@@ -36,7 +36,9 @@
 					loc.tempValues = {};
 					loc.iEnd = ArrayLen(loc.values);
 					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					{
 						StructInsert(loc.tempValues, loc.values[loc.i], loc.values[loc.i], true);
+					}
 					loc.values = ListToArray(StructKeyList(loc.tempValues));
 				}
 				loc.returnValue = ArrayAvg(loc.values);
@@ -47,6 +49,7 @@
 			// if the column's type is a float or similar we can run an AVG type query since it will always return a value of the same type as the column
 			arguments.type = "AVG";
 			loc.returnValue = $calculate(argumentCollection=arguments);
+			
 			// we convert the result to a string so that it is the same as what would happen if you calculate an average in ColdFusion code (like we do for integers in this function for example)
 			loc.returnValue = JavaCast("string", loc.returnValue);
 		}
@@ -77,20 +80,25 @@
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
-		var returnValue = "";
+		var loc = {};
 		$args(name="count", args=arguments);
 		arguments.type = "COUNT";
 		arguments.property = ListFirst(primaryKey());
 		if (Len(arguments.include))
+		{
 			arguments.distinct = true;
+		}
 		else
+		{
 			arguments.distinct = false;
-		returnValue = $calculate(argumentCollection=arguments);
-		if (IsNumeric(returnValue))
-			return returnValue;
-		else
-			return 0;
+		}
+		loc.returnValue = $calculate(argumentCollection=arguments);
+		if (!IsNumeric(loc.returnValue))
+		{
+			loc.returnValue = 0;
+		}
 	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="maximum" returntype="any" access="public" output="false" hint="Calculates the maximum value for a given property. Uses the SQL function `MAX`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
@@ -113,10 +121,12 @@
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
+		var loc = {};
 		$args(name="maximum", args=arguments);
 		arguments.type = "MAX";
+		loc.returnValue = $calculate(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn $calculate(argumentCollection=arguments)>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="minimum" returntype="any" access="public" output="false" hint="Calculates the minimum value for a given property. Uses the SQL function `MIN`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
@@ -139,10 +149,12 @@
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
+		var loc = {};
 		$args(name="minimum", args=arguments);
 		arguments.type = "MIN";
+		loc.returnValue = $calculate(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn $calculate(argumentCollection=arguments)>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="sum" returntype="any" access="public" output="false" hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
@@ -166,10 +178,12 @@
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
+		var loc = {};
 		$args(name="sum", args=arguments);
 		arguments.type = "SUM";
+		loc.returnValue = $calculate(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn $calculate(argumentCollection=arguments)>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <!--- PRIVATE MODEL CLASS METHODS --->
@@ -191,18 +205,24 @@
 
 		// add the DISTINCT keyword if necessary (generally used for `COUNT` operations when associated tables are joined in the query, means we'll only count the unique primary keys on the current model)
 		if (arguments.distinct)
+		{
 			arguments.select = arguments.select & "DISTINCT ";
+		}
 
 		// create a list of columns for the `SELECT` clause either from regular properties on the model or calculated ones
 		loc.properties = "";
 		loc.iEnd = ListLen(arguments.property);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.iItem = Trim(ListGetAt(arguments.property, loc.i));
-			if (ListFindNoCase(variables.wheels.class.propertyList, loc.iItem))
-				loc.properties = ListAppend(loc.properties, tableName() & "." & variables.wheels.class.properties[loc.iItem].column);
-			else if (ListFindNoCase(variables.wheels.class.calculatedPropertyList, loc.iItem))
-				loc.properties = ListAppend(loc.properties, variables.wheels.class.calculatedProperties[loc.iItem].sql);
+			loc.item = Trim(ListGetAt(arguments.property, loc.i));
+			if (ListFindNoCase(variables.wheels.class.propertyList, loc.item))
+			{
+				loc.properties = ListAppend(loc.properties, tableName() & "." & variables.wheels.class.properties[loc.item].column);
+			}
+			else if (ListFindNoCase(variables.wheels.class.calculatedPropertyList, loc.item))
+			{
+				loc.properties = ListAppend(loc.properties, variables.wheels.class.calculatedProperties[loc.item].sql);
+			}
 		}
 		arguments.select = arguments.select & loc.properties;
 
@@ -216,7 +236,9 @@
 		
 		loc.returnValue = findAll(argumentCollection=arguments).wheelsqueryresult;
 		if (!Len(loc.returnValue) && Len(arguments.ifNull))
+		{
 			loc.returnValue = arguments.ifNull;
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

@@ -119,14 +119,17 @@
 
 		// we only allow direct associations to be loaded when returning objects
 		if (application.wheels.showErrorInformation && Len(arguments.returnAs) && arguments.returnAs != "query" && Find("(", arguments.include) && arguments.returnIncluded)
+		{
 			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You may only include direct associations to this object when returning an array of objects.");
+		}
 
 		// count records and get primary keys for pagination
 		if (arguments.page)
 		{
-			if (application.wheels.showErrorInformation && arguments.perPage lte 0)
-				$throw(type="Wheels", message="Incorrect Argument", extendedInfo="The perPage argument should be a positive numeric value.");
-
+			if (application.wheels.showErrorInformation && arguments.perPage <= 0)
+			{
+				$throw(type="Wheels", message="Incorrect Argument", extendedInfo="The `perPage` argument should be a positive numeric value.");
+			}
 			if (Len(arguments.order))
 			{
 				// insert primary keys to order clause unless they are already there, this guarantees that the ordering is unique which is required to make pagination work properly
@@ -134,9 +137,11 @@
 				loc.iEnd = ListLen(primaryKeys());
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					loc.iItem = primaryKeys(loc.i);
-					if (!ListFindNoCase(loc.compareList, loc.iItem) && !ListFindNoCase(loc.compareList, tableName() & "." & loc.iItem))
-						arguments.order = ListAppend(arguments.order, loc.iItem);
+					loc.item = primaryKeys(loc.i);
+					if (!ListFindNoCase(loc.compareList, loc.item) && !ListFindNoCase(loc.compareList, tableName() & "." & loc.item))
+					{
+						arguments.order = ListAppend(arguments.order, loc.item);
+					}
 				}
 			}
 			else
@@ -145,13 +150,21 @@
 				arguments.order = primaryKey();
 			}
 			if (Len(arguments.include))
+			{
 				loc.distinct = true;
+			}
 			else
+			{
 				loc.distinct = false;
-			if (arguments.count gt 0)
+			}
+			if (arguments.count > 0)
+			{
 				loc.totalRecords = arguments.count;
+			}
 			else
+			{
 				loc.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
+			}
 			loc.currentPage = arguments.page;
 			if (loc.totalRecords == 0)
 			{
@@ -166,8 +179,10 @@
 
 				// if the full range of records is not requested we correct the limit to get the exact amount instead
 				// for example if totalRecords is 57, limit is 10 and offset 50 (i.e. requesting records 51-60) we change the limit to 7
-				if ((loc.limit + loc.offset) gt loc.totalRecords)
+				if ((loc.limit + loc.offset) > loc.totalRecords)
+				{
 					loc.limit = loc.totalRecords - loc.offset;
+				}
 
 				if (loc.limit < 1)
 				{
@@ -180,20 +195,25 @@
 					if (loc.values.RecordCount)
 					{
 						loc.paginationWhere = "";
-						for (loc.k=1; loc.k <= loc.values.RecordCount; loc.k++)
+						loc.iEnd = loc.values.recordCount;
+						for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 						{
 							loc.keyComboValues = [];
-							loc.iEnd = ListLen(primaryKeys());
-							for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+							loc.jEnd = ListLen(primaryKeys());
+							for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 							{
-								loc.property = primaryKeys(loc.i);
-								ArrayAppend(loc.keyComboValues, "#tableName()#.#loc.property# = #variables.wheels.class.adapter.$quoteValue(str=loc.values[loc.property][loc.k], type=validationTypeForProperty(loc.property))#");
+								loc.property = primaryKeys(loc.j);
+								ArrayAppend(loc.keyComboValues, "#tableName()#.#loc.property# = #variables.wheels.class.adapter.$quoteValue(str=loc.values[loc.property][loc.i], type=validationTypeForProperty(loc.property))#");
 							}
 							loc.paginationWhere = ListAppend(loc.paginationWhere, "(" & ArrayToList(loc.keyComboValues, " AND ") & ")", Chr(7));
  						}
 						loc.paginationWhere = Replace(loc.paginationWhere, Chr(7), " OR ", "all");
- 						if (Len(arguments.where) && Len(arguments.include)) // this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
+
+ 						// this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
+ 						if (Len(arguments.where) && Len(arguments.include))
+ 						{
  							arguments.where = "(#arguments.where#) AND (#loc.paginationWhere#)";
+ 						}
  						else
 						{
 							arguments.where = loc.paginationWhere;
@@ -278,29 +298,25 @@
 			switch (arguments.returnAs)
 			{
 				case "query":
-				{
 					loc.returnValue = loc.findAll.query;
+
 					// execute callbacks unless we're currently running the count or primary key pagination queries (we only want the callback to run when we have the actual data)
 					if (loc.returnValue.columnList != "wheelsqueryresult" && !arguments.$limit && !arguments.$offset)
+					{
 						$callback("afterFind", arguments.callbacks, loc.returnValue);
+					}
 					break;
-				}
 				case "struct": case "structs":
-				{
 					loc.returnValue = $serializeQueryToStructs(query=loc.findAll.query, argumentCollection=arguments);
 					break;
-				}
 				case "object": case "objects":
-				{
 					loc.returnValue = $serializeQueryToObjects(query=loc.findAll.query, argumentCollection=arguments);
 					break;
-				}
 				default:
-				{
 					if (application.wheels.showErrorInformation)
+					{
 						$throw(type="Wheels.IncorrectArgumentValue", message="Incorrect Arguments", extendedInfo="The `returnAs` may be either `query`, `struct(s)` or `object(s)`");
-					break;
-				}
+					}
 			}
 		}
 	</cfscript>
@@ -335,19 +351,20 @@
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
-		var returnValue = "";
+		var loc = {};
 		$args(name="findByKey", args=arguments);
 		arguments.include = $listClean(arguments.include);
 		if (Len(arguments.key))
 		{
 			$keyLengthCheck(arguments.key);
 		}
+		
 		// convert primary key column name(s) / value(s) to a WHERE clause that is then used in the findOne call
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
-		returnValue = findOne(argumentCollection=arguments);
+		loc.returnValue = findOne(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="findOne" returntype="any" access="public" output="false" hint="Fetches the first record found based on the `WHERE` and `ORDER BY` clauses. With the default settings (i.e. the `returnAs` argument set to `object`), a model object will be returned if the record is found and the boolean value `false` if not. Instead of using the `where` argument, you can create cleaner code by making use of a concept called dynamic finders."
@@ -381,7 +398,7 @@
 	<cfargument name="returnAs" type="string" required="false" hint="Set this to `query` to return as a single-row query result set. Set this to `object` to return as an object.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
-		var returnValue = "";
+		var loc = {};
 		$args(name="findOne", args=arguments);
 		arguments.include = $listClean(arguments.include);
 		if (!Len(arguments.include) || (StructKeyExists(variables.wheels.class.associations, arguments.include) && variables.wheels.class.associations[arguments.include].type != "hasMany"))
@@ -397,16 +414,20 @@
 			arguments.perPage = 1;
 			arguments.count = 1;
 		}
-		returnValue = findAll(argumentCollection=arguments);
-		if (IsArray(returnValue))
+		loc.returnValue = findAll(argumentCollection=arguments);
+		if (IsArray(loc.returnValue))
 		{
-			if (ArrayLen(returnValue))
-				returnValue = returnValue[1];
+			if (ArrayLen(loc.returnValue))
+			{
+				loc.returnValue = loc.returnValue[1];
+			}
 			else
-				returnValue = false;
+			{
+				loc.returnValue = false;
+			}
 		}
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <!--- update --->
@@ -438,14 +459,18 @@
 		arguments.include = $listClean(arguments.include);
 		arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,reload,parameterize,instantiate,validate,transaction,callbacks,includeSoftDeletes", setOnModel=false);
 
-		if (arguments.instantiate) // find and instantiate each object and call its update function
+		// find and instantiate each object and call its update function
+		if (arguments.instantiate)
 		{
 			loc.returnValue = 0;
 			loc.objects = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, reload=arguments.reload, parameterize=arguments.parameterize, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes, returnIncluded=false, returnAs="objects");
-			for (loc.i=1; loc.i lte ArrayLen(loc.objects); loc.i++)
+			loc.iEnd = ArrayLen(loc.objects);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				if (loc.objects[loc.i].update(properties=arguments.properties, parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks))
-					loc.returnValue = loc.returnValue + 1;
+				{
+					loc.returnValue++;
+				}
 			}
 		}
 		else
@@ -455,13 +480,14 @@
 			loc.pos = 0;
 			for (loc.key in arguments.properties)
 			{
-				loc.pos = loc.pos + 1;
+				loc.pos++;
 				ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.key].column# = ");
-
-				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=!len(arguments.properties[loc.key])};
+				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=!Len(arguments.properties[loc.key])};
 				ArrayAppend(arguments.sql, loc.param);
-				if (StructCount(arguments.properties) gt loc.pos)
+				if (StructCount(arguments.properties) > loc.pos)
+				{
 					ArrayAppend(arguments.sql, ",");
+				}
 			}
 			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
@@ -472,8 +498,11 @@
 </cffunction>
 
 <cffunction name="$updateAll" returntype="numeric" access="public" output="false">
-	<cfset var update = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize)>
-	<cfreturn update.result.recordCount>
+	<cfscript>
+		var loc = {};
+		loc.returnValue = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize).result.recordCount;
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="updateByKey" returntype="boolean" access="public" output="false" hint="Finds the object with the supplied key and saves it (if validation permits it) with the supplied properties and/or named arguments. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument. Returns `true` if the object was found and updated successfully, `false` otherwise."
@@ -494,14 +523,14 @@
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
-		var returnValue = "";
+		var loc = {};
 		$args(name="updateByKey", args=arguments);
 		$keyLengthCheck(arguments.key);
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
-		returnValue = updateOne(argumentCollection=arguments);
+		loc.returnValue = updateOne(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="updateOne" returntype="boolean" access="public" output="false" hint="Gets an object based on the arguments used and updates it with the supplied properties. Returns `true` if an object was found and updated successfully, `false` otherwise."
@@ -530,9 +559,13 @@
 		StructDelete(arguments, "where");
 		StructDelete(arguments, "order");
 		if (IsObject(loc.object))
+		{
 			loc.returnValue = loc.object.update(argumentCollection=arguments);
+		}
 		else
+		{
 			loc.returnValue = false;
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -551,11 +584,13 @@
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
+		var loc = {};
 		$args(name="updateProperty", args=arguments);
 		arguments.validate = false;
 		this[arguments.property] = arguments.value;
+		loc.returnValue = save(parameterize=arguments.parameterize, reload=false, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks);
 	</cfscript>
-	<cfreturn save(parameterize=arguments.parameterize, reload=false, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks) />
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="updateProperties" returntype="boolean" access="public" output="false" hint="Updates all the properties from the `properties` argument or other named arguments. If the object is invalid, the save will fail and `false` will be returned."
@@ -572,12 +607,13 @@
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
+		var loc = {};
 		$args(name="updateProperties", args=arguments);
 		$setProperties(argumentCollection=arguments, filterList="properties,parameterize,validate,transaction,callbacks");
+		loc.returnValue = save(parameterize=arguments.parameterize, reload=false, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks);
 	</cfscript>
-	<cfreturn save(parameterize=arguments.parameterize, reload=false, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks) />
+	<cfreturn loc.returnValue>
 </cffunction>
-
 
 <!--- delete --->
 
@@ -605,15 +641,17 @@
 		var loc = {};
 		$args(name="deleteAll", args=arguments);
 		arguments.include = $listClean(arguments.include);
-
 		if (arguments.instantiate)
 		{
 			loc.returnValue = 0;
 			loc.objects = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, reload=arguments.reload, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes, returnIncluded=false, returnAs="objects");
-			for (loc.i=1; loc.i lte ArrayLen(loc.objects); loc.i++)
+			loc.iEnd = ArrayLen(loc.objects);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				if (loc.objects[loc.i].delete(parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks, softDelete=arguments.softDelete))
+				{
 					loc.returnValue++;
+				}
 			}
 		}
 		else
@@ -679,9 +717,13 @@
 		$args(name="deleteOne", args=arguments);
 		loc.object = findOne(where=arguments.where, order=arguments.order, reload=arguments.reload, includeSoftDeletes=arguments.includeSoftDeletes);
 		if (IsObject(loc.object))
+		{
 			loc.returnValue = loc.object.delete(transaction=arguments.transaction, callbacks=arguments.callbacks, softDelete=arguments.softDelete);
+		}
 		else
+		{
 			loc.returnValue = false;
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -719,15 +761,22 @@
 	<cfscript>
 		var loc = {};
 		$args(name="exists", args=arguments);
-		if (application.wheels.showErrorInformation)
-			if (Len(arguments.key) && Len(arguments.where))
+		if (application.wheels.showErrorInformation && Len(arguments.key) && Len(arguments.where))
+		{
 				$throw(type="Wheels.IncorrectArguments", message="You cannot pass in both `key` and `where`.");
+		}
 		if (Len(arguments.where))
-			loc.returnValue = findOne(select=primaryKey(), where=arguments.where, reload=arguments.reload, returnAs="query").RecordCount gte 1;
+		{
+			loc.returnValue = findOne(select=primaryKey(), where=arguments.where, reload=arguments.reload, returnAs="query").recordCount >= 1;
+		}
 		else if (Len(arguments.key))
-			loc.returnValue = findByKey(key=arguments.key, select=primaryKey(), reload=arguments.reload, returnAs="query").RecordCount == 1;
+		{
+			loc.returnValue = findByKey(key=arguments.key, select=primaryKey(), reload=arguments.reload, returnAs="query").recordCount == 1;
+		}
 		else
+		{
 			loc.returnValue = false;
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -755,27 +804,33 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="Set to `false` to permanently delete a record, even if it has a soft delete column.">
 	<cfscript>
+		var loc = {};
 		$args(name="delete", args=arguments);
 		arguments.sql = [];
 		arguments.sql = $addDeleteClause(sql=arguments.sql, softDelete=arguments.softDelete);
 		arguments.sql = $addKeyWhereClause(sql=arguments.sql, includeSoftDeletes=arguments.includeSoftDeletes);
+		loc.returnValue = invokeWithTransaction(method="$delete", argumentCollection=arguments);
 	</cfscript>
-	<cfreturn invokeWithTransaction(method="$delete", argumentCollection=arguments)>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$delete" returntype="boolean" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.ret = false;
+		loc.returnValue = false;
 		if ($callback("beforeDelete", arguments.callbacks))
 		{
-			$deleteDependents(); // delete dependents before the main record in case of foreign key constraints
-			loc.del = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
-			if (loc.del.result.recordCount eq 1 and $callback("afterDelete", arguments.callbacks))
-				loc.ret = true;
+			// delete dependents before the main record in case of foreign key constraints
+			$deleteDependents();
+			
+			loc.deleted = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
+			if (loc.deleted.result.recordCount == 1 && $callback("afterDelete", arguments.callbacks))
+			{
+				loc.returnValue = true;
+			}
 		}
-		return loc.ret;
 	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="reload" returntype="void" access="public" output="false" hint="Reloads the property values of this object from the database."
@@ -794,13 +849,13 @@
 		loc.iEnd = ListLen(loc.properties);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			// coldfusion has a problem with blank boolean values in the query
 			try
 			{
+				// coldfusion has a problem with blank boolean values in the query
 				loc.property = ListGetAt(loc.properties, loc.i);
 				this[loc.property] = loc.query[loc.property][1];
 			}
-			catch (Any e)
+			catch (any e)
 			{
 				this[loc.property] = "";
 			}
@@ -829,9 +884,13 @@
 	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to skip validations for this operation.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="Set this to `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="Set to `false` to disable callbacks for this operation.">
-	<cfset $args(name="save", args=arguments)>
-	<cfset clearErrors()>
-	<cfreturn invokeWithTransaction(method="$save", argumentCollection=arguments)>
+	<cfscript>
+		var loc = {};
+		$args(name="save", args=arguments);
+		clearErrors();
+		loc.returnValue = invokeWithTransaction(method="$save", argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$save" returntype="boolean" access="public" output="false">
@@ -841,7 +900,8 @@
 	<cfargument name="callbacks" type="boolean" required="true" />
 	<cfscript>
 		var loc = {};
-		loc.ret = false;
+		loc.returnValue = false;
+		
 		// make sure all of our associations are set properly before saving
 		$setAssociations();
 
@@ -855,7 +915,7 @@
 					if ($saveAssociations(argumentCollection=arguments, validate=false, callbacks=false) && $callback("afterCreate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
 					{
 						$updatePersistedProperties();
-						loc.ret = true;
+						loc.returnValue = true;
 					}
 				}
 			}
@@ -867,13 +927,13 @@
 					if ($callback("afterUpdate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
 					{
 						$updatePersistedProperties();
-						loc.ret = true;
+						loc.returnValue = true;
 					}
 				}
 			}
 		}
 	</cfscript>
-	<cfreturn loc.ret />
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="update" returntype="boolean" access="public" output="false" hint="Updates the object with the supplied properties and saves it to the database. Returns `true` if the object was saved successfully to the database and `false` otherwise."
@@ -909,9 +969,13 @@
 	<cfargument name="validate" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfset $args(name="update", args=arguments)>
-	<cfset $setProperties(argumentCollection=arguments, filterList="properties,parameterize,reload,validate,transaction,callbacks")>
-	<cfreturn save(parameterize=arguments.parameterize, reload=arguments.reload, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks)>
+	<cfscript>
+		var loc = {};
+		$args(name="update", args=arguments);
+		$setProperties(argumentCollection=arguments, filterList="properties,parameterize,reload,validate,transaction,callbacks");
+		loc.returnValue = save(parameterize=arguments.parameterize, reload=arguments.reload, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <!--- other --->
@@ -927,15 +991,19 @@
 	'
 	categories="model-object,miscellaneous" chapters="" functions="">
 	<cfscript>
-		// if no values have ever been saved to the database this object is new
+		var loc = {};
 		if (!StructKeyExists(variables, "$persistedProperties"))
 		{
-			return true;
+			// no values have been saved to the database so this object is new
+			loc.returnValue = true;
 		}
-		return false;
+		else
+		{
+			loc.returnValue = false;
+		}
 	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
-
 
 <!--- PRIVATE MODEL CLASS METHODS --->
 
@@ -951,9 +1019,12 @@
 		var loc = {};
 		loc.fileName = $objectFileName(name=variables.wheels.class.modelName, objectPath=variables.wheels.class.path, type="model");
 		loc.returnValue = $createObjectFromRoot(path=variables.wheels.class.path, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.modelName, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row, base=arguments.base, useFilterLists=(!arguments.persisted));
+		
 		// if the object should be persisted, call afterFind else call afterNew
 		if ((arguments.persisted && loc.returnValue.$callback("afterFind", arguments.callbacks)) || (!arguments.persisted && loc.returnValue.$callback("afterNew", arguments.callbacks)))
+		{
 			loc.returnValue.$callback("afterInitialization", arguments.callbacks);
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -1042,36 +1113,38 @@
 	<cfargument name="reload" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
-
-		// if no changes, no need to perform update
-		if(!hasChanged())
+		if (hasChanged())
 		{
-			return true;
-		}
-
-		if (variables.wheels.class.timeStampingOnUpdate)
-			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
-		loc.sql = [];
-		ArrayAppend(loc.sql, "UPDATE #tableName()# SET ");
-		for (loc.key in variables.wheels.class.properties)
-		{
-			// include all changed non-key values in the update
-			if (StructKeyExists(this, loc.key) && !ListFindNoCase(primaryKeys(), loc.key) && hasChanged(loc.key))
+			// perform update since changes have been made
+			if (variables.wheels.class.timeStampingOnUpdate)
 			{
-				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
-				loc.param = $buildQueryParamValues(loc.key);
-				ArrayAppend(loc.sql, loc.param);
-				ArrayAppend(loc.sql, ",");
+				$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 			}
-		}
+			loc.sql = [];
+			ArrayAppend(loc.sql, "UPDATE #tableName()# SET ");
+			for (loc.key in variables.wheels.class.properties)
+			{
+				// include all changed non-key values in the update
+				if (StructKeyExists(this, loc.key) && !ListFindNoCase(primaryKeys(), loc.key) && hasChanged(loc.key))
+				{
+					ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
+					loc.param = $buildQueryParamValues(loc.key);
+					ArrayAppend(loc.sql, loc.param);
+					ArrayAppend(loc.sql, ",");
+				}
+			}
 
-		if (ArrayLen(loc.sql) gt 1) // only submit the update if we generated an sql set statement
-		{
-			ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
-			loc.sql = $addKeyWhereClause(sql=loc.sql);
-			loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
-			if (arguments.reload)
-				this.reload();
+			// only submit the update if we generated an sql set statement
+			if (ArrayLen(loc.sql) > 1)
+			{
+				ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
+				loc.sql = $addKeyWhereClause(sql=loc.sql);
+				loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
+				if (arguments.reload)
+				{
+					this.reload();
+				}
+			}
 		}
 	</cfscript>
 	<cfreturn true>
@@ -1082,18 +1155,18 @@
 <cffunction name="$buildQueryParamValues" returntype="struct" access="public" output="false">
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
-	var ret = {};
-	ret.value = this[arguments.property];
-	ret.type = variables.wheels.class.properties[arguments.property].type;
-	ret.dataType = variables.wheels.class.properties[arguments.property].dataType;
-	ret.scale = variables.wheels.class.properties[arguments.property].scale;
-	ret.null = (!len(this[arguments.property]) && variables.wheels.class.properties[arguments.property].nullable);
-	return ret;
+		var loc = {};
+		loc.returnValue = {};
+		loc.returnValue.value = this[arguments.property];
+		loc.returnValue.type = variables.wheels.class.properties[arguments.property].type;
+		loc.returnValue.dataType = variables.wheels.class.properties[arguments.property].dataType;
+		loc.returnValue.scale = variables.wheels.class.properties[arguments.property].scale;
+		loc.returnValue.null = (!Len(this[arguments.property]) && variables.wheels.class.properties[arguments.property].nullable);
 	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$keyLengthCheck" returntype="void" access="public" output="false"
-	hint="Makes sure that the number of keys passed in is the same as the number of keys defined for the model. If not, an error is raised.">
+<cffunction name="$keyLengthCheck" returntype="void" access="public" output="false" hint="Makes sure that the number of keys passed in is the same as the number of keys defined for the model. If not, an error is raised.">
 	<cfargument name="key" type="any" required="true">
 	<cfscript>
 	if (ListLen(primaryKeys()) != ListLen(arguments.key))
@@ -1103,12 +1176,8 @@
 	</cfscript>
 </cffunction>
 
-
-<!---
-	developers can now override this method for localizing dates if they prefer.
---->
 <cffunction name="$timestampProperty" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true" />
+	<cfargument name="property" type="string" required="true">
 	<cfscript>
 		this[arguments.property] = Now();
 	</cfscript>
