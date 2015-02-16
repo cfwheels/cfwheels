@@ -523,7 +523,7 @@
 			loc.route = $findRoute(argumentCollection=arguments);
 			if (arguments.$URLRewriting == "Off")
 			{
-				loc.returnValue = loc.returnValue & "?controller=";
+				loc.returnValue &= "?controller=";
 				if (Len(arguments.controller))
 				{
 					loc.returnValue &= hyphenize(arguments.controller);
@@ -579,11 +579,11 @@
 							// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
 							loc.param = obfuscateParam("#loc.param#");
 						}
-						loc.returnValue = loc.returnValue & "/" & loc.param; // get param from arguments
+						loc.returnValue &= "/" & loc.param; // get param from arguments
 					}
 					else
 					{
-						loc.returnValue = loc.returnValue & "/" & loc.property; // add hard coded param from route
+						loc.returnValue &= "/" & loc.property; // add hard coded param from route
 					}
 				}
 				// add it the format if it exists

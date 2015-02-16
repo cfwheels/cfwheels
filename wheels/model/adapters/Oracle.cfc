@@ -205,7 +205,7 @@
 				loc.metadata = GetMetaData(loc.query);
 				loc.columns = [];
 				loc.iEnd = ArrayLen(loc.metadata);
-				for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
 				{
 					loc.column = loc.metadata[loc.i];
 					if (loc.column.typename eq "timestamp")
@@ -217,7 +217,7 @@
 				if (!ArrayIsEmpty(loc.columns))
 				{
 					loc.iEnd = ArrayLen(loc.columns);
-					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+					for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
 					{
 						loc.column = loc.columns[loc.i];
 						for (loc.row = 1; loc.row lte loc.rows; loc.row++)

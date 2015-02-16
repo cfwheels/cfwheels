@@ -74,7 +74,7 @@
 
 			// loop through all the properties they want to query and assign values
 			loc.iEnd = ArrayLen(loc.finderProperties);
-			for (loc.i = 1; loc.i LTE loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i LTE loc.iEnd; loc.i++)
 			{
 				ArrayAppend(loc.addToWhere, "#loc.finderProperties[loc.i]# #$dynamicFinderOperator(loc.finderProperties[loc.i])# #variables.wheels.class.adapter.$quoteValue(str=loc.values[loc.i], type=validationTypeForProperty(loc.finderProperties[loc.i]))#");
 			}

@@ -169,9 +169,14 @@
 		arguments.objectName = {};
 		arguments.tagValue = arguments.value;
 		if (arguments.checked)
+		{
 			arguments.objectName[arguments.name] = arguments.value;
+		}
 		else
-			arguments.objectName[arguments.name] = " "; // space added to allow a blank value while still not having the form control checked
+		{
+			// space added to allow a blank value while still not having the form control checked
+			arguments.objectName[arguments.name] = " ";
+		}
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "value");
 		StructDelete(arguments, "checked");
@@ -220,15 +225,22 @@
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		if (arguments.checked)
+		{
 			arguments.objectName[arguments.name] = arguments.value;
+		}
 		else
-			arguments.objectName[arguments.name] = " "; // space added to allow a blank value while still not having the form control checked
+		{
+			// space added to allow a blank value while still not having the form control checked
+			arguments.objectName[arguments.name] = " ";
+		}
 		if (!StructKeyExists(arguments, "id"))
 		{
 			loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.checkedValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 			if (len(loc.valueToAppend))
-				arguments.id = arguments.id & "-" & loc.valueToAppend;
+			{
+				arguments.id &= "-" & loc.valueToAppend;
+			}
 		}
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "value");

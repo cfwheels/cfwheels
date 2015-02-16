@@ -84,14 +84,18 @@
 		$args(name="passwordField", reserved="type,name,value", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
+		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
+		}
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "password";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		loc.maxlength = $maxLength(argumentCollection=arguments);
 		if (StructKeyExists(loc, "maxlength"))
+		{
 			arguments.maxlength = loc.maxlength;
+		}
 		arguments.value = $formValue(argumentCollection=arguments);
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
@@ -118,10 +122,14 @@
 		arguments.type = "hidden";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		if (!StructKeyExists(arguments, "id"))
+		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
+		}
 		arguments.value = $formValue(argumentCollection=arguments);
 		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get")
+		{
 			arguments.value = obfuscateParam(arguments.value);
+		}
 		loc.returnValue = $tag(name="input", close=true, skip="objectName,property,association,position", attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -162,7 +170,9 @@
 		$args(name="fileField", reserved="type,name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
+		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
+		}
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "file";
@@ -207,7 +217,9 @@
 		$args(name="textArea", reserved="name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
+		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
+		}
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
@@ -265,7 +277,9 @@
 		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 			if (len(loc.valueToAppend))
-				arguments.id = arguments.id & "-" & loc.valueToAppend;
+			{
+				arguments.id &= "-" & loc.valueToAppend;
+			}
 		}
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
@@ -273,7 +287,9 @@
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.value = arguments.tagValue;
 		if (arguments.tagValue == $formValue(argumentCollection=arguments))
+		{
 			arguments.checked = "checked";
+		}
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -319,7 +335,9 @@
 		$args(name="checkBox", reserved="type,name,value,checked", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
+		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
+		}
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "checkbox";
@@ -327,7 +345,9 @@
 		arguments.value = arguments.checkedValue;
 		loc.value = $formValue(argumentCollection=arguments);
 		if (loc.value == arguments.value || IsNumeric(loc.value) && loc.value == 1 || !IsNumeric(loc.value) && IsBoolean(loc.value) && loc.value)
+		{
 			arguments.checked = "checked";
+		}
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments);
 		if (Len(arguments.uncheckedValue))
 		{
@@ -336,9 +356,9 @@
 			loc.hiddenAttributes.id = arguments.id & "-checkbox";
 			loc.hiddenAttributes.name = arguments.name & "($checkbox)";
 			loc.hiddenAttributes.value = arguments.uncheckedValue;
-			loc.returnValue = loc.returnValue & $tag(name="input", close=true, attributes=loc.hiddenAttributes);
+			loc.returnValue &= $tag(name="input", close=true, attributes=loc.hiddenAttributes);
 		}
-		loc.returnValue = loc.returnValue & loc.after;
+		loc.returnValue &= loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -389,24 +409,34 @@
 		$args(name="select", reserved="name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
+		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
+		}
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		if (StructKeyExists(arguments, "multiple") and IsBoolean(arguments.multiple))
+		if (StructKeyExists(arguments, "multiple") && IsBoolean(arguments.multiple))
 		{
 			if (arguments.multiple)
+			{
 				arguments.multiple = "multiple";
+			}
 			else
+			{
 				StructDelete(arguments, "multiple");
+			}
 		}
 		loc.content = $optionsForSelect(argumentCollection=arguments);
 		if (!IsBoolean(arguments.includeBlank) || arguments.includeBlank)
 		{
 			if (!IsBoolean(arguments.includeBlank))
+			{
 				loc.blankOptionText = arguments.includeBlank;
+			}
 			else
+			{
 				loc.blankOptionText = "";
+			}
 			loc.blankOptionAttributes = {value=""};
 			loc.content = $element(name="option", content=loc.blankOptionText, attributes=loc.blankOptionAttributes) & loc.content;
 		}
@@ -428,11 +458,13 @@
 			if (!Len(arguments.valueField) || !Len(arguments.textField))
 			{
 				// order the columns according to their ordinal position in the database table
+				loc.columns = "";
 				loc.info = GetMetaData(arguments.options);
 				loc.iEnd = ArrayLen(loc.info);
-				loc.columns = "";
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
 					loc.columns = ListAppend(loc.columns, loc.info[loc.i].name);
+				}
 				if (!Len(loc.columns))
 				{
 					arguments.valueField = "";
@@ -453,9 +485,13 @@
 						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 						{
 							if (!Len(arguments.valueField) && IsNumeric(arguments.options[ListGetAt(loc.columns, loc.j)][loc.i]))
+							{
 								arguments.valueField = ListGetAt(loc.columns, loc.j);
+							}
 							if (!Len(arguments.textField) && !IsNumeric(arguments.options[ListGetAt(loc.columns, loc.j)][loc.i]))
+							{
 								arguments.textField = ListGetAt(loc.columns, loc.j);
+							}
 						}
 					}
 					if (!Len(arguments.valueField) || !Len(arguments.textField))
@@ -469,7 +505,7 @@
 			loc.iEnd = arguments.options.RecordCount;
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=arguments.options[arguments.valueField][loc.i], optionText=arguments.options[arguments.textField][loc.i]);
+				loc.returnValue &= $option(objectValue=loc.value, optionValue=arguments.options[arguments.valueField][loc.i], optionText=arguments.options[arguments.textField][loc.i]);
 			}
 		}
 		else if (IsStruct(arguments.options))
@@ -479,16 +515,17 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.key = ListGetAt(loc.sortedKeys, loc.i);
-				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=LCase(loc.key), optionText=arguments.options[loc.key]);
+				loc.returnValue &= $option(objectValue=loc.value, optionValue=LCase(loc.key), optionText=arguments.options[loc.key]);
 			}
 		}
 		else
 		{
 			// convert the options to an array so we don't duplicate logic
 			if (IsSimpleValue(arguments.options))
+			{
 				arguments.options = ListToArray(arguments.options);
+			}
 
-			// loop through the array
 			loc.iEnd = ArrayLen(arguments.options);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
@@ -524,22 +561,29 @@
 							{
 								loc.propertyValue = loc.object[loc.propertyName];
 								if (!Len(arguments.valueField) && IsNumeric(loc.propertyValue))
+								{
 									arguments.valueField = loc.propertyName;
+								}
 								if (!Len(arguments.textField) && !IsNumeric(loc.propertyValue))
+								{
 									arguments.textField = loc.propertyName;
+								}
 							}
 						}
-
 					}
 					if (StructKeyExists(loc.object, arguments.valueField))
+					{
 						loc.optionValue = loc.object[arguments.valueField];
+					}
 					if (StructKeyExists(loc.object, arguments.textField))
+					{
 						loc.optionText = loc.object[arguments.textField];
+					}
 				}
 				else if (IsStruct(arguments.options[loc.i]))
 				{
 					loc.object = arguments.options[loc.i];
-					// if the struct only has one elment then use the key/value pair
+					// if the struct only has one element then use the key/value pair
 					if(StructCount(loc.object) eq 1)
 					{
 						loc.key = StructKeyList(loc.object);
@@ -558,7 +602,7 @@
 						}
 					}
 				}
-				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=loc.optionValue, optionText=loc.optionText);
+				loc.returnValue &= $option(objectValue=loc.value, optionValue=loc.optionValue, optionText=loc.optionText);
 			}
 		}
 	</cfscript>
@@ -579,9 +623,13 @@
 		}
 		loc.optionAttributes = {value=arguments.optionValue};
 		if (arguments.optionValue == arguments.objectValue || ListFindNoCase(arguments.objectValue, arguments.optionValue))
+		{
 			loc.optionAttributes.selected = "selected";
+		}
 		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get")
+		{
 			loc.optionAttributes.value = obfuscateParam(loc.optionAttributes.value);
+		}
 		loc.returnValue = $element(name="option", content=arguments.optionText, attributes=loc.optionAttributes);
 	</cfscript>
 	<cfreturn loc.returnValue>

@@ -18,7 +18,7 @@
 		$args(args=arguments, name="nestedProperties", combine="association/associations");
 		arguments.association = $listClean(arguments.association);
 		loc.iEnd = ListLen(arguments.association);
-		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
 		{
 			loc.association = ListGetAt(arguments.association, loc.i);
 			if (StructKeyExists(variables.wheels.class.associations, loc.association))
@@ -54,7 +54,7 @@
 					loc.array = [ this[loc.association] ];
 
 				if (IsArray(loc.array))
-					for (loc.i = 1; loc.i lte ArrayLen(loc.array); loc.i++)
+					for (loc.i=1; loc.i lte ArrayLen(loc.array); loc.i++)
 						$invoke(componentReference=loc.array[loc.i], method="valid");
 			}
 		}
@@ -86,7 +86,7 @@
 					loc.info = $expandedAssociations(include=loc.association);
 					loc.info = loc.info[1];
 
-					for (loc.i = 1; loc.i lte ArrayLen(loc.array); loc.i++)
+					for (loc.i=1; loc.i lte ArrayLen(loc.array); loc.i++)
 					{
 						if (ListFindNoCase("hasMany,hasOne", loc.associations[loc.association].type))
 							$setForeignKeyValues(missingMethodArguments=loc.array[loc.i], keys=loc.info.foreignKey);
@@ -165,7 +165,7 @@
 					loc.keys = loc.model.primaryKey();
 					loc.itemArray = ListToArray(loc.item, ",", true);
 					loc.iEnd = ListLen(loc.keys);
-					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+					for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
 						arguments.value[loc.item][ListGetAt(loc.keys, loc.i)] = loc.itemArray[loc.i];
 					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association, delete=arguments.delete));
 					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.item]);
@@ -174,7 +174,7 @@
 		}
 		else if (IsArray(arguments.value))
 		{
-			for (loc.i = 1; loc.i lte ArrayLen(arguments.value); loc.i++)
+			for (loc.i=1; loc.i lte ArrayLen(arguments.value); loc.i++)
 			{
 				if (IsObject(arguments.value[loc.i]) && ArrayLen(this[arguments.property]) gte loc.i && IsObject(this[arguments.property][loc.i]) && this[arguments.property][loc.i].compareTo(arguments.value[loc.i]))
 				{
@@ -215,7 +215,7 @@
 			loc.sortedArray = [];
 			loc.iEnd = ArrayLen(this[arguments.property]);
 
-			for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
 			{
 				if (!IsNumeric(this[arguments.property][loc.i][arguments.association.nested.sortProperty]))
 					return;
@@ -293,7 +293,7 @@
 		loc.returnValue = "";
 
 		loc.iEnd = ListLen(arguments.keys);
-		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
 		{
 			loc.key = ListGetAt(arguments.keys, loc.i);
 			if (!StructKeyExists(arguments.params, loc.key) || !Len(arguments.params[loc.key]))

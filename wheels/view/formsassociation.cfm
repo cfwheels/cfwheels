@@ -114,7 +114,7 @@
 			return loc.returnValue;
 		}
 		loc.iEnd = ArrayLen(loc.object[arguments.association]);
-		for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.assoc = loc.object[arguments.association][loc.i];
 			if (IsObject(loc.assoc) && loc.assoc.key() == arguments.keys)
@@ -145,7 +145,7 @@
 			return loc.returnValue;
 		}
 		loc.iEnd = ArrayLen(loc.object[arguments.association]);
-		for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.assoc = loc.object[arguments.association][loc.i];
 			if (isObject(loc.assoc) && loc.assoc.key() == arguments.keys && StructKeyExists(loc.assoc, arguments.property))

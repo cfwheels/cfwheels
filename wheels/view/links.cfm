@@ -139,7 +139,7 @@
 			loc.js = "document.write('#Trim(loc.returnValue)#');";
 			loc.encoded = "";
 			loc.iEnd = Len(loc.js);
-			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.encoded &= "%" & Right("0" & FormatBaseN(Asc(Mid(loc.js,loc.i,1)),16),2);
 			}

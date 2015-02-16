@@ -187,7 +187,9 @@
 	<cfscript>
 		var loc = {};
 		if (!StructKeyExists(request.wheels, "cycle"))
+		{
 			request.wheels.cycle = {};
+		}
 		if (!StructKeyExists(request.wheels.cycle, arguments.name))
 		{
 			request.wheels.cycle[arguments.name] = ListGetAt(arguments.values, 1);
@@ -196,7 +198,9 @@
 		{
 			loc.foundAt = ListFindNoCase(arguments.values, request.wheels.cycle[arguments.name]);
 			if (loc.foundAt == ListLen(arguments.values))
+			{
 				loc.foundAt = 0;
+			}
 			request.wheels.cycle[arguments.name] = ListGetAt(arguments.values, loc.foundAt + 1);
 		}
 		loc.returnValue = request.wheels.cycle[arguments.name]; 
@@ -225,7 +229,9 @@
 	<cfargument name="name" type="string" required="false" default="default" hint="The name of the cycle to reset.">
 	<cfscript>
 		if (StructKeyExists(request.wheels, "cycle") && StructKeyExists(request.wheels.cycle, arguments.name))
+		{
 			StructDelete(request.wheels.cycle, arguments.name);
+		}
 	</cfscript>
 </cffunction>
 

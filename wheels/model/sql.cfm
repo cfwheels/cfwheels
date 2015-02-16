@@ -601,7 +601,7 @@
 		loc.returnValue = arguments.list;
 		loc.matches = REMatch("[A-Za-z1-9]+\.\*", loc.returnValue);
 		loc.iEnd = ArrayLen(loc.matches);
-		for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.match = loc.matches[loc.i];
 			loc.fields = "";

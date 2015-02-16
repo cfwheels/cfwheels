@@ -307,7 +307,7 @@
 		loc.attributes = {};
 		for (loc.key in arguments)
 		{
-			if (CompareNoCase(Left(loc.key, 5), "label") eq 0 && Len(loc.key) gt 5 && loc.key != "labelPlacement")
+			if (CompareNoCase(Left(loc.key, 5), "label") == 0 && Len(loc.key) > 5 && loc.key != "labelPlacement")
 			{
 				loc.attributes[ReplaceNoCase(loc.key, "label", "")] = arguments[loc.key];
 			}

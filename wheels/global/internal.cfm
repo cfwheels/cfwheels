@@ -414,7 +414,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.temp = listToArray(ListGetAt(arguments.params, loc.i, "&"), "=");
-			loc.returnValue = loc.returnValue & loc.delim & loc.temp[1] & "=";
+			loc.returnValue &= loc.delim & loc.temp[1] & "=";
 			loc.delim = "&";
 			if (ArrayLen(loc.temp) == 2)
 			{
@@ -429,7 +429,7 @@
 					// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
 					loc.param = obfuscateParam("#loc.param#");
 				}
-				loc.returnValue = loc.returnValue & loc.param;
+				loc.returnValue &= loc.param;
 			}
 		}
 	</cfscript>
@@ -639,7 +639,7 @@
 		// let's allow for multiple controller paths so that plugins can contain controllers
 		// the last path is the one we will instantiate the base controller on if the controller is not found on any of the paths
 		loc.iEnd = ListLen(arguments.controllerPaths);
-		for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.controllerPath = ListGetAt(arguments.controllerPaths, loc.i);
 			loc.fileName = $objectFileName(name=arguments.name, objectPath=loc.controllerPath, type=arguments.type);

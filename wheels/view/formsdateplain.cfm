@@ -128,25 +128,37 @@
 		arguments.separator = arguments.dateSeparator;
 		// when a list of 6 elements has been passed in as labels we assume the first 3 are meant to be placed on the date related tags
 		if (ListLen(loc.label) == 6)
+		{
 			arguments.label = ListGetAt(loc.label, 1) & "," & ListGetAt(loc.label, 2) & "," & ListGetAt(loc.label, 3);
+		}
 		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
-			loc.returnValue = loc.returnValue & dateSelect(argumentCollection=arguments);
+		{
+			loc.returnValue &= dateSelect(argumentCollection=arguments);
+		}
 		else
-			loc.returnValue = loc.returnValue & dateSelectTags(argumentCollection=arguments);
+		{
+			loc.returnValue &= dateSelectTags(argumentCollection=arguments);
+		}
 
 		// separate date and time with a string ("-" by default)
-		loc.returnValue = loc.returnValue & loc.separator;
+		loc.returnValue &= loc.separator;
 
 		// create time portion
 		arguments.order = arguments.timeOrder;
 		arguments.separator = arguments.timeSeparator;
 		// when a list of 6 elements has been passed in as labels we assume the last 3 are meant to be placed on the time related tags
 		if (ListLen(loc.label) == 6)
+		{
 			arguments.label = ListGetAt(loc.label, 4) & "," & ListGetAt(loc.label, 5) & "," & ListGetAt(loc.label, 6);
+		}
 		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
-			loc.returnValue = loc.returnValue & timeSelect(argumentCollection=arguments);
+		{
+			loc.returnValue &= timeSelect(argumentCollection=arguments);
+		}
 		else
-			loc.returnValue = loc.returnValue & timeSelectTags(argumentCollection=arguments);
+		{
+			loc.returnValue &= timeSelectTags(argumentCollection=arguments);
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -213,7 +225,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="monthSelectTag", args=arguments);
-		if (IsNumeric(arguments.selected) and IsValid("range", arguments.selected, 0, 12))
+		if (IsNumeric(arguments.selected) && IsValid("range", arguments.selected, 0, 12))
 		{
 			arguments.selected = $dateForSelectTags("month", arguments.selected, arguments.$now);
 		}
@@ -243,7 +255,7 @@
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		$args(name="daySelectTag", args=arguments);
-		if (IsNumeric(arguments.selected) and IsValid("range", arguments.selected, 0, 31))
+		if (IsNumeric(arguments.selected) && IsValid("range", arguments.selected, 0, 31))
 		{
 			arguments.selected = $dateForSelectTags("day", arguments.selected, arguments.$now);
 		}
@@ -279,8 +291,10 @@
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		$args(name="hourSelectTag", args=arguments);
-		if (IsNumeric(arguments.selected) and arguments.selected gte 0 and arguments.selected lt 60)
+		if (IsNumeric(arguments.selected) && arguments.selected >= 0 && arguments.selected < 60)
+		{
 			arguments.selected = createTime(arguments.selected, Minute(arguments.$now), Second(arguments.$now));
+		}
 		arguments.order = "hour";
 	</cfscript>
 	<cfreturn timeSelectTags(argumentCollection=arguments)>
@@ -313,7 +327,7 @@
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		$args(name="minuteSelectTag", args=arguments);
-		if (IsNumeric(arguments.selected) and arguments.selected gte 0 and arguments.selected lt 60)
+		if (IsNumeric(arguments.selected) && arguments.selected >= 0 && arguments.selected < 60)
 		{
 			arguments.selected = createTime(Hour(arguments.$now), arguments.selected, Second(arguments.$now));
 		}
@@ -349,8 +363,10 @@
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		$args(name="secondSelectTag", args=arguments);
-		if (IsNumeric(arguments.selected) and arguments.selected gte 0 and arguments.selected lt 60)
+		if (IsNumeric(arguments.selected) && arguments.selected >= 0 && arguments.selected < 60)
+		{
 			arguments.selected = createTime(Hour(arguments.$now), Minute(arguments.$now), arguments.selected);
+		}
 		arguments.order = "second";
 	</cfscript>
 	<cfreturn timeSelectTags(argumentCollection=arguments)>
@@ -361,52 +377,39 @@
 	<cfargument name="value" type="numeric" required="true">
 	<cfargument name="$now" type="date" required="true">
 	<cfscript>
-	var loc = {};
-	loc._year = year(arguments.$now);
-	loc._month = month(arguments.$now);
-	loc._day = day(arguments.$now);
-	loc.ret = arguments.$now;
-	
-	switch(arguments.part)
-	{
-		case "year":
+		var loc = {};
+		loc.year = Year(arguments.$now);
+		loc.month = Month(arguments.$now);
+		loc.day = Day(arguments.$now);
+		loc.returnValue = arguments.$now;
+		switch (arguments.part)
 		{
-			loc._year = arguments.value;
-			break;
+			case "year": loc.year = arguments.value; break;
+			case "month": loc.month = arguments.value; break;
+			case "day": loc.day = arguments.value; break;
 		}
-		case "month":
+
+		// handle february
+		if (loc.month == 2 && ((!IsLeapYear(loc.year) && loc.day > 29) || (IsLeapYear(loc.year) && loc.day > 28)))
 		{
-			loc._month = arguments.value;
-			break;
+			if (IsLeapYear(loc.year))
+			{
+				loc.day = 29;
+			}
+			else
+			{
+				loc.day = 28;
+			}
 		}
-		case "day":
+		
+		try
 		{
-			loc._day = arguments.value;
-			break;
+			loc.returnValue = CreateDate(loc.year, loc.month, loc.day);
 		}
-	}
-	
-	// handle febuary
-	if (loc._month eq 2 && ((!IsLeapYear(loc._year) && loc._day gt 29) || (IsLeapYear(loc._year) && loc._day gt 28)))
-	{
-		if (IsLeapYear(loc._year))
+		catch (any e)
 		{
-			loc._day = 29;
+			loc.returnValue = arguments.$now;
 		}
-		else
-		{
-			loc._day = 28;
-		}
-	}
-	
-	try
-	{
-		loc.ret = createDate(loc._year, loc._month, loc._day);
-	}
-	catch (Any e)
-	{
-		loc.ret = arguments.$now;
-	}
 	</cfscript>
-	<cfreturn loc.ret>
+	<cfreturn loc.returnValue>
 </cffunction>

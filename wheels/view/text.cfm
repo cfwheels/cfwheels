@@ -143,7 +143,7 @@
 		{
 			loc.origText = arguments.text;
 			loc.iEnd = ListLen(arguments.phrases, arguments.delimiter);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i=loc.i+1)
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.newText = "";
 				loc.phrase = Trim(ListGetAt(arguments.phrases, loc.i, arguments.delimiter));

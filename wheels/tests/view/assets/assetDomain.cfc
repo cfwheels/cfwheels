@@ -37,7 +37,7 @@
 			loc.e = loc.controller.$assetDomain(loc.assetPath);
 
 			loc.iEnd = 100;
-			for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
 				assert('loc.e eq loc.controller.$assetDomain(loc.assetPath)');
 		</cfscript>
 	</cffunction>
