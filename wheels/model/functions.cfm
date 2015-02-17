@@ -2,6 +2,7 @@
 <cfinclude template="calculations.cfm">
 <cfinclude template="callbacks.cfm">
 <cfinclude template="crud.cfm">
+<cfinclude template="delete.cfm">
 <cfinclude template="errors.cfm">
 <cfinclude template="initialization.cfm">
 <cfinclude template="miscellaneous.cfm">
@@ -11,4 +12,5 @@
 <cfinclude template="serialize.cfm">
 <cfinclude template="sql.cfm">
 <cfinclude template="transactions.cfm">
+<cfinclude template="update.cfm">
 <cfinclude template="validations.cfm">

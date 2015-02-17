@@ -251,7 +251,7 @@
 						for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 						{
 							loc.column = loc.columns[loc.i];
-							loc.jEnd = loc.query.recordCount
+							loc.jEnd = loc.query.recordCount;
 							for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 							{
 								if (IsObject(loc.query[loc.column][loc.j]))
