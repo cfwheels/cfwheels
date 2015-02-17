@@ -85,6 +85,82 @@
 
 <!--- PUBLIC MODEL CLASS METHODS --->
 
+<cffunction name="exists" returntype="boolean" access="public" output="false" hint="Checks if a record exists in the table. You can pass in either a primary key value to the `key` argument or a string to the `where` argument."
+	examples=
+	'
+		<!--- Checking if Joe exists in the database --->
+		<cfset result = model("user").exists(where="firstName=''Joe''")>
+
+		<!--- Checking if a specific user exists based on a primary key valued passed in through the URL/form in an if statement --->
+		<cfif model("user").exists(keyparams.key)>
+			<!--- Do something... --->
+		</cfif>
+
+		<!--- If you have a `belongsTo` association setup from `comment` to `post`, you can do a scoped call. (The `hasPost` method below will call `model("post").exists(comment.postId)` internally.) --->
+		<cfset comment = model("comment").findByKey(params.commentId)>
+		<cfset commentHasAPost = comment.hasPost()>
+
+		<!--- If you have a `hasOne` association setup from `user` to `profile`, you can do a scoped call. (The `hasProfile` method below will call `model("profile").exists(where="userId=##user.id##")` internally.) --->
+		<cfset user = model("user").findByKey(params.userId)>
+		<cfset userHasProfile = user.hasProfile()>
+
+		<!--- If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `hasComments` method below will call `model("comment").exists(where="postid=##post.id##")` internally.) --->
+		<cfset post = model("post").findByKey(params.postId)>
+		<cfset postHasComments = post.hasComments()>
+	'
+	categories="model-class,miscellaneous" chapters="reading-records,associations" functions="belongsTo,hasMany,hasOne">
+	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @findByKey.">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
+	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfscript>
+		var loc = {};
+		$args(name="exists", args=arguments);
+		if (application.wheels.showErrorInformation && Len(arguments.key) && Len(arguments.where))
+		{
+				$throw(type="Wheels.IncorrectArguments", message="You cannot pass in both `key` and `where`.");
+		}
+		if (Len(arguments.where))
+		{
+			loc.rv = findOne(select=primaryKey(), where=arguments.where, reload=arguments.reload, returnAs="query").recordCount >= 1;
+		}
+		else if (Len(arguments.key))
+		{
+			loc.rv = findByKey(key=arguments.key, select=primaryKey(), reload=arguments.reload, returnAs="query").recordCount == 1;
+		}
+		else
+		{
+			loc.rv = false;
+		}
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
+<cffunction name="isNew" returntype="boolean" access="public" output="false" hint="Returns `true` if this object hasn't been saved yet. (In other words, no matching record exists in the database yet.) Returns `false` if a record exists."
+	examples=
+	'
+		<!--- Create a new object and then check if it is new (yes, this example is ridiculous. It makes more sense in the context of callbacks for example) --->
+		<cfset employee = model("employee").new()>
+		<cfif employee.isNew()>
+			<!--- Do something... --->
+		</cfif>
+	'
+	categories="model-object,miscellaneous" chapters="" functions="">
+	<cfscript>
+		var loc = {};
+		if (!StructKeyExists(variables, "$persistedProperties"))
+		{
+			// no values have been saved to the database so this object is new
+			loc.rv = true;
+		}
+		else
+		{
+			loc.rv = false;
+		}
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
 <cffunction name="columnNames" returntype="string" access="public" output="false" hint="Returns a list of column names in the table mapped to this model. The list is ordered according to the columns' ordinal positions in the database table."
 	examples=
 	'
@@ -206,4 +282,37 @@
 	'
 	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="isInstance">
 	<cfreturn !isInstance(argumentCollection=arguments)>
+</cffunction>
+
+<!--- PRIVATE MODEL OBJECT METHODS --->
+
+<cffunction name="$buildQueryParamValues" returntype="struct" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.rv = {};
+		loc.rv.value = this[arguments.property];
+		loc.rv.type = variables.wheels.class.properties[arguments.property].type;
+		loc.rv.dataType = variables.wheels.class.properties[arguments.property].dataType;
+		loc.rv.scale = variables.wheels.class.properties[arguments.property].scale;
+		loc.rv.null = (!Len(this[arguments.property]) && variables.wheels.class.properties[arguments.property].nullable);
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
+<cffunction name="$keyLengthCheck" returntype="void" access="public" output="false" hint="Makes sure that the number of keys passed in is the same as the number of keys defined for the model. If not, an error is raised.">
+	<cfargument name="key" type="any" required="true">
+	<cfscript>
+	if (ListLen(primaryKeys()) != ListLen(arguments.key))
+	{
+		$throw(type="Wheels.InvalidArgumentValue", message="The `key` argument contains an invalid value.", extendedInfo="The `key` argument contains a list, however this table doesn't have a composite key. A list of values is allowed for the `key` argument, but this only applies in the case when the table contains a composite key.");
+	}
+	</cfscript>
+</cffunction>
+
+<cffunction name="$timestampProperty" returntype="void" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfscript>
+		this[arguments.property] = Now();
+	</cfscript>
 </cffunction>

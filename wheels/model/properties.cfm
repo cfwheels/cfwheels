@@ -12,11 +12,18 @@
 	<cfscript>
 		var loc = {};
 		if (StructKeyExists(arguments, "property"))
+		{
 			arguments.properties = ListAppend(arguments.properties, arguments.property);
+		}
+		
 		// see if any associations should be included in the white list
 		for (loc.association in variables.wheels.class.associations)
+		{
 			if (variables.wheels.class.associations[loc.association].nested.allow)
+			{
 				arguments.properties = ListAppend(arguments.properties, loc.association);
+			}
+		}
 		variables.wheels.class.accessibleProperties.whiteList = $listClean(arguments.properties);
 	</cfscript>
 </cffunction>
@@ -33,7 +40,9 @@
 	<cfscript>
 		var loc = {};
 		if (StructKeyExists(arguments, "property"))
+		{
 			arguments.properties = ListAppend(arguments.properties, arguments.property);
+		}
 		variables.wheels.class.accessibleProperties.blackList = $listClean(arguments.properties);
 	</cfscript>
 </cffunction>
@@ -61,32 +70,39 @@
 	<cfargument name="defaultValue" type="string" required="false" hint="A default value for this property.">
 	<cfscript>
 		// validate setup
-		if (Len(arguments.column) and Len(arguments.sql))
+		if (Len(arguments.column) && Len(arguments.sql))
+		{
 			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot specify both a column and a sql statement when setting up the mapping for this property.");
-		if (Len(arguments.sql) and StructKeyExists(arguments, "defaultValue"))
+		}
+		if (Len(arguments.sql) && StructKeyExists(arguments, "defaultValue"))
+		{
 			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot specify a default value for calculated properties.");
+		}
 
 		// create the key
 		if (!StructKeyExists(variables.wheels.class.mapping, arguments.name))
+		{
 			variables.wheels.class.mapping[arguments.name] = {};
+		}
 
 		if (Len(arguments.column))
 		{
 			variables.wheels.class.mapping[arguments.name].type = "column";
 			variables.wheels.class.mapping[arguments.name].value = arguments.column;
 		}
-
 		if (Len(arguments.sql))
 		{
 			variables.wheels.class.mapping[arguments.name].type = "sql";
 			variables.wheels.class.mapping[arguments.name].value = arguments.sql;
 		}
-
 		if (Len(arguments.label))
+		{
 			variables.wheels.class.mapping[arguments.name].label = arguments.label;
-
+		}
 		if (StructKeyExists(arguments, "defaultValue"))
+		{
 			variables.wheels.class.mapping[arguments.name].defaultValue = arguments.defaultValue;
+		}
 	</cfscript>
 </cffunction>
 
@@ -103,8 +119,10 @@
 		var loc = {};
 		loc.rv = variables.wheels.class.propertyList;
 		if (ListLen(variables.wheels.class.calculatedPropertyList))
+		{
 			loc.rv = ListAppend(loc.rv, variables.wheels.class.calculatedPropertyList);
-		</cfscript>
+		}
+	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
 
@@ -115,7 +133,11 @@
 		<cfset employee = model("employee").columns()>
 	'
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="">
-	<cfreturn ListToArray(variables.wheels.class.columnList) />
+	<cfscript>
+		var loc = {};
+		loc.rv = ListToArray(variables.wheels.class.columnList);
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="columnForProperty" returntype="any" access="public" output="false" hint="Returns the column name mapped for the named model property."
@@ -128,11 +150,14 @@
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @hasProperty.">
 	<cfscript>
-		var columnName = false;
+		var loc = {};
+		loc.rv = false;
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
-			columnName = variables.wheels.class.properties[arguments.property].column;
+		{
+			loc.rv = variables.wheels.class.properties[arguments.property].column;
+		}
 	</cfscript>
-	<cfreturn columnName />
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="columnDataForProperty" returntype="any" access="public" output="false" hint="Returns a struct with data for the named property."
@@ -145,11 +170,14 @@
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="">
 	<cfargument name="property" type="string" required="true" hint="Name of column to retrieve data for.">
 	<cfscript>
-		var columnData = false;
+		var loc = {};
+		loc.rv = false;
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
-			columnData = variables.wheels.class.properties[arguments.property];
+		{
+			loc.rv = variables.wheels.class.properties[arguments.property];
+		}
 	</cfscript>
-	<cfreturn columnData />
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="validationTypeForProperty" returntype="any" access="public" output="false" hint="Returns the validation type for the property"
@@ -163,13 +191,14 @@
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="">
 	<cfargument name="property" type="string" required="true" hint="Name of column to retrieve data for.">
 	<cfscript>
-		var columnData = "string";
+		var loc = {};
+		loc.rv = "string";
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
 		{
-			columnData = variables.wheels.class.properties[arguments.property].validationtype;
+			loc.rv = variables.wheels.class.properties[arguments.property].validationtype;
 		}
 	</cfscript>
-	<cfreturn columnData />
+	<cfreturn loc.rv>
 </cffunction>
 
 <!--- PUBLIC MODEL OBJECT METHODS --->
@@ -194,13 +223,19 @@
 			if (StructKeyExists(this, loc.property))
 			{
 				if (arguments.$persisted && hasChanged(loc.property))
+				{
 					loc.rv = ListAppend(loc.rv, changedFrom(loc.property));
+				}
 				else
+				{
 					loc.rv = ListAppend(loc.rv, this[loc.property]);
+				}
 			}
 		}
 		if (!Len(loc.rv) && arguments.$returnTickCountWhenNew)
+		{
 			loc.rv = variables.wheels.tickCountId;
+		}
 		</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
@@ -219,11 +254,14 @@
 	categories="model-object,miscellaneous" chapters="" functions="">
 	<cfargument name="property" type="string" required="true" hint="Name of property to inspect.">
 	<cfscript>
-		var hasProperty = false;
+		var loc = {};
+		loc.rv = false;
 		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]))
-			hasProperty = true;
+		{
+			loc.rv = true;
+		}
 	</cfscript>
-	<cfreturn hasProperty />
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="propertyIsPresent" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified property exists on the model and is not a blank string."
@@ -240,14 +278,17 @@
 	categories="model-object,miscellaneous" chapters="" functions="">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @hasProperty.">
 	<cfscript>
-		var isPresent = false;
+		var loc = {};
+		loc.rv = false;
 		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]) && IsSimpleValue(this[arguments.property]) && Len(this[arguments.property]))
-			isPresent = true;
+		{
+			loc.rv = true;
+		}
 	</cfscript>
-	<cfreturn isPresent />
+	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="toggle" returntype="any" access="public" output="false" hint="Assigns to the property specified the opposite of the property's current boolean value. Throws an error if the property cannot be converted to a boolean value. Returns this object if save called internally is `false`."
+<cffunction name="toggle" returntype="boolean" access="public" output="false" hint="Assigns to the property specified the opposite of the property's current boolean value. Throws an error if the property cannot be converted to a boolean value. Returns this object if save called internally is `false`."
 	examples=
 	'
 		<!--- Get an object, and toggle a boolean property --->
@@ -258,18 +299,26 @@
 	'
 	categories="model-object,crud" chapters="updating-records" functions="">
 	<cfargument name="property" type="string" required="true">
-	<cfargument name="save" type="boolean" required="false" hint="Argument to decide whether save the property after it has been toggled. Defaults to true.">
+	<cfargument name="save" type="boolean" required="false" hint="Argument to decide whether to save the property after it has been toggled. Defaults to true.">
 	<cfscript>
+		var loc = {};
 		$args(name="toggle", args=arguments);
 		if (!StructKeyExists(this, arguments.property))
+		{
 			$throw(type="Wheels.PropertyDoesNotExist", message="Property Does Not Exist", extendedInfo="You may only toggle a property that exists on this model.");
+		}
 		if (!IsBoolean(this[arguments.property]))
+		{
 			$throw(type="Wheels.PropertyIsIncorrectType", message="Incorrect Arguments", extendedInfo="You may only toggle a property that evaluates to the boolean value.");
+		}
 		this[arguments.property] = !this[arguments.property];
+		loc.rv = true;
 		if (arguments.save)
-			return updateProperty(property=arguments.property, value=this[arguments.property]);
+		{
+			loc.rv = updateProperty(property=arguments.property, value=this[arguments.property]);
+		}
 	</cfscript>
-	<cfreturn this />
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="properties" returntype="struct" access="public" output="false" hint="Returns a structure of all the properties with their names as keys and the values of the property as values."
@@ -283,8 +332,6 @@
 	<cfscript>
 		var loc = {};
 		loc.rv = {};
-
-		// loop through all properties and functions in the this scope
 		for (loc.key in this)
 		{
 			// we return anything that is not a function
@@ -292,7 +339,9 @@
 			{
 				// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
 				if (ListFindNoCase(propertyNames(), loc.key))
+				{
 					loc.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), loc.key));
+				}
 
 				// set property from the this scope in the struct that we will return
 				loc.rv[loc.key] = this[loc.key];
@@ -311,7 +360,9 @@
 	'
 	categories="model-object,miscellaneous" chapters="" functions="properties">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfset $setProperties(argumentCollection=arguments) />
+	<cfscript>
+		$setProperties(argumentCollection=arguments);
+	</cfscript>
 </cffunction>
 
 <!--- changes --->
@@ -340,17 +391,16 @@
 
 		// always return true if $persistedProperties does not exists
 		if (!StructKeyExists(variables, "$persistedProperties"))
+		{
 			return true;
+		}
 
 		if (!Len(arguments.property))
 		{
-			// they haven't specified a particular property so loop through
-			// them all
+			// they haven't specified a particular property so loop through them all
 			arguments.property = StructKeyList(variables.wheels.class.properties);
 		}
-
 		arguments.property = ListToArray(arguments.property);
-
 		loc.iEnd = ArrayLen(arguments.property);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
@@ -363,13 +413,11 @@
 				}
 				else
 				{
-					// hehehehe... convert each datatype to a string
-					// for easier comparision
+					// convert each datatype to a string for easier comparision
 					loc.type = validationTypeForProperty(loc.key);
 					loc.a = $convertToString(this[loc.key], loc.type);
 					loc.b = $convertToString(variables.$persistedProperties[loc.key], loc.type);
-
-					if(Compare(loc.a, loc.b) neq 0)
+					if (Compare(loc.a, loc.b) != 0)
 					{
 						return true;
 					}
@@ -396,8 +444,12 @@
 		var loc = {};
 		loc.rv = "";
 		for (loc.key in variables.wheels.class.properties)
+		{
 			if (hasChanged(loc.key))
+			{
 				loc.rv = ListAppend(loc.rv, loc.key);
+			}
+		}
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
@@ -418,11 +470,14 @@
 	categories="model-object,changes" chapters="dirty-records" functions="allChanges,changedProperties,hasChanged">
 	<cfargument name="property" type="string" required="true" hint="Name of property to get the previous value for.">
 	<cfscript>
-		var rv = "";
+		var loc = {};
+		loc.rv = "";
 		if (StructKeyExists(variables, "$persistedProperties") && StructKeyExists(variables.$persistedProperties, arguments.property))
-			rv = variables.$persistedProperties[arguments.property];
+		{
+			loc.rv = variables.$persistedProperties[arguments.property];
+		}
 	</cfscript>
-	<cfreturn rv>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="allChanges" returntype="struct" access="public" output="false" hint="Returns a struct detailing all changes that have been made on the object but not yet saved to the database."
@@ -448,9 +503,13 @@
 				loc.rv[loc.item] = {};
 				loc.rv[loc.item].changedFrom = changedFrom(loc.item);
 				if (StructKeyExists(this, loc.item))
+				{
 					loc.rv[loc.item].changedTo = this[loc.item];
+				}
 				else
+				{
 					loc.rv[loc.item].changedTo = "";
+				}
 			}
 		}
 	</cfscript>
@@ -466,33 +525,46 @@
 	<cfargument name="$useFilterLists" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
-
-		loc.allowedProperties = {};
-
+		loc.rv = {};
 		arguments.filterList = ListAppend(arguments.filterList, "properties,filterList,setOnModel,$useFilterLists");
 
 		// add eventual named arguments to properties struct (named arguments will take precedence)
 		for (loc.key in arguments)
+		{
 			if (!ListFindNoCase(arguments.filterList, loc.key))
+			{
 				arguments.properties[loc.key] = arguments[loc.key];
+			}
+		}
 
-		for (loc.key in arguments.properties) // loop throug the properties and see if they can be set based off of the accessible properties lists
+		// loop through the properties and see if they can be set based off of the accessible properties lists
+		for (loc.key in arguments.properties)
 		{
 			loc.accessible = true;
 			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, loc.key))
+			{
 				loc.accessible = false;
+			}
 			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, loc.key))
+			{
 				loc.accessible = false;
+			}
 			if (loc.accessible)
-				loc.allowedProperties[loc.key] = arguments.properties[loc.key];
+			{
+				loc.rv[loc.key] = arguments.properties[loc.key];
+			}
 			if (loc.accessible && arguments.setOnModel)
-				$setProperty(property=loc.key, value=loc.allowedProperties[loc.key]);
+			{
+				$setProperty(property=loc.key, value=loc.rv[loc.key]);
+			}
 		}
 
 		if (arguments.setOnModel)
+		{
 			return;
+		}
 	</cfscript>
-	<cfreturn loc.allowedProperties />
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$setProperty" returntype="void" access="public" output="false">
@@ -501,15 +573,25 @@
 	<cfargument name="associations" type="struct" required="false" default="#variables.wheels.class.associations#">
 	<cfscript>
 		if (IsObject(arguments.value))
+		{
 			this[arguments.property] = arguments.value;
+		}
 		else if (IsStruct(arguments.value) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[arguments.property].nested.allow && ListFindNoCase("belongsTo,hasOne", arguments.associations[arguments.property].type))
+		{
 			$setOneToOneAssociationProperty(property=arguments.property, value=arguments.value, association=arguments.associations[arguments.property]);
+		}
 		else if (IsStruct(arguments.value) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[arguments.property].nested.allow && arguments.associations[arguments.property].type == "hasMany")
+		{
 			$setCollectionAssociationProperty(property=arguments.property, value=arguments.value, association=arguments.associations[arguments.property]);
+		}
 		else if (IsArray(arguments.value) && ArrayLen(arguments.value) && !IsObject(arguments.value[1]) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[arguments.property].nested.allow && arguments.associations[arguments.property].type == "hasMany")
+		{
 			$setCollectionAssociationProperty(property=arguments.property, value=arguments.value, association=arguments.associations[arguments.property]);
+		}
 		else
+		{
 			this[arguments.property] = arguments.value;
+		}
 	</cfscript>
 </cffunction>
 
@@ -518,8 +600,12 @@
 		var loc = {};
 		variables.$persistedProperties = {};
 		for (loc.key in variables.wheels.class.properties)
+		{
 			if (StructKeyExists(this, loc.key))
+			{
 				variables.$persistedProperties[loc.key] = this[loc.key];
+			}
+		}
 	</cfscript>
 </cffunction>
 
@@ -540,21 +626,32 @@
 <cffunction name="$propertyInfo" returntype="struct" access="public" output="false">
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
-		var rv = {};
+		var loc = {};
+		loc.rv = {};
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
-			rv = variables.wheels.class.properties[arguments.property];
+		{
+			loc.rv = variables.wheels.class.properties[arguments.property];
+		}
 	</cfscript>
-	<cfreturn rv />
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$label" returntype="string" access="public" output="false">
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
+		var loc = {};
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property) && StructKeyExists(variables.wheels.class.properties[arguments.property], "label"))
-			return variables.wheels.class.properties[arguments.property].label;
+		{
+			loc.rv = variables.wheels.class.properties[arguments.property].label;
+		}
 		else if (StructKeyExists(variables.wheels.class.mapping, arguments.property) && StructKeyExists(variables.wheels.class.mapping[arguments.property], "label"))
-			return variables.wheels.class.mapping[arguments.property].label;
+		{
+			loc.rv = variables.wheels.class.mapping[arguments.property].label;
+		}
 		else
-			return Humanize(arguments.property);
+		{
+			loc.rv = Humanize(arguments.property);
+		}
 	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
