@@ -4,6 +4,7 @@ Model Enhancements
 ==================
 
 * Allow spaces in list passed in to the "include" argument on finders - #150 [Per Djurner]
+* Added findFirst() and findLast() finder methods [Per Djurner]
 
 Controller Enhancements
 =======================
@@ -20,7 +21,7 @@ Miscellaneous
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-1.3.4 (02/03/2015)
+1.3.4 (02/17/2015)
 
 Miscellaneous
 =============
