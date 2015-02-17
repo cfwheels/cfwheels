@@ -41,7 +41,7 @@
 					break;
 				case "blob": case "tinyblob": case "mediumblob": case "longblob":
 					loc.rv = "cf_sql_blob";
-					break;}
+					break;
 				case "char":
 					loc.rv = "cf_sql_char";
 					break;
