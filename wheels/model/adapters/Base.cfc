@@ -69,7 +69,7 @@
 						// removes the alias
 						loc.item = Replace(loc.item, " AS " & loc.alias, "");
 					}
-					loc.item = loc.item & loc.sort;
+					loc.item &= loc.sort;
 				}
 				loc.rv = ListAppend(loc.rv, loc.item);
 			}

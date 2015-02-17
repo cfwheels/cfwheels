@@ -143,7 +143,7 @@
 	examples='
 		<!--- Get the table name prefix for this user when running a custom query --->
 		<cffunction name="getDisabledUsers" returntype="query">
-			<cfset var loc = {}>
+			<cfset var loc = StructNew()>
 			<cfquery datasource="##get(''dataSourceName'')##" name="loc.disabledUsers">
 				SELECT
 					*

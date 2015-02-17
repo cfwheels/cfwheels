@@ -175,7 +175,9 @@
 						}
 					}
 					break;
-				case "xml": loc.content = $toXml(arguments.data); break;
+				case "xml":
+					loc.content = $toXml(arguments.data);
+					break;
 			}
 		}
 		

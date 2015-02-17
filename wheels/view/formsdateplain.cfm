@@ -384,9 +384,15 @@
 		loc.rv = arguments.$now;
 		switch (arguments.part)
 		{
-			case "year": loc.year = arguments.value; break;
-			case "month": loc.month = arguments.value; break;
-			case "day": loc.day = arguments.value; break;
+			case "year":
+				loc.year = arguments.value;
+				break;
+			case "month":
+				loc.month = arguments.value;
+				break;
+			case "day":
+				loc.day = arguments.value;
+				break;
 		}
 
 		// handle february

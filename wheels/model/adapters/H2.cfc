@@ -1,11 +1,19 @@
 <cfcomponent extends="Base" output="false">
 
 	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
-		<cfreturn "generated_key">
+		<cfscript>
+			var loc = {};
+			loc.rv = "generated_key";
+		</cfscript>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$randomOrder" returntype="string" access="public" output="false">
-		<cfreturn "RAND()">
+		<cfscript>
+			var loc = {};
+			loc.rv = "RAND()";
+		</cfscript>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$getType" returntype="string" access="public" output="false">
@@ -14,22 +22,54 @@
 			var loc = {};
 			switch (arguments.type)
 			{
-				case "bigint": case "int8": loc.rv = "cf_sql_bigint"; break;
-				case "binary": case "bytea": case "raw": loc.rv = "cf_sql_binary"; break;
-				case "bit": case "bool": case "boolean": loc.rv = "cf_sql_bit"; break;
-				case "blob": case "tinyblob": case "mediumblob": case "longblob": case "image": case "oid": loc.rv = "cf_sql_blob"; break;
-				case "char": case "character": case "nchar": loc.rv = "cf_sql_char"; break;
-				case "date": loc.rv = "cf_sql_date"; break;
-				case "dec": case "decimal": case "number": case "numeric": loc.rv = "cf_sql_decimal"; break;
-				case "double": loc.rv = "cf_sql_double"; break;
-				case "float": case "float4": case "float8": case "real": loc.rv = "cf_sql_float"; break;
-				case "int": case "int4": case "integer": case "mediumint": case "signed": loc.rv = "cf_sql_integer"; break;
-				case "int2": case "smallint": case "year": loc.rv = "cf_sql_smallint"; break;
-				case "time": loc.rv = "cf_sql_time"; break;
-				case "datetime": case "smalldatetime": case "timestamp": loc.rv = "cf_sql_timestamp"; break;
-				case "tinyint": loc.rv = "cf_sql_tinyint"; break;
-				case "varbinary": case "longvarbinary": loc.rv = "cf_sql_varbinary"; break;
-				case "varchar": case "varchar2": case "longvarchar": case "varchar_ignorecase": case "nvarchar": case "nvarchar2": case "clob": case "nclob": case "text": case "tinytext": case "mediumtext": case "longtext": case "ntext": loc.rv = "cf_sql_varchar"; break;
+				case "bigint": case "int8":
+					loc.rv = "cf_sql_bigint";
+					break;
+				case "binary": case "bytea": case "raw":
+					loc.rv = "cf_sql_binary";
+					break;
+				case "bit": case "bool": case "boolean":
+					loc.rv = "cf_sql_bit";
+					break;
+				case "blob": case "tinyblob": case "mediumblob": case "longblob": case "image": case "oid":
+					loc.rv = "cf_sql_blob";
+					break;
+				case "char": case "character": case "nchar":
+					loc.rv = "cf_sql_char";
+					break;
+				case "date":
+					loc.rv = "cf_sql_date";
+					break;
+				case "dec": case "decimal": case "number": case "numeric":
+					loc.rv = "cf_sql_decimal";
+					break;
+				case "double":
+					loc.rv = "cf_sql_double";
+					break;
+				case "float": case "float4": case "float8": case "real":
+					loc.rv = "cf_sql_float";
+					break;
+				case "int": case "int4": case "integer": case "mediumint": case "signed":
+					loc.rv = "cf_sql_integer";
+					break;
+				case "int2": case "smallint": case "year":
+					loc.rv = "cf_sql_smallint";
+					break;
+				case "time":
+					loc.rv = "cf_sql_time";
+					break;
+				case "datetime": case "smalldatetime": case "timestamp":
+					loc.rv = "cf_sql_timestamp";
+					break;
+				case "tinyint":
+					loc.rv = "cf_sql_tinyint";
+					break;
+				case "varbinary": case "longvarbinary":
+					loc.rv = "cf_sql_varbinary";
+					break;
+				case "varchar": case "varchar2": case "longvarchar": case "varchar_ignorecase": case "nvarchar": case "nvarchar2": case "clob": case "nclob": case "text": case "tinytext": case "mediumtext": case "longtext": case "ntext":
+					loc.rv = "cf_sql_varchar";
+					break;
 			}
 		</cfscript>
 		<cfreturn loc.rv>
@@ -55,15 +95,15 @@
 		<cfargument name="queryAttributes" type="struct" required="true">
 		<cfargument name="result" type="struct" required="true">
 		<cfargument name="primaryKey" type="string" required="true">
-		<cfset var loc = {}>
-		<cfset var query = {}>
+		<cfset var loc = StructNew()>
+		<cfset var query = StructNew()>
 		<cfset loc.sql = Trim(arguments.result.sql)>
 		<cfif Left(loc.sql, 11) IS "INSERT INTO" AND NOT StructKeyExists(arguments.result, $generatedKey())>
 			<cfset loc.startPar = Find("(", loc.sql) + 1>
 			<cfset loc.endPar = Find(")", loc.sql)>
 			<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
 			<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
-				<cfset loc.rv = {}>
+				<cfset loc.rv = StructNew()>
 				<cfquery attributeCollection="#arguments.queryAttributes#">SELECT LAST_INSERT_ID() AS lastId</cfquery>
 				<cfset loc.rv[$generatedKey()] = query.name.lastId>
 				<cfreturn loc.rv>
