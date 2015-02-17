@@ -30,8 +30,7 @@
 	<cfargument name="type" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
-
-		if (!len(arguments.type))
+		if (!Len(arguments.type))
 		{
 			if (IsArray(arguments.value))
 			{
@@ -54,7 +53,6 @@
 				arguments.type = "datetime";
 			}
 		}
-
 		switch (arguments.type)
 		{
 			case "array":
@@ -88,14 +86,14 @@
 			case "boolean":
 				if (Len(arguments.value))
 				{
-					arguments.value = ( arguments.value IS true );
+					arguments.value = (arguments.value IS true);
 				}
 				break;
 			case "datetime":
 				// createdatetime will throw an error
 				if (IsDate(arguments.value))
 				{
-					arguments.value = CreateDateTime(year(arguments.value), Month(arguments.value), Day(arguments.value), Hour(arguments.value), Minute(arguments.value), Second(arguments.value));
+					arguments.value = CreateDateTime(Year(arguments.value), Month(arguments.value), Day(arguments.value), Hour(arguments.value), Minute(arguments.value), Second(arguments.value));
 				}
 				break;
 		}
@@ -109,18 +107,18 @@
 	<cfargument name="returnAs" type="string" required="false" default="string">
 	<cfscript>
 		var loc = {};
-		loc.list = ListToArray(arguments.list, arguments.delim);
-		loc.iEnd = ArrayLen(loc.list);
+		loc.rv = ListToArray(arguments.list, arguments.delim);
+		loc.iEnd = ArrayLen(loc.rv);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.list[loc.i] = Trim(loc.list[loc.i]);
+			loc.rv[loc.i] = Trim(loc.rv[loc.i]);
 		}
-		if (arguments.returnAs == "array")
+		if (arguments.returnAs != "array")
 		{
-			return loc.list;
+			loc.rv = ArrayToList(loc.rv, arguments.delim);
 		}
 	</cfscript>
-	<cfreturn ArrayToList(loc.list, arguments.delim)>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$hashedKey" returntype="string" access="public" output="false" hint="Creates a unique string based on any arguments passed in (used as a key for caching mostly).">
@@ -129,7 +127,7 @@
 		loc.rv = "";
 
 		// Make all cache keys domain specific
-		StructInsert(arguments,ListLen(StructKeyList(arguments)) + 1,request.cgi.http_host,true);
+		StructInsert(arguments, ListLen(StructKeyList(arguments)) + 1, request.cgi.http_host, true);
 
 		// we need to make sure we are looping through the passed in arguments in the same order everytime
 		loc.values = [];
@@ -146,6 +144,7 @@
 			try
 			{
 				loc.rv = SerializeJSON(loc.values);
+				
 				// remove the characters that indicate array or struct so that we can sort it as a list below
 				loc.rv = ReplaceList(loc.rv, "{,},[,]", ",,,");
 				loc.rv = ListSort(loc.rv, "text");
@@ -155,8 +154,9 @@
 				loc.rv = $wddx(input=loc.values);
 			}
 		}
-		return Hash(loc.rv);
+		loc.rv = Hash(loc.rv);
 	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$timeSpanForCache" returntype="any" access="public" output="false">
@@ -180,8 +180,9 @@
 				loc.list = ListSetAt(loc.list, loc.i, loc.cache);
 			}
 		}
-		return CreateTimeSpan(ListGetAt(loc.list, 1), ListGetAt(loc.list, 2), ListGetAt(loc.list, 3), ListGetAt(loc.list, 4));
+		loc.rv = CreateTimeSpan(ListGetAt(loc.list, 1), ListGetAt(loc.list, 2), ListGetAt(loc.list, 3), ListGetAt(loc.list, 4));
 	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$combineArguments" returntype="void" access="public" output="false">
@@ -286,7 +287,7 @@
 		{
 			if (ListFindNoCase(arguments.on, loc.key))
 			{
-				arguments.input["$"&loc.key] = arguments.input[loc.key];
+				arguments.input["$" & loc.key] = arguments.input[loc.key];
 				StructDelete(arguments.input, loc.key);
 			}
 		}
@@ -320,11 +321,13 @@
 <cffunction name="$URLEncode" returntype="string" access="public" output="false">
 	<cfargument name="param" type="string" required="false" default="">
 	<cfscript>
-		var rv = "";
-		rv = URLEncodedFormat(arguments.param);
-		rv = ReplaceList(rv, "%24,%2D,%5F,%2E,%2B,%21,%2A,%27,%28,%29", "$,-,_,.,+,!,*,',(,)"); // these characters are safe so set them back to their original values.
+		var loc = {};
+		loc.rv = URLEncodedFormat(arguments.param);
+		
+		// these characters are safe so set them back to their original values
+		loc.rv = ReplaceList(loc.rv, "%24,%2D,%5F,%2E,%2B,%21,%2A,%27,%28,%29", "$,-,_,.,+,!,*,',(,)");
 	</cfscript>
-	<cfreturn rv>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$routeVariables" returntype="string" access="public" output="false">
@@ -347,7 +350,7 @@
 		}
 
 		loc.routePos = application.wheels.namedRoutePositions[arguments.route];
-		if (loc.routePos Contains ",")
+		if (Find(",", loc.routePos))
 		{
 			// there are several routes with this name so we need to figure out which one to use by checking the passed in arguments
 			loc.iEnd = ListLen(loc.routePos);
@@ -381,13 +384,14 @@
 <cffunction name="$cachedModelClassExists" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
-		var rv = false;
+		var loc = {};
+		loc.rv = false;
 		if (StructKeyExists(application.wheels.models, arguments.name))
 		{
-			rv = application.wheels.models[arguments.name];
+			loc.rv = application.wheels.models[arguments.name];
 		}
 	</cfscript>
-	<cfreturn rv>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$constructParams" returntype="string" access="public" output="false">
@@ -539,13 +543,14 @@
 <cffunction name="$cachedControllerClassExists" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
-		var rv = false;
+		var loc = {};
+		loc.rv = false;
 		if (StructKeyExists(application.wheels.controllers, arguments.name))
 		{
-			rv = application.wheels.controllers[arguments.name];
+			loc.rv = application.wheels.controllers[arguments.name];
 		}
 	</cfscript>
-	<cfreturn rv>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$fileExistsNoCase" returntype="any" access="public" output="false">
@@ -845,11 +850,15 @@
 </cffunction>
 
 <cffunction name="$clearModelInitializationCache">
-	<cfset StructClear(application.wheels.models)>
+	<cfscript>
+		StructClear(application.wheels.models);
+	</cfscript>
 </cffunction>
 
 <cffunction name="$clearControllerInitializationCache">
-	<cfset StructClear(application.wheels.controllers)>
+	<cfscript>
+		StructClear(application.wheels.controllers);
+	</cfscript>
 </cffunction>
 
 <cffunction name="$checkMinimumVersion" access="private" returntype="string" output="false">
@@ -907,25 +916,25 @@
 
 <cffunction name="$loadPlugins" returntype="void" access="public" output="false">
 	<cfscript>
-	var loc = {};
-	loc.appKey = $appKey();
-	loc.pluginPath = application[loc.appKey].webPath & application[loc.appKey].pluginPath;
-	application[loc.appKey].PluginObj = $createObjectFromRoot(path="wheels", fileName="Plugins", method="init", pluginPath=loc.pluginPath, deletePluginDirectories=application[loc.appKey].deletePluginDirectories, overwritePlugins=application[loc.appKey].overwritePlugins, loadIncompatiblePlugins=application[loc.appKey].loadIncompatiblePlugins, wheelsEnvironment=application[loc.appKey].environment, wheelsVersion=application[loc.appKey].version);
-	application[loc.appKey].plugins = application[loc.appKey].PluginObj.getPlugins();
-	application[loc.appKey].incompatiblePlugins = application[loc.appKey].PluginObj.getIncompatiblePlugins();
-	application[loc.appKey].dependantPlugins = application[loc.appKey].PluginObj.getDependantPlugins();
-	application[loc.appKey].mixins = application[loc.appKey].PluginObj.getMixins();
+		var loc = {};
+		loc.appKey = $appKey();
+		loc.pluginPath = application[loc.appKey].webPath & application[loc.appKey].pluginPath;
+		application[loc.appKey].PluginObj = $createObjectFromRoot(path="wheels", fileName="Plugins", method="init", pluginPath=loc.pluginPath, deletePluginDirectories=application[loc.appKey].deletePluginDirectories, overwritePlugins=application[loc.appKey].overwritePlugins, loadIncompatiblePlugins=application[loc.appKey].loadIncompatiblePlugins, wheelsEnvironment=application[loc.appKey].environment, wheelsVersion=application[loc.appKey].version);
+		application[loc.appKey].plugins = application[loc.appKey].PluginObj.getPlugins();
+		application[loc.appKey].incompatiblePlugins = application[loc.appKey].PluginObj.getIncompatiblePlugins();
+		application[loc.appKey].dependantPlugins = application[loc.appKey].PluginObj.getDependantPlugins();
+		application[loc.appKey].mixins = application[loc.appKey].PluginObj.getMixins();
 	</cfscript>
 </cffunction>
 
 <cffunction name="$appKey" returntype="string" access="public" output="false">
 	<cfscript>
-	var loc = {};
-	loc.rv = "wheels";
-	if (StructKeyExists(application, "$wheels"))
-	{
-		loc.rv = "$wheels";
-	}
+		var loc = {};
+		loc.rv = "wheels";
+		if (StructKeyExists(application, "$wheels"))
+		{
+			loc.rv = "$wheels";
+		}
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>

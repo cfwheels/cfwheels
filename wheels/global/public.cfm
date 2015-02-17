@@ -136,18 +136,18 @@
 		var loc = {};
 
 		// all numeric values must be integers
-		arguments.totalRecords = fix(arguments.totalRecords);
-		arguments.currentPage = fix(arguments.currentPage);
-		arguments.perPage = fix(arguments.perPage);
+		arguments.totalRecords = Fix(arguments.totalRecords);
+		arguments.currentPage = Fix(arguments.currentPage);
+		arguments.perPage = Fix(arguments.perPage);
 
 		// totalRecords cannot be negative
-		if (arguments.totalRecords lt 0)
+		if (arguments.totalRecords < 0)
 		{
 			arguments.totalRecords = 0;
 		}
 
 		// perPage less then zero
-		if (arguments.perPage lte 0)
+		if (arguments.perPage <= 0)
 		{
 			arguments.perPage = 25;
 		}
@@ -156,11 +156,11 @@
 		arguments.totalPages = Ceiling(arguments.totalRecords/arguments.perPage);
 
 		// currentPage shouldn't be less then 1 or greater then the number of pages
-		if (arguments.currentPage gte arguments.totalPages)
+		if (arguments.currentPage >= arguments.totalPages)
 		{
 			arguments.currentPage = arguments.totalPages;
 		}
-		if (arguments.currentPage lt 1)
+		if (arguments.currentPage < 1)
 		{
 			arguments.currentPage = 1;
 		}
@@ -176,17 +176,17 @@
 		arguments.endRow = (arguments.startRow - 1) + arguments.perPage;
 
 		// endRow shouldn't be greater then the totalRecords or less than startRow
-		if (arguments.endRow gte arguments.totalRecords)
+		if (arguments.endRow >= arguments.totalRecords)
 		{
 			arguments.endRow = arguments.totalRecords;
 		}
-		if (arguments.endRow lt arguments.startRow)
+		if (arguments.endRow < arguments.startRow)
 		{
 			arguments.endRow = arguments.startRow;
 		}
 
-		loc.args = duplicate(arguments);
-		structDelete(loc.args, "handle", false);
+		loc.args = Duplicate(arguments);
+		StructDelete(loc.args, "handle");
 		request.wheels[arguments.handle] = loc.args;
 	</cfscript>
 </cffunction>
@@ -236,13 +236,13 @@
 		loc.appKey = $appKey();
 
 		// throw errors when controller or action is not passed in as arguments and not included in the pattern
-		if (!Len(arguments.controller) && arguments.pattern Does Not Contain "[controller]")
+		if (!Len(arguments.controller) && !FindNoCase("[controller]", arguments.pattern))
 		{
-			$throw(type="Wheels.IncorrectArguments", message="The `controller` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `controller` argument to specifically tell Wheels which controller to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
+			$throw(type="Wheels.IncorrectArguments", message="The `controller` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `controller` argument to specifically tell Wheels which controller to call or include it in the pattern to tell CFWheels to determine it dynamically on each request based on the incoming URL.");
 		}
-		if (!Len(arguments.action) && arguments.pattern Does Not Contain "[action]")
+		if (!Len(arguments.action) && !FindNoCase("[action]", arguments.pattern))
 		{
-			$throw(type="Wheels.IncorrectArguments", message="The `action` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `action` argument to specifically tell Wheels which action to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
+			$throw(type="Wheels.IncorrectArguments", message="The `action` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `action` argument to specifically tell Wheels which action to call or include it in the pattern to tell CFWheels to determine it dynamically on each request based on the incoming URL.");
 		}
 
 		loc.thisRoute = Duplicate(arguments);
@@ -499,7 +499,7 @@
 		loc.params = {};
 		if (StructKeyExists(variables, "params"))
 		{
-			StructAppend(loc.params, variables.params, true);
+			StructAppend(loc.params, variables.params);
 		}
 		if (application.wheels.showErrorInformation)
 		{
@@ -541,11 +541,13 @@
 				{
 					loc.rv &= hyphenize(loc.route.action);
 				}
+				
 				// add it the format if it exists
 				if (StructKeyExists(loc.route, "formatVariable") && StructKeyExists(arguments, loc.route.formatVariable))
 				{
 					loc.rv &= "&#loc.route.formatVariable#=#arguments[loc.route.formatVariable]#";
 				}
+				
 				loc.iEnd = ListLen(loc.route.variables);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
@@ -562,12 +564,12 @@
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.property = ListGetAt(loc.route.pattern, loc.i, "/");
-					if (loc.property Contains "[")
+					if (Find("[", loc.property))
 					{
 						loc.property = Mid(loc.property, 2, Len(loc.property)-2);
 						if (application.wheels.showErrorInformation && !StructKeyExists(arguments, loc.property))
 						{
-							$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The route chosen by Wheels `#loc.route.name#` requires the argument `#loc.property#`. Pass the argument `#loc.property#` or change your routes to reflect the proper variables needed.");
+							$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The route chosen by CFWheels `#loc.route.name#` requires the argument `#loc.property#`. Pass the argument `#loc.property#` or change your routes to reflect the proper variables needed.");
 						}
 						loc.param = $URLEncode(arguments[loc.property]);
 						if (loc.property == "controller" || loc.property == "action")
@@ -714,15 +716,20 @@
 	<cfargument name="except" type="string" required="false" default="" hint="a list of strings (space separated) to replace within the output.">
 	<cfscript>
 		var loc = {};
-		loc.rv = REReplace(arguments.text, "([[:upper:]])", " \1", "all"); // adds a space before every capitalized word
-		loc.rv = REReplace(loc.rv, "([[:upper:]]) ([[:upper:]])(?:\s|\b)", "\1\2", "all"); // fixes abbreviations so they form a word again (example: aURLVariable)
+		
+		// add a space before every capitalized word
+		loc.rv = REReplace(arguments.text, "([[:upper:]])", " \1", "all");
+		
+		// fix abbreviations so they form a word again (example: aURLVariable)
+		loc.rv = REReplace(loc.rv, "([[:upper:]]) ([[:upper:]])(?:\s|\b)", "\1\2", "all");
+
 		if (Len(arguments.except))
 		{
 			loc.iEnd = ListLen(arguments.except, " ");
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.a = ListGetAt(arguments.except, loc.i);
-				loc.rv = ReReplaceNoCase(loc.rv, "#loc.a#(?:\b)", "#loc.a#", "all");
+				loc.item = ListGetAt(arguments.except, loc.i);
+				loc.rv = ReReplaceNoCase(loc.rv, "#loc.item#(?:\b)", "#loc.item#", "all");
 			}
 		}
 
@@ -847,11 +854,11 @@
 			else if (ListFindNoCase(loc.irregulars, loc.text))
 			{
 				loc.pos = ListFindNoCase(loc.irregulars, loc.text);
-				if (arguments.which == "singularize" && loc.pos MOD 2 == 0)
+				if (arguments.which == "singularize" && loc.pos % 2 == 0)
 				{
 					loc.rv = ListGetAt(loc.irregulars, loc.pos-1);
 				}
-				else if (arguments.which == "pluralize" && loc.pos MOD 2 != 0)
+				else if (arguments.which == "pluralize" && loc.pos % 2 != 0)
 				{
 					loc.rv = ListGetAt(loc.irregulars, loc.pos+1);
 				}
