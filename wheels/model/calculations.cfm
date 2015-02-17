@@ -28,7 +28,7 @@
 			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it
 			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
 			loc.values = ListToArray(Evaluate("ValueList(loc.values.#arguments.property#)"));
-			loc.returnValue = arguments.ifNull;
+			loc.rv = arguments.ifNull;
 			if (!ArrayIsEmpty(loc.values))
 			{
 				if (arguments.distinct)
@@ -41,20 +41,20 @@
 					}
 					loc.values = ListToArray(StructKeyList(loc.tempValues));
 				}
-				loc.returnValue = ArrayAvg(loc.values);
+				loc.rv = ArrayAvg(loc.values);
 			} 
 		}
 		else
 		{
 			// if the column's type is a float or similar we can run an AVG type query since it will always return a value of the same type as the column
 			arguments.type = "AVG";
-			loc.returnValue = $calculate(argumentCollection=arguments);
+			loc.rv = $calculate(argumentCollection=arguments);
 			
 			// we convert the result to a string so that it is the same as what would happen if you calculate an average in ColdFusion code (like we do for integers in this function for example)
-			loc.returnValue = JavaCast("string", loc.returnValue);
+			loc.rv = JavaCast("string", loc.rv);
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="count" returntype="numeric" access="public" output="false" hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function `COUNT`. If no records can be found to perform the calculation on, `0` is returned."
@@ -92,13 +92,13 @@
 		{
 			arguments.distinct = false;
 		}
-		loc.returnValue = $calculate(argumentCollection=arguments);
-		if (!IsNumeric(loc.returnValue))
+		loc.rv = $calculate(argumentCollection=arguments);
+		if (!IsNumeric(loc.rv))
 		{
-			loc.returnValue = 0;
+			loc.rv = 0;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="maximum" returntype="any" access="public" output="false" hint="Calculates the maximum value for a given property. Uses the SQL function `MAX`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
@@ -124,9 +124,9 @@
 		var loc = {};
 		$args(name="maximum", args=arguments);
 		arguments.type = "MAX";
-		loc.returnValue = $calculate(argumentCollection=arguments);
+		loc.rv = $calculate(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="minimum" returntype="any" access="public" output="false" hint="Calculates the minimum value for a given property. Uses the SQL function `MIN`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
@@ -152,9 +152,9 @@
 		var loc = {};
 		$args(name="minimum", args=arguments);
 		arguments.type = "MIN";
-		loc.returnValue = $calculate(argumentCollection=arguments);
+		loc.rv = $calculate(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="sum" returntype="any" access="public" output="false" hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
@@ -181,9 +181,9 @@
 		var loc = {};
 		$args(name="sum", args=arguments);
 		arguments.type = "SUM";
-		loc.returnValue = $calculate(argumentCollection=arguments);
+		loc.rv = $calculate(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <!--- PRIVATE MODEL CLASS METHODS --->
@@ -234,11 +234,11 @@
 		StructDelete(arguments, "property");
 		StructDelete(arguments, "distinct");
 		
-		loc.returnValue = findAll(argumentCollection=arguments).wheelsqueryresult;
-		if (!Len(loc.returnValue) && Len(arguments.ifNull))
+		loc.rv = findAll(argumentCollection=arguments).wheelsqueryresult;
+		if (!Len(loc.rv) && Len(arguments.ifNull))
 		{
-			loc.returnValue = arguments.ifNull;
+			loc.rv = arguments.ifNull;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

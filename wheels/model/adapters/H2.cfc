@@ -14,25 +14,25 @@
 			var loc = {};
 			switch (arguments.type)
 			{
-				case "bigint": case "int8": loc.returnValue = "cf_sql_bigint"; break;
-				case "binary": case "bytea": case "raw": loc.returnValue = "cf_sql_binary"; break;
-				case "bit": case "bool": case "boolean": loc.returnValue = "cf_sql_bit"; break;
-				case "blob": case "tinyblob": case "mediumblob": case "longblob": case "image": case "oid": loc.returnValue = "cf_sql_blob"; break;
-				case "char": case "character": case "nchar": loc.returnValue = "cf_sql_char"; break;
-				case "date": loc.returnValue = "cf_sql_date"; break;
-				case "dec": case "decimal": case "number": case "numeric": loc.returnValue = "cf_sql_decimal"; break;
-				case "double": loc.returnValue = "cf_sql_double"; break;
-				case "float": case "float4": case "float8": case "real": loc.returnValue = "cf_sql_float"; break;
-				case "int": case "int4": case "integer": case "mediumint": case "signed": loc.returnValue = "cf_sql_integer"; break;
-				case "int2": case "smallint": case "year": loc.returnValue = "cf_sql_smallint"; break;
-				case "time": loc.returnValue = "cf_sql_time"; break;
-				case "datetime": case "smalldatetime": case "timestamp": loc.returnValue = "cf_sql_timestamp"; break;
-				case "tinyint": loc.returnValue = "cf_sql_tinyint"; break;
-				case "varbinary": case "longvarbinary": loc.returnValue = "cf_sql_varbinary"; break;
-				case "varchar": case "varchar2": case "longvarchar": case "varchar_ignorecase": case "nvarchar": case "nvarchar2": case "clob": case "nclob": case "text": case "tinytext": case "mediumtext": case "longtext": case "ntext": loc.returnValue = "cf_sql_varchar"; break;
+				case "bigint": case "int8": loc.rv = "cf_sql_bigint"; break;
+				case "binary": case "bytea": case "raw": loc.rv = "cf_sql_binary"; break;
+				case "bit": case "bool": case "boolean": loc.rv = "cf_sql_bit"; break;
+				case "blob": case "tinyblob": case "mediumblob": case "longblob": case "image": case "oid": loc.rv = "cf_sql_blob"; break;
+				case "char": case "character": case "nchar": loc.rv = "cf_sql_char"; break;
+				case "date": loc.rv = "cf_sql_date"; break;
+				case "dec": case "decimal": case "number": case "numeric": loc.rv = "cf_sql_decimal"; break;
+				case "double": loc.rv = "cf_sql_double"; break;
+				case "float": case "float4": case "float8": case "real": loc.rv = "cf_sql_float"; break;
+				case "int": case "int4": case "integer": case "mediumint": case "signed": loc.rv = "cf_sql_integer"; break;
+				case "int2": case "smallint": case "year": loc.rv = "cf_sql_smallint"; break;
+				case "time": loc.rv = "cf_sql_time"; break;
+				case "datetime": case "smalldatetime": case "timestamp": loc.rv = "cf_sql_timestamp"; break;
+				case "tinyint": loc.rv = "cf_sql_tinyint"; break;
+				case "varbinary": case "longvarbinary": loc.rv = "cf_sql_varbinary"; break;
+				case "varchar": case "varchar2": case "longvarchar": case "varchar_ignorecase": case "nvarchar": case "nvarchar2": case "clob": case "nclob": case "text": case "tinytext": case "mediumtext": case "longtext": case "ntext": loc.rv = "cf_sql_varchar"; break;
 			}
 		</cfscript>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$query" returntype="struct" access="public" output="false">
@@ -46,9 +46,9 @@
 			arguments = $convertMaxRowsToLimit(arguments);
 			arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
 			arguments.sql = $addColumnsToSelectAndGroupBy(arguments.sql);
-			loc.returnValue = $performQuery(argumentCollection=arguments);
+			loc.rv = $performQuery(argumentCollection=arguments);
 		</cfscript>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$identitySelect" returntype="any" access="public" output="false">
@@ -63,10 +63,10 @@
 			<cfset loc.endPar = Find(")", loc.sql)>
 			<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
 			<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
-				<cfset loc.returnValue = {}>
+				<cfset loc.rv = {}>
 				<cfquery attributeCollection="#arguments.queryAttributes#">SELECT LAST_INSERT_ID() AS lastId</cfquery>
-				<cfset loc.returnValue[$generatedKey()] = query.name.lastId>
-				<cfreturn loc.returnValue>
+				<cfset loc.rv[$generatedKey()] = query.name.lastId>
+				<cfreturn loc.rv>
 			</cfif>
 		</cfif>
 	</cffunction>
@@ -79,24 +79,24 @@
 			loc.columns = super.$getColumns(argumentCollection=arguments);
 			
 			// since cfdbinfo incorrectly returns information_schema tables we need to create a new query result that excludes these tables
-			loc.returnValue = QueryNew(loc.columns.columnList);
+			loc.rv = QueryNew(loc.columns.columnList);
 			loc.iEnd = loc.columns.recordCount;
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				// yes, it should actually be "table_schem" below, not a typo 
 				if (loc.columns["table_schem"][loc.i] != "information_schema")
 				{
-					QueryAddRow(loc.returnValue);
+					QueryAddRow(loc.rv);
 					loc.jEnd = ListLen(loc.columns.columnList);
 					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 					{
 						loc.item = ListGetAt(loc.columns.columnList, loc.j);
-						QuerySetCell(loc.returnValue, loc.item, loc.columns[loc.item][loc.i]);
+						QuerySetCell(loc.rv, loc.item, loc.columns[loc.item][loc.i]);
 					}
 				}
 			} 
 		</cfscript>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cfinclude template="../../plugins/injection.cfm">

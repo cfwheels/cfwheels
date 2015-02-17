@@ -277,7 +277,7 @@
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = false;
+		loc.rv = false;
 		clearErrors();
 		if ($callback("beforeValidation", arguments.callbacks))
 		{
@@ -285,19 +285,19 @@
 			{
 				if ($validateAssociations() && $callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate") && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks))
 				{
-					loc.returnValue = true;
+					loc.rv = true;
 				}
 			}
 			else
 			{
 				if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave,onUpdate") && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks))
 				{
-					loc.returnValue = true;
+					loc.rv = true;
 				}
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="automaticValidations" returntype="void" access="public" output="false" hint="Whether or not to enable default validations for this model."
@@ -371,7 +371,7 @@
 	<cfargument name="message" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = arguments.message;
+		loc.rv = arguments.message;
 
 		// loop through each argument and replace bracketed occurance with argument value
 		for (loc.i in arguments)
@@ -384,19 +384,19 @@
 				{
 					loc.value = this.$label(loc.value);
 				}
-				loc.returnValue = Replace(loc.returnValue, "[[#loc.i#]]", "{{#chr(7)#}}", "all");
-				loc.returnValue = Replace(loc.returnValue, "[#loc.i#]", LCase(loc.value), "all");
-				loc.returnValue = Replace(loc.returnValue, "{{#chr(7)#}}", "[#loc.i#]", "all");
+				loc.rv = Replace(loc.rv, "[[#loc.i#]]", "{{#chr(7)#}}", "all");
+				loc.rv = Replace(loc.rv, "[#loc.i#]", LCase(loc.value), "all");
+				loc.rv = Replace(loc.rv, "{{#chr(7)#}}", "[#loc.i#]", "all");
 			}
 		}
 
 		// capitalize the first word in the property name if it comes first in the sentence
 		if (Left(arguments.message, 10) == "[property]")
 		{
-			loc.returnValue = capitalize(loc.returnValue);
+			loc.rv = capitalize(loc.rv);
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <!--- PRIVATE MODEL OBJECT METHODS --->
@@ -451,24 +451,24 @@
 		}
 
 		// now that we have run all the validation checks we can return "true" if no errors exist on the object, "false" otherwise
-		loc.returnValue = !hasErrors();
+		loc.rv = !hasErrors();
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$evaluateCondition" returntype="boolean" access="public" output="false" hint="Evaluates the condition to determine if the validation should be executed.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = false;
+		loc.rv = false;
 
 		// proceed with validation when "condition" has been supplied and it evaluates to "true" or when "unless" has been supplied and it evaluates to "false"
 		// if both "condition" and "unless" have been supplied though, they both need to be evaluated correctly ("true"/false" that is) for validation to proceed
 		if ((!StructKeyExists(arguments, "condition") || !Len(arguments.condition) || Evaluate(arguments.condition)) && (!StructKeyExists(arguments, "unless") || !Len(arguments.unless) || !Evaluate(arguments.unless)))
 		{
-			loc.returnValue = true;
+			loc.rv = true;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$validatesConfirmationOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesConfirmationOf method.">
@@ -604,7 +604,7 @@
 	<cfargument name="validation" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = false;
+		loc.rv = false;
 		for (loc.key in variables.wheels.class.validations)
 		{
 			if (StructKeyExists(variables.wheels.class.validations, loc.key))
@@ -615,12 +615,12 @@
 				{
 					if (StructKeyExists(loc.eventArray[loc.i].args, "property") && loc.eventArray[loc.i].args.property == arguments.property && loc.eventArray[loc.i].method == "$#arguments.validation#")
 					{
-						loc.returnValue = true;
+						loc.rv = true;
 						break;
 					}
 				}
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

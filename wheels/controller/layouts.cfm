@@ -61,7 +61,7 @@
 	<cfargument name="$action" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = true;
+		loc.rv = true;
 		loc.layoutType = "template";
 		if (isAjax() && StructKeyExists(variables.$class.layout, "ajax") && Len(variables.$class.layout.ajax))
 		{
@@ -69,7 +69,7 @@
 		}
 		if (!StructIsEmpty(variables.$class.layout))
 		{
-			loc.returnValue = variables.$class.layout.useDefault;
+			loc.rv = variables.$class.layout.useDefault;
 			if ((StructKeyExists(this, variables.$class.layout[loc.layoutType]) && IsCustomFunction(this[variables.$class.layout[loc.layoutType]])) || IsCustomFunction(variables.$class.layout[loc.layoutType]))
 			{
 				// if the developer doesn't return anything from the method or if they return a blank string it should use the default layout still
@@ -78,15 +78,15 @@
 				loc.temp = $invoke(method=variables.$class.layout[loc.layoutType], invokeArgs=loc.invokeArgs);
 				if (StructKeyExists(loc, "temp"))
 				{
-					loc.returnValue = loc.temp;
+					loc.rv = loc.temp;
 				}
 			}
 			else if ((!StructKeyExists(variables.$class.layout, "except") || !ListFindNoCase(variables.$class.layout.except, arguments.$action)) && (!StructKeyExists(variables.$class.layout, "only") || ListFindNoCase(variables.$class.layout.only, arguments.$action)))
 			{
-				loc.returnValue = variables.$class.layout[loc.layoutType];
+				loc.rv = variables.$class.layout[loc.layoutType];
 			}
 		}
-		return loc.returnValue;
+		return loc.rv;
 	</cfscript>
 </cffunction>
 
@@ -131,19 +131,19 @@
 				{
 					loc.include = loc.include & "/" & "layout.cfm";
 				}
-				loc.returnValue = $includeAndReturnOutput($template=loc.include);
+				loc.rv = $includeAndReturnOutput($template=loc.include);
 			}
 			else
 			{
 				arguments.$name = arguments.$layout;
 				arguments.$template = $generateIncludeTemplatePath(argumentCollection=arguments);
-				loc.returnValue = $includeFile(argumentCollection=arguments);
+				loc.rv = $includeFile(argumentCollection=arguments);
 			}
 		}
 		else
 		{
-			loc.returnValue = arguments.$content;
+			loc.rv = arguments.$content;
 		}
-		return loc.returnValue;
+		return loc.rv;
 	</cfscript>
 </cffunction>

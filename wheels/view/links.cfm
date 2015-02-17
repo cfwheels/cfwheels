@@ -63,9 +63,9 @@
 			// variables passed in as route arguments should not be added to the html element
 			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments));
 		}
-		loc.returnValue = $element(name="a", skip=loc.skip, content=arguments.text, attributes=arguments);
+		loc.rv = $element(name="a", skip=loc.skip, content=arguments.text, attributes=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="buttonTo" returntype="string" access="public" output="false" hint="Creates a form containing a single button that submits to the URL. The URL is built the same way as the @linkTo function."
@@ -106,9 +106,9 @@
 			// variables passed in as route arguments should not be added to the html element
 			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments));
 		}
-		loc.returnValue = $element(name="form", skip=loc.skip, content=loc.content, attributes=arguments);
+		loc.rv = $element(name="form", skip=loc.skip, content=loc.content, attributes=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="mailTo" returntype="string" access="public" output="false" hint="Creates a `mailto` link tag to the specified email address, which is also used as the name of the link unless name is specified."
@@ -133,10 +133,10 @@
 		{
 			loc.content = arguments.emailAddress;
 		}
-		loc.returnValue = $element(name="a", skip="emailAddress,name,encode", content=loc.content, attributes=arguments);
+		loc.rv = $element(name="a", skip="emailAddress,name,encode", content=loc.content, attributes=arguments);
 		if (arguments.encode)
 		{
-			loc.js = "document.write('#Trim(loc.returnValue)#');";
+			loc.js = "document.write('#Trim(loc.rv)#');";
 			loc.encoded = "";
 			loc.iEnd = Len(loc.js);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -144,10 +144,10 @@
 				loc.encoded &= "%" & Right("0" & FormatBaseN(Asc(Mid(loc.js,loc.i,1)),16),2);
 			}
 			loc.content = "eval(unescape('#loc.encoded#'))";
-			loc.returnValue = $element(name="script", content=loc.content, type="text/javascript");
+			loc.rv = $element(name="script", content=loc.content, type="text/javascript");
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="paginationLinks" returntype="string" access="public" output="false" hint="Builds and returns a string containing links to pages based on a paginated query. Uses @linkTo internally to build the link, so you need to pass in a `route` name or a `controller`/`action`/`key` combination. All other @linkTo arguments can be supplied as well, in which case they are passed through directly to @linkTo. If you have paginated more than one query in the controller, you can use the `handle` argument to reference them. (Don't forget to pass in a `handle` to the @findAll function in your controller first.)"
@@ -376,7 +376,7 @@
 				loc.middle = Mid(loc.middle, 1, Len(loc.middle)-Len(arguments.appendToPage));
 			}
 		}
-		loc.returnValue = loc.start & loc.middle & loc.end;
+		loc.rv = loc.start & loc.middle & loc.end;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

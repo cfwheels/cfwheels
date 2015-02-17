@@ -4,22 +4,22 @@
 	<cfscript>
 		var loc = {};
 		if (Right(arguments.missingMethodName, 10) == "hasChanged" && StructKeyExists(variables.wheels.class.properties,ReplaceNoCase(arguments.missingMethodName, "hasChanged", "")))
-			loc.returnValue = hasChanged(property=ReplaceNoCase(arguments.missingMethodName, "hasChanged", ""));
+			loc.rv = hasChanged(property=ReplaceNoCase(arguments.missingMethodName, "hasChanged", ""));
 		else if (Right(arguments.missingMethodName, 11) == "changedFrom" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "changedFrom", "")))
-			loc.returnValue = changedFrom(property=ReplaceNoCase(arguments.missingMethodName, "changedFrom", ""));
+			loc.rv = changedFrom(property=ReplaceNoCase(arguments.missingMethodName, "changedFrom", ""));
 		else if (Right(arguments.missingMethodName, 9) == "IsPresent" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "IsPresent", "")))
-			loc.returnValue = propertyIsPresent(property=ReplaceNoCase(arguments.missingMethodName, "IsPresent", ""));
+			loc.rv = propertyIsPresent(property=ReplaceNoCase(arguments.missingMethodName, "IsPresent", ""));
 		else if (Left(arguments.missingMethodName, 9) == "columnFor" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "columnFor", "")))
-			loc.returnValue = columnForProperty(property=ReplaceNoCase(arguments.missingMethodName, "columnFor", ""));
+			loc.rv = columnForProperty(property=ReplaceNoCase(arguments.missingMethodName, "columnFor", ""));
 		else if (Left(arguments.missingMethodName, 6) == "toggle" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "toggle", "")))
-			loc.returnValue = toggle(property=ReplaceNoCase(arguments.missingMethodName, "toggle", ""), argumentCollection=arguments.missingMethodArguments);
+			loc.rv = toggle(property=ReplaceNoCase(arguments.missingMethodName, "toggle", ""), argumentCollection=arguments.missingMethodArguments);
 		else if (Left(arguments.missingMethodName, 3) == "has" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "has", "")))
-			loc.returnValue = hasProperty(property=ReplaceNoCase(arguments.missingMethodName, "has", ""));
+			loc.rv = hasProperty(property=ReplaceNoCase(arguments.missingMethodName, "has", ""));
 		else if (Left(arguments.missingMethodName, 6) == "update" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "update", "")))
 		{
 			if (!StructKeyExists(arguments.missingMethodArguments, "value"))
 				$throw(type="Wheels.IncorrectArguments", message="The `value` argument is required but was not passed in.", extendedInfo="Pass in a value to the dynamic updateProperty in the `value` argument.");
-			loc.returnValue = updateProperty(property=ReplaceNoCase(arguments.missingMethodName, "update", ""), value=arguments.missingMethodArguments.value);
+			loc.rv = updateProperty(property=ReplaceNoCase(arguments.missingMethodName, "update", ""), value=arguments.missingMethodArguments.value);
 		}
 		else if (Left(arguments.missingMethodName, 9) == "findOneBy" || Left(arguments.missingMethodName, 9) == "findAllBy")
 		{
@@ -90,16 +90,16 @@
 			StructDelete(arguments.missingMethodArguments, "values");
 
 			// call finder method
-			loc.returnValue = IIf(Left(arguments.missingMethodName, 9) == "findOneBy", "findOne(argumentCollection=arguments.missingMethodArguments)", "findAll(argumentCollection=arguments.missingMethodArguments)");
+			loc.rv = IIf(Left(arguments.missingMethodName, 9) == "findOneBy", "findOne(argumentCollection=arguments.missingMethodArguments)", "findAll(argumentCollection=arguments.missingMethodArguments)");
 		}
 		else
 		{
-			loc.returnValue = $associationMethod(argumentCollection=arguments);
+			loc.rv = $associationMethod(argumentCollection=arguments);
 		}
-		if (!StructKeyExists(loc, "returnValue"))
+		if (!StructKeyExists(loc, "rv"))
 			$throw(type="Wheels.MethodNotFound", message="The method `#arguments.missingMethodName#` was not found in the `#variables.wheels.class.modelName#` model.", extendedInfo="Check your spelling or add the method to the model's CFC file.");
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$dynamicFinderOperator" returntype="string" access="public" output="false">
@@ -381,11 +381,11 @@
 				}
 			}
 			if (Len(loc.method))
-				loc.returnValue = $invoke(componentReference=loc.componentReference, method=loc.method, invokeArgs=arguments.missingMethodArguments);
+				loc.rv = $invoke(componentReference=loc.componentReference, method=loc.method, invokeArgs=arguments.missingMethodArguments);
 		}
 	</cfscript>
-	<cfif StructKeyExists(loc, "returnValue")>
-		<cfreturn loc.returnValue>
+	<cfif StructKeyExists(loc, "rv")>
+		<cfreturn loc.rv>
 	</cfif>
 </cffunction>
 
@@ -393,12 +393,12 @@
 	<cfargument name="name" type="string" required="true" hint="Name of property to get value for.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
+		loc.rv = "";
 		loc.iEnd = ListLen(arguments.name);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			loc.returnValue = ListAppend(loc.returnValue, this[ListGetAt(arguments.name, loc.i)]);
+			loc.rv = ListAppend(loc.rv, this[ListGetAt(arguments.name, loc.i)]);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$setForeignKeyValues" returntype="void" access="public" output="false">

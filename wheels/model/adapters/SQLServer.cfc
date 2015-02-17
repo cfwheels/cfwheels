@@ -14,27 +14,27 @@
 			var loc = {};
 			switch(arguments.type)
 			{
-				case "bigint": {loc.returnValue = "cf_sql_bigint"; break;}
-				case "binary": case "geography": case "geometry": case "timestamp": {loc.returnValue = "cf_sql_binary"; break;}
-				case "bit": {loc.returnValue = "cf_sql_bit"; break;}
-				case "char": case "nchar": case "uniqueidentifier": {loc.returnValue = "cf_sql_char"; break;}
-				case "date": {loc.returnValue = "cf_sql_date"; break;}
-				case "datetime": case "datetime2": case "smalldatetime": {loc.returnValue = "cf_sql_timestamp"; break;}
-				case "decimal": case "money": case "smallmoney": {loc.returnValue = "cf_sql_decimal"; break;}
-				case "float": {loc.returnValue = "cf_sql_float"; break;}
-				case "int": {loc.returnValue = "cf_sql_integer"; break;}
-				case "image": {loc.returnValue = "cf_sql_longvarbinary"; break;}
-				case "text": case "ntext": case "xml": {loc.returnValue = "cf_sql_longvarchar";	break;}
-				case "numeric":	{loc.returnValue = "cf_sql_numeric"; break;}
-				case "real": {loc.returnValue = "cf_sql_real"; break;}
-				case "smallint": {loc.returnValue = "cf_sql_smallint"; break;}
-				case "time": {loc.returnValue = "cf_sql_time"; break;}
-				case "tinyint":	{loc.returnValue = "cf_sql_tinyint"; break;}
-				case "varbinary": {loc.returnValue = "cf_sql_varbinary"; break;}
-				case "varchar": case "nvarchar": {loc.returnValue = "cf_sql_varchar"; break;}
+				case "bigint": {loc.rv = "cf_sql_bigint"; break;}
+				case "binary": case "geography": case "geometry": case "timestamp": {loc.rv = "cf_sql_binary"; break;}
+				case "bit": {loc.rv = "cf_sql_bit"; break;}
+				case "char": case "nchar": case "uniqueidentifier": {loc.rv = "cf_sql_char"; break;}
+				case "date": {loc.rv = "cf_sql_date"; break;}
+				case "datetime": case "datetime2": case "smalldatetime": {loc.rv = "cf_sql_timestamp"; break;}
+				case "decimal": case "money": case "smallmoney": {loc.rv = "cf_sql_decimal"; break;}
+				case "float": {loc.rv = "cf_sql_float"; break;}
+				case "int": {loc.rv = "cf_sql_integer"; break;}
+				case "image": {loc.rv = "cf_sql_longvarbinary"; break;}
+				case "text": case "ntext": case "xml": {loc.rv = "cf_sql_longvarchar";	break;}
+				case "numeric":	{loc.rv = "cf_sql_numeric"; break;}
+				case "real": {loc.rv = "cf_sql_real"; break;}
+				case "smallint": {loc.rv = "cf_sql_smallint"; break;}
+				case "time": {loc.rv = "cf_sql_time"; break;}
+				case "tinyint":	{loc.rv = "cf_sql_tinyint"; break;}
+				case "varbinary": {loc.rv = "cf_sql_varbinary"; break;}
+				case "varchar": case "nvarchar": {loc.rv = "cf_sql_varchar"; break;}
 			}
 		</cfscript>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 	</cffunction>
 	
 	<cffunction name="$query" returntype="struct" access="public" output="false">
@@ -142,9 +142,9 @@
 			// sql server doesn't support limit and offset in sql
 			StructDelete(arguments, "limit", false);
 			StructDelete(arguments, "offset", false);
-			loc.returnValue = $performQuery(argumentCollection=arguments);
+			loc.rv = $performQuery(argumentCollection=arguments);
 		</cfscript>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 	</cffunction>
 	
 	<cffunction name="$identitySelect" returntype="any" access="public" output="false">
@@ -159,10 +159,10 @@
 			<cfset loc.endPar = Find(")", loc.sql)>
 			<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
 			<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
-				<cfset loc.returnValue = {}>
+				<cfset loc.rv = {}>
 				<cfquery attributeCollection="#arguments.queryAttributes#">SELECT SCOPE_IDENTITY() AS lastId</cfquery>
-				<cfset loc.returnValue[$generatedKey()] = query.name.lastId>
-				<cfreturn loc.returnValue>
+				<cfset loc.rv[$generatedKey()] = query.name.lastId>
+				<cfreturn loc.rv>
 			</cfif>
 		</cfif>
 	</cffunction>

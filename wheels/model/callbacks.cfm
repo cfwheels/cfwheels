@@ -253,19 +253,19 @@
 		{
 			if (StructKeyExists(variables.wheels.class.callbacks, arguments.type))
 			{
-				loc.returnValue = variables.wheels.class.callbacks[arguments.type];
+				loc.rv = variables.wheels.class.callbacks[arguments.type];
 			}
 			else
 			{
-				loc.returnValue = ArrayNew(1);
+				loc.rv = ArrayNew(1);
 			}
 		}
 		else
 		{
-			loc.returnValue = variables.wheels.class.callbacks;
+			loc.rv = variables.wheels.class.callbacks;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 
@@ -290,27 +290,27 @@
 					// since this is an afterFind callback we need to handle it differently
 					if (IsQuery(arguments.collection))
 					{
-						loc.returnValue = $queryCallback(method=loc.method, collection=arguments.collection);
+						loc.rv = $queryCallback(method=loc.method, collection=arguments.collection);
 					}
 					else
 					{
 						loc.invokeArgs = properties();
-						loc.returnValue = $invoke(method=loc.method, invokeArgs=loc.invokeArgs);
-						if (StructKeyExists(loc, "returnValue") && IsStruct(loc.returnValue))
+						loc.rv = $invoke(method=loc.method, invokeArgs=loc.invokeArgs);
+						if (StructKeyExists(loc, "rv") && IsStruct(loc.rv))
 						{
-							setProperties(loc.returnValue);
-							StructDelete(loc, "returnValue");
+							setProperties(loc.rv);
+							StructDelete(loc, "rv");
 						}
 					}
 				}
 				else
 				{
 					// this is a regular callback so just call the method
-					loc.returnValue = $invoke(method=loc.method);
+					loc.rv = $invoke(method=loc.method);
 				}
 				
 				// break the loop if the callback returned false
-				if (StructKeyExists(loc, "returnValue") && IsBoolean(loc.returnValue) && !loc.returnValue)
+				if (StructKeyExists(loc, "rv") && IsBoolean(loc.rv) && !loc.rv)
 				{
 					break;
 				}
@@ -318,12 +318,12 @@
 		}
 
 		// return true by default (happens when no callbacks are set or none of the callbacks returned a result)
-		if (!StructKeyExists(loc, "returnValue"))
+		if (!StructKeyExists(loc, "rv"))
 		{
-			loc.returnValue = true;
+			loc.rv = true;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$queryCallback" returntype="boolean" access="public" output="false" hint="Loops over the passed in query, calls the callback method for each row and changes the query based on the arguments struct that is passed back.">
@@ -334,7 +334,7 @@
 
 		// we return true by default
 		// will be overridden only if the callback method returns false on one of the iterations
-		loc.returnValue = true;
+		loc.rv = true;
 
 		// loop over all query rows and execute the callback method for each
 		loc.iEnd = arguments.collection.recordCount;
@@ -378,7 +378,7 @@
 				else if (IsBoolean(loc.result) && !loc.result)
 				{
 					// break the loop and return false if the callback returned false
-					loc.returnValue = false;
+					loc.rv = false;
 					break;
 				}
 			}
@@ -391,5 +391,5 @@
 			request.wheels[loc.querykey] = variables.wheels.class.modelName;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

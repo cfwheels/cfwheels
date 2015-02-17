@@ -119,7 +119,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="dateTimeSelectTags", args=arguments);
-		loc.returnValue = "";
+		loc.rv = "";
 		loc.separator = arguments.separator;
 		loc.label = arguments.label;
 
@@ -133,15 +133,15 @@
 		}
 		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
 		{
-			loc.returnValue &= dateSelect(argumentCollection=arguments);
+			loc.rv &= dateSelect(argumentCollection=arguments);
 		}
 		else
 		{
-			loc.returnValue &= dateSelectTags(argumentCollection=arguments);
+			loc.rv &= dateSelectTags(argumentCollection=arguments);
 		}
 
 		// separate date and time with a string ("-" by default)
-		loc.returnValue &= loc.separator;
+		loc.rv &= loc.separator;
 
 		// create time portion
 		arguments.order = arguments.timeOrder;
@@ -153,14 +153,14 @@
 		}
 		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
 		{
-			loc.returnValue &= timeSelect(argumentCollection=arguments);
+			loc.rv &= timeSelect(argumentCollection=arguments);
 		}
 		else
 		{
-			loc.returnValue &= timeSelectTags(argumentCollection=arguments);
+			loc.rv &= timeSelectTags(argumentCollection=arguments);
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="yearSelectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a select form control for a range of years based on the supplied `name`."
@@ -381,7 +381,7 @@
 		loc.year = Year(arguments.$now);
 		loc.month = Month(arguments.$now);
 		loc.day = Day(arguments.$now);
-		loc.returnValue = arguments.$now;
+		loc.rv = arguments.$now;
 		switch (arguments.part)
 		{
 			case "year": loc.year = arguments.value; break;
@@ -404,12 +404,12 @@
 		
 		try
 		{
-			loc.returnValue = CreateDate(loc.year, loc.month, loc.day);
+			loc.rv = CreateDate(loc.year, loc.month, loc.day);
 		}
 		catch (any e)
 		{
-			loc.returnValue = arguments.$now;
+			loc.rv = arguments.$now;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

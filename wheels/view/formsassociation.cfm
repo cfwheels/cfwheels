@@ -22,7 +22,7 @@
 		var loc = {};
 		$args(name="hasManyRadioButton", args=arguments);
 		loc.checked = false;
-		loc.returnValue = "";
+		loc.rv = "";
 		loc.value = $hasManyFormValue(argumentCollection=arguments);
 		loc.included = includedInObject(argumentCollection=arguments);
 		if (!loc.included)
@@ -35,9 +35,9 @@
 		}
 		loc.tagId = "#arguments.objectName#-#arguments.association#-#Replace(arguments.keys, ",", "-", "all")#-#arguments.property#-#arguments.tagValue#";
 		loc.tagName = "#arguments.objectName#[#arguments.association#][#arguments.keys#][#arguments.property#]";
-		loc.returnValue = radioButtonTag(name=loc.tagName, id=loc.tagId, value=arguments.tagValue, checked=loc.checked, label=arguments.label);
+		loc.rv = radioButtonTag(name=loc.tagName, id=loc.tagId, value=arguments.tagValue, checked=loc.checked, label=arguments.label);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="hasManyCheckBox" returntype="string" access="public" output="false" hint="Used as a shortcut to output the proper form elements for an association. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -68,7 +68,7 @@
 		var loc = {};
 		$args(name="hasManyCheckBox", args=arguments);
 		loc.checked = true;
-		loc.returnValue = "";
+		loc.rv = "";
 		loc.included = includedInObject(argumentCollection=arguments);
 		if (!loc.included)
 		{
@@ -80,9 +80,9 @@
 		StructDelete(arguments, "keys");
 		StructDelete(arguments, "objectName");
 		StructDelete(arguments, "association");
-		loc.returnValue = checkBoxTag(name=loc.tagName, id=loc.tagId, value=0, checked=loc.checked, uncheckedValue=1, argumentCollection=arguments);
+		loc.rv = checkBoxTag(name=loc.tagName, id=loc.tagId, value=0, checked=loc.checked, uncheckedValue=1, argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="includedInObject" returntype="boolean" access="public" output="false" hint="Used as a shortcut to check if the specified IDs are a part of the main form object. This method should only be used for `hasMany` associations."
@@ -99,7 +99,7 @@
 	<cfargument name="keys" type="string" required="true" hint="See documentation for @hasManyRadioButton.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = false;
+		loc.rv = false;
 		loc.object = $getObject(arguments.objectName);
 
 		// clean up our key argument if there is a comma on the beginning or end
@@ -107,11 +107,11 @@
 
 		if (!StructKeyExists(loc.object, arguments.association) || !IsArray(loc.object[arguments.association]))
 		{
-			return loc.returnValue;
+			return loc.rv;
 		}
 		if (!Len(arguments.keys))
 		{
-			return loc.returnValue;
+			return loc.rv;
 		}
 		loc.iEnd = ArrayLen(loc.object[arguments.association]);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -119,12 +119,12 @@
 			loc.assoc = loc.object[arguments.association][loc.i];
 			if (IsObject(loc.assoc) && loc.assoc.key() == arguments.keys)
 			{
-				loc.returnValue = loc.i;
+				loc.rv = loc.i;
 				break;
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$hasManyFormValue" returntype="string" access="public" output="false">
@@ -134,15 +134,15 @@
 	<cfargument name="keys" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
+		loc.rv = "";
 		loc.object = $getObject(arguments.objectName);
 		if (!StructKeyExists(loc.object, arguments.association) || !IsArray(loc.object[arguments.association]))
 		{
-			return loc.returnValue;
+			return loc.rv;
 		}
 		if (!Len(arguments.keys))
 		{
-			return loc.returnValue;
+			return loc.rv;
 		}
 		loc.iEnd = ArrayLen(loc.object[arguments.association]);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -150,10 +150,10 @@
 			loc.assoc = loc.object[arguments.association][loc.i];
 			if (isObject(loc.assoc) && loc.assoc.key() == arguments.keys && StructKeyExists(loc.assoc, arguments.property))
 			{
-				loc.returnValue = loc.assoc[arguments.property];
+				loc.rv = loc.assoc[arguments.property];
 				break;
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

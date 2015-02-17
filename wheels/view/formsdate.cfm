@@ -118,7 +118,7 @@
 		}
 
 		loc.value = $formValue(argumentCollection=arguments);
-		loc.returnValue = "";
+		loc.rv = "";
 		loc.firstDone = false;
 		loc.iEnd = ListLen(arguments.order);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -153,13 +153,13 @@
 
 			if (loc.firstDone)
 			{
-				loc.returnValue &= arguments.separator;
+				loc.rv &= arguments.separator;
 			}
-			loc.returnValue &= Evaluate("$#loc.item#SelectTag(argumentCollection=arguments)");
+			loc.rv &= Evaluate("$#loc.item#SelectTag(argumentCollection=arguments)");
 			loc.firstDone = true;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$yearMonthHourMinuteSecondSelectTag" returntype="string" access="public" output="false">
@@ -248,9 +248,9 @@
 				loc.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=loc.args);
 			}
 		}
-		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
+		loc.rv = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$yearMonthHourMinuteSecondSelectTagContent">
@@ -274,9 +274,9 @@
 		{
 			arguments.optionContent = NumberFormat(arguments.optionContent, "09");
 		}
-		loc.returnValue = $element(name="option", content=arguments.optionContent, attributes=loc.args);
+		loc.rv = $element(name="option", content=arguments.optionContent, attributes=loc.args);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$ampmSelectTag" returntype="string" access="public" output="false">
@@ -309,7 +309,7 @@
 			}
 			loc.content &= $element(name="option", content=loc.option, attributes=loc.args);
 		}
-		loc.returnValue = $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments);
+		loc.rv = $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

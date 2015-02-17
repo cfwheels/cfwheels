@@ -19,10 +19,10 @@
 	<cfargument name="html" type="string" required="true" hint="The HTML to remove tag markup from.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = REReplaceNoCase(arguments.html, "<\ *[a-z].*?>", "", "all");
-		loc.returnValue = REReplaceNoCase(loc.returnValue, "<\ */\ *[a-z].*?>", "", "all");
+		loc.rv = REReplaceNoCase(arguments.html, "<\ *[a-z].*?>", "", "all");
+		loc.rv = REReplaceNoCase(loc.rv, "<\ */\ *[a-z].*?>", "", "all");
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="h" returntype="string" access="public" output="false" hint="Escapes unsafe HTML. Alias for your CFML engine's `XMLFormat()` function."

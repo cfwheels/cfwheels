@@ -332,12 +332,12 @@
 		var loc = {};
 		loc.args = {};
 		loc.args.name = arguments.name;
-		loc.returnValue = $doubleCheckedLock(name="controllerLock#application.applicationName#", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=loc.args, executeArgs=loc.args);
+		loc.rv = $doubleCheckedLock(name="controllerLock#application.applicationName#", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=loc.args, executeArgs=loc.args);
 		if (!StructIsEmpty(arguments.params))
 		{
-			loc.returnValue = loc.returnValue.$createControllerObject(arguments.params);
+			loc.rv = loc.rv.$createControllerObject(arguments.params);
 		}
-		return loc.returnValue;
+		return loc.rv;
 	</cfscript>
 </cffunction>
 
@@ -358,14 +358,14 @@
 		loc.appKey = $appKey();
 		if (Len(arguments.functionName))
 		{
-			loc.returnValue = application[loc.appKey].functions[arguments.functionName][arguments.name];
+			loc.rv = application[loc.appKey].functions[arguments.functionName][arguments.name];
 		}
 		else
 		{
-			loc.returnValue = application[loc.appKey][arguments.name];
+			loc.rv = application[loc.appKey][arguments.name];
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="model" returntype="any" access="public" output="false" hint="Returns a reference to the requested model so that class level methods can be called on it."
@@ -389,7 +389,7 @@
 	<cfargument name="param" type="any" required="true" hint="Value to obfuscate.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = arguments.param;
+		loc.rv = arguments.param;
 		if (IsValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param > 0 && Left(arguments.param, 1) != 0)
 		{
 			loc.iEnd = Len(arguments.param);
@@ -401,11 +401,11 @@
 			}
 			if (IsValid("integer", loc.a))
 			{
-				loc.returnValue = FormatBaseN(loc.b+154, 16) & FormatBaseN(BitXor(loc.a, 461), 16);
+				loc.rv = FormatBaseN(loc.b+154, 16) & FormatBaseN(BitXor(loc.a, 461), 16);
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="deobfuscateParam" returntype="string" access="public" output="false" hint="Deobfuscates a value."
@@ -423,38 +423,38 @@
 			try
 			{
 				loc.checksum = Left(arguments.param, 2);
-				loc.returnValue = Right(arguments.param, Len(arguments.param)-2);
-				loc.z = BitXor(InputBasen(loc.returnValue, 16), 461);
-				loc.returnValue = "";
+				loc.rv = Right(arguments.param, Len(arguments.param)-2);
+				loc.z = BitXor(InputBasen(loc.rv, 16), 461);
+				loc.rv = "";
 				loc.iEnd = Len(loc.z) - 1;
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					loc.returnValue &= Left(Right(loc.z, loc.i), 1);
+					loc.rv &= Left(Right(loc.z, loc.i), 1);
 				}
 				loc.checkSumTest = 0;
-				loc.iEnd = Len(loc.returnValue);
+				loc.iEnd = Len(loc.rv);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					loc.checkSumTest += Left(Right(loc.returnValue, loc.i), 1);
+					loc.checkSumTest += Left(Right(loc.rv, loc.i), 1);
 				}
 				loc.c1 = ToString(FormatBaseN(loc.checkSumTest+154, 10));
 				loc.c2 = InputBasen(loc.checksum, 16);
 				if (loc.c1 != loc.c2)
 				{
-					loc.returnValue = arguments.param;
+					loc.rv = arguments.param;
 				}
 			}
 			catch (any e)
 			{
-	    		loc.returnValue = arguments.param;
+	    		loc.rv = arguments.param;
 			}
 		}
 		else
 		{
-    		loc.returnValue = arguments.param;
+    		loc.rv = arguments.param;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="pluginNames" returntype="string" access="public" output="false" hint="Returns a list of all installed plugins' names."
@@ -516,35 +516,35 @@
 		}
 
 		// build the link
-		loc.returnValue = application.wheels.webPath & ListLast(request.cgi.script_name, "/");
+		loc.rv = application.wheels.webPath & ListLast(request.cgi.script_name, "/");
 		if (Len(arguments.route))
 		{
 			// link for a named route
 			loc.route = $findRoute(argumentCollection=arguments);
 			if (arguments.$URLRewriting == "Off")
 			{
-				loc.returnValue &= "?controller=";
+				loc.rv &= "?controller=";
 				if (Len(arguments.controller))
 				{
-					loc.returnValue &= hyphenize(arguments.controller);
+					loc.rv &= hyphenize(arguments.controller);
 				}
 				else
 				{
-					loc.returnValue &= hyphenize(loc.route.controller);
+					loc.rv &= hyphenize(loc.route.controller);
 				}
-				loc.returnValue &= "&action=";
+				loc.rv &= "&action=";
 				if (Len(arguments.action))
 				{
-					loc.returnValue &= hyphenize(arguments.action);
+					loc.rv &= hyphenize(arguments.action);
 				}
 				else
 				{
-					loc.returnValue &= hyphenize(loc.route.action);
+					loc.rv &= hyphenize(loc.route.action);
 				}
 				// add it the format if it exists
 				if (StructKeyExists(loc.route, "formatVariable") && StructKeyExists(arguments, loc.route.formatVariable))
 				{
-					loc.returnValue &= "&#loc.route.formatVariable#=#arguments[loc.route.formatVariable]#";
+					loc.rv &= "&#loc.route.formatVariable#=#arguments[loc.route.formatVariable]#";
 				}
 				loc.iEnd = ListLen(loc.route.variables);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -552,7 +552,7 @@
 					loc.property = ListGetAt(loc.route.variables, loc.i);
 					if (loc.property != "controller" && loc.property != "action")
 					{
-						loc.returnValue &= "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
+						loc.rv &= "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
 					}
 				}
 			}
@@ -579,17 +579,17 @@
 							// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
 							loc.param = obfuscateParam("#loc.param#");
 						}
-						loc.returnValue &= "/" & loc.param; // get param from arguments
+						loc.rv &= "/" & loc.param; // get param from arguments
 					}
 					else
 					{
-						loc.returnValue &= "/" & loc.property; // add hard coded param from route
+						loc.rv &= "/" & loc.property; // add hard coded param from route
 					}
 				}
 				// add it the format if it exists
 				if (StructKeyExists(loc.route, "formatVariable") && StructKeyExists(arguments, loc.route.formatVariable))
 				{
-					loc.returnValue &= ".#arguments[loc.route.formatVariable]#";
+					loc.rv &= ".#arguments[loc.route.formatVariable]#";
 				}
 			}
 		}
@@ -609,10 +609,10 @@
 			{
 				arguments.action = loc.params.action;
 			}
-			loc.returnValue &= "?controller=" & hyphenize(arguments.controller);
+			loc.rv &= "?controller=" & hyphenize(arguments.controller);
 			if (Len(arguments.action))
 			{
-				loc.returnValue &= "&action=" & hyphenize(arguments.action);
+				loc.rv &= "&action=" & hyphenize(arguments.action);
 			}
 			if (Len(arguments.key))
 			{
@@ -622,29 +622,29 @@
 					// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
 					loc.param = obfuscateParam("#loc.param#");
 				}
-				loc.returnValue &= "&key=" & loc.param;
+				loc.rv &= "&key=" & loc.param;
 			}
 		}
 
 		if (arguments.$URLRewriting != "Off")
 		{
-			loc.returnValue = Replace(loc.returnValue, "?controller=", "/");
-			loc.returnValue = Replace(loc.returnValue, "&action=", "/");
-			loc.returnValue = Replace(loc.returnValue, "&key=", "/");
+			loc.rv = Replace(loc.rv, "?controller=", "/");
+			loc.rv = Replace(loc.rv, "&action=", "/");
+			loc.rv = Replace(loc.rv, "&key=", "/");
 		}
 		if (arguments.$URLRewriting == "On")
 		{
-			loc.returnValue = Replace(loc.returnValue, application.wheels.rewriteFile, "");
-			loc.returnValue = Replace(loc.returnValue, "//", "/");
+			loc.rv = Replace(loc.rv, application.wheels.rewriteFile, "");
+			loc.rv = Replace(loc.rv, "//", "/");
 		}
 
 		if (Len(arguments.params))
 		{
-			loc.returnValue &= $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
+			loc.rv &= $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
 		}
 		if (Len(arguments.anchor))
 		{
-			loc.returnValue &= "##" & arguments.anchor;
+			loc.rv &= "##" & arguments.anchor;
 		}
 
 		if (!arguments.onlyPath)
@@ -652,36 +652,36 @@
 			if (arguments.port != 0)
 			{
 				// use the port that was passed in by the developer
-				loc.returnValue = ":" & arguments.port & loc.returnValue;
+				loc.rv = ":" & arguments.port & loc.rv;
 			}
 			else if (request.cgi.server_port != 80 && request.cgi.server_port != 443)
 			{
 				// if the port currently in use is not 80 or 443 we set it explicitly in the URL
-				loc.returnValue = ":" & request.cgi.server_port & loc.returnValue;
+				loc.rv = ":" & request.cgi.server_port & loc.rv;
 			}
 			if (Len(arguments.host))
 			{
-				loc.returnValue = arguments.host & loc.returnValue;
+				loc.rv = arguments.host & loc.rv;
 			}
 			else
 			{
-				loc.returnValue = request.cgi.server_name & loc.returnValue;
+				loc.rv = request.cgi.server_name & loc.rv;
 			}
 			if (Len(arguments.protocol))
 			{
-				loc.returnValue = arguments.protocol & "://" & loc.returnValue;
+				loc.rv = arguments.protocol & "://" & loc.rv;
 			}
 			else if (request.cgi.server_port_secure)
 			{
-				loc.returnValue = "https://" & loc.returnValue;
+				loc.rv = "https://" & loc.rv;
 			}
 			else
 			{
-				loc.returnValue = "http://" & loc.returnValue;
+				loc.rv = "http://" & loc.rv;
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <!--- string helpers --->
@@ -714,22 +714,22 @@
 	<cfargument name="except" type="string" required="false" default="" hint="a list of strings (space separated) to replace within the output.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = REReplace(arguments.text, "([[:upper:]])", " \1", "all"); // adds a space before every capitalized word
-		loc.returnValue = REReplace(loc.returnValue, "([[:upper:]]) ([[:upper:]])(?:\s|\b)", "\1\2", "all"); // fixes abbreviations so they form a word again (example: aURLVariable)
+		loc.rv = REReplace(arguments.text, "([[:upper:]])", " \1", "all"); // adds a space before every capitalized word
+		loc.rv = REReplace(loc.rv, "([[:upper:]]) ([[:upper:]])(?:\s|\b)", "\1\2", "all"); // fixes abbreviations so they form a word again (example: aURLVariable)
 		if (Len(arguments.except))
 		{
 			loc.iEnd = ListLen(arguments.except, " ");
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.a = ListGetAt(arguments.except, loc.i);
-				loc.returnValue = ReReplaceNoCase(loc.returnValue, "#loc.a#(?:\b)", "#loc.a#", "all");
+				loc.rv = ReReplaceNoCase(loc.rv, "#loc.a#(?:\b)", "#loc.a#", "all");
 			}
 		}
 
 		// capitalize the first letter and trim final result (which removes the leading space that happens if the string starts with an upper case character)
-		loc.returnValue = Trim(capitalize(loc.returnValue));
+		loc.rv = Trim(capitalize(loc.rv));
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="pluralize" returntype="string" access="public" output="false" hint="Returns the plural form of the passed in word. Can also pluralize a word based on a value passed to the `count` argument."
@@ -824,7 +824,7 @@
 		loc.ruleMatched = false;
 
 		// when count is 1 we don't need to pluralize at all so just set the return value to the input string
-		loc.returnValue = loc.text;
+		loc.rv = loc.text;
 
 		if (arguments.count != 1)
 		{
@@ -841,7 +841,7 @@
 			loc.irregulars = "child,children,foot,feet,man,men,move,moves,person,people,sex,sexes,tooth,teeth,woman,women";
 			if (ListFindNoCase(loc.uncountables, loc.text))
 			{
-				loc.returnValue = loc.text;
+				loc.rv = loc.text;
 				loc.ruleMatched = true;
 			}
 			else if (ListFindNoCase(loc.irregulars, loc.text))
@@ -849,15 +849,15 @@
 				loc.pos = ListFindNoCase(loc.irregulars, loc.text);
 				if (arguments.which == "singularize" && loc.pos MOD 2 == 0)
 				{
-					loc.returnValue = ListGetAt(loc.irregulars, loc.pos-1);
+					loc.rv = ListGetAt(loc.irregulars, loc.pos-1);
 				}
 				else if (arguments.which == "pluralize" && loc.pos MOD 2 != 0)
 				{
-					loc.returnValue = ListGetAt(loc.irregulars, loc.pos+1);
+					loc.rv = ListGetAt(loc.irregulars, loc.pos+1);
 				}
 				else
 				{
-					loc.returnValue = loc.text;
+					loc.rv = loc.text;
 				}
 				loc.ruleMatched = true;
 			}
@@ -885,26 +885,26 @@
 				{
 					if(REFindNoCase(loc.rules[loc.i][1], loc.text))
 					{
-						loc.returnValue = REReplaceNoCase(loc.text, loc.rules[loc.i][1], loc.rules[loc.i][2]);
+						loc.rv = REReplaceNoCase(loc.text, loc.rules[loc.i][1], loc.rules[loc.i][2]);
 						loc.ruleMatched = true;
 						break;
 					}
 				}
-				loc.returnValue = Replace(loc.returnValue, Chr(7), "", "all");
+				loc.rv = Replace(loc.rv, Chr(7), "", "all");
 			}
 			
 			// this was a camelCased string and we need to prepend the unchanged part to the result
 			if (StructKeyExists(loc, "prepend") && loc.ruleMatched)
 			{
-				loc.returnValue = loc.prepend & loc.returnValue;
+				loc.rv = loc.prepend & loc.rv;
 			}
 		}
 
 		// return the count number in the string (e.g. "5 sites" instead of just "sites")
 		if (arguments.returnCount && arguments.count != -1)
 		{
-			loc.returnValue = LSNumberFormat(arguments.count) & " " & loc.returnValue;
+			loc.rv = LSNumberFormat(arguments.count) & " " & loc.rv;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

@@ -203,9 +203,9 @@
 			}
 			request.wheels.cycle[arguments.name] = ListGetAt(arguments.values, loc.foundAt + 1);
 		}
-		loc.returnValue = request.wheels.cycle[arguments.name]; 
+		loc.rv = request.wheels.cycle[arguments.name]; 
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="resetCycle" returntype="void" access="public" output="false" hint="Resets a cycle so that it starts from the first list value the next time it is called."
@@ -245,7 +245,7 @@
 		var loc = {};
 		
 		// start the HTML tag and give it its name
-		loc.returnValue = "<" & arguments.name;
+		loc.rv = "<" & arguments.name;
 		
 		// if named arguments are passed in we add these to the attributes argument instead so we can handle them all in the same code below
 		if (StructCount(arguments) > 5)
@@ -269,21 +269,21 @@
 			// place the attribute name and value in the string unless it should be skipped according to the arguments or if it's an internal argument (starting with a "$" sign)
 			if (!ListFindNoCase(arguments.skip, loc.key) && (!Len(arguments.skipStartingWith) || Left(loc.key, Len(arguments.skipStartingWith)) != arguments.skipStartingWith) && Left(loc.key, 1) != "$")
 			{
-				loc.returnValue &= $tagAttribute(loc.key, arguments.attributes[loc.key]);
+				loc.rv &= $tagAttribute(loc.key, arguments.attributes[loc.key]);
 			}
 		}
 
 		// close the tag (usually done on self-closing tags like "img" for example) or just end it (for tags like "div" for example)
 		if (arguments.close)
 		{
-			loc.returnValue &= " />";
+			loc.rv &= " />";
 		}
 		else
 		{
-			loc.returnValue &= ">";
+			loc.rv &= ">";
 		}		
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$tagAttribute" returntype="string" access="public" output="false">
@@ -304,7 +304,7 @@
 		arguments.name = LCase(arguments.name);
 
 		// set standard attribute name / value to use as the default to return (e.g. name / value part of <input name="value">)
-		loc.returnValue = " " & arguments.name & "=""" & arguments.value & """";
+		loc.rv = " " & arguments.name & "=""" & arguments.value & """";
 
 		// when attribute can be boolean we handle it accordingly and override the above return value
 		if ((!IsBoolean(application.wheels.booleanAttributes) && ListFindNoCase(application.wheels.booleanAttributes, arguments.name)) || (IsBoolean(application.wheels.booleanAttributes) && application.wheels.booleanAttributes))
@@ -315,17 +315,17 @@
 				if (arguments.value)
 				{
 					// when value is true we just add the attribute name itself (e.g. <input type="checkbox" checked>)
-					loc.returnValue = " " & arguments.name;
+					loc.rv = " " & arguments.name;
 				}
 				else
 				{
 					// when value is false we do not add the attribute at all
-					loc.returnValue = "";
+					loc.rv = "";
 				}
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$element" returntype="string" access="public" output="false">
@@ -335,12 +335,12 @@
 	<cfargument name="skip" type="string" required="false" default="">
 	<cfargument name="skipStartingWith" type="string" required="false" default="">
 	<cfscript>
-		var returnValue = "";
-		returnValue = arguments.content;
+		var rv = "";
+		rv = arguments.content;
 		StructDelete(arguments, "content");
-		returnValue = $tag(argumentCollection=arguments) & returnValue & "</" & arguments.name & ">";
+		rv = $tag(argumentCollection=arguments) & rv & "</" & arguments.name & ">";
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn rv>
 </cffunction>
 
 <cffunction name="$objectName" returntype="any" access="public" output="false">
@@ -391,10 +391,10 @@
 		if (IsSimpleValue(arguments.objectName))
 		{
 			// form element for object(s)
-			loc.returnValue = ListLast(arguments.objectName, ".");
-			if (Find("[", loc.returnValue))
+			loc.rv = ListLast(arguments.objectName, ".");
+			if (Find("[", loc.rv))
 			{
-				loc.returnValue = $swapArrayPositionsForIds(objectName=loc.returnValue);
+				loc.rv = $swapArrayPositionsForIds(objectName=loc.rv);
 			}
 			if (Find("($", arguments.property))
 			{
@@ -402,23 +402,23 @@
 			}
 			if (Find("[", arguments.property))
 			{
-				loc.returnValue = REReplace(REReplace(loc.returnValue & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
+				loc.rv = REReplace(REReplace(loc.rv & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
 			}
 			else
 			{
-				loc.returnValue = REReplace(REReplace(loc.returnValue & "-" & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
+				loc.rv = REReplace(REReplace(loc.rv & "-" & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
 			}
 		}
 		else
 		{
-			loc.returnValue = ReplaceList(arguments.property, "[,($,],',"",)", "-,-,");
+			loc.rv = ReplaceList(arguments.property, "[,($,],',"",)", "-,-,");
 		}
 		if (Len(arguments.valueToAppend))
 		{
-			loc.returnValue &= "-" & arguments.valueToAppend;
+			loc.rv &= "-" & arguments.valueToAppend;
 		}
 	</cfscript>
-	<cfreturn REReplace(loc.returnValue, "-+", "-", "all")>
+	<cfreturn REReplace(loc.rv, "-+", "-", "all")>
 </cffunction>
 
 <cffunction name="$tagName" returntype="string" access="public" output="false">
@@ -428,37 +428,37 @@
 		var loc = {};
 		if (IsSimpleValue(arguments.objectName))
 		{
-			loc.returnValue = ListLast(arguments.objectName, ".");
-			if (Find("[", loc.returnValue))
+			loc.rv = ListLast(arguments.objectName, ".");
+			if (Find("[", loc.rv))
 			{
-				loc.returnValue = $swapArrayPositionsForIds(objectName=loc.returnValue);
+				loc.rv = $swapArrayPositionsForIds(objectName=loc.rv);
 			}
 			if (Find("[", arguments.property))
 			{
-				loc.returnValue = ReplaceList(loc.returnValue & arguments.property, "',""", "");
+				loc.rv = ReplaceList(loc.rv & arguments.property, "',""", "");
 			}
 			else
 			{
-				loc.returnValue = ReplaceList(loc.returnValue & "[" & arguments.property & "]", "',""", "");
+				loc.rv = ReplaceList(loc.rv & "[" & arguments.property & "]", "',""", "");
 			}
 		}
 		else
 		{
-			loc.returnValue = arguments.property;
+			loc.rv = arguments.property;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$swapArrayPositionsForIds" returntype="string" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true" />
 	<cfscript>
 		var loc = {};
-		loc.returnValue = arguments.objectName;
+		loc.rv = arguments.objectName;
 		
 		// we could have multiple nested arrays so we need to traverse the objectName to find where we have array positions and
 		// swap all of the out for object ids
-		loc.array = ListToArray(ReplaceList(loc.returnValue, "],'", ""), "[", true);
+		loc.array = ListToArray(ReplaceList(loc.rv, "],'", ""), "[", true);
 		loc.iEnd = ArrayLen(loc.array);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
@@ -472,11 +472,11 @@
 				{
 					loc.objectReference = ListAppend(loc.objectReference, ListGetAt(arguments.objectName, loc.j, "["), "[");
 				}
-				loc.returnValue = ListSetAt(loc.returnValue, loc.i, $getObject(loc.objectReference).key($returnTickCountWhenNew=true) & "]", "[");
+				loc.rv = ListSetAt(loc.rv, loc.i, $getObject(loc.objectReference).key($returnTickCountWhenNew=true) & "]", "[");
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$addToJavaScriptAttribute" returntype="string" access="public" output="false">
@@ -487,36 +487,36 @@
 		var loc = {};
 		if (StructKeyExists(arguments.attributes, arguments.name))
 		{
-			loc.returnValue = arguments.attributes[arguments.name];
-			if (Right(loc.returnValue, 1) != ";")
+			loc.rv = arguments.attributes[arguments.name];
+			if (Right(loc.rv, 1) != ";")
 			{
-				loc.returnValue &= ";";
+				loc.rv &= ";";
 			}
-			loc.returnValue &= arguments.content;
+			loc.rv &= arguments.content;
 		}
 		else
 		{
-			loc.returnValue = arguments.content;
+			loc.rv = arguments.content;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$getObject" returntype="any" access="public" output="false" hint="Returns the object referenced by the variable name passed in. If the scope is included it gets it from there, otherwise it gets it from the variables scope.">
 	<cfargument name="objectName" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
+		loc.rv = "";
 		try
 		{
 			if (Find(".", arguments.objectName) || Find("[", arguments.objectName))
 			{
 				// we can't directly invoke objects in structure or arrays of objects so we must evaluate
-				loc.returnValue = Evaluate(arguments.objectName);
+				loc.rv = Evaluate(arguments.objectName);
 			}
 			else
 			{
-				loc.returnValue = variables[arguments.objectName];
+				loc.rv = variables[arguments.objectName];
 			}
 		}
 		catch (any e)
@@ -531,5 +531,5 @@
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

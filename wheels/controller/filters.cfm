@@ -96,23 +96,23 @@
 		if (arguments.type == "all")
 		{
 			// return all filters
-			loc.returnValue = variables.$class.filters;
+			loc.rv = variables.$class.filters;
 		}
 		else
 		{
 			// loop over the filters and return all those that match the supplied type
-			loc.returnValue = ArrayNew(1);
+			loc.rv = ArrayNew(1);
 			loc.iEnd = ArrayLen(variables.$class.filters);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				if (variables.$class.filters[loc.i].type == arguments.type)
 				{
-					ArrayAppend(loc.returnValue, variables.$class.filters[loc.i]);
+					ArrayAppend(loc.rv, variables.$class.filters[loc.i]);
 				}
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <!--- PRIVATE FUNCTIONS --->

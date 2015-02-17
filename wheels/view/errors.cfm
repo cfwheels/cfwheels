@@ -19,7 +19,7 @@
 			$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 		}
 		loc.errors = loc.object.allErrors();
-		loc.returnValue = "";
+		loc.rv = "";
 		if (!ArrayIsEmpty(loc.errors))
 		{
 			loc.used = "";
@@ -41,10 +41,10 @@
 					}
 				}
 			}
-			loc.returnValue = $element(name="ul", skip="objectName,showDuplicates", content=loc.listItems, attributes=arguments);
+			loc.rv = $element(name="ul", skip="objectName,showDuplicates", content=loc.listItems, attributes=arguments);
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="errorMessageOn" returntype="string" access="public" output="false" hint="Returns the error message, if one exists, on the object's property. If multiple error messages exist, the first one is returned."
@@ -71,12 +71,12 @@
 			$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 		}
 		loc.error = loc.object.errorsOn(arguments.property);
-		loc.returnValue = "";
+		loc.rv = "";
 		if (!ArrayIsEmpty(loc.error))
 		{
 			loc.content = arguments.prependText & loc.error[1].message & arguments.appendText;
-			loc.returnValue = $element(name=arguments.wrapperElement, skip="objectName,property,prependText,appendText,wrapperElement", content=loc.content, attributes=arguments);
+			loc.rv = $element(name=arguments.wrapperElement, skip="objectName,property,prependText,appendText,wrapperElement", content=loc.content, attributes=arguments);
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

@@ -26,7 +26,7 @@
 </cffunction>
 
 <cffunction name="$createNestedParamStruct" returntype="struct" access="public" output="false">
-	<cfargument name="params" type="struct" required="true" />
+	<cfargument name="params" type="struct" required="true">
 	<cfscript>
 		var loc = {};
 		for (loc.key in arguments.params)
@@ -87,12 +87,12 @@
 			loc.currentRoute = loc.route.pattern;
 			if (loc.currentRoute == "*")
 			{
-				loc.returnValue = loc.route;
+				loc.rv = loc.route;
 				break;
 			} 
 			else if (arguments.path == "" && loc.currentRoute == "")
 			{
-				loc.returnValue = loc.route;
+				loc.rv = loc.route;
 				break;
 			}
 			else if (ListLen(arguments.path, "/") >= ListLen(loc.currentRoute, "/") && loc.currentRoute != "")
@@ -111,53 +111,55 @@
 				}
 				if (loc.match)
 				{
-					loc.returnValue = loc.route;
+					loc.rv = loc.route;
 					if (len(loc.format))
 					{
 						// we need to duplicate the route here otherwise we overwrite the one in the application scope
-						loc.returnValue = Duplicate(loc.returnValue);
-						loc.returnValue[ReplaceList(loc.format, "[,]", "")] = $getFormatFromRequest(pathInfo=arguments.path);
+						loc.rv = Duplicate(loc.rv);
+						loc.rv[ReplaceList(loc.format, "[,]", "")] = $getFormatFromRequest(pathInfo=arguments.path);
 					}
 					break;
 				}
 			}
 		}
-		if (!StructKeyExists(loc, "returnValue"))
+		if (!StructKeyExists(loc, "rv"))
 		{
 			$throw(type="Wheels.RouteNotFound", message="Wheels couldn't find a route that matched this request.", extendedInfo="Make sure there is a route setup in your `config/routes.cfm` file that matches the `#arguments.path#` request.");
 		}
-		</cfscript>
-		<cfreturn loc.returnValue>
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$getPathFromRequest" returntype="string" access="public" output="false">
 	<cfargument name="pathInfo" type="string" required="true">
 	<cfargument name="scriptName" type="string" required="true">
 	<cfscript>
-		var returnValue = "";
+		var loc = {};
+		
 		// we want the path without the leading "/" so this is why we do some checking here
 		if (arguments.pathInfo == arguments.scriptName || arguments.pathInfo == "/" || arguments.pathInfo == "")
 		{
-			returnValue = "";
+			loc.rv = "";
 		}
 		else
 		{
-			returnValue = Right(arguments.pathInfo, Len(arguments.pathInfo)-1);
+			loc.rv = Right(arguments.pathInfo, Len(arguments.pathInfo)-1);
 		}
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$getFormatFromRequest" returntype="string" access="public" output="false">
 	<cfargument name="pathInfo" type="string" required="true">
 	<cfscript>
-		var returnValue = "";
+		var loc = {};
+		loc.rv = "";
 		if (Find(".", arguments.pathInfo))
 		{
-			returnValue = ListLast(arguments.pathInfo, ".");
+			loc.rv = ListLast(arguments.pathInfo, ".");
 		}
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$request" returntype="string" access="public" output="false">
@@ -213,8 +215,9 @@
 		var loc = {};
 		loc.path = $getPathFromRequest(pathInfo=arguments.pathInfo, scriptName=arguments.scriptName);
 		loc.route = $findMatchingRoute(path=loc.path);
-		return $createParams(path=loc.path, route=loc.route, formScope=arguments.formScope, urlScope=arguments.urlScope);
+		loc.rv = $createParams(path=loc.path, route=loc.route, formScope=arguments.formScope, urlScope=arguments.urlScope);
 	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$mergeURLAndFormScopes" returntype="struct" access="public" output="false" hint="Merges the URL and form scope into a single structure, URL scope has precedence.">
@@ -290,7 +293,7 @@
 				{
 					arguments.params[loc.formParamName] = arguments.params[loc.key];
 				}
-				StructDelete(arguments.params, loc.key, false);
+				StructDelete(arguments.params, loc.key);
 			}
 		}
 	</cfscript>
@@ -357,16 +360,16 @@
 			{
 				arguments.params[loc.key] = CreateDateTime(loc.dates[loc.key].year, loc.dates[loc.key].month, loc.dates[loc.key].day, loc.dates[loc.key].hour, loc.dates[loc.key].minute, loc.dates[loc.key].second);
 			}
-			catch(any e)
+			catch (any e)
 			{
 				arguments.params[loc.key] = "";
 			}
-			StructDelete(arguments.params, "#loc.key#($year)", false);
-			StructDelete(arguments.params, "#loc.key#($month)", false);
-			StructDelete(arguments.params, "#loc.key#($day)", false);
-			StructDelete(arguments.params, "#loc.key#($hour)", false);
-			StructDelete(arguments.params, "#loc.key#($minute)", false);
-			StructDelete(arguments.params, "#loc.key#($second)", false);
+			StructDelete(arguments.params, "#loc.key#($year)");
+			StructDelete(arguments.params, "#loc.key#($month)");
+			StructDelete(arguments.params, "#loc.key#($day)");
+			StructDelete(arguments.params, "#loc.key#($hour)");
+			StructDelete(arguments.params, "#loc.key#($minute)");
+			StructDelete(arguments.params, "#loc.key#($second)");
 		}
 	</cfscript>
 	<cfreturn arguments.params>

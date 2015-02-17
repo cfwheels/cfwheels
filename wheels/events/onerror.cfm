@@ -13,10 +13,10 @@
 		}
 		$setting(requestTimeout=loc.requestTimeout);
 
-		loc.returnValue = $simpleLock(name="reloadLock#application.applicationName#", execute="$runOnError", executeArgs=arguments, type="readOnly", timeout=180);
+		loc.rv = $simpleLock(name="reloadLock#application.applicationName#", execute="$runOnError", executeArgs=arguments, type="readOnly", timeout=180);
 	</cfscript>
 	<cfoutput>
-		#loc.returnValue#
+		#loc.rv#
 	</cfoutput>
 </cffunction>
 
@@ -60,9 +60,9 @@
 				}
 				if (StructKeyExists(loc, "wheelsError"))
 				{
-					loc.returnValue = $includeAndReturnOutput($template="wheels/styles/header.cfm");
-					loc.returnValue &= $includeAndReturnOutput($template="wheels/events/onerror/wheelserror.cfm", wheelsError=loc.wheelsError);
-					loc.returnValue &= $includeAndReturnOutput($template="wheels/styles/footer.cfm");
+					loc.rv = $includeAndReturnOutput($template="wheels/styles/header.cfm");
+					loc.rv &= $includeAndReturnOutput($template="wheels/events/onerror/wheelserror.cfm", wheelsError=loc.wheelsError);
+					loc.rv &= $includeAndReturnOutput($template="wheels/styles/footer.cfm");
 				}
 				else
 				{
@@ -72,7 +72,7 @@
 			else
 			{
 				$header(statusCode=500, statusText="Internal Server Error");
-				loc.returnValue = $includeAndReturnOutput($template="#application.wheels.eventPath#/onerror.cfm", exception=arguments.exception, eventName=arguments.eventName);
+				loc.rv = $includeAndReturnOutput($template="#application.wheels.eventPath#/onerror.cfm", exception=arguments.exception, eventName=arguments.eventName);
 			}
 		}
 		else
@@ -80,5 +80,5 @@
 			$throw(object=arguments.exception);
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

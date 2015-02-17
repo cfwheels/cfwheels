@@ -8,9 +8,9 @@
 		<cfscript>
 			var loc = {};
 			variables.instance.connection = arguments;
-			loc.returnValue = $assignAdapter();
+			loc.rv = $assignAdapter();
 		</cfscript>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$assignAdapter" returntype="any" access="public" output="false">
@@ -57,9 +57,9 @@
 			{
 				$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by CFWheels.", extendedInfo="Use SQL Server, MySQL, Oracle, PostgreSQL or H2.");
 			}
-			loc.returnValue = CreateObject("component", "model.adapters.#loc.adapterName#").init(argumentCollection=variables.instance.connection);
+			loc.rv = CreateObject("component", "model.adapters.#loc.adapterName#").init(argumentCollection=variables.instance.connection);
 		</cfscript>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cfinclude template="plugins/injection.cfm">

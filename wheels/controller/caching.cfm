@@ -62,18 +62,18 @@
 	<cfargument name="action" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = false;
+		loc.rv = false;
 		loc.cachableActions = $cachableActions();
 		loc.iEnd = ArrayLen(loc.cachableActions);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			if (loc.cachableActions[loc.i].action == arguments.action || loc.cachableActions[loc.i].action == "*")
 			{
-				loc.returnValue = {};
-				loc.returnValue.time = loc.cachableActions[loc.i].time;
-				loc.returnValue.static = loc.cachableActions[loc.i].static;
+				loc.rv = {};
+				loc.rv.time = loc.cachableActions[loc.i].time;
+				loc.rv.static = loc.cachableActions[loc.i].static;
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

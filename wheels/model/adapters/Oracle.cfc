@@ -26,30 +26,30 @@
 			var loc = {};
 			switch(arguments.type)
 			{
-				case "blob": case "bfile": {loc.returnValue = "cf_sql_blob"; break;}
-				case "char": case "nchar": {loc.returnValue = "cf_sql_char"; break;}
-				case "clob": case "nclob": {loc.returnValue = "cf_sql_clob"; break;}
-				case "date": case "timestamp": {loc.returnValue = "cf_sql_timestamp"; break;}
-				case "binary_double": {loc.returnValue = "cf_sql_double"; break;}
+				case "blob": case "bfile": {loc.rv = "cf_sql_blob"; break;}
+				case "char": case "nchar": {loc.rv = "cf_sql_char"; break;}
+				case "clob": case "nclob": {loc.rv = "cf_sql_clob"; break;}
+				case "date": case "timestamp": {loc.rv = "cf_sql_timestamp"; break;}
+				case "binary_double": {loc.rv = "cf_sql_double"; break;}
 				case "number": case "float": case "binary_float":
 				{
 					// integer datatypes are represented by number(38,0)
 					if (val(arguments.scale) == 0)
 					{
-						loc.returnValue = "cf_sql_integer";
+						loc.rv = "cf_sql_integer";
 					}
 					else
 					{
-						loc.returnValue = "cf_sql_float";
+						loc.rv = "cf_sql_float";
 					}
 					break;
 				}
-				case "long": {loc.returnValue = "cf_sql_longvarchar"; break;}
-				case "raw": {loc.returnValue = "cf_sql_varbinary"; break;}
-				case "varchar2": case "nvarchar2": {loc.returnValue = "cf_sql_varchar"; break;}
+				case "long": {loc.rv = "cf_sql_longvarchar"; break;}
+				case "raw": {loc.rv = "cf_sql_varbinary"; break;}
+				case "varchar2": case "nvarchar2": {loc.rv = "cf_sql_varchar"; break;}
 			}
 		</cfscript>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$query" returntype="struct" access="public" output="false">
@@ -76,10 +76,10 @@
 			// oracle doesn't support limit and offset in sql
 			StructDelete(arguments, "limit", false);
 			StructDelete(arguments, "offset", false);
-			loc.returnValue = $performQuery(argumentCollection=arguments);
-			loc.returnValue = $handleTimestampObject(loc.returnValue);
+			loc.rv = $performQuery(argumentCollection=arguments);
+			loc.rv = $handleTimestampObject(loc.rv);
 		</cfscript>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$identitySelect" returntype="any" access="public" output="false">
@@ -94,7 +94,7 @@
 			<cfset loc.endPar = Find(")", loc.sql)>
 			<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
 			<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
-				<cfset loc.returnValue = {}>
+				<cfset loc.rv = {}>
 				<cfset loc.tbl = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
 				<cfif !StructKeyExists(arguments.result, $generatedKey()) || application.wheels.serverName IS NOT "Adobe ColdFusion">
 					<!---
@@ -115,8 +115,8 @@
 				</cfif>
 				<cfset loc.lastId = Trim(query.name.lastId)>
 				<cfif len(query.name.lastId)>
-					<cfset loc.returnValue[$generatedKey()] = Trim(loc.lastid)>
-					<cfreturn loc.returnValue>
+					<cfset loc.rv[$generatedKey()] = Trim(loc.lastid)>
+					<cfreturn loc.rv>
 				</cfif>
 			<cfelse>
 				<!--- since Oracle always returns rowid we need to delete it in those cases where we have manually inserted the primary key, if we don't do this we'll end up setting the rowid value to the object --->
@@ -147,7 +147,7 @@
 		{
 			StructDelete(loc.args, "password");
 		}
-		loc.args.name = "loc.returnValue";
+		loc.args.name = "loc.rv";
 		</cfscript>
 		<cfquery attributeCollection="#loc.args#">
 		SELECT
@@ -183,10 +183,10 @@
 		wheels catches the error and raises a Wheels.TableNotFound error
 		to mimic this we will throw an error if the query result is empty
 		 --->
-		<cfif !loc.returnValue.RecordCount>
+		<cfif !loc.rv.RecordCount>
 			<cfthrow/>
 		</cfif>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$handleTimestampObject" hint="Oracle will return timestamp as an object. you need to call timestampValue() to get the string representation">

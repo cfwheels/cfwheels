@@ -62,8 +62,12 @@
 		{
 			loc.iEnd = ArrayLen(variables.wheels.errors);
 			for (loc.i=loc.iEnd; loc.i >= 1; loc.i--)
+			{
 				if (variables.wheels.errors[loc.i].property == arguments.property && (variables.wheels.errors[loc.i].name == arguments.name))
+				{
 					ArrayDeleteAt(variables.wheels.errors, loc.i);
+				}
+			}
 		}
 	</cfscript>
 </cffunction>
@@ -85,13 +89,17 @@
 	<cfargument name="property" type="string" required="false" default="" hint="Specify a property name here if you want to count only errors set on a specific property.">
 	<cfargument name="name" type="string" required="false" default="" hint="Specify an error name here if you want to count only errors set with a specific error name.">
 	<cfscript>
-		var returnValue = "";
+		var loc = {};
 		if (!Len(arguments.property) && !Len(arguments.name))
-			returnValue = ArrayLen(variables.wheels.errors);
+		{
+			loc.rv = ArrayLen(variables.wheels.errors);
+		}
 		else
-			returnValue = ArrayLen(errorsOn(argumentCollection=arguments));
+		{
+			loc.rv = ArrayLen(errorsOn(argumentCollection=arguments));
+		}
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="errorsOn" returntype="array" access="public" output="false" hint="Returns an array of all errors associated with the supplied property (and error name if passed in)."
@@ -105,13 +113,17 @@
 	<cfargument name="name" type="string" required="false" default="" hint="If you want to return only errors on the above property set with a specific error name you can specify it here.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = [];
+		loc.rv = [];
 		loc.iEnd = ArrayLen(variables.wheels.errors);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
 			if (variables.wheels.errors[loc.i].property == arguments.property && (variables.wheels.errors[loc.i].name == arguments.name))
-				ArrayAppend(loc.returnValue, variables.wheels.errors[loc.i]);
+			{
+				ArrayAppend(loc.rv, variables.wheels.errors[loc.i]);
+			}
+		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="errorsOnBase" returntype="array" access="public" output="false" hint="Returns an array of all errors associated with the object as a whole (not related to any specific property)."
@@ -123,9 +135,11 @@
 	categories="model-object,errors" chapters="object-validation" functions="addError,addErrorToBase,allErrors,clearErrors,errorCount,errorsOn,hasErrors">
 	<cfargument name="name" type="string" required="false" default="" hint="Specify an error name here to only return errors for that error name.">
 	<cfscript>
+		var loc = {};
 		arguments.property = "";
+		loc.rv = errorsOn(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn errorsOn(argumentCollection=arguments)>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="hasErrors" returntype="boolean" access="public" output="false" hint="Returns `true` if the object has any errors. You can also limit to only check a specific property or name for errors."
@@ -140,9 +154,12 @@
 	<cfargument name="property" type="string" required="false" default="" hint="Name of the property to check if there are any errors set on.">
 	<cfargument name="name" type="string" required="false" default="" hint="Error name to check if there are any errors set with.">
 	<cfscript>
-		var returnValue = false;
+		var loc = {};
+		loc.rv = false;
 		if (errorCount(argumentCollection=arguments) > 0)
-			returnValue = true;
+		{
+			loc.rv = true;
+		}
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.rv>
 </cffunction>

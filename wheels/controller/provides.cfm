@@ -23,7 +23,6 @@
 		}
 		variables.$class.formats.default = ListAppend(variables.$class.formats.default, arguments.formats);
 	</cfscript>
-	<cfreturn>
 </cffunction>
 	
 <cffunction name="onlyProvides" access="public" output="false" returntype="void" hint="Use this in an individual controller action to define which formats the action will respond with. This can be used to define provides behavior in individual actions or to override a global setting set with @provides in the controller's `init()`."
@@ -64,7 +63,6 @@
 		}
 		variables.$class.formats.actions[arguments.action] = arguments.formats;
 	</cfscript>
-	<cfreturn>
 </cffunction>
 	
 <cffunction name="renderWith" access="public" returntype="any" output="false" hint="Instructs the controller to render the data passed in to the format that is requested. If the format requested is `json` or `xml`, Wheels will transform the data into that format automatically. For other formats (or to override the automatic formatting), you can also create a view template in this format: `nameofaction.xml.cfm`, `nameofaction.json.cfm`, `nameofaction.pdf.cfm`, etc."
@@ -195,13 +193,13 @@
 	<cfargument name="action" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = variables.$class.formats.default;
+		loc.rv = variables.$class.formats.default;
 		if (StructKeyExists(variables.$class.formats, arguments.action))
 		{
-			loc.returnValue = variables.$class.formats[arguments.action];
+			loc.rv = variables.$class.formats[arguments.action];
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$generateRenderWithTemplatePath" access="public" output="false" returntype="string">
@@ -211,21 +209,21 @@
 	<cfargument name="contentType" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
+		loc.rv = "";
 		if (!Len(arguments.template))
 		{
-			loc.returnValue = "/" & arguments.controller & "/" & arguments.action;
+			loc.rv = "/" & arguments.controller & "/" & arguments.action;
 		}
 		else
 		{
-			loc.returnValue = arguments.template;
+			loc.rv = arguments.template;
 		}
 		if (Len(arguments.contentType))
 		{
-			loc.returnValue &= "." & arguments.contentType;
+			loc.rv &= "." & arguments.contentType;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$formatTemplatePathExists" access="public" output="false" returntype="boolean">
@@ -233,16 +231,16 @@
 	<cfscript>
 		var loc = {};
 		loc.templatePath = $generateIncludeTemplatePath($type="page", $name=arguments.$name, $template=arguments.$name);
-		loc.returnValue = false;
+		loc.rv = false;
 		if (!ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name) && !ListFindNoCase(variables.$class.formats.nonExistingTemplates, arguments.$name))
 		{
 			if (FileExists(ExpandPath(loc.templatePath)))
 			{
-				loc.returnValue = true;
+				loc.rv = true;
 			}			
 			if (get("cacheFileChecking"))
 			{
-				if (loc.returnValue)
+				if (loc.rv)
 				{
 					variables.$class.formats.existingTemplates = ListAppend(variables.$class.formats.existingTemplates, arguments.$name);
 				}
@@ -252,12 +250,12 @@
 				}
 			}
 		}
-		if (!loc.returnValue && ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name))
+		if (!loc.rv && ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name))
 		{
-			loc.returnValue = true;
+			loc.rv = true;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 	
 <cffunction name="$requestContentType" access="public" output="false" returntype="string">
@@ -265,10 +263,10 @@
 	<cfargument name="httpAccept" type="string" required="false" default="#request.cgi.http_accept#">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "html";
+		loc.rv = "html";
 		if (StructKeyExists(arguments.params, "format"))
 		{
-			loc.returnValue = arguments.params.format;
+			loc.rv = arguments.params.format;
 		}
 		else
 		{
@@ -277,11 +275,11 @@
 			{
 				if (FindNoCase(loc.formats[loc.item], arguments.httpAccept))
 				{
-					loc.returnValue = loc.item;
+					loc.rv = loc.item;
 					break;
 				}
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

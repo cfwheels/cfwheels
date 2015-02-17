@@ -14,7 +14,7 @@
 	<cfargument name="username" type="string" required="false" default="" hint="The username for the data source.">
 	<cfargument name="password" type="string" required="false" default="" hint="The password for the data source.">
 	<cfscript>
-		StructAppend(variables.wheels.class.connection, arguments, true);
+		StructAppend(variables.wheels.class.connection, arguments);
 	</cfscript>
 </cffunction>
 
@@ -41,7 +41,9 @@
 	'
 	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
 	<cfargument name="prefix" type="string" required="true" hint="A prefix to prepend to the table name.">
-	<cfset variables.wheels.class.tableNamePrefix =  arguments.prefix>
+	<cfscript>
+		variables.wheels.class.tableNamePrefix =  arguments.prefix;
+	</cfscript>
 </cffunction>
 
 <cffunction name="setPrimaryKey" returntype="void" access="public" output="false" hint="Allows you to pass in the name(s) of the property(s) that should be used as the primary key(s). Pass as a list if defining a composite primary key. Also aliased as `setPrimaryKeys()`."
@@ -58,10 +60,10 @@
 		loc.iEnd = ListLen(arguments.property);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.element = ListGetAt(arguments.property, loc.i);
-			if (!ListFindNoCase(variables.wheels.class.keys, loc.element))
+			loc.item = ListGetAt(arguments.property, loc.i);
+			if (!ListFindNoCase(variables.wheels.class.keys, loc.item))
 			{
-				variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.element);
+				variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.item);
 			}
 		}
 	</cfscript>
@@ -76,7 +78,9 @@
 	'
 	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
 	<cfargument name="property" type="string" required="true" hint="Property (or list of properties) to set as the primary key.">
-	<cfset setPrimaryKey(argumentCollection=arguments)>
+	<cfscript>
+		setPrimaryKey(argumentCollection=arguments);
+	</cfscript>
 </cffunction>
 
 <!--- PUBLIC MODEL CLASS METHODS --->
@@ -99,10 +103,18 @@
 	'
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="primaryKeys">
 	<cfargument name="position" type="numeric" required="false" default="0" hint="If you are accessing a composite primary key, pass the position of a single key to fetch.">
-	<cfif arguments.position gt 0>
-		<cfreturn ListGetAt(variables.wheels.class.keys, arguments.position)>
-	</cfif>
-	<cfreturn variables.wheels.class.keys>
+	<cfscript>
+		var loc = {};
+		if (arguments.position > 0)
+		{
+			loc.rv = ListGetAt(variables.wheels.class.keys, arguments.position);
+		}
+		else
+		{
+			loc.rv = variables.wheels.class.keys;
+		}
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="primaryKeys" returntype="string" access="public" output="false" hint="Alias for @primaryKey. Use this for better readability when you're accessing multiple primary keys."
@@ -159,11 +171,11 @@
 	'
 	categories="model-object,miscellaneous" chapters="" functions="">
 	<cfargument name="object" type="component" required="true">
-	<cfreturn Compare(this.$objectId(), arguments.object.$objectId()) eq 0 />
+	<cfreturn Compare(this.$objectId(), arguments.object.$objectId()) IS 0>
 </cffunction>
 
 <cffunction name="$objectId" access="public" output="false" returntype="string">
-	<cfreturn variables.wheels.tickCountId />
+	<cfreturn variables.wheels.tickCountId>
 </cffunction>
 
 <cffunction name="isInstance" returntype="boolean" access="public" output="false" hint="Use this method to check whether you are currently in an instance object."

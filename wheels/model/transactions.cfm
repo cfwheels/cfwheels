@@ -50,14 +50,14 @@
 		<cfcase value="commit,rollback">
 			<cftransaction action="begin" isolation="#arguments.isolation#">
 				<cftry>
-					<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs)>
-					<cfif IsBoolean(loc.returnValue) and loc.returnValue>
-						<cftransaction action="#arguments.transaction#" />
+					<cfset loc.rv = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs)>
+					<cfif IsBoolean(loc.rv) and loc.rv>
+						<cftransaction action="#arguments.transaction#">
 					<cfelse>
-						<cftransaction action="rollback" />
+						<cftransaction action="rollback">
 					</cfif>
 					<cfcatch type="any">
-						<cftransaction action="rollback" />
+						<cftransaction action="rollback">
 						<cfset request.wheels.transactions[loc.connectionArgs] = false>
 						<cfrethrow />
 					</cfcatch>
@@ -65,7 +65,7 @@
 			</cftransaction>
 		</cfcase>
 		<cfcase value="none,alreadyopen">
-			<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs)>
+			<cfset loc.rv = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs)>
 		</cfcase>
 		<cfdefaultcase>
 			<cfset $throw(type="Wheels", message="Invalid transaction type", extendedInfo="The transaction type of `#arguments.transaction#` is invalid. Please use `commit`, `rollback` or `none`.")>
@@ -77,11 +77,11 @@
 	</cfif>
 
 	<!--- check the return type --->
-	<cfif not IsBoolean(loc.returnValue)>
+	<cfif not IsBoolean(loc.rv)>
 		<cfset $throw(type="Wheels", message="Invalid return type", extendedInfo="Methods invoked using `invokeWithTransaction` must return a boolean value.")>
 	</cfif>
 	
-	<cfreturn loc.returnValue />
+	<cfreturn loc.rv />
 </cffunction>
 
 <cffunction name="$hashedConnectionArgs" returntype="string" access="public" output="false">

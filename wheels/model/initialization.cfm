@@ -76,10 +76,11 @@
 				// set up properties and column mapping
 				if (!ListFind(loc.processedColumns, loc.columns["column_name"][loc.i]))
 				{
-					loc.property = loc.columns["column_name"][loc.i]; // default the column to map to a property with the same name
+					// default the column to map to a property with the same name
+					loc.property = loc.columns["column_name"][loc.i];
 					for (loc.key in variables.wheels.class.mapping)
 					{
-						if (StructKeyExists(variables.wheels.class.mapping[loc.key], "type") and variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property)
+						if (StructKeyExists(variables.wheels.class.mapping[loc.key], "type") && variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property)
 						{
 							// developer has chosen to map this column to a property with a different name so set that here
 							loc.property = loc.key;

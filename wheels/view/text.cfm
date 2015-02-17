@@ -110,14 +110,14 @@
 			loc.endPos = loc.pos + arguments.radius;
 			loc.truncateEnd = arguments.excerptString;
 		}
-		loc.returnValue = loc.truncateStart & Mid(arguments.text, loc.startPos, ((loc.endPos+Len(arguments.phrase))-(loc.startPos))) & loc.truncateEnd;
+		loc.rv = loc.truncateStart & Mid(arguments.text, loc.startPos, ((loc.endPos+Len(arguments.phrase))-(loc.startPos))) & loc.truncateEnd;
 	}
 	else
 	{
-		loc.returnValue = "";
+		loc.rv = "";
 	}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="highlight" returntype="string" access="public" output="false" hint="Highlights the phrase(s) everywhere in the text if found by wrapping it in a `span` tag."
@@ -137,7 +137,7 @@
 		$args(name="highlight", args=arguments);
 		if (!Len(arguments.text) || !Len(arguments.phrases))
 		{
-			loc.returnValue = arguments.text;
+			loc.rv = arguments.text;
 		}
 		else
 		{
@@ -166,10 +166,10 @@
 				loc.newText &= Mid(loc.origText, loc.pos, Len(loc.origText) - loc.pos + 1);
 				loc.origText = loc.newText;
 			}
-			loc.returnValue = loc.newText;
+			loc.rv = loc.newText;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="simpleFormat" returntype="string" access="public" output="false" hint="Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards)."
@@ -202,22 +202,22 @@
 	<cfscript>
 		var loc = {};
 		$args(name="simpleFormat", args=arguments);
-		loc.returnValue = Trim(arguments.text);
-		loc.returnValue = Replace(loc.returnValue, "#Chr(13)#", "", "all");
-		loc.returnValue = Replace(loc.returnValue, "#Chr(10)##Chr(10)#", "</p><p>", "all");
-		loc.returnValue = Replace(loc.returnValue, "#Chr(10)#", "<br />", "all");
+		loc.rv = Trim(arguments.text);
+		loc.rv = Replace(loc.rv, "#Chr(13)#", "", "all");
+		loc.rv = Replace(loc.rv, "#Chr(10)##Chr(10)#", "</p><p>", "all");
+		loc.rv = Replace(loc.rv, "#Chr(10)#", "<br />", "all");
 
 		// add back in our returns so we can strip the tags and re-apply them without issue
 		// this is good to be edited the textarea text in it's original format (line returns)
-		loc.returnValue = Replace(loc.returnValue, "</p><p>", "</p>#Chr(10)##Chr(10)#<p>", "all");
-		loc.returnValue = Replace(loc.returnValue, "<br />", "<br />#Chr(10)#", "all");
+		loc.rv = Replace(loc.rv, "</p><p>", "</p>#Chr(10)##Chr(10)#<p>", "all");
+		loc.rv = Replace(loc.rv, "<br />", "<br />#Chr(10)#", "all");
 
 		if (arguments.wrap)
 		{
-			loc.returnValue = "<p>" & loc.returnValue & "</p>";
+			loc.rv = "<p>" & loc.rv & "</p>";
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="titleize" returntype="string" access="public" output="false" hint="Capitalizes all words in the text to create a nicer looking title."
@@ -230,14 +230,14 @@
 	<cfargument name="word" type="string" required="true" hint="The text to turn into a title.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
+		loc.rv = "";
 		loc.iEnd = ListLen(arguments.word, " ");
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.returnValue = ListAppend(loc.returnValue, capitalize(ListGetAt(arguments.word, loc.i, " ")), " ");
+			loc.rv = ListAppend(loc.rv, capitalize(ListGetAt(arguments.word, loc.i, " ")), " ");
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="truncate" returntype="string" access="public" output="false" hint="Truncates text to the specified length and replaces the last characters with the specified truncate string (which defaults to ""..."")."
@@ -258,14 +258,14 @@
 		$args(name="truncate", args=arguments);
 		if (Len(arguments.text) > arguments.length)
 		{
-			loc.returnValue = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
+			loc.rv = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
 		}
 		else
 		{
-			loc.returnValue = arguments.text;
+			loc.rv = arguments.text;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="wordTruncate" returntype="string" access="public" output="false" hint="Truncates text to the specified length of words and replaces the remaining characters with the specified truncate string (which defaults to ""..."")."
@@ -284,21 +284,21 @@
 	<cfscript>
 		var loc = {};
 		$args(name="wordTruncate", args=arguments);
-		loc.returnValue = "";
+		loc.rv = "";
 		loc.wordArray = ListToArray(arguments.text, " ", false);
 		loc.wordLen = ArrayLen(loc.wordArray);
 		if (loc.wordLen > arguments.length)
 		{
 			for (loc.i=1; loc.i <= arguments.length; loc.i++)
 			{
-				loc.returnValue = ListAppend(loc.returnValue, loc.wordArray[loc.i], " ");
+				loc.rv = ListAppend(loc.rv, loc.wordArray[loc.i], " ");
 			}
-			loc.returnValue &= arguments.truncateString;
+			loc.rv &= arguments.truncateString;
 		}
 		else
 		{
-			loc.returnValue = arguments.text;
+			loc.rv = arguments.text;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

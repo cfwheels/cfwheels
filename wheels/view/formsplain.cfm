@@ -24,9 +24,9 @@
 		arguments.objectName[arguments.name] = arguments.value;
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "value");
-		loc.returnValue = textField(argumentCollection=arguments);
+		loc.rv = textField(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="passwordFieldTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a password field form control based on the supplied `name`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -54,9 +54,9 @@
 		arguments.objectName[arguments.name] = arguments.value;
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "value");
-		loc.returnValue = passwordField(argumentCollection=arguments);
+		loc.rv = passwordField(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="hiddenFieldTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a hidden field form control based on the supplied `name`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -77,9 +77,9 @@
 		arguments.objectName[arguments.name] = arguments.value;
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "value");
-		loc.returnValue = hiddenField(argumentCollection=arguments);
+		loc.rv = hiddenField(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="fileFieldTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a file form control based on the supplied `name`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -105,9 +105,9 @@
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = "";
 		StructDelete(arguments, "name");
-		loc.returnValue = fileField(argumentCollection=arguments);
+		loc.rv = fileField(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="textAreaTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a text area form control based on the supplied `name`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -135,9 +135,9 @@
 		arguments.objectName[arguments.name] = arguments.content;
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "content");
-		loc.returnValue = textArea(argumentCollection=arguments);
+		loc.rv = textArea(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="radioButtonTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a radio button form control based on the supplied `name`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -180,9 +180,9 @@
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "value");
 		StructDelete(arguments, "checked");
-		loc.returnValue = radioButton(argumentCollection=arguments);
+		loc.rv = radioButton(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="checkBoxTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a check box form control based on the supplied `name`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -245,9 +245,9 @@
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "value");
 		StructDelete(arguments, "checked");
-		loc.returnValue = checkBox(argumentCollection=arguments);
+		loc.rv = checkBox(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="selectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a select form control based on the supplied `name` and `options`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -288,7 +288,7 @@
 		arguments.objectName[arguments.name] = arguments.selected;
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "selected");
-		loc.returnValue = select(argumentCollection=arguments);
+		loc.rv = select(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

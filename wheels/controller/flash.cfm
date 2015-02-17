@@ -73,11 +73,11 @@
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfargument name="key" type="string" required="true" hint="The key to delete.">
 	<cfscript>
-		var returnValue = "";
+		var rv = "";
 		var $flash = $readFlash();
-		returnValue = StructDelete($flash, arguments.key, true);
+		rv = StructDelete($flash, arguments.key, true);
 		$writeFlash($flash);
-		return returnValue;
+		return rv;
 	</cfscript>
 </cffunction>
 
@@ -218,7 +218,7 @@
 	<cfscript>
 		var loc = {};
 		loc.$flash = $readFlash();
-		loc.returnValue = "";
+		loc.rv = "";
 		$args(name="flashMessages", args=arguments);
 		$combineArguments(args=arguments, combine="keys,key", required=false);
 
@@ -258,9 +258,9 @@
 
 		if (Len(loc.listItems) || arguments.includeEmptyContainer)
 		{
-			loc.returnValue = $element(name="div", skip="key,keys,includeEmptyContainer,lowerCaseDynamicClassValues", content=loc.listItems, attributes=arguments);
+			loc.rv = $element(name="div", skip="key,keys,includeEmptyContainer,lowerCaseDynamicClassValues", content=loc.listItems, attributes=arguments);
 		}
-		return loc.returnValue;
+		return loc.rv;
 	</cfscript>
 </cffunction>
 

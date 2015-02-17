@@ -45,9 +45,9 @@
 			arguments.maxLength = loc.maxLength;
 		}
 		arguments.value = $formValue(argumentCollection=arguments);
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
+		loc.rv = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="passwordField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a password field form control based on the supplied `objectName` and `property`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -97,9 +97,9 @@
 			arguments.maxlength = loc.maxlength;
 		}
 		arguments.value = $formValue(argumentCollection=arguments);
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
+		loc.rv = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="hiddenField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a hidden field form control based on the supplied `objectName` and `property`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -130,9 +130,9 @@
 		{
 			arguments.value = obfuscateParam(arguments.value);
 		}
-		loc.returnValue = $tag(name="input", close=true, skip="objectName,property,association,position", attributes=arguments);
+		loc.rv = $tag(name="input", close=true, skip="objectName,property,association,position", attributes=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="fileField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a file field form control based on the supplied `objectName` and `property`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -177,9 +177,9 @@
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "file";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
+		loc.rv = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="textArea" returntype="string" access="public" output="false" hint="Builds and returns a string containing a text area field form control based on the supplied `objectName` and `property`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -224,9 +224,9 @@
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		loc.content = $formValue(argumentCollection=arguments);
-		loc.returnValue = loc.before & $element(name="textarea", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
+		loc.rv = loc.before & $element(name="textarea", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="radioButton" returntype="string" access="public" output="false" hint="Builds and returns a string containing a radio button form control based on the supplied `objectName` and `property`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -290,9 +290,9 @@
 		{
 			arguments.checked = "checked";
 		}
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
+		loc.rv = loc.before & $tag(name="input", close=true, skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="checkBox" returntype="string" access="public" output="false" hint="Builds and returns a string containing a check box form control based on the supplied `objectName` and `property`. In most cases, this function generates a form field that should represent a `boolean` style field in your data. Use @checkBoxTag or @hasManyCheckBox to generate check boxes for selecting multiple values. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -348,7 +348,7 @@
 		{
 			arguments.checked = "checked";
 		}
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments);
+		loc.rv = loc.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments);
 		if (Len(arguments.uncheckedValue))
 		{
 			loc.hiddenAttributes = {};
@@ -356,11 +356,11 @@
 			loc.hiddenAttributes.id = arguments.id & "-checkbox";
 			loc.hiddenAttributes.name = arguments.name & "($checkbox)";
 			loc.hiddenAttributes.value = arguments.uncheckedValue;
-			loc.returnValue &= $tag(name="input", close=true, attributes=loc.hiddenAttributes);
+			loc.rv &= $tag(name="input", close=true, attributes=loc.hiddenAttributes);
 		}
-		loc.returnValue &= loc.after;
+		loc.rv &= loc.after;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="select" returntype="string" access="public" output="false" hint="Builds and returns a string containing a `select` form control based on the supplied `objectName` and `property`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -440,9 +440,9 @@
 			loc.blankOptionAttributes = {value=""};
 			loc.content = $element(name="option", content=loc.blankOptionText, attributes=loc.blankOptionAttributes) & loc.content;
 		}
-		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
+		loc.rv = loc.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$optionsForSelect" returntype="string" access="public" output="false">
@@ -452,7 +452,7 @@
 	<cfscript>
 		var loc = {};
 		loc.value = $formValue(argumentCollection=arguments);
-		loc.returnValue = "";
+		loc.rv = "";
 		if (IsQuery(arguments.options))
 		{
 			if (!Len(arguments.valueField) || !Len(arguments.textField))
@@ -505,7 +505,7 @@
 			loc.iEnd = arguments.options.RecordCount;
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.returnValue &= $option(objectValue=loc.value, optionValue=arguments.options[arguments.valueField][loc.i], optionText=arguments.options[arguments.textField][loc.i]);
+				loc.rv &= $option(objectValue=loc.value, optionValue=arguments.options[arguments.valueField][loc.i], optionText=arguments.options[arguments.textField][loc.i]);
 			}
 		}
 		else if (IsStruct(arguments.options))
@@ -515,7 +515,7 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.key = ListGetAt(loc.sortedKeys, loc.i);
-				loc.returnValue &= $option(objectValue=loc.value, optionValue=LCase(loc.key), optionText=arguments.options[loc.key]);
+				loc.rv &= $option(objectValue=loc.value, optionValue=LCase(loc.key), optionText=arguments.options[loc.key]);
 			}
 		}
 		else
@@ -602,11 +602,11 @@
 						}
 					}
 				}
-				loc.returnValue &= $option(objectValue=loc.value, optionValue=loc.optionValue, optionText=loc.optionText);
+				loc.rv &= $option(objectValue=loc.value, optionValue=loc.optionValue, optionText=loc.optionText);
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$option" returntype="string" access="public" output="false">
@@ -630,7 +630,7 @@
 		{
 			loc.optionAttributes.value = obfuscateParam(loc.optionAttributes.value);
 		}
-		loc.returnValue = $element(name="option", content=arguments.optionText, attributes=loc.optionAttributes);
+		loc.rv = $element(name="option", content=arguments.optionText, attributes=loc.optionAttributes);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

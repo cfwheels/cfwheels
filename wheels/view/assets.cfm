@@ -36,7 +36,7 @@
 			StructDelete(arguments, "media");
 		}
 		arguments.rel = "stylesheet";
-		loc.returnValue = "";
+		loc.rv = "";
 		arguments.sources = $listClean(list=arguments.sources, returnAs="array", delim=arguments.delim);
 		loc.iEnd = ArrayLen(arguments.sources);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -55,15 +55,15 @@
 				}
 				arguments.href = $assetDomain(arguments.href) & $appendQueryString();
 			}
-			loc.returnValue &= $tag(name="link", skip="sources,head,delim", close=true, attributes=arguments) & Chr(10);
+			loc.rv &= $tag(name="link", skip="sources,head,delim", close=true, attributes=arguments) & Chr(10);
 		}
 		if (arguments.head)
 		{
-			$htmlhead(text=loc.returnValue);
-			loc.returnValue = "";
+			$htmlhead(text=loc.rv);
+			loc.rv = "";
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="javaScriptIncludeTag" returntype="string" access="public" output="false" hint="Returns a `script` tag for a JavaScript file (or several) based on the supplied arguments."
@@ -96,7 +96,7 @@
 		{
 			StructDelete(arguments, "type");
 		}
-		loc.returnValue = "";
+		loc.rv = "";
 		arguments.sources = $listClean(list=arguments.sources, returnAs="array", delim=arguments.delim);
 		loc.iEnd = ArrayLen(arguments.sources);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -115,15 +115,15 @@
 				}
 				arguments.src = $assetDomain(arguments.src) & $appendQueryString();
 			}
-			loc.returnValue &= $element(name="script", skip="sources,head,delim", attributes=arguments) & Chr(10);
+			loc.rv &= $element(name="script", skip="sources,head,delim", attributes=arguments) & Chr(10);
 		}
 		if (arguments.head)
 		{
-			$htmlhead(text=loc.returnValue);
-			loc.returnValue = "";
+			$htmlhead(text=loc.rv);
+			loc.rv = "";
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="imageTag" returntype="string" access="public" output="false" hint="Returns an `img` tag. If the image is stored in the local `images` folder, the tag will also set the `width`, `height`, and `alt` attributes for you. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -162,29 +162,29 @@
 			loc.executeArgs = arguments;
 			loc.executeArgs.category = loc.category;
 			loc.executeArgs.key = loc.key;
-			loc.returnValue = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$addImageTagToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			loc.rv = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$addImageTagToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 		}
 		else
 		{
-			loc.returnValue = $imageTag(argumentCollection=arguments);
+			loc.rv = $imageTag(argumentCollection=arguments);
 		}
 
 		// ugly fix continued
 		if (StructKeyExists(arguments, "wheelsId"))
 		{
-			loc.returnValue = ReplaceNoCase(loc.returnValue, "wheelsId", "id");
+			loc.rv = ReplaceNoCase(loc.rv, "wheelsId", "id");
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$addImageTagToCache" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = $imageTag(argumentCollection=arguments);
-		$addToCache(key=arguments.key, value=loc.returnValue, category=arguments.category);
+		loc.rv = $imageTag(argumentCollection=arguments);
+		$addToCache(key=arguments.key, value=loc.rv, category=arguments.category);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$imageTag" returntype="string" access="public" output="false">
@@ -245,35 +245,35 @@
 		{
 			arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
 		}
-		loc.returnValue = $tag(name="img", skip="source,key,category", close=true, attributes=arguments);
+		loc.rv = $tag(name="img", skip="source,key,category", close=true, attributes=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$appendQueryString" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
+		loc.rv = "";
 		// if assetQueryString is a boolean value, it means we just reloaded, so create a new query string based off of now
 		// the only problem with this is if the app doesn't get used a lot and the application is left alone for a period longer than the application scope is allowed to exist
 		if (IsBoolean(application.wheels.assetQueryString) && YesNoFormat(application.wheels.assetQueryString) == "no")
 		{
-			return loc.returnValue;
+			return loc.rv;
 		}
 		if (!IsNumeric(application.wheels.assetQueryString) && IsBoolean(application.wheels.assetQueryString))
 		{
 			application.wheels.assetQueryString = Hash(DateFormat(Now(), "yyyymmdd") & TimeFormat(Now(), "HHmmss"));
 		}
-		loc.returnValue &= "?" & application.wheels.assetQueryString;
+		loc.rv &= "?" & application.wheels.assetQueryString;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$assetDomain" returntype="string" access="public" output="false">
 	<cfargument name="pathToAsset" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = arguments.pathToAsset;
+		loc.rv = arguments.pathToAsset;
 		if (get("showErrorInformation"))
 		{
 			if (!IsStruct(application.wheels.assetPaths) && !IsBoolean(application.wheels.assetPaths))
@@ -289,7 +289,7 @@
 		// return nothing if assetPaths is not a struct
 		if (!IsStruct(application.wheels.assetPaths))
 		{
-			return loc.returnValue;
+			return loc.rv;
 		}
 
 		loc.protocol = "http://";
@@ -316,7 +316,7 @@
 		{
 			loc.position = loc.domainLen;
 		}
-		loc.returnValue = loc.protocol & Trim(ListGetAt(loc.domainList, loc.position)) & arguments.pathToAsset;
+		loc.rv = loc.protocol & Trim(ListGetAt(loc.domainList, loc.position)) & arguments.pathToAsset;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
