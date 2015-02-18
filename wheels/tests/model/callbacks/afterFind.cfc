@@ -39,7 +39,7 @@
 	</cffunction>
 
 	<cffunction name="test_setting_property_on_one_object_with_skipped_callback">
-		<cfset loc.post = model("post").findOne(callbacks=false)>
+		<cfset loc.post = model("post").findOne(callbacks=false, order="id")>
 		<cfset assert("loc.post.title IS 'Title for first test post'")>
 	</cffunction>
 
@@ -49,7 +49,7 @@
 	</cffunction>
 
 	<cffunction name="test_setting_properties_on_multiple_objects_with_skipped_callback">
-		<cfset loc.posts = model("post").findAll(returnAs="objects", callbacks=false)>
+		<cfset loc.posts = model("post").findAll(returnAs="objects", callbacks=false, order="id")>
 		<cfset assert("loc.posts[1].title IS 'Title for first test post' AND loc.posts[2].title IS 'Title for second test post'")>
 	</cffunction>
 

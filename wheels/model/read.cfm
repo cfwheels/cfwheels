@@ -371,13 +371,13 @@
 		var loc = {};
 		$args(args=arguments, name="findFirst", combine="property/properties");
 		arguments.order = "";
-		loc.iEnd = ListLen(arguments.properties);
+		loc.iEnd = ListLen(arguments.property);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.item = ListGetAt(arguments.properties, loc.i);
+			loc.item = ListGetAt(arguments.property, loc.i);
 			arguments.order = ListAppend(arguments.order, loc.item & " " & arguments.$sort);
 		}
-		StructDelete(arguments, "properties");
+		StructDelete(arguments, "property");
 		StructDelete(arguments, "$sort");
 		loc.rv = findOne(argumentCollection=arguments);
 	</cfscript>
