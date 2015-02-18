@@ -4,11 +4,14 @@ Model Enhancements
 ==================
 
 * Allow spaces in list passed in to the "include" argument on finders - #150 [Per Djurner]
+* Added findFirst() and findLast() finder methods - [Per Djurner]
 
 Controller Enhancements
 =======================
 
 * Ability to redirect to a specific URL - [Simon Allard]
+(* Option to correct JSON output by passing in x="string" to renderWith() - [Per Djurner])
+(* Option to correct JSON output by passing in x="integer" to renderWith() - [Per Djurner])
 
 Miscellaneous
 =============
