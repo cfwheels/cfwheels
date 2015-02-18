@@ -27,7 +27,7 @@
 		-> <a class="delete" href="/blog/delete/99" id="delete-99">Delete Post</a>
 	'
 	categories="view-helper,links" chapters="linking-pages" functions="URLFor,buttonTo,mailTo">
-	<cfargument name="text" type="string" required="false" default="" hint="The text content of the link.">
+	<cfargument name="text" type="string" required="false" hint="The text content of the link.">
 	<cfargument name="confirm" type="string" required="false" default="" hint="Pass a message here to cause a JavaScript confirmation dialog box to pop up containing the message.">
 	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
 	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for @URLFor.">
@@ -53,7 +53,7 @@
 			arguments.href = URLFor(argumentCollection=arguments);
 		}
 		arguments.href = toXHTML(arguments.href);
-		if (!Len(arguments.text))
+		if (!StructKeyExists(arguments, "text"))
 		{
 			arguments.text = arguments.href;
 		}
