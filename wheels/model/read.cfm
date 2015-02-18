@@ -364,7 +364,7 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="findFirst" returntype="any" access="public" output="false" hint="Fetches the first record ordered by primary key value. Use the `property` argument to order by something else.">
+<!--- <cffunction name="findFirst" returntype="any" access="public" output="false" hint="Fetches the first record ordered by primary key value. Use the `property` argument to order by something else.">
 	<cfargument name="property" type="string" required="false" default="#primaryKey()#" hint="Name of the property to order by.">
 	<cfargument name="$sort" type="string" required="false" default="ASC">
 	<cfscript>
@@ -385,7 +385,7 @@
 		loc.rv = findFirst(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.rv>
-</cffunction>
+</cffunction> --->
 
 <!--- PUBLIC MODEL OBJECT METHODS --->
 
