@@ -22,6 +22,7 @@ Controller Enhancements
 Miscellaneous
 =============
 
+* Support for the Lucee server - [Tom King]
 * Made "development" the default environment mode - [Per Djurner]
 * Removed deprecation work-around for the "if" argument on validation helpers - [Per Djurner]
 * Removed deprecation work-around for the "class" argument on association initialization methods - [Per Djurner]
