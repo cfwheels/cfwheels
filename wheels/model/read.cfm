@@ -364,6 +364,26 @@
 	<cfreturn loc.rv>
 </cffunction>
 
+<cffunction name="findFirst" returntype="any" access="public" output="false" hint="Fetches the first record ordered by primary key value. Use the `property` argument to order by something else.">
+	<cfargument name="property" type="string" required="false" default="#primaryKey()#" hint="Name of the property to order by. This argument is also aliased as `properties`.">
+	<cfargument name="$sort" type="string" required="false" default="ASC">
+	<cfscript>
+		var loc = {};
+		$args(args=arguments, name="findFirst", combine="properties/property");
+		arguments.order = "";
+		loc.iEnd = ListLen(arguments.properties);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(arguments.properties, loc.i);
+			arguments.order = ListAppend(arguments.order, loc.item & " " & arguments.$sort);
+		}
+		StructDelete(arguments, "properties");
+		StructDelete(arguments, "$sort");
+		loc.rv = findOne(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
 <!--- PUBLIC MODEL OBJECT METHODS --->
 
 <cffunction name="reload" returntype="void" access="public" output="false" hint="Reloads the property values of this object from the database."
