@@ -6,6 +6,11 @@ Model Enhancements
 * Allow spaces in list passed in to the "include" argument on finders - #150 [Per Djurner]
 * Added findFirst() and findLast() finder methods - [Per Djurner]
 
+View Enhancements
+=================
+
+* Respect blank "text" argument in linkTo() - #365 [Adam Chapman, Tony Petruzzi, Per Djurner]
+
 Controller Enhancements
 =======================
 
