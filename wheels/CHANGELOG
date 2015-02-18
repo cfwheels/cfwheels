@@ -14,6 +14,7 @@ View Enhancements
 Controller Enhancements
 =======================
 
+* Allow external attachments with sendEmail() - [Adam Chapman, Tony Petruzzi]
 * Ability to redirect to a specific URL - [Simon Allard]
 (* Option to correct JSON output by passing in x="string" to renderWith() - [Per Djurner])
 (* Option to correct JSON output by passing in x="integer" to renderWith() - [Per Djurner])

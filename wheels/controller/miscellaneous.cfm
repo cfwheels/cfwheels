@@ -102,8 +102,14 @@
 			loc.iEnd = ListLen(arguments.file);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
+				loc.item = ListGetAt(arguments.file, loc.i);
 				arguments.mailparams[loc.i] = {};
-				arguments.mailparams[loc.i].file = ExpandPath(application.wheels.filePath) & "/" & ListGetAt(arguments.file, loc.i);
+				if (!ReFindNoCase("\\|/", loc.item))
+				{
+					// no directory delimiter is present so append the path
+					loc.item = ExpandPath(application.wheels.filePath) & "/" & loc.item;
+				}
+				arguments.mailparams[loc.i].file = loc.item;
 			}
 		}
 

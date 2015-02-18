@@ -62,6 +62,15 @@
 		<cfset assert("result.mailparams[1].file Contains '_assets' AND result.mailparams[1].file Contains 'cfwheels-logo.png'")>
 	</cffunction>
 
+	<cffunction name="test_send_with_attachments_external">
+		<cfset args.template = "plainEmailTemplate">
+		<cfset args.file = "cfwheels-logo.png,http://www.example.com/test.txt,c:\inetpub\wwwroot\cfwheels\something.pdf">
+		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
+		<cfset assert("result.mailparams[1].file Contains '_assets' AND result.mailparams[1].file Contains 'cfwheels-logo.png'")>
+		<cfset assert("result.mailparams[2].file eq 'http://www.example.com/test.txt'")>
+		<cfset assert("result.mailparams[3].file eq 'c:\inetpub\wwwroot\cfwheels\something.pdf'")>
+	</cffunction>
+
 	<cffunction name="test_send_with_custom_argument">
 		<cfset args.template = "plainEmailTemplate">
 		<cfset args.customArgument = "IPassedInThisAsACustomArgument">
