@@ -369,7 +369,7 @@
 	<cfargument name="$sort" type="string" required="false" default="ASC">
 	<cfscript>
 		var loc = {};
-		$args(args=arguments, name="findFirst", combine="properties/property");
+		$args(args=arguments, name="findFirst", combine="property/properties");
 		arguments.order = "";
 		loc.iEnd = ListLen(arguments.properties);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -380,6 +380,16 @@
 		StructDelete(arguments, "properties");
 		StructDelete(arguments, "$sort");
 		loc.rv = findOne(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
+<cffunction name="findLast" returntype="any" access="public" output="false" hint="Fetches the last record ordered by primary key value.">
+	<cfargument name="property" type="string" required="false" hint="See documentation for @findFirst.">
+	<cfscript>
+		var loc = {};
+		arguments.$sort = "DESC";
+		loc.rv = findFirst(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
