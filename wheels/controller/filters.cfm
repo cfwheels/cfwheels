@@ -74,7 +74,7 @@
 	</cfscript>
 </cffunction>
 
-<!--- PUBLIC CONTROLLER CLASS FUNCTIONS --->
+<!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
 <cffunction name="filterChain" returntype="array" access="public" output="false" hint="Returns an array of all the filters set on this controller in the order in which they will be executed."
 	examples=

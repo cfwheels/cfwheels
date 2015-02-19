@@ -26,73 +26,97 @@
 	categories="view-helper,miscellaneous" chapters="">
 	<cfargument name="position" type="any" required="false" default="last" hint="The position in the section's stack where you want the content placed. Valid values are `first`, `last`, or the numeric position.">
 	<cfargument name="overwrite" type="any" required="false" default="false" hint="Whether or not to overwrite any of the content. Valid values are `false`, `true`, or `all`.">
-	<cfset var loc = {}>
-	
-	<!--- position in the array for the content --->
-	<cfset loc.position = "last">
-	<!--- should we overwrite or insert into the array --->
-	<cfset loc.overwrite = "false">
-	
-	<!--- extract optional arguments --->
-	<cfif StructKeyExists(arguments, "position")>
-		<cfset loc.position = arguments.position>
-		<cfset StructDelete(arguments, "position", false)>
-	</cfif>
-	
-	<cfif StructKeyExists(arguments, "overwrite")>
-		<cfset loc.overwrite = arguments.overwrite>
-		<cfset StructDelete(arguments, "overwrite", false)>
-	</cfif>
-	
-	<!--- if no other arguments exists, exit --->
-	<cfif StructIsEmpty(arguments)>
-		<cfreturn>
-	</cfif>
-	
-	<!--- since we're not going to know the name of the section, we have to get it dynamically --->
-	<cfset loc.section = ListFirst(StructKeyList(arguments))>
-	<cfset loc.content = arguments[loc.section]>
-	
-	<cfif !IsBoolean(loc.overwrite)>
-		<cfset loc.overwrite = "all">
-	</cfif>
-	
-	<cfif !StructKeyExists(variables.$instance.contentFor, loc.section) OR loc.overwrite eq "all">
-		<!--- if the section doesn't exists, or they want to overwrite the whole thing --->
-		<cfset variables.$instance.contentFor[loc.section] = []>
-		<cfset ArrayAppend(variables.$instance.contentFor[loc.section], loc.content)>
-	<cfelse>
-		<cfset loc.size = ArrayLen(variables.$instance.contentFor[loc.section])>
-		<!--- they want to append, prepend or insert at a specific point in the array --->
-		<!--- make sure position is within range --->
-		<cfif !IsNumeric(loc.position) AND !ListFindNoCase("first,last", loc.position)>
-			<cfset loc.position = "last">
-		</cfif>
-		<cfif IsNumeric(loc.position)>
-			<cfif loc.position lte 1>
-				<cfset loc.position = "first">
-			<cfelseif loc.position gte loc.size>
-				<cfset loc.position = "last">
-			</cfif>
-		</cfif>
+	<cfscript>
+		var loc = {};
 
-		<cfif loc.overwrite>
-			<cfif loc.position is "last">
-				<cfset loc.position = loc.size>
-			<cfelseif loc.position is "first">
-				<cfset loc.position = 1>
-			</cfif>
-			<cfset variables.$instance.contentFor[loc.section][loc.position] = loc.content>
-		<cfelse>
-			<cfif loc.position is "last">
-				<cfset ArrayAppend(variables.$instance.contentFor[loc.section], loc.content)>
-			<cfelseif loc.position is "first">
-				<cfset ArrayPrepend(variables.$instance.contentFor[loc.section], loc.content)>
-			<cfelse>
-				<cfset ArrayInsertAt(variables.$instance.contentFor[loc.section], loc.position, loc.content)>
-			</cfif>
-		</cfif>			
-	</cfif>
+		// position in the array for the content
+		loc.position = "last";
+		
+		//should we overwrite or insert into the array
+		loc.overwrite = "false";
+
+		// extract optional arguments
+		if (StructKeyExists(arguments, "position"))
+		{
+			loc.position = arguments.position;
+			StructDelete(arguments, "position");
+		}
+		if (StructKeyExists(arguments, "overwrite"))
+		{
+			loc.overwrite = arguments.overwrite;
+			StructDelete(arguments, "overwrite");
+		}
+
+		// if no other arguments exists, exit
+		if (StructIsEmpty(arguments))
+		{
+			return;
+		}
+
+		// since we're not going to know the name of the section, we have to get it dynamically
+		loc.section = ListFirst(StructKeyList(arguments));
+		loc.content = arguments[loc.section];
+
+		if (!IsBoolean(loc.overwrite))
+		{
+			loc.overwrite = "all";
+		}
+
+		if (!StructKeyExists(variables.$instance.contentFor, loc.section) || loc.overwrite == "all")
+		{
+			// if the section doesn't exists, or they want to overwrite the whole thing
+			variables.$instance.contentFor[loc.section] = [];
+			ArrayAppend(variables.$instance.contentFor[loc.section], loc.content);
+		}
+		else
+		{
+			loc.size = ArrayLen(variables.$instance.contentFor[loc.section]);
+			// they want to append, prepend or insert at a specific point in the array
+			// make sure position is within range
+			if (!IsNumeric(loc.position) && !ListFindNoCase("first,last", loc.position))
+			{
+				loc.position = "last";
+			}
+			if (IsNumeric(loc.position))
+			{
+				if (loc.position <= 1)
+				{
+					loc.position = "first";
+				}
+				else if (loc.position >= loc.size)
+				{
+					loc.position = "last";
+				}
+			}
+			if (loc.overwrite)
+			{
+				if (loc.position == "last")
+				{
+					loc.position = loc.size;
+				}
+				else if (loc.position == "first")
+				{
+					loc.position = 1;
+				}
+				variables.$instance.contentFor[loc.section][loc.position] = loc.content;
+			}
+			else
+			{
+				if (loc.position == "last")
+				{
+					ArrayAppend(variables.$instance.contentFor[loc.section], loc.content);
+				}
+				else if (loc.position == "first")
+				{
+					ArrayPrepend(variables.$instance.contentFor[loc.section], loc.content);
+				}
+				else
+				{
+					ArrayInsertAt(variables.$instance.contentFor[loc.section], loc.position, loc.content);
+				}
+			}
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="includeLayout" returntype="string" access="public" output="false" hint="Includes the contents of another layout file. This is usually used to include a parent layout from within a child layout."
@@ -143,8 +167,12 @@
 	<cfargument name="spacer" type="string" required="false" hint="HTML or string to place between partials when called using a query.">
 	<cfargument name="dataFunction" type="any" required="false" hint="Name of controller function to load data from.">
 	<cfargument name="$prependWithUnderscore" type="boolean" required="false" default="true">
-	<cfset $args(name="includePartial", args=arguments)>
-	<cfreturn $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,group,cache,layout,spacer,dataFunction"))>
+	<cfscript>
+		var loc = {};
+		$args(name="includePartial", args=arguments);
+		loc.rv = $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,group,cache,layout,spacer,dataFunction"));
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="cycle" returntype="string" access="public" output="false" hint="Cycles through list values every time it is called."

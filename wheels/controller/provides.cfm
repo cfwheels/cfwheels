@@ -1,3 +1,5 @@
+<!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
+
 <cffunction name="provides" access="public" output="false" returntype="void" hint="Defines formats that the controller will respond with upon request. The format can be requested through a URL variable called `format`, by appending the format name to the end of a URL as an extension (when URL rewriting is enabled), or in the request header."
 	examples='
 		<!--- In your controller --->
@@ -24,7 +26,9 @@
 		variables.$class.formats.default = ListAppend(variables.$class.formats.default, arguments.formats);
 	</cfscript>
 </cffunction>
-	
+
+<!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
+
 <cffunction name="onlyProvides" access="public" output="false" returntype="void" hint="Use this in an individual controller action to define which formats the action will respond with. This can be used to define provides behavior in individual actions or to override a global setting set with @provides in the controller's `init()`."
 	examples='
 		<!--- In your controller --->
@@ -108,7 +112,7 @@
 		// call render page if we are just rendering html
 		if (loc.contentType == "html")
 		{
-			StructDelete(arguments, "data", false); 
+			StructDelete(arguments, "data"); 
 			return renderPage(argumentCollection=arguments);
 		}
 		
@@ -190,6 +194,8 @@
 		renderText(loc.content);
 	</cfscript>
 </cffunction>
+
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$acceptableFormats" access="public" output="false" returntype="string">
 	<cfargument name="action" type="string" required="true">

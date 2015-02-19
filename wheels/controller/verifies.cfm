@@ -1,3 +1,5 @@
+<!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
+
 <cffunction name="verifies" returntype="void" access="public" output="false" hint="Instructs Wheels to verify that some specific criterias are met before running an action. NOTE: All undeclared arguments will be passed to `redirectTo()` call if a handler is not specified."
 	examples=
 	'
@@ -31,6 +33,8 @@
 		ArrayAppend(variables.$class.verifications, Duplicate(arguments));
 	</cfscript>
 </cffunction>
+
+<!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
 <cffunction name="verificationChain" returntype="array" access="public" output="false" hint="Returns an array of all the verifications set on this controller in the order in which they will be executed."
 	examples='
@@ -66,6 +70,8 @@
 		}
 	</cfscript>
 </cffunction>
+
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$runVerifications" returntype="void" access="public" output="false">
 	<cfargument name="action" type="string" required="true">
@@ -178,7 +184,7 @@
 					loc.typeCheck = "string";
 				}
 
-				if(!IsValid(loc.typeCheck, loc.value) || (loc.typeCheck == "string" && !loc.typeAllowedBlank && !Len(trim(loc.value))))
+				if (!IsValid(loc.typeCheck, loc.value) || (loc.typeCheck == "string" && !loc.typeAllowedBlank && !Len(Trim(loc.value))))
 				{
 					return false;
 				}

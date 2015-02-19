@@ -1,3 +1,5 @@
+<!--- PRIVATE FUNCTIONS --->
+
 <cffunction name="$processAction" returntype="boolean" access="public" output="false">
 	<cfscript>
 		var loc = {};
@@ -119,7 +121,7 @@
 			{
 				renderPage();
 			}
-			catch(Any e)
+			catch (any e)
 			{
 				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.$class.name)#/#LCase(arguments.action)#.cfm")))
 				{
@@ -149,8 +151,10 @@
 	<cfargument name="key" type="string" required="true">
 	<cfargument name="category" type="string" required="true">
 	<cfscript>
+		var loc = {};
 		$callAction(action=arguments.action);
 		$addToCache(key=arguments.key, value=variables.$instance.response, time=arguments.time, category=arguments.category);
+		loc.rv = response();
 	</cfscript>
-	<cfreturn response()>
+	<cfreturn loc.rv>
 </cffunction>

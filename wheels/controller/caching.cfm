@@ -1,6 +1,6 @@
 <!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
 
-<cffunction name="caches" returntype="void" access="public" output="false" hint="Tells Wheels to cache one or more actions."
+<cffunction name="caches" returntype="void" access="public" output="false" hint="Tells CFWheels to cache one or more actions."
 	examples=
 	'
 		<cfset caches(actions="browseByUser,browseByTitle", time=30)>
@@ -51,11 +51,26 @@
 </cffunction>
 
 <cffunction name="$cachableActions" returntype="array" access="public" output="false">
-	<cfreturn variables.$class.cachableActions>
+	<cfscript>
+		var loc = {};
+		loc.rv = variables.$class.cachableActions;
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$hasCachableActions" returntype="boolean" access="public" output="false">
-	<cfreturn !ArrayIsEmpty($cachableActions())>
+	<cfscript>
+		var loc = {};
+		if (ArrayIsEmpty($cachableActions()))
+		{
+			loc.rv = false;
+		}
+		else
+		{
+			loc.rv = true;
+		}
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$cacheSettingsForAction" returntype="any" access="public" output="false">

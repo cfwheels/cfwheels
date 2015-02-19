@@ -1,3 +1,5 @@
+<!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
+
 <cffunction name="isSecure" returntype="boolean" access="public" output="false" hint="Returns whether Wheels is communicating over a secure port."
 	examples=
 	'
@@ -51,7 +53,7 @@
 		{
 			if (!StructKeyExists(request.wheels, arguments.handle))
 			{
-				$throw(type="Wheels.QueryHandleNotFound", message="Wheels couldn't find a query with the handle of `#arguments.handle#`.", extendedInfo="Make sure your `findAll` call has the `page` argument specified and matching `handle` argument if specified.");
+				$throw(type="Wheels.QueryHandleNotFound", message="CFWheels couldn't find a query with the handle of `#arguments.handle#`.", extendedInfo="Make sure your `findAll` call has the `page` argument specified and matching `handle` argument if specified.");
 			}
 		}
 		return request.wheels[arguments.handle];

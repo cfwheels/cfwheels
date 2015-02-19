@@ -1,3 +1,5 @@
+<!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
+
 <cffunction name="usesLayout" access="public" returntype="void" output="false" hint="Used within a controller's `init()` method to specify controller- or action-specific layouts."
 	examples=
 	'
@@ -39,11 +41,11 @@
 	<cfargument name="only" type="string" required="false" hint="List of action that SHOULD ONLY get the layout">
 	<cfargument name="useDefault" type="boolean" required="false" default="true" hint="When specifying conditions or a method, pass `true` to use the default `layout.cfm` if none of the conditions are met">
 	<cfscript>
-		// when the layout is a method, the method itself should handle all the logic
 		if ((StructKeyExists(this, arguments.template) && IsCustomFunction(this[arguments.template])) || IsCustomFunction(arguments.template))
 		{
-			StructDelete(arguments, "except", false);
-			StructDelete(arguments, "only", false);
+			// when the layout is a method, the method itself should handle all the logic
+			StructDelete(arguments, "except");
+			StructDelete(arguments, "only");
 		}
 		if (StructKeyExists(arguments, "except"))
 		{
@@ -56,6 +58,8 @@
 		variables.$class.layout = arguments;
 	</cfscript>
 </cffunction>
+
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$useLayout" access="public" returntype="any" output="false">
 	<cfargument name="$action" type="string" required="true">
@@ -86,8 +90,8 @@
 				loc.rv = variables.$class.layout[loc.layoutType];
 			}
 		}
-		return loc.rv;
 	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$renderLayout" returntype="string" access="public" output="false">
@@ -125,11 +129,11 @@
 				}
 				if (ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) || loc.layoutFileExists)
 				{
-					loc.include = loc.include & "/" & variables.params.controller & "/" & "layout.cfm";
+					loc.include &= "/" & variables.params.controller & "/" & "layout.cfm";
 				}
 				else
 				{
-					loc.include = loc.include & "/" & "layout.cfm";
+					loc.include &= "/" & "layout.cfm";
 				}
 				loc.rv = $includeAndReturnOutput($template=loc.include);
 			}
@@ -144,6 +148,6 @@
 		{
 			loc.rv = arguments.$content;
 		}
-		return loc.rv;
 	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>

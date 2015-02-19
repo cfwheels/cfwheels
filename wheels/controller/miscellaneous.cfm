@@ -158,21 +158,18 @@
 		loc.relativeRoot = application.wheels.rootPath;
 		if (Right(loc.relativeRoot, 1) != "/")
 		{
-			loc.relativeRoot = loc.relativeRoot & "/";
+			loc.relativeRoot &= "/";
 		}
-
 		loc.root = ExpandPath(loc.relativeRoot);
 		loc.folder = arguments.directory;
 		if (!Len(loc.folder))
 		{
 			loc.folder = loc.relativeRoot & application.wheels.filePath; 
 		}
-
-		if (Left(loc.folder, Len(loc.root)) eq loc.root)
+		if (Left(loc.folder, Len(loc.root)) == loc.root)
 		{
 			loc.folder = RemoveChars(loc.folder, 1, Len(loc.root));
 		}
-
 		loc.fullPath = Replace(loc.folder, "\", "/", "all");
 		loc.fullPath = ListAppend(loc.fullPath, arguments.file, "/");
 		loc.fullPath = ExpandPath(loc.fullPath);
@@ -183,11 +180,12 @@
 		// if the file is not found, try searching for it
 		if (!FileExists(loc.fullPath))
 		{
-			loc.match = $directory(action="list", directory="#loc.directory#", filter="#loc.file#.*");
+			loc.match = $directory(action="list", directory=loc.directory, filter="#loc.file#.*");
+
 			// only extract the extension if we find a single match
 			if (loc.match.recordCount == 1)
 			{
-				loc.file = loc.file & "." & ListLast(loc.match.name, ".");
+				loc.file &= "." & ListLast(loc.match.name, ".");
 				loc.fullPath = loc.directory & "/" & loc.file;
 			}
 			else
@@ -220,6 +218,6 @@
 
 		// prompt the user to download the file
 		$header(name="content-disposition", value="#arguments.disposition#; filename=""#loc.name#""");
-		$content(type="#loc.mime#", file="#loc.fullPath#", deleteFile="#arguments.deleteFile#");
+		$content(type=loc.mime, file=loc.fullPath, deleteFile=arguments.deleteFile);
 	</cfscript>
 </cffunction>
