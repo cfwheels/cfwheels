@@ -116,7 +116,18 @@
 		</cfif>
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashKeep,flashKeyExists,flashMessages">
-	<cfreturn !flashCount()>
+	<cfscript>
+		var loc = {};
+		if (flashCount())
+		{
+			loc.rv = false;
+		}
+		else
+		{
+			loc.rv = true;
+		}
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="flashKeep" returntype="void" access="public" output="false" hint="Make the entire Flash or specific key in it stick around for one more request."
@@ -336,9 +347,15 @@
 
 <cffunction name="$setFlashStorage" returntype="void" access="public" output="false">
 	<cfargument name="storage" type="string" required="true">
-	<cfset variables.$class.flashStorage = arguments.storage>
+	<cfscript>
+		variables.$class.flashStorage = arguments.storage;
+	</cfscript>
 </cffunction>
 
 <cffunction name="$getFlashStorage" returntype="string" access="public" output="false">
-	<cfreturn variables.$class.flashStorage>
+	<cfscript>
+		var loc = {};
+		loc.rv = variables.$class.flashStorage;
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
