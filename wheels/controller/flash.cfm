@@ -25,25 +25,23 @@
 	categories="controller-request,flash" chapters="using-the-flash" functions="flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfargument name="key" type="string" required="false" hint="The key to get the value for.">
 	<cfscript>
-		var loc = {};
-		loc.flash = $readFlash();
+		var $flash = $readFlash();
 		if (StructKeyExists(arguments, "key"))
 		{
-			if (flashKeyExists(key=arguments.key))
+			if (flashKeyExists(key=arguments.key, $flash=$flash))
 			{
-				loc.flash = loc.flash[arguments.key];
+				$flash = $flash[arguments.key];
 			}
 			else
 			{
-				loc.flash = "";
+				$flash = "";
 			}
 		}
 		
 		// we can just return the flash since it is created at the beginning of the request
 		// this way we always return what is expected - a struct
-		loc.rv = loc.flash;
+		return $flash;
 	</cfscript>
-	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="flashClear" returntype="void" access="public" output="false" hint="Deletes everything from the Flash."
@@ -52,9 +50,7 @@
 		<cfset flashClear()>
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
-	<cfscript>
-		$writeFlash();
-	</cfscript>
+	<cfset $writeFlash()>
 </cffunction>
 
 <cffunction name="flashCount" returntype="numeric" access="public" output="false" hint="Returns how many keys exist in the Flash."
@@ -65,12 +61,8 @@
 		</cfif>
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
-	<cfscript>
-		var loc = {};
-		loc.flash = $readFlash();
-		loc.rv = StructCount(loc.flash);
-	</cfscript>
-	<cfreturn loc.rv>
+	<cfset var $flash = $readFlash()>
+	<cfreturn StructCount($flash)>
 </cffunction>
 
 <cffunction name="flashDelete" returntype="boolean" access="public" output="false" hint="Deletes a specific key from the Flash."
@@ -81,12 +73,12 @@
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfargument name="key" type="string" required="true" hint="The key to delete.">
 	<cfscript>
-		var loc = {};
-		loc.flash = $readFlash();
-		loc.rv = StructDelete(loc.flash, arguments.key, true);
-		$writeFlash(loc.flash);
+		var rv = "";
+		var $flash = $readFlash();
+		rv = StructDelete($flash, arguments.key, true);
+		$writeFlash($flash);
+		return rv;
 	</cfscript>
-	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="flashInsert" returntype="void" access="public" output="false" hint="Inserts a new key/value into the Flash."
@@ -97,12 +89,15 @@
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfscript>
 		var loc = {};
-		loc.flash = $readFlash();
-		for (loc.key in arguments)
+		loc.$flash = $readFlash();
+		loc.iEnd = StructCount(arguments);
+		loc.keys = StructKeyList(arguments);
+		for(loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			StructInsert(loc.flash, loc.key, arguments[loc.key], true);
+			loc.key = ListGetAt(loc.keys, loc.i);
+			StructInsert(loc.$flash, loc.key, arguments[loc.key], true);
 		}
-		$writeFlash(loc.flash);
+		$writeFlash(loc.$flash);
 	</cfscript>
 </cffunction>
 
@@ -121,18 +116,7 @@
 		</cfif>
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashKeep,flashKeyExists,flashMessages">
-	<cfscript>
-		var loc = {};
-		if (flashCount())
-		{
-			loc.rv = false;
-		}
-		else
-		{
-			loc.rv = true;
-		}
-	</cfscript>
-	<cfreturn loc.rv>
+	<cfreturn !flashCount()>
 </cffunction>
 
 <cffunction name="flashKeep" returntype="void" access="public" output="false" hint="Make the entire Flash or specific key in it stick around for one more request."
@@ -166,12 +150,8 @@
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashMessages">
 	<cfargument name="key" type="string" required="true" hint="The key to check if it exists.">
-	<cfscript>
-		var loc = {};
-		loc.flash = $readFlash();
-		loc.rv = StructKeyExists(loc.flash, arguments.key);
-	</cfscript>
-	<cfreturn loc.rv>
+	<cfset var $flash = $readFlash()>
+	<cfreturn StructKeyExists($flash, arguments.key)>
 </cffunction>
 
 <cffunction name="flashMessages" returntype="string" access="public" output="false" hint="Displays a marked-up listing of messages that exists in the Flash."
@@ -237,23 +217,24 @@
 	<cfargument name="lowerCaseDynamicClassValues" type="boolean" required="false" hint="Outputs all class attribute values in lower case (except the main one).">
 	<cfscript>
 		var loc = {};
-		$args(name="flashMessages", args=arguments, combine="keys/key");
-		loc.flash = $readFlash();
+		loc.$flash = $readFlash();
 		loc.rv = "";
+		$args(name="flashMessages", args=arguments);
+		$combineArguments(args=arguments, combine="keys,key", required=false);
 
-		// if no keys are requested, populate with everything stored in the Flash and sort them
+		// If no keys are requested, populate with everything stored in the Flash and sort them
 		if (!StructKeyExists(arguments, "keys"))
 		{
-			loc.flashKeys = StructKeyList(loc.flash);
+			loc.flashKeys = StructKeyList(loc.$flash);
 			loc.flashKeys = ListSort(loc.flashKeys, "textnocase");
 		}
 		else
 		{
-			// otherwise, generate list based on what was passed as "arguments.keys"
+			// Otherwise, generate list based on what was passed as "arguments.keys"
 			loc.flashKeys = arguments.keys;
 		}
 
-		// generate markup for each Flash item in the list
+		// Generate markup for each Flash item in the list
 		loc.listItems = "";
 		loc.iEnd = ListLen(loc.flashKeys);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -267,7 +248,7 @@
 			loc.attributes = {class=loc.class};
 			if (!StructKeyExists(arguments, "key") || arguments.key == loc.item)
 			{
-				loc.content = loc.flash[loc.item];
+				loc.content = loc.$flash[loc.item];
 				if (IsSimpleValue(loc.content))
 				{
 					loc.listItems &= $element(name="p", content=loc.content, attributes=loc.attributes);
@@ -279,30 +260,26 @@
 		{
 			loc.rv = $element(name="div", skip="key,keys,includeEmptyContainer,lowerCaseDynamicClassValues", content=loc.listItems, attributes=arguments);
 		}
+		return loc.rv;
 	</cfscript>
-	<cfreturn loc.rv>
 </cffunction>
-
-<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$readFlash" returntype="struct" access="public" output="false">
 	<cfscript>
-		var loc = {};
-		loc.rv = {};
 		if (!StructKeyExists(arguments, "$locked"))
 		{
-			loc.rv = $simpleLock(name="flashLock#application.applicationName#", type="readonly", execute="$readFlash", executeArgs=arguments);
+			return $simpleLock(name="flashLock#application.applicationName#", type="readonly", execute="$readFlash", executeArgs=arguments);
 		}
 		if ($getFlashStorage() == "cookie" && StructKeyExists(cookie, "flash"))
 		{
-			loc.rv = DeSerializeJSON(cookie.flash);
+			return DeSerializeJSON(cookie.flash);
 		}
 		else if ($getFlashStorage() == "session" && StructKeyExists(session, "flash"))
 		{
-			loc.rv = Duplicate(session.flash);
+			return Duplicate(session.flash);
 		}
+		return StructNew();
 	</cfscript>
-	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$writeFlash" returntype="void" access="public" output="false">
@@ -310,7 +287,7 @@
 	<cfscript>
 		if (!StructKeyExists(arguments, "$locked"))
 		{
-			$simpleLock(name="flashLock#application.applicationName#", type="exclusive", execute="$writeFlash", executeArgs=arguments);
+			return $simpleLock(name="flashLock#application.applicationName#", type="exclusive", execute="$writeFlash", executeArgs=arguments);
 		}
 		if ($getFlashStorage() == "cookie")
 		{
@@ -330,44 +307,38 @@
 		// only save the old flash if they want to keep anything
 		if (StructKeyExists(request.wheels, "flashKeep"))
 		{
-			loc.flash = $readFlash();
+			loc.$flash = $readFlash();
 		}
 		
 		// clear the current flash
 		flashClear();
 		
 		// see if they wanted to keep anything
-		if (StructKeyExists(loc, "flash"))
+		if (StructKeyExists(loc, "$flash"))
 		{
 			// delete any keys they don't want to keep
 			if (Len(request.wheels.flashKeep))
 			{
-				for (loc.key in loc.flash)
+				for (loc.key in loc.$flash)
 				{
 					if (!ListFindNoCase(request.wheels.flashKeep, loc.key))
 					{
-						StructDelete(loc.flash, loc.key);
+						StructDelete(loc.$flash, loc.key, false);
 					}
 				}
 			}
 			
 			// write to the flash
-			$writeFlash(loc.flash);
+			$writeFlash(loc.$flash);
 		}
 	</cfscript>
 </cffunction>
 
 <cffunction name="$setFlashStorage" returntype="void" access="public" output="false">
 	<cfargument name="storage" type="string" required="true">
-	<cfscript>
-		variables.$class.flashStorage = arguments.storage;
-	</cfscript>
+	<cfset variables.$class.flashStorage = arguments.storage>
 </cffunction>
 
 <cffunction name="$getFlashStorage" returntype="string" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = variables.$class.flashStorage;
-	</cfscript>
-	<cfreturn loc.rv>
+	<cfreturn variables.$class.flashStorage>
 </cffunction>
