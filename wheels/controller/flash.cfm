@@ -228,24 +228,23 @@
 	<cfargument name="lowerCaseDynamicClassValues" type="boolean" required="false" hint="Outputs all class attribute values in lower case (except the main one).">
 	<cfscript>
 		var loc = {};
-		loc.$flash = $readFlash();
+		$args(name="flashMessages", args=arguments, combine="keys/key");
+		loc.flash = $readFlash();
 		loc.rv = "";
-		$args(name="flashMessages", args=arguments);
-		$combineArguments(args=arguments, combine="keys,key", required=false);
 
-		// If no keys are requested, populate with everything stored in the Flash and sort them
+		// if no keys are requested, populate with everything stored in the Flash and sort them
 		if (!StructKeyExists(arguments, "keys"))
 		{
-			loc.flashKeys = StructKeyList(loc.$flash);
+			loc.flashKeys = StructKeyList(loc.flash);
 			loc.flashKeys = ListSort(loc.flashKeys, "textnocase");
 		}
 		else
 		{
-			// Otherwise, generate list based on what was passed as "arguments.keys"
+			// otherwise, generate list based on what was passed as "arguments.keys"
 			loc.flashKeys = arguments.keys;
 		}
 
-		// Generate markup for each Flash item in the list
+		// generate markup for each Flash item in the list
 		loc.listItems = "";
 		loc.iEnd = ListLen(loc.flashKeys);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -259,7 +258,7 @@
 			loc.attributes = {class=loc.class};
 			if (!StructKeyExists(arguments, "key") || arguments.key == loc.item)
 			{
-				loc.content = loc.$flash[loc.item];
+				loc.content = loc.flash[loc.item];
 				if (IsSimpleValue(loc.content))
 				{
 					loc.listItems &= $element(name="p", content=loc.content, attributes=loc.attributes);
@@ -271,8 +270,8 @@
 		{
 			loc.rv = $element(name="div", skip="key,keys,includeEmptyContainer,lowerCaseDynamicClassValues", content=loc.listItems, attributes=arguments);
 		}
-		return loc.rv;
 	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$readFlash" returntype="struct" access="public" output="false">
