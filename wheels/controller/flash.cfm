@@ -25,10 +25,11 @@
 	categories="controller-request,flash" chapters="using-the-flash" functions="flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfargument name="key" type="string" required="false" hint="The key to get the value for.">
 	<cfscript>
+		var loc = {};
 		var $flash = $readFlash();
 		if (StructKeyExists(arguments, "key"))
 		{
-			if (flashKeyExists(key=arguments.key, $flash=$flash))
+			if (flashKeyExists(key=arguments.key))
 			{
 				$flash = $flash[arguments.key];
 			}
@@ -40,8 +41,9 @@
 		
 		// we can just return the flash since it is created at the beginning of the request
 		// this way we always return what is expected - a struct
-		return $flash;
+		loc.rv = $flash;
 	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="flashClear" returntype="void" access="public" output="false" hint="Deletes everything from the Flash."
