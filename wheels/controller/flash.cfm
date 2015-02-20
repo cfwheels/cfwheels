@@ -95,15 +95,12 @@
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfscript>
 		var loc = {};
-		loc.$flash = $readFlash();
-		loc.iEnd = StructCount(arguments);
-		loc.keys = StructKeyList(arguments);
-		for(loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		loc.flash = $readFlash();
+		for (loc.key in arguments)
 		{
-			loc.key = ListGetAt(loc.keys, loc.i);
-			StructInsert(loc.$flash, loc.key, arguments[loc.key], true);
+			StructInsert(loc.flash, loc.key, arguments[loc.key], true);
 		}
-		$writeFlash(loc.$flash);
+		$writeFlash(loc.flash);
 	</cfscript>
 </cffunction>
 
