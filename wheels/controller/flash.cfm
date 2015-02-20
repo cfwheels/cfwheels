@@ -199,7 +199,7 @@
 	<cfscript>
 		if (!StructKeyExists(arguments, "$locked"))
 		{
-			return $simpleLock(name="flashLock#application.applicationName#", type="exclusive", execute="$writeFlash", executeArgs=arguments);
+			$simpleLock(name="flashLock#application.applicationName#", type="exclusive", execute="$writeFlash", executeArgs=arguments);
 		}
 		if ($getFlashStorage() == "cookie")
 		{
