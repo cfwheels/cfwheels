@@ -167,8 +167,12 @@
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashMessages">
 	<cfargument name="key" type="string" required="true" hint="The key to check if it exists.">
-	<cfset var $flash = $readFlash()>
-	<cfreturn StructKeyExists($flash, arguments.key)>
+	<cfscript>
+		var loc = {};
+		loc.flash = $readFlash();
+		loc.rv = StructKeyExists(loc.flash, arguments.key);
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$readFlash" returntype="struct" access="public" output="false">
