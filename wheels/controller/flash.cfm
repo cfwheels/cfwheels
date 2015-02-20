@@ -173,20 +173,22 @@
 
 <cffunction name="$readFlash" returntype="struct" access="public" output="false">
 	<cfscript>
+		var loc = {};
+		loc.rv = {};
 		if (!StructKeyExists(arguments, "$locked"))
 		{
-			return $simpleLock(name="flashLock#application.applicationName#", type="readonly", execute="$readFlash", executeArgs=arguments);
+			loc.rv = $simpleLock(name="flashLock#application.applicationName#", type="readonly", execute="$readFlash", executeArgs=arguments);
 		}
-		if ($getFlashStorage() == "cookie" && StructKeyExists(cookie, "flash"))
+		else if ($getFlashStorage() == "cookie" && StructKeyExists(cookie, "flash"))
 		{
-			return DeSerializeJSON(cookie.flash);
+			loc.rv = DeSerializeJSON(cookie.flash);
 		}
 		else if ($getFlashStorage() == "session" && StructKeyExists(session, "flash"))
 		{
-			return Duplicate(session.flash);
+			loc.rv = Duplicate(session.flash);
 		}
-		return StructNew();
 	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$writeFlash" returntype="void" access="public" output="false">
