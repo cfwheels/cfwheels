@@ -26,22 +26,22 @@
 	<cfargument name="key" type="string" required="false" hint="The key to get the value for.">
 	<cfscript>
 		var loc = {};
-		var $flsh = $readFlash();
+		loc.flash = $readFlash();
 		if (StructKeyExists(arguments, "key"))
 		{
 			if (flashKeyExists(key=arguments.key))
 			{
-				$flsh = $flsh[arguments.key];
+				loc.flash = loc.flash[arguments.key];
 			}
 			else
 			{
-				$flsh = "";
+				loc.flash = "";
 			}
 		}
 		
 		// we can just return the flash since it is created at the beginning of the request
 		// this way we always return what is expected - a struct
-		loc.rv = $flsh;
+		loc.rv = loc.flash;
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
