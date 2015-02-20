@@ -50,7 +50,9 @@
 		<cfset flashClear()>
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
-	<cfset $writeFlash()>
+	<cfscript>
+		$writeFlash();
+	</cfscript>
 </cffunction>
 
 <cffunction name="flashCount" returntype="numeric" access="public" output="false" hint="Returns how many keys exist in the Flash."
@@ -61,8 +63,12 @@
 		</cfif>
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
-	<cfset var $flash = $readFlash()>
-	<cfreturn StructCount($flash)>
+	<cfscript>
+		var loc = {};
+		loc.flash = $readFlash();
+		loc.rv = StructCount(loc.flash);
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="flashDelete" returntype="boolean" access="public" output="false" hint="Deletes a specific key from the Flash."
@@ -163,115 +169,6 @@
 	<cfargument name="key" type="string" required="true" hint="The key to check if it exists.">
 	<cfset var $flash = $readFlash()>
 	<cfreturn StructKeyExists($flash, arguments.key)>
-</cffunction>
-
-<cffunction name="flashMessages" returntype="string" access="public" output="false" hint="Displays a marked-up listing of messages that exists in the Flash."
-	examples=
-	'
-		<!--- In the controller action --->
-		<cfset flashInsert(success="Your post was successfully submitted.")>
-		<cfset flashInsert(alert="Don''t forget to tweet about this post!")>
-		<cfset flashInsert(error="This is an error message.")>
-
-		<!--- In the layout or view --->
-		<cfoutput>
-			##flashMessages()##
-		</cfoutput>
-		<!---
-			Generates this (sorted alphabetically):
-			<div class="flashMessages">
-				<p class="alertMessage">
-					Don''t forget to tweet about this post!
-				</p>
-				<p class="errorMessage">
-					This is an error message.
-				</p>
-				<p class="successMessage">
-					Your post was successfully submitted.
-				</p>
-			</div>
-		--->
-
-		<!--- Only show the "success" key in the view --->
-		<cfoutput>
-			##flashMessages(key="success")##
-		</cfoutput>
-		<!---
-			Generates this:
-			<div class="flashMessage">
-				<p class="successMessage">
-					Your post was successfully submitted.
-				</p>
-			</div>
-		--->
-
-		<!--- Show only the "success" and "alert" keys in the view, in that order --->
-		<cfoutput>
-			##flashMessages(keys="success,alert")##
-		</cfoutput>
-		<!---
-			Generates this (sorted alphabetically):
-			<div class="flashMessages">
-				<p class="successMessage">
-					Your post was successfully submitted.
-				</p>
-				<p class="alertMessage">
-					Don''t forget to tweet about this post!
-				</p>
-			</div>
-		--->
-	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists">
-	<cfargument name="keys" type="string" required="false" hint="The key (or list of keys) to show the value for. You can also use the `key` argument instead for better readability when accessing a single key.">
-	<cfargument name="class" type="string" required="false" hint="HTML `class` to set on the `div` element that contains the messages.">
-	<cfargument name="includeEmptyContainer" type="boolean" required="false" hint="Includes the DIV container even if the flash is empty.">
-	<cfargument name="lowerCaseDynamicClassValues" type="boolean" required="false" hint="Outputs all class attribute values in lower case (except the main one).">
-	<cfscript>
-		var loc = {};
-		$args(name="flashMessages", args=arguments, combine="keys/key");
-		loc.flash = $readFlash();
-		loc.rv = "";
-
-		// if no keys are requested, populate with everything stored in the Flash and sort them
-		if (!StructKeyExists(arguments, "keys"))
-		{
-			loc.flashKeys = StructKeyList(loc.flash);
-			loc.flashKeys = ListSort(loc.flashKeys, "textnocase");
-		}
-		else
-		{
-			// otherwise, generate list based on what was passed as "arguments.keys"
-			loc.flashKeys = arguments.keys;
-		}
-
-		// generate markup for each Flash item in the list
-		loc.listItems = "";
-		loc.iEnd = ListLen(loc.flashKeys);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.item = ListGetAt(loc.flashKeys, loc.i);
-			loc.class = loc.item & "Message";
-			if (arguments.lowerCaseDynamicClassValues)
-			{
-				loc.class = LCase(loc.class);
-			}
-			loc.attributes = {class=loc.class};
-			if (!StructKeyExists(arguments, "key") || arguments.key == loc.item)
-			{
-				loc.content = loc.flash[loc.item];
-				if (IsSimpleValue(loc.content))
-				{
-					loc.listItems &= $element(name="p", content=loc.content, attributes=loc.attributes);
-				}
-			}
-		}
-
-		if (Len(loc.listItems) || arguments.includeEmptyContainer)
-		{
-			loc.rv = $element(name="div", skip="key,keys,includeEmptyContainer,lowerCaseDynamicClassValues", content=loc.listItems, attributes=arguments);
-		}
-	</cfscript>
-	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$readFlash" returntype="struct" access="public" output="false">
