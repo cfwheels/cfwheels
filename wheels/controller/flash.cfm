@@ -214,29 +214,29 @@
 		// only save the old flash if they want to keep anything
 		if (StructKeyExists(request.wheels, "flashKeep"))
 		{
-			loc.$flash = $readFlash();
+			loc.flash = $readFlash();
 		}
 		
 		// clear the current flash
 		flashClear();
 		
 		// see if they wanted to keep anything
-		if (StructKeyExists(loc, "$flash"))
+		if (StructKeyExists(loc, "flash"))
 		{
 			// delete any keys they don't want to keep
 			if (Len(request.wheels.flashKeep))
 			{
-				for (loc.key in loc.$flash)
+				for (loc.key in loc.flash)
 				{
 					if (!ListFindNoCase(request.wheels.flashKeep, loc.key))
 					{
-						StructDelete(loc.$flash, loc.key, false);
+						StructDelete(loc.flash, loc.key);
 					}
 				}
 			}
 			
 			// write to the flash
-			$writeFlash(loc.$flash);
+			$writeFlash(loc.flash);
 		}
 	</cfscript>
 </cffunction>
