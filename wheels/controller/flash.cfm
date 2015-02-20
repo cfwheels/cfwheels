@@ -199,7 +199,8 @@
 	<cfscript>
 		if (!StructKeyExists(arguments, "$locked"))
 		{
-			$simpleLock(name="flashLock#application.applicationName#", type="exclusive", execute="$writeFlash", executeArgs=arguments);
+			// the return is needed here because otherwise we get an abstracthttpconnection error in jetty (when running tests)
+			return $simpleLock(name="flashLock#application.applicationName#", type="exclusive", execute="$writeFlash", executeArgs=arguments);
 		}
 		if ($getFlashStorage() == "cookie")
 		{
