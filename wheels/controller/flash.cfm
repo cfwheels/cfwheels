@@ -79,12 +79,12 @@
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfargument name="key" type="string" required="true" hint="The key to delete.">
 	<cfscript>
-		var rv = "";
-		var $flash = $readFlash();
-		rv = StructDelete($flash, arguments.key, true);
-		$writeFlash($flash);
-		return rv;
+		var loc = {};
+		loc.flash = $readFlash();
+		loc.rv = StructDelete(loc.flash, arguments.key, true);
+		$writeFlash(loc.flash);
 	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="flashInsert" returntype="void" access="public" output="false" hint="Inserts a new key/value into the Flash."
