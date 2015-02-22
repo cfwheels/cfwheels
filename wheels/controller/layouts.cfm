@@ -1,49 +1,54 @@
 <!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
 
-<cffunction name="usesLayout" access="public" returntype="void" output="false" hint="Used within a controller's `init()` method to specify controller- or action-specific layouts."
+<cffunction name="usesLayout" access="public" returntype="void" output="false" hint="Used within a controller's `init()` function to specify controller- or action-specific layouts."
 	examples=
 	'
-		<!---
-			Example 1: We want this layout to be used as the default throughout the entire
-			controller, except for the myajax action
-		 --->
+		<!--- Example 1: We want this layout to be used as the default throughout the entire controller, except for the myajax action --->
 		<cffunction name="init">
-			<cfset usesLayout(template="myLayout", except="myajax")>
+			<cfscript>
+				usesLayout(template="myLayout", except="myajax");
+			</cfscript>
 		</cffunction>
 		
-		<!---
-			Example 2: Use a custom layout for these actions but use the default layout.cfm
-			for the rest
-		--->
+		<!--- Example 2: Use a custom layout for these actions but use the default layout.cfm for the rest --->
 		<cffunction name="init">
-			<cfset usesLayout(template="myLayout", only="termsOfService,shippingPolicy")>
+			<cfscript>
+				usesLayout(template="myLayout", only="termsOfService,shippingPolicy");
+			</cfscript>
 		</cffunction>
 		
-		<!--- Example 3: Define a custom method to decide which layout to display --->
+		<!--- Example 3: Define a custom function to decide which layout to display --->
 		<cffunction name="init">
-			<cfset usesLayout("setLayout")>
+			<cfscript>
+				usesLayout("setLayout");
+			</cfscript>
 		</cffunction>
 		
 		<cffunction name="setLayout">
-			<!--- Use holiday theme for the month of December --->
-			<cfif Month(Now()) eq 12>
-				<cfreturn "holiday">
-			<!--- Otherwise, use default layout by returning `true` --->
-			<cfelse>
-				<cfreturn true>
-			</cfif>
+			<cfscript>
+				if (Month(Now()) == 12)
+				{
+					// Use holiday theme for the month of December
+					return "holiday";
+				}
+				else
+				{
+					// Otherwise, use default layout by returning `true`
+					return true;
+				}
+			</cfscript>
 		</cffunction>
 	'
 	categories="controller-initialization,rendering" chapters="rendering-layout" functions="renderPage">
-	<cfargument name="template" required="true" type="string" hint="Name of the layout template or method name you want to use">
-	<cfargument name="ajax" required="false" type="string" default="" hint="Name of the layout template you want to use for AJAX requests">
-	<cfargument name="except" type="string" required="false" hint="List of actions that SHOULD NOT get the layout">
-	<cfargument name="only" type="string" required="false" hint="List of action that SHOULD ONLY get the layout">
-	<cfargument name="useDefault" type="boolean" required="false" default="true" hint="When specifying conditions or a method, pass `true` to use the default `layout.cfm` if none of the conditions are met">
+	<cfargument name="template" required="true" type="string" hint="Name of the layout template or function name you want to use.">
+	<cfargument name="ajax" required="false" type="string" default="" hint="Name of the layout template you want to use for AJAX requests.">
+	<cfargument name="except" type="string" required="false" hint="List of actions that should not get the layout.">
+	<cfargument name="only" type="string" required="false" hint="List of actions that should only get the layout.">
+	<cfargument name="useDefault" type="boolean" required="false" default="true" hint="When specifying conditions or a function, pass `true` to use the default `layout.cfm` if none of the conditions are met.">
 	<cfscript>
 		if ((StructKeyExists(this, arguments.template) && IsCustomFunction(this[arguments.template])) || IsCustomFunction(arguments.template))
 		{
-			// when the layout is a method, the method itself should handle all the logic
+			// when the layout is a function, the function itself should handle all the logic
 			StructDelete(arguments, "except");
 			StructDelete(arguments, "only");
 		}
@@ -76,7 +81,7 @@
 			loc.rv = variables.$class.layout.useDefault;
 			if ((StructKeyExists(this, variables.$class.layout[loc.layoutType]) && IsCustomFunction(this[variables.$class.layout[loc.layoutType]])) || IsCustomFunction(variables.$class.layout[loc.layoutType]))
 			{
-				// if the developer doesn't return anything from the method or if they return a blank string it should use the default layout still
+				// if the developer doesn't return anything from the function or if they return a blank string it should use the default layout still
 				loc.invokeArgs = {};
 				loc.invokeArgs.action = arguments.$action;
 				loc.temp = $invoke(method=variables.$class.layout[loc.layoutType], invokeArgs=loc.invokeArgs);
@@ -101,8 +106,7 @@
 		var loc = {};
 		if ((IsBoolean(arguments.$layout) && arguments.$layout) || (!IsBoolean(arguments.$layout) && Len(arguments.$layout)))
 		{
-			// store the content in a variable in the request scope so it can be accessed
-			// by the includeContent function that the developer uses in layout files
+			// store the content in a variable in the request scope so it can be accessed by the includeContent function that the developer uses in layout files
 			// this is done so we avoid passing data to/from it since it would complicate things for the developer
 			contentFor(body=arguments.$content, overwrite=true);
 			loc.include = application.wheels.viewPath;

@@ -1,17 +1,17 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="sendEmail" returntype="any" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in. Besides the Wheels-specific arguments documented here, you can also pass in any argument that is accepted by the `cfmail` tag as well as your own arguments to be used by the view."
+<cffunction name="sendEmail" returntype="any" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in. Besides the CFWheels-specific arguments documented here, you can also pass in any argument that is accepted by the `cfmail` tag as well as your own arguments to be used by the view."
 	examples=
 	'
-		<!--- Get a member and send a welcome email, passing in a few custom variables to the template --->
-		<cfset newMember = model("member").findByKey(params.member.id)>
-		<cfset sendEmail(
+		// Get a member and send a welcome email, passing in a few custom variables to the template
+		newMember = model("member").findByKey(params.member.id);
+		sendEmail(
 			to=newMember.email,
 			template="myemailtemplate",
 			subject="Thank You for Becoming a Member",
 			recipientName=newMember.name,
 			startDate=newMember.startDate
-		)>
+		);
 	'
 	categories="controller-request,miscellaneous" chapters="sending-email" functions="">
 	<cfargument name="template" type="string" required="false" default="" hint="The path to the email template or two paths if you want to send a multipart email. if the `detectMultipart` argument is `false`, the template for the text version should be the first one in the list. This argument is also aliased as `templates`.">
@@ -117,7 +117,8 @@
 		loc.iEnd = ListLen(loc.nonPassThruArgs);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			StructDelete(arguments, ListGetAt(loc.nonPassThruArgs, loc.i));
+			loc.item = ListGetAt(loc.nonPassThruArgs, loc.i);
+			StructDelete(arguments, loc.item);
 		}
 
 		// send the email using the cfmail tag

@@ -49,7 +49,7 @@
 <cffunction name="flashClear" returntype="void" access="public" output="false" hint="Deletes everything from the Flash."
 	examples=
 	'
-		<cfset flashClear()>
+		flashClear();
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfscript>
@@ -76,7 +76,7 @@
 <cffunction name="flashDelete" returntype="boolean" access="public" output="false" hint="Deletes a specific key from the Flash."
 	examples=
 	'
-		<cfset flashDelete(key="errorMessage")>
+		flashDelete(key="errorMessage");
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfargument name="key" type="string" required="true" hint="The key to delete.">
@@ -92,7 +92,7 @@
 <cffunction name="flashInsert" returntype="void" access="public" output="false" hint="Inserts a new key/value into the Flash."
 	examples=
 	'
-		<cfset flashInsert(msg="It Worked!")>
+		flashInsert(msg="It Worked!");
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfscript>
@@ -138,14 +138,14 @@
 <cffunction name="flashKeep" returntype="void" access="public" output="false" hint="Make the entire Flash or specific key in it stick around for one more request."
 	examples=
 	'
-		<!--- Keep the entire Flash for the next request --->
-		<cfset flashKeep()>
+		// Keep the entire Flash for the next request
+		flashKeep();
 
-		<!--- Keep the "error" key in the Flash for the next request --->
-		<cfset flashKeep("error")>
+		// Keep the "error" key in the Flash for the next request
+		flashKeep("error");
 
-		<!--- Keep both the "error" and "success" keys in the Flash for the next request --->
-		<cfset flashKeep("error,success")>
+		// Keep both the "error" and "success" keys in the Flash for the next request
+		flashKeep("error,success");
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeyExists,flashMessages">
 	<cfargument name="key" type="string" required="false" default="" hint="A key or list of keys to flag for keeping. This argument is also aliased as `keys`.">

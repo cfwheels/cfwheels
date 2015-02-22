@@ -94,10 +94,15 @@
 		loc.executeArgs.name = arguments.name;
 		$simpleLock(name="controllerLock#application.applicationName#", type="readonly", execute="$setControllerClassData", executeArgs=loc.executeArgs);
 		variables.params = arguments.params;
+		loc.rv = this;
 	</cfscript>
-	<cfreturn this>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$getControllerClassData" returntype="struct" access="public" output="false">
-	<cfreturn variables.$class>
+	<cfscript>
+		var loc = {};
+		loc.rv = variables.$class;
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
