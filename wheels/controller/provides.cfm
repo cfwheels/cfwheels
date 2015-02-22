@@ -4,7 +4,9 @@
 	examples='
 		<!--- In your controller --->
 		<cffunction name="init">
-			<cfset provides("html,xml,json")>
+			<cfscript>
+				provides("html,xml,json");
+			</cfscript>
 		</cffunction>
 	'
 	categories="controller-initialization,provides" chapters="responding-with-multiple-formats" functions="onlyProvides,renderWith">

@@ -17,7 +17,7 @@
 					if (loc.cachableActions[loc.i].static)
 					{
 						$cache(action="serverCache", timeSpan=$timeSpanForCache(loc.cachableActions[loc.i].time), useQueryString=true);
-						if (!$recacheRequired())
+						if (!$reCacheRequired())
 						{
 							$abort();
 						}
@@ -31,7 +31,7 @@
 			}
 		}
 
-		if (application.wheels.showDebugInformation)
+		if (get("showDebugInformation"))
 		{
 			$debugPoint("beforeFilters");
 		}
@@ -39,61 +39,55 @@
 		// run verifications if they exist on the controller
 		$runVerifications(action=params.action, params=params);
 		
-		// return immediately if an abort is issued from a verification
-		if ($abortIssued())
+		// continue unless an abort is issued from a verification
+		if (!$abortIssued())
 		{
-			return true;
-		}
+			// run before filters if they exist on the controller
+			$runFilters(type="before", action=params.action);
+			
 
-		// run before filters if they exist on the controller
-		$runFilters(type="before", action=params.action);
-		
-		// check to see if the controller params has changed and if so, instantiate the new controller and re-run filters and verifications
-		if (params.controller != variables.$class.name)
-		{
-			return false;
-		}
-
-		if (application.wheels.showDebugInformation)
-		{
-			$debugPoint("beforeFilters,action");
-		}
-
-		// only proceed to call the action if the before filter has not already rendered content
-		if (!$performedRenderOrRedirect())
-		{
-			if (loc.cache)
+			if (get("showDebugInformation"))
 			{
-				// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, calling the controller action (which in turn sets the content to the request scope)
-				loc.category = "action";
-				loc.key = $hashedKey(variables.$class.name, variables.params);
-				loc.lockName = loc.category & loc.key & application.applicationName;
-				loc.conditionArgs = {key=loc.key, category=loc.category};
-				loc.executeArgs = {controller=params.controller, action=params.action, key=loc.key, time=loc.cache, category=loc.category};
-				variables.$instance.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+				$debugPoint("beforeFilters,action");
 			}
-			if (!$performedRender())
-			{
-				// if we didn't render anything from a cached action we call the action here
-				$callAction(action=params.action);
-			}
-		}
 
-		// run after filters with surrounding debug points (don't run the filters if a delayed redirect will occur though)
-		if (application.wheels.showDebugInformation)
-		{
-			$debugPoint("action,afterFilters");
+			// only proceed to call the action if the before filter has not already rendered content
+			if (!$performedRenderOrRedirect())
+			{
+				if (loc.cache)
+				{
+					// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, calling the controller action (which in turn sets the content to the request scope)
+					loc.category = "action";
+					loc.key = $hashedKey(variables.$class.name, variables.params);
+					loc.lockName = loc.category & loc.key & application.applicationName;
+					loc.conditionArgs = {key=loc.key, category=loc.category};
+					loc.executeArgs = {controller=params.controller, action=params.action, key=loc.key, time=loc.cache, category=loc.category};
+					variables.$instance.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+				}
+				if (!$performedRender())
+				{
+					// if we didn't render anything from a cached action we call the action here
+					$callAction(action=params.action);
+				}
+			}
+
+			// run after filters with surrounding debug points (don't run the filters if a delayed redirect will occur though)
+			if (get("showDebugInformation"))
+			{
+				$debugPoint("action,afterFilters");
+			}
+			if (!$performedRedirect())
+			{
+				$runFilters(type="after", action=params.action);
+			}
+			if (get("showDebugInformation"))
+			{
+				$debugPoint("afterFilters");
+			}
 		}
-		if (!$performedRedirect())
-		{
-			$runFilters(type="after", action=params.action);
-		}
-		if (application.wheels.showDebugInformation)
-		{
-			$debugPoint("afterFilters");
-		}
+		loc.rv = true;
 	</cfscript>
-	<cfreturn true>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$callAction" returntype="void" access="public" output="false">
@@ -129,7 +123,7 @@
 				}
 				else
 				{
-					if (application.wheels.showErrorInformation)
+					if (get("showErrorInformation"))
 					{
 						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.action#` action in the `#variables.$class.name#` controller.", extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(variables.$class.name)#` directory (create the directory as well if it doesn't already exist).");
 					}

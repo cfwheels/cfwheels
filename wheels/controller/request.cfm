@@ -49,7 +49,7 @@
 	categories="controller-request,miscellaneous" chapters="getting-paginated-data,displaying-links-for-pagination" functions="paginationLinks,findAll">
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query to return pagination information for.">
 	<cfscript>
-		if (application.wheels.showErrorInformation)
+		if (get("showErrorInformation"))
 		{
 			if (!StructKeyExists(request.wheels, arguments.handle))
 			{

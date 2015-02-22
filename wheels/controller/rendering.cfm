@@ -33,7 +33,7 @@
 		var loc = {};
 		$args(name="renderPage", args=arguments);
 		$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
-		if (application.wheels.showDebugInformation)
+		if (get("showDebugInformation"))
 		{
 			$debugPoint("view");
 		}
@@ -81,7 +81,7 @@
 		{
 			variables.$instance.response = loc.page;
 		}
-		if (application.wheels.showDebugInformation)
+		if (get("showDebugInformation"))
 		{
 			$debugPoint("view");
 		}
@@ -450,9 +450,9 @@
 					loc.groupValue = "";
 					loc.groupQueryCount = 1;
 					arguments.group = QueryNew(loc.query.columnList);
-					if (application.wheels.showErrorInformation && !ListFindNoCase(loc.query.columnList, arguments.$group))
+					if (get("showErrorInformation") && !ListFindNoCase(loc.query.columnList, arguments.$group))
 					{
-						$throw(type="Wheels.GroupColumnNotFound", message="Wheels couldn't find a query column with the name of `#arguments.$group#`.", extendedInfo="Make sure your finder method has the column `#arguments.$group#` specified in the `select` argument. If the column does not exist, create it.");
+						$throw(type="Wheels.GroupColumnNotFound", message="CFWheels couldn't find a query column with the name of `#arguments.$group#`.", extendedInfo="Make sure your finder method has the column `#arguments.$group#` specified in the `select` argument. If the column does not exist, create it.");
 					}
 					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					{
@@ -573,19 +573,35 @@
 </cffunction>
 
 <cffunction name="$performedRender" returntype="boolean" access="public" output="false">
-	<cfreturn StructKeyExists(variables.$instance, "response")>
+	<cfscript>
+		var loc = {};
+		loc.rv = StructKeyExists(variables.$instance, "response");
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$performedRedirect" returntype="boolean" access="public" output="false">
-	<cfreturn StructKeyExists(variables.$instance, "redirect")>
+	<cfscript>
+		var loc = {};
+		loc.rv = StructKeyExists(variables.$instance, "redirect");
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$abortIssued" returntype="boolean" access="public" output="false">
-	<cfreturn StructKeyExists(variables.$instance, "abort")>
+	<cfscript>
+		var loc = {};
+		loc.rv = StructKeyExists(variables.$instance, "abort");
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="$recacheRequired" returntype="boolean" access="public" output="false">
-	<cfreturn StructKeyExists(variables.$instance, "recache") && variables.$instance.recache>
+<cffunction name="$reCacheRequired" returntype="boolean" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.rv = StructKeyExists(variables.$instance, "reCache") && variables.$instance.reCache;
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$getRedirect" returntype="struct" access="public" output="false">
