@@ -9,21 +9,21 @@
 				usesLayout(template="myLayout", except="myajax");
 			</cfscript>
 		</cffunction>
-		
+
 		<!--- Example 2: Use a custom layout for these actions but use the default layout.cfm for the rest --->
 		<cffunction name="init">
 			<cfscript>
 				usesLayout(template="myLayout", only="termsOfService,shippingPolicy");
 			</cfscript>
 		</cffunction>
-		
+
 		<!--- Example 3: Define a custom function to decide which layout to display --->
 		<cffunction name="init">
 			<cfscript>
 				usesLayout("setLayout");
 			</cfscript>
 		</cffunction>
-		
+
 		<cffunction name="setLayout">
 			<cfscript>
 				if (Month(Now()) == 12)

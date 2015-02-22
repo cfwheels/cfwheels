@@ -165,7 +165,7 @@
 		loc.folder = arguments.directory;
 		if (!Len(loc.folder))
 		{
-			loc.folder = loc.relativeRoot & application.wheels.filePath; 
+			loc.folder = loc.relativeRoot & application.wheels.filePath;
 		}
 		if (Left(loc.folder, Len(loc.root)) == loc.root)
 		{

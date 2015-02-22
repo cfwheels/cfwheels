@@ -38,13 +38,13 @@
 
 		// run verifications if they exist on the controller
 		$runVerifications(action=params.action, params=params);
-		
+
 		// continue unless an abort is issued from a verification
 		if (!$abortIssued())
 		{
 			// run before filters if they exist on the controller
 			$runFilters(type="before", action=params.action);
-			
+
 
 			if (get("showDebugInformation"))
 			{

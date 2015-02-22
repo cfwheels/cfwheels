@@ -37,13 +37,13 @@
 		<cffunction name="init">
 			<cfset provides("html,xml,json")>
 		</cffunction>
-		
+
 		<!--- This action will provide the formats defined in `init()` above --->
 		<cffunction name="list">
 			<cfset products = model("product").findAll()>
 			<cfset renderWith(products)>
 		</cffunction>
-		
+
 		<!--- This action will only provide the `html` type and will ignore what was defined in the call to `provides()` in the `init()` method above --->
 		<cffunction name="new">
 			<cfset onlyProvides("html")>
@@ -70,20 +70,20 @@
 		variables.$class.formats.actions[arguments.action] = arguments.formats;
 	</cfscript>
 </cffunction>
-	
+
 <cffunction name="renderWith" access="public" returntype="any" output="false" hint="Instructs the controller to render the data passed in to the format that is requested. If the format requested is `json` or `xml`, Wheels will transform the data into that format automatically. For other formats (or to override the automatic formatting), you can also create a view template in this format: `nameofaction.xml.cfm`, `nameofaction.json.cfm`, `nameofaction.pdf.cfm`, etc."
 	examples='
 		<!--- In your controller --->
 		<cffunction name="init">
 			<cfset provides("html,xml,json")>
 		</cffunction>
-		
+
 		<!--- This action will provide the formats defined in `init()` above --->
 		<cffunction name="list">
 			<cfset products = model("product").findAll()>
 			<cfset renderWith(products)>
 		</cffunction>
-		
+
 		<!--- This action will only provide the `html` type and will ignore what was defined in the call to `provides()` in the `init()` method above --->
 		<cffunction name="new">
 			<cfset onlyProvides("html")>
@@ -104,28 +104,28 @@
 		$args(name="renderWith", args=arguments);
 		loc.contentType = $requestContentType();
 		loc.acceptableFormats = $acceptableFormats(action=arguments.action);
-		
+
 		// default to html if the content type found is not acceptable
 		if (!ListFindNoCase(loc.acceptableFormats, loc.contentType))
 		{
 			loc.contentType = "html";
 		}
-		
+
 		// call render page if we are just rendering html
 		if (loc.contentType == "html")
 		{
-			StructDelete(arguments, "data"); 
+			StructDelete(arguments, "data");
 			return renderPage(argumentCollection=arguments);
 		}
-		
+
 		loc.templateName = $generateRenderWithTemplatePath(argumentCollection=arguments, contentType=loc.contentType);
-		loc.templatePathExists = $formatTemplatePathExists($name=loc.templateName);	
-		
+		loc.templatePathExists = $formatTemplatePathExists($name=loc.templateName);
+
 		if (loc.templatePathExists)
 		{
 			loc.content = renderPage(argumentCollection=arguments, template=loc.templateName, returnAs="string", layout=false, hideDebugInformation=true);
 		}
-		
+
 		// throw an error if we rendered a pdf template and we got here, the cfdocument call should have stopped processing
 		if (loc.contentType == "pdf" && get("showErrorInformation") && loc.templatePathExists)
 		{
@@ -137,10 +137,10 @@
 		{
 			$throw(type="Wheels.RenderingError", message="To render the #loc.contentType# content type, create the template `#loc.templateName#.cfm` for the #arguments.controller# controller.");
 		}
-				
+
 		// set our header based on our mime type
 		$header(name="content-type", value=application.wheels.formats[loc.contentType] & "; charset=UTF-8", charset="utf-8");
-		
+
 		// if we do not have the loc.content variable and we are not rendering html then try to create it
 		if (!StructKeyExists(loc, "content"))
 		{
@@ -186,13 +186,13 @@
 					break;
 			}
 		}
-		
+
 		// if the developer passed in returnAs = string then return the generated content to them
 		if (arguments.returnAs == "string")
 		{
 			return loc.content;
 		}
-			
+
 		renderText(loc.content);
 	</cfscript>
 </cffunction>
@@ -247,7 +247,7 @@
 			if (FileExists(ExpandPath(loc.templatePath)))
 			{
 				loc.rv = true;
-			}			
+			}
 			if (get("cacheFileChecking"))
 			{
 				if (loc.rv)
@@ -267,7 +267,7 @@
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
-	
+
 <cffunction name="$requestContentType" access="public" output="false" returntype="string">
 	<cfargument name="params" type="struct" required="false" default="#variables.params#">
 	<cfargument name="httpAccept" type="string" required="false" default="#request.cgi.http_accept#">

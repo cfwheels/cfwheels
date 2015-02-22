@@ -3,17 +3,17 @@
 <cffunction name="verifies" returntype="void" access="public" output="false" hint="Instructs Wheels to verify that some specific criterias are met before running an action. NOTE: All undeclared arguments will be passed to `redirectTo()` call if a handler is not specified."
 	examples=
 	'
-		<!--- Tell Wheels to verify that the `handleForm` action is always a `POST` request when executed --->
-		<cfset verifies(only="handleForm", post=true)>
+		// Tell Wheels to verify that the `handleForm` action is always a `POST` request when executed
+		verifies(only="handleForm", post=true);
 
-		<!--- Make sure that the edit action is a `GET` request, that `userId` exists in the `params` struct, and that it''s an integer --->
-		<cfset verifies(only="edit", get=true, params="userId", paramsTypes="integer")>
+		// Make sure that the edit action is a `GET` request, that `userId` exists in the `params` struct, and that it''s an integer
+		verifies(only="edit", get=true, params="userId", paramsTypes="integer");
 
-		<!--- Just like above, only this time we want to invoke a custom method in our controller to handle the request when it is invalid --->
-		<cfset verifies(only="edit", get=true, params="userId", paramsTypes="integer", handler="myCustomMethod")>
-		
-		<!--- Just like above, only this time instead of specifying a handler, we want to `redirect` the visitor to the index action of the controller and show an error in The Flash when the request is invalid --->
-		<cfset verifies(only="edit", get=true, params="userId", paramsTypes="integer", action="index", error="Invalid userId")>
+		// Just like above, only this time we want to invoke a custom method in our controller to handle the request when it is invalid
+		verifies(only="edit", get=true, params="userId", paramsTypes="integer", handler="myCustomMethod");
+
+		// Just like above, only this time instead of specifying a handler, we want to `redirect` the visitor to the index action of the controller and show an error in The Flash when the request is invalid
+		verifies(only="edit", get=true, params="userId", paramsTypes="integer", action="index", error="Invalid userId");
 	'
 	categories="controller-initialization,verification" chapters="filters-and-verification" functions="verificationChain,setVerificationChain">
 	<cfargument name="only" type="string" required="false" default="" hint="List of action names to limit this verification to.">
@@ -37,24 +37,30 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
 <cffunction name="verificationChain" returntype="array" access="public" output="false" hint="Returns an array of all the verifications set on this controller in the order in which they will be executed."
-	examples='
-		<!--- Get verification chain, remove the first item, and set it back --->
-		<cfset myVerificationChain = verificationChain()>
-		<cfset ArrayDeleteAt(myVerificationChain, 1)>
-		<cfset setVerificationChain(myVerificationChain)>
+	examples=
+	'
+		// Get verification chain, remove the first item, and set it back
+		myVerificationChain = verificationChain();
+		ArrayDeleteAt(myVerificationChain, 1);
+		setVerificationChain(myVerificationChain);
 	'
 	categories="controller-initialization,verification" chapters="filters-and-verification" functions="verifies,setVerificationChain">
-	<cfreturn variables.$class.verifications>
+	<cfscript>
+		var loc = {};
+		loc.rv = variables.$class.verifications;
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="setVerificationChain" returntype="void" access="public" output="false" hint="Use this function if you need a more low level way of setting the entire verification chain for a controller."
-	examples='
-		<!--- Set verification chain directly in an array --->
-		<cfset setVerificationChain([
+	examples=
+	'
+		// Set verification chain directly in an array
+		setVerificationChain([
 			{only="handleForm", post=true},
 			{only="edit", get=true, params="userId", paramsTypes="integer"},
 			{only="edit", get=true, params="userId", paramsTypes="integer", handler="index", error="Invalid userId"}
-		])>
+		]);
 	'
 	categories="controller-initialization,verification" chapters="filters-and-verification" functions="verifies,verificationChain">
 	<cfargument name="chain" type="array" required="true" hint="An array of structs, each of which represent an `argumentCollection` that get passed to the `verifies` function. This should represent the entire verification chain that you want to use for this controller.">
@@ -81,13 +87,13 @@
 	<cfargument name="cookieScope" type="struct" required="false" default="#cookie#">
 	<cfscript>
 		var loc = {};
-		
+
 		// only access the session scope when session management is enabled in the app
-		if (StructIsEmpty(arguments.sessionScope) && application.wheels.sessionManagement)
+		if (StructIsEmpty(arguments.sessionScope) && get("sessionManagement"))
 		{
 			arguments.sessionScope = session;
 		}
-		
+
 		loc.verifications = verificationChain();
 		loc.$args = "only,except,post,get,ajax,cookie,session,params,cookieTypes,sessionTypes,paramsTypes,handler";
 		loc.abort = false;
@@ -162,18 +168,19 @@
 	<cfargument name="types" type="string" required="true">
 	<cfscript>
 		var loc = {};
+		loc.rv = true;
 		loc.iEnd = ListLen(arguments.vars);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.varCheck = ListGetAt(arguments.vars, loc.i);
-			if (!StructKeyExists(arguments.scope, loc.varCheck))
+			loc.item = ListGetAt(arguments.vars, loc.i);
+			if (!StructKeyExists(arguments.scope, loc.item))
 			{
-				return false;
+				loc.rv = false;
+				break;
 			}
-
 			if (Len(arguments.types))
 			{
-				loc.value = arguments.scope[loc.varCheck];
+				loc.value = arguments.scope[loc.item];
 				loc.typeCheck = ListGetAt(arguments.types, loc.i);
 
 				// by default string aren't allowed to be blank
@@ -186,10 +193,11 @@
 
 				if (!IsValid(loc.typeCheck, loc.value) || (loc.typeCheck == "string" && !loc.typeAllowedBlank && !Len(Trim(loc.value))))
 				{
-					return false;
+					loc.rv = false;
+					break;
 				}
 			}
 		}
 	</cfscript>
-	<cfreturn true>
+	<cfreturn loc.rv>
 </cffunction>

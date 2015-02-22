@@ -38,7 +38,7 @@
 				loc.flash = "";
 			}
 		}
-		
+
 		// we can just return the flash since it is created at the beginning of the request
 		// this way we always return what is expected - a struct
 		loc.rv = loc.flash;
@@ -216,16 +216,16 @@
 <cffunction name="$flashClear" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		
+
 		// only save the old flash if they want to keep anything
 		if (StructKeyExists(request.wheels, "flashKeep"))
 		{
 			loc.flash = $readFlash();
 		}
-		
+
 		// clear the current flash
 		flashClear();
-		
+
 		// see if they wanted to keep anything
 		if (StructKeyExists(loc, "flash"))
 		{
@@ -240,7 +240,7 @@
 					}
 				}
 			}
-			
+
 			// write to the flash
 			$writeFlash(loc.flash);
 		}

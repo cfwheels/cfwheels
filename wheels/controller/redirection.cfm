@@ -91,7 +91,7 @@
 						loc.params = Replace(loc.params, "&", "?", "one");
 					}
 					loc.url &= loc.params;
-				} 
+				}
 			}
 			else
 			{
@@ -106,7 +106,7 @@
 				}
 			}
 		}
-		else if (Len(arguments.url)) 
+		else if (Len(arguments.url))
  		{
  			loc.url = arguments.url;
  		}
@@ -114,19 +114,19 @@
 		{
 			loc.url = URLFor(argumentCollection=arguments);
 		}
-		
+
 		// schedule or perform the redirect right away
 		if (arguments.delay)
 		{
 			if (StructKeyExists(variables.$instance, "redirect"))
 			{
 				// throw an error if the developer has already scheduled a redirect previously in this request
-				$throw(type="Wheels.RedirectToAlreadyCalled", message="`redirectTo()` was already called.");		
+				$throw(type="Wheels.RedirectToAlreadyCalled", message="`redirectTo()` was already called.");
 			}
 			else
 			{
 				// schedule a redirect that will happen after the action code has been completed
-				variables.$instance.redirect = {url=loc.url, addToken=arguments.addToken, statusCode=arguments.statusCode, $args=arguments};			
+				variables.$instance.redirect = {url=loc.url, addToken=arguments.addToken, statusCode=arguments.statusCode, $args=arguments};
 			}
 		}
 		else
