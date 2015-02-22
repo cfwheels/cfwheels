@@ -3,19 +3,20 @@
 <cffunction name="redirectTo" returntype="void" access="public" output="false" hint="Redirects the browser to the supplied `controller`/`action`/`key`, `route` or back to the referring page. Internally, this function uses the @URLFor function to build the link and the `cflocation` tag to perform the redirect."
 	examples=
 	'
-		<!--- Redirect to an action after successfully saving a user --->
-		<cfif user.save()>
-		    <cfset redirectTo(action="saveSuccessful")>
-		</cfif>
+		// Redirect to an action after successfully saving a user
+		if (user.save())
+		{
+			redirectTo(action="saveSuccessful");
+		}
 
-		<!--- Redirect to a specific page on a secure server --->
-		<cfset redirectTo(controller="checkout", action="start", params="type=express", protocol="https")>
+		// Redirect to a specific page on a secure server
+		redirectTo(controller="checkout", action="start", params="type=express", protocol="https");
 
-		<!--- Redirect to a route specified in `config/routes.cfm` and pass in the screen name that the route takes --->
-		<cfset redirectTo(route="profile", screenName="Joe")>
+		// Redirect to a route specified in `config/routes.cfm` and pass in the screen name that the route takes
+		redirectTo(route="profile", screenName="Joe");
 
-		<!--- Redirect back to the page the user came from --->
-		<cfset redirectTo(back=true)>
+		// Redirect back to the page the user came from
+		redirectTo(back=true);
 	'
 	categories="controller-request,miscellaneous" chapters="redirecting-users,using-routes" functions="">
 	<cfargument name="back" type="boolean" required="false" default="false" hint="Set to `true` to redirect back to the referring page.">
@@ -64,8 +65,9 @@
 				loc.item = ListGetAt(loc.argumentNames, loc.i);
 				if (!ListFindNoCase(loc.nonFlashArgumentNames, loc.item))
 				{
+					loc.key = REReplaceNoCase(loc.item, "^flash(.)", "\l\1");
 					loc.flashArguments = {};
-					loc.flashArguments[REReplaceNoCase(loc.item, "^flash(.)", "\l\1")] = arguments[loc.item];
+					loc.flashArguments[loc.key] = arguments[loc.item];
 					flashInsert(argumentCollection=loc.flashArguments);
 				}
 			}
@@ -74,7 +76,7 @@
 		// set the url that will be used in the cflocation tag
 		if (arguments.back)
 		{
-			if (Len(request.cgi.http_referer) && request.cgi.http_referer Contains request.cgi.server_name)
+			if (Len(request.cgi.http_referer) && FindNoCase(request.cgi.server_name, request.cgi.http_referer))
 			{
 				// referrer exists and points to the same domain so it's ok to redirect to it
 				loc.url = request.cgi.http_referer;
@@ -82,7 +84,7 @@
 				{
 					// append params to the referrer url
 					loc.params = $constructParams(arguments.params);
-					if (request.cgi.http_referer Contains "?")
+					if (Find("?", request.cgi.http_referer))
 					{
 						loc.params = Replace(loc.params, "?", "&");
 					}
@@ -126,7 +128,11 @@
 			else
 			{
 				// schedule a redirect that will happen after the action code has been completed
-				variables.$instance.redirect = {url=loc.url, addToken=arguments.addToken, statusCode=arguments.statusCode, $args=arguments};
+				variables.$instance.redirect = {};
+				variables.$instance.redirect.url = loc.url;
+				variables.$instance.redirect.addToken = arguments.addToken;
+				variables.$instance.redirect.statusCode = arguments.statusCode;
+				variables.$instance.redirect.$args = arguments;
 			}
 		}
 		else

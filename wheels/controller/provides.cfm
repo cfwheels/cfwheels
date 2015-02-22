@@ -1,7 +1,8 @@
 <!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
 
 <cffunction name="provides" access="public" output="false" returntype="void" hint="Defines formats that the controller will respond with upon request. The format can be requested through a URL variable called `format`, by appending the format name to the end of a URL as an extension (when URL rewriting is enabled), or in the request header."
-	examples='
+	examples=
+	'
 		<!--- In your controller --->
 		<cffunction name="init">
 			<cfscript>
@@ -15,7 +16,7 @@
 		var loc = {};
 		$combineArguments(args=arguments, combine="formats,format", required=true);
 		arguments.formats = $listClean(arguments.formats);
-		loc.possibleFormats = StructKeyList(application.wheels.formats);
+		loc.possibleFormats = StructKeyList(get("formats"));
 		loc.iEnd = ListLen(arguments.formats);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
@@ -32,7 +33,8 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
 <cffunction name="onlyProvides" access="public" output="false" returntype="void" hint="Use this in an individual controller action to define which formats the action will respond with. This can be used to define provides behavior in individual actions or to override a global setting set with @provides in the controller's `init()`."
-	examples='
+	examples=
+	'
 		<!--- In your controller --->
 		<cffunction name="init">
 			<cfset provides("html,xml,json")>
@@ -57,14 +59,14 @@
 		var loc = {};
 		$combineArguments(args=arguments, combine="formats,format", required=true);
 		arguments.formats = $listClean(arguments.formats);
-		loc.possibleFormats = StructKeyList(application.wheels.formats);
+		loc.possibleFormats = StructKeyList(get("formats"));
 		loc.iEnd = ListLen(arguments.formats);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(arguments.formats, loc.i);
 			if (get("showErrorInformation") && !ListFindNoCase(loc.possibleFormats, loc.item))
 			{
-				$throw(type="Wheels.invalidFormat", message="An invalid format of `#loc.item#` has been specified. The possible values are #loc.possibleFormats#.");
+				$throw(type="Wheels.InvalidFormat", message="An invalid format of `#loc.item#` has been specified. The possible values are #loc.possibleFormats#.");
 			}
 		}
 		variables.$class.formats.actions[arguments.action] = arguments.formats;
@@ -72,7 +74,8 @@
 </cffunction>
 
 <cffunction name="renderWith" access="public" returntype="any" output="false" hint="Instructs the controller to render the data passed in to the format that is requested. If the format requested is `json` or `xml`, Wheels will transform the data into that format automatically. For other formats (or to override the automatic formatting), you can also create a view template in this format: `nameofaction.xml.cfm`, `nameofaction.json.cfm`, `nameofaction.pdf.cfm`, etc."
-	examples='
+	examples=
+	'
 		<!--- In your controller --->
 		<cffunction name="init">
 			<cfset provides("html,xml,json")>
@@ -120,7 +123,6 @@
 
 		loc.templateName = $generateRenderWithTemplatePath(argumentCollection=arguments, contentType=loc.contentType);
 		loc.templatePathExists = $formatTemplatePathExists($name=loc.templateName);
-
 		if (loc.templatePathExists)
 		{
 			loc.content = renderPage(argumentCollection=arguments, template=loc.templateName, returnAs="string", layout=false, hideDebugInformation=true);
@@ -139,7 +141,9 @@
 		}
 
 		// set our header based on our mime type
-		$header(name="content-type", value=application.wheels.formats[loc.contentType] & "; charset=UTF-8", charset="utf-8");
+		loc.formats = get("formats");
+		loc.value = loc.formats[loc.contentType] & "; charset=utf-8";
+		$header(name="content-type", value=loc.value, charset="utf-8");
 
 		// if we do not have the loc.content variable and we are not rendering html then try to create it
 		if (!StructKeyExists(loc, "content"))
@@ -187,14 +191,19 @@
 			}
 		}
 
-		// if the developer passed in returnAs = string then return the generated content to them
+		// if the developer passed in returnAs="string" then return the generated content to them
 		if (arguments.returnAs == "string")
 		{
-			return loc.content;
+			loc.rv = loc.content;
 		}
-
-		renderText(loc.content);
+		else
+		{
+			renderText(loc.content);
+		}
 	</cfscript>
+	<cfif StructKeyExists(loc, "rv")>
+		<cfreturn loc.rv>
+	</cfif>
 </cffunction>
 
 <!--- PRIVATE FUNCTIONS --->
