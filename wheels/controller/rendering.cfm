@@ -39,7 +39,7 @@
 		}
 
 		// if no layout specific arguments were passed in use the this instance's layout
-		if(!Len(arguments.$layout))
+		if (!Len(arguments.$layout))
 		{
 			arguments.$layout = $useLayout(arguments.$action);
 		}
@@ -56,7 +56,7 @@
 			request.wheels.showDebugInformation = true;
 		}
 
-		if (application.wheels.cachePages && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
+		if (get("cachePages") && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
 			loc.category = "action";
 			loc.key = $hashedKey(arguments, variables.params);
@@ -157,18 +157,20 @@
 	examples='
 		<!--- In `views/layout.cfm` --->
 		<html>
-		<head>
-			<title>My Site</title>
-		</head>
-
-		<body>
-		<cfoutput>##contentForLayout()##</cfoutput>
-		</body>
-
+			<head>
+				<title>My Site</title>
+			</head>
+			<body>
+				<cfoutput>##contentForLayout()##</cfoutput>
+			</body>
 		</html>
 	'
 	categories="controller-request,layout" chapters="using-layouts" functions="">
-	<cfreturn includeContent("body")>
+	<cfscript>
+		var loc = {};
+		loc.rv = includeContent("body");
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="includeContent" returntype="string" access="public" output="false" hint="Used to output the content for a particular section in a layout."
@@ -180,17 +182,15 @@
 
 		<!--- In `views/layout.cfm` --->
 		<html>
-		<head>
-		    <title>My Site</title>
-		    ##includeContent("head")##
-		</head>
-		<body>
-
-		<cfoutput>
-		##includeContent()##
-		</cfoutput>
-
-		</body>
+			<head>
+			    <title>My Site</title>
+			    ##includeContent("head")##
+			</head>
+			<body>
+				<cfoutput>
+					##includeContent()##
+				</cfoutput>
+			</body>
 		</html>
 	'
 	categories="view-helper,miscellaneous" chapters="using-layouts" functions="">
@@ -216,17 +216,22 @@
 </cffunction>
 
 <cffunction name="response" returntype="string" access="public" output="false" hint="Returns content that CFWheels will send to the client in response to the request."
-	examples='
+	examples=
+	'
 		<!--- In a controller --->
 		<cffunction name="init">
-			<cfset filters(type="after", through="translateResponse")>
+			<cfscript>
+				filters(type="after", through="translateResponse");
+			</cfscript>
 		</cffunction>
 
 		<!--- After filter translates response and sets it --->
-		<cffunction name="translateResponse">
-			<cfset var wheelsResponse = response()>
-			<cfset var translatedResponse = someTranslationMethod(wheelsResponse)>
-			<cfset setResponse(translatedResponse)>
+		<cffunction name="translateResponse" access="private">
+			<cfscript>
+				wheelsResponse = response();
+				translatedResponse = someTranslationMethod(wheelsResponse);
+				setResponse(translatedResponse);
+			</cfscript>
 		</cffunction>
 	'
 	categories="controller-request,rendering" chapters="" functions="setResponse">
@@ -248,14 +253,16 @@
 	examples='
 		<!--- In a controller --->
 		<cffunction name="init">
-			<cfset filters(type="after", through="translateResponse")>
+			<cfscript>
+				filters(type="after", through="translateResponse");
+			</cfscript>
 		</cffunction>
 
 		<!--- After filter translates response and sets it --->
-		<cffunction name="translateResponse">
-			<cfset var wheelsResponse = response()>
-			<cfset var translatedResponse = someTranslationFunction(wheelsResponse)>
-			<cfset setResponse(translatedResponse)>
+		<cffunction name="translateResponse" access="private">
+			wheelsResponse = response();
+			translatedResponse = someTranslationFunction(wheelsResponse);
+			setResponse(translatedResponse);
 		</cffunction>
 	'
 	categories="controller-request,rendering" chapters="" functions="response">
@@ -273,7 +280,7 @@
 		loc.rv = $renderPage(argumentCollection=arguments);
 		if (!IsNumeric(arguments.$cache))
 		{
-			arguments.$cache = application.wheels.defaultCacheTime;
+			arguments.$cache = get("defaultCacheTime");
 		}
 		$addToCache(key=arguments.key, value=loc.rv, time=arguments.$cache, category=arguments.category);
 	</cfscript>
@@ -302,7 +309,7 @@
 		loc.rv = $renderPartial(argumentCollection=arguments);
 		if (!IsNumeric(arguments.$cache))
 		{
-			arguments.$cache = application.wheels.defaultCacheTime;
+			arguments.$cache = get("defaultCacheTime");
 		}
 		$addToCache(key=arguments.key, value=loc.rv, time=arguments.$cache, category=arguments.category);
 	</cfscript>
@@ -313,7 +320,7 @@
 	<cfscript>
 		var loc = {};
 		loc.rv = {};
-		if (StructKeyExists(arguments, "$dataFunction") && arguments.$dataFunction != "false")
+		if (StructKeyExists(arguments, "$dataFunction") && arguments.$dataFunction != false)
 		{
 			if (IsBoolean(arguments.$dataFunction))
 			{
@@ -374,7 +381,7 @@
 <cffunction name="$includeOrRenderPartial" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		if (application.wheels.cachePartials && (isNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
+		if (get("cachePartials") && (isNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
 			loc.category = "partial";
 			loc.key = $hashedKey(arguments);
@@ -399,12 +406,15 @@
 	<cfargument name="$name" type="any" required="true">
 	<cfargument name="$type" type="any" required="true">
 	<cfargument name="$controllerName" type="string" required="false" default="#variables.params.controller#">
-	<cfargument name="$baseTemplatePath" type="string" required="false" default="#application.wheels.viewPath#">
+	<cfargument name="$baseTemplatePath" type="string" required="false" default="#get("viewPath")#">
 	<cfargument name="$prependWithUnderscore" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		loc.rv = arguments.$baseTemplatePath;
-		loc.fileName = ReplaceNoCase(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".cfm", "", "all") & ".cfm"; // extracts the file part of the path and replace ending ".cfm"
+
+		// extracts the file part of the path and replace ending ".cfm"
+		loc.fileName = ReplaceNoCase(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".cfm", "", "all") & ".cfm";
+
 		if (arguments.$type == "partial" && arguments.$prependWithUnderscore)
 		{
 			// replace leading "_" when the file is a partial
@@ -416,7 +426,7 @@
 			// include a file in a sub folder to views
 			loc.rv &= loc.folderName & "/" & loc.fileName;
 		}
-		else if (arguments.$name Contains "/")
+		else if (Find("/", arguments.$name))
 		{
 			// include a file in a sub folder of the current controller
 			loc.rv &= "/" & arguments.$controllerName & "/" & loc.folderName & "/" & loc.fileName;

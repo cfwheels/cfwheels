@@ -1,6 +1,6 @@
 <!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
 
-<cffunction name="verifies" returntype="void" access="public" output="false" hint="Instructs Wheels to verify that some specific criterias are met before running an action. NOTE: All undeclared arguments will be passed to `redirectTo()` call if a handler is not specified."
+<cffunction name="verifies" returntype="void" access="public" output="false" hint="Instructs CFWheels to verify that some specific criterias are met before running an action. Note that all undeclared arguments will be passed to `redirectTo()` call if a handler is not specified."
 	examples=
 	'
 		// Tell Wheels to verify that the `handleForm` action is always a `POST` request when executed
@@ -9,8 +9,8 @@
 		// Make sure that the edit action is a `GET` request, that `userId` exists in the `params` struct, and that it''s an integer
 		verifies(only="edit", get=true, params="userId", paramsTypes="integer");
 
-		// Just like above, only this time we want to invoke a custom method in our controller to handle the request when it is invalid
-		verifies(only="edit", get=true, params="userId", paramsTypes="integer", handler="myCustomMethod");
+		// Just like above, only this time we want to invoke a custom function in our controller to handle the request when it is invalid
+		verifies(only="edit", get=true, params="userId", paramsTypes="integer", handler="myCustomFunction");
 
 		// Just like above, only this time instead of specifying a handler, we want to `redirect` the visitor to the index action of the controller and show an error in The Flash when the request is invalid
 		verifies(only="edit", get=true, params="userId", paramsTypes="integer", action="index", error="Invalid userId");
@@ -100,50 +100,50 @@
 		loc.iEnd = ArrayLen(loc.verifications);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.verification = loc.verifications[loc.i];
-			if ((!Len(loc.verification.only) && !Len(loc.verification.except)) || (Len(loc.verification.only) && ListFindNoCase(loc.verification.only, arguments.action)) || (Len(loc.verification.except) && !ListFindNoCase(loc.verification.except, arguments.action)))
+			loc.element = loc.verifications[loc.i];
+			if ((!Len(loc.element.only) && !Len(loc.element.except)) || (Len(loc.element.only) && ListFindNoCase(loc.element.only, arguments.action)) || (Len(loc.element.except) && !ListFindNoCase(loc.element.except, arguments.action)))
 			{
-				if (IsBoolean(loc.verification.post) && ((loc.verification.post && !isPost()) || (!loc.verification.post && isPost())))
+				if (IsBoolean(loc.element.post) && ((loc.element.post && !isPost()) || (!loc.element.post && isPost())))
 				{
 					loc.abort = true;
 				}
-				if (IsBoolean(loc.verification.get) && ((loc.verification.get && !isGet()) || (!loc.verification.get && isGet())))
+				if (IsBoolean(loc.element.get) && ((loc.element.get && !isGet()) || (!loc.element.get && isGet())))
 				{
 					loc.abort = true;
 				}
-				if (IsBoolean(loc.verification.ajax) && ((loc.verification.ajax && !isAjax()) || (!loc.verification.ajax && isAjax())))
+				if (IsBoolean(loc.element.ajax) && ((loc.element.ajax && !isAjax()) || (!loc.element.ajax && isAjax())))
 				{
 					loc.abort = true;
 				}
-				if (!$checkVerificationsVars(arguments.params, loc.verification.params, loc.verification.paramsTypes))
+				if (!$checkVerificationsVars(arguments.params, loc.element.params, loc.element.paramsTypes))
 				{
 					loc.abort = true;
 				}
-				if (!$checkVerificationsVars(arguments.sessionScope, loc.verification.session, loc.verification.sessionTypes))
+				if (!$checkVerificationsVars(arguments.sessionScope, loc.element.session, loc.element.sessionTypes))
 				{
 					loc.abort = true;
 				}
-				if (!$checkVerificationsVars(arguments.cookieScope, loc.verification.cookie, loc.verification.cookieTypes))
+				if (!$checkVerificationsVars(arguments.cookieScope, loc.element.cookie, loc.element.cookieTypes))
 				{
 					loc.abort = true;
 				}
 			}
 			if (loc.abort)
 			{
-				if (Len(loc.verification.handler))
+				if (Len(loc.element.handler))
 				{
-					$invoke(method=loc.verification.handler);
+					$invoke(method=loc.element.handler);
 					redirectTo(back="true");
 				}
 				else
 				{
 					// check to see if we should perform a redirect or abort completly
 					loc.redirectArgs = {};
-					for(loc.key in loc.verification)
+					for(loc.key in loc.element)
 					{
-						if (!ListFindNoCase(loc.$args, loc.key) && StructKeyExists(loc.verification, loc.key))
+						if (!ListFindNoCase(loc.$args, loc.key) && StructKeyExists(loc.element, loc.key))
 						{
-							loc.redirectArgs[loc.key] = loc.verification[loc.key];
+							loc.redirectArgs[loc.key] = loc.element[loc.key];
 						}
 					}
 					if (!StructIsEmpty(loc.redirectArgs))
