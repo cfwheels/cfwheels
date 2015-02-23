@@ -1,7 +1,9 @@
 <cffunction name="onMissingTemplate" returntype="void" access="public" output="true">
 	<cfargument name="targetpage" type="any" required="true">
 	<cfscript>
-		$simpleLock(name="reloadLock#application.applicationName#", execute="$runOnMissingTemplate", executeArgs=arguments, type="readOnly", timeout=180);
+		var loc = {};
+		loc.lockName = "reloadLock" & application.applicationName;
+		$simpleLock(name=loc.lockName, execute="$runOnMissingTemplate", executeArgs=arguments, type="readOnly", timeout=180);
 	</cfscript>
 </cffunction>
 

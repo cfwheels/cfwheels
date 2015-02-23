@@ -144,7 +144,7 @@
 			try
 			{
 				loc.rv = SerializeJSON(loc.values);
-				
+
 				// remove the characters that indicate array or struct so that we can sort it as a list below
 				loc.rv = ReplaceList(loc.rv, "{,},[,]", ",,,");
 				loc.rv = ListSort(loc.rv, "text");
@@ -271,7 +271,7 @@
 		{
 			if (!ListFindNoCase(arguments.$defined, loc.key) && Left(loc.key, 1) != "$")
 			{
-				loc.rv[loc.key] = arguments[loc.key];	
+				loc.rv[loc.key] = arguments[loc.key];
 			}
 		}
 	</cfscript>
@@ -323,7 +323,7 @@
 	<cfscript>
 		var loc = {};
 		loc.rv = URLEncodedFormat(arguments.param);
-		
+
 		// these characters are safe so set them back to their original values
 		loc.rv = ReplaceList(loc.rv, "%24,%2D,%5F,%2E,%2B,%21,%2A,%27,%28,%29", "$,-,_,.,+,!,*,',(,)");
 	</cfscript>
@@ -787,7 +787,7 @@
 	<cfargument name="type" type="string" required="false" default="model">
 	<cfscript>
 		var loc = {};
-		
+
 		// let's allow for multiple model paths so that plugins can contain models
 		// the last path is the one we will instantiate the base model on if the model is not found on any of the paths
 		loc.iEnd = ListLen(arguments.modelPaths);

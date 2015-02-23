@@ -55,7 +55,7 @@
 		}
 		else if (get("modelRequireInit"))
 		{
-			$throw(type="Wheels.ModelInitMissing", message="An init function is required for Model: #variables.wheels.class.modelName#", extendedInfo="Create an init function in /models/#variables.wheels.class.modelName#");	
+			$throw(type="Wheels.ModelInitMissing", message="An init function is required for Model: #variables.wheels.class.modelName#", extendedInfo="Create an init function in /models/#variables.wheels.class.modelName#");
 		}
 
 		// make sure that the tablename has the respected prefix
@@ -121,7 +121,7 @@
 					if (loc.columns["is_primarykey"][loc.i])
 					{
 						setPrimaryKey(loc.property);
-					}				
+					}
 					if (variables.wheels.class.automaticValidations && !ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", loc.property))
 					{
 						loc.defaultValidationsAllowBlank = variables.wheels.class.properties[loc.property].nullable;
@@ -135,7 +135,7 @@
 						{
 							validatesPresenceOf(properties=loc.property);
 						}
-						
+
 						// always allowblank if a database default or validatesPresenceOf() has been set
 						if (Len(loc.columns["column_default_value"][loc.i]) || $validationExists(property=loc.property, validation="validatesPresenceOf"))
 						{
@@ -227,7 +227,7 @@
 		variables.wheels = {};
 		variables.wheels.instance = {};
 		variables.wheels.errors = [];
-		
+
 		// assign an object id for the instance (only use the last 12 digits to avoid creating an exponent)
 		request.wheels.tickCountId = Right(request.wheels.tickCountId, 12) + 1;
 		variables.wheels.tickCountId = request.wheels.tickCountId;
@@ -235,7 +235,8 @@
 		// copy class variables from the object in the application scope
 		if (!StructKeyExists(variables.wheels, "class"))
 		{
-			variables.wheels.class = $simpleLock(name="classLock#application.applicationName#", type="readOnly", object=application.wheels.models[arguments.name], execute="$classData");
+			loc.lockName = "classLock" & application.applicationName;
+			variables.wheels.class = $simpleLock(name=loc.lockName, type="readOnly", object=application.wheels.models[arguments.name], execute="$classData");
 		}
 
 		// setup object properties in the this scope
@@ -252,8 +253,9 @@
 		{
 			$updatePersistedProperties();
 		}
+		loc.rv = this;
 	</cfscript>
-	<cfreturn this>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$classData" returntype="struct" access="public" output="false">

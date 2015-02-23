@@ -24,14 +24,15 @@
 	#content
 	{
 		background: #fff;
+		font-family: Arial, Helvetica, sans-serif;
 		padding: 15px;
-		font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 		line-height: 1.5em;
 		font-size: 14px;
 		color: #333;
 	}
 	#content h1
 	{
+		font-family: "Trebuchet MS", Verdana, sans-serif;
 		font-size: 24px;
 		font-weight: bold;
 		color: #B00701;
@@ -39,6 +40,7 @@
 	}
 	#content h2
 	{
+		font-family: "Trebuchet MS", Verdana, sans-serif;
 		font-size: 16px;
 		font-weight: bold;
 		color: #B00701;
@@ -71,7 +73,7 @@
 	#content ul li, #content ol li
 	{
 		padding-bottom: 0;
-		
+
 	}
 	#content img
 	{

@@ -13,7 +13,8 @@
 		}
 		$setting(requestTimeout=loc.requestTimeout);
 
-		loc.rv = $simpleLock(name="reloadLock#application.applicationName#", execute="$runOnError", executeArgs=arguments, type="readOnly", timeout=180);
+		loc.lockName = "reloadLock" & application.applicationName;
+		loc.rv = $simpleLock(name=loc.lockName, execute="$runOnError", executeArgs=arguments, type="readOnly", timeout=180);
 	</cfscript>
 	<cfoutput>
 		#loc.rv#
@@ -54,7 +55,7 @@
 				{
 					loc.wheelsError = arguments.exception.rootCause;
 				}
-				else if (StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels") 
+				else if (StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels")
 				{
 					loc.wheelsError = arguments.exception.cause.rootCause;
 				}
