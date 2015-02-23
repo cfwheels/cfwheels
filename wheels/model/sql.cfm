@@ -195,10 +195,11 @@
 <cffunction name="$selectClause" returntype="string" access="public" output="false">
 	<cfargument name="select" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfargument name="returnAs" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs);
+		loc.returnValue = $createSQLFieldList(list=arguments.select, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, returnAs=arguments.returnAs);
 		loc.returnValue = "SELECT " & loc.returnValue;
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -207,6 +208,7 @@
 <cffunction name="$createSQLFieldList" returntype="string" access="public" output="false">
 	<cfargument name="list" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfargument name="returnAs" type="string" required="true">
 	<cfargument name="renameFields" type="boolean" required="false" default="true">
 	<cfargument name="addCalculatedProperties" type="boolean" required="false" default="true">
@@ -218,7 +220,7 @@
 		loc.classes = [];
 		if (Len(arguments.include))
 		{
-			loc.classes = $expandedAssociations(include=arguments.include);
+			loc.classes = $expandedAssociations(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 		}
 		ArrayPrepend(loc.classes, variables.wheels.class);
 
