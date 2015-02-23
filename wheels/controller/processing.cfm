@@ -16,7 +16,8 @@
 				{
 					if (loc.cachableActions[loc.i].static)
 					{
-						$cache(action="serverCache", timeSpan=$timeSpanForCache(loc.cachableActions[loc.i].time), useQueryString=true);
+						loc.timeSpan = $timeSpanForCache(loc.cachableActions[loc.i].time);
+						$cache(action="serverCache", timeSpan=loc.timeSpan, useQueryString=true);
 						if (!$reCacheRequired())
 						{
 							$abort();
@@ -45,7 +46,6 @@
 			// run before filters if they exist on the controller
 			$runFilters(type="before", action=params.action);
 
-
 			if (get("showDebugInformation"))
 			{
 				$debugPoint("beforeFilters,action");
@@ -59,9 +59,16 @@
 					// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, calling the controller action (which in turn sets the content to the request scope)
 					loc.category = "action";
 					loc.key = $hashedKey(variables.$class.name, variables.params);
+					loc.conditionArgs = {};
+					loc.conditionArgs.key = loc.key;
+					loc.conditionArgs.category = loc.category;
+					loc.executeArgs = {};
+					loc.executeArgs.controller = params.controller;
+					loc.executeArgs.action = params.action;
+					loc.executeArgs.key = loc.key;
+					loc.executeArgs.time = loc.cache;
+					loc.executeArgs.category = loc.category;
 					loc.lockName = loc.category & loc.key & application.applicationName;
-					loc.conditionArgs = {key=loc.key, category=loc.category};
-					loc.executeArgs = {controller=params.controller, action=params.action, key=loc.key, time=loc.cache, category=loc.category};
 					variables.$instance.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 				}
 				if (!$performedRender())
@@ -96,7 +103,7 @@
 		var loc = {};
 		if (Left(arguments.action, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action))
 		{
-			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.action#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
+			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.action#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in CFWheels functions.");
 		}
 		if (StructKeyExists(this, arguments.action) && IsCustomFunction(this[arguments.action]))
 		{
@@ -117,7 +124,8 @@
 			}
 			catch (any e)
 			{
-				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.$class.name)#/#LCase(arguments.action)#.cfm")))
+				loc.file = get("viewPath") & "/" & LCase(variables.$class.name) & "/" & LCase(arguments.action) & ".cfm";
+				if (FileExists(ExpandPath(loc.file)))
 				{
 					$throw(object=e);
 				}
@@ -130,7 +138,8 @@
 					else
 					{
 						$header(statusCode=404, statustext="Not Found");
-						$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+						loc.template = get("eventPath") & "/onmissingtemplate.cfm";
+						$includeAndOutput(template=loc.template);
 						$abort();
 					}
 				}

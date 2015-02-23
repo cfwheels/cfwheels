@@ -3,24 +3,11 @@
 <cffunction name="flash" returntype="any" access="public" output="false" hint="Returns the value of a specific key in the Flash (or the entire Flash as a struct if no key is passed in)."
 	examples=
 	'
-		<!--- Display "message" item in flash --->
-		<cfoutput>
-			<cfif flashKeyExists("message")>
-				<p class="message">
-					##flash("message")##
-				</p>
-			</cfif>
-		</cfoutput>
+		// Get the current value of notice in the Flash
+		notice = flash("notice");
 
-		<!--- Display all flash items --->
-		<cfoutput>
-			<cfset allFlash = flash()>
-			<cfloop list="##StructKeyList(allFlash)##" index="flashItem">
-				<p class="##flashItem##">
-					##flash(flashItem)##
-				</p>
-			</cfloop>
-		</cfoutput>
+		// Get the entire Flash as a struct
+		flashContents = flash();
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfargument name="key" type="string" required="false" hint="The key to get the value for.">
@@ -60,9 +47,7 @@
 <cffunction name="flashCount" returntype="numeric" access="public" output="false" hint="Returns how many keys exist in the Flash."
 	examples=
 	'
-		<cfif flashCount() gt 0>
-			do something...
-		</cfif>
+		count = flashCount();
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfscript>
@@ -73,7 +58,7 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="flashDelete" returntype="boolean" access="public" output="false" hint="Deletes a specific key from the Flash."
+<cffunction name="flashDelete" returntype="boolean" access="public" output="false" hint="Deletes a specific key from the Flash. Returns `true` if the key exists."
 	examples=
 	'
 		flashDelete(key="errorMessage");
@@ -89,7 +74,7 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="flashInsert" returntype="void" access="public" output="false" hint="Inserts a new key/value into the Flash."
+<cffunction name="flashInsert" returntype="void" access="public" output="false" hint="Inserts a new key / value into the Flash."
 	examples=
 	'
 		flashInsert(msg="It Worked!");
@@ -109,16 +94,7 @@
 <cffunction name="flashIsEmpty" returntype="boolean" access="public" output="false" hint="Returns whether or not the Flash is empty."
 	examples=
 	'
-		<cfif not flashIsEmpty()>
-			<div id="messages">
-				<cfset allFlash = flash()>
-				<cfloop list="##StructKeyList(allFlash)##" index="flashItem">
-					<p class="##flashItem##">
-						##flash(flashItem)##
-					</p>
-				</cfloop>
-			</div>
-		</cfif>
+		empty = flashIsEmpty();
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashKeep,flashKeyExists,flashMessages">
 	<cfscript>
@@ -158,11 +134,7 @@
 <cffunction name="flashKeyExists" returntype="boolean" access="public" output="false" hint="Checks if a specific key exists in the Flash."
 	examples=
 	'
-		<cfif flashKeyExists("error")>
-			<cfoutput>
-				<p>##flash("error")##</p>
-			</cfoutput>
-		</cfif>
+		errorExists = flashKeyExists("error");
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashMessages">
 	<cfargument name="key" type="string" required="true" hint="The key to check if it exists.">
@@ -174,13 +146,16 @@
 	<cfreturn loc.rv>
 </cffunction>
 
+<!--- PRIVATE FUNCTIONS --->
+
 <cffunction name="$readFlash" returntype="struct" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		loc.rv = {};
 		if (!StructKeyExists(arguments, "$locked"))
 		{
-			loc.rv = $simpleLock(name="flashLock#application.applicationName#", type="readonly", execute="$readFlash", executeArgs=arguments);
+			loc.lockName = "flashLock" & application.applicationName;
+			loc.rv = $simpleLock(name=loc.lockName, type="readonly", execute="$readFlash", executeArgs=arguments);
 		}
 		else if ($getFlashStorage() == "cookie" && StructKeyExists(cookie, "flash"))
 		{
@@ -194,23 +169,30 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="$writeFlash" returntype="void" access="public" output="false">
+<cffunction name="$writeFlash" returntype="any" access="public" output="false">
 	<cfargument name="flash" type="struct" required="false" default="#StructNew()#">
 	<cfscript>
 		if (!StructKeyExists(arguments, "$locked"))
 		{
 			// the return is needed here because otherwise we get an abstracthttpconnection error in jetty (when running tests)
-			return $simpleLock(name="flashLock#application.applicationName#", type="exclusive", execute="$writeFlash", executeArgs=arguments);
-		}
-		if ($getFlashStorage() == "cookie")
-		{
-			cookie.flash = SerializeJSON(arguments.flash);
+			loc.lockName = "flashLock" & application.applicationName;
+			loc.rv = $simpleLock(name=loc.lockName, type="exclusive", execute="$writeFlash", executeArgs=arguments);
 		}
 		else
 		{
-			session.flash = arguments.flash;
+			if ($getFlashStorage() == "cookie")
+			{
+				cookie.flash = SerializeJSON(arguments.flash);
+			}
+			else
+			{
+				session.flash = arguments.flash;
+			}
 		}
 	</cfscript>
+	<cfif StructKeyExists(loc, "rv")>
+		<cfreturn loc.rv>
+	</cfif>
 </cffunction>
 
 <cffunction name="$flashClear" returntype="void" access="public" output="false">

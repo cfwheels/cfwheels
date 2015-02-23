@@ -66,14 +66,15 @@
 		variables.$instance.contentFor = {};
 
 		// include controller specific helper files if they exist, cache the file check for performance reasons
+		loc.template = get("viewPath") & "/" & LCase(arguments.name) & "/helpers.cfm";
 		loc.helperFileExists = false;
 		if (!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.name))
 		{
-			if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(arguments.name)#/helpers.cfm")))
+			if (FileExists(ExpandPath(loc.template)))
 			{
 				loc.helperFileExists = true;
 			}
-			if (application.wheels.cacheFileChecking)
+			if (get("cacheFileChecking"))
 			{
 				if (loc.helperFileExists)
 				{
@@ -87,12 +88,13 @@
 		}
 		if (Len(arguments.name) && (ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) || loc.helperFileExists))
 		{
-			$include(template="#application.wheels.viewPath#/#arguments.name#/helpers.cfm");
+			$include(template=loc.template);
 		}
 
 		loc.executeArgs = {};
 		loc.executeArgs.name = arguments.name;
-		$simpleLock(name="controllerLock#application.applicationName#", type="readonly", execute="$setControllerClassData", executeArgs=loc.executeArgs);
+		loc.lockName = "controllerLock" & application.applicationName;
+		$simpleLock(name=loc.lockName, type="readonly", execute="$setControllerClassData", executeArgs=loc.executeArgs);
 		variables.params = arguments.params;
 		loc.rv = this;
 	</cfscript>

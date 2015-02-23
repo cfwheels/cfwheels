@@ -104,7 +104,7 @@
 				}
 				else
 				{
-					loc.url = application.wheels.webPath;
+					loc.url = get("webPath");
 				}
 			}
 		}

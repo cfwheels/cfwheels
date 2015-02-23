@@ -52,7 +52,8 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			// include the email template and return it
-			loc.content = $renderPage($template=ListGetAt(arguments.template, loc.i), $layout=ListGetAt(arguments.layout, loc.i));
+			loc.item = ListGetAt(arguments.template, loc.i);
+			loc.content = $renderPage($template=loc.item, $layout=ListGetAt(arguments.layout, loc.i));
 			loc.mailpart = {};
 			loc.mailpart.tagContent = loc.content;
 			if (ArrayIsEmpty(arguments.mailparts))
@@ -107,7 +108,7 @@
 				if (!ReFindNoCase("\\|/", loc.item))
 				{
 					// no directory delimiter is present so append the path
-					loc.item = ExpandPath(application.wheels.filePath) & "/" & loc.item;
+					loc.item = ExpandPath(get("filePath")) & "/" & loc.item;
 				}
 				arguments.mailparams[loc.i].file = loc.item;
 			}
@@ -128,22 +129,25 @@
 		}
 		else
 		{
-			return arguments;
+			loc.rv = arguments;
 		}
 	</cfscript>
+	<cfif StructKeyExists(loc, "rv")>
+		<cfreturn loc.rv>
+	</cfif>
 </cffunction>
 
 <cffunction name="sendFile" returntype="any" access="public" output="false" hint="Sends a file to the user (from the `files` folder or a path relative to it by default)."
 	examples=
 	'
-		<!--- Send a PDF file to the user --->
-		<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf")>
+		// Send a PDF file to the user
+		sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf");
 
-		<!--- Send the same file but give the user a different name in the browser dialog window --->
-		<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", name="Tutorial.pdf")>
+		// Send the same file but give the user a different name in the browser dialog window
+		sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", name="Tutorial.pdf");
 
-		<!--- Send a file that is located outside of the web root --->
-		<cfset sendFile(file="../../tutorials/wheels_tutorial_20081028_J657D6HX.pdf")>
+		// Send a file that is located outside of the web root
+		sendFile(file="../../tutorials/wheels_tutorial_20081028_J657D6HX.pdf");
 	'
 	categories="controller-request,miscellaneous" chapters="sending-files" functions="">
 	<cfargument name="file" type="string" required="true" hint="The file to send to the user.">
@@ -156,7 +160,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="sendFile", args=arguments);
-		loc.relativeRoot = application.wheels.rootPath;
+		loc.relativeRoot = get("rootPath");
 		if (Right(loc.relativeRoot, 1) != "/")
 		{
 			loc.relativeRoot &= "/";
@@ -165,7 +169,7 @@
 		loc.folder = arguments.directory;
 		if (!Len(loc.folder))
 		{
-			loc.folder = loc.relativeRoot & application.wheels.filePath;
+			loc.folder = loc.relativeRoot & get("filePath");
 		}
 		if (Left(loc.folder, Len(loc.root)) == loc.root)
 		{
@@ -214,11 +218,16 @@
 		if (arguments.$testingMode)
 		{
 			StructAppend(loc, arguments, false);
-			return loc;
+			loc.rv = loc;
 		}
-
-		// prompt the user to download the file
-		$header(name="content-disposition", value="#arguments.disposition#; filename=""#loc.name#""");
-		$content(type=loc.mime, file=loc.fullPath, deleteFile=arguments.deleteFile);
+		else
+		{
+			// prompt the user to download the file
+			$header(name="content-disposition", value="#arguments.disposition#; filename=""#loc.name#""");
+			$content(type=loc.mime, file=loc.fullPath, deleteFile=arguments.deleteFile);
+		}
 	</cfscript>
+	<cfif StructKeyExists(loc, "rv")>
+		<cfreturn loc.rv>
+	</cfif>
 </cffunction>

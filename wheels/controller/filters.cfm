@@ -6,7 +6,7 @@
 		// Always execute `restrictAccess` before all actions in this controller
 		filters("restrictAccess");
 
-		// Always execute `isLoggedIn` and `checkIPAddress` (in that order) before all actions in this controller except the `home` and `login` actions
+		// Always execute `isLoggedIn` and `checkIPAddress` (in that order) before all actions in this controller, except the `home` and `login` actions
 		filters(through="isLoggedIn,checkIPAddress", except="home,login");
 	'
 	categories="controller-initialization,filtering" chapters="filters-and-verification" functions="setFilterChain,filterChain">
@@ -79,10 +79,11 @@
 <cffunction name="filterChain" returntype="array" access="public" output="false" hint="Returns an array of all the filters set on this controller in the order in which they will be executed."
 	examples=
 	'
-		// Get filter chain, remove the first item, and set it back
+		// Get filter chain
 		myFilterChain = filterChain();
-		ArrayDeleteAt(myFilterChain, 1);
-		setFilterChain(myFilterChain);
+
+		// Get filter chain for after filters only
+		myFilterChain = filterChain(type="after");
 	'
 	categories="controller-initialization,filtering" chapters="filters-and-verification" functions="filters,setFilterChain">
 	<cfargument name="type" type="string" required="false" default="all" hint="Use this argument to return only `before` or `after` filters.">
@@ -101,7 +102,7 @@
 		else
 		{
 			// loop over the filters and return all those that match the supplied type
-			loc.rv = ArrayNew(1);
+			loc.rv = [];
 			loc.iEnd = ArrayLen(variables.$class.filters);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{

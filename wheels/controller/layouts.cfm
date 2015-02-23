@@ -3,41 +3,15 @@
 <cffunction name="usesLayout" access="public" returntype="void" output="false" hint="Used within a controller's `init()` function to specify controller- or action-specific layouts."
 	examples=
 	'
-		<!--- Example 1: We want this layout to be used as the default throughout the entire controller, except for the myajax action --->
-		<cffunction name="init">
-			<cfscript>
-				usesLayout(template="myLayout", except="myajax");
-			</cfscript>
-		</cffunction>
+		// We want this layout to be used as the default throughout the entire controller, except for the `myAjax` action
+		usesLayout(template="myLayout", except="myAjax");
 
-		<!--- Example 2: Use a custom layout for these actions but use the default layout.cfm for the rest --->
-		<cffunction name="init">
-			<cfscript>
-				usesLayout(template="myLayout", only="termsOfService,shippingPolicy");
-			</cfscript>
-		</cffunction>
+		// Use a custom layout for these actions but use the default `layout.cfm` for the rest
+		usesLayout(template="myLayout", only="termsOfService,shippingPolicy");
 
-		<!--- Example 3: Define a custom function to decide which layout to display --->
-		<cffunction name="init">
-			<cfscript>
-				usesLayout("setLayout");
-			</cfscript>
-		</cffunction>
-
-		<cffunction name="setLayout">
-			<cfscript>
-				if (Month(Now()) == 12)
-				{
-					// Use holiday theme for the month of December
-					return "holiday";
-				}
-				else
-				{
-					// Otherwise, use default layout by returning `true`
-					return true;
-				}
-			</cfscript>
-		</cffunction>
+		// Define a custom function to decide which layout to display
+		// The `setLayout` function should return the name of the layout to use or `true` to use the default one
+		usesLayout("setLayout");
 	'
 	categories="controller-initialization,rendering" chapters="rendering-layout" functions="renderPage">
 	<cfargument name="template" required="true" type="string" hint="Name of the layout template or function name you want to use.">
@@ -84,10 +58,10 @@
 				// if the developer doesn't return anything from the function or if they return a blank string it should use the default layout still
 				loc.invokeArgs = {};
 				loc.invokeArgs.action = arguments.$action;
-				loc.temp = $invoke(method=variables.$class.layout[loc.layoutType], invokeArgs=loc.invokeArgs);
-				if (StructKeyExists(loc, "temp"))
+				loc.result = $invoke(method=variables.$class.layout[loc.layoutType], invokeArgs=loc.invokeArgs);
+				if (StructKeyExists(loc, "result"))
 				{
-					loc.rv = loc.temp;
+					loc.rv = loc.result;
 				}
 			}
 			else if ((!StructKeyExists(variables.$class.layout, "except") || !ListFindNoCase(variables.$class.layout.except, arguments.$action)) && (!StructKeyExists(variables.$class.layout, "only") || ListFindNoCase(variables.$class.layout.only, arguments.$action)))
@@ -109,17 +83,19 @@
 			// store the content in a variable in the request scope so it can be accessed by the includeContent function that the developer uses in layout files
 			// this is done so we avoid passing data to/from it since it would complicate things for the developer
 			contentFor(body=arguments.$content, overwrite=true);
-			loc.include = application.wheels.viewPath;
+			loc.viewPath = get("viewPath");
+			loc.include = loc.viewPath;
 			if (IsBoolean(arguments.$layout))
 			{
 				loc.layoutFileExists = false;
 				if (!ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) && !ListFindNoCase(application.wheels.nonExistingLayoutFiles, variables.params.controller))
 				{
-					if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.params.controller)#/layout.cfm")))
+					loc.file = loc.viewPath & "/" & LCase(variables.params.controller) & "/layout.cfm";
+					if (FileExists(ExpandPath(loc.file)))
 					{
 						loc.layoutFileExists = true;
 					}
-					if (application.wheels.cacheFileChecking)
+					if (get("cacheFileChecking"))
 					{
 						if (loc.layoutFileExists)
 						{

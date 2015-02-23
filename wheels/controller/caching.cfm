@@ -3,7 +3,14 @@
 <cffunction name="caches" returntype="void" access="public" output="false" hint="Tells CFWheels to cache one or more actions."
 	examples=
 	'
+		// Cache the `termsOfUse` action
+		caches("termsOfUse");
+
+		// Cache the `termsOfUse` action for 30 minutes
 		caches(actions="browseByUser,browseByTitle", time=30);
+
+		// Cache the `termsOfUse` and `codeOfConduct` actions, including their filters
+		caches(actions="termsOfUse,codeOfConduct", static=true);
 	'
 	categories="controller-initialization,caching" chapters="caching" functions="">
 	<cfargument name="action" type="string" required="false" default="" hint="Action(s) to cache. This argument is also aliased as `actions`.">
