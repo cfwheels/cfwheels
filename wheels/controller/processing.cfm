@@ -26,6 +26,7 @@
 					else
 					{
 						loc.cache = loc.cachableActions[loc.i].time;
+						loc.appendToKey = loc.cachableActions[loc.i].appendToKey;
 					}
 					break;
 				}
@@ -58,7 +59,24 @@
 				{
 					// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, calling the controller action (which in turn sets the content to the request scope)
 					loc.category = "action";
+
+					// create the key for the cache
 					loc.key = $hashedKey(variables.$class.name, variables.params);
+
+					// evaluate variables and append to the cache key when specified
+					if (Len(loc.appendToKey))
+					{
+						loc.iEnd = ListLen(loc.appendToKey);
+						for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+						{
+							loc.item = ListGetAt(loc.appendToKey, loc.i);
+							if (IsDefined(loc.item))
+							{
+								loc.key &= Evaluate(loc.item);
+							}
+						}
+					}
+
 					loc.conditionArgs = {};
 					loc.conditionArgs.key = loc.key;
 					loc.conditionArgs.category = loc.category;

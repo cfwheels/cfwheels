@@ -3,7 +3,6 @@
 Model Enhancements
 ==================
 
-* Pass through "includeSoftDeletes" argument correctly - #451 [Jon Brose]
 * Allow spaces in list passed in to the "include" argument on finders - #150 [Per Djurner]
 * Added findFirst() and findLast() finder methods - [Per Djurner]
 
@@ -15,10 +14,16 @@ View Enhancements
 Controller Enhancements
 =======================
 
+* Pass in "appendToKey" to caches() to cache content separately - #439 [Per Djurner]
 * Allow external attachments with sendEmail() - [Adam Chapman, Tony Petruzzi]
 * Ability to redirect to a specific URL - [Simon Allard]
 (* Option to correct JSON output by passing in x="string" to renderWith() - [Per Djurner])
 (* Option to correct JSON output by passing in x="integer" to renderWith() - [Per Djurner])
+
+Bug Fixes
+=========
+
+* Pass through "includeSoftDeletes" argument correctly - #451 [Jon Brose]
 
 Miscellaneous
 =============

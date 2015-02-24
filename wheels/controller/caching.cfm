@@ -11,11 +11,15 @@
 
 		// Cache the `termsOfUse` and `codeOfConduct` actions, including their filters
 		caches(actions="termsOfUse,codeOfConduct", static=true);
+
+		// Cache content separately based on region
+		caches(action="home", key="request.region");
 	'
 	categories="controller-initialization,caching" chapters="caching" functions="">
 	<cfargument name="action" type="string" required="false" default="" hint="Action(s) to cache. This argument is also aliased as `actions`.">
 	<cfargument name="time" type="numeric" required="false" hint="Minutes to cache the action(s) for.">
 	<cfargument name="static" type="boolean" required="false" hint="Set to `true` to tell CFWheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions). Please note that the `onSessionStart` and `onRequestStart` events still execute though.">
+	<cfargument name="appendToKey" type="string" required="false" hint="List of variables to be evaluated at runtime and included in the cache key so that content can be cached separately.">
 	<cfscript>
 		var loc = {};
 		$args(args=arguments, name="caches", combine="action/actions");
@@ -29,7 +33,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(arguments.action, loc.i);
-			loc.action = {action=loc.item, time=arguments.time, static=arguments.static};
+			loc.action = {action=loc.item, time=arguments.time, static=arguments.static, appendToKey=arguments.appendToKey};
 			$addCachableAction(loc.action);
 		}
 	</cfscript>
