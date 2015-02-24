@@ -14,6 +14,7 @@
 	<cfargument name="type" type="string" required="false" default="before" hint="Whether to run the function(s) before or after the action(s).">
 	<cfargument name="only" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell CFWheels that the filter function(s) should only be run on these actions.">
 	<cfargument name="except" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell CFWheels that the filter function(s) should be run on all actions except the specified ones.">
+	<cfargument name="append" type="boolean" required="false" default="true" hint="Pass in `false` to prepend the function(s) to the filter chain instead of appending.">
 	<cfscript>
 		var loc = {};
 		arguments.through = $listClean(arguments.through);
@@ -44,7 +45,14 @@
 					}
 				}
 			}
-			ArrayAppend(variables.$class.filters, loc.filter);
+			if (arguments.append)
+			{
+				ArrayAppend(variables.$class.filters, loc.filter);
+			}
+			else
+			{
+				ArrayPrepend(variables.$class.filters, loc.filter);
+			}
 		}
 	</cfscript>
 </cffunction>

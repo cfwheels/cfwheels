@@ -14,6 +14,7 @@ View Enhancements
 Controller Enhancements
 =======================
 
+* Ability to prepend functions to the filter chain instead of appending - #321 [Per Djurner]
 * Pass in "appendToKey" to caches() to cache content separately - #439 [Per Djurner]
 * Allow external attachments with sendEmail() - [Adam Chapman, Tony Petruzzi]
 * Ability to redirect to a specific URL - [Simon Allard]
