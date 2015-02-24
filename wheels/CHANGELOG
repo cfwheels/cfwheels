@@ -3,6 +3,7 @@
 Model Enhancements
 ==================
 
+* Pass through "includeSoftDeletes" argument correctly - #451 [Jon Brose]
 * Allow spaces in list passed in to the "include" argument on finders - #150 [Per Djurner]
 * Added findFirst() and findLast() finder methods - [Per Djurner]
 
@@ -87,7 +88,7 @@ Bug Fixes
 * Do not run filters and verifications when caching actions statically - [Per Djurner]
 * Fixed a bug where trying to obfuscate a high number was throwing an error - [Per Djurner]
 * Fixed bug with static caching on Adobe ColdFusion 9 - #332 [Charley Contreras]
-* Allow for format auto-detection when HTTP ACCEPT contains multiple values - #297 [Raul Riera, Singgih Cahyono] 
+* Allow for format auto-detection when HTTP ACCEPT contains multiple values - #297 [Raul Riera, Singgih Cahyono]
 * Fixed so that sendEmail() can use the "remove" attribute to delete attachments - #339 [Simon Allard]
 * Fixed bugs with using the "twelveHour" argument on form helpers - #342, #343 [Jeremy Keczan, Per Djurner]
 * Fixed issue with using non-ascii characters in routes - #138 [Chris Ogden, Singgih Cahyono, Per Djurner]
@@ -193,7 +194,7 @@ Other Enhancements
 
 * Update web.config, htaccess to ignore favicon.ico - [Cathy Shapiro, Tony Petruzzi]
 * Route with only format specified was throwing error - [jjallen, Tony Petruzzi]
- 
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1.1.7 (12/11/2011)
@@ -201,7 +202,7 @@ Other Enhancements
 Bug Fixes
 =========
 
-* Filter controller and action params - [Pete Freitag, Andy Bellenie, Tony Petruzzi] 
+* Filter controller and action params - [Pete Freitag, Andy Bellenie, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -468,7 +469,7 @@ View Enhancements
 * Ability for years to display in descending order in date select form tags - [Tony Petruzzi]
 * Support for an automatic "assetQueryString" which can be used to force local browser caches to refresh when there is an update to your assets (CSS, JavaScript etc) - [James Gibson]
 * Added buttonTag() form helper - [Tony Petruzzi]
-* Added "disabled" and "readonly" arguments to form input helpers [Andy Bellenie]	
+* Added "disabled" and "readonly" arguments to form input helpers [Andy Bellenie]
 * Allows disabling error elements appearing on form fields by setting "errorElement" - [Andy Bellenie]
 * Updates to checkBoxTag() and checkBox() to allow for unchecked values - [James Gibson]
 * Added "pageNumberAsParam" argument to paginationLinks() that decides whether the page parameter should be part of the route or just a regular parameter - [James Gibson]
@@ -493,7 +494,7 @@ Controller Enhancements
 * Controllers can now respond to different formats such as "xml", "json", "csv", "pdf" and "xls" - [James Gibson]
 * Ability to store Flash in cookies - [Per Djurner]
 * Ability to add Flash messages when redirecting - [Per Djurner]
-* redirecTo(back=true) can now fall back on a route/controller/action when the referrer is blank instead of throwing an error - [Per Djurner] 
+* redirecTo(back=true) can now fall back on a route/controller/action when the referrer is blank instead of throwing an error - [Per Djurner]
 * Support for "format" parsing in route patterns ([controller]/[action].[format]) - [James Gibson]
 * Ability to pass through arguments to filters - [Per Djurner]
 * Added flashKeep() function for keeping Flash contents for one additional request - [Per Djurner]

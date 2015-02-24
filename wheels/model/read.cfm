@@ -186,7 +186,7 @@
 			if (!IsArray(loc.sql))
 			{
 				loc.sql = [];
-				ArrayAppend(loc.sql, $selectClause(select=arguments.select, include=arguments.include, returnAs=arguments.returnAs));
+				ArrayAppend(loc.sql, $selectClause(select=arguments.select, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, returnAs=arguments.returnAs));
 				ArrayAppend(loc.sql, $fromClause(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes));
 				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 				loc.groupBy = $groupByClause(select=arguments.select, group=arguments.group, include=arguments.include, distinct=arguments.distinct, returnAs=arguments.returnAs);
@@ -292,7 +292,7 @@
 		{
 			$keyLengthCheck(arguments.key);
 		}
-		
+
 		// convert primary key column name(s) / value(s) to a WHERE clause that is then used in the findOne call
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");

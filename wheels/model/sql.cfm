@@ -171,7 +171,7 @@
 	<cfscript>
 		var loc = {};
 		loc.rv = "";
-		
+
 		// if we want a distinct statement, we can do it grouping every field in the select
 		if (arguments.distinct)
 		{
@@ -184,9 +184,9 @@
 		if (Len(loc.rv))
 		{
 			loc.rv = "GROUP BY " & loc.rv;
-			// this is a little ugly because I want to contain any possible issues to group by for 1.3.x releases 
-			// for 2.0.x we should probably strip out the " AS x" part in the $createSQLFieldList function instead 
-			loc.rv = REReplaceNoCase(loc.rv, " AS [a-z0-9-_]*", "", "all"); 
+			// this is a little ugly because I want to contain any possible issues to group by for 1.3.x releases
+			// for 2.0.x we should probably strip out the " AS x" part in the $createSQLFieldList function instead
+			loc.rv = REReplaceNoCase(loc.rv, " AS [a-z0-9-_]*", "", "all");
 		}
 	</cfscript>
 	<cfreturn loc.rv>
@@ -195,10 +195,11 @@
 <cffunction name="$selectClause" returntype="string" access="public" output="false">
 	<cfargument name="select" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfargument name="returnAs" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.rv = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs);
+		loc.rv = $createSQLFieldList(list=arguments.select, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, returnAs=arguments.returnAs);
 		loc.rv = "SELECT " & loc.rv;
 	</cfscript>
 	<cfreturn loc.rv>
@@ -207,6 +208,7 @@
 <cffunction name="$createSQLFieldList" returntype="string" access="public" output="false">
 	<cfargument name="list" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfargument name="returnAs" type="string" required="true">
 	<cfargument name="renameFields" type="boolean" required="false" default="true">
 	<cfargument name="addCalculatedProperties" type="boolean" required="false" default="true">
@@ -218,7 +220,7 @@
 		loc.classes = [];
 		if (Len(arguments.include))
 		{
-			loc.classes = $expandedAssociations(include=arguments.include);
+			loc.classes = $expandedAssociations(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 		}
 		ArrayPrepend(loc.classes, variables.wheels.class);
 
@@ -296,7 +298,7 @@
 									loc.flagAsDuplicate  = true;
 								}
 							}
-						}						
+						}
 						if (loc.flagAsDuplicate)
 						{
 							loc.toAppend &= "[[duplicate]]" & loc.j;
@@ -708,7 +710,7 @@
 			if (!StructKeyExists(loc.classAssociations[loc.name], "join"))
 			{
 				loc.join = UCase(ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one")) & " JOIN " & loc.classAssociations[loc.name].tableName;
-				
+
 				// alias the table as the association name when joining to itself
 				if (ListFindNoCase(loc.tables, loc.classAssociations[loc.name].tableName))
 				{
@@ -749,7 +751,7 @@
 						loc.first = loc.key2;
 						loc.second = loc.key1;
 					}
-					
+
 					// alias the table as the association name when joining to itself
 					loc.tableName = loc.classAssociations[loc.name].tableName;
 					if (ListFindNoCase(loc.tables, loc.classAssociations[loc.name].tableName))
