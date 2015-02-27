@@ -5,12 +5,18 @@
 		<cfargument name="datasource" type="string" required="true">
 		<cfargument name="username" type="string" required="true">
 		<cfargument name="password" type="string" required="true">
-		<cfset variables.instance.connection = arguments>
+		<cfscript>
+			variables.instance.connection = arguments;
+		</cfscript>
 		<cfreturn this>
 	</cffunction>
 
 	<cffunction name="$defaultValues" returntype="string" access="public" output="false">
-		<cfreturn " DEFAULT VALUES">
+		<cfscript>
+			var loc = {};
+			loc.rv = " DEFAULT VALUES";
+		</cfscript>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$tableName" returntype="string" access="public" output="false">
@@ -37,7 +43,11 @@
 	<cffunction name="$tableAlias" returntype="string" access="public" output="false">
 		<cfargument name="table" type="string" required="true">
 		<cfargument name="alias" type="string" required="true">
-		<cfreturn arguments.table & " AS " & arguments.alias>
+		<cfscript>
+			var loc = {};
+			loc.rv = arguments.table & " AS " & arguments.alias;
+		</cfscript>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$columnAlias" returntype="string" access="public" output="false">
@@ -62,7 +72,7 @@
 					if (arguments.action == "keep")
 					{
 						// keeps the alias only
-						loc.item = loc.alias; 
+						loc.item = loc.alias;
 					}
 					else if (arguments.action == "remove")
 					{
@@ -86,8 +96,8 @@
 			{
 				// remove the column aliases from the order by clause (this is passed in so that we can handle sub queries with calculated properties)
 				loc.pos = ArrayLen(loc.rv);
-				loc.orderByClause = ReplaceNoCase(loc.rv[loc.pos], "ORDER BY ", "");
-				loc.rv[loc.pos] = "ORDER BY " & $columnAlias(list=loc.orderByClause, action="remove");
+				loc.list = ReplaceNoCase(loc.rv[loc.pos], "ORDER BY ", "");
+				loc.rv[loc.pos] = "ORDER BY " & $columnAlias(list=loc.list, action="remove");
 			}
 		</cfscript>
 		<cfreturn loc.rv>
@@ -104,16 +114,18 @@
 			// guard against invalid match
 			if (ArrayLen(loc.match.pos) == 0)
 			{
-				return false;
+				loc.rv = false;
 			}
-			if (loc.match.len[1] <= 2)
+			else if (loc.match.len[1] <= 2)
 			{
-				return false;
+				loc.rv = false;
 			}
-
-			// extract and analyze the function name
-			loc.name = Mid(arguments.sql, loc.match.pos[1]+1, loc.match.len[1]-2);
-			loc.rv = ListContains("AVG,COUNT,MAX,MIN,SUM", loc.name);
+			else
+			{
+				// extract and analyze the function name
+				loc.name = Mid(arguments.sql, loc.match.pos[1]+1, loc.match.len[1]-2);
+				loc.rv = ListContains("AVG,COUNT,MAX,MIN,SUM", loc.name);
+			}
 		</cfscript>
 		<cfreturn loc.rv>
 	</cffunction>
@@ -123,7 +135,7 @@
 		<cfscript>
 			var loc = {};
 			loc.rv = arguments.sql;
-			if (IsSimpleValue(loc.rv[ArrayLen(loc.rv)]) && Left(loc.rv[ArrayLen(loc.rv)], 8) IS "ORDER BY" && IsSimpleValue(loc.rv[ArrayLen(loc.rv)-1]) && Left(loc.rv[ArrayLen(loc.rv)-1], 8) IS "GROUP BY")
+			if (IsSimpleValue(loc.rv[ArrayLen(loc.rv)]) && Left(loc.rv[ArrayLen(loc.rv)], 8) == "ORDER BY" && IsSimpleValue(loc.rv[ArrayLen(loc.rv)-1]) && Left(loc.rv[ArrayLen(loc.rv)-1], 8) == "GROUP BY")
 			{
 				loc.iEnd = ListLen(loc.rv[ArrayLen(loc.rv)]);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -131,7 +143,8 @@
 					loc.item = Trim(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(ListGetAt(loc.rv[ArrayLen(loc.rv)], loc.i), "ORDER BY ", ""), " ASC", ""), " DESC", ""));
 					if (!ListFindNoCase(ReplaceNoCase(loc.rv[ArrayLen(loc.rv)-1], "GROUP BY ", ""), loc.item) && !$isAggregateFunction(loc.item))
 					{
-						loc.rv[ArrayLen(loc.rv)-1] = ListAppend(loc.rv[ArrayLen(loc.rv)-1], loc.item);
+						loc.key = ArrayLen(loc.rv)-1;
+						loc.rv[loc.key] = ListAppend(loc.rv[loc.key], loc.item);
 					}
 				}
 			}
@@ -153,7 +166,7 @@
 				}
 				catch (any e)
 				{
-					$throw(type="Wheels.TableNotFound", message="The `#arguments.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#arguments.tableName#` to your database or tell Wheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating an `init` method inside it and then calling `table(""tbl_users"")` from within it.");
+					$throw(type="Wheels.TableNotFound", message="The `#arguments.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#arguments.tableName#` to your database or tell CFWheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating an `init` method inside it and then calling `table(""tbl_users"")` from within it.");
 				}
 			}
 			else
@@ -194,21 +207,22 @@
 		</cfswitch>
 	</cffunction>
 
-	<cffunction name="$cleanInStatmentValue" returntype="string" access="public" output="false">
+	<cffunction name="$cleanInStatementValue" returntype="string" access="public" output="false">
 		<cfargument name="statement" type="string" required="true">
 		<cfscript>
 			var loc = {};
+			loc.rv = arguments.statement;
 			loc.delim = ",";
-			if (Find("'", arguments.statement))
+			if (Find("'", loc.rv))
 			{
 				loc.delim = "','";
-				arguments.statement = RemoveChars(arguments.statement, 1, 1);
-				arguments.statement = reverse(RemoveChars(reverse(arguments.statement), 1, 1));
-				arguments.statement = Replace(arguments.statement, "''", "'", "all");
+				loc.rv = RemoveChars(loc.rv, 1, 1);
+				loc.rv = Reverse(RemoveChars(Reverse(loc.rv), 1, 1));
+				loc.rv = Replace(loc.rv, "''", "'", "all");
 			}
-			arguments.statement = ReplaceNoCase(arguments.statement, loc.delim, chr(7), "all");
+			loc.rv = ReplaceNoCase(loc.rv, loc.delim, Chr(7), "all");
 		</cfscript>
-		<cfreturn arguments.statement>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$CFQueryParameters" returntype="struct" access="public" output="false">
@@ -217,7 +231,7 @@
 			var loc = {};
 			if (!StructKeyExists(arguments.settings, "value"))
 			{
-				$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syntax error in the WHERE statement such as forgetting to quote strings.");
+				$throw(type="Wheels.QueryParamValue", message="The value for `cfqueryparam` cannot be determined", extendedInfo="This is usually caused by a syntax error in the `WHERE` statement, such as forgetting to quote strings for example.");
 			}
 			loc.rv = {};
 			loc.rv.cfsqltype = arguments.settings.type;
@@ -234,7 +248,7 @@
 			{
 				loc.rv.list = arguments.settings.list;
 				loc.rv.separator = Chr(7);
-				loc.rv.value = $cleanInStatmentValue(loc.rv.value);
+				loc.rv.value = $cleanInStatementValue(loc.rv.value);
 			}
 		</cfscript>
 		<cfreturn loc.rv>
@@ -305,8 +319,12 @@
 		<cfargument name="datasource" type="string" required="true">
 		<cfargument name="username" type="string" required="true">
 		<cfargument name="password" type="string" required="true">
-		<cfset arguments.type = "columns">
-		<cfreturn $dbinfo(argumentCollection=arguments)>
+		<cfscript>
+			var loc = {};
+			arguments.type = "columns";
+			loc.rv = $dbinfo(argumentCollection=arguments);
+		</cfscript>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$quoteValue" returntype="string" access="public" output="false">
@@ -314,6 +332,7 @@
 		<cfargument name="sqlType" type="string" default="CF_SQL_VARCHAR" hint="sql column type for data">
 		<cfargument name="type" type="string" required="false" hint="validation type for data">
 		<cfscript>
+			var loc = {};
 			if (!StructKeyExists(arguments, "type"))
 			{
 				arguments.type = $getValidationType(arguments.sqlType);
@@ -331,18 +350,20 @@
 	</cffunction>
 
 	<cffunction name="$convertMaxRowsToLimit" returntype="struct" access="public" output="false">
-		<cfargument name="argScope" type="struct" required="true">
+		<cfargument name="args" type="struct" required="true">
 		<cfscript>
-			if (StructKeyExists(arguments.argScope, "maxrows") && arguments.argScope.maxrows > 0)
+			var loc = {};
+			loc.rv = arguments.args;
+			if (StructKeyExists(loc.rv, "maxRows") && loc.rv.maxRows > 0)
 			{
-				if (arguments.argScope.maxrows > 0)
+				if (loc.rv.maxRows > 0)
 				{
-					arguments.argScope.limit = arguments.argScope.maxrows;
+					loc.rv.limit = loc.rv.maxRows;
 				}
-				StructDelete(arguments.argScope, "maxrows");
+				StructDelete(loc.rv, "maxRows");
 			}
 		</cfscript>
-		<cfreturn arguments.argScope>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cfinclude template="../../plugins/injection.cfm">
