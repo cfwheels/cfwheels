@@ -3,7 +3,7 @@
 <cffunction name="verifies" returntype="void" access="public" output="false" hint="Instructs CFWheels to verify that some specific criterias are met before running an action. Note that all undeclared arguments will be passed to `redirectTo()` call if a handler is not specified."
 	examples=
 	'
-		// Tell Wheels to verify that the `handleForm` action is always a `POST` request when executed
+		// Tell CFWheels to verify that the `handleForm` action is always a `POST` request when executed
 		verifies(only="handleForm", post=true);
 
 		// Make sure that the edit action is a `GET` request, that `userId` exists in the `params` struct, and that it''s an integer

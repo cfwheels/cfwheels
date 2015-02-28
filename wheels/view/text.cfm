@@ -1,8 +1,8 @@
 <cffunction name="autoLink" returntype="string" access="public" output="false" hint="Turns all URLs and email addresses into hyperlinks."
 	examples=
 	'
-		##autoLink("Download Wheels from http://cfwheels.org/download")##
-		-> Download Wheels from <a href="http://cfwheels.org/download">http://cfwheels.org/download</a>
+		##autoLink("Download CFWheels from http://cfwheels.org/download")##
+		-> Download CFWheels from <a href="http://cfwheels.org/download">http://cfwheels.org/download</a>
 
 		##autoLink("Email us at info@cfwheels.org")##
 		-> Email us at <a href="mailto:info@cfwheels.org">info@cfwheels.org</a>
@@ -76,7 +76,7 @@
 <cffunction name="excerpt" returntype="string" access="public" output="false" hint="Extracts an excerpt from text that matches the first instance of a given phrase."
 	examples=
 	'
-		##excerpt(text="ColdFusion Wheels is a Rails-like MVC framework for Adobe ColdFusion, Railo and Lucee", phrase="framework", radius=5)##
+		##excerpt(text="ColdFusion CFWheels is a Rails-like MVC framework for Adobe ColdFusion, Railo and Lucee", phrase="framework", radius=5)##
 		-> ... MVC framework for ...
 	'
 	categories="view-helper,text" functions="autoLink,highlight,simpleFormat,titleize,truncate">
@@ -224,7 +224,7 @@
 	examples=
 	'
 		##titleize("Wheels is a framework for ColdFusion")##
-		-> Wheels Is A Framework For ColdFusion
+		-> CFWheels Is A Framework For ColdFusion
 	'
 	categories="view-helper,text" functions="autoLink,excerpt,highlight,simpleFormat,truncate">
 	<cfargument name="word" type="string" required="true" hint="The text to turn into a title.">
@@ -244,10 +244,10 @@
 	examples=
 	'
 		##truncate(text="Wheels is a framework for ColdFusion", length=20)##
-		-> Wheels is a frame...
+		-> CFWheels is a frame...
 
 		##truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")##
-		-> Wheels is a framework f (more)
+		-> CFWheels is a framework f (more)
 	'
 	categories="view-helper,text" functions="autoLink,excerpt,highlight,simpleFormat,titleize">
 	<cfargument name="text" type="string" required="true" hint="The text to truncate.">
@@ -272,10 +272,10 @@
 	examples=
 	'
 		##wordTruncate(text="Wheels is a framework for ColdFusion", length=4)##
-		-> Wheels is a framework...
+		-> CFWheels is a framework...
 
 		##truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")##
-		-> Wheels is a framework for (more)
+		-> CFWheels is a framework for (more)
 	'
 	categories="view-helper,text" functions="autoLink,excerpt,highlight,simpleFormat,titleize">
 	<cfargument name="text" type="string" required="true" hint="The text to truncate.">

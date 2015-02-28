@@ -10,7 +10,7 @@
 	categories="model-initialization,nested-properties" chapters="nested-properties" functions="belongsTo,hasOne,hasMany,hasManyCheckBox,hasManyRadioButton,includedInObject">
 	<cfargument name="association" type="string" required="false" default="" hint="The association (or list of associations) you want to allow to be set through the params. This argument is also aliased as `associations`.">
 	<cfargument name="autoSave" type="boolean" required="false" hint="Whether to save the association(s) when the parent object is saved.">
-	<cfargument name="allowDelete" type="boolean" required="false" hint="Set `allowDelete` to `true` to tell Wheels to look for the property `_delete` in your model. If present and set to a value that evaluates to `true`, the model will be deleted when saving the parent.">
+	<cfargument name="allowDelete" type="boolean" required="false" hint="Set `allowDelete` to `true` to tell CFWheels to look for the property `_delete` in your model. If present and set to a value that evaluates to `true`, the model will be deleted when saving the parent.">
 	<cfargument name="sortProperty" type="string" required="false" hint="Set `sortProperty` to a property on the object that you would like to sort by. The property should be numeric, should start with 1, and should be consecutive. Only valid with `hasMany` associations.">
 	<cfargument name="rejectIfBlank" type="string" required="false" hint="A list of properties that should not be blank. If any of the properties are blank, any CRUD operations will be rejected.">
 	<cfscript>
@@ -28,7 +28,7 @@
 				variables.wheels.class.associations[loc.association].nested.autoSave = arguments.autoSave;
 				variables.wheels.class.associations[loc.association].nested.sortProperty = arguments.sortProperty;
 				variables.wheels.class.associations[loc.association].nested.rejectIfBlank = $listClean(arguments.rejectIfBlank);
-				
+
 				// add to the white list if it exists
 				if (StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList"))
 				{
@@ -101,7 +101,7 @@
 							$setForeignKeyValues(missingMethodArguments=loc.array[loc.i], keys=loc.info.foreignKey);
 						}
 						loc.saveResult = $invoke(componentReference=loc.array[loc.i], method="save", invokeArgs=arguments);
-						
+
 						// don't change the return value if we have already received a false
 						if (loc.rv)
 						{

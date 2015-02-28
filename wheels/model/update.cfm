@@ -72,7 +72,7 @@
 		<cfset result = model("post").updateByKey(33, params.post)>
 
 		<!--- Updates the object with `33` as the primary key using named arguments --->
-		<cfset result = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
+		<cfset result = model("post").updateByKey(key=33, title="New version of CFWheels just released", published=1)>
 	'
 	categories="model-class,update" chapters="updating-records,associations" functions="hasOne,hasMany,update,updateAll,updateOne">
 	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
@@ -137,11 +137,11 @@
 	'
 		<!--- Get a post object and then update its title in the database --->
 		<cfset post = model("post").findByKey(33)>
-		<cfset post.update(title="New version of Wheels just released")>
+		<cfset post.update(title="New version of CFWheels just released")>
 
 		<!--- Get a post object and then update its title and other properties based on what is pased in from the URL/form --->
 		<cfset post = model("post").findByKey(params.key)>
-		<cfset post.update(title="New version of Wheels just released", properties=params.post)>
+		<cfset post.update(title="New version of CFWheels just released", properties=params.post)>
 
 		<!--- If you have a `hasOne` association setup from `author` to `bio`, you can do a scoped call. (The `setBio` method below will call `bio.update(authorId=anAuthor.id)` internally.) --->
 		<cfset author = model("author").findByKey(params.authorId)>

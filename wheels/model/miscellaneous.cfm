@@ -5,7 +5,7 @@
 	'
 		<!--- In models/User.cfc --->
 		<cffunction name="init">
-			<!--- Tell Wheels to use the data source named `users_source` instead of the default one whenever this model makes SQL calls  --->
+			<!--- Tell CFWheels to use the data source named `users_source` instead of the default one whenever this model makes SQL calls  --->
   			<cfset dataSource("users_source")>
 		</cffunction>
 	'
@@ -18,12 +18,12 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="table" returntype="void" access="public" output="false" hint="Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels convention of a singular object name mapping to a plural table name. To not use a table for your model at all, `call table(false)`."
+<cffunction name="table" returntype="void" access="public" output="false" hint="Use this method to tell CFWheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard CFWheels convention of a singular object name mapping to a plural table name. To not use a table for your model at all, `call table(false)`."
 	examples=
 	'
 		<!--- In models/User.cfc --->
 		<cffunction name="init">
-			<!--- Tell Wheels to use the `tbl_USERS` table in the database for the `user` model instead of the default (which would be `users`) --->
+			<!--- Tell CFWheels to use the `tbl_USERS` table in the database for the `user` model instead of the default (which would be `users`) --->
 			<cfset table("tbl_USERS")>
 		</cffunction>
 	'
@@ -237,7 +237,7 @@
 
 <!--- PUBLIC MODEL OBJECT METHODS --->
 
-<cffunction name="compareTo" access="public" output="false" returntype="boolean" hint="Pass in another Wheels model object to see if the two objects are the same."
+<cffunction name="compareTo" access="public" output="false" returntype="boolean" hint="Pass in another CFWheels model object to see if the two objects are the same."
 	examples='
 		<!--- Load a user requested in the URL/form and restrict access if it doesn''t match the user stored in the session --->
 		<cfset user = model("user").findByKey(params.key)>

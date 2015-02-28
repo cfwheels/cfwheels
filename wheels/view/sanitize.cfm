@@ -13,7 +13,7 @@
 	examples=
 	'
 		##stripTags("<strong>Wheels</strong> is a framework for <a href="http://www.adobe.com/products/coldfusion/">ColdFusion</a>.")##
-		-> Wheels is a framework for ColdFusion.
+		-> CFWheels is a framework for ColdFusion.
 	'
 	categories="view-helper,sanitize" functions="stripLinks,h">
 	<cfargument name="html" type="string" required="true" hint="The HTML to remove tag markup from.">

@@ -4,7 +4,7 @@
 		##linkTo(text="Log Out", controller="account", action="logout")##
 		-> <a href="/account/logout">Log Out</a>
 
-		<!--- if you''re already in the `account` controller, Wheels will assume that''s where you want the link to point --->
+		<!--- if you''re already in the `account` controller, CFWheels will assume that''s where you want the link to point --->
 		##linkTo(text="Log Out", action="logout")##
 		-> <a href="/account/logout">Log Out</a>
 
@@ -17,11 +17,11 @@
 		<!--- Given that a `userProfile` route has been configured in `config/routes.cfm` --->
 		##linkTo(text="Joe''s Profile", route="userProfile", userName="joe")##
 		-> <a href="/user/joe">Joe''s Profile</a>
-		
+
 		<!--- Link to an external website --->
 		##linkTo(text="ColdFusion Framework", href="http://cfwheels.org/")##
 		-> <a href="http://cfwheels.org/">ColdFusion Framework</a>
-		
+
 		<!--- Give the link `class` and `id` attributes --->
 		##linkTo(text="Delete Post", action="delete", key=99, class="delete", id="delete-99")##
 		-> <a class="delete" href="/blog/delete/99" id="delete-99">Delete Post</a>
@@ -39,7 +39,7 @@
 	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="href" type="string" required="false" hint="Pass a link to an external site here if you want to bypass the Wheels routing system altogether and link to an external URL.">
+	<cfargument name="href" type="string" required="false" hint="Pass a link to an external site here if you want to bypass the CFWheels routing system altogether and link to an external URL.">
 	<cfscript>
 		var loc = {};
 		$args(name="linkTo", args=arguments);
@@ -165,7 +165,7 @@
 		    </cfoutput>
 		</ul>
 		<cfoutput>##paginationLinks(action="listAuthors")##</cfoutput>
-		
+
 		<!--- Example 2: Using the same model call above, show all authors with a window size of 5 --->
 		<!--- View code --->
 		<cfoutput>##paginationLinks(action="listAuthors", windowSize=5)##</cfoutput>
@@ -301,7 +301,7 @@
 						// allow the class attribute to be applied to the anchor tag if specified
 						loc.linkToArguments.class = arguments.class;
 					}
-					else 
+					else
 					{
 						// clear the class argument if not provided
 						StructDelete(loc.linkToArguments, "class");

@@ -5,35 +5,35 @@
 		<!---
 			Note that there are two ways to do pagination yourself using
 			a custom query.
-			
+
 			1) Do a query that grabs everything that matches and then use
 			the `cfouput` or `cfloop` tag to page through the results.
-				
+
 			2) Use your database to make 2 queries. The first query
 			basically does a count of the total number of records that match
 			the criteria and the second query actually selects the page of
 			records for retrieval.
-			
+
 			In the example below, we will show how to write a custom query
 			using both of these methods. Note that the syntax where your
 			database performs the pagination will differ depending on the
 			database engine you are using. Plese consult your database
 			engine''s documentation for the correct syntax.
-				
+
 			Also note that the view code will differ depending on the method
 			used.
 		--->
-		
-		<!--- 
+
+		<!---
 			First method: Handle the pagination through your CFML engine
 		--->
-		
+
 		<!--- Model code --->
 		<!--- In your model (ie. User.cfc), create a custom method for your custom query --->
 		<cffunction name="myCustomQuery">
 			<cfargument name="page" type="numeric">
 			<cfargument name="perPage" type="numeric" required="false" default="25">
-						
+
 			<cfquery name="local.customQuery" datasource="##get(''dataSourceName'')##">
 				SELECT * FROM users
 			</cfquery>
@@ -41,21 +41,21 @@
 			<cfset setPagination(totalRecords=local.customQuery.RecordCount, currentPage=arguments.page, perPage=arguments.perPage, handle="myCustomQueryHandle")>
 			<cfreturn customQuery>
 		</cffunction>
-				
+
 		<!--- Controller code --->
 		<cffunction name="list">
 			<cfparam name="params.page" default="1">
 			<cfparam name="params.perPage" default="25">
-			
+
 			<cfset allUsers = model("user").myCustomQuery(page=params.page, perPage=params.perPage)>
-			<!--- 
+			<!---
 				Because we''re going to let `cfoutput`/`cfloop` handle the pagination,
 				we''re going to need to get some addition information about the
 				pagination.
 			 --->
 			<cfset paginationData = pagination("myCustomQueryHandle")>
 		</cffunction>
-		
+
 		<!--- View code (using `cfloop`) --->
 		<!--- Use the information from `paginationData` to page through the records --->
 		<cfoutput>
@@ -66,7 +66,7 @@
 		</ul>
 		##paginationLinks(handle="myCustomQueryHandle")##
 		</cfoutput>
-		
+
 		<!--- View code (using `cfoutput`) --->
 		<!--- Use the information from `paginationData` to page through the records --->
 		<ul>
@@ -75,40 +75,40 @@
 		    </cfoutput>
 		</ul>
 		<cfoutput>##paginationLinks(handle="myCustomQueryHandle")##</cfoutput>
-		
-		
-		<!--- 
+
+
+		<!---
 			Second method: Handle the pagination through the database
 		--->
-		
+
 		<!--- Model code --->
 		<!--- In your model (ie. `User.cfc`), create a custom method for your custom query --->
 		<cffunction name="myCustomQuery">
 			<cfargument name="page" type="numeric">
 			<cfargument name="perPage" type="numeric" required="false" default="25">
-			
+
 			<cfquery name="local.customQueryCount" datasource="##get(''dataSouceName'')##">
 				SELECT COUNT(*) AS theCount FROM users
 			</cfquery>
-						
+
 			<cfquery name="local.customQuery" datasource="##get(''dataSourceName'')##">
 				SELECT * FROM users
 				LIMIT ##arguments.page## OFFSET ##arguments.perPage##
 			</cfquery>
-			
+
 			<!--- Notice the we use the value from the first query for `totalRecords`  --->
 			<cfset setPagination(totalRecords=local.customQueryCount.theCount, currentPage=arguments.page, perPage=arguments.perPage, handle="myCustomQueryHandle")>
 			<!--- We return the second query --->
 			<cfreturn customQuery>
 		</cffunction>
-				
+
 		<!--- Controller code --->
 		<cffunction name="list">
 			<cfparam name="params.page" default="1">
 			<cfparam name="params.perPage" default="25">
 			<cfset allUsers = model("user").myCustomQuery(page=params.page, perPage=params.perPage)>
 		</cffunction>
-		
+
 		<!--- View code (using `cfloop`) --->
 		<cfoutput>
 		<ul>
@@ -118,7 +118,7 @@
 		</ul>
 		##paginationLinks(handle="myCustomQueryHandle")##
 		</cfoutput>
-		
+
 		<!--- View code (using `cfoutput`) --->
 		<ul>
 		    <cfoutput query="allUsers">
@@ -218,7 +218,7 @@
 		<!--- Example 1: Adds a route which will invoke the `profile` action on the `user` controller with `params.userName` set when the URL matches the `pattern` argument --->
 		<cfset addRoute(name="userProfile", pattern="user/[username]", controller="user", action="profile")>
 
-		<!--- Example 2: Category/product URLs. Note the order of precedence is such that the more specific route should be defined first so Wheels will fall back to the less-specific version if it''s not found --->
+		<!--- Example 2: Category/product URLs. Note the order of precedence is such that the more specific route should be defined first so CFWheels will fall back to the less-specific version if it''s not found --->
 		<cfset addRoute(name="product", pattern="products/[categorySlug]/[productSlug]", controller="products", action="product")>
 		<cfset addRoute(name="productCategory", pattern="products/[categorySlug]", controller="products", action="category")>
 		<cfset addRoute(name="products", pattern="products", controller="products", action="index")>
@@ -238,11 +238,11 @@
 		// throw errors when controller or action is not passed in as arguments and not included in the pattern
 		if (!Len(arguments.controller) && !FindNoCase("[controller]", arguments.pattern))
 		{
-			$throw(type="Wheels.IncorrectArguments", message="The `controller` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `controller` argument to specifically tell Wheels which controller to call or include it in the pattern to tell CFWheels to determine it dynamically on each request based on the incoming URL.");
+			$throw(type="Wheels.IncorrectArguments", message="The `controller` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `controller` argument to specifically tell CFWheels which controller to call or include it in the pattern to tell CFWheels to determine it dynamically on each request based on the incoming URL.");
 		}
 		if (!Len(arguments.action) && !FindNoCase("[action]", arguments.pattern))
 		{
-			$throw(type="Wheels.IncorrectArguments", message="The `action` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `action` argument to specifically tell Wheels which action to call or include it in the pattern to tell CFWheels to determine it dynamically on each request based on the incoming URL.");
+			$throw(type="Wheels.IncorrectArguments", message="The `action` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `action` argument to specifically tell CFWheels which action to call or include it in the pattern to tell CFWheels to determine it dynamically on each request based on the incoming URL.");
 		}
 
 		loc.thisRoute = Duplicate(arguments);
@@ -266,7 +266,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="addDefaultRoutes" returntype="void" access="public" output="false" hint="Adds the default Wheels routes (for example, `[controller]/[action]/[key]`, etc.) to your application. Only use this method if you have set `loadDefaultRoutes` to `false` and want to control exactly where in the route order you want to place the default routes."
+<cffunction name="addDefaultRoutes" returntype="void" access="public" output="false" hint="Adds the default CFWheels routes (for example, `[controller]/[action]/[key]`, etc.) to your application. Only use this method if you have set `loadDefaultRoutes` to `false` and want to control exactly where in the route order you want to place the default routes."
 	examples=
 	'
 		<!--- Adds the default routes to your application (done in `config/routes.cfm`) --->
@@ -286,7 +286,7 @@
 		<!--- Example 1: Set the `URLRewriting` setting to `Partial` --->
 		<cfset set(URLRewriting="Partial")>
 
-		<!--- Example 2: Set default values for the arguments in the `buttonTo` view helper. This works for the majority of Wheels functions/arguments. --->
+		<!--- Example 2: Set default values for the arguments in the `buttonTo` view helper. This works for the majority of CFWheels functions/arguments. --->
 		<cfset set(functionName="buttonTo", onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable="")>
 
 		<!--- Example 3: Set the default values for a form helper to get the form marked up to your preferences --->
@@ -341,10 +341,10 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="get" returntype="any" access="public" output="false" hint="Returns the current setting for the supplied Wheels setting or the current default for the supplied Wheels function argument."
+<cffunction name="get" returntype="any" access="public" output="false" hint="Returns the current setting for the supplied CFWheels setting or the current default for the supplied CFWheels function argument."
 	examples=
 	'
-		<!--- Get the current value for the `tableNamePrefix` Wheels setting --->
+		<!--- Get the current value for the `tableNamePrefix` CFWheels setting --->
 		<cfset setting = get("tableNamePrefix")>
 
 		<!--- Get the default for the `message` argument of the `validatesConfirmationOf` method  --->
@@ -486,7 +486,7 @@
 	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL.">
 	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL.">
 	<cfargument name="key" type="any" required="false" default="" hint="Key(s) to include in the URL.">
-	<cfargument name="params" type="string" required="false" default="" hint="Any additional parameters to be set in the query string (example: `wheels=cool&x=y`). Please note that Wheels uses the `&` and `=` characters to split the parameters and encode them properly for you (using `URLEncodedFormat()` internally). However, if you need to pass in `&` or `=` as part of the value, then you need to encode them (and only them), example: `a=cats%26dogs%3Dtrouble!&b=1`.">
+	<cfargument name="params" type="string" required="false" default="" hint="Any additional parameters to be set in the query string (example: `wheels=cool&x=y`). Please note that CFWheels uses the `&` and `=` characters to split the parameters and encode them properly for you (using `URLEncodedFormat()` internally). However, if you need to pass in `&` or `=` as part of the value, then you need to encode them (and only them), example: `a=cats%26dogs%3Dtrouble!&b=1`.">
 	<cfargument name="anchor" type="string" required="false" default="" hint="Sets an anchor name to be appended to the path.">
 	<cfargument name="onlyPath" type="boolean" required="false" hint="If `true`, returns only the relative URL (no protocol, host name or port).">
 	<cfargument name="host" type="string" required="false" hint="Set this to override the current host.">
@@ -541,13 +541,13 @@
 				{
 					loc.rv &= hyphenize(loc.route.action);
 				}
-				
+
 				// add it the format if it exists
 				if (StructKeyExists(loc.route, "formatVariable") && StructKeyExists(arguments, loc.route.formatVariable))
 				{
 					loc.rv &= "&#loc.route.formatVariable#=#arguments[loc.route.formatVariable]#";
 				}
-				
+
 				loc.iEnd = ListLen(loc.route.variables);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
@@ -716,10 +716,10 @@
 	<cfargument name="except" type="string" required="false" default="" hint="a list of strings (space separated) to replace within the output.">
 	<cfscript>
 		var loc = {};
-		
+
 		// add a space before every capitalized word
 		loc.rv = REReplace(arguments.text, "([[:upper:]])", " \1", "all");
-		
+
 		// fix abbreviations so they form a word again (example: aURLVariable)
 		loc.rv = REReplace(loc.rv, "([[:upper:]]) ([[:upper:]])(?:\s|\b)", "\1\2", "all");
 
@@ -899,7 +899,7 @@
 				}
 				loc.rv = Replace(loc.rv, Chr(7), "", "all");
 			}
-			
+
 			// this was a camelCased string and we need to prepend the unchanged part to the result
 			if (StructKeyExists(loc, "prepend") && loc.ruleMatched)
 			{

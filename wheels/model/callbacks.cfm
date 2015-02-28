@@ -3,7 +3,7 @@
 <cffunction name="afterNew" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after a new object has been initialized (which is usually done with the @new method)."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset afterNew("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -14,7 +14,7 @@
 <cffunction name="afterFind" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an existing object has been initialized (which is usually done with the @findByKey or @findOne method)."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `setTime` method after getting objects or records with one of the finder methods --->
+		<!--- Instruct CFWheels to call the `setTime` method after getting objects or records with one of the finder methods --->
 		<cffunction name="init">
 			<cfset afterFind("setTime")>
 		</cffunction>
@@ -32,7 +32,7 @@
 <cffunction name="afterInitialization" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an object has been initialized."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset afterInitialization("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -43,7 +43,7 @@
 <cffunction name="beforeValidation" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before an object is validated."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset beforeValidation("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -54,7 +54,7 @@
 <cffunction name="beforeValidationOnCreate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before a new object is validated."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset beforeValidationOnCreate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnUpdate">
@@ -65,7 +65,7 @@
 <cffunction name="beforeValidationOnUpdate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before an existing object is validated."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset beforeValidationOnUpdate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate">
@@ -76,7 +76,7 @@
 <cffunction name="afterValidation" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an object is validated."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset afterValidation("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -87,7 +87,7 @@
 <cffunction name="afterValidationOnCreate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after a new object is validated."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset afterValidationOnCreate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -98,7 +98,7 @@
 <cffunction name="afterValidationOnUpdate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an existing object is validated."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset afterValidationOnUpdate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -109,7 +109,7 @@
 <cffunction name="beforeSave" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before an object is saved."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset beforeSave("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -120,7 +120,7 @@
 <cffunction name="beforeCreate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before a new object is created."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset beforeCreate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -131,7 +131,7 @@
 <cffunction name="beforeUpdate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before an existing object is updated."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset beforeUpdate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -142,7 +142,7 @@
 <cffunction name="afterCreate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after a new object is created."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset afterCreate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -153,7 +153,7 @@
 <cffunction name="afterUpdate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an existing object is updated."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset afterUpdate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -164,7 +164,7 @@
 <cffunction name="afterSave" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an object is saved."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset afterSave("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -175,7 +175,7 @@
 <cffunction name="beforeDelete" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before an object is deleted."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset beforeDelete("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -186,7 +186,7 @@
 <cffunction name="afterDelete" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an object is deleted."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
+		<!--- Instruct CFWheels to call the `fixObj` method --->
 		<cfset afterDelete("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
@@ -201,13 +201,13 @@
 	<cfargument name="methods" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		
+
 		// create this type in the array if it doesn't already exist
 		if (!StructKeyExists(variables.wheels.class.callbacks,arguments.type))
 		{
 			variables.wheels.class.callbacks[arguments.type] = ArrayNew(1);
 		}
-		
+
 		loc.existingCallbacks = ArrayToList(variables.wheels.class.callbacks[arguments.type]);
 		if (StructKeyExists(arguments, "method"))
 		{
@@ -230,13 +230,13 @@
 	<cfscript>
 		var loc = {};
 		arguments.type = $listClean(list="#arguments.type#", returnAs="array");
-		
+
 		// no type(s) was passed in. get all the callback types registered
 		if (ArrayIsEmpty(arguments.type))
 		{
 			arguments.type = ListToArray(StructKeyList(variables.wheels.class.callbacks));
 		}
-		
+
 		// loop through each callback type and clear it
 		loc.iEnd = ArrayLen(arguments.type);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -308,7 +308,7 @@
 					// this is a regular callback so just call the method
 					loc.rv = $invoke(method=loc.method);
 				}
-				
+
 				// break the loop if the callback returned false
 				if (StructKeyExists(loc, "rv") && IsBoolean(loc.rv) && !loc.rv)
 				{

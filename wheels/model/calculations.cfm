@@ -226,7 +226,7 @@
 		}
 		arguments.select &= loc.properties;
 
-		// alias the result with `AS`, this means that Wheels will not try and change the string (which is why we have to add the table name above since it won't be done automatically)
+		// alias the result with `AS`, this means that CFWheels will not try and change the string (which is why we have to add the table name above since it won't be done automatically)
 		arguments.select &= ") AS wheelsqueryresult";
 
 		// call `findAll` with `select`, `where`, `parameterize` and `include` but delete all other arguments

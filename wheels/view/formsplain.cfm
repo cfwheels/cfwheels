@@ -192,13 +192,13 @@
 		<cfoutput>
 		    ##checkBoxTag(name="subscribe", value="true", label="Subscribe to our newsletter", checked=false)##
 		</cfoutput>
-		
+
 		<!--- Example 2: Loop over a query to display choices and whether or not they are checked --->
 		<!--- - Controller code --->
 		<cfset pizza = model("pizza").findByKey(session.pizzaId)>
 		<cfset selectedToppings = pizza.toppings()>
 		<cfset toppings = model("topping").findAll(order="name")>
-		
+
 		<!--- View code --->
 		<fieldset>
 			<legend>Toppings</legend>
@@ -260,8 +260,8 @@
 		<cfoutput>
 		    ##selectTag(name="cityId", options=cities)##
 		</cfoutput>
-		
-		<!--- Do this when Wheels isn''t grabbing the correct values for the `option`s'' values and display texts --->
+
+		<!--- Do this when CFWheels isn''t grabbing the correct values for the `option`s'' values and display texts --->
 		<cfoutput>
 			##selectTag(name="cityId", options=cities, valueField="id", textField="name")##
 		</cfoutput>

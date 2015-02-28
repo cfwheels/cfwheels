@@ -109,23 +109,23 @@
 
 <cffunction name="contentFor" returntype="void" access="public" output="false" hint="Used to store a section's output for rendering within a layout. This content store acts as a stack, so you can store multiple pieces of content for a given section."
 	examples=
-	'	
+	'
 		<!--- In your view --->
 		<cfsavecontent variable="mySidebar">
 		<h1>My Sidebar Text</h1>
 		</cfsavecontent>
 		<cfset contentFor(sidebar=mySidebar)>
-		
+
 		<!--- In your layout --->
 		<html>
 		<head>
 		    <title>My Site</title>
 		</head>
 		<body>
-		
+
 		<cfoutput>
 		##includeContent("sidebar")##
-		
+
 		##includeContent()##
 		</cfoutput>
 
@@ -140,7 +140,7 @@
 
 		// position in the array for the content
 		loc.position = "last";
-		
+
 		//should we overwrite or insert into the array
 		loc.overwrite = "false";
 
@@ -240,7 +240,7 @@
 			</cfoutput>
 		</cfsavecontent>
 		<cfset contentFor(sidebar=categoriesSidebar)>
-		
+
 		<!--- Include parent layout at `views/layout.cfm` --->
 		<cfoutput>
 			##includeLayout("/layout.cfm")##
@@ -256,17 +256,17 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="includePartial" returntype="string" access="public" output="false" hint="Includes the specified partial file in the view. Similar to using `cfinclude` but with the ability to cache the result and use Wheels-specific file look-up. By default, Wheels will look for the file in the current controller's view folder. To include a file relative from the base `views` folder, you can start the path supplied to `name` with a forward slash."
+<cffunction name="includePartial" returntype="string" access="public" output="false" hint="Includes the specified partial file in the view. Similar to using `cfinclude` but with the ability to cache the result and use Wheels-specific file look-up. By default, CFWheels will look for the file in the current controller's view folder. To include a file relative from the base `views` folder, you can start the path supplied to `name` with a forward slash."
 	examples=
 	'
 		<cfoutput>##includePartial("login")##</cfoutput>
-		-> If we''re in the "admin" controller, Wheels will include the file "views/admin/_login.cfm".
+		-> If we''re in the "admin" controller, CFWheels will include the file "views/admin/_login.cfm".
 
 		<cfoutput>##includePartial(partial="misc/doc", cache=30)##</cfoutput>
-		-> If we''re in the "admin" controller, Wheels will include the file "views/admin/misc/_doc.cfm" and cache it for 30 minutes.
+		-> If we''re in the "admin" controller, CFWheels will include the file "views/admin/misc/_doc.cfm" and cache it for 30 minutes.
 
 		<cfoutput>##includePartial(partial="/shared/button")##</cfoutput>
-		-> Wheels will include the file "views/shared/_button.cfm".
+		-> CFWheels will include the file "views/shared/_button.cfm".
 	'
 	categories="view-helper,miscellaneous" chapters="pages,partials" functions="renderPartial">
 	<cfargument name="partial" type="any" required="true" hint="See documentation for @renderPartial.">
@@ -304,7 +304,7 @@
 				</cfoutput>
 			</tbody>
 		</table>
-		
+
 		<!--- Alternating row colors and shrinking emphasis --->
 		<cfoutput query="employees" group="departmentId">
 			<div class="##cycle(values="even,odd", name="row")##">
@@ -340,7 +340,7 @@
 			}
 			request.wheels.cycle[arguments.name] = ListGetAt(arguments.values, loc.foundAt + 1);
 		}
-		loc.rv = request.wheels.cycle[arguments.name]; 
+		loc.rv = request.wheels.cycle[arguments.name];
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
@@ -380,10 +380,10 @@
 	<cfargument name="skipStartingWith" type="string" required="false" default="" hint="If you want to skip attributes that start with a specific string you can specify it here.">
 	<cfscript>
 		var loc = {};
-		
+
 		// start the HTML tag and give it its name
 		loc.rv = "<" & arguments.name;
-		
+
 		// if named arguments are passed in we add these to the attributes argument instead so we can handle them all in the same code below
 		if (StructCount(arguments) > 5)
 		{
@@ -395,7 +395,7 @@
 				}
 			}
 		}
-		
+
 		// add the names of the attributes and their values to the output string with a space in between (class="something" name="somethingelse" etc)
 		// since the order of a struct can differ we sort the attributes in alphabetical order before placing them in the HTML tag (we could just place them in random order in the HTML but that would complicate testing for example)
 		loc.sortedKeys = ListSort(StructKeyList(arguments.attributes), "textnocase");
@@ -418,7 +418,7 @@
 		else
 		{
 			loc.rv &= ">";
-		}		
+		}
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
@@ -488,11 +488,11 @@
 		var loc = {};
 		loc.currentModelObject = false;
 		loc.hasManyAssociationCount = 0;
-		
+
 		// combine our arguments
 		$combineArguments(args=arguments, combine="positions,position");
 		$combineArguments(args=arguments, combine="associations,association");
-		
+
 		// only try to create the object name if we have a simple value
 		if (IsSimpleValue(arguments.objectName) && ListLen(arguments.associations))
 		{
@@ -592,7 +592,7 @@
 	<cfscript>
 		var loc = {};
 		loc.rv = arguments.objectName;
-		
+
 		// we could have multiple nested arrays so we need to traverse the objectName to find where we have array positions and
 		// swap all of the out for object ids
 		loc.array = ListToArray(ReplaceList(loc.rv, "],'", ""), "[", true);
