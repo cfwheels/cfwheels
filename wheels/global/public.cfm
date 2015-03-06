@@ -515,7 +515,7 @@
 			arguments.key = arguments.key.key();
 		}
 
-		// build the link
+		// build the link (could use some refactoring, lots of duplication related to obfuscating for example)
 		loc.rv = application.wheels.webPath & ListLast(request.cgi.script_name, "/");
 		if (Len(arguments.route))
 		{
@@ -554,7 +554,12 @@
 					loc.property = ListGetAt(loc.route.variables, loc.i);
 					if (loc.property != "controller" && loc.property != "action")
 					{
-						loc.rv &= "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
+						loc.param = $URLEncode(arguments[loc.property]);
+						if (application.wheels.obfuscateUrls)
+						{
+							loc.param = obfuscateParam("#loc.param#");
+						}
+						loc.rv &= "&" & loc.property & "=" & loc.param;
 					}
 				}
 			}

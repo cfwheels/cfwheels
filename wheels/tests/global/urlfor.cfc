@@ -1,12 +1,21 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
-		<cfset loc.orgEnv = duplicate(application)>
+		<cfset loc.orgEnv = duplicate(application.wheels)>
 		<cfset application.wheels.URLRewriting = "On">
 	</cffunction>
 
 	<cffunction name="teardown">
-		<cfset application = loc.orgEnv>
+		<cfset application.wheels = loc.orgEnv>
+	</cffunction>
+
+	<cffunction name="test_issue_455">
+		<cfset addRoute(name="user_2", pattern="user/[user_id]/[controller]/[action]")>
+		<cfset $setNamedRoutePositions()>
+		<cfset application.wheels.URLRewriting = "Off">
+		<cfset application.wheels.obfuscateUrls = true>
+		<cfset loc.r = urlFor(route="user_2", user_id="5559", controller="SurveyTemplates", action="index")>
+		<cfset assert('loc.r contains "b24dae"')>
 	</cffunction>
 
 	<cffunction name="test_links_are_properly_hyphenated">
