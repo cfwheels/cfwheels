@@ -1,15 +1,6 @@
 <!--- PUBLIC MODEL INITIALIZATION METHODS --->
 
-<cffunction name="belongsTo" returntype="void" access="public" output="false" hint="Sets up a `belongsTo` association between this model and the specified one. Use this association when this model contains a foreign key referencing another model."
-	examples=
-	'
-		// Specify that instances of this model belong to an author. (The table for this model should have a foreign key set on it, typically named `authorid`.)
-		belongsTo("author");
-
-		// Same as above, but because we have broken away from the foreign key naming convention, we need to set `modelName` and `foreignKey`
-		belongsTo(name="bookWriter", modelName="author", foreignKey="authorId");
-	'
-	categories="model-initialization,associations" chapters="associations" functions="hasOne,hasMany">
+<cffunction name="belongsTo" returntype="void" access="public" output="false" hint="Sets up a `belongsTo` association between this model and the specified one. Use this association when this model contains a foreign key referencing another model.">
 	<cfargument name="name" type="string" required="true" hint="Gives the association a name that you refer to when working with the association (in the `include` argument to @findAll, to name one example).">
 	<cfargument name="modelName" type="string" required="false" default="" hint="Name of associated model (usually not needed if you follow CFWheels conventions because the model name will be deduced from the `name` argument).">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name (usually not needed if you follow CFWheels conventions since the foreign key name will be deduced from the `name` argument).">
@@ -97,7 +88,7 @@
 	</cfscript>
 </cffunction>
 
-<!--- PRIVATE MODEL INITIALIZATION METHODS --->
+<!--- PRIVATE METHODS --->
 
 <cffunction name="$registerAssociation" returntype="void" access="public" output="false" hint="Called from the association methods above to save the data to the class struct of the model.">
 	<cfscript>

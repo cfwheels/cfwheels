@@ -1,13 +1,6 @@
-<!--- class methods --->
-<cffunction name="nestedProperties" output="false" access="public" returntype="void" hint="Allows for nested objects, structs, and arrays to be set from params and other generated data."
-	examples='
-		<!--- In `models/User.cfc`, allow for `groupEntitlements` to be saved and deleted through the `user` object --->
-		<cffunction name="init">
-			<cfset hasMany("groupEntitlements")>
-			<cfset nestedProperties(association="groupEntitlements", allowDelete=true)>
-		</cffunction>
-	'
-	categories="model-initialization,nested-properties" chapters="nested-properties" functions="belongsTo,hasOne,hasMany,hasManyCheckBox,hasManyRadioButton,includedInObject">
+<!--- PUBLIC MODEL INITIALIZATION METHODS --->
+
+<cffunction name="nestedProperties" output="false" access="public" returntype="void" hint="Allows for nested objects, structs, and arrays to be set from params and other generated data.">
 	<cfargument name="association" type="string" required="false" default="" hint="The association (or list of associations) you want to allow to be set through the params. This argument is also aliased as `associations`.">
 	<cfargument name="autoSave" type="boolean" required="false" hint="Whether to save the association(s) when the parent object is saved.">
 	<cfargument name="allowDelete" type="boolean" required="false" hint="Set `allowDelete` to `true` to tell CFWheels to look for the property `_delete` in your model. If present and set to a value that evaluates to `true`, the model will be deleted when saving the parent.">
@@ -42,6 +35,8 @@
 		}
 	</cfscript>
 </cffunction>
+
+<!--- PRIVATE METHODS --->
 
 <cffunction name="$validateAssociations" returntype="boolean" access="public" output="false">
 	<cfscript>
