@@ -14,32 +14,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="hasMany" returntype="void" access="public" output="false" hint="Sets up a `hasMany` association between this model and the specified one."
-	examples=
-	'
-		// Specify that instances of this model has many comments (the table for the associated model, not the current, should have the foreign key set on it).
-		hasMany("comments");
-
-		// Specify that this model (let''s call it `reader` in this case) has many subscriptions and setup a shortcut to the `publication` model (useful when dealing with many-to-many relationships).
-		hasMany(name="subscriptions", shortcut="publications");
-
-		// Automatically delete all associated `comments` whenever this object is deleted
-		hasMany(name="comments", dependent="deleteAll");
-
-		// When not following CFWheels naming conventions for associations, it can get complex to define how a `shortcut` works.
-		// In this example, we are naming our `shortcut` differently than the actual model''s name.
-
-		// In the models/Customer.cfc `init()` method
-		hasMany(name="subscriptions", shortcut="magazines", through="publication,subscriptions");
-
-		// In the models/Subscription.cfc `init()` method
-		belongsTo("customer");
-		belongsTo("publication");
-
-		// In the models/Publication `init()` method
-		hasMany("subscriptions");
-	'
-	categories="model-initialization,associations" chapters="associations" functions="belongsTo,hasOne">
+<cffunction name="hasMany" returntype="void" access="public" output="false" hint="Sets up a `hasMany` association between this model and the specified one.">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
 	<cfargument name="modelName" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
@@ -59,19 +34,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="hasOne" returntype="void" access="public" output="false" hint="Sets up a `hasOne` association between this model and the specified one."
-	examples=
-	'
-		// Specify that instances of this model has one profile. (The table for the associated model, not the current, should have the foreign key set on it.)
-		hasOne("profile");
-
-		// Same as above but setting the `joinType` to `inner`, which basically means this model should always have a record in the `profiles` table
-		hasOne(name="profile", joinType="inner");
-
-		// Automatically delete the associated `profile` whenever this object is deleted
-		hasMany(name="comments", dependent="delete");
-	'
-	categories="model-initialization,associations" chapters="associations" functions="belongsTo,hasMany">
+<cffunction name="hasOne" returntype="void" access="public" output="false" hint="Sets up a `hasOne` association between this model and the specified one.">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
 	<cfargument name="modelName" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
