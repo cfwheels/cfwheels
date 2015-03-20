@@ -1,18 +1,6 @@
 <!--- PUBLIC MODEL CLASS METHODS --->
 
-<cffunction name="average" returntype="any" access="public" output="false" hint="Calculates the average value for a given property. Uses the SQL function `AVG`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
-	examples=
-	'
-		// Get the average salary for all employees
-		avgSalary = model("employee").average("salary");
-
-		// Get the average salary for employees in a given department
-		avgSalary = model("employee").average(property="salary", where="departmentId=##params.key##");
-
-		// Make sure a numeric value is always returned if no records are calculated
-		avgSalary = model("employee").average(property="salary", where="salary BETWEEN ##params.min## AND ##params.max##", ifNull=0);
-	'
-	categories="model-class,statistics" chapters="column-statistics" functions="count,maximum,minimum,sum">
+<cffunction name="average" returntype="any" access="public" output="false" hint="Calculates the average value for a given property. Uses the SQL function `AVG`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to calculate the average for.">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
@@ -57,24 +45,7 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="count" returntype="numeric" access="public" output="false" hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function `COUNT`. If no records can be found to perform the calculation on, `0` is returned."
-	examples=
-	'
-		// Count how many authors there are in the table
-		authorCount = model("author").count();
-
-		// Count how many authors that have a last name starting with an "A"
-		authorOnACount = model("author").count(where="lastName LIKE ''A%''");
-
-		// Count how many authors that have written books starting with an "A"
-		authorWithBooksOnACount = model("author").count(include="books", where="booktitle LIKE ''A%''");
-
-		// Count the number of comments on a specific post (a `hasMany` association from `post` to `comment` is required)
-		// The `commentCount` method will call `model("comment").count(where="postId=##post.id##")` internally
-		aPost = model("post").findByKey(params.postId);
-		amount = aPost.commentCount();
-	'
-	categories="model-class,statistics" chapters="column-statistics,associations" functions="average,hasMany,maximum,minimum,sum">
+<cffunction name="count" returntype="numeric" access="public" output="false" hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function `COUNT`. If no records can be found to perform the calculation on, `0` is returned.">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
@@ -101,19 +72,7 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="maximum" returntype="any" access="public" output="false" hint="Calculates the maximum value for a given property. Uses the SQL function `MAX`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
-	examples=
-	'
-		// Get the amount of the highest salary for all employees
-		highestSalary = model("employee").maximum("salary");
-
-		// Get the amount of the highest salary for employees in a given department
-		highestSalary = model("employee").maximum(property="salary", where="departmentId=##params.key##");
-
-		// Make sure a numeric value is always returned, even if no records are found to calculate the maximum for
-		highestSalary = model("employee").maximum(property="salary", where="salary > ##params.minSalary##", ifNull=0);
-	'
-	categories="model-class,statistics" chapters="column-statistics" functions="average,count,minimum,sum">
+<cffunction name="maximum" returntype="any" access="public" output="false" hint="Calculates the maximum value for a given property. Uses the SQL function `MAX`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the highest value for (must be a property of a numeric data type).">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
@@ -129,19 +88,7 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="minimum" returntype="any" access="public" output="false" hint="Calculates the minimum value for a given property. Uses the SQL function `MIN`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
-	examples=
-	'
-		// Get the amount of the lowest salary for all employees
-		lowestSalary = model("employee").minimum("salary");
-
-		// Get the amount of the lowest salary for employees in a given department
-		lowestSalary = model("employee").minimum(property="salary", where="departmentId=##params.key##");
-
-		// Make sure a numeric amount is always returned, even when there were no records analyzed by the query
-		lowestSalary = model("employee").minimum(property="salary", where="salary BETWEEN ##params.min## AND ##params.max##", ifNull=0);
-	'
-	categories="model-class,statistics" chapters="column-statistics" functions="average,count,maximum,sum">
+<cffunction name="minimum" returntype="any" access="public" output="false" hint="Calculates the minimum value for a given property. Uses the SQL function `MIN`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the lowest value for (must be a property of a numeric data type).">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
@@ -157,19 +104,7 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="sum" returntype="any" access="public" output="false" hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
-	examples=
-	'
-		// Get the sum of all salaries
-		allSalaries = model("employee").sum("salary");
-
-		// Get the sum of all salaries for employees in a given country
-		allAustralianSalaries = model("employee").sum(property="salary", include="country", where="countryname=''Australia''");
-
-		// Make sure a numeric value is always returned, even if there are no records analyzed by the query
-		salarySum = model("employee").sum(property="salary", where="salary BETWEEN ##params.min## AND ##params.max##", ifNull=0);
-	'
-	categories="model-class,statistics" chapters="column-statistics" functions="average,count,maximum,minimum">
+<cffunction name="sum" returntype="any" access="public" output="false" hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the sum for (must be a property of a numeric data type).">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
@@ -186,7 +121,7 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<!--- PRIVATE MODEL CLASS METHODS --->
+<!--- PRIVATE METHODS --->
 
 <cffunction name="$calculate" returntype="any" access="public" output="false" hint="Creates the query that needs to be run for all of the above methods.">
 	<cfargument name="type" type="string" required="true">
