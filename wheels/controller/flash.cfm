@@ -1,15 +1,6 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="flash" returntype="any" access="public" output="false" hint="Returns the value of a specific key in the Flash (or the entire Flash as a struct if no key is passed in)."
-	examples=
-	'
-		// Get the current value of notice in the Flash
-		notice = flash("notice");
-
-		// Get the entire Flash as a struct
-		flashContents = flash();
-	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
+<cffunction name="flash" returntype="any" access="public" output="false" hint="Returns the value of a specific key in the Flash (or the entire Flash as a struct if no key is passed in).">
 	<cfargument name="key" type="string" required="false" hint="The key to get the value for.">
 	<cfscript>
 		var loc = {};
@@ -33,23 +24,13 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="flashClear" returntype="void" access="public" output="false" hint="Deletes everything from the Flash."
-	examples=
-	'
-		flashClear();
-	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
+<cffunction name="flashClear" returntype="void" access="public" output="false" hint="Deletes everything from the Flash.">
 	<cfscript>
 		$writeFlash();
 	</cfscript>
 </cffunction>
 
-<cffunction name="flashCount" returntype="numeric" access="public" output="false" hint="Returns how many keys exist in the Flash."
-	examples=
-	'
-		count = flashCount();
-	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
+<cffunction name="flashCount" returntype="numeric" access="public" output="false" hint="Returns how many keys exist in the Flash.">
 	<cfscript>
 		var loc = {};
 		loc.flash = $readFlash();
@@ -58,12 +39,7 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="flashDelete" returntype="boolean" access="public" output="false" hint="Deletes a specific key from the Flash. Returns `true` if the key exists."
-	examples=
-	'
-		flashDelete(key="errorMessage");
-	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
+<cffunction name="flashDelete" returntype="boolean" access="public" output="false" hint="Deletes a specific key from the Flash. Returns `true` if the key exists.">
 	<cfargument name="key" type="string" required="true" hint="The key to delete.">
 	<cfscript>
 		var loc = {};
@@ -74,12 +50,7 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="flashInsert" returntype="void" access="public" output="false" hint="Inserts a new key / value into the Flash."
-	examples=
-	'
-		flashInsert(msg="It Worked!");
-	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
+<cffunction name="flashInsert" returntype="void" access="public" output="false" hint="Inserts a new key / value into the Flash.">
 	<cfscript>
 		var loc = {};
 		loc.flash = $readFlash();
@@ -91,12 +62,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="flashIsEmpty" returntype="boolean" access="public" output="false" hint="Returns whether or not the Flash is empty."
-	examples=
-	'
-		empty = flashIsEmpty();
-	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashKeep,flashKeyExists,flashMessages">
+<cffunction name="flashIsEmpty" returntype="boolean" access="public" output="false" hint="Returns whether or not the Flash is empty.">
 	<cfscript>
 		var loc = {};
 		if (flashCount())
@@ -111,19 +77,7 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="flashKeep" returntype="void" access="public" output="false" hint="Make the entire Flash or specific key in it stick around for one more request."
-	examples=
-	'
-		// Keep the entire Flash for the next request
-		flashKeep();
-
-		// Keep the "error" key in the Flash for the next request
-		flashKeep("error");
-
-		// Keep both the "error" and "success" keys in the Flash for the next request
-		flashKeep("error,success");
-	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeyExists,flashMessages">
+<cffunction name="flashKeep" returntype="void" access="public" output="false" hint="Make the entire Flash or specific key in it stick around for one more request.">
 	<cfargument name="key" type="string" required="false" default="" hint="A key or list of keys to flag for keeping. This argument is also aliased as `keys`.">
 	<cfscript>
 		$args(args=arguments, name="flashKeep", combine="key/keys");
@@ -131,12 +85,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="flashKeyExists" returntype="boolean" access="public" output="false" hint="Checks if a specific key exists in the Flash."
-	examples=
-	'
-		errorExists = flashKeyExists("error");
-	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashMessages">
+<cffunction name="flashKeyExists" returntype="boolean" access="public" output="false" hint="Checks if a specific key exists in the Flash.">
 	<cfargument name="key" type="string" required="true" hint="The key to check if it exists.">
 	<cfscript>
 		var loc = {};

@@ -1,19 +1,6 @@
 <!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
 
-<cffunction name="usesLayout" access="public" returntype="void" output="false" hint="Used within a controller's `init()` function to specify controller- or action-specific layouts."
-	examples=
-	'
-		// We want this layout to be used as the default throughout the entire controller, except for the `myAjax` action
-		usesLayout(template="myLayout", except="myAjax");
-
-		// Use a custom layout for these actions but use the default `layout.cfm` for the rest
-		usesLayout(template="myLayout", only="termsOfService,shippingPolicy");
-
-		// Define a custom function to decide which layout to display
-		// The `setLayout` function should return the name of the layout to use or `true` to use the default one
-		usesLayout("setLayout");
-	'
-	categories="controller-initialization,rendering" chapters="rendering-layout" functions="renderPage">
+<cffunction name="usesLayout" access="public" returntype="void" output="false" hint="Used within a controller's `init()` function to specify controller- or action-specific layouts.">
 	<cfargument name="template" required="true" type="string" hint="Name of the layout template or function name you want to use.">
 	<cfargument name="ajax" required="false" type="string" default="" hint="Name of the layout template you want to use for AJAX requests.">
 	<cfargument name="except" type="string" required="false" hint="List of actions that should not get the layout.">

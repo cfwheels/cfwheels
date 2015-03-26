@@ -1,19 +1,6 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="sendEmail" returntype="any" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in. Besides the CFWheels-specific arguments documented here, you can also pass in any argument that is accepted by the `cfmail` tag as well as your own arguments to be used by the view."
-	examples=
-	'
-		// Get a member and send a welcome email, passing in a few custom variables to the template
-		newMember = model("member").findByKey(params.member.id);
-		sendEmail(
-			to=newMember.email,
-			template="myemailtemplate",
-			subject="Thank You for Becoming a Member",
-			recipientName=newMember.name,
-			startDate=newMember.startDate
-		);
-	'
-	categories="controller-request,miscellaneous" chapters="sending-email" functions="">
+<cffunction name="sendEmail" returntype="any" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in. Besides the CFWheels-specific arguments documented here, you can also pass in any argument that is accepted by the `cfmail` tag as well as your own arguments to be used by the view.">
 	<cfargument name="template" type="string" required="false" default="" hint="The path to the email template or two paths if you want to send a multipart email. if the `detectMultipart` argument is `false`, the template for the text version should be the first one in the list. This argument is also aliased as `templates`.">
 	<cfargument name="from" type="string" required="false" default="" hint="Email address to send from.">
 	<cfargument name="to" type="string" required="false" default="" hint="List of email addresses to send the email to.">
@@ -137,19 +124,7 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="sendFile" returntype="any" access="public" output="false" hint="Sends a file to the user (from the `files` folder or a path relative to it by default)."
-	examples=
-	'
-		// Send a PDF file to the user
-		sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf");
-
-		// Send the same file but give the user a different name in the browser dialog window
-		sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", name="Tutorial.pdf");
-
-		// Send a file that is located outside of the web root
-		sendFile(file="../../tutorials/wheels_tutorial_20081028_J657D6HX.pdf");
-	'
-	categories="controller-request,miscellaneous" chapters="sending-files" functions="">
+<cffunction name="sendFile" returntype="any" access="public" output="false" hint="Sends a file to the user (from the `files` folder or a path relative to it by default).">
 	<cfargument name="file" type="string" required="true" hint="The file to send to the user.">
 	<cfargument name="name" type="string" required="false" default="" hint="The file name to show in the browser download dialog box.">
 	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as.">

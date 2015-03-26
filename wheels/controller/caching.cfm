@@ -1,21 +1,6 @@
 <!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
 
-<cffunction name="caches" returntype="void" access="public" output="false" hint="Tells CFWheels to cache one or more actions."
-	examples=
-	'
-		// Cache the `termsOfUse` action
-		caches("termsOfUse");
-
-		// Cache the `termsOfUse` action for 30 minutes
-		caches(actions="browseByUser,browseByTitle", time=30);
-
-		// Cache the `termsOfUse` and `codeOfConduct` actions, including their filters
-		caches(actions="termsOfUse,codeOfConduct", static=true);
-
-		// Cache content separately based on region
-		caches(action="home", key="request.region");
-	'
-	categories="controller-initialization,caching" chapters="caching" functions="">
+<cffunction name="caches" returntype="void" access="public" output="false" hint="Tells CFWheels to cache one or more actions.">
 	<cfargument name="action" type="string" required="false" default="" hint="Action(s) to cache. This argument is also aliased as `actions`.">
 	<cfargument name="time" type="numeric" required="false" hint="Minutes to cache the action(s) for.">
 	<cfargument name="static" type="boolean" required="false" hint="Set to `true` to tell CFWheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions). Please note that the `onSessionStart` and `onRequestStart` events still execute though.">

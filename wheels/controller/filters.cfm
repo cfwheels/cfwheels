@@ -1,15 +1,6 @@
 <!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
 
-<cffunction name="filters" returntype="void" access="public" output="false" hint="Tells CFWheels to run a function before an action is run or after an action has been run. You can also specify multiple functions and actions."
-	examples=
-	'
-		// Always execute `restrictAccess` before all actions in this controller
-		filters("restrictAccess");
-
-		// Always execute `isLoggedIn` and `checkIPAddress` (in that order) before all actions in this controller, except the `home` and `login` actions
-		filters(through="isLoggedIn,checkIPAddress", except="home,login");
-	'
-	categories="controller-initialization,filtering" chapters="filters-and-verification" functions="setFilterChain,filterChain">
+<cffunction name="filters" returntype="void" access="public" output="false" hint="Tells CFWheels to run a function before an action is run or after an action has been run. You can also specify multiple functions and actions.">
 	<cfargument name="through" type="string" required="true" hint="Function(s) to execute before or after the action(s).">
 	<cfargument name="type" type="string" required="false" default="before" hint="Whether to run the function(s) before or after the action(s).">
 	<cfargument name="only" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell CFWheels that the filter function(s) should only be run on these actions.">
@@ -57,17 +48,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="setFilterChain" returntype="void" access="public" output="false" hint="Use this function if you need a more low level way of setting the entire filter chain for a controller."
-	examples=
-	'
-		// Set filter chain directly in an array
-		setFilterChain([
-			{through="restrictAccess"},
-			{through="isLoggedIn,checkIPAddress", except="home,login"},
-			{type="after", through="logConversion", only="thankYou"}
-		]);
-	'
-	categories="controller-initialization,filtering" chapters="filters-and-verification" functions="filters,filterChain">
+<cffunction name="setFilterChain" returntype="void" access="public" output="false" hint="Use this function if you need a more low level way of setting the entire filter chain for a controller.">
 	<cfargument name="chain" type="array" required="true" hint="An array of structs, each of which represent an `argumentCollection` that get passed to the `filters` function. This should represent the entire filter chain that you want to use for this controller.">
 	<cfscript>
 		var loc = {};
@@ -82,18 +63,7 @@
 	</cfscript>
 </cffunction>
 
-<!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
-
-<cffunction name="filterChain" returntype="array" access="public" output="false" hint="Returns an array of all the filters set on this controller in the order in which they will be executed."
-	examples=
-	'
-		// Get filter chain
-		myFilterChain = filterChain();
-
-		// Get filter chain for after filters only
-		myFilterChain = filterChain(type="after");
-	'
-	categories="controller-initialization,filtering" chapters="filters-and-verification" functions="filters,setFilterChain">
+<cffunction name="filterChain" returntype="array" access="public" output="false" hint="Returns an array of all the filters set on this controller in the order in which they will be executed.">
 	<cfargument name="type" type="string" required="false" default="all" hint="Use this argument to return only `before` or `after` filters.">
 	<cfscript>
 		var loc = {};
