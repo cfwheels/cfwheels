@@ -1,24 +1,6 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="redirectTo" returntype="void" access="public" output="false" hint="Redirects the browser to the supplied `controller`/`action`/`key`, `route` or back to the referring page. Internally, this function uses the @URLFor function to build the link and the `cflocation` tag to perform the redirect."
-	examples=
-	'
-		// Redirect to an action after successfully saving a user
-		if (user.save())
-		{
-			redirectTo(action="saveSuccessful");
-		}
-
-		// Redirect to a specific page on a secure server
-		redirectTo(controller="checkout", action="start", params="type=express", protocol="https");
-
-		// Redirect to a route specified in `config/routes.cfm` and pass in the screen name that the route takes
-		redirectTo(route="profile", screenName="Joe");
-
-		// Redirect back to the page the user came from
-		redirectTo(back=true);
-	'
-	categories="controller-request,miscellaneous" chapters="redirecting-users,using-routes" functions="">
+<cffunction name="redirectTo" returntype="void" access="public" output="false" hint="Redirects the browser to the supplied `controller`/`action`/`key`, `route` or back to the referring page. Internally, this function uses the @URLFor function to build the link and the `cflocation` tag to perform the redirect.">
 	<cfargument name="back" type="boolean" required="false" default="false" hint="Set to `true` to redirect back to the referring page.">
 	<cfargument name="addToken" type="boolean" required="false" hint="See documentation for your CFML engine's implementation of `cflocation`.">
 	<cfargument name="statusCode" type="numeric" required="false" hint="See documentation for your CFML engine's implementation of `cflocation`.">
