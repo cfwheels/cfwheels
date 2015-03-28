@@ -19,7 +19,7 @@
 		</body>
 	'
 	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,imageTag">
-	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many CSS files in the `stylesheets` folder, minus the `.css` extension. (Can also be called with the `source` argument.) Pass a full URL to generate a tag for an external style sheet.">
+	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many CSS files in the `stylesheets` folder, minus the `.css` extension. (Can also be called with the `source` argument.) Pass a full URL to generate a tag for an external style sheet. Start with `/` to reference files in folders off the web root.">
 	<cfargument name="type" type="string" required="false" hint="The `type` attribute for the `link` tag.">
 	<cfargument name="media" type="string" required="false" hint="The `media` attribute for the `link` tag.">
 	<cfargument name="head" type="string" required="false" hint="Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior, which is to place the output where the function is called from.">
@@ -48,7 +48,14 @@
 			}
 			else
 			{
-				arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & loc.item;
+				if (Left(loc.item, 1) == "/")
+				{
+					arguments.href = application.wheels.webPath & Right(loc.item, Len(loc.item)-1);
+				}
+				else
+				{
+					arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & loc.item;
+				}
 				if (!ListFindNoCase("css,cfm", ListLast(loc.item, ".")))
 				{
 					arguments.href &= ".css";
@@ -85,7 +92,7 @@
 		</body>
 	'
 	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="styleSheetLinkTag,imageTag">
-	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. (Can also be called with the `source` argument.) Pass a full URL to access an external JavaScript file.">
+	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. (Can also be called with the `source` argument.) Pass a full URL to access an external JavaScript file. Start with `/` to reference files in folders off the web root.">
 	<cfargument name="type" type="string" required="false" hint="The `type` attribute for the `script` tag.">
 	<cfargument name="head" type="string" required="false" hint="See documentation for @styleSheetLinkTag.">
 	<cfargument name="delim" type="string" required="false" default="," hint="the delimiter to use for the list of stylesheets">
@@ -108,7 +115,14 @@
 			}
 			else
 			{
-				arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & loc.item;
+				if (Left(loc.item, 1) == "/")
+				{
+					arguments.src = application.wheels.webPath & Right(loc.item, Len(loc.item)-1);
+				}
+				else
+				{
+					arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & loc.item;
+				}
 				if (!ListFindNoCase("js,cfm", ListLast(loc.item, ".")))
 				{
 					arguments.src &= ".js";
@@ -131,10 +145,10 @@
 	'
 		<!--- Outputs an `img` tag for `images/logo.png` --->
 		##imageTag("logo.png")##
-		
+
 		<!--- Outputs an `img` tag for `http://cfwheels.org/images/logo.png` --->
 		##imageTag("http://cfwheels.org/images/logo.png", alt="ColdFusion on Wheels")##
-		
+
 		<!--- Outputs an `img` tag with the `class` attribute set --->
 		##imageTag(source="logo.png", class="logo")##
 	'
@@ -212,7 +226,7 @@
 				{
 					$throw(type="Wheels.ImageFormatNotSupported", message="CFWheels can't read image files with that format.", extendedInfo="Use one of these image types instead: #GetReadableImageFormats()#.");
 				}
-			}		
+			}
 			if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height"))
 			{
 				// height and / or width arguments are missing so use cfimage to get them
