@@ -1,10 +1,10 @@
 <!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
 
-<cffunction name="caches" returntype="void" access="public" output="false" hint="Tells CFWheels to cache one or more actions.">
-	<cfargument name="action" type="string" required="false" default="" hint="Action(s) to cache. This argument is also aliased as `actions`.">
-	<cfargument name="time" type="numeric" required="false" hint="Minutes to cache the action(s) for.">
-	<cfargument name="static" type="boolean" required="false" hint="Set to `true` to tell CFWheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions). Please note that the `onSessionStart` and `onRequestStart` events still execute though.">
-	<cfargument name="appendToKey" type="string" required="false" default="" hint="List of variables to be evaluated at runtime and included in the cache key so that content can be cached separately.">
+<cffunction name="caches" returntype="void" access="public" output="false">
+	<cfargument name="action" type="string" required="false" default="">
+	<cfargument name="time" type="numeric" required="false">
+	<cfargument name="static" type="boolean" required="false">
+	<cfargument name="appendToKey" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		$args(args=arguments, name="caches", combine="action/actions");

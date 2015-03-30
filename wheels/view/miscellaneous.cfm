@@ -284,6 +284,36 @@
 	<cfreturn loc.rv>
 </cffunction>
 
+<cffunction name="contentForLayout" returntype="string" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.rv = includeContent("body");
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
+<cffunction name="includeContent" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="false" default="body">
+	<cfargument name="defaultValue" type="string" required="false" default="">
+	<cfscript>
+		var loc = {};
+		if (StructKeyExists(arguments, "default"))
+		{
+			arguments.defaultValue = arguments.default;
+			StructDelete(arguments, "default");
+		}
+		if (StructKeyExists(variables.$instance.contentFor, arguments.name))
+		{
+			loc.rv = ArrayToList(variables.$instance.contentFor[arguments.name], Chr(10));
+		}
+		else
+		{
+			loc.rv = arguments.defaultValue;
+		}
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
 <cffunction name="cycle" returntype="string" access="public" output="false" hint="Cycles through list values every time it is called."
 	examples=
 	'

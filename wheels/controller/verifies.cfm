@@ -1,50 +1,25 @@
 <!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
 
-<cffunction name="verifies" returntype="void" access="public" output="false" hint="Instructs CFWheels to verify that some specific criterias are met before running an action. Note that all undeclared arguments will be passed to `redirectTo()` call if a handler is not specified."
-	examples=
-	'
-		// Tell CFWheels to verify that the `handleForm` action is always a `POST` request when executed
-		verifies(only="handleForm", post=true);
-
-		// Make sure that the edit action is a `GET` request, that `userId` exists in the `params` struct, and that it''s an integer
-		verifies(only="edit", get=true, params="userId", paramsTypes="integer");
-
-		// Just like above, only this time we want to invoke a custom function in our controller to handle the request when it is invalid
-		verifies(only="edit", get=true, params="userId", paramsTypes="integer", handler="myCustomFunction");
-
-		// Just like above, only this time instead of specifying a handler, we want to `redirect` the visitor to the index action of the controller and show an error in The Flash when the request is invalid
-		verifies(only="edit", get=true, params="userId", paramsTypes="integer", action="index", error="Invalid userId");
-	'
-	categories="controller-initialization,verification" chapters="filters-and-verification" functions="verificationChain,setVerificationChain">
-	<cfargument name="only" type="string" required="false" default="" hint="List of action names to limit this verification to.">
-	<cfargument name="except" type="string" required="false" default="" hint="List of action names to exclude this verification from.">
-	<cfargument name="post" type="any" required="false" default="" hint="Set to `true` to verify that this is a `POST` request.">
-	<cfargument name="get" type="any" required="false" default="" hint="Set to `true` to verify that this is a `GET` request.">
-	<cfargument name="ajax" type="any" required="false" default="" hint="Set to `true` to verify that this is an AJAX request.">
-	<cfargument name="cookie" type="string" required="false" default="" hint="Verify that the passed in variable name exists in the `cookie` scope.">
-	<cfargument name="session" type="string" required="false" default="" hint="Verify that the passed in variable name exists in the `session` scope.">
-	<cfargument name="params" type="string" required="false" default="" hint="Verify that the passed in variable name exists in the `params` struct.">
-	<cfargument name="handler" type="string" required="false" hint="Pass in the name of a function that should handle failed verifications. The default is to just abort the request when a verification fails.">
-	<cfargument name="cookieTypes" type="string" required="false" default="" hint="List of types to check each listed `cookie` value against (will be passed through to your CFML engine's `IsValid` function).">
-	<cfargument name="sessionTypes" type="string" required="false" default="" hint="List of types to check each list `session` value against (will be passed through to your CFML engine's `IsValid` function).">
-	<cfargument name="paramsTypes" type="string" required="false" default="" hint="List of types to check each `params` value against (will be passed through to your CFML engine's `IsValid` function).">
+<cffunction name="verifies" returntype="void" access="public" output="false">
+	<cfargument name="only" type="string" required="false" default="">
+	<cfargument name="except" type="string" required="false" default="">
+	<cfargument name="post" type="any" required="false" default="">
+	<cfargument name="get" type="any" required="false" default="">
+	<cfargument name="ajax" type="any" required="false" default="">
+	<cfargument name="cookie" type="string" required="false" default="">
+	<cfargument name="session" type="string" required="false" default="">
+	<cfargument name="params" type="string" required="false" default="">
+	<cfargument name="handler" type="string" required="false">
+	<cfargument name="cookieTypes" type="string" required="false" default="">
+	<cfargument name="sessionTypes" type="string" required="false" default="">
+	<cfargument name="paramsTypes" type="string" required="false" default="">
 	<cfscript>
 		$args(name="verifies", args=arguments);
 		ArrayAppend(variables.$class.verifications, Duplicate(arguments));
 	</cfscript>
 </cffunction>
 
-<!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
-
-<cffunction name="verificationChain" returntype="array" access="public" output="false" hint="Returns an array of all the verifications set on this controller in the order in which they will be executed."
-	examples=
-	'
-		// Get verification chain, remove the first item, and set it back
-		myVerificationChain = verificationChain();
-		ArrayDeleteAt(myVerificationChain, 1);
-		setVerificationChain(myVerificationChain);
-	'
-	categories="controller-initialization,verification" chapters="filters-and-verification" functions="verifies,setVerificationChain">
+<cffunction name="verificationChain" returntype="array" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		loc.rv = variables.$class.verifications;
@@ -52,18 +27,8 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="setVerificationChain" returntype="void" access="public" output="false" hint="Use this function if you need a more low level way of setting the entire verification chain for a controller."
-	examples=
-	'
-		// Set verification chain directly in an array
-		setVerificationChain([
-			{only="handleForm", post=true},
-			{only="edit", get=true, params="userId", paramsTypes="integer"},
-			{only="edit", get=true, params="userId", paramsTypes="integer", handler="index", error="Invalid userId"}
-		]);
-	'
-	categories="controller-initialization,verification" chapters="filters-and-verification" functions="verifies,verificationChain">
-	<cfargument name="chain" type="array" required="true" hint="An array of structs, each of which represent an `argumentCollection` that get passed to the `verifies` function. This should represent the entire verification chain that you want to use for this controller.">
+<cffunction name="setVerificationChain" returntype="void" access="public" output="false">
+	<cfargument name="chain" type="array" required="true">
 	<cfscript>
 		var loc = {};
 

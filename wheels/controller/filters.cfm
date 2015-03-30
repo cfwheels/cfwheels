@@ -1,11 +1,11 @@
 <!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
 
-<cffunction name="filters" returntype="void" access="public" output="false" hint="Tells CFWheels to run a function before an action is run or after an action has been run. You can also specify multiple functions and actions.">
-	<cfargument name="through" type="string" required="true" hint="Function(s) to execute before or after the action(s).">
-	<cfargument name="type" type="string" required="false" default="before" hint="Whether to run the function(s) before or after the action(s).">
-	<cfargument name="only" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell CFWheels that the filter function(s) should only be run on these actions.">
-	<cfargument name="except" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell CFWheels that the filter function(s) should be run on all actions except the specified ones.">
-	<cfargument name="placement" type="string" required="false" default="append" hint="Pass in `prepend` to prepend the function(s) to the filter chain instead of appending.">
+<cffunction name="filters" returntype="void" access="public" output="false">
+	<cfargument name="through" type="string" required="true">
+	<cfargument name="type" type="string" required="false" default="before">
+	<cfargument name="only" type="string" required="false" default="">
+	<cfargument name="except" type="string" required="false" default="">
+	<cfargument name="placement" type="string" required="false" default="append">
 	<cfscript>
 		var loc = {};
 		arguments.through = $listClean(arguments.through);
@@ -48,8 +48,8 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="setFilterChain" returntype="void" access="public" output="false" hint="Use this function if you need a more low level way of setting the entire filter chain for a controller.">
-	<cfargument name="chain" type="array" required="true" hint="An array of structs, each of which represent an `argumentCollection` that get passed to the `filters` function. This should represent the entire filter chain that you want to use for this controller.">
+<cffunction name="setFilterChain" returntype="void" access="public" output="false">
+	<cfargument name="chain" type="array" required="true">
 	<cfscript>
 		var loc = {};
 
@@ -63,8 +63,8 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="filterChain" returntype="array" access="public" output="false" hint="Returns an array of all the filters set on this controller in the order in which they will be executed.">
-	<cfargument name="type" type="string" required="false" default="all" hint="Use this argument to return only `before` or `after` filters.">
+<cffunction name="filterChain" returntype="array" access="public" output="false">
+	<cfargument name="type" type="string" required="false" default="all">
 	<cfscript>
 		var loc = {};
 		if (!ListFindNoCase("before,after,all", arguments.type))

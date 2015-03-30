@@ -1,11 +1,11 @@
 <!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
 
-<cffunction name="usesLayout" access="public" returntype="void" output="false" hint="Used within a controller's `init()` function to specify controller- or action-specific layouts.">
-	<cfargument name="template" required="true" type="string" hint="Name of the layout template or function name you want to use.">
-	<cfargument name="ajax" required="false" type="string" default="" hint="Name of the layout template you want to use for AJAX requests.">
-	<cfargument name="except" type="string" required="false" hint="List of actions that should not get the layout.">
-	<cfargument name="only" type="string" required="false" hint="List of actions that should only get the layout.">
-	<cfargument name="useDefault" type="boolean" required="false" default="true" hint="When specifying conditions or a function, pass `true` to use the default `layout.cfm` if none of the conditions are met.">
+<cffunction name="usesLayout" access="public" returntype="void" output="false">
+	<cfargument name="template" required="true" type="string">
+	<cfargument name="ajax" required="false" type="string" default="">
+	<cfargument name="except" type="string" required="false">
+	<cfargument name="only" type="string" required="false">
+	<cfargument name="useDefault" type="boolean" required="false" default="true">
 	<cfscript>
 		if ((StructKeyExists(this, arguments.template) && IsCustomFunction(this[arguments.template])) || IsCustomFunction(arguments.template))
 		{

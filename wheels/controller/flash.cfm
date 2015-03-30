@@ -1,7 +1,7 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="flash" returntype="any" access="public" output="false" hint="Returns the value of a specific key in the Flash (or the entire Flash as a struct if no key is passed in).">
-	<cfargument name="key" type="string" required="false" hint="The key to get the value for.">
+<cffunction name="flash" returntype="any" access="public" output="false">
+	<cfargument name="key" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		loc.flash = $readFlash();
@@ -24,13 +24,13 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="flashClear" returntype="void" access="public" output="false" hint="Deletes everything from the Flash.">
+<cffunction name="flashClear" returntype="void" access="public" output="false">
 	<cfscript>
 		$writeFlash();
 	</cfscript>
 </cffunction>
 
-<cffunction name="flashCount" returntype="numeric" access="public" output="false" hint="Returns how many keys exist in the Flash.">
+<cffunction name="flashCount" returntype="numeric" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		loc.flash = $readFlash();
@@ -39,8 +39,8 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="flashDelete" returntype="boolean" access="public" output="false" hint="Deletes a specific key from the Flash. Returns `true` if the key exists.">
-	<cfargument name="key" type="string" required="true" hint="The key to delete.">
+<cffunction name="flashDelete" returntype="boolean" access="public" output="false">
+	<cfargument name="key" type="string" required="true">
 	<cfscript>
 		var loc = {};
 		loc.flash = $readFlash();
@@ -50,7 +50,7 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="flashInsert" returntype="void" access="public" output="false" hint="Inserts a new key / value into the Flash.">
+<cffunction name="flashInsert" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		loc.flash = $readFlash();
@@ -62,7 +62,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="flashIsEmpty" returntype="boolean" access="public" output="false" hint="Returns whether or not the Flash is empty.">
+<cffunction name="flashIsEmpty" returntype="boolean" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		if (flashCount())
@@ -77,16 +77,16 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="flashKeep" returntype="void" access="public" output="false" hint="Make the entire Flash or specific key in it stick around for one more request.">
-	<cfargument name="key" type="string" required="false" default="" hint="A key or list of keys to flag for keeping. This argument is also aliased as `keys`.">
+<cffunction name="flashKeep" returntype="void" access="public" output="false">
+	<cfargument name="key" type="string" required="false" default="">
 	<cfscript>
 		$args(args=arguments, name="flashKeep", combine="key/keys");
 		request.wheels.flashKeep = arguments.key;
 	</cfscript>
 </cffunction>
 
-<cffunction name="flashKeyExists" returntype="boolean" access="public" output="false" hint="Checks if a specific key exists in the Flash.">
-	<cfargument name="key" type="string" required="true" hint="The key to check if it exists.">
+<cffunction name="flashKeyExists" returntype="boolean" access="public" output="false">
+	<cfargument name="key" type="string" required="true">
 	<cfscript>
 		var loc = {};
 		loc.flash = $readFlash();

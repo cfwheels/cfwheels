@@ -1,13 +1,13 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="sendEmail" returntype="any" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in. Besides the CFWheels-specific arguments documented here, you can also pass in any argument that is accepted by the `cfmail` tag as well as your own arguments to be used by the view.">
-	<cfargument name="template" type="string" required="false" default="" hint="The path to the email template or two paths if you want to send a multipart email. if the `detectMultipart` argument is `false`, the template for the text version should be the first one in the list. This argument is also aliased as `templates`.">
-	<cfargument name="from" type="string" required="false" default="" hint="Email address to send from.">
-	<cfargument name="to" type="string" required="false" default="" hint="List of email addresses to send the email to.">
-	<cfargument name="subject" type="string" required="false" default="" hint="The subject line of the email.">
-	<cfargument name="layout" type="any" required="false" hint="Layout(s) to wrap the email template in. This argument is also aliased as `layouts`.">
-	<cfargument name="file" type="string" required="false" default="" hint="A list of the names of the files to attach to the email. This will reference files stored in the `files` folder (or a path relative to it). This argument is also aliased as `files`.">
-	<cfargument name="detectMultipart" type="boolean" required="false" hint="When set to `true` and multiple values are provided for the `template` argument, CFWheels will detect which of the templates is text and which one is HTML (by counting the `<` characters).">
+<cffunction name="sendEmail" returntype="any" access="public" output="false">
+	<cfargument name="template" type="string" required="false" default="">
+	<cfargument name="from" type="string" required="false" default="">
+	<cfargument name="to" type="string" required="false" default="">
+	<cfargument name="subject" type="string" required="false" default="">
+	<cfargument name="layout" type="any" required="false">
+	<cfargument name="file" type="string" required="false" default="">
+	<cfargument name="detectMultipart" type="boolean" required="false">
 	<cfargument name="$deliver" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
@@ -124,13 +124,13 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="sendFile" returntype="any" access="public" output="false" hint="Sends a file to the user (from the `files` folder or a path relative to it by default).">
-	<cfargument name="file" type="string" required="true" hint="The file to send to the user.">
-	<cfargument name="name" type="string" required="false" default="" hint="The file name to show in the browser download dialog box.">
-	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as.">
-	<cfargument name="disposition" type="string" required="false" hint="Set to `inline` to have the browser handle the opening of the file (possibly inline in the browser) or set to `attachment` to force a download dialog box.">
-	<cfargument name="directory" type="string" required="false" default="" hint="Directory outside of the webroot where the file exists. Must be a full path.">
-	<cfargument name="deleteFile" type="boolean" required="false" default="false" hint="Pass in `true` to delete the file on the server after sending it.">
+<cffunction name="sendFile" returntype="any" access="public" output="false">
+	<cfargument name="file" type="string" required="true">
+	<cfargument name="name" type="string" required="false" default="">
+	<cfargument name="type" type="string" required="false" default="">
+	<cfargument name="disposition" type="string" required="false">
+	<cfargument name="directory" type="string" required="false" default="">
+	<cfargument name="deleteFile" type="boolean" required="false" default="false">
 	<cfargument name="$testingMode" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};

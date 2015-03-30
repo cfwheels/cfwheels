@@ -1,7 +1,7 @@
 <!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
 
-<cffunction name="provides" access="public" output="false" returntype="void" hint="Defines formats that the controller will respond with upon request. The format can be requested through a URL variable called `format`, by appending the format name to the end of a URL as an extension (when URL rewriting is enabled), or in the request header.">
-	<cfargument name="formats" type="string" required="false" default="" hint="Formats to instruct the controller to provide. Valid values are `html` (the default), `xml`, `json`, `csv`, `pdf`, and `xls`.">
+<cffunction name="provides" access="public" output="false" returntype="void">
+	<cfargument name="formats" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		$combineArguments(args=arguments, combine="formats,format", required=true);
@@ -22,9 +22,9 @@
 
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="onlyProvides" access="public" output="false" returntype="void" hint="Use this in an individual controller action to define which formats the action will respond with. This can be used to define provides behavior in individual actions or to override a global setting set with @provides in the controller's `init()`.">
-	<cfargument name="formats" type="string" required="false" default="" hint="See documentation for @provides.">
-	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Name of action, defaults to current.">
+<cffunction name="onlyProvides" access="public" output="false" returntype="void">
+	<cfargument name="formats" type="string" required="false" default="">
+	<cfargument name="action" type="string" required="false" default="#variables.params.action#">
 	<cfscript>
 		var loc = {};
 		$combineArguments(args=arguments, combine="formats,format", required=true);
@@ -43,15 +43,15 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="renderWith" access="public" returntype="any" output="false" hint="Instructs the controller to render the data passed in to the format that is requested. If the format requested is `json` or `xml`, CFWheels will transform the data into that format automatically. For other formats (or to override the automatic formatting), you can also create a view template in this format: `nameofaction.xml.cfm`, `nameofaction.json.cfm`, `nameofaction.pdf.cfm`, etc.">
-	<cfargument name="data" type="any" required="true" hint="Data to format and render.">
-	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for @renderPage.">
-	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for @renderPage.">
-	<cfargument name="template" type="string" required="false" default="" hint="See documentation for @renderPage.">
-	<cfargument name="layout" type="any" required="false" hint="See documentation for @renderPage.">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPage.">
-	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for @renderPage.">
-	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="See documentation for @renderPage.">
+<cffunction name="renderWith" access="public" returntype="any" output="false">
+	<cfargument name="data" type="any" required="true">
+	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#">
+	<cfargument name="action" type="string" required="false" default="#variables.params.action#">
+	<cfargument name="template" type="string" required="false" default="">
+	<cfargument name="layout" type="any" required="false">
+	<cfargument name="cache" type="any" required="false" default="">
+	<cfargument name="returnAs" type="string" required="false" default="">
+	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		$args(name="renderWith", args=arguments);

@@ -1,21 +1,21 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="redirectTo" returntype="void" access="public" output="false" hint="Redirects the browser to the supplied `controller`/`action`/`key`, `route` or back to the referring page. Internally, this function uses the @URLFor function to build the link and the `cflocation` tag to perform the redirect.">
-	<cfargument name="back" type="boolean" required="false" default="false" hint="Set to `true` to redirect back to the referring page.">
-	<cfargument name="addToken" type="boolean" required="false" hint="See documentation for your CFML engine's implementation of `cflocation`.">
-	<cfargument name="statusCode" type="numeric" required="false" hint="See documentation for your CFML engine's implementation of `cflocation`.">
-	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="action" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="params" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="onlyPath" type="boolean" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="url" type="string" required="false" default="" hint="Redirect to an external URL.">
-	<cfargument name="delay" type="boolean" required="false" hint="Set to `true` to delay the redirection until after the rest of your action code has executed.">
+<cffunction name="redirectTo" returntype="void" access="public" output="false">
+	<cfargument name="back" type="boolean" required="false" default="false">
+	<cfargument name="addToken" type="boolean" required="false">
+	<cfargument name="statusCode" type="numeric" required="false">
+	<cfargument name="route" type="string" required="false" default="">
+	<cfargument name="controller" type="string" required="false" default="">
+	<cfargument name="action" type="string" required="false" default="">
+	<cfargument name="key" type="any" required="false" default="">
+	<cfargument name="params" type="string" required="false" default="">
+	<cfargument name="anchor" type="string" required="false" default="">
+	<cfargument name="onlyPath" type="boolean" required="false">
+	<cfargument name="host" type="string" required="false">
+	<cfargument name="protocol" type="string" required="false">
+	<cfargument name="port" type="numeric" required="false">
+	<cfargument name="url" type="string" required="false" default="">
+	<cfargument name="delay" type="boolean" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="redirectTo", args=arguments);
