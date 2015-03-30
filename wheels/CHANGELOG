@@ -11,6 +11,7 @@ View Enhancements
 
 * Respect blank "text" argument in linkTo() - #365 [Adam Chapman, Tony Petruzzi, Per Djurner]
 * Allow styleSheetLinkTag and JavaScriptIncludeTag to reference files starting from the root - [Per Djurner]
+* Added "monthNames" and "monthAbbreviations" arguments to form helpers for easy localization - [Per Djurner]
 
 Controller Enhancements
 =======================

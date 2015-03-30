@@ -5,7 +5,7 @@
 		<cfoutput>
 			##dateSelect(objectName="user", property="dateOfBirth")##
 		</cfoutput>
-		
+
 		<!--- Show fields to select month and year --->
 		<cfoutput>
 			##dateSelect(objectName="order", property="expirationDate", order="month,year")##
@@ -21,6 +21,8 @@
 	<cfargument name="startYear" type="numeric" required="false" hint="First year in select list.">
 	<cfargument name="endYear" type="numeric" required="false" hint="Last year in select list.">
 	<cfargument name="monthDisplay" type="string" required="false" hint="Pass in `names`, `numbers`, or `abbreviations` to control display.">
+	<cfargument name="monthNames" type="string" required="false" hint="Pass in month names (e.g. January, February etc.). Defaults to English.">
+	<cfargument name="monthAbbreviations" type="string" required="false" hint="Pass in month abbreviations (e.g. Jan, Feb etc.). Defaults to English.">
 	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
 	<cfargument name="label" type="string" required="false" hint="The label text to use in the form control. The label will be applied to all `select` tags, but you can pass in a list to cutomize each one individually.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
@@ -46,12 +48,12 @@
 		<cfoutput>
 		    ##timeSelect(objectName="business", property="openUntil")##
 		</cfoutput>
-		
+
 		<!--- Show fields for hour and minute --->
 		<cfoutput>
 			##timeSelect(objectName="business", property="openUntil", order="hour,minute")##
 		</cfoutput>
-		
+
 		<!--- Only show 15-minute intervals --->
 		<cfoutput>
 			##timeSelect(objectName="appointment", property="dateTimeStart", minuteStep=15)##
@@ -92,7 +94,7 @@
 		<cfoutput>
 		    ##dateTimeSelect(objectName="article", property="publishedAt")##
 		</cfoutput>
-		
+
 		<!--- Show fields for month, day, hour, and minute --->
 		<cfoutput>
 			##dateTimeSelect(objectName="appointment", property="dateTimeStart", dateOrder="month,day", timeOrder="hour,minute")##
@@ -108,6 +110,8 @@
 	<cfargument name="startYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="endYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="monthDisplay" type="string" required="false" hint="See documentation for @dateSelect.">
+	<cfargument name="monthNames" type="string" required="false" hint="See documentation for @dateSelect.">
+	<cfargument name="monthAbbreviations" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="timeOrder" type="string" required="false" hint="Use to change the order of or exclude time select tags.">
 	<cfargument name="timeSeparator" type="string" required="false" hint="Use to change the character that is displayed between the time select tags.">
 	<cfargument name="minuteStep" type="numeric" required="false" hint="See documentation for @timeSelect.">

@@ -25,20 +25,24 @@
 
 <cffunction name="$monthSelectTag" returntype="string" access="public" output="false">
 	<cfargument name="monthDisplay" type="string" required="true">
+	<cfargument name="monthNames" type="string" required="true">
+	<cfargument name="monthAbbreviations" type="string" required="true">
 	<cfscript>
 		arguments.$loopFrom = 1;
 		arguments.$loopTo = 12;
 		arguments.$type = "month";
 		arguments.$step = 1;
-		if (arguments.monthDisplay == "abbreviations")
+		if (arguments.monthDisplay == "names")
 		{
-			arguments.$optionNames = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec";
+			arguments.$optionNames = arguments.monthNames;
 		}
-		else if (arguments.monthDisplay == "names")
+		else if (arguments.monthDisplay == "abbreviations")
 		{
-			arguments.$optionNames = "January,February,March,April,May,June,July,August,September,October,November,December";
+			arguments.$optionNames = arguments.monthAbbreviations;
 		}
 		StructDelete(arguments, "monthDisplay");
+		StructDelete(arguments, "monthNames");
+		StructDelete(arguments, "monthAbbreviations");
 	</cfscript>
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
@@ -185,7 +189,7 @@
 	<cfscript>
 		var loc = {};
 		loc.optionContent = "";
-		
+
 		// only set the default value if the value is blank and includeBlank is false
 		if (!Len(arguments.value) && (IsBoolean(arguments.includeBlank) && !arguments.includeBlank))
 		{
@@ -198,7 +202,7 @@
 				arguments.value = Evaluate("#arguments.$type#(arguments.$now)");
 			}
 		}
-		
+
 		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && ListLen(arguments.label) > 1)
 		{
 			arguments.label = ListGetAt(arguments.label, ListFindNoCase(arguments.order, arguments.$type));
@@ -248,7 +252,7 @@
 				loc.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=loc.args);
 			}
 		}
-		loc.rv = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
+		loc.rv = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
@@ -309,7 +313,7 @@
 			}
 			loc.content &= $element(name="option", content=loc.option, attributes=loc.args);
 		}
-		loc.rv = $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments);
+		loc.rv = $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>

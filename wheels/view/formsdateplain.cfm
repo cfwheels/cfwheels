@@ -5,7 +5,7 @@
 		<cfoutput>
 			##dateSelectTags(name="dateStart", selected=params.dateStart)##
 		</cfoutput>
-		
+
 		<!--- Show fields for month and year only --->
 		<cfoutput>
 			##dateSelectTags(name="expiration", selected=params.expiration, order="month,year")##
@@ -19,6 +19,8 @@
 	<cfargument name="startYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="endYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="monthDisplay" type="string" required="false" hint="See documentation for @dateSelect.">
+	<cfargument name="monthNames" type="string" required="false" hint="See documentation for @dateSelect.">
+	<cfargument name="monthAbbreviations" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
@@ -47,7 +49,7 @@
 		<cfoutput>
 		    ##timeSelectTags(name="timeOfMeeting" selected=params.timeOfMeeting)##
 		</cfoutput>
-		
+
 		<!--- Show fields for `hour` and `minute` only --->
 		<cfoutput>
 			##timeSelectTags(name="timeOfMeeting", selected=params.timeOfMeeting, order="hour,minute")##
@@ -88,7 +90,7 @@
 		<cfoutput>
 		    ##dateTimeSelectTags(name="dateTimeStart", selected=params.dateTimeStart)##
 		</cfoutput>
-		
+
 		<!--- Show fields for month, day, hour, and minute --->
 		<cfoutput>
 			##dateTimeSelectTags(name="dateTimeStart", selected=params.dateTimeStart, dateOrder="month,day", timeOrder="hour,minute")##
@@ -102,6 +104,8 @@
 	<cfargument name="startYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="endYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="monthDisplay" type="string" required="false" hint="See documentation for @dateSelect.">
+	<cfargument name="monthNames" type="string" required="false" hint="See documentation for @dateSelect.">
+	<cfargument name="monthAbbreviations" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="timeOrder" type="string" required="false" hint="See documentation for @dateTimeSelect.">
 	<cfargument name="timeSeparator" type="string" required="false" hint="See documentation for @dateTimeSelect.">
 	<cfargument name="minuteStep" type="numeric" required="false" hint="See documentation for @timeSelect.">
@@ -170,7 +174,7 @@
 		<cfoutput>
 		    ##yearSelectTag(name="yearOfBirthday", selected=params.yearOfBirthday)##
 		</cfoutput>
-		
+
 		<!--- Only allow selection of year to be for the past 50 years, minimum being 18 years ago --->
 		<cfset fiftyYearsAgo = Now() - 50>
 		<cfset eighteenYearsAgo = Now() - 18>
@@ -214,6 +218,8 @@
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="selected" type="string" required="false" default="" hint="The month that should be selected initially.">
 	<cfargument name="monthDisplay" type="string" required="false" hint="See documentation for @dateSelect.">
+	<cfargument name="monthNames" type="string" required="false" hint="See documentation for @dateSelect.">
+	<cfargument name="monthAbbreviations" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
@@ -271,7 +277,7 @@
 		<cfoutput>
 		    ##hourSelectTag(name="hourOfMeeting", selected=params.hourOfMeeting)##
 		</cfoutput>
-		
+
 		<!--- Show 12 hours instead of 24 --->
 		<cfoutput>
 			##hourSelectTag(name="hourOfMeeting", selected=params.hourOfMeeting, twelveHour=true)##
@@ -307,7 +313,7 @@
 		<cfoutput>
 		    ##minuteSelectTag(name="minuteOfMeeting", value=params.minuteOfMeeting)##
 		</cfoutput>
-		
+
 		<!--- Only show 15-minute intervals --->
 		<cfoutput>
 			##minuteSelectTag(name="minuteOfMeeting", value=params.minuteOfMeeting, minuteStep=15)##
@@ -343,7 +349,7 @@
 		<cfoutput>
 		    ##secondSelectTag(name="secondsToLaunch", selected=params.secondsToLaunch)##
 		</cfoutput>
-		
+
 		<!--- Only show 15-second intervals --->
 		<cfoutput>
 			##secondSelectTag(name="secondsToLaunch", value=params.secondsToLaunch, secondStep=15)##
@@ -407,7 +413,7 @@
 				loc.day = 28;
 			}
 		}
-		
+
 		try
 		{
 			loc.rv = CreateDate(loc.year, loc.month, loc.day);
