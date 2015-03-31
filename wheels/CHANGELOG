@@ -10,7 +10,7 @@ View Enhancements
 =================
 
 * Respect blank "text" argument in linkTo() - #365 [Adam Chapman, Tony Petruzzi, Per Djurner]
-* Allow styleSheetLinkTag and JavaScriptIncludeTag to reference files starting from the root - [Per Djurner]
+* Allow styleSheetLinkTag() and JavaScriptIncludeTag() to reference files starting from the root - [Per Djurner]
 * Added "monthNames" and "monthAbbreviations" arguments to form helpers for easy localization - [Per Djurner]
 
 Controller Enhancements
@@ -20,12 +20,13 @@ Controller Enhancements
 * Pass in "appendToKey" to caches() to cache content separately - #439 [Per Djurner]
 * Allow external attachments with sendEmail() - [Adam Chapman, Tony Petruzzi]
 * Ability to redirect to a specific URL - [Simon Allard]
-(* Option to correct JSON output by passing in x="string" to renderWith() - [Per Djurner])
-(* Option to correct JSON output by passing in x="integer" to renderWith() - [Per Djurner])
+* Option to correct JSON output by passing in x="string" to renderWith() - [Per Djurner]
+* Option to correct JSON output by passing in x="integer" to renderWith() - [Per Djurner]
 
 Bug Fixes
 =========
 
+* Obfuscate parameters in named route patterns when URL rewriting is off - #455 [Amber Cline, Per Djurner]
 * Pass through "includeSoftDeletes" argument correctly - #451 [Jon Brose]
 
 Miscellaneous
