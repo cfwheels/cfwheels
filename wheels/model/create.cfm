@@ -1,28 +1,12 @@
 <!--- PUBLIC MODEL CLASS METHODS --->
 
-<cffunction name="create" returntype="any" access="public" output="false" hint="Creates a new object, saves it to the database (if the validation permits it), and returns it. If the validation fails, the unsaved object (with errors added to it) is still returned. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument."
-	examples=
-	'
-		<!--- Create a new author and save it to the database --->
-		<cfset newAuthor = model("author").create(params.author)>
-
-		<!--- Same as above using named arguments --->
-		<cfset newAuthor = model("author").create(firstName="John", lastName="Doe")>
-
-		<!--- Same as above using both named arguments and a struct --->
-		<cfset newAuthor = model("author").create(active=1, properties=params.author)>
-
-		<!--- If you have a `hasOne` or `hasMany` association setup from `customer` to `order`, you can do a scoped call. (The `createOrder` method below will call `model("order").create(customerId=aCustomer.id, shipping=params.shipping)` internally.) --->
-		<cfset aCustomer = model("customer").findByKey(params.customerId)>
-		<cfset anOrder = aCustomer.createOrder(shipping=params.shipping)>
-	'
-	categories="model-class,create" chapters="creating-records,associations" functions="hasOne,hasMany,new">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @save.">
-	<cfargument name="validate" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+<cffunction name="create" returntype="any" access="public" output="false">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="reload" type="boolean" required="false">
+	<cfargument name="validate" type="boolean" required="false" default="true">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		$args(name="create", args=arguments);
@@ -34,25 +18,9 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="new" returntype="any" access="public" output="false" hint="Creates a new object based on supplied properties and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument."
-	examples=
-	'
-		<!--- Create a new author in memory (not saved to the database) --->
-		<cfset newAuthor = model("author").new()>
-
-		<!--- Create a new author based on properties in a struct --->
-		<cfset newAuthor = model("author").new(params.authorStruct)>
-
-		<!--- Create a new author by passing in named arguments --->
-		<cfset newAuthor = model("author").new(firstName="John", lastName="Doe")>
-
-		<!--- If you have a `hasOne` or `hasMany` association setup from `customer` to `order`, you can do a scoped call. (The `newOrder` method below will call `model("order").new(customerId=aCustomer.id)` internally.) --->
-		<cfset aCustomer = model("customer").findByKey(params.customerId)>
-		<cfset anOrder = aCustomer.newOrder(shipping=params.shipping)>
-	'
-	categories="model-class,create" chapters="creating-records,associations" functions="create,hasMany,hasOne">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="The properties you want to set on the object (can also be passed in as named arguments).">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+<cffunction name="new" returntype="any" access="public" output="false">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		arguments.properties = $setProperties(argumentCollection=arguments, filterList="properties,reload,transaction,callbacks", setOnModel=false);
@@ -64,27 +32,12 @@
 
 <!--- PUBLIC MODEL OBJECT METHODS --->
 
-<cffunction name="save" returntype="boolean" access="public" output="false" hint="Saves the object if it passes validation and callbacks. Returns `true` if the object was saved successfully to the database, `false` if not."
-	examples=
-	'
-		<!--- Save the user object to the database (will automatically do an `INSERT` or `UPDATE` statement depending on if the record is new or already exists --->
-		<cfset user.save()>
-
-		<!--- Save the user object directly in an if statement without using `cfqueryparam` and take appropriate action based on the result --->
-		<cfif user.save(parameterize=false)>
-			<cfset flashInsert(notice="The user was saved!")>
-			<cfset redirectTo(action="edit")>
-		<cfelse>
-			<cfset flashInsert(alert="Error, please correct!")>
-			<cfset renderPage(action="edit")>
-		</cfif>
-	'
-	categories="model-object,crud" chapters="creating-records" functions="">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="reload" type="boolean" required="false" hint="Set to `true` to reload the object from the database once an insert/update has completed.">
-	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to skip validations for this operation.">
-	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="Set this to `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="Set to `false` to disable callbacks for this operation.">
+<cffunction name="save" returntype="boolean" access="public" output="false">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="reload" type="boolean" required="false">
+	<cfargument name="validate" type="boolean" required="false" default="true">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		$args(name="save", args=arguments);
@@ -94,19 +47,19 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<!--- PRIVATE MODEL CLASS METHODS --->
+<!--- PRIVATE METHODS --->
 
 <cffunction name="$createInstance" returntype="any" access="public" output="false">
 	<cfargument name="properties" type="struct" required="true">
 	<cfargument name="persisted" type="boolean" required="true">
 	<cfargument name="row" type="numeric" required="false" default="1">
 	<cfargument name="base" type="boolean" required="false" default="true">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		loc.fileName = $objectFileName(name=variables.wheels.class.modelName, objectPath=variables.wheels.class.path, type="model");
 		loc.rv = $createObjectFromRoot(path=variables.wheels.class.path, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.modelName, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row, base=arguments.base, useFilterLists=(!arguments.persisted));
-		
+
 		// if the object should be persisted, call afterFind else call afterNew
 		if ((arguments.persisted && loc.rv.$callback("afterFind", arguments.callbacks)) || (!arguments.persisted && loc.rv.$callback("afterNew", arguments.callbacks)))
 		{
@@ -116,8 +69,6 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<!--- PRIVATE MODEL OBJECT METHODS --->
-
 <cffunction name="$save" returntype="boolean" access="public" output="false">
 	<cfargument name="parameterize" type="any" required="true">
 	<cfargument name="reload" type="boolean" required="true">
@@ -126,7 +77,7 @@
 	<cfscript>
 		var loc = {};
 		loc.rv = false;
-		
+
 		// make sure all of our associations are set properly before saving
 		$setAssociations();
 

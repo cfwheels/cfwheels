@@ -26,7 +26,7 @@
 			application.$wheels.serverName = "Lucee";
 			application.$wheels.serverVersion = server.lucee.version;
 		}
-		else if(StructKeyExists(server, "railo"))
+		else if (StructKeyExists(server, "railo"))
 		{
 			application.$wheels.serverName = "Railo";
 			application.$wheels.serverVersion = server.railo.version;

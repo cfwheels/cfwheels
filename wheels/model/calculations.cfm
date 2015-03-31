@@ -1,13 +1,13 @@
 <!--- PUBLIC MODEL CLASS METHODS --->
 
-<cffunction name="average" returntype="any" access="public" output="false" hint="Calculates the average value for a given property. Uses the SQL function `AVG`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to calculate the average for.">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="distinct" type="boolean" required="false" hint="When `true`, `AVG` will be performed only on each unique instance of a value, regardless of how many times the value occurs.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="ifNull" type="any" required="false" hint="The value returned if no records are found. Common usage is to set this to `0` to make sure a numeric value is always returned instead of a blank string.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+<cffunction name="average" returntype="any" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="distinct" type="boolean" required="false">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="ifNull" type="any" required="false">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		$args(name="average", args=arguments);
@@ -45,11 +45,11 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="count" returntype="numeric" access="public" output="false" hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function `COUNT`. If no records can be found to perform the calculation on, `0` is returned.">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+<cffunction name="count" returntype="numeric" access="public" output="false">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		$args(name="count", args=arguments);
@@ -72,13 +72,13 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="maximum" returntype="any" access="public" output="false" hint="Calculates the maximum value for a given property. Uses the SQL function `MAX`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to get the highest value for (must be a property of a numeric data type).">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+<cffunction name="maximum" returntype="any" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="ifNull" type="any" required="false">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		$args(name="maximum", args=arguments);
@@ -88,13 +88,13 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="minimum" returntype="any" access="public" output="false" hint="Calculates the minimum value for a given property. Uses the SQL function `MIN`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to get the lowest value for (must be a property of a numeric data type).">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+<cffunction name="minimum" returntype="any" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="ifNull" type="any" required="false">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		$args(name="minimum", args=arguments);
@@ -104,14 +104,14 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="sum" returntype="any" access="public" output="false" hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to get the sum for (must be a property of a numeric data type).">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="distinct" type="boolean" required="false" hint="When `true`, `SUM` returns the sum of unique values only.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+<cffunction name="sum" returntype="any" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="distinct" type="boolean" required="false">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="ifNull" type="any" required="false">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		$args(name="sum", args=arguments);
@@ -123,7 +123,7 @@
 
 <!--- PRIVATE METHODS --->
 
-<cffunction name="$calculate" returntype="any" access="public" output="false" hint="Creates the query that needs to be run for all of the above methods.">
+<cffunction name="$calculate" returntype="any" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="where" type="string" required="true">

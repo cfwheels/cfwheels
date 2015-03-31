@@ -4,8 +4,8 @@
 	<cfscript>
 		var loc = {};
 
-		// In case the error was caused by a timeout we have to add extra time for error handling.
-		// We have to check if onErrorRequestTimeout exists since errors can be triggered before the application.wheels struct has been created.
+		// in case the error was caused by a timeout we have to add extra time for error handling.
+		// we have to check if onErrorRequestTimeout exists since errors can be triggered before the application.wheels struct has been created.
 		loc.requestTimeout = 70;
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "onErrorRequestTimeout"))
 		{

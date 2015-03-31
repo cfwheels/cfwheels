@@ -1,87 +1,87 @@
 <!--- PUBLIC MODEL INITIALIZATION METHODS --->
 
-<cffunction name="afterCreate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after a new object is created.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="afterCreate" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="afterCreate", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="afterDelete" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an object is deleted.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="afterDelete" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="afterDelete", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="afterFind" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an existing object has been initialized (which is usually done with the @findByKey or @findOne method).">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="afterFind" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="afterFind", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="afterInitialization" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an object has been initialized.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="afterInitialization" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="afterInitialization", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="afterNew" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after a new object has been initialized (which is usually done with the @new method).">
-	<cfargument name="methods" type="string" required="false" default="" hint="Method name or list of method names that should be called when this callback event occurs in an object's life cycle (can also be called with the `method` argument).">
+<cffunction name="afterNew" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="afterNew", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="afterSave" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an object is saved.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="afterSave" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="afterSave", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="afterUpdate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an existing object is updated.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="afterUpdate" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="afterUpdate", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="afterValidation" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an object is validated.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="afterValidation" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="afterValidation", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="afterValidationOnCreate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after a new object is validated.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="afterValidationOnCreate" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="afterValidationOnCreate", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="afterValidationOnUpdate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an existing object is validated.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="afterValidationOnUpdate" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="afterValidationOnUpdate", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="beforeCreate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before a new object is created.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="beforeCreate" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="beforeCreate", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="beforeDelete" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before an object is deleted.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="beforeDelete" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="beforeDelete", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="beforeSave" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before an object is saved.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="beforeSave" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="beforeSave", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="beforeUpdate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before an existing object is updated.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="beforeUpdate" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="beforeUpdate", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="beforeValidation" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before an object is validated.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="beforeValidation" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="beforeValidation", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="beforeValidationOnCreate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before a new object is validated.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="beforeValidationOnCreate" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="beforeValidationOnCreate", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="beforeValidationOnUpdate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before an existing object is validated.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+<cffunction name="beforeValidationOnUpdate" returntype="void" access="public" output="false">
+	<cfargument name="methods" type="string" required="false" default="">
 	<cfset $registerCallback(type="beforeValidationOnUpdate", argumentCollection=arguments)>
 </cffunction>
 
@@ -116,8 +116,8 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$clearCallbacks" returntype="void" access="public" output="false" hint="Removes all callbacks registered for this model. Pass in the `type` argument to only remove callbacks for that specific type.">
-	<cfargument name="type" type="string" required="false" default="" hint="Type of callback (`beforeSave` etc).">
+<cffunction name="$clearCallbacks" returntype="void" access="public" output="false">
+	<cfargument name="type" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		arguments.type = $listClean(list="#arguments.type#", returnAs="array");
@@ -137,8 +137,8 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$callbacks" returntype="any" access="public" output="false" hint="Returns all registered callbacks for this model (as a struct). Pass in the `type` argument to only return callbacks for that specific type (as an array).">
-	<cfargument name="type" type="string" required="false" default="" hint="See documentation for @$clearCallbacks.">
+<cffunction name="$callbacks" returntype="any" access="public" output="false">
+	<cfargument name="type" type="string" required="false" default="">
 	<cfscript>
 		if (Len(arguments.type))
 		{
@@ -159,13 +159,10 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-
-<!--- PRIVATE MODEL OBJECT METHODS --->
-
-<cffunction name="$callback" returntype="boolean" access="public" output="false" hint="Executes all callback methods for a specific type. Will stop execution on the first callback that returns `false`.">
-	<cfargument name="type" type="string" required="true" hint="See documentation for @$clearCallbacks.">
-	<cfargument name="execute" type="boolean" required="true" hint="Execute callbacks or not.">
-	<cfargument name="collection" type="any" required="false" default="" hint="A query is passed in here for `afterFind` callbacks.">
+<cffunction name="$callback" returntype="boolean" access="public" output="false">
+	<cfargument name="type" type="string" required="true">
+	<cfargument name="execute" type="boolean" required="true">
+	<cfargument name="collection" type="any" required="false" default="">
 	<cfscript>
 		var loc = {};
 		if (arguments.execute)
@@ -217,9 +214,9 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="$queryCallback" returntype="boolean" access="public" output="false" hint="Loops over the passed in query, calls the callback method for each row and changes the query based on the arguments struct that is passed back.">
-	<cfargument name="method" type="string" required="true" hint="The method to call.">
-	<cfargument name="collection" type="query" required="true" hint="See documentation for @$callback.">
+<cffunction name="$queryCallback" returntype="boolean" access="public" output="false">
+	<cfargument name="method" type="string" required="true">
+	<cfargument name="collection" type="query" required="true">
 	<cfscript>
 		var loc = {};
 

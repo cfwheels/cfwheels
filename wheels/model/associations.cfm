@@ -1,11 +1,11 @@
 <!--- PUBLIC MODEL INITIALIZATION METHODS --->
 
-<cffunction name="belongsTo" returntype="void" access="public" output="false" hint="Sets up a `belongsTo` association between this model and the specified one. Use this association when this model contains a foreign key referencing another model.">
-	<cfargument name="name" type="string" required="true" hint="Gives the association a name that you refer to when working with the association (in the `include` argument to @findAll, to name one example).">
-	<cfargument name="modelName" type="string" required="false" default="" hint="Name of associated model (usually not needed if you follow CFWheels conventions because the model name will be deduced from the `name` argument).">
-	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name (usually not needed if you follow CFWheels conventions since the foreign key name will be deduced from the `name` argument).">
-	<cfargument name="joinKey" type="string" required="false" default="" hint="Column name to join to if not the primary key (usually not needed if you follow wheels conventions since the join key will be the tables primary key/keys).">
-	<cfargument name="joinType" type="string" required="false" hint="Use to set the join type when joining associated tables. Possible values are `inner` (for `INNER JOIN`) and `outer` (for `LEFT OUTER JOIN`).">
+<cffunction name="belongsTo" returntype="void" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="modelName" type="string" required="false" default="">
+	<cfargument name="foreignKey" type="string" required="false" default="">
+	<cfargument name="joinKey" type="string" required="false" default="">
+	<cfargument name="joinType" type="string" required="false">
 	<cfscript>
 		$args(name="belongsTo", args=arguments);
 		arguments.type = "belongsTo";
@@ -14,15 +14,15 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="hasMany" returntype="void" access="public" output="false" hint="Sets up a `hasMany` association between this model and the specified one.">
-	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
-	<cfargument name="modelName" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="joinKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
-	<cfargument name="dependent" type="string" required="false" hint="Defines how to handle dependent models when you delete a record from this model. Set to `delete` to instantiate associated models and call their @delete method, `deleteAll` to delete without instantiating, `removeAll` to remove the foreign key, or `false` to do nothing.">
-	<cfargument name="shortcut" type="string" required="false" default="" hint="Set this argument to create an additional dynamic method that gets the object(s) from the other side of a many-to-many association.">
-	<cfargument name="through" type="string" required="false" default="#singularize(arguments.shortcut)#,#arguments.name#" hint="Set this argument if you need to override CFWheels conventions when using the `shortcut` argument. Accepts a list of two association names representing the chain from the opposite side of the many-to-many relationship to this model.">
+<cffunction name="hasMany" returntype="void" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="modelName" type="string" required="false" default="">
+	<cfargument name="foreignKey" type="string" required="false" default="">
+	<cfargument name="joinKey" type="string" required="false" default="">
+	<cfargument name="joinType" type="string" required="false">
+	<cfargument name="dependent" type="string" required="false">
+	<cfargument name="shortcut" type="string" required="false" default="">
+	<cfargument name="through" type="string" required="false" default="#singularize(arguments.shortcut)#,#arguments.name#">
 	<cfscript>
 		var loc = {};
 		$args(name="hasMany", args=arguments);
@@ -34,13 +34,13 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="hasOne" returntype="void" access="public" output="false" hint="Sets up a `hasOne` association between this model and the specified one.">
-	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
-	<cfargument name="modelName" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="joinKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
-	<cfargument name="dependent" type="string" required="false" hint="See documentation for @hasMany.">
+<cffunction name="hasOne" returntype="void" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="modelName" type="string" required="false" default="">
+	<cfargument name="foreignKey" type="string" required="false" default="">
+	<cfargument name="joinKey" type="string" required="false" default="">
+	<cfargument name="joinType" type="string" required="false">
+	<cfargument name="dependent" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="hasOne", args=arguments);
@@ -53,7 +53,7 @@
 
 <!--- PRIVATE METHODS --->
 
-<cffunction name="$registerAssociation" returntype="void" access="public" output="false" hint="Called from the association methods above to save the data to the class struct of the model.">
+<cffunction name="$registerAssociation" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
 
@@ -91,7 +91,6 @@
 		variables.wheels.class.associations[loc.associationName] = arguments;
 	</cfscript>
 </cffunction>
-
 
 <cffunction name="$deleteDependents" returntype="void" access="public" output="false">
 	<cfscript>

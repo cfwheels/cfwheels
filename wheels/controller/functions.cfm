@@ -8,5 +8,4 @@
 <cfinclude template="provides.cfm">
 <cfinclude template="redirection.cfm">
 <cfinclude template="rendering.cfm">
-<cfinclude template="request.cfm">
 <cfinclude template="verifies.cfm">

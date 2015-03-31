@@ -1,139 +1,99 @@
-<!--- TODO: move setPagination function to controller, it's only here for now to maintain backwards compatibility --->
-<cffunction name="setPagination" access="public" output="false" returntype="void" hint="Allows you to set a pagination handle for a custom query so you can perform pagination on it in your view with `paginationLinks()`."
-	examples=
-	'
-		<!---
-			Note that there are two ways to do pagination yourself using
-			a custom query.
+<!--- PUBLIC CONFIGURATION FUNCTIONS --->
 
-			1) Do a query that grabs everything that matches and then use
-			the `cfouput` or `cfloop` tag to page through the results.
-
-			2) Use your database to make 2 queries. The first query
-			basically does a count of the total number of records that match
-			the criteria and the second query actually selects the page of
-			records for retrieval.
-
-			In the example below, we will show how to write a custom query
-			using both of these methods. Note that the syntax where your
-			database performs the pagination will differ depending on the
-			database engine you are using. Plese consult your database
-			engine''s documentation for the correct syntax.
-
-			Also note that the view code will differ depending on the method
-			used.
-		--->
-
-		<!---
-			First method: Handle the pagination through your CFML engine
-		--->
-
-		<!--- Model code --->
-		<!--- In your model (ie. User.cfc), create a custom method for your custom query --->
-		<cffunction name="myCustomQuery">
-			<cfargument name="page" type="numeric">
-			<cfargument name="perPage" type="numeric" required="false" default="25">
-
-			<cfquery name="local.customQuery" datasource="##get(''dataSourceName'')##">
-				SELECT * FROM users
-			</cfquery>
-
-			<cfset setPagination(totalRecords=local.customQuery.RecordCount, currentPage=arguments.page, perPage=arguments.perPage, handle="myCustomQueryHandle")>
-			<cfreturn customQuery>
-		</cffunction>
-
-		<!--- Controller code --->
-		<cffunction name="list">
-			<cfparam name="params.page" default="1">
-			<cfparam name="params.perPage" default="25">
-
-			<cfset allUsers = model("user").myCustomQuery(page=params.page, perPage=params.perPage)>
-			<!---
-				Because we''re going to let `cfoutput`/`cfloop` handle the pagination,
-				we''re going to need to get some addition information about the
-				pagination.
-			 --->
-			<cfset paginationData = pagination("myCustomQueryHandle")>
-		</cffunction>
-
-		<!--- View code (using `cfloop`) --->
-		<!--- Use the information from `paginationData` to page through the records --->
-		<cfoutput>
-		<ul>
-		    <cfloop query="allUsers" startrow="##paginationData.startrow##" endrow="##paginationData.endrow##">
-		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
-		    </cfloop>
-		</ul>
-		##paginationLinks(handle="myCustomQueryHandle")##
-		</cfoutput>
-
-		<!--- View code (using `cfoutput`) --->
-		<!--- Use the information from `paginationData` to page through the records --->
-		<ul>
-		    <cfoutput query="allUsers" startrow="##paginationData.startrow##" maxrows="##paginationData.maxrows##">
-		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
-		    </cfoutput>
-		</ul>
-		<cfoutput>##paginationLinks(handle="myCustomQueryHandle")##</cfoutput>
-
-
-		<!---
-			Second method: Handle the pagination through the database
-		--->
-
-		<!--- Model code --->
-		<!--- In your model (ie. `User.cfc`), create a custom method for your custom query --->
-		<cffunction name="myCustomQuery">
-			<cfargument name="page" type="numeric">
-			<cfargument name="perPage" type="numeric" required="false" default="25">
-
-			<cfquery name="local.customQueryCount" datasource="##get(''dataSouceName'')##">
-				SELECT COUNT(*) AS theCount FROM users
-			</cfquery>
-
-			<cfquery name="local.customQuery" datasource="##get(''dataSourceName'')##">
-				SELECT * FROM users
-				LIMIT ##arguments.page## OFFSET ##arguments.perPage##
-			</cfquery>
-
-			<!--- Notice the we use the value from the first query for `totalRecords`  --->
-			<cfset setPagination(totalRecords=local.customQueryCount.theCount, currentPage=arguments.page, perPage=arguments.perPage, handle="myCustomQueryHandle")>
-			<!--- We return the second query --->
-			<cfreturn customQuery>
-		</cffunction>
-
-		<!--- Controller code --->
-		<cffunction name="list">
-			<cfparam name="params.page" default="1">
-			<cfparam name="params.perPage" default="25">
-			<cfset allUsers = model("user").myCustomQuery(page=params.page, perPage=params.perPage)>
-		</cffunction>
-
-		<!--- View code (using `cfloop`) --->
-		<cfoutput>
-		<ul>
-		    <cfloop query="allUsers">
-		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
-		    </cfloop>
-		</ul>
-		##paginationLinks(handle="myCustomQueryHandle")##
-		</cfoutput>
-
-		<!--- View code (using `cfoutput`) --->
-		<ul>
-		    <cfoutput query="allUsers">
-		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
-		    </cfoutput>
-		</ul>
-		<cfoutput>##paginationLinks(handle="myCustomQueryHandle")##</cfoutput>
-	'
-	categories="model-class,miscellaneous" chapters="getting-paginated-data" functions="findAll,paginationLinks">
-	<cfargument name="totalRecords" type="numeric" required="true" hint="Total count of records that should be represented by the paginated links.">
-	<cfargument name="currentPage" type="numeric" required="false" default="1" hint="Page number that should be represented by the data being fetched and the paginated links.">
-	<cfargument name="perPage" type="numeric" required="false" default="25" hint="Number of records that should be represented on each page of data.">
-	<cfargument name="handle" type="string" required="false" default="query" hint="Name of handle to reference in @paginationLinks.">
+<cffunction name="addFormat" returntype="void" access="public" output="false">
+	<cfargument name="extension" type="string" required="true">
+	<cfargument name="mimeType" type="string" required="true">
 	<cfscript>
 		var loc = {};
+		loc.appKey = $appKey();
+		application[loc.appKey].formats[arguments.extension] = arguments.mimeType;
+	</cfscript>
+</cffunction>
+
+<cffunction name="addRoute" returntype="void" access="public" output="false">
+	<cfargument name="name" type="string" required="false" default="">
+	<cfargument name="pattern" type="string" required="true">
+	<cfargument name="controller" type="string" required="false" default="">
+	<cfargument name="action" type="string" required="false" default="">
+	<cfscript>
+		var loc = {};
+		loc.appKey = $appKey();
+
+		// throw errors when controller or action is not passed in as arguments and not included in the pattern
+		if (!Len(arguments.controller) && !FindNoCase("[controller]", arguments.pattern))
+		{
+			$throw(type="Wheels.IncorrectArguments", message="The `controller` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `controller` argument to specifically tell CFWheels which controller to call or include it in the pattern to tell CFWheels to determine it dynamically on each request based on the incoming URL.");
+		}
+		if (!Len(arguments.action) && !FindNoCase("[action]", arguments.pattern))
+		{
+			$throw(type="Wheels.IncorrectArguments", message="The `action` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `action` argument to specifically tell CFWheels which action to call or include it in the pattern to tell CFWheels to determine it dynamically on each request based on the incoming URL.");
+		}
+
+		loc.thisRoute = Duplicate(arguments);
+		loc.thisRoute.variables = "";
+		if (Find(".", loc.thisRoute.pattern))
+		{
+			loc.thisRoute.format = ListLast(loc.thisRoute.pattern, ".");
+			loc.thisRoute.formatVariable = ReplaceList(loc.thisRoute.format, "[,]", "");
+			loc.thisRoute.pattern = ListFirst(loc.thisRoute.pattern, ".");
+		}
+		loc.iEnd = ListLen(loc.thisRoute.pattern, "/");
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(loc.thisRoute.pattern, loc.i, "/");
+			if (REFind("^\[", loc.item))
+			{
+				loc.thisRoute.variables = ListAppend(loc.thisRoute.variables, ReplaceList(loc.item, "[,]", ""));
+			}
+		}
+		ArrayAppend(application[loc.appKey].routes, loc.thisRoute);
+	</cfscript>
+</cffunction>
+
+<cffunction name="addDefaultRoutes" returntype="void" access="public" output="false">
+	<cfscript>
+		addRoute(pattern="[controller]/[action]/[key]");
+		addRoute(pattern="[controller]/[action]");
+		addRoute(pattern="[controller]", action="index");
+	</cfscript>
+</cffunction>
+
+<cffunction name="set" returntype="void" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.appKey = $appKey();
+		if (ArrayLen(arguments) > 1)
+		{
+			for (loc.key in arguments)
+			{
+				if (loc.key != "functionName")
+				{
+					loc.iEnd = ListLen(arguments.functionName);
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					{
+						application[loc.appKey].functions[Trim(ListGetAt(arguments.functionName, loc.i))][loc.key] = arguments[loc.key];
+					}
+				}
+			}
+		}
+		else
+		{
+			application[loc.appKey][StructKeyList(arguments)] = arguments[1];
+		}
+	</cfscript>
+</cffunction>
+
+<!--- PUBLIC HELPER FUNCTIONS --->
+
+<cffunction name="setPagination" access="public" output="false" returntype="void">
+	<cfargument name="totalRecords" type="numeric" required="true">
+	<cfargument name="currentPage" type="numeric" required="false" default="1">
+	<cfargument name="perPage" type="numeric" required="false" default="25">
+	<cfargument name="handle" type="string" required="false" default="query">
+	<cfscript>
+		var loc = {};
+
+		// should be documented as a controller function but needs to be placed here because the findAll() method calls it
 
 		// all numeric values must be integers
 		arguments.totalRecords = Fix(arguments.totalRecords);
@@ -191,143 +151,9 @@
 	</cfscript>
 </cffunction>
 
-<!--- PUBLIC CONFIGURATION FUNCTIONS --->
-
-<cffunction name="addFormat" returntype="void" access="public" output="false" hint="Adds a new MIME format for use with responding to multiple formats."
-	examples='
-		<!--- Add the `js` format --->
-		<cfset addFormat(extension="js", mimeType="text/javascript")>
-
-		<!--- Add the `ppt` and `pptx` formats --->
-		<cfset addFormat(extension="ppt", mimeType="application/vnd.ms-powerpoint")>
-		<cfset addFormat(extension="pptx", mimeType="application/vnd.ms-powerpoint")>
-	'
-	categories="configuration" chapters="responding-with-multiple-formats" functions="provides,renderWith">
-	<cfargument name="extension" type="string" required="true" hint="File extension to add.">
-	<cfargument name="mimeType" type="string" required="true" hint="Matching MIME type to associate with the file extension.">
-	<cfscript>
-		var loc = {};
-		loc.appKey = $appKey();
-		application[loc.appKey].formats[arguments.extension] = arguments.mimeType;
-	</cfscript>
-</cffunction>
-
-<cffunction name="addRoute" returntype="void" access="public" output="false" hint="Adds a new route to your application."
-	examples=
-	'
-		<!--- Example 1: Adds a route which will invoke the `profile` action on the `user` controller with `params.userName` set when the URL matches the `pattern` argument --->
-		<cfset addRoute(name="userProfile", pattern="user/[username]", controller="user", action="profile")>
-
-		<!--- Example 2: Category/product URLs. Note the order of precedence is such that the more specific route should be defined first so CFWheels will fall back to the less-specific version if it''s not found --->
-		<cfset addRoute(name="product", pattern="products/[categorySlug]/[productSlug]", controller="products", action="product")>
-		<cfset addRoute(name="productCategory", pattern="products/[categorySlug]", controller="products", action="category")>
-		<cfset addRoute(name="products", pattern="products", controller="products", action="index")>
-
-		<!--- Example 3: Change the `home` route. This should be listed last because it is least specific --->
-		<cfset addRoute(name="home", pattern="", controller="main", action="index")>
-	'
-	categories="configuration" chapters="using-routes" functions="">
-	<cfargument name="name" type="string" required="false" default="" hint="Name for the route. This is referenced as the `name` argument in functions based on @URLFor like @linkTo, @startFormTag, etc.">
-	<cfargument name="pattern" type="string" required="true" hint="The URL pattern that the route will match.">
-	<cfargument name="controller" type="string" required="false" default="" hint="Controller to call when route matches (unless the controller name exists in the pattern).">
-	<cfargument name="action" type="string" required="false" default="" hint="Action to call when route matches (unless the action name exists in the pattern).">
-	<cfscript>
-		var loc = {};
-		loc.appKey = $appKey();
-
-		// throw errors when controller or action is not passed in as arguments and not included in the pattern
-		if (!Len(arguments.controller) && !FindNoCase("[controller]", arguments.pattern))
-		{
-			$throw(type="Wheels.IncorrectArguments", message="The `controller` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `controller` argument to specifically tell CFWheels which controller to call or include it in the pattern to tell CFWheels to determine it dynamically on each request based on the incoming URL.");
-		}
-		if (!Len(arguments.action) && !FindNoCase("[action]", arguments.pattern))
-		{
-			$throw(type="Wheels.IncorrectArguments", message="The `action` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `action` argument to specifically tell CFWheels which action to call or include it in the pattern to tell CFWheels to determine it dynamically on each request based on the incoming URL.");
-		}
-
-		loc.thisRoute = Duplicate(arguments);
-		loc.thisRoute.variables = "";
-		if (Find(".", loc.thisRoute.pattern))
-		{
-			loc.thisRoute.format = ListLast(loc.thisRoute.pattern, ".");
-			loc.thisRoute.formatVariable = ReplaceList(loc.thisRoute.format, "[,]", "");
-			loc.thisRoute.pattern = ListFirst(loc.thisRoute.pattern, ".");
-		}
-		loc.iEnd = ListLen(loc.thisRoute.pattern, "/");
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.item = ListGetAt(loc.thisRoute.pattern, loc.i, "/");
-			if (REFind("^\[", loc.item))
-			{
-				loc.thisRoute.variables = ListAppend(loc.thisRoute.variables, ReplaceList(loc.item, "[,]", ""));
-			}
-		}
-		ArrayAppend(application[loc.appKey].routes, loc.thisRoute);
-	</cfscript>
-</cffunction>
-
-<cffunction name="addDefaultRoutes" returntype="void" access="public" output="false" hint="Adds the default CFWheels routes (for example, `[controller]/[action]/[key]`, etc.) to your application. Only use this method if you have set `loadDefaultRoutes` to `false` and want to control exactly where in the route order you want to place the default routes."
-	examples=
-	'
-		<!--- Adds the default routes to your application (done in `config/routes.cfm`) --->
-		<cfset addDefaultRoutes()>
-	'
-	categories="configuration" chapters="using-routes" functions="">
-	<cfscript>
-		addRoute(pattern="[controller]/[action]/[key]");
-		addRoute(pattern="[controller]/[action]");
-		addRoute(pattern="[controller]", action="index");
-	</cfscript>
-</cffunction>
-
-<cffunction name="set" returntype="void" access="public" output="false" hint="Use to configure a global setting or set a default for a function."
-	examples=
-	'
-		<!--- Example 1: Set the `URLRewriting` setting to `Partial` --->
-		<cfset set(URLRewriting="Partial")>
-
-		<!--- Example 2: Set default values for the arguments in the `buttonTo` view helper. This works for the majority of CFWheels functions/arguments. --->
-		<cfset set(functionName="buttonTo", onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable="")>
-
-		<!--- Example 3: Set the default values for a form helper to get the form marked up to your preferences --->
-		<cfset set(functionName="textField", labelPlacement="before", prependToLabel="<div>", append="</div>", appendToLabel="<br />")>
-	'
-	categories="configuration" chapters="configuration-and-defaults" functions="get">
-	<cfscript>
-		var loc = {};
-		loc.appKey = $appKey();
-		if (ArrayLen(arguments) > 1)
-		{
-			for (loc.key in arguments)
-			{
-				if (loc.key != "functionName")
-				{
-					loc.iEnd = ListLen(arguments.functionName);
-					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-					{
-						application[loc.appKey].functions[Trim(ListGetAt(arguments.functionName, loc.i))][loc.key] = arguments[loc.key];
-					}
-				}
-			}
-		}
-		else
-		{
-			application[loc.appKey][StructKeyList(arguments)] = arguments[1];
-		}
-	</cfscript>
-</cffunction>
-
-<!--- PUBLIC GLOBAL FUNCTIONS --->
-
-<!--- miscellaneous --->
-
-<cffunction name="controller" returntype="any" access="public" output="false" hint="Creates and returns a controller object with your own custom `name` and `params`. Used primarily for testing purposes."
-	examples='
-		<cfset testController = controller("users", params)>
-	'
-	categories="global,miscellaneous" chapters="" functions="">
-	<cfargument name="name" type="string" required="true" hint="Name of the controller to create.">
-	<cfargument name="params" type="struct" required="false" default="#StructNew()#" hint="The params struct (combination of `form` and `URL` variables).">
+<cffunction name="controller" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="params" type="struct" required="false" default="#StructNew()#">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -337,22 +163,13 @@
 		{
 			loc.rv = loc.rv.$createControllerObject(arguments.params);
 		}
-		return loc.rv;
 	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="get" returntype="any" access="public" output="false" hint="Returns the current setting for the supplied CFWheels setting or the current default for the supplied CFWheels function argument."
-	examples=
-	'
-		<!--- Get the current value for the `tableNamePrefix` CFWheels setting --->
-		<cfset setting = get("tableNamePrefix")>
-
-		<!--- Get the default for the `message` argument of the `validatesConfirmationOf` method  --->
-		<cfset setting = get(functionName="validatesConfirmationOf", name="message")>
-	'
-	categories="global,miscellaneous" chapters="configuration-and-defaults" functions="set">
-	<cfargument name="name" type="string" required="true" hint="Variable name to get setting for.">
-	<cfargument name="functionName" type="string" required="false" default="" hint="Function name to get setting for.">
+<cffunction name="get" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="functionName" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.appKey = $appKey();
@@ -368,25 +185,13 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="model" returntype="any" access="public" output="false" hint="Returns a reference to the requested model so that class level methods can be called on it."
-	examples=
-	'
-		<!--- The `model("author")` part of the code below gets a reference to the model from the application scope, and then the `findByKey` class level method is called on it --->
-		<cfset authorObject = model("author").findByKey(1)>
-	'
-	categories="global,miscellaneous" chapters="object-relational-mapping" functions="">
-	<cfargument name="name" type="string" required="true" hint="Name of the model to get a reference to.">
+<cffunction name="model" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
 	<cfreturn $doubleCheckedLock(name="modelLock#application.applicationName#", condition="$cachedModelClassExists", execute="$createModelClass", conditionArgs=arguments, executeArgs=arguments)>
 </cffunction>
 
-<cffunction name="obfuscateParam" returntype="string" access="public" output="false" hint="Obfuscates a value. Typically used for hiding primary key values when passed along in the URL."
-	examples=
-	'
-		<!--- Obfuscate the primary key value `99` --->
-		<cfset newValue = obfuscateParam(99)>
-	'
-	categories="global,miscellaneous" chapters="obfuscating-urls" functions="deobfuscateParam">
-	<cfargument name="param" type="any" required="true" hint="Value to obfuscate.">
+<cffunction name="obfuscateParam" returntype="string" access="public" output="false">
+	<cfargument name="param" type="any" required="true">
 	<cfscript>
 		var loc = {};
 		loc.rv = arguments.param;
@@ -408,14 +213,8 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="deobfuscateParam" returntype="string" access="public" output="false" hint="Deobfuscates a value."
-	examples=
-	'
-		<!--- Get the original value from an obfuscated one --->
-		<cfset originalValue = deobfuscateParam("b7ab9a50")>
-	'
-	categories="global,miscellaneous" chapters="obfuscating-urls" functions="obfuscateParam">
-	<cfargument name="param" type="string" required="true" hint="Value to deobfuscate.">
+<cffunction name="deobfuscateParam" returntype="string" access="public" output="false">
+	<cfargument name="param" type="string" required="true">
 	<cfscript>
 		var loc = {};
 		if (Val(arguments.param) != arguments.param)
@@ -457,41 +256,21 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="pluginNames" returntype="string" access="public" output="false" hint="Returns a list of all installed plugins' names."
-	examples=
-	'
-		<!--- Check if the Scaffold plugin is installed --->
-		<cfif ListFindNoCase("scaffold", pluginNames())>
-			<!--- do something cool --->
-		</cfif>
-	'
-	categories="global,miscellaneous" chapters="using-and-creating-plugins" functions="">
+<cffunction name="pluginNames" returntype="string" access="public" output="false">
 	<cfreturn StructKeyList(application.wheels.plugins)>
 </cffunction>
 
-<cffunction name="URLFor" returntype="string" access="public" output="false" hint="Creates an internal URL based on supplied arguments."
-	examples=
-	'
-		<!--- Create the URL for the `logOut` action on the `account` controller, typically resulting in `/account/log-out` --->
-		##URLFor(controller="account", action="logOut")##
-
-		<!--- Create a URL with an anchor set on it --->
-		##URLFor(action="comments", anchor="comment10")##
-
-		<!--- Create a URL based on a route called `products`, which expects params for `categorySlug` and `productSlug` --->
-		##URLFor(route="product", categorySlug="accessories", productSlug="battery-charger")##
-	'
-	categories="global,miscellaneous" chapters="request-handling,linking-pages" functions="redirectTo,linkTo,startFormTag">
-	<cfargument name="route" type="string" required="false" default="" hint="Name of a route that you have configured in `config/routes.cfm`.">
-	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL.">
-	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL.">
-	<cfargument name="key" type="any" required="false" default="" hint="Key(s) to include in the URL.">
-	<cfargument name="params" type="string" required="false" default="" hint="Any additional parameters to be set in the query string (example: `wheels=cool&x=y`). Please note that CFWheels uses the `&` and `=` characters to split the parameters and encode them properly for you (using `URLEncodedFormat()` internally). However, if you need to pass in `&` or `=` as part of the value, then you need to encode them (and only them), example: `a=cats%26dogs%3Dtrouble!&b=1`.">
-	<cfargument name="anchor" type="string" required="false" default="" hint="Sets an anchor name to be appended to the path.">
-	<cfargument name="onlyPath" type="boolean" required="false" hint="If `true`, returns only the relative URL (no protocol, host name or port).">
-	<cfargument name="host" type="string" required="false" hint="Set this to override the current host.">
-	<cfargument name="protocol" type="string" required="false" hint="Set this to override the current protocol.">
-	<cfargument name="port" type="numeric" required="false" hint="Set this to override the current port number.">
+<cffunction name="URLFor" returntype="string" access="public" output="false">
+	<cfargument name="route" type="string" required="false" default="">
+	<cfargument name="controller" type="string" required="false" default="">
+	<cfargument name="action" type="string" required="false" default="">
+	<cfargument name="key" type="any" required="false" default="">
+	<cfargument name="params" type="string" required="false" default="">
+	<cfargument name="anchor" type="string" required="false" default="">
+	<cfargument name="onlyPath" type="boolean" required="false">
+	<cfargument name="host" type="string" required="false">
+	<cfargument name="protocol" type="string" required="false">
+	<cfargument name="port" type="numeric" required="false">
 	<cfargument name="$URLRewriting" type="string" required="false" default="#application.wheels.URLRewriting#">
 	<cfscript>
 		var loc = {};
@@ -691,34 +470,22 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<!--- string helpers --->
-
-<cffunction name="capitalize" returntype="string" access="public" output="false" hint="Returns the text with the first character converted to uppercase."
-	examples=
-	'
-		<!--- Capitalize a sentence, will result in "Wheels is a framework" --->
-		##capitalize("wheels is a framework")##
-	'
-	categories="global,string" chapters="miscellaneous-helpers" functions="humanize,pluralize,singularize">
-	<cfargument name="text" type="string" required="true" hint="Text to capitalize.">
-	<cfif !Len(arguments.text)>
-		<cfreturn arguments.text />
-	</cfif>
-	<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
+<cffunction name="capitalize" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.rv = arguments.text;
+		if (Len(loc.rv))
+		{
+			loc.rv = UCase(Left(loc.rv, 1)) & Mid(loc.rv, 2, Len(loc.rv)-1);
+		}
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="humanize" returntype="string" access="public" output="false" hint="Returns readable text by capitalizing and converting camel casing to multiple words."
-	examples=
-	'
-		<!--- Humanize a string, will result in "Wheels Is A Framework" --->
-		##humanize("wheelsIsAFramework")##
-
-		<!--- Humanize a string, force wheels to replace "Cfml" with "CFML" --->
-		##humanize("wheelsIsACFMLFramework", "CFML")##
-	'
-	categories="global,string" chapters="miscellaneous-helpers" functions="capitalize,pluralize,singularize">
-	<cfargument name="text" type="string" required="true" hint="Text to humanize.">
-	<cfargument name="except" type="string" required="false" default="" hint="a list of strings (space separated) to replace within the output.">
+<cffunction name="humanize" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="true">
+	<cfargument name="except" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 
@@ -744,84 +511,52 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="pluralize" returntype="string" access="public" output="false" hint="Returns the plural form of the passed in word. Can also pluralize a word based on a value passed to the `count` argument."
-	examples=
-	'
-		<!--- Pluralize a word, will result in "people" --->
-		##pluralize("person")##
-
-		<!--- Pluralize based on the count passed in --->
-		Your search returned ##pluralize(word="person", count=users.RecordCount)##
-	'
-	categories="global,string" chapters="miscellaneous-helpers" functions="capitalize,humanize,singularize">
-	<cfargument name="word" type="string" required="true" hint="The word to pluralize.">
-	<cfargument name="count" type="numeric" required="false" default="-1" hint="Pluralization will occur when this value is not `1`.">
-	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="Will return `count` prepended to the pluralization when `true` and `count` is not `-1`.">
+<cffunction name="pluralize" returntype="string" access="public" output="false">
+	<cfargument name="word" type="string" required="true">
+	<cfargument name="count" type="numeric" required="false" default="-1">
+	<cfargument name="returnCount" type="boolean" required="false" default="true">
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="pluralize", count=arguments.count, returnCount=arguments.returnCount)>
 </cffunction>
 
-<cffunction name="singularize" returntype="string" access="public" output="false" hint="Returns the singular form of the passed in word."
-	examples=
-	'
-		<!--- Singularize a word, will result in "language" --->
-		##singularize("languages")##
-	'
-	categories="global,string" chapters="miscellaneous-helpers" functions="capitalize,humanize,pluralize">
-	<cfargument name="word" type="string" required="true" hint="String to singularize.">
+<cffunction name="singularize" returntype="string" access="public" output="false">
+	<cfargument name="word" type="string" required="true">
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="singularize")>
 </cffunction>
 
-<cffunction name="toXHTML" returntype="string" access="public" output="false" hint="Returns an XHTML-compliant string."
-	examples=
-	'
-		<!--- Outputs `productId=5&amp;categoryId=12&amp;returningCustomer=1` --->
-		<cfoutput>
-			##toXHTML("productId=5&categoryId=12&returningCustomer=1")##
-		</cfoutput>
-	'
-	categories="global,string" chapters="" functions="">
-	<cfargument name="text" type="string" required="true" hint="String to make XHTML-compliant.">
-	<cfset arguments.text = Replace(arguments.text, "&", "&amp;", "all")>
-	<cfreturn arguments.text>
+<cffunction name="toXHTML" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="true">
+	<cfreturn Replace(arguments.text, "&", "&amp;", "all")>
 </cffunction>
 
-<cffunction name="mimeTypes" returntype="string" access="public" output="false" hint="Returns an associated MIME type based on a file extension."
-	examples=
-	'
-		<!--- Get the internally-stored MIME type for `xls` --->
-		<cfset mimeType = mimeTypes("xls")>
-
-		<!--- Get the internally-stored MIME type for a dynamic value. Fall back to a MIME type of `text/plain` if it''s not found --->
-		<cfset mimeType = mimeTypes(extension=params.type, fallback="text/plain")>
-	'
-	categories="global,miscellaneous" chapters="" functions="">
-	<cfargument name="extension" required="true" type="string" hint="The extension to get the MIME type for.">
-	<cfargument name="fallback" required="false" type="string" default="application/octet-stream" hint="the fallback MIME type to return.">
-	<cfif StructKeyExists(application.wheels.mimetypes, arguments.extension)>
-		<cfset arguments.fallback = application.wheels.mimetypes[arguments.extension]>
-	</cfif>
-	<cfreturn arguments.fallback>
+<cffunction name="mimeTypes" returntype="string" access="public" output="false">
+	<cfargument name="extension" required="true" type="string">
+	<cfargument name="fallback" required="false" type="string" default="application/octet-stream">
+	<cfscript>
+		var loc = {};
+		loc.rv = arguments.fallback;
+		if (StructKeyExists(application.wheels.mimetypes, arguments.extension))
+		{
+			loc.rv = application.wheels.mimetypes[arguments.extension];
+		}
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="hyphenize" returntype="string" access="public" output="false" hint="Converts camelCase strings to lowercase strings with hyphens as word delimiters instead. Example: `myVariable` becomes `my-variable`."
-	examples=
-	'
-		<!--- Outputs "my-blog-post" --->
-		<cfoutput>
-			##hyphenize("myBlogPost")##
-		</cfoutput>
-	'
-	categories="global,string" chapters="" functions="">
-	<cfargument name="string" type="string" required="true" hint="The string to hyphenize.">
-	<cfset arguments.string = REReplace(arguments.string, "([A-Z][a-z])", "-\l\1", "all")>
-	<cfset arguments.string = REReplace(arguments.string, "([a-z])([A-Z])", "\1-\l\2", "all")>
-	<cfset arguments.string = REReplace(arguments.string, "^-", "", "one")>
-	<cfreturn LCase(arguments.string)>
+<cffunction name="hyphenize" returntype="string" access="public" output="false">
+	<cfargument name="string" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.rv = REReplace(arguments.string, "([A-Z][a-z])", "-\l\1", "all");
+		loc.rv = REReplace(loc.rv, "([a-z])([A-Z])", "\1-\l\2", "all");
+		loc.rv = REReplace(loc.rv, "^-", "", "one");
+		loc.rv = LCase(loc.rv);
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <!--- PRIVATE FUNCTIONS --->
 
-<cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false" hint="Called by singularize and pluralize to perform the conversion.">
+<cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false">
 	<cfargument name="text" type="string" required="true">
 	<cfargument name="which" type="string" required="true">
 	<cfargument name="count" type="numeric" required="false" default="-1">

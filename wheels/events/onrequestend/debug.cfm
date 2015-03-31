@@ -25,14 +25,6 @@
 		<cfset loc.hasAppTests = false>
 	</cfif>
 </cfif>
-<cfset loc.version = get("version")>
-<cfif NOT Len(loc.version)>
-	<cfset loc.file = ExpandPath(get("webPath") & "/wheels/CHANGELOG")>
-	<cfloop file="#loc.file#" index="loc.i">
-		<cfset loc.version = loc.i>
-		<cfbreak>
-	</cfloop>
-</cfif>
 <cfsavecontent variable="loc.css">
 	<style>
 		#wheels-debug-area
@@ -99,7 +91,7 @@
 		</tr>
 		<tr>
 			<td><strong>Framework:</strong></td>
-			<td>CFWheels #loc.version#
+			<td>CFWheels #get("version")#
 				<cfif loc.hasFrameworkTests> [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=core&reload=true">Run Tests</a>, <a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=core&reload=true">View Tests</a>]</cfif>
 			</td>
 		</tr>
@@ -178,7 +170,7 @@
 		</tr>
 		<tr>
 			<td><strong>Help Links:</strong></td>
-			<td><a href="http://cfwheels.org/docs/#Replace(Left(get("version"), 3), ".", "-")#" target="_blank">Documentation</a>, <a href="http://groups.google.com/group/cfwheels" target="_blank">Google Group</a>, <a href="https://github.com/cfwheels/cfwheels/issues" target="_blank">Issue Tracker</a></td>
+			<td><a href="http://cfwheels.readme.io/docs" target="_blank">Documentation</a>, <a href="http://groups.google.com/group/cfwheels" target="_blank">Mailing List</a>, <a href="https://github.com/cfwheels/cfwheels/issues" target="_blank">Issue Tracker</a></td>
 		</tr>
 	</table>
 </div>
