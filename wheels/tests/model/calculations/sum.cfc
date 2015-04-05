@@ -5,6 +5,11 @@
 		<cfset assert("loc.result IS 15")>
 	</cffunction>
 
+	<cffunction name="test_sum_with_group">
+		<cfset loc.result = model("post").sum(property="views", group="authorId")>
+		<cfset assert("loc.result['viewsSum'][2] IS 5")>
+	</cffunction>
+
 	<cffunction name="test_sum_with_where">
 		<cfset loc.author = model("author").findOne(where="lastName='Djurner'")>
 		<cfset loc.result = model("post").sum(property="views", where="authorid=#loc.author.id#")>

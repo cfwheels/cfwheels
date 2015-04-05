@@ -7,6 +7,11 @@
 		<cfset assert("loc.result IS 3")>
 	</cffunction>
 
+	<cffunction name="test_average_with_group">
+		<cfset loc.result = model("post").average(property="views", group="authorId")>
+		<cfset assert("loc.result['viewsAverage'][1] IS 3")>
+	</cffunction>
+
 	<cffunction name="test_average_with_integer_with_non_matching_where">
 		<cfset loc.result = model("post").average(property="views", where="id=0")>
 		<cfset assert("loc.result IS ''")>
@@ -20,7 +25,7 @@
 	<cffunction name="test_average_with_integer_with_ifNull">
 		<cfset loc.result = model("post").average(property="views", where="id=0", ifNull=0)>
 		<cfset assert("loc.result IS 0")>
-	</cffunction>	
+	</cffunction>
 
 	<!--- floats --->
 
@@ -43,9 +48,9 @@
 		<cfset loc.result = model("post").average(property="averageRating", where="id=0", ifNull=0)>
 		<cfset assert("loc.result IS 0")>
 	</cffunction>
-	
+
 	<!--- include deleted records --->
-	
+
 	<cffunction name="test_average_with_include_soft_deletes">
 		<cftransaction action="begin">
 			<cfset loc.post = model("Post").findOne(where="views=0")>

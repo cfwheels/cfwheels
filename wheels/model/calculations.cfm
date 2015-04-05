@@ -8,48 +8,57 @@
 	<cfargument name="parameterize" type="any" required="false">
 	<cfargument name="ifNull" type="any" required="false">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
+	<cfargument name="group" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="average", args=arguments);
-		if (ListFindNoCase("cf_sql_integer,cf_sql_bigint,cf_sql_smallint,cf_sql_tinyint", variables.wheels.class.properties[arguments.property].type))
+		arguments.type = "AVG";
+		if (StructKeyExists(arguments, "group"))
 		{
-			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it
-			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
-			loc.values = ListToArray(Evaluate("ValueList(loc.values.#arguments.property#)"));
-			loc.rv = arguments.ifNull;
-			if (!ArrayIsEmpty(loc.values))
-			{
-				if (arguments.distinct)
-				{
-					loc.tempValues = {};
-					loc.iEnd = ArrayLen(loc.values);
-					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-					{
-						StructInsert(loc.tempValues, loc.values[loc.i], loc.values[loc.i], true);
-					}
-					loc.values = ListToArray(StructKeyList(loc.tempValues));
-				}
-				loc.rv = ArrayAvg(loc.values);
-			}
+			loc.rv = $calculate(argumentCollection=arguments);
 		}
 		else
 		{
-			// if the column's type is a float or similar we can run an AVG type query since it will always return a value of the same type as the column
-			arguments.type = "AVG";
-			loc.rv = $calculate(argumentCollection=arguments);
+			if (ListFindNoCase("cf_sql_integer,cf_sql_bigint,cf_sql_smallint,cf_sql_tinyint", variables.wheels.class.properties[arguments.property].type))
+			{
+				// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it
+				loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
+				loc.values = ListToArray(Evaluate("ValueList(loc.values.#arguments.property#)"));
+				loc.rv = arguments.ifNull;
+				if (!ArrayIsEmpty(loc.values))
+				{
+					if (arguments.distinct)
+					{
+						loc.tempValues = {};
+						loc.iEnd = ArrayLen(loc.values);
+						for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+						{
+							StructInsert(loc.tempValues, loc.values[loc.i], loc.values[loc.i], true);
+						}
+						loc.values = ListToArray(StructKeyList(loc.tempValues));
+					}
+					loc.rv = ArrayAvg(loc.values);
+				}
+			}
+			else
+			{
+				// if the column's type is a float or similar we can run an AVG type query since it will always return a value of the same type as the column
+				loc.rv = $calculate(argumentCollection=arguments);
 
-			// we convert the result to a string so that it is the same as what would happen if you calculate an average in ColdFusion code (like we do for integers in this function for example)
-			loc.rv = JavaCast("string", loc.rv);
+				// we convert the result to a string so that it is the same as what would happen if you calculate an average in ColdFusion code (like we do for integers in this function for example)
+				loc.rv = JavaCast("string", loc.rv);
+			}
 		}
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="count" returntype="numeric" access="public" output="false">
+<cffunction name="count" returntype="any" access="public" output="false">
 	<cfargument name="where" type="string" required="false" default="">
 	<cfargument name="include" type="string" required="false" default="">
 	<cfargument name="parameterize" type="any" required="false">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
+	<cfargument name="group" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="count", args=arguments);
@@ -64,7 +73,7 @@
 			arguments.distinct = false;
 		}
 		loc.rv = $calculate(argumentCollection=arguments);
-		if (!IsNumeric(loc.rv))
+		if (!StructKeyExists(arguments, "group") && !IsNumeric(loc.rv))
 		{
 			loc.rv = 0;
 		}
@@ -79,6 +88,7 @@
 	<cfargument name="parameterize" type="any" required="false">
 	<cfargument name="ifNull" type="any" required="false">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
+	<cfargument name="group" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="maximum", args=arguments);
@@ -95,6 +105,7 @@
 	<cfargument name="parameterize" type="any" required="false">
 	<cfargument name="ifNull" type="any" required="false">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
+	<cfargument name="group" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="minimum", args=arguments);
@@ -112,6 +123,7 @@
 	<cfargument name="parameterize" type="any" required="false">
 	<cfargument name="ifNull" type="any" required="false">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
+	<cfargument name="group" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="sum", args=arguments);
@@ -132,6 +144,7 @@
 	<cfargument name="distinct" type="boolean" required="false" default="false">
 	<cfargument name="ifNull" type="any" required="false" default="">
 	<cfargument name="includeSoftDeletes" type="boolean" required="true">
+	<cfargument name="group" type="string" required="false">
 	<cfscript>
 		var loc = {};
 
@@ -161,18 +174,41 @@
 		}
 		arguments.select &= loc.properties;
 
-		// alias the result with `AS`, this means that CFWheels will not try and change the string (which is why we have to add the table name above since it won't be done automatically)
-		arguments.select &= ") AS wheelsqueryresult";
+		// alias the result with `AS`, this means that Wheels will not try and change the string (which is why we have to add the table name above since it won't be done automatically)
+		loc.alias = LCase(arguments.type);
+		loc.alias = Replace(Replace(Replace(loc.alias, "avg", "average"), "min", "minimum"), "max", "maximum");
+		if (arguments.type != "count")
+		{
+			loc.alias = arguments.property & loc.alias;
+		}
+		arguments.select &= ") AS " & loc.alias;
 
-		// call `findAll` with `select`, `where`, `parameterize` and `include` but delete all other arguments
+		if (StructKeyExists(arguments, "group"))
+		{
+			if (ListFindNoCase(variables.wheels.class.calculatedPropertyList, arguments.group))
+			{
+				arguments.select = ListAppend(arguments.select, variables.wheels.class.calculatedProperties[arguments.group].sql & " AS " & arguments.group);
+			}
+			else
+			{
+				arguments.select = ListAppend(arguments.select, tableName() & "." & arguments.group);
+			}
+		}
+
+		// call `findAll` with `select`, `where`, `group`, `parameterize` and `include` but delete all other arguments
 		StructDelete(arguments, "type");
 		StructDelete(arguments, "property");
 		StructDelete(arguments, "distinct");
 
-		loc.rv = findAll(argumentCollection=arguments).wheelsqueryresult;
-		if (!Len(loc.rv) && Len(arguments.ifNull))
+		loc.rv = findAll(argumentCollection=arguments);
+		if (!StructKeyExists(arguments, "group"))
 		{
-			loc.rv = arguments.ifNull;
+			// when not grouping by something we just return the value itself
+			loc.rv = loc.rv[loc.alias];
+			if (!Len(loc.rv) && Len(arguments.ifNull))
+			{
+				loc.rv = arguments.ifNull;
+			}
 		}
 	</cfscript>
 	<cfreturn loc.rv>

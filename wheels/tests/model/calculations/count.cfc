@@ -5,6 +5,11 @@
 		<cfset assert("loc.result IS 7")>
 	</cffunction>
 
+	<cffunction name="test_count_with_group">
+		<cfset loc.result = model("post").count(property="views", group="authorId")>
+		<cfset assert("loc.result['count'][2] IS 2")>
+	</cffunction>
+
 	<cffunction name="test_count_with_include">
 		<cfset loc.result = model("author").count(include="posts")>
 		<cfset assert("loc.result IS 7")>
@@ -34,7 +39,7 @@
 		<cfset loc.result = model("author").count(where="title LIKE '%first%' OR title LIKE '%second%' OR title LIKE '%fourth%'", include="posts")>
 		<cfset assert("loc.result IS 2")>
 	</cffunction>
-	
+
 	<cffunction name="test_dynamic_count">
 		<cfset loc.author = model("author").findOne(where="lastName='Djurner'")>
 		<cfset loc.result = loc.author.postCount()>
@@ -46,7 +51,7 @@
 		<cfset loc.result = loc.author.postCount(where="title LIKE '%first%' OR title LIKE '%second%'")>
 		<cfset assert("loc.result IS 2")>
 	</cffunction>
-	
+
 	<cffunction name="test_count_with_include_soft_deletes">
 		<cftransaction action="begin">
 			<cfset loc.post = model("Post").findOne(where="views=0")>
@@ -55,6 +60,6 @@
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert('loc.count eq 5')>
-	</cffunction>	
-	
+	</cffunction>
+
 </cfcomponent>
