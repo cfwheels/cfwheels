@@ -5,6 +5,7 @@ Model Enhancements
 
 * Allow spaces in list passed in to the "include" argument on finders - #150 [Per Djurner]
 * Added findFirst() and findLast() finder methods - [Per Djurner]
+* Add support for "GROUP BY" in sum(), average() etc. - #464 [Per Djurner]
 
 View Enhancements
 =================
