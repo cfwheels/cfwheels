@@ -38,6 +38,7 @@ Miscellaneous
 * Removed deprecation work-around for the "if" argument on validation helpers - [Per Djurner]
 * Removed deprecation work-around for the "class" argument on association initialization methods - [Per Djurner]
 * Removed the "lib" folder - [Per Djurner]
+* Removed the h() function, use XMLFormat() instead - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
