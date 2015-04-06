@@ -62,7 +62,7 @@
 	    <cfset loc.e = '<select id="user-firstname" name="user[firstname]"><option value="tp">tony petruzzi</option><option value="pd">per djurner</option></select>'>
 	    <cfset assert('loc.e eq loc.r')>
 	</cffunction>
-	
+
 	<cffunction name="test_with_array_of_structs_as_options_2">
 		<cfset loc.options = []>
 		<cfset loc.options[1] = {}>
@@ -77,8 +77,8 @@
 	<cffunction name="test_htmlsafe">
 		<cfset loc.badValue = "<script>alert('hello');</script>">
 		<cfset loc.badName = "<script>alert('tony');</script>">
-		<cfset loc.goodValue = loc.controller.h(loc.badValue)>
-		<cfset loc.goodName = loc.controller.h(loc.badName)>
+		<cfset loc.goodValue = XMLFormat(loc.badValue)>
+		<cfset loc.goodName = XMLFormat(loc.badName)>
 		<cfset loc.options = []>
 		<cfset loc.options[1] = {value="#loc.badValue#", name="#loc.badName#"}>
 	    <cfset loc.r = loc.controller.select(objectName="user", property="firstname", options=loc.options, valueField="value", textField="name", label=false)>

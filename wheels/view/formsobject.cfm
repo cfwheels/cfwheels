@@ -618,8 +618,8 @@
 		var loc = {};
 		if (arguments.applyHtmlEditFormat)
 		{
-			arguments.optionValue = h(arguments.optionValue);
-			arguments.optionText = h(arguments.optionText);
+			arguments.optionValue = XMLFormat(arguments.optionValue);
+			arguments.optionText = XMLFormat(arguments.optionText);
 		}
 		loc.optionAttributes = {value=arguments.optionValue};
 		if (arguments.optionValue == arguments.objectValue || ListFindNoCase(arguments.objectValue, arguments.optionValue))
