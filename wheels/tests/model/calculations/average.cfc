@@ -7,11 +7,6 @@
 		<cfset assert("loc.result IS 3")>
 	</cffunction>
 
-	<cffunction name="test_average_with_group">
-		<cfset loc.result = model("post").average(property="views", group="authorId")>
-		<cfset assert("loc.result['viewsAverage'][1] IS 3")>
-	</cffunction>
-
 	<cffunction name="test_average_with_integer_with_non_matching_where">
 		<cfset loc.result = model("post").average(property="views", where="id=0")>
 		<cfset assert("loc.result IS ''")>
@@ -28,6 +23,11 @@
 	</cffunction>
 
 	<!--- floats --->
+
+	<cffunction name="test_average_with_group">
+		<cfset loc.result = model("post").average(property="averageRating", group="authorId")>
+		<cfset assert("DecimalFormat(loc.result['averageRatingAverage'][1]) IS DecimalFormat(3.40)")>
+	</cffunction>
 
 	<cffunction name="test_average_with_float">
 		<cfset loc.result = model("post").average(property="averageRating")>
