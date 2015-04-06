@@ -5,10 +5,15 @@
 		<cfset assert("loc.result IS 0")>
 	</cffunction>
 
-	<!--- <cffunction name="test_minimum_with_group">
-		<cfset loc.result = model("post").minimum(property="views", group="authorId")>
-		<cfset assert("loc.result['viewsMinimum'][2] IS 2")>
-	</cffunction> --->
+	<cffunction name="test_minimum_with_group">
+		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
+			<cfset loc.result = model("post").minimum(property="views", group="authorId")>
+			<cfset assert("loc.result['viewsMinimum'][2] IS 2")>
+		<cfelse>
+			<cfset assert(true)>
+		</cfif>
+
+	</cffunction>
 
 	<cffunction name="test_minimum_with_non_matching_where">
 		<cfset loc.result = model("post").minimum(property="views", where="id=0")>

@@ -5,10 +5,14 @@
 		<cfset assert("loc.result IS 5")>
 	</cffunction>
 
-	<!--- <cffunction name="test_maximum_with_group">
-		<cfset loc.result = model("post").maximum(property="views", group="authorId")>
-		<cfset assert("loc.result['viewsMaximum'][1] IS 5")>
-	</cffunction> --->
+	<cffunction name="test_maximum_with_group">
+		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
+			<cfset loc.result = model("post").maximum(property="views", group="authorId")>
+			<cfset assert("loc.result['viewsMaximum'][1] IS 5")>
+		<cfelse>
+			<cfset assert(true)>
+		</cfif>
+	</cffunction>
 
 	<cffunction name="test_maximum_with_where">
 		<cfset loc.result = model("post").maximum(property="views", where="title LIKE 'Title%'")>

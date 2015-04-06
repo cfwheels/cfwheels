@@ -24,10 +24,14 @@
 
 	<!--- floats --->
 
-	<!--- <cffunction name="test_average_with_group">
-		<cfset loc.result = model("post").average(property="averageRating", group="authorId")>
-		<cfset assert("DecimalFormat(loc.result['averageRatingAverage'][1]) IS DecimalFormat(3.40)")>
-	</cffunction> --->
+	<cffunction name="test_average_with_group">
+		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
+			<cfset loc.result = model("post").average(property="averageRating", group="authorId")>
+			<cfset assert("DecimalFormat(loc.result['averageRatingAverage'][1]) IS DecimalFormat(3.40)")>
+		<cfelse>
+			<cfset assert(true)>
+		</cfif>
+	</cffunction>
 
 	<cffunction name="test_average_with_float">
 		<cfset loc.result = model("post").average(property="averageRating")>
