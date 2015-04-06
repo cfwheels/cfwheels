@@ -58,6 +58,7 @@
 				$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by CFWheels.", extendedInfo="Use SQL Server, MySQL, Oracle, PostgreSQL or H2.");
 			}
 			loc.rv = CreateObject("component", "model.adapters.#loc.adapterName#").init(argumentCollection=variables.instance.connection);
+			application.wheels.adapterName = loc.adapterName;
 		</cfscript>
 		<cfreturn loc.rv>
 	</cffunction>

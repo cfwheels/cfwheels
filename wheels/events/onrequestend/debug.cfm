@@ -96,6 +96,10 @@
 			</td>
 		</tr>
 		<tr>
+			<td><strong>Active Environment:</strong></td>
+			<td>#capitalize(get("environment"))#<cfif NOT Len(get("reloadPassword"))><cfset loc.environments = "design,development,testing,maintenance,production"> [<cfset loc.pos = 0><cfloop list="#loc.environments#" index="loc.i"><cfset loc.pos = loc.pos + 1><cfif get("environment") IS NOT loc.i><a href="#loc.baseReloadURL##loc.i#">#capitalize(loc.i)#</a><cfif ListLen(loc.environments) GT loc.pos>, </cfif></cfif></cfloop>]</cfif></td>
+		</tr>
+		<tr>
 			<td><strong>Host Name:</strong></td>
 			<td>#get("hostName")#</td>
 		</tr>
@@ -107,10 +111,12 @@
 			<td><strong>Default Data Source:</strong></td>
 			<td>#capitalize(get("dataSourceName"))#</td>
 		</tr>
-		<tr>
-			<td><strong>Active Environment:</strong></td>
-			<td>#capitalize(get("environment"))#<cfif NOT Len(get("reloadPassword"))><cfset loc.environments = "design,development,testing,maintenance,production"> [<cfset loc.pos = 0><cfloop list="#loc.environments#" index="loc.i"><cfset loc.pos = loc.pos + 1><cfif get("environment") IS NOT loc.i><a href="#loc.baseReloadURL##loc.i#">#capitalize(loc.i)#</a><cfif ListLen(loc.environments) GT loc.pos>, </cfif></cfif></cfloop>]</cfif></td>
-		</tr>
+		<cfif StructKeyExists(application.wheels, "adapterName")>
+			<tr>
+				<td><strong>Database Adapter:</strong></td>
+				<td>#get("adapterName")#</td>
+			</tr>
+		</cfif>
 		<tr>
 			<td><strong>URL Rewriting:</strong></td>
 			<td>#get("URLRewriting")#</td>
