@@ -1,45 +1,17 @@
-<cffunction name="linkTo" returntype="string" access="public" output="false" hint="Creates a link to another page in your application. Pass in the name of a `route` to use your configured routes or a `controller`/`action`/`key` combination. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
-	examples=
-	'
-		##linkTo(text="Log Out", controller="account", action="logout")##
-		-> <a href="/account/logout">Log Out</a>
-
-		<!--- if you''re already in the `account` controller, CFWheels will assume that''s where you want the link to point --->
-		##linkTo(text="Log Out", action="logout")##
-		-> <a href="/account/logout">Log Out</a>
-
-		##linkTo(text="View Post", controller="blog", action="post", key=99)##
-		-> <a href="/blog/post/99">View Post</a>
-
-		##linkTo(text="View Settings", action="settings", params="show=all&sort=asc")##
-		-> <a href="/account/settings?show=all&amp;sort=asc">View Settings</a>
-
-		<!--- Given that a `userProfile` route has been configured in `config/routes.cfm` --->
-		##linkTo(text="Joe''s Profile", route="userProfile", userName="joe")##
-		-> <a href="/user/joe">Joe''s Profile</a>
-
-		<!--- Link to an external website --->
-		##linkTo(text="ColdFusion Framework", href="http://cfwheels.org/")##
-		-> <a href="http://cfwheels.org/">ColdFusion Framework</a>
-
-		<!--- Give the link `class` and `id` attributes --->
-		##linkTo(text="Delete Post", action="delete", key=99, class="delete", id="delete-99")##
-		-> <a class="delete" href="/blog/delete/99" id="delete-99">Delete Post</a>
-	'
-	categories="view-helper,links" chapters="linking-pages" functions="URLFor,buttonTo,mailTo">
-	<cfargument name="text" type="string" required="false" hint="The text content of the link.">
-	<cfargument name="confirm" type="string" required="false" default="" hint="Pass a message here to cause a JavaScript confirmation dialog box to pop up containing the message.">
-	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="action" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="params" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="onlyPath" type="boolean" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="href" type="string" required="false" hint="Pass a link to an external site here if you want to bypass the CFWheels routing system altogether and link to an external URL.">
+<cffunction name="linkTo" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="false">
+	<cfargument name="confirm" type="string" required="false" default="">
+	<cfargument name="route" type="string" required="false" default="">
+	<cfargument name="controller" type="string" required="false" default="">
+	<cfargument name="action" type="string" required="false" default="">
+	<cfargument name="key" type="any" required="false" default="">
+	<cfargument name="params" type="string" required="false" default="">
+	<cfargument name="anchor" type="string" required="false" default="">
+	<cfargument name="onlyPath" type="boolean" required="false">
+	<cfargument name="host" type="string" required="false">
+	<cfargument name="protocol" type="string" required="false">
+	<cfargument name="port" type="numeric" required="false">
+	<cfargument name="href" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="linkTo", args=arguments);
@@ -68,26 +40,21 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="buttonTo" returntype="string" access="public" output="false" hint="Creates a form containing a single button that submits to the URL. The URL is built the same way as the @linkTo function."
-	examples=
-	'
-		##buttonTo(text="Delete Account", action="perFormDelete", disable="Wait...")##
-	'
-	categories="view-helper,links" functions="URLFor,linkTo,mailTo">
-	<cfargument name="text" type="string" required="false" hint="The text content of the button.">
-	<cfargument name="confirm" type="string" required="false" hint="See documentation for @linkTo.">
-	<cfargument name="image" type="string" required="false" hint="If you want to use an image for the button pass in the link to it here (relative from the `images` folder).">
-	<cfargument name="disable" type="any" required="false" hint="Pass in `true` if you want the button to be disabled when clicked (can help prevent multiple clicks), or pass in a string if you want the button disabled and the text on the button updated (to ""please wait..."", for example).">
-	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="action" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="params" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="onlyPath" type="boolean" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
+<cffunction name="buttonTo" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="false">
+	<cfargument name="confirm" type="string" required="false">
+	<cfargument name="image" type="string" required="false">
+	<cfargument name="disable" type="any" required="false">
+	<cfargument name="route" type="string" required="false" default="">
+	<cfargument name="controller" type="string" required="false" default="">
+	<cfargument name="action" type="string" required="false" default="">
+	<cfargument name="key" type="any" required="false" default="">
+	<cfargument name="params" type="string" required="false" default="">
+	<cfargument name="anchor" type="string" required="false" default="">
+	<cfargument name="onlyPath" type="boolean" required="false">
+	<cfargument name="host" type="string" required="false">
+	<cfargument name="protocol" type="string" required="false">
+	<cfargument name="port" type="numeric" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="buttonTo", reserved="method", args=arguments);
@@ -111,16 +78,10 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="mailTo" returntype="string" access="public" output="false" hint="Creates a `mailto` link tag to the specified email address, which is also used as the name of the link unless name is specified."
-	examples=
-	'
-		##mailTo(emailAddress="webmaster@yourdomain.com", name="Contact our Webmaster")##
-		-> <a href="mailto:webmaster@yourdomain.com">Contact our Webmaster</a>
-	'
-	categories="view-helper,links" functions="URLFor,linkTo,buttonTo">
-	<cfargument name="emailAddress" type="string" required="true" hint="The email address to link to.">
-	<cfargument name="name" type="string" required="false" default="" hint='A string to use as the link text ("Joe" or "Support Department", for example).'>
-	<cfargument name="encode" type="boolean" required="false" hint="Pass `true` here to encode the email address, making it harder for bots to harvest it for example.">
+<cffunction name="mailTo" returntype="string" access="public" output="false">
+	<cfargument name="emailAddress" type="string" required="true">
+	<cfargument name="name" type="string" required="false" default="">
+	<cfargument name="encode" type="boolean" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="mailTo", reserved="href", args=arguments);
@@ -150,67 +111,24 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="paginationLinks" returntype="string" access="public" output="false" hint="Builds and returns a string containing links to pages based on a paginated query. Uses @linkTo internally to build the link, so you need to pass in a `route` name or a `controller`/`action`/`key` combination. All other @linkTo arguments can be supplied as well, in which case they are passed through directly to @linkTo. If you have paginated more than one query in the controller, you can use the `handle` argument to reference them. (Don't forget to pass in a `handle` to the @findAll function in your controller first.)"
-	examples=
-	'
-		<!--- Example 1: List authors page by page, 25 at a time --->
-		<!--- Controller code --->
-		<cfparam name="params.page" default="1">
-		<cfset allAuthors = model("author").findAll(page=params.page, perPage=25, order="lastName")>
-
-		<!--- View code --->
-		<ul>
-		    <cfoutput query="allAuthors">
-		        <li>##firstName## ##lastName##</li>
-		    </cfoutput>
-		</ul>
-		<cfoutput>##paginationLinks(action="listAuthors")##</cfoutput>
-
-		<!--- Example 2: Using the same model call above, show all authors with a window size of 5 --->
-		<!--- View code --->
-		<cfoutput>##paginationLinks(action="listAuthors", windowSize=5)##</cfoutput>
-
-		<!--- Example 3: If more than one paginated query is being run, then you need to reference the correct `handle` in the view --->
-		<!--- Controller code --->
-		<cfset allAuthors = model("author").findAll(handle="authQuery", page=5, order="id")>
-
-		<!--- View code --->
-		<ul>
-		    <cfoutput>##paginationLinks(action="listAuthors", handle="authQuery", prependToLink="<li>", appendToLink="</li>")##</cfoutput>
-		</ul>
-
-		<!--- Example 4: Call to `paginationLinks` using routes --->
-		<!--- Route setup in config/routes.cfm --->
-		<cfset addRoute(name="paginatedCommentListing", pattern="blog/[year]/[month]/[day]/[page]", controller="theBlog", action="stats")>
-		<cfset addRoute(name="commentListing", pattern="blog/[year]/[month]/[day]",  controller="theBlog", action="stats")>
-
-		<!--- Ccontroller code --->
-		<cfparam name="params.page" default="1">
-		<cfset comments = model("comment").findAll(page=params.page, order="createdAt")>
-
-		<!--- View code --->
-		<ul>
-		    <cfoutput>##paginationLinks(route="paginatedCommentListing", year=2009, month="feb", day=10)##</cfoutput>
-		</ul>
-	'
-	categories="view-helper,links" chapters="getting-paginated-data,displaying-links-for-pagination" functions="pagination,setPagination,linkTo,findAll">
-	<cfargument name="windowSize" type="numeric" required="false" hint="The number of page links to show around the current page.">
-	<cfargument name="alwaysShowAnchors" type="boolean" required="false" hint="Whether or not links to the first and last page should always be displayed.">
-	<cfargument name="anchorDivider" type="string" required="false" hint="String to place next to the anchors on either side of the list.">
-	<cfargument name="linkToCurrentPage" type="boolean" required="false" hint="Whether or not the current page should be linked to.">
-	<cfargument name="prepend" type="string" required="false" hint="String or HTML to be prepended before result.">
-	<cfargument name="append" type="string" required="false" hint="String or HTML to be appended after result.">
-	<cfargument name="prependToPage" type="string" required="false" hint="String or HTML to be prepended before each page number.">
-	<cfargument name="prependOnFirst" type="boolean" required="false" hint="Whether or not to prepend the `prependToPage` string on the first page in the list.">
-	<cfargument name="prependOnAnchor" type="boolean" required="false" hint="Whether or not to prepend the `prependToPage` string on the anchors.">
-	<cfargument name="appendToPage" type="string" required="false" hint="String or HTML to be appended after each page number.">
-	<cfargument name="appendOnLast" type="boolean" required="false" hint="Whether or not to append the `appendToPage` string on the last page in the list.">
-	<cfargument name="appendOnAnchor" type="boolean" required="false" hint="Whether or not to append the `appendToPage` string on the anchors.">
-	<cfargument name="classForCurrent" type="string" required="false" hint="Class name for the current page number (if `linkToCurrentPage` is `true`, the class name will go on the `a` element. If not, a `span` element will be used).">
-	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for.">
-	<cfargument name="name" type="string" required="false" hint="The name of the param that holds the current page number.">
-	<cfargument name="showSinglePage" type="boolean" required="false" hint="Will show a single page when set to `true`. (The default behavior is to return an empty string when there is only one page in the pagination).">
-	<cfargument name="pageNumberAsParam" type="boolean" required="false" hint="Decides whether to link the page number as a param or as part of a route. (The default behavior is `true`).">
+<cffunction name="paginationLinks" returntype="string" access="public" output="false">
+	<cfargument name="windowSize" type="numeric" required="false">
+	<cfargument name="alwaysShowAnchors" type="boolean" required="false">
+	<cfargument name="anchorDivider" type="string" required="false">
+	<cfargument name="linkToCurrentPage" type="boolean" required="false">
+	<cfargument name="prepend" type="string" required="false">
+	<cfargument name="append" type="string" required="false">
+	<cfargument name="prependToPage" type="string" required="false">
+	<cfargument name="prependOnFirst" type="boolean" required="false">
+	<cfargument name="prependOnAnchor" type="boolean" required="false">
+	<cfargument name="appendToPage" type="string" required="false">
+	<cfargument name="appendOnLast" type="boolean" required="false">
+	<cfargument name="appendOnAnchor" type="boolean" required="false">
+	<cfargument name="classForCurrent" type="string" required="false">
+	<cfargument name="handle" type="string" required="false" default="query">
+	<cfargument name="name" type="string" required="false">
+	<cfargument name="showSinglePage" type="boolean" required="false">
+	<cfargument name="pageNumberAsParam" type="boolean" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="paginationLinks", args=arguments);
