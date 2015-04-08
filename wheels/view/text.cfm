@@ -1,16 +1,9 @@
-<cffunction name="autoLink" returntype="string" access="public" output="false" hint="Turns all URLs and email addresses into hyperlinks."
-	examples=
-	'
-		##autoLink("Download CFWheels from http://cfwheels.org/download")##
-		-> Download CFWheels from <a href="http://cfwheels.org/download">http://cfwheels.org/download</a>
+<!--- PUBLIC VIEW HELPER FUNCTIONS --->
 
-		##autoLink("Email us at info@cfwheels.org")##
-		-> Email us at <a href="mailto:info@cfwheels.org">info@cfwheels.org</a>
-	'
-	categories="view-helper,text" functions="excerpt,highlight,simpleFormat,titleize,truncate">
-	<cfargument name="text" type="string" required="true" hint="The text to create links in.">
-	<cfargument name="link" type="string" required="false" hint="Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`.">
-	<cfargument name="relative" type="boolean" required="false" default="true" hint="Should we autolink relative urls">
+<cffunction name="autoLink" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="true">
+	<cfargument name="link" type="string" required="false">
+	<cfargument name="relative" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		$args(name="autoLink", args=arguments);
@@ -36,54 +29,11 @@
 	<cfreturn arguments.text>
 </cffunction>
 
-<cffunction name="$autoLinkLoop" access="public" returntype="string" output="false">
+<cffunction name="excerpt" returntype="string" access="public" output="false">
 	<cfargument name="text" type="string" required="true">
-	<cfargument name="regex" type="string" required="true">
-	<cfargument name="protocol" type="string" required="false" default="">
-	<cfscript>
-	var loc = {};
-	loc.punctuationRegEx = "([^\w\/-]+)$";
-	loc.startPosition = 1;
-	loc.match = ReFindNoCase(arguments.regex, arguments.text, loc.startPosition, true);
-	while (loc.match.pos[1] > 0)
-	{
-		loc.startPosition = loc.match.pos[1] + loc.match.len[1];
-		loc.str = Mid(arguments.text, loc.match.pos[1], loc.match.len[1]);
-		if (Left(loc.str, 2) != "<a")
-		{
-			arguments.text = RemoveChars(arguments.text, loc.match.pos[1], loc.match.len[1]);
-			loc.punctuation = ArrayToList(ReMatchNoCase(loc.punctuationRegEx, loc.str));
-			loc.str = REReplaceNoCase(loc.str, loc.punctuationRegEx, "", "all");
-
-			// make sure that links beginning with "www." have a protocol
-			if (Left(loc.str, 4) == "www." && !Len(arguments.protocol))
-			{
-				arguments.protocol = "http://";
-			}
-
-			arguments.href = arguments.protocol & loc.str;
-			loc.element = $element("a", arguments, loc.str, "text,regex,link,protocol,relative") & loc.punctuation;
-			arguments.text = Insert(loc.element, arguments.text, loc.match.pos[1]-1);
-			loc.startPosition = loc.match.pos[1] + Len(loc.element);
-		}
-		loc.startPosition++;
-		loc.match = ReFindNoCase(arguments.regex, arguments.text, loc.startPosition, true);
-	}
-	</cfscript>
-	<cfreturn arguments.text>
-</cffunction>
-
-<cffunction name="excerpt" returntype="string" access="public" output="false" hint="Extracts an excerpt from text that matches the first instance of a given phrase."
-	examples=
-	'
-		##excerpt(text="ColdFusion CFWheels is a Rails-like MVC framework for Adobe ColdFusion, Railo and Lucee", phrase="framework", radius=5)##
-		-> ... MVC framework for ...
-	'
-	categories="view-helper,text" functions="autoLink,highlight,simpleFormat,titleize,truncate">
-	<cfargument name="text" type="string" required="true" hint="The text to extract an excerpt from.">
-	<cfargument name="phrase" type="string" required="true" hint="The phrase to extract.">
-	<cfargument name="radius" type="numeric" required="false" hint="Number of characters to extract surrounding the phrase.">
-	<cfargument name="excerptString" type="string" required="false" hint="String to replace first and/or last characters with.">
+	<cfargument name="phrase" type="string" required="true">
+	<cfargument name="radius" type="numeric" required="false">
+	<cfargument name="excerptString" type="string" required="false">
 	<cfscript>
 	var loc = {};
 	$args(name="excerpt", args=arguments);
@@ -120,18 +70,12 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="highlight" returntype="string" access="public" output="false" hint="Highlights the phrase(s) everywhere in the text if found by wrapping it in a `span` tag."
-	examples=
-	'
-		##highlight(text="You searched for: Wheels", phrases="Wheels")##
-		-> You searched for: <span class="highlight">Wheels</span>
-	'
-	categories="view-helper,text" functions="autoLink,excerpt,simpleFormat,titleize,truncate">
-	<cfargument name="text" type="string" required="true" hint="Text to search.">
-	<cfargument name="phrases" type="string" required="true" hint="List of phrases to highlight.">
-	<cfargument name="delimiter" type="string" required="false" hint="Delimiter to use in `phrases` argument.">
-	<cfargument name="tag" type="string" required="false" hint="HTML tag to use to wrap the highlighted phrase(s).">
-	<cfargument name="class" type="string" required="false" hint="Class to use in the tags wrapping highlighted phrase(s).">
+<cffunction name="highlight" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="true">
+	<cfargument name="phrases" type="string" required="true">
+	<cfargument name="delimiter" type="string" required="false">
+	<cfargument name="tag" type="string" required="false">
+	<cfargument name="class" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="highlight", args=arguments);
@@ -172,33 +116,9 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="simpleFormat" returntype="string" access="public" output="false" hint="Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards)."
-	examples=
-	'
-		<!--- How most of your calls will look --->
-		##simpleFormat(post.comments)##
-
-		<!--- Demonstrates what output looks like with specific data --->
-		<cfsavecontent variable="comment">
-			I love this post!
-
-			Here''s why:
-			* Short
-			* Succinct
-			* Awesome
-		</cfsavecontent>
-		##simpleFormat(comment)##
-		-> <p>I love this post!</p>
-		   <p>
-		       Here''s why:<br />
-			   * Short<br />
-			   * Succinct<br />
-			   * Awesome
-		   </p>
-	'
-	categories="view-helper,text" functions="autoLink,excerpt,highlight,titleize,truncate">
-	<cfargument name="text" type="string" required="true" hint="The text to format.">
-	<cfargument name="wrap" type="boolean" required="false" hint="Set to `true` to wrap the result in a paragraph.">
+<cffunction name="simpleFormat" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="true">
+	<cfargument name="wrap" type="boolean" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="simpleFormat", args=arguments);
@@ -220,14 +140,8 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="titleize" returntype="string" access="public" output="false" hint="Capitalizes all words in the text to create a nicer looking title."
-	examples=
-	'
-		##titleize("Wheels is a framework for ColdFusion")##
-		-> CFWheels Is A Framework For ColdFusion
-	'
-	categories="view-helper,text" functions="autoLink,excerpt,highlight,simpleFormat,truncate">
-	<cfargument name="word" type="string" required="true" hint="The text to turn into a title.">
+<cffunction name="titleize" returntype="string" access="public" output="false">
+	<cfargument name="word" type="string" required="true">
 	<cfscript>
 		var loc = {};
 		loc.rv = "";
@@ -240,19 +154,10 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="truncate" returntype="string" access="public" output="false" hint="Truncates text to the specified length and replaces the last characters with the specified truncate string (which defaults to ""..."")."
-	examples=
-	'
-		##truncate(text="Wheels is a framework for ColdFusion", length=20)##
-		-> CFWheels is a frame...
-
-		##truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")##
-		-> CFWheels is a framework f (more)
-	'
-	categories="view-helper,text" functions="autoLink,excerpt,highlight,simpleFormat,titleize">
-	<cfargument name="text" type="string" required="true" hint="The text to truncate.">
-	<cfargument name="length" type="numeric" required="false" hint="Length to truncate the text to.">
-	<cfargument name="truncateString" type="string" required="false" hint="String to replace the last characters with.">
+<cffunction name="truncate" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="true">
+	<cfargument name="length" type="numeric" required="false">
+	<cfargument name="truncateString" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="truncate", args=arguments);
@@ -268,19 +173,10 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="wordTruncate" returntype="string" access="public" output="false" hint="Truncates text to the specified length of words and replaces the remaining characters with the specified truncate string (which defaults to ""..."")."
-	examples=
-	'
-		##wordTruncate(text="Wheels is a framework for ColdFusion", length=4)##
-		-> CFWheels is a framework...
-
-		##truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")##
-		-> CFWheels is a framework for (more)
-	'
-	categories="view-helper,text" functions="autoLink,excerpt,highlight,simpleFormat,titleize">
-	<cfargument name="text" type="string" required="true" hint="The text to truncate.">
-	<cfargument name="length" type="numeric" required="false" hint="Number of words to truncate the text to.">
-	<cfargument name="truncateString" type="string" required="false" hint="String to replace the last characters with.">
+<cffunction name="wordTruncate" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="true">
+	<cfargument name="length" type="numeric" required="false">
+	<cfargument name="truncateString" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="wordTruncate", args=arguments);
@@ -301,4 +197,43 @@
 		}
 	</cfscript>
 	<cfreturn loc.rv>
+</cffunction>
+
+<!--- PRIVATE FUNCTIONS --->
+
+<cffunction name="$autoLinkLoop" access="public" returntype="string" output="false">
+	<cfargument name="text" type="string" required="true">
+	<cfargument name="regex" type="string" required="true">
+	<cfargument name="protocol" type="string" required="false" default="">
+	<cfscript>
+	var loc = {};
+	loc.punctuationRegEx = "([^\w\/-]+)$";
+	loc.startPosition = 1;
+	loc.match = ReFindNoCase(arguments.regex, arguments.text, loc.startPosition, true);
+	while (loc.match.pos[1] > 0)
+	{
+		loc.startPosition = loc.match.pos[1] + loc.match.len[1];
+		loc.str = Mid(arguments.text, loc.match.pos[1], loc.match.len[1]);
+		if (Left(loc.str, 2) != "<a")
+		{
+			arguments.text = RemoveChars(arguments.text, loc.match.pos[1], loc.match.len[1]);
+			loc.punctuation = ArrayToList(ReMatchNoCase(loc.punctuationRegEx, loc.str));
+			loc.str = REReplaceNoCase(loc.str, loc.punctuationRegEx, "", "all");
+
+			// make sure that links beginning with "www." have a protocol
+			if (Left(loc.str, 4) == "www." && !Len(arguments.protocol))
+			{
+				arguments.protocol = "http://";
+			}
+
+			arguments.href = arguments.protocol & loc.str;
+			loc.element = $element("a", arguments, loc.str, "text,regex,link,protocol,relative") & loc.punctuation;
+			arguments.text = Insert(loc.element, arguments.text, loc.match.pos[1]-1);
+			loc.startPosition = loc.match.pos[1] + Len(loc.element);
+		}
+		loc.startPosition++;
+		loc.match = ReFindNoCase(arguments.regex, arguments.text, loc.startPosition, true);
+	}
+	</cfscript>
+	<cfreturn arguments.text>
 </cffunction>

@@ -1,3 +1,5 @@
+<!--- PUBLIC VIEW HELPER FUNCTIONS --->
+
 <cffunction name="stripLinks" returntype="string" access="public" output="false">
 	<cfargument name="html" type="string" required="true">
 	<cfscript>

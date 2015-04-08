@@ -1,64 +1,10 @@
-<cffunction name="flashMessages" returntype="string" access="public" output="false" hint="Displays a marked-up listing of messages that exist in the Flash."
-	examples=
-	'
-		<!--- In the controller action --->
-		flashInsert(success="Your post was successfully submitted.");
-		flashInsert(alert="Don''t forget to tweet about this post!");
-		flashInsert(error="This is an error message.");
+<!--- PUBLIC VIEW HELPER FUNCTIONS --->
 
-		<!--- In the layout or view --->
-		<cfoutput>
-			##flashMessages()##
-		</cfoutput>
-		<!---
-			Generates this (sorted alphabetically):
-			<div class="flashMessages">
-				<p class="alertMessage">
-					Don''t forget to tweet about this post!
-				</p>
-				<p class="errorMessage">
-					This is an error message.
-				</p>
-				<p class="successMessage">
-					Your post was successfully submitted.
-				</p>
-			</div>
-		--->
-
-		<!--- Only show the "success" key in the view --->
-		<cfoutput>
-			##flashMessages(key="success")##
-		</cfoutput>
-		<!---
-			Generates this:
-			<div class="flashMessage">
-				<p class="successMessage">
-					Your post was successfully submitted.
-				</p>
-			</div>
-		--->
-
-		<!--- Show only the "success" and "alert" keys in the view, in that order --->
-		<cfoutput>
-			##flashMessages(keys="success,alert")##
-		</cfoutput>
-		<!---
-			Generates this (sorted alphabetically):
-			<div class="flashMessages">
-				<p class="successMessage">
-					Your post was successfully submitted.
-				</p>
-				<p class="alertMessage">
-					Don''t forget to tweet about this post!
-				</p>
-			</div>
-		--->
-	'
-	categories="view-helper,miscellaneous" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists">
-	<cfargument name="keys" type="string" required="false" hint="The key (or list of keys) to show the value for. You can also use the `key` argument instead for better readability when accessing a single key.">
-	<cfargument name="class" type="string" required="false" hint="HTML `class` to set on the `div` element that contains the messages.">
-	<cfargument name="includeEmptyContainer" type="boolean" required="false" hint="Includes the `div` container even if the Flash is empty.">
-	<cfargument name="lowerCaseDynamicClassValues" type="boolean" required="false" hint="Outputs all class attribute values in lower case (except the main one).">
+<cffunction name="flashMessages" returntype="string" access="public" output="false">
+	<cfargument name="keys" type="string" required="false">
+	<cfargument name="class" type="string" required="false">
+	<cfargument name="includeEmptyContainer" type="boolean" required="false">
+	<cfargument name="lowerCaseDynamicClassValues" type="boolean" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="flashMessages", args=arguments, combine="keys/key");
@@ -107,34 +53,9 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="contentFor" returntype="void" access="public" output="false" hint="Used to store a section's output for rendering within a layout. This content store acts as a stack, so you can store multiple pieces of content for a given section."
-	examples=
-	'
-		<!--- In your view --->
-		<cfsavecontent variable="mySidebar">
-		<h1>My Sidebar Text</h1>
-		</cfsavecontent>
-		<cfset contentFor(sidebar=mySidebar)>
-
-		<!--- In your layout --->
-		<html>
-		<head>
-		    <title>My Site</title>
-		</head>
-		<body>
-
-		<cfoutput>
-		##includeContent("sidebar")##
-
-		##includeContent()##
-		</cfoutput>
-
-		</body>
-		</html>
-	'
-	categories="view-helper,miscellaneous" chapters="">
-	<cfargument name="position" type="any" required="false" default="last" hint="The position in the section's stack where you want the content placed. Valid values are `first`, `last`, or the numeric position.">
-	<cfargument name="overwrite" type="any" required="false" default="false" hint="Whether or not to overwrite any of the content. Valid values are `false`, `true`, or `all`.">
+<cffunction name="contentFor" returntype="void" access="public" output="false">
+	<cfargument name="position" type="any" required="false" default="last">
+	<cfargument name="overwrite" type="any" required="false" default="false">
 	<cfscript>
 		var loc = {};
 
@@ -228,26 +149,8 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="includeLayout" returntype="string" access="public" output="false" hint="Includes the contents of another layout file. This is usually used to include a parent layout from within a child layout."
-	examples=
-	'
-		<!--- Make sure that the `sidebar` value is provided for the parent layout --->
-		<cfsavecontent variable="categoriesSidebar">
-			<cfoutput>
-				<ul>
-					##includePartial(categories)##
-				</ul>
-			</cfoutput>
-		</cfsavecontent>
-		<cfset contentFor(sidebar=categoriesSidebar)>
-
-		<!--- Include parent layout at `views/layout.cfm` --->
-		<cfoutput>
-			##includeLayout("/layout.cfm")##
-		</cfoutput>
-	'
-	categories="view-helper,miscellaneous" chapters="using-layouts" functions="usesLayout,renderPage">
-	<cfargument name="name" type="string" required="false" default="layout" hint="Name of the layout file to include.">
+<cffunction name="includeLayout" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="false" default="layout">
 	<cfscript>
 		arguments.partial = arguments.name;
 		StructDelete(arguments, "name");
@@ -256,25 +159,13 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="includePartial" returntype="string" access="public" output="false" hint="Includes the specified partial file in the view. Similar to using `cfinclude` but with the ability to cache the result and use Wheels-specific file look-up. By default, CFWheels will look for the file in the current controller's view folder. To include a file relative from the base `views` folder, you can start the path supplied to `name` with a forward slash."
-	examples=
-	'
-		<cfoutput>##includePartial("login")##</cfoutput>
-		-> If we''re in the "admin" controller, CFWheels will include the file "views/admin/_login.cfm".
-
-		<cfoutput>##includePartial(partial="misc/doc", cache=30)##</cfoutput>
-		-> If we''re in the "admin" controller, CFWheels will include the file "views/admin/misc/_doc.cfm" and cache it for 30 minutes.
-
-		<cfoutput>##includePartial(partial="/shared/button")##</cfoutput>
-		-> CFWheels will include the file "views/shared/_button.cfm".
-	'
-	categories="view-helper,miscellaneous" chapters="pages,partials" functions="renderPartial">
-	<cfargument name="partial" type="any" required="true" hint="See documentation for @renderPartial.">
-	<cfargument name="group" type="string" required="false" default="" hint="If passing a query result set for the `partial` argument, use this to specify the field to group the query by. A new query will be passed into the partial template for you to iterate over.">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPage.">
-	<cfargument name="layout" type="string" required="false" hint="See documentation for @renderPage.">
-	<cfargument name="spacer" type="string" required="false" hint="HTML or string to place between partials when called using a query.">
-	<cfargument name="dataFunction" type="any" required="false" hint="Name of controller function to load data from.">
+<cffunction name="includePartial" returntype="string" access="public" output="false">
+	<cfargument name="partial" type="any" required="true">
+	<cfargument name="group" type="string" required="false" default="">
+	<cfargument name="cache" type="any" required="false" default="">
+	<cfargument name="layout" type="string" required="false">
+	<cfargument name="spacer" type="string" required="false">
+	<cfargument name="dataFunction" type="any" required="false">
 	<cfargument name="$prependWithUnderscore" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
@@ -314,43 +205,9 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="cycle" returntype="string" access="public" output="false" hint="Cycles through list values every time it is called."
-	examples=
-	'
-		<!--- Alternating table row colors --->
-		<table>
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Phone</th>
-				</tr>
-			</thead>
-			<tbody>
-				<cfoutput query="employees">
-					<tr class="##cycle("odd,even")##">
-						<td>##employees.name##</td>
-						<td>##employees.phone##</td>
-					</tr>
-				</cfoutput>
-			</tbody>
-		</table>
-
-		<!--- Alternating row colors and shrinking emphasis --->
-		<cfoutput query="employees" group="departmentId">
-			<div class="##cycle(values="even,odd", name="row")##">
-				<ul>
-					<cfoutput>
-						<cfset rank = cycle(values="president,vice-president,director,manager,specialist,intern", name="position")>
-						<li class="##rank##">##categories.categoryName##</li>
-						<cfset resetCycle("emphasis")>
-					</cfoutput>
-				</ul>
-			</div>
-		</cfoutput>
-	'
-	categories="view-helper,miscellaneous" functions="resetCycle">
-	<cfargument name="values" type="string" required="true" hint="List of values to cycle through.">
-	<cfargument name="name" type="string" required="false" default="default" hint="Name to give the cycle. Useful when you use multiple cycles on a page.">
+<cffunction name="cycle" returntype="string" access="public" output="false">
+	<cfargument name="values" type="string" required="true">
+	<cfargument name="name" type="string" required="false" default="default">
 	<cfscript>
 		var loc = {};
 		if (!StructKeyExists(request.wheels, "cycle"))
@@ -375,25 +232,8 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="resetCycle" returntype="void" access="public" output="false" hint="Resets a cycle so that it starts from the first list value the next time it is called."
-	examples=
-	'
-		<!--- alternating row colors and shrinking emphasis --->
-		<cfoutput query="employees" group="departmentId">
-			<div class="##cycle(values="even,odd", name="row")##">
-				<ul>
-					<cfoutput>
-						<cfset rank = cycle(values="president,vice-president,director,manager,specialist,intern", name="position")>
-						<li class="##rank##">##categories.categoryName##</li>
-						<cfset resetCycle("emphasis")>
-					</cfoutput>
-				</ul>
-			</div>
-		</cfoutput>
-	'
-	categories="view-helper,miscellaneous" functions="cycle"
-	>
-	<cfargument name="name" type="string" required="false" default="default" hint="The name of the cycle to reset.">
+<cffunction name="resetCycle" returntype="void" access="public" output="false">
+	<cfargument name="name" type="string" required="false" default="default">
 	<cfscript>
 		if (StructKeyExists(request.wheels, "cycle") && StructKeyExists(request.wheels.cycle, arguments.name))
 		{
@@ -402,12 +242,14 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$tag" returntype="string" access="public" output="false" hint="Creates a HTML tag with attributes.">
-	<cfargument name="name" type="string" required="true" hint="The name of the HTML tag.">
-	<cfargument name="attributes" type="struct" required="false" default="#StructNew()#" hint="The attributes and their values">
-	<cfargument name="close" type="boolean" required="false" default="false" hint="Whether or not to close the tag (self-close) or just end it with a bracket.">
-	<cfargument name="skip" type="string" required="false" default="" hint="List of attributes that should not be placed in the HTML tag.">
-	<cfargument name="skipStartingWith" type="string" required="false" default="" hint="If you want to skip attributes that start with a specific string you can specify it here.">
+<!--- PRIVATE FUNCTIONS --->
+
+<cffunction name="$tag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="attributes" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="close" type="boolean" required="false" default="false">
+	<cfargument name="skip" type="string" required="false" default="">
+	<cfargument name="skipStartingWith" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 
@@ -669,11 +511,10 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="$getObject" returntype="any" access="public" output="false" hint="Returns the object referenced by the variable name passed in. If the scope is included it gets it from there, otherwise it gets it from the variables scope.">
+<cffunction name="$getObject" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.rv = "";
 		try
 		{
 			if (Find(".", arguments.objectName) || Find("[", arguments.objectName))

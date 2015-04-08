@@ -1,3 +1,5 @@
+<!--- PUBLIC VIEW HELPER FUNCTIONS --->
+
 <cffunction name="distanceOfTimeInWords" returntype="string" access="public" output="false" hint="Pass in two dates to this method, and it will return a string describing the difference between them."
 	examples='
 	<cfset aWhileAgo = Now() - 30>

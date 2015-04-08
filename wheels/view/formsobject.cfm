@@ -1,3 +1,5 @@
+<!--- PUBLIC VIEW HELPER FUNCTIONS --->
+
 <cffunction name="textField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a text field form control based on the supplied `objectName` and `property`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
 	examples=
 	'
@@ -444,6 +446,8 @@
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
+
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$optionsForSelect" returntype="string" access="public" output="false">
 	<cfargument name="options" type="any" required="true">

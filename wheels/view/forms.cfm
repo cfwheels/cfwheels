@@ -1,3 +1,5 @@
+<!--- PUBLIC VIEW HELPER FUNCTIONS --->
+
 <cffunction name="endFormTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing the closing `form` tag."
 	examples=
 	'
@@ -86,7 +88,7 @@
 		{
 			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments));
 		}
-		
+
 		// need to re-add action here even if it was removed due to being a route variable above
 		if (ListFind(loc.skip, "action"))
 		{
@@ -212,6 +214,8 @@
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
+
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$formValue" returntype="string" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">

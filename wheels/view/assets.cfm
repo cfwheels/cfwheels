@@ -1,3 +1,5 @@
+<!--- PUBLIC VIEW HELPER FUNCTIONS --->
+
 <cffunction name="styleSheetLinkTag" returntype="string" access="public" output="false" hint="Returns a `link` tag for a stylesheet (or several) based on the supplied arguments."
 	examples=
 	'
@@ -191,6 +193,8 @@
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
+
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$addImageTagToCache" returntype="string" access="public" output="false">
 	<cfscript>

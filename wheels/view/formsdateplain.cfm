@@ -1,3 +1,5 @@
+<!--- PUBLIC VIEW HELPER FUNCTIONS --->
+
 <cffunction name="dateSelectTags" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls (month, day, and year) based on a `name` and `value`."
 	examples=
 	'
@@ -377,6 +379,8 @@
 	</cfscript>
 	<cfreturn timeSelectTags(argumentCollection=arguments)>
 </cffunction>
+
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$dateForSelectTags" returntype="date" access="public" output="false">
 	<cfargument name="part" type="string" required="true">

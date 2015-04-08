@@ -1,3 +1,5 @@
+<!--- PRIVATE FUNCTIONS --->
+
 <cffunction name="$yearSelectTag" returntype="string" access="public" output="false">
 	<cfargument name="startYear" type="numeric" required="true">
 	<cfargument name="endYear" type="numeric" required="true">

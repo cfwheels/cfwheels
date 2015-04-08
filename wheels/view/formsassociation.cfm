@@ -1,3 +1,5 @@
+<!--- PUBLIC VIEW HELPER FUNCTIONS --->
+
 <cffunction name="hasManyRadioButton" returntype="string" access="public" output="false" hint="Used as a shortcut to output the proper form elements for an association. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
 	examples='
 		<!--- Show radio buttons for associating a default address with the current author --->
@@ -126,6 +128,8 @@
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
+
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$hasManyFormValue" returntype="string" access="public" output="false">
 	<cfargument name="objectName" type="string" required="true">
