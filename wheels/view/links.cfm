@@ -1,3 +1,5 @@
+<!--- PUBLIC VIEW HELPER FUNCTIONS --->
+
 <cffunction name="linkTo" returntype="string" access="public" output="false">
 	<cfargument name="text" type="string" required="false">
 	<cfargument name="confirm" type="string" required="false" default="">
