@@ -1,3 +1,5 @@
+<!--- PRIVATE METHODS --->
+
 <cffunction name="$initModelClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="path" type="string" required="true">

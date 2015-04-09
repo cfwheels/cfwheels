@@ -1,3 +1,5 @@
+<!--- PRIVATE FUNCTIONS --->
+
 <cffunction name="$init" returntype="any" access="public" output="false">
 	<cfscript>
 		var loc = {};
