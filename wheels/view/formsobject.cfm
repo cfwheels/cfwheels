@@ -297,41 +297,21 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="checkBox" returntype="string" access="public" output="false" hint="Builds and returns a string containing a check box form control based on the supplied `objectName` and `property`. In most cases, this function generates a form field that should represent a `boolean` style field in your data. Use @checkBoxTag or @hasManyCheckBox to generate check boxes for selecting multiple values. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
-	examples=
-	'
-		<!--- Basic example of a check box for a boolean field --->
-		<cfoutput>
-		    ##checkBox(objectName="photo", property="isPublic", label="Display this photo publicly.")##
-		</cfoutput>
-
-		<!--- Shows check boxes for selecting public access for all photos provided by the `photos` association and nested properties --->
-		<cfoutput>
-			<cfloop from="1" to="##ArrayLen(user.photos)##" index="i">
-				<div>
-					<h3>##user.photos[i].title##:</h3>
-					<div>
-						##checkBox(objectName="user", association="photos", position=i, property="isPublic", label="Display this photo publicly.")##
-					</div>
-				</div>
-			</cfloop>
-		</cfoutput>
-	'
-	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors,nested-properties" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
-	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
-	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
-	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
-	<cfargument name="checkedValue" type="string" required="false" hint="The value of the check box when it's in the `checked` state.">
-	<cfargument name="uncheckedValue" type="string" required="false" hint="The value of the check box when it's in the `unchecked` state.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
+<cffunction name="checkBox" returntype="string" access="public" output="false">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="association" type="string" required="false">
+	<cfargument name="position" type="string" required="false">
+	<cfargument name="checkedValue" type="string" required="false">
+	<cfargument name="uncheckedValue" type="string" required="false">
+	<cfargument name="label" type="string" required="false">
+	<cfargument name="labelPlacement" type="string" required="false">
+	<cfargument name="prepend" type="string" required="false">
+	<cfargument name="append" type="string" required="false">
+	<cfargument name="prependToLabel" type="string" required="false">
+	<cfargument name="appendToLabel" type="string" required="false">
+	<cfargument name="errorElement" type="string" required="false">
+	<cfargument name="errorClass" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="checkBox", reserved="type,name,value,checked", args=arguments);
