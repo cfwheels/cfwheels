@@ -186,9 +186,6 @@
 		if (Len(loc.rv))
 		{
 			loc.rv = "GROUP BY " & loc.rv;
-			// this is a little ugly because I want to contain any possible issues to group by for 1.3.x releases
-			// for 2.0.x we should probably strip out the " AS x" part in the $createSQLFieldList function instead
-			loc.rv = REReplaceNoCase(loc.rv, " AS [a-z0-9-_]*", "", "all");
 		}
 	</cfscript>
 	<cfreturn loc.rv>
@@ -323,7 +320,11 @@
 						}
 						else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem) && arguments.addCalculatedProperties)
 						{
-							loc.toAppend &= "(" & Replace(loc.classData.calculatedProperties[loc.iItem].sql, ",", "[[comma]]", "all") & ") AS " & loc.iItem;
+							loc.toAppend &= "(" & Replace(loc.classData.calculatedProperties[loc.iItem].sql, ",", "[[comma]]", "all") & ")";
+							if (arguments.renameFields)
+							{
+								loc.toAppend &= " AS " & loc.iItem;
+							}
 						}
 						loc.addedPropertiesByModel[loc.classData.modelName] = ListAppend(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem);
 						break;

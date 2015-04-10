@@ -27,6 +27,7 @@ Controller Enhancements
 Bug Fixes
 =========
 
+* Do not remove "AS" when it's in the SQL for a calculated property - #453 [Jean Duteau, Per Djurner]
 * Obfuscate parameters in named route patterns when URL rewriting is off - #455 [Amber Cline, Per Djurner]
 * Pass through "includeSoftDeletes" argument correctly - #451 [Jon Brose]
 
