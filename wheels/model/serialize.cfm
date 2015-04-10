@@ -1,3 +1,5 @@
+<!--- PRIVATE METHODS --->
+
 <cffunction name="$serializeQueryToObjects" access="public" output="false" returntype="any">
 	<cfargument name="query" type="query" required="true">
 	<cfargument name="include" type="string" required="false" default="">
@@ -69,7 +71,7 @@
 		var loc = {};
 		loc.rv = [];
 		loc.doneStructs = "";
-		
+
 		// loop through all of our records and create an object for each row in the query
 		loc.iEnd = arguments.query.recordCount;
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -91,10 +93,10 @@
 							// we have a hasMany assocation, so loop through all of the records again to find the ones that belong to our root object
 							loc.struct[loc.include] = [];
 							loc.hasManyDoneStructs = "";
-							
+
 							// only get a reference to our model once per assocation
-							loc.model = model(variables.wheels.class.associations[loc.include].modelName); 
-							
+							loc.model = model(variables.wheels.class.associations[loc.include].modelName);
+
 							loc.kEnd = arguments.query.recordCount;
 							for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
 							{

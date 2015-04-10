@@ -1,11 +1,11 @@
 <!--- PUBLIC MODEL INITIALIZATION METHODS --->
 
-<cffunction name="nestedProperties" output="false" access="public" returntype="void" hint="Allows for nested objects, structs, and arrays to be set from params and other generated data.">
-	<cfargument name="association" type="string" required="false" default="" hint="The association (or list of associations) you want to allow to be set through the params. This argument is also aliased as `associations`.">
-	<cfargument name="autoSave" type="boolean" required="false" hint="Whether to save the association(s) when the parent object is saved.">
-	<cfargument name="allowDelete" type="boolean" required="false" hint="Set `allowDelete` to `true` to tell CFWheels to look for the property `_delete` in your model. If present and set to a value that evaluates to `true`, the model will be deleted when saving the parent.">
-	<cfargument name="sortProperty" type="string" required="false" hint="Set `sortProperty` to a property on the object that you would like to sort by. The property should be numeric, should start with 1, and should be consecutive. Only valid with `hasMany` associations.">
-	<cfargument name="rejectIfBlank" type="string" required="false" hint="A list of properties that should not be blank. If any of the properties are blank, any CRUD operations will be rejected.">
+<cffunction name="nestedProperties" output="false" access="public" returntype="void">
+	<cfargument name="association" type="string" required="false" default="">
+	<cfargument name="autoSave" type="boolean" required="false">
+	<cfargument name="allowDelete" type="boolean" required="false">
+	<cfargument name="sortProperty" type="string" required="false">
+	<cfargument name="rejectIfBlank" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(args=arguments, name="nestedProperties", combine="association/associations");

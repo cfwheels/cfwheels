@@ -1,3 +1,5 @@
+<!--- PRIVATE METHODS --->
+
 <cffunction name="$addDeleteClause" returntype="array" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="softDelete" type="boolean" required="true">

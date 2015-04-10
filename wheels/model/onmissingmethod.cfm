@@ -1,6 +1,8 @@
-<cffunction name="onMissingMethod" returntype="any" access="public" output="false" hint="This method handles dynamic finders, properties, and association methods. It is not part of the public API.">
-	<cfargument name="missingMethodName" type="string" required="true" hint="Name of method attempted to load.">
-	<cfargument name="missingMethodArguments" type="struct" required="true" hint="Name/value pairs of arguments that were passed to the attempted method call.">
+<!--- PUBLIC DYNAMIC MODEL METHODS --->
+
+<cffunction name="onMissingMethod" returntype="any" access="public" output="false">
+	<cfargument name="missingMethodName" type="string" required="true">
+	<cfargument name="missingMethodArguments" type="struct" required="true">
 	<cfscript>
 		var loc = {};
 		if (Right(arguments.missingMethodName, 10) == "hasChanged" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "hasChanged", "")))
@@ -118,6 +120,8 @@
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
+
+<!--- PRIVATE METHODS --->
 
 <cffunction name="$dynamicFinderOperator" returntype="string" access="public" output="false">
 	<cfargument name="property" type="string" required="true">
@@ -260,10 +264,10 @@
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					}
 					loc.singularKey = singularize(loc.key);
-					
+
 					// create a generic method name (example: "hasComments" becomes "hasObjects")
 					loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, loc.key, "objects"), loc.singularKey, "object");
-					
+
 					if (loc.name == "objects")
 					{
 						loc.method = "findAll";
@@ -424,10 +428,10 @@
 					{
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					}
-					
+
 					// create a generic method name (example: "hasAuthor" becomes "hasObject")
 					loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object");
-					
+
 					if (loc.name == "object")
 					{
 						loc.method = "findByKey";
@@ -451,8 +455,8 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="$propertyValue" returntype="string" access="public" output="false" hint="Returns the object's value of the passed in property name. If you pass in a list of property names you will get the values back in a list as well.">
-	<cfargument name="name" type="string" required="true" hint="Name of property to get value for.">
+<cffunction name="$propertyValue" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
 	<cfscript>
 		var loc = {};
 		loc.rv = "";
