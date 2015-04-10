@@ -1,17 +1,9 @@
 <!--- PUBLIC VIEW HELPER FUNCTIONS --->
 
-<cffunction name="errorMessagesFor" returntype="string" access="public" output="false" hint="Builds and returns a list (`ul` tag with a default class of `errorMessages`) containing all the error messages for all the properties of the object (if any). Returns an empty string otherwise."
-	examples=
-	'
-		<!--- view code --->
-		<cfoutput>
-		    ##errorMessagesFor(objectName="user")##
-		</cfoutput>
-	'
-	categories="view-helper,errors" chapters="form-helpers-and-showing-errors" functions="errorMessagesOn">
-	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display error messages for.">
-	<cfargument name="class" type="string" required="false" hint="CSS class to set on the `ul` element.">
-	<cfargument name="showDuplicates" type="boolean" required="false" hint="Whether or not to show duplicate error messages.">
+<cffunction name="errorMessagesFor" returntype="string" access="public" output="false">
+	<cfargument name="objectName" type="string" required="true">
+	<cfargument name="class" type="string" required="false">
+	<cfargument name="showDuplicates" type="boolean" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="errorMessagesFor", args=arguments);
@@ -49,21 +41,13 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="errorMessageOn" returntype="string" access="public" output="false" hint="Returns the error message, if one exists, on the object's property. If multiple error messages exist, the first one is returned."
-	examples=
-	'
-	<!--- view code --->
-	<cfoutput>
-	    ##errorMessageOn(objectName="user", property="email")##
-	</cfoutput>
-	'
-	categories="view-helper,errors" chapters="form-helpers-and-showing-errors" functions="errorMessagesOn">
-	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display the error message for.">
-	<cfargument name="property" type="string" required="true" hint="The name of the property to display the error message for.">
-	<cfargument name="prependText" type="string" required="false" hint="String to prepend to the error message.">
-	<cfargument name="appendText" type="string" required="false" hint="String to append to the error message.">
-	<cfargument name="wrapperElement" type="string" required="false" hint="HTML element to wrap the error message in.">
-	<cfargument name="class" type="string" required="false" hint="CSS class to set on the wrapper element.">
+<cffunction name="errorMessageOn" returntype="string" access="public" output="false">
+	<cfargument name="objectName" type="string" required="true">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="prependText" type="string" required="false">
+	<cfargument name="appendText" type="string" required="false">
+	<cfargument name="wrapperElement" type="string" required="false">
+	<cfargument name="class" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="errorMessageOn", args=arguments);

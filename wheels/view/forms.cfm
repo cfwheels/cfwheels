@@ -1,18 +1,8 @@
 <!--- PUBLIC VIEW HELPER FUNCTIONS --->
 
-<cffunction name="endFormTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing the closing `form` tag."
-	examples=
-	'
-		<!--- view code --->
-		<cfoutput>
-		    ##startFormTag(action="create")##
-		        <!--- your form controls --->
-		    ##endFormTag()##
-		</cfoutput>
-	'
-	categories="view-helper,forms-general" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
+<cffunction name="endFormTag" returntype="string" access="public" output="false">
+	<cfargument name="prepend" type="string" required="false">
+	<cfargument name="append" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="endFormTag", args=arguments);
@@ -25,32 +15,22 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="startFormTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing the opening form tag. The form's action will be built according to the same rules as `URLFor`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
-	examples=
-	'
-		<!--- view code --->
-		<cfoutput>
-		    ##startFormTag(action="create", spamProtection=true)##
-		        <!--- your form controls --->
-		    ##endFormTag()##
-		</cfoutput>
-	'
-	categories="view-helper,forms-general" chapters="form-helpers-and-showing-errors" functions="URLFor,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="method" type="string" required="false" hint="The type of method to use in the form tag. `get` and `post` are the options.">
-	<cfargument name="multipart" type="boolean" required="false" hint="Set to `true` if the form should be able to upload files.">
-	<cfargument name="spamProtection" type="boolean" required="false" hint="Set to `true` to protect the form against spammers (done with JavaScript).">
-	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="action" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="params" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="onlyPath" type="boolean" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
+<cffunction name="startFormTag" returntype="string" access="public" output="false">
+	<cfargument name="method" type="string" required="false">
+	<cfargument name="multipart" type="boolean" required="false">
+	<cfargument name="spamProtection" type="boolean" required="false">
+	<cfargument name="route" type="string" required="false" default="">
+	<cfargument name="controller" type="string" required="false" default="">
+	<cfargument name="action" type="string" required="false" default="">
+	<cfargument name="key" type="any" required="false" default="">
+	<cfargument name="params" type="string" required="false" default="">
+	<cfargument name="anchor" type="string" required="false" default="">
+	<cfargument name="onlyPath" type="boolean" required="false">
+	<cfargument name="host" type="string" required="false">
+	<cfargument name="protocol" type="string" required="false">
+	<cfargument name="port" type="numeric" required="false">
+	<cfargument name="prepend" type="string" required="false">
+	<cfargument name="append" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="startFormTag", args=arguments);
@@ -100,23 +80,12 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="submitTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a submit button `form` control. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
-	examples=
-	'
-		!--- view code --->
-		<cfoutput>
-		    ##startFormTag(action="something")##
-		        <!--- form controls go here --->
-		        ##submitTag()##
-		    ##endFormTag()##
-		</cfoutput>
-	'
-	categories="view-helper,forms-general" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="value" type="string" required="false" hint="Message to display in the button form control.">
-	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
-	<cfargument name="disable" type="any" required="false" hint="Whether or not to disable the button upon clicking. (prevents double-clicking.)">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
+<cffunction name="submitTag" returntype="string" access="public" output="false">
+	<cfargument name="value" type="string" required="false">
+	<cfargument name="image" type="string" required="false">
+	<cfargument name="disable" type="any" required="false">
+	<cfargument name="prepend" type="string" required="false">
+	<cfargument name="append" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="submitTag", reserved="type,src", args=arguments);
@@ -155,25 +124,14 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="buttonTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a button `form` control."
-	examples=
-	'
-		<!--- view code --->
-		<cfoutput>
-		    ##startFormTag(action="something")##
-		        <!--- form controls go here --->
-		        ##buttonTag(content="Submit this form", value="save")##
-		    ##endFormTag()##
-		</cfoutput>
-	'
-	categories="view-helper,forms-general" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="content" type="string" required="false" hint="Content to display inside the button.">
-	<cfargument name="type" type="string" required="false" hint="The type for the button: `button`, `reset`, or `submit`.">
-	<cfargument name="value" type="string" required="false" hint="The value of the button when submitted.">
-	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
-	<cfargument name="disable" type="any" required="false" hint="Whether or not to disable the button upon clicking (prevents double-clicking).">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
+<cffunction name="buttonTag" returntype="string" access="public" output="false">
+	<cfargument name="content" type="string" required="false">
+	<cfargument name="type" type="string" required="false">
+	<cfargument name="value" type="string" required="false">
+	<cfargument name="image" type="string" required="false">
+	<cfargument name="disable" type="any" required="false">
+	<cfargument name="prepend" type="string" required="false">
+	<cfargument name="append" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="buttonTag", args=arguments);

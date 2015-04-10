@@ -1,31 +1,11 @@
 <!--- PUBLIC VIEW HELPER FUNCTIONS --->
 
-<cffunction name="styleSheetLinkTag" returntype="string" access="public" output="false" hint="Returns a `link` tag for a stylesheet (or several) based on the supplied arguments."
-	examples=
-	'
-		<!--- view code --->
-		<head>
-			<!--- Includes `stylesheets/styles.css` --->
-		    ##styleSheetLinkTag("styles")##
-			<!--- Includes `stylesheets/blog.css` and `stylesheets/comments.css` --->
-			##styleSheetLinkTag("blog,comments")##
-			<!--- Includes printer style sheet --->
-			##styleSheetLinkTag(source="print", media="print")##
-			<!--- Includes external style sheet --->
-			##styleSheetLinkTag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/cupertino/jquery-ui.css")##
-		</head>
-
-		<body>
-			<!--- This will still appear in the `head` --->
-			##styleSheetLinkTag(source="tabs", head=true)##
-		</body>
-	'
-	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,imageTag">
-	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many CSS files in the `stylesheets` folder, minus the `.css` extension. (Can also be called with the `source` argument.) Pass a full URL to generate a tag for an external style sheet. Start with `/` to reference files in folders off the web root.">
-	<cfargument name="type" type="string" required="false" hint="The `type` attribute for the `link` tag.">
-	<cfargument name="media" type="string" required="false" hint="The `media` attribute for the `link` tag.">
-	<cfargument name="head" type="string" required="false" hint="Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior, which is to place the output where the function is called from.">
-	<cfargument name="delim" type="string" required="false" default="," hint="the delimiter to use for the list of stylesheets">
+<cffunction name="styleSheetLinkTag" returntype="string" access="public" output="false">
+	<cfargument name="sources" type="string" required="false" default="">
+	<cfargument name="type" type="string" required="false">
+	<cfargument name="media" type="string" required="false">
+	<cfargument name="head" type="string" required="false">
+	<cfargument name="delim" type="string" required="false" default=",">
 	<cfscript>
 		var loc = {};
 		$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
@@ -75,29 +55,11 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="javaScriptIncludeTag" returntype="string" access="public" output="false" hint="Returns a `script` tag for a JavaScript file (or several) based on the supplied arguments."
-	examples=
-	'
-		<!--- view code --->
-		<head>
-			<!--- Includes `javascripts/main.js` --->
-		    ##javaScriptIncludeTag("main")##
-			<!--- Includes `javascripts/blog.js` and `javascripts/accordion.js` --->
-			##javaScriptIncludeTag("blog,accordion")##
-			<!--- Includes external JavaScript file --->
-			##javaScriptIncludeTag("https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js")##
-		</head>
-
-		<body>
-			<!--- Will still appear in the `head` --->
-			##javaScriptIncludeTag(source="tabs", head=true)##
-		</body>
-	'
-	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="styleSheetLinkTag,imageTag">
-	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. (Can also be called with the `source` argument.) Pass a full URL to access an external JavaScript file. Start with `/` to reference files in folders off the web root.">
-	<cfargument name="type" type="string" required="false" hint="The `type` attribute for the `script` tag.">
-	<cfargument name="head" type="string" required="false" hint="See documentation for @styleSheetLinkTag.">
-	<cfargument name="delim" type="string" required="false" default="," hint="the delimiter to use for the list of stylesheets">
+<cffunction name="javaScriptIncludeTag" returntype="string" access="public" output="false">
+	<cfargument name="sources" type="string" required="false" default="">
+	<cfargument name="type" type="string" required="false">
+	<cfargument name="head" type="string" required="false">
+	<cfargument name="delim" type="string" required="false" default=",">
 	<cfscript>
 		var loc = {};
 		$args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
@@ -142,20 +104,8 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="imageTag" returntype="string" access="public" output="false" hint="Returns an `img` tag. If the image is stored in the local `images` folder, the tag will also set the `width`, `height`, and `alt` attributes for you. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
-	examples=
-	'
-		<!--- Outputs an `img` tag for `images/logo.png` --->
-		##imageTag("logo.png")##
-
-		<!--- Outputs an `img` tag for `http://cfwheels.org/images/logo.png` --->
-		##imageTag("http://cfwheels.org/images/logo.png", alt="ColdFusion on Wheels")##
-
-		<!--- Outputs an `img` tag with the `class` attribute set --->
-		##imageTag(source="logo.png", class="logo")##
-	'
-	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,styleSheetLinkTag">
-	<cfargument name="source" type="string" required="true" hint="The file name of the image if it's availabe in the local file system (i.e. ColdFusion will be able to access it). Provide the full URL if the image is on a remote server.">
+<cffunction name="imageTag" returntype="string" access="public" output="false">
+	<cfargument name="source" type="string" required="true">
 	<cfscript>
 		var loc = {};
 		$args(name="imageTag", reserved="src", args=arguments);

@@ -1,5 +1,50 @@
 <cfoutput>
 
+<cfset func = "buttonTag">
+<cfset isModel = false>
+
+<cfif isModel>
+	<cfset set(dataSourceName="wheelstestdb")>
+	<cfset model("author")>
+	<cfset funcRef = application.wheels.models.author[func]>
+<cfelse>
+	<cfset funcRef = Evaluate(func)>
+</cfif>
+<cfset data = GetMetaData(funcRef)>
+<cfset list = "name,type,required,default,hint">
+<cfset block = "">
+<cfloop array="#data.parameters#" index="i">
+	<cfif NOT StructKeyExists(i, "default")>
+		<cfset i.default = "">
+	</cfif>
+	<cfif StructKeyExists(application.wheels.functions, func) AND StructKeyExists(application.wheels.functions[func], i.name)>
+		<cfset i.default = application.wheels.functions[func][i.name]>
+	</cfif>
+</cfloop>
+<cfif ArrayLen(data.parameters)>
+	<cfset block &= "[block:parameters]{""data"":{""h-0"":""Parameter"",""h-1"":""Type"",""h-2"":""Required"",""h-3"":""Default"",""h-4"":""Description"",">
+	<cfloop list="#list#" index="i">
+		<cfloop from="1" to="#ArrayLen(data.parameters)#" index="j">
+			<cfif Left(data.parameters[j].name, 1) IS NOT "$">
+				<cfset block &= """#j-1#-#ListFind(list, i)-1#"": ""#data.parameters[j][i]#""">
+				<cfif i IS NOT "hint" OR j IS NOT ArrayLen(data.parameters)>
+					<cfset block &= ",">
+				</cfif>
+			</cfif>
+		</cfloop>
+	</cfloop>
+	<cfset block &= "},""cols"":5,""rows"":#ArrayLen(data.parameters)#">
+	<cfset block &= "}[/block]">
+	<cfset block = Replace(block, "[runtime expression]", "", "all")>
+	<cfset block = REReplaceNoCase(block, "@([a-z]*)", "[\1](doc:\L\1)", "all")>
+</cfif>
+#data.name#
+<hr>
+#data.hint#
+<hr>
+#block#
+<hr>
+
 <h1>Congratulations!</h1>
 <p><strong>You have successfully installed<cfif Len(get("version"))> version #get("version")# of</cfif> CFWheels.</strong><br>
 Welcome to the wonderful world of CFWheels. We hope you will enjoy it!</p>
