@@ -1,51 +1,26 @@
 <!--- PUBLIC MODEL CLASS METHODS --->
 
-<cffunction name="findAll" returntype="any" access="public" output="false" hint="Returns records from the database table mapped to this model according to the arguments passed in. (Use the `where` argument to decide which records to get, use the `order` argument to set in what order those records should be returned, and so on). The records will be returned as either a `cfquery` result set or an array of objects (depending on what the `returnAs` argument is set to). Instead of using the `where` argument, you can create cleaner code by making use of a concept called dynamic finders."
-	examples=
-	'
-		<!--- Getting only 5 users and ordering them randomly --->
-		<cfset fiveRandomUsers = model("user").findAll(maxRows=5, order="random")>
-
-		<!--- Including an association (which in this case needs to be setup as a `belongsTo` association to `author` on the `article` model first)  --->
-		<cfset articles = model("article").findAll(where="published=1", order="createdAt DESC", include="author")>
-
-		<!--- Similar to the above but using the association in the opposite direction (which needs to be setup as a `hasMany` association to `article` on the `author` model) --->
-		<cfset bobsArticles = model("author").findAll(where="firstName=''Bob''", include="articles")>
-
-		<!--- Using pagination (getting records 26-50 in this case) and a more complex way to include associations (a song `belongsTo` an album, which in turn `belongsTo` an artist) --->
-		<cfset songs = model("song").findAll(include="album(artist)", page=2, perPage=25)>
-
-		<!--- Using a dynamic finder to get all books released a certain year. Same as calling model("book").findOne(where="releaseYear=##params.year##") --->
-		<cfset books = model("book").findAllByReleaseYear(params.year)>
-
-		<!--- Getting all books of a certain type from a specific year by using a dynamic finder. Same as calling model("book").findAll(where="releaseYear=##params.year## AND type=''##params.type##''") --->
-		<cfset books = model("book").findAllByReleaseYearAndType("##params.year##,##params.type##")>
-
-		<!--- If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `comments` method below will call `model("comment").findAll(where="postId=##post.id##")` internally) --->
-		<cfset post = model("post").findByKey(params.postId)>
-		<cfset comments = post.comments()>
-	'
-	categories="model-class,read" chapters="reading-records,associations" functions="findByKey,findOne,hasMany">
-	<cfargument name="where" type="string" required="false" default="" hint="This argument maps to the `WHERE` clause of the query. The following operators are supported: `=`, `!=`, `<>`, `<`, `<=`, `>`, `>=`, `LIKE`, `NOT LIKE`, `IN`, `NOT IN`, `IS NULL`, `IS NOT NULL`, `AND`, and `OR`. (Note that the key words need to be written in upper case.) You can also use parentheses to group statements. You do not need to specify the table name(s); CFWheels will do that for you.">
-	<cfargument name="order" type="string" required="false" hint="Maps to the `ORDER BY` clause of the query. You do not need to specify the table name(s); CFWheels will do that for you.">
-	<cfargument name="group" type="string" required="false" hint="Maps to the `GROUP BY` clause of the query. You do not need to specify the table name(s); CFWheels will do that for you.">
-	<cfargument name="select" type="string" required="false" default="" hint="Determines how the `SELECT` clause for the query used to return data will look.	You can pass in a list of the properties (which map to columns) that you want returned from your table(s). If you don't set this argument at all, CFWheels will select all properties from your table(s). If you specify a table name (e.g. `users.email`) or alias a column (e.g. `fn AS firstName`) in the list, then the entire list will be passed through unchanged and used in the `SELECT` clause of the query. By default, all column names in tables `JOIN`ed via the `include` argument will be prepended with the singular version of the included table name.">
-	<cfargument name="distinct" type="boolean" required="false" default="false" hint="Whether to add the `DISTINCT` keyword to your `SELECT` clause. CFWheels will, when necessary, add this automatically (when using pagination and a `hasMany` association is used in the `include` argument, to name one example).">
-	<cfargument name="include" type="string" required="false" default="" hint="Associations that should be included in the query using `INNER` or `LEFT OUTER` joins (which join type that is used depends on how the association has been set up in your model). If all included associations are set on the current model, you can specify them in a list (e.g. `department,addresses,emails`). You can build more complex `include` strings by using parentheses when the association is set on an included model, like `album(artist(genre))`, for example. These complex `include` strings only work when `returnAs` is set to `query` though.">
-	<cfargument name="maxRows" type="numeric" required="false" default="-1" hint="Maximum number of records to retrieve. Passed on to the `maxRows` `cfquery` attribute. The default, `-1`, means that all records will be retrieved.">
-	<cfargument name="page" type="numeric" required="false" default=0 hint="If you want to paginate records, you can do so by specifying a page number here. For example, getting records 11-20 would be page number 2 when `perPage` is kept at the default setting (10 records per page). The default, `0`, means that records won't be paginated and that the `perPage`, `count`, and `handle` arguments will be ignored.">
-	<cfargument name="perPage" type="numeric" required="false" hint="When using pagination, you can specify how many records you want to fetch per page here. This argument is only used when the `page` argument has been passed in.">
-	<cfargument name="count" type="numeric" required="false" default=0 hint="When using pagination and you know in advance how many records you want to paginate through, you can pass in that value here. Doing so will prevent CFWheels from running a `COUNT` query to get this value. This argument is only used when the `page` argument has been passed in.">
-	<cfargument name="handle" type="string" required="false" default="query" hint="Handle to use for the query in pagination. This is useful when you're paginating multiple queries and need to reference them in the @paginationLinks function, for example. This argument is only used when the `page` argument has been passed in.">
-	<cfargument name="cache" type="any" required="false" default="" hint="If you want to cache the query, you can do so by specifying the number of minutes you want to cache the query for here. If you set it to `true`, the default cache time will be used (60 minutes).">
-	<cfargument name="reload" type="boolean" required="false" hint="Set to `true` to force CFWheels to query the database even though an identical query may have been run in the same request. (The default in CFWheels is to get the second query from the request-level cache.)">
-	<cfargument name="parameterize" type="any" required="false" hint="Set to `true` to use `cfqueryparam` on all columns, or pass in a list of property names to use `cfqueryparam` on those only.">
-	<cfargument name="returnAs" type="string" required="false" hint="Set this to `objects` to return an array of objects. Set this to `query` to return a query result set.">
-	<cfargument name="returnIncluded" type="boolean" required="false" hint="When `returnAs` is set to `objects`, you can set this argument to `false` to prevent returning objects fetched from associations specified in the `include` argument. This is useful when you only need to include associations for use in the `WHERE` clause only and want to avoid the performance hit that comes with object creation.">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="You can set this argument to `false` to prevent running the execution of callbacks for a method call.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="You can set this argument to `true` to include soft-deleted records in the results.">
-	<cfargument name="$limit" type="numeric" required="false" default=0>
-	<cfargument name="$offset" type="numeric" required="false" default=0>
+<cffunction name="findAll" returntype="any" access="public" output="false">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="order" type="string" required="false">
+	<cfargument name="group" type="string" required="false">
+	<cfargument name="select" type="string" required="false" default="">
+	<cfargument name="distinct" type="boolean" required="false" default="false">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="maxRows" type="numeric" required="false" default="-1">
+	<cfargument name="page" type="numeric" required="false" default="0">
+	<cfargument name="perPage" type="numeric" required="false">
+	<cfargument name="count" type="numeric" required="false" default="0">
+	<cfargument name="handle" type="string" required="false" default="query">
+	<cfargument name="cache" type="any" required="false" default="">
+	<cfargument name="reload" type="boolean" required="false">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="returnAs" type="string" required="false">
+	<cfargument name="returnIncluded" type="boolean" required="false">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
+	<cfargument name="$limit" type="numeric" required="false" default="0">
+	<cfargument name="$offset" type="numeric" required="false" default="0">
 	<cfscript>
 		var loc = {};
 		$args(name="findAll", args=arguments);
@@ -257,33 +232,16 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="findByKey" returntype="any" access="public" output="false" hint="Fetches the requested record by primary key and returns it as an object. Returns `false` if no record is found. You can override this behavior to return a `cfquery` result set instead, similar to what's described in the documentation for @findOne."
-	examples=
-	'
-		<!--- Getting the author with the primary key value `99` as an object --->
-		<cfset auth = model("author").findByKey(99)>
-
-		<!--- Getting an author based on a form/URL value and then checking if it was found --->
-		<cfset auth = model("author").findByKey(params.key)>
-		<cfif NOT IsObject(auth)>
-			<cfset flashInsert(message="Author ##params.key## was not found")>
-			<cfset redirectTo(back=true)>
-		</cfif>
-
-		<!--- If you have a `belongsTo` association setup from `comment` to `post`, you can do a scoped call. (The `post` method below will call `model("post").findByKey(comment.postId)` internally) --->
-		<cfset comment = model("comment").findByKey(params.commentId)>
-		<cfset post = comment.post()>
-	'
-	categories="model-class,read" chapters="reading-records,associations" functions="belongsTo,findAll,findOne">
-	<cfargument name="key" type="any" required="true" hint="Primary key value(s) of the record to fetch. Separate with comma if passing in multiple primary key values. Accepts a string, list, or a numeric value.">
-	<cfargument name="select" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="returnAs" type="string" required="false" hint="See documentation for @findOne.">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+<cffunction name="findByKey" returntype="any" access="public" output="false">
+	<cfargument name="key" type="any" required="true">
+	<cfargument name="select" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="cache" type="any" required="false" default="">
+	<cfargument name="reload" type="boolean" required="false">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="returnAs" type="string" required="false">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		$args(name="findByKey", args=arguments);
@@ -301,36 +259,16 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="findOne" returntype="any" access="public" output="false" hint="Fetches the first record found based on the `WHERE` and `ORDER BY` clauses. With the default settings (i.e. the `returnAs` argument set to `object`), a model object will be returned if the record is found and the boolean value `false` if not. Instead of using the `where` argument, you can create cleaner code by making use of a concept called dynamic finders."
-	examples=
-	'
-		<!--- Getting the most recent order as an object from the database --->
-		<cfset order = model("order").findOne(order="datePurchased DESC")>
-
-		<!--- Using a dynamic finder to get the first person with the last name `Smith`. Same as calling `model("user").findOne(where"lastName=''Smith''")` --->
-		<cfset person = model("user").findOneByLastName("Smith")>
-
-		<!--- Getting a specific user using a dynamic finder. Same as calling `model("user").findOne(where"email=''someone@somewhere.com'' AND password=''mypass''")` --->
-		<cfset user = model("user").findOneByEmailAndPassword("someone@somewhere.com,mypass")>
-
-		<!--- If you have a `hasOne` association setup from `user` to `profile`, you can do a scoped call. (The `profile` method below will call `model("profile").findOne(where="userId=##user.id##")` internally) --->
-		<cfset user = model("user").findByKey(params.userId)>
-		<cfset profile = user.profile()>
-
-		<!--- If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `findOneComment` method below will call `model("comment").findOne(where="postId=##post.id##")` internally) --->
-		<cfset post = model("post").findByKey(params.postId)>
-		<cfset comment = post.findOneComment(where="text=''I Love Wheels!''")>
-	'
-	categories="model-class,read" chapters="reading-records,associations" functions="findAll,findByKey,hasMany,hasOne">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="select" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="returnAs" type="string" required="false" hint="Set this to `query` to return as a single-row query result set. Set this to `object` to return as an object.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+<cffunction name="findOne" returntype="any" access="public" output="false">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="order" type="string" required="false" default="">
+	<cfargument name="select" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="cache" type="any" required="false" default="">
+	<cfargument name="reload" type="boolean" required="false">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="returnAs" type="string" required="false">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		$args(name="findOne", args=arguments);
@@ -364,8 +302,8 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="findFirst" returntype="any" access="public" output="false" hint="Fetches the first record ordered by primary key value. Use the `property` argument to order by something else.">
-	<cfargument name="property" type="string" required="false" default="#primaryKey()#" hint="Name of the property to order by. This argument is also aliased as `properties`.">
+<cffunction name="findFirst" returntype="any" access="public" output="false">
+	<cfargument name="property" type="string" required="false" default="#primaryKey()#">
 	<cfargument name="$sort" type="string" required="false" default="ASC">
 	<cfscript>
 		var loc = {};
@@ -384,8 +322,8 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="findLast" returntype="any" access="public" output="false" hint="Fetches the last record ordered by primary key value.">
-	<cfargument name="property" type="string" required="false" hint="See documentation for @findFirst.">
+<cffunction name="findLast" returntype="any" access="public" output="false">
+	<cfargument name="property" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		arguments.$sort = "DESC";
@@ -396,15 +334,7 @@
 
 <!--- PUBLIC MODEL OBJECT METHODS --->
 
-<cffunction name="reload" returntype="void" access="public" output="false" hint="Reloads the property values of this object from the database."
-	examples=
-	'
-		<!--- Get an object, call a method on it that could potentially change values, and then reload the values from the database --->
-		<cfset employee = model("employee").findByKey(params.key)>
-		<cfset employee.someCallThatChangesValuesInTheDatabase()>
-		<cfset employee.reload()>
-	'
-	categories="model-object,miscellaneous" chapters="reading-records" functions="">
+<cffunction name="reload" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		loc.query = findByKey(key=key(), reload=true, returnAs="query");

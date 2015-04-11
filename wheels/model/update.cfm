@@ -1,26 +1,16 @@
 <!--- PUBLIC MODEL CLASS METHODS --->
 
-<cffunction name="updateAll" returntype="numeric" access="public" output="false" hint="Updates all properties for the records that match the `where` argument. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument. By default, objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in `instantiate=true`. This method returns the number of records that were updated."
-	examples=
-	'
-		<!--- Update the `published` and `publishedAt` properties for all records that have `published=0` --->
-		<cfset recordsUpdated = model("post").updateAll(published=1, publishedAt=Now(), where="published=0")>
-
-		<!--- If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `removeAllComments` method below will call `model("comment").updateAll(postid="", where="postId=##post.id##")` internally.) --->
-		<cfset aPost = model("post").findByKey(params.postId)>
-		<cfset removedSuccessfully = aPost.removeAllComments()>
-	'
-	categories="model-class,update" chapters="updating-records,associations" functions="hasMany,update,updateByKey,updateOne">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="instantiate" type="boolean" required="false" hint="Whether or not to instantiate the object(s) first. When objects are not instantiated, any callbacks and validations set on them will be skipped.">
-	<cfargument name="validate" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+<cffunction name="updateAll" returntype="numeric" access="public" output="false">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="reload" type="boolean" required="false">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="instantiate" type="boolean" required="false">
+	<cfargument name="validate" type="boolean" required="false" default="true">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		$args(name="updateAll", args=arguments);
@@ -65,23 +55,14 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="updateByKey" returntype="boolean" access="public" output="false" hint="Finds the object with the supplied key and saves it (if validation permits it) with the supplied properties and/or named arguments. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument. Returns `true` if the object was found and updated successfully, `false` otherwise."
-	examples=
-	'
-		<!--- Updates the object with `33` as the primary key value with values passed in through the URL/form --->
-		<cfset result = model("post").updateByKey(33, params.post)>
-
-		<!--- Updates the object with `33` as the primary key using named arguments --->
-		<cfset result = model("post").updateByKey(key=33, title="New version of CFWheels just released", published=1)>
-	'
-	categories="model-class,update" chapters="updating-records,associations" functions="hasOne,hasMany,update,updateAll,updateOne">
-	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
-	<cfargument name="validate" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+<cffunction name="updateByKey" returntype="boolean" access="public" output="false">
+	<cfargument name="key" type="any" required="true">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="reload" type="boolean" required="false">
+	<cfargument name="validate" type="boolean" required="false" default="true">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		$args(name="updateByKey", args=arguments);
@@ -93,25 +74,15 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="updateOne" returntype="boolean" access="public" output="false" hint="Gets an object based on the arguments used and updates it with the supplied properties. Returns `true` if an object was found and updated successfully, `false` otherwise."
-	examples=
-	'
-		<!--- Sets the `new` property to `1` on the most recently released product --->
-		<cfset result = model("product").updateOne(order="releaseDate DESC", new=1)>
-
-		<!--- If you have a `hasOne` association setup from `user` to `profile`, you can do a scoped call. (The `removeProfile` method below will call `model("profile").updateOne(where="userId=##aUser.id##", userId="")` internally.) --->
-		<cfset aUser = model("user").findByKey(params.userId)>
-		<cfset aUser.removeProfile()>
-	'
-	categories="model-class,update" chapters="updating-records,associations" functions="hasOne,update,updateAll,updateByKey">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
-	<cfargument name="validate" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+<cffunction name="updateOne" returntype="boolean" access="public" output="false">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="order" type="string" required="false" default="">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="reload" type="boolean" required="false">
+	<cfargument name="validate" type="boolean" required="false" default="true">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		$args(name="updateOne", args=arguments);
@@ -132,39 +103,13 @@
 
 <!--- PUBLIC MODEL OBJECT METHODS --->
 
-<cffunction name="update" returntype="boolean" access="public" output="false" hint="Updates the object with the supplied properties and saves it to the database. Returns `true` if the object was saved successfully to the database and `false` otherwise."
-	examples=
-	'
-		<!--- Get a post object and then update its title in the database --->
-		<cfset post = model("post").findByKey(33)>
-		<cfset post.update(title="New version of CFWheels just released")>
-
-		<!--- Get a post object and then update its title and other properties based on what is pased in from the URL/form --->
-		<cfset post = model("post").findByKey(params.key)>
-		<cfset post.update(title="New version of CFWheels just released", properties=params.post)>
-
-		<!--- If you have a `hasOne` association setup from `author` to `bio`, you can do a scoped call. (The `setBio` method below will call `bio.update(authorId=anAuthor.id)` internally.) --->
-		<cfset author = model("author").findByKey(params.authorId)>
-		<cfset bio = model("bio").findByKey(params.bioId)>
-		<cfset author.setBio(bio)>
-
-		<!--- If you have a `hasMany` association setup from `owner` to `car`, you can do a scoped call. (The `addCar` method below will call `car.update(ownerId=anOwner.id)` internally.) --->
-		<cfset anOwner = model("owner").findByKey(params.ownerId)>
-		<cfset aCar = model("car").findByKey(params.carId)>
-		<cfset anOwner.addCar(aCar)>
-
-		<!--- If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `removeComment` method below will call `comment.update(postId="")` internally.) --->
-		<cfset aPost = model("post").findByKey(params.postId)>
-		<cfset aComment = model("comment").findByKey(params.commentId)>
-		<cfset aPost.removeComment(aComment)>
-	'
-	categories="model-object,crud" chapters="updating-records,associations" functions="hasMany,hasOne,updateAll,updateByKey,updateOne">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
-	<cfargument name="validate" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+<cffunction name="update" returntype="boolean" access="public" output="false">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="reload" type="boolean" required="false">
+	<cfargument name="validate" type="boolean" required="false" default="true">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		$args(name="update", args=arguments);
@@ -174,19 +119,12 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="updateProperty" returntype="boolean" access="public" output="false" hint="Updates a single property and saves the record without going through the normal validation procedure. This is especially useful for boolean flags on existing records."
-	examples=
-	'
-		<!--- Sets the `new` property to `1` through updateProperty() --->
-		<cfset product = model("product").findByKey(56)>
-		<cfset product.updateProperty("new", 1)>
-	'
-	categories="model-class,update" chapters="updating-records,associations" functions="hasOne,update,updateAll,updateByKey,updateProperties">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to update the value for globally.">
-	<cfargument name="value" type="any" required="true" hint="Value to set on the given property globally.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+<cffunction name="updateProperty" returntype="boolean" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="value" type="any" required="true">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		$args(name="updateProperty", args=arguments);
@@ -197,19 +135,12 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="updateProperties" returntype="boolean" access="public" output="false" hint="Updates all the properties from the `properties` argument or other named arguments. If the object is invalid, the save will fail and `false` will be returned."
-	examples=
-	'
-		<!--- Sets the `new` property to `1` through `updateProperties()` --->
-		<cfset product = model("product").findByKey(56)>
-		<cfset product.updateProperties(new=1)>
-	'
-	categories="model-class,update" chapters="updating-records,associations" functions="hasOne,update,updateAll,updateByKey,updateProperties">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Struct containing key/value pairs with properties and associated values that need to be updated globally.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="validate" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+<cffunction name="updateProperties" returntype="boolean" access="public" output="false">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="validate" type="boolean" required="false" default="true">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		$args(name="updateProperties", args=arguments);
@@ -219,7 +150,7 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<!--- PRIVATE MODEL CLASS METHODS --->
+<!--- PRIVATE METHODS --->
 
 <cffunction name="$updateAll" returntype="numeric" access="public" output="false">
 	<cfscript>
@@ -228,8 +159,6 @@
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
-
-<!--- PRIVATE MODEL OBJECT METHODS --->
 
 <cffunction name="$update" returntype="boolean" access="public" output="false">
 	<cfargument name="parameterize" type="any" required="true">
