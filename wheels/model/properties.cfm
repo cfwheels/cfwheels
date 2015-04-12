@@ -351,6 +351,13 @@
 	<cfreturn loc.rv>
 </cffunction>
 
+<cffunction name="clearChangeInformation" returntype="void" access="public" output="false">
+	<cfargument name="property" type="string" required="false">
+	<cfscript>
+		$updatePersistedProperties(argumentCollection=arguments);
+	</cfscript>
+</cffunction>
+
 <!--- PRIVATE METHODS --->
 
 <cffunction name="$setProperties" returntype="any" access="public" output="false">
@@ -431,12 +438,13 @@
 </cffunction>
 
 <cffunction name="$updatePersistedProperties" returntype="void" access="public" output="false">
+	<cfargument name="property" type="string" required="false">
 	<cfscript>
 		var loc = {};
 		variables.$persistedProperties = {};
 		for (loc.key in variables.wheels.class.properties)
 		{
-			if (StructKeyExists(this, loc.key))
+			if (StructKeyExists(this, loc.key) && (!StructKeyExists(arguments, "property") || arguments.property == loc.key))
 			{
 				variables.$persistedProperties[loc.key] = this[loc.key];
 			}

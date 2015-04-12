@@ -7,6 +7,7 @@ Model Enhancements
 * Added findFirst() and findLast() finder methods - [Per Djurner]
 * Add support for "GROUP BY" in sum(), average() etc. - #464 [Per Djurner]
 * Made exists() check for any record when "key" and "where" is not passed in [Per Djurner]
+* Added clearChangeInformation() for clearing knowledge of object changes - #433 [Jeremy Keczan, Per Djurner]
 
 View Enhancements
 =================
