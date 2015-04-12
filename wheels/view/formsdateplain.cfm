@@ -130,33 +130,18 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="yearSelectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a select form control for a range of years based on the supplied `name`."
-	examples=
-	'
-		<!--- View code --->
-		<cfoutput>
-		    ##yearSelectTag(name="yearOfBirthday", selected=params.yearOfBirthday)##
-		</cfoutput>
-
-		<!--- Only allow selection of year to be for the past 50 years, minimum being 18 years ago --->
-		<cfset fiftyYearsAgo = Now() - 50>
-		<cfset eighteenYearsAgo = Now() - 18>
-		<cfoutput>
-			##yearSelectTag(name="yearOfBirthday", selected=params.yearOfBirthday, startYear=fiftyYearsAgo, endYear=eighteenYearsAgo)##
-		</cfoutput>
-	'
-	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
-	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
-	<cfargument name="selected" type="string" required="false" default="" hint="The year that should be selected initially.">
-	<cfargument name="startYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
-	<cfargument name="endYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
-	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
+<cffunction name="yearSelectTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="selected" type="string" required="false" default="">
+	<cfargument name="startYear" type="numeric" required="false">
+	<cfargument name="endYear" type="numeric" required="false">
+	<cfargument name="includeBlank" type="any" required="false">
+	<cfargument name="label" type="string" required="false">
+	<cfargument name="labelPlacement" type="string" required="false">
+	<cfargument name="prepend" type="string" required="false">
+	<cfargument name="append" type="string" required="false">
+	<cfargument name="prependToLabel" type="string" required="false">
+	<cfargument name="appendToLabel" type="string" required="false">
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		$args(name="yearSelectTag", args=arguments);
@@ -169,27 +154,19 @@
 	<cfreturn dateSelectTags(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="monthSelectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a select form control for the months of the year based on the supplied `name`."
-	examples=
-	'
-		<!--- This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object --->
-		<cfoutput>
-		    ##monthSelectTag(name="monthOfBirthday", selected=params.monthOfBirthday)##
-		</cfoutput>
-	'
-	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
-	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
-	<cfargument name="selected" type="string" required="false" default="" hint="The month that should be selected initially.">
-	<cfargument name="monthDisplay" type="string" required="false" hint="See documentation for @dateSelect.">
-	<cfargument name="monthNames" type="string" required="false" hint="See documentation for @dateSelect.">
-	<cfargument name="monthAbbreviations" type="string" required="false" hint="See documentation for @dateSelect.">
-	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
+<cffunction name="monthSelectTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="selected" type="string" required="false" default="">
+	<cfargument name="monthDisplay" type="string" required="false">
+	<cfargument name="monthNames" type="string" required="false">
+	<cfargument name="monthAbbreviations" type="string" required="false">
+	<cfargument name="includeBlank" type="any" required="false">
+	<cfargument name="label" type="string" required="false">
+	<cfargument name="labelPlacement" type="string" required="false">
+	<cfargument name="prepend" type="string" required="false">
+	<cfargument name="append" type="string" required="false">
+	<cfargument name="prependToLabel" type="string" required="false">
+	<cfargument name="appendToLabel" type="string" required="false">
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		var loc = {};
@@ -203,24 +180,16 @@
 	<cfreturn dateSelectTags(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="daySelectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a select form control for the days of the week based on the supplied `name`."
-	examples=
-	'
-		<!--- This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object --->
-		<cfoutput>
-		    ##daySelectTag(name="dayOfWeek", selected=params.dayOfWeek)##
-		</cfoutput>
-	'
-	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
-	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
-	<cfargument name="selected" type="string" required="false" default="" hint="The day that should be selected initially.">
-	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
+<cffunction name="daySelectTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="selected" type="string" required="false" default="">
+	<cfargument name="includeBlank" type="any" required="false">
+	<cfargument name="label" type="string" required="false">
+	<cfargument name="labelPlacement" type="string" required="false">
+	<cfargument name="prepend" type="string" required="false">
+	<cfargument name="append" type="string" required="false">
+	<cfargument name="prependToLabel" type="string" required="false">
+	<cfargument name="appendToLabel" type="string" required="false">
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		$args(name="daySelectTag", args=arguments);
@@ -233,30 +202,17 @@
 	<cfreturn dateSelectTags(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="hourSelectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing one select form control for the hours of the day based on the supplied `name`."
-	examples=
-	'
-		<!--- This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object --->
-		<cfoutput>
-		    ##hourSelectTag(name="hourOfMeeting", selected=params.hourOfMeeting)##
-		</cfoutput>
-
-		<!--- Show 12 hours instead of 24 --->
-		<cfoutput>
-			##hourSelectTag(name="hourOfMeeting", selected=params.hourOfMeeting, twelveHour=true)##
-		</cfoutput>
-	'
-	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
-	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
-	<cfargument name="selected" type="string" required="false" default="" hint="The hour that should be selected initially.">
-	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="twelveHour" type="boolean" required="false" hint="See documentation for @timeSelect.">
+<cffunction name="hourSelectTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="selected" type="string" required="false" default="">
+	<cfargument name="includeBlank" type="any" required="false">
+	<cfargument name="label" type="string" required="false">
+	<cfargument name="labelPlacement" type="string" required="false">
+	<cfargument name="prepend" type="string" required="false">
+	<cfargument name="append" type="string" required="false">
+	<cfargument name="prependToLabel" type="string" required="false">
+	<cfargument name="appendToLabel" type="string" required="false">
+	<cfargument name="twelveHour" type="boolean" required="false">
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		$args(name="hourSelectTag", args=arguments);
@@ -269,30 +225,17 @@
 	<cfreturn timeSelectTags(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="minuteSelectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing one select form control for the minutes of an hour based on the supplied `name`."
-	examples=
-	'
-		<!--- This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object --->
-		<cfoutput>
-		    ##minuteSelectTag(name="minuteOfMeeting", value=params.minuteOfMeeting)##
-		</cfoutput>
-
-		<!--- Only show 15-minute intervals --->
-		<cfoutput>
-			##minuteSelectTag(name="minuteOfMeeting", value=params.minuteOfMeeting, minuteStep=15)##
-		</cfoutput>
-	'
-	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
-	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
-	<cfargument name="selected" type="string" required="false" default="" hint="The minute that should be selected initially.">
-	<cfargument name="minuteStep" type="numeric" required="false" hint="See documentation for @timeSelect.">
-	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
+<cffunction name="minuteSelectTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="selected" type="string" required="false" default="">
+	<cfargument name="minuteStep" type="numeric" required="false">
+	<cfargument name="includeBlank" type="any" required="false">
+	<cfargument name="label" type="string" required="false">
+	<cfargument name="labelPlacement" type="string" required="false">
+	<cfargument name="prepend" type="string" required="false">
+	<cfargument name="append" type="string" required="false">
+	<cfargument name="prependToLabel" type="string" required="false">
+	<cfargument name="appendToLabel" type="string" required="false">
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		$args(name="minuteSelectTag", args=arguments);
@@ -305,30 +248,17 @@
 	<cfreturn timeSelectTags(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="secondSelectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing one select form control for the seconds of a minute based on the supplied `name`."
-	examples=
-	'
-		<!--- This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object --->
-		<cfoutput>
-		    ##secondSelectTag(name="secondsToLaunch", selected=params.secondsToLaunch)##
-		</cfoutput>
-
-		<!--- Only show 15-second intervals --->
-		<cfoutput>
-			##secondSelectTag(name="secondsToLaunch", value=params.secondsToLaunch, secondStep=15)##
-		</cfoutput>
-	'
-	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
-	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
-	<cfargument name="selected" type="string" required="false" default="" hint="The second that should be selected initially.">
-	<cfargument name="secondStep" type="numeric" required="false" hint="See documentation for @timeSelect.">
-	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
+<cffunction name="secondSelectTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="selected" type="string" required="false" default="">
+	<cfargument name="secondStep" type="numeric" required="false">
+	<cfargument name="includeBlank" type="any" required="false">
+	<cfargument name="label" type="string" required="false">
+	<cfargument name="labelPlacement" type="string" required="false">
+	<cfargument name="prepend" type="string" required="false">
+	<cfargument name="append" type="string" required="false">
+	<cfargument name="prependToLabel" type="string" required="false">
+	<cfargument name="appendToLabel" type="string" required="false">
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		$args(name="secondSelectTag", args=arguments);
