@@ -47,28 +47,26 @@
 <!--- PUBLIC MODEL CLASS METHODS --->
 
 <cffunction name="exists" returntype="boolean" access="public" output="false">
-	<cfargument name="key" type="any" required="false" default="">
-	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="key" type="any" required="false">
+	<cfargument name="where" type="string" required="false">
 	<cfargument name="reload" type="boolean" required="false">
 	<cfargument name="parameterize" type="any" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="exists", args=arguments);
-		if (application.wheels.showErrorInformation && Len(arguments.key) && Len(arguments.where))
+		if (get("showErrorInformation") && StructKeyExists(arguments, "key") && StructKeyExists(arguments, "where"))
 		{
 				$throw(type="Wheels.IncorrectArguments", message="You cannot pass in both `key` and `where`.");
 		}
-		if (Len(arguments.where))
+		arguments.select = primaryKey();
+		arguments.returnAs = "query";
+		if (StructKeyExists(arguments, "key"))
 		{
-			loc.rv = findOne(select=primaryKey(), where=arguments.where, reload=arguments.reload, returnAs="query").recordCount >= 1;
-		}
-		else if (Len(arguments.key))
-		{
-			loc.rv = findByKey(key=arguments.key, select=primaryKey(), reload=arguments.reload, returnAs="query").recordCount == 1;
+			loc.rv = findByKey(argumentCollection=arguments).recordCount;
 		}
 		else
 		{
-			loc.rv = false;
+			loc.rv = findOne(argumentCollection=arguments).recordCount;
 		}
 	</cfscript>
 	<cfreturn loc.rv>

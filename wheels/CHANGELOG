@@ -6,6 +6,7 @@ Model Enhancements
 * Allow spaces in list passed in to the "include" argument on finders - #150 [Per Djurner]
 * Added findFirst() and findLast() finder methods - [Per Djurner]
 * Add support for "GROUP BY" in sum(), average() etc. - #464 [Per Djurner]
+* Made exists() check for any record when "key" and "where" is not passed in [Per Djurner]
 
 View Enhancements
 =================
@@ -27,6 +28,7 @@ Controller Enhancements
 Bug Fixes
 =========
 
+* Pass through "parameterize" in exists() [Per Djurner]
 * Do not remove "AS" when it's in the SQL for a calculated property - #453 [Jean Duteau, Per Djurner]
 * Obfuscate parameters in named route patterns when URL rewriting is off - #455 [Amber Cline, Per Djurner]
 * Pass through "includeSoftDeletes" argument correctly - #451 [Jon Brose]
