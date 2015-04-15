@@ -12,8 +12,10 @@
 		$args(name="create", args=arguments);
 		loc.parameterize = arguments.parameterize;
 		StructDelete(arguments, "parameterize");
+		loc.validate = arguments.validate;
+		StructDelete(arguments, "validate");
 		loc.rv = new(argumentCollection=arguments);
-		loc.rv.save(parameterize=loc.parameterize, reload=arguments.reload, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks);
+		loc.rv.save(parameterize=loc.parameterize, reload=arguments.reload, validate=loc.validate, transaction=arguments.transaction, callbacks=arguments.callbacks);
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
