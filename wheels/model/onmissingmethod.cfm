@@ -109,6 +109,10 @@
 			// call finder method
 			loc.rv = IIf(Left(arguments.missingMethodName, 9) == "findOneBy", "findOne(argumentCollection=arguments.missingMethodArguments)", "findAll(argumentCollection=arguments.missingMethodArguments)");
 		}
+		else if (Left(arguments.missingMethodName, 14) == "findOrCreateBy")
+		{
+			loc.rv = $findOrCreateBy(argumentCollection=arguments);
+		}
 		else
 		{
 			loc.rv = $associationMethod(argumentCollection=arguments);
@@ -122,6 +126,54 @@
 </cffunction>
 
 <!--- PRIVATE METHODS --->
+
+<cffunction name="$findOrCreateBy" returntype="any" access="public" output="false">
+	<cfscript>
+		var loc = {};
+
+		// default save to true but set to passed in value if it exists and then delete from arguments
+		loc.save = true;
+		if (StructKeyExists(arguments.missingMethodArguments, "save"))
+		{
+			loc.save = arguments.missingMethodArguments.save;
+			StructDelete(arguments.missingMethodArguments, "save");
+		}
+
+		// get the property name from the last part of the function name
+		loc.property = ReplaceNoCase(arguments.missingMethodName, "findOrCreateBy", "");
+
+		// get the value from the parameter that matches the property name or the first one if named arguments were not used
+		if (StructKeyExists(arguments.missingMethodArguments, "1"))
+		{
+			arguments.missingMethodArguments[loc.property] = arguments.missingMethodArguments[1];
+			StructDelete(arguments.missingMethodArguments, "1");
+		}
+		loc.value = arguments.missingMethodArguments[loc.property];
+
+		loc.object = findOne(where=$keyWhereString(loc.property, loc.value));
+		if (IsObject(loc.object))
+		{
+			loc.rv = loc.object;
+		}
+		else
+		{
+			StructDelete(arguments, "missingMethodName");
+			StructDelete(arguments.missingMethodArguments, loc.property);
+			StructAppend(arguments, arguments.missingMethodArguments);
+			StructDelete(arguments, "missingMethodArguments");
+			arguments[loc.property] = loc.value;
+			if (loc.save)
+			{
+				loc.rv = create(argumentCollection=arguments);
+			}
+			else
+			{
+				loc.rv = new(argumentCollection=arguments);
+			}
+		}
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
 
 <cffunction name="$dynamicFinderOperator" returntype="string" access="public" output="false">
 	<cfargument name="property" type="string" required="true">

@@ -332,6 +332,30 @@
 	<cfreturn loc.rv>
 </cffunction>
 
+<cffunction name="findAllKeys" returntype="string" access="public" output="false">
+	<cfargument name="quoted" type="boolean" required="false" default="false">
+	<cfargument name="delimiter" type="string" required="false" default=",">
+	<cfscript>
+		var loc = {};
+		loc.quoted = arguments.quoted;
+		StructDelete(arguments, "quoted");
+		loc.delimiter = arguments.delimiter;
+		StructDelete(arguments, "delimiter");
+		arguments.select = primaryKey();
+		loc.query = findAll(argumentCollection=arguments);
+		if (loc.quoted)
+		{
+			loc.functionName = "QuotedValueList";
+		}
+		else
+		{
+			loc.functionName = "ValueList";
+		}
+		loc.rv = Evaluate("#loc.functionName#(loc.query.#arguments.select#, '#loc.delimiter#')");
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
 <!--- PUBLIC MODEL OBJECT METHODS --->
 
 <cffunction name="reload" returntype="void" access="public" output="false">
