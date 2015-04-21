@@ -28,6 +28,8 @@ Controller Enhancements
 Bug Fixes
 =========
 
+* Fix for blank path_info in CGI scope - #447 [Tim Badolato, Tony Petruzzi, Per Djurner]
+* Fix for accessing request scope key that does not exist from session - #446 [Brent Alexander, Per Djurner]
 * Removed "validate" property that was incorrectly set when calling create() - [Per Djurner]
 * Pass through "parameterize" in exists() [Per Djurner]
 * Do not remove "AS" when it's in the SQL for a calculated property - #453 [Jean Duteau, Per Djurner]
