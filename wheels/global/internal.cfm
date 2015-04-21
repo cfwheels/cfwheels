@@ -229,24 +229,26 @@
 </cffunction>
 
 <cffunction name="$cgiScope" returntype="struct" access="public" output="false" hint="This copies all the variables CFWheels needs from the CGI scope to the request scope.">
-	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type">
-	<cfargument name="cgiScope" type="struct" required="false" default="#cgi#">
+	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type,http_x_rewrite_url,http_x_original_url,request_uri,redirect_url">
+	<cfargument name="scope" type="struct" required="false" default="#cgi#">
 	<cfscript>
 		var loc = {};
-
-		// create a copy of the cgi scope (specified keys only)
 		loc.rv = {};
 		loc.iEnd = ListLen(arguments.keys);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(arguments.keys, loc.i);
-			loc.rv[loc.item] = arguments.cgiScope[loc.item];
+			loc.rv[loc.item] = "";
+			if (StructKeyExists(arguments.scope, loc.item))
+			{
+				loc.rv[loc.item] = arguments.scope[loc.item];
+			}
 		}
 
 		// fix path_info if it contains any characters that are not ascii (see issue 138)
-		if (StructKeyExists(arguments.cgiScope, "unencoded_url") && Len(arguments.cgiScope.unencoded_url))
+		if (StructKeyExists(arguments.scope, "unencoded_url") && Len(arguments.scope.unencoded_url))
 		{
-			loc.requestUrl = URLDecode(arguments.cgiScope.unencoded_url);
+			loc.requestUrl = URLDecode(arguments.scope.unencoded_url);
 		}
 		else if (IsSimpleValue(getPageContext().getRequest().getRequestURL()))
 		{
@@ -256,7 +258,45 @@
 		if (StructKeyExists(loc, "requestUrl") && REFind("[^\0-\x80]", loc.requestUrl))
 		{
 			// strip out the script_name and query_string leaving us with only the part of the string that should go in path_info
-			loc.rv["path_info"] = Replace(Replace(loc.requestUrl, arguments.cgiScope.script_name, ""), "?" & URLDecode(arguments.cgiScope.query_string), "");
+			loc.rv.path_info = Replace(Replace(loc.requestUrl, arguments.scope.script_name, ""), "?" & URLDecode(arguments.scope.query_string), "");
+		}
+
+		// fixes IIS issue that returns a blank cgi.path_info
+		if (!Len(loc.rv.path_info))
+		{
+			if (Len(loc.rv.http_x_rewrite_url))
+			{
+				// IIS6 1/ IIRF (Ionics Isapi Rewrite Filter)
+				loc.rv.path_info = ListFirst(loc.rv.http_x_rewrite_url, "?");
+			}
+			else if (Len(loc.rv.http_x_original_url))
+			{
+				// IIS7 rewrite default
+				loc.rv.path_info = ListFirst(loc.rv.http_x_original_url, "?");
+			}
+			else if (Len(loc.rv.request_uri))
+			{
+				// Apache default
+				loc.rv.path_info = ListFirst(loc.rv.request_uri, "?");
+			}
+			else if (Len(loc.rv.redirect_url))
+			{
+				// Apache fallback
+				loc.rv.path_info = ListFirst(loc.rv.redirect_url, "?");
+			}
+
+			// finally lets remove the index.cfm because some of the custom cgi variables don't bring it back
+			// like this it means at the root we are working with / instead of /index.cfm
+			if (Len(loc.rv.path_info) >= 10 && Right(loc.rv.path_info, 10) == "/index.cfm")
+			{
+				// this will remove the index.cfm and the trailing slash
+				loc.rv.path_info = Replace(loc.rv.path_info, "/index.cfm", "");
+				if (!Len(loc.rv.path_info))
+				{
+					// add back the forward slash if path_info was "/index.cfm"
+					loc.rv.path_info = "/";
+				}
+			}
 		}
 	</cfscript>
 	<cfreturn loc.rv>
