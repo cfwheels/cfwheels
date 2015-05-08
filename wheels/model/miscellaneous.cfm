@@ -51,6 +51,7 @@
 	<cfargument name="where" type="string" required="false">
 	<cfargument name="reload" type="boolean" required="false">
 	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="exists", args=arguments);
