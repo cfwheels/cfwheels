@@ -250,12 +250,23 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validationErrorMessage" returntype="string" access="public" output="false" hint="Creates nicer looking error text by humanizing the property name and capitalizing it when appropriate.">
+<cffunction name="$validationErrorMessage" returntype="string" access="public" output="false">
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="message" type="string" required="true">
 	<cfscript>
 		var loc = {};
 		loc.rv = arguments.message;
+
+		// evaluate the error message if it contains pound signs
+		if (Find(Chr(35), loc.rv))
+		{
+			// use a try / catch here since it will fail if a pound sign is used that's not in an expression
+			try
+			{
+				loc.rv = Evaluate(DE(loc.rv));
+			}
+			catch (any e) {}
+		}
 
 		// loop through each argument and replace bracketed occurrence with argument value
 		for (loc.key in arguments)

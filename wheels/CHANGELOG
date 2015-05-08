@@ -8,6 +8,7 @@ Model Enhancements
 * Add support for "GROUP BY" in sum(), average() etc. - #464 [Per Djurner]
 * Made exists() check for any record when "key" and "where" is not passed in [Per Djurner]
 * Added clearChangeInformation() for clearing knowledge of object changes - #433 [Jeremy Keczan, Per Djurner]
+* Evaluate validation error messages at runtime - #470 [Per Djurner]
 
 View Enhancements
 =================

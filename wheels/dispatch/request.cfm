@@ -374,12 +374,12 @@
 			{
 				loc.rv[loc.key] = "";
 			}
-			StructDelete(loc.rv, "#loc.key#($year)");
-			StructDelete(loc.rv, "#loc.key#($month)");
-			StructDelete(loc.rv, "#loc.key#($day)");
-			StructDelete(loc.rv, "#loc.key#($hour)");
-			StructDelete(loc.rv, "#loc.key#($minute)");
-			StructDelete(loc.rv, "#loc.key#($second)");
+			StructDelete(loc.rv, loc.key & "($year)");
+			StructDelete(loc.rv, loc.key & "($month)");
+			StructDelete(loc.rv, loc.key & "($day)");
+			StructDelete(loc.rv, loc.key & "($hour)");
+			StructDelete(loc.rv, loc.key & "($minute)");
+			StructDelete(loc.rv, loc.key & "($second)");
 		}
 	</cfscript>
 	<cfreturn loc.rv>
