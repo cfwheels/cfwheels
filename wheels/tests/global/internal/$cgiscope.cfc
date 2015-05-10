@@ -2,6 +2,7 @@
 
 	<cffunction name="setup">
 		<cfset loc.cgi_scope = {}>
+		<cfset loc.cgi_scope.script_name = "/rewrite.cfm">
 		<cfset loc.cgi_scope.path_info = "/users/list/index.cfm">
 		<cfset loc.cgi_scope.http_x_rewrite_url = "/users/list/http_x_rewrite_url/index.cfm?controller=wheels&action=wheels&view=test">
 		<cfset loc.cgi_scope.http_x_original_url = "/users/list/http_x_original_url/index.cfm?controller=wheels&action=wheels&view=test">
