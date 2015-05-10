@@ -233,6 +233,7 @@
 	<cfargument name="scope" type="struct" required="false" default="#cgi#">
 	<cfscript>
 		var loc = {};
+		loc.appKey = $appKey();
 		loc.rv = {};
 		loc.iEnd = ListLen(arguments.keys);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -262,7 +263,7 @@
 		}
 
 		// fixes IIS issue that returns a blank cgi.path_info
-		if (!Len(loc.rv.path_info) && application.wheels.URLRewriting != "Off")
+		if (!Len(loc.rv.path_info) && application[loc.appKey].URLRewriting != "Off")
 		{
 			if (Len(loc.rv.http_x_rewrite_url))
 			{
