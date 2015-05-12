@@ -43,6 +43,6 @@ version).
 [CFWheels][1] is released under the Apache License Version 2.0.
  
 [1]: http://cfwheels.org/
-[2]: http://cfwheels.org/docs/chapter/beginner-tutorial-hello-world
-[3]: http://cfwheels.org/docs/chapter/coding-guidelines
+[2]: http://docs.cfwheels.org/docs/beginner-tutorial-hello-world
+[3]: http://docs.cfwheels.org/docs/contributing-to-cfwheels
 [4]: https://github.com/cfwheels/cfwheels/issues
