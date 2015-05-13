@@ -5,6 +5,11 @@ Bug Fixes
 
 * Fixed routing bug when running from a sub folder on Adobe ColdFusion 10  - [Brant Nielsen, Per Djurner]
 
+Miscellaneous
+=============
+
+* Updates to framework utility pages - Update logo, Fix links on congrats page to point to new documentation site - [Chris Peters]
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1.4 (05/08/2014)
