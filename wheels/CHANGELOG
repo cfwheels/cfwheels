@@ -3,6 +3,8 @@
 Bug Fixes
 =========
 
+* Fixed rewrite rules so base URL is rewritten correctly on Apache - #367 [Jeremy Keczan, Per Djurner]
+* Removed incorrect path info information set by Apache - #367 [David Belanger, Per Djurner]
 * Fixed routing bug when running from a sub folder on Adobe ColdFusion 10  - [Brant Nielsen, Per Djurner]
 
 Miscellaneous

@@ -298,6 +298,12 @@
 				}
 			}
 		}
+
+		// some web servers incorrectly place rewrite.cfm in the path_info but since that should never be there we can safely remove it
+		if (Find("rewrite.cfm/", loc.rv.path_info))
+		{
+			Replace(loc.rv.path_info, "rewrite.cfm/", "");
+		}
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
