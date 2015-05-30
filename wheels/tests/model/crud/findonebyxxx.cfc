@@ -10,7 +10,7 @@
 	</cffunction>
 
 	<cffunction name="test_explicit_arguments">
-		<cfset results.user = model("user").findOneByZipCode(value="22222", select="id,lastName,zipCode")>
+		<cfset results.user = model("user").findOneByZipCode(value="22222", select="id,lastName,zipCode", order="id")>
 		<cfset assert("IsObject(results.user) AND results.user.lastName IS 'Peters' AND NOT StructKeyExists(results.user, 'firstName')")>
 	</cffunction>
 
