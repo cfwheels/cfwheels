@@ -200,6 +200,9 @@
 		StructDelete(arguments, "property");
 		StructDelete(arguments, "distinct");
 
+		// since we don't return any records for calculation methods we want to skip the callbacks
+		arguments.callbacks = false;
+
 		loc.rv = findAll(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "group"))
 		{
