@@ -39,9 +39,9 @@
 		<cfset loc.g = loc.gallery.new(loc.params)>
 		<cfset
 			loc.g.photos = [
-				loc.photo.new(userId=loc.u.id, filename="Nested Properties Photo Test 1", DESCRIPTION1="test photo 1 for nested properties gallery"),
-				loc.photo.new(userId=loc.u.id, filename="Nested Properties Photo Test 2", DESCRIPTION1="test photo 2 for nested properties gallery"),
-				loc.photo.new(userId=loc.u.id, filename="Nested Properties Photo Test 3", DESCRIPTION1="test photo 3 for nested properties gallery")
+				loc.photo.new(userId=loc.u.id, filename="Nested Properties Photo Test 1", DESCRIPTION1="test photo 1 for nested properties gallery", position=1),
+				loc.photo.new(userId=loc.u.id, filename="Nested Properties Photo Test 2", DESCRIPTION1="test photo 2 for nested properties gallery", position=2),
+				loc.photo.new(userId=loc.u.id, filename="Nested Properties Photo Test 3", DESCRIPTION1="test photo 3 for nested properties gallery", position=3)
 			]
 		>
 		<cfreturn loc.g>

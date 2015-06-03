@@ -155,6 +155,7 @@ CREATE TABLE photos
 	,filename varchar(255) NOT NULL
 	,description varchar(255) NOT NULL
 	,filedata #loc.binaryColumnType# NULL
+	,position int NOT NULL
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
@@ -416,6 +417,7 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 				galleryid="#loc.gallery.id#"
 				,filename="Gallery #loc.gallery.id# Photo Test #loc.i2#"
 				,description1="test photo #loc.i2# for gallery #loc.gallery.id#"
+				,position=1
 			)>
 		</cfloop>
 	</cfloop>

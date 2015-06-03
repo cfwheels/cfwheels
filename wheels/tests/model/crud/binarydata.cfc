@@ -28,6 +28,7 @@
 				,filename="somefilename"
 				,fileData=loc.binaryData
 				,description1="something something"
+				,position=1
 			)>
 			<cfset loc.photo = model("photo").findByKey(loc.photo.id)>
 			<cfset loc._binary = loc.photo.filedata>

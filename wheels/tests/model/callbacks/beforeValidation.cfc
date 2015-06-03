@@ -43,7 +43,7 @@
 		<cfset loc.gallery = model("gallery").new(userId=loc.user.id, title="Nested Properties Gallery", description="A gallery testing nested properties.")>
 		<cfset loc.gallery.photos = 
 			[
-				model("photo").new(userId=loc.user.id, filename="Nested Properties Photo Test 1", DESCRIPTION1="test photo 1 for nested properties gallery")
+				model("photo").new(userId=loc.user.id, filename="Nested Properties Photo Test 1", DESCRIPTION1="test photo 1 for nested properties gallery", position=1)
 			]
 		>
 		<cfreturn loc>
