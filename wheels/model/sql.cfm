@@ -237,9 +237,15 @@
 			{
 				loc.classData = loc.classes[loc.i];
 				arguments.list = ListAppend(arguments.list, loc.classData.propertyList);
-				if (Len(loc.classData.calculatedPropertyList))
+				if (StructCount(loc.classData.calculatedProperties))
 				{
-					arguments.list = ListAppend(arguments.list, loc.classData.calculatedPropertyList);
+					for (loc.key in loc.classData.calculatedProperties)
+					{
+						if (loc.classData.calculatedProperties[loc.key].select)
+						{
+							arguments.list = ListAppend(arguments.list, loc.key);
+						}
+					}
 				}
 			}
 		}

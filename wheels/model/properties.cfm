@@ -39,6 +39,7 @@
 	<cfargument name="sql" type="string" required="false" default="">
 	<cfargument name="label" type="string" required="false" default="">
 	<cfargument name="defaultValue" type="string" required="false">
+	<cfargument name="select" type="boolean" required="false" default="true">
 	<cfscript>
 		// validate setup
 		if (Len(arguments.column) && Len(arguments.sql))
@@ -65,6 +66,7 @@
 		{
 			variables.wheels.class.mapping[arguments.name].type = "sql";
 			variables.wheels.class.mapping[arguments.name].value = arguments.sql;
+			variables.wheels.class.mapping[arguments.name].select = arguments.select;
 		}
 		if (Len(arguments.label))
 		{
