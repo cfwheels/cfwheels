@@ -479,26 +479,31 @@
 					loc.jEnd = ArrayLen(loc.classes);
 					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 					{
-						// defaults for cfqueryparam, will be overridden and set appropriately when a column mapping is found below
-						loc.param.type = "CF_SQL_CHAR";
 						loc.param.dataType = "char";
+						loc.param.type = "CF_SQL_CHAR";
 						loc.param.scale = 0;
 						loc.param.list = false;
-
 						loc.classData = loc.classes[loc.j];
-						if (!Find(".", loc.param.property) || ListFirst(loc.param.property, ".") == loc.classData.tableName)
+						loc.table = ListFirst(loc.param.property, ".");
+						loc.column = ListLast(loc.param.property, ".");
+						if (!Find(".", loc.param.property) || loc.table == loc.classData.tableName)
 						{
-							if (ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
+							if (ListFindNoCase(loc.classData.propertyList, loc.column))
 							{
-								loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
-								loc.param.dataType = loc.classData.properties[ListLast(loc.param.property, ".")].dataType;
-								loc.param.scale = loc.classData.properties[ListLast(loc.param.property, ".")].scale;
-								loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
+								loc.param.column = loc.classData.tableName & "." & loc.classData.properties[loc.column].column;
+								loc.param.dataType = loc.classData.properties[loc.column].dataType;
+								loc.param.type = loc.classData.properties[loc.column].type;
+								loc.param.scale = loc.classData.properties[loc.column].scale;
 								break;
 							}
-							else if (ListFindNoCase(loc.classData.calculatedPropertyList, ListLast(loc.param.property, ".")))
+							else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.column))
 							{
-								loc.param.column = "(" & loc.classData.calculatedProperties[ListLast(loc.param.property, ".")].sql & ")";
+								loc.param.column = "(" & loc.classData.calculatedProperties[loc.column].sql & ")";
+								if (StructKeyExists(loc.classData.calculatedProperties[loc.column], "dataType"))
+								{
+									loc.param.dataType = loc.classData.calculatedProperties[loc.column].dataType;
+									loc.param.type = variables.wheels.class.adapter.$getType(loc.param.dataType);
+								}
 								break;
 							}
 						}

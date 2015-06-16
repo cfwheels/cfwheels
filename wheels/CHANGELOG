@@ -4,6 +4,7 @@ Model Enhancements
 ==================
 
 * Support for property(sql="...", select=false) to not include a calculated property by default in SELECT clauses - #122 [Adam Chapman, Per Djurner]
+* Support for setting calculated properties to a specific data type - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

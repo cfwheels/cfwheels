@@ -183,6 +183,7 @@
 				variables.wheels.class.calculatedProperties[loc.key] = {};
 				variables.wheels.class.calculatedProperties[loc.key][variables.wheels.class.mapping[loc.key].type] = variables.wheels.class.mapping[loc.key].value;
 				variables.wheels.class.calculatedProperties[loc.key].select = variables.wheels.class.mapping[loc.key].select;
+				variables.wheels.class.calculatedProperties[loc.key].dataType = variables.wheels.class.mapping[loc.key].dataType;
 			}
 		}
 
