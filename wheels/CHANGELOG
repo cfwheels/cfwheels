@@ -1,10 +1,20 @@
 1.5 (?)
 
+Bug Fixes
+=========
+
+* Fixed lock name in onSessionEnd event - #499 [Aaron ?, Per Djurner]
+
 Model Enhancements
 ==================
 
-* Support for property(sql="...", select=false) to not include a calculated property by default in SELECT clauses - #122 [Adam Chapman, Per Djurner]
+* Support for passing in select=false to property() to not include a calculated property by default in SELECT clauses - #122 [Adam Chapman, Per Djurner]
 * Support for setting calculated properties to a specific data type - [Per Djurner]
+
+View Enhancements
+=================
+
+* Ability to set attributes on the input element created by buttonTo() - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

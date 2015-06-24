@@ -541,3 +541,23 @@
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
+
+<cffunction name="$innerArgs" returntype="struct" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="args" type="struct" required="true">
+	<cfscript>
+		var loc = {};
+		loc.rv = {};
+		loc.element = arguments.name;
+		for (loc.key in arguments.args)
+		{
+			if (Left(loc.key, Len(loc.element)) == loc.element)
+			{
+				loc.name = LCase(Mid(loc.key, Len(loc.element)+1, 1)) & Right(loc.key, Len(loc.key)-Len(loc.element)-1);
+				loc.rv[loc.name] = arguments.args[loc.key];
+				StructDelete(arguments.args, loc.key);
+			}
+		}
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>

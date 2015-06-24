@@ -3,7 +3,7 @@
 	<cfargument name="applicationScope" type="any" required="true">
 	<cfscript>
 		var loc = {};
-		loc.lockName = "reloadLock" & application.applicationName;
+		loc.lockName = "reloadLock" & arguments.applicationScope.applicationName;
 		$simpleLock(name=loc.lockName, execute="$runOnSessionEnd", executeArgs=arguments, type="readOnly", timeout=180);
 	</cfscript>
 </cffunction>
