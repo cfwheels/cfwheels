@@ -3,7 +3,8 @@
 Bug Fixes
 =========
 
-* Fixed lock name in onSessionEnd event - #499 [Aaron ?, Per Djurner]
+* Fixed lock name in onSessionEnd event - #499 [Per Djurner]
+* Fixed edge case issue with calling dynamic association methods - #501 [Per Djurner]
 
 Model Enhancements
 ==================
