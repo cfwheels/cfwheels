@@ -397,7 +397,14 @@
 			}
 			if (loc.accessible)
 			{
-				loc.rv[loc.key] = arguments.properties[loc.key];
+				if (IsNull(arguments.properties[loc.key])) 
+				{
+					loc.rv[loc.key] = "";
+				}
+				else
+				{
+					loc.rv[loc.key] = arguments.properties[loc.key];
+				}
 			}
 			if (loc.accessible && arguments.setOnModel)
 			{
