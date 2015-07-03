@@ -481,7 +481,7 @@
 			loc.existingObject = findOne(select=primaryKey(),where=ArrayToList(loc.where, " AND "), reload=true, includeSoftDeletes=arguments.includeSoftDeletes);
 
 			// we add an error if an object was found in the database and the current object is either not saved yet or not the same as the one in the database
-			if (IsObject(loc.existingObject) && (isNew() || loc.existingObject.key() != key($persisted=true)))
+			if (IsObject(loc.existingObject) && (isNew() || loc.existingObject.key() != this.key($persisted=true)))
 			{
 				addError(property=arguments.property, message=$validationErrorMessage(argumentCollection=arguments));
 			}
