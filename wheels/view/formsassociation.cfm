@@ -45,6 +45,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="hasManyCheckBox", args=arguments);
+		arguments.keys = $listClean(arguments.keys);
 		loc.checked = true;
 		loc.rv = "";
 		loc.included = includedInObject(argumentCollection=arguments);
