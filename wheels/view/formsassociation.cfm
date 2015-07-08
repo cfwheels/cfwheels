@@ -11,6 +11,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="hasManyRadioButton", args=arguments);
+		arguments.keys = Replace(arguments.keys, ", ", ",", "all");
 		loc.checked = false;
 		loc.rv = "";
 		loc.value = $hasManyFormValue(argumentCollection=arguments);
@@ -23,7 +24,6 @@
 		{
 			loc.checked = true;
 		}
-		arguments.keys = Replace(arguments.keys, ", ", ",", "all");
 		loc.tagId = "#arguments.objectName#-#arguments.association#-#Replace(arguments.keys, ",", "-", "all")#-#arguments.property#-#arguments.tagValue#";
 		loc.tagName = "#arguments.objectName#[#arguments.association#][#arguments.keys#][#arguments.property#]";
 		loc.rv = radioButtonTag(name=loc.tagName, id=loc.tagId, value=arguments.tagValue, checked=loc.checked, label=arguments.label);
@@ -46,6 +46,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="hasManyCheckBox", args=arguments);
+		arguments.keys = Replace(arguments.keys, ", ", ",", "all");
 		loc.checked = true;
 		loc.rv = "";
 		loc.included = includedInObject(argumentCollection=arguments);
@@ -54,7 +55,6 @@
 			loc.included = "";
 			loc.checked = false;
 		}
-		arguments.keys = Replace(arguments.keys, ", ", ",", "all");
 		loc.tagId = "#arguments.objectName#-#arguments.association#-#Replace(arguments.keys, ",", "-", "all")#-_delete";
 		loc.tagName = "#arguments.objectName#[#arguments.association#][#arguments.keys#][_delete]";
 		StructDelete(arguments, "keys");
