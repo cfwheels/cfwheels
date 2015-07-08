@@ -8,6 +8,7 @@ Bug Fixes
 * Skip setting object property when NULL is passed in - #507 [Andy Bellenie, Per Djurner]
 * Fixed lock name in onSessionEnd event - #499 [Per Djurner]
 * Fixed edge case issue with calling dynamic association methods - #501 [Per Djurner]
+* Ignore white space in the "where" argument to finders - #503 [Per Djurner]
 
 Model Enhancements
 ==================
