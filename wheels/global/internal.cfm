@@ -932,10 +932,10 @@
 		}
 		if (arguments.engine == "Railo")
 		{
-			loc.minimumMajor = "3";
-			loc.minimumMinor = "1";
-			loc.minimumPatch = "2";
-			loc.minimumBuild = "0";
+			loc.minimumMajor = "4";
+			loc.minimumMinor = "2";
+			loc.minimumPatch = "1";
+			loc.minimumBuild = "008";
 		}
 		else if (arguments.engine == "Lucee")
 		{
@@ -949,7 +949,7 @@
 			loc.minimumMajor = "8";
 			loc.minimumMinor = "0";
 			loc.minimumPatch = "1";
-			loc.minimumBuild = "0";
+			loc.minimumBuild = "195765";
 			loc.10 = {minimumMinor=0, minimumPatch=4};
 		}
 		if (loc.major < loc.minimumMajor || (loc.major == loc.minimumMajor && loc.minor < loc.minimumMinor) || (loc.major == loc.minimumMajor && loc.minor == loc.minimumMinor && loc.patch < loc.minimumPatch) || (loc.major == loc.minimumMajor && loc.minor == loc.minimumMinor && loc.patch == loc.minimumPatch && loc.build < loc.minimumBuild))
