@@ -106,6 +106,10 @@
 
 <cffunction name="imageTag" returntype="string" access="public" output="false">
 	<cfargument name="source" type="string" required="true">
+	<cfargument name="onlyPath" type="boolean" required="false">
+	<cfargument name="host" type="string" required="false">
+	<cfargument name="protocol" type="string" required="false">
+	<cfargument name="port" type="numeric" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="imageTag", reserved="src", args=arguments);
@@ -174,7 +178,7 @@
 			{
 				if (loc.localFile && !FileExists(ExpandPath(arguments.src)))
 				{
-					$throw(type="Wheels.ImageFileNotFound", message="CFWheels could not find `#expandPath('#arguments.src#')#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
+					$throw(type="Wheels.ImageFileNotFound", message="CFWheels could not find `#ExpandPath('#arguments.src#')#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
 				}
 				else if (!IsImageFile(ExpandPath(arguments.src)))
 				{
@@ -197,23 +201,28 @@
 			else
 			{
 				// remove height and width attributes if false
-				if (arguments.width EQ false)
+				if (!arguments.width)
 				{
 					StructDelete(arguments, "width");
 				}
-				if (arguments.height EQ false)
+				if (!arguments.height)
 				{
 					StructDelete(arguments, "height");
 				}
 			}
 			// only append a query string if the file is local
 			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
+
+			if (!arguments.onlyPath)
+			{
+				arguments.src = $prependUrl(path=arguments.src, argumentCollection=arguments);
+			}
 		}
 		if (!StructKeyExists(arguments, "alt"))
 		{
 			arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
 		}
-		loc.rv = $tag(name="img", skip="source,key,category", close=true, attributes=arguments);
+		loc.rv = $tag(name="img", skip="source,key,category,onlyPath,host,protocol,port", close=true, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>

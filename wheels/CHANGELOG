@@ -12,10 +12,13 @@ View Enhancements
 
 * Ability to set attributes on the input element created by buttonTo() - [Per Djurner]
 * Ignore spaces in the "keys" argument to hasManyCheckBox() and hasManyRadioButton() - [Song Lin, Per Djurner]
+* Added "onlyPath" argument to imageTag() - #508 [Per Djurner]
 
 Bug Fixes
 =========
 
+* Fixed so "defaultValue" gets set on non-persisted properties - #519 [Andy Bellenie]
+* Corrected output of property labels in error messages - #494 [Andy Bellenie]
 * Don't show debug info on AJAX requests - #496 [Leroy Mah, Per Djurner]
 * Removed use of ExpandPath() in debug file since it was causing file permission issues - [Peter Hopman, Per Djurner]
 * Skip setting object property when NULL is passed in - #507 [Andy Bellenie, Per Djurner]
