@@ -38,7 +38,7 @@
 				}
 				loc.mailArgs.from = application.wheels.errorEmailAddress;
 				loc.mailArgs.to = application.wheels.errorEmailAddress;
-				loc.mailArgs.subject = application.wheels.errorEmailSubject;
+				loc.mailArgs.subject = application.wheels.errorEmailSubject & ": " & arguments.exception.message;
 				loc.mailArgs.type = "html";
 				loc.mailArgs.tagContent = $includeAndReturnOutput($template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception);
 				StructDelete(loc.mailArgs, "layouts", false);
