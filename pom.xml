@@ -41,7 +41,7 @@ Benefits of embedded-container-test versus full-integration-test
 		<!-- embedded CFML and web server version for easy upgrade -->
 		<luceeVersion>4.5.1.022</luceeVersion>
 		<openbdVersion>3.1</openbdVersion>
-		<railoVersion>4.2.1.000</railoVersion>
+		<railoVersion>4.2.1.008</railoVersion>
 		<jettyVersion>8.1.15.v20140411</jettyVersion>
 		<railoConfig>railo-server.xml</railoConfig>
 		<testServer>http://localhost:8080</testServer>
