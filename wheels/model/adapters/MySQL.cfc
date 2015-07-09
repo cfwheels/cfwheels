@@ -118,5 +118,11 @@
 		</cfif>
 	</cffunction>
 
+	<cffunction name="$isIdentity" returntype="boolean" access="public" output="false">
+		<cfargument name="columns" type="query" required="true">
+		<cfargument name="i" type="numeric" required="true">
+		<cfreturn arguments.columns["is_autoincrement"][arguments.i]>
+	</cffunction>
+
 	<cfinclude template="../../plugins/injection.cfm">
 </cfcomponent>
