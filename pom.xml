@@ -7,19 +7,19 @@ usage:
      (on Eclipse, Run->Run As->9 Maven install)
   - Execute "mvn jetty:run" to start the embedded web server to run individual tests
     (In Eclipse, Run->Run As->6 Maven build...)
-  - Individual tests URL: http://localhost:8080/index.cfm?controller=wheels&action=wheels&view=tests&type=core  
-  - "mvn verify -P jetty,railo,subfolder" install CFWheels also on subfolder and run all tests 
+  - Individual tests URL: http://localhost:8080/index.cfm?controller=wheels&action=wheels&view=tests&type=core
+  - "mvn verify -P jetty,railo,subfolder" install CFWheels also on subfolder and run all tests
   - "mvn verify -P jetty,railo,oracle-emu" runs all CFWheels tests on Oracle emulation via embedded H2 database
   - "mvn verify -P jetty,railo,mysql" runs all CFWheels tests on Travis-CI MySQL database
   - "mvn verify -P jetty,railo,postgresal" runs all CFWheels tests on Travis-CI postgreSQL database
   - "mvn verify -P jetty,railo,plugins" download plugins and run all tests with it
   - "mvn clean verify -P mssql" upload and runs all CFWheels tests on ACF11 and Microsoft SQLServer on VivioTech test server
-  - "mvn clean verify -P mssql,acf9oracle" upload and deploy CFWheels on test server and run all tests also on ACF9 Oracle database 
+  - "mvn clean verify -P mssql,acf9oracle" upload and deploy CFWheels on test server and run all tests also on ACF9 Oracle database
   - "mvn clean verify -P oracle" copy and runs all CFWheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
   - "mvn clean verify -P jetty,openbd" download OpenBD and run all tests on it (preliminary support)
   - "mvn clean verify -P jetty,lucee" download Lucee and run all tests on it (preliminary support)
-  - "mvn verify -DtestParallelStart=true" start with parallel request and then run all tests 
-  - "mvn verify -DtestSharedAppName=true" start with shared application name test and then run all tests 
+  - "mvn verify -DtestParallelStart=true" start with parallel request and then run all tests
+  - "mvn verify -DtestSharedAppName=true" start with shared application name test and then run all tests
 
 Benefits of embedded-container-test versus full-integration-test
   #1 clean test data (data is not shared with nor contaminated by other processes)
@@ -39,7 +39,7 @@ Benefits of embedded-container-test versus full-integration-test
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- embedded CFML and web server version for easy upgrade -->
-		<luceeVersion>4.5.0.042</luceeVersion>
+		<luceeVersion>4.5.1.022</luceeVersion>
 		<openbdVersion>3.1</openbdVersion>
 		<railoVersion>4.2.1.000</railoVersion>
 		<jettyVersion>8.1.15.v20140411</jettyVersion>
@@ -374,7 +374,7 @@ Benefits of embedded-container-test versus full-integration-test
 		</profile>
 		<profile>
 			<!-- to activate, execute "mvn clean verify -Poracle" on locally
-				requires Oracle Express (any datasource) and ColdFusion installed on specific folder  
+				requires Oracle Express (any datasource) and ColdFusion installed on specific folder
 			-->
 			<id>oracle</id>
 			<properties>
