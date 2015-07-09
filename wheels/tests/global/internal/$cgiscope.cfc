@@ -2,6 +2,18 @@
 
 	<cffunction name="setup">
 		<cfset loc.cgi_scope = {}>
+		<cfset loc.cgi_scope.request_method = "">
+		<cfset loc.cgi_scope.http_x_requested_with = "">
+		<cfset loc.cgi_scope.http_referer = "">
+		<cfset loc.cgi_scope.server_name = "">
+		<cfset loc.cgi_scope.query_string = "">
+		<cfset loc.cgi_scope.remote_addr = "">
+		<cfset loc.cgi_scope.server_port = "">
+		<cfset loc.cgi_scope.server_port_secure = "">
+		<cfset loc.cgi_scope.server_protocol = "">
+		<cfset loc.cgi_scope.http_host = "">
+		<cfset loc.cgi_scope.http_accept = "">
+		<cfset loc.cgi_scope.content_type = "">
 		<cfset loc.cgi_scope.script_name = "/rewrite.cfm">
 		<cfset loc.cgi_scope.path_info = "/users/list/index.cfm">
 		<cfset loc.cgi_scope.http_x_rewrite_url = "/users/list/http_x_rewrite_url/index.cfm?controller=wheels&action=wheels&view=test">

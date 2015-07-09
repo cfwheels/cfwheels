@@ -16,6 +16,7 @@ View Enhancements
 Bug Fixes
 =========
 
+* Don't show debug info on AJAX requests - #496 [Leroy Mah, Per Djurner]
 * Removed use of ExpandPath() in debug file since it was causing file permission issues - [Peter Hopman, Per Djurner]
 * Skip setting object property when NULL is passed in - #507 [Andy Bellenie, Per Djurner]
 * Fixed lock name in onSessionEnd event - #499 [Per Djurner]
