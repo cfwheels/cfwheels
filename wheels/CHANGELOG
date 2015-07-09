@@ -1,25 +1,30 @@
 1.5 (?)
 
-Bug Fixes
-=========
-
-* Ignore spaces in the "keys" argument to hasManyCheckBox() and hasManyRadioButton() - [Song Lin, Per Djurner]
-* Removed use of ExpandPath() in debug file since it was causing file permission issues - [Peter Hopman, Per Djurner]
-* Skip setting object property when NULL is passed in - #507 [Andy Bellenie, Per Djurner]
-* Fixed lock name in onSessionEnd event - #499 [Per Djurner]
-* Fixed edge case issue with calling dynamic association methods - #501 [Per Djurner]
-* Ignore white space in the "where" argument to finders - #503 [Per Djurner]
-
 Model Enhancements
 ==================
 
 * Support for passing in select=false to property() to not include a calculated property by default in SELECT clauses - #122 [Adam Chapman, Per Djurner]
 * Support for setting calculated properties to a specific data type - [Per Djurner]
+* Ignore white space in the "where" argument to finders - #503 [Per Djurner]
 
 View Enhancements
 =================
 
 * Ability to set attributes on the input element created by buttonTo() - [Per Djurner]
+* Ignore spaces in the "keys" argument to hasManyCheckBox() and hasManyRadioButton() - [Song Lin, Per Djurner]
+
+Bug Fixes
+=========
+
+* Removed use of ExpandPath() in debug file since it was causing file permission issues - [Peter Hopman, Per Djurner]
+* Skip setting object property when NULL is passed in - #507 [Andy Bellenie, Per Djurner]
+* Fixed lock name in onSessionEnd event - #499 [Per Djurner]
+* Fixed edge case issue with calling dynamic association methods - #501 [Per Djurner]
+
+Miscellaneous
+=============
+
+* Set minimum Lucee version to 4.5.1.022 - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

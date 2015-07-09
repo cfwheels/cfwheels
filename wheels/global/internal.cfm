@@ -917,6 +917,7 @@
 		loc.major = ListGetAt(loc.version, 1);
 		loc.minor = 0;
 		loc.patch = 0;
+		loc.build = 0;
 		if (ListLen(loc.version) > 1)
 		{
 			loc.minor = ListGetAt(loc.version, 2);
@@ -925,28 +926,35 @@
 		{
 			loc.patch = ListGetAt(loc.version, 3);
 		}
+		if (ListLen(loc.version) > 3)
+		{
+			loc.build = ListGetAt(loc.version, 4);
+		}
 		if (arguments.engine == "Railo")
 		{
 			loc.minimumMajor = "3";
 			loc.minimumMinor = "1";
 			loc.minimumPatch = "2";
+			loc.minimumBuild = "0";
 		}
 		else if (arguments.engine == "Lucee")
 		{
 			loc.minimumMajor = "4";
 			loc.minimumMinor = "5";
-			loc.minimumPatch = "0";
+			loc.minimumPatch = "1";
+			loc.minimumBuild = "022";
 		}
 		else if (arguments.engine == "Adobe ColdFusion")
 		{
 			loc.minimumMajor = "8";
 			loc.minimumMinor = "0";
 			loc.minimumPatch = "1";
+			loc.minimumBuild = "0";
 			loc.10 = {minimumMinor=0, minimumPatch=4};
 		}
-		if (loc.major < loc.minimumMajor || (loc.major == loc.minimumMajor && loc.minor < loc.minimumMinor) || (loc.major == loc.minimumMajor && loc.minor == loc.minimumMinor && loc.patch < loc.minimumPatch))
+		if (loc.major < loc.minimumMajor || (loc.major == loc.minimumMajor && loc.minor < loc.minimumMinor) || (loc.major == loc.minimumMajor && loc.minor == loc.minimumMinor && loc.patch < loc.minimumPatch) || (loc.major == loc.minimumMajor && loc.minor == loc.minimumMinor && loc.patch == loc.minimumPatch && loc.build < loc.minimumBuild))
 		{
-			loc.rv = loc.minimumMajor & "." & loc.minimumMinor & "." & loc.minimumPatch;
+			loc.rv = loc.minimumMajor & "." & loc.minimumMinor & "." & loc.minimumPatch & "." & loc.minimumBuild;
 		}
 		if (StructKeyExists(loc, loc.major))
 		{
