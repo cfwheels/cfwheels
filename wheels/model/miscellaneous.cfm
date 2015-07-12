@@ -61,6 +61,7 @@
 		}
 		arguments.select = primaryKey();
 		arguments.returnAs = "query";
+		arguments.callbacks = false;
 		if (StructKeyExists(arguments, "key"))
 		{
 			loc.rv = findByKey(argumentCollection=arguments).recordCount;

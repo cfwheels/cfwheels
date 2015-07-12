@@ -100,7 +100,7 @@
 				}
 				else
 				{
-					loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=primaryKeys(), where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
+					loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=primaryKeys(), where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes, callbacks=false);
 					if (loc.values.RecordCount)
 					{
 						loc.paginationWhere = "";
@@ -342,6 +342,7 @@
 		loc.delimiter = arguments.delimiter;
 		StructDelete(arguments, "delimiter");
 		arguments.select = primaryKey();
+		arguments.callbacks = false;
 		loc.query = findAll(argumentCollection=arguments);
 		if (loc.quoted)
 		{
