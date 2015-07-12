@@ -10,6 +10,7 @@ Model Enhancements
 View Enhancements
 =================
 
+* Ability to pass in list to "includeBlank" argument on dateSelect() and similar functions - #502 [Thorsten Eilers, Per Djurner]
 * Ability to set attributes on the input element created by buttonTo() - [Per Djurner]
 * Ignore spaces in the "keys" argument to hasManyCheckBox() and hasManyRadioButton() - [Song Lin, Per Djurner]
 * Added "onlyPath" argument to imageTag() - #508 [Per Djurner]
@@ -17,6 +18,7 @@ View Enhancements
 Bug Fixes
 =========
 
+* Skip running callbacks when validating uniqueness and similar situations - #492 [Andy Bellenie, Per Djurner]
 * Fixed so "defaultValue" gets set on non-persisted properties - #519 [Andy Bellenie]
 * Corrected output of property labels in error messages - #494 [Andy Bellenie]
 * Don't show debug info on AJAX requests - #496 [Leroy Mah, Per Djurner]

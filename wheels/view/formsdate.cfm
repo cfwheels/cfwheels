@@ -131,22 +131,22 @@
 		{
 			loc.item = ListGetAt(arguments.order, loc.i);
 			loc.marker = "($" & loc.item & ")";
-			if(!loc.combine)
+			if (!loc.combine)
 			{
 				loc.name = $tagName(arguments.objectName, "#arguments.property#-#loc.item#");
 				loc.marker = "";
 			}
 			arguments.name = loc.name & loc.marker;
 			arguments.value = loc.value;
-			if (Isdate(loc.value))
+			if (IsDate(loc.value))
 			{
 				if (arguments.twelveHour && ListFind("hour,ampm", loc.item))
 				{
-					if (loc.item IS "hour")
+					if (loc.item == "hour")
 					{
 						arguments.value = TimeFormat(loc.value, 'h');
 					}
-					else if (loc.item IS "ampm")
+					else if (loc.item == "ampm")
 					{
 						arguments.value = TimeFormat(loc.value, 'tt');
 					}
@@ -156,7 +156,6 @@
 					arguments.value = Evaluate("#loc.item#(loc.value)");
 				}
 			}
-
 			if (loc.firstDone)
 			{
 				loc.rv &= arguments.separator;
@@ -205,13 +204,20 @@
 			}
 		}
 
-		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && ListLen(arguments.label) > 1)
+		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1)
 		{
-			arguments.label = ListGetAt(arguments.label, ListFindNoCase(arguments.order, arguments.$type));
-		}
-		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && StructKeyExists(arguments, "labelClass") && ListLen(arguments.labelClass) > 1)
-		{
-			arguments.labelClass = ListGetAt(arguments.labelClass, ListFindNoCase(arguments.order, arguments.$type));
+			if (ListLen(arguments.includeBlank) > 1)
+			{
+				arguments.includeBlank = ListGetAt(arguments.includeBlank, ListFindNoCase(arguments.order, arguments.$type));
+			}
+			if (ListLen(arguments.label) > 1)
+			{
+				arguments.label = ListGetAt(arguments.label, ListFindNoCase(arguments.order, arguments.$type));
+			}
+			if (StructKeyExists(arguments, "labelClass") && ListLen(arguments.labelClass) > 1)
+			{
+				arguments.labelClass = ListGetAt(arguments.labelClass, ListFindNoCase(arguments.order, arguments.$type));
+			}
 		}
 		if (!StructKeyExists(arguments, "id"))
 		{
