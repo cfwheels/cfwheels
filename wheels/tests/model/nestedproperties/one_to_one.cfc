@@ -83,6 +83,38 @@
 		<cfset assert("IsBoolean(loc.missingProfile) and not loc.missingProfile")>
 	</cffunction>
 
+	<cffunction name="test_beforeCreate_callback_on_child">
+		<cftransaction>
+			<cfset loc.testAuthor.save()>
+			<cfset assert("loc.testAuthor.profile.beforeCreateCallbackCount eq 1")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
+	<cffunction name="test_beforeSave_callback_on_child">
+		<cftransaction>
+			<cfset loc.testAuthor.save()>
+			<cfset assert("loc.testAuthor.profile.beforeSaveCallbackCount eq 1")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
+	<cffunction name="test_afterCreate_callback_on_child">
+		<cftransaction>
+			<cfset loc.testAuthor.save()>
+			<cfset assert("loc.testAuthor.profile.afterCreateCallbackCount eq 1")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
+	<cffunction name="test_afterSave_callback_on_child">
+		<cftransaction>
+			<cfset loc.testAuthor.save()>
+			<cfset assert("loc.testAuthor.profile.afterSaveCallbackCount eq 1")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
 	<cffunction name="$setTestObjects" access="private" hint="Sets up test `author` and `profile` objects.">
 		<cfset loc.testAuthor = loc.author.findOneByLastName(value="Peters", include="profile")>
 		<cfset loc.bioText = "Loves learning how to write tests." />
@@ -90,18 +122,16 @@
 	</cffunction>
 	
 	<cffunction name="$setTestParamsStruct" access="private" hint="Sets up test `author` struct reminiscent of what would be passed through a form. The `author` represented here also includes a nested child `profile` struct.">
-		<cfset
-			loc.testParams = {
-				author = {
-					firstName="Brian",
-					lastName="Meloche",
-					profile = {
-						dateOfBirth="10/02/1970 18:01:00",
-						bio="Host of CFConversations, the best ColdFusion podcast out there."
-					}
+		<cfset loc.testParams = {
+			author = {
+				firstName="Brian",
+				lastName="Meloche",
+				profile = {
+					dateOfBirth="10/02/1970 18:01:00",
+					bio="Host of CFConversations, the best ColdFusion podcast out there."
 				}
 			}
-		>
+		}>
 		<cfreturn loc.testParams>
 	</cffunction>
 
