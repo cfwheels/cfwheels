@@ -8,6 +8,8 @@
 		<cfset beforeSave("beforeSaveCallbackThatIncreasesVariable")>
 		<cfset afterCreate("afterCreateCallbackThatIncreasesVariable")>
 		<cfset beforeSave("afterSaveCallbackThatIncreasesVariable")>
+		<!--- The evaluated `condition` will throw an exception if callbacks aren't executed properly when this object is a nested property --->
+		<cfset validate(method="validateBeforeValidationRunsProperlyAsNestedAssociation", condition="this.beforeValidationCallbackRegistered")>
 	</cffunction>
 
 	<cffunction name="afterCreateCallbackThatIncreasesVariable" access="private">
@@ -46,6 +48,9 @@
 			<cfset this.beforeValidationCallbackCount = 0>
 		</cfif>
 		<cfset this.beforeValidationCallbackCount++>
+	</cffunction>
+
+	<cffunction name="validateBeforeValidationRunsProperlyAsNestedAssociation" access="private">
 	</cffunction>
 
 </cfcomponent>
