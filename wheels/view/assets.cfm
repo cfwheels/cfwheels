@@ -170,13 +170,14 @@
 		else
 		{
 			arguments.src = application.wheels.webPath & application.wheels.imagePath & "/" & arguments.source;
+			loc.file = GetDirectoryFromPath(GetBaseTemplatePath()) & application.wheels.imagePath & "/" & arguments.source;
 			if (get("showErrorInformation"))
 			{
-				if (loc.localFile && !FileExists(ExpandPath(arguments.src)))
+				if (loc.localFile && !FileExists(loc.file))
 				{
-					$throw(type="Wheels.ImageFileNotFound", message="CFWheels could not find `#expandPath('#arguments.src#')#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
+					$throw(type="Wheels.ImageFileNotFound", message="CFWheels could not find `#loc.file#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
 				}
-				else if (!IsImageFile(ExpandPath(arguments.src)))
+				else if (!IsImageFile(loc.file))
 				{
 					$throw(type="Wheels.ImageFormatNotSupported", message="CFWheels can't read image files with that format.", extendedInfo="Use one of these image types instead: #GetReadableImageFormats()#.");
 				}
@@ -184,7 +185,7 @@
 			if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height"))
 			{
 				// height and / or width arguments are missing so use cfimage to get them
-				loc.image = $image(action="info", source=ExpandPath(arguments.src));
+				loc.image = $image(action="info", source=loc.file);
 				if (!StructKeyExists(arguments, "width") && loc.image.width > 0)
 				{
 					arguments.width = loc.image.width;
