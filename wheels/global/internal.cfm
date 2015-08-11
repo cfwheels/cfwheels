@@ -238,11 +238,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(arguments.keys, loc.i);
-			loc.rv[loc.item] = "";
-			if (StructKeyExists(arguments.scope, loc.item))
-			{
-				loc.rv[loc.item] = arguments.scope[loc.item];
-			}
+			loc.rv[loc.item] = arguments.scope[loc.item];
 		}
 
 		// fix path_info if it contains any characters that are not ascii (see issue 138)
