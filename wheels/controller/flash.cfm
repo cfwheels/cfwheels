@@ -121,7 +121,6 @@
 <cffunction name="$writeFlash" returntype="any" access="public" output="false">
 	<cfargument name="flash" type="struct" required="false" default="#StructNew()#">
 	<cfscript>
-		var loc = {};
 		if (!StructKeyExists(arguments, "$locked"))
 		{
 			loc.lockName = "flashLock" & application.applicationName;
