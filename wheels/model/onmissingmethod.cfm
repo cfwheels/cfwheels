@@ -318,7 +318,12 @@
 					loc.singularKey = singularize(loc.key);
 
 					// create a generic method name (example: "hasComments" becomes "hasObjects")
-					loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, loc.key, "objects"), loc.singularKey, "object");
+					loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "objects");
+					if (loc.name == arguments.missingMethodName)
+					{
+						// we should never change anything more than once so if the plural version was already replaced we do not need to replace the singular one
+						loc.name = ReplaceNoCase(loc.name, loc.singularKey, "object");
+					}
 
 					if (loc.name == "objects")
 					{
