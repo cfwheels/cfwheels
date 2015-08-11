@@ -382,22 +382,25 @@
 		// loop through the properties and see if they can be set based off of the accessible properties lists
 		for (loc.key in arguments.properties)
 		{
-			loc.accessible = true;
-			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, loc.key))
+			if (StructKeyExists(arguments.properties, loc.key))
 			{
-				loc.accessible = false;
-			}
-			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, loc.key))
-			{
-				loc.accessible = false;
-			}
-			if (loc.accessible)
-			{
-				loc.rv[loc.key] = arguments.properties[loc.key];
-			}
-			if (loc.accessible && arguments.setOnModel)
-			{
-				$setProperty(property=loc.key, value=loc.rv[loc.key]);
+				loc.accessible = true;
+				if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, loc.key))
+				{
+					loc.accessible = false;
+				}
+				if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, loc.key))
+				{
+					loc.accessible = false;
+				}
+				if (loc.accessible)
+				{
+					loc.rv[loc.key] = arguments.properties[loc.key];
+				}
+				if (loc.accessible && arguments.setOnModel)
+				{
+					$setProperty(property=loc.key, value=loc.rv[loc.key]);
+				}
 			}
 		}
 
