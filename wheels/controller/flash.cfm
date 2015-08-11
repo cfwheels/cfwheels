@@ -121,6 +121,7 @@
 <cffunction name="$writeFlash" returntype="any" access="public" output="false">
 	<cfargument name="flash" type="struct" required="false" default="#StructNew()#">
 	<cfscript>
+		var loc = {};
 		if (!StructKeyExists(arguments, "$locked"))
 		{
 			// the return is needed here because otherwise we get an abstracthttpconnection error in jetty (when running tests)
