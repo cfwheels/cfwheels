@@ -96,6 +96,10 @@
 						loc.rv = true;
 					}
 				}
+				else
+				{
+					$validateAssociations(callbacks=arguments.callbacks);
+				}
 			}
 			else
 			{
@@ -108,7 +112,15 @@
 						loc.rv = true;
 					}
 				}
+				else
+				{
+					$validateAssociations(callbacks=arguments.callbacks);
+				}
 			}
+		}
+		else
+		{
+			$validateAssociations(callbacks=arguments.callbacks);
 		}
 	</cfscript>
 	<cfreturn loc.rv>
