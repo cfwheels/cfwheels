@@ -18,16 +18,13 @@ View Enhancements
 Bug Fixes
 =========
 
-* Fixed missing var scope causing error on Lucee - [Russ Michaels, Tom King]
 * Skip running callbacks when validating uniqueness and similar situations - #492 [Andy Bellenie, Per Djurner]
 * Fixed so "defaultValue" gets set on non-persisted properties - #519 [Andy Bellenie]
 * Corrected output of property labels in error messages - #494 [Andy Bellenie]
-* Don't show debug info on AJAX requests - #496 [Leroy Mah, Per Djurner]
 * Removed use of ExpandPath() in debug file since it was causing file permission issues - [Peter Hopman, Per Djurner]
 * Skip setting object property when NULL is passed in - #507 [Andy Bellenie, Per Djurner]
 * Fixed lock name in onSessionEnd event - #499 [Per Djurner]
 * Fixed edge case issue with calling dynamic association methods - #501 [Per Djurner]
-* Fixed permissions issue with imageTag() when running on shared hosting - [Per Djurner]
 
 Miscellaneous
 =============
@@ -36,7 +33,7 @@ Miscellaneous
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-1.4.1 (05/30/2014)
+1.4.1 (05/30/2015)
 
 Bug Fixes
 =========
@@ -55,7 +52,7 @@ Miscellaneous
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-1.4 (05/08/2014)
+1.4 (05/08/2015)
 
 Model Enhancements
 ==================
