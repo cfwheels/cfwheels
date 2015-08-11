@@ -83,6 +83,38 @@
 		<cfset assert("IsBoolean(loc.missingProfile) and not loc.missingProfile")>
 	</cffunction>
 
+	<cffunction name="test_valid_beforeValidation_callback_on_child">
+		<cfset assert("loc.testAuthor.valid()")>
+		<cfset assert("loc.testAuthor.profile.beforeValidationCallbackRegistered")>
+		<cfset assert("loc.testAuthor.profile.beforeValidationCallbackCount eq 1")>
+	</cffunction>
+
+	<cffunction name="test_valid_beforeValidation_callback_on_child_with_validation_error_on_parent">
+		<cfset loc.testAuthor.firstName = "">
+		<cfset assert("not loc.testAuthor.valid()")>
+		<cfset assert("loc.testAuthor.profile.beforeValidationCallbackRegistered")>
+		<cfset assert("loc.testAuthor.profile.beforeValidationCallbackCount eq 1")>
+	</cffunction>
+
+	<cffunction name="test_save_beforeValidation_callback_on_child">
+		<cftransaction>
+			<cfset assert("loc.testAuthor.save()")>
+			<cfset assert("loc.testAuthor.profile.beforeValidationCallbackRegistered")>
+			<cfset assert("loc.testAuthor.profile.beforeValidationCallbackCount eq 1")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
+	<cffunction name="test_save_beforeValidation_callback_on_child_with_validation_error_on_parent">
+		<cfset loc.testAuthor.firstName = "">
+		<cftransaction>
+			<cfset assert("not loc.testAuthor.save()")>
+			<cfset assert("loc.testAuthor.profile.beforeValidationCallbackRegistered")>
+			<cfset assert("loc.testAuthor.profile.beforeValidationCallbackCount eq 1")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
 	<cffunction name="test_beforeCreate_callback_on_child">
 		<cftransaction>
 			<cfset loc.testAuthor.save()>

@@ -2,6 +2,7 @@
 
 	<cffunction name="init">
 		<cfset belongsTo("author")>
+		<cfset beforeValidation("beforeValidationCallbackThatSetsProperty,beforeValidationCallbackThatIncreasesVariable")>
 		<cfset beforeCreate("beforeCreateCallbackThatIncreasesVariable")>
 		<cfset beforeSave("beforeSaveCallbackThatIncreasesVariable")>
 		<cfset afterCreate("afterCreateCallbackThatIncreasesVariable")>
@@ -33,6 +34,17 @@
 			<cfset this.beforeSaveCallbackCount = 0>
 		</cfif>
 		<cfset this.beforeSaveCallbackCount++>
+	</cffunction>
+
+	<cffunction name="beforeValidationCallbackThatSetsProperty" access="private">
+		<cfset this.beforeValidationCallbackRegistered = true>
+	</cffunction>
+
+	<cffunction name="beforeValidationCallbackThatIncreasesVariable" access="private">
+		<cfif NOT StructKeyExists(this, "beforeValidationCallbackCount")>
+			<cfset this.beforeValidationCallbackCount = 0>
+		</cfif>
+		<cfset this.beforeValidationCallbackCount++>
 	</cffunction>
 
 </cfcomponent>

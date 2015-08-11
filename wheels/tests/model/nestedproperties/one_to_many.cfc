@@ -31,6 +31,46 @@
 		</cftransaction>
 	</cffunction>
 
+	<cffunction name="test_valid_beforeValidation_callbacks_on_children">
+		<cfset assert("loc.testGallery.valid()")>
+		<cfloop from="1" to="#ArrayLen(loc.testGallery.photos)#" index="loc.i">
+			<cfset assert("loc.testGallery.photos[loc.i].beforeValidationCallbackRegistered")>
+			<cfset assert("loc.testGallery.photos[loc.i].beforeValidationCallbackCount eq 1")>
+		</cfloop>
+	</cffunction>
+
+	<cffunction name="test_valid_beforeValidation_callbacks_on_children_with_validation_error_on_parent">
+		<cfset loc.testGallery.title = "">
+		<cfset assert("not loc.testGallery.valid()")>
+		<cfloop from="1" to="#ArrayLen(loc.testGallery.photos)#" index="loc.i">
+			<cfset assert("loc.testGallery.photos[loc.i].beforeValidationCallbackRegistered")>
+			<cfset assert("loc.testGallery.photos[loc.i].beforeValidationCallbackCount eq 1")>
+		</cfloop>
+	</cffunction>
+
+	<cffunction name="test_save_beforeValidation_callbacks_on_children">
+		<cftransaction>
+			<cfset assert("loc.testGallery.save()")>
+			<cfloop from="1" to="#ArrayLen(loc.testGallery.photos)#" index="loc.i">
+				<cfset assert("loc.testGallery.photos[loc.i].beforeValidationCallbackRegistered")>
+				<cfset assert("loc.testGallery.photos[loc.i].beforeValidationCallbackCount eq 1")>
+			</cfloop>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
+	<cffunction name="test_save_beforeValidation_callbacks_on_children_with_validation_error_on_parent">
+		<cfset loc.testGallery.title = "">
+		<cftransaction>
+			<cfset assert("not loc.testGallery.save()")>
+			<cfloop from="1" to="#ArrayLen(loc.testGallery.photos)#" index="loc.i">
+				<cfset assert("loc.testGallery.photos[loc.i].beforeValidationCallbackRegistered")>
+				<cfset assert("loc.testGallery.photos[loc.i].beforeValidationCallbackCount eq 1")>
+			</cfloop>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
 	<cffunction name="test_beforeCreate_callback_on_children">
 		<cftransaction>
 			<cfset loc.testGallery.save()>
