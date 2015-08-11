@@ -5,19 +5,19 @@ Model Enhancements
 
 * Support for passing in select=false to property() to not include a calculated property by default in SELECT clauses - #122 [Adam Chapman, Per Djurner]
 * Support for setting calculated properties to a specific data type - [Per Djurner]
-* Ignore white space in the "where" argument to finders - #503 [Per Djurner]
 
 View Enhancements
 =================
 
 * Ability to pass in list to "includeBlank" argument on dateSelect() and similar functions - #502 [Thorsten Eilers, Per Djurner]
 * Ability to set attributes on the input element created by buttonTo() - [Per Djurner]
-* Ignore spaces in the "keys" argument to hasManyCheckBox() and hasManyRadioButton() - [Song Lin, Per Djurner]
 * Added "onlyPath" argument to imageTag() - #508 [Per Djurner]
 
 Bug Fixes
 =========
 
+* Ignore white space in the "where" argument to finders - #503 [Per Djurner]
+* Ignore spaces in the "keys" argument to hasManyCheckBox() and hasManyRadioButton() - [Song Lin, Per Djurner]
 * Skip running callbacks when validating uniqueness and similar situations - #492 [Andy Bellenie, Per Djurner]
 * Fixed so "defaultValue" gets set on non-persisted properties - #519 [Andy Bellenie]
 * Corrected output of property labels in error messages - #494 [Andy Bellenie]
@@ -25,7 +25,7 @@ Bug Fixes
 Miscellaneous
 =============
 
-* Set minimum Lucee version to 4.5.1.022 - [Per Djurner]
+* Set minimum Lucee version to 4.5.1.023 - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

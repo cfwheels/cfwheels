@@ -39,7 +39,7 @@ Benefits of embedded-container-test versus full-integration-test
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- embedded CFML and web server version for easy upgrade -->
-		<luceeVersion>4.5.1.022</luceeVersion>
+		<luceeVersion>4.5.1.023</luceeVersion>
 		<openbdVersion>3.1</openbdVersion>
 		<railoVersion>4.2.1.008</railoVersion>
 		<jettyVersion>8.1.15.v20140411</jettyVersion>

@@ -13,7 +13,7 @@
 	</cffunction>
 
 	<cffunction name="test_lucee_valid">
-		<cfset assert('!Len($checkMinimumVersion(version="4.5.1.022", engine="Lucee"))')>
+		<cfset assert('!Len($checkMinimumVersion(version="4.5.1.023", engine="Lucee"))')>
 	</cffunction>
 
 	<cffunction name="test_lucee_invalid">

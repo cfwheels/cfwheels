@@ -938,7 +938,7 @@
 			loc.minimumMajor = "4";
 			loc.minimumMinor = "5";
 			loc.minimumPatch = "1";
-			loc.minimumBuild = "022";
+			loc.minimumBuild = "023";
 		}
 		else if (arguments.engine == "Adobe ColdFusion")
 		{
