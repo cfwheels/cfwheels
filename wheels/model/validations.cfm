@@ -181,19 +181,20 @@
 		{
 			if (isNew())
 			{
-				if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate") && $validateAssociations(callbacks=arguments.callbacks) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks))
+				if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate") && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks))
 				{
 					loc.rv = true;
 				}
 			}
 			else
 			{
-				if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave,onUpdate") && $validateAssociations(callbacks=arguments.callbacks) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks))
+				if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave,onUpdate") && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks))
 				{
 					loc.rv = true;
 				}
 			}
 		}
+		$validateAssociations(callbacks=arguments.callbacks);
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
