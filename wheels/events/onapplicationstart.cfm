@@ -39,14 +39,21 @@
 		loc.upgradeTo = $checkMinimumVersion(engine=application.$wheels.serverName, version=application.$wheels.serverVersion);
 		if (Len(loc.upgradeTo))
 		{
-			$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please upgrade to version #loc.upgradeTo# or higher.");
+			if (IsBoolean(loc.upgradeTo))
+			{
+				$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please use Lucee or Adobe ColdFusion instead.");
+			}
+			else
+			{
+				$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please upgrade to version #loc.upgradeTo# or higher.");
+			}
 		}
 
 		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
 		request.cgi = $cgiScope();
 
 		// set up containers for routes, caches, settings etc
-		application.$wheels.version = "1.5";
+		application.$wheels.version = "2.0";
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
 		application.$wheels.controllers = {};
 		application.$wheels.models = {};

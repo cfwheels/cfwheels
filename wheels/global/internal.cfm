@@ -926,14 +926,7 @@
 		{
 			loc.build = ListGetAt(loc.version, 4);
 		}
-		if (arguments.engine == "Railo")
-		{
-			loc.minimumMajor = "4";
-			loc.minimumMinor = "2";
-			loc.minimumPatch = "1";
-			loc.minimumBuild = "008";
-		}
-		else if (arguments.engine == "Lucee")
+		if (arguments.engine == "Lucee")
 		{
 			loc.minimumMajor = "4";
 			loc.minimumMinor = "5";
@@ -942,22 +935,33 @@
 		}
 		else if (arguments.engine == "Adobe ColdFusion")
 		{
-			loc.minimumMajor = "8";
+			loc.minimumMajor = "10";
 			loc.minimumMinor = "0";
-			loc.minimumPatch = "1";
-			loc.minimumBuild = "195765";
-			loc.10 = {minimumMinor=0, minimumPatch=4};
+			loc.minimumPatch = "16";
+			loc.minimumBuild = "";
+			loc.11 = {minimumMinor=0, minimumPatch=5};
 		}
-		if (loc.major < loc.minimumMajor || (loc.major == loc.minimumMajor && loc.minor < loc.minimumMinor) || (loc.major == loc.minimumMajor && loc.minor == loc.minimumMinor && loc.patch < loc.minimumPatch) || (loc.major == loc.minimumMajor && loc.minor == loc.minimumMinor && loc.patch == loc.minimumPatch && loc.build < loc.minimumBuild))
+		else
 		{
-			loc.rv = loc.minimumMajor & "." & loc.minimumMinor & "." & loc.minimumPatch & "." & loc.minimumBuild;
+			loc.rv = false;
 		}
-		if (StructKeyExists(loc, loc.major))
+		if (StructKeyExists(loc, "minimumMajor"))
 		{
-			// special requirements for having a specific minor or patch version within a major release exists
-			if (loc.minor < loc[loc.major].minimumMinor || (loc.minor == loc[loc.major].minimumMinor && loc.patch < loc[loc.major].minimumPatch))
+			if (loc.major < loc.minimumMajor || (loc.major == loc.minimumMajor && loc.minor < loc.minimumMinor) || (loc.major == loc.minimumMajor && loc.minor == loc.minimumMinor && loc.patch < loc.minimumPatch) || (loc.major == loc.minimumMajor && loc.minor == loc.minimumMinor && loc.patch == loc.minimumPatch && Len(loc.minimumBuild) && loc.build < loc.minimumBuild))
 			{
-				loc.rv = loc.major & "." & loc[loc.major].minimumMinor & "." & loc[loc.major].minimumPatch;
+				loc.rv = loc.minimumMajor & "." & loc.minimumMinor & "." & loc.minimumPatch;
+				if (Len(loc.minimumBuild))
+				{
+					loc.rv &= "." & loc.minimumBuild;
+				}
+			}
+			if (StructKeyExists(loc, loc.major))
+			{
+				// special requirements for having a specific minor or patch version within a major release exists
+				if (loc.minor < loc[loc.major].minimumMinor || (loc.minor == loc[loc.major].minimumMinor && loc.patch < loc[loc.major].minimumPatch))
+				{
+					loc.rv = loc.major & "." & loc[loc.major].minimumMinor & "." & loc[loc.major].minimumPatch;
+				}
 			}
 		}
 	</cfscript>
