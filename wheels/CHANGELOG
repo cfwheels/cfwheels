@@ -1,4 +1,4 @@
-2.0 (?)
+2.0 (TBD)
 
 Model Enhancements
 ==================
@@ -25,7 +25,7 @@ Bug Fixes
 Miscellaneous
 =============
 
-* Set minimum Lucee version to 4.5.1.023 - [Per Djurner]
+* Set minimum Lucee version to 4.5.1.022 - [Per Djurner, Chris Peters]
 * Set minimum ACF version to 10.0.16 / 11.0.5 - [Per Djurner]
 * Dropped support for Railo - [Per Djurner]
 

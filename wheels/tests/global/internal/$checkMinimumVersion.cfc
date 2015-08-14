@@ -10,13 +10,13 @@
 	</cffunction>
 
 	<cffunction name="test_lucee_valid">
-		<cfset assert('!Len($checkMinimumVersion(version="4.5.1.023", engine="Lucee"))')>
+		<cfset assert('!Len($checkMinimumVersion(version="4.5.1.022", engine="Lucee"))')>
 	</cffunction>
 
 	<cffunction name="test_lucee_invalid">
-		<cfset assert('Len($checkMinimumVersion(version="4.5.1.022", engine="Lucee"))')>
+		<cfset assert('Len($checkMinimumVersion(version="4.5.1.021", engine="Lucee"))')>
 		<cfset assert('Len($checkMinimumVersion(version="4.4.0", engine="Lucee"))')>
-		<cfset assert('Len($checkMinimumVersion(version="4.5.0.042", engine="Lucee"))')>
+		<cfset assert('Len($checkMinimumVersion(version="4.5.0.023", engine="Lucee"))')>
 	</cffunction>
 
 	<cffunction name="test_adobe_valid">
