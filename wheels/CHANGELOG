@@ -16,8 +16,6 @@ View Enhancements
 Bug Fixes
 =========
 
-* Avoid plugin directory exception during first application load - #541 [Adam Chapman, Per Djurner]
-* Skip running callbacks when validating uniqueness and similar situations - #492 [Andy Bellenie, Per Djurner]
 * Fixed so "defaultValue" gets set on non-persisted properties - #519 [Andy Bellenie]
 * Corrected output of property labels in error messages - #494 [Andy Bellenie]
 
