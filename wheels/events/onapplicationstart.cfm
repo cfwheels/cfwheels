@@ -37,7 +37,7 @@
 			application.$wheels.serverVersion = server.coldfusion.productVersion;
 		}
 		loc.upgradeTo = $checkMinimumVersion(engine=application.$wheels.serverName, version=application.$wheels.serverVersion);
-		if (Len(loc.upgradeTo))
+		if (Len(loc.upgradeTo) && !StructKeyExists(this, "disableEngineCheck"))
 		{
 			if (IsBoolean(loc.upgradeTo))
 			{
