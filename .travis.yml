@@ -1,3 +1,4 @@
+sudo: false #upgrade to faster docker-based CI
 language: java
 
 cache: bundler #works only for private repo http://docs.travis-ci.com/user/caching/
