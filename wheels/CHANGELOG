@@ -13,6 +13,7 @@ Bug Fixes
 * Ignore white space in the "where" argument to finders - #503 [Per Djurner]
 * Ignore spaces in the "keys" argument to hasManyCheckBox() and hasManyRadioButton() - [Song Lin, Per Djurner]
 * Skip running callbacks when validating uniqueness and similar situations - #492 [Andy Bellenie, Per Djurner]
+* Avoid plugin directory exception during first application load - #541 [Adam Chapman, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

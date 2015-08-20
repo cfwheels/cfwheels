@@ -87,7 +87,11 @@
 			<cfset loc.plugin = loc.plugins[loc.p]>
 			<cfif not loc.plugin.folderExists OR (loc.plugin.folderExists AND variables.$class.overwritePlugins)>
 				<cfif not loc.plugin.folderExists>
-					<cfdirectory action="create" directory="#loc.plugin.folderPath#">
+					<cftry>
+						<cfdirectory action="create" directory="#loc.plugin.folderPath#">
+						<cfcatch type="any">
+						</cfcatch>
+					</cftry>
 				</cfif>
 				<cfzip action="unzip" destination="#loc.plugin.folderPath#" file="#loc.plugin.file#" overwrite="true" />
 			</cfif>
