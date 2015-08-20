@@ -11,6 +11,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="hasManyRadioButton", args=arguments);
+		arguments.keys = Replace(arguments.keys, ", ", ",", "all");
 		loc.checked = false;
 		loc.rv = "";
 		loc.value = $hasManyFormValue(argumentCollection=arguments);
@@ -45,6 +46,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="hasManyCheckBox", args=arguments);
+		arguments.keys = Replace(arguments.keys, ", ", ",", "all");
 		loc.checked = true;
 		loc.rv = "";
 		loc.included = includedInObject(argumentCollection=arguments);

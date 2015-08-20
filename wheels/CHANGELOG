@@ -1,4 +1,4 @@
-1.4.2 (08/14/2015)
+1.4.2 (08/28/2015)
 
 Bug Fixes
 =========
@@ -11,6 +11,7 @@ Bug Fixes
 * Fixed edge case issue with calling dynamic association methods - #501 [Dominik Hofer, Per Djurner]
 * Fixed lock name in onSessionEnd event - #499 [Per Djurner]
 * Ignore white space in the "where" argument to finders - #503 [Per Djurner]
+* Ignore spaces in the "keys" argument to hasManyCheckBox() and hasManyRadioButton() - [Song Lin, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
