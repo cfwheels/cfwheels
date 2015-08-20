@@ -16,8 +16,7 @@ usage:
   - "mvn clean verify -P mssql" upload and runs all CFWheels tests on ACF11 and Microsoft SQLServer on VivioTech test server
   - "mvn clean verify -P mssql,acf10oracle" upload and deploy CFWheels on test server and run all tests also on ACF10 Oracle database
   - "mvn clean verify -P oracle" copy and runs all CFWheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
-  - "mvn clean verify -P jetty,openbd" download OpenBD and run all tests on it (preliminary support)
-  - "mvn clean verify -P jetty,lucee" download Lucee and run all tests on it (preliminary support)
+  - "mvn clean verify -P jetty,lucee" download Lucee and run all tests on it
   - "mvn verify -DtestParallelStart=true" start with parallel request and then run all tests
   - "mvn verify -DtestSharedAppName=true" start with shared application name test and then run all tests
 
@@ -40,10 +39,8 @@ Benefits of embedded-container-test versus full-integration-test
 	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- embedded CFML and web server version for easy upgrade -->
 		<luceeVersion>4.5.1.023</luceeVersion>
-		<openbdVersion>3.1</openbdVersion>
-		<railoVersion>4.2.1.008</railoVersion>
 		<jettyVersion>8.1.15.v20140411</jettyVersion>
-		<railoConfig>railo-server.xml</railoConfig>
+		<luceeConfig>lucee-web.xml.cfm</luceeConfig>
 		<testServer>http://localhost:8080</testServer>
 		<testSecondPort></testSecondPort>
 		<deployUrl></deployUrl>
@@ -176,8 +173,6 @@ Benefits of embedded-container-test versus full-integration-test
 							<skip>${skipTests}</skip>
 							<!-- use root source folder. So, file changes can be seen instantly -->
 							<webAppSourceDirectory>.</webAppSourceDirectory>
-							<!-- web.xml required for railo -->
-							<webXml>${webXml}</webXml>
 							<webApp>
 								<!-- the URL context path -->
 								<contextPath>/</contextPath>
@@ -213,84 +208,18 @@ Benefits of embedded-container-test versus full-integration-test
 			</build>
 		</profile>
 		<profile>
-			<!-- embedded CFML server is activated by default -->
-			<id>railo</id>
-			<dependencies>
-				<dependency>
-					<!-- embedded test database runtime, required by railo -->
-					<groupId>com.h2database</groupId>
-					<artifactId>h2</artifactId>
-					<version>1.4.178</version>
-				</dependency>
-				<dependency>
-					<!-- embedded test CFML server runtime -->
-					<groupId>org.getrailo</groupId>
-					<artifactId>railo</artifactId>
-					<version>${railoVersion}</version>
-				</dependency>
-			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.7</version>
-						<executions>
-							<execution>
-								<!-- copy data source and other configuration during test file into local repo -->
-							    <id>copy railo config</id>
-								<phase>test</phase>
-								<configuration>
-									<target>
-										<copy file="src/test/xml/${railoConfig}" tofile="${settings.localRepository}/org/getrailo/railo/${railoVersion}/railo-server/context/railo-server.xml"
-											overwrite="true" />
-									</target>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-							<execution>
-								<!-- force clean WEB-INF because it is outside the automatically clean up target folder-->
-								<id>clean railo runtime</id>
-								<phase>clean</phase>
-								<configuration>
-									<target>
-										<delete dir="bluedragon"/>
-										<delete dir="manual"/>
-										<delete dir="subfolder"/>
-										<delete dir="temp"/>
-										<delete dir="WEB-INF"/>
-										<delete dir="wheels/tests/_assets/plugins/removing/TestGlobalMixins"/>
-										<delete dir="wheels/tests/_assets/plugins/unpacking/TestDefaultAssignMixins"/>
-										<delete dir="wheels/tests/_assets/plugins/unpacking/TestGlobalMixins"/>
-									    <delete>
-										    <fileset dir="plugins" includes="**/*.zip"/>
-										</delete>
-  									</target>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<!-- to activate, execute "mvn verify -Prailo,mysql" on Travis-CI -->
+			<!-- to activate, execute "mvn verify -Plucee,mysql" on Travis-CI -->
 			<id>mysql</id>
 			<dependencies>
 				<dependency>
-					<!-- jdbc database driver, required for railo datasource -->
+					<!-- jdbc database driver, required for lucee datasource -->
 					<groupId>mysql</groupId>
 					<artifactId>mysql-connector-java</artifactId>
 					<version>5.1.30</version>
 				</dependency>
 			</dependencies>
 			<properties>
-				<railoConfig>railo-server-mysql.xml</railoConfig>
+				<luceeConfig>lucee-web-mysql.xml.cfm</luceeConfig>
 			</properties>
 		</profile>
 		<profile>
@@ -301,25 +230,25 @@ Benefits of embedded-container-test versus full-integration-test
 			</properties>
 		</profile>
 		<profile>
-			<!-- to activate, execute "mvn verify -Prailo,postgresql" on Travis-CI -->
+			<!-- to activate, execute "mvn verify -Plucee,postgresql" on Travis-CI -->
 			<id>postgresql</id>
 			<dependencies>
 				<dependency>
-					<!-- jdbc database driver, required for railo datasource -->
+					<!-- jdbc database driver, required for lucee datasource -->
 					<groupId>postgresql</groupId>
 					<artifactId>postgresql</artifactId>
 					<version>8.3-606.jdbc4</version>
 				</dependency>
 			</dependencies>
 			<properties>
-				<railoConfig>railo-server-postgresql.xml</railoConfig>
+				<luceeConfig>lucee-web-postgresql.xml.cfm</luceeConfig>
 			</properties>
 		</profile>
 		<profile>
-			<!-- to activate, execute "mvn verify -Prailo,oracle-emu" on Travis-CI or locally -->
+			<!-- to activate, execute "mvn verify -Plucee,oracle-emu" on Travis-CI or locally -->
 			<id>oracle-emu</id>
 			<properties>
-				<railoConfig>railo-server-oracle-emu.xml</railoConfig>
+				<luceeConfig>lucee-web-oracle-emu.xml.cfm</luceeConfig>
 				<testOracleEmulation>true</testOracleEmulation>
 			</properties>
 		</profile>
@@ -404,7 +333,7 @@ Benefits of embedded-container-test versus full-integration-test
 			</build>
 		</profile>
 		<profile>
-			<!-- to activate, execute "mvn verify -Prailo,subfolder" -->
+			<!-- to activate, execute "mvn verify -Plucee,subfolder" -->
 			<id>subfolder</id>
 			<properties>
 				<testSubfolder>true</testSubfolder>
@@ -433,44 +362,6 @@ Benefits of embedded-container-test versus full-integration-test
 									    </fileset>
 									  </copy>
   									</target>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<!-- to activate, execute "mvn clean verify -P jetty,openbd" -->
-			<id>openbd</id>
-			<properties>
-				<webXml>WEB-INF/web.xml</webXml>
-			</properties>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.7</version>
-						<executions>
-							<execution>
-								<!-- download openbd -->
-							    <id>download openbd</id>
-								<phase>test</phase>
-								<configuration>
-									<target>
-										<get src="http://openbd.org/download/${openbdVersion}/openbd.war" dest="target/openbd.war" skipexisting="true"/>
-										<unzip src="target/openbd.war" dest="."
-											overwrite="false">
-										  <patternset>
-										    <include name="WEB-INF/**"/>
-										  </patternset>
-		  								</unzip>
-          								<mkdir dir="plugins"/>
-									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -511,7 +402,7 @@ Benefits of embedded-container-test versus full-integration-test
 										  </patternset>
 		  								</unzip>
           								<mkdir dir="plugins"/>
-										<copy file="src/test/xml/lucee-web.xml.cfm" tofile="WEB-INF/lucee/lucee-web.xml.cfm"
+										<copy file="src/test/xml/${luceeConfig}" tofile="WEB-INF/lucee/lucee-web.xml.cfm"
 											overwrite="true" />
 									</target>
 								</configuration>
@@ -525,7 +416,7 @@ Benefits of embedded-container-test versus full-integration-test
 			</build>
 		</profile>
 		<profile>
-			<!-- to activate, execute mvn verify -Pjetty,railo,plugins -->
+			<!-- to activate, execute mvn verify -Pjetty,lucee,plugins -->
 			<id>plugins</id>
 			<build>
 				<plugins>
