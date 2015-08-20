@@ -3,18 +3,18 @@ installing Maven:
   - on linux: sudo apt-get install maven
   - other OS: the same as installing CFEclipse plugin on Eclipse IDE
 usage:
-  - "mvn verify" runs all CFWheels tests on embedded railo and H2 database (use port 8080 for embedded web server)
+  - "mvn verify" runs all CFWheels tests on embedded lucee and H2 database (use port 8080 for embedded web server)
      (on Eclipse, Run->Run As->9 Maven install)
   - Execute "mvn jetty:run" to start the embedded web server to run individual tests
     (In Eclipse, Run->Run As->6 Maven build...)
   - Individual tests URL: http://localhost:8080/index.cfm?controller=wheels&action=wheels&view=tests&type=core
-  - "mvn verify -P jetty,railo,subfolder" install CFWheels also on subfolder and run all tests
-  - "mvn verify -P jetty,railo,oracle-emu" runs all CFWheels tests on Oracle emulation via embedded H2 database
-  - "mvn verify -P jetty,railo,mysql" runs all CFWheels tests on Travis-CI MySQL database
-  - "mvn verify -P jetty,railo,postgresal" runs all CFWheels tests on Travis-CI postgreSQL database
-  - "mvn verify -P jetty,railo,plugins" download plugins and run all tests with it
+  - "mvn verify -P jetty,lucee,subfolder" install CFWheels also on subfolder and run all tests
+  - "mvn verify -P jetty,lucee,oracle-emu" runs all CFWheels tests on Oracle emulation via embedded H2 database
+  - "mvn verify -P jetty,lucee,mysql" runs all CFWheels tests on Travis-CI MySQL database
+  - "mvn verify -P jetty,lucee,postgresal" runs all CFWheels tests on Travis-CI postgreSQL database
+  - "mvn verify -P jetty,lucee,plugins" download plugins and run all tests with it
   - "mvn clean verify -P mssql" upload and runs all CFWheels tests on ACF11 and Microsoft SQLServer on VivioTech test server
-  - "mvn clean verify -P mssql,acf9oracle" upload and deploy CFWheels on test server and run all tests also on ACF9 Oracle database
+  - "mvn clean verify -P mssql,acf10oracle" upload and deploy CFWheels on test server and run all tests also on ACF10 Oracle database
   - "mvn clean verify -P oracle" copy and runs all CFWheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
   - "mvn clean verify -P jetty,openbd" download OpenBD and run all tests on it (preliminary support)
   - "mvn clean verify -P jetty,lucee" download Lucee and run all tests on it (preliminary support)
@@ -215,9 +215,6 @@ Benefits of embedded-container-test versus full-integration-test
 		<profile>
 			<!-- embedded CFML server is activated by default -->
 			<id>railo</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<dependencies>
 				<dependency>
 					<!-- embedded test database runtime, required by railo -->
@@ -297,10 +294,10 @@ Benefits of embedded-container-test versus full-integration-test
 			</properties>
 		</profile>
 		<profile>
-			<!-- to activate, execute "mvn verify -Pmssql,acf9oracle" on Travis-CI -->
-			<id>acf9oracle</id>
+			<!-- to activate, execute "mvn verify -Pmssql,acf10oracle" on Travis-CI -->
+			<id>acf10oracle</id>
 			<properties>
-				<testSecondPort>8509</testSecondPort>
+				<testSecondPort>8510</testSecondPort>
 			</properties>
 		</profile>
 		<profile>
@@ -487,6 +484,9 @@ Benefits of embedded-container-test versus full-integration-test
 		<profile>
 			<!-- to activate, execute "mvn clean verify -P jetty,lucee" -->
 			<id>lucee</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<properties>
 				<webXml>WEB-INF/web.xml</webXml>
 			</properties>

@@ -1,3 +1,4 @@
+sudo: false #upgrade to faster docker-based CI
 language: java
 
 cache: bundler #works only for private repo http://docs.travis-ci.com/user/caching/
@@ -12,13 +13,14 @@ before_script:
 script: "
 if [ $TRAVIS_SECURE_ENV_VARS == 'true' ];
 then 
-    mvn verify -Pjetty,railo,subfolder -DtestParallelStart=true && mvn verify -Pjetty,railo,mysql && mvn verify -Pjetty,railo,postgresql && mvn verify -Pjetty,railo,oracle-emu && mvn clean verify -P jetty,lucee && mvn clean verify -Pmssql,acf9oracle; 
+    mvn verify -Pjetty,lucee,subfolder -DtestParallelStart=true && mvn verify -Pjetty,lucee,mysql && mvn verify -Pjetty,lucee,postgresql && mvn verify -Pjetty,lucee,oracle-emu && mvn clean verify -Pmssql; 
 else 
-    mvn verify -Pjetty,railo,subfolder -DtestParallelStart=true && mvn verify -Pjetty,railo,mysql && mvn verify -Pjetty,railo,postgresql && mvn verify -Pjetty,railo,oracle-emu && mvn clean verify -P jetty,lucee;
+    mvn verify -Pjetty,lucee,subfolder -DtestParallelStart=true && mvn verify -Pjetty,lucee,mysql && mvn verify -Pjetty,lucee,postgresql && mvn verify -Pjetty,lucee,oracle-emu;
 fi"
 
 #see pom.xml for the explanation of the mvn commands above
-
+#skipped because too slow: && mvn clean verify -Pmssql,acf10oracle
+ 
 jdk:
   - oraclejdk7
 
