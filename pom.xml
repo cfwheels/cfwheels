@@ -15,10 +15,11 @@ usage:
   - "mvn verify -P jetty,lucee,plugins" download plugins and run all tests with it
   - "mvn clean verify -P mssql" upload and runs all CFWheels tests on ACF11 and Microsoft SQLServer on VivioTech test server
   - "mvn clean verify -P mssql,acf10oracle" upload and deploy CFWheels on test server and run all tests also on ACF10 Oracle database
-  - "mvn clean verify -P oracle" copy and runs all CFWheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
+  - "mvn clean verify -P oracle" copy and runs all CFWheels tests on local ColdFusion and Oracle (or whatever database configured locally)
   - "mvn clean verify -P jetty,lucee" download Lucee and run all tests on it
   - "mvn verify -DtestParallelStart=true" start with parallel request and then run all tests
   - "mvn verify -DtestSharedAppName=true" start with shared application name test and then run all tests
+  - "mvn verify -Pjetty,lucee,plugins" download some 3rd party plugins and run all tests (experimental)
 
 Benefits of embedded-container-test versus full-integration-test
   #1 clean test data (data is not shared with nor contaminated by other processes)
@@ -27,6 +28,8 @@ Benefits of embedded-container-test versus full-integration-test
   #4 fast and predictable (all tests run without external network connection)
   #5 instant result (changes on source code is visible immediately without the need to upload to remote server)
 
+More Info:
+	How to download, unzip, copy, zip, etc...: https://ant.apache.org/manual/tasklist.html
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -49,13 +52,12 @@ Benefits of embedded-container-test versus full-integration-test
 		<testParallelStart>false</testParallelStart>
 		<!-- settings for Oracle emulation -->
 		<testOracleEmulation>false</testOracleEmulation>
-		<webXml>src/test/xml/web.xml</webXml>
 		<!-- plugins IDs -->
-		<scaffold>9</scaffold>
-		<pluginManager>8</pluginManager>
-		<dBMigrate>28</dBMigrate>
-		<localizator>89</localizator>
-		<multimodule>93</multimodule>
+		<scaffold>master</scaffold>
+		<pluginmanager>1.0.6</pluginmanager>
+		<dbmigrate>1.1.2</dbmigrate>
+		<localizator>2.6.1</localizator>
+		<multimodule>0.7</multimodule>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -319,8 +321,8 @@ Benefits of embedded-container-test versus full-integration-test
 								<phase>pre-integration-test</phase>
 								<configuration>
 									<target>
-										<copy file="${project.build.directory}/${project.build.finalName}.war" tofile="C:/ColdFusion8/wwwroot/${project.build.finalName}.war" overwrite="true" />
-										<copy file="src/test/coldfusion/_deploy.cfm" tofile="C:/ColdFusion8/wwwroot/_deploy.cfm" overwrite="true" />
+										<copy file="${project.build.directory}/${project.build.finalName}.war" tofile="C:/ColdFusion10/wwwroot/${project.build.finalName}.war" overwrite="true" />
+										<copy file="src/test/coldfusion/_deploy.cfm" tofile="C:/ColdFusion10/wwwroot/_deploy.cfm" overwrite="true" />
 									</target>
 								</configuration>
 								<goals>
@@ -378,9 +380,6 @@ Benefits of embedded-container-test versus full-integration-test
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
-			<properties>
-				<webXml>WEB-INF/web.xml</webXml>
-			</properties>
 			<build>
 				<plugins>
 					<plugin>
@@ -421,68 +420,88 @@ Benefits of embedded-container-test versus full-integration-test
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>wagon-maven-plugin</artifactId>
-						<version>1.0-beta-5</version>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
 						<executions>
-							<execution>
+ 							<execution>
 								<id>download-pluginmanager</id>
 								<phase>test</phase>
 								<goals>
-									<goal>download-single</goal>
+									<goal>run</goal>
 								</goals>
 								<configuration>
-									<fromFile>${pluginManager}</fromFile>
-									<url>http://cfwheels.org/plugins/download</url>
-									<toFile>plugins/PluginManager-${pluginManager}.zip</toFile>
+									<target>
+										<get src="https://github.com/liquifusion/PluginManager/archive/${pluginmanager}.zip" dest="target/pluginmanager.zip" skipexisting="true"/>
+										<unzip src="target/pluginmanager.zip" dest="target/"
+											overwrite="false">
+		  								</unzip>
+										<zip destfile="plugins/pluginmanager-${pluginmanager}.zip" basedir="target/PluginManager-${pluginmanager}" />
+									</target>
 								</configuration>
 							</execution>
 							<execution>
 								<id>download-scaffold</id>
 								<phase>test</phase>
 								<goals>
-									<goal>download-single</goal>
+									<goal>run</goal>
 								</goals>
 								<configuration>
-									<fromFile>${scaffold}</fromFile>
-									<url>http://cfwheels.org/plugins/download</url>
-									<toFile>plugins/Scaffold-${scaffold}.zip</toFile>
+									<target>
+										<get src="https://github.com/raulriera/Scaffold/archive/${scaffold}.zip" dest="target/scaffold.zip" skipexisting="true"/>
+										<unzip src="target/scaffold.zip" dest="target/"
+											overwrite="false">
+		  								</unzip>
+										<zip destfile="plugins/scaffold-${scaffold}.zip" basedir="target/Scaffold-${scaffold}" />
+									</target>
 								</configuration>
 							</execution>
 							<execution>
 								<id>download-dbmigrate</id>
 								<phase>test</phase>
 								<goals>
-									<goal>download-single</goal>
+									<goal>run</goal>
 								</goals>
 								<configuration>
-									<fromFile>${dBMigrate}</fromFile>
-									<url>http://cfwheels.org/plugins/download</url>
-									<toFile>plugins/DBMigrate-${dBMigrate}.zip</toFile>
+									<target>
+										<get src="https://github.com/tdm00/cfwheels-dbmigrate-plugin/archive/v${dbmigrate}.zip" dest="target/dbmigrate.zip" skipexisting="true"/>
+										<unzip src="target/dbmigrate.zip" dest="target/"
+											overwrite="false">
+		  								</unzip>
+										<zip destfile="plugins/dbmigrate-${dbmigrate}.zip" basedir="target/cfwheels-dbmigrate-plugin-${dbmigrate}" />
+									</target>
 								</configuration>
 							</execution>
-							<execution>
+ 							<execution>
 								<id>download-localizator</id>
 								<phase>test</phase>
 								<goals>
-									<goal>download-single</goal>
+									<goal>run</goal>
 								</goals>
 								<configuration>
-									<fromFile>${localizator}</fromFile>
-									<url>http://cfwheels.org/plugins/download</url>
-									<toFile>plugins/Localizator-${localizator}.zip</toFile>
+									<target>
+										<get src="https://github.com/ellor1138/Localizator/archive/${localizator}.zip" dest="target/localizator.zip" skipexisting="true"/>
+										<unzip src="target/localizator.zip" dest="target/"
+											overwrite="false">
+		  								</unzip>
+										<zip destfile="plugins/localizator-${localizator}.zip" basedir="target/Localizator-${localizator}" />
+									</target>
 								</configuration>
 							</execution>
 							<execution>
 								<id>download-multimodule</id>
 								<phase>test</phase>
 								<goals>
-									<goal>download-single</goal>
+									<goal>run</goal>
 								</goals>
 								<configuration>
-									<fromFile>${multimodule}</fromFile>
-									<url>http://cfwheels.org/plugins/download</url>
-									<toFile>plugins/MultiModule-${multimodule}.zip</toFile>
+									<target>
+										<get src="https://github.com/scahyono/multimodule/archive/v${multimodule}.zip" dest="target/multimodule.zip" skipexisting="true"/>
+										<unzip src="target/multimodule.zip" dest="target/"
+											overwrite="false">
+		  								</unzip>
+										<zip destfile="plugins/multimodule-${multimodule}.zip" basedir="target/multimodule-${multimodule}/plugins/multimodule" />
+									</target>
 								</configuration>
 							</execution>
 						</executions>
@@ -491,11 +510,4 @@ Benefits of embedded-container-test versus full-integration-test
 			</build>
 		</profile>
 	</profiles>
-	<repositories>
-		<repository>
-			<!-- the embedded CFML server only available here to download -->
-			<id>cfmlprojects.org</id>
-			<url>http://cfmlprojects.org/artifacts</url>
-		</repository>
-	</repositories>
 </project>
