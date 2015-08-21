@@ -181,7 +181,7 @@
 		{
 			if (isNew())
 			{
-				if ($validateAssociations() && $callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate") && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks))
+				if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate") && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks))
 				{
 					loc.rv = true;
 				}
@@ -194,6 +194,7 @@
 				}
 			}
 		}
+		$validateAssociations(callbacks=arguments.callbacks);
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>

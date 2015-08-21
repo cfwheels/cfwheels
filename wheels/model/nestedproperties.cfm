@@ -39,6 +39,7 @@
 <!--- PRIVATE METHODS --->
 
 <cffunction name="$validateAssociations" returntype="boolean" access="public" output="false">
+	<cfargument name="callbacks" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
 		loc.associations = variables.wheels.class.associations;
@@ -55,7 +56,7 @@
 				{
 					for (loc.i=1; loc.i <= ArrayLen(loc.array); loc.i++)
 					{
-						$invoke(componentReference=loc.array[loc.i], method="valid");
+						$invoke(componentReference=loc.array[loc.i], method="valid", invokeArgs=arguments);
 					}
 				}
 			}
