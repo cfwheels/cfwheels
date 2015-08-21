@@ -210,7 +210,7 @@ More Info:
 			</build>
 		</profile>
 		<profile>
-			<!-- to activate, execute "mvn verify -Plucee,mysql" on Travis-CI -->
+			<!-- to activate, execute "mvn verify -Pjetty,lucee,mysql" on Travis-CI -->
 			<id>mysql</id>
 			<dependencies>
 				<dependency>
@@ -232,7 +232,7 @@ More Info:
 			</properties>
 		</profile>
 		<profile>
-			<!-- to activate, execute "mvn verify -Plucee,postgresql" on Travis-CI -->
+			<!-- to activate, execute "mvn verify -Pjetty,lucee,postgresql" on Travis-CI -->
 			<id>postgresql</id>
 			<dependencies>
 				<dependency>
@@ -247,7 +247,7 @@ More Info:
 			</properties>
 		</profile>
 		<profile>
-			<!-- to activate, execute "mvn verify -Plucee,oracle-emu" on Travis-CI or locally -->
+			<!-- to activate, execute "mvn verify -Pjetty,lucee,oracle-emu" on Travis-CI or locally -->
 			<id>oracle-emu</id>
 			<properties>
 				<luceeConfig>lucee-web-oracle-emu.xml.cfm</luceeConfig>
@@ -335,7 +335,7 @@ More Info:
 			</build>
 		</profile>
 		<profile>
-			<!-- to activate, execute "mvn verify -Plucee,subfolder" -->
+			<!-- to activate, execute "mvn verify -Pjetty,lucee,subfolder" -->
 			<id>subfolder</id>
 			<properties>
 				<testSubfolder>true</testSubfolder>
