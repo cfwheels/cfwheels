@@ -13,13 +13,12 @@ before_script:
 script: "
 if [ $TRAVIS_SECURE_ENV_VARS == 'true' ];
 then 
-    mvn verify -Pjetty,lucee,subfolder -DtestParallelStart=true && mvn verify -Pjetty,lucee,mysql && mvn verify -Pjetty,lucee,postgresql && mvn verify -Pjetty,lucee,oracle-emu && mvn clean verify -Pmssql; 
+    mvn verify -Pjetty,lucee,subfolder -DtestParallelStart=true && mvn verify -Pjetty,lucee,mysql && mvn verify -Pjetty,lucee,postgresql && mvn verify -Pjetty,lucee,oracle-emu && mvn clean verify -Pmssql,acf10oracle; 
 else 
     mvn verify -Pjetty,lucee,subfolder -DtestParallelStart=true && mvn verify -Pjetty,lucee,mysql && mvn verify -Pjetty,lucee,postgresql && mvn verify -Pjetty,lucee,oracle-emu;
 fi"
 
 #see pom.xml for the explanation of the mvn commands above
-#skipped because too slow: && mvn clean verify -Pmssql,acf10oracle
  
 jdk:
   - oraclejdk7
