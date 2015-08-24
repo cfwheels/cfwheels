@@ -89,11 +89,20 @@
 			{
 				if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks))
 				{
+					loc.rollback = false;
+					if (!Len(key()))
+					{
+						loc.rollback = true;
+					}
 					$create(parameterize=arguments.parameterize, reload=arguments.reload);
 					if ($saveAssociations(argumentCollection=arguments) && $callback("afterCreate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
 					{
 						$updatePersistedProperties();
 						loc.rv = true;
+					}
+					else if (loc.rollback)
+					{
+						//StructDelete(this, primaryKey());
 					}
 				}
 				else
