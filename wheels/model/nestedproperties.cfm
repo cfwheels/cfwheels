@@ -107,7 +107,12 @@
 				}
 			}
 		}
-	</cfscript>
+		if (!loc.rv)
+		{
+			// if the associations were not saved correctly, roll them back to their new state but keep the errors
+			$resetAssociationsToNew();
+		}
+		</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
 
@@ -334,4 +339,55 @@
 		}
 	</cfscript>
 	<cfreturn loc.rv>
+</cffunction>
+
+<cffunction name="$resetToNew" returntype="void" access="public" output="true">
+	<cfscript>
+		var loc = {};
+		if ($persistedOnInitialization())
+		{
+			return;
+		}
+
+		// remove the persisted properties container
+		StructDelete(variables, "$persistedProperties");
+
+		// remove any primary keys set by the save
+		loc.keys = primaryKeys();
+		loc.iEnd = ListLen(loc.keys);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(loc.keys, loc.i);
+			StructDelete(this, loc.item);
+		}
+	</cfscript>
+</cffunction>
+
+<cffunction name="$resetAssociationsToNew" returntype="void" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.associations = variables.wheels.class.associations;
+		for (loc.association in loc.associations)
+		{
+			if (loc.associations[loc.association].nested.allow && loc.associations[loc.association].nested.autoSave && StructKeyExists(this, loc.association))
+			{
+				loc.array = this[loc.association];
+
+				if (IsObject(this[loc.association]))
+					loc.array = [ this[loc.association] ];
+
+				if (IsArray(loc.array))
+					for (loc.i = 1; loc.i lte ArrayLen(loc.array); loc.i++)
+						loc.array[loc.i].$resetToNew();
+			}
+		}
+	</cfscript>
+</cffunction>
+
+<cffunction name="$persistedOnInitialization" access="public" output="false" returntype="boolean">
+	<cfscript>
+		if (StructKeyExists(variables.wheels.instance, "persistedOnInitialization") && variables.wheels.instance.persistedOnInitialization)
+			return true;
+	</cfscript>
+	<cfreturn false />
 </cffunction>

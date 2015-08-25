@@ -102,7 +102,7 @@
 					}
 					else if (loc.rollback)
 					{
-						//StructDelete(this, primaryKey());
+						$resetToNew();
 					}
 				}
 				else
