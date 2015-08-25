@@ -79,7 +79,6 @@
 			if (loc.associations[loc.association].nested.allow && loc.associations[loc.association].nested.autoSave && StructKeyExists(this, loc.association))
 			{
 				loc.array = this[loc.association];
-
 				if (IsObject(this[loc.association]))
 				{
 					loc.array = [this[loc.association]];
@@ -97,10 +96,9 @@
 							$setForeignKeyValues(missingMethodArguments=loc.array[loc.i], keys=loc.info.foreignKey);
 						}
 						loc.saveResult = $invoke(componentReference=loc.array[loc.i], method="save", invokeArgs=arguments);
-
-						// don't change the return value if we have already received a false
 						if (loc.rv)
 						{
+							// don't change the return value when we have already received a false
 							loc.rv = loc.saveResult;
 						}
 					}
@@ -372,22 +370,34 @@
 			if (loc.associations[loc.association].nested.allow && loc.associations[loc.association].nested.autoSave && StructKeyExists(this, loc.association))
 			{
 				loc.array = this[loc.association];
-
 				if (IsObject(this[loc.association]))
-					loc.array = [ this[loc.association] ];
-
+				{
+					loc.array = [this[loc.association]];
+				}
 				if (IsArray(loc.array))
-					for (loc.i = 1; loc.i lte ArrayLen(loc.array); loc.i++)
+				{
+					loc.iEnd = ArrayLen(loc.array);
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					{
 						loc.array[loc.i].$resetToNew();
+					}
+				}
 			}
 		}
 	</cfscript>
 </cffunction>
 
-<cffunction name="$persistedOnInitialization" access="public" output="false" returntype="boolean">
+<cffunction name="$persistedOnInitialization" returntype="boolean" access="public" output="false">
 	<cfscript>
+		var loc = {};
 		if (StructKeyExists(variables.wheels.instance, "persistedOnInitialization") && variables.wheels.instance.persistedOnInitialization)
-			return true;
+		{
+			loc.rv = true;
+		}
+		else
+		{
+			loc.rv = false;
+		}
 	</cfscript>
-	<cfreturn false />
+	<cfreturn loc.rv>
 </cffunction>
