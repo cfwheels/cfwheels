@@ -158,6 +158,7 @@
 	</cffunction>
 
 	<cffunction name="test_child_primary_key_rolled_back_on_parent_validation_error">
+		<cfset loc.testAuthor = loc.author.new(loc.testParams.author)>
 		<cfset loc.testAuthor.firstName = "">
 		<cftransaction>
 			<cfset loc.testAuthor.save()>
@@ -168,7 +169,7 @@
 
 	<cffunction name="test_parent_primary_key_rolled_back_on_child_validation_error">
 		<cfset loc.testAuthor = loc.author.new(loc.testParams.author)>
-		<cfset loc.testAuthor.profile.firstName = "">
+		<cfset loc.testAuthor.profile.dateOfBirth = "">
 		<cftransaction>
 			<cfset loc.testAuthor.save()>
 			<cftransaction action="rollback"/>
@@ -177,7 +178,8 @@
 	</cffunction>
 
 	<cffunction name="test_child_primary_key_rolled_back_on_child_validation_error">
-		<cfset loc.testAuthor.profile.firstName = "">
+		<cfset loc.testAuthor = loc.author.new(loc.testParams.author)>
+		<cfset loc.testAuthor.profile.dateOfBirth = "">
 		<cftransaction>
 			<cfset loc.testAuthor.save()>
 			<cftransaction action="rollback"/>
