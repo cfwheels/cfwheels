@@ -8,6 +8,7 @@
 		<cfset beforeSave("beforeSaveCallbackThatIncreasesVariable")>
 		<cfset afterCreate("afterCreateCallbackThatIncreasesVariable")>
 		<cfset beforeSave("afterSaveCallbackThatIncreasesVariable")>
+		<cfset validatesPresenceOf("filename")>
 		<!--- The evaluated `condition` will throw an exception if callbacks aren't executed properly when this object is a nested property --->
 		<cfset validate(method="validateBeforeValidationRunsProperlyAsNestedAssociation", condition="this.beforeValidationCallbackRegistered")>
 	</cffunction>

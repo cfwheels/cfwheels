@@ -111,11 +111,51 @@
 		</cftransaction>
 	</cffunction>
 
+	<cffunction name="test_parent_primary_key_rolled_back_on_parent_validation_error">
+		<cfset loc.testGallery.title = "">
+		<cftransaction>
+			<cfset assert("not loc.testGallery.save()")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+		<cfset assert("not Len(loc.testGallery.key())")>
+	</cffunction>
+
+	<cffunction name="test_children_primary_keys_rolled_back_on_parent_validation_error">
+		<cfset loc.testGallery.title = "">
+		<cftransaction>
+			<cfset assert("not loc.testGallery.save()")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+		<cfloop from="1" to="#ArrayLen(loc.testGallery.photos)#" index="loc.i">
+			<cfset assert("not Len(loc.testGallery.photos[loc.i].key())")>
+		</cfloop>
+	</cffunction>
+
+	<cffunction name="test_parent_primary_key_rolled_back_on_child_validation_error">
+		<cfset loc.testGallery.photos[2].filename = "">
+		<cftransaction>
+			<cfset assert("not loc.testGallery.save()")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+		<cfset assert("not Len(loc.testGallery.key())")>
+	</cffunction>
+
+	<cffunction name="test_children_primary_keys_rolled_back_on_child_validation_error">
+		<cfset loc.testGallery.photos[2].filename = "">
+		<cftransaction>
+			<cfset assert("not loc.testGallery.save()")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+		<cfloop from="1" to="#ArrayLen(loc.testGallery.photos)#" index="loc.i">
+			<cfset assert("not Len(loc.testGallery.photos[loc.i].key())")>
+		</cfloop>
+	</cffunction>
+
 	<cffunction name="$setTestObjects" access="private" hint="Sets up test gallery/gallery photo objects.">
 		<!--- User --->
 		<cfset loc.u = loc.user.findOneByLastName("Petruzzi")>
 		<!--- Gallery --->
-		<cfset loc.params = {userId=loc.u.id, title="Nested Properties Gallery", description="A gallery testing nested properties."}>
+		<cfset loc.params = { userId=loc.u.id, title="Nested Properties Gallery", description="A gallery testing nested properties." }>
 		<cfset loc.g = loc.gallery.new(loc.params)>
 		<cfset loc.g.photos = [
 			loc.photo.new(userId=loc.u.id, filename="Nested Properties Photo Test 1", DESCRIPTION1="test photo 1 for nested properties gallery"),

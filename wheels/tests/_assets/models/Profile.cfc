@@ -2,6 +2,7 @@
 
 	<cffunction name="init">
 		<cfset belongsTo("author")>
+		<cfset validatesPresenceOf("dateOfBirth")>
 		<cfset beforeValidation("beforeValidationCallbackThatSetsProperty,beforeValidationCallbackThatIncreasesVariable")>
 		<cfset beforeCreate("beforeCreateCallbackThatIncreasesVariable")>
 		<cfset beforeSave("beforeSaveCallbackThatIncreasesVariable")>
