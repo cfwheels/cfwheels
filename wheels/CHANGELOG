@@ -38,6 +38,7 @@ Bug Fixes
 * Removed incorrect path info information set by Apache - #367 [David Belanger, Per Djurner]
 * Fixed routing bug when running from a sub folder on Adobe ColdFusion 10  - [Brant Nielsen, Per Djurner]
 * Made sure error emails never depend on application variables being set - [Per Djurner]
+* Fix for using cfscript operators in "condition" and "unless" argument on ACF 8 - [Per Djurner]
 
 Miscellaneous
 =============

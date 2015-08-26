@@ -349,9 +349,30 @@
 		var loc = {};
 		loc.rv = false;
 
+		// since cf8 can't handle cfscript operators (==, != etc) inside an Evaluate() call we replace them with eq, neq etc in a try / catch
+		loc.evaluate = "condition,unless";
+		loc.iEnd = ListLen(loc.evaluate);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(loc.evaluate, loc.i);
+			if (StructKeyExists(arguments, loc.item) && Len(arguments[loc.item]))
+			{
+				loc.key = loc.item & "Evaluated";
+				try
+				{
+					loc[loc.key] = Evaluate(arguments[loc.item]);
+				}
+				catch (any e)
+				{
+					arguments[loc.item] = ReplaceList(arguments[loc.item], "==,!=,<,<=,>,>=", "eq,neq,lt,lte,gt,gte");
+					loc[loc.key] = Evaluate(arguments[loc.item]);
+				}
+			}
+		}
+
 		// proceed with validation when "condition" has been supplied and it evaluates to "true" or when "unless" has been supplied and it evaluates to "false"
 		// if both "condition" and "unless" have been supplied though, they both need to be evaluated correctly ("true"/false" that is) for validation to proceed
-		if ((!StructKeyExists(arguments, "condition") || !Len(arguments.condition) || Evaluate(arguments.condition)) && (!StructKeyExists(arguments, "unless") || !Len(arguments.unless) || !Evaluate(arguments.unless)))
+		if ((!StructKeyExists(arguments, "condition") || !Len(arguments.condition) || loc.conditionEvaluated) && (!StructKeyExists(arguments, "unless") || !Len(arguments.unless) || !loc.unlessEvaluated))
 		{
 			loc.rv = true;
 		}
