@@ -14,6 +14,7 @@ Bug Fixes
 * Ignore spaces in the "keys" argument to hasManyCheckBox() and hasManyRadioButton() - [Song Lin, Per Djurner]
 * Skip running callbacks when validating uniqueness and similar situations - #492 [Andy Bellenie, Per Djurner]
 * Avoid plugin directory exception during first application load - #541 [Adam Chapman, Per Djurner]
+* Fix for using cfscript operators in "condition" and "unless" argument on ACF 8 - #531 [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
