@@ -7,11 +7,11 @@ env:
   global: #ftp credential for remote test server, encrypted with repo specific key 
     - secure: "QZdX3M+wYTejkwHLseV/LwhPOCvkbONJcElHjdsrwb4xiuzZSdHiRYmTc+9hzyIOTb1hrylKZ8udMzIuZZTUCa0Ze30sQmcC83vGIteM+uzQr0RV9asf/4hL83cBye50f1OWIJlyq5FLvD0KMkhP+BnTA7jTI5UD8a4FX+F2UUU="
   matrix:
-    - PROFILE=mssql,acf10oracle
+    - PROFILE=mssql,acf10oracle PARAM=none
     - PROFILE=jetty,lucee,subfolder PARAM=testParallelStart=true
-    - PROFILE=jetty,lucee,mysql
-    - PROFILE=jetty,lucee,postgresql
-    - PROFILE=jetty,lucee,oracle-emu
+    - PROFILE=jetty,lucee,mysql PARAM=none
+    - PROFILE=jetty,lucee,postgresql PARAM=none
+    - PROFILE=jetty,lucee,oracle-emu PARAM=none
 
 before_script:
   - mysql -e 'create database test;'
