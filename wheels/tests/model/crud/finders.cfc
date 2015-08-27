@@ -178,6 +178,20 @@
 		<cfset assert('loc.r eq true')>
 	</cffunction>
 
+	<cffunction name="test_exists_any_record">
+		<cfset loc.r = loc.user.exists()>
+		<cfset assert('loc.r eq true')>
+	</cffunction>
+
+	<cffunction name="test_exists_no_records">
+		<cftransaction action="begin">
+			<cfset loc.user.deleteAll()>
+			<cfset loc.r = loc.user.exists()>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.r eq false')>
+	</cffunction>
+
 	<cffunction name="test_allow_negative_values_in_where_clause">
 		<cfset loc.r = loc.user.exists(where="id = -1")>
 		<cfset assert('loc.r eq false')>
@@ -216,7 +230,7 @@
 		<cfset loc.e = model("author").findOne(where="lastname = 'Bellenie'", include="posts")>
 		<cfset assert('IsArray(loc.e.posts) && ArrayIsEmpty(loc.e.posts)')>
 	</cffunction>
-	
+
 	<cffunction name="test_findAll_with_softdeleted_associated_rows">
 		<cftransaction action="begin">
 			<cfset model("Post").deleteAll()>

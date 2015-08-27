@@ -20,7 +20,13 @@
 		}
 
 		// check and store server engine name, throw error if using a version that we don't support
-		if (StructKeyExists(server, "railo"))
+		// NB Lucee first as there seems to be some sort of alias in Lucee -> Railo which means server.railo exists
+		if (StructKeyExists(server, "lucee"))
+		{
+			application.$wheels.serverName = "Lucee";
+			application.$wheels.serverVersion = server.lucee.version;
+		}
+		else if (StructKeyExists(server, "railo"))
 		{
 			application.$wheels.serverName = "Railo";
 			application.$wheels.serverVersion = server.railo.version;
@@ -31,9 +37,16 @@
 			application.$wheels.serverVersion = server.coldfusion.productVersion;
 		}
 		loc.upgradeTo = $checkMinimumVersion(engine=application.$wheels.serverName, version=application.$wheels.serverVersion);
-		if (Len(loc.upgradeTo))
+		if (Len(loc.upgradeTo) && !StructKeyExists(this, "disableEngineCheck") && !StructKeyExists(url, "disableEngineCheck"))
 		{
-			$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by Wheels.", extendedInfo="Please upgrade to version #loc.upgradeTo# or higher.");
+			if (IsBoolean(loc.upgradeTo))
+			{
+				$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please use Lucee or Adobe ColdFusion instead.");
+			}
+			else
+			{
+				$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please upgrade to version #loc.upgradeTo# or higher.");
+			}
 		}
 
 		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
@@ -142,7 +155,7 @@
 		application.$wheels.sendEmailOnError = false;
 		application.$wheels.errorEmailSubject = "Error";
 		application.$wheels.excludeFromErrorEmail = "";
-		if (request.cgi.server_name Contains ".")
+		if (Find(".", request.cgi.server_name))
 		{
 			application.$wheels.errorEmailAddress = "webmaster@" & Reverse(ListGetAt(Reverse(request.cgi.server_name), 2,".")) & "." & Reverse(ListGetAt(Reverse(request.cgi.server_name), 1, "."));
 		}
@@ -200,7 +213,8 @@
 		application.$wheels.setUpdatedAtOnCreate = true;
 		application.$wheels.useExpandedColumnAliases = false;
 		application.$wheels.modelRequireInit = false;
-	
+		application.$wheels.booleanAttributes = "allowfullscreen,async,autofocus,autoplay,checked,compact,controls,declare,default,defaultchecked,defaultmuted,defaultselected,defer,disabled,draggable,enabled,formnovalidate,hidden,indeterminate,inert,ismap,itemscope,loop,multiple,muted,nohref,noresize,noshade,novalidate,nowrap,open,pauseonexit,readonly,required,reversed,scoped,seamless,selected,sortable,spellcheck,translate,truespeed,typemustmatch,visible";
+
 		// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
 		if (StructKeyExists(this, "sessionManagement") && this.sessionManagement)
 		{
@@ -222,7 +236,7 @@
 		application.$wheels.clearQueryCacheOnReload = true;
 		application.$wheels.clearServerCacheOnReload = true;
 		application.$wheels.cacheQueriesDuringRequest = true;
-		
+
 		// possible formats for provides
 		application.$wheels.formats = {};
 		application.$wheels.formats.html = "text/html";
@@ -244,10 +258,10 @@
 		application.$wheels.functions.checkBoxTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", value=1};
 		application.$wheels.functions.count = {parameterize=true};
 		application.$wheels.functions.create = {parameterize=true, reload=false};
-		application.$wheels.functions.dateSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names"};
-		application.$wheels.functions.dateSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names"};
-		application.$wheels.functions.dateTimeSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, secondStep=1, separator=" - ", twelveHour=false};
-		application.$wheels.functions.dateTimeSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, secondStep=1,separator=" - ", twelveHour=false};
+		application.$wheels.functions.dateSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"};
+		application.$wheels.functions.dateSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"};
+		application.$wheels.functions.dateTimeSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, secondStep=1, separator=" - ", twelveHour=false};
+		application.$wheels.functions.dateTimeSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, secondStep=1,separator=" - ", twelveHour=false};
 		application.$wheels.functions.daySelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 		application.$wheels.functions.delete = {parameterize=true};
 		application.$wheels.functions.deleteAll = {reload=false, parameterize=true, instantiate=false};
@@ -271,7 +285,7 @@
 		application.$wheels.functions.hiddenField = {};
 		application.$wheels.functions.highlight = {delimiter=",", tag="span", class="highlight"};
 		application.$wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, twelveHour=false};
-		application.$wheels.functions.imageTag = {};
+		application.$wheels.functions.imageTag = {onlyPath=true, host="", protocol="", port=0};
 		application.$wheels.functions.includePartial = {layout="", spacer="", dataFunction=true};
 		application.$wheels.functions.javaScriptIncludeTag = {type="text/javascript", head=false};
 		application.$wheels.functions.linkTo = {onlyPath=true, host="", protocol="", port=0};
@@ -279,7 +293,7 @@
 		application.$wheels.functions.maximum = {parameterize=true, ifNull=""};
 		application.$wheels.functions.minimum = {parameterize=true, ifNull=""};
 		application.$wheels.functions.minuteSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, minuteStep=1};
-		application.$wheels.functions.monthSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, monthDisplay="names"};
+		application.$wheels.functions.monthSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"};
 		application.$wheels.functions.nestedProperties = {autoSave=true, allowDelete=false, sortProperty="", rejectIfBlank=""};
 		application.$wheels.functions.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prepend="", append="", prependToPage="", prependOnFirst=true, prependOnAnchor=true, appendToPage="", appendOnLast=true, appendOnAnchor=true, classForCurrent="", name="page", showSinglePage=false, pageNumberAsParam=true};
 		application.$wheels.functions.passwordField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
@@ -367,7 +381,7 @@
 
 		// reload the plugins each time we reload the application
 		$loadPlugins();
-		
+
 		// allow developers to inject plugins into the application variables scope
 		if (!StructIsEmpty(application.$wheels.mixins))
 		{

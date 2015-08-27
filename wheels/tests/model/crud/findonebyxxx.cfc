@@ -10,7 +10,7 @@
 	</cffunction>
 
 	<cffunction name="test_explicit_arguments">
-		<cfset results.user = model("user").findOneByZipCode(value="22222", select="id,lastName,zipCode")>
+		<cfset results.user = model("user").findOneByZipCode(value="22222", select="id,lastName,zipCode", order="id")>
 		<cfset assert("IsObject(results.user) AND results.user.lastName IS 'Peters' AND NOT StructKeyExists(results.user, 'firstName')")>
 	</cffunction>
 
@@ -43,13 +43,13 @@
 		<cfset loc.post = model("Post").findOneByTitleAndAuthoridAndViews(values="Title for first test post|1|5", delimiter="|")>
 		<cfset assert('IsObject(loc.post)')>
 	</cffunction>
-	
+
 	<cffunction name="test_passing_array">
 		<cfset loc.args = ["Title for first test post", 1, 5]>
 		<cfset loc.post = model("Post").findOneByTitleAndAuthoridAndViews(values=loc.args)>
 		<cfset assert('IsObject(loc.post)')>
 	</cffunction>
-	
+
 	<cffunction name="test_can_change_delimieter_for_dynamic_finders">
 		<cfset loc.title = "Testing to make, to make sure, commas work">
 		<cftransaction action="begin">
@@ -61,12 +61,12 @@
 		</cftransaction>
 		<cfset assert('IsObject(loc.post)')>
 	</cffunction>
-	
+
 	<cffunction name="test_passing_where_clause">
 		<cfset loc.post = model("Post").findOneByTitle(value="Title for first test post", where="authorid = 1 AND views = 5")>
 		<cfset assert('IsObject(loc.post)')>
 	</cffunction>
-	
+
 	<cffunction name="test_can_pass_in_commas">
 		<cfset loc.title = "Testing to make, to make sure, commas work">
 		<cftransaction action="begin">

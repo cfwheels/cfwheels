@@ -9,7 +9,6 @@
 		<cfargument name="name" type="string" required="true" />
 		<cfargument name="data" type="any" required="true" />
 		<cfset variables[arguments.name] = arguments.data />
-		<cfreturn />
 	</cffunction>
 
 	<cffunction name="test_name_is_not_a_function">

@@ -120,8 +120,8 @@ public class CFWheelsCoreIT {
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.setProperty("testOracleEmulation", "true");
-		setUpServices();
+		testOracleEmulation=true;
+		recreateTestDatabase();
 	}
 
 	private static void recreateTestDatabase() throws Exception {
@@ -138,6 +138,15 @@ public class CFWheelsCoreIT {
 			content = content.replace("CREATE TRIGGER bi_#loc.i# BEFORE INSERT ON #loc.i# FOR EACH ROW BEGIN SELECT #loc.seq#.nextval INTO :NEW.<cfif loc.i IS \"photogalleries\">photogalleryid<cfelseif loc.i IS \"photogalleryphotos\">photogalleryphotoid<cfelse>id</cfif> FROM dual; END;",
 					"ALTER TABLE #loc.i# MODIFY COLUMN <cfif loc.i IS \"photogalleries\">photogalleryid<cfelseif loc.i IS \"photogalleryphotos\">photogalleryphotoid<cfelse>id</cfif> #loc.identityColumnType# DEFAULT #loc.seq#.nextval");
 			Files.write(Paths.get("wheels/tests/populate.cfm"), content.getBytes());
+		}
+		if ("true".equals(System.getProperty("testSharedAppName"))) {
+			driver.get(baseUrl + "/wheels/tests/_assets/sharedappname/test.cfm");
+			driver.get(baseUrl);
+	        String pageSource = driver.getPageSource();
+	        if (pageSource.contains("Error")) {
+	        	fail("Shared App Name test failed");
+	    		Files.write(Paths.get("target/failsafe-reports/_databaseRecreateERROR.html"), pageSource.getBytes());
+	        }
 		}
 		if ("true".equals(System.getProperty("testParallelStart"))) {
 			hitHomepageWithParallelRequest();

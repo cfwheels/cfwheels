@@ -1,5 +1,31 @@
 <cfcomponent extends="wheelsMapping.Test">
 
+	<cffunction name="test_clearing_all_change_info">
+		<cfset loc.author = model("author").findOne(select="firstName")>
+		<cfset loc.author.firstName = "asfdg9876asdgf">
+		<cfset loc.author.lastName = "asfdg9876asdgf">
+		<cfset loc.result = loc.author.hasChanged()>
+		<cfset assert("loc.result")>
+		<cfset loc.author.clearChangeInformation()>
+		<cfset loc.result = loc.author.hasChanged()>
+		<cfset assert("NOT loc.result")>
+	</cffunction>
+
+	<cffunction name="test_clearing_property_change_info">
+		<cfset loc.author = model("author").findOne(select="firstName")>
+		<cfset loc.author.firstName = "asfdg9876asdgf">
+		<cfset loc.author.lastName = "asfdg9876asdgf">
+		<cfset loc.result = loc.author.hasChanged(property="firstName")>
+		<cfset assert("loc.result")>
+		<cfset loc.result = loc.author.hasChanged(property="lastName")>
+		<cfset assert("loc.result")>
+		<cfset loc.author.clearChangeInformation(property="firstName")>
+		<cfset loc.result = loc.author.hasChanged(property="firstName")>
+		<cfset assert("NOT loc.result")>
+		<cfset loc.result = loc.author.hasChanged(property="lastName")>
+		<cfset assert("loc.result")>
+	</cffunction>
+
 	<cffunction name="test_comparing_existing_properties_only">
 		<cfset loc.author = model("author").findOne(select="firstName")>
 		<cfset loc.result = loc.author.hasChanged()>
@@ -151,7 +177,7 @@
 			<cftransaction action="rollback" />
 		</cftransaction>
 	</cffunction>
-	
+
 	<cffunction name="test_float_compare">
 		<cftransaction>
 			<cfset loc.post = model("post").findByKey(2)>

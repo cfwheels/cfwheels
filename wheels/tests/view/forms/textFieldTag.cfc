@@ -43,10 +43,4 @@
 		<cfset assert('loc.result IS loc.correct')>
 	</cffunction>
 
-	<cffunction name="test_boolean_attribute">
-		<cfset loc.result = loc.controller.textFieldTag(name="num", controls1=true, controls2="true")>
-		<cfset loc.correct = '<input controls1 controls2 id="num" name="num" type="text" value="" />'>
-		<cfset assert('loc.result IS loc.correct')>
-	</cffunction>
-
 </cfcomponent>

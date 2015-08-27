@@ -83,6 +83,110 @@
 		<cfset assert("IsBoolean(loc.missingProfile) and not loc.missingProfile")>
 	</cffunction>
 
+	<cffunction name="test_valid_beforeValidation_callback_on_child">
+		<cfset assert("loc.testAuthor.valid()")>
+		<cfset assert("loc.testAuthor.profile.beforeValidationCallbackRegistered")>
+		<cfset assert("loc.testAuthor.profile.beforeValidationCallbackCount eq 1")>
+	</cffunction>
+
+	<cffunction name="test_valid_beforeValidation_callback_on_child_with_validation_error_on_parent">
+		<cfset loc.testAuthor.firstName = "">
+		<cfset assert("not loc.testAuthor.valid()")>
+		<cfset assert("loc.testAuthor.profile.beforeValidationCallbackRegistered")>
+		<cfset assert("loc.testAuthor.profile.beforeValidationCallbackCount eq 1")>
+	</cffunction>
+
+	<cffunction name="test_save_beforeValidation_callback_on_child">
+		<cftransaction>
+			<cfset assert("loc.testAuthor.save()")>
+			<cfset assert("loc.testAuthor.profile.beforeValidationCallbackRegistered")>
+			<cfset assert("loc.testAuthor.profile.beforeValidationCallbackCount eq 1")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
+	<cffunction name="test_save_beforeValidation_callback_on_child_with_validation_error_on_parent">
+		<cfset loc.testAuthor.firstName = "">
+		<cftransaction>
+			<cfset assert("not loc.testAuthor.save()")>
+			<cfset assert("loc.testAuthor.profile.beforeValidationCallbackRegistered")>
+			<cfset assert("loc.testAuthor.profile.beforeValidationCallbackCount eq 1")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
+	<cffunction name="test_beforeCreate_callback_on_child">
+		<cftransaction>
+			<cfset loc.testAuthor.save()>
+			<cfset assert("loc.testAuthor.profile.beforeCreateCallbackCount eq 1")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
+	<cffunction name="test_beforeSave_callback_on_child">
+		<cftransaction>
+			<cfset loc.testAuthor.save()>
+			<cfset assert("loc.testAuthor.profile.beforeSaveCallbackCount eq 1")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
+	<cffunction name="test_afterCreate_callback_on_child">
+		<cftransaction>
+			<cfset loc.testAuthor.save()>
+			<cfset assert("loc.testAuthor.profile.afterCreateCallbackCount eq 1")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
+	<cffunction name="test_afterSave_callback_on_child">
+		<cftransaction>
+			<cfset loc.testAuthor.save()>
+			<cfset assert("loc.testAuthor.profile.afterSaveCallbackCount eq 1")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
+	<cffunction name="test_parent_primary_key_rolled_back_on_parent_validation_error">
+		<cfset loc.testAuthor = loc.author.new(loc.testParams.author)>
+		<cfset loc.testAuthor.firstName = "">
+		<cftransaction>
+			<cfset loc.testAuthor.save()>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+		<cfset assert("not Len(loc.testAuthor.key())")>
+	</cffunction>
+
+	<cffunction name="test_child_primary_key_rolled_back_on_parent_validation_error">
+		<cfset loc.testAuthor = loc.author.new(loc.testParams.author)>
+		<cfset loc.testAuthor.firstName = "">
+		<cftransaction>
+			<cfset loc.testAuthor.save()>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+		<cfset assert("not Len(loc.testAuthor.profile.key())")>
+	</cffunction>
+
+	<cffunction name="test_parent_primary_key_rolled_back_on_child_validation_error">
+		<cfset loc.testAuthor = loc.author.new(loc.testParams.author)>
+		<cfset loc.testAuthor.profile.dateOfBirth = "">
+		<cftransaction>
+			<cfset loc.testAuthor.save()>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+		<cfset assert("not Len(loc.testAuthor.key())")>
+	</cffunction>
+
+	<cffunction name="test_child_primary_key_rolled_back_on_child_validation_error">
+		<cfset loc.testAuthor = loc.author.new(loc.testParams.author)>
+		<cfset loc.testAuthor.profile.dateOfBirth = "">
+		<cftransaction>
+			<cfset loc.testAuthor.save()>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+		<cfset assert("not Len(loc.testAuthor.profile.key())")>
+	</cffunction>
+
 	<cffunction name="$setTestObjects" access="private" hint="Sets up test `author` and `profile` objects.">
 		<cfset loc.testAuthor = loc.author.findOneByLastName(value="Peters", include="profile")>
 		<cfset loc.bioText = "Loves learning how to write tests." />
@@ -90,18 +194,16 @@
 	</cffunction>
 	
 	<cffunction name="$setTestParamsStruct" access="private" hint="Sets up test `author` struct reminiscent of what would be passed through a form. The `author` represented here also includes a nested child `profile` struct.">
-		<cfset
-			loc.testParams = {
-				author = {
-					firstName="Brian",
-					lastName="Meloche",
-					profile = {
-						dateOfBirth="10/02/1970 18:01:00",
-						bio="Host of CFConversations, the best ColdFusion podcast out there."
-					}
+		<cfset loc.testParams = {
+			author = {
+				firstName="Brian",
+				lastName="Meloche",
+				profile = {
+					dateOfBirth="10/02/1970 18:01:00",
+					bio="Host of CFConversations, the best ColdFusion podcast out there."
 				}
 			}
-		>
+		}>
 		<cfreturn loc.testParams>
 	</cffunction>
 

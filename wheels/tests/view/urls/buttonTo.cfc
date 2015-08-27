@@ -25,4 +25,10 @@
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
+	<cffunction name="test_attributes">
+		<cfset loc.e = '<form action="#application.wheels.webpath#" class="form-class" method="post"><input class="input-class" type="submit" value="" /></form>'>
+		<cfset loc.r = loc.controller.buttonTo(class="form-class", inputClass="input-class")>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+
 </cfcomponent>

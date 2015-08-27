@@ -26,11 +26,11 @@
 		<cfargument name="rootelement" type="string" required="false" default="data" />
 		<cfargument name="elementattributes" type="string" required="false" default="" hint="Optional string like 'order=2', which will be added into the starting rootElement tag." />
 		<cfargument name="addXMLHeader" type="boolean" required="no" default="true" hint="Whether or not to add the &lt;?xml?&gt; tag" />
-		<cfset var returnValue = "" />
+		<cfset var rv = "" />
 		<cfif Len(arguments.elementattributes)>
 			<cfset arguments.elementattributes = " " & Trim(arguments.elementattributes) />
 		</cfif>
-		<cfsavecontent variable="returnValue"><!---
+		<cfsavecontent variable="rv"><!---
 			---><cfoutput><!---
 				---><cfif arguments.addXMLHeader><!---
 					---><?xml version="1.0" encoding="UTF-8"?><!---
@@ -52,16 +52,16 @@
 				---></cfif><!---
 			---></cfoutput><!---
 		---></cfsavecontent>
-		<cfreturn returnValue />
+		<cfreturn rv />
 	</cffunction>
 	
 	<cffunction name="$simpleValueToXml" access="public" output="false" returntype="string">
 		<cfargument name="data" type="string" required="true" />
 		<cfargument name="rootelement" type="string" required="false" default="data" />
 		<cfargument name="elementattributes" type="string" required="false" default="" />
-		<cfset var returnValue = "" />
+		<cfset var rv = "" />
 		<cfset arguments.data = XmlFormat(arguments.data) />
-		<cfsavecontent variable="returnValue"><!---
+		<cfsavecontent variable="rv"><!---
 			---><cfoutput><!---
 				---><cfif IsNumeric(arguments.data)><!---
 					---><#arguments.rootelement# type="numeric"#arguments.elementattributes#>#arguments.data#</#arguments.rootelement#><!---
@@ -74,7 +74,7 @@
 				---></cfif><!---
 			---></cfoutput><!---
 		---></cfsavecontent>
-		<cfreturn returnValue />
+		<cfreturn rv />
 	</cffunction>
 	
 	<cffunction name="$arrayToXML" access="public" output="false" returntype="string" hint="Converts an array into XML">
@@ -84,7 +84,7 @@
 		<cfargument name="itemelement" type="string" required="false" default="item" />
 		<cfset var loc = {} />
 		
-		<cfsavecontent variable="loc.returnValue"><!---
+		<cfsavecontent variable="loc.rv"><!---
 			---><cfoutput><!---
 				---><#arguments.rootelement# type="array"#elementattributes#><!---
 					---><cfloop from="1" to="#ArrayLen(arguments.data)#" index="loc.x"><!---
@@ -94,7 +94,7 @@
 			---></cfoutput><!---
 		---></cfsavecontent>
 		
-		<cfreturn loc.returnValue />
+		<cfreturn loc.rv />
 	</cffunction>
 	
 	<cffunction name="$queryToXML" access="public" output="false" returntype="string" hint="Converts a query to XML">
@@ -105,7 +105,7 @@
 		<cfset var loc = {} />
 		<cfset loc.columns = arguments.data.columnList />
 		
-		<cfsavecontent variable="loc.returnValue"><!---
+		<cfsavecontent variable="loc.rv"><!---
 			---><cfoutput><!---
 				---><#arguments.rootelement# type="query"#arguments.elementattributes#><!---
 					---><cfloop query="arguments.data"><!---
@@ -119,7 +119,7 @@
 			---></cfoutput><!---
 		---></cfsavecontent>
 
-		<cfreturn loc.returnValue />
+		<cfreturn loc.rv />
 	</cffunction>
 	
 	<cffunction name="$structToXML" access="public" output="false" returntype="string" hint="Converts a struct into XML.">
@@ -129,7 +129,7 @@
 		<cfset var loc = {} />
 		<cfset loc.keys = StructKeyList(arguments.data) />
 		
-		<cfsavecontent variable="loc.returnValue"><!---
+		<cfsavecontent variable="loc.rv"><!---
 			---><cfoutput><!---
 				---><#arguments.rootelement# type="struct"#arguments.elementattributes#><!---
 					---><cfloop list="#loc.keys#" index="loc.key"><!---
@@ -139,7 +139,7 @@
 			---></cfoutput><!---
 		---></cfsavecontent>
 		
-		<cfreturn loc.returnValue />
+		<cfreturn loc.rv />
 	</cffunction>
 	
 	<cffunction name="$objectToXML" access="public" output="false" returntype="string" hint="Converts a struct into XML.">
@@ -150,7 +150,7 @@
 		<cfset loc.keys = ListSort(StructKeyList(arguments.data), "textnocase", "asc") />
 		<cfset loc.name = GetMetaData(arguments.data).name/>
 		
-		<cfsavecontent variable="loc.returnValue"><!---
+		<cfsavecontent variable="loc.rv"><!---
 			---><cfoutput><!---
 				---><#arguments.rootelement# type="component" name="#loc.name#"#arguments.elementattributes#><!---
 					---><cfloop list="#loc.keys#" index="loc.key"><!---
@@ -162,7 +162,7 @@
 			---></cfoutput><!---
 		---></cfsavecontent>
 		
-		<cfreturn loc.returnValue />
+		<cfreturn loc.rv />
 	</cffunction>
 
 </cfcomponent>

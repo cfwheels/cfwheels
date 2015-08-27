@@ -1,3 +1,5 @@
+<!--- PRIVATE METHODS --->
+
 <cffunction name="$addDeleteClause" returntype="array" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="softDelete" type="boolean" required="true">
@@ -24,7 +26,7 @@
 		var loc = {};
 
 		// start the from statement with the SQL keyword and the table name for the current model
-		loc.returnValue = "FROM " & tableName();
+		loc.rv = "FROM " & tableName();
 
 		// add join statements if associations have been specified through the include argument
 		if (Len(arguments.include))
@@ -36,11 +38,11 @@
 			loc.iEnd = ArrayLen(loc.associations);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.returnValue = ListAppend(loc.returnValue, loc.associations[loc.i].join, " ");
+				loc.rv = ListAppend(loc.rv, loc.associations[loc.i].join, " ");
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$addKeyWhereClause" returntype="array" access="public" output="false">
@@ -85,16 +87,16 @@
 	<cfargument name="include" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
+		loc.rv = "";
 		if (Len(arguments.order))
 		{
 			if (arguments.order == "random")
 			{
-				loc.returnValue = variables.wheels.class.adapter.$randomOrder();
+				loc.rv = variables.wheels.class.adapter.$randomOrder();
 			}
 			else if (Find("(", arguments.order))
 			{
-				loc.returnValue = arguments.order;
+				loc.rv = arguments.order;
 			}
 			else
 			{
@@ -106,7 +108,7 @@
 				}
 				ArrayPrepend(loc.classes, variables.wheels.class);
 
-				loc.returnValue = "";
+				loc.rv = "";
 				loc.iEnd = ListLen(arguments.order);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
@@ -117,7 +119,7 @@
 					}
 					if (Find(".", loc.iItem))
 					{
-						loc.returnValue = ListAppend(loc.returnValue, loc.iItem);
+						loc.rv = ListAppend(loc.rv, loc.iItem);
 					}
 					else
 					{
@@ -142,9 +144,9 @@
 									loc.toAdd &= " AS " & loc.property;
 								}
 								loc.toAdd &= " " & UCase(ListLast(loc.iItem, " "));
-								if (!ListFindNoCase(loc.returnValue, loc.toAdd))
+								if (!ListFindNoCase(loc.rv, loc.toAdd))
 								{
-									loc.returnValue = ListAppend(loc.returnValue, loc.toAdd);
+									loc.rv = ListAppend(loc.rv, loc.toAdd);
 									break;
 								}
 							}
@@ -156,10 +158,10 @@
 					}
 				}
 			}
-			loc.returnValue = "ORDER BY " & loc.returnValue;
+			loc.rv = "ORDER BY " & loc.rv;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$groupByClause" returntype="string" access="public" output="false">
@@ -170,40 +172,42 @@
 	<cfargument name="returnAs" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
-		
+		loc.rv = "";
+
 		// if we want a distinct statement, we can do it grouping every field in the select
 		if (arguments.distinct)
 		{
-			loc.returnValue = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
+			loc.rv = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs, renameFields=false);
 		}
 		else if (Len(arguments.group))
 		{
-			loc.returnValue = $createSQLFieldList(list=arguments.group, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
+			loc.rv = $createSQLFieldList(list=arguments.group, include=arguments.include, returnAs=arguments.returnAs, renameFields=false);
 		}
-		if (Len(loc.returnValue))
+		if (Len(loc.rv))
 		{
-			loc.returnValue = "GROUP BY " & loc.returnValue;
+			loc.rv = "GROUP BY " & loc.rv;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$selectClause" returntype="string" access="public" output="false">
 	<cfargument name="select" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfargument name="returnAs" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs);
-		loc.returnValue = "SELECT " & loc.returnValue;
+		loc.rv = $createSQLFieldList(list=arguments.select, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, returnAs=arguments.returnAs);
+		loc.rv = "SELECT " & loc.rv;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$createSQLFieldList" returntype="string" access="public" output="false">
 	<cfargument name="list" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfargument name="returnAs" type="string" required="true">
 	<cfargument name="renameFields" type="boolean" required="false" default="true">
 	<cfargument name="addCalculatedProperties" type="boolean" required="false" default="true">
@@ -215,7 +219,7 @@
 		loc.classes = [];
 		if (Len(arguments.include))
 		{
-			loc.classes = $expandedAssociations(include=arguments.include);
+			loc.classes = $expandedAssociations(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 		}
 		ArrayPrepend(loc.classes, variables.wheels.class);
 
@@ -233,9 +237,15 @@
 			{
 				loc.classData = loc.classes[loc.i];
 				arguments.list = ListAppend(arguments.list, loc.classData.propertyList);
-				if (Len(loc.classData.calculatedPropertyList))
+				if (StructCount(loc.classData.calculatedProperties))
 				{
-					arguments.list = ListAppend(arguments.list, loc.classData.calculatedPropertyList);
+					for (loc.key in loc.classData.calculatedProperties)
+					{
+						if (loc.classData.calculatedProperties[loc.key].select)
+						{
+							arguments.list = ListAppend(arguments.list, loc.key);
+						}
+					}
 				}
 			}
 		}
@@ -243,7 +253,7 @@
 		// go through the properties and map them to the database unless the developer passed in a table name or an alias in which case we assume they know what they're doing and leave the select clause as is
 		if (!Find(".", arguments.list) && !Find(" AS ", arguments.list))
 		{
-			loc.returnValue = "";
+			loc.rv = "";
 			loc.addedProperties = "";
 			loc.addedPropertiesByModel = {};
 			loc.iEnd = ListLen(arguments.list);
@@ -293,7 +303,7 @@
 									loc.flagAsDuplicate  = true;
 								}
 							}
-						}						
+						}
 						if (loc.flagAsDuplicate)
 						{
 							loc.toAppend &= "[[duplicate]]" & loc.j;
@@ -316,7 +326,11 @@
 						}
 						else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem) && arguments.addCalculatedProperties)
 						{
-							loc.toAppend &= "(" & Replace(loc.classData.calculatedProperties[loc.iItem].sql, ",", "[[comma]]", "all") & ") AS " & loc.iItem;
+							loc.toAppend &= "(" & Replace(loc.classData.calculatedProperties[loc.iItem].sql, ",", "[[comma]]", "all") & ")";
+							if (arguments.renameFields)
+							{
+								loc.toAppend &= " AS " & loc.iItem;
+							}
 						}
 						loc.addedPropertiesByModel[loc.classData.modelName] = ListAppend(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem);
 						break;
@@ -324,7 +338,7 @@
 				}
 				if (Len(loc.toAppend))
 				{
-					loc.returnValue = ListAppend(loc.returnValue, loc.toAppend);
+					loc.rv = ListAppend(loc.rv, loc.toAppend);
 				}
 				else if (application.wheels.showErrorInformation && (!arguments.addCalculatedProperties && !ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)))
 				{
@@ -337,10 +351,10 @@
 			{
 				loc.newSelect = "";
 				loc.addedProperties = "";
-				loc.iEnd = ListLen(loc.returnValue);
+				loc.iEnd = ListLen(loc.rv);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					loc.iItem = ListGetAt(loc.returnValue, loc.i);
+					loc.iItem = ListGetAt(loc.rv, loc.i);
 
 					// get the property part, done by taking everytyhing from the end of the string to a . or a space (which would be found when using " AS ")
 					loc.property = Reverse(SpanExcluding(Reverse(loc.iItem), ". "));
@@ -383,19 +397,19 @@
 						loc.addedProperties = ListAppend(loc.addedProperties, loc.newProperty);
 					}
 				}
-				loc.returnValue = loc.newSelect;
+				loc.rv = loc.newSelect;
 			}
 		}
 		else
 		{
-			loc.returnValue = arguments.list;
-			if (!arguments.renameFields && Find(" AS ", loc.returnValue))
+			loc.rv = arguments.list;
+			if (!arguments.renameFields && Find(" AS ", loc.rv))
 			{
-				loc.returnValue = REReplace(loc.returnValue, variables.wheels.class.RESQLAs, "", "all");
+				loc.rv = REReplace(loc.rv, variables.wheels.class.RESQLAs, "", "all");
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$addWhereClause" returntype="array" access="public" output="false">
@@ -421,7 +435,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = [];
+		loc.rv = [];
 		if (Len(arguments.where))
 		{
 			// setup an array containing class info for current class and all the ones that should be included
@@ -432,8 +446,8 @@
 			}
 			ArrayPrepend(loc.classes, variables.wheels.class);
 
-			ArrayAppend(loc.returnValue, "WHERE");
-			loc.wherePos = ArrayLen(loc.returnValue) + 1;
+			ArrayAppend(loc.rv, "WHERE");
+			loc.wherePos = ArrayLen(loc.rv) + 1;
 			loc.params = ArrayNew(1);
 			loc.where = ReplaceList(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "AND,OR", "#Chr(7)#AND,#Chr(7)#OR");
 			for (loc.i=1; loc.i <= ListLen(loc.where, Chr(7)); loc.i++)
@@ -465,26 +479,31 @@
 					loc.jEnd = ArrayLen(loc.classes);
 					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 					{
-						// defaults for cfqueryparam, will be overridden and set appropriately when a column mapping is found below
-						loc.param.type = "CF_SQL_CHAR";
 						loc.param.dataType = "char";
+						loc.param.type = "CF_SQL_CHAR";
 						loc.param.scale = 0;
 						loc.param.list = false;
-
 						loc.classData = loc.classes[loc.j];
-						if (!Find(".", loc.param.property) || ListFirst(loc.param.property, ".") == loc.classData.tableName)
+						loc.table = ListFirst(loc.param.property, ".");
+						loc.column = ListLast(loc.param.property, ".");
+						if (!Find(".", loc.param.property) || loc.table == loc.classData.tableName)
 						{
-							if (ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
+							if (ListFindNoCase(loc.classData.propertyList, loc.column))
 							{
-								loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
-								loc.param.dataType = loc.classData.properties[ListLast(loc.param.property, ".")].dataType;
-								loc.param.scale = loc.classData.properties[ListLast(loc.param.property, ".")].scale;
-								loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
+								loc.param.column = loc.classData.tableName & "." & loc.classData.properties[loc.column].column;
+								loc.param.dataType = loc.classData.properties[loc.column].dataType;
+								loc.param.type = loc.classData.properties[loc.column].type;
+								loc.param.scale = loc.classData.properties[loc.column].scale;
 								break;
 							}
-							else if (ListFindNoCase(loc.classData.calculatedPropertyList, ListLast(loc.param.property, ".")))
+							else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.column))
 							{
-								loc.param.column = "(" & loc.classData.calculatedProperties[ListLast(loc.param.property, ".")].sql & ")";
+								loc.param.column = "(" & loc.classData.calculatedProperties[loc.column].sql & ")";
+								if (StructKeyExists(loc.classData.calculatedProperties[loc.column], "dataType"))
+								{
+									loc.param.dataType = loc.classData.calculatedProperties[loc.column].dataType;
+									loc.param.type = variables.wheels.class.adapter.$getType(loc.param.dataType);
+								}
 								break;
 							}
 						}
@@ -512,14 +531,14 @@
 				loc.item = ListGetAt(loc.where, loc.i, "?");
 				if (Len(Trim(loc.item)))
 				{
-					ArrayAppend(loc.returnValue, loc.item);
+					ArrayAppend(loc.rv, loc.item);
 				}
 				if (loc.i < ListLen(loc.where, "?"))
 				{
 					loc.column = loc.params[loc.i].column;
-					ArrayAppend(loc.returnValue, loc.column & " " & loc.params[loc.i].operator);
+					ArrayAppend(loc.rv, loc.column & " " & loc.params[loc.i].operator);
 					loc.param = {type=loc.params[loc.i].type, dataType=loc.params[loc.i].dataType, scale=loc.params[loc.i].scale, list=loc.params[loc.i].list};
-					ArrayAppend(loc.returnValue, loc.param);
+					ArrayAppend(loc.rv, loc.param);
 				}
 			}
 		}
@@ -537,20 +556,20 @@
 			{
 				if (Len(arguments.where))
 				{
-					ArrayInsertAt(loc.returnValue, loc.wherePos, " (");
-					ArrayAppend(loc.returnValue, ") AND (");
-					ArrayAppend(loc.returnValue, loc.addToWhere);
-					ArrayAppend(loc.returnValue, ")");
+					ArrayInsertAt(loc.rv, loc.wherePos, " (");
+					ArrayAppend(loc.rv, ") AND (");
+					ArrayAppend(loc.rv, loc.addToWhere);
+					ArrayAppend(loc.rv, ")");
 				}
 				else
 				{
-					ArrayAppend(loc.returnValue, "WHERE ");
-					ArrayAppend(loc.returnValue, loc.addToWhere);
+					ArrayAppend(loc.rv, "WHERE ");
+					ArrayAppend(loc.rv, loc.addToWhere);
 				}
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$addWhereClauseParameters" returntype="array" access="public" output="false">
@@ -595,10 +614,10 @@
 	<cfargument name="classes" type="array" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = arguments.list;
-		loc.matches = REMatch("[A-Za-z1-9]+\.\*", loc.returnValue);
+		loc.rv = arguments.list;
+		loc.matches = REMatch("[A-Za-z1-9]+\.\*", loc.rv);
 		loc.iEnd = ArrayLen(loc.matches);
-		for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.match = loc.matches[loc.i];
 			loc.fields = "";
@@ -618,7 +637,7 @@
 			}
 			if (Len(loc.fields))
 			{
-				loc.returnValue = Replace(loc.returnValue, loc.match, loc.fields, "all");
+				loc.rv = Replace(loc.rv, loc.match, loc.fields, "all");
 			}
 			else if (application.wheels.showErrorInformation)
 			{
@@ -626,7 +645,7 @@
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$expandedAssociations" returntype="array" access="public" output="false">
@@ -634,7 +653,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" default="false">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = [];
+		loc.rv = [];
 
 		// add the current class name so that the levels list start at the lowest level
 		loc.levels = variables.wheels.class.modelName;
@@ -705,7 +724,7 @@
 			if (!StructKeyExists(loc.classAssociations[loc.name], "join"))
 			{
 				loc.join = UCase(ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one")) & " JOIN " & loc.classAssociations[loc.name].tableName;
-				
+
 				// alias the table as the association name when joining to itself
 				if (ListFindNoCase(loc.tables, loc.classAssociations[loc.name].tableName))
 				{
@@ -746,7 +765,7 @@
 						loc.first = loc.key2;
 						loc.second = loc.key1;
 					}
-					
+
 					// alias the table as the association name when joining to itself
 					loc.tableName = loc.classAssociations[loc.name].tableName;
 					if (ListFindNoCase(loc.tables, loc.classAssociations[loc.name].tableName))
@@ -782,10 +801,10 @@
 			loc.tables = ListAppend(loc.tables, loc.classAssociations[loc.name].tableName);
 
 			// add info to the array that we will return
-			ArrayAppend(loc.returnValue, loc.classAssociations[loc.name]);
+			ArrayAppend(loc.rv, loc.classAssociations[loc.name]);
 		}
 		</cfscript>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$keyWhereString" returntype="string" access="public" output="false">
@@ -794,7 +813,7 @@
 	<cfargument name="keys" type="any" required="false" default="">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
+		loc.rv = "";
 		loc.iEnd = ListLen(arguments.properties);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
@@ -812,12 +831,12 @@
 				loc.value = "";
 			}
 			loc.toAppend = loc.key & "=" & variables.wheels.class.adapter.$quoteValue(str=loc.value, type=validationTypeForProperty(loc.key));
-			loc.returnValue = ListAppend(loc.returnValue, loc.toAppend, " ");
+			loc.rv = ListAppend(loc.rv, loc.toAppend, " ");
 			if (loc.i < loc.iEnd)
 			{
-				loc.returnValue = ListAppend(loc.returnValue, "AND", " ");
+				loc.rv = ListAppend(loc.rv, "AND", " ");
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

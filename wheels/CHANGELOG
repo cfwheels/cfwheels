@@ -1,9 +1,143 @@
-2.0
+2.0 (TBD)
+
+Model Enhancements
+==================
+
+* Support for passing in select=false to property() to not include a calculated property by default in SELECT clauses - #122 [Adam Chapman, Per Djurner]
+* Support for setting calculated properties to a specific data type - [Per Djurner]
+
+View Enhancements
+=================
+
+* Ability to pass in list to "includeBlank" argument on dateSelect() and similar functions - #502 [Thorsten Eilers, Per Djurner]
+* Ability to set attributes on the input element created by buttonTo() - [Per Djurner]
+* Added "onlyPath" argument to imageTag() - #508 [Per Djurner]
 
 Bug Fixes
 =========
 
-* Tableless models should not require dataSourceName #351 [Jeremy Keczan, Singgih Cahyono]  
+* Fixed so "defaultValue" gets set on non-persisted properties - #519 [Andy Bellenie]
+* Corrected output of property labels in error messages - #494 [Andy Bellenie]
+
+Miscellaneous
+=============
+
+* Set minimum Lucee version to 4.5.1.022 - [Per Djurner, Chris Peters]
+* Set minimum ACF version to 10.0.16 / 11.0.5 - [Per Djurner]
+* Dropped support for Railo - [Per Djurner]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.4.1 (05/30/2015)
+
+Bug Fixes
+=========
+
+* Skip callbacks when running calculation methods - #488 [Adam Chapman, Per Djurner]
+* Fixed rewrite rules so base URL is rewritten correctly on Apache - #367 [Jeremy Keczan, Per Djurner]
+* Removed incorrect path info information set by Apache - #367 [David Belanger, Per Djurner]
+* Fixed routing bug when running from a sub folder on Adobe ColdFusion 10  - [Brant Nielsen, Per Djurner]
+* Made sure error emails never depend on application variables being set - [Per Djurner]
+* Fix for using cfscript operators in "condition" and "unless" argument on ACF 8 - [Per Djurner]
+
+Miscellaneous
+=============
+
+* Removed tests folder - [Per Djurner]
+* Updates to framework utility pages - Update logo, Fix links on congrats page to point to new documentation site - [Chris Peters]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.4 (05/08/2015)
+
+Model Enhancements
+==================
+
+* Allow spaces in list passed in to the "include" argument on finders - #150 [Per Djurner]
+* Added findOrCreateBy[Property](), findAllKeys(), findFirst() and findLast() finder methods - [Per Djurner]
+* Add support for "GROUP BY" in sum(), average() etc. - #464 [Per Djurner]
+* Made exists() check for any record when "key" and "where" is not passed in [Per Djurner]
+* Added clearChangeInformation() for clearing knowledge of object changes - #433 [Jeremy Keczan, Per Djurner]
+* Evaluate validation error messages at runtime - #470 [Per Djurner]
+
+View Enhancements
+=================
+
+* Respect blank "text" argument in linkTo() - #365 [Adam Chapman, Tony Petruzzi, Per Djurner]
+* Allow styleSheetLinkTag() and JavaScriptIncludeTag() to reference files starting from the root - [Per Djurner]
+* Added "monthNames" and "monthAbbreviations" arguments to form helpers for easy localization - [Per Djurner]
+
+Controller Enhancements
+=======================
+
+* Ability to prepend functions to the filter chain instead of appending - #321 [Per Djurner]
+* Pass in "appendToKey" to caches() to cache content separately - #439 [Per Djurner]
+* Allow external attachments with sendEmail() - [Adam Chapman, Tony Petruzzi]
+* Ability to redirect to a specific URL - [Simon Allard]
+* Option to correct JSON output by passing in x="string" or x="integer" to renderWith() - [Per Djurner]
+
+Bug Fixes
+=========
+
+* Fix for blank path_info in CGI scope - #447 [Tim Badolato, Tony Petruzzi, Per Djurner]
+* Fix for accessing request scope key that does not exist from session - #446 [Brent Alexander, Per Djurner]
+* Removed "validate" property that was incorrectly set when calling create() - [Per Djurner]
+* Pass through "parameterize" in exists() [Per Djurner]
+* Do not remove "AS" when it's in the SQL for a calculated property - #453 [Jean Duteau, Per Djurner]
+* Obfuscate parameters in named route patterns when URL rewriting is off - #455 [Amber Cline, Per Djurner]
+* Pass through "includeSoftDeletes" argument correctly - #451 [Jon Brose]
+
+Miscellaneous
+=============
+
+* Support for the Lucee server - [Tom King]
+* Made "development" the default environment mode - [Per Djurner]
+* Removed deprecation work-around for the "if" argument on validation helpers - [Per Djurner]
+* Removed deprecation work-around for the "class" argument on association initialization methods - [Per Djurner]
+* Removed the "lib" folder - [Per Djurner]
+* Removed the h() function, use XMLFormat() instead - [Per Djurner]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.3.4 (02/03/2015)
+
+Miscellaneous
+=============
+
+* Removed unnecessary tests folder [Brant Nielsen, Per Djurner]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.3.3 (02/02/2015)
+
+Bug Fixes
+=========
+
+* Correct output of boolean HTML attributes using new global "booleanAttributes" setting - #377 [James Hayes, Per Djurner]
+* Make sure locks cannot be affected by other applications running on the same server - [Jonathan Smith, Per Djurner]
+* Fixed bug with updating an integer column from NULL to 0 - #436 [Simon Allard, Per Djurner]
+* Fixed potential permissions issue when running on shared hosting - [John Bliss, Per Djurner]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.3.2 (11/11/2014)
+
+Bug Fixes
+=========
+
+* Fixed regression bug with setting unique id for nested properties - [Simon Allard, Per Djurner]
+* Fixed reversed usage for setting option text / value when passing in an array of structs to select() / selectTag() - [Per Djurner]
+* Tableless models should not require dataSourceName - #351 [Jeremy Keczan, Singgih Cahyono]
+* Fixed issue with using group by with calculated properties - #89 [Adam Chapman, Per Djurner, Singgih Cahyono]
+* Fixed ORM incorrectly parsing a property value as NULL - #209 [Chris Peters, Per Djurner]
+* Fixed bug with application scope when sharing name across applications - #359 [Singgih Cahyono]
+* Fix for removing "AS" from ORDER BY clause in Microsoft SQL Server - #132 [Troy Murray, Tony Petruzzi, Charley Contreras, Per Djurner]
+* Calling valid() will now correctly validate all associations when using nested properties - #284 [Adam Chapman, Per Djurner]
+* Fixed issue with save() causing callbacks to run twice when using nested properties - #284 [Adam Chapman, Per Djurner]
+* Fixed race condition issue with caching - #376 [Brian Parks, Tom King, Per Djurner]
+* Fixed number parsing in WHERE strings - [Per Djurner]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1.3.1 (08/25/2014)
 
@@ -22,7 +156,7 @@ Bug Fixes
 * Do not run filters and verifications when caching actions statically - [Per Djurner]
 * Fixed a bug where trying to obfuscate a high number was throwing an error - [Per Djurner]
 * Fixed bug with static caching on Adobe ColdFusion 9 - #332 [Charley Contreras]
-* Allow for format auto-detection when HTTP ACCEPT contains multiple values - #297 [Raul Riera, Singgih Cahyono] 
+* Allow for format auto-detection when HTTP ACCEPT contains multiple values - #297 [Raul Riera, Singgih Cahyono]
 * Fixed so that sendEmail() can use the "remove" attribute to delete attachments - #339 [Simon Allard]
 * Fixed bugs with using the "twelveHour" argument on form helpers - #342, #343 [Jeremy Keczan, Per Djurner]
 * Fixed issue with using non-ascii characters in routes - #138 [Chris Ogden, Singgih Cahyono, Per Djurner]
@@ -65,7 +199,7 @@ Other Enhancements
 ==================
 
 * Fixed issue with double camel-casing of already singular strings [Don Humphreys]
-* Fixes issue with running Wheels with strict scope cascading enabled in Railo - [Jason Weible]
+* Fixes issue with running CFWheels with strict scope cascading enabled in Railo - [Jason Weible]
 * Made application start-up thread safe - [Per Djurner]
 * Performance improvement for locking - [Per Djurner]
 * Case insensitive loading of controllers and models - [Per Djurner]
@@ -82,7 +216,6 @@ Bug Fixes
 * Make sure the latest version of a plugin is unpacked if multiple versions exists - [Tony Petruzzi]
 * Fixed so the "onApplicationEnd" and "onSessionEnd" events pass through the arguments scope [Per Djurner]
 * Fixed so the "onSessionEnd" event fires correctly - #172 [Per Djurner]
-* Fixed race condition issue with caching - [Per Djurner]
 * Added geometry and geography datatypes (SQLServer) - [Simon Allard]
 * Allow blank values to be passed through when validating uniqueness - [Per Djurner]
 * Added work-around for "FastHashRemoved" struct bug found in ColdFusion 8 - [Per Djurner]
@@ -129,7 +262,7 @@ Other Enhancements
 
 * Update web.config, htaccess to ignore favicon.ico - [Cathy Shapiro, Tony Petruzzi]
 * Route with only format specified was throwing error - [jjallen, Tony Petruzzi]
- 
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1.1.7 (12/11/2011)
@@ -137,7 +270,7 @@ Other Enhancements
 Bug Fixes
 =========
 
-* Filter controller and action params - [Pete Freitag, Andy Bellenie, Tony Petruzzi] 
+* Filter controller and action params - [Pete Freitag, Andy Bellenie, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -379,7 +512,7 @@ Model Enhancements
 * Ability to set a default value for column statistics with "ifNull" argument - #330 [Andy Bellenie]
 * Support for nested properties (saving data in associated model objects through the parent) - [James Gibson]
 * Added automatic deletion of dependent models - #367 (Per Djurner, Andy Bellenie]
-* Added "setUpdatedAtOnCreate" to tell Wheels if it should update the "updatedAt" property when creating new records - [James Gibson]
+* Added "setUpdatedAtOnCreate" to tell CFWheels if it should update the "updatedAt" property when creating new records - [James Gibson]
 * New setting "useExpandedColumnAliases" that you can set to "true" to prepend included model properties with their model name in queries - #442 [Andy Bellenie]
 * Arguments are now always passed in to "afterFind" callback methods and you can return them to set both queries and objects - [Tony Petruzzi]
 * Updated findAll() to allow for more than one association as long as they are direct (i.e. include="assoc1,assoc2" works but not include="assoc1(assoc2)) - [James Gibson]
@@ -389,7 +522,7 @@ Model Enhancements
 * Ability to set defaults on a model using the "defaultValue" argument to property() - #244 [Andy Bellenie]
 * Added transaction handling support, use the "transaction" argument on save(), updateAll() etc, callbacks are automatically wrapped in a transaction - #325 [Andy Bellenie]
 * Added a position argument to primaryKeys() for easier retrieval - [Tony Petruzzi]
-* Added a setPagination() function to make it possible to use paginationLinks() and similar functions for custom queries (i.e. ones not created with the Wheels ORM) - [Tony Petruzzi]
+* Added a setPagination() function to make it possible to use paginationLinks() and similar functions for custom queries (i.e. ones not created with the CFWheels ORM) - [Tony Petruzzi]
 * Allow database views to be used as a model by calling setPrimaryKey() - #390 [Tony Petruzzi]
 
 View Enhancements
@@ -404,7 +537,7 @@ View Enhancements
 * Ability for years to display in descending order in date select form tags - [Tony Petruzzi]
 * Support for an automatic "assetQueryString" which can be used to force local browser caches to refresh when there is an update to your assets (CSS, JavaScript etc) - [James Gibson]
 * Added buttonTag() form helper - [Tony Petruzzi]
-* Added "disabled" and "readonly" arguments to form input helpers [Andy Bellenie]	
+* Added "disabled" and "readonly" arguments to form input helpers [Andy Bellenie]
 * Allows disabling error elements appearing on form fields by setting "errorElement" - [Andy Bellenie]
 * Updates to checkBoxTag() and checkBox() to allow for unchecked values - [James Gibson]
 * Added "pageNumberAsParam" argument to paginationLinks() that decides whether the page parameter should be part of the route or just a regular parameter - [James Gibson]
@@ -429,7 +562,7 @@ Controller Enhancements
 * Controllers can now respond to different formats such as "xml", "json", "csv", "pdf" and "xls" - [James Gibson]
 * Ability to store Flash in cookies - [Per Djurner]
 * Ability to add Flash messages when redirecting - [Per Djurner]
-* redirecTo(back=true) can now fall back on a route/controller/action when the referrer is blank instead of throwing an error - [Per Djurner] 
+* redirecTo(back=true) can now fall back on a route/controller/action when the referrer is blank instead of throwing an error - [Per Djurner]
 * Support for "format" parsing in route patterns ([controller]/[action].[format]) - [James Gibson]
 * Ability to pass through arguments to filters - [Per Djurner]
 * Added flashKeep() function for keeping Flash contents for one additional request - [Per Djurner]
@@ -443,7 +576,7 @@ Other Enhancements
 * Allowed plugins to run in maintenance mode - [James Gibson]
 * Added "excludeFromErrorEmail" setting - #447 [Per Djurner]
 * New setting, "errorEmailSubject", that allows you to customize the subject line of error emails - #392 [Per Djurner]
-* New setting, "deletePluginDirectories" that tells Wheels whether to delete plugin directories if no corresponding ZIP file exists - #385 [Per Djurner]
+* New setting, "deletePluginDirectories" that tells CFWheels whether to delete plugin directories if no corresponding ZIP file exists - #385 [Per Djurner]
 * Added a "cachePlugins" setting to allow developers to not cache plugins during the development of them - #304 [Andy Bellenie]
 * Allow setting multiple argument defaults at once, e.g. set(functionName="textField,textArea,select", labelPlacement="before" - #426 [Raul Riera, Per Djurner]
 * A full testing framework is now included in Wheels, unit tests can be created in the "tests" folder - [Tony Petruzzi]
@@ -478,7 +611,7 @@ Bug Fixes
 * Update to capitalize() to return nothing if the passed in string is empty - [James Gibson]
 * validatesPresenceOf() now takes whitespace into account - [Tony Petruzzi]
 * Fix for lock timeouts occurring during race conditions in the "design" and "development" modes - #467 [John C. Bland II, Andy Bellenie, Tony Petruzzi]
-* Fix so Wheels uses passed in width/height in imageTag() when only one of them is passed in - #328 [Andy Bellenie, Per Djurner]
+* Fix so CFWheels uses passed in width/height in imageTag() when only one of them is passed in - #328 [Andy Bellenie, Per Djurner]
 * Don't append .css, .js to asset files when they end in .cfm - [Tony Petruzzi]
 * Update to reload to catch the query blank boolean error - [James Gibson]
 * onCreate validations do not run when onSave validations fail - #455 [Andy Bellenie]
@@ -524,7 +657,7 @@ Bug Fixes
 * Changed so developer supplied arguments to URLFor() are not converted to lowercase - #415 [Per Djurner]
 * Made sure you can only reload based on the URL when a reload password exists (either empty or set) - #410 [John C. Bland II, Per Djurner]
 * Added escaping on strings used in JavaScript - #393 [Tony Petruzzi]
-* Changed so the dispatch object is created with a reference from the root of the Wheels application instead of the entire website - [Per Djurner]
+* Changed so the dispatch object is created with a reference from the root of the CFWheels application instead of the entire website - [Per Djurner]
 * Fixed so sendEmail() automatically sets the "type" argument to "text" or "html" when only one template is in use - [Per Djurner]
 * Fixed so creating SELECT clause works when there are 10 tables or more in use - #421 [Don Humphreys, Tony Petruzzi]
 * Fixed a regression bug in the dateTimeSelect() function - #413 [Andy Bellenie]
@@ -550,7 +683,7 @@ Bug Fixes
 * Fixed bug in MS SQL adapter when paginating and ordering on identically named columns from two tables - #355 [Don Bellamy, Per Djurner]
 * Fixed bug where soft deleted rows were returned when using the include argument - #344 [Andy Bellenie, Per Djurner]
 * Fixed bug where humanize() would add a space at the beginning of the string if it started with an upper case character - #359 [Per Djurner]
-* To fix bugs with change tracking Wheels will now only check for changes to properties that exist on the model object - #353 [James Gibson, Per Djurner]
+* To fix bugs with change tracking CFWheels will now only check for changes to properties that exist on the model object - #353 [James Gibson, Per Djurner]
 * Fixed so the keys we use for caching always return identical results so they do not break the cache unnecessarily - [Andy Bellenie, Per Djurner]
 * Fixed so average() with integer values work in Railo - #331 [Raul Riera, James Gibson, Per Djurner]
 * Fixed so the "for" attribute on form helpers always matches the "id" attribute when it's passed in by the developer - #340 [Chris Peters, Per Djurner]
@@ -558,7 +691,7 @@ Bug Fixes
 * Wrapped debug output completely in "cfoutput" tags so that it works when "enableCFOutputOnly" has been set to true - [William Fisk, Per Djurner]
 * Fixed a bug with pagination with outer joins that was creating SQL errors when no records were returned from the pagination query - [James Gibson]
 * Made the "objectName" argument check for the object in the "variables" scope by default instead of unscoped - #365 [John C. Bland II, Per Djurner]
-* Fixed so the this.dataSource setting is picked up by Wheels when used - #333 [Chris Peters, Per Djurner]
+* Fixed so the this.dataSource setting is picked up by CFWheels when used - #333 [Chris Peters, Per Djurner]
 * Fixed so you can use the built-in validation methods for properties that does not exist in the database table - #362 [Andy Bellenie, Per Djurner]
 * Fixed so primary key column is not added to order clause when paginating if it has already been specified with tableName.columnName syntax - [Per Djurner]
 * Fixed so pluralization/singularization works with camelCased variable names - [Chris Peters, Per Djurner]
@@ -581,7 +714,7 @@ Bug Fixes
 Model Enhancements
 ==================
 * Added "xml" datatype for SQL Server 2005/2008 - #295 [Andy Bellenie, Per Djurner]
-* Added the Railo specific cfquery attribute called "psq" to make Wheels run on a default installation of Railo - [Raul Riera, Per Djurner]
+* Added the Railo specific cfquery attribute called "psq" to make CFWheels run on a default installation of Railo - [Raul Riera, Per Djurner]
 * Changed setProperties() to allow any passed in variable to be set on the object - [Per Djurner]
 * Changed properties() so that it returns anything in the this scope that is not a function - [Per Djurner]
 * Modified so SUM, AVG, MIN, MAX returns blank string and COUNT returns 0 when no records are found - [Tony Petruzzi, Per Djurner]
@@ -606,7 +739,7 @@ Controller Enhancements
 Other Enhancements
 ==================
 * Support for setting Application.cfc this scoped variables through config/app.cfm - #315 [Jay McEntire, Per Djurner]
-* Allow plugin developer to specify a list of supported Wheels versions instead of just one - [Chris Peters, Per Djurner]
+* Allow plugin developer to specify a list of supported CFWheels versions instead of just one - [Chris Peters, Per Djurner]
 * Methods from plugins can now be injected to "Application.cfc" - #288 [James Gibson, Per Djurner]
 
 Bug Fixes
@@ -628,7 +761,7 @@ Bug Fixes
 * Fixed radio button ids to work properly with negative number values - #274 [Elezotte, Per Djurner]
 * Removed display of "rewrite.cfm" in error emails - #280 [Raul Riera, Per Djurner]
 * Fix for layout handling in sendEmail() on multipart emails - #269 [Chris Peters, Per Djurner]
-* Throw Wheels errors based on the "showErrorInformation" setting instead of production mode - #276 [Tony Petruzzi, Per Djurner]
+* Throw CFWheels errors based on the "showErrorInformation" setting instead of production mode - #276 [Tony Petruzzi, Per Djurner]
 * Fixed so includePartial() / renderPartial() returns a blank string when passed an empty array instead of an error - #287 [James Gibson, Per Djurner]
 * Fixed a problem with file naming and case on Linux / Unix when using helpers and plugins - [Chris Peters, Per Djurner]
 * Fixed so pagination aborts early when no records exist in the table instead of causing an error - Groups [Per Djurner, James Gibson]
@@ -642,4 +775,4 @@ Miscellaneous
 * Refactored validations code - #266 [Per Djurner]
 * Copied cgi scope to request scope - #277 [Tony Petruzzi, James Gibson, Per Djurner]
 * Removed an unnecessary variable assignment - #265 [William Fisk, Per Djurner]
-* Added informative error messages for common Wheels mistakes - [James Gibson, Per Djurner]
+* Added informative error messages for common CFWheels mistakes - [James Gibson, Per Djurner]

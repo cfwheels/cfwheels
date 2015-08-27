@@ -22,4 +22,9 @@
 		<cfset assert('loc.columnList eq "authors.firstname,authors.id,authors.lastname,posts.authorid,posts.averagerating,posts.body,posts.createdat,posts.deletedat,posts.id AS postid,posts.title,posts.updatedat,posts.views"')>
 	</cffunction>
 
+	<cffunction name="test_select_argument_on_calculated_property">
+		<cfset loc.columnList = ListSort(model("AuthorSelectArgument").findAll(returnAs="query").columnList, "text")>
+		<cfset assert('loc.columnList eq "firstname,id,lastname,selectargdefault,selectargtrue"')>
+	</cffunction>
+
 </cfcomponent>

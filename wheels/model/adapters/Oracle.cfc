@@ -1,22 +1,38 @@
 <cfcomponent extends="Base" output="false">
 
+	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
+		<cfscript>
+			var loc = {};
+			loc.rv = "rowid";
+		</cfscript>
+		<cfreturn loc.rv>
+	</cffunction>
+
+	<cffunction name="$randomOrder" returntype="string" access="public" output="false">
+		<cfscript>
+			var loc = {};
+			loc.rv = "dbms_random.value()";
+		</cfscript>
+		<cfreturn loc.rv>
+	</cffunction>
+
 	<cffunction name="$defaultValues" returntype="string" access="public" output="false">
 		<cfargument name="$primaryKey" type="string" required="true" hint="the table primaryKey">
-		<cfreturn "(#arguments.$primaryKey#) VALUES(DEFAULT)">
+		<cfscript>
+			var loc = {};
+			loc.rv = "(#arguments.$primaryKey#) VALUES(DEFAULT)";
+		</cfscript>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$tableAlias" returntype="string" access="public" output="false">
 		<cfargument name="table" type="string" required="true">
 		<cfargument name="alias" type="string" required="true">
-		<cfreturn arguments.table & " " & arguments.alias>
-	</cffunction>
-
-	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
-		<cfreturn "rowid">
-	</cffunction>
-
-	<cffunction name="$randomOrder" returntype="string" access="public" output="false">
-		<cfreturn "dbms_random.value()">
+		<cfscript>
+			var loc = {};
+			loc.rv = arguments.table & " " & arguments.alias;
+		</cfscript>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$getType" returntype="string" access="public" output="false">
@@ -24,32 +40,46 @@
 		<cfargument name="scale" type="string" required="true">
 		<cfscript>
 			var loc = {};
-			switch(arguments.type)
+			switch (arguments.type)
 			{
-				case "blob": case "bfile": {loc.returnValue = "cf_sql_blob"; break;}
-				case "char": case "nchar": {loc.returnValue = "cf_sql_char"; break;}
-				case "clob": case "nclob": {loc.returnValue = "cf_sql_clob"; break;}
-				case "date": case "timestamp": {loc.returnValue = "cf_sql_timestamp"; break;}
-				case "binary_double": {loc.returnValue = "cf_sql_double"; break;}
+				case "blob": case "bfile":
+					loc.rv = "cf_sql_blob";
+					break;
+				case "char": case "nchar":
+					loc.rv = "cf_sql_char";
+					break;
+				case "clob": case "nclob":
+					loc.rv = "cf_sql_clob";
+					break;
+				case "date": case "timestamp":
+					loc.rv = "cf_sql_timestamp";
+					break;
+				case "binary_double":
+					loc.rv = "cf_sql_double";
+					break;
 				case "number": case "float": case "binary_float":
-				{
 					// integer datatypes are represented by number(38,0)
-					if (val(arguments.scale) == 0)
+					if (Val(arguments.scale) == 0)
 					{
-						loc.returnValue = "cf_sql_integer";
+						loc.rv = "cf_sql_integer";
 					}
 					else
 					{
-						loc.returnValue = "cf_sql_float";
+						loc.rv = "cf_sql_float";
 					}
 					break;
-				}
-				case "long": {loc.returnValue = "cf_sql_longvarchar"; break;}
-				case "raw": {loc.returnValue = "cf_sql_varbinary"; break;}
-				case "varchar2": case "nvarchar2": {loc.returnValue = "cf_sql_varchar"; break;}
+				case "long":
+					loc.rv = "cf_sql_longvarchar";
+					break;
+				case "raw":
+					loc.rv = "cf_sql_varbinary";
+					break;
+				case "varchar2": case "nvarchar2":
+					loc.rv = "cf_sql_varchar";
+					break;
 			}
 		</cfscript>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$query" returntype="struct" access="public" output="false">
@@ -74,29 +104,29 @@
 			}
 
 			// oracle doesn't support limit and offset in sql
-			StructDelete(arguments, "limit", false);
-			StructDelete(arguments, "offset", false);
-			loc.returnValue = $performQuery(argumentCollection=arguments);
-			loc.returnValue = $handleTimestampObject(loc.returnValue);
+			StructDelete(arguments, "limit");
+			StructDelete(arguments, "offset");
+			loc.rv = $performQuery(argumentCollection=arguments);
+			loc.rv = $handleTimestampObject(loc.rv);
 		</cfscript>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$identitySelect" returntype="any" access="public" output="false">
 		<cfargument name="queryAttributes" type="struct" required="true">
 		<cfargument name="result" type="struct" required="true">
 		<cfargument name="primaryKey" type="string" required="true">
-		<cfset var loc = {}>
-		<cfset var query = {}>
+		<cfset var loc = StructNew()>
+		<cfset var query = StructNew()>
 		<cfset loc.sql = Trim(arguments.result.sql)>
 		<cfif Left(loc.sql, 11) IS "INSERT INTO">
 			<cfset loc.startPar = Find("(", loc.sql) + 1>
 			<cfset loc.endPar = Find(")", loc.sql)>
 			<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
 			<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
-				<cfset loc.returnValue = {}>
+				<cfset loc.rv = StructNew()>
 				<cfset loc.tbl = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
-				<cfif !StructKeyExists(arguments.result, $generatedKey()) || application.wheels.serverName IS NOT "Adobe ColdFusion">
+				<cfif NOT StructKeyExists(arguments.result, $generatedKey()) || application.wheels.serverName IS NOT "Adobe ColdFusion">
 					<!---
 					there isn't a way in oracle to tell what (if any) sequences exists
 					on a table. hence we'll just have to perform a guess for now.
@@ -115,8 +145,8 @@
 				</cfif>
 				<cfset loc.lastId = Trim(query.name.lastId)>
 				<cfif len(query.name.lastId)>
-					<cfset loc.returnValue[$generatedKey()] = Trim(loc.lastid)>
-					<cfreturn loc.returnValue>
+					<cfset loc.rv[$generatedKey()] = Trim(loc.lastid)>
+					<cfreturn loc.rv>
 				</cfif>
 			<cfelse>
 				<!--- since Oracle always returns rowid we need to delete it in those cases where we have manually inserted the primary key, if we don't do this we'll end up setting the rowid value to the object --->
@@ -137,7 +167,7 @@
 		<cfargument name="password" type="string" required="true">
 		<cfscript>
 		var loc = {};
-		loc.args = duplicate(arguments);
+		loc.args = Duplicate(arguments);
 		StructDelete(loc.args, "table");
 		if (!Len(loc.args.username))
 		{
@@ -147,7 +177,7 @@
 		{
 			StructDelete(loc.args, "password");
 		}
-		loc.args.name = "loc.returnValue";
+		loc.args.name = "loc.rv";
 		</cfscript>
 		<cfquery attributeCollection="#loc.args#">
 		SELECT
@@ -183,63 +213,67 @@
 		wheels catches the error and raises a Wheels.TableNotFound error
 		to mimic this we will throw an error if the query result is empty
 		 --->
-		<cfif !loc.returnValue.RecordCount>
-			<cfthrow/>
+		<cfif NOT loc.rv.recordCount>
+			<cfthrow>
 		</cfif>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cffunction name="$handleTimestampObject" hint="Oracle will return timestamp as an object. you need to call timestampValue() to get the string representation">
 		<cfargument name="results" type="struct" required="true">
 		<cfscript>
-		var loc = {};
-		// depending on the driver and engine used with oracle, timestamps can be returned as
-		// objects instead of strings.
-		if (StructKeyExists(arguments.results, "query"))
-		{
-			// look for all timestamp columns
-			loc.query = arguments.results.query;
-			loc.rows = loc.query.RecordCount;
-			if (loc.rows gt 0)
+			var loc = {};
+
+			// depending on the driver and engine used with oracle, timestamps can be returned as
+			// objects instead of strings.
+			if (StructKeyExists(arguments.results, "query"))
 			{
-				loc.metadata = GetMetaData(loc.query);
-				loc.columns = [];
-				loc.iEnd = ArrayLen(loc.metadata);
-				for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+				// look for all timestamp columns
+				loc.query = arguments.results.query;
+				if (loc.query.recordCount > 0)
 				{
-					loc.column = loc.metadata[loc.i];
-					if (loc.column.typename eq "timestamp")
+					loc.metadata = GetMetaData(loc.query);
+					loc.columns = [];
+					loc.iEnd = ArrayLen(loc.metadata);
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					{
-						ArrayAppend(loc.columns, loc.column.name);
-					}
-				}
-				// if we have any timestamp columns
-				if (!ArrayIsEmpty(loc.columns))
-				{
-					loc.iEnd = ArrayLen(loc.columns);
-					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
-					{
-						loc.column = loc.columns[loc.i];
-						for (loc.row = 1; loc.row lte loc.rows; loc.row++)
+						loc.column = loc.metadata[loc.i];
+						if (loc.column.typename == "timestamp")
 						{
-							if (IsObject(loc.query[loc.column][loc.row]))
-							{// call timestampValue() on objects to convert to string
-								loc.query[loc.column][loc.row] = loc.query[loc.column][loc.row].timestampValue();
-							}
-							else if (IsSimpleValue(loc.query[loc.column][loc.row]) && Len(loc.query[loc.column][loc.row]))
-							{// if the driver does the conversion automatically, there is no need to continue
-								break;
+							ArrayAppend(loc.columns, loc.column.name);
+						}
+					}
+
+					// if we have any timestamp columns
+					if (!ArrayIsEmpty(loc.columns))
+					{
+						loc.iEnd = ArrayLen(loc.columns);
+						for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+						{
+							loc.column = loc.columns[loc.i];
+							loc.jEnd = loc.query.recordCount;
+							for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+							{
+								if (IsObject(loc.query[loc.column][loc.j]))
+								{
+									// call timestampValue() on objects to convert to string
+									loc.query[loc.column][loc.j] = loc.query[loc.column][loc.j].timestampValue();
+								}
+								else if (IsSimpleValue(loc.query[loc.column][loc.j]) && Len(loc.query[loc.column][loc.j]))
+								{
+									// if the driver does the conversion automatically, there is no need to continue
+									break;
+								}
 							}
 						}
 					}
+					arguments.results.query = loc.query;
 				}
-				arguments.results.query = loc.query;
 			}
-		}
-		return arguments.results;
+			loc.rv = arguments.results;
 		</cfscript>
+		<cfreturn loc.rv>
 	</cffunction>
 
 	<cfinclude template="../../plugins/injection.cfm">
-
 </cfcomponent>

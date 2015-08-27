@@ -1,85 +1,63 @@
-<cffunction name="usesLayout" access="public" returntype="void" output="false" hint="Used within a controller's `init()` method to specify controller- or action-specific layouts."
-	examples=
-	'
-		<!---
-			Example 1: We want this layout to be used as the default throughout the entire
-			controller, except for the myajax action
-		 --->
-		<cffunction name="init">
-			<cfset usesLayout(template="myLayout", except="myajax")>
-		</cffunction>
-		
-		<!---
-			Example 2: Use a custom layout for these actions but use the default layout.cfm
-			for the rest
-		--->
-		<cffunction name="init">
-			<cfset usesLayout(template="myLayout", only="termsOfService,shippingPolicy")>
-		</cffunction>
-		
-		<!--- Example 3: Define a custom method to decide which layout to display --->
-		<cffunction name="init">
-			<cfset usesLayout("setLayout")>
-		</cffunction>
-		
-		<cffunction name="setLayout">
-			<!--- Use holiday theme for the month of December --->
-			<cfif Month(Now()) eq 12>
-				<cfreturn "holiday">
-			<!--- Otherwise, use default layout by returning `true` --->
-			<cfelse>
-				<cfreturn true>
-			</cfif>
-		</cffunction>
-	'
-	categories="controller-initialization,rendering" chapters="rendering-layout" functions="renderPage">
-	<cfargument name="template" required="true" type="string" hint="Name of the layout template or method name you want to use">
-	<cfargument name="ajax" required="false" type="string" default="" hint="Name of the layout template you want to use for AJAX requests">
-	<cfargument name="except" type="string" required="false" hint="List of actions that SHOULD NOT get the layout">
-	<cfargument name="only" type="string" required="false" hint="List of action that SHOULD ONLY get the layout">
-	<cfargument name="useDefault" type="boolean" required="false" default="true" hint="When specifying conditions or a method, pass `true` to use the default `layout.cfm` if none of the conditions are met">
+<!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
+
+<cffunction name="usesLayout" access="public" returntype="void" output="false">
+	<cfargument name="template" required="true" type="string">
+	<cfargument name="ajax" required="false" type="string" default="">
+	<cfargument name="except" type="string" required="false">
+	<cfargument name="only" type="string" required="false">
+	<cfargument name="useDefault" type="boolean" required="false" default="true">
 	<cfscript>
-		// when the layout is a method, the method itself should handle all the logic
 		if ((StructKeyExists(this, arguments.template) && IsCustomFunction(this[arguments.template])) || IsCustomFunction(arguments.template))
 		{
-			StructDelete(arguments, "except", false);
-			StructDelete(arguments, "only", false);
+			// when the layout is a function, the function itself should handle all the logic
+			StructDelete(arguments, "except");
+			StructDelete(arguments, "only");
 		}
 		if (StructKeyExists(arguments, "except"))
+		{
 			arguments.except = $listClean(arguments.except);
+		}
 		if (StructKeyExists(arguments, "only"))
+		{
 			arguments.only = $listClean(arguments.only);
+		}
 		variables.$class.layout = arguments;
 	</cfscript>
 </cffunction>
+
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$useLayout" access="public" returntype="any" output="false">
 	<cfargument name="$action" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = true;
+		loc.rv = true;
 		loc.layoutType = "template";
 		if (isAjax() && StructKeyExists(variables.$class.layout, "ajax") && Len(variables.$class.layout.ajax))
+		{
 			loc.layoutType = "ajax";
+		}
 		if (!StructIsEmpty(variables.$class.layout))
 		{
-			loc.returnValue = variables.$class.layout.useDefault;
+			loc.rv = variables.$class.layout.useDefault;
 			if ((StructKeyExists(this, variables.$class.layout[loc.layoutType]) && IsCustomFunction(this[variables.$class.layout[loc.layoutType]])) || IsCustomFunction(variables.$class.layout[loc.layoutType]))
 			{
-				// if the developer doesn't return anything from the method or if they return a blank string it should use the default layout still
+				// if the developer doesn't return anything from the function or if they return a blank string it should use the default layout still
 				loc.invokeArgs = {};
 				loc.invokeArgs.action = arguments.$action;
-				loc.temp = $invoke(method=variables.$class.layout[loc.layoutType], invokeArgs=loc.invokeArgs);
-				if (StructKeyExists(loc, "temp"))
-					loc.returnValue = loc.temp;
+				loc.result = $invoke(method=variables.$class.layout[loc.layoutType], invokeArgs=loc.invokeArgs);
+				if (StructKeyExists(loc, "result"))
+				{
+					loc.rv = loc.result;
+				}
 			}
 			else if ((!StructKeyExists(variables.$class.layout, "except") || !ListFindNoCase(variables.$class.layout.except, arguments.$action)) && (!StructKeyExists(variables.$class.layout, "only") || ListFindNoCase(variables.$class.layout.only, arguments.$action)))
 			{
-				loc.returnValue = variables.$class.layout[loc.layoutType];
+				loc.rv = variables.$class.layout[loc.layoutType];
 			}
 		}
-		return loc.returnValue;
 	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$renderLayout" returntype="string" access="public" output="false">
@@ -89,47 +67,54 @@
 		var loc = {};
 		if ((IsBoolean(arguments.$layout) && arguments.$layout) || (!IsBoolean(arguments.$layout) && Len(arguments.$layout)))
 		{
-			// store the content in a variable in the request scope so it can be accessed
-			// by the includeContent function that the developer uses in layout files
+			// store the content in a variable in the request scope so it can be accessed by the includeContent function that the developer uses in layout files
 			// this is done so we avoid passing data to/from it since it would complicate things for the developer
 			contentFor(body=arguments.$content, overwrite=true);
-			loc.include = application.wheels.viewPath;
+			loc.viewPath = get("viewPath");
+			loc.include = loc.viewPath;
 			if (IsBoolean(arguments.$layout))
 			{
 				loc.layoutFileExists = false;
 				if (!ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) && !ListFindNoCase(application.wheels.nonExistingLayoutFiles, variables.params.controller))
 				{
-					if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.params.controller)#/layout.cfm")))
+					loc.file = loc.viewPath & "/" & LCase(variables.params.controller) & "/layout.cfm";
+					if (FileExists(ExpandPath(loc.file)))
+					{
 						loc.layoutFileExists = true;
-					if (application.wheels.cacheFileChecking)
+					}
+					if (get("cacheFileChecking"))
 					{
 						if (loc.layoutFileExists)
+						{
 							application.wheels.existingLayoutFiles = ListAppend(application.wheels.existingLayoutFiles, variables.params.controller);
+						}
 						else
+						{
 							application.wheels.nonExistingLayoutFiles = ListAppend(application.wheels.nonExistingLayoutFiles, variables.params.controller);
+						}
 					}
 				}
 				if (ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) || loc.layoutFileExists)
 				{
-					loc.include = loc.include & "/" & variables.params.controller & "/" & "layout.cfm";
+					loc.include &= "/" & variables.params.controller & "/" & "layout.cfm";
 				}
 				else
 				{
-					loc.include = loc.include & "/" & "layout.cfm";
+					loc.include &= "/" & "layout.cfm";
 				}
-				loc.returnValue = $includeAndReturnOutput($template=loc.include);
+				loc.rv = $includeAndReturnOutput($template=loc.include);
 			}
 			else
 			{
 				arguments.$name = arguments.$layout;
 				arguments.$template = $generateIncludeTemplatePath(argumentCollection=arguments);
-				loc.returnValue = $includeFile(argumentCollection=arguments);
+				loc.rv = $includeFile(argumentCollection=arguments);
 			}
 		}
 		else
 		{
-			loc.returnValue = arguments.$content;
+			loc.rv = arguments.$content;
 		}
-		return loc.returnValue;
 	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>
