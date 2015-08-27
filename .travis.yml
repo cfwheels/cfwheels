@@ -3,20 +3,21 @@ language: java
 
 cache: bundler #works only for private repo http://docs.travis-ci.com/user/caching/
 
-env: #ftp credential for remote test server, encrypted with repo specific key 
-  - secure: "QZdX3M+wYTejkwHLseV/LwhPOCvkbONJcElHjdsrwb4xiuzZSdHiRYmTc+9hzyIOTb1hrylKZ8udMzIuZZTUCa0Ze30sQmcC83vGIteM+uzQr0RV9asf/4hL83cBye50f1OWIJlyq5FLvD0KMkhP+BnTA7jTI5UD8a4FX+F2UUU="
+env:
+  global: #ftp credential for remote test server, encrypted with repo specific key 
+    - secure: "QZdX3M+wYTejkwHLseV/LwhPOCvkbONJcElHjdsrwb4xiuzZSdHiRYmTc+9hzyIOTb1hrylKZ8udMzIuZZTUCa0Ze30sQmcC83vGIteM+uzQr0RV9asf/4hL83cBye50f1OWIJlyq5FLvD0KMkhP+BnTA7jTI5UD8a4FX+F2UUU="
+  matrix:
+    - PROFILE=mssql,acf10oracle
+    - PROFILE=jetty,lucee,subfolder PARAM=testParallelStart=true
+    - PROFILE=jetty,lucee,mysql
+    - PROFILE=jetty,lucee,postgresql
+    - PROFILE=jetty,lucee,oracle-emu
 
 before_script:
   - mysql -e 'create database test;'
   - psql -c 'create database test;' -U postgres
 
-script: "
-if [ $TRAVIS_SECURE_ENV_VARS == 'true' ];
-then 
-    mvn verify -Pjetty,lucee,subfolder -DtestParallelStart=true && mvn verify -Pjetty,lucee,mysql && mvn verify -Pjetty,lucee,postgresql && mvn verify -Pjetty,lucee,oracle-emu && mvn clean verify -Pmssql,acf10oracle; 
-else 
-    mvn verify -Pjetty,lucee,subfolder -DtestParallelStart=true && mvn verify -Pjetty,lucee,mysql && mvn verify -Pjetty,lucee,postgresql && mvn verify -Pjetty,lucee,oracle-emu;
-fi"
+script: "mvn verify -P$PROFILE -D$PARAM"
 
 #see pom.xml for the explanation of the mvn commands above
  
