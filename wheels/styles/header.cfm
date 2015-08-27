@@ -102,21 +102,50 @@
 		background: #ffffe0;
 		border: none;
 	}
-
 	#logo
 	{
 		float: right;
 		margin: 0 0 20px 20px;
 		width: 75px;
 	}
-
 	#logo a
 	{
 		display: block;
 	}
-
-	#logo a:hover {
+	#logo a:hover
+	{
 		background: none;
+	}
+	#content .testing a
+	{
+		font-weight: bold;
+		text-decoration: none;
+	}
+	#content .failed
+	{
+		color: red;
+		font-weight: bold
+	}
+	#content .success
+	{
+		color: green;
+		font-weight: bold
+	}
+	#content .testing
+	{
+		margin-bottom: 15px;
+	}
+	#content .testing th, #content .testing td
+	{
+		padding: 2px 20px 2px 2px;
+	}
+	#content .errRow
+	{
+		background-color: #ffdfdf;
+	}
+	#content .n
+	{
+		text-align: right;
 	}
 	</style>
 </head>

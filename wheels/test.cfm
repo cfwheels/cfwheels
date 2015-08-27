@@ -214,21 +214,21 @@
 	<cfargument name="display" type="boolean" required="false" default="true" hint="whether to display the debug call. false returns without outputting anything into the buffer. good when you want to leave the debug command in the test for later purposes, but don't want it to display">
 	<cfset var attributeArgs = {}>
 	<cfset var dump = "">
-	
+
 	<cfif !arguments.display>
 		<cfreturn>
 	</cfif>
-	
+
 	<cfset attributeArgs["var"] = "#evaluate(arguments.expression)#">
 
 	<cfset structdelete(arguments, "expression")>
 	<cfset structdelete(arguments, "display")>
 	<cfset structappend(attributeArgs, arguments, true)>
-	
+
 	<cfsavecontent variable="dump">
 	<cfdump attributeCollection="#attributeArgs#">
 	</cfsavecontent>
-	
+
 	<cfif !StructKeyExists(request["TESTING_FRAMEWORK_DEBUGGING"], TESTING_FRAMEWORK_VARS.RUNNING_TEST)>
 		<cfset request["TESTING_FRAMEWORK_DEBUGGING"][TESTING_FRAMEWORK_VARS.RUNNING_TEST] = []>
 	</cfif>
@@ -320,10 +320,15 @@
 		invoking methods starting in "test".  Wrap with calls to setup()
 		and teardown() if provided.
 	--->
-	<cfset keyList = listSort(structKeyList(this), "textnocase", "asc")>
+
+	<cfset functions = getMetadata(this).functions>
+	<cfloop from="1" to="#ArrayLen(functions)#" index="i">
+		<cfset keyList = ListAppend(keyList, functions[i].name)>
+	</cfloop>
+	<cfset keyList = ListSort(keyList, "textnocase", "asc")>
 
 	<cfloop list="#keyList#" index="key">
-	
+
 		<!--- keep track of the test name so we can display debug information --->
 		<cfset TESTING_FRAMEWORK_VARS.RUNNING_TEST = key>
 
@@ -507,7 +512,7 @@
 	<cfif structkeyexists(arguments.options, "test") and len(arguments.options.test)>
 		<cfset loc.test = arguments.options.test>
 	</cfif>
-	
+
 	<!--- resolve paths --->
 	<cfset loc.paths = $resolvePaths(arguments.options)>
 
@@ -548,7 +553,7 @@
 
 <cffunction name="$cleanTestName" returntype="string" output="false" hint="cleans up the test name so they are more readable">
 	<cfargument name="str" type="string" required="true" hint="test name to clean up">
-	<cfreturn trim(rereplacenocase(removechars(arguments.str, 1, 4), "_|-", " ", "all"))>
+	<cfreturn humanize(Trim(REReplaceNoCase(RemoveChars(arguments.str, 1, 4), "_|-", " ", "all")))>
 </cffunction>
 
 <cffunction name="$cleanTestPath" returntype="string" output="false" hint="cleans up the test name so they are more readable">
@@ -560,15 +565,15 @@
 	<cfargument name="options" type="struct" required="false" default="#structnew()#">
 	<cfset var loc = {}>
 
-	<!--- container for returning the paths --->	
+	<!--- container for returning the paths --->
 	<cfset loc.paths = {}>
-	
+
 	<!--- default test type --->
 	<cfset loc.type = "core">
-	
+
 	<!--- testfilter --->
 	<cfset loc.paths.test_filter = "*">
-	
+
 	<!--- by default we run all packages, however they can specify to run a specific package of tests --->
 	<cfset loc.package = "">
 
@@ -594,9 +599,9 @@
 		<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.rootComponentPath>
 		<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "#application.wheels.pluginComponentPath#.#loc.type#", ".")>
 	</cfif>
-	
+
 	<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "tests", ".")>
-	
+
 	<!--- add the package if specified --->
 	<cfset loc.paths.test_path = listappend("#TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH#", loc.package, ".")>
 
@@ -622,7 +627,7 @@
 				detail="In order to run test you must supply a valid test package or single test file to run">
 		</cfif>
 	</cfif>
-	
+
 	<!--- for test results display --->
 	<cfset TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH = loc.paths.test_path>
 
@@ -635,11 +640,11 @@
 	<cfset var loc = {}>
 	<cfset var q = "">
 	<cfset var t = QueryNew("package","Varchar")>
-	
+
 	<cfset loc.paths = $resolvePaths(arguments.options)>
-	
+
 	<cfset $loadTestEnvAndPopuplateDatabase(loc.paths, arguments.options)>
-	
+
 	<cfdirectory directory="#loc.paths.full_test_path#" action="list" recurse="true" name="q" filter="#arguments.filefilter#.cfc" />
 
 	<!--- run tests --->
@@ -663,11 +668,11 @@
 <cffunction name="$loadTestEnvAndPopuplateDatabase">
 	<cfargument name="paths" type="struct" required="true">
 	<cfargument name="options" type="struct" required="true">
-	
+
 	<cfif FileExists(arguments.paths.full_root_test_path & "/env.cfm")>
 		<cfinclude template="#arguments.paths.relative_root_test_path & '/env.cfm'#">
 	</cfif>
-	
+
 	<!--- populate the test database only on reload --->
 	<cfif structkeyexists(arguments.options, "reload") && arguments.options.reload eq true && FileExists(arguments.paths.full_root_test_path & "/populate.cfm")>
 		<cfinclude template="#arguments.paths.relative_root_test_path & '/populate.cfm'#">
