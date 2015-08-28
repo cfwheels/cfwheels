@@ -87,28 +87,49 @@
 		{
 			if (isNew())
 			{
-				if ($validateAssociations() && $callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks))
+				if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks))
 				{
+					loc.rollback = false;
+					if (!Len(key()))
+					{
+						loc.rollback = true;
+					}
 					$create(parameterize=arguments.parameterize, reload=arguments.reload);
-					if ($saveAssociations(argumentCollection=arguments, validate=false, callbacks=false) && $callback("afterCreate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
+					if ($saveAssociations(argumentCollection=arguments) && $callback("afterCreate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
 					{
 						$updatePersistedProperties();
 						loc.rv = true;
 					}
+					else if (loc.rollback)
+					{
+						$resetToNew();
+					}
+				}
+				else
+				{
+					$validateAssociations(callbacks=arguments.callbacks);
 				}
 			}
 			else
 			{
-				if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave,onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $saveAssociations(argumentCollection=arguments) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
+				if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave,onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
 				{
 					$update(parameterize=arguments.parameterize, reload=arguments.reload);
-					if ($callback("afterUpdate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
+					if ($saveAssociations(argumentCollection=arguments) && $callback("afterUpdate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
 					{
 						$updatePersistedProperties();
 						loc.rv = true;
 					}
 				}
+				else
+				{
+					$validateAssociations(callbacks=arguments.callbacks);
+				}
 			}
+		}
+		else
+		{
+			$validateAssociations(callbacks=arguments.callbacks);
 		}
 	</cfscript>
 	<cfreturn loc.rv>
