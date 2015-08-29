@@ -6,18 +6,6 @@ Model Enhancements
 * Support for passing in select=false to property() to not include a calculated property by default in SELECT clauses - #122 [Adam Chapman, Per Djurner]
 * Support for setting calculated properties to a specific data type - [Per Djurner]
 
-View Enhancements
-=================
-
-* Ability to pass in list to "includeBlank" argument on dateSelect() and similar functions - #502 [Thorsten Eilers, Per Djurner]
-* Ability to set attributes on the input element created by buttonTo() - [Per Djurner]
-* Added "onlyPath" argument to imageTag() - #508 [Per Djurner]
-
-Bug Fixes
-=========
-
-* Corrected output of property labels in error messages - #494 [Andy Bellenie]
-
 Miscellaneous
 =============
 
