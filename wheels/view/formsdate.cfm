@@ -205,13 +205,20 @@
 			}
 		}
 
-		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && ListLen(arguments.label) > 1)
+		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1)
 		{
-			arguments.label = ListGetAt(arguments.label, ListFindNoCase(arguments.order, arguments.$type));
-		}
-		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && StructKeyExists(arguments, "labelClass") && ListLen(arguments.labelClass) > 1)
-		{
-			arguments.labelClass = ListGetAt(arguments.labelClass, ListFindNoCase(arguments.order, arguments.$type));
+			if (ListLen(arguments.includeBlank) > 1)
+			{
+				arguments.includeBlank = ListGetAt(arguments.includeBlank, ListFindNoCase(arguments.order, arguments.$type));
+			}
+			if (ListLen(arguments.label) > 1)
+			{
+				arguments.label = ListGetAt(arguments.label, ListFindNoCase(arguments.order, arguments.$type));
+			}
+			if (StructKeyExists(arguments, "labelClass") && ListLen(arguments.labelClass) > 1)
+			{
+				arguments.labelClass = ListGetAt(arguments.labelClass, ListFindNoCase(arguments.order, arguments.$type));
+			}
 		}
 		if (!StructKeyExists(arguments, "id"))
 		{

@@ -278,7 +278,7 @@
 		application.$wheels.functions.hiddenField = {};
 		application.$wheels.functions.highlight = {delimiter=",", tag="span", class="highlight"};
 		application.$wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, twelveHour=false};
-		application.$wheels.functions.imageTag = {};
+		application.$wheels.functions.imageTag = {onlyPath=true, host="", protocol="", port=0};
 		application.$wheels.functions.includePartial = {layout="", spacer="", dataFunction=true};
 		application.$wheels.functions.javaScriptIncludeTag = {type="text/javascript", head=false};
 		application.$wheels.functions.linkTo = {onlyPath=true, host="", protocol="", port=0};

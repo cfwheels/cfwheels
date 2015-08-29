@@ -68,7 +68,11 @@
 			loc.onsubmit = "return confirm('#JSStringFormat(arguments.confirm)#');";
 			arguments.onsubmit = $addToJavaScriptAttribute(name="onsubmit", content=loc.onsubmit, attributes=arguments);
 		}
-		loc.content = submitTag(value=arguments.text, image=arguments.image, disable=arguments.disable);
+		loc.args = $innerArgs(name="input", args=arguments);
+		loc.args.value = arguments.text;
+		loc.args.image = arguments.image;
+		loc.args.disable = arguments.disable;
+		loc.content = submitTag(argumentCollection=loc.args);
 		loc.skip = "disable,image,text,confirm,route,controller,key,params,anchor,onlyPath,host,protocol,port";
 		if (Len(arguments.route))
 		{

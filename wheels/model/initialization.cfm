@@ -255,6 +255,7 @@
 		{
 			$updatePersistedProperties();
 		}
+		variables.wheels.instance.persistedOnInitialization = arguments.persisted;
 		loc.rv = this;
 	</cfscript>
 	<cfreturn loc.rv>

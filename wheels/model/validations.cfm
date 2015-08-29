@@ -281,15 +281,9 @@
 					loc.value = this.$label(loc.value);
 				}
 				loc.rv = Replace(loc.rv, "[[#loc.key#]]", "{{#Chr(7)#}}", "all");
-				loc.rv = Replace(loc.rv, "[#loc.key#]", LCase(loc.value), "all");
+				loc.rv = Replace(loc.rv, "[#loc.key#]", loc.value, "all");
 				loc.rv = Replace(loc.rv, "{{#Chr(7)#}}", "[#loc.key#]", "all");
 			}
-		}
-
-		// capitalize the first word in the property name if it comes first in the sentence
-		if (Left(arguments.message, 10) == "[property]")
-		{
-			loc.rv = capitalize(loc.rv);
 		}
 	</cfscript>
 	<cfreturn loc.rv>

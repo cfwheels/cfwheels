@@ -282,9 +282,9 @@
 		}
 		if (application.wheels.showErrorInformation)
 		{
-			if (arguments.onlyPath && (Len(arguments.host) || Len(arguments.protocol)))
+			if (arguments.onlyPath && (Len(arguments.host) || Len(arguments.protocol) || arguments.port))
 			{
-				$throw(type="Wheels.IncorrectArguments", message="Can't use the `host` or `protocol` arguments when `onlyPath` is `true`.", extendedInfo="Set `onlyPath` to `false` so that `linkTo` will create absolute URLs and thus allowing you to set the `host` and `protocol` on the link.");
+				$throw(type="Wheels.IncorrectArguments", message="Can't use the `host`, `protocol` and `port` arguments when `onlyPath` is `true`.", extendedInfo="Set `onlyPath` to `false` so that absolute URLs are created, thus allowing you to set `host`, `protocol` and `port`.");
 			}
 		}
 
@@ -432,39 +432,9 @@
 		{
 			loc.rv &= "##" & arguments.anchor;
 		}
-
 		if (!arguments.onlyPath)
 		{
-			if (arguments.port != 0)
-			{
-				// use the port that was passed in by the developer
-				loc.rv = ":" & arguments.port & loc.rv;
-			}
-			else if (request.cgi.server_port != 80 && request.cgi.server_port != 443)
-			{
-				// if the port currently in use is not 80 or 443 we set it explicitly in the URL
-				loc.rv = ":" & request.cgi.server_port & loc.rv;
-			}
-			if (Len(arguments.host))
-			{
-				loc.rv = arguments.host & loc.rv;
-			}
-			else
-			{
-				loc.rv = request.cgi.server_name & loc.rv;
-			}
-			if (Len(arguments.protocol))
-			{
-				loc.rv = arguments.protocol & "://" & loc.rv;
-			}
-			else if (request.cgi.server_port_secure)
-			{
-				loc.rv = "https://" & loc.rv;
-			}
-			else
-			{
-				loc.rv = "http://" & loc.rv;
-			}
+			loc.rv = $prependUrl(path=loc.rv, argumentCollection=arguments);
 		}
 	</cfscript>
 	<cfreturn loc.rv>
