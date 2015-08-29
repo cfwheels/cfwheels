@@ -16,7 +16,6 @@ View Enhancements
 Bug Fixes
 =========
 
-* Fixed so "defaultValue" gets set on non-persisted properties - #519 [Andy Bellenie]
 * Corrected output of property labels in error messages - #494 [Andy Bellenie]
 
 Miscellaneous
