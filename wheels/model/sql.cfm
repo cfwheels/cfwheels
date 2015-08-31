@@ -177,7 +177,7 @@
 		// if we want a distinct statement, we can do it grouping every field in the select
 		if (arguments.distinct)
 		{
-			loc.rv = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs, renameFields=false);
+			loc.rv = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
 		}
 		else if (Len(arguments.group))
 		{
