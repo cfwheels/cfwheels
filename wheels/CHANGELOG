@@ -20,6 +20,7 @@ Miscellaneous
 Bug Fixes
 =========
 
+* Fix for selecting distinct with calculated property - [Edward Chanter, Per Djurner]
 * Fixed so default values are applied to non persistent properties - #519 [Andy Bellenie]
 * Fixed missing var scope causing error on Lucee - [Russ Michaels, Tom King]
 * Don't show debug info on AJAX requests - #496 [Leroy Mah, Per Djurner]
