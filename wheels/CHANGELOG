@@ -34,6 +34,7 @@ Bug Fixes
 * Skip running callbacks when validating uniqueness and similar situations - #492 [Andy Bellenie, Per Djurner]
 * Avoid plugin directory exception during first application load - #541 [Adam Chapman, Per Djurner]
 * Fix for using cfscript operators in "condition" and "unless" argument on ACF 8 - #531 [Per Djurner]
+* afterSave and afterCreate callbacks are not firing on nested objects - #525 [Adam Chapman, Chris Peters, Per Djurner]
 * Fix for rolling back nested properties - #539 [James Gibson, Chris Peters, Per Djurner]
 * Ability to pass in list to "includeBlank" argument on dateSelect() and similar functions - #502 [Thorsten Eilers, Per Djurner]
 * Ability to set attributes on the input element created by buttonTo() - [Per Djurner]
