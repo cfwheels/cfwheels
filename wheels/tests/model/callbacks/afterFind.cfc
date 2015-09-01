@@ -3,7 +3,7 @@
 	<cffunction name="setup">
 		<cfset model("post").$registerCallback(type="afterFind", methods="afterFindCallback")>
 	</cffunction>
-	
+
 	<cffunction name="teardown">
 		<cfset model("post").$clearCallbacks(type="afterFind")>
 	</cffunction>
@@ -12,7 +12,7 @@
 		<cfset loc.results = model("collisionTest").findAll(returnAs="objects")>
 		<cfset assert("loc.results[1].method IS 'done'")>
 	</cffunction>
-	
+
 	<cffunction name="test_setting_one_query_record">
 		<cfset loc.posts = model("post").findAll(maxRows=1, order="id DESC")>
 		<cfset assert("loc.posts.views[1] IS 102 AND loc.posts['title'][1] IS 'setTitle'")>
@@ -59,5 +59,13 @@
 		<cfset loc.posts = model("post").findAll(returnAs="objects")>
 		<cfset assert("loc.posts[1].something eq 'hello world'")>
 	</cffunction>
+
+	<!--- issue 329
+	<cffunction name="test_creation_of_new_column_and_property_on_included_model">
+		<cfset loc.posts = model("author").findAll(include="posts")>
+		<cfset assert("loc.posts.something[1] eq 'hello world'")>
+		<cfset loc.posts = model("author").findAll(include="posts", returnAs="objects")>
+		<cfset assert("loc.posts[1].something eq 'hello world'")>
+	</cffunction> --->
 
 </cfcomponent>
