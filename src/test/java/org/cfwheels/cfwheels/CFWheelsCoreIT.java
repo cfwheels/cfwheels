@@ -120,8 +120,8 @@ public class CFWheelsCoreIT {
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.setProperty("testOracleEmulation", "true");
-		setUpServices();
+		testOracleEmulation=true;
+		recreateTestDatabase();
 	}
 
 	private static void recreateTestDatabase() throws Exception {

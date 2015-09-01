@@ -8,9 +8,9 @@
 		// if the controller file exists we instantiate it, otherwise we instantiate the parent controller
 		// this is done so that an action's view page can be rendered without having an actual controller file for it
 		loc.controllerName = $objectFileName(name=variables.$class.name, objectPath=variables.$class.path, type="controller");
-		loc.returnValue = $createObjectFromRoot(path=variables.$class.path, fileName=loc.controllerName, method="$initControllerObject", name=variables.$class.name, params=arguments.params);
+		loc.rv = $createObjectFromRoot(path=variables.$class.path, fileName=loc.controllerName, method="$initControllerObject", name=variables.$class.name, params=arguments.params);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$initControllerClass" returntype="any" access="public" output="false">
@@ -31,22 +31,22 @@
 		variables.$class.filters = [];
 		variables.$class.cachableActions = [];
 		variables.$class.layout = {};
-		
+
 		// default the controller to only respond to html
 		variables.$class.formats = {};
 		variables.$class.formats.default = "html";
 		variables.$class.formats.actions = {};
 		variables.$class.formats.existingTemplates = "";
 		variables.$class.formats.nonExistingTemplates = "";
-		
+
 		$setFlashStorage(get("flashStorage"));
 		if (StructKeyExists(variables, "init"))
 		{
 			init();
 		}
-		loc.returnValue = this;
+		loc.rv = this;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$setControllerClassData" returntype="void" access="public" output="false">
@@ -66,14 +66,15 @@
 		variables.$instance.contentFor = {};
 
 		// include controller specific helper files if they exist, cache the file check for performance reasons
+		loc.template = get("viewPath") & "/" & LCase(arguments.name) & "/helpers.cfm";
 		loc.helperFileExists = false;
 		if (!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.name))
 		{
-			if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(arguments.name)#/helpers.cfm")))
+			if (FileExists(ExpandPath(loc.template)))
 			{
 				loc.helperFileExists = true;
 			}
-			if (application.wheels.cacheFileChecking)
+			if (get("cacheFileChecking"))
 			{
 				if (loc.helperFileExists)
 				{
@@ -87,17 +88,23 @@
 		}
 		if (Len(arguments.name) && (ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) || loc.helperFileExists))
 		{
-			$include(template="#application.wheels.viewPath#/#arguments.name#/helpers.cfm");
+			$include(template=loc.template);
 		}
 
 		loc.executeArgs = {};
 		loc.executeArgs.name = arguments.name;
-		$simpleLock(name="controllerLock", type="readonly", execute="$setControllerClassData", executeArgs=loc.executeArgs);
+		loc.lockName = "controllerLock" & application.applicationName;
+		$simpleLock(name=loc.lockName, type="readonly", execute="$setControllerClassData", executeArgs=loc.executeArgs);
 		variables.params = arguments.params;
+		loc.rv = this;
 	</cfscript>
-	<cfreturn this>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$getControllerClassData" returntype="struct" access="public" output="false">
-	<cfreturn variables.$class>
+	<cfscript>
+		var loc = {};
+		loc.rv = variables.$class;
+	</cfscript>
+	<cfreturn loc.rv>
 </cffunction>

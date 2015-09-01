@@ -4,10 +4,12 @@
 <!--- ignore packages before the "tests directory" --->
 <cfif packages.recordCount>
 	<cfset allPackages = ListToArray(packages.package, ".")>
-	<cfset foundAt = ArrayFindNoCase(allPackages, "tests")>
 	<cfset preTest = "">
-	<cfloop from="1" to="#foundAt#" index="i">
+	<cfloop from="1" to="#ArrayLen(allPackages)#" index="i">
 		<cfset preTest = ListAppend(preTest, allPackages[i], ".")>
+		<cfif allPackages[i] IS "tests">
+			<cfbreak>
+		</cfif>
 	</cfloop>
 </cfif>
 <cfoutput>

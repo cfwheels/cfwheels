@@ -4,8 +4,8 @@
 	<cfscript>
 		var loc = {};
 
-		// In case the error was caused by a timeout we have to add extra time for error handling.
-		// We have to check if onErrorRequestTimeout exists since errors can be triggered before the application.wheels struct has been created.
+		// in case the error was caused by a timeout we have to add extra time for error handling.
+		// we have to check if onErrorRequestTimeout exists since errors can be triggered before the application.wheels struct has been created.
 		loc.requestTimeout = 70;
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "onErrorRequestTimeout"))
 		{
@@ -13,10 +13,11 @@
 		}
 		$setting(requestTimeout=loc.requestTimeout);
 
-		loc.returnValue = $simpleLock(execute="$runOnError", executeArgs=arguments, name="wheelsReloadLock", type="readOnly", timeout=180);
+		loc.lockName = "reloadLock" & application.applicationName;
+		loc.rv = $simpleLock(name=loc.lockName, execute="$runOnError", executeArgs=arguments, type="readOnly", timeout=180);
 	</cfscript>
 	<cfoutput>
-		#loc.returnValue#
+		#loc.rv#
 	</cfoutput>
 </cffunction>
 
@@ -54,15 +55,15 @@
 				{
 					loc.wheelsError = arguments.exception.rootCause;
 				}
-				else if (StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels") 
+				else if (StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels")
 				{
 					loc.wheelsError = arguments.exception.cause.rootCause;
 				}
 				if (StructKeyExists(loc, "wheelsError"))
 				{
-					loc.returnValue = $includeAndReturnOutput($template="wheels/styles/header.cfm");
-					loc.returnValue &= $includeAndReturnOutput($template="wheels/events/onerror/wheelserror.cfm", wheelsError=loc.wheelsError);
-					loc.returnValue &= $includeAndReturnOutput($template="wheels/styles/footer.cfm");
+					loc.rv = $includeAndReturnOutput($template="wheels/styles/header.cfm");
+					loc.rv &= $includeAndReturnOutput($template="wheels/events/onerror/wheelserror.cfm", wheelsError=loc.wheelsError);
+					loc.rv &= $includeAndReturnOutput($template="wheels/styles/footer.cfm");
 				}
 				else
 				{
@@ -72,7 +73,7 @@
 			else
 			{
 				$header(statusCode=500, statusText="Internal Server Error");
-				loc.returnValue = $includeAndReturnOutput($template="#application.wheels.eventPath#/onerror.cfm", exception=arguments.exception, eventName=arguments.eventName);
+				loc.rv = $includeAndReturnOutput($template="#application.wheels.eventPath#/onerror.cfm", exception=arguments.exception, eventName=arguments.eventName);
 			}
 		}
 		else
@@ -80,5 +81,5 @@
 			$throw(object=arguments.exception);
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.rv>
 </cffunction>

@@ -1,6 +1,13 @@
 <cfscript>
 	// we use $wheels here since these variables get placed in the variables scope of all objects and we need to make sure they don't clash with other wheels variables or any variables the developer may set
-	$wheels.appKey = IIf(StructKeyExists(application, "$wheels"), DE("$wheels"), DE("wheels"));
+	if (StructKeyExists(application, "$wheels"))
+	{
+		$wheels.appKey = "$wheels";
+	}
+	else
+	{
+		$wheels.appKey = "wheels";
+	}
 	if (!StructIsEmpty(application[$wheels.appKey].mixins))
 	{
 		$wheels.metaData = GetMetaData(this);
@@ -16,21 +23,13 @@
 		{
 			if (!StructKeyExists(variables, "core"))
 			{
-				if (application[$wheels.appKey].serverName == "Railo")
-				{
-					// this is to work around a railo bug (https://jira.jboss.org/browse/RAILO-936)
-					variables.core = Duplicate(variables);
-				}
-				else
-				{
-					variables.core = {};
-					StructAppend(variables.core, variables);
-					StructDelete(variables.core, "$wheels", false);
-				}
+				variables.core = {};
+				StructAppend(variables.core, variables);
+				StructDelete(variables.core, "$wheels");
 			}
 			StructAppend(variables, application[$wheels.appKey].mixins[$wheels.className], true);
 		}
 		// get rid of any extra data created in the variables scope
-		StructDelete(variables, "$wheels", false);
+		StructDelete(variables, "$wheels");
 	}
 </cfscript>

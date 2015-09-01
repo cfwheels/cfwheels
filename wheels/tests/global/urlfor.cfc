@@ -9,6 +9,19 @@
 		<cfset application = loc.orgEnv>
 	</cffunction>
 
+	<!--- <cffunction name="test_issue_455">
+		<cfset addRoute(name="user_2", pattern="user/[user_id]/[controller]/[action]")>
+		<cfset $setNamedRoutePositions()>
+		<cfset oldUrlRewriting = application.wheels.URLRewriting>
+		<cfset oldObfuscateUrls = application.wheels.obfuscateUrls>
+		<cfset application.wheels.URLRewriting = "Off">
+		<cfset application.wheels.obfuscateUrls = true>
+		<cfset loc.r = urlFor(route="user_2", user_id="5559", controller="SurveyTemplates", action="index")>
+		<cfset assert('loc.r contains "b24dae"')>
+		<cfset application.wheels.URLRewriting = oldUrlRewriting>
+		<cfset application.wheels.obfuscateUrls = oldObfuscateUrls>
+	</cffunction> --->
+
 	<cffunction name="test_links_are_properly_hyphenated">
 		<cfset addRoute(name="user_2", pattern="user/[user_id]/[controller]/[action]")>
 		<cfset $setNamedRoutePositions()>

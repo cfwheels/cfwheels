@@ -10,7 +10,7 @@
 		<cfset loc.hasAuthor = loc.profile.hasAuthor() />
 		<cfset assert('loc.hasAuthor eq true')>
 	</cffunction>
- 
+
  	<cffunction name="test_hasObject_valid_with_combi_key">
 		<cfset loc.combikey = loc.combiKeyModel.findByKey(key="1,1")>
 		<cfset loc.hasUser = loc.combikey.hasUser() />

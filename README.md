@@ -19,15 +19,15 @@ about how to proceed. Join us!
 
 ## Running Tests
 
-**Before running tests, make sure that all debugging is turned OFF**. This could add a consideral amount
+**Before running tests, make sure that all debugging is turned OFF**. This could add a considerable amount
 of time for the tests to complete and may cause your engine to become unresponsive.
 
- 1. Create a database on a supported database server name `wheelstestdb`. At this time the supported
-    database servers are H2, Microsoft SQL Server, Oracle, PostgreSQL, MySQL.
+ 1. Create a database on a supported database server named `wheelstestdb`. At this time the supported
+    database servers are H2, Microsoft SQL Server, Oracle, PostgreSQL and MySQL.
  2. Create a datasource in your CFML engine's administrator named `wheelstestdb` pointing to the
     `wheelstestdb` database and make sure to give it CLOB and BLOB support.
  3. Open your browser to the CFWheels Welcome Page.
- 4. In the grey debug area at the bottom of the page, click the `Run Tests` link next the version number
+ 4. In the gray debug area at the bottom of the page, click the `Run Tests` link next to the version number
     on the `Framework` line.
 
 Please report any errors that you may encounter on our [issue tracker][4]. Please be sure to report the
@@ -43,6 +43,6 @@ version).
 [CFWheels][1] is released under the Apache License Version 2.0.
  
 [1]: http://cfwheels.org/
-[2]: http://cfwheels.org/docs/chapter/beginner-tutorial-hello-world
-[3]: http://cfwheels.org/docs/chapter/coding-guidelines
+[2]: http://docs.cfwheels.org/docs/beginner-tutorial-hello-world
+[3]: http://docs.cfwheels.org/docs/contributing-to-cfwheels
 [4]: https://github.com/cfwheels/cfwheels/issues

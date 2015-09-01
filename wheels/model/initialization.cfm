@@ -1,3 +1,5 @@
+<!--- PRIVATE METHODS --->
+
 <cffunction name="$initModelClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="path" type="string" required="true">
@@ -18,8 +20,8 @@
 		}
 
 		variables.wheels.class.RESQLAs = "[[:space:]]AS[[:space:]][A-Za-z1-9]+";
-		variables.wheels.class.RESQLOperators = "((?: (?:NOT )?LIKE)|(?: (?:NOT )?IN)|(?: IS(?: NOT)?)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
-		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators# ?)(\('.+?'\)|\((-?[0-9\.],?)+\)|'.+?'()|''|(-?[0-9\.]+)()|NULL)(($|\)| (AND|OR)))";
+		variables.wheels.class.RESQLOperators = "((?:\s+(?:NOT\s+)?LIKE)|(?:\s+(?:NOT\s+)?IN)|(?:\s+IS(?:\s+NOT)?)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
+		variables.wheels.class.RESQLWhere = "\s*(#variables.wheels.class.RESQLOperators#)\s*(\('.+?'\)|\(((?:\+|-)?[0-9\.],?)+\)|'.+?'()|''|((?:\+|-)?[0-9\.]+)()|NULL)((\s*$|\)|\s+(AND|OR)))";
 		variables.wheels.class.mapping = {};
 		variables.wheels.class.properties = {};
 		variables.wheels.class.accessibleProperties = {};
@@ -55,7 +57,7 @@
 		}
 		else if (get("modelRequireInit"))
 		{
-			$throw(type="Wheels.ModelInitMissing", message="An init function is required for Model: #variables.wheels.class.modelName#", extendedInfo="Create an init function in /models/#variables.wheels.class.modelName#");	
+			$throw(type="Wheels.ModelInitMissing", message="An init function is required for Model: #variables.wheels.class.modelName#", extendedInfo="Create an init function in /models/#variables.wheels.class.modelName#");
 		}
 
 		// make sure that the tablename has the respected prefix
@@ -76,10 +78,11 @@
 				// set up properties and column mapping
 				if (!ListFind(loc.processedColumns, loc.columns["column_name"][loc.i]))
 				{
-					loc.property = loc.columns["column_name"][loc.i]; // default the column to map to a property with the same name
+					// default the column to map to a property with the same name
+					loc.property = loc.columns["column_name"][loc.i];
 					for (loc.key in variables.wheels.class.mapping)
 					{
-						if (StructKeyExists(variables.wheels.class.mapping[loc.key], "type") and variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property)
+						if (StructKeyExists(variables.wheels.class.mapping[loc.key], "type") && variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property)
 						{
 							// developer has chosen to map this column to a property with a different name so set that here
 							loc.property = loc.key;
@@ -120,7 +123,7 @@
 					if (loc.columns["is_primarykey"][loc.i])
 					{
 						setPrimaryKey(loc.property);
-					}				
+					}
 					if (variables.wheels.class.automaticValidations && !ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", loc.property))
 					{
 						loc.defaultValidationsAllowBlank = variables.wheels.class.properties[loc.property].nullable;
@@ -134,7 +137,7 @@
 						{
 							validatesPresenceOf(properties=loc.property);
 						}
-						
+
 						// always allowblank if a database default or validatesPresenceOf() has been set
 						if (Len(loc.columns["column_default_value"][loc.i]) || $validationExists(property=loc.property, validation="validatesPresenceOf"))
 						{
@@ -179,6 +182,8 @@
 				variables.wheels.class.calculatedPropertyList = ListAppend(variables.wheels.class.calculatedPropertyList, loc.key);
 				variables.wheels.class.calculatedProperties[loc.key] = {};
 				variables.wheels.class.calculatedProperties[loc.key][variables.wheels.class.mapping[loc.key].type] = variables.wheels.class.mapping[loc.key].value;
+				variables.wheels.class.calculatedProperties[loc.key].select = variables.wheels.class.mapping[loc.key].select;
+				variables.wheels.class.calculatedProperties[loc.key].dataType = variables.wheels.class.mapping[loc.key].dataType;
 			}
 		}
 
@@ -226,7 +231,7 @@
 		variables.wheels = {};
 		variables.wheels.instance = {};
 		variables.wheels.errors = [];
-		
+
 		// assign an object id for the instance (only use the last 12 digits to avoid creating an exponent)
 		request.wheels.tickCountId = Right(request.wheels.tickCountId, 12) + 1;
 		variables.wheels.tickCountId = request.wheels.tickCountId;
@@ -234,7 +239,8 @@
 		// copy class variables from the object in the application scope
 		if (!StructKeyExists(variables.wheels, "class"))
 		{
-			variables.wheels.class = $simpleLock(name="classLock", type="readOnly", object=application.wheels.models[arguments.name], execute="$classData");
+			loc.lockName = "classLock" & application.applicationName;
+			variables.wheels.class = $simpleLock(name=loc.lockName, type="readOnly", object=application.wheels.models[arguments.name], execute="$classData");
 		}
 
 		// setup object properties in the this scope
@@ -251,8 +257,10 @@
 		{
 			$updatePersistedProperties();
 		}
+		variables.wheels.instance.persistedOnInitialization = arguments.persisted;
+		loc.rv = this;
 	</cfscript>
-	<cfreturn this>
+	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$classData" returntype="struct" access="public" output="false">

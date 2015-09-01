@@ -20,9 +20,18 @@
 	<cffunction name="test_average_with_integer_with_ifNull">
 		<cfset loc.result = model("post").average(property="views", where="id=0", ifNull=0)>
 		<cfset assert("loc.result IS 0")>
-	</cffunction>	
+	</cffunction>
 
 	<!--- floats --->
+
+	<cffunction name="test_average_with_group">
+		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
+			<cfset loc.result = model("post").average(property="averageRating", group="authorId")>
+			<cfset assert("DecimalFormat(loc.result['averageRatingAverage'][1]) IS DecimalFormat(3.40)")>
+		<cfelse>
+			<cfset assert(true)>
+		</cfif>
+	</cffunction>
 
 	<cffunction name="test_average_with_float">
 		<cfset loc.result = model("post").average(property="averageRating")>
@@ -43,9 +52,9 @@
 		<cfset loc.result = model("post").average(property="averageRating", where="id=0", ifNull=0)>
 		<cfset assert("loc.result IS 0")>
 	</cffunction>
-	
+
 	<!--- include deleted records --->
-	
+
 	<cffunction name="test_average_with_include_soft_deletes">
 		<cftransaction action="begin">
 			<cfset loc.post = model("Post").findOne(where="views=0")>

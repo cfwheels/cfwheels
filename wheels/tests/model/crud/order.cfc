@@ -1,5 +1,10 @@
 <cfcomponent extends="wheelsMapping.Test">
 
+	<cffunction name="test_order_with_maxrows_and_calculated_property">
+		<cfset loc.result = model("photo").findOne(order="DESCRIPTION1 DESC", maxRows=1)>
+		<cfset assert("loc.result.filename IS 'Gallery 9 Photo Test 9'")>
+	</cffunction>
+
 	<cffunction name="test_order_clause_no_sort">
 		<cfset loc.result = model("author").findOne(order="lastName")>
 		<cfset assert("loc.result.lastName IS 'Amiri'")>
@@ -33,11 +38,6 @@
 	<cffunction name="test_order_clause_with_paginated_include_and_identical_columns_desc_sort_with_specified_table_names">
 		<cfset loc.result = model("post").findAll(page=1, perPage=3, include="comments", order="posts.createdAt DESC,posts.id DESC,comments.createdAt")>
 		<cfset assert("loc.result['title'][1] IS 'Title for fifth test post'")>
-	</cffunction>
-
-	<cffunction name="test_order_clause_with_pagination_and_primary_key_alias">
-		<cfset loc.r = model("post").findAll(select="id, authorid, title", order="primary_key_id", page=1, perPage=2)>
-		<cfset assert('loc.r.recordcount eq 2')>
 	</cffunction>
 
 </cfcomponent>
