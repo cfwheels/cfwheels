@@ -205,9 +205,19 @@
 		<cfset assert('loc.obj.firstName eq loc.obj.authors[1].firstName')>
 	</cffunction>
 
-	<cffunction name="test_distinct_with_calculated_property">
+	<cffunction name="test_calculated_property_with_distinct">
 		<cfset loc.authors = model("author").findAll(select="id, firstName, lastName, numberofitems", distinct=true)>
 		<cfset assert('loc.authors.recordCount IS 7')>
+	</cffunction>
+
+	<cffunction name="test_calculated_property_without_distinct">
+		<cfset loc.authors = model("author").findAll(select="id, firstName, lastName, numberofitems")>
+		<cfset assert('loc.authors.recordCount IS 7')>
+	</cffunction>
+
+	<cffunction name="test_calculated_properties_with_included_model_with_distinct">
+		<cfset loc.authors = model("author").findAll(select="id, firstName, lastName, numberofitems, titlealias", include="posts", distinct=true)>
+		<cfset assert('loc.authors.recordCount IS 10')>
 	</cffunction>
 
 </cfcomponent>
