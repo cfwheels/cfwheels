@@ -5,7 +5,7 @@
 		<cfset hasMany("comments")>
 		<cfset hasMany("classifications")>
 		<cfset validatesUniquenessOf("title")>
-		<cfset property(name="titleAlias", sql="title")>
+		<cfset property(name="titleAlias", sql="title", select=false)>
 	</cffunction>
 
 	<cffunction name="afterFindCallback">

@@ -215,9 +215,11 @@
 		<cfset assert('loc.authors.recordCount IS 7')>
 	</cffunction>
 
+	<!---
+	issue 554
 	<cffunction name="test_calculated_properties_with_included_model_with_distinct">
 		<cfset loc.authors = model("author").findAll(select="id, firstName, lastName, numberofitems, titlealias", include="posts", distinct=true)>
 		<cfset assert('loc.authors.recordCount IS 10')>
-	</cffunction>
+	</cffunction> --->
 
 </cfcomponent>
