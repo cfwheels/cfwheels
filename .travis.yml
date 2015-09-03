@@ -21,7 +21,7 @@ before_script: #prepare MySQL and PostgresSQL databases
 script: "
  if [ $TRAVIS_SECURE_ENV_VARS == 'true' ] || [ $PARAM != 'onlysecure' ]; 
  then
-  mvn verify -P$PROFILE -D$PARAM;
+  mvn clean verify -P$PROFILE -D$PARAM;
  else
   mvn clean;
  fi" #only run ACF/MSSQL/Oracle test on when secure enviroment parameter exists (e.g.: only in cfwheels/cfwheels commits)
