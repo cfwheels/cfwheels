@@ -210,13 +210,15 @@
 		<cfset assert('loc.authors.recordCount IS 7')>
 	</cffunction>
 
-	<cffunction name="test_aggregate_calculated_property_with_distinct">
+	<cffunction name="test_select_aggregate_calculated_property_with_distinct">
 		<cfset loc.authors = model("author").findAll(select="id, firstName, lastName, numberofitems", distinct=true)>
 		<cfset assert('loc.authors.recordCount IS 7')>
 	</cffunction>
 
-	<!---
-	issue 554
+	<cffunction name="test_aggregate_calculated_property_with_distinct">
+		<cfset loc.posts = model("post").findAll(select="id, authorId, firstId", distinct=true)>
+		<cfset assert('loc.posts.recordCount IS 5')>
+	</cffunction>
 
 	<cffunction name="test_non_aggregate_calculated_property_with_distinct">
 		<cfset loc.posts = model("post").findAll(select="id, authorId, titleAlias", distinct=true)>
@@ -227,6 +229,5 @@
 		<cfset loc.authors = model("author").findAll(select="id, firstName, lastName, numberofitems, titlealias", include="posts", distinct=true)>
 		<cfset assert('loc.authors.recordCount IS 10')>
 	</cffunction>
-	--->
 
 </cfcomponent>

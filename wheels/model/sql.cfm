@@ -177,7 +177,7 @@
 		// if we want a distinct statement, we can do it grouping every field in the select
 		if (arguments.distinct)
 		{
-			loc.rv = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
+			loc.rv = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs, renameFields=false);
 		}
 		else if (Len(arguments.group))
 		{
@@ -210,7 +210,6 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfargument name="returnAs" type="string" required="true">
 	<cfargument name="renameFields" type="boolean" required="false" default="true">
-	<cfargument name="addCalculatedProperties" type="boolean" required="false" default="true">
 	<cfargument name="useExpandedColumnAliases" type="boolean" required="false" default="#application.wheels.useExpandedColumnAliases#">
 	<cfscript>
 		var loc = {};
@@ -324,12 +323,16 @@
 								}
 							}
 						}
-						else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem) && arguments.addCalculatedProperties)
+						else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem))
 						{
-							loc.toAppend &= "(" & Replace(loc.classData.calculatedProperties[loc.iItem].sql, ",", "[[comma]]", "all") & ")";
-							if (arguments.renameFields)
+							loc.sql = Replace(loc.classData.calculatedProperties[loc.iItem].sql, ",", "[[comma]]", "all");
+							if (!REFind("^(SELECT )?(AVG|COUNT|MAX|MIN|SUM)\(.*\)", loc.sql))
 							{
-								loc.toAppend &= " AS " & loc.iItem;
+								loc.toAppend &= "(" & loc.sql & ")";
+								if (arguments.renameFields)
+								{
+									loc.toAppend &= " AS " & loc.iItem;
+								}
 							}
 						}
 						loc.addedPropertiesByModel[loc.classData.modelName] = ListAppend(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem);
@@ -339,10 +342,6 @@
 				if (Len(loc.toAppend))
 				{
 					loc.rv = ListAppend(loc.rv, loc.toAppend);
-				}
-				else if (application.wheels.showErrorInformation && (!arguments.addCalculatedProperties && !ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)))
-				{
-					$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.iItem#` property but couldn't find it in the database table.", extendedInfo="Verify the `select` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 				}
 			}
 
