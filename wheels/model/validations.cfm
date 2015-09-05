@@ -364,7 +364,7 @@
 				}
 				catch (any e)
 				{
-					arguments[loc.item] = ReplaceList(arguments[loc.item], "==,!=,<,<=,>,>=", "eq,neq,lt,lte,gt,gte");
+					arguments[loc.item] = Replace(ReplaceList(arguments[loc.item], "==,!=,<,<=,>,>=", " eq , neq , lt , lte , gt , gte "), "  ", " ", "all");
 					loc[loc.key] = Evaluate(arguments[loc.item]);
 				}
 			}
