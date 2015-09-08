@@ -6,7 +6,7 @@
 		<cfargument name="username" type="string" required="true">
 		<cfargument name="password" type="string" required="true">
 		<cfscript>
-			variables.instance.connection = arguments;
+			variables.connection = arguments;
 		</cfscript>
 		<cfreturn this>
 	</cffunction>
@@ -156,7 +156,7 @@
 		<cfargument name="tableName" type="string" required="true" hint="the table to retrieve column information for">
 		<cfscript>
 			var loc = {};
-			loc.args = Duplicate(variables.instance.connection);
+			loc.args = StructCopy(variables.connection);
 			loc.args.table = arguments.tableName;
 			if (application.wheels.showErrorInformation)
 			{
@@ -259,13 +259,12 @@
 		<cfargument name="parameterize" type="boolean" required="true">
 		<cfargument name="limit" type="numeric" required="false" default="0">
 		<cfargument name="offset" type="numeric" required="false" default="0">
-		<cfargument name="connection" type="struct" required="false" default="#variables.instance.connection#">
 		<cfargument name="$primaryKey" type="string" required="false" default="">
 		<cfscript>
 			var loc = {};
 			var query = {};
 			loc.rv = {};
-			loc.args = Duplicate(arguments.connection);
+			loc.args = StructCopy(variables.connection);
 			loc.args.result = "loc.result";
 			loc.args.name = "query.name";
 			if (StructKeyExists(loc.args, "username") && !Len(loc.args.username))

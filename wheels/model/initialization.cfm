@@ -66,7 +66,7 @@
 		if (!IsBoolean(variables.wheels.class.tableName) || variables.wheels.class.tableName)
 		{
 			// load the database adapter
-			variables.wheels.class.adapter = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#variables.wheels.class.connection.datasource#", username="#variables.wheels.class.connection.username#", password="#variables.wheels.class.connection.password#");
+			variables.wheels.class.adapter = $assignAdapter();
 
 			// get columns for the table
 			loc.columns = variables.wheels.class.adapter.$getColumns(tableName());
@@ -218,6 +218,55 @@
 	</cfscript>
 	<cfreturn this>
 </cffunction>
+
+<cffunction name="$assignAdapter" returntype="any" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		if (application.wheels.showErrorInformation)
+		{
+			try
+			{
+				loc.info = $dbinfo(argumentCollection=variables.wheels.class.connection, type="version");
+			}
+			catch (any e)
+			{
+				$throw(type="Wheels.DataSourceNotFound", message="The data source could not be reached.", extendedInfo="Make sure your database is reachable and that your data source settings are correct. You either need to setup a data source with the name `#variables.wheels.class.connection.dataSource#` in the Administrator or tell CFWheels to use a different data source in `config/settings.cfm`.");
+			}
+		}
+		else
+		{
+			loc.info = $dbinfo(argumentCollection=variables.wheels.class.connection, type="version");
+		}
+		if (FindNoCase("SQLServer", loc.info.driver_name) || FindNoCase("SQL Server", loc.info.driver_name))
+		{
+			loc.adapterName = "SQLServer";
+		}
+		else if (FindNoCase("MySQL", loc.info.driver_name))
+		{
+			loc.adapterName = "MySQL";
+		}
+		else if (FindNoCase("Oracle", loc.info.driver_name))
+		{
+			loc.adapterName = "Oracle";
+		}
+		else if (FindNoCase("PostgreSQL", loc.info.driver_name))
+		{
+			loc.adapterName = "PostgreSQL";
+		}
+		else if (FindNoCase("H2", loc.info.driver_name))
+		{
+			loc.adapterName = "H2";
+		}
+		else
+		{
+			$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by CFWheels.", extendedInfo="Use SQL Server, MySQL, Oracle, PostgreSQL or H2.");
+		}
+		loc.rv = CreateObject("component", "adapters.#loc.adapterName#").init(argumentCollection=variables.wheels.class.connection);
+		application.wheels.adapterName = loc.adapterName;
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
 
 <cffunction name="$initModelObject" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
