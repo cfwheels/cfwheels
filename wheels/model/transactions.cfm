@@ -70,5 +70,5 @@
 <!--- PRIVATE METHODS --->
 
 <cffunction name="$hashedConnectionArgs" returntype="string" access="public" output="false">
-	<cfreturn Hash(variables.wheels.class.connection.datasource & variables.wheels.class.connection.username & variables.wheels.class.connection.password)>
+	<cfreturn Hash(variables.wheels.class.dataSource & variables.wheels.class.username & variables.wheels.class.password)>
 </cffunction>

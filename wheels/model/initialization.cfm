@@ -29,7 +29,9 @@
 		variables.wheels.class.associations = {};
 		variables.wheels.class.callbacks = {};
 		variables.wheels.class.keys = "";
-		variables.wheels.class.connection = {datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword};
+		variables.wheels.class.dataSource = application.wheels.dataSourceName;
+		variables.wheels.class.username = application.wheels.dataSourceUserName;
+		variables.wheels.class.password = application.wheels.dataSourcePassword;
 		variables.wheels.class.automaticValidations = application.wheels.automaticValidations;
 		setTableNamePrefix(get("tableNamePrefix"));
 		table(LCase(pluralize(variables.wheels.class.modelName)));
@@ -226,16 +228,16 @@
 		{
 			try
 			{
-				loc.info = $dbinfo(argumentCollection=variables.wheels.class.connection, type="version");
+				loc.info = $dbinfo(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password, type="version");
 			}
 			catch (any e)
 			{
-				$throw(type="Wheels.DataSourceNotFound", message="The data source could not be reached.", extendedInfo="Make sure your database is reachable and that your data source settings are correct. You either need to setup a data source with the name `#variables.wheels.class.connection.dataSource#` in the Administrator or tell CFWheels to use a different data source in `config/settings.cfm`.");
+				$throw(type="Wheels.DataSourceNotFound", message="The data source could not be reached.", extendedInfo="Make sure your database is reachable and that your data source settings are correct. You either need to setup a data source with the name `#variables.wheels.class.dataSource#` in the Administrator or tell CFWheels to use a different data source in `config/settings.cfm`.");
 			}
 		}
 		else
 		{
-			loc.info = $dbinfo(argumentCollection=variables.wheels.class.connection, type="version");
+			loc.info = $dbinfo(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password, type="version");
 		}
 		if (FindNoCase("SQLServer", loc.info.driver_name) || FindNoCase("SQL Server", loc.info.driver_name))
 		{
@@ -261,7 +263,7 @@
 		{
 			$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by CFWheels.", extendedInfo="Use SQL Server, MySQL, Oracle, PostgreSQL or H2.");
 		}
-		loc.rv = CreateObject("component", "adapters.#loc.adapterName#").init(argumentCollection=variables.wheels.class.connection);
+		loc.rv = CreateObject("component", "adapters.#loc.adapterName#").init(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password);
 		application.wheels.adapterName = loc.adapterName;
 	</cfscript>
 	<cfreturn loc.rv>

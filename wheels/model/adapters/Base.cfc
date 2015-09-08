@@ -2,11 +2,13 @@
 	<cfinclude template="../../global/cfml.cfm">
 
 	<cffunction name="init" access="public" returntype="any" output="false">
-		<cfargument name="datasource" type="string" required="true">
+		<cfargument name="dataSource" type="string" required="true">
 		<cfargument name="username" type="string" required="true">
 		<cfargument name="password" type="string" required="true">
 		<cfscript>
-			variables.connection = arguments;
+			variables.dataSource = arguments.dataSource;
+			variables.username = arguments.username;
+			variables.password = arguments.password;
 		</cfscript>
 		<cfreturn this>
 	</cffunction>
@@ -156,7 +158,10 @@
 		<cfargument name="tableName" type="string" required="true" hint="the table to retrieve column information for">
 		<cfscript>
 			var loc = {};
-			loc.args = StructCopy(variables.connection);
+			loc.args = {};
+			loc.args.dataSource = variables.dataSource;
+			loc.args.username = variables.username;
+			loc.args.password = variables.password;
 			loc.args.table = arguments.tableName;
 			if (application.wheels.showErrorInformation)
 			{
@@ -264,7 +269,10 @@
 			var loc = {};
 			var query = {};
 			loc.rv = {};
-			loc.args = StructCopy(variables.connection);
+			loc.args = {};
+			loc.args.dataSource = variables.dataSource;
+			loc.args.username = variables.username;
+			loc.args.password = variables.password;
 			loc.args.result = "loc.result";
 			loc.args.name = "query.name";
 			if (StructKeyExists(loc.args, "username") && !Len(loc.args.username))
