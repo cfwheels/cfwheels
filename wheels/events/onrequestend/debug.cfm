@@ -1,20 +1,26 @@
 <cfset loc.baseReloadURL = cgi.script_name>
-<cfif cgi.path_info IS NOT cgi.script_name>
-	<cfset loc.baseReloadURL = loc.baseReloadURL & cgi.path_info>
+<cfif IsDefined("request.cgi.path_info")>
+	<cfif request.cgi.path_info IS NOT cgi.script_name>
+		<cfset loc.baseReloadURL &= request.cgi.path_info>
+	</cfif>
+<cfelse>
+	<cfif cgi.path_info IS NOT cgi.script_name>
+		<cfset loc.baseReloadURL &= cgi.path_info>
+	</cfif>
 </cfif>
 <cfif Len(cgi.query_string)>
-	<cfset loc.baseReloadURL = loc.baseReloadURL & "?" & cgi.query_string>
+	<cfset loc.baseReloadURL &= "?" & cgi.query_string>
 </cfif>
 <cfset loc.baseReloadURL = ReplaceNoCase(loc.baseReloadURL, "/" & application.wheels.rewriteFile, "")>
 <cfloop list="design,development,testing,maintenance,production,true" index="loc.i">
 	<cfset loc.baseReloadURL = ReplaceNoCase(ReplaceNoCase(loc.baseReloadURL, "?reload=" & loc.i, ""), "&reload=" & loc.i, "")>
 </cfloop>
 <cfif loc.baseReloadURL Contains "?">
-	<cfset loc.baseReloadURL = loc.baseReloadURL & "&">
+	<cfset loc.baseReloadURL &= "&">
 <cfelse>
-	<cfset loc.baseReloadURL = loc.baseReloadURL & "?">
+	<cfset loc.baseReloadURL &= "?">
 </cfif>
-<cfset loc.baseReloadURL = loc.baseReloadURL & "reload=">
+<cfset loc.baseReloadURL &= "reload=">
 <cfset loc.hasFrameworkTests = StructKeyExists(this, "mappings") && StructKeyExists(this.mappings, "/wheelsMapping") && DirectoryExists(this.mappings["/wheelsMapping"])>
 <cfset loc.appTestDir = GetDirectoryFromPath(GetBaseTemplatePath()) & "tests">
 <cfset loc.hasAppTests = DirectoryExists(loc.appTestDir)>
