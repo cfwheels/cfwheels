@@ -47,7 +47,11 @@
 
 		// set up containers for routes, caches, settings etc
 		application.$wheels.version = "1.4.3";
-		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
+		try
+		{
+			application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
+		}
+		catch (any e) {}
 		application.$wheels.controllers = {};
 		application.$wheels.models = {};
 		application.$wheels.existingHelperFiles = "";

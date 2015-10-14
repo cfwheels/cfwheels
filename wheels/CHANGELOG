@@ -4,6 +4,7 @@ Bug Fixes
 =========
 
 * Fix for using cfscript operators in condition and unless arguments - [Per Djurner]
+* Added try / catch on getting host name since CreateObject("java") can be unavailable for security reasons - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
