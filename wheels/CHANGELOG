@@ -9,6 +9,7 @@ Bug Fixes
 * Remove white space character in output - [Bill Tindal, Per Djurner]
 * Use correct path info in error email and debug area - [Per Djurner]
 * Fixed plugin injection issue on start-up - #556 [Adam Chapman, Per Djurner]
+* Skip calculated properties that are aggregate SQL functions in the GROUP BY clause - #554 [Adam Chapman, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
