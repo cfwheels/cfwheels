@@ -146,7 +146,7 @@
 				loc.rv = SerializeJSON(loc.values);
 
 				// remove the characters that indicate array or struct so that we can sort it as a list below
-				loc.rv = ReplaceList(loc.rv, "{,},[,]", ",,,");
+				loc.rv = ReplaceList(loc.rv, "{,},[,],/", ",,,,");
 				loc.rv = ListSort(loc.rv, "text");
 			}
 			catch (any e)
