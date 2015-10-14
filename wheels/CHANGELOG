@@ -7,6 +7,7 @@ Bug Fixes
 * Added try / catch on getting host name since CreateObject("java") can be unavailable for security reasons - [Per Djurner]
 * Fixed bug with cache keys always changing even though the input was the same - [Per Djurner]
 * Remove white space character in output - [Bill Tindal, Per Djurner]
+* Use correct path info in error email and debug area - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

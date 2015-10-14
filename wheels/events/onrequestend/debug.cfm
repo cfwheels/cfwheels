@@ -1,6 +1,12 @@
 <cfset loc.baseReloadURL = cgi.script_name>
-<cfif cgi.path_info IS NOT cgi.script_name>
-	<cfset loc.baseReloadURL = loc.baseReloadURL & cgi.path_info>
+<cfif IsDefined("request.cgi.path_info")>
+	<cfif request.cgi.path_info IS NOT cgi.script_name>
+		<cfset loc.baseReloadURL = loc.baseReloadURL & request.cgi.path_info>
+	</cfif>
+<cfelse>
+	<cfif cgi.path_info IS NOT cgi.script_name>
+		<cfset loc.baseReloadURL = loc.baseReloadURL & cgi.path_info>
+	</cfif>
 </cfif>
 <cfif Len(cgi.query_string)>
 	<cfset loc.baseReloadURL = loc.baseReloadURL & "?" & cgi.query_string>
