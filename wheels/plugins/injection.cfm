@@ -29,7 +29,10 @@
 			}
 			StructAppend(variables, application[$wheels.appKey].mixins[$wheels.className], true);
 		}
-		// get rid of any extra data created in the variables scope
-		StructDelete(variables, "$wheels");
+		if (StructKeyExists(variables, "$wheels"))
+		{
+			// get rid of any extra data created in the variables scope
+			StructDelete(variables, "$wheels");
+		}
 	}
 </cfscript>
