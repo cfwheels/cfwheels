@@ -1,4 +1,4 @@
-1.4.3 (10/14/2015)
+1.4.3 (10/16/2015)
 
 Bug Fixes
 =========
@@ -10,6 +10,7 @@ Bug Fixes
 * Use correct path info in error email and debug area - [Per Djurner]
 * Fixed plugin injection issue on start-up - #556 [Adam Chapman, Per Djurner]
 * Skip calculated properties that are aggregate SQL functions in the GROUP BY clause - #554 [Adam Chapman, Per Djurner]
+* Fixed error when trying to validate uniqueness on blank numeric properties - #558 [Chris Peters, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
