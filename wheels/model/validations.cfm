@@ -481,7 +481,13 @@
 			// create the WHERE clause to be used in the query that checks if an identical value already exists
 			// wrap value in single quotes unless it's numeric
 			// example: "userName='Joe'"
-			ArrayAppend(loc.where, "#arguments.property#=#variables.wheels.class.adapter.$quoteValue(str=this[arguments.property], type=validationTypeForProperty(arguments.property))#");
+			loc.part = arguments.property & "=" & variables.wheels.class.adapter.$quoteValue(str=this[arguments.property], type=validationTypeForProperty(arguments.property));
+			if (Right(loc.part, 3) == "=''" && ListFindNoCase("integer,float,boolean", validationTypeForProperty(arguments.property)))
+			{
+				// when numeric property but blank we need to translate to IS NULL
+				loc.part = SpanExcluding(loc.part, "=") & " IS NULL";
+			}
+			ArrayAppend(loc.where, loc.part);
 
 			// add scopes to the WHERE clause if passed in, this means that checks for other properties are done in the WHERE clause as well
 			// example: "userName='Joe'" becomes "userName='Joe' AND account=1" if scope is "account" for example
@@ -490,7 +496,13 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.item = ListGetAt(arguments.scope, loc.i);
-				ArrayAppend(loc.where, "#loc.item#=#variables.wheels.class.adapter.$quoteValue(str=this[loc.item], type=validationTypeForProperty(loc.item))#");
+				loc.part = loc.item & "=" & variables.wheels.class.adapter.$quoteValue(str=this[loc.item], type=validationTypeForProperty(loc.item));
+				if (Right(loc.part, 3) == "=''" && ListFindNoCase("integer,float,boolean", validationTypeForProperty(loc.item)))
+				{
+					// when numeric property but blank we need to translate to IS NULL
+					loc.part = SpanExcluding(loc.part, "=") & " IS NULL";
+				}
+				ArrayAppend(loc.where, loc.part);
 			}
 
 			// try to fetch existing object from the database
