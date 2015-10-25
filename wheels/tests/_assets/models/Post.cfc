@@ -5,6 +5,8 @@
 		<cfset hasMany("comments")>
 		<cfset hasMany("classifications")>
 		<cfset validatesUniquenessOf("title")>
+		<cfset property(name="titleAlias", sql="title", select=false)>
+		<cfset property(name="firstId", sql="MAX(posts.id)", select=false)>
 	</cffunction>
 
 	<cffunction name="afterFindCallback">

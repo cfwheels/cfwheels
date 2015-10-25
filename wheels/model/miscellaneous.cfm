@@ -5,7 +5,9 @@
 	<cfargument name="username" type="string" required="false" default="">
 	<cfargument name="password" type="string" required="false" default="">
 	<cfscript>
-		StructAppend(variables.wheels.class.connection, arguments);
+		variables.wheels.class.datasource = arguments.datasource;
+		variables.wheels.class.username = arguments.username;
+		variables.wheels.class.password = arguments.password;
 	</cfscript>
 </cffunction>
 

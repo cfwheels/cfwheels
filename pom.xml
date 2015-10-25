@@ -41,7 +41,7 @@ More Info:
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- embedded CFML and web server version for easy upgrade -->
-		<luceeVersion>4.5.1.023</luceeVersion>
+		<luceeVersion>https://bitbucket.org/lucee/lucee/downloads/lucee-4.5.1.023.war</luceeVersion>
 		<jettyVersion>8.1.15.v20140411</jettyVersion>
 		<luceeConfig>lucee-web.xml.cfm</luceeConfig>
 		<testServer>http://localhost:8080</testServer>
@@ -393,7 +393,7 @@ More Info:
 								<phase>test</phase>
 								<configuration>
 									<target>
-										<get src="https://bitbucket.org/lucee/lucee/downloads/lucee-${luceeVersion}.war" dest="target/lucee.war" skipexisting="true"/>
+										<get src="${luceeVersion}" dest="target/lucee.war" skipexisting="true"/>
 										<unzip src="target/lucee.war" dest="."
 											overwrite="false">
 										  <patternset>

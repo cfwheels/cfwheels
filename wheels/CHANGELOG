@@ -15,6 +15,22 @@ Miscellaneous
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+1.4.3 (10/16/2015)
+
+Bug Fixes
+=========
+
+* Fix for using cfscript operators in condition and unless arguments - [Per Djurner]
+* Added try / catch on getting host name since CreateObject("java") can be unavailable for security reasons - [Per Djurner]
+* Fixed bug with cache keys always changing even though the input was the same - [Per Djurner]
+* Remove white space character in output - [Bill Tindal, Per Djurner]
+* Use correct path info in error email and debug area - [Per Djurner]
+* Fixed plugin injection issue on start-up - #556 [Adam Chapman, Per Djurner]
+* Skip calculated properties that are aggregate SQL functions in the GROUP BY clause - #554 [Adam Chapman, Per Djurner]
+* Fixed error when trying to validate uniqueness on blank numeric properties - #558 [Chris Peters, Per Djurner]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 1.4.2 (08/31/2015)
 
 Bug Fixes

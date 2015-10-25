@@ -147,7 +147,7 @@
 		<cfset loc.user.validatesLengthOf(property="firstname", minimum="5", maximum="20")>
 		<cfset assert('!loc.user.valid()')>
 	</cffunction>
-	
+
 	<cffunction name="test_validatesLengthOf_maximum_valid">
 		<cfset loc.user.firstname = "thisisatestagain">
 		<cfset loc.user.validatesLengthOf(property="firstname", maximum="20")>
@@ -289,7 +289,7 @@
 		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", greaterThanOrEqualTo="10")>
 		<cfset assert('!loc.user.valid()')>
 	</cffunction>
-	
+
 	<cffunction name="test_validatesNumericalityOf_greaterThanOrEqualTo_invalid_float">
 		<cfset loc.user.birthdaymonth = "11.25">
 		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", greaterThanOrEqualTo="11.30")>
@@ -386,13 +386,13 @@
 			<cfset assert('loc.user.valid()')>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="test_validatesUniquenessOf_valids_when_updating_existing_record">
 		<cfset loc.user = model("users").findOne(where="firstname = 'Tony'")>
 		<cfset loc.user.validatesUniquenessOf(property="firstname")>
 		<cfset assert('loc.user.valid()')>
 	</cffunction>
-	
+
 	<cffunction name="test_validatesUniquenessOf_takes_softdeletes_into_account">
 			<cftransaction action="begin">
 			<cfset loc.org_post = model('post').findOne()>
@@ -405,11 +405,16 @@
 		</cftransaction>
 	</cffunction>
 
-	<!--- <cffunction name="test_validatesUniquenessOf_with_blank_property_value">
+	<cffunction name="test_validatesUniquenessOf_with_blank_integer_values">
+		<cfset loc.combiKey = model("combiKey").new(id1="", id2="")>
+		<cfset assert("not loc.combiKey.valid()")>
+	</cffunction>
+
+	<cffunction name="test_validatesUniquenessOf_with_blank_property_value">
 		<cfset loc.user.firstname = "">
 		<cfset loc.user.validatesUniquenessOf(property="firstname")>
 		<cfset assert('loc.user.valid()')>
-	</cffunction> --->
+	</cffunction>
 
 	<!--- validate --->
 	<cffunction name="test_validate_registering_methods">
