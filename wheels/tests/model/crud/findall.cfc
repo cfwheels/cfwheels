@@ -3,7 +3,7 @@
 	<cffunction name="setup">
 		<cfset loc.source = model("user").findAll(select="id,lastName", maxRows=3)>
 	</cffunction>
-	
+
 	<cffunction name="test_maxrows_change_should_break_cache">
 		<cfset $cacheQueries = application.wheels.cacheQueries>
 		<cfset application.wheels.cacheQueries = true>
@@ -34,6 +34,13 @@
 			<cfset loc.resultTwo = model("user").findAll(select="id")>
 		</cftransaction>
 		<cfset assert("loc.resultOne.recordCount IS loc.resultTwo.recordCount")>
+	</cffunction>
+
+	<cffunction name="test_in_operator_with_spaces">
+		<cfscript>
+			authors = model("author").findAll(where="id != 0 AND id IN (1, 2, 3) AND firstName IN('Per', 'Tony') AND lastName IN ('Djurner', 'Petruzzi')");
+			assert("authors.recordCount IS 2");
+		</cfscript>
 	</cffunction>
 
 </cfcomponent>

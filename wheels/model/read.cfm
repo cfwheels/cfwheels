@@ -25,6 +25,7 @@
 		var loc = {};
 		$args(name="findAll", args=arguments);
 		arguments.include = $listClean(arguments.include);
+		arguments.where = $cleanInList(arguments.where);
 
 		// we only allow direct associations to be loaded when returning objects
 		if (application.wheels.showErrorInformation && Len(arguments.returnAs) && arguments.returnAs != "query" && Find("(", arguments.include) && arguments.returnIncluded)

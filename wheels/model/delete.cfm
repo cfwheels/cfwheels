@@ -14,6 +14,7 @@
 		var loc = {};
 		$args(name="deleteAll", args=arguments);
 		arguments.include = $listClean(arguments.include);
+		arguments.where = $cleanInList(arguments.where);
 		if (arguments.instantiate)
 		{
 			loc.rv = 0;

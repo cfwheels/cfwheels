@@ -101,6 +101,25 @@
 	<cfreturn arguments.value>
 </cffunction>
 
+<cffunction name="$cleanInlist" returntype="any" access="public" output="false">
+	<cfargument name="where" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.rv = arguments.where;
+		loc.regex = "IN\s?\(.*?,\s.*?\)";
+		loc.in = REFind(loc.regex, loc.rv, 1, true);
+		while (loc.in.len[1])
+		{
+			loc.str = Mid(loc.rv, loc.in.pos[1], loc.in.len[1]);
+			loc.rv = RemoveChars(loc.rv, loc.in.pos[1], loc.in.len[1]);
+			loc.cleaned = $listClean(loc.str);
+			loc.rv = Insert(loc.cleaned, loc.rv, loc.in.pos[1]-1);
+			loc.in = REFind(loc.regex, loc.rv, loc.in.pos[1] + Len(loc.cleaned), true);
+		}
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
 <cffunction name="$listClean" returntype="any" access="public" output="false" hint="removes whitespace between list elements. optional argument to return the list as an array.">
 	<cfargument name="list" type="string" required="true">
 	<cfargument name="delim" type="string" required="false" default=",">
