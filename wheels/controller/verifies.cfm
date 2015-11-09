@@ -54,7 +54,15 @@
 		var loc = {};
 
 		// only access the session scope when session management is enabled in the app
-		if (StructIsEmpty(arguments.sessionScope) && get("sessionManagement"))
+		// default to the wheels setting but get it on a per request basis if possible (from application.cfc)
+		loc.sessionManagement = get("sessionManagement");
+		try
+		{
+			loc.sessionManagement = application.getApplicationSettings().sessionManagement;
+		}
+		catch (any e) {}
+
+		if (StructIsEmpty(arguments.sessionScope) && loc.sessionManagement)
 		{
 			arguments.sessionScope = session;
 		}
