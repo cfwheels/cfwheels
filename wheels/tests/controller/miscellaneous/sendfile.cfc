@@ -69,7 +69,7 @@
 	</cffunction>
 
 	<cffunction name="test_ram_resource">
-		<cfdocument format="PDF" name="cfwheels_pdf"></cfdocument>
+		<cfdocument format="PDF" name="cfwheels_pdf"><p>Test</p></cfdocument>
 		<cffile action="write" file="ram://cfwheels.pdf" output="#cfwheels_pdf#"> 
 		<cfset args.file = "ram://cfwheels.pdf">
 		<cfset args.deleteFile=true>
