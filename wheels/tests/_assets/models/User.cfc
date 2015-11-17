@@ -8,6 +8,7 @@
 		<cfset hasMany(name="authors", foreignKey="firstName", joinKey="firstName")>
 		<cfset hasMany(name="combikeys")>
 		<cfset hasMany(name="outerjoinphotogalleries", modelName="gallery", jointype="outer")>
+		<cfset hasMany(name="associates")>
 		<cfset validatesPresenceOf("username,password,firstname,lastname")>
 		<cfset validatesUniquenessOf("username")>
 		<cfset validatesLengthOf(property="username", minimum="4", maximum="20", when="onCreate", message="Please shorten your [property] please. [maximum] characters is the maximum length allowed.")>
