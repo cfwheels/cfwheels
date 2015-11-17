@@ -30,7 +30,7 @@
 		$args(args=arguments, name="sendEmail", combine="template/templates/!,layout/layouts,file/files", required="template,from,to,subject");
 
 		loc.nonPassThruArgs = "template,templates,layout,layouts,file,files,detectMultipart,$deliver";
-		loc.mailTagArgs = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext,remove";
+		loc.mailTagArgs = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,mailparams,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext,remove";
 		loc.deliver = arguments.$deliver;
 
 		// if two templates but only one layout was passed in we set the same layout to be used on both
@@ -151,46 +151,60 @@
 	<cfscript>
 		var loc = {};
 		$args(name="sendFile", args=arguments);
-		loc.relativeRoot = get("rootPath");
-		if (Right(loc.relativeRoot, 1) != "/")
-		{
-			loc.relativeRoot &= "/";
-		}
-		loc.root = ExpandPath(loc.relativeRoot);
-		loc.folder = arguments.directory;
-		if (!Len(loc.folder))
-		{
-			loc.folder = loc.relativeRoot & get("filePath");
-		}
-		if (Left(loc.folder, Len(loc.root)) == loc.root)
-		{
-			loc.folder = RemoveChars(loc.folder, 1, Len(loc.root));
-		}
-		loc.fullPath = Replace(loc.folder, "\", "/", "all");
-		loc.fullPath = ListAppend(loc.fullPath, arguments.file, "/");
-		loc.fullPath = ExpandPath(loc.fullPath);
-		loc.fullPath = Replace(loc.fullPath, "\", "/", "all");
-		loc.file = ListLast(loc.fullPath, "/");
-		loc.directory = Reverse(ListRest(Reverse(loc.fullPath), "/"));
 
-		// if the file is not found, try searching for it
-		if (!FileExists(loc.fullPath))
-		{
-			loc.match = $directory(action="list", directory=loc.directory, filter="#loc.file#.*");
-
-			// only extract the extension if we find a single match
-			if (loc.match.recordCount == 1)
+		// Check whether the resource is a ram resource or physical file
+		if(!listFirst(arguments.file, "://") EQ "ram"){ 
+			loc.relativeRoot = get("rootPath");
+			if (Right(loc.relativeRoot, 1) != "/")
 			{
-				loc.file &= "." & ListLast(loc.match.name, ".");
-				loc.fullPath = loc.directory & "/" & loc.file;
+				loc.relativeRoot &= "/";
 			}
-			else
+			loc.root = ExpandPath(loc.relativeRoot);
+			loc.folder = arguments.directory;
+			if (!Len(loc.folder))
 			{
-				$throw(type="Wheels.FileNotFound", message="A file could not be found.", extendedInfo="Make sure a file with the name `#loc.file#` exists in the `#loc.directory#` folder.");
+				loc.folder = loc.relativeRoot & get("filePath");
 			}
-		}
+			if (Left(loc.folder, Len(loc.root)) == loc.root)
+			{
+				loc.folder = RemoveChars(loc.folder, 1, Len(loc.root));
+			}
+			loc.fullPath = Replace(loc.folder, "\", "/", "all");
+			loc.fullPath = ListAppend(loc.fullPath, arguments.file, "/");
+			loc.fullPath = ExpandPath(loc.fullPath);
+			loc.fullPath = Replace(loc.fullPath, "\", "/", "all");
+			loc.file = ListLast(loc.fullPath, "/");
+			loc.directory = Reverse(ListRest(Reverse(loc.fullPath), "/"));
 
-		loc.name = loc.file;
+			// if the file is not found, try searching for it
+			if (!FileExists(loc.fullPath))
+			{
+				loc.match = $directory(action="list", directory=loc.directory, filter="#loc.file#.*");
+
+				// only extract the extension if we find a single match
+				if (loc.match.recordCount == 1)
+				{
+					loc.file &= "." & ListLast(loc.match.name, ".");
+					loc.fullPath = loc.directory & "/" & loc.file;
+				}
+				else
+				{
+					$throw(type="Wheels.FileNotFound", message="A file could not be found.", extendedInfo="Make sure a file with the name `#loc.file#` exists in the `#loc.directory#` folder.");
+				}
+			}
+			loc.name = loc.file;
+		}
+		else {
+			loc.fullPath = arguments.file;
+			loc.file 	 = arguments.file;
+			// For ram:// resources, skip the physical file check but still check the thing exists
+			if (!FileExists(loc.fullPath)){
+				$throw(type="Wheels.FileNotFound", message="ram:// resource could not be found.", extendedInfo="Make sure a resource with the name `#loc.file#` exists in memory");
+			}
+			// Make the default display name behaviour the same as physical files
+			loc.name     = replace(arguments.file, "ram://","","one");
+		} 
+
 		loc.extension = ListLast(loc.file, ".");
 
 		// replace the display name for the file if supplied

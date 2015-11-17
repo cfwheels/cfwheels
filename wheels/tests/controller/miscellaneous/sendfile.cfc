@@ -67,5 +67,21 @@
 		<cfset assert('loc.r.mime eq "image/png"')>
 		<cfset assert('loc.r.name eq "cfwheels-logo.png"')>
 	</cffunction>
+
+	<cffunction name="test_ram_resource">
+		<cfdocument format="PDF" name="cfwheels_pdf"><p>Test</p></cfdocument>
+		<cffile action="write" file="ram://cfwheels.pdf" output="#cfwheels_pdf#"> 
+		<cfset args.file = "ram://cfwheels.pdf">
+		<cfset args.deleteFile=true>
+		<cfset loc.r = loc.controller.sendFile(argumentCollection=args)>
+		<cfset assert('loc.r.file eq "ram://cfwheels.pdf"')>
+		<cfset assert('loc.r.mime eq "application/pdf"')>
+		<cfset assert('loc.r.name eq "cfwheels.pdf"')>
+	</cffunction>
 	
+	<cffunction name="test_non_existent_ram_resource"> 
+		<cfset args.file = "ram://doesnt_exist.pdf">  
+		<cfset loc.r = raised("loc.controller.sendFile(argumentCollection=args)")>
+		<cfset assert('loc.r eq "Wheels.FileNotFound"')>
+	</cffunction>
 </cfcomponent>

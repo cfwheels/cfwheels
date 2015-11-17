@@ -15,6 +15,7 @@
 		var loc = {};
 		$args(name="updateAll", args=arguments);
 		arguments.include = $listClean(arguments.include);
+		arguments.where = $cleanInList(arguments.where);
 		arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,reload,parameterize,instantiate,validate,transaction,callbacks,includeSoftDeletes", setOnModel=false);
 
 		// find and instantiate each object and call its update function
