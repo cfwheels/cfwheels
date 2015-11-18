@@ -73,21 +73,21 @@ public class CFWheelsCoreIT {
 	    		added = true;
 				continue;
 			}
-			
+
 			Object[] arr = new Object[] {contextPath, prefix + f.getName() };
     		params.add(arr);
     		added = true;
     	}
 		return added;
 	}
-    
+
 	/**
 	 * Taking backup of key cfwheels files and initializing test database once (unzip cfwheels only on remote server)
 	 * @throws Exception
 	 */
 	@BeforeClass
 	static public void setUpServices() throws Exception {
-		Files.copy(Paths.get("wheels/Connection.cfc"), Paths.get("wheels/Connection.cfc.bak"), StandardCopyOption.REPLACE_EXISTING);
+		Files.copy(Paths.get("wheels/model/initialization.cfm"), Paths.get("wheels/model/initialization.cfm.bak"), StandardCopyOption.REPLACE_EXISTING);
 		Files.copy(Paths.get("wheels/tests/populate.cfm"), Paths.get("wheels/tests/populate.cfm.bak"), StandardCopyOption.REPLACE_EXISTING);
 		Path path = Paths.get("target/failsafe-reports");
 
@@ -110,7 +110,7 @@ public class CFWheelsCoreIT {
 		}
 
 	}
-	
+
 	@Before
 	public void setUp() throws Exception {
 		if (! currentContextPath.equals(contextPath) && ! contextPath.equals("/subfolder/")) {
@@ -120,15 +120,15 @@ public class CFWheelsCoreIT {
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.setProperty("testOracleEmulation", "true");
-		setUpServices();
+		testOracleEmulation=true;
+		recreateTestDatabase();
 	}
 
 	private static void recreateTestDatabase() throws Exception {
 		if (testOracleEmulation) {
-			String content = new String(Files.readAllBytes(Paths.get("wheels/Connection.cfc")));
+			String content = new String(Files.readAllBytes(Paths.get("wheels/model/initialization.cfm")));
 			content = content.replace("loc.adapterName = \"H2\"","loc.adapterName = 'Oracle'");
-			Files.write(Paths.get("wheels/Connection.cfc"), content.getBytes());
+			Files.write(Paths.get("wheels/model/initialization.cfm"), content.getBytes());
 
 			content = new String(Files.readAllBytes(Paths.get("src/test/coldfusion/_oracle-emu.cfm")));
 			content += new String(Files.readAllBytes(Paths.get("wheels/tests/populate.cfm")));
@@ -182,7 +182,7 @@ public class CFWheelsCoreIT {
 			driver.quit();
 		}
 	}
-	
+
 	private static void hitHomepageWithParallelRequest() {
 		new HitterThread().start();
 		new HitterThread().start();
@@ -220,9 +220,9 @@ public class CFWheelsCoreIT {
 	 */
 	@AfterClass
 	static public void tearDownServices() throws Exception {
-		Files.copy(Paths.get("wheels/Connection.cfc.bak"), Paths.get("wheels/Connection.cfc"), StandardCopyOption.REPLACE_EXISTING);
+		Files.copy(Paths.get("wheels/model/initialization.cfm.bak"), Paths.get("wheels/model/initialization.cfm"), StandardCopyOption.REPLACE_EXISTING);
 		Files.copy(Paths.get("wheels/tests/populate.cfm.bak"), Paths.get("wheels/tests/populate.cfm"), StandardCopyOption.REPLACE_EXISTING);
-		Files.delete(Paths.get("wheels/Connection.cfc.bak"));
+		Files.delete(Paths.get("wheels/model/initialization.cfm.bak"));
 		Files.delete(Paths.get("wheels/tests/populate.cfm.bak"));
 
 		driver.quit();

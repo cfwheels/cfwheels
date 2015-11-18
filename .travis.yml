@@ -1,24 +1,33 @@
-language: java
+sudo: false #upgrade to faster docker-based CI
+language: java #all CFML engine runs on JVM
 
 cache: bundler #works only for private repo http://docs.travis-ci.com/user/caching/
 
-env: #ftp credential for remote test server, encrypted with repo specific key 
-  - secure: "QZdX3M+wYTejkwHLseV/LwhPOCvkbONJcElHjdsrwb4xiuzZSdHiRYmTc+9hzyIOTb1hrylKZ8udMzIuZZTUCa0Ze30sQmcC83vGIteM+uzQr0RV9asf/4hL83cBye50f1OWIJlyq5FLvD0KMkhP+BnTA7jTI5UD8a4FX+F2UUU="
+env:
+  global: #ftp credential for remote test server, encrypted with repo specific key 
+    - secure: "QZdX3M+wYTejkwHLseV/LwhPOCvkbONJcElHjdsrwb4xiuzZSdHiRYmTc+9hzyIOTb1hrylKZ8udMzIuZZTUCa0Ze30sQmcC83vGIteM+uzQr0RV9asf/4hL83cBye50f1OWIJlyq5FLvD0KMkhP+BnTA7jTI5UD8a4FX+F2UUU="
+  matrix: #parallel test combination: Windows+ACF11/SQLServer+ACF10/Oracle, Lucee/H2, Lucee/MySQL, Lucee/PostgreSQL, Lucee/OracleEmulation
+    - PROFILE=mssql,acf10oracle PARAM=onlysecure
+    - PROFILE=jetty,lucee,subfolder PARAM=testParallelStart=true
+    - PROFILE=jetty,lucee,mysql PARAM=none
+    - PROFILE=jetty,lucee,postgresql PARAM=none
+    - PROFILE=jetty,lucee,oracle-emu PARAM=none
+    - PROFILE=jetty,lucee PARAM=luceeVersion=http://stable.lucee.org/rest/update/provider/express/5.0.0.65-BETA
 
-before_script:
+before_script: #prepare MySQL and PostgresSQL databases
   - mysql -e 'create database test;'
   - psql -c 'create database test;' -U postgres
 
 script: "
-if [ $TRAVIS_SECURE_ENV_VARS == 'true' ];
-then 
-    mvn verify -Pjetty,railo,subfolder -DtestParallelStart=true && mvn verify -Pjetty,railo,mysql && mvn verify -Pjetty,railo,postgresql && mvn verify -Pjetty,railo,oracle-emu && mvn clean verify -P jetty,lucee && mvn clean verify -Pmssql,acf9oracle; 
-else 
-    mvn verify -Pjetty,railo,subfolder -DtestParallelStart=true && mvn verify -Pjetty,railo,mysql && mvn verify -Pjetty,railo,postgresql && mvn verify -Pjetty,railo,oracle-emu && mvn clean verify -P jetty,lucee;
-fi"
-
+ if [ $TRAVIS_SECURE_ENV_VARS == 'true' ] || [ $PARAM != 'onlysecure' ]; 
+ then
+  mvn clean verify -P$PROFILE -D$PARAM;
+ else
+  mvn clean;
+ fi" #only run ACF/MSSQL/Oracle test on when secure enviroment parameter exists (e.g.: only in cfwheels/cfwheels commits)
+ 
 #see pom.xml for the explanation of the mvn commands above
-
+ 
 jdk:
   - oraclejdk7
 
