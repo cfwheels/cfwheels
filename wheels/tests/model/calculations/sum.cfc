@@ -14,6 +14,33 @@
 		</cfif>
 	</cffunction>
 
+	<cffunction name="test_sum_with_group_on_associated_model">
+		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
+			<cfset loc.result = model("post").sum(property="views", include="author", group="lastName")>
+			<cfset assert("loc.result['viewsSum'][2] IS 5")>
+		<cfelse>
+			<cfset assert(true)>
+		</cfif>
+	</cffunction>
+
+	<cffunction name="test_sum_with_group_on_calculated_property">
+		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
+			<cfset loc.result = model("photo").sum(property="galleryId", group="DESCRIPTION1")>
+			<cfset assert("loc.result['galleryIdSum'][2] IS 10")>
+		<cfelse>
+			<cfset assert(true)>
+		</cfif>
+	</cffunction>
+
+	<cffunction name="test_sum_with_group_on_calculated_property_on_associated_model">
+		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
+			<cfset loc.result = model("gallery").sum(property="userId", include="photos", group="DESCRIPTION1")>
+			<cfset assert("loc.result['userIdSum'][3] IS 3")>
+		<cfelse>
+			<cfset assert(true)>
+		</cfif>
+	</cffunction>
+
 	<cffunction name="test_sum_with_where">
 		<cfset loc.author = model("author").findOne(where="lastName='Djurner'")>
 		<cfset loc.result = model("post").sum(property="views", where="authorid=#loc.author.id#")>
