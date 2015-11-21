@@ -19,6 +19,7 @@ Bug Fixes
 * Pass through all arguments properly when using findOrCreateBy - #561 [Per Djurner]
 * Make it possible to disable session management on a per request basis - #493 [Andy Bellenie, Per Djurner]
 * Allow mailParams to be passed through to sendEmail() - #565 [Tom King]
+* Fixed inconsistency in form helpers for nested properties - [Marc Funaro, Per Djurner, Chris Peters]
 
 Miscellaneous
 =============
