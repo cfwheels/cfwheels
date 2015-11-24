@@ -22,14 +22,11 @@
 		<cfset assert('loc.columnList eq "authors.firstname,authors.id,authors.lastname,posts.authorid,posts.averagerating,posts.body,posts.createdat,posts.deletedat,posts.id AS postid,posts.title,posts.updatedat,posts.views"')>
 	</cffunction>
 
-<<<<<<< HEAD
 	<!--- failing test for issue 568 --->
-	<!--- <cffunction name="test_select_common_columns_using_aliased_model">
-		<cfset loc.columnList = ListSort(model("User").$createSQLFieldList(clause="select", list="id, firstname, lastname, friendid, friendfirstname, friendlastname", include="Associates(Friend)", returnAs="query", useExpandedColumnAliases=true), "text")>
-		<cfset assert('loc.columnList eq "users.firstname,users.id,users.lastname,users.firstname AS friendfirstname,users.id AS friendid,users.lastname AS friendlastname"')>
+	<!--- <cffunction name="test_select_ambiguous_column_name_using_alias">
+		<cfset loc.query = model("Post").findAll(select="createdat,commentcreatedat", include="Comments")>
+		<cfset loc.columnList = ListSort(loc.query.columnList, "text")>
+		<cfset assert('loc.columnList eq "createdat,commentcreatedat"')>
 	</cffunction> --->
 
 </cfcomponent>
-=======
-</cfcomponent>
->>>>>>> parent of bf211ff... failing test for issue 568
