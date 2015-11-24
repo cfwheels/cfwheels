@@ -43,7 +43,7 @@
 <cfset loc.tableList = ValueList(loc.dbinfo.table_name, chr(7))>
 
 <!--- list of tables to delete --->
-<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes,associates">
+<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes">
 <cfloop list="#loc.tables#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
 		<cftry>
@@ -269,15 +269,6 @@ CREATE TABLE users
 ) #loc.storageEngine#
 </cfquery>
 
-<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
-CREATE TABLE associates
-(
-	id #loc.identityColumnType#
-	,userid #loc.intColumnType# NOT NULL
-	,associateuserid #loc.intColumnType# NOT NULL
-	,PRIMARY KEY(id)
-) #loc.storageEngine#
-</cfquery>
 
 <!--- create oracle sequences --->
 <cfif loc.db eq "oracle">
@@ -428,13 +419,6 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 			)>
 		</cfloop>
 	</cfloop>
-	
-	<cfif loc.users.currentRow lt loc.users.recordCount>
-		<cfset loc.associate = model("associate").create(
-			userid="#loc.users.id#"
-			,associateuserid="#loc.users.id + 1#"
-		)>
-	</cfif>
 </cfloop>
 
 <cfset model("user2").create(username="Chris", password="x", firstName="x", lastName="x")>

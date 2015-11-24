@@ -22,6 +22,7 @@
 		<cfset assert('loc.columnList eq "authors.firstname,authors.id,authors.lastname,posts.authorid,posts.averagerating,posts.body,posts.createdat,posts.deletedat,posts.id AS postid,posts.title,posts.updatedat,posts.views"')>
 	</cffunction>
 
+<<<<<<< HEAD
 	<!--- failing test for issue 568 --->
 	<!--- <cffunction name="test_select_common_columns_using_aliased_model">
 		<cfset loc.columnList = ListSort(model("User").$createSQLFieldList(clause="select", list="id, firstname, lastname, friendid, friendfirstname, friendlastname", include="Associates(Friend)", returnAs="query", useExpandedColumnAliases=true), "text")>
@@ -29,3 +30,6 @@
 	</cffunction> --->
 
 </cfcomponent>
+=======
+</cfcomponent>
+>>>>>>> parent of bf211ff... failing test for issue 568
