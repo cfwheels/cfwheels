@@ -26,7 +26,7 @@
 	<!--- <cffunction name="test_select_ambiguous_column_name_using_alias">
 		<cfset loc.query = model("Post").findAll(select="createdat,commentcreatedat", include="Comments")>
 		<cfset loc.columnList = ListSort(loc.query.columnList, "text")>
-		<cfset assert('loc.columnList eq "createdat,commentcreatedat"')>
+		<cfset assert('loc.columnList eq "commentcreatedat,createdat"')>
 	</cffunction> --->
 
 </cfcomponent>
