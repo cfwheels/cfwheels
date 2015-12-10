@@ -1,21 +1,5 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="pagination" returntype="struct" access="public" output="false">
-	<cfargument name="handle" type="string" required="false" default="query">
-	<cfscript>
-		var loc = {};
-		if (get("showErrorInformation"))
-		{
-			if (!StructKeyExists(request.wheels, arguments.handle))
-			{
-				$throw(type="Wheels.QueryHandleNotFound", message="CFWheels couldn't find a query with the handle of `#arguments.handle#`.", extendedInfo="Make sure your `findAll` call has the `page` argument specified and matching `handle` argument if specified.");
-			}
-		}
-		loc.rv = request.wheels[arguments.handle];
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
 <cffunction name="sendEmail" returntype="any" access="public" output="false">
 	<cfargument name="template" type="string" required="false" default="">
 	<cfargument name="from" type="string" required="false" default="">
