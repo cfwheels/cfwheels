@@ -1,4 +1,4 @@
-1.4.4
+1.4.4 (12/10/2015)
 
 Bug Fixes
 =========
@@ -10,6 +10,7 @@ Bug Fixes
 * Allow mailParams to be passed through to sendEmail() - #565 [Tom King]
 * Fixed inconsistency in form helpers for nested properties - [Marc Funaro, Per Djurner, Chris Peters]
 * Fixed issue with grouping on associated models - [Song Lin, Per Djurner]
+* Made the pagination() function available globally - #560 [Chris Peters, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
