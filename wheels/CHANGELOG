@@ -14,7 +14,7 @@ Controller Enhancements
 Bug Fixes
 =========
 
-* ?
+* Don't include query string when looking for image on file through imageTag() - [Per Djurner]
 
 Miscellaneous
 =============
