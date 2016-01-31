@@ -75,17 +75,17 @@
 			{
 				if (REFindNoCase("[a-z]", application.wheels.ipExceptions))
 				{
-					if (ListFindNoCase(application.wheels.ipExceptions, request.cgi.http_user_agent))
+					if (ListFindNoCase(application.wheels.ipExceptions, cgi.http_user_agent))
 					{
 						loc.makeException = true;
 					}
 				}
 				else
 				{
-					loc.ipAddress = request.cgi.remote_addr;
-					if (StructKeyExists(request.cgi, "http_x_forwarded_for") && Len(request.cgi.http_x_forwarded_for))
+					loc.ipAddress = cgi.remote_addr;
+					if (StructKeyExists(cgi, "http_x_forwarded_for") && Len(cgi.http_x_forwarded_for))
 					{
-						loc.ipAddress = request.cgi.http_x_forwarded_for;
+						loc.ipAddress = cgi.http_x_forwarded_for;
 					}
 					if (ListFind(application.wheels.ipExceptions, loc.ipAddress))
 					{
