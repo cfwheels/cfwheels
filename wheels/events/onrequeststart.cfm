@@ -83,7 +83,7 @@
 				else
 				{
 					loc.ipAddress = request.cgi.remote_addr;
-					if (StructKeyExists(request.cgi, "http_x_forwarded_for"))
+					if (StructKeyExists(request.cgi, "http_x_forwarded_for") && Len(request.cgi.http_x_forwarded_for))
 					{
 						loc.ipAddress = request.cgi.http_x_forwarded_for;
 					}
