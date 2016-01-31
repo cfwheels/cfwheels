@@ -19,6 +19,8 @@ Bug Fixes
 Miscellaneous
 =============
 
+* Support checking IP in "http_x_forwarded_for" when doing maintenance mode exclusions - [Per Djurner]
+* Support checking user agent string when doing maintenance mode exclusions - [Per Djurner]
 * Set minimum Lucee version to 4.5.1.022 - [Per Djurner, Chris Peters]
 * Set minimum ACF version to 10.0.16 / 11.0.5 - [Per Djurner]
 * Dropped support for Railo - [Per Djurner]
