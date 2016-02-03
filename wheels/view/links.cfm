@@ -184,7 +184,7 @@
 							loc.linkToArguments.params &= "&" & arguments.params;
 						}
 					}
-					loc.linkToArguments.text = loc.pageNumber;
+					loc.linkToArguments.text = NumberFormat(loc.pageNumber);
 					if (Len(arguments.prependToPage) && arguments.prependOnAnchor)
 					{
 						loc.start &= arguments.prependToPage;
@@ -214,7 +214,7 @@
 							loc.linkToArguments.params &= "&" & arguments.params;
 						}
 					}
-					loc.linkToArguments.text = loc.i;
+					loc.linkToArguments.text = NumberFormat(loc.i);
 					if (Len(arguments.classForCurrent) && loc.currentPage == loc.i)
 					{
 						// apply the classForCurrent class if specified and this is the current page
@@ -242,11 +242,11 @@
 					{
 						if (Len(arguments.classForCurrent))
 						{
-							loc.middle &= $element(name="span", content=loc.i, class=arguments.classForCurrent);
+							loc.middle &= $element(name="span", content=NumberFormat(loc.i), class=arguments.classForCurrent);
 						}
 						else
 						{
-							loc.middle &= loc.i;
+							loc.middle &= NumberFormat(loc.i);
 						}
 					}
 					if (Len(arguments.appendToPage))
@@ -271,7 +271,7 @@
 							loc.linkToArguments.params &= "&" & arguments.params;
 						}
 					}
-					loc.linkToArguments.text = loc.totalPages;
+					loc.linkToArguments.text = NumberFormat(loc.totalPages);
 					loc.end &= arguments.anchorDivider;
 					if (Len(arguments.prependToPage) && arguments.prependOnAnchor)
 					{
