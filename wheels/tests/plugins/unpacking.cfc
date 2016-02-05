@@ -36,11 +36,8 @@
 
 	<cffunction name="test_unpacking_plugin">
 		<cfset loc.PluginObj = $pluginObj(loc.config)>
-		<cfdirectory action="list" directory="#expandPath(loc.config.pluginPath)#" type="dir" name="loc.q">
-		<cfset loc.dirs = "">
-		<cfloop query="loc.q">
-			<cfset loc.dirs = ListAppend(loc.dirs, name)>
-		</cfloop>
+		<cfdirectory action="list" directory="#ExpandPath(loc.config.pluginPath)#" type="dir" name="loc.q">
+		<cfset loc.dirs = ValueList(loc.q.name)>
 		<cfset assert('ListFind(loc.dirs, "testdefaultassignmixins")')>
 		<cfset assert('ListFind(loc.dirs, "testglobalmixins")')>
 	</cffunction>
