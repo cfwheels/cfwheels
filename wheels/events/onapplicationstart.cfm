@@ -238,7 +238,7 @@
 		application.$wheels.cacheDatePart = "n";
 		application.$wheels.defaultCacheTime = 60;
 		application.$wheels.clearQueryCacheOnReload = true;
-		application.$wheels.clearServerCacheOnReload = true;
+		application.$wheels.clearTemplateCacheOnReload = true;
 		application.$wheels.cacheQueriesDuringRequest = true;
 
 		// possible formats for provides
@@ -360,11 +360,11 @@
 		$include(template="config/#application.$wheels.environment#/settings.cfm");
 
 		// clear query (cfquery) and page (cfcache) caches
-		if (application.$wheels.clearQueryCacheOnReload)
+		if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cachekey")) 
 		{
-			$objectcache(action="clear");
+			application.$wheels.cachekey = Hash(CreateUUID());
 		}
-		if (application.$wheels.clearServerCacheOnReload)
+		if (application.$wheels.clearTemplateCacheOnReload)
 		{
 			$cache(action="flush");
 		}
