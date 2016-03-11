@@ -37,7 +37,7 @@
 				case "date":
 					loc.rv = "cf_sql_date";
 					break;
-				case "datetime": case "datetime2": case "smalldatetime":
+				case "datetime": case "datetime2": case "smalldatetime": case "datetimeoffset":
 					loc.rv = "cf_sql_timestamp";
 					break;
 				case "decimal": case "money": case "smallmoney":
