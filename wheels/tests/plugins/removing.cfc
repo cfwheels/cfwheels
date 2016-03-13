@@ -2,15 +2,15 @@
 
 	<cffunction name="setup">
 		<cfset loc.config = {
-			path="wheels"
-			,fileName="Plugins"
-			,method="init"
-			,pluginPath="/wheelsMapping/tests/_assets/plugins/removing"
-			,deletePluginDirectories=true
-			,overwritePlugins=false
-			,loadIncompatiblePlugins=true
+			path="wheels",
+			fileName="Plugins",
+			method="init",
+			pluginPath="/wheelsMapping/tests/_assets/plugins/removing",
+			deletePluginDirectories=true,
+			overwritePlugins=false,
+			loadIncompatiblePlugins=true
 		}>
-		<cfset loc.dir = expandPath(loc.config.pluginPath)>
+		<cfset loc.dir = ExpandPath(loc.config.pluginPath)>
 		<cfset loc.dir = ListChangeDelims(loc.dir, "/", "\")>
 		
 		<cfset loc.badDir = ListAppend(loc.dir, "testing", "/")>
@@ -45,7 +45,7 @@
 		<cfset assert('DirectoryExists(loc.badDir)')>
 		<cfset loc.PluginObj = $pluginObj(loc.config)>
 		<cfset assert('DirectoryExists(loc.goodDir)')>
-		<cfset assert('!DirectoryExists(loc.badDir)')>
+		<cfset assert('not DirectoryExists(loc.badDir)')>
 	</cffunction>
 	
 </cfcomponent>

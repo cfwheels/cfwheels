@@ -217,6 +217,7 @@
 		application.$wheels.setUpdatedAtOnCreate = true;
 		application.$wheels.useExpandedColumnAliases = false;
 		application.$wheels.modelRequireInit = false;
+		application.$wheels.showIncompatiblePlugins = (application.$wheels.version < 2.0);
 		application.$wheels.booleanAttributes = "allowfullscreen,async,autofocus,autoplay,checked,compact,controls,declare,default,defaultchecked,defaultmuted,defaultselected,defer,disabled,draggable,enabled,formnovalidate,hidden,indeterminate,inert,ismap,itemscope,loop,multiple,muted,nohref,noresize,noshade,novalidate,nowrap,open,pauseonexit,readonly,required,reversed,scoped,seamless,selected,sortable,spellcheck,translate,truespeed,typemustmatch,visible";
 
 		// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
@@ -238,7 +239,7 @@
 		application.$wheels.cacheDatePart = "n";
 		application.$wheels.defaultCacheTime = 60;
 		application.$wheels.clearQueryCacheOnReload = true;
-		application.$wheels.clearServerCacheOnReload = true;
+		application.$wheels.clearTemplateCacheOnReload = true;
 		application.$wheels.cacheQueriesDuringRequest = true;
 
 		// possible formats for provides
@@ -360,11 +361,11 @@
 		$include(template="config/#application.$wheels.environment#/settings.cfm");
 
 		// clear query (cfquery) and page (cfcache) caches
-		if (application.$wheels.clearQueryCacheOnReload)
+		if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cachekey")) 
 		{
-			$objectcache(action="clear");
+			application.$wheels.cachekey = Hash(CreateUUID());
 		}
-		if (application.$wheels.clearServerCacheOnReload)
+		if (application.$wheels.clearTemplateCacheOnReload)
 		{
 			$cache(action="flush");
 		}

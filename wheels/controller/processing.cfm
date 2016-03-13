@@ -6,7 +6,7 @@
 
 		// check if action should be cached and if so cache statically or set the time to use later when caching just the action
 		loc.cache = 0;
-		if ($hasCachableActions() && flashIsEmpty() && StructIsEmpty(form))
+		if (get("cacheActions") && $hasCachableActions() && flashIsEmpty() && StructIsEmpty(form))
 		{
 			loc.cachableActions = $cachableActions();
 			loc.iEnd = ArrayLen(loc.cachableActions);

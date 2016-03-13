@@ -70,7 +70,30 @@
 			{
 				application.wheels.ipExceptions = url.except;
 			}
-			if (!Len(application.wheels.ipExceptions) || !ListFind(application.wheels.ipExceptions, request.cgi.remote_addr))
+			loc.makeException = false;
+			if (Len(application.wheels.ipExceptions))
+			{
+				if (REFindNoCase("[a-z]", application.wheels.ipExceptions))
+				{
+					if (ListFindNoCase(application.wheels.ipExceptions, cgi.http_user_agent))
+					{
+						loc.makeException = true;
+					}
+				}
+				else
+				{
+					loc.ipAddress = cgi.remote_addr;
+					if (StructKeyExists(cgi, "http_x_forwarded_for") && Len(cgi.http_x_forwarded_for))
+					{
+						loc.ipAddress = cgi.http_x_forwarded_for;
+					}
+					if (ListFind(application.wheels.ipExceptions, loc.ipAddress))
+					{
+						loc.makeException = true;
+					}
+				}
+			}
+			if (!loc.makeException)
 			{
 				$header(statusCode=503, statustext="Service Unavailable");
 				$includeAndOutput(template="#application.wheels.eventPath#/onmaintenance.cfm");

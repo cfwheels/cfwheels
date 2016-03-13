@@ -21,7 +21,8 @@
 	<cfset loc.baseReloadURL &= "?">
 </cfif>
 <cfset loc.baseReloadURL &= "reload=">
-<cfset loc.hasFrameworkTests = StructKeyExists(this, "mappings") && StructKeyExists(this.mappings, "/wheelsMapping") && DirectoryExists(this.mappings["/wheelsMapping"])>
+<cfset loc.frameworkTestDir = GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels/tests">
+<cfset loc.hasFrameworkTests = DirectoryExists(loc.frameworkTestDir)>
 <cfset loc.appTestDir = GetDirectoryFromPath(GetBaseTemplatePath()) & "tests">
 <cfset loc.hasAppTests = DirectoryExists(loc.appTestDir)>
 <cfif loc.hasAppTests>
@@ -75,12 +76,12 @@
 
 <div id="wheels-debug-area">
 	<table>
-		<cfif (get("version") LT 2.0 AND Len(application.wheels.incompatiblePlugins)) OR Len(application.wheels.dependantPlugins)>
+		<cfif (get('showIncompatiblePlugins') AND Len(application.wheels.incompatiblePlugins)) OR Len(application.wheels.dependantPlugins)>
 			<tr>
 				<td><strong><span style="color:red;">Warnings:</span></strong></td>
 				<td>
 					<span style="color:red;">
-						<cfif get("version") LT 2.0 AND Len(application.wheels.incompatiblePlugins)>
+						<cfif get('showIncompatiblePlugins') AND Len(application.wheels.incompatiblePlugins)>
 							<cfloop list="#application.wheels.incompatiblePlugins#" index="loc.i">The #loc.i# plugin may be incompatible with this version of Wheels, please look for a compatible version of the plugin<br /></cfloop>
 						</cfif>
 						<cfif Len(application.wheels.dependantPlugins)>
@@ -134,7 +135,7 @@
 		</tr>
 		<tr>
 			<td><strong>Plugins:</strong></td>
-			<td><cfif StructCount(get("plugins")) IS NOT 0><cfset loc.count = 0><cfloop collection="#get('plugins')#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#loc.i#">#loc.i#</a><cfif DirectoryExists("#GetDirectoryFromPath(GetBaseTemplatePath())#plugins#LCase(loc.i)#/tests")> [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=#LCase(loc.i)#">Run Tests</a>, <a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=#LCase(loc.i)#&reload=true">View Tests</a>]</cfif><cfif StructCount(get("plugins")) GT loc.count><br/></cfif></cfloop><cfelse>None</cfif></td>
+			<td><cfif StructCount(get("plugins")) IS NOT 0><cfset loc.count = 0><cfloop collection="#get('plugins')#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#loc.i#">#loc.i#</a><cfif DirectoryExists("#GetDirectoryFromPath(GetBaseTemplatePath())#plugins/#LCase(loc.i)#/tests")> [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=#LCase(loc.i)#">Run Tests</a>, <a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=#LCase(loc.i)#&reload=true">View Tests</a>]</cfif><cfif StructCount(get("plugins")) GT loc.count><br/></cfif></cfloop><cfelse>None</cfif></td>
 		</tr>
 		<cfif StructKeyExists(request.wheels.params, "route")>
 			<tr>
