@@ -81,19 +81,14 @@
 			{
 				if (Find("<", arguments.tagContent) && Find(">", arguments.tagContent))
 				{
-					loc.rv["html"] = arguments.tagContent;
+					arguments.type = "html";
 				}
 				else
 				{
-					loc.rv["text"] = arguments.tagContent;
+					arguments.type = "text";
 				}
-
 			}
-			else
-			{
-				// if detectMultipart is false i can only assume the type
-				loc.rv["html"] = arguments.tagContent;
-			}
+			loc.rv[arguments.type] = arguments.tagContent;
 		}
 		else
 		{

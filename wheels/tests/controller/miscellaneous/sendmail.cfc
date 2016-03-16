@@ -36,10 +36,11 @@
 	<cffunction name="test_sendemail_plain">
 		<cfset args.template = "plainEmailTemplate">
 		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("ListLen(StructKeyList(result)) IS 5")>
+		<cfset assert("ListLen(StructKeyList(result)) IS 6")>
 		<cfset assert("StructKeyExists(result, 'to')")>
 		<cfset assert("StructKeyExists(result, 'from')")>
 		<cfset assert("StructKeyExists(result, 'subject')")>
+		<cfset assert("result.type IS 'text'")>
 		<cfset assert("result.text IS textBody")>
 		<cfset assert("result.html IS ''")>
 	</cffunction>
@@ -47,8 +48,30 @@
 	<cffunction name="test_sendemail_html">
 		<cfset args.template = "HTMLEmailTemplate">
 		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.text IS '")>
+		<cfset assert("result.type IS 'html'")>
+		<cfset assert("result.text IS ''")>
 		<cfset assert("result.html IS HTMLBody")>
+	</cffunction>
+
+	<cffunction name="test_sendemail_detectmultipart_with_html">
+		<cfset args.template = "HTMLEmailTemplate">
+		<cfset args.detectMultipart = true>
+		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
+		<cfset assert("result.type IS 'html'")>
+	</cffunction>
+
+	<cffunction name="test_sendemail_detectmultipart_with_plain">
+		<cfset args.template = "plainEmailTemplate">
+		<cfset args.detectMultipart = true>
+		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
+		<cfset assert("result.type IS 'text'")>
+	</cffunction>
+
+	<cffunction name="test_sendemail_type_argument_without_detectmultipart">
+		<cfset args.template = "plainEmailTemplate">
+		<cfset args.type = "html">
+		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
+		<cfset assert("result.type IS 'html'")>
 	</cffunction>
 
 	<cffunction name="test_sendemail_combined_in_correct_order">
