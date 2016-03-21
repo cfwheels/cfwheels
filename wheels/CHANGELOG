@@ -14,6 +14,7 @@ Controller Enhancements
 Bug Fixes
 =========
 
+* Display URL correctly in error email when on HTTPS - [Per Djurner]
 * Don't include query string when looking for image on file through imageTag() - [Per Djurner]
 
 Miscellaneous
