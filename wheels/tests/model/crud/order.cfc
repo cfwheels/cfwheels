@@ -5,12 +5,12 @@
 		<cfset assert("loc.result.filename IS 'Gallery 9 Photo Test 9'")>
 	</cffunction>
 
-	<cffunction name="_test_order_clause_no_sort">
+	<cffunction name="test_order_clause_no_sort">
 		<cfset loc.result = model("author").findOne(order="lastName")>
 		<cfset assert("loc.result.lastName IS 'Amiri'")>
 	</cffunction>
 
-	<cffunction name="_test_order_clause_asc_sort">
+	<cffunction name="test_order_clause_asc_sort">
 		<cfset loc.result = model("author").findOne(order="lastName ASC")>
 		<cfset assert("loc.result.lastName IS 'Amiri'")>
 	</cffunction>

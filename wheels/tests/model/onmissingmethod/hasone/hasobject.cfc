@@ -5,7 +5,7 @@
 		<cfset loc.userModel = model("user")>
 	</cffunction>
 
- 	<cffunction name="_test_hasObject_valid">
+ 	<cffunction name="test_hasObject_valid">
 		<cfset loc.author = loc.authorModel.findOne(where="firstName = 'Per'")>
 		<cfset loc.hasProfile = loc.author.hasProfile() />
 		<cfset assert('loc.hasProfile eq true')>

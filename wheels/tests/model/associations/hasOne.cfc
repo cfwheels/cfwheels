@@ -1,6 +1,6 @@
 <cfcomponent extends="wheelsMapping.Test">
 
-	<cffunction name="_test_getting_child">
+	<cffunction name="test_getting_child">
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cfset loc.dynamicResult = loc.author.profile()>
 		<cfset loc.coreResult = model("profile").findOne(where="authorId=#loc.author.id#")>
@@ -39,7 +39,7 @@
 		<cfset assert("loc.author.id IS loc.profile.authorId")>
 	</cffunction>
 
-	<cffunction name="_test_removing_child_by_nullifying_foreign_key">
+	<cffunction name="test_removing_child_by_nullifying_foreign_key">
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cftransaction>
 			<cfset loc.author.removeProfile(transaction="none")>
@@ -53,7 +53,7 @@
 		</cftransaction>
 	</cffunction>
 
-	<cffunction name="_test_deleting_child">
+	<cffunction name="test_deleting_child">
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cfset loc.profileCount = model("profile").count() />
 		<cftransaction>

@@ -4,7 +4,7 @@
 		<cfset loc.authorModel = model("author")>
 	</cffunction>
 
- 	<cffunction name="_test_removeObject_valid">
+ 	<cffunction name="test_removeObject_valid">
 		<cfset loc.author = loc.authorModel.findOne(where="firstName = 'Per'")>
 		<cfset loc.profile = loc.author.profile()>
 		<cftransaction action="begin">

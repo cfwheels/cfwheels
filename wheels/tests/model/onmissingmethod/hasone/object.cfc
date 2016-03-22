@@ -5,7 +5,7 @@
 		<cfset loc.userModel = model("user")>
 	</cffunction>
 
- 	<cffunction name="_test_object_valid">
+ 	<cffunction name="test_object_valid">
 		<cfset loc.author = loc.authorModel.findOne(where="firstName = 'Per'")>
 		<cfset loc.profile = loc.author.profile() />
 		<cfset assert('IsObject(loc.profile) eq true')>
