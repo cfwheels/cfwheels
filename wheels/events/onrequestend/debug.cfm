@@ -76,12 +76,12 @@
 
 <div id="wheels-debug-area">
 	<table>
-		<cfif (get('showIncompatiblePlugins') AND Len(application.wheels.incompatiblePlugins)) OR Len(application.wheels.dependantPlugins)>
+		<cfif (get("version") LT 2.0 AND Len(application.wheels.incompatiblePlugins)) OR Len(application.wheels.dependantPlugins)>
 			<tr>
 				<td><strong><span style="color:red;">Warnings:</span></strong></td>
 				<td>
 					<span style="color:red;">
-						<cfif get('showIncompatiblePlugins') AND Len(application.wheels.incompatiblePlugins)>
+						<cfif get("version") LT 2.0 AND Len(application.wheels.incompatiblePlugins)>
 							<cfloop list="#application.wheels.incompatiblePlugins#" index="loc.i">The #loc.i# plugin may be incompatible with this version of Wheels, please look for a compatible version of the plugin<br /></cfloop>
 						</cfif>
 						<cfif Len(application.wheels.dependantPlugins)>

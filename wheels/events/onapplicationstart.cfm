@@ -217,7 +217,7 @@
 		application.$wheels.setUpdatedAtOnCreate = true;
 		application.$wheels.useExpandedColumnAliases = false;
 		application.$wheels.modelRequireInit = false;
-		application.$wheels.showIncompatiblePlugins = (application.$wheels.version < 2.0);
+		application.$wheels.showIncompatiblePlugins = true;
 		application.$wheels.booleanAttributes = "allowfullscreen,async,autofocus,autoplay,checked,compact,controls,declare,default,defaultchecked,defaultmuted,defaultselected,defer,disabled,draggable,enabled,formnovalidate,hidden,indeterminate,inert,ismap,itemscope,loop,multiple,muted,nohref,noresize,noshade,novalidate,nowrap,open,pauseonexit,readonly,required,reversed,scoped,seamless,selected,sortable,spellcheck,translate,truespeed,typemustmatch,visible";
 
 		// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
@@ -361,7 +361,7 @@
 		$include(template="config/#application.$wheels.environment#/settings.cfm");
 
 		// clear query (cfquery) and page (cfcache) caches
-		if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cachekey")) 
+		if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cachekey"))
 		{
 			application.$wheels.cachekey = Hash(CreateUUID());
 		}
