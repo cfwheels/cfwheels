@@ -36,7 +36,7 @@
 		<cfset assert("loc.resultOne.recordCount IS loc.resultTwo.recordCount")>
 	</cffunction>
 
-	<cffunction name="test_in_operator_with_spaces">
+	<cffunction name="_test_in_operator_with_spaces">
 		<cfscript>
 			authors = model("author").findAll(where="id != 0 AND id IN (1, 2, 3) AND firstName IN('Per', 'Tony') AND lastName IN ('Djurner', 'Petruzzi')");
 			assert("authors.recordCount IS 2");
