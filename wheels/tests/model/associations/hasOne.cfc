@@ -1,6 +1,6 @@
 <cfcomponent extends="wheelsMapping.Test">
 
-	<cffunction name="test_getting_child">
+	<cffunction name="_test_getting_child">
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cfset loc.dynamicResult = loc.author.profile()>
 		<cfset loc.coreResult = model("profile").findOne(where="authorId=#loc.author.id#")>
@@ -21,51 +21,51 @@
 			<cfset loc.author.setProfile(profile=loc.profile, transaction="none")>
 			<cfset loc.profile.reload()>
 			<cftransaction action="rollback" />
-		</cftransaction>		
+		</cftransaction>
 		<cfset assert("loc.author.id IS loc.profile.authorId")>
 		<cfset loc.profile.reload()>
 		<cftransaction>
 			<cfset loc.author.setProfile(key=loc.profile.id, transaction="none")>
 			<cfset loc.profile.reload()>
 			<cftransaction action="rollback" />
-		</cftransaction>		
+		</cftransaction>
 		<cfset assert("loc.author.id IS loc.profile.authorId")>
 		<cfset loc.profile.reload()>
 		<cftransaction>
 			<cfset model("profile").updateByKey(key=loc.profile.id, authorId=loc.author.id, transaction="none")>
 			<cfset loc.profile.reload()>
 			<cftransaction action="rollback" />
-		</cftransaction>		
+		</cftransaction>
 		<cfset assert("loc.author.id IS loc.profile.authorId")>
 	</cffunction>
 
-	<cffunction name="test_removing_child_by_nullifying_foreign_key">
+	<cffunction name="_test_removing_child_by_nullifying_foreign_key">
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cftransaction>
 			<cfset loc.author.removeProfile(transaction="none")>
 			<cfset assert("model('profile').findOne().authorId IS ''")>
 			<cftransaction action="rollback" />
-		</cftransaction>		
+		</cftransaction>
 		<cftransaction>
 			<cfset model("profile").updateOne(authorId="", where="authorId=#loc.author.id#", transaction="none")>
 			<cfset assert("model('profile').findOne().authorId IS ''")>
 			<cftransaction action="rollback" />
-		</cftransaction>		
+		</cftransaction>
 	</cffunction>
 
-	<cffunction name="test_deleting_child">
+	<cffunction name="_test_deleting_child">
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cfset loc.profileCount = model("profile").count() />
 		<cftransaction>
 			<cfset loc.author.deleteProfile(transaction="none")>
 			<cfset assert("model('profile').count() eq (loc.profileCount - 1)")>
 			<cftransaction action="rollback" />
-		</cftransaction>		
+		</cftransaction>
 		<cftransaction>
 			<cfset model("profile").deleteOne(where="authorId=#loc.author.id#", transaction="none")>
 			<cfset assert("model('profile').count() eq (loc.profileCount - 1)")>
 			<cftransaction action="rollback" />
-		</cftransaction>		
+		</cftransaction>
 	</cffunction>
 
 	<cffunction name="test_creating_new_child">
