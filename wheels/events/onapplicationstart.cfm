@@ -415,13 +415,16 @@
 		// Redirect away from reloads on GET requests.
 		if (application.wheels.redirectAfterReload && StructKeyExists(url, "reload") && cgi.REQUEST_METHOD == 'get')
 		{
-			if (StructKeyExists(cgi, "PATH_INFO") && Len(cgi.PATH_INFO)) {
+			if (StructKeyExists(cgi, "PATH_INFO") && Len(cgi.PATH_INFO))
+			{
 				loc.url = cgi.PATH_INFO;
 			}
-			else if (StructKeyExists(cgi, "PATH_INFO")) {
+			else if (StructKeyExists(cgi, "PATH_INFO"))
+			{
 				loc.url = "/";
 			}
-			else {
+			else
+			{
 				loc.url = cgi.SCRIPT_NAME;
 			}
 
@@ -431,13 +434,16 @@
 			for (loc.i = 1; loc.i <= ArrayLen(loc.oldQueryString); loc.i++)
 			{
 				loc.keyValue = loc.oldQueryString[loc.i];
+				loc.key = ListFirst(loc.keyValue, "=");
 
-				if (!loc.keyValue.startsWith("reload=") && !loc.keyValue.startsWith("password=")) {
+				if (!ListFindNoCase("reload,password", loc.key))
+				{
 					ArrayAppend(loc.newQueryString, loc.keyValue);
 				}
 			}
 
-			if (ArrayLen(loc.newQueryString)) {
+			if (ArrayLen(loc.newQueryString))
+			{
 				loc.queryString = ArrayToList(loc.newQueryString, '&');
 				loc.url = "#loc.url#?#loc.queryString#";
 			}
