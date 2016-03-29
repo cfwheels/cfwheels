@@ -6,6 +6,11 @@ Model Enhancements
 * Support for passing in select=false to property() to not include a calculated property by default in SELECT clauses - #122 [Adam Chapman, Per Djurner]
 * Support for setting calculated properties to a specific data type - [Per Djurner]
 
+View Enhancements
+=================
+
+* ?
+
 Controller Enhancements
 =======================
 
@@ -14,17 +19,33 @@ Controller Enhancements
 Bug Fixes
 =========
 
-* Display URL correctly in error email when on HTTPS - [Per Djurner]
-* Don't include query string when looking for image on file through imageTag() - [Per Djurner]
+* ?
 
 Miscellaneous
 =============
 
+* Added ability to turn off incompatible plugin warnings from showing - [Danny Beard]
+* Redirect away after a reload request - [Chris Peters]
 * Support checking IP in "http_x_forwarded_for" when doing maintenance mode exclusions - [Per Djurner]
 * Support checking user agent string when doing maintenance mode exclusions - [Per Djurner]
 * Set minimum Lucee version to 4.5.1.022 - [Per Djurner, Chris Peters]
 * Set minimum ACF version to 10.0.16 / 11.0.5 - [Per Djurner]
 * Dropped support for Railo - [Per Djurner]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.4.5 (3/30/2016)
+
+Bug Fixes
+=========
+
+* Display URL correctly in error email when on HTTPS - [Per Djurner]
+* Added the datetimeoffset data type to the Microsoft SQL Server adapter - [Danny Beard]
+* Fix for test link display in debug footer - #588 [Tom King]
+* Don't include query string when looking for image on file through imageTag() - [Per Djurner]
+* Format numbers in paginationLinks() - [Per Djurner]
+* Correct plugin filename case on application startup - #586 [Chris Peters]
+* Clear out cached queries on reload  - #585 [Andy Bellenie]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
