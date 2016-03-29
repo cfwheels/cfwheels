@@ -5,6 +5,7 @@ Bug Fixes
 
 * Display URL correctly in error email when on HTTPS - [Per Djurner]
 * Added the datetimeoffset data type to the Microsoft SQL Server adapter - [Danny Beard]
+* Fix for test link display in debug footer - #588 [Tom King]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
