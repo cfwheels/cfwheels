@@ -174,7 +174,7 @@
 		else
 		{
 			arguments.src = application.wheels.webPath & application.wheels.imagePath & "/" & arguments.source;
-			loc.file = GetDirectoryFromPath(GetBaseTemplatePath()) & application.wheels.imagePath & "/" & arguments.source;
+			loc.file = GetDirectoryFromPath(GetBaseTemplatePath()) & application.wheels.imagePath & "/" & SpanExcluding(arguments.source, "?");
 			if (get("showErrorInformation"))
 			{
 				if (loc.localFile && !FileExists(loc.file))
