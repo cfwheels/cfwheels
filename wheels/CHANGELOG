@@ -1,4 +1,4 @@
-1.4.5 (3/29/2016)
+1.4.5 (3/30/2016)
 
 Bug Fixes
 =========
@@ -8,6 +8,8 @@ Bug Fixes
 * Fix for test link display in debug footer - #588 [Tom King]
 * Don't include query string when looking for image on file through imageTag() - [Per Djurner]
 * Format numbers in paginationLinks() - [Per Djurner]
+TBD Correct plugin filename case on application startup - #586 [Chris Peters]
+TBD Clear out cached queries on reload  - #585 [Andy Bellenie]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
