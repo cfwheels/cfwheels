@@ -31,7 +31,7 @@
 	<cfif IsDefined("application.wheels.rewriteFile")>
 		<p>
 			<strong>URL:</strong><br>
-			#LCase(ListFirst(cgi.server_protocol, "/"))#://#cgi.server_name##Replace(cgi.script_name, "/#application.wheels.rewriteFile#", "")#<cfif IsDefined("request.cgi.path_info")>#request.cgi.path_info#<cfelse>#cgi.path_info#</cfif><cfif cgi.query_string IS NOT "">?#cgi.query_string#</cfif>
+			http<cfif cgi.server_port_secure>s</cfif>://#cgi.server_name##Replace(cgi.script_name, "/#application.wheels.rewriteFile#", "")#<cfif IsDefined("request.cgi.path_info")>#request.cgi.path_info#<cfelse>#cgi.path_info#</cfif><cfif cgi.query_string IS NOT "">?#cgi.query_string#</cfif>
 		</p>
 	</cfif>
 	<cfif Len(cgi.http_referer)>
