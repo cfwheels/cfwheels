@@ -236,7 +236,8 @@
 			if (!IsCustomFunction(this[loc.key]))
 			{
 				// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
-				if (ListFindNoCase(propertyNames(), loc.key)) {
+				if (ListFindNoCase(propertyNames(), loc.key))
+				{
 					loc.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), loc.key));
 				}
 				// if it's a nested property, apply this function recursively
