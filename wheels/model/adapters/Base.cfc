@@ -284,6 +284,12 @@
 				loc.args.psq = false;
 			}
 
+			// add a key as a comment for cached queries to ensure query is unique for the life of this application
+			if (StructKeyExists(arguments, "cachedwithin") && StructKeyExists(application.wheels, "cachekey"))
+			{
+				loc.comment = $comment("cachekey:#application.wheels.cachekey#");
+			}
+
 			// overloaded arguments are settings for the query
 			loc.orgArgs = Duplicate(arguments);
 			StructDelete(loc.orgArgs, "sql");
@@ -293,7 +299,7 @@
 			StructDelete(loc.orgArgs, "$primaryKey");
 			StructAppend(loc.args, loc.orgArgs);
 		</cfscript>
-		<cfquery attributeCollection="#loc.args#"><cfset loc.pos = 0><cfloop array="#arguments.sql#" index="loc.i"><cfset loc.pos = loc.pos + 1><cfif IsStruct(loc.i)><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif NOT IsBinary(loc.i.value) AND loc.i.value IS "null" AND loc.pos GT 1 AND (Right(arguments.sql[loc.pos-1], 2) IS "IS" OR Right(arguments.sql[loc.pos-1], 6) IS "IS NOT")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(loc.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>#$quoteValue(str=loc.i.value, sqlType=loc.i.type)#</cfif></cfif><cfelse><cfset loc.i = Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
+		<cfquery attributeCollection="#loc.args#"><cfset loc.pos = 0><cfloop array="#arguments.sql#" index="loc.i"><cfset loc.pos = loc.pos + 1><cfif IsStruct(loc.i)><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif NOT IsBinary(loc.i.value) AND loc.i.value IS "null" AND loc.pos GT 1 AND (Right(arguments.sql[loc.pos-1], 2) IS "IS" OR Right(arguments.sql[loc.pos-1], 6) IS "IS NOT")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(loc.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>#$quoteValue(str=loc.i.value, sqlType=loc.i.type)#</cfif></cfif><cfelse><cfset loc.i = Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif><cfif StructKeyExists(loc, "comment")>#loc.comment#</cfif></cfquery>
 		<cfscript>
 			if (StructKeyExists(query, "name"))
 			{
@@ -364,6 +370,11 @@
 			}
 		</cfscript>
 		<cfreturn loc.rv>
+	</cffunction>
+
+	<cffunction name="$comment" returntype="string" access="public" output="false">
+		<cfargument name="text" type="string" required="true">
+		<cfreturn "/* " & arguments.text & " */">
 	</cffunction>
 
 	<cfinclude template="../../plugins/injection.cfm">

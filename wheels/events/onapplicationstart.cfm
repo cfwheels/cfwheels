@@ -353,9 +353,9 @@
 		$include(template="config/#application.$wheels.environment#/settings.cfm");
 
 		// clear query (cfquery) and page (cfcache) caches
-		if (application.$wheels.clearQueryCacheOnReload)
+		if (application.$wheels.clearQueryCacheOnReload || !StructKeyExists(application.$wheels, "cachekey"))
 		{
-			$objectcache(action="clear");
+			application.$wheels.cachekey = Hash(CreateUUID());
 		}
 		if (application.$wheels.clearServerCacheOnReload)
 		{
