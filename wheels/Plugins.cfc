@@ -46,10 +46,16 @@
 		<cfset loc.folders = $folders()>
 
 		<cfloop query="loc.folders">
+			<cfdirectory name="loc.subfolder" action="list" directory="#loc.folders.directory#/#loc.folders.name#">
+			<cfquery name="loc.pluginCfc" dbtype="query">
+			SELECT name
+			FROM loc.subfolder
+			WHERE LOWER(name) = '#LCase(loc.folders.name)#.cfc'
+			</cfquery>
 			<cfset loc.temp = {}>
-			<cfset loc.temp.name = loc.folders.name>
+			<cfset loc.temp.name = Replace(loc.pluginCfc.name, ".cfc", "")>
 			<cfset loc.temp.folderPath = $fullPathToPlugin(loc.folders.name)>
-			<cfset loc.temp.componentName = lcase(loc.folders.name) & "." & loc.folders.name>
+			<cfset loc.temp.componentName = loc.folders.name & "." & Replace(loc.pluginCfc.name, ".cfc", "")>
 			<cfset loc.plugins[loc.folders.name] = loc.temp>
 		</cfloop>
 
@@ -69,7 +75,7 @@
 			<cfset loc.temp = {}>
 			<cfset loc.temp.file = $fullPathToPlugin(loc.files.name)>
 			<cfset loc.temp.name = loc.files.name>
-			<cfset loc.temp.folderPath = lcase($fullPathToPlugin(loc.name))>
+			<cfset loc.temp.folderPath = $fullPathToPlugin(LCase(loc.name))>
 			<cfset loc.temp.folderExists = directoryExists(loc.temp.folderPath)>
 			<cfset loc.plugins[loc.name] = loc.temp>
 		</cfloop>
@@ -124,13 +130,15 @@
 		<cfset var loc = {}>
 
 		<cfset loc.plugins = $pluginFolders()>
+		<cfset loc.pluginKeys = StructKeyList(loc.plugins)>
 		<cfset loc.wheelsVersion = SpanExcluding(variables.$class.wheelsVersion, " ")>
-		<cfloop collection="#loc.plugins#" item="loc.iPlugins">
-			<cfset loc.plugin = createobject("component", $componentPathToPlugin(loc.iPlugins)).init()>
-			<cfif not StructKeyExists(loc.plugin, "version") OR ListFind(loc.plugin.version, loc.wheelsVersion) OR variables.$class.loadIncompatiblePlugins>
-				<cfset variables.$class.plugins[loc.iPlugins] = loc.plugin>
-				<cfif StructKeyExists(loc.plugin, "version") AND not ListFind(loc.plugin.version, loc.wheelsVersion)>
-					<cfset variables.$class.incompatiblePlugins = ListAppend(variables.$class.incompatiblePlugins, loc.iPlugins)>
+		<cfloop list="#loc.pluginKeys#" index="loc.pluginKey">
+			<cfset loc.pluginValue = loc.plugins[loc.pluginKey]>
+			<cfset loc.plugin = CreateObject("component", $componentPathToPlugin(loc.pluginKey, loc.pluginValue.name)).init()>
+			<cfif not StructKeyExists(loc.plugin, "version") or ListFind(loc.plugin.version, loc.wheelsVersion) or variables.$class.loadIncompatiblePlugins>
+				<cfset variables.$class.plugins[loc.pluginKey] = loc.plugin>
+				<cfif StructKeyExists(loc.plugin, "version") and not ListFind(loc.plugin.version, loc.wheelsVersion)>
+					<cfset variables.$class.incompatiblePlugins = ListAppend(variables.$class.incompatiblePlugins, loc.pluginKey)>
 				</cfif>
 			</cfif>
 		</cfloop>
@@ -257,8 +265,9 @@
 
 	<cffunction name="$componentPathToPlugin">
 		<cfargument name="folder" type="string" required="true">
+		<cfargument name="file" type="string" required="true">
 		<cfset var loc = {}>
-		<cfset loc.path = [ListChangeDelims(variables.$class.pluginPath, ".", "/"), arguments.folder, arguments.folder]>
+		<cfset loc.path = [ListChangeDelims(variables.$class.pluginPath, ".", "/"), arguments.folder, arguments.file]>
 		<cfreturn ArrayToList(loc.path, ".")>
 	</cffunction>
 
