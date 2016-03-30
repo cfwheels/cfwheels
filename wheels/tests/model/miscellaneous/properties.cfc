@@ -74,4 +74,26 @@
 		<cfset assert('loc.result.lastName eq "b"')>
 	</cffunction>
 
+	<cffunction name="test_getting_nested_objects_with_simple_argument">
+		<cfset loc.adam = {firstName="adam", lastName="chapman"}>
+		<cfset loc.postOne = {views="1000", averageRating=1.0, body="This is the single body", title="this is the single title"}>
+		<cfset loc.postTwo = {views="2000", averageRating=2.0, body="This is the arrays first body", title="this is the arrays first title"}>
+		<cfset loc.postThree = {views="3000", averageRating=3.0, body="This is the arrays second body", title="this is the arrays second title"}>
+
+		<cfset loc.author = model("author").new(loc.adam)>
+		<cfset loc.author.post = model("post").new(loc.postOne)>
+		<cfset loc.author.posts = [model("post").new(loc.postTwo), model("post").new(loc.postThree)]>
+
+		<cfset loc.simpleAuthor = loc.author.properties(simple=true)>
+		<cfset loc.complexAuthor = loc.author.properties()>
+
+		<cfset loc.in = loc.simpleAuthor>
+		<cfset loc.want = loc.adam>
+		<cfset loc.want.post = loc.postOne>
+		<cfset loc.want.posts = [loc.postTwo, loc.postThree]>
+
+		<cfset assert('SerializeJSON(loc.in) eq SerializeJSON(loc.want)')>
+		<cfset assert("IsObject(loc.complexAuthor.post)")>
+	</cffunction>
+
 </cfcomponent>

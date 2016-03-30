@@ -225,24 +225,41 @@
 </cffunction>
 
 <cffunction name="properties" returntype="struct" access="public" output="false">
+	<cfargument name="simple" type="boolean" required="false" default="false">
 	<cfscript>
-		var loc = {};
-		loc.rv = {};
-		for (loc.key in this)
+	var loc = {};
+	loc.rv = {};
+	// loop through all properties and functions in the this scope
+	for (loc.key in this)
+	{
+		// we return anything that is not a function
+		if (!IsCustomFunction(this[loc.key]))
 		{
-			// we return anything that is not a function
-			if (!IsCustomFunction(this[loc.key]))
+			// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
+			if (ListFindNoCase(propertyNames(), loc.key)) {
+				loc.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), loc.key));
+			}
+			// if it's a nested property, apply this function recursively
+			if (IsObject(this[loc.key]) && arguments.simple)
 			{
-				// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
-				if (ListFindNoCase(propertyNames(), loc.key))
+				loc.rv[loc.key] = this[loc.key].properties(argumentCollection=arguments);
+			}
+			// loop thru the array and apply this function to each item
+			else if (IsArray(this[loc.key]) && arguments.simple)
+			{
+				loc.rv[loc.key] = [];
+				for (loc.i=1; loc.i <= ArrayLen(this[loc.key]); loc.i++)
 				{
-					loc.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), loc.key));
+					loc.rv[loc.key][loc.i] = this[loc.key][loc.i].properties(argumentCollection=arguments);
 				}
-
-				// set property from the this scope in the struct that we will return
+			}
+			// set property from the this scope in the struct that we will return
+			else
+			{
 				loc.rv[loc.key] = this[loc.key];
 			}
 		}
+	}
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
