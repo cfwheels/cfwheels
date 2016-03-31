@@ -93,10 +93,10 @@
 		<cfset loc.want.posts = [loc.postTwo, loc.postThree]>
 
 		<cfset assert("IsObject(loc.complexAuthor.post)")>
-		<cfset assert("StructKeyList(loc.in) eq StructKeyList(loc.want)")>
-		<cfset assert("StructKeyList(loc.in.post) eq StructKeyList(loc.want.post)")>
-		<cfset assert("StructKeyList(loc.in.posts[1]) eq StructKeyList(loc.want.posts[1])")>
-		<cfset assert("StructKeyList(loc.in.posts[2]) eq StructKeyList(loc.want.posts[2])")>
+		<cfset assert("ListSort(StructKeyList(loc.in), 'textNoCase') eq ListSort(StructKeyList(loc.want), 'textNoCase')")>
+		<cfset assert("ListSort(StructKeyList(loc.in.post), 'textNoCase') eq ListSort(StructKeyList(loc.want.post), 'textNoCase')")>
+		<cfset assert("ListSort(StructKeyList(loc.in.posts[1]), 'textNoCase') eq ListSort(StructKeyList(loc.want.posts[1]), 'textNoCase')")>
+		<cfset assert("ListSort(StructKeyList(loc.in.posts[2]), 'textNoCase') eq ListSort(StructKeyList(loc.want.posts[2]), 'textNoCase')")>
 		<!--- this would be a lot simpler, but the JSON is serialised differently on ACF10 --->
 		<!--- <cfset assert("SerializeJSON(loc.in) eq SerializeJSON(loc.want)")> --->
 	</cffunction>
