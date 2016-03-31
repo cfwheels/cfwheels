@@ -92,8 +92,17 @@
 		<cfset loc.want.post = loc.postOne>
 		<cfset loc.want.posts = [loc.postTwo, loc.postThree]>
 
-		<cfset assert('SerializeJSON(loc.in) eq SerializeJSON(loc.want)')>
 		<cfset assert("IsObject(loc.complexAuthor.post)")>
+		<cfset assert("StructKeyList(loc.in) == StructKeyList(loc.want)")>
+		<!--- given an object, IsStruct() returns true, so check not IsObject --->
+		<cfset assert("! IsObject(loc.in.post)")>
+		<cfset assert("StructKeyList(loc.in.post) == StructKeyList(loc.want.post)")>
+		<cfset assert("! IsObject(loc.in.posts[1])")>
+		<cfset assert("StructKeyList(loc.in.posts[1]) == StructKeyList(loc.want.posts[1])")>
+		<cfset assert("! IsObject(loc.in.posts[2])")>
+		<cfset assert("StructKeyList(loc.in.posts[2]) == StructKeyList(loc.want.posts[2])")>
+		<!--- this would be a lot simpler, but the JSON is serialised differently on ACF10 --->
+		<!--- <cfset assert("SerializeJSON(loc.in) eq SerializeJSON(loc.want)")> --->
 	</cffunction>
 
 </cfcomponent>
