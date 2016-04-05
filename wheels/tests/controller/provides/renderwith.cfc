@@ -12,6 +12,15 @@
 		<cfset $header(name="content-type", value="text/html" , charset="utf-8") />
 	</cffunction>
 
+	<!--- Helper function for getting correct HTTP statusCode --->
+	<cffunction name="responseCode" output="false">
+	  <cfif StructKeyExists(server, "lucee")>   
+	    <cfreturn getPageContext().getResponse().getStatus()>    
+	  <cfelse>
+	    <cfreturn getPageContext().getFusionContext().getResponse().getStatus()> 
+	  </cfif> 
+	</cffunction>
+
 	<!--- <cffunction name="test_json_integer">
 		<cfset params = {controller="dummy", action="dummy", format = "json"}>
 		<cfset loc.controller = controller("dummy", params)>
@@ -140,11 +149,7 @@
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string")> 
-		<cfif StructKeyExists(server, "lucee")>   
-			<cfset assert("getPageContext().getResponse().getStatus() EQ 200")>    
-		<cfelse>
-			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 200")> 
-		</cfif>  
+		<cfset assert("responseCode() EQ 200")>  
 	</cffunction>
 
 	<cffunction name="test_custom_status_codes_204">
@@ -154,11 +159,7 @@
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status=204)>  
-		<cfif StructKeyExists(server, "lucee")>   
-			<cfset assert("getPageContext().getResponse().getStatus() EQ 204")>    
-		<cfelse>
-			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 204")> 
-		</cfif>   
+		<cfset assert("responseCode() EQ 204")>   
 	</cffunction>
 
 	<cffunction name="test_custom_status_codes_403">
@@ -168,11 +169,7 @@
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status=403)>  
-		<cfif StructKeyExists(server, "lucee")>   
-			<cfset assert("getPageContext().getResponse().getStatus() EQ 403")>    
-		<cfelse>
-			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 403")> 
-		</cfif>   
+		<cfset assert("responseCode() EQ 403")>   
 	</cffunction>
 
 	<cffunction name="test_custom_status_codes_404">
@@ -182,11 +179,7 @@
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status=404)>  
-		<cfif StructKeyExists(server, "lucee")>   
-			<cfset assert("getPageContext().getResponse().getStatus() EQ 404")>    
-		<cfelse>
-			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 404")> 
-		</cfif> 
+		<cfset assert("responseCode() EQ 404")> 
 	</cffunction>
 
 	<cffunction name="test_custom_status_codes_OK">
@@ -196,11 +189,7 @@
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="OK")> 
-		<cfif StructKeyExists(server, "lucee")>   
-			<cfset assert("getPageContext().getResponse().getStatus() EQ 200")>    
-		<cfelse>
-			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 200")> 
-		</cfif>   
+		<cfset assert("responseCode() EQ 200")>   
 	</cffunction> 
 	<cffunction name="test_custom_status_codes_Not_Found">
 		<cfset getPageContext().getResponse().setStatus("100")>
@@ -210,11 +199,7 @@
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="Not Found")>
-		<cfif StructKeyExists(server, "lucee")>   
-			<cfset assert("getPageContext().getResponse().getStatus() EQ 404")>    
-		<cfelse>
-			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 404")> 
-		</cfif>  
+		<cfset assert("responseCode() EQ 404")>  
 	</cffunction>
 	<cffunction name="test_custom_status_codes_Method_Not_Allowed">
 		<cfset getPageContext().getResponse().setStatus("100")>
@@ -224,11 +209,7 @@
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="Method Not Allowed")> 
-		<cfif StructKeyExists(server, "lucee")>   
-			<cfset assert("getPageContext().getResponse().getStatus() EQ 405")>    
-		<cfelse>
-			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 405")> 
-		</cfif> 
+		<cfset assert("responseCode() EQ 405")> 
 	</cffunction>
 
 	<cffunction name="test_custom_status_codes_Method_Not_Allowed_case">
@@ -239,11 +220,7 @@
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="method not allowed")> 
-		<cfif StructKeyExists(server, "lucee")>   
-			<cfset assert("getPageContext().getResponse().getStatus() EQ 405")>    
-		<cfelse>
-			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 405")> 
-		</cfif>   
+		<cfset assert("responseCode() EQ 405")>   
 	</cffunction>  
 
 	<cffunction name="test_custom_status_codes_bad_numeric">
@@ -267,4 +244,5 @@
 		<cfset loc.e = "Wheels.renderingError">  
 		<cfset assert("loc.e EQ loc.r")> 
 	</cffunction>
+
 </cfcomponent>
