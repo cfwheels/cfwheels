@@ -132,16 +132,19 @@
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
-	<!--- Custom Status Codes; probably no need to test all 75 odd --->
-	<!--- Commenting out for now: these tests fail on windows - how to test this without using getStatus()?
+	<!--- Custom Status Codes; probably no need to test all 75 odd ---> 
 	<cffunction name="test_custom_status_codes_no_argument_passed">
 		<cfset params.format = "json">
 		<cfset params.action = "test2">
 		<cfset loc.controller = controller("test", params)>
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string")>  
-		<cfset assert("getPageContext().getResponse().getStatus() EQ 200")>   
+		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string")> 
+		<cfif StructKeyExists(server, "lucee")>   
+			<cfset assert("getPageContext().getResponse().getStatus() EQ 200")>    
+		<cfelse>
+			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 200")> 
+		</cfif>  
 	</cffunction>
 
 	<cffunction name="test_custom_status_codes_204">
@@ -151,7 +154,11 @@
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status=204)>  
-		<cfset assert("getPageContext().getResponse().getStatus() EQ 204")>   
+		<cfif StructKeyExists(server, "lucee")>   
+			<cfset assert("getPageContext().getResponse().getStatus() EQ 204")>    
+		<cfelse>
+			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 204")> 
+		</cfif>   
 	</cffunction>
 
 	<cffunction name="test_custom_status_codes_403">
@@ -161,7 +168,11 @@
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status=403)>  
-		<cfset assert("getPageContext().getResponse().getStatus() EQ 403")>   
+		<cfif StructKeyExists(server, "lucee")>   
+			<cfset assert("getPageContext().getResponse().getStatus() EQ 403")>    
+		<cfelse>
+			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 403")> 
+		</cfif>   
 	</cffunction>
 
 	<cffunction name="test_custom_status_codes_404">
@@ -171,7 +182,11 @@
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status=404)>  
-		<cfset assert("getPageContext().getResponse().getStatus() EQ 404")>   
+		<cfif StructKeyExists(server, "lucee")>   
+			<cfset assert("getPageContext().getResponse().getStatus() EQ 404")>    
+		<cfelse>
+			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 404")> 
+		</cfif> 
 	</cffunction>
 
 	<cffunction name="test_custom_status_codes_OK">
@@ -180,8 +195,12 @@
 		<cfset loc.controller = controller("test", params)>
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="OK")>  
-		<cfset assert("getPageContext().getResponse().getStatus() EQ 200")>   
+		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="OK")> 
+		<cfif StructKeyExists(server, "lucee")>   
+			<cfset assert("getPageContext().getResponse().getStatus() EQ 200")>    
+		<cfelse>
+			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 200")> 
+		</cfif>   
 	</cffunction> 
 	<cffunction name="test_custom_status_codes_Not_Found">
 		<cfset getPageContext().getResponse().setStatus("100")>
@@ -190,9 +209,12 @@
 		<cfset loc.controller = controller("test", params)>
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="Not Found")> 
-		<cfset loc.status = getPageContext().getResponse().getStatus()> 
-		<cfset assert("loc.status EQ 404")>   
+		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="Not Found")>
+		<cfif StructKeyExists(server, "lucee")>   
+			<cfset assert("getPageContext().getResponse().getStatus() EQ 404")>    
+		<cfelse>
+			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 404")> 
+		</cfif>  
 	</cffunction>
 	<cffunction name="test_custom_status_codes_Method_Not_Allowed">
 		<cfset getPageContext().getResponse().setStatus("100")>
@@ -202,8 +224,11 @@
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="Method Not Allowed")> 
-		<cfset loc.status = getPageContext().getResponse().getStatus()> 
-		<cfset assert("loc.status EQ 405")>   
+		<cfif StructKeyExists(server, "lucee")>   
+			<cfset assert("getPageContext().getResponse().getStatus() EQ 405")>    
+		<cfelse>
+			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 405")> 
+		</cfif> 
 	</cffunction>
 
 	<cffunction name="test_custom_status_codes_Method_Not_Allowed_case">
@@ -214,9 +239,12 @@
 		<cfset loc.controller.provides("json")>
 		<cfset user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="method not allowed")> 
-		<cfset loc.status = getPageContext().getResponse().getStatus()>
-		<cfset assert("loc.status EQ 405")>   
-	</cffunction> --->
+		<cfif StructKeyExists(server, "lucee")>   
+			<cfset assert("getPageContext().getResponse().getStatus() EQ 405")>    
+		<cfelse>
+			<cfset assert("getPageContext().getFusionContext().getResponse().getStatus() EQ 405")> 
+		</cfif>   
+	</cffunction>  
 
 	<cffunction name="test_custom_status_codes_bad_numeric">
 		<cfset params.format = "json">
