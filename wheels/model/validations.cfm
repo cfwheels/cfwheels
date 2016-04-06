@@ -482,7 +482,7 @@
 			// wrap value in single quotes unless it's numeric
 			// example: "userName='Joe'"
 			loc.part = arguments.property & "=" & variables.wheels.class.adapter.$quoteValue(str=this[arguments.property], type=validationTypeForProperty(arguments.property));
-			if (Right(loc.part, 3) == "=''" && ListFindNoCase("integer,float,boolean", validationTypeForProperty(arguments.property)))
+			if (Right(loc.part, 3) == "=''" && ListFindNoCase("integer,float,boolean,decimal", validationTypeForProperty(arguments.property)))
 			{
 				// when numeric property but blank we need to translate to IS NULL
 				loc.part = SpanExcluding(loc.part, "=") & " IS NULL";
@@ -497,7 +497,7 @@
 			{
 				loc.item = ListGetAt(arguments.scope, loc.i);
 				loc.part = loc.item & "=" & variables.wheels.class.adapter.$quoteValue(str=this[loc.item], type=validationTypeForProperty(loc.item));
-				if (Right(loc.part, 3) == "=''" && ListFindNoCase("integer,float,boolean", validationTypeForProperty(loc.item)))
+				if (Right(loc.part, 3) == "=''" && ListFindNoCase("integer,float,boolean,decimal", validationTypeForProperty(loc.item)))
 				{
 					// when numeric property but blank we need to translate to IS NULL
 					loc.part = SpanExcluding(loc.part, "=") & " IS NULL";
