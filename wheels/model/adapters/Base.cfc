@@ -343,7 +343,7 @@
 			{
 				arguments.type = $getValidationType(arguments.sqlType);
 			}
-			if (!ListFindNoCase("integer,float,boolean,decimal", arguments.type) || !Len(arguments.str))
+			if (!ListFindNoCase("integer,float,boolean", arguments.type) || !Len(arguments.str))
 			{
 				loc.rv = "'#arguments.str#'";
 			}

@@ -405,16 +405,11 @@
 		</cftransaction>
 	</cffunction>
 
-	<cffunction name="test_validatesUniquenessOf_with_blank_integer_values">
-		<cfset loc.combiKey = model("combiKey").new(id1="", id2="")>
-		<cfset assert("not loc.combiKey.valid()")>
-	</cffunction>
-
-	<cffunction name="test_validatesUniquenessOf_with_blank_property_value">
+	<!--- <cffunction name="test_validatesUniquenessOf_with_blank_property_value">
 		<cfset loc.user.firstname = "">
 		<cfset loc.user.validatesUniquenessOf(property="firstname")>
 		<cfset assert('loc.user.valid()')>
-	</cffunction>
+	</cffunction> --->
 
 	<!--- validate --->
 	<cffunction name="test_validate_registering_methods">
