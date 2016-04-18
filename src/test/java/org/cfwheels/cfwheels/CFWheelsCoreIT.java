@@ -196,7 +196,7 @@ public class CFWheelsCoreIT {
 	public void testCFWheels() throws IOException {
 		System.out.print(contextPath);
 		System.out.println(packageName);
-		String packageUrl = baseUrl + contextPath + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&package="+packageName;
+		String packageUrl = baseUrl + contextPath + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&reload=true&package=" + packageName;
 		driver.get(packageUrl);
         String pageSource = driver.getPageSource();
         assertTrue("The page should have results",pageSource.trim().length()>0);
