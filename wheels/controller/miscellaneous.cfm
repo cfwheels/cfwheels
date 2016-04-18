@@ -300,3 +300,15 @@
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
+
+<cfscript>
+
+public boolean function isHead() {
+	return request.cgi.request_method == "head";
+}
+	
+public boolean function isOptions() {
+	return request.cgi.request_method == "options";
+}
+
+</cfscript>
