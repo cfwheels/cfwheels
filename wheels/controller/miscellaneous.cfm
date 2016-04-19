@@ -303,6 +303,18 @@
 
 <cfscript>
 
+public boolean function isPut() {
+	return request.cgi.request_method == "put";
+}
+
+public boolean function isPatch() {
+	return request.cgi.request_method == "patch";
+}
+
+public boolean function isDelete() {
+	return request.cgi.request_method == "delete";
+}
+
 public boolean function isHead() {
 	return request.cgi.request_method == "head";
 }
