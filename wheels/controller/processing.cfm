@@ -1,119 +1,115 @@
 <!--- PRIVATE FUNCTIONS --->
+<cfscript>
 
-<cffunction name="$processAction" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
+public boolean function $processAction() {
+		// Check if action should be cached, and if so, cache statically or set the time to use later when caching just
+		// the action.
+		local.cache = 0;
 
-		// check if action should be cached and if so cache statically or set the time to use later when caching just the action
-		loc.cache = 0;
-		if (get("cacheActions") && $hasCachableActions() && flashIsEmpty() && StructIsEmpty(form))
-		{
-			loc.cachableActions = $cachableActions();
-			loc.iEnd = ArrayLen(loc.cachableActions);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				if (loc.cachableActions[loc.i].action == params.action || loc.cachableActions[loc.i].action == "*")
-				{
-					if (loc.cachableActions[loc.i].static)
-					{
-						loc.timeSpan = $timeSpanForCache(loc.cachableActions[loc.i].time);
-						$cache(action="serverCache", timeSpan=loc.timeSpan, useQueryString=true);
-						if (!$reCacheRequired())
-						{
-							$abort();
+		if (get("cacheActions") && $hasCachableActions() && flashIsEmpty() && StructIsEmpty(form)) {
+			local.cachableActions = $cachableActions();
+
+			for (local.action in local.cachableActions) {
+				if (local.action.action == params.action || local.action.action == "*") {
+					if (local.action.static) {
+						local.timeSpan = $timeSpanForCache(local.action.time);
+						$cache(action="serverCache", timeSpan=local.timeSpan, useQueryString=true);
+
+						if (!$reCacheRequired()) {
+							Abort;
 						}
 					}
-					else
-					{
-						loc.cache = loc.cachableActions[loc.i].time;
-						loc.appendToKey = loc.cachableActions[loc.i].appendToKey;
+					else {
+						local.cache = local.action.time;
+						local.appendToKey = local.action.appendToKey;
 					}
+
 					break;
 				}
 			}
 		}
 
-		if (get("showDebugInformation"))
-		{
+		if (get("showDebugInformation")) {
 			$debugPoint("beforeFilters");
 		}
 
-		// run verifications if they exist on the controller
+		// Run verifications if they exist on the controller.
 		$runVerifications(action=params.action, params=params);
 
-		// continue unless an abort is issued from a verification
-		if (!$abortIssued())
-		{
-			// run before filters if they exist on the controller
+		// Continue unless an abort is issued from a verification.
+		if (!$abortIssued()) {
+			// Run before filters if they exist on the controller.
 			$runFilters(type="before", action=params.action);
 
-			if (get("showDebugInformation"))
-			{
+			if (get("showDebugInformation")) {
 				$debugPoint("beforeFilters,action");
 			}
 
-			// only proceed to call the action if the before filter has not already rendered content
-			if (!$performedRenderOrRedirect())
-			{
-				if (loc.cache)
-				{
-					// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, calling the controller action (which in turn sets the content to the request scope)
-					loc.category = "action";
+			// Only proceed to call the action if the before filter has not already rendered content.
+			if (!$performedRenderOrRedirect()) {
+				if (local.cache) {
+					// Get content from the cache if it exists there and set it to the request scope. If not, the
+					// $callActionAndAddToCache function will run, calling the controller action (which in turn sets the
+					// content to the request scope).
+					local.category = "action";
 
-					// create the key for the cache
-					loc.key = $hashedKey(variables.$class.name, variables.params);
+					// Create the key for the cache.
+					local.key = $hashedKey(variables.$class.name, variables.params);
 
-					// evaluate variables and append to the cache key when specified
-					if (Len(loc.appendToKey))
-					{
-						loc.iEnd = ListLen(loc.appendToKey);
-						for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-						{
-							loc.item = ListGetAt(loc.appendToKey, loc.i);
-							if (IsDefined(loc.item))
-							{
-								loc.key &= Evaluate(loc.item);
+					// Evaluate variables and append to the cache key when specified.
+					if (Len(local.appendToKey)) {
+						for (local.item in local.appendToKey) {
+							if (IsDefined(local.item)) {
+								local.key &= Evaluate(local.item);
 							}
 						}
 					}
 
-					loc.conditionArgs = {};
-					loc.conditionArgs.key = loc.key;
-					loc.conditionArgs.category = loc.category;
-					loc.executeArgs = {};
-					loc.executeArgs.controller = params.controller;
-					loc.executeArgs.action = params.action;
-					loc.executeArgs.key = loc.key;
-					loc.executeArgs.time = loc.cache;
-					loc.executeArgs.category = loc.category;
-					loc.lockName = loc.category & loc.key & application.applicationName;
-					variables.$instance.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+					local.conditionArgs = {};
+					local.conditionArgs.key = local.key;
+					local.conditionArgs.category = local.category;
+					local.executeArgs = {};
+					local.executeArgs.controller = params.controller;
+					local.executeArgs.action = params.action;
+					local.executeArgs.key = local.key;
+					local.executeArgs.time = local.cache;
+					local.executeArgs.category = local.category;
+					local.lockName = local.category & local.key & application.applicationName;
+
+					variables.$instance.response = $doubleCheckedLock(
+						name=local.lockName,
+						condition="$getFromCache",
+						execute="$callActionAndAddToCache",
+						conditionArgs=local.conditionArgs,
+						executeArgs=local.executeArgs
+					);
 				}
-				if (!$performedRender())
-				{
-					// if we didn't render anything from a cached action we call the action here
+
+				if (!$performedRender()) {
+					// If we didn't render anything from a cached action, we call the action here.
 					$callAction(action=params.action);
 				}
 			}
 
-			// run after filters with surrounding debug points (don't run the filters if a delayed redirect will occur though)
-			if (get("showDebugInformation"))
-			{
+			// Run after filters with surrounding debug points. (Don't run the filters if a delayed redirect will occur
+			// though.)
+			if (get("showDebugInformation")) {
 				$debugPoint("action,afterFilters");
 			}
-			if (!$performedRedirect())
-			{
+
+			if (!$performedRedirect()) {
 				$runFilters(type="after", action=params.action);
 			}
-			if (get("showDebugInformation"))
-			{
+
+			if (get("showDebugInformation")) {
 				$debugPoint("afterFilters");
 			}
 		}
-		loc.rv = true;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+
+		return true;	
+}
+
+</cfscript>
 
 <cffunction name="$callAction" returntype="void" access="public" output="false">
 	<cfargument name="action" type="string" required="true">
