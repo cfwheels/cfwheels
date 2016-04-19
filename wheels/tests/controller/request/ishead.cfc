@@ -1,5 +1,5 @@
 component extends="wheelsMapping.Test" {
-  include template="common.cfm";
+  include "common.cfm";
 
   function test_isHead_with_head_request() {
     request.cgi.request_method = "head";

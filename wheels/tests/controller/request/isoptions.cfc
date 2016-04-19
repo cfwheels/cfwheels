@@ -1,5 +1,5 @@
 component extends="wheelsMapping.Test" {
-  include template="common.cfm";
+  include "common.cfm";
 
   function test_isOptions_with_options_request() {
     request.cgi.request_method = "options";
