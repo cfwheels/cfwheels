@@ -2,6 +2,9 @@
 <cfscript>
 
 public boolean function $processAction() {
+		// CSRF protection.
+		$runCsrfProtection(action=params.action);
+
 		// Check if action should be cached, and if so, cache statically or set the time to use later when caching just
 		// the action.
 		local.cache = 0;

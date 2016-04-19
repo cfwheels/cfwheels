@@ -1,4 +1,5 @@
 <cfinclude template="caching.cfm">
+<cfinclude template="csrf.cfm">
 <cfinclude template="filters.cfm">
 <cfinclude template="flash.cfm">
 <cfinclude template="initialization.cfm">
