@@ -8,6 +8,6 @@ component extends="wheelsMapping.Controller" {
   }
 
   function create() {
-    renderText("Create ran.")
+    renderText("Create ran.");
   }
 }

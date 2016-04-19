@@ -8,6 +8,6 @@ component extends="wheelsMapping.Controller" {
   }
 
   function update() {
-    renderText("Update ran.")
+    renderText("Update ran.");
   }
 }
