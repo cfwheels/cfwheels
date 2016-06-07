@@ -31,9 +31,9 @@
 		<cfset loc.controller.processAction("actionPostWithRedirect", params)>
 		<cfset assert('loc.controller.$abortIssued() eq "false"')>
 		<cfset assert('loc.controller.$performedRenderOrRedirect() eq "true"')>
-		<cfset assert('loc.controller.$getRedirect().$args.action  eq "index"')>
-		<cfset assert('loc.controller.$getRedirect().$args.controller  eq "somewhere"')>
-		<cfset assert('loc.controller.$getRedirect().$args.error  eq "invalid"')>
+		<cfset assert('loc.controller.getRedirect().$args.action  eq "index"')>
+		<cfset assert('loc.controller.getRedirect().$args.controller  eq "somewhere"')>
+		<cfset assert('loc.controller.getRedirect().$args.error  eq "invalid"')>
 	</cffunction>
 
 	<cffunction name="test_valid_types">

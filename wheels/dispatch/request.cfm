@@ -200,7 +200,7 @@
 		// if there is a delayed redirect pending we execute it here thus halting the rest of the request
 		if (loc.controller.$performedRedirect())
 		{
-			$location(argumentCollection=loc.controller.$getRedirect());
+			$location(argumentCollection=loc.controller.getRedirect());
 		}
 
 		// clear out the flash (note that this is not done for redirects since the processing does not get here)
