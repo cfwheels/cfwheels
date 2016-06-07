@@ -195,7 +195,7 @@
 
 		// create the requested controller and call the action on it
 		loc.controller = controller(name=loc.params.controller, params=loc.params);
-		loc.controller.$processAction();
+		loc.controller.processAction();
 
 		// if there is a delayed redirect pending we execute it here thus halting the rest of the request
 		if (loc.controller.$performedRedirect())
