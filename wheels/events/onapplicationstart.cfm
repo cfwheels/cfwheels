@@ -205,6 +205,7 @@
 		application.$wheels.tableNamePrefix = "";
 		application.$wheels.obfuscateURLs = false;
 		application.$wheels.reloadPassword = "";
+		application.$wheels.redirectAfterReload = false;
 		application.$wheels.softDeleteProperty = "deletedAt";
 		application.$wheels.timeStampOnCreateProperty = "createdAt";
 		application.$wheels.timeStampOnUpdateProperty = "updatedAt";
@@ -217,8 +218,13 @@
 		application.$wheels.setUpdatedAtOnCreate = true;
 		application.$wheels.useExpandedColumnAliases = false;
 		application.$wheels.modelRequireInit = false;
-		application.$wheels.showIncompatiblePlugins = (application.$wheels.version < 2.0);
+		application.$wheels.showIncompatiblePlugins = true;
 		application.$wheels.booleanAttributes = "allowfullscreen,async,autofocus,autoplay,checked,compact,controls,declare,default,defaultchecked,defaultmuted,defaultselected,defer,disabled,draggable,enabled,formnovalidate,hidden,indeterminate,inert,ismap,itemscope,loop,multiple,muted,nohref,noresize,noshade,novalidate,nowrap,open,pauseonexit,readonly,required,reversed,scoped,seamless,selected,sortable,spellcheck,translate,truespeed,typemustmatch,visible";
+		if (ListFindNoCase("production,maintenance", application.$wheels.environment))
+		{
+			application.$wheels.redirectAfterReload = true;
+		}
+
 
 		// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
 		if (StructKeyExists(this, "sessionManagement") && this.sessionManagement)
@@ -361,7 +367,7 @@
 		$include(template="config/#application.$wheels.environment#/settings.cfm");
 
 		// clear query (cfquery) and page (cfcache) caches
-		if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cachekey")) 
+		if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cachekey"))
 		{
 			application.$wheels.cachekey = Hash(CreateUUID());
 		}
@@ -405,5 +411,44 @@
 
 		// run the developer's on application start code
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
+
+		// Redirect away from reloads on GET requests.
+		if (application.wheels.redirectAfterReload && StructKeyExists(url, "reload") && cgi.REQUEST_METHOD == 'get')
+		{
+			if (StructKeyExists(cgi, "PATH_INFO") && Len(cgi.PATH_INFO))
+			{
+				loc.url = cgi.PATH_INFO;
+			}
+			else if (StructKeyExists(cgi, "PATH_INFO"))
+			{
+				loc.url = "/";
+			}
+			else
+			{
+				loc.url = cgi.SCRIPT_NAME;
+			}
+
+			loc.oldQueryString = ListToArray(cgi.QUERY_STRING, "&");
+			loc.newQueryString = ArrayNew(1);
+
+			for (loc.i = 1; loc.i <= ArrayLen(loc.oldQueryString); loc.i++)
+			{
+				loc.keyValue = loc.oldQueryString[loc.i];
+				loc.key = ListFirst(loc.keyValue, "=");
+
+				if (!ListFindNoCase("reload,password", loc.key))
+				{
+					ArrayAppend(loc.newQueryString, loc.keyValue);
+				}
+			}
+
+			if (ArrayLen(loc.newQueryString))
+			{
+				loc.queryString = ArrayToList(loc.newQueryString, '&');
+				loc.url = "#loc.url#?#loc.queryString#";
+			}
+
+			$location(url=loc.url, addToken=false);
+		}
 	</cfscript>
 </cffunction>

@@ -1,4 +1,6 @@
 .project
+CFIDE
+cfide
 WEB-INF
 /target
 /.settings

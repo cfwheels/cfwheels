@@ -52,6 +52,7 @@
 	<cfargument name="cache" type="any" required="false" default="">
 	<cfargument name="returnAs" type="string" required="false" default="">
 	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false">
+	<cfargument name="status" type="any" required="false" default="200">
 	<cfscript>
 		var loc = {};
 		$args(name="renderWith", args=arguments);
@@ -95,6 +96,21 @@
 			loc.formats = get("formats");
 			loc.value = loc.formats[loc.contentType] & "; charset=utf-8";
 			$header(name="content-type", value=loc.value, charset="utf-8");
+
+			// If custom statuscode passed in, then set appropriate header
+			// status may be a numeric value such as 404, or a text value such as 'Forbidden';
+			if(structKeyExists(arguments, "status")){
+				loc.status=arguments.status;
+				if(isNumeric(loc.status)){
+					loc.statusCode=loc.status;
+					loc.statusText=$returnStatusText(loc.status); 
+				} else { 
+					// Try for statuscode;
+					loc.statusCode=$returnStatusCode(loc.status);
+					loc.statusText=loc.status;
+				}
+				$header(statusCode=loc.statusCode, statusText=loc.statusText); 
+			}
 
 			// if we do not have the loc.content variable and we are not rendering html then try to create it
 			if (!StructKeyExists(loc, "content"))
@@ -253,4 +269,107 @@
 		}
 	</cfscript>
 	<cfreturn loc.rv>
+</cffunction>
+<cffunction name="$returnStatusText" access="public" output="false" returntype="string">
+	<cfargument name="status" type="numeric" required="false" default="OK">
+	<cfscript>
+		var loc={};
+		loc.status      = arguments.status;
+		loc.statusCodes = $getStatusCodes();
+		loc.rv          =  "";		 
+		if(structKeyExists(loc.statuscodes, loc.status)){
+			loc.rv = loc.statuscodes[loc.status];
+		} else {
+			$throw(type="Wheels.RenderingError", message="An invalid http response code #loc.status# was passed in.");
+		} 
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
+<cffunction name="$returnStatusCode" access="public" output="false" returntype="string">
+	<cfargument name="status" required="false" default="200" hint="Can be either a numeric value or text">
+	<cfscript>
+		var loc={};
+		loc.status      = arguments.status;
+		loc.statusCodes = $getStatusCodes();
+		loc.rv          =  "";	 
+		loc.lookup=StructFindValue(loc.statuscodes, loc.status);
+		if(arrayLen(loc.lookup)){
+      		loc.rv = loc.lookup[1]["key"];
+      	} else {
+			$throw(type="Wheels.RenderingError", message="An invalid http response text #loc.status# was passed in.");
+		} 
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
+<cffunction name="$getStatusCodes" access="public" output="false" returntype="struct">
+	<cfscript>
+	var loc={};
+		loc.statuscodes={
+			100 = 'Continue',
+			101 = 'Switching Protocols',
+			102 = 'Processing',
+			200 = 'OK',
+			201 = 'Created',
+			202 = 'Accepted',
+			203 = 'Non-Authoritative Information',
+			204 = 'No Content',
+			205 = 'Reset Content',
+			206 = 'Partial Content',
+			207 = 'Multi-Status',
+			208 = 'Already Reported',
+			226 = 'IM Used',
+			300 = 'Multiple Choices',
+			301 = 'Moved Permanently',
+			302 = 'Found',
+			303 = 'See Other',
+			304 = 'Not Modified',
+			305 = 'Use Proxy',
+			306 = 'Reserved',
+			307 = 'Temporary Redirect',
+			308 = 'Permanent Redirect',
+			400 = 'Bad Request',
+			401 = 'Unauthorized',
+			402 = 'Payment Required',
+			403 = 'Forbidden',
+			404 = 'Not Found',
+			405 = 'Method Not Allowed',
+			406 = 'Not Acceptable',
+			407 = 'Proxy Authentication Required',
+			408 = 'Request Timeout',
+			409 = 'Conflict',
+			410 = 'Gone',
+			411 = 'Length Required',
+			412 = 'Precondition Failed',
+			413 = 'Request Entity Too Large',
+			414 = 'Request-URI Too Long',
+			415 = 'Unsupported Media Type',
+			416 = 'Requested Range Not Satisfiable',
+			417 = 'Expectation Failed',
+			422 = 'Unprocessable Entity',
+			423 = 'Locked',
+			424 = 'Failed Dependency',
+			425 = 'Reserved for WebDAV advanced collections expired proposal',
+			426 = 'Upgrade Required',
+			427 = 'Unassigned',
+			428 = 'Precondition Required',
+			429 = 'Too Many Requests',
+			430 = 'Unassigned',
+			431 = 'Request Header Fields Too Large',
+			500 = 'Internal Server Error',
+			501 = 'Not Implemented',
+			502 = 'Bad Gateway',
+			503 = 'Service Unavailable',
+			504 = 'Gateway Timeout',
+			505 = 'HTTP Version Not Supported',
+			506 = 'Variant Also Negotiates (Experimental)',
+			507 = 'Insufficient Storage',
+			508 = 'Loop Detected',
+			509 = 'Unassigned',
+			510 = 'Not Extended',
+			511 = 'Network Authentication Required'
+		};
+	</cfscript>
+	<cfreturn loc.statuscodes>
 </cffunction>

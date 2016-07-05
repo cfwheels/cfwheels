@@ -2,28 +2,51 @@
 
 Model Enhancements
 ==================
-
 * Support for passing in select=false to property() to not include a calculated property by default in SELECT clauses - #122 [Adam Chapman, Per Djurner]
 * Support for setting calculated properties to a specific data type - [Per Djurner]
+* Added "simple" argument to properties() that returns only simple properties of the object and its nested properties - [Adam Chapman]
+
+View Enhancements
+=================
+* ?
 
 Controller Enhancements
 =======================
-
 * Support for passing in ram:// resources to sendFile() - #566 [Tom King]
+* Extended sendMail() so that it can return the text and/or html content of the email - #122 [Adam Chapman]
+* renderWith() can now set http status codes in header with the "status" argument - #549 [Tom King]
 
 Bug Fixes
 =========
-
-* Don't include query string when looking for image on file through imageTag() - [Per Djurner]
+* ?
 
 Miscellaneous
 =============
-
+* Added ability to turn off incompatible plugin warnings from showing - [Danny Beard]
+* Redirect away after a reload request - [Chris Peters]
 * Support checking IP in "http_x_forwarded_for" when doing maintenance mode exclusions - [Per Djurner]
 * Support checking user agent string when doing maintenance mode exclusions - [Per Djurner]
-* Set minimum Lucee version to 4.5.1.022 - [Per Djurner, Chris Peters]
-* Set minimum ACF version to 10.0.16 / 11.0.5 - [Per Djurner]
-* Dropped support for Railo - [Per Djurner]
+
+Breaking Changes
+================
+* Minimum Lucee version is now 4.5.1.022.
+* Minimum ACF version is now 10.0.16 / 11.0.5.
+* Support for Railo has been dropped.
+* The global setting "clearServerCache" has been renamed to "clearTemplateCache".
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.4.5 (3/30/2016)
+
+Bug Fixes
+=========
+* Display URL correctly in error email when on HTTPS - [Per Djurner]
+* Added the datetimeoffset data type to the Microsoft SQL Server adapter - [Danny Beard]
+* Fix for test link display in debug footer - #588 [Tom King]
+* Don't include query string when looking for image on file through imageTag() - [Per Djurner]
+* Format numbers in paginationLinks() - [Per Djurner]
+* Correct plugin filename case on application startup - #586 [Chris Peters]
+* Clear out cached queries on reload  - #585 [Andy Bellenie]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -31,7 +54,6 @@ Miscellaneous
 
 Bug Fixes
 =========
-
 * Check global "cacheActions" setting - #572 [Andy Bellenie, Per Djurner]
 * Fixed parsing for SQL IN parameters - #564 [Lee Bartelme, Per Djurner]
 * Pass through all arguments properly when using findOrCreateBy - #561 [Per Djurner]
@@ -47,7 +69,6 @@ Bug Fixes
 
 Bug Fixes
 =========
-
 * Fix for using cfscript operators in condition and unless arguments - [Per Djurner]
 * Added try / catch on getting host name since CreateObject("java") can be unavailable for security reasons - [Per Djurner]
 * Fixed bug with cache keys always changing even though the input was the same - [Per Djurner]
@@ -63,7 +84,6 @@ Bug Fixes
 
 Bug Fixes
 =========
-
 * Fix for selecting distinct with calculated property - [Edward Chanter, Per Djurner]
 * Fixed so default values are applied to non persistent properties - #519 [Andy Bellenie]
 * Fixed missing var scope causing error on Lucee - [Russ Michaels, Tom King]
@@ -91,7 +111,6 @@ Bug Fixes
 
 Bug Fixes
 =========
-
 * Skip callbacks when running calculation methods - #488 [Adam Chapman, Per Djurner]
 * Fixed rewrite rules so base URL is rewritten correctly on Apache - #367 [Jeremy Keczan, Per Djurner]
 * Removed incorrect path info information set by Apache - #367 [David Belanger, Per Djurner]
@@ -101,7 +120,6 @@ Bug Fixes
 
 Miscellaneous
 =============
-
 * Removed tests folder - [Per Djurner]
 * Updates to framework utility pages - Update logo, Fix links on congrats page to point to new documentation site - [Chris Peters]
 
@@ -111,7 +129,6 @@ Miscellaneous
 
 Model Enhancements
 ==================
-
 * Allow spaces in list passed in to the "include" argument on finders - #150 [Per Djurner]
 * Added findOrCreateBy[Property](), findAllKeys(), findFirst() and findLast() finder methods - [Per Djurner]
 * Add support for "GROUP BY" in sum(), average() etc. - #464 [Per Djurner]
@@ -121,14 +138,12 @@ Model Enhancements
 
 View Enhancements
 =================
-
 * Respect blank "text" argument in linkTo() - #365 [Adam Chapman, Tony Petruzzi, Per Djurner]
 * Allow styleSheetLinkTag() and JavaScriptIncludeTag() to reference files starting from the root - [Per Djurner]
 * Added "monthNames" and "monthAbbreviations" arguments to form helpers for easy localization - [Per Djurner]
 
 Controller Enhancements
 =======================
-
 * Ability to prepend functions to the filter chain instead of appending - #321 [Per Djurner]
 * Pass in "appendToKey" to caches() to cache content separately - #439 [Per Djurner]
 * Allow external attachments with sendEmail() - [Adam Chapman, Tony Petruzzi]
@@ -137,7 +152,6 @@ Controller Enhancements
 
 Bug Fixes
 =========
-
 * Fix for blank path_info in CGI scope - #447 [Tim Badolato, Tony Petruzzi, Per Djurner]
 * Fix for accessing request scope key that does not exist from session - #446 [Brent Alexander, Per Djurner]
 * Removed "validate" property that was incorrectly set when calling create() - [Per Djurner]
@@ -148,7 +162,6 @@ Bug Fixes
 
 Miscellaneous
 =============
-
 * Support for the Lucee server - [Tom King]
 * Made "development" the default environment mode - [Per Djurner]
 * Removed deprecation work-around for the "if" argument on validation helpers - [Per Djurner]
@@ -162,7 +175,6 @@ Miscellaneous
 
 Miscellaneous
 =============
-
 * Removed unnecessary tests folder [Brant Nielsen, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -171,7 +183,6 @@ Miscellaneous
 
 Bug Fixes
 =========
-
 * Correct output of boolean HTML attributes using new global "booleanAttributes" setting - #377 [James Hayes, Per Djurner]
 * Make sure locks cannot be affected by other applications running on the same server - [Jonathan Smith, Per Djurner]
 * Fixed bug with updating an integer column from NULL to 0 - #436 [Simon Allard, Per Djurner]
@@ -183,7 +194,6 @@ Bug Fixes
 
 Bug Fixes
 =========
-
 * Fixed regression bug with setting unique id for nested properties - [Simon Allard, Per Djurner]
 * Fixed reversed usage for setting option text / value when passing in an array of structs to select() / selectTag() - [Per Djurner]
 * Tableless models should not require dataSourceName - #351 [Jeremy Keczan, Singgih Cahyono]
@@ -202,7 +212,6 @@ Bug Fixes
 
 Bug Fixes
 =========
-
 * Fixed issue with calling addFormat() on application start-up - #333 [Tom King, Per Djurner]
 * Fixed so that Railo outputs ids for nested properties as integers instead of exponents - [Jordan Clark]
 * Make sure that ids for nested properties are unique - [Sam Hakimi, Tony Petruzzi]
@@ -226,7 +235,6 @@ Bug Fixes
 
 Model Enhancements
 ==================
-
 * Support for tableless models - [Tony Petruzzi]
 * Alias table names using the association name in the "FROM" clause of a query when needed - [James Gibson, Per Djurner]
 * New global "modelRequireInit" setting that you can set to "true" to require an init function specified in all models - [Jonathan Smith]
@@ -235,7 +243,6 @@ Model Enhancements
 
 View Enhancements
 =================
-
 * Made it possible to set global defaults on autoLink(), excerpt(), wordTruncate() and simpleFormat() - [Chris Peters]
 * Added server host name to debug info and error email - [Colin MacAllister]
 * Made it possible to set a global default for the "twelveHour" argument on date / time helpers - [Per Djurner]
@@ -250,24 +257,13 @@ View Enhancements
 
 Controller Enhancements
 =======================
-
 * Added the ability to pass through arguments from the view to the data Function in the controller - [Per Djurner]
 * Made setPagination() available from the controller layer - [Per Djurner]
 
-Other Enhancements
-==================
-
-* Fixed issue with double camel-casing of already singular strings [Don Humphreys]
-* Fixes issue with running CFWheels with strict scope cascading enabled in Railo - [Jason Weible]
-* Made application start-up thread safe - [Per Djurner]
-* Performance improvement for locking - [Per Djurner]
-* Case insensitive loading of controllers and models - [Per Djurner]
-* Browse test packages for core, app and plugins - [Adam Chapman, Tony Petruzzi]
-* Refactored to avoid a Duplicate() call when sending error email - [Per Djurner]
-
 Bug Fixes
 =========
-
+* Fixed issue with double camel-casing of already singular strings [Don Humphreys]
+* Fixes issue with running CFWheels with strict scope cascading enabled in Railo - [Jason Weible]
 * Prevent stack overflow error with named arguments on dynamic update - [Tony Petruzzi]
 * Fixes pagination bug when using association methods with a blank "where" clause - [Andy Bellenie]
 * Added missing "validate" argument to create() - [Andy Bellenie]
@@ -292,33 +288,37 @@ Bug Fixes
 * Plugins with global mixin are ignored in unit tests - [Singgih Cahyono, Tony Petruzzi]
 * Automatic validation should validate primary key - #143 [Adam Chapman, Tony Petruzzi]
 
+Miscellaneous
+=============
+* Made application start-up thread safe - [Per Djurner]
+* Performance improvement for locking - [Per Djurner]
+* Case insensitive loading of controllers and models - [Per Djurner]
+* Browse test packages for core, app and plugins - [Adam Chapman, Tony Petruzzi]
+* Refactored to avoid a Duplicate() call when sending error email - [Per Djurner]
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1.1.8 (05/21/2012)
 
 Model Enhancements
 ==================
-
 * Add boolean type to validatesFormatOf() - [Andy Bellenie]
 
 View Enhancements
 =================
-
 * Add delimiter parameter to the highlight() function - #826 [Per Djurner, Tony Petruzzi]
 * Use mark tag in highlight - #836 [Per Djurner, Tony Petruzzi]
 * Add parameters append and prepend to the submitTag() - #593 [Per Djurner, Tony Petruzzi]
 
 Bug Fixes
 =========
-
 * Turned off URL rewriting in IIS 7 by default - [Per Djurner, Tony Petruzzi]
 * Add CFFileServlet to the pattern list, of the rewrite rules file, to be able to display an image when using <cfimage action='writeToBrowser'> - [ellor1138]
 * radioButtonTag() checked attribute is ignored if value attribute is empty - #733 [Per Djurner, Tony Petruzzi]
 * make cached queries respect the 'maxrows' argument (findAll) - #824 [Per Djurner, Tony Petruzzi]
 
-Other Enhancements
-==================
-
+Miscellaneous
+=============
 * Update web.config, htaccess to ignore favicon.ico - [Cathy Shapiro, Tony Petruzzi]
 * Route with only format specified was throwing error - [jjallen, Tony Petruzzi]
 
@@ -328,7 +328,6 @@ Other Enhancements
 
 Bug Fixes
 =========
-
 * Filter controller and action params - [Pete Freitag, Andy Bellenie, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -337,18 +336,15 @@ Bug Fixes
 
 Model Enhancements
 ==================
-
 * validatesUniquenessOf only selects primary keys - [Jordan Clark, Don Humphreys]
 
 View Enhancements
 =================
-
 * Allow removal height and/or width attributes from imageTag when set to false - [downtroden, Tony Petruzzi]
 * Allow delimiter to be specified for stylesheets and javascripts - [Derek, Tony Petruzzi]
 
 Bug Fixes
 =========
-
 * hasChanged was incorrectly evaluating boolean values - [Jordan Clark, Don Humphreys]
 * Do not perform update when no changes have been made to the properties of a model - #786 [Mohamad El-Husseini, Tony Petruzzi]
 * OnlyPath argument of urlFor does not correctly recognise HTTPS urls - [Andy Bellenie, Tony Petruzzi]
@@ -361,45 +357,31 @@ Bug Fixes
 
 View Enhancements
 =================
-
 * Escape html entities in text and value of select options - #767 [Richard Herbert, Tony Petruzzi]
 
 Bug Fixes
 =========
-
 * Fix plugins not loading when application is in a subdirectory - [Mike Craig, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1.1.4 (07/20/2011)
 
-View Enhancements
-=================
-
-* Allow an array of structs to used for options in selectTag() - [Adam Chapman, Tony Petruzzi]
-* Added secondStep parameter to date/time select tags - [Tom King, Tony Petruzzi]
-
-Controller Enhancements
-=======================
-
 Model Enhancements
 ==================
-
 * Update to belongsTo(), hasOne() and hasMany() for the new argument joinKey. - [James Gibson, Tony Petruzzi]
 * You can pass an unlimited number properties when using dynamic finders - [Tony Petruzzi]
 * Dynamic finders now support passing in an array for values - [Tony Petruzzi]
 * Added the delimiter argument to dynamic finders, this allow you to change the delimiter - [Tony Petruzzi]
 * Added validationTypeForProperty() method - [Tony Petruzzi]
 
-Other Enhancements
-==================
-
-* Added proper HTTP status headers - #705 [Randy Johnson , Andy Bellenie]
-* Plugin development no longer requires a zip file. - [Tony Petruzzi]
+View Enhancements
+=================
+* Allow an array of structs to used for options in selectTag() - [Adam Chapman, Tony Petruzzi]
+* Added secondStep parameter to date/time select tags - [Tom King, Tony Petruzzi]
 
 Bug Fixes
 =========
-
 * Incorrect MIME type for JSON - #751 [daniel.mcq, Tony Petruzzi]
 * Route with format will cause exception when route is selected and format is not provided - #738 [Danny Beard, Tony Petruzzi]
 * Raise renderError when template is not found for format - #759 [Mike Henke, Tony Petruzzi]
@@ -414,9 +396,19 @@ Bug Fixes
 * Update hasChanged() to properly chech floats - [Andy Bellenie, Tony Petruzzi]
 * Date tags selected date throws out of range error - [Ben Garrett, Tony Petruzzi]
 
+Miscellaneous
+=============
+* Added proper HTTP status headers - #705 [Randy Johnson , Andy Bellenie]
+* Plugin development no longer requires a zip file. - [Tony Petruzzi]
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1.1.3 (03/24/2011)
+
+Model Enhancements
+==================
+* You can now have bracket markers for all validation arguments - #706 [Tony Petruzzi]
+* Columns marked as not null should allow for blank strings - [Tony Petruzzi]
 
 View Enhancements
 =================
@@ -425,11 +417,6 @@ View Enhancements
 Controller Enhancements
 =======================
 * Allow for default argument on sendmail for from, to and subject - #727 [Andy Bellenie, Tony Petruzzi]
-
-Model Enhancements
-==================
-* You can now have bracket markers for all validation arguments - #706 [Tony Petruzzi]
-* Columns marked as not null should allow for blank strings - [Tony Petruzzi]
 
 Bug Fixes
 =========
@@ -447,6 +434,10 @@ Bug Fixes
 
 1.1.2 (01/29/2011)
 
+Model Enhancements
+==================
+* Add 'when' argument to validate() - #643 [Andy Bellenie, Tony Petruzzi]
+
 View Enhancements
 =================
 * Select, SelectTag allow an array of structs to be passed to options - #680 [William Fisk, Tony Petruzzi]
@@ -454,10 +445,6 @@ View Enhancements
 Controller Enhancements
 =======================
 * Changed "default" argument on includeContent() to "defaultValue" - #663 [Tony Petruzzi]
-
-Model Enhancements
-==================
-* Add 'when' argument to validate() - #643 [Andy Bellenie, Tony Petruzzi]
 
 Bug Fixes
 =========
@@ -630,18 +617,9 @@ Controller Enhancements
 * Added usesLayout() for specifying a controller specific layout - [Tony Petruzzi, Per Djurner]
 * You can now perform a redirect instead of aborting the request using verifies(), any extra arguments passed in are passed through to redirectTo() - [Tony Petruzzi]
 
-Other Enhancements
-==================
-* Allowed plugins to run in maintenance mode - [James Gibson]
-* Added "excludeFromErrorEmail" setting - #447 [Per Djurner]
-* New setting, "errorEmailSubject", that allows you to customize the subject line of error emails - #392 [Per Djurner]
-* New setting, "deletePluginDirectories" that tells CFWheels whether to delete plugin directories if no corresponding ZIP file exists - #385 [Per Djurner]
-* Added a "cachePlugins" setting to allow developers to not cache plugins during the development of them - #304 [Andy Bellenie]
-* Allow setting multiple argument defaults at once, e.g. set(functionName="textField,textArea,select", labelPlacement="before" - #426 [Raul Riera, Per Djurner]
-* A full testing framework is now included in Wheels, unit tests can be created in the "tests" folder - [Tony Petruzzi]
-
 Bug Fixes
 =========
+
 * Session scope is now locked when accessing the Flash - #275 [James Gibson, Per Djurner]
 * Corrected the "id" attribute for radioButton() when value is blank - #373 [Tony Petruzzi]
 * findByKey() now correctly returns "false" when passed a blank "key" argument - #514 [Andy Bellenie]
@@ -653,6 +631,13 @@ Bug Fixes
 
 Miscellaneous
 =============
+* Allowed plugins to run in maintenance mode - [James Gibson]
+* Added "excludeFromErrorEmail" setting - #447 [Per Djurner]
+* New setting, "errorEmailSubject", that allows you to customize the subject line of error emails - #392 [Per Djurner]
+* New setting, "deletePluginDirectories" that tells CFWheels whether to delete plugin directories if no corresponding ZIP file exists - #385 [Per Djurner]
+* Added a "cachePlugins" setting to allow developers to not cache plugins during the development of them - #304 [Andy Bellenie]
+* Allow setting multiple argument defaults at once, e.g. set(functionName="textField,textArea,select", labelPlacement="before" - #426 [Raul Riera, Per Djurner]
+* A full testing framework is now included in Wheels, unit tests can be created in the "tests" folder - [Tony Petruzzi]
 * Adobe ColdFusion 8.0.1 or Railo 3.1.2.020 is now required [Tony Petruzzi, Per Djurner]
 * Deprecated the "class" argument on association methods (belongsTo(), hasMany(), hasOne()), use "modelName" instead. - [Per Djurner]
 * Refactor to avoid polluting the Application.cfc's this scope with the "rootDir" variable - [Per Djurner]
@@ -795,12 +780,6 @@ Controller Enhancements
 * Rewrite support in sub folders in Apache - [Peter Amiri]
 * Turned off rewriting for "robots.txt" file - #278 [Chris Peters, Per Djurner]
 
-Other Enhancements
-==================
-* Support for setting Application.cfc this scoped variables through config/app.cfm - #315 [Jay McEntire, Per Djurner]
-* Allow plugin developer to specify a list of supported CFWheels versions instead of just one - [Chris Peters, Per Djurner]
-* Methods from plugins can now be injected to "Application.cfc" - #288 [James Gibson, Per Djurner]
-
 Bug Fixes
 =========
 * Fixed AVG SQL calculation when dealing with integer values - [Tony Petruzzi, Per Djurner]
@@ -831,6 +810,9 @@ Bug Fixes
 
 Miscellaneous
 =============
+* Support for setting Application.cfc this scoped variables through config/app.cfm - #315 [Jay McEntire, Per Djurner]
+* Allow plugin developer to specify a list of supported CFWheels versions instead of just one - [Chris Peters, Per Djurner]
+* Methods from plugins can now be injected to "Application.cfc" - #288 [James Gibson, Per Djurner]
 * Refactored validations code - #266 [Per Djurner]
 * Copied cgi scope to request scope - #277 [Tony Petruzzi, James Gibson, Per Djurner]
 * Removed an unnecessary variable assignment - #265 [William Fisk, Per Djurner]

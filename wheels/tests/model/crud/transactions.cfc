@@ -163,13 +163,13 @@
 		<cfset assert("IsObject(loc.tag)")>
 		<cfset assert("loc.results.recordcount IS 1")>
 	</cffunction>
-		
+
 	<cffunction name="test_transaction_closed_after_rollback">
 		<cfset loc.hash = model("tag").$hashedConnectionArgs()>
 		<cfset loc.tag = model("tagWithDataCallbacks").create(name="Kermit", description="The Frog", transaction="rollback")>
 		<cfset assert('request.wheels.transactions[loc.hash] is false')>
 	</cffunction>
-	
+
 	<cffunction name="test_transaction_closed_after_none">
 		<cfset loc.hash = model("tag").$hashedConnectionArgs()>
 		<cftransaction>

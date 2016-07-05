@@ -80,7 +80,7 @@
 		</cfscript>
 		<cfreturn loc.rv>
 	</cffunction>
-	
+
 	<cffunction name="$query" returntype="struct" access="public" output="false">
 		<cfargument name="sql" type="array" required="true">
 		<cfargument name="limit" type="numeric" required="false" default="0">
@@ -171,7 +171,7 @@
 				loc.thirdOrder = $columnAlias(list=loc.thirdOrder, action="remove");
 				loc.secondOrder = $columnAlias(list=loc.secondOrder, action="keep");
 				loc.firstOrder = $columnAlias(list=loc.firstOrder, action="keep");
-	
+
 				// build new sql string and replace the old one with it
 				loc.beforeWhere = "SELECT " & loc.firstSelect & " FROM (SELECT TOP " & arguments.limit & " " & loc.secondSelect & " FROM (SELECT ";
 				if (Find(" ", ListRest(arguments.sql[2], " ")))
@@ -206,7 +206,7 @@
 		</cfscript>
 		<cfreturn loc.rv>
 	</cffunction>
-	
+
 	<cffunction name="$identitySelect" returntype="any" access="public" output="false">
 		<cfargument name="queryAttributes" type="struct" required="true">
 		<cfargument name="result" type="struct" required="true">

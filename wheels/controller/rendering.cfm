@@ -129,6 +129,21 @@
 	</cfscript>
 </cffunction>
 
+<cffunction name="getRedirect" returntype="struct" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		if ($performedRedirect())
+		{
+			loc.rv = variables.$instance.redirect;
+		}
+		else
+		{
+			loc.rv = {};
+		}
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
 <!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$renderPageAndAddToCache" returntype="string" access="public" output="false">
@@ -480,21 +495,6 @@
 	<cfscript>
 		var loc = {};
 		loc.rv = StructKeyExists(variables.$instance, "reCache") && variables.$instance.reCache;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
-<cffunction name="$getRedirect" returntype="struct" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		if ($performedRedirect())
-		{
-			loc.rv = variables.$instance.redirect;
-		}
-		else
-		{
-			loc.rv = {};
-		}
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>

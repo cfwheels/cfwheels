@@ -12,6 +12,15 @@
 		<cfset $header(name="content-type", value="text/html" , charset="utf-8") />
 	</cffunction>
 
+	<!--- Helper function for getting correct HTTP statusCode --->
+	<cffunction name="responseCode" output="false">
+	  <cfif StructKeyExists(server, "lucee")>   
+	    <cfreturn getPageContext().getResponse().getStatus()>    
+	  <cfelse>
+	    <cfreturn getPageContext().getFusionContext().getResponse().getStatus()> 
+	  </cfif> 
+	</cffunction>
+
 	<!--- <cffunction name="test_json_integer">
 		<cfset params = {controller="dummy", action="dummy", format = "json"}>
 		<cfset loc.controller = controller("dummy", params)>
@@ -130,6 +139,110 @@
 		<cfset loc.r = raised('loc.controller.renderWith(data=user, layout=false, returnAs="string")')>
 		<cfset loc.e = "Wheels.renderingError">
 		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
+	<!--- Custom Status Codes; probably no need to test all 75 odd ---> 
+	<cffunction name="test_custom_status_codes_no_argument_passed">
+		<cfset params.format = "json">
+		<cfset params.action = "test2">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("json")>
+		<cfset user = model("user").findOne(where="username = 'tonyp'")>
+		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string")> 
+		<cfset assert("responseCode() EQ 200")>  
+	</cffunction>
+
+	<cffunction name="test_custom_status_codes_204">
+		<cfset params.format = "json">
+		<cfset params.action = "test2">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("json")>
+		<cfset user = model("user").findOne(where="username = 'tonyp'")>
+		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status=204)>  
+		<cfset assert("responseCode() EQ 204")>   
+	</cffunction>
+
+	<cffunction name="test_custom_status_codes_403">
+		<cfset params.format = "json">
+		<cfset params.action = "test2">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("json")>
+		<cfset user = model("user").findOne(where="username = 'tonyp'")>
+		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status=403)>  
+		<cfset assert("responseCode() EQ 403")>   
+	</cffunction>
+
+	<cffunction name="test_custom_status_codes_404">
+		<cfset params.format = "json">
+		<cfset params.action = "test2">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("json")>
+		<cfset user = model("user").findOne(where="username = 'tonyp'")>
+		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status=404)>  
+		<cfset assert("responseCode() EQ 404")> 
+	</cffunction>
+
+	<cffunction name="test_custom_status_codes_OK">
+		<cfset params.format = "json">
+		<cfset params.action = "test2">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("json")>
+		<cfset user = model("user").findOne(where="username = 'tonyp'")>
+		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="OK")> 
+		<cfset assert("responseCode() EQ 200")>   
+	</cffunction> 
+	<cffunction name="test_custom_status_codes_Not_Found">
+		<cfset getPageContext().getResponse().setStatus("100")>
+		<cfset params.format = "json">
+		<cfset params.action = "test2">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("json")>
+		<cfset user = model("user").findOne(where="username = 'tonyp'")>
+		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="Not Found")>
+		<cfset assert("responseCode() EQ 404")>  
+	</cffunction>
+	<cffunction name="test_custom_status_codes_Method_Not_Allowed">
+		<cfset getPageContext().getResponse().setStatus("100")>
+		<cfset params.format = "json">
+		<cfset params.action = "test2">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("json")>
+		<cfset user = model("user").findOne(where="username = 'tonyp'")>
+		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="Method Not Allowed")> 
+		<cfset assert("responseCode() EQ 405")> 
+	</cffunction>
+
+	<cffunction name="test_custom_status_codes_Method_Not_Allowed_case">
+		<cfset getPageContext().getResponse().setStatus("100")>
+		<cfset params.format = "json">
+		<cfset params.action = "test2">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("json")>
+		<cfset user = model("user").findOne(where="username = 'tonyp'")>
+		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="method not allowed")> 
+		<cfset assert("responseCode() EQ 405")>   
+	</cffunction>  
+
+	<cffunction name="test_custom_status_codes_bad_numeric">
+		<cfset params.format = "json">
+		<cfset params.action = "test2">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("json")>
+		<cfset user = model("user").findOne(where="username = 'tonyp'")>
+		<cfset loc.r = raised('loc.controller.renderWith(data=user, layout=false, returnAs="string", status=987654321)')> 
+		<cfset loc.e = "Wheels.renderingError"> 
+		<cfset assert("loc.e EQ loc.r")> 
+	</cffunction>
+
+	<cffunction name="test_custom_status_codes_bad_text">
+		<cfset params.format = "json">
+		<cfset params.action = "test2">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("json")>
+		<cfset user = model("user").findOne(where="username = 'tonyp'")>
+		<cfset loc.r = raised('loc.controller.renderWith(data=user, layout=false, returnAs="string", status="THECAKEISALIE")')>
+		<cfset loc.e = "Wheels.renderingError">  
+		<cfset assert("loc.e EQ loc.r")> 
 	</cffunction>
 
 </cfcomponent>

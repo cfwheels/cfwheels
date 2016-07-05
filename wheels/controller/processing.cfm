@@ -1,6 +1,6 @@
-<!--- PRIVATE FUNCTIONS --->
+<!--- PUBLIC FUNCTIONS --->
 
-<cffunction name="$processAction" returntype="boolean" access="public" output="false">
+<cffunction name="processAction" returntype="boolean" access="public" output="false">
 	<cfscript>
 		var loc = {};
 
@@ -114,6 +114,8 @@
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
+
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$callAction" returntype="void" access="public" output="false">
 	<cfargument name="action" type="string" required="true">

@@ -17,7 +17,7 @@
 		<cfset $$oldViewPath = application.wheels.viewPath>
 		<cfset application.wheels.viewPath = "wheels/tests/_assets/views">
 		<cfset loc.controller.caches(action="test")>
-		<cfset loc.result = loc.controller.$processAction("test", params)>
+		<cfset loc.result = loc.controller.processAction("test", params)>
 		<cfset application.wheels.viewPath = $$oldViewPath>
 		<cfset assert("loc.result IS true")>
 	</cffunction>
@@ -39,5 +39,5 @@
 		<cfset loc.r = loc.controller.$cacheSettingsForAction("dummy")>
 		<cfset assert("loc.r.static IS true")>
 	</cffunction>
-	
+
 </cfcomponent>
