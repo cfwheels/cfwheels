@@ -9,7 +9,7 @@
 	<cffunction name="test_all_tags_should_be_stripped">
 		<cfset loc.e = loc.controller.stripTags(argumentcollection=loc.args)>
 		<cfset loc.r = "thisisa test tosee if this works or not.">
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert(loc.e eq loc.r)>
 	</cffunction>
 
 </cfcomponent>

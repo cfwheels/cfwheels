@@ -20,7 +20,7 @@ augue validus cui lucidus.">
 
 	<cffunction name="test_text_should_format">
 		<cfset loc.e = loc.controller.simpleFormat(argumentcollection=loc.args)>
-		<cfset debug(expression='loc.e', display=false, format="text")>
+		<!--- <cfset debug(expression='loc.e', display=false, format="text")> --->
 		<cfset loc.r = "<p>Lobortis, erat feugiat jus autem</p>
 
 <p>vel obruo dolor luptatum, os in interdico ex. Sit typicus</p>
@@ -35,7 +35,7 @@ luptatum valetudo ne, venio vero regula letalis valde vicis.</p>
 Hendrerit nostrud abigo vicis<br />
 augue validus cui lucidus.</p>">
 		<cfset loc.r = Replace(loc.r, "#Chr(13)#", "", "all")>
-		<cfset assert("htmleditformat(loc.e) eq htmleditformat(loc.r)")>
+		<cfset assert(htmleditformat(loc.e) eq htmleditformat(loc.r))>
 	</cffunction>
 
 </cfcomponent>

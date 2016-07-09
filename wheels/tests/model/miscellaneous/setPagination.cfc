@@ -32,11 +32,11 @@
 	<cffunction name="assert_pagination">
 		<cfargument name="handle" type="string" required="true">
 		<cfset loc.args = arguments>
-		<cfset assert('StructKeyExists(request.wheels, loc.args.handle)')>
+		<cfset assert(StructKeyExists(request.wheels, loc.args.handle))>
 		<cfset loc.p = request.wheels[loc.args.handle]>
 		<cfset StructDelete(loc.args, "handle", false)>
 		<cfloop collection="#loc.args#" item="loc.i">
-			<cfset assert('loc.p[loc.i] eq loc.args[loc.i]')>
+			<cfset assert(loc.p[loc.i] eq loc.args[loc.i])>
 		</cfloop>
 	</cffunction>
 

@@ -9,7 +9,7 @@
 	<cffunction name="test_all_links_should_be_stripped">
 		<cfset loc.e = loc.controller.striplinks(argumentcollection=loc.args)>
 		<cfset loc.r = "this is a test to see if this works or not.">
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert(loc.e eq loc.r)>
 	</cffunction>
 
 </cfcomponent>

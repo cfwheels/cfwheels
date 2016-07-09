@@ -19,19 +19,19 @@
 		)>
 		
 		<!--- should be valid since id is not passed in --->
-		<cfset assert('loc.user.valid()')>
+		<cfset assert(loc.user.valid())>
 		
 		<!--- should _not_ be valid since id is not a number --->		
 		<cfset loc.user.id = 'ABC'>
-		<cfset assert('!loc.user.valid()')>
+		<cfset assert(!loc.user.valid())>
 		
 		<!--- should be valid since id is blank --->
 		<cfset loc.user.id = ''>
-		<cfset assert('loc.user.valid()')>
+		<cfset assert(loc.user.valid())>
 		
 		<!--- should be valid since id is a number --->
 		<cfset loc.user.id = 1>
-		<cfset assert('loc.user.valid()')>
+		<cfset assert(loc.user.valid())>
 	</cffunction>
 	
 </cfcomponent>

@@ -1,3 +1,2 @@
-<cfcomponent>
-	<cfinclude template="test.cfm">
+<cfcomponent extends="wheelsMapping.rocketunit.Test">
 </cfcomponent>

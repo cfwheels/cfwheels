@@ -3,13 +3,13 @@
 	<cffunction name="test_key">
 		<cfset loc.author = model("author").findOne()>
 		<cfset loc.result = loc.author.key()>
-		<cfset assert("loc.result IS loc.author.id")>
+		<cfset assert(loc.result IS loc.author.id)>
 	</cffunction>
 
 	<cffunction name="test_key_with_new">
 		<cfset loc.author = model("author").new(id=1, firstName="Per", lastName="Djurner")>
 		<cfset loc.result = loc.author.key()>
-		<cfset assert("loc.result IS 1")>
+		<cfset assert(loc.result IS 1)>
 	</cffunction>
 
 	<cffunction name="test_setting_and_getting_properties">
@@ -37,7 +37,7 @@
 		<cfset loc.properties = loc.user.properties()>
 
 		<cfloop collection="#loc.properties#" item="loc.i">
-			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
+			<cfset assert(loc.properties[loc.i] eq loc.args[loc.i])>
 		</cfloop>
 
 		<cfset loc.args.FirstName = "per">
@@ -47,7 +47,7 @@
 		<cfset loc.properties = loc.user.properties()>
 
 		<cfloop collection="#loc.properties#" item="loc.i">
-			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
+			<cfset assert(loc.properties[loc.i] eq loc.args[loc.i])>
 		</cfloop>
 
 		<cfset loc.args.FirstName = "chris">
@@ -62,7 +62,7 @@
 		<cfset loc.properties = loc.user.properties()>
 
 		<cfloop collection="#loc.properties#" item="loc.i">
-			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
+			<cfset assert(loc.properties[loc.i] eq loc.args[loc.i])>
 		</cfloop>
 	</cffunction>
 
@@ -70,8 +70,8 @@
 		<cfset loc.author = model("author").findOne()>
 		<cfset loc.author.setProperties(firstName="a", lastName="b")>
 		<cfset loc.result = loc.author.properties()>
-		<cfset assert('loc.result.firstName eq "a"')>
-		<cfset assert('loc.result.lastName eq "b"')>
+		<cfset assert(loc.result.firstName eq "a")>
+		<cfset assert(loc.result.lastName eq "b")>
 	</cffunction>
 
 	<cffunction name="test_getting_nested_objects_with_simple_argument">
@@ -92,13 +92,13 @@
 		<cfset loc.want.post = loc.postOne>
 		<cfset loc.want.posts = [loc.postTwo, loc.postThree]>
 
-		<cfset assert("IsObject(loc.complexAuthor.post)")>
-		<cfset assert("ListSort(StructKeyList(loc.in), 'textNoCase') eq ListSort(StructKeyList(loc.want), 'textNoCase')")>
-		<cfset assert("ListSort(StructKeyList(loc.in.post), 'textNoCase') eq ListSort(StructKeyList(loc.want.post), 'textNoCase')")>
-		<cfset assert("ListSort(StructKeyList(loc.in.posts[1]), 'textNoCase') eq ListSort(StructKeyList(loc.want.posts[1]), 'textNoCase')")>
-		<cfset assert("ListSort(StructKeyList(loc.in.posts[2]), 'textNoCase') eq ListSort(StructKeyList(loc.want.posts[2]), 'textNoCase')")>
+		<cfset assert(IsObject(loc.complexAuthor.post))>
+		<cfset assert(ListSort(StructKeyList(loc.in), 'textNoCase') eq ListSort(StructKeyList(loc.want), 'textNoCase'))>
+		<cfset assert(ListSort(StructKeyList(loc.in.post), 'textNoCase') eq ListSort(StructKeyList(loc.want.post), 'textNoCase'))>
+		<cfset assert(ListSort(StructKeyList(loc.in.posts[1]), 'textNoCase') eq ListSort(StructKeyList(loc.want.posts[1]), 'textNoCase'))>
+		<cfset assert(ListSort(StructKeyList(loc.in.posts[2]), 'textNoCase') eq ListSort(StructKeyList(loc.want.posts[2]), 'textNoCase'))>
 		<!--- this would be a lot simpler, but the JSON is serialised differently on ACF10 --->
-		<!--- <cfset assert("SerializeJSON(loc.in) eq SerializeJSON(loc.want)")> --->
+		<!--- <cfset assert(SerializeJSON(loc.in) eq SerializeJSON(loc.want))> --->
 	</cffunction>
 
 </cfcomponent>

@@ -16,7 +16,7 @@
 		<cfset structdelete(loc.args, "id")>
 		<cfset loc.r = '<img alt="Cfwheels logo" height="121" src="#loc.imagePath#/#loc.args.source#" width="93" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert(loc.e eq loc.r)>
 	</cffunction>
 
 	<cffunction name="test_supplying_an_alt">
@@ -24,7 +24,7 @@
 		<cfset structdelete(loc.args, "id")>
 		<cfset loc.r = '<img alt="#loc.args.alt#" height="121" src="#loc.imagePath#/#loc.args.source#" width="93" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert(loc.e eq loc.r)>
 	</cffunction>
 
 	<cffunction name="test_supplying_an_id_when_caching_is_on">
@@ -34,14 +34,14 @@
 		<cfset StructDelete(loc.args, "class")>
 		<cfset loc.r = '<img alt="Cfwheels logo" height="121" src="#loc.imagePath#/#loc.args.source#" id="#loc.args.id#" width="93" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentCollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert(loc.e eq loc.r)>
 		<cfset application.wheels.cacheImages = loc.cacheImages>
 	</cffunction>
 
 	<cffunction name="test_supplying_class_and_id">
 		<cfset loc.r = '<img alt="#loc.args.alt#" class="#loc.args.class#" height="121" src="#loc.imagePath#/#loc.args.source#" id="#loc.args.id#" width="93" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert(loc.e eq loc.r)>
 	</cffunction>
 
 	<cffunction name="test_grabbing_from_http">
@@ -51,7 +51,7 @@
 		<cfset loc.args.source = "http://www.cfwheels.org/images/cfwheels-logo.png">
 		<cfset loc.r = '<img alt="Cfwheels logo" src="#loc.args.source#" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert(loc.e eq loc.r)>
 	</cffunction>
 
 	<cffunction name="test_grabbing_from_https">
@@ -61,7 +61,7 @@
 		<cfset loc.args.source = "https://www.cfwheels.org/images/cfwheels-logo.png">
 		<cfset loc.r = '<img alt="Cfwheels logo" src="#loc.args.source#" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert(loc.e eq loc.r)>
 	</cffunction>
 
 	<cffunction name="test_specifying_height_and_width">
@@ -72,7 +72,7 @@
 		<cfset loc.args.width = 25>
 		<cfset loc.r = '<img alt="Cfwheels logo" height="25" src="#loc.imagePath#/#loc.args.source#" width="25" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert(loc.e eq loc.r)>
 	</cffunction>
 
 	<cffunction name="test_height_only">
@@ -82,7 +82,7 @@
 		<cfset loc.args.height = 25>
 		<cfset loc.r = '<img alt="Cfwheels logo" height="25" src="#loc.imagePath#/#loc.args.source#" width="93" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert(loc.e eq loc.r)>
 	</cffunction>
 
 	<cffunction name="test_width_only">
@@ -92,7 +92,7 @@
 		<cfset loc.args.width = 25>
 		<cfset loc.r = '<img alt="Cfwheels logo" height="121" src="#loc.imagePath#/#loc.args.source#" width="25" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert(loc.e eq loc.r)>
 	</cffunction>
 	
 	<cffunction name="test_remove_height_width_attributes_when_set_to_false">
@@ -103,7 +103,7 @@
 		<cfset loc.args.width = false>
 		<cfset loc.r = '<img alt="Cfwheels logo" src="#loc.imagePath#/#loc.args.source#" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert(loc.e eq loc.r)>
 	</cffunction>
 
 </cfcomponent>

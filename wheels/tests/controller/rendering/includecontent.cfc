@@ -12,7 +12,7 @@
 		</cfloop>
 		<cfset loc.e = ArrayToList(loc.a, chr(10))>
 		<cfset loc.r = loc.controller.includeContent("head")>
-		<cfset assert('loc.e eq loc.r')>
+		<cfset assert(loc.e eq loc.r)>
 	</cffunction>
 	
 	<cffunction name="test_contentFor_and_includeContent_default_section">
@@ -22,17 +22,17 @@
 		</cfloop>
 		<cfset loc.e = ArrayToList(loc.a, chr(10))>
 		<cfset loc.r = loc.controller.includeContent()>
-		<cfset assert('loc.e eq loc.r')>
+		<cfset assert(loc.e eq loc.r)>
 	</cffunction>
 	
 	<cffunction name="test_includeContent_invalid_section_returns_blank">
 		<cfset loc.r = loc.controller.includeContent("somethingstupid")>
-		<cfset assert('loc.r eq ""')>
+		<cfset assert(loc.r eq "")>
 	</cffunction>
 	
 	<cffunction name="test_includeContent_returns_default">
 		<cfset loc.r = loc.controller.includeContent("somethingstupid", "my default value")>
-		<cfset assert('loc.r eq "my default value"')>
+		<cfset assert(loc.r eq "my default value")>
 	</cffunction>
 
 </cfcomponent>
