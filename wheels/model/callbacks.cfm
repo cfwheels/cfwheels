@@ -140,6 +140,7 @@
 <cffunction name="$callbacks" returntype="any" access="public" output="false">
 	<cfargument name="type" type="string" required="false" default="">
 	<cfscript>
+		var loc = {};
 		if (Len(arguments.type))
 		{
 			if (StructKeyExists(variables.wheels.class.callbacks, arguments.type))
