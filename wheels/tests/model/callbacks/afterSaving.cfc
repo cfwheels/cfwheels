@@ -20,7 +20,7 @@
 			<cfset loc.obj.save(transaction="none")>
 			<cftransaction action="rollback"/>
 		</cftransaction>
-		<cfset assert("loc.obj.callbackCount IS 4")>
+		<cfset assert(loc.obj.callbackCount IS 4)>
 	</cffunction>
 
 	<cffunction name="test_chain_when_saving_existing_object_with_all_callbacks_skipped">
@@ -28,7 +28,7 @@
 			<cfset loc.obj.save(transaction="none", callbacks=false)>
 			<cftransaction action="rollback"/>
 		</cftransaction>
-		<cfset assert("NOT StructKeyExists(loc.obj, 'callbackCount')")>
+		<cfset assert(NOT StructKeyExists(loc.obj, 'callbackCount'))>
 	</cffunction>
 
 </cfcomponent>

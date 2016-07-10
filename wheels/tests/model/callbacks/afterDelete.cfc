@@ -14,7 +14,7 @@
 			<cfset loc.obj.delete(transaction="none")>
 			<cftransaction action="rollback"/>
 		</cftransaction>
-		<cfset assert("StructKeyExists(loc.obj, 'setByCallback')")>
+		<cfset assert(StructKeyExists(loc.obj, 'setByCallback'))>
 	</cffunction>
 
 	<cffunction name="test_existing_object_with_skipped_callback">
@@ -22,7 +22,7 @@
 			<cfset loc.obj.delete(transaction="none", callbacks="false")>
 			<cftransaction action="rollback"/>
 		</cftransaction>
-		<cfset assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
+		<cfset assert(NOT StructKeyExists(loc.obj, 'setByCallback'))>
 	</cffunction>
 
 </cfcomponent>

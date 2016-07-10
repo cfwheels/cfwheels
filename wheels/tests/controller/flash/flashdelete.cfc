@@ -1,6 +1,12 @@
 <cfcomponent extends="wheelsMapping.Test">
 
-	<cfinclude template="setup.cfm">
+	<cffunction name="setup">
+		<cfinclude template="setup.cfm">
+	</cffunction>
+
+	<cffunction name="teardown">
+		<cfinclude template="teardown.cfm">
+	</cffunction>
 
 	<cffunction name="test_flashDelete_invalid">
 		<cfset run_flashDelete_invalid()>
@@ -11,9 +17,9 @@
 	<cffunction name="run_flashDelete_invalid">
 		<cfset loc.controller.flashClear()>
 		<cfset result = loc.controller.flashDelete(key="success")>
-		<cfset assert("result IS false")>
+		<cfset assert(result IS false)>
 	</cffunction>
-	
+
 	<cffunction name="test_flashDelete_valid">
 		<cfset run_flashDelete_valid()>
 		<cfset application.wheels.flashStorage = "cookie">
@@ -24,7 +30,7 @@
 		<cfset loc.controller.flashClear()>
 		<cfset loc.controller.flashInsert(success="Congrats!")>
 		<cfset result = loc.controller.flashDelete(key="success")>
-		<cfset assert("result IS true")>
+		<cfset assert(result IS true)>
 	</cffunction>
-	
+
 </cfcomponent>

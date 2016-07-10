@@ -9,8 +9,8 @@
 		<cfset loc.profile = model("profile").findOne()>
 		<cftransaction action="begin">
 			<cfset loc.updated = loc.author.setProfile(loc.profile) />
-			<cfset assert('loc.updated eq true')>
-			<cfset assert('loc.profile.authorid eq loc.author.id')>
+			<cfset assert(loc.updated eq true)>
+			<cfset assert(loc.profile.authorid eq loc.author.id)>
 			<cftransaction action="rollback" />
 		</cftransaction>
 	</cffunction>

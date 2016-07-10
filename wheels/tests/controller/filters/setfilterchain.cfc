@@ -24,8 +24,8 @@
 		<!--- Undo test --->
 		<cfset loc.controller.setFilterChain(ArrayNew(1))>
 		<!--- Compare filter chains --->
-		<cfset assert("ArrayLen(filterChainSet) eq ArrayLen(filterChainNormal)")>
-		<cfset assert("filterChainSet.equals(filterChainNormal)")>
+		<cfset assert(ArrayLen(filterChainSet) eq ArrayLen(filterChainNormal))>
+		<cfset assert(filterChainSet.equals(filterChainNormal))>
 	</cffunction>
 
 </cfcomponent>

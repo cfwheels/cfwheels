@@ -10,8 +10,8 @@
 		<cftransaction action="begin">
 			<cfset loc.updated = loc.author.removePost(loc.post) />
 			<cfset loc.post.reload() />
-			<cfset assert('loc.updated eq true')>
-			<cfset assert('loc.post.authorid eq ""')>
+			<cfset assert(loc.updated eq true)>
+			<cfset assert(loc.post.authorid eq "")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 	</cffunction>

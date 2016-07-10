@@ -12,12 +12,12 @@
 
 	<cffunction name="test_existing_object">
 		<cfset loc.obj.save()>
-		<cfset assert("StructKeyExists(loc.obj, 'setByCallback')")>
+		<cfset assert(StructKeyExists(loc.obj, 'setByCallback'))>
 	</cffunction>
 
 	<cffunction name="test_existing_object_with_skipped_callback">
 		<cfset loc.obj.save(callbacks=false, transaction="rollback")>
-		<cfset assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
+		<cfset assert(NOT StructKeyExists(loc.obj, 'setByCallback'))>
 	</cffunction>
 
 </cfcomponent>

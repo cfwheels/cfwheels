@@ -4,7 +4,7 @@
 		<cfset loc.shops = model("shop").findone(
 				include="city"
 			)>
-		<cfset assert("IsObject(loc.shops)")>
+		<cfset assert(IsObject(loc.shops))>
 	</cffunction>
 
 </cfcomponent>

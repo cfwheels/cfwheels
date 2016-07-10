@@ -1,0 +1,1 @@
+<cfset loc.controller.flashClear()>

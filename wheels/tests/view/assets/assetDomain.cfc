@@ -17,7 +17,7 @@
 		<cfscript>
 			loc.assetPath = "/javascripts/path/to/my/asset.js";
 			loc.e = loc.controller.$assetDomain(loc.assetPath);
-			assert('FindNoCase("http://", loc.e) or FindNoCase("https://", loc.e)');
+			assert(FindNoCase("http://", loc.e) or FindNoCase("https://", loc.e));
 		</cfscript>
 	</cffunction>
 
@@ -26,7 +26,7 @@
 			request.cgi.server_port_secure = true;
 			loc.assetPath = "/javascripts/path/to/my/asset.js";
 			loc.e = loc.controller.$assetDomain(loc.assetPath);
-			assert('FindNoCase("https://", loc.e)');
+			assert(FindNoCase("https://", loc.e));
 			request.cgi.server_port_secure = "";
 		</cfscript>
 	</cffunction>
@@ -38,7 +38,7 @@
 
 			loc.iEnd = 100;
 			for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
-				assert('loc.e eq loc.controller.$assetDomain(loc.assetPath)');
+				assert(loc.e eq loc.controller.$assetDomain(loc.assetPath));
 		</cfscript>
 	</cffunction>
 
@@ -47,7 +47,7 @@
 			application.wheels.assetPaths = false;
 			loc.assetPath = "/javascripts/path/to/my/asset.js";
 			loc.e = loc.controller.$assetDomain(loc.assetPath);
-			assert('loc.e eq loc.assetPath');
+			assert(loc.e eq loc.assetPath);
 			application.wheels.assetPaths = {http="asset0.localhost, asset2.localhost", https="secure.localhost"};
 		</cfscript>
 	</cffunction>
