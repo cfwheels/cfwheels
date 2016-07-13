@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="teardown">
 		<cfset model("tag").$clearCallbacks(type="beforeCreate,beforeUpdate")>

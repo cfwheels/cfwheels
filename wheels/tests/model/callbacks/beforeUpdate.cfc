@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="setup">
 		<cfset model("tag").$registerCallback(type="beforeUpdate", methods="callbackThatSetsProperty,callbackThatReturnsFalse")>

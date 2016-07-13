@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cfinclude template="/wheelsMapping/view/miscellaneous.cfm">
 

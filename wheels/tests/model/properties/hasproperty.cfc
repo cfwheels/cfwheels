@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="test_returns_true_when_property_is_set">
 		<cfset loc.model = model("author") />

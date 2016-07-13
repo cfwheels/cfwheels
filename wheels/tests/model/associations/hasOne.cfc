@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="test_getting_child">
 		<cfset loc.author = model("author").findOne(order="id")>

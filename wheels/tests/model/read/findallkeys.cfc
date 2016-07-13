@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="test_findAllKeys">
 		<cfset loc.p = model("post").findAll(select="id")>

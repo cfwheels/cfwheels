@@ -1,4 +1,4 @@
-component extends="wheelsMapping.Test" {
+component extends="wheels.Test" {
   include "common.cfm";
 
   function test_isOptions_with_options_request() {

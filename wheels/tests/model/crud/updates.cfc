@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
  	<cffunction name="test_update">
 		<cftransaction action="begin">

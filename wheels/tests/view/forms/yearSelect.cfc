@@ -1,7 +1,7 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="setup">
-		<cfset loc.controller = createobject("component", "wheelsMapping.tests._assets.controllers.ControllerWithModel")>
+		<cfset loc.controller = createobject("component", "wheels.Tests._assets.controllers.ControllerWithModel")>
 		<cfset loc.args= {}>
 		<cfset loc.args.objectName = "user">
 		<cfset loc.args.property = "birthday">

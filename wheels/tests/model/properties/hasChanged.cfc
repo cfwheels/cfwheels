@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="test_boolean_handled_properly">
 		<cfset loc.sqltype = model("Sqltype").findOne()>

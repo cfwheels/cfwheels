@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="test_getting_parent">
 		<cfset loc.obj = model("post").findOne(order="id")>

@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="setup">
         <cfset loc.user = createobject("component", "wheelsMapping.Model").$initModelClass(name="Users", path=get("modelPath"))>

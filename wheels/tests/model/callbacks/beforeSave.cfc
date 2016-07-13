@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="test_proceeding_on_true_and_nothing">
 		<cfset model("tag").$registerCallback(type="beforeSave", methods="callbackThatReturnsTrue,callbackThatReturnsNothing")>

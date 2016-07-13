@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="test_new_model_with_property_defaults">
 		<cfset loc.author = model("Author").new()>

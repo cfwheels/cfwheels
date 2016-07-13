@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<!--- <cffunction name="test_contains_multiple_spaces_tabs_and_carriage_returns">
 		<cfset loc.r = model("post").findAll(where="views

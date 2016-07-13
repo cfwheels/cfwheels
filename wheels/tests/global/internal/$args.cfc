@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="test_declaring_required_arguments_throws_error_when_missing">
 		<cfset loc.args = {}>

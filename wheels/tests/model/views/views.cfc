@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="test_should_be_able_to_query_views_on_a_column">
 		<cfset loc.view = model("ViewUserPhotoKeyUserId").findAll(where="username = 'tonyp'")>

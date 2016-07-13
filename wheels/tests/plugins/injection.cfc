@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="setup">
 		<cfset loc.config = {
@@ -16,7 +16,7 @@
 		<cfset loc.params = {controller="test", action="index"}>	
 		<cfset loc.c = controller("test", loc.params)>
 		<cfset loc.d = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init")>
-		<cfset loc.t = createObject("component","wheelsMapping.Test")>
+		<cfset loc.t = createObject("component","wheels.Test")>
 	</cffunction>
 	
 	<cffunction name="teardown">

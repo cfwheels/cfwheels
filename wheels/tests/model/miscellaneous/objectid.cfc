@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="test_objectids_should_be_sequential_and_norepeating">
 		<cfset loc.photos = []>

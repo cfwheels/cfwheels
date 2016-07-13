@@ -1,4 +1,4 @@
-component extends="wheelsMapping.Test" {
+component extends="wheels.Test" {
   include "common.cfm";
 
   function test_isDelete_with_head_request() {

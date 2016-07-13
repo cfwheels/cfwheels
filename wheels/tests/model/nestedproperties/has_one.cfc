@@ -1,4 +1,4 @@
-﻿<cfcomponent extends="wheelsMapping.Test">
+﻿<cfcomponent extends="wheels.Test">
 
 	<cffunction name="setup">
 		<cfset loc.author = model("author")>

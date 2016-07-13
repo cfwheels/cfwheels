@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="test_clearing_all_change_info">
 		<cfset loc.author = model("author").findOne(select="firstName")>

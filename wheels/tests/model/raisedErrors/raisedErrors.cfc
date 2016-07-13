@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Test">
+<cfcomponent extends="wheels.Test">
 
 	<cffunction name="test_table_not_found">
 		<cfset loc.e = raised("model('table_not_found')")>
