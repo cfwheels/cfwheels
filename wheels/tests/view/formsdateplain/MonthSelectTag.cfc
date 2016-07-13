@@ -10,7 +10,7 @@
 		<cfset loc.args.$now = "01/31/2011">
 		<cfset loc.r = loc.controller.monthSelectTag(argumentcollection=loc.args)>
 		<cfset loc.e = '<option selected="selected" value="2">'>
-		<cfset assert(loc.r CONTAINS loc.e)>
+		<cfset assert('loc.r CONTAINS loc.e')>
 	</cffunction>
 
 </cfcomponent>

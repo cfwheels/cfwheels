@@ -17,10 +17,10 @@
 			loc.args.pathinfo = "/users/foo.bar";
 			loc.args.urlScope["username"] = "foo.bar";
 			loc.params = loc.dispatch.$paramParser(argumentCollection=loc.args);
-			assert(loc.params.controller eq "Test");
-			assert(loc.params.action eq "test");
-			assert(loc.params.username eq "foo");
-			assert(loc.params.format eq "bar");
+			assert('loc.params.controller eq "Test"');
+			assert('loc.params.action eq "test"');
+			assert('loc.params.username eq "foo"');
+			assert('loc.params.format eq "bar"');
 		</cfscript>
 	</cffunction>
 	
@@ -31,9 +31,9 @@
 			loc.args.pathinfo = "/contact/export.csv";
 			loc.args.urlScope = {};
 			loc.params = loc.dispatch.$paramParser(argumentCollection=loc.args);
-			assert(loc.params.controller eq "Test");
-			assert(loc.params.action eq "test");
-			assert(loc.params.format eq "csv");
+			assert('loc.params.controller eq "Test"');
+			assert('loc.params.action eq "test"');
+			assert('loc.params.format eq "csv"');
 		</cfscript>
 	</cffunction>
 
@@ -44,7 +44,7 @@
 			loc.args.pathinfo = "/users/foo.bar";
 			loc.args.urlScope["username"] = "foo.bar";
 			loc.params = loc.dispatch.$paramParser(argumentCollection=loc.args);
-			assert(loc.params.username eq "foo.bar");
+			assert('loc.params.username eq "foo.bar"');
 		</cfscript>
 	</cffunction>
 	
@@ -55,10 +55,10 @@
 			loc.args.pathinfo = "/users/foo";
 			loc.args.urlScope["username"] = "foo";
 			loc.params = loc.dispatch.$paramParser(argumentCollection=loc.args);
-			assert(loc.params.controller eq "Test");
-			assert(loc.params.action eq "test");
-			assert(loc.params.username eq "foo");
-			assert(loc.params.format eq "");
+			assert('loc.params.controller eq "Test"');
+			assert('loc.params.action eq "test"');
+			assert('loc.params.username eq "foo"');
+			assert('loc.params.format eq ""');
 		</cfscript>
 	</cffunction>
 

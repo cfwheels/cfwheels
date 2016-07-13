@@ -8,10 +8,10 @@
 
 	<cffunction name="test_checking_cachable_action">
 		<cfset loc.result = loc.controller.$hasCachableActions()>
-		<cfset assert(loc.result IS false)>
+		<cfset assert("loc.result IS false")>
 		<cfset loc.controller.caches("dummy1")>
 		<cfset loc.result = loc.controller.$hasCachableActions()>
-		<cfset assert(loc.result IS true)>
+		<cfset assert("loc.result IS true")>
 	</cffunction>
 	
 </cfcomponent>

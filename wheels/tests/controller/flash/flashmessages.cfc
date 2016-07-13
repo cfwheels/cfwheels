@@ -1,12 +1,6 @@
 <cfcomponent extends="wheelsMapping.Test">
 
-	<cffunction name="setup">
-		<cfinclude template="setup.cfm">
-	</cffunction>
-
-	<cffunction name="teardown">
-		<cfinclude template="teardown.cfm">
-	</cffunction>
+	<cfinclude template="setup.cfm">
 
 	<cffunction name="test_normal_output">
 		<cfset run_normal_output()>
@@ -17,9 +11,8 @@
 	<cffunction name="run_normal_output">
 		<cfset loc.controller.flashInsert(success="Congrats!")>
 		<cfset loc.controller.flashInsert(alert="Error!")>
-		<cfset loc.result = loc.controller.flashMessages()>
-		<cfset loc.expected = '<div class="flashMessages"><p class="alertMessage">Error!</p><p class="successMessage">Congrats!</p></div>'>
-		<cfset assert(loc.result IS loc.expected)>
+		<cfset result = loc.controller.flashMessages()>
+		<cfset assert("result IS '<div class=""flashMessages""><p class=""alertMessage"">Error!</p><p class=""successMessage"">Congrats!</p></div>'")>
 	</cffunction>
 
 	<cffunction name="test_specific_key_only">
@@ -31,9 +24,8 @@
 	<cffunction name="run_specific_key_only">
 		<cfset loc.controller.flashInsert(success="Congrats!")>
 		<cfset loc.controller.flashInsert(alert="Error!")>
-		<cfset loc.result = loc.controller.flashMessages(key="alert")>
-		<cfset loc.expected = '<div class="flashMessages"><p class="alertMessage">Error!</p></div>'>
-		<cfset assert(loc.result EQ loc.expected)>
+		<cfset result = loc.controller.flashMessages(key="alert")>
+		<cfset assert("result IS '<div class=""flashMessages""><p class=""alertMessage"">Error!</p></div>'")>
 	</cffunction>
 
 	<cffunction name="test_passing_through_id">
@@ -44,11 +36,8 @@
 
 	<cffunction name="run_passing_through_id">
 		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset loc.result = loc.controller.flashMessages(id="my-id")>
-		<cfset loc.congrats = '<p class="successMessage">Congrats!</p>'>
-		<cfset loc.id = 'id="my-id"'>
-		<cfset assert(loc.result Contains loc.congrats)>
-		<cfset assert(loc.result Contains loc.id)>
+		<cfset result = loc.controller.flashMessages(id="my-id")>
+		<cfset assert("result Contains '<p class=""successMessage"">Congrats!</p>' AND result Contains 'id=""my-id""'")>
 	</cffunction>
 
 	<cffunction name="test_empty_flash">
@@ -59,7 +48,7 @@
 
 	<cffunction name="run_empty_flash">
 		<cfset result = loc.controller.flashMessages()>
-		<cfset assert(result IS '')>
+		<cfset assert("result IS ''")>
 	</cffunction>
 
 	<cffunction name="test_empty_flash_includeEmptyContainer">
@@ -69,9 +58,8 @@
 	</cffunction>
 
 	<cffunction name="run_empty_flash_includeEmptyContainer">
-		<cfset loc.result = loc.controller.flashMessages(includeEmptyContainer="true")>
-		<cfset loc.expected = '<div class="flashMessages"></div>'>
-		<cfset assert(loc.result EQ loc.expected)>
+		<cfset result = loc.controller.flashMessages(includeEmptyContainer="true")>
+		<cfset assert("result IS '<div class=""flashMessages""></div>'")>
 	</cffunction>
 
 	<cffunction name="test_skipping_complex_values">
@@ -85,9 +73,8 @@
 		<cfset arr = []>
 		<cfset arr[1] = "test">
 		<cfset loc.controller.flashInsert(alert=arr)>
-		<cfset loc.result = loc.controller.flashMessages()>
-		<cfset loc.expected = '<div class="flashMessages"><p class="successMessage">Congrats!</p></div>'>
-		<cfset assert(loc.result IS loc.expected)>
+		<cfset result = loc.controller.flashMessages()>
+		<cfset assert("result IS '<div class=""flashMessages""><p class=""successMessage"">Congrats!</p></div>'")>
 	</cffunction>
 
 	<cffunction name="test_control_order_via_keys_argument">
@@ -99,12 +86,10 @@
 	<cffunction name="run_control_order_via_keys_argument">
 		<cfset loc.controller.flashInsert(success="Congrats!")>
 		<cfset loc.controller.flashInsert(alert="Error!")>
-		<cfset loc.result = loc.controller.flashMessages(keys="success,alert")>
-		<cfset loc.expected = '<div class="flashMessages"><p class="successMessage">Congrats!</p><p class="alertMessage">Error!</p></div>'>
-		<cfset assert(loc.result EQ loc.expected)>
-		<cfset loc.result = loc.controller.flashMessages(keys="alert,success")>
-		<cfset loc.expected = '<div class="flashMessages"><p class="alertMessage">Error!</p><p class="successMessage">Congrats!</p></div>'>
-		<cfset assert(loc.result EQ loc.expected)>
+		<cfset result = loc.controller.flashMessages(keys="success,alert")>
+		<cfset assert("result IS '<div class=""flashMessages""><p class=""successMessage"">Congrats!</p><p class=""alertMessage"">Error!</p></div>'")>
+		<cfset result = loc.controller.flashMessages(keys="alert,success")>
+		<cfset assert("result IS '<div class=""flashMessages""><p class=""alertMessage"">Error!</p><p class=""successMessage"">Congrats!</p></div>'")>
 	</cffunction>
 
 	<cffunction name="test_casing_of_class_attribute">
@@ -121,7 +106,7 @@
 		<cfelse>
 			<cfset loc.e = 'class="somethingMessage"'>
 		</cfif>
-		<cfset assert(Find(loc.e, loc.r))>
+		<cfset assert('Find(loc.e, loc.r)')>
 		<cfset loc.controller.flashInsert(someThing="")>
 	</cffunction>
 
@@ -146,7 +131,7 @@
 		<cfelse>
 			<cfset loc.e = 'class="someThingMessage"'>
 		</cfif>
-		<cfset assert(Find(loc.e, loc.r))>
+		<cfset assert('Find(loc.e, loc.r)')>
 	</cffunction>
 
 	<cffunction name="test_casing_of_class_attribute_upper">
@@ -159,7 +144,7 @@
 		<cfset loc.controller.flashInsert(SOMETHING="")>
 		<cfset loc.r = loc.controller.flashMessages()>
 		<cfset loc.e = 'class="SOMETHINGMessage"'>
-		<cfset assert(Find(loc.e, loc.r))>
+		<cfset assert('Find(loc.e, loc.r)')>
 	</cffunction>
 
 	<cffunction name="test_setting_class">
@@ -177,7 +162,7 @@
 		<cfelse>
 			<cfset loc.e2 = 'class="successMessage"'>
 		</cfif>
-		<cfset assert(Find(loc.e, loc.r) AND Find(loc.e2, loc.r))>
+		<cfset assert('Find(loc.e, loc.r) AND Find(loc.e2, loc.r)')>
 	</cffunction>
 
 </cfcomponent>

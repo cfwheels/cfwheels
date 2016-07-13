@@ -3,11 +3,11 @@ component extends="wheelsMapping.Test" {
 
   function test_isPatch_with_head_request() {
     request.cgi.request_method = "patch";
-    assert(loc.controller.isPatch());
+    assert("loc.controller.isPatch()");
   }
-
+  
   function test_isPatch_with_get_request() {
     request.cgi.request_method = "get";
-    assert(! loc.controller.isPatch());
+    assert("not loc.controller.isPatch()");
   }
 }

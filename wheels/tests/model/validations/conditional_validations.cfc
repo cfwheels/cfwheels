@@ -116,7 +116,7 @@
 		<cfargument name="obj" type="any" required="true">
 		<cfargument name="expect" type="boolean" required="true">
 		<cfset loc.e = arguments.obj.valid()>
-		<cfset assert(loc.e eq #arguments.expect#)>
+		<cfset assert('loc.e eq #arguments.expect#')>
 	</cffunction>
 
 	<!--- mixin --->

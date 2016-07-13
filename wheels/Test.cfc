@@ -1,2 +1,1 @@
-<cfcomponent extends="wheelsMapping.rocketunit.Test">
-</cfcomponent>
+<cfcomponent extends="wheelsMapping.rocketunit.Test"></cfcomponent>

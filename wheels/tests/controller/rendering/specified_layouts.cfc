@@ -13,22 +13,22 @@
 
 		<cfset loc.e = "index_layout">
 		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.e = "show_layout">
 		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.e = "true">
 		<cfset loc.r = loc.controller.$useLayout("list")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.args.usedefault = false>
 		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
 
 		<cfset loc.e = "false">
 		<cfset loc.r = loc.controller.$useLayout("list")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_ajax_request_with_no_layout_specified_should_fallback_to_template">
@@ -41,7 +41,7 @@
 
 		<cfset loc.e = "index_layout">
 		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_using_method_ajax">
@@ -55,22 +55,22 @@
 
 		<cfset loc.e = "index_layout_ajax">
 		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.e = "show_layout_ajax">
 		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.e = "true">
 		<cfset loc.r = loc.controller.$useLayout("list")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.args.usedefault = false>
 		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
 
 		<cfset loc.e = "false">
 		<cfset loc.r = loc.controller.$useLayout("list")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_should_respect_exceptions">
@@ -81,18 +81,18 @@
 
 		<cfset loc.e = "mylayout">
 		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.e = "true">
 		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.args.usedefault = false>
 		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
 
 		<cfset loc.e = "false">
 		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_should_respect_exceptions_ajax">
@@ -104,18 +104,18 @@
 
 		<cfset loc.e = "mylayout_ajax">
 		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.e = "true">
 		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.args.usedefault = false>
 		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
 
 		<cfset loc.e = "false">
 		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_should_respect_only">
@@ -126,18 +126,18 @@
 
 		<cfset loc.e = "true">
 		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.e = "mylayout">
 		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.args.usedefault = false>
 		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
 
 		<cfset loc.e = "false">
 		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_should_respect_only_ajax">
@@ -149,18 +149,18 @@
 
 		<cfset loc.e = "true">
 		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.e = "mylayout_ajax">
 		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 
 		<cfset loc.args.usedefault = false>
 		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
 
 		<cfset loc.e = "false">
 		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert(loc.e eq loc.r)>
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
 	<cffunction name="controller_layout_test">

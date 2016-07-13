@@ -41,8 +41,8 @@
 		<cfloop query="loc.q">
 			<cfset loc.dirs = ListAppend(loc.dirs, name)>
 		</cfloop>
-		<cfset assert(ListFind(loc.dirs, "testdefaultassignmixins"))>
-		<cfset assert(ListFind(loc.dirs, "testglobalmixins"))>
+		<cfset assert('ListFind(loc.dirs, "testdefaultassignmixins")')>
+		<cfset assert('ListFind(loc.dirs, "testglobalmixins")')>
 	</cffunction>
 
 </cfcomponent>

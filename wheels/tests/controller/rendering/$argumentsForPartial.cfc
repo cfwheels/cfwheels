@@ -1,15 +1,10 @@
 <cfcomponent extends="wheelsMapping.Test">
 
-	<cffunction name="setup">
-		<cfinclude template="setup.cfm">
-		<cfset params = {controller="dummy", action="dummy"}>
-		<cfset loc.controller = controller("dummy", params)>
-	</cffunction>
+	<cfinclude template="setupAndTeardown.cfm">
 
-	<cffunction name="teardown">
-		<cfinclude template="teardown.cfm">
-	</cffunction>
-
+	<cfset params = {controller="dummy", action="dummy"}>
+	<cfset loc.controller = controller("dummy", params)>
+	
 	<cffunction name="$injectIntoVariablesScope" output="false">
 		<cfargument name="name" type="string" required="true" />
 		<cfargument name="data" type="any" required="true" />
@@ -21,7 +16,7 @@
 		<cfset loc.controller.$injectIntoVariablesScope = this.$injectIntoVariablesScope />
 		<cfset loc.controller.$injectIntoVariablesScope(name="query", data=query) />
 		<cfset loc.e = loc.controller.$argumentsForPartial($name="query", $dataFunction=true)>
-		<cfset assert(IsStruct(loc.e) and StructIsEmpty(loc.e)) />
+		<cfset assert('IsStruct(loc.e) and StructIsEmpty(loc.e)') />
 	</cffunction>
 
 </cfcomponent>

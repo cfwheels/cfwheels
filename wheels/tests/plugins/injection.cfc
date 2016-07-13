@@ -29,18 +29,18 @@
 	</cffunction>
 	
 	<cffunction name="test_global_method">
-		<cfset assert(StructKeyExists(loc.m, "$GlobalTestMixin"))>
-		<cfset assert(StructKeyExists(loc.c, "$GlobalTestMixin"))>
-		<cfset assert(StructKeyExists(loc.d, "$GlobalTestMixin"))>
-		<cfset assert(StructKeyExists(loc.t, "$GlobalTestMixin"))>
+		<cfset assert('StructKeyExists(loc.m, "$GlobalTestMixin")')>
+		<cfset assert('StructKeyExists(loc.c, "$GlobalTestMixin")')>
+		<cfset assert('StructKeyExists(loc.d, "$GlobalTestMixin")')>
+		<cfset assert('StructKeyExists(loc.t, "$GlobalTestMixin")')>
 	</cffunction>
 	
 	<cffunction name="test_component_specific">
-		<cfset assert(StructKeyExists(loc.m, "$MixinForModels"))>
-		<cfset assert(StructKeyExists(loc.m, "$MixinForModelsAndContollers"))>
-		<cfset assert(StructKeyExists(loc.c, "$MixinForControllers"))>
-		<cfset assert(StructKeyExists(loc.c, "$MixinForModelsAndContollers"))>		
-		<cfset assert(StructKeyExists(loc.d, "$MixinForDispatch"))>
+		<cfset assert('StructKeyExists(loc.m, "$MixinForModels")')>
+		<cfset assert('StructKeyExists(loc.m, "$MixinForModelsAndContollers")')>
+		<cfset assert('StructKeyExists(loc.c, "$MixinForControllers")')>
+		<cfset assert('StructKeyExists(loc.c, "$MixinForModelsAndContollers")')>		
+		<cfset assert('StructKeyExists(loc.d, "$MixinForDispatch")')>
 	</cffunction>
 
 </cfcomponent>

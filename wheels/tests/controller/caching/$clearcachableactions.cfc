@@ -6,7 +6,7 @@
 		<cfset loc.controller.caches(action="dummy")>
 		<cfset loc.controller.$clearCachableActions()>
 		<cfset loc.r = loc.controller.$cachableActions()>
-		<cfset assert(ArrayLen(loc.r) IS 0)>
+		<cfset assert("ArrayLen(loc.r) IS 0")>
 	</cffunction>
 	
 </cfcomponent>

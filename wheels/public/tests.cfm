@@ -55,18 +55,18 @@
 				<th>Failures</th>
 				<th>Errors</th>
 			</tr>
-			<cfloop from="1" to="#ArrayLen(testResults.cases)#" index="testIndex">
-				<cfset cases = testResults.cases[testIndex]>
-				<tr class="<cfif cases.numFailures + cases.numErrors gt 0>errRow<cfelse>sRow</cfif>">
+			<cfloop from="1" to="#ArrayLen(testResults.summary)#" index="testIndex">
+				<cfset summary = testResults.summary[testIndex]>
+				<tr class="<cfif summary.numFailures + summary.numErrors gt 0>errRow<cfelse>sRow</cfif>">
 					<td>
-						<cfset a = ListToArray(cases.packageName, ".")>
+						<cfset a = ListToArray(summary.packageName, ".")>
 						<cfset b = CreateObject("java", "java.util.ArrayList").Init(a)>
 						<cfset c = ArrayLen(a)>
 						<cfloop from="1" to="#c#" index="i"><a href="#linkParams#&package=#ArrayToList(b.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#">#a[i]#</a><cfif i neq c>.</cfif></cfloop>
 					</td>
-					<td class="n">#cases.numTests#</td>
-					<td class="n<cfif cases.numFailures neq 0> failed</cfif>">#cases.numFailures#</td>
-					<td class="n<cfif cases.numErrors neq 0> failed</cfif>">#cases.numErrors#</td>
+					<td class="n">#summary.numTests#</td>
+					<td class="n<cfif summary.numFailures neq 0> failed</cfif>">#summary.numFailures#</td>
+					<td class="n<cfif summary.numErrors neq 0> failed</cfif>">#summary.numErrors#</td>
 				</tr>
 			</cfloop>
 		</table>
@@ -81,8 +81,8 @@
 			<th>Time</th>
 			<th>Status</th>
 		</tr>
-		<cfloop from="1" to="#arrayLen(testResults.tests)#" index="testIndex">
-			<cfset result = testResults.tests[testIndex]>
+		<cfloop from="1" to="#arrayLen(testResults.results)#" index="testIndex">
+			<cfset result = testResults.results[testIndex]>
 			<tr class="<cfif result.status neq 'Success'>errRow<cfelse>sRow</cfif>">
 				<cfif testResults.numCases GT 1>
 					<td><a href="#linkParams#&package=#result.packageName#">#result.cleanTestCase#</a></td>

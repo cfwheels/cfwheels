@@ -13,7 +13,7 @@
 			<cftransaction action="rollback" />
 		</cftransaction>
 
-		<cfset assert(IsBinary(ToBinary(loc._binary)))>
+		<cfset assert('IsBinary(ToBinary(loc._binary))')>
 	</cffunction>
 
  	<cffunction name="test_insert">
@@ -33,7 +33,7 @@
 			<cfset loc._binary = loc.photo.filedata>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset assert(IsBinary(ToBinary(loc._binary)))>
+		<cfset assert('IsBinary(ToBinary(loc._binary))')>
 	</cffunction>
 
 </cfcomponent>

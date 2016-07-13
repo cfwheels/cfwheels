@@ -3,11 +3,11 @@ component extends="wheelsMapping.Test" {
 
   function test_isOptions_with_options_request() {
     request.cgi.request_method = "options";
-    assert(loc.controller.isOptions());
+    assert("loc.controller.isOptions()");
   }
-
+  
   function test_isOptions_with_get_request() {
     request.cgi.request_method = "get";
-    assert(! loc.controller.isOptions());
+    assert("not loc.controller.isOptions()");
   }
 }

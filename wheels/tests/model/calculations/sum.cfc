@@ -2,13 +2,13 @@
 
 	<cffunction name="test_sum">
 		<cfset loc.result = model("post").sum(property="views")>
-		<cfset assert(loc.result IS 15)>
+		<cfset assert("loc.result IS 15")>
 	</cffunction>
 
 	<cffunction name="test_sum_with_group">
 		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
 			<cfset loc.result = model("post").sum(property="views", group="authorId")>
-			<cfset assert(loc.result['viewsSum'][2] IS 5)>
+			<cfset assert("loc.result['viewsSum'][2] IS 5")>
 		<cfelse>
 			<cfset assert(true)>
 		</cfif>
@@ -17,7 +17,7 @@
 	<cffunction name="test_sum_with_group_on_associated_model">
 		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
 			<cfset loc.result = model("post").sum(property="views", include="author", group="lastName")>
-			<cfset assert(loc.result['viewsSum'][2] IS 5)>
+			<cfset assert("loc.result['viewsSum'][2] IS 5")>
 		<cfelse>
 			<cfset assert(true)>
 		</cfif>
@@ -26,7 +26,7 @@
 	<cffunction name="test_sum_with_group_on_calculated_property">
 		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
 			<cfset loc.result = model("photo").sum(property="galleryId", group="DESCRIPTION1")>
-			<cfset assert(loc.result['galleryIdSum'][2] IS 10)>
+			<cfset assert("loc.result['galleryIdSum'][2] IS 10")>
 		<cfelse>
 			<cfset assert(true)>
 		</cfif>
@@ -35,7 +35,7 @@
 	<cffunction name="test_sum_with_group_on_calculated_property_on_associated_model">
 		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
 			<cfset loc.result = model("gallery").sum(property="userId", include="photos", group="DESCRIPTION1")>
-			<cfset assert(loc.result['userIdSum'][3] IS 3)>
+			<cfset assert("loc.result['userIdSum'][3] IS 3")>
 		<cfelse>
 			<cfset assert(true)>
 		</cfif>
@@ -44,22 +44,22 @@
 	<cffunction name="test_sum_with_where">
 		<cfset loc.author = model("author").findOne(where="lastName='Djurner'")>
 		<cfset loc.result = model("post").sum(property="views", where="authorid=#loc.author.id#")>
-		<cfset assert(loc.result IS 10)>
+		<cfset assert("loc.result IS 10")>
 	</cffunction>
 
 	<cffunction name="test_sum_with_non_matching_where">
 		<cfset loc.result = model("post").sum(property="views", where="id=0")>
-		<cfset assert(loc.result IS '')>
+		<cfset assert("loc.result IS ''")>
 	</cffunction>
 
 	<cffunction name="test_sum_with_distinct">
 		<cfset loc.result = model("post").sum(property="views", distinct=true)>
-		<cfset assert(loc.result IS 10)>
+		<cfset assert("loc.result IS 10")>
 	</cffunction>
 
 	<cffunction name="test_sum_with_ifNull">
 		<cfset loc.result = model("post").sum(property="views", where="id=0", ifNull=0)>
-		<cfset assert(loc.result IS 0)>
+		<cfset assert("loc.result IS 0")>
 	</cffunction>
 
 	<cffunction name="test_sum_with_include_soft_deletes">
@@ -68,7 +68,7 @@
 			<cfset loc.sum = model("Post").sum(property="views", includeSoftDeletes=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset assert(loc.sum eq 15)>
+		<cfset assert('loc.sum eq 15')>
 	</cffunction>
 
 </cfcomponent>
