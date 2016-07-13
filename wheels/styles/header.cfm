@@ -126,6 +126,14 @@
 		color: red;
 		font-weight: bold
 	}
+	#content .failed ul
+	{
+		list-style: none;
+	}
+	#content .failed ul li
+	{
+		font-weight: normal
+	}
 	#content .success
 	{
 		color: green;
