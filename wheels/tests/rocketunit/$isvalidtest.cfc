@@ -6,11 +6,11 @@ component extends="wheelsMapping.Test" {
 	}
 
 	function test_package_is_valid() {
-		assert(loc.rocketUnit.$isValidTest("wheelsMapping.tests._assets.rocketunit.ValidTestPackage"));
+		assert('loc.rocketUnit.$isValidTest("wheelsMapping.tests._assets.rocketunit.ValidTestPackage")');
 	}
 
 	function test_package_is_invalid() {
-		assert(! loc.rocketUnit.$isValidTest("wheelsMapping.tests._assets.rocketunit.ValidTestPackage", "Foo"));
+		assert('! loc.rocketUnit.$isValidTest("wheelsMapping.tests._assets.rocketunit.ValidTestPackage", "Foo")');
 	}
 }
 </cfscript>

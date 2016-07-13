@@ -8,7 +8,7 @@ component extends="wheelsMapping.Test" {
 	function _test_$cleantestcase_returns_expected_value() {
 		loc.actual = loc.rocketUnit.$cleanTestCase("wheels.tests.rocketunit.foo.bar");
 		loc.expected = "foo.bar";
-		assert(loc.actual eq loc.expected);
+		assert("loc.actual eq loc.expected");
 	}
 }
 </cfscript>

@@ -10,18 +10,18 @@ component extends="wheelsMapping.Test" {
 
 	function test_$cleantestname_with_underscores_returns_expected_value() {
     loc.actual = loc.rocketUnit.$cleanTestName("test_actual_equals_expected");
-		assert(loc.actual eq loc.expected);
+		assert("loc.actual eq loc.expected");
 	}
 
 
   function test_$cleantestname_with_hyphens_returns_expected_value() {
     loc.actual = loc.rocketUnit.$cleanTestName("test_actual-equals-expected");
-		assert(loc.actual eq loc.expected);
+		assert("loc.actual eq loc.expected");
 	}
 
   function test_$cleantestname_with_camelcase_returns_expected_value() {
     loc.actual = loc.rocketUnit.$cleanTestName("test_actualEqualsExpected");
-    assert(loc.actual eq loc.expected);
+    assert("loc.actual eq loc.expected");
 	}
 }
 </cfscript>
