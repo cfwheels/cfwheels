@@ -483,7 +483,7 @@
   	// run tests
   	for(loc.row in loc.packages) {
   		loc.instance = CreateObject("component", loc.row.package);
-      loc.instance.$runTest(loc.resultKey, loc.test)
+      loc.instance.$runTest(loc.resultKey, loc.test);
   	};
   	// swap back the enviroment
   	StructAppend(application, loc.savedenv, true);
