@@ -26,6 +26,7 @@ Miscellaneous
 * Redirect away after a reload request - [Chris Peters]
 * Support checking IP in "http_x_forwarded_for" when doing maintenance mode exclusions - [Per Djurner]
 * Support checking user agent string when doing maintenance mode exclusions - [Per Djurner]
+* Support for junit and json format test results - (Adam Chapman)
 
 Breaking Changes
 ================

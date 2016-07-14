@@ -397,7 +397,7 @@
 		<cfset arrayAppend(request[resultkey].summary, result)>
 
 		<cfset request[resultkey].numCases = request[resultkey].numCases + 1>
-		<cfset request[resultkey]["end"] = now()>
+		<cfset request[resultkey].end = now()>
 
 		<cfreturn numTestErrors eq 0>
 

@@ -1,3 +1,12 @@
-<cfinclude template="../styles/header.cfm">
-<cfoutput>#includeContent()#</cfoutput>
-<cfinclude template="../styles/footer.cfm">
+<cfscript>
+  param name="params.format" default="html";
+
+  if (ListFindNoCase("junit,json", params.format)) {
+    request.wheels.showDebugInformation = false;
+    writeOutput(includeContent());
+  } else {
+    include "../styles/header.cfm";
+    writeOutput(includeContent());
+    include "../styles/footer.cfm";
+  }
+</cfscript>
