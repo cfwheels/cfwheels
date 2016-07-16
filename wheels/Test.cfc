@@ -213,8 +213,6 @@ component output=false {
 			return;
 		}
 
-    dump(var=arguments, label="arguments");
-
 		attributeArgs["var"] = evaluate(arguments.expression);
 
 		structDelete(arguments, "expression");
@@ -222,7 +220,7 @@ component output=false {
     structAppend(attributeArgs, arguments, true);
 
     savecontent variable="dump" {
-      dump(attributeCollection=attributeArgs);
+      writeDump(attributeCollection=attributeArgs);
     }
 
 		if (! StructKeyExists(request["TESTING_FRAMEWORK_DEBUGGING"], TESTING_FRAMEWORK_VARS.RUNNING_TEST)) {
