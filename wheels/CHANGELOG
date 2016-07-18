@@ -28,6 +28,7 @@ Miscellaneous
 * Support checking user agent string when doing maintenance mode exclusions - [Per Djurner]
 * Added junit and json format test results - [Adam Chapman]
 * Added empty application test directories - [Chris Peters, Adam Chapman]
+* Added default urlrewrite.xml to support Tuckey URL rewriting with Commandbox #649 - [Tom King]
 
 Breaking Changes
 ================
