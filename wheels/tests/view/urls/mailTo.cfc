@@ -1,9 +1,10 @@
-<cfcomponent extends="wheels.Test">
+component extends="wheels.Test" {
 
-	<cfset loc.controller = controller(name="dummy")>
+	function setup(){
+		loc.controller = controller(name="dummy");
+	}
 
-	<cffunction name="test_x_mailTo_valid">
-		<cfset loc.controller.mailTo(emailAddress="webmaster@yourdomain.com", name="Contact our Webmaster")>
-	</cffunction>
-
-</cfcomponent>
+	function test_x_mailTo_valid(){
+		loc.controller.mailTo(emailAddress="webmaster@yourdomain.com", name="Contact our Webmaster");
+	}	
+}  
