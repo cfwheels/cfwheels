@@ -1,7 +1,5 @@
 <cfscript>
-  param name="params.format" default="html";
-
-  if (ListFindNoCase("junit,json", params.format)) {
+  if (StructKeyExists(params, "format") && ListFindNoCase("junit,json", params.format)) {
     request.wheels.showDebugInformation = false;
     writeOutput(includeContent());
   } else {
