@@ -661,7 +661,8 @@
 		if (!ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath) && !ListFindNoCase(application.wheels.nonExistingObjectFiles, loc.fullObjectPath))
 		{
 			// we have not yet checked if this file exists or not so let's do that here (the function below will return the file name with the correct case if it exists, false if not)
-			loc.file = $fileExistsNoCase(ExpandPath(loc.fullObjectPath & ".cfc"));
+			loc.file = $fileExistsNoCase(Expandpath(arguments.objectPath) & "/" & arguments.name & ".cfc");
+
 			if (IsBoolean(loc.file) && !loc.file)
 			{
 				// no file exists, let's store that if caching is on so we don't have to check it again

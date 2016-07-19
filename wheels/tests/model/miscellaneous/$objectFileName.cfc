@@ -7,7 +7,7 @@ component extends="wheels.Test" {
 		loc.expected = "PhotoGallery";
 		debug("loc.actual", false);
 		debug("loc.expected", false);
-		// assert("Compare(loc.actual, loc.expected) eq 0", "loc.actual", "loc.expected");
+		assert("Compare(loc.actual, loc.expected) eq 0", "loc.actual", "loc.expected");
 	}
 }
 </cfscript>
