@@ -122,64 +122,66 @@ component output=false {
               assertion.
    */
 
-  public void function assert(required string expression) {
-    var token = "";
- 		var tokenValue = "";
- 		var message = "assert failed: #expression#";
- 		var newline = chr(10) & chr(13);
- 		var i = "";
- 		var evaluatedTokens = "";
+   public void function assert(required string expression) {
+     var token = "";
+     var tokenValue = "";
+     var message = "assert failed: #arguments.expression#";
+     var newline = chr(10) & chr(13);
+     var i = "";
+     var evaluatedTokens = "";
 
-    if (! evaluate(expression)) {
+     if (! evaluate(arguments.expression)) {
 
-      for (expression in arguments) {
+       for (i in arguments) {
 
- 				evaluatedTokens = {};
+         expr = arguments[i];
+         evaluatedTokens = {};
 
- 				/*
- 					Double pass of expressions with different delimiters so that for expression "a(b) or c[d]",
- 					"a(b)", "c[d]", "b" and "d" are evaluated.  Do not evaluate any expression more than once.
- 				*/
-        for (token in listToArray("#expression# #reReplace(expression, "[([\])]", " ")#", " +=-*/%##")) {
+         /*
+         	Double pass of expressions with different delimiters so that for expression "a(b) or c[d]",
+         	"a(b)", "c[d]", "b" and "d" are evaluated.  Do not evaluate any expression more than once.
+         */
 
- 					if (! structKeyExists(evaluatedTokens, token)) {
+         for (token in listToArray("#expr# #reReplace(expr, "[([\])]", " ")#", " +=-*/%##")) {
 
- 						evaluatedTokens[token] = true;
- 						tokenValue = "__INVALID__";
+           if (! structKeyExists(evaluatedTokens, token)) {
 
- 						if (! (isNumeric(token) or isBoolean(token))) {
-              try {
-                tokenValue = evaluate(token);
-              } catch(expression e) {
-              }
- 						}
+						evaluatedTokens[token] = true;
+						tokenValue = "__INVALID__";
 
- 						/*
- 							Format token value according to type
- 						*/
- 						if ((! isSimpleValue(tokenValue)) or (tokenValue neq "__INVALID__")) {
+						if (! (isNumeric(token) or isBoolean(token))) {
+               try {
+                 tokenValue = evaluate(token);
+               } catch(expression e) {
+               }
+						}
 
- 							if (isSimpleValue(tokenValue)) {
- 								if (! (isNumeric(tokenValue) or isBoolean(tokenValue))) {
- 									tokenValue ="'#tokenValue#'";
- 								}
- 							} else {
- 								if (isArray(tokenValue)) {
- 									tokenValue = "array of #arrayLen(tokenValue)# items";
- 								} else if (isStruct(tokenValue)) {
- 									tokenValue = "struct with #structCount(tokenValue)# members";
- 								} else if (IsCustomFunction(tokenValue)) {
- 									tokenValue = "UDF";
- 								}
- 							}
- 							message = message & newline & token & " = " & tokenValue;
- 						}
- 					}
- 				}
- 			}
- 			fail(message);
- 		}
- 	}
+						/*
+							Format token value according to type
+						*/
+						if ((! isSimpleValue(tokenValue)) or (tokenValue neq "__INVALID__")) {
+
+							if (isSimpleValue(tokenValue)) {
+								if (! (isNumeric(tokenValue) or isBoolean(tokenValue))) {
+									tokenValue ="'#tokenValue#'";
+								}
+							} else {
+								if (isArray(tokenValue)) {
+									tokenValue = "array of #arrayLen(tokenValue)# items";
+								} else if (isStruct(tokenValue)) {
+									tokenValue = "struct with #structCount(tokenValue)# members";
+								} else if (IsCustomFunction(tokenValue)) {
+									tokenValue = "UDF";
+								}
+							}
+							message = message & newline & token & " = " & tokenValue;
+						}
+					}
+				}
+			}
+			fail(message);
+		}
+	}
 
   /*
 		Called from a test function to cause the test to fail.
