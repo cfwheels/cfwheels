@@ -506,7 +506,6 @@ component output=false {
 
   /*
    * removes the base test directory from the test name to make them prettier and more readable
-   * TODO: value of TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH should be an argument so it can be passed in for testing
    */
   public string function $cleanTestCase(
     required string name,
