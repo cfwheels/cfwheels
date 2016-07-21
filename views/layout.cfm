@@ -2,6 +2,9 @@
 
 <html>
 	<body>
-		<cfoutput>#includeContent()#</cfoutput>
+		<cfoutput>
+		#flashMessages()#
+		#includeContent()#
+		</cfoutput>
 	</body>
 </html>
