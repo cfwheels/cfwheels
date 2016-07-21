@@ -1,14 +1,19 @@
-<cfinclude template="assets.cfm">
-<cfinclude template="dates.cfm">
-<cfinclude template="errors.cfm">
-<cfinclude template="forms.cfm">
-<cfinclude template="formsassociation.cfm">
-<cfinclude template="formsdate.cfm">
-<cfinclude template="formsdateobject.cfm">
-<cfinclude template="formsdateplain.cfm">
-<cfinclude template="formsobject.cfm">
-<cfinclude template="formsplain.cfm">
-<cfinclude template="links.cfm">
-<cfinclude template="miscellaneous.cfm">
-<cfinclude template="sanitize.cfm">
-<cfinclude template="text.cfm">
+<cfscript>
+  
+include "assets.cfm";
+include "csrf.cfm";
+include "dates.cfm";
+include "errors.cfm";
+include "forms.cfm";
+include "formsassociation.cfm";
+include "formsdate.cfm";
+include "formsdateobject.cfm";
+include "formsdateplain.cfm";
+include "formsobject.cfm";
+include "formsplain.cfm";
+include "links.cfm";
+include "miscellaneous.cfm";
+include "sanitize.cfm";
+include "text.cfm";
+
+</cfscript>
