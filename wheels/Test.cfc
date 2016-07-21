@@ -330,11 +330,11 @@ component output=false {
 						status = "Error";
             if (ArrayLen(e.tagContext)) {
             	template = "#ListLast(e.tagContext[1].template, "/")# line #e.tagContext[1].line#";
-              tagContext = "<ul>" & newline;
+              tagContext = "<ul>";
               for (context in e.tagContext) {
-                tagContext = tagContext & '<li>#context.template# line #context.line#</li>' & newline;
+                tagContext = tagContext & '<li>#context.template# line #context.line#</li>';
               };
-              tagContext = tagContext = "</ul>";
+              tagContext = tagContext & "</ul>";
             } else {
             	template = "";
               tagContext = "[Unknown tagContext]";
