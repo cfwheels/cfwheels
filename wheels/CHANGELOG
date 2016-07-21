@@ -8,7 +8,7 @@ Model Enhancements
 
 View Enhancements
 =================
-* ?
+* flashMessages() are now in default layout.cfm - #650 [Tom King]
 
 Controller Enhancements
 =======================
