@@ -1,4 +1,3 @@
-<cfscript>
 component extends="wheels.Test" {
 
 	function test_$cleantestcase_returns_expected_value() {
@@ -8,4 +7,3 @@ component extends="wheels.Test" {
 		assert("loc.actual eq loc.expected");
 	}
 }
-</cfscript>

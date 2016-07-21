@@ -1,4 +1,3 @@
-<cfscript>
 component extends="wheels.Test" {
 
 	function setup() {
@@ -22,4 +21,3 @@ component extends="wheels.Test" {
     assert("loc.actual eq loc.expected");
 	}
 }
-</cfscript>

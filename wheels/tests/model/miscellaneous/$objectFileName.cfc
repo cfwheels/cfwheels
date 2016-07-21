@@ -1,4 +1,3 @@
-<cfscript>
 component extends="wheels.Test" {
 
 	function test_$objectFileName_returns_model_class_name_in_same_case_as_file() {
@@ -10,4 +9,3 @@ component extends="wheels.Test" {
 		assert("Compare(loc.actual, loc.expected) eq 0", "loc.actual", "loc.expected");
 	}
 }
-</cfscript>

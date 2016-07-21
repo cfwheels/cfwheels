@@ -1,0 +1,17 @@
+{
+    "force":true,
+    "web":{
+        "http":{
+            "host":"localhost",
+        },
+        "rewrites":{
+            "enable":true,
+            "config":"urlrewrite.xml"
+        }
+    },
+    "defaultEngine":"adobe@10",
+    "engine":"adobe@10",
+    "app":{
+        "cfengine":"adobe@10"
+    }
+}

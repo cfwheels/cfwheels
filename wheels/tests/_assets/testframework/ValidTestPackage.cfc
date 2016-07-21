@@ -1,4 +1,3 @@
-<cfscript>
 component extends="wheels.Test" {
 
   public void function test_valid_test_package_passing_test() {
@@ -13,4 +12,3 @@ component extends="wheels.Test" {
     return 1;
   }
 }
-</cfscript>

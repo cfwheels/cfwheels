@@ -1,4 +1,3 @@
-<cfscript>
 component extends="wheels.Test" {
 
 	function test_package_is_valid() {
@@ -9,4 +8,3 @@ component extends="wheels.Test" {
 		assert('! $isValidTest("wheels.Tests._assets.testframework.ValidTestPackage", "Foo")');
 	}
 }
-</cfscript>
