@@ -46,7 +46,8 @@ component extends="wheelsMapping.Test" {
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     }
     catch (any e) {
-      assert("e.Type is 'Wheels.InvalidAuthenticityToken'");
+      loc.type = e.Type;
+      assert("loc.type is 'Wheels.InvalidAuthenticityToken'");
     }
   }
 
@@ -60,7 +61,8 @@ component extends="wheelsMapping.Test" {
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     }
     catch (any e) {
-      assert("e.Type is 'Wheels.InvalidAuthenticityToken'");
+      loc.type = e.Type;
+      assert("loc.type is 'Wheels.InvalidAuthenticityToken'");
     }
   }
 
@@ -83,7 +85,8 @@ component extends="wheelsMapping.Test" {
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     }
     catch (any e) {
-      assert("e.Type is 'Wheels.InvalidAuthenticityToken'");
+      loc.type = e.Type;
+      assert("loc.type is 'Wheels.InvalidAuthenticityToken'");
     }
   }
 
@@ -97,7 +100,8 @@ component extends="wheelsMapping.Test" {
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     }
     catch (any e) {
-      assert("e.Type is 'Wheels.InvalidAuthenticityToken'");
+      loc.type = e.Type;
+      assert("loc.type is 'Wheels.InvalidAuthenticityToken'");
     }
   }
 
@@ -120,7 +124,8 @@ component extends="wheelsMapping.Test" {
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     }
     catch (any e) {
-      assert("e.Type is 'Wheels.InvalidAuthenticityToken'");
+      loc.type = e.Type;
+      assert("loc.type is 'Wheels.InvalidAuthenticityToken'");
     }
   }
 
@@ -134,7 +139,8 @@ component extends="wheelsMapping.Test" {
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     }
     catch (any e) {
-      assert("e.Type is 'Wheels.InvalidAuthenticityToken'");
+      loc.type = e.Type;
+      assert("loc.type is 'Wheels.InvalidAuthenticityToken'");
     }
   }
 }
