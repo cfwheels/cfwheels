@@ -76,6 +76,10 @@
 		}
 
 		loc.rv = arguments.prepend & $tag(name="form", skip=loc.skip, attributes=arguments) & arguments.append;
+
+		if (ListFindNoCase("post,put,patch,delete", arguments.method)) {
+			loc.rv &= authenticityTokenField();
+		}
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
