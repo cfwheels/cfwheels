@@ -12,7 +12,7 @@ env:
     - PROFILE=jetty,lucee,mysql PARAM=none
     - PROFILE=jetty,lucee,postgresql PARAM=none
     - PROFILE=jetty,lucee,oracle-emu PARAM=none
-    - PROFILE=jetty,lucee PARAM=luceeVersion=http://stable.lucee.org/rest/update/provider/express/5.0.0.65-BETA
+    - PROFILE=jetty,lucee PARAM=luceeVersion=http://stable.lucee.org/rest/update/provider/express/5.0.0.252
 
 before_script: #prepare MySQL and PostgresSQL databases
   - mysql -e 'create database test;'
