@@ -1,9 +1,9 @@
-component extends="wheels.Test" {
-	
+component extends="wheels.tests.Test" {
+
 	function setup(){
 		params.controller = "Blog";
 		params.action = "edit";
-		params.key = "1"; 
+		params.key = "1";
 		loc.controller = controller(params.controller, params);
 		loc.args = {};
 		loc.args.controller = "Blog";
@@ -89,4 +89,4 @@ component extends="wheels.Test" {
 		loc.r = loc.controller.urlFor(argumentcollection=loc.args);
 		assert("loc.e eq loc.r");
 	}
-}  
+}

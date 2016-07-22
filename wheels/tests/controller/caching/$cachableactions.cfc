@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cfset loc.controller = controller(name="dummy")>
 

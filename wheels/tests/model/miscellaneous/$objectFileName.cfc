@@ -1,4 +1,4 @@
-component extends="wheels.Test" {
+component extends="wheels.tests.Test" {
 
 	function setup(){
 		loc={};
@@ -10,15 +10,15 @@ component extends="wheels.Test" {
 		loc={};
 	}
 
-	function test_$fileExistsNoCase_returns_filename(){  
+	function test_$fileExistsNoCase_returns_filename(){
 		loc.expected="PhotoGallery.cfc";
-		loc.actual = $fileExistsNoCase(expandPath(loc.objectPath) & loc.name & ".cfc");  
+		loc.actual = $fileExistsNoCase(expandPath(loc.objectPath) & loc.name & ".cfc");
 		assert("loc.actual EQ loc.expected");
-	} 
+	}
 
-	function test_$objectFileName_returns_model_class_name_in_same_case_as_file_wo_exandpath() { 
+	function test_$objectFileName_returns_model_class_name_in_same_case_as_file_wo_exandpath() {
 		loc.actual = $objectFileName(name="PhotoGallery", objectPath=loc.objectPath, type="model");
-		loc.expected = "PhotoGallery"; 
+		loc.expected = "PhotoGallery";
 		assert("Compare(loc.actual, loc.expected) eq 0", "loc.actual", "loc.expected", "loc.objectPath");
 	}
 }

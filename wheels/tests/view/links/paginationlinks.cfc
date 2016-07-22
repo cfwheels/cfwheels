@@ -1,4 +1,4 @@
-component extends="wheels.Test" {
+component extends="wheels.tests.Test" {
 
 	function setup(){
 		copies = Duplicate(application.wheels);
@@ -16,7 +16,7 @@ component extends="wheels.Test" {
 	}
 
 	function teardown(){
-		application.wheels = copies; 
+		application.wheels = copies;
 	}
 
 	function test_current_page(){
@@ -28,7 +28,7 @@ component extends="wheels.Test" {
 		loc.result = loc.controller.paginationLinks(linkToCurrentPage=false);
 		assert("loc.result Does Not Contain '#loc.link#' AND loc.result Contains '2'");
 	}
- 	
+
  	function test_class_and_classForCurrent(){
 
 		loc.authors = model("author").findAll(page=2, perPage=3, order="lastName");
@@ -43,27 +43,27 @@ component extends="wheels.Test" {
 		loc.authors = model("author").findAll(page=2, perPage=3, order="lastName");
 		loc.link = loc.controller.linkTo(route="pagination", special=99, text="3", params="page=3");
 		loc.result = loc.controller.paginationLinks(route="pagination", special=99);
-		assert("loc.result Contains '#loc.link#' AND loc.result Contains '?page='"); 
+		assert("loc.result Contains '#loc.link#' AND loc.result Contains '?page='");
  	}
 
- 	function test_page_as_route_param_with_route_not_containing_page_parameter_in_variables(){ 
-		loc.authors = model("author").findAll(page=2, perPage=3, order="lastName"); 
+ 	function test_page_as_route_param_with_route_not_containing_page_parameter_in_variables(){
+		loc.authors = model("author").findAll(page=2, perPage=3, order="lastName");
 		loc.result = loc.controller.paginationLinks(route="pagination", special=99);
-		assert("loc.result Contains '/pag/ina/tion/99?page='"); 
+		assert("loc.result Contains '/pag/ina/tion/99?page='");
 		loc.result = loc.controller.paginationLinks(route="pagination", special=99, pageNumberAsParam="false");
 		assert("loc.result Does Not Contain '/pag/ina/tion/99?page=' AND loc.result contains '/pag/ina/tion/99'");
  	}
 
- 	function test_page_as_route_param_with_route_containing_page_parameter_in_variables(){ 
-		loc.authors = model("author").findAll(page=2, perPage=3, order="lastName"); 
+ 	function test_page_as_route_param_with_route_containing_page_parameter_in_variables(){
+		loc.authors = model("author").findAll(page=2, perPage=3, order="lastName");
 		loc.addToPattern = "/[page]";
 		loc.addToVariables = ",page";
 		application.wheels.routes[2].pattern = application.wheels.routes[2].pattern & loc.addToPattern;
-		application.wheels.routes[2].variables = application.wheels.routes[2].variables & loc.addToVariables; 
+		application.wheels.routes[2].variables = application.wheels.routes[2].variables & loc.addToVariables;
 		loc.result = loc.controller.paginationLinks(route="pagination", special=99);
-		assert("loc.result Contains '/pag/ina/tion/99/3'"); 
+		assert("loc.result Contains '/pag/ina/tion/99/3'");
 		loc.result = loc.controller.paginationLinks(route="pagination", special=99, pageNumberAsParam="false");
 		assert("loc.result Contains '/pag/ina/tion/99/3'");
  	}
 
-} 
+}

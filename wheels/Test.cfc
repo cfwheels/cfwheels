@@ -1,104 +1,101 @@
-<cfscript>
-/*
-  Base component for rapidly writing/running test cases.
-
-  Terminology
-  -----------
-  -	A Test Package is a collection of Test Cases that tests the functionality
-    of an application/service/whatever.
-
-  -	A Test Case is a collection of Tests to apply to a particular CF component,
-    tag or include file.
-
-  - 	A Test is a sequence of calls to the code being tested and Assertions about
-    the results we get from the code.
-
-  -	An Assertion is a statement we make about the results we get that should
-    evaluate to true if the tested code is working properly.
-
-  How are these things represented in test code using this file?
-  --------------------------------------------------------------
-  -	A Test Package is a directory that can be referred to by a CF mapping, and
-    ideally outside the web root for security.
-
-  -	A Test Case is a CF component in that directory that extends this component.
-
-  -	A Test is a method in one of these components.  The method name should start with
-    the word "test", it should require no arguments and return void.  Any setup or
-    clearup code common to all test functions can be added to optional setup() and
-    teardown() methods, which again take no arguments and return void.
-
-    Tests in each Test Case are run in alphabetical order.  If you want your tests
-    to run in a particular order you could name them test01xxx, test02yyy, etc.
-
-  -	An Assertion is a call to the assert() method (inherited from this component) inside
-    a test method.  assert() takes a string argument, an expression (see ColdFusion
-    evaluate() documentation) that evaluates to true or false.  If false, a "failure"
-    is recorded for the test case and the test case fails.  assert() tries to include
-    the value of any variables it finds in the expression.
-
-    If there are specific variable values you would like included in the failure message,
-    pass them as additional string arguments to assert().  Multiple variables can be
-    listed in a single space-delimited string if this is convenient.
-
-    For more complicated assertions you may call the fail() method directly, which takes
-    a single message string as an argument.
-
-  -	If an uncaught exception is thrown an "error" is recorded for the Test Case and the
-    Test Case fails.
-
-  Running tests
-  -------------
-  Assuming this file is under a com.rocketboots.rocketunit cf mapping, you have some test cases
-  under a com.myco.myapp.sometestpackage cf mapping, and a test case SomeTestCase.cfc in that
-  mapping...
-
-  To run a test package:
-
-    <cfset test = createObject("component", "com.rocketboots.rocketunit.Test")>
-    <cfset test.runTestPackage("test.com.myco.myapp.sometestpackage")>
-
-
-  To run a specific test case:
-
-    <cfset test = createObject("component", "test.com.myco.myapp.sometestpackage.SomeTestCase")>
-    <cfset test.runTest()>
-
-  To see human readable output after running a test:
-
-    <cfoutput>#test.HTMLFormatTestResults()#</cfoutput>
-
-  The test results are available in the request.test structure.  If you would like to
-  use a different key in request (as we do for the rocketunit self-tests) for the results
-  you can pass the key name as a second argument to the run method.
-
-  You can call run() multiple times and the test results will be combined.
-
-  If you wish to reset the test results before calling run() again, call resetTestResults().
-
-
-  Copyright 2007 RocketBoots Pty Limited - http://www.rocketboots.com.au
-
-    This file is part of RocketUnit.
-
-    RocketUnit is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    RocketUnit is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with RocketUnit; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-  @version $Id: Test.cfc 167 2007-04-12 07:50:15Z robin $
-*/
-
 component output=false {
+  /*
+    Base component for rapidly writing/running test cases.
+
+    Terminology
+    -----------
+    -	A Test Package is a collection of Test Cases that tests the functionality
+      of an application/service/whatever.
+
+    -	A Test Case is a collection of Tests to apply to a particular CF component,
+      tag or include file.
+
+    - 	A Test is a sequence of calls to the code being tested and Assertions about
+      the results we get from the code.
+
+    -	An Assertion is a statement we make about the results we get that should
+      evaluate to true if the tested code is working properly.
+
+    How are these things represented in test code using this file?
+    --------------------------------------------------------------
+    -	A Test Package is a directory that can be referred to by a CF mapping, and
+      ideally outside the web root for security.
+
+    -	A Test Case is a CF component in that directory that extends this component.
+
+    -	A Test is a method in one of these components.  The method name should start with
+      the word "test", it should require no arguments and return void.  Any setup or
+      clearup code common to all test functions can be added to optional setup() and
+      teardown() methods, which again take no arguments and return void.
+
+      Tests in each Test Case are run in alphabetical order.  If you want your tests
+      to run in a particular order you could name them test01xxx, test02yyy, etc.
+
+    -	An Assertion is a call to the assert() method (inherited from this component) inside
+      a test method.  assert() takes a string argument, an expression (see ColdFusion
+      evaluate() documentation) that evaluates to true or false.  If false, a "failure"
+      is recorded for the test case and the test case fails.  assert() tries to include
+      the value of any variables it finds in the expression.
+
+      If there are specific variable values you would like included in the failure message,
+      pass them as additional string arguments to assert().  Multiple variables can be
+      listed in a single space-delimited string if this is convenient.
+
+      For more complicated assertions you may call the fail() method directly, which takes
+      a single message string as an argument.
+
+    -	If an uncaught exception is thrown an "error" is recorded for the Test Case and the
+      Test Case fails.
+
+    Running tests
+    -------------
+    Assuming this file is under a com.rocketboots.rocketunit cf mapping, you have some test cases
+    under a com.myco.myapp.sometestpackage cf mapping, and a test case SomeTestCase.cfc in that
+    mapping...
+
+    To run a test package:
+
+      <cfset test = createObject("component", "com.rocketboots.rocketunit.Test")>
+      <cfset test.runTestPackage("test.com.myco.myapp.sometestpackage")>
+
+
+    To run a specific test case:
+
+      <cfset test = createObject("component", "test.com.myco.myapp.sometestpackage.SomeTestCase")>
+      <cfset test.runTest()>
+
+    To see human readable output after running a test:
+
+      <cfoutput>#test.HTMLFormatTestResults()#</cfoutput>
+
+    The test results are available in the request.test structure.  If you would like to
+    use a different key in request (as we do for the rocketunit self-tests) for the results
+    you can pass the key name as a second argument to the run method.
+
+    You can call run() multiple times and the test results will be combined.
+
+    If you wish to reset the test results before calling run() again, call resetTestResults().
+
+    Copyright 2007 RocketBoots Pty Limited - http://www.rocketboots.com.au
+
+      This file is part of RocketUnit.
+
+      RocketUnit is free software; you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation; either version 2 of the License, or
+      (at your option) any later version.
+
+      RocketUnit is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with RocketUnit; if not, write to the Free Software
+      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    @version $Id: Test.cfc 167 2007-04-12 07:50:15Z robin $
+  */
 
   // variables that are used by the testing framework itself
   TESTING_FRAMEWORK_VARS = {};
@@ -465,8 +462,9 @@ component output=false {
   	var loc = {};
   	// the key in the request scope that will contain the test results
   	loc.resultKey = "WheelsTests";
-  	// save the original environment for overloading
-  	loc.savedenv = Duplicate(application);
+
+    // TODO: perhaps set(functionName="redirectTo", delay=true); ?
+
   	// not only can we specify the package, but also the test we want to run
   	loc.test = "";
   	if (StructKeyExists(arguments.options, "test") && Len(arguments.options.test)) {
@@ -474,13 +472,29 @@ component output=false {
   	}
   	loc.paths = $resolvePaths(arguments.options);
   	loc.packages = $listTestPackages(arguments.options, loc.paths.test_filter);
-  	// run tests
-  	for(loc.row in loc.packages) {
+
+    // run tests
+    loc.i = 0;
+    for (loc.row in loc.packages) {
+      loc.i++;
   		loc.instance = CreateObject("component", loc.row.package);
+      // is there a better way to check for existence of a function?
+      // if the beforeall method is present, run it once only per request
+      if (StructKeyExists(loc.instance, "beforeAll") && loc.i eq 1) {
+        loc.instance.beforeAll();
+      }
+      if (StructKeyExists(loc.instance, "packageSetup")) {
+        loc.instance.packageSetup();
+      }
       loc.instance.$runTest(loc.resultKey, loc.test);
+      if (StructKeyExists(loc.instance, "packageTeardown")) {
+        loc.instance.packageTeardown();
+      }
+      // if the afterAll method is present, run it after the last package (once per request)
+      if (StructKeyExists(loc.instance, "afterAll") && loc.i eq loc.packages.recordCount) {
+        loc.instance.afterAll();
+      }
   	};
-  	// swap back the enviroment
-  	StructAppend(application, loc.savedenv, true);
   	// return the results
   	return $results(loc.resultKey);
   }
@@ -495,11 +509,21 @@ component output=false {
   	string shouldExtend="Test"
   ) {
   	var loc = {};
+    loc.name = ListLast(arguments.component, ".");
+
   	if (Len(arguments.shouldExtend)) {
       loc.metadata = GetComponentMetaData(arguments.component);
-  		if (! StructKeyExists(loc.metadata, "extends") or loc.metadata.extends.fullname does not contain arguments.shouldExtend) {
+  		if (! StructKeyExists(loc.metadata, "extends") or ListLast(loc.metadata.extends.fullname, ".") neq arguments.shouldExtend) {
   			return false;
   		}
+    }
+    // package names that begin with underscores are not valid
+    if (Left(loc.name, 1) eq "_") {
+      return false;
+    }
+    // don't test Test.cfc base components
+    if (loc.name eq "Test") {
+      return false;
     }
     return true;
   }
@@ -618,8 +642,8 @@ component output=false {
   		if (! ReFindNoCase("(^|\.)_", loc.packageName)) {
         loc.packageName = ListPrepend(loc.packageName, loc.paths.test_path, ".");
         loc.packageName = ListAppend(loc.packageName, ListFirst(loc.package.name, "."), ".");
-        // ignore invalid packages and package names that begin with underscores
-  			if (Left(loc.package.name, 1) != "_" && $isValidTest(loc.packageName)) {
+        // ignore invalid packages
+  			if ($isValidTest(loc.packageName)) {
   				QueryAddRow(loc.rv);
           QuerySetCell(loc.rv, "package", loc.packageName);
   			}
@@ -644,5 +668,13 @@ component output=false {
   	}
   }
 
+  /*
+   * Returns true if a file path is a wheels core file
+   */
+  public any function $isCoreFile(required string path) {
+    var loc = {};
+    loc.path = Replace(arguments.path, ExpandPath("/"), "", "one");
+    return (Left(loc.path, 7) eq "wheels/" || ListFindNoCase("index.cfm,rewrite.cfm,root.cfm", loc.path));
+  }
+
 }
-</cfscript>

@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="test_validate_and_validateOnCreate_should_be_called_when_creating">
 		<cfset loc.user = model("user").new()>

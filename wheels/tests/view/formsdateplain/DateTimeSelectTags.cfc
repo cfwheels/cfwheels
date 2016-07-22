@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="setup">
 		<cfset pkg.controller = controller("dummy")>

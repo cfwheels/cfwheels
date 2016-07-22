@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="test_updatedAt_does_not_change_when_no_changes_to_model">
 		<cftransaction>

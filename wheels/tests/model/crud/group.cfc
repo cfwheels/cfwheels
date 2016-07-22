@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="test_simple_group_by">
 		<cfset loc.r = model("tag").findAll(select="parentId, COUNT(*) AS groupCount", group="parentId")>

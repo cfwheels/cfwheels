@@ -1,4 +1,4 @@
-component extends="wheels.Test" {
+component extends="wheels.tests.Test" {
 
   public void function test_valid_test_package_passing_test() {
     assert("true");

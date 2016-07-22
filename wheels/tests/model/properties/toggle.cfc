@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="test_toggle_property_with_save">
 		<cfset loc.model = model("user").findOne(where="firstName='Chris'") />

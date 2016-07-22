@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="test_table_name_with_star_translates_to_all_fields">
 		<cfset loc.model = model("post") />

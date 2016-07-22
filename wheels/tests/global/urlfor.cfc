@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="test_issue_455">
 		<cfset addRoute(name="user_2", pattern="user/[user_id]/[controller]/[action]")>

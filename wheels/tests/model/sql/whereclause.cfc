@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="test_numeric_operators">
 		<cfset operators = "=,<>,!=,<,<=,!<,>,>=,!>">

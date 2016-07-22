@@ -1,4 +1,4 @@
-component extends="wheels.Test" {
+component extends="wheels.tests.Test" {
 
 	function setup() {
     loc.expected = "Actual equals expected";

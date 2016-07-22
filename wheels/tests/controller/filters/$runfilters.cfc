@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cfset params = {controller="filtering", action="index"}>	
 	<cfset loc.controller = controller("filtering", params)>

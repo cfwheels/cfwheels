@@ -1,4 +1,4 @@
-component extends="wheels.Test" {
+component extends="wheels.tests.Test" {
   include "common.cfm";
 
   function test_isPatch_with_head_request() {

@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="test_automatic_validations_should_validate_primary_keys">
 		<cfset loc.user = model("UserAutoMaticValidations").new(

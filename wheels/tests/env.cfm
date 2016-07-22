@@ -1,6 +1,6 @@
 <cfset application.wheels.controllerPath = "wheels/tests/_assets/controllers">
 <cfset application.wheels.modelPath = "/wheelsMapping/tests/_assets/models">
-<cfset application.wheels.modelComponentPath = "wheels.Tests._assets.models">
+<cfset application.wheels.modelComponentPath = "wheels.tests._assets.models">
 <cfset application.wheels.dataSourceName = "wheelstestdb">
 
 <!--- turn off default validations for testing --->

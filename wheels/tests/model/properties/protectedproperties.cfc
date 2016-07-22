@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="test_property_cannot_be_set_with_mass_assignment_when_protected">
 		<cfset loc.model = model("post") />

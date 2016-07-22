@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="test_order_with_maxrows_and_calculated_property">
 		<cfset loc.result = model("photo").findOne(order="DESCRIPTION1 DESC", maxRows=1)>

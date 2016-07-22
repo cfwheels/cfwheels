@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="test_have_access_to_changed_property_values_in_aftersave">
 		<cfset model("user").$registerCallback(type="afterSave", methods="saveHasChanged")>

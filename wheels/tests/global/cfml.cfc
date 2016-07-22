@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="test_$listClean_default_delim">
 		<cfset loc.mylist = "tony,    per   ,  james    ,,, chris   , raul ,,,,  peter">

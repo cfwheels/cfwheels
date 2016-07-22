@@ -1,4 +1,4 @@
-component extends="wheels.Test" {
+component extends="wheels.tests.Test" {
 
 	function test_$cleantestcase_returns_expected_value() {
 		loc.basePath = "wheels.tests.testframework";

@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 
 	<cffunction name="test_railo_invalid">
 		<cfset assert('Len($checkMinimumVersion(version="4.3.0.003", engine="Railo"))')>

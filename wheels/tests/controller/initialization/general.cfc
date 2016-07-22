@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.Test">
+<cfcomponent extends="wheels.tests.Test">
 	
 	<cffunction name="test_initializing_by_calling_init_function">
 	</cffunction>
