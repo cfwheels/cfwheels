@@ -1172,6 +1172,7 @@ public string function $buildReleaseZip(
 		"models",
 		"plugins",
 		"stylesheets",
+		"tests",
 		"views",
 		"wheels",
 		".htaccess",
