@@ -1,7 +1,9 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset belongsTo(name="city", foreignKey="citycode")>
-	</cffunction>
+	public void function init() {
+		property(name="id", sql="shopid");
+		setPrimaryKey("shopid");
+		belongsTo(name="city", foreignKey="citycode");
+	}
 
-</cfcomponent>
+}
