@@ -1187,6 +1187,7 @@ public string function $buildReleaseZip(
 		"server-cf2016.json",
 		"server-lucee4.json",
 		"server-lucee5.json",
+		"urlrewrite.xml",
 		"web.config"
 	];
 
@@ -1204,6 +1205,7 @@ public string function $buildReleaseZip(
 			$zip(file=loc.path, source=ExpandPath(loc.i));
 		} else if (DirectoryExists(ExpandPath(loc.i))) {
 			$zip(file=loc.path, source=ExpandPath(loc.i), prefix=loc.i);
+		// TODO: throw if file/dir not found
 		}
 	};
 	for (loc.i in loc.exclude) {
