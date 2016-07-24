@@ -1151,3 +1151,60 @@
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
+
+<cfscript>
+public string function $buildReleaseZip(
+	string version=application.wheels.version,
+	string directory=Expandpath("/")
+) {
+	var loc = {};
+	loc.path = arguments.directory & "cfwheels.#arguments.version#.zip";
+
+	// directories & files to add to the zip
+	loc.include = [
+		"config",
+		"controllers",
+		"events",
+		"files",
+		"images",
+		"javascripts",
+		"miscellaneous",
+		"models",
+		"plugins",
+		"stylesheets",
+		"views",
+		"wheels",
+		".htaccess",
+		"Application.cfc",
+		"index.cfm",
+		"IsapiRewrite4.ini",
+		"README.md",
+		"rewrite.cfm",
+		"root.cfm",
+		"web.config"
+	];
+
+	// directories & files to be removed
+	loc.exclude = [
+		"wheels/tests",
+		"wheels/public/build.cfm"
+	];
+
+	// filter out these bad boys
+	loc.filter = "*.settings, *.classpath, *.project, *.DS_Store";
+
+	for (loc.i in loc.include) {
+		if (FileExists(ExpandPath(loc.i))) {
+			$zip(file=loc.path, source=ExpandPath(loc.i));
+		} else if (DirectoryExists(ExpandPath(loc.i))) {
+			$zip(file=loc.path, source=ExpandPath(loc.i), prefix=loc.i);
+		}
+	};
+	for (loc.i in loc.exclude) {
+		$zip(file=loc.path, action="delete", entrypath=loc.i);
+	};
+	$zip(file=loc.path, action="delete", filter=loc.filter, recurse=true);
+
+	return loc.path;
+}
+</cfscript>

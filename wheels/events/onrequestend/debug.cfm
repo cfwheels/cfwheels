@@ -23,6 +23,7 @@
 <cfset loc.baseReloadURL &= "reload=">
 <cfset loc.frameworkTestDir = GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels/tests">
 <cfset loc.hasFrameworkTests = DirectoryExists(loc.frameworkTestDir)>
+<cfset loc.hasFrameworkBuildFile = FileExists(GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels/public/build.cfm")>
 <cfset loc.appTestDir = GetDirectoryFromPath(GetBaseTemplatePath()) & "tests">
 <cfset loc.hasAppTests = DirectoryExists(loc.appTestDir)>
 <cfif loc.hasAppTests>
@@ -98,7 +99,13 @@
 		<tr>
 			<td><strong>Framework:</strong></td>
 			<td>CFWheels #get("version")#
-				<cfif loc.hasFrameworkTests> [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=core">Run Tests</a>, <a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=core&reload=true">View Tests</a>]</cfif>
+				<cfif loc.hasFrameworkTests or loc.hasFrameworkBuildFile>
+					<cfsavecontent variable="coreLinks">
+						<cfif loc.hasFrameworkTests><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=core">Run Tests</a>, <a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=core&reload=true">View Tests</a>,</cfif>
+						<cfif loc.hasFrameworkBuildFile><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=build">Build</a></cfif>
+					</cfsavecontent>
+					[#Trim(coreLinks)#]
+				</cfif>
 			</td>
 		</tr>
 		<tr>

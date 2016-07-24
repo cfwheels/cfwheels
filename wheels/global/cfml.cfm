@@ -217,3 +217,7 @@
 		<cfreturn loc.output>
 	</cfif>
 </cffunction>
+
+<cffunction name="$zip" returntype="any" access="public" output="false">
+	<cfzip attributeCollection="#arguments#">
+</cffunction>
