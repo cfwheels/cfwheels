@@ -1,0 +1,19 @@
+{
+    "force":true,
+    "web":{
+        "http":{
+            "host":"localhost",
+            "port":"60005",
+            "enable":true
+        },
+        "rewrites":{
+            "enable":true,
+            "config":"urlrewrite.xml"
+        }
+    },
+    "engine":"lucee@5",
+    "app":{
+        "cfengine":"lucee@5"
+    },
+    "name":"lucee5"
+}

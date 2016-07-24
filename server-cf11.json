@@ -3,15 +3,17 @@
     "web":{
         "http":{
             "host":"localhost",
+            "port":"60011",
+            "enable":true
         },
         "rewrites":{
             "enable":true,
             "config":"urlrewrite.xml"
         }
     },
-    "defaultEngine":"adobe@10",
-    "engine":"adobe@10",
+    "engine":"adobe@11",
     "app":{
-        "cfengine":"adobe@10"
-    }
+        "cfengine":"adobe@11"
+    },
+    "name":"cf11"
 }
