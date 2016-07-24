@@ -4,8 +4,7 @@ component extends="wheels.Test" output=false {
    * Executes once before the test suite runs
    */
   function beforeAll() {
-    // save the original environment for overloading
-    request.wheelsApplicationScope = Duplicate(application);
+
   }
 
   /*
@@ -26,7 +25,6 @@ component extends="wheels.Test" output=false {
    * Executes once after the test suite runs
    */
   function afterAll() {
-    // swap back the enviroment
-  	StructAppend(application, request.wheelsApplicationScope, true);
+    
   }
 }

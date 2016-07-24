@@ -463,6 +463,8 @@ component output=false {
   	// the key in the request scope that will contain the test results
   	loc.resultKey = "WheelsTests";
 
+    // save the original environment for overloading
+    loc.wheelsApplicationScope = Duplicate(application);
     // TODO: perhaps set(functionName="redirectTo", delay=true); ?
 
   	// not only can we specify the package, but also the test we want to run
@@ -495,6 +497,8 @@ component output=false {
         loc.instance.afterAll();
       }
   	};
+    // swap back the enviroment
+  	StructAppend(application, loc.wheelsApplicationScope, true);
   	// return the results
   	return $results(loc.resultKey);
   }
