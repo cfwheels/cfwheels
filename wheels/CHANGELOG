@@ -29,6 +29,7 @@ Miscellaneous
 * Added junit and json format test results - [Adam Chapman]
 * Added empty application test directories - [Chris Peters, Adam Chapman]
 * Added default urlrewrite.xml to support Tuckey URL rewriting with Commandbox #649 - [Tom King]
+* Added default multiengine server.json files for Commandbox #649 - [Tom King, Adam Chapman]
 * Added beforeAll(), afterAll(), packageSetup(), packageTeardown() methods to test framework #651 - [Adam Chapman]
 
 Breaking Changes
