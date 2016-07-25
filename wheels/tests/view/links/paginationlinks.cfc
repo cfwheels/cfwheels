@@ -12,7 +12,7 @@ component extends="wheels.tests.Test" {
 		loc.route.variables = "special";
 		ArrayInsertAt(application.wheels.routes, 2, loc.route);
 		application.wheels.namedRoutePositions.pagination = 2;
-		application.wheels.URLRewriting = "on";
+		application.wheels.URLRewriting = "On";
 	}
 
 	function teardown(){
