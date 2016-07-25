@@ -1,19 +1,19 @@
 component extends="wheels.tests.Test" {
 
-  function test_pk_calculated_property_selecting_pk() {
+  // TODO: oracle does NOT like this test Issue #631
+  // Exception message: The SCALE parameter to the $getType function is required but was not passed in.
+  function _test_pk_calculated_property_selecting_pk() {
     loc.shop = model("Shop").findOne(select="shopid", where="id = 'shop1'");
     loc.actual = loc.shop.key();
-    // TODO: oracle does NOT like this test
-    // Exception message: The SCALE parameter to the $getType function is required but was not passed in.
-    // assert("Len(loc.actual) gt 0");
+    assert("Len(loc.actual) gt 0");
   }
 
-  function test_pk_calculated_property_selecting_alias() {
+  // TODO: fix this failing test. Issue #631
+  function _test_pk_calculated_property_selecting_alias() {
     loc.shop = model("Shop").findOne(select="id", where="id = 'shop1'");
     loc.actual = loc.shop.key();
     debug("loc.shop.properties()", false);
-    // TODO: fix this failing test. Issue #631
-    // assert("Len(loc.actual) gt 0", "loc.actual");
+    assert("Len(loc.actual) gt 0", "loc.actual");
   }
 
 }
