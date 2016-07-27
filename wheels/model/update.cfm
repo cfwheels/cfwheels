@@ -136,21 +136,6 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="updateProperties" returntype="boolean" access="public" output="false">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#">
-	<cfargument name="parameterize" type="any" required="false">
-	<cfargument name="validate" type="boolean" required="false" default="true">
-	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
-	<cfargument name="callbacks" type="boolean" required="false" default="true">
-	<cfscript>
-		var loc = {};
-		$args(name="updateProperties", args=arguments);
-		$setProperties(argumentCollection=arguments, filterList="properties,parameterize,validate,transaction,callbacks");
-		loc.rv = save(parameterize=arguments.parameterize, reload=false, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
 <!--- PRIVATE METHODS --->
 
 <cffunction name="$updateAll" returntype="numeric" access="public" output="false">

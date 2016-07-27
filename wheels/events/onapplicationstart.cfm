@@ -342,7 +342,6 @@
 		application.$wheels.functions.updateByKey = {reload=false};
 		application.$wheels.functions.updateOne = {reload=false};
 		application.$wheels.functions.updateProperty = {parameterize=true};
-		application.$wheels.functions.updateProperties = {parameterize=true};
 		application.$wheels.functions.URLFor = {onlyPath=true, host="", protocol="", port=0};
 		application.$wheels.functions.validatesConfirmationOf = {message="[property] should match confirmation"};
 		application.$wheels.functions.validatesExclusionOf = {message="[property] is reserved", allowBlank=false};

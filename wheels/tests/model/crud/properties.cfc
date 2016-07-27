@@ -17,11 +17,11 @@
 		</cftransaction>
 		<cfset assert('loc.saved eq true and loc.author.firstName eq "Frog"')>
 	</cffunction>
- 
- 	<cffunction name="test_updateProperties">
+
+ 	<cffunction name="test_updating_properties">
 		<cftransaction action="begin">
 			<cfset loc.author = model("Author").findOne(where="firstName='Andy'")>
-			<cfset loc.saved = loc.author.updateProperties(firstName="Kirmit", lastName="Frog")>
+			<cfset loc.saved = loc.author.update(firstName="Kirmit", lastName="Frog")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert('loc.saved eq true and loc.author.lastName eq "Frog" and loc.author.firstName eq "Kirmit"')>
