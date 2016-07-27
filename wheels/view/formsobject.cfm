@@ -16,7 +16,7 @@
 	<cfargument name="type" type="string" required="false" default="text">
 	<cfscript>
 		var loc = {};
-		$args(name="textField", reserved="name,value", args=arguments);
+		$args(name="textField", reserved="name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 		{
@@ -30,7 +30,10 @@
 		{
 			arguments.maxLength = loc.maxLength;
 		}
-		arguments.value = $formValue(argumentCollection=arguments);
+		if (!StructKeyExists(arguments, "value") || !Len(arguments.value))
+		{
+			arguments.value = $formValue(argumentCollection=arguments);
+		}
 		loc.rv = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.rv>
@@ -51,7 +54,7 @@
 	<cfargument name="errorClass" type="string" required="false">
 	<cfscript>
 		var loc = {};
-		$args(name="passwordField", reserved="type,name,value", args=arguments);
+		$args(name="passwordField", reserved="type,name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 		{
@@ -66,7 +69,10 @@
 		{
 			arguments.maxlength = loc.maxlength;
 		}
-		arguments.value = $formValue(argumentCollection=arguments);
+		if (!StructKeyExists(arguments, "value") || !Len(arguments.value))
+		{
+			arguments.value = $formValue(argumentCollection=arguments);
+		}
 		loc.rv = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.rv>
@@ -79,7 +85,7 @@
 	<cfargument name="position" type="string" required="false">
 	<cfscript>
 		var loc = {};
-		$args(name="hiddenField", reserved="type,name,value", args=arguments);
+		$args(name="hiddenField", reserved="type,name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		arguments.type = "hidden";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
@@ -87,7 +93,10 @@
 		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		}
-		arguments.value = $formValue(argumentCollection=arguments);
+		if (!StructKeyExists(arguments, "value") || !Len(arguments.value))
+		{
+			arguments.value = $formValue(argumentCollection=arguments);
+		}
 		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get")
 		{
 			arguments.value = obfuscateParam(arguments.value);

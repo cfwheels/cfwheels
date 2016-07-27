@@ -10,6 +10,7 @@ Model Enhancements
 View Enhancements
 =================
 * flashMessages() are now in default layout.cfm - #650 [Tom King]
+* Added ability to override value in textField(), passwordField() and hiddenField() - #633 [Per Djurner, Chris Peters]
 
 Controller Enhancements
 =======================
