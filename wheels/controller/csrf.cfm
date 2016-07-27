@@ -50,11 +50,9 @@ public boolean function $isRequestProtectedFromForgery() {
 }
 
 public function $setAuthenticityToken() {
-	if ($isVerifiedRequest() && isAjax()) {
-		local.headers = GetHttpRequestData().headers;
-
-		if (StructKeyExists(local.headers, "X-CSRF-Token")) {
-			params.authenticityToken = local.headers["X-CSRF-Token"];
+	if (!$isVerifiedRequest() && isAjax()) {
+		if (StructKeyExists(request.headers, "X-CSRF-Token")) {
+			params.authenticityToken = request.headers["X-CSRF-Token"];
 		}
 	}
 }

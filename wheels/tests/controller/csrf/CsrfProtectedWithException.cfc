@@ -9,6 +9,15 @@ component extends="wheelsMapping.Test" {
     assert('loc.controller.response() eq "Index ran."');
   }
 
+  function test_csrf_protection_skipped_on_get_ajax_request() {
+    request.cgi.http_x_requested_with = "XMLHTTPRequest";
+    loc.params = { controller="csrfProtectedWithException", action="index" };
+    loc.controller = controller("csrfProtectedWithException", loc.params);
+
+    loc.controller.$processAction("index", loc.params);
+    assert('loc.controller.response() eq "Index ran."');
+  }
+
   function test_csrf_protection_skipped_on_options_request() {
     request.cgi.request_method = "OPTIONS";
     loc.params = { controller="csrfProtectedWithException", action="index" };
@@ -18,7 +27,27 @@ component extends="wheelsMapping.Test" {
     assert('loc.controller.response() eq "Index ran."');
   }
 
+  function test_csrf_protection_skipped_on_options_ajax_request() {
+    request.cgi.http_x_requested_with = "XMLHTTPRequest";
+    request.cgi.request_method = "OPTIONS";
+    loc.params = { controller="csrfProtectedWithException", action="index" };
+    loc.controller = controller("csrfProtectedWithException", loc.params);
+
+    loc.controller.$processAction("index", loc.params);
+    assert('loc.controller.response() eq "Index ran."');
+  }
+
   function test_csrf_protection_skipped_on_head_request() {
+    request.cgi.request_method = "HEAD";
+    loc.params = { controller="csrfProtectedWithException", action="index" };
+    loc.controller = controller("csrfProtectedWithException", loc.params);
+
+    loc.controller.$processAction("index", loc.params);
+    assert('loc.controller.response() eq "Index ran."');
+  }
+
+  function test_csrf_protection_skipped_on_head_ajax_request() {
+    request.cgi.http_x_requested_with = "XMLHTTPRequest";
     request.cgi.request_method = "HEAD";
     loc.params = { controller="csrfProtectedWithException", action="index" };
     loc.controller = controller("csrfProtectedWithException", loc.params);
@@ -136,6 +165,138 @@ component extends="wheelsMapping.Test" {
 
     try {
       loc.controller.$processAction("delete", loc.params);
+      fail("Wheels.InvalidAuthenticityToken error did not occur.");
+    }
+    catch (any e) {
+      loc.type = e.Type;
+      assert("loc.type is 'Wheels.InvalidAuthenticityToken'");
+    }
+  }
+
+  function test_csrf_protection_with_valid_x_csrf_token_header_on_ajax_post_request() {
+    request.headers["X-CSRF-TOKEN"] = CSRFGenerateToken();
+    request.cgi.request_method = "POST";
+    request.cgi.http_x_requested_with = "XMLHTTPRequest";
+    loc.params = { controller="csrfProtectedWithException", action="create" };
+    loc.controller = controller("csrfProtectedWithException", loc.params);
+
+    loc.controller.$processAction("create", loc.params);
+    assert('loc.controller.response() eq "Create ran."');
+  }
+
+  function test_csrf_protection_with_no_x_csrf_token_header_on_ajax_post_request() {
+    request.cgi.request_method = "POST";
+    request.cgi.http_x_requested_with = "XMLHTTPRequest";
+    loc.params = { controller="csrfProtectedWithException", action="create" };
+    loc.controller = controller("csrfProtectedWithException", loc.params);
+
+    try {
+      loc.controller.$processAction("create", loc.params);
+      fail("Wheels.InvalidAuthenticityToken error did not occur.");
+    }
+    catch (any e) {
+      loc.type = e.Type;
+      assert("loc.type is 'Wheels.InvalidAuthenticityToken'");
+    }
+  }
+
+  function test_csrf_protection_with_invalid_x_csrf_token_header_on_ajax_post_request() {
+    request.headers["X-CSRF-TOKEN"] = "#CSRFGenerateToken()#1";
+    request.cgi.request_method = "POST";
+    request.cgi.http_x_requested_with = "XMLHTTPRequest";
+    loc.params = { controller="csrfProtectedWithException", action="create" };
+    loc.controller = controller("csrfProtectedWithException", loc.params);
+
+    try {
+      loc.controller.$processAction("create", loc.params);
+      fail("Wheels.InvalidAuthenticityToken error did not occur.");
+    }
+    catch (any e) {
+      loc.type = e.Type;
+      assert("loc.type is 'Wheels.InvalidAuthenticityToken'");
+    }
+  }
+
+  function test_csrf_protection_with_valid_x_csrf_token_header_on_ajax_patch_request() {
+    request.headers["X-CSRF-TOKEN"] = CSRFGenerateToken();
+    request.cgi.request_method = "PATCH";
+    request.cgi.http_x_requested_with = "XMLHTTPRequest";
+    loc.params = { controller="csrfProtectedWithException", action="update" };
+    loc.controller = controller("csrfProtectedWithException", loc.params);
+
+    loc.controller.$processAction("patch", loc.params);
+    assert('loc.controller.response() eq "Update ran."');
+  }
+
+  function test_csrf_protection_with_no_x_csrf_token_header_on_ajax_patch_request() {
+    request.cgi.request_method = "PATCH";
+    request.cgi.http_x_requested_with = "XMLHTTPRequest";
+    loc.params = { controller="csrfProtectedWithException", action="update" };
+    loc.controller = controller("csrfProtectedWithException", loc.params);
+
+    try {
+      loc.controller.$processAction("patch", loc.params);
+      fail("Wheels.InvalidAuthenticityToken error did not occur.");
+    }
+    catch (any e) {
+      loc.type = e.Type;
+      assert("loc.type is 'Wheels.InvalidAuthenticityToken'");
+    }
+  }
+
+  function test_csrf_protection_with_invalid_x_csrf_token_header_on_ajax_patch_request() {
+    request.headers["X-CSRF-TOKEN"] = "#CSRFGenerateToken()#1";
+    request.cgi.request_method = "PATCH";
+    request.cgi.http_x_requested_with = "XMLHTTPRequest";
+    loc.params = { controller="csrfProtectedWithException", action="update" };
+    loc.controller = controller("csrfProtectedWithException", loc.params);
+
+    try {
+      loc.controller.$processAction("patch", loc.params);
+      fail("Wheels.InvalidAuthenticityToken error did not occur.");
+    }
+    catch (any e) {
+      loc.type = e.Type;
+      assert("loc.type is 'Wheels.InvalidAuthenticityToken'");
+    }
+  }
+
+  function test_csrf_protection_with_valid_x_csrf_token_header_on_ajax_delete_request() {
+    request.headers["X-CSRF-TOKEN"] = CSRFGenerateToken();
+    request.cgi.request_method = "DELETE";
+    request.cgi.http_x_requested_with = "XMLHTTPRequest";
+    loc.params = { controller="csrfProtectedWithException", action="delete" };
+    loc.controller = controller("csrfProtectedWithException", loc.params);
+
+    loc.controller.$processAction("patch", loc.params);
+    assert('loc.controller.response() eq "Delete ran."');
+  }
+
+  function test_csrf_protection_with_no_x_csrf_token_header_on_ajax_delete_request() {
+    request.cgi.request_method = "DELETE";
+    request.cgi.http_x_requested_with = "XMLHTTPRequest";
+    loc.params = { controller="csrfProtectedWithException", action="delete" };
+    loc.controller = controller("csrfProtectedWithException", loc.params);
+
+    try {
+      loc.controller.$processAction("patch", loc.params);
+      fail("Wheels.InvalidAuthenticityToken error did not occur.");
+    }
+    catch (any e) {
+      loc.type = e.Type;
+      assert("loc.type is 'Wheels.InvalidAuthenticityToken'");
+    }
+  }
+
+  function test_csrf_protection_with_invalid_x_csrf_token_header_on_ajax_delete_request() {
+    request.headers["X-CSRF-TOKEN"] = "#CSRFGenerateToken()#1";
+    request.cgi.request_method = "DELETE";
+    request.cgi.http_x_requested_with = "XMLHTTPRequest";
+    loc.params = { controller="csrfProtectedWithException", action="delete" };
+    loc.controller = controller("csrfProtectedWithException", loc.params);
+
+    try {
+      loc.controller.$processAction("patch", loc.params);
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     }
     catch (any e) {
