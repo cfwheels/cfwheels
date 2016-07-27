@@ -465,7 +465,8 @@ component output=false {
 
     // save the original environment for overloading
     loc.wheelsApplicationScope = Duplicate(application);
-    // TODO: perhaps set(functionName="redirectTo", delay=true); ?
+    // to enable unit testing controllers without actually performing the redirect
+    set(functionName="redirectTo", delay=true);
 
   	// not only can we specify the package, but also the test we want to run
   	loc.test = "";
