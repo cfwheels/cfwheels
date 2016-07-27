@@ -121,17 +121,23 @@
 </cffunction>
 
 <cffunction name="updateProperty" returntype="boolean" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="value" type="any" required="true">
+	<cfargument name="property" type="string" required="false">
+	<cfargument name="value" type="any" required="false">
 	<cfargument name="parameterize" type="any" required="false">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
 	<cfargument name="callbacks" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		$args(name="updateProperty", args=arguments);
+		arguments.reload = false;
 		arguments.validate = false;
-		this[arguments.property] = arguments.value;
-		loc.rv = save(parameterize=arguments.parameterize, reload=false, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks);
+		if (StructKeyExists(arguments, "property") && StructKeyExists(arguments, "value")) {
+			arguments.properties = {};
+			arguments.properties[arguments.property] = arguments.value;
+			StructDelete(arguments, "property");
+			StructDelete(arguments, "value");
+		}
+		loc.rv = update(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
