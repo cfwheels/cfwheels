@@ -159,6 +159,8 @@
 		application.$wheels.sendEmailOnError = false;
 		application.$wheels.errorEmailSubject = "Error";
 		application.$wheels.excludeFromErrorEmail = "";
+		application.$wheels.errorEmailToAddress = "";
+		application.$wheels.errorEmailFromAddress = "";
 		if (Find(".", request.cgi.server_name))
 		{
 			application.$wheels.errorEmailAddress = "webmaster@" & Reverse(ListGetAt(Reverse(request.cgi.server_name), 2,".")) & "." & Reverse(ListGetAt(Reverse(request.cgi.server_name), 1, "."));
@@ -177,9 +179,6 @@
 			application.$wheels.showDebugInformation = false;
 		}
 
-		application.$wheels.errorEmailToAddress = application.$wheels.errorEmailAddress;
-		application.$wheels.errorEmailFromAddress = application.$wheels.errorEmailAddress;
-	
 		// asset path settings
 		// assetPaths can be struct with two keys,  http and https, if no https struct key, http is used for secure and non-secure
 		// ex. {http="asset0.domain1.com,asset2.domain1.com,asset3.domain1.com", https="secure.domain1.com"}
