@@ -638,7 +638,7 @@ component output=false {
     loc.rv = QueryNew("package","Varchar");
 
     loc.paths = $resolvePaths(arguments.options);
-    $initialseTestEnvironment(loc.paths, arguments.options);
+    $initialiseTestEnvironment(loc.paths, arguments.options);
 
   	loc.packages = DirectoryList(loc.paths.full_test_path, true, "query", "#arguments.filter#.cfc");
   	for (loc.package in loc.packages) {
@@ -660,16 +660,12 @@ component output=false {
   /*
    * Initialises the test environment and populates test database
    */
-  public void function $initialseTestEnvironment(
+  public void function $initialiseTestEnvironment(
   	required struct paths,
   	required struct options
   ) {
   	if (FileExists(arguments.paths.full_root_test_path & "/env.cfm")) {
   		include "#arguments.paths.relative_root_test_path & '/env.cfm'#";
-  	}
-  	// populate the test database only on reload
-  	if (StructKeyExists(arguments.options, "reload") && arguments.options.reload == true && FileExists(arguments.paths.full_root_test_path & "/populate.cfm")) {
-  		include "#arguments.paths.relative_root_test_path & '/populate.cfm'#";
   	}
   }
 
