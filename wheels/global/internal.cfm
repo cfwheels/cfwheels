@@ -1192,6 +1192,7 @@ public string function $buildReleaseZip(
 	];
 
 	// directories & files to be removed
+	// TOOD: also filter out crap like .DS_Store
 	loc.exclude = [
 		"wheels/tests",
 		"wheels/public/build.cfm"
@@ -1205,7 +1206,12 @@ public string function $buildReleaseZip(
 			$zip(file=loc.path, source=ExpandPath(loc.i));
 		} else if (DirectoryExists(ExpandPath(loc.i))) {
 			$zip(file=loc.path, source=ExpandPath(loc.i), prefix=loc.i);
-		// TODO: throw if file/dir not found
+		} else {
+			throw(
+				type="Wheels.Build",
+				message="#ExpandPath(loc.i)# not found",
+				detail="All paths specified in loc.include must exist"
+			);
 		}
 	};
 	for (loc.i in loc.exclude) {
