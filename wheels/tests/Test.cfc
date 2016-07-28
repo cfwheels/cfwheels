@@ -8,16 +8,16 @@ component extends="wheels.Test" output=false {
   }
 
   /*
-   * Executes before every tests case if called from the package via super.superSetup()
+   * Executes before every tests case if called from the package via super.setup()
    */
-  function superSetup() {
-    loc = {};
+  function setup() {
+
   }
 
   /*
-   * Executes after every tests case if called from the package via super.superTeardown()
+   * Executes after every tests case if called from the package via super.teardown()
    */
-  function superTeardown() {
+  function teardown() {
 
   }
 
@@ -25,6 +25,6 @@ component extends="wheels.Test" output=false {
    * Executes once after the test suite runs
    */
   function afterAll() {
-    
+
   }
 }
