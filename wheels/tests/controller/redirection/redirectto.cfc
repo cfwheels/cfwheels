@@ -1,8 +1,7 @@
 <cfcomponent extends="wheels.tests.Test">
 
-	<cfset params = {controller="test", action="testRedirect"}>
-
 	<cffunction name="setup">
+		<cfset params = {controller="test", action="testRedirect"}>
 		<cfset loc.controller = controller("test", params)>
 		<cfset copies.request.cgi = request.cgi>
 		<cfset copies.application.wheels.viewPath = application.wheels.viewPath>

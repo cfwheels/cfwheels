@@ -1,6 +1,8 @@
 <cfcomponent extends="wheels.tests.Test">
 
-	<cfset variables.counter = 1>
+	<cffunction name="packageSetup">
+		<cfset variables.counter = 1>
+	</cffunction>
 
 	<cffunction name="setup">
 		<cfset params = {controller="dummy", action="dummy"}>

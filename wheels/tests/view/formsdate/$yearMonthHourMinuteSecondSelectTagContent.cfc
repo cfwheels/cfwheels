@@ -1,8 +1,7 @@
 <cfcomponent extends="wheels.tests.Test">
 
-	<cfset pkg.controller = controller("dummy")>
-
 	<cffunction name="setup">
+		<cfset pkg.controller = controller("dummy")>
 		<cfset result = "">
 		<cfset results = {}>
 	</cffunction>

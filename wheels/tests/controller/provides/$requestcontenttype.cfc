@@ -1,11 +1,10 @@
 <cfcomponent extends="wheels.tests.Test">
 
-	<cfset params = {controller="dummy", action="dummy"}>
-	
 	<cffunction name="setup">
+		<cfset params = {controller="dummy", action="dummy"}>
 		<cfset $$oldCGIScope = request.cgi>
 	</cffunction>
-	
+
 	<cffunction name="teardown">
 		<cfset request.cgi = $$oldCGIScope>
 	</cffunction>

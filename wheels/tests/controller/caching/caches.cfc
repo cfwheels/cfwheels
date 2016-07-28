@@ -1,9 +1,8 @@
 <cfcomponent extends="wheels.tests.Test">
 
-	<cfset params = {controller="test", action="test"}>
-	<cfset loc.controller = controller("test", params)>
-
 	<cffunction name="setup">
+		<cfset params = {controller="test", action="test"}>
+		<cfset loc.controller = controller("test", params)>
 		<cfset loc.controller.$clearCachableActions()>
 	</cffunction>
 
