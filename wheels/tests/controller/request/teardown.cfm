@@ -1,0 +1,1 @@
+<cfset request.cgi = $$oldCGIScope>

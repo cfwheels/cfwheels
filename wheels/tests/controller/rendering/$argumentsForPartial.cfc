@@ -1,10 +1,15 @@
 <cfcomponent extends="wheels.tests.Test">
 
-	<cfinclude template="setupAndTeardown.cfm">
+	<cffunction name="setup">
+		<cfinclude template="setup.cfm">
+		<cfset params = {controller="dummy", action="dummy"}>
+		<cfset loc.controller = controller("dummy", params)>
+	</cffunction>
 
-	<cfset params = {controller="dummy", action="dummy"}>
-	<cfset loc.controller = controller("dummy", params)>
-	
+	<cffunction name="teardown">
+		<cfinclude template="teardown.cfm">
+	</cffunction>
+
 	<cffunction name="$injectIntoVariablesScope" output="false">
 		<cfargument name="name" type="string" required="true" />
 		<cfargument name="data" type="any" required="true" />

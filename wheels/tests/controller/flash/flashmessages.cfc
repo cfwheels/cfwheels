@@ -1,6 +1,12 @@
 <cfcomponent extends="wheels.tests.Test">
 
-	<cfinclude template="setup.cfm">
+	<cffunction name="setup">
+		<cfinclude template="setup.cfm">
+	</cffunction>
+
+	<cffunction name="teardown">
+		<cfinclude template="teardown.cfm">
+	</cffunction>
 
 	<cffunction name="test_normal_output">
 		<cfset run_normal_output()>

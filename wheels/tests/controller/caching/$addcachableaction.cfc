@@ -1,8 +1,7 @@
 <cfcomponent extends="wheels.tests.Test">
 
-	<cfset loc.controller = controller(name="dummy")>
-	
 	<cffunction name="setup">
+		<cfset loc.controller = controller(name="dummy")>
 		<cfset loc.controller.$clearCachableActions()>
 	</cffunction>
 
@@ -16,5 +15,5 @@
 		<cfset loc.r = loc.controller.$cachableActions()>
 		<cfset assert("ArrayLen(loc.r) IS 2 AND loc.r[2].action IS 'dummy2'")>
 	</cffunction>
-	
+
 </cfcomponent>

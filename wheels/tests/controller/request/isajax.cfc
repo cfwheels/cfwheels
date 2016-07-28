@@ -1,6 +1,12 @@
 <cfcomponent extends="wheels.tests.Test">
 
-	<cfinclude template="common.cfm">
+	<cffunction name="setup">
+		<cfinclude template="setup.cfm">
+	</cffunction>
+
+	<cffunction name="teardown">
+		<cfinclude template="teardown.cfm">
+	</cffunction>
 
 	<cffunction name="test_isAjax_valid">
 		<cfset request.cgi.http_x_requested_with = "XMLHTTPRequest">

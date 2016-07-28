@@ -1,11 +1,18 @@
 component extends="wheels.tests.Test" {
-  include "common.cfm";
+
+  function setup() {
+    include "setup.cfm";
+  }
+
+  function teardown() {
+    include "teardown.cfm";
+  }
 
   function test_isPatch_with_head_request() {
     request.cgi.request_method = "patch";
     assert("loc.controller.isPatch()");
   }
-  
+
   function test_isPatch_with_get_request() {
     request.cgi.request_method = "get";
     assert("not loc.controller.isPatch()");

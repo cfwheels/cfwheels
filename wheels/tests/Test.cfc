@@ -10,14 +10,14 @@ component extends="wheels.Test" output=false {
   /*
    * Executes before every tests case if called from the package via super.superSetup()
    */
-  function superSetup() {
+  function setup() {
 
   }
 
   /*
    * Executes after every tests case if called from the package via super.superTeardown()
    */
-  function superTeardown() {
+  function teardown() {
 
   }
 

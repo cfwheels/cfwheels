@@ -1,12 +1,18 @@
 <cfcomponent extends="wheels.tests.Test">
 
-	<cfinclude template="common.cfm">
+	<cffunction name="setup">
+		<cfinclude template="setup.cfm">
+	</cffunction>
+
+	<cffunction name="teardown">
+		<cfinclude template="teardown.cfm">
+	</cffunction>
 
 	<cffunction name="test_isSecure_valid">
 		<cfset request.cgi.server_port_secure = "yes">
 		<cfset assert("loc.controller.isSecure() eq true")>
 	</cffunction>
-	
+
 	<cffunction name="test_isSecure_invalid">
 		<cfset request.cgi.server_port_secure = "">
 		<cfset assert("loc.controller.isSecure() eq false")>

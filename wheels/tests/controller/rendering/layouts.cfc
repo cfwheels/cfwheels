@@ -1,9 +1,14 @@
 <cfcomponent extends="wheels.tests.Test">
 
-	<cfinclude template="setupAndTeardown.cfm">
+	<cffunction name="setup">
+		<cfinclude template="setup.cfm">
+		<cfset params = {controller="test", action="test"}>
+		<cfset loc.controller = controller("test", params)>
+	</cffunction>
 
-	<cfset params = {controller="test", action="test"}>
-	<cfset loc.controller = controller("test", params)>
+	<cffunction name="teardown">
+		<cfinclude template="teardown.cfm">
+	</cffunction>
 
 	<cffunction name="test_rendering_without_layout">
 		<cfset loc.controller.renderPage(layout=false)>
