@@ -1,3 +1,5 @@
+// TOOD: get running on cf10.. no queryExecute!
+
 component extends="wheels.tests.Test" {
 
 	function packageSetup() {
