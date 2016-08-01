@@ -6,6 +6,7 @@ Model Enhancements
 * Support for setting calculated properties to a specific data type - [Per Djurner]
 * Added "simple" argument to properties() that returns only simple properties of the object and its nested properties - [Adam Chapman]
 * Support for calling updateProperty() with dynamic argument, e.g. updateProperty(firstName="Per") - [Per Djurner]
+* Support for using boolean transaction argument, e.g. update(transaction=false) - #654 [Adam Chapman]
 
 View Enhancements
 =================
