@@ -97,6 +97,15 @@
 		</cftransaction>
 	</cffunction>
 
+	<cffunction name="test_create_with_transactions_false">
+		<cftransaction>
+			<cfset loc.tag = model("tag").create(name="Kermit", description="The Frog", transaction=false)>
+			<cfset loc.tag = model("tag").findOne(where="name='Kermit'")>
+			<cfset assert("IsObject(loc.tag)")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+	</cffunction>
+
 	<cffunction name="test_update_with_transactions_disabled">
 		<cftransaction>
 			<cfset loc.tag = model("tag").findOne(where="description='testdesc'")>

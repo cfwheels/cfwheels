@@ -47,11 +47,11 @@
 				</cftry>
 			</cftransaction>
 		</cfcase>
-		<cfcase value="none,alreadyopen">
+		<cfcase value="false,none,alreadyopen">
 			<cfset loc.rv = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs)>
 		</cfcase>
 		<cfdefaultcase>
-			<cfset $throw(type="Wheels", message="Invalid transaction type", extendedInfo="The transaction type of `#arguments.transaction#` is invalid. Please use `commit`, `rollback` or `none`.")>
+			<cfset $throw(type="Wheels", message="Invalid transaction type", extendedInfo="The transaction type of `#arguments.transaction#` is invalid. Please use `commit`, `rollback` or `false`.")>
 		</cfdefaultcase>
 	</cfswitch>
 
