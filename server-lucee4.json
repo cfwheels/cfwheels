@@ -10,8 +10,7 @@
             "enable":true,
             "config":"urlrewrite.xml"
         }
-    },
-    "engine":"lucee@4",
+    }, 
     "app":{
         "cfengine":"lucee@4"
     },

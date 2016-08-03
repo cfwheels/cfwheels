@@ -10,8 +10,7 @@
             "enable":true,
             "config":"urlrewrite.xml"
         }
-    },
-    "engine":"adobe@2016",
+    }, 
     "app":{
         "cfengine":"adobe@2016"
     },
