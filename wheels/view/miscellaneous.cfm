@@ -365,6 +365,11 @@
 		$combineArguments(args=arguments, combine="positions,position");
 		$combineArguments(args=arguments, combine="associations,association");
 
+		if (IsObject(arguments.objectName))
+		{
+			$throw(type="Wheels.InvalidArgument", message="The `objectName` argument passed is not of type string.");
+		}
+
 		// only try to create the object name if we have a simple value
 		if (IsSimpleValue(arguments.objectName) && ListLen(arguments.associations))
 		{
