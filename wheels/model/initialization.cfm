@@ -111,6 +111,8 @@
 					variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
 					variables.wheels.class.properties[loc.property].label = Humanize(loc.property);
 					variables.wheels.class.properties[loc.property].validationtype = variables.wheels.class.adapter.$getValidationType(variables.wheels.class.properties[loc.property].type);
+					variables.wheels.class.properties[loc.property].identity = variables.wheels.class.adapter.$isIdentity(loc.columns, loc.i);
+
 					if (StructKeyExists(variables.wheels.class.mapping, loc.property))
 					{
 						if (StructKeyExists(variables.wheels.class.mapping[loc.property], "label"))
@@ -130,12 +132,14 @@
 					{
 						loc.defaultValidationsAllowBlank = variables.wheels.class.properties[loc.property].nullable;
 
-						// primary keys should be allowed to be blank
-						if (ListFindNoCase(primaryKeys(), loc.property))
+						// identity columns must be allowed to be empty
+						if (variables.wheels.class.properties[loc.property].identity)
 						{
 							loc.defaultValidationsAllowBlank = true;
 						}
-						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !Len(loc.columns["column_default_value"][loc.i]) && !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+
+						// any non-nullable non-identity columns should have their presence validated 
+						if (!variables.wheels.class.properties[loc.property].identity && !variables.wheels.class.properties[loc.property].nullable && !Len(loc.columns["column_default_value"][loc.i]) && !$validationExists(property=loc.property, validation="validatesPresenceOf"))
 						{
 							validatesPresenceOf(properties=loc.property);
 						}
@@ -218,6 +222,7 @@
 			variables.wheels.class.timeStampingOnUpdate = false;
 		}
 	</cfscript>
+	<cfdump var="#variables.wheels.class.properties#" abort="true" />
 	<cfreturn this>
 </cffunction>
 
