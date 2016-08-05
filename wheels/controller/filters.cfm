@@ -1,12 +1,16 @@
-<!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
+<cfscript>
 
-<cffunction name="filters" returntype="void" access="public" output="false">
-	<cfargument name="through" type="string" required="true">
-	<cfargument name="type" type="string" required="false" default="before">
-	<cfargument name="only" type="string" required="false" default="">
-	<cfargument name="except" type="string" required="false" default="">
-	<cfargument name="placement" type="string" required="false" default="append">
-	<cfscript>
+	/**
+	* PUBLIC CONTROLLER INITIALIZATION FUNCTIONS
+	*/
+
+	public void function filters(
+		required string through,
+		string type="before",
+		string only="",
+		string except="",
+		string placement="append"
+	) {
 		var loc = {};
 		arguments.through = $listClean(arguments.through);
 		arguments.only = $listClean(arguments.only);
@@ -45,14 +49,10 @@
 				ArrayPrepend(variables.$class.filters, loc.filter);
 			}
 		}
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="setFilterChain" returntype="void" access="public" output="false">
-	<cfargument name="chain" type="array" required="true">
-	<cfscript>
+	public void function setFilterChain(required array chain) {
 		var loc = {};
-
 		// clear current filter chain and then re-add from the passed in chain
 		variables.$class.filters = [];
 		loc.iEnd = ArrayLen(arguments.chain);
@@ -60,12 +60,9 @@
 		{
 			filters(argumentCollection=arguments.chain[loc.i]);
 		}
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="filterChain" returntype="array" access="public" output="false">
-	<cfargument name="type" type="string" required="false" default="all">
-	<cfscript>
+	public array function filterChain(string type="all") {
 		var loc = {};
 		if (!ListFindNoCase("before,after,all", arguments.type))
 		{
@@ -90,16 +87,14 @@
 				}
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<!--- PRIVATE FUNCTIONS --->
+	/**
+	* PRIVATE FUNCTIONS
+	*/
 
-<cffunction name="$runFilters" returntype="void" access="public" output="false">
-	<cfargument name="type" type="string" required="true">
-	<cfargument name="action" type="string" required="true">
-	<cfscript>
+	public void function $runFilters(required string type, required string action) {
 		var loc = {};
 		loc.filters = filterChain(arguments.type);
 		loc.iEnd = ArrayLen(loc.filters);
@@ -120,5 +115,6 @@
 				}
 			}
 		}
-	</cfscript>
-</cffunction>
+	}
+
+</cfscript>
