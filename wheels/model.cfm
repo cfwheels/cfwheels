@@ -1,3 +1,5 @@
-<cfinclude template="global/functions.cfm">
-<cfinclude template="model/functions.cfm">
-<cfinclude template="plugins/injection.cfm">
+<cfscript>
+	include "global/functions.cfm";
+	include "model/functions.cfm";
+	include "plugins/injection.cfm";
+</cfscript>
