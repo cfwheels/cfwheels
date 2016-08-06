@@ -1,19 +1,19 @@
-<!--- PRIVATE FUNCTIONS --->
-
-<cffunction name="$init" returntype="any" access="public" output="false">
-	<cfscript>
+<cfscript>
+/**
+* PRIVATE FUNCTIONS
+*/
+	public any function $init() {
 		var loc = {};
 		loc.rv = this;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	} 
 
-<cffunction name="$createParams" returntype="struct" access="public" output="false">
-	<cfargument name="path" type="string" required="true">
-	<cfargument name="route" type="struct" required="true">
-	<cfargument name="formScope" type="struct" required="true">
-	<cfargument name="urlScope" type="struct" required="true">
-	<cfscript>
+	public struct function $createParams(
+		required string path, 
+		required struct route, 
+		required struct formScope, 
+		required struct urlScope
+	) {
 		var loc = {};
 		loc.rv = {};
 		loc.rv = $mergeUrlAndFormScopes(params=loc.rv, urlScope=arguments.urlScope, formScope=arguments.formScope);
@@ -27,13 +27,10 @@
 		loc.rv = $ensureControllerAndAction(params=loc.rv, route=arguments.route);
 		loc.rv = $addRouteFormat(params=loc.rv, route=arguments.route);
 		loc.rv = $addRouteName(params=loc.rv, route=arguments.route);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
-<cffunction name="$createNestedParamStruct" returntype="struct" access="public" output="false">
-	<cfargument name="params" type="struct" required="true">
-	<cfscript>
+		return loc.rv;
+	}
+ 
+	public struct function $createNestedParamStruct(required struct params) {
 		var loc = {};
 		loc.rv = arguments.params;
 		for (loc.key in loc.rv)
@@ -75,13 +72,10 @@
 				StructDelete(loc.rv, loc.key);
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
-<cffunction name="$findMatchingRoute" returntype="struct" access="public" output="false">
-	<cfargument name="path" type="string" required="true">
-	<cfscript>
+		return loc.rv;
+	}
+ 
+	public struct function $findMatchingRoute(required string path) {
 		var loc = {};
 		loc.iEnd = ArrayLen(application.wheels.routes);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -135,14 +129,10 @@
 		{
 			$throw(type="Wheels.RouteNotFound", message="CFWheels couldn't find a route that matched this request.", extendedInfo="Make sure there is a route setup in your `config/routes.cfm` file that matches the `#arguments.path#` request.");
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
-<cffunction name="$getPathFromRequest" returntype="string" access="public" output="false">
-	<cfargument name="pathInfo" type="string" required="true">
-	<cfargument name="scriptName" type="string" required="true">
-	<cfscript>
+		return loc.rv;
+	}
+ 
+	public string function $getPathFromRequest(required string pathInfo, required string scriptName) {
 		var loc = {};
 
 		// we want the path without the leading "/" so this is why we do some checking here
@@ -154,29 +144,25 @@
 		{
 			loc.rv = Right(arguments.pathInfo, Len(arguments.pathInfo)-1);
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$getFormatFromRequest" returntype="string" access="public" output="false">
-	<cfargument name="pathInfo" type="string" required="true">
-	<cfscript>
+	public string function $getFormatFromRequest(required string pathInfo) {
 		var loc = {};
 		loc.rv = "";
 		if (Find(".", arguments.pathInfo))
 		{
 			loc.rv = ListLast(arguments.pathInfo, ".");
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$request" returntype="string" access="public" output="false">
-	<cfargument name="pathInfo" type="string" required="false" default="#request.cgi.path_info#">
-	<cfargument name="scriptName" type="string" required="false" default="#request.cgi.script_name#">
-	<cfargument name="formScope" type="struct" required="false" default="#form#">
-	<cfargument name="urlScope" type="struct" required="false" default="#url#">
-	<cfscript>
+	public string function $request(
+		string pathInfo=request.cgi.path_info,
+		string scriptName=request.cgi.script_name,
+		struct formScope=form,
+		struct urlScope=url 
+	) { 
 		var loc = {};
 		if (get("showDebugInformation"))
 		{
@@ -207,43 +193,46 @@
 		loc.controller.$flashClear();
 
 		loc.rv = loc.controller.response();
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$paramParser" returntype="struct" access="public" output="false">
-	<cfargument name="pathInfo" type="string" required="false" default="#request.cgi.path_info#">
-	<cfargument name="scriptName" type="string" required="false" default="#request.cgi.script_name#">
-	<cfargument name="formScope" type="struct" required="false" default="#form#">
-	<cfargument name="urlScope" type="struct" required="false" default="#url#">
-	<cfscript>
+	public struct function $paramParser(
+		string pathInfo=request.cgi.path_info,
+		string scriptName=request.cgi.script_name,
+		struct formScope=form,
+		struct urlScope=url 
+	) {  
 		var loc = {};
 		loc.path = $getPathFromRequest(pathInfo=arguments.pathInfo, scriptName=arguments.scriptName);
 		loc.route = $findMatchingRoute(path=loc.path);
 		loc.rv = $createParams(path=loc.path, route=loc.route, formScope=arguments.formScope, urlScope=arguments.urlScope);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$mergeUrlAndFormScopes" returntype="struct" access="public" output="false" hint="Merges the URL and form scope into a single structure, URL scope has precedence.">
-	<cfargument name="params" type="struct" required="true">
-	<cfargument name="urlScope" type="struct" required="true">
-	<cfargument name="formScope" type="struct" required="true">
-	<cfscript>
+	/**
+	*  @hint Merges the URL and form scope into a single structure, URL scope has precedence.
+	*/
+	public struct function $mergeUrlAndFormScopes(
+		required struct params,
+		required struct urlScope,
+		required struct formScope
+	) {
 		StructAppend(arguments.params, arguments.formScope);
 		StructAppend(arguments.params, arguments.urlScope);
 
 		// get rid of the fieldnames
 		StructDelete(arguments.params, "fieldnames");
-	</cfscript>
-	<cfreturn arguments.params>
-</cffunction>
+		return arguments.params;
+	}
 
-<cffunction name="$mergeRoutePattern" returntype="struct" access="public" output="false" hint="Parses the route pattern, identifies the variable markers within the pattern and assigns the value from the url variables with the path.">
-	<cfargument name="params" type="struct" required="true">
-	<cfargument name="route" type="struct" required="true">
-	<cfargument name="path" type="string" required="true">
-	<cfscript>
+	/**
+	*  @hint Parses the route pattern, identifies the variable markers within the pattern and assigns the value from the url variables with the path.
+	*/
+	public struct function $mergeRoutePattern(
+		required struct params,
+		required struct route,
+		required string path
+	) {
 		var loc = {};
 		loc.rv = arguments.params;
 		if (StructKeyExists(arguments.route, "format") && Len(arguments.route.format))
@@ -260,13 +249,13 @@
 				loc.rv[loc.key] = ListGetAt(arguments.path, loc.i, "/");
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$decryptParams" returntype="struct" access="public" output="false" hint="Loops through the params struct passed in and attempts to deobfuscate them. ignores the controller and action params values.">
-	<cfargument name="params" type="struct" required="true">
-	<cfscript>
+	/**
+	*  @hint Loops through the params struct passed in and attempts to deobfuscate them. ignores the controller and action params values.
+	*/
+	public struct function $decryptParams(required struct params) {
 		var loc = {};
 		loc.rv = arguments.params;
 		if (get("obfuscateUrls"))
@@ -283,13 +272,13 @@
 				}
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$translateBlankCheckBoxSubmissions" returntype="struct" access="public" output="false" hint="Loops through the params struct and handle the cases where checkboxes are unchecked.">
-	<cfargument name="params" type="struct" required="true">
-	<cfscript>
+	/**
+	*  @hint Loops through the params struct and handle the cases where checkboxes are unchecked.
+	*/
+	public struct function $translateBlankCheckBoxSubmissions(required struct params) {
 		var loc = {};
 		loc.rv = arguments.params;
 		for (loc.key in loc.rv)
@@ -305,13 +294,13 @@
 				StructDelete(loc.rv, loc.key);
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$translateDatePartSubmissions" returntype="struct" access="public" output="false" hint="Combines date parts into a single value.">
-	<cfargument name="params" type="struct" required="true">
-	<cfscript>
+	/**
+	*  @hint Combines date parts into a single value.
+	*/
+	public struct function $translateDatePartSubmissions(required struct params) {
 		var loc = {};
 		loc.rv = arguments.params;
 		loc.dates = {};
@@ -381,14 +370,13 @@
 			StructDelete(loc.rv, loc.key & "($minute)");
 			StructDelete(loc.rv, loc.key & "($second)");
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$ensureControllerAndAction" returntype="struct" access="public" output="false" hint="Ensure that the controller and action params exists and camelized.">
-	<cfargument name="params" type="struct" required="true">
-	<cfargument name="route" type="struct" required="true">
-	<cfscript>
+	/**
+	*  @hint Ensure that the controller and action params exists and camelized.
+	*/
+	public struct function $ensureControllerAndAction(required struct params, required struct route) {
 		var loc = {};
 		loc.rv = arguments.params;
 		if (!StructKeyExists(loc.rv, "controller"))
@@ -407,34 +395,32 @@
 		// convert controller to upperCamelCase and action to normal camelCase
 		loc.rv.controller = REReplace(loc.rv.controller, "(^|-)([a-z])", "\u\2", "all");
 		loc.rv.action = REReplace(loc.rv.action, "-([a-z])", "\u\1", "all");
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$addRouteFormat" returntype="struct" access="public" output="false" hint="Adds in the format variable from the route if it exists.">
-	<cfargument name="params" type="struct" required="true">
-	<cfargument name="route" type="struct" required="true">
-	<cfscript>
+	/**
+	*  @hint Adds in the format variable from the route if it exists.
+	*/
+	public struct function $addRouteFormat(required struct params, required struct route) {		
 		var loc = {};
 		loc.rv = arguments.params;
 		if (StructKeyExists(arguments.route, "formatVariable") && StructKeyExists(arguments.route, "format"))
 		{
 			loc.rv[arguments.route.formatVariable] = arguments.route.format;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$addRouteName" returntype="struct" access="public" output="false" hint="Adds in the name variable from the route if it exists.">
-	<cfargument name="params" type="struct" required="true">
-	<cfargument name="route" type="struct" required="true">
-	<cfscript>
+	/**
+	*  @hint Adds in the name variable from the route if it exists. 
+	*/
+	public struct function $addRouteName(required struct params, required struct route) {		
 		var loc = {};
 		loc.rv = arguments.params;
 		if (StructKeyExists(arguments.route, "name") && Len(arguments.route.name) && !StructKeyExists(loc.rv, "route"))
 		{
 			loc.rv.route = arguments.route.name;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
+</cfscript>  
