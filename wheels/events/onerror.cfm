@@ -1,7 +1,5 @@
-<cffunction name="onError" returntype="void" access="public" output="true">
-	<cfargument name="exception" type="any" required="true">
-	<cfargument name="eventName" type="any" required="true">
-	<cfscript>
+<cfscript> 
+	public void function onError(required exception, required eventName) {
 		var loc = {};
 
 		// in case the error was caused by a timeout we have to add extra time for error handling.
@@ -14,16 +12,10 @@
 
 		loc.lockName = "reloadLock" & application.applicationName;
 		loc.rv = $simpleLock(name=loc.lockName, execute="$runOnError", executeArgs=arguments, type="readOnly", timeout=180);
-	</cfscript>
-	<cfoutput>
-		#loc.rv#
-	</cfoutput>
-</cffunction>
+		writeOutput(loc.rv);
+	}
 
-<cffunction name="$runOnError" returntype="string" access="public" output="false">
-	<cfargument name="exception" type="any" required="true">
-	<cfargument name="eventName" type="any" required="true">
-	<cfscript>
+	public string function $runOnError(required exception, required eventName) {
 		var loc = {};
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized")) {
 			if (application.wheels.sendEmailOnError) {
@@ -71,6 +63,6 @@
 		} else {
 			$throw(object=arguments.exception);
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
+</cfscript>

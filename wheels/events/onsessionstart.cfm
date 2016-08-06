@@ -1,5 +1,5 @@
-<cffunction name="onSessionStart" returntype="void" access="public" output="false">
-	<cfscript>
+<cfscript>
+	public void function onSessionStart() { 
 		var loc = {};
 		loc.lockName = "reloadLock" & application.applicationName;
 
@@ -10,12 +10,10 @@
 		}
 
 		$simpleLock(name=loc.lockName, execute="$runOnSessionStart", type="readOnly", timeout=180);
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="$runOnSessionStart" returntype="void" access="public" output="false">
-	<cfscript>
+	public void function $runOnSessionStart() { 
 		$initializeRequestScope();
 		$include(template="#application.wheels.eventPath#/onsessionstart.cfm");
-	</cfscript>
-</cffunction>
+	} 
+</cfscript>

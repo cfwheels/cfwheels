@@ -1,17 +1,11 @@
-<cffunction name="onSessionEnd" returntype="void" access="public" output="false">
-	<cfargument name="sessionScope" type="any" required="true">
-	<cfargument name="applicationScope" type="any" required="true">
-	<cfscript>
+<cfscript>
+	public void function onSessionEnd(required sessionScope, required applicationScope){
 		var loc = {};
 		loc.lockName = "reloadLock" & arguments.applicationScope.applicationName;
 		$simpleLock(name=loc.lockName, execute="$runOnSessionEnd", executeArgs=arguments, type="readOnly", timeout=180);
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="$runOnSessionEnd" returntype="void" access="public" output="false">
-	<cfargument name="sessionScope" type="any" required="true">
- 	<cfargument name="applicationScope" type="any" required="true">
-	<cfscript>
+	public void function $runOnSessionEnd(required sessionScope, required applicationScope){
 		$include(template="#arguments.applicationScope.wheels.eventPath#/onsessionend.cfm", argumentCollection=arguments);
-	</cfscript>
-</cffunction>
+	}
+</cfscript>

@@ -1,6 +1,5 @@
-<cffunction name="onRequestStart" returntype="void" access="public" output="false">
-	<cfargument name="targetPage" type="any" required="true">
-	<cfscript>
+<cfscript> 
+	public void function onRequestStart(required targetPage) {
 		var loc = {};
 		loc.lockName = "reloadLock" & application.applicationName;
 
@@ -25,12 +24,9 @@
 
 		// run the rest of the request start code
 		$simpleLock(name=loc.lockName, execute="$runOnRequestStart", executeArgs=arguments, type="readOnly", timeout=180);
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="$runOnRequestStart" returntype="void" access="public" output="false">
-	<cfargument name="targetPage" type="any" required="true">
-	<cfscript>
+	public void function $runOnRequestStart(required targetPage) {
 		var loc = {};
 		if (application.wheels.showDebugInformation)
 		{
@@ -128,5 +124,5 @@
 		{
 			$debugPoint("requestStart");
 		}
-	</cfscript>
-</cffunction>
+	}
+</cfscript>
