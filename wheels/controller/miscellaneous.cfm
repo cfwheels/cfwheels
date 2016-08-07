@@ -243,54 +243,19 @@
 	}
  
 	public boolean function isSecure() {
-		var loc = {};
-		if (request.cgi.server_port_secure == "true")
-		{
-			loc.rv = true;
-		}
-		else
-		{
-			loc.rv = false;
-		}
-		return loc.rv;
+		return request.cgi.server_port_secure == "true";
 	}
 
 	public boolean function isAjax() {
-		var loc = {};
-		if (request.cgi.http_x_requested_with == "XMLHTTPRequest")
-		{
-			loc.rv = true;
-		}
-		else
-		{
-			loc.rv = false;
-		}
-		return loc.rv;
+		return request.cgi.http_x_requested_with == "XMLHTTPRequest";
 	}
 
 	public boolean function isGet() {
-		var loc = {};
-		if (request.cgi.request_method == "get")
-		{
-			loc.rv = true;
-		}
-		else
-		{
-			loc.rv = false;
-		}
-		return loc.rv;
+		return request.cgi.request_method == "get";
 	}
-	public boolean function isPost() {
-		var loc = {};
-		if (request.cgi.request_method == "post")
-		{
-			loc.rv = true;
-		}
-		else
-		{
-			loc.rv = false;
-		}
-		return loc.rv;
+
+	public boolean function isPost() { 
+		return request.cgi.request_method == "post";
 	} 
 
 	public boolean function isPut() {
