@@ -1,16 +1,19 @@
-<!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
+<cfscript>
+	/**
+	* PUBLIC CONTROLLER REQUEST FUNCTIONS
+	*/ 
 
-<cffunction name="sendEmail" returntype="any" access="public" output="false">
-	<cfargument name="template" type="string" required="false" default="">
-	<cfargument name="from" type="string" required="false" default="">
-	<cfargument name="to" type="string" required="false" default="">
-	<cfargument name="subject" type="string" required="false" default="">
-	<cfargument name="layout" type="any" required="false">
-	<cfargument name="file" type="string" required="false" default="">
-	<cfargument name="detectMultipart" type="boolean" required="false">
-	<cfargument name="deliver" type="boolean" required="false" default="true">
-	<cfargument name="writeToFile" type="string" required="false" default="">
-	<cfscript>
+	public any function sendEmail(
+		string template="",
+		string from="",
+		string to="",
+		string subject="",
+		layout,
+		string file="",
+		boolean detectMultipart,
+		boolean deliver=true,
+		string writeToFile=""
+	) {
 		var loc = {};
 		loc.deliver = Duplicate(arguments.deliver);
 		loc.writeToFile = Duplicate(arguments.writeToFile);
@@ -140,19 +143,18 @@
 		{
 			$mail(argumentCollection=arguments);
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
-<cffunction name="sendFile" returntype="any" access="public" output="false">
-	<cfargument name="file" type="string" required="true">
-	<cfargument name="name" type="string" required="false" default="">
-	<cfargument name="type" type="string" required="false" default="">
-	<cfargument name="disposition" type="string" required="false">
-	<cfargument name="directory" type="string" required="false" default="">
-	<cfargument name="deleteFile" type="boolean" required="false" default="false">
-	<cfargument name="$testingMode" type="boolean" required="false" default="false">
-	<cfscript>
+		return loc.rv;
+	}
+ 
+	public any function sendFile(
+		required string file,
+		string name="",
+		string type="",
+		string disposition,
+		string directory="",
+		boolean deleteFile=false,
+		boolean $testingMode=false
+	) {
 		var loc = {};
 		$args(name="sendFile", args=arguments);
 
@@ -235,14 +237,12 @@
 			$header(name="content-disposition", value="#arguments.disposition#; filename=""#loc.name#""");
 			$content(type=loc.mime, file=loc.fullPath, deleteFile=arguments.deleteFile);
 		}
-	</cfscript>
-	<cfif StructKeyExists(loc, "rv")>
-		<cfreturn loc.rv>
-	</cfif>
-</cffunction>
-
-<cffunction name="isSecure" returntype="boolean" access="public" output="false">
-	<cfscript>
+		if(structKeyExists(loc,"rv")){
+			return loc.rv;
+		}
+	}
+ 
+	public boolean function isSecure() {
 		var loc = {};
 		if (request.cgi.server_port_secure == "true")
 		{
@@ -252,12 +252,10 @@
 		{
 			loc.rv = false;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="isAjax" returntype="boolean" access="public" output="false">
-	<cfscript>
+	public boolean function isAjax() {
 		var loc = {};
 		if (request.cgi.http_x_requested_with == "XMLHTTPRequest")
 		{
@@ -267,12 +265,10 @@
 		{
 			loc.rv = false;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="isGet" returntype="boolean" access="public" output="false">
-	<cfscript>
+	public boolean function isGet() {
 		var loc = {};
 		if (request.cgi.request_method == "get")
 		{
@@ -282,12 +278,9 @@
 		{
 			loc.rv = false;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
-<cffunction name="isPost" returntype="boolean" access="public" output="false">
-	<cfscript>
+		return loc.rv;
+	}
+	public boolean function isPost() {
 		var loc = {};
 		if (request.cgi.request_method == "post")
 		{
@@ -297,30 +290,27 @@
 		{
 			loc.rv = false;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	} 
 
-<cfscript>
+	public boolean function isPut() {
+		return request.cgi.request_method == "put";
+	}
 
-public boolean function isPut() {
-	return request.cgi.request_method == "put";
-}
+	public boolean function isPatch() {
+		return request.cgi.request_method == "patch";
+	}
 
-public boolean function isPatch() {
-	return request.cgi.request_method == "patch";
-}
+	public boolean function isDelete() {
+		return request.cgi.request_method == "delete";
+	}
 
-public boolean function isDelete() {
-	return request.cgi.request_method == "delete";
-}
-
-public boolean function isHead() {
-	return request.cgi.request_method == "head";
-}
-	
-public boolean function isOptions() {
-	return request.cgi.request_method == "options";
+	public boolean function isHead() {
+		return request.cgi.request_method == "head";
+	}
+		
+	public boolean function isOptions() {
+		return request.cgi.request_method == "options";
 }
 
 </cfscript>

@@ -1,12 +1,15 @@
-<!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
+<cfscript>  
+	/**
+	* PUBLIC CONTROLLER INITIALIZATION FUNCTIONS
+	*/
 
-<cffunction name="usesLayout" access="public" returntype="void" output="false">
-	<cfargument name="template" required="true" type="string">
-	<cfargument name="ajax" required="false" type="string" default="">
-	<cfargument name="except" type="string" required="false">
-	<cfargument name="only" type="string" required="false">
-	<cfargument name="useDefault" type="boolean" required="false" default="true">
-	<cfscript>
+	public void function usesLayout(
+		required string template,
+		string ajax="",
+		string except,
+		string only,
+		boolean useDefault=true
+	) {
 		if ((StructKeyExists(this, arguments.template) && IsCustomFunction(this[arguments.template])) || IsCustomFunction(arguments.template))
 		{
 			// when the layout is a function, the function itself should handle all the logic
@@ -22,14 +25,13 @@
 			arguments.only = $listClean(arguments.only);
 		}
 		variables.$class.layout = arguments;
-	</cfscript>
-</cffunction>
+	}
 
-<!--- PRIVATE FUNCTIONS --->
-
-<cffunction name="$useLayout" access="public" returntype="any" output="false">
-	<cfargument name="$action" type="string" required="true">
-	<cfscript>
+	/**
+	* PRIVATE FUNCTIONS
+	*/
+	
+	public any function $useLayout(required string $action) {
 		var loc = {};
 		loc.rv = true;
 		loc.layoutType = "template";
@@ -56,14 +58,10 @@
 				loc.rv = variables.$class.layout[loc.layoutType];
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$renderLayout" returntype="string" access="public" output="false">
-	<cfargument name="$content" type="string" required="true">
-	<cfargument name="$layout" type="any" required="true">
-	<cfscript>
+	public string function $renderLayout(required string $content, required $layout) {
 		var loc = {};
 		if ((IsBoolean(arguments.$layout) && arguments.$layout) || (!IsBoolean(arguments.$layout) && Len(arguments.$layout)))
 		{
@@ -115,6 +113,6 @@
 		{
 			loc.rv = arguments.$content;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
+</cfscript>
