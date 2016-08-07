@@ -12,7 +12,7 @@
 		return loc.rv;
 	}
 
-	public any function $initControllerClass(string name) {
+	public any function $initControllerClass(string name="") {
 		var loc = {};
 			variables.$class.name = arguments.name;
 			variables.$class.path = arguments.path;
