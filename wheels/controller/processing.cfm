@@ -1,7 +1,8 @@
-<!--- PUBLIC FUNCTIONS --->
-
-<cffunction name="processAction" returntype="boolean" access="public" output="false">
-	<cfscript>
+<cfscript>
+	/**
+	* PUBLIC FUNCTIONS
+	*/  
+	public boolean function processAction() {
 		var loc = {};
 
 		// check if action should be cached and if so cache statically or set the time to use later when caching just the action
@@ -111,15 +112,13 @@
 			}
 		}
 		loc.rv = true;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<!--- PRIVATE FUNCTIONS --->
-
-<cffunction name="$callAction" returntype="void" access="public" output="false">
-	<cfargument name="action" type="string" required="true">
-	<cfscript>
+	/**
+	* PRIVATE FUNCTIONS
+	*/   
+	public void function $callAction(required string action) {
 		var loc = {};
 		if (Left(arguments.action, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action))
 		{
@@ -165,19 +164,18 @@
 				}
 			}
 		}
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="$callActionAndAddToCache" returntype="string" access="public" output="false">
-	<cfargument name="action" type="string" required="true">
-	<cfargument name="time" type="numeric" required="true">
-	<cfargument name="key" type="string" required="true">
-	<cfargument name="category" type="string" required="true">
-	<cfscript>
+	public string function $callActionAndAddToCache(
+		required string action,
+		required numeric time,
+		required string key,
+		required string category
+	) {
 		var loc = {};
 		$callAction(action=arguments.action);
 		$addToCache(key=arguments.key, value=variables.$instance.response, time=arguments.time, category=arguments.category);
 		loc.rv = response();
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
+</cfscript>  
