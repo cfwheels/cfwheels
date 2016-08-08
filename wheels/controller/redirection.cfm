@@ -17,6 +17,7 @@
 		string protocol,
 		numeric port,
 		string url="",
+		boolean delay
 	) {
 		var loc = {};
 		$args(name="redirectTo", args=arguments);
