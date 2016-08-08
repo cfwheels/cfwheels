@@ -1,22 +1,23 @@
-<!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
-
-<cffunction name="redirectTo" returntype="void" access="public" output="false">
-	<cfargument name="back" type="boolean" required="false" default="false">
-	<cfargument name="addToken" type="boolean" required="false">
-	<cfargument name="statusCode" type="numeric" required="false">
-	<cfargument name="route" type="string" required="false" default="">
-	<cfargument name="controller" type="string" required="false" default="">
-	<cfargument name="action" type="string" required="false" default="">
-	<cfargument name="key" type="any" required="false" default="">
-	<cfargument name="params" type="string" required="false" default="">
-	<cfargument name="anchor" type="string" required="false" default="">
-	<cfargument name="onlyPath" type="boolean" required="false">
-	<cfargument name="host" type="string" required="false">
-	<cfargument name="protocol" type="string" required="false">
-	<cfargument name="port" type="numeric" required="false">
-	<cfargument name="url" type="string" required="false" default="">
-	<cfargument name="delay" type="boolean" required="false">
-	<cfscript>
+<cfscript>
+	/**
+	*  PUBLIC CONTROLLER REQUEST FUNCTIONS
+	*/
+	public void function redirectTo( 
+		boolean back=false,
+		boolean addToken,
+		numeric statusCode,
+		string route="",
+		string controller="",
+		string action="",
+		any key="",
+		string params="",
+		string anchor="",
+		boolean onlyPath,
+		string host,
+		string protocol,
+		numeric port,
+		string url="",
+	) {
 		var loc = {};
 		$args(name="redirectTo", args=arguments);
 
@@ -122,5 +123,5 @@
 			// do the redirect now using cflocation
 			$location(url=loc.url, addToken=arguments.addToken, statusCode=arguments.statusCode);
 		}
-	</cfscript>
-</cffunction>
+	}
+</cfscript>
