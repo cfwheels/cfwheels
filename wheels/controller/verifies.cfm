@@ -1,35 +1,32 @@
-<!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
-
-<cffunction name="verifies" returntype="void" access="public" output="false">
-	<cfargument name="only" type="string" required="false" default="">
-	<cfargument name="except" type="string" required="false" default="">
-	<cfargument name="post" type="any" required="false" default="">
-	<cfargument name="get" type="any" required="false" default="">
-	<cfargument name="ajax" type="any" required="false" default="">
-	<cfargument name="cookie" type="string" required="false" default="">
-	<cfargument name="session" type="string" required="false" default="">
-	<cfargument name="params" type="string" required="false" default="">
-	<cfargument name="handler" type="string" required="false">
-	<cfargument name="cookieTypes" type="string" required="false" default="">
-	<cfargument name="sessionTypes" type="string" required="false" default="">
-	<cfargument name="paramsTypes" type="string" required="false" default="">
-	<cfscript>
+<cfscript>
+	/**
+	*  PUBLIC CONTROLLER INITIALIZATION FUNCTIONS
+	*/
+	public void function verifies(
+		string only="",
+		string except="",
+		any post="",
+		any get="",
+		any ajax="",
+		string cookie="",
+		string session="",
+		string params="",
+		string handler,
+		string cookieTypes="",
+		string sessionTypes="",
+		string paramsTypes=""
+	) { 
 		$args(name="verifies", args=arguments);
 		ArrayAppend(variables.$class.verifications, Duplicate(arguments));
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="verificationChain" returntype="array" access="public" output="false">
-	<cfscript>
+	public array function verificationChain() { 
 		var loc = {};
 		loc.rv = variables.$class.verifications;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="setVerificationChain" returntype="void" access="public" output="false">
-	<cfargument name="chain" type="array" required="true">
-	<cfscript>
+	public void function setVerificationChain(required array chain) { 
 		var loc = {};
 
 		// clear current verification chain and then re-add from the passed in chain
@@ -39,18 +36,18 @@
 		{
 			verifies(argumentCollection=arguments.chain[loc.i]);
 		}
-	</cfscript>
-</cffunction>
+	}
 
-<!--- PRIVATE FUNCTIONS --->
-
-<cffunction name="$runVerifications" returntype="void" access="public" output="false">
-	<cfargument name="action" type="string" required="true">
-	<cfargument name="params" type="struct" required="true">
-	<cfargument name="cgiScope" type="struct" required="false" default="#request.cgi#">
-	<cfargument name="sessionScope" type="struct" required="false" default="#StructNew()#">
-	<cfargument name="cookieScope" type="struct" required="false" default="#cookie#">
-	<cfscript>
+	/**
+	*  PRIVATE FUNCTIONS
+	*/ 
+	public void function $runVerifications(
+		required string action,
+		required struct params,
+		struct cgiScope=request.cgi,
+		struct sessionScope={},
+		struct cookieScope=cookie
+	) {
 		var loc = {};
 
 		// only access the session scope when session management is enabled in the app
@@ -132,14 +129,13 @@
 				break;
 			}
 		}
-	</cfscript>
-</cffunction>
-
-<cffunction name="$checkVerificationsVars" returntype="boolean" access="public" output="false">
-	<cfargument name="scope" type="struct" required="true">
-	<cfargument name="vars" type="string" required="true">
-	<cfargument name="types" type="string" required="true">
-	<cfscript>
+	}
+ 
+	public boolean function $checkVerificationsVars(
+		required struct scope,
+		required string vars,
+		required string types
+	) {
 		var loc = {};
 		loc.rv = true;
 		loc.iEnd = ListLen(arguments.vars);
@@ -171,6 +167,6 @@
 				}
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
+</cfscript>   
