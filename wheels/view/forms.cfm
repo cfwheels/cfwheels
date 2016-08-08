@@ -1,9 +1,9 @@
-<!--- PUBLIC VIEW HELPER FUNCTIONS --->
+<cfscript>
+	/**
+	* PUBLIC VIEW HELPER FUNCTIONS
+	*/
 
-<cffunction name="endFormTag" returntype="string" access="public" output="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfscript>
+	public string function endFormTag(string prepend, string append) {
 		var loc = {};
 		$args(name="endFormTag", args=arguments);
 		if (StructKeyExists(request.wheels, "currentFormMethod"))
@@ -11,27 +11,26 @@
 			StructDelete(request.wheels, "currentFormMethod");
 		}
 		loc.rv = arguments.prepend & "</form>" & arguments.append;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="startFormTag" returntype="string" access="public" output="false">
-	<cfargument name="method" type="string" required="false">
-	<cfargument name="multipart" type="boolean" required="false">
-	<cfargument name="spamProtection" type="boolean" required="false">
-	<cfargument name="route" type="string" required="false" default="">
-	<cfargument name="controller" type="string" required="false" default="">
-	<cfargument name="action" type="string" required="false" default="">
-	<cfargument name="key" type="any" required="false" default="">
-	<cfargument name="params" type="string" required="false" default="">
-	<cfargument name="anchor" type="string" required="false" default="">
-	<cfargument name="onlyPath" type="boolean" required="false">
-	<cfargument name="host" type="string" required="false">
-	<cfargument name="protocol" type="string" required="false">
-	<cfargument name="port" type="numeric" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfscript>
+	public string function startFormTag(
+		string method,
+		boolean multipart,
+		boolean spamProtection,
+		string route="",
+		string controller="",
+		string action="",
+		any key="",
+		string params="",
+		string anchor="",
+		boolean onlyPath,
+		string host,
+		string protocol,
+		numeric port,
+		string prepend,
+		string append,
+	) {
 		var loc = {};
 		$args(name="startFormTag", args=arguments);
 
@@ -76,17 +75,16 @@
 		}
 
 		loc.rv = arguments.prepend & $tag(name="form", skip=loc.skip, attributes=arguments) & arguments.append;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="submitTag" returntype="string" access="public" output="false">
-	<cfargument name="value" type="string" required="false">
-	<cfargument name="image" type="string" required="false">
-	<cfargument name="disable" type="any" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfscript>
+	public string function submitTag(
+		string value,
+		string image,
+		any disable,
+		string prepend,
+		string append
+	) {
 		var loc = {};
 		$args(name="submitTag", reserved="type,src", args=arguments);
 		loc.rv = arguments.prepend;
@@ -120,19 +118,18 @@
 			loc.rv &= $tag(name="input", close=true, skip="image,disable,append,prepend", attributes=arguments);
 		}
 		loc.rv &= loc.append;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="buttonTag" returntype="string" access="public" output="false">
-	<cfargument name="content" type="string" required="false">
-	<cfargument name="type" type="string" required="false">
-	<cfargument name="value" type="string" required="false">
-	<cfargument name="image" type="string" required="false">
-	<cfargument name="disable" type="any" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfscript>
+	public string function buttonTag(
+		string content,
+		string type,
+		string value,
+		string image,
+		any disable,
+		string prepend,
+		string append
+	) {
 		var loc = {};
 		$args(name="buttonTag", args=arguments);
 
@@ -169,17 +166,18 @@
 
 		// create the button
 		loc.rv = loc.prepend & $element(name="button", content=loc.content, attributes=arguments) & loc.append;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<!--- PRIVATE FUNCTIONS --->
+	/**
+	* PRIVATE FUNCTIONS
+	*/
 
-<cffunction name="$formValue" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="applyHtmlEditFormat" type="boolean" required="false" default="true" />
-	<cfscript>
+	public string function $formValue(
+		required any objectName,
+		required string property,
+		boolean applyHtmlEditFormat=true
+	) {
 		var loc = {};
 		if (IsStruct(arguments.objectName))
 		{
@@ -205,14 +203,10 @@
 		{
 			loc.rv = HTMLEditFormat(loc.rv);
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$maxLength" returntype="any" access="public">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
+	public any function $maxLength(required any objectName, required string property) {
 		var loc = {};
 		if (StructKeyExists(arguments, "maxlength"))
 		{
@@ -230,16 +224,12 @@
 				}
 			}
 		}
-	</cfscript>
-	<cfif StructKeyExists(loc, "rv")>
-		<cfreturn loc.rv>
-	</cfif>
-</cffunction>
+		if (StructKeyExists(loc, "rv")) {
+			return loc.rv;
+		}
+	}
 
-<cffunction name="$formHasError" returntype="boolean" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
+	public boolean function $formHasError(required any objectName, required string property) {
 		var loc = {};
 		loc.rv = false;
 		if (!IsStruct(arguments.objectName))
@@ -254,16 +244,15 @@
 				loc.rv = true;
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$createLabel" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="label" type="string" required="true">
-	<cfargument name="prependToLabel" type="string" required="true">
-	<cfscript>
+	public string function $createLabel(
+		required any objectName,
+		required string property,
+		required string label,
+		required string prependToLabel
+	) {
 		var loc = {};
 		loc.rv = arguments.prependToLabel;
 		loc.attributes = {};
@@ -281,22 +270,21 @@
 		loc.rv &= $tag(name="label", attributes=loc.attributes);
 		loc.rv &= arguments.label;
 		loc.rv &= "</label>";
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$formBeforeElement" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="label" type="any" required="true">
-	<cfargument name="labelPlacement" type="string" required="true">
-	<cfargument name="prepend" type="string" required="true">
-	<cfargument name="append" type="string" required="true">
-	<cfargument name="prependToLabel" type="string" required="true">
-	<cfargument name="appendToLabel" type="string" required="true">
-	<cfargument name="errorElement" type="string" required="true">
-	<cfargument name="errorClass" type="string" required="true">
-	<cfscript>
+	public string function $formBeforeElement(
+		required any objectName,
+		required string property,
+		required any label,
+		required string labelPlacement,
+		required string prepend,
+		required string append,
+		required string prependToLabel,
+		required string appendToLabel,
+		required string errorElement,
+		required string errorClass
+	) {
 		var loc = {};
 		loc.rv = "";
 		arguments.label = $getFieldLabel(argumentCollection=arguments);
@@ -325,21 +313,20 @@
 			}
 		}
 		loc.rv &= arguments.prepend;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$formAfterElement" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="label" type="string" required="true">
-	<cfargument name="labelPlacement" type="string" required="true">
-	<cfargument name="prepend" type="string" required="true">
-	<cfargument name="append" type="string" required="true">
-	<cfargument name="prependToLabel" type="string" required="true">
-	<cfargument name="appendToLabel" type="string" required="true">
-	<cfargument name="errorElement" type="string" required="true">
-	<cfscript>
+	public string function $formAfterElement(
+		required any objectName,
+		required string property,
+		required string label,
+		required string labelPlacement,
+		required string prepend,
+		required string append,
+		required string prependToLabel,
+		required string appendToLabel,
+		required string errorElement
+	) {
 		var loc = {};
 		loc.rv = arguments.append;
 		arguments.label = $getFieldLabel(argumentCollection=arguments);
@@ -367,15 +354,14 @@
 			// the input has an error and is wrapped in a tag so we need to close that wrapper tag
 			loc.rv &= "</" & arguments.errorElement & ">";
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$getFieldLabel" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="label" type="string" required="true">
-	<cfscript>
+	public string function $getFieldLabel(
+		required any objectName,
+		required string property,
+		required string label
+	) {
 		var loc = {};
 		loc.object = false;
 		if (Compare("false", arguments.label) == 0)
@@ -397,6 +383,6 @@
 		{
 			loc.rv = arguments.label;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
+</cfscript>

@@ -1,14 +1,17 @@
-<!--- PUBLIC VIEW HELPER FUNCTIONS --->
+<cfscript>
+	/**
+	* PUBLIC VIEW HELPER FUNCTIONS
+	*/
 
-<cffunction name="hasManyRadioButton" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="string" required="true">
-	<cfargument name="association" type="string" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="keys" type="string" required="true">
-	<cfargument name="tagValue" type="string" required="true">
-	<cfargument name="checkIfBlank" type="boolean" required="false" default="false">
-	<cfargument name="label" type="string" required="false">
-	<cfscript>
+	public string function hasManyRadioButton(
+		required string objectName,
+		requiredstring association,
+		required string property,
+		requiredstring keys,
+		required string tagValue,
+		boolean checkIfBlank=false,
+		string label
+	) {
 		var loc = {};
 		$args(name="hasManyRadioButton", args=arguments);
 		arguments.keys = Replace(arguments.keys, ", ", ",", "all");
@@ -28,23 +31,22 @@
 		loc.tagId = "#arguments.objectName#-#arguments.association#-#Replace(arguments.keys, ",", "-", "all")#-#arguments.property#-#arguments.tagValue#";
 		loc.tagName = "#arguments.objectName#[#arguments.association#][#arguments.keys#][#arguments.property#]";
 		loc.rv = radioButtonTag(name=loc.tagName, id=loc.tagId, value=arguments.tagValue, checked=loc.checked, label=arguments.label);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="hasManyCheckBox" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="string" required="true">
-	<cfargument name="association" type="string" required="true">
-	<cfargument name="keys" type="string" required="true">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfargument name="errorElement" type="string" required="false">
-	<cfargument name="errorClass" type="string" required="false">
-	<cfscript>
+	public string function hasManyCheckBox(
+		required string objectName,
+		required string association,
+		required string keys,
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel,
+		string errorElement,
+		string errorClass
+	) {
 		var loc = {};
 		$args(name="hasManyCheckBox", args=arguments);
 		arguments.keys = Replace(arguments.keys, ", ", ",", "all");
@@ -63,15 +65,14 @@
 		StructDelete(arguments, "objectName");
 		StructDelete(arguments, "association");
 		loc.rv = checkBoxTag(name=loc.tagName, id=loc.tagId, value=0, checked=loc.checked, uncheckedValue=1, argumentCollection=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="includedInObject" returntype="boolean" access="public" output="false">
-	<cfargument name="objectName" type="string" required="true">
-	<cfargument name="association" type="string" required="true">
-	<cfargument name="keys" type="string" required="true">
-	<cfscript>
+	public boolean function includedInObject(
+		required string objectName,
+		required string association,
+		required string keys
+	) {
 		var loc = {};
 		loc.rv = false;
 		loc.object = $getObject(arguments.objectName);
@@ -97,18 +98,19 @@
 				break;
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<!--- PRIVATE FUNCTIONS --->
+	/**
+	* PRIVATE FUNCTIONS
+	*/
 
-<cffunction name="$hasManyFormValue" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="string" required="true">
-	<cfargument name="association" type="string" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="keys" type="string" required="true">
-	<cfscript>
+	public string function $hasManyFormValue(
+		required objectName string,
+		required association string,
+		required property string,
+		required keys string
+	) {
 		var loc = {};
 		loc.rv = "";
 		loc.object = $getObject(arguments.objectName);
@@ -130,6 +132,6 @@
 				break;
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
+</cfscript>

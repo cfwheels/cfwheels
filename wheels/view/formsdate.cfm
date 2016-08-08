@@ -1,9 +1,9 @@
-<!--- PRIVATE FUNCTIONS --->
+<cfscript>
+	/**
+	* PRIVATE FUNCTIONS
+	*/
 
-<cffunction name="$yearSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="startYear" type="numeric" required="true">
-	<cfargument name="endYear" type="numeric" required="true">
-	<cfscript>
+	public string function $yearSelectTag(required numeric startYear, required numeric endYear) {
 		if (Structkeyexists(arguments, "value") && Val(arguments.value))
 		{
 			if (arguments.value < arguments.startYear && arguments.endYear > arguments.startYear)
@@ -21,15 +21,14 @@
 		arguments.$step = 1;
 		StructDelete(arguments, "startYear");
 		StructDelete(arguments, "endYear");
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
+		return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	}
 
-<cffunction name="$monthSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="monthDisplay" type="string" required="true">
-	<cfargument name="monthNames" type="string" required="true">
-	<cfargument name="monthAbbreviations" type="string" required="true">
-	<cfscript>
+	public string function $monthSelectTag(
+		required string monthDisplay,
+		required string monthNames,
+		required string monthAbbreviations
+	) {
 		arguments.$loopFrom = 1;
 		arguments.$loopTo = 12;
 		arguments.$type = "month";
@@ -45,22 +44,18 @@
 		StructDelete(arguments, "monthDisplay");
 		StructDelete(arguments, "monthNames");
 		StructDelete(arguments, "monthAbbreviations");
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
+		return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	}
 
-<cffunction name="$daySelectTag" returntype="string" access="public" output="false">
-	<cfscript>
+	public string function $daySelectTag() {
 		arguments.$loopFrom = 1;
 		arguments.$loopTo = 31;
 		arguments.$type = "day";
 		arguments.$step = 1;
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
+		return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	}
 
-<cffunction name="$hourSelectTag" returntype="string" access="public" output="false">
-	<cfscript>
+	public string function $hourSelectTag() {
 		arguments.$loopFrom = 0;
 		arguments.$loopTo = 23;
 		arguments.$type = "hour";
@@ -70,41 +65,34 @@
 			arguments.$loopFrom = 1;
 			arguments.$loopTo = 12;
 		}
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
+		return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	}
 
-<cffunction name="$minuteSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="minuteStep" type="numeric" required="true">
-	<cfscript>
+	public string function $minuteSelectTag(required numeric minuteStep) {
 		arguments.$loopFrom = 0;
 		arguments.$loopTo = 59;
 		arguments.$type = "minute";
 		arguments.$step = arguments.minuteStep;
 		StructDelete(arguments, "minuteStep");
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
+		return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	}
 
-<cffunction name="$secondSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="secondStep" type="numeric" required="true">
-	<cfscript>
+	public any function $secondSelectTag(required numeric secondStep) {
 		arguments.$loopFrom = 0;
 		arguments.$loopTo = 59;
 		arguments.$type = "second";
 		arguments.$step = arguments.secondStep;
 		StructDelete(arguments, "secondStep");
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
+		return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	}
 
-<cffunction name="$dateOrTimeSelect" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="$functionName" type="string" required="true">
-	<cfargument name="combine" type="boolean" required="false" default="true">
-	<cfargument name="twelveHour" type="boolean" required="false" default="false">
-	<cfscript>
+	public string function $dateOrTimeSelect(
+		required any objectName,
+		required string property,
+		required string $functionName,
+		boolean combine=true,
+		boolean twelveHour=false
+	) {
 		var loc = {};
 		loc.combine = arguments.combine;
 		StructDelete(arguments, "combine");
@@ -163,31 +151,30 @@
 			loc.rv &= Evaluate("$#loc.item#SelectTag(argumentCollection=arguments)");
 			loc.firstDone = true;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$yearMonthHourMinuteSecondSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="value" type="string" required="true">
-	<cfargument name="includeBlank" type="any" required="true">
-	<cfargument name="label" type="string" required="true">
-	<cfargument name="labelPlacement" type="string" required="true">
-	<cfargument name="prepend" type="string" required="true">
-	<cfargument name="append" type="string" required="true">
-	<cfargument name="prependToLabel" type="string" required="true">
-	<cfargument name="appendToLabel" type="string" required="true">
-	<cfargument name="errorElement" type="string" required="false" default="">
-	<cfargument name="errorClass" type="string" required="false" default="">
-	<cfargument name="$type" type="string" required="true">
-	<cfargument name="$loopFrom" type="numeric" required="true">
-	<cfargument name="$loopTo" type="numeric" required="true">
-	<cfargument name="$id" type="string" required="true">
-	<cfargument name="$step" type="numeric" required="true">
-	<cfargument name="$optionNames" type="string" required="false" default="">
-	<cfargument name="twelveHour" type="boolean" required="false" default="false">
-	<cfargument name="$now" type="date" required="false" default="#now()#">
-	<cfscript>
+	public string function $yearMonthHourMinuteSecondSelectTag(
+		required string name,
+		required string value,
+		required any includeBlank,
+		required string label,
+		required string labelPlacement,
+		required string prepend,
+		required string append,
+		required string prependToLabel,
+		required string appendToLabel,
+		string errorElement="",
+		string errorClass="",
+		required string $type,
+		required numeric $loopFrom,
+		required numeric $loopTo,
+		required string $id,
+		required numeric $step,
+		string $optionNames="",
+		boolean twelveHour=false,
+		date $now=now()
+	) {
 		var loc = {};
 		loc.optionContent = "";
 
@@ -261,12 +248,10 @@
 			}
 		}
 		loc.rv = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$yearMonthHourMinuteSecondSelectTagContent">
-	<cfscript>
+	public string function $yearMonthHourMinuteSecondSelectTagContent() {
 		var loc = {};
 		loc.args = {};
 		loc.args.value = arguments.counter;
@@ -287,16 +272,15 @@
 			arguments.optionContent = NumberFormat(arguments.optionContent, "09");
 		}
 		loc.rv = $element(name="option", content=arguments.optionContent, attributes=loc.args);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
 
-<cffunction name="$ampmSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="value" type="string" required="true">
-	<cfargument name="$id" type="string" required="true">
-	<cfargument name="$now" type="date" required="false" default="#now()#">
-	<cfscript>
+	public string function $ampmSelectTag(
+		required string name,
+		required string value,
+		required string $id,
+		date $now=now()
+	) {
 		var loc = {};
 		loc.options = "AM,PM";
 		loc.optionContent = "";
@@ -322,6 +306,6 @@
 			loc.content &= $element(name="option", content=loc.option, attributes=loc.args);
 		}
 		loc.rv = $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return loc.rv;
+	}
+</cfscript>
