@@ -1,5 +1,10 @@
 <!--- get the version of the database we're running against --->
-<cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="version">
+<cftry>
+	<cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="version">	
+	<cfcatch type="any">
+		<cfthrow message="Datasource not found?" detail="The CFDBINFO call appears to have failed when looking for #application.wheels.dataSourceName#">
+	</cfcatch>
+</cftry>
 <cfset loc.db = LCase(Replace(loc.dbinfo.database_productname, " ", "", "all"))>
 
 <!--- handle differences in database for identity inserts, column types etc--->
