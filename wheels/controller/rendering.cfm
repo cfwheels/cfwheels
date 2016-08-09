@@ -1,15 +1,16 @@
-<!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
-
-<cffunction name="renderPage" returntype="any" access="public" output="false">
-	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#">
-	<cfargument name="action" type="string" required="false" default="#variables.params.action#">
-	<cfargument name="template" type="string" required="false" default="">
-	<cfargument name="layout" type="any" required="false">
-	<cfargument name="cache" type="any" required="false" default="">
-	<cfargument name="returnAs" type="string" required="false" default="">
-	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false">
-	<cfscript>
-		var loc = {};
+<cfscript>
+	/**
+	*  PUBLIC CONTROLLER REQUEST FUNCTIONS
+	*/
+	public any function renderPage(
+		string controller=variables.params.controller,
+		string action=variables.params.action,
+		string template="",
+		any layout,
+		any cache="",
+		string returnAs="",
+		boolean hideDebugInformation=false
+	) { 
 		$args(name="renderPage", args=arguments);
 		$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
 		if (get("showDebugInformation"))
@@ -37,131 +38,105 @@
 
 		if (get("cachePages") && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
-			loc.category = "action";
-			loc.key = $hashedKey(arguments, variables.params);
-			loc.lockName = loc.category & loc.key & application.applicationName;
-			loc.conditionArgs = {};
-			loc.conditionArgs.category = loc.category;
-			loc.conditionArgs.key = loc.key;
-			loc.executeArgs = arguments;
-			loc.executeArgs.category = loc.category;
-			loc.executeArgs.key = loc.key;
-			loc.page = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$renderPageAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			local.category = "action";
+			local.key = $hashedKey(arguments, variables.params);
+			local.lockName = local.category & local.key & application.applicationName;
+			local.conditionArgs = {};
+			local.conditionArgs.category = local.category;
+			local.conditionArgs.key = local.key;
+			local.executeArgs = arguments;
+			local.executeArgs.category = local.category;
+			local.executeArgs.key = local.key;
+			local.page = $doubleCheckedLock(name=local.lockName, condition="$getFromCache", execute="$renderPageAndAddToCache", conditionArgs=local.conditionArgs, executeArgs=local.executeArgs);
 		}
 		else
 		{
-			loc.page = $renderPage(argumentCollection=arguments);
+			local.page = $renderPage(argumentCollection=arguments);
 		}
 		if (arguments.$returnAs == "string")
 		{
-			loc.rv = loc.page;
+			local.rv = local.page;
 		}
 		else
 		{
-			variables.$instance.response = loc.page;
+			variables.$instance.response = local.page;
 		}
 		if (get("showDebugInformation"))
 		{
 			$debugPoint("view");
 		}
-	</cfscript>
-	<cfif StructKeyExists(loc, "rv")>
-		<cfreturn loc.rv>
-	</cfif>
-</cffunction>
-
-<cffunction name="renderNothing" returntype="void" access="public" output="false">
-	<cfscript>
+		if(StructKeyExists(local, "rv")){
+			return local.rv;
+		}
+	}
+ 
+	public void function renderNothing() {
 		variables.$instance.response = "";
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="renderText" returntype="void" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	<cfscript>
+	public void function renderText(required any text) {
 		variables.$instance.response = arguments.text;
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="renderPartial" returntype="any" access="public" output="false">
-	<cfargument name="partial" type="string" required="true">
-	<cfargument name="cache" type="any" required="false" default="">
-	<cfargument name="layout" type="string" required="false">
-	<cfargument name="returnAs" type="string" required="false" default="">
-	<cfargument name="dataFunction" type="any" required="false">
-	<cfscript>
-		var loc = {};
+	public any function renderPartial(
+		required string partial,
+		any cache="",
+		string layout,
+		string returnAs="",
+		any dataFunction
+	) {
 		$args(name="renderPartial", args=arguments);
-		loc.partial = $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,cache,layout,returnAs,dataFunction"));
+		local.partial = $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,cache,layout,returnAs,dataFunction"));
 		if (arguments.$returnAs == "string")
 		{
-			loc.rv = loc.partial;
+			local.rv = local.partial;
 		}
 		else
 		{
-			variables.$instance.response = loc.partial;
+			variables.$instance.response = local.partial;
 		}
-	</cfscript>
-	<cfif StructKeyExists(loc, "rv")>
-		<cfreturn loc.rv>
-	</cfif>
-</cffunction>
+		if(structKeyExists(local, "rv")){
+			return local.rv;
+		}
+	}
 
-<cffunction name="response" returntype="string" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		if ($performedRender())
-		{
-			loc.rv = Trim(variables.$instance.response);
+	public string function response() {
+		if ($performedRender()) {
+			local.rv = Trim(variables.$instance.response);
+		} else {
+			local.rv = "";
 		}
-		else
-		{
-			loc.rv = "";
-		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="setResponse" returntype="void" access="public" output="false">
-	<cfargument name="content" type="string" required="true">
-	<cfscript>
+	public void function setResponse(required string content) {
 		variables.$instance.response = arguments.content;
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="getRedirect" returntype="struct" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		if ($performedRedirect())
-		{
-			loc.rv = variables.$instance.redirect;
+	public struct function getRedirect() {
+		if ($performedRedirect()) {
+			local.rv = variables.$instance.redirect;
+		} else {
+			local.rv = {};
 		}
-		else
-		{
-			loc.rv = {};
-		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<!--- PRIVATE FUNCTIONS --->
+	/**
+	*  PRIVATE FUNCTIONS
+	*/
 
-<cffunction name="$renderPageAndAddToCache" returntype="string" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = $renderPage(argumentCollection=arguments);
+	public string function $renderPageAndAddToCache() {
+		local.rv = $renderPage(argumentCollection=arguments);
 		if (!IsNumeric(arguments.$cache))
 		{
 			arguments.$cache = get("defaultCacheTime");
 		}
-		$addToCache(key=arguments.key, value=loc.rv, time=arguments.$cache, category=arguments.category);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		$addToCache(key=arguments.key, value=local.rv, time=arguments.$cache, category=arguments.category);
+		return local.rv;
+	}
 
-<cffunction name="$renderPage" returntype="string" access="public" output="false">
-	<cfscript>
-		var loc = {};
+	public string function $renderPage() {
 		if (!Len(arguments.$template))
 		{
 			arguments.$template = "/" & arguments.$controller & "/" & arguments.$action;
@@ -169,56 +144,47 @@
 		arguments.$type = "page";
 		arguments.$name = arguments.$template;
 		arguments.$template = $generateIncludeTemplatePath(argumentCollection=arguments);
-		loc.content = $includeFile(argumentCollection=arguments);
-		loc.rv = $renderLayout($content=loc.content, $layout=arguments.$layout, $type=arguments.$type);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.content = $includeFile(argumentCollection=arguments);
+		local.rv = $renderLayout($content=local.content, $layout=arguments.$layout, $type=arguments.$type);
+		return local.rv;
+	}
 
-<cffunction name="$renderPartialAndAddToCache" returntype="string" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = $renderPartial(argumentCollection=arguments);
+	public string function $renderPartialAndAddToCache() {
+		local.rv = $renderPartial(argumentCollection=arguments);
 		if (!IsNumeric(arguments.$cache))
 		{
 			arguments.$cache = get("defaultCacheTime");
 		}
-		$addToCache(key=arguments.key, value=loc.rv, time=arguments.$cache, category=arguments.category);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		$addToCache(key=arguments.key, value=local.rv, time=arguments.$cache, category=arguments.category);
+		return local.rv;
+	}
 
-<cffunction name="$argumentsForPartial" returntype="struct" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = {};
+	public struct function $argumentsForPartial() {
+		local.rv = {};
 		if (StructKeyExists(arguments, "$dataFunction") && arguments.$dataFunction != false)
 		{
 			if (IsBoolean(arguments.$dataFunction))
 			{
-				loc.dataFunction = SpanExcluding(ListLast(arguments.$name, "/"), ".");
-				if (StructKeyExists(variables, loc.dataFunction))
+				local.dataFunction = SpanExcluding(ListLast(arguments.$name, "/"), ".");
+				if (StructKeyExists(variables, local.dataFunction))
 				{
-					loc.metaData = GetMetaData(variables[loc.dataFunction]);
-					if (IsStruct(loc.metaData) && StructKeyExists(loc.metaData, "returnType") && loc.metaData.returnType == "struct" && StructKeyExists(loc.metaData, "access") && loc.metaData.access == "private")
+					local.metaData = GetMetaData(variables[local.dataFunction]);
+					if (IsStruct(local.metaData) && StructKeyExists(local.metaData, "returnType") && local.metaData.returnType == "struct" && StructKeyExists(local.metaData, "access") && local.metaData.access == "private")
 					{
-						loc.rv = $invoke(method=loc.dataFunction, invokeArgs=arguments);
+						local.rv = $invoke(method=local.dataFunction, invokeArgs=arguments);
 					}
 				}
 			}
 			else
 			{
-				loc.rv = $invoke(method=arguments.$dataFunction, invokeArgs=arguments);
+				local.rv = $invoke(method=arguments.$dataFunction, invokeArgs=arguments);
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$renderPartial" returntype="string" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = "";
+	public string function $renderPartial() {
+		local.rv = "";
 		if (IsQuery(arguments.$partial) && arguments.$partial.recordCount)
 		{
 			arguments.$name = request.wheels[$hashedKey(arguments.$partial)];
@@ -243,258 +209,229 @@
 			arguments.$type = "partial";
 			arguments.$template = $generateIncludeTemplatePath(argumentCollection=arguments);
 			StructAppend(arguments, $argumentsForPartial(argumentCollection=arguments), false);
-			loc.content = $includeFile(argumentCollection=arguments);
-			loc.rv = $renderLayout($content=loc.content, $layout=arguments.$layout, $type=arguments.$type);
+			local.content = $includeFile(argumentCollection=arguments);
+			local.rv = $renderLayout($content=local.content, $layout=arguments.$layout, $type=arguments.$type);
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$includeOrRenderPartial" returntype="string" access="public" output="false">
-	<cfscript>
-		var loc = {};
+	public string function $includeOrRenderPartial() {
 		if (get("cachePartials") && (isNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
-			loc.category = "partial";
-			loc.key = $hashedKey(arguments);
-			loc.lockName = loc.category & loc.key & application.applicationName;
-			loc.conditionArgs = {};
-			loc.conditionArgs.category = loc.category;
-			loc.conditionArgs.key = loc.key;
-			loc.executeArgs = arguments;
-			loc.executeArgs.category = loc.category;
-			loc.executeArgs.key = loc.key;
-			loc.rv = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$renderPartialAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			local.category = "partial";
+			local.key = $hashedKey(arguments);
+			local.lockName = local.category & local.key & application.applicationName;
+			local.conditionArgs = {};
+			local.conditionArgs.category = local.category;
+			local.conditionArgs.key = local.key;
+			local.executeArgs = arguments;
+			local.executeArgs.category = local.category;
+			local.executeArgs.key = local.key;
+			local.rv = $doubleCheckedLock(name=local.lockName, condition="$getFromCache", execute="$renderPartialAndAddToCache", conditionArgs=local.conditionArgs, executeArgs=local.executeArgs);
 		}
 		else
 		{
-			loc.rv = $renderPartial(argumentCollection=arguments);
+			local.rv = $renderPartial(argumentCollection=arguments);
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$generateIncludeTemplatePath" returntype="string" access="public" output="false">
-	<cfargument name="$name" type="any" required="true">
-	<cfargument name="$type" type="any" required="true">
-	<cfargument name="$controllerName" type="string" required="false" default="#variables.params.controller#">
-	<cfargument name="$baseTemplatePath" type="string" required="false" default="#get("viewPath")#">
-	<cfargument name="$prependWithUnderscore" type="boolean" required="false" default="true">
-	<cfscript>
-		var loc = {};
-		loc.rv = arguments.$baseTemplatePath;
+	public string function $generateIncludeTemplatePath(
+		required any $name,
+		required any $type,
+		string $controllerName=variables.params.controller,
+		string $baseTemplatePath=get('viewPath'),
+		boolean $prependWithUnderscore=true 
+	) {
+		local.rv = arguments.$baseTemplatePath;
 
 		// extracts the file part of the path and replace ending ".cfm"
-		loc.fileName = ReplaceNoCase(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".cfm", "", "all") & ".cfm";
+		local.fileName = ReplaceNoCase(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".cfm", "", "all") & ".cfm";
 
 		if (arguments.$type == "partial" && arguments.$prependWithUnderscore)
 		{
 			// replace leading "_" when the file is a partial
-			loc.fileName = Replace("_" & loc.fileName, "__", "_", "one");
+			local.fileName = Replace("_" & local.fileName, "__", "_", "one");
 		}
-		loc.folderName = Reverse(ListRest(Reverse(arguments.$name), "/"));
+		local.folderName = Reverse(ListRest(Reverse(arguments.$name), "/"));
 		if (Left(arguments.$name, 1) == "/")
 		{
 			// include a file in a sub folder to views
-			loc.rv &= loc.folderName & "/" & loc.fileName;
+			local.rv &= local.folderName & "/" & local.fileName;
 		}
 		else if (Find("/", arguments.$name))
 		{
 			// include a file in a sub folder of the current controller
-			loc.rv &= "/" & arguments.$controllerName & "/" & loc.folderName & "/" & loc.fileName;
+			local.rv &= "/" & arguments.$controllerName & "/" & local.folderName & "/" & local.fileName;
 		}
 		else
 		{
 			// include a file in the current controller's view folder
-			loc.rv &= "/" & arguments.$controllerName & "/" & loc.fileName;
+			local.rv &= "/" & arguments.$controllerName & "/" & local.fileName;
 		}
-		loc.rv = LCase(loc.rv);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = LCase(local.rv);
+		return local.rv;
+	}
 
-<cffunction name="$includeFile" returntype="string" access="public" output="false">
-	<cfargument name="$name" type="any" required="true">
-	<cfargument name="$template" type="any" required="true">
-	<cfargument name="$type" type="string" required="true">
-	<cfscript>
-		var loc = {};
+	public string function $includeFile(
+		required any $name,
+		required any $template,
+		required any $type
+	) {
 		if (arguments.$type == "partial")
 		{
 			if (StructKeyExists(arguments, "query") && IsQuery(arguments.query))
 			{
-				loc.query = arguments.query;
+				local.query = arguments.query;
 				StructDelete(arguments, "query");
-				loc.rv = "";
-				loc.iEnd = loc.query.recordCount;
+				local.rv = "";
+				local.iEnd = local.query.recordCount;
 				if (Len(arguments.$group))
 				{
 					// we want to group based on a column so loop through the rows until we find, this will break if the query is not ordered by the grouped column
-					loc.tempSpacer = "}|{";
-					loc.groupValue = "";
-					loc.groupQueryCount = 1;
-					arguments.group = QueryNew(loc.query.columnList);
-					if (get("showErrorInformation") && !ListFindNoCase(loc.query.columnList, arguments.$group))
+					local.tempSpacer = "}|{";
+					local.groupValue = "";
+					local.groupQueryCount = 1;
+					arguments.group = QueryNew(local.query.columnList);
+					if (get("showErrorInformation") && !ListFindNoCase(local.query.columnList, arguments.$group))
 					{
 						$throw(type="Wheels.GroupColumnNotFound", message="CFWheels couldn't find a query column with the name of `#arguments.$group#`.", extendedInfo="Make sure your finder method has the column `#arguments.$group#` specified in the `select` argument. If the column does not exist, create it.");
 					}
-					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					for (local.i=1; local.i <= local.iEnd; local.i++)
 					{
-						if (loc.i == 1)
+						if (local.i == 1)
 						{
-							loc.groupValue = loc.query[arguments.$group][loc.i];
+							local.groupValue = local.query[arguments.$group][local.i];
 						}
-						else if (loc.groupValue != loc.query[arguments.$group][loc.i])
+						else if (local.groupValue != local.query[arguments.$group][local.i])
 						{
 							// we have a different group for this row so output what we have
-							loc.rv &= $includeAndReturnOutput(argumentCollection=arguments);
+							local.rv &= $includeAndReturnOutput(argumentCollection=arguments);
 							if (StructKeyExists(arguments, "$spacer"))
 							{
-								loc.rv &= loc.tempSpacer;
+								local.rv &= local.tempSpacer;
 							}
-							loc.groupValue = loc.query[arguments.$group][loc.i];
-							arguments.group = QueryNew(loc.query.columnList);
-							loc.groupQueryCount = 1;
+							local.groupValue = local.query[arguments.$group][local.i];
+							arguments.group = QueryNew(local.query.columnList);
+							local.groupQueryCount = 1;
 						}
 						QueryAddRow(arguments.group);
-						loc.jEnd = ListLen(loc.query.columnList);
-						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+						local.jEnd = ListLen(local.query.columnList);
+						for (local.j=1; local.j <= local.jEnd; local.j++)
 						{
-							loc.property = ListGetAt(loc.query.columnList, loc.j);
-							arguments[loc.property] = loc.query[loc.property][loc.i];
-							QuerySetCell(arguments.group, loc.property, loc.query[loc.property][loc.i], loc.groupQueryCount);
+							local.property = ListGetAt(local.query.columnList, local.j);
+							arguments[local.property] = local.query[local.property][local.i];
+							QuerySetCell(arguments.group, local.property, local.query[local.property][local.i], local.groupQueryCount);
 						}
-						arguments.current = loc.i + 1 - arguments.group.recordCount;
-						loc.groupQueryCount++;
+						arguments.current = local.i + 1 - arguments.group.recordCount;
+						local.groupQueryCount++;
 					}
 
 					// if we have anything left at the end we need to render it too
 					if (arguments.group.recordCount)
 					{
-						loc.rv &= $includeAndReturnOutput(argumentCollection=arguments);
-						if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
+						local.rv &= $includeAndReturnOutput(argumentCollection=arguments);
+						if (StructKeyExists(arguments, "$spacer") && local.i < local.iEnd)
 						{
-							loc.rv &= loc.tempSpacer;
+							local.rv &= local.tempSpacer;
 						}
 					}
 
 					// now remove the last temp spacer and replace the tempSpacer with $spacer
-					if (Right(loc.rv, 3) == loc.tempSpacer)
+					if (Right(local.rv, 3) == local.tempSpacer)
 					{
-						loc.rv = Left(loc.rv, Len(loc.rv) - 3);
+						local.rv = Left(local.rv, Len(local.rv) - 3);
 					}
-					loc.rv = Replace(loc.rv, loc.tempSpacer, arguments.$spacer, "all");
+					local.rv = Replace(local.rv, local.tempSpacer, arguments.$spacer, "all");
 				}
 				else
 				{
-					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					for (local.i=1; local.i <= local.iEnd; local.i++)
 					{
-						arguments.current = loc.i;
-						arguments.totalCount = loc.iEnd;
-						loc.jEnd = ListLen(loc.query.columnList);
-						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+						arguments.current = local.i;
+						arguments.totalCount = local.iEnd;
+						local.jEnd = ListLen(local.query.columnList);
+						for (local.j=1; local.j <= local.jEnd; local.j++)
 						{
-							loc.property = ListGetAt(loc.query.columnList, loc.j);
+							local.property = ListGetAt(local.query.columnList, local.j);
 							try
 							{
-								arguments[loc.property] = loc.query[loc.property][loc.i];
+								arguments[local.property] = local.query[local.property][local.i];
 							}
 							catch (any e)
 							{
-								arguments[loc.property] = "";
+								arguments[local.property] = "";
 							}
 						}
-						loc.rv &= $includeAndReturnOutput(argumentCollection=arguments);
-						if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
+						local.rv &= $includeAndReturnOutput(argumentCollection=arguments);
+						if (StructKeyExists(arguments, "$spacer") && local.i < local.iEnd)
 						{
-							loc.rv &= arguments.$spacer;
+							local.rv &= arguments.$spacer;
 						}
 					}
 				}
 			}
 			else if (StructKeyExists(arguments, "object") && IsObject(arguments.object))
 			{
-				loc.modelName = arguments.object.$classData().modelName;
-				arguments[loc.modelName] = arguments.object;
+				local.modelName = arguments.object.$classData().modelName;
+				arguments[local.modelName] = arguments.object;
 				StructDelete(arguments, "object");
-				StructAppend(arguments, arguments[loc.modelName].properties(), false);
+				StructAppend(arguments, arguments[local.modelName].properties(), false);
 			}
 			else if (StructKeyExists(arguments, "objects") && IsArray(arguments.objects))
 			{
-				loc.array = arguments.objects;
+				local.array = arguments.objects;
 				StructDelete(arguments, "objects");
-				loc.originalArguments = Duplicate(arguments);
-				loc.modelName = loc.array[1].$classData().modelName;
-				loc.rv = "";
-				loc.iEnd = ArrayLen(loc.array);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				local.originalArguments = Duplicate(arguments);
+				local.modelName = local.array[1].$classData().modelName;
+				local.rv = "";
+				local.iEnd = ArrayLen(local.array);
+				for (local.i=1; local.i <= local.iEnd; local.i++)
 				{
 					StructClear(arguments);
-					StructAppend(arguments, loc.originalArguments);
-					arguments.current = loc.i;
-					arguments.totalCount = loc.iEnd;
-					arguments[loc.modelName] = loc.array[loc.i];
-					loc.properties = loc.array[loc.i].properties();
-					StructAppend(arguments, loc.properties, true);
-					loc.rv &= $includeAndReturnOutput(argumentCollection=arguments);
-					if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
+					StructAppend(arguments, local.originalArguments);
+					arguments.current = local.i;
+					arguments.totalCount = local.iEnd;
+					arguments[local.modelName] = local.array[local.i];
+					local.properties = local.array[local.i].properties();
+					StructAppend(arguments, local.properties, true);
+					local.rv &= $includeAndReturnOutput(argumentCollection=arguments);
+					if (StructKeyExists(arguments, "$spacer") && local.i < local.iEnd)
 					{
-						loc.rv &= arguments.$spacer;
+						local.rv &= arguments.$spacer;
 					}
 				}
 			}
 		}
-		if (!StructKeyExists(loc, "rv"))
+		if (!StructKeyExists(local, "rv"))
 		{
-			loc.rv = $includeAndReturnOutput(argumentCollection=arguments);
+			local.rv = $includeAndReturnOutput(argumentCollection=arguments);
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$performedRenderOrRedirect" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		if ($performedRender() || $performedRedirect())
-		{
-			loc.rv = true;
+	public boolean function $performedRenderOrRedirect() {
+		if ($performedRender() || $performedRedirect())	{
+			local.rv = true;
+		} else {
+			local.rv = false;
 		}
-		else
-		{
-			loc.rv = false;
-		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$performedRender" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = StructKeyExists(variables.$instance, "response");
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+	public boolean function $performedRender() {
+		return StructKeyExists(variables.$instance, "response");
+	}
 
-<cffunction name="$performedRedirect" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = StructKeyExists(variables.$instance, "redirect");
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+	public boolean function $performedRedirect() {
+		return StructKeyExists(variables.$instance, "redirect");
+	}
 
-<cffunction name="$abortIssued" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = StructKeyExists(variables.$instance, "abort");
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+	public boolean function $abortIssued() {
+		return StructKeyExists(variables.$instance, "abort");
+	}
 
-<cffunction name="$reCacheRequired" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = StructKeyExists(variables.$instance, "reCache") && variables.$instance.reCache;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+	public boolean function $reCacheRequired() {
+		return StructKeyExists(variables.$instance, "reCache") && variables.$instance.reCache;
+	}
+</cfscript>

@@ -47,7 +47,7 @@
 				} else if (StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels") {
 					local.wheelsError = arguments.exception.cause.rootCause;
 				}
-				if (StructKeyExists(loc, "wheelsError")) {
+				if (StructKeyExists(local, "wheelsError")) {
 					local.rv = $includeAndReturnOutput($template="wheels/styles/header.cfm");
 					local.rv &= $includeAndReturnOutput($template="wheels/events/onerror/wheelserror.cfm", wheelsError=local.wheelsError);
 					local.rv &= $includeAndReturnOutput($template="wheels/styles/footer.cfm");
