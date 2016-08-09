@@ -3,18 +3,16 @@
 <cffunction name="stripLinks" returntype="string" access="public" output="false">
 	<cfargument name="html" type="string" required="true">
 	<cfscript>
-		var loc = {};
-		loc.rv = REReplaceNoCase(arguments.html, "<a.*?>(.*?)</a>", "\1" , "all");
+		local.rv = REReplaceNoCase(arguments.html, "<a.*?>(.*?)</a>", "\1" , "all");
 	</cfscript>
-	<cfreturn loc.rv>
+	<cfreturn local.rv>
 </cffunction>
 
 <cffunction name="stripTags" returntype="string" access="public" output="false">
 	<cfargument name="html" type="string" required="true">
 	<cfscript>
-		var loc = {};
-		loc.rv = REReplaceNoCase(arguments.html, "<\ *[a-z].*?>", "", "all");
-		loc.rv = REReplaceNoCase(loc.rv, "<\ */\ *[a-z].*?>", "", "all");
+		local.rv = REReplaceNoCase(arguments.html, "<\ *[a-z].*?>", "", "all");
+		local.rv = REReplaceNoCase(local.rv, "<\ */\ *[a-z].*?>", "", "all");
 	</cfscript>
-	<cfreturn loc.rv>
+	<cfreturn local.rv>
 </cffunction>

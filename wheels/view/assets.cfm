@@ -10,7 +10,6 @@
 		string head,
 		string delim=","
 	) {
-		var loc = {};
 		$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
 		if (!Len(arguments.type)) {
 			StructDelete(arguments, "type");
@@ -19,31 +18,31 @@
 			StructDelete(arguments, "media");
 		}
 		arguments.rel = "stylesheet";
-		loc.rv = "";
+		local.rv = "";
 		arguments.sources = $listClean(list=arguments.sources, returnAs="array", delim=arguments.delim);
-		loc.iEnd = ArrayLen(arguments.sources);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++) {
-			loc.item = arguments.sources[loc.i];
-			if (ReFindNoCase("^(https?:)?\/\/", loc.item)) {
-				arguments.href = arguments.sources[loc.i];
+		local.iEnd = ArrayLen(arguments.sources);
+		for (local.i=1; local.i <= local.iEnd; local.i++) {
+			local.item = arguments.sources[local.i];
+			if (ReFindNoCase("^(https?:)?\/\/", local.item)) {
+				arguments.href = arguments.sources[local.i];
 			} else {
-				if (Left(loc.item, 1) == "/") {
-					arguments.href = application.wheels.webPath & Right(loc.item, Len(loc.item)-1);
+				if (Left(local.item, 1) == "/") {
+					arguments.href = application.wheels.webPath & Right(local.item, Len(local.item)-1);
 				} else {
-					arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & loc.item;
+					arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & local.item;
 				}
-				if (!ListFindNoCase("css,cfm", ListLast(loc.item, "."))) {
+				if (!ListFindNoCase("css,cfm", ListLast(local.item, "."))) {
 					arguments.href &= ".css";
 				}
 				arguments.href = $assetDomain(arguments.href) & $appendQueryString();
 			}
-			loc.rv &= $tag(name="link", skip="sources,head,delim", close=true, attributes=arguments) & Chr(10);
+			local.rv &= $tag(name="link", skip="sources,head,delim", close=true, attributes=arguments) & Chr(10);
 		}
 		if (arguments.head) {
-			$htmlhead(text=loc.rv);
-			loc.rv = "";
+			$htmlhead(text=local.rv);
+			local.rv = "";
 		}
-		return loc.rv;
+		return local.rv;
 	}
 
 	public string function javaScriptIncludeTag(
@@ -52,36 +51,35 @@
 		string head,
 		string delim=","
 	) {
-		var loc = {};
 		$args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
 		if (!Len(arguments.type)) {
 			StructDelete(arguments, "type");
 		}
-		loc.rv = "";
+		local.rv = "";
 		arguments.sources = $listClean(list=arguments.sources, returnAs="array", delim=arguments.delim);
-		loc.iEnd = ArrayLen(arguments.sources);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++) {
-			loc.item = arguments.sources[loc.i];
-			if (ReFindNoCase("^(https?:)?\/\/", loc.item)) {
-				arguments.src = arguments.sources[loc.i];
+		local.iEnd = ArrayLen(arguments.sources);
+		for (local.i=1; local.i <= local.iEnd; local.i++) {
+			local.item = arguments.sources[local.i];
+			if (ReFindNoCase("^(https?:)?\/\/", local.item)) {
+				arguments.src = arguments.sources[local.i];
 			} else {
-				if (Left(loc.item, 1) == "/") {
-					arguments.src = application.wheels.webPath & Right(loc.item, Len(loc.item)-1);
+				if (Left(local.item, 1) == "/") {
+					arguments.src = application.wheels.webPath & Right(local.item, Len(local.item)-1);
 				} else {
-					arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & loc.item;
+					arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & local.item;
 				}
-				if (!ListFindNoCase("js,cfm", ListLast(loc.item, "."))) {
+				if (!ListFindNoCase("js,cfm", ListLast(local.item, "."))) {
 					arguments.src &= ".js";
 				}
 				arguments.src = $assetDomain(arguments.src) & $appendQueryString();
 			}
-			loc.rv &= $element(name="script", skip="sources,head,delim", attributes=arguments) & Chr(10);
+			local.rv &= $element(name="script", skip="sources,head,delim", attributes=arguments) & Chr(10);
 		}
 		if (arguments.head) {
-			$htmlhead(text=loc.rv);
-			loc.rv = "";
+			$htmlhead(text=local.rv);
+			local.rv = "";
 		}
-		return loc.rv;
+		return local.rv;
 	}
 
 	public string function imageTag(
@@ -91,7 +89,6 @@
 		string protocol,
 		numeric port
 	) {
-		var loc = {};
 		$args(name="imageTag", reserved="src", args=arguments);
 
 		// ugly fix due to the fact that id can't be passed along to cfinvoke
@@ -101,25 +98,25 @@
 		}
 
 		if (application.wheels.cacheImages) {
-			loc.category = "image";
-			loc.key = $hashedKey(arguments);
-			loc.lockName = loc.category & loc.key & application.applicationName;
-			loc.conditionArgs = {};
-			loc.conditionArgs.category = loc.category;
-			loc.conditionArgs.key = loc.key;
-			loc.executeArgs = arguments;
-			loc.executeArgs.category = loc.category;
-			loc.executeArgs.key = loc.key;
-			loc.rv = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$addImageTagToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			local.category = "image";
+			local.key = $hashedKey(arguments);
+			local.lockName = local.category & local.key & application.applicationName;
+			local.conditionArgs = {};
+			local.conditionArgs.category = local.category;
+			local.conditionArgs.key = local.key;
+			local.executeArgs = arguments;
+			local.executeArgs.category = local.category;
+			local.executeArgs.key = local.key;
+			local.rv = $doubleCheckedLock(name=local.lockName, condition="$getFromCache", execute="$addImageTagToCache", conditionArgs=local.conditionArgs, executeArgs=local.executeArgs);
 		} else {
-			loc.rv = $imageTag(argumentCollection=arguments);
+			local.rv = $imageTag(argumentCollection=arguments);
 		}
 
 		// ugly fix continued
 		if (StructKeyExists(arguments, "wheelsId")) {
-			loc.rv = ReplaceNoCase(loc.rv, "wheelsId", "id");
+			local.rv = ReplaceNoCase(local.rv, "wheelsId", "id");
 		}
-		return loc.rv;
+		return local.rv;
 	}
 
 	/**
@@ -127,38 +124,36 @@
 	*/
 
 	public string function $addImageTagToCache() {
-		var loc = {};
-		loc.rv = $imageTag(argumentCollection=arguments);
-		$addToCache(key=arguments.key, value=loc.rv, category=arguments.category);
-		return loc.rv;
+		local.rv = $imageTag(argumentCollection=arguments);
+		$addToCache(key=arguments.key, value=local.rv, category=arguments.category);
+		return local.rv;
 	}
 
 	public string function $imageTag() {
-		var loc = {};
-		loc.localFile = true;
+		local.localFile = true;
 		if (Left(arguments.source, 7) == "http://" || Left(arguments.source, 8) == "https://") {
-			loc.localFile = false;
+			local.localFile = false;
 		}
-		if (!loc.localFile) {
+		if (!local.localFile) {
 			arguments.src = arguments.source;
 		} else {
 			arguments.src = application.wheels.webPath & application.wheels.imagePath & "/" & arguments.source;
-			loc.file = GetDirectoryFromPath(GetBaseTemplatePath()) & application.wheels.imagePath & "/" & SpanExcluding(arguments.source, "?");
+			local.file = GetDirectoryFromPath(GetBaseTemplatePath()) & application.wheels.imagePath & "/" & SpanExcluding(arguments.source, "?");
 			if (get("showErrorInformation")) {
-				if (loc.localFile && !FileExists(loc.file)) {
-					$throw(type="Wheels.ImageFileNotFound", message="CFWheels could not find `#loc.file#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
-				} else if (!IsImageFile(loc.file)) {
+				if (local.localFile && !FileExists(local.file)) {
+					$throw(type="Wheels.ImageFileNotFound", message="CFWheels could not find `#local.file#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
+				} else if (!IsImageFile(local.file)) {
 					$throw(type="Wheels.ImageFormatNotSupported", message="CFWheels can't read image files with that format.", extendedInfo="Use one of these image types instead: #GetReadableImageFormats()#.");
 				}
 			}
 			if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height")) {
 				// height and / or width arguments are missing so use cfimage to get them
-				loc.image = $image(action="info", source=loc.file);
-				if (!StructKeyExists(arguments, "width") && loc.image.width > 0) {
-					arguments.width = loc.image.width;
+				local.image = $image(action="info", source=local.file);
+				if (!StructKeyExists(arguments, "width") && local.image.width > 0) {
+					arguments.width = local.image.width;
 				}
-				if (!StructKeyExists(arguments, "height") && loc.image.height > 0) {
-					arguments.height = loc.image.height;
+				if (!StructKeyExists(arguments, "height") && local.image.height > 0) {
+					arguments.height = local.image.height;
 				}
 			} else {
 				// remove height and width attributes if false
@@ -179,28 +174,26 @@
 		if (!StructKeyExists(arguments, "alt")) {
 			arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
 		}
-		loc.rv = $tag(name="img", skip="source,key,category,onlyPath,host,protocol,port", close=true, attributes=arguments);
-		return loc.rv;
+		local.rv = $tag(name="img", skip="source,key,category,onlyPath,host,protocol,port", close=true, attributes=arguments);
+		return local.rv;
 	}
 
 	public string function $appendQueryString() {
-		var loc = {};
-		loc.rv = "";
+		local.rv = "";
 		// if assetQueryString is a boolean value, it means we just reloaded, so create a new query string based off of now
 		// the only problem with this is if the app doesn't get used a lot and the application is left alone for a period longer than the application scope is allowed to exist
 		if (IsBoolean(application.wheels.assetQueryString) && YesNoFormat(application.wheels.assetQueryString) == "no") {
-			return loc.rv;
+			return local.rv;
 		}
 		if (!IsNumeric(application.wheels.assetQueryString) && IsBoolean(application.wheels.assetQueryString)) {
 			application.wheels.assetQueryString = Hash(DateFormat(Now(), "yyyymmdd") & TimeFormat(Now(), "HHmmss"));
 		}
-		loc.rv &= "?" & application.wheels.assetQueryString;
-		return loc.rv;
+		local.rv &= "?" & application.wheels.assetQueryString;
+		return local.rv;
 	}
 
 	public string function $assetDomain(required string pathToAsset) {
-		var loc = {};
-		loc.rv = arguments.pathToAsset;
+		local.rv = arguments.pathToAsset;
 		if (get("showErrorInformation")) {
 			if (!IsStruct(application.wheels.assetPaths) && !IsBoolean(application.wheels.assetPaths)) {
 				$throw(type="Wheels.IncorrectConfiguration", message="The setting `assetsPaths` must be false or a struct.");
@@ -212,29 +205,29 @@
 
 		// return nothing if assetPaths is not a struct
 		if (!IsStruct(application.wheels.assetPaths)) {
-			return loc.rv;
+			return local.rv;
 		}
 
-		loc.protocol = "http://";
-		loc.domainList = application.wheels.assetPaths.http;
+		local.protocol = "http://";
+		local.domainList = application.wheels.assetPaths.http;
 		if (isSecure()) {
-			loc.protocol = "https://";
+			local.protocol = "https://";
 			if (StructKeyExists(application.wheels.assetPaths, "https")) {
-				loc.domainList = application.wheels.assetPaths.https;
+				local.domainList = application.wheels.assetPaths.https;
 			}
 		}
-		loc.domainLen = ListLen(loc.domainList);
-		if (loc.domainLen > 1) {
+		local.domainLen = ListLen(local.domainList);
+		if (local.domainLen > 1) {
 			// now comes the interesting part, lets take the pathToAsset argument, hash it and create a number from it
 			// so that we can do mod based off the length of the domain list
 			// this is an easy way to apply the same sub-domain to each asset, so we do not create more work for the server
 			// at the same time we are getting a very random hash value to rotate the domains over the assets evenly
-			loc.pathNumber = Right(REReplace(Hash(arguments.pathToAsset), "[A-Za-z]", "", "all"), 5);
-			loc.position = (loc.pathNumber % loc.domainLen) + 1;
+			local.pathNumber = Right(REReplace(Hash(arguments.pathToAsset), "[A-Za-z]", "", "all"), 5);
+			local.position = (local.pathNumber % local.domainLen) + 1;
 		} else {
-			loc.position = loc.domainLen;
+			local.position = local.domainLen;
 		}
-		loc.rv = loc.protocol & Trim(ListGetAt(loc.domainList, loc.position)) & arguments.pathToAsset;
-		return loc.rv;
+		local.rv = local.protocol & Trim(ListGetAt(local.domainList, local.position)) & arguments.pathToAsset;
+		return local.rv;
 	}
 </cfscript>

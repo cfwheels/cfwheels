@@ -85,49 +85,48 @@
 		boolean combine,
 		boolean twelveHour
 	) {
-		var loc = {};
 		$args(name="dateTimeSelectTags", args=arguments);
-		loc.rv = "";
-		loc.separator = arguments.separator;
-		loc.label = arguments.label;
+		local.rv = "";
+		local.separator = arguments.separator;
+		local.label = arguments.label;
 
 		// create date portion
 		arguments.order = arguments.dateOrder;
 		arguments.separator = arguments.dateSeparator;
 		// when a list of 6 elements has been passed in as labels we assume the first 3 are meant to be placed on the date related tags
-		if (ListLen(loc.label) == 6)
+		if (ListLen(local.label) == 6)
 		{
-			arguments.label = ListGetAt(loc.label, 1) & "," & ListGetAt(loc.label, 2) & "," & ListGetAt(loc.label, 3);
+			arguments.label = ListGetAt(local.label, 1) & "," & ListGetAt(local.label, 2) & "," & ListGetAt(local.label, 3);
 		}
 		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
 		{
-			loc.rv &= dateSelect(argumentCollection=arguments);
+			local.rv &= dateSelect(argumentCollection=arguments);
 		}
 		else
 		{
-			loc.rv &= dateSelectTags(argumentCollection=arguments);
+			local.rv &= dateSelectTags(argumentCollection=arguments);
 		}
 
 		// separate date and time with a string ("-" by default)
-		loc.rv &= loc.separator;
+		local.rv &= local.separator;
 
 		// create time portion
 		arguments.order = arguments.timeOrder;
 		arguments.separator = arguments.timeSeparator;
 		// when a list of 6 elements has been passed in as labels we assume the last 3 are meant to be placed on the time related tags
-		if (ListLen(loc.label) == 6)
+		if (ListLen(local.label) == 6)
 		{
-			arguments.label = ListGetAt(loc.label, 4) & "," & ListGetAt(loc.label, 5) & "," & ListGetAt(loc.label, 6);
+			arguments.label = ListGetAt(local.label, 4) & "," & ListGetAt(local.label, 5) & "," & ListGetAt(local.label, 6);
 		}
 		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
 		{
-			loc.rv &= timeSelect(argumentCollection=arguments);
+			local.rv &= timeSelect(argumentCollection=arguments);
 		}
 		else
 		{
-			loc.rv &= timeSelectTags(argumentCollection=arguments);
+			local.rv &= timeSelectTags(argumentCollection=arguments);
 		}
-		return loc.rv;
+		return local.rv;
 	}
 
 	public string function yearSelectTag(
@@ -168,7 +167,6 @@
 		string appendToLabel,
 		date $now=now()
 	) {
-		var loc = {};
 		$args(name="monthSelectTag", args=arguments);
 		if (IsNumeric(arguments.selected) && IsValid("range", arguments.selected, 0, 12))
 		{
@@ -274,45 +272,44 @@
 		required numeric value,
 		required date $now
 	) {
-		var loc = {};
-		loc.year = Year(arguments.$now);
-		loc.month = Month(arguments.$now);
-		loc.day = Day(arguments.$now);
-		loc.rv = arguments.$now;
+		local.year = Year(arguments.$now);
+		local.month = Month(arguments.$now);
+		local.day = Day(arguments.$now);
+		local.rv = arguments.$now;
 		switch (arguments.part)
 		{
 			case "year":
-				loc.year = arguments.value;
+				local.year = arguments.value;
 				break;
 			case "month":
-				loc.month = arguments.value;
+				local.month = arguments.value;
 				break;
 			case "day":
-				loc.day = arguments.value;
+				local.day = arguments.value;
 				break;
 		}
 
 		// handle february
-		if (loc.month == 2 && ((!IsLeapYear(loc.year) && loc.day > 29) || (IsLeapYear(loc.year) && loc.day > 28)))
+		if (local.month == 2 && ((!IsLeapYear(local.year) && local.day > 29) || (IsLeapYear(local.year) && local.day > 28)))
 		{
-			if (IsLeapYear(loc.year))
+			if (IsLeapYear(local.year))
 			{
-				loc.day = 29;
+				local.day = 29;
 			}
 			else
 			{
-				loc.day = 28;
+				local.day = 28;
 			}
 		}
 
 		try
 		{
-			loc.rv = CreateDate(loc.year, loc.month, loc.day);
+			local.rv = CreateDate(local.year, local.month, local.day);
 		}
 		catch (any e)
 		{
-			loc.rv = arguments.$now;
+			local.rv = arguments.$now;
 		}
-		return loc.rv;
+		return local.rv;
 	}
 </cfscript>

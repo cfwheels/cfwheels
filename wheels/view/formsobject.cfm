@@ -1,90 +1,88 @@
-<!--- PUBLIC VIEW HELPER FUNCTIONS --->
+<cfscript>
+	/**
+	* PUBLIC VIEW HELPER FUNCTIONS
+	*/
 
-<cffunction name="textField" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="association" type="string" required="false">
-	<cfargument name="position" type="string" required="false">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfargument name="errorElement" type="string" required="false">
-	<cfargument name="errorClass" type="string" required="false">
-	<cfargument name="type" type="string" required="false" default="text">
-	<cfscript>
-		var loc = {};
+	public string function textField(
+		required any objectName,
+		required string property,
+		string association,
+		string position,
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel,
+		string errorElement,
+		string errorClass,
+		string type="text"
+	) {
 		$args(name="textField", reserved="name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		}
-		loc.before = $formBeforeElement(argumentCollection=arguments);
-		loc.after = $formAfterElement(argumentCollection=arguments);
+		local.before = $formBeforeElement(argumentCollection=arguments);
+		local.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		loc.maxLength = $maxLength(argumentCollection=arguments);
-		if (StructKeyExists(loc, "maxLength"))
+		local.maxLength = $maxLength(argumentCollection=arguments);
+		if (StructKeyExists(local, "maxLength"))
 		{
-			arguments.maxLength = loc.maxLength;
+			arguments.maxLength = local.maxLength;
 		}
 		if (!StructKeyExists(arguments, "value") || !Len(arguments.value))
 		{
 			arguments.value = $formValue(argumentCollection=arguments);
 		}
-		loc.rv = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = local.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
+		return local.rv;
+	}
 
-<cffunction name="passwordField" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="association" type="string" required="false">
-	<cfargument name="position" type="string" required="false">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfargument name="errorElement" type="string" required="false">
-	<cfargument name="errorClass" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public string function passwordField(
+		required any objectName,
+		required string property,
+		string association,
+		string position,
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel,
+		string errorElement,
+		string errorClass
+	) {
 		$args(name="passwordField", reserved="type,name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		}
-		loc.before = $formBeforeElement(argumentCollection=arguments);
-		loc.after = $formAfterElement(argumentCollection=arguments);
+		local.before = $formBeforeElement(argumentCollection=arguments);
+		local.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "password";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		loc.maxlength = $maxLength(argumentCollection=arguments);
-		if (StructKeyExists(loc, "maxlength"))
+		local.maxlength = $maxLength(argumentCollection=arguments);
+		if (StructKeyExists(local, "maxlength"))
 		{
-			arguments.maxlength = loc.maxlength;
+			arguments.maxlength = local.maxlength;
 		}
 		if (!StructKeyExists(arguments, "value") || !Len(arguments.value))
 		{
 			arguments.value = $formValue(argumentCollection=arguments);
 		}
-		loc.rv = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = local.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
+		return local.rv;
+	}
 
-<cffunction name="hiddenField" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="association" type="string" required="false">
-	<cfargument name="position" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public string function hiddenField(
+		required any objectName,
+		required string property,
+		string association,
+		string position
+	) {
 		$args(name="hiddenField", reserved="type,name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		arguments.type = "hidden";
@@ -101,100 +99,94 @@
 		{
 			arguments.value = obfuscateParam(arguments.value);
 		}
-		loc.rv = $tag(name="input", close=true, skip="objectName,property,association,position", attributes=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = $tag(name="input", close=true, skip="objectName,property,association,position", attributes=arguments);
+		return local.rv;
+	}
 
-<cffunction name="fileField" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="association" type="string" required="false">
-	<cfargument name="position" type="string" required="false">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfargument name="errorElement" type="string" required="false">
-	<cfargument name="errorClass" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public string function fileField(
+		required any objectName,
+		required string property,
+		string association,
+		string position,
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel,
+		string errorElement,
+		string errorClass
+	) {
 		$args(name="fileField", reserved="type,name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		}
-		loc.before = $formBeforeElement(argumentCollection=arguments);
-		loc.after = $formAfterElement(argumentCollection=arguments);
+		local.before = $formBeforeElement(argumentCollection=arguments);
+		local.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "file";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		loc.rv = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = local.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
+		return local.rv;
+	}
 
-<cffunction name="textArea" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="association" type="string" required="false">
-	<cfargument name="position" type="string" required="false">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfargument name="errorElement" type="string" required="false">
-	<cfargument name="errorClass" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public string function textArea(
+		required any objectName,
+		required string property,
+		string association,
+		string position,
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel,
+		string errorElement,
+		string errorClass
+	) {
 		$args(name="textArea", reserved="name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		}
-		loc.before = $formBeforeElement(argumentCollection=arguments);
-		loc.after = $formAfterElement(argumentCollection=arguments);
+		local.before = $formBeforeElement(argumentCollection=arguments);
+		local.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		loc.content = $formValue(argumentCollection=arguments);
-		loc.rv = loc.before & $element(name="textarea", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.content = $formValue(argumentCollection=arguments);
+		local.rv = local.before & $element(name="textarea", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", content=local.content, attributes=arguments) & local.after;
+		return local.rv;
+	}
 
-<cffunction name="radioButton" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="association" type="string" required="false">
-	<cfargument name="position" type="string" required="false">
-	<cfargument name="tagValue" type="string" required="true">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfargument name="errorElement" type="string" required="false">
-	<cfargument name="errorClass" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public string function radioButton(
+		required any objectName,
+		required string property,
+		string association,
+		string position,
+		string tagValue,
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel,
+		string errorElement,
+		string errorClass
+	) {
 		$args(name="radioButton", reserved="type,name,value,checked", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
-		loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
+		local.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
 		if (!StructKeyExists(arguments, "id"))
 		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
-			if (len(loc.valueToAppend))
+			if (len(local.valueToAppend))
 			{
-				arguments.id &= "-" & loc.valueToAppend;
+				arguments.id &= "-" & local.valueToAppend;
 			}
 		}
-		loc.before = $formBeforeElement(argumentCollection=arguments);
-		loc.after = $formAfterElement(argumentCollection=arguments);
+		local.before = $formBeforeElement(argumentCollection=arguments);
+		local.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "radio";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.value = arguments.tagValue;
@@ -202,86 +194,82 @@
 		{
 			arguments.checked = "checked";
 		}
-		loc.rv = loc.before & $tag(name="input", close=true, skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = local.before & $tag(name="input", close=true, skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
+		return local.rv;
+	}
 
-<cffunction name="checkBox" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="association" type="string" required="false">
-	<cfargument name="position" type="string" required="false">
-	<cfargument name="checkedValue" type="string" required="false">
-	<cfargument name="uncheckedValue" type="string" required="false">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfargument name="errorElement" type="string" required="false">
-	<cfargument name="errorClass" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public string function checkBox(
+		required any objectName,
+		required string property,
+		string association,
+		string position,
+		string checkedValue,
+		string uncheckedValue,
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel,
+		string errorElement,
+		string errorClass
+	) {
 		$args(name="checkBox", reserved="type,name,value,checked", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		}
-		loc.before = $formBeforeElement(argumentCollection=arguments);
-		loc.after = $formAfterElement(argumentCollection=arguments);
+		local.before = $formBeforeElement(argumentCollection=arguments);
+		local.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "checkbox";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.value = arguments.checkedValue;
-		loc.value = $formValue(argumentCollection=arguments);
-		if (loc.value == arguments.value || IsNumeric(loc.value) && loc.value == 1 || !IsNumeric(loc.value) && IsBoolean(loc.value) && loc.value)
+		local.value = $formValue(argumentCollection=arguments);
+		if (local.value == arguments.value || IsNumeric(local.value) && local.value == 1 || !IsNumeric(local.value) && IsBoolean(local.value) && local.value)
 		{
 			arguments.checked = "checked";
 		}
-		loc.rv = loc.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments);
+		local.rv = local.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments);
 		if (Len(arguments.uncheckedValue))
 		{
-			loc.hiddenAttributes = {};
-			loc.hiddenAttributes.type = "hidden";
-			loc.hiddenAttributes.id = arguments.id & "-checkbox";
-			loc.hiddenAttributes.name = arguments.name & "($checkbox)";
-			loc.hiddenAttributes.value = arguments.uncheckedValue;
-			loc.rv &= $tag(name="input", close=true, attributes=loc.hiddenAttributes);
+			local.hiddenAttributes = {};
+			local.hiddenAttributes.type = "hidden";
+			local.hiddenAttributes.id = arguments.id & "-checkbox";
+			local.hiddenAttributes.name = arguments.name & "($checkbox)";
+			local.hiddenAttributes.value = arguments.uncheckedValue;
+			local.rv &= $tag(name="input", close=true, attributes=local.hiddenAttributes);
 		}
-		loc.rv &= loc.after;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv &= local.after;
+		return local.rv;
+	}
 
-<cffunction name="select" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="association" type="string" required="false">
-	<cfargument name="position" type="string" required="false">
-	<cfargument name="options" type="any" required="true">
-	<cfargument name="includeBlank" type="any" required="false">
-	<cfargument name="valueField" type="string" required="false">
-	<cfargument name="textField" type="string" required="false">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfargument name="errorElement" type="string" required="false">
-	<cfargument name="errorClass" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public string function select(
+		required any objectName,
+		required string property,
+		string association,
+		string position,
+		any options,
+		any includeBlank,
+		string valueField,
+		string textField,
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel,
+		string errorElement,
+		string errorClass
+	) {
 		$args(name="select", reserved="name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		}
-		loc.before = $formBeforeElement(argumentCollection=arguments);
-		loc.after = $formAfterElement(argumentCollection=arguments);
+		local.before = $formBeforeElement(argumentCollection=arguments);
+		local.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		if (StructKeyExists(arguments, "multiple") && IsBoolean(arguments.multiple))
 		{
@@ -294,98 +282,98 @@
 				StructDelete(arguments, "multiple");
 			}
 		}
-		loc.content = $optionsForSelect(argumentCollection=arguments);
+		local.content = $optionsForSelect(argumentCollection=arguments);
 		if (!IsBoolean(arguments.includeBlank) || arguments.includeBlank)
 		{
 			if (!IsBoolean(arguments.includeBlank))
 			{
-				loc.blankOptionText = arguments.includeBlank;
+				local.blankOptionText = arguments.includeBlank;
 			}
 			else
 			{
-				loc.blankOptionText = "";
+				local.blankOptionText = "";
 			}
-			loc.blankOptionAttributes = {value=""};
-			loc.content = $element(name="option", content=loc.blankOptionText, attributes=loc.blankOptionAttributes) & loc.content;
+			local.blankOptionAttributes = {value=""};
+			local.content = $element(name="option", content=local.blankOptionText, attributes=local.blankOptionAttributes) & local.content;
 		}
-		loc.rv = loc.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = local.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", content=local.content, attributes=arguments) & local.after;
+		return local.rv;
+	}
 
-<!--- PRIVATE FUNCTIONS --->
+	/**
+	* PRIVATE FUNCTIONS
+	*/
 
-<cffunction name="$optionsForSelect" returntype="string" access="public" output="false">
-	<cfargument name="options" type="any" required="true">
-	<cfargument name="valueField" type="string" required="true">
-	<cfargument name="textField" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		loc.value = $formValue(argumentCollection=arguments);
-		loc.rv = "";
+	public string function $optionsForSelect(
+		required any options,
+		required string valueField,
+		required string textField
+	) {
+		local.value = $formValue(argumentCollection=arguments);
+		local.rv = "";
 		if (IsQuery(arguments.options))
 		{
 			if (!Len(arguments.valueField) || !Len(arguments.textField))
 			{
 				// order the columns according to their ordinal position in the database table
-				loc.columns = "";
-				loc.info = GetMetaData(arguments.options);
-				loc.iEnd = ArrayLen(loc.info);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				local.columns = "";
+				local.info = GetMetaData(arguments.options);
+				local.iEnd = ArrayLen(local.info);
+				for (local.i=1; local.i <= local.iEnd; local.i++)
 				{
-					loc.columns = ListAppend(loc.columns, loc.info[loc.i].name);
+					local.columns = ListAppend(local.columns, local.info[local.i].name);
 				}
-				if (!Len(loc.columns))
+				if (!Len(local.columns))
 				{
 					arguments.valueField = "";
 					arguments.textField = "";
 				}
-				else if (ListLen(loc.columns) == 1)
+				else if (ListLen(local.columns) == 1)
 				{
-					arguments.valueField = ListGetAt(loc.columns, 1);
-					arguments.textField = ListGetAt(loc.columns, 1);
+					arguments.valueField = ListGetAt(local.columns, 1);
+					arguments.textField = ListGetAt(local.columns, 1);
 				}
 				else
 				{
 					// take the first numeric field in the query as the value field and the first non numeric as the text field
-					loc.iEnd = arguments.options.RecordCount;
-					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					local.iEnd = arguments.options.RecordCount;
+					for (local.i=1; local.i <= local.iEnd; local.i++)
 					{
-						loc.jEnd = ListLen(loc.columns);
-						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+						local.jEnd = ListLen(local.columns);
+						for (local.j=1; local.j <= local.jEnd; local.j++)
 						{
-							if (!Len(arguments.valueField) && IsNumeric(arguments.options[ListGetAt(loc.columns, loc.j)][loc.i]))
+							if (!Len(arguments.valueField) && IsNumeric(arguments.options[ListGetAt(local.columns, local.j)][local.i]))
 							{
-								arguments.valueField = ListGetAt(loc.columns, loc.j);
+								arguments.valueField = ListGetAt(local.columns, local.j);
 							}
-							if (!Len(arguments.textField) && !IsNumeric(arguments.options[ListGetAt(loc.columns, loc.j)][loc.i]))
+							if (!Len(arguments.textField) && !IsNumeric(arguments.options[ListGetAt(local.columns, local.j)][local.i]))
 							{
-								arguments.textField = ListGetAt(loc.columns, loc.j);
+								arguments.textField = ListGetAt(local.columns, local.j);
 							}
 						}
 					}
 					if (!Len(arguments.valueField) || !Len(arguments.textField))
 					{
 						// the query does not contain both a numeric and a text column so we'll just use the first and second column instead
-						arguments.valueField = ListGetAt(loc.columns, 1);
-						arguments.textField = ListGetAt(loc.columns, 2);
+						arguments.valueField = ListGetAt(local.columns, 1);
+						arguments.textField = ListGetAt(local.columns, 2);
 					}
 				}
 			}
-			loc.iEnd = arguments.options.RecordCount;
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			local.iEnd = arguments.options.RecordCount;
+			for (local.i=1; local.i <= local.iEnd; local.i++)
 			{
-				loc.rv &= $option(objectValue=loc.value, optionValue=arguments.options[arguments.valueField][loc.i], optionText=arguments.options[arguments.textField][loc.i]);
+				local.rv &= $option(objectValue=local.value, optionValue=arguments.options[arguments.valueField][local.i], optionText=arguments.options[arguments.textField][local.i]);
 			}
 		}
 		else if (IsStruct(arguments.options))
 		{
-			loc.sortedKeys = ListSort(StructKeyList(arguments.options), "textnocase"); // sort struct keys alphabetically
-			loc.iEnd = ListLen(loc.sortedKeys);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			local.sortedKeys = ListSort(StructKeyList(arguments.options), "textnocase"); // sort struct keys alphabetically
+			local.iEnd = ListLen(local.sortedKeys);
+			for (local.i=1; local.i <= local.iEnd; local.i++)
 			{
-				loc.key = ListGetAt(loc.sortedKeys, loc.i);
-				loc.rv &= $option(objectValue=loc.value, optionValue=LCase(loc.key), optionText=arguments.options[loc.key]);
+				local.key = ListGetAt(local.sortedKeys, local.i);
+				local.rv &= $option(objectValue=local.value, optionValue=LCase(local.key), optionText=arguments.options[local.key]);
 			}
 		}
 		else
@@ -396,111 +384,109 @@
 				arguments.options = ListToArray(arguments.options);
 			}
 
-			loc.iEnd = ArrayLen(arguments.options);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			local.iEnd = ArrayLen(arguments.options);
+			for (local.i=1; local.i <= local.iEnd; local.i++)
 			{
-				loc.optionValue = "";
-				loc.optionText = "";
+				local.optionValue = "";
+				local.optionText = "";
 				// see if the value in the array cell is an array, which means the programmer is using multidimensional arrays. if it is, use the first dimension for the key and the second for the value if it exists.
-				if (IsSimpleValue(arguments.options[loc.i]))
+				if (IsSimpleValue(arguments.options[local.i]))
 				{
-					loc.optionValue = arguments.options[loc.i];
-					loc.optionText = humanize(arguments.options[loc.i]);
+					local.optionValue = arguments.options[local.i];
+					local.optionText = humanize(arguments.options[local.i]);
 				}
-				else if (IsArray(arguments.options[loc.i]) && ArrayLen(arguments.options[loc.i]) >= 2)
+				else if (IsArray(arguments.options[local.i]) && ArrayLen(arguments.options[local.i]) >= 2)
 				{
-					loc.optionValue = arguments.options[loc.i][1];
-					loc.optionText = arguments.options[loc.i][2];
+					local.optionValue = arguments.options[local.i][1];
+					local.optionText = arguments.options[local.i][2];
 				}
-				else if (IsStruct(arguments.options[loc.i]) && StructKeyExists(arguments.options[loc.i], "value") && StructKeyExists(arguments.options[loc.i], "text"))
+				else if (IsStruct(arguments.options[local.i]) && StructKeyExists(arguments.options[local.i], "value") && StructKeyExists(arguments.options[local.i], "text"))
 				{
-					loc.optionValue = arguments.options[loc.i]["value"];
-					loc.optionText = arguments.options[loc.i]["text"];
+					local.optionValue = arguments.options[local.i]["value"];
+					local.optionText = arguments.options[local.i]["text"];
 				}
-				else if (IsObject(arguments.options[loc.i]))
+				else if (IsObject(arguments.options[local.i]))
 				{
-					loc.object = arguments.options[loc.i];
+					local.object = arguments.options[local.i];
 					if (!Len(arguments.valueField) || !Len(arguments.textField))
 					{
-						loc.propertyNames = loc.object.propertyNames();
-						loc.jEnd = ListLen(loc.propertyNames);
-						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+						local.propertyNames = local.object.propertyNames();
+						local.jEnd = ListLen(local.propertyNames);
+						for (local.j=1; local.j <= local.jEnd; local.j++)
 						{
-							loc.propertyName = ListGetAt(loc.propertyNames, loc.j);
-							if (StructKeyExists(loc.object, loc.propertyName))
+							local.propertyName = ListGetAt(local.propertyNames, local.j);
+							if (StructKeyExists(local.object, local.propertyName))
 							{
-								loc.propertyValue = loc.object[loc.propertyName];
-								if (!Len(arguments.valueField) && IsNumeric(loc.propertyValue))
+								local.propertyValue = local.object[local.propertyName];
+								if (!Len(arguments.valueField) && IsNumeric(local.propertyValue))
 								{
-									arguments.valueField = loc.propertyName;
+									arguments.valueField = local.propertyName;
 								}
-								if (!Len(arguments.textField) && !IsNumeric(loc.propertyValue))
+								if (!Len(arguments.textField) && !IsNumeric(local.propertyValue))
 								{
-									arguments.textField = loc.propertyName;
+									arguments.textField = local.propertyName;
 								}
 							}
 						}
 					}
-					if (StructKeyExists(loc.object, arguments.valueField))
+					if (StructKeyExists(local.object, arguments.valueField))
 					{
-						loc.optionValue = loc.object[arguments.valueField];
+						local.optionValue = local.object[arguments.valueField];
 					}
-					if (StructKeyExists(loc.object, arguments.textField))
+					if (StructKeyExists(local.object, arguments.textField))
 					{
-						loc.optionText = loc.object[arguments.textField];
+						local.optionText = local.object[arguments.textField];
 					}
 				}
-				else if (IsStruct(arguments.options[loc.i]))
+				else if (IsStruct(arguments.options[local.i]))
 				{
-					loc.object = arguments.options[loc.i];
+					local.object = arguments.options[local.i];
 					// if the struct only has one element then use the key/value pair
-					if(StructCount(loc.object) eq 1)
+					if(StructCount(local.object) eq 1)
 					{
-						loc.key = StructKeyList(loc.object);
-						loc.optionValue = LCase(loc.key);
-						loc.optionText = loc.object[loc.key];
+						local.key = StructKeyList(local.object);
+						local.optionValue = LCase(local.key);
+						local.optionText = local.object[local.key];
 					}
 					else
 					{
-						if (StructKeyExists(loc.object, arguments.valueField))
+						if (StructKeyExists(local.object, arguments.valueField))
 						{
-							loc.optionValue = loc.object[arguments.valueField];
+							local.optionValue = local.object[arguments.valueField];
 						}
-						if (StructKeyExists(loc.object, arguments.textField))
+						if (StructKeyExists(local.object, arguments.textField))
 						{
-							loc.optionText = loc.object[arguments.textField];
+							local.optionText = local.object[arguments.textField];
 						}
 					}
 				}
-				loc.rv &= $option(objectValue=loc.value, optionValue=loc.optionValue, optionText=loc.optionText);
+				local.rv &= $option(objectValue=local.value, optionValue=local.optionValue, optionText=local.optionText);
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$option" returntype="string" access="public" output="false">
-	<cfargument name="objectValue" type="string" required="true">
-	<cfargument name="optionValue" type="string" required="true">
-	<cfargument name="optionText" type="string" required="true">
-	<cfargument name="applyHtmlEditFormat" type="boolean" required="false" default="true" />
-	<cfscript>
-		var loc = {};
+	public string function $option(
+		required string objectValue,
+		required string optionValue,
+		required string optionText,
+		boolean applyHtmlEditFormat=true
+	) {
 		if (arguments.applyHtmlEditFormat)
 		{
 			arguments.optionValue = XMLFormat(arguments.optionValue);
 			arguments.optionText = XMLFormat(arguments.optionText);
 		}
-		loc.optionAttributes = {value=arguments.optionValue};
+		local.optionAttributes = {value=arguments.optionValue};
 		if (arguments.optionValue == arguments.objectValue || ListFindNoCase(arguments.objectValue, arguments.optionValue))
 		{
-			loc.optionAttributes.selected = "selected";
+			local.optionAttributes.selected = "selected";
 		}
 		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get")
 		{
-			loc.optionAttributes.value = obfuscateParam(loc.optionAttributes.value);
+			local.optionAttributes.value = obfuscateParam(local.optionAttributes.value);
 		}
-		loc.rv = $element(name="option", content=arguments.optionText, attributes=loc.optionAttributes);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = $element(name="option", content=arguments.optionText, attributes=local.optionAttributes);
+		return local.rv;
+	}
+</cfscript>

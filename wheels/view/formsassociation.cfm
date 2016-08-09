@@ -12,26 +12,25 @@
 		boolean checkIfBlank=false,
 		string label
 	) {
-		var loc = {};
 		$args(name="hasManyRadioButton", args=arguments);
 		arguments.keys = Replace(arguments.keys, ", ", ",", "all");
-		loc.checked = false;
-		loc.rv = "";
-		loc.value = $hasManyFormValue(argumentCollection=arguments);
-		loc.included = includedInObject(argumentCollection=arguments);
-		if (!loc.included)
+		local.checked = false;
+		local.rv = "";
+		local.value = $hasManyFormValue(argumentCollection=arguments);
+		local.included = includedInObject(argumentCollection=arguments);
+		if (!local.included)
 		{
-			loc.included = "";
+			local.included = "";
 		}
-		if (loc.value == arguments.tagValue || (arguments.checkIfBlank && loc.value != arguments.tagValue))
+		if (local.value == arguments.tagValue || (arguments.checkIfBlank && local.value != arguments.tagValue))
 		{
-			loc.checked = true;
+			local.checked = true;
 		}
 		arguments.objectName = ListLast(arguments.objectName, ".");
-		loc.tagId = "#arguments.objectName#-#arguments.association#-#Replace(arguments.keys, ",", "-", "all")#-#arguments.property#-#arguments.tagValue#";
-		loc.tagName = "#arguments.objectName#[#arguments.association#][#arguments.keys#][#arguments.property#]";
-		loc.rv = radioButtonTag(name=loc.tagName, id=loc.tagId, value=arguments.tagValue, checked=loc.checked, label=arguments.label);
-		return loc.rv;
+		local.tagId = "#arguments.objectName#-#arguments.association#-#Replace(arguments.keys, ",", "-", "all")#-#arguments.property#-#arguments.tagValue#";
+		local.tagName = "#arguments.objectName#[#arguments.association#][#arguments.keys#][#arguments.property#]";
+		local.rv = radioButtonTag(name=local.tagName, id=local.tagId, value=arguments.tagValue, checked=local.checked, label=arguments.label);
+		return local.rv;
 	}
 
 	public string function hasManyCheckBox(
@@ -47,25 +46,24 @@
 		string errorElement,
 		string errorClass
 	) {
-		var loc = {};
 		$args(name="hasManyCheckBox", args=arguments);
 		arguments.keys = Replace(arguments.keys, ", ", ",", "all");
-		loc.checked = true;
-		loc.rv = "";
-		loc.included = includedInObject(argumentCollection=arguments);
-		if (!loc.included)
+		local.checked = true;
+		local.rv = "";
+		local.included = includedInObject(argumentCollection=arguments);
+		if (!local.included)
 		{
-			loc.included = "";
-			loc.checked = false;
+			local.included = "";
+			local.checked = false;
 		}
 		arguments.objectName = ListLast(arguments.objectName, ".");
-		loc.tagId = "#arguments.objectName#-#arguments.association#-#Replace(arguments.keys, ",", "-", "all")#-_delete";
-		loc.tagName = "#arguments.objectName#[#arguments.association#][#arguments.keys#][_delete]";
+		local.tagId = "#arguments.objectName#-#arguments.association#-#Replace(arguments.keys, ",", "-", "all")#-_delete";
+		local.tagName = "#arguments.objectName#[#arguments.association#][#arguments.keys#][_delete]";
 		StructDelete(arguments, "keys");
 		StructDelete(arguments, "objectName");
 		StructDelete(arguments, "association");
-		loc.rv = checkBoxTag(name=loc.tagName, id=loc.tagId, value=0, checked=loc.checked, uncheckedValue=1, argumentCollection=arguments);
-		return loc.rv;
+		local.rv = checkBoxTag(name=local.tagName, id=local.tagId, value=0, checked=local.checked, uncheckedValue=1, argumentCollection=arguments);
+		return local.rv;
 	}
 
 	public boolean function includedInObject(
@@ -73,32 +71,31 @@
 		required string association,
 		required string keys
 	) {
-		var loc = {};
-		loc.rv = false;
-		loc.object = $getObject(arguments.objectName);
+		local.rv = false;
+		local.object = $getObject(arguments.objectName);
 
 		// clean up our key argument if there is a comma on the beginning or end
 		arguments.keys = REReplace(arguments.keys, "^,|,$", "", "all");
 
-		if (!StructKeyExists(loc.object, arguments.association) || !IsArray(loc.object[arguments.association]))
+		if (!StructKeyExists(local.object, arguments.association) || !IsArray(local.object[arguments.association]))
 		{
-			return loc.rv;
+			return local.rv;
 		}
 		if (!Len(arguments.keys))
 		{
-			return loc.rv;
+			return local.rv;
 		}
-		loc.iEnd = ArrayLen(loc.object[arguments.association]);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.iEnd = ArrayLen(local.object[arguments.association]);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.assoc = loc.object[arguments.association][loc.i];
-			if (IsObject(loc.assoc) && loc.assoc.key() == arguments.keys)
+			local.assoc = local.object[arguments.association][local.i];
+			if (IsObject(local.assoc) && local.assoc.key() == arguments.keys)
 			{
-				loc.rv = loc.i;
+				local.rv = local.i;
 				break;
 			}
 		}
-		return loc.rv;
+		return local.rv;
 	}
 
 	/**
@@ -111,27 +108,26 @@
 		required string property,
 		required string keys
 	) {
-		var loc = {};
-		loc.rv = "";
-		loc.object = $getObject(arguments.objectName);
-		if (!StructKeyExists(loc.object, arguments.association) || !IsArray(loc.object[arguments.association]))
+		local.rv = "";
+		local.object = $getObject(arguments.objectName);
+		if (!StructKeyExists(local.object, arguments.association) || !IsArray(local.object[arguments.association]))
 		{
-			return loc.rv;
+			return local.rv;
 		}
 		if (!Len(arguments.keys))
 		{
-			return loc.rv;
+			return local.rv;
 		}
-		loc.iEnd = ArrayLen(loc.object[arguments.association]);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.iEnd = ArrayLen(local.object[arguments.association]);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.assoc = loc.object[arguments.association][loc.i];
-			if (isObject(loc.assoc) && loc.assoc.key() == arguments.keys && StructKeyExists(loc.assoc, arguments.property))
+			local.assoc = local.object[arguments.association][local.i];
+			if (isObject(local.assoc) && local.assoc.key() == arguments.keys && StructKeyExists(local.assoc, arguments.property))
 			{
-				loc.rv = loc.assoc[arguments.property];
+				local.rv = local.assoc[arguments.property];
 				break;
 			}
 		}
-		return loc.rv;
+		return local.rv;
 	}
 </cfscript>
