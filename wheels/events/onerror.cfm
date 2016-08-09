@@ -1,68 +1,66 @@
 <cfscript> 
 	public void function onError(required exception, required eventName) {
-		var loc = {};
 
 		// in case the error was caused by a timeout we have to add extra time for error handling.
 		// we have to check if onErrorRequestTimeout exists since errors can be triggered before the application.wheels struct has been created.
-		loc.requestTimeout = 70;
+		local.requestTimeout = 70;
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "onErrorRequestTimeout")) {
-			loc.requestTimeout = application.wheels.onErrorRequestTimeout;
+			local.requestTimeout = application.wheels.onErrorRequestTimeout;
 		}
-		$setting(requestTimeout=loc.requestTimeout);
+		$setting(requestTimeout=local.requestTimeout);
 
-		loc.lockName = "reloadLock" & application.applicationName;
-		loc.rv = $simpleLock(name=loc.lockName, execute="$runOnError", executeArgs=arguments, type="readOnly", timeout=180);
-		writeOutput(loc.rv);
+		local.lockName = "reloadLock" & application.applicationName;
+		local.rv = $simpleLock(name=local.lockName, execute="$runOnError", executeArgs=arguments, type="readOnly", timeout=180);
+		writeOutput(local.rv);
 	}
 
 	public string function $runOnError(required exception, required eventName) {
-		var loc = {};
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized")) {
 			if (application.wheels.sendEmailOnError) {
-				loc.args = {};
-				$args(name="sendEmail", args=loc.args);
- 				loc.args.from = application.wheels.errorEmailAddress;
+				local.args = {};
+				$args(name="sendEmail", args=local.args);
+ 				local.args.from = application.wheels.errorEmailAddress;
  				if (Len(application.wheels.errorEmailFromAddress)) {
-	 				loc.args.from = application.wheels.errorEmailFromAddress;
+	 				local.args.from = application.wheels.errorEmailFromAddress;
  				}
- 				loc.args.to = application.wheels.errorEmailAddress;
+ 				local.args.to = application.wheels.errorEmailAddress;
  				if (Len(application.wheels.errorEmailToAddress)) {
-	 				loc.args.to = application.wheels.errorEmailToAddress;
+	 				local.args.to = application.wheels.errorEmailToAddress;
  				}
- 				if (Len(loc.args.from) && Len(loc.args.to)) {
+ 				if (Len(local.args.from) && Len(local.args.to)) {
 					if (StructKeyExists(application.wheels, "errorEmailServer") && Len(application.wheels.errorEmailServer)) {
-						loc.args.server = application.wheels.errorEmailServer;
+						local.args.server = application.wheels.errorEmailServer;
 					}
-					loc.args.subject = application.wheels.errorEmailSubject;
-					loc.args.type = "html";
-					loc.args.tagContent = $includeAndReturnOutput($template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception);
-					StructDelete(loc.args, "layouts", false);
-					StructDelete(loc.args, "detectMultiPart", false);
+					local.args.subject = application.wheels.errorEmailSubject;
+					local.args.type = "html";
+					local.args.tagContent = $includeAndReturnOutput($template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception);
+					StructDelete(local.args, "layouts", false);
+					StructDelete(local.args, "detectMultiPart", false);
 					try {
-						$mail(argumentCollection=loc.args);
+						$mail(argumentCollection=local.args);
 					} catch (any e) {}
  				}
 			}
 			if (application.wheels.showErrorInformation) {
 				if (StructKeyExists(arguments.exception, "rootCause") && Left(arguments.exception.rootCause.type, 6) == "Wheels") {
-					loc.wheelsError = arguments.exception.rootCause;
+					local.wheelsError = arguments.exception.rootCause;
 				} else if (StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels") {
-					loc.wheelsError = arguments.exception.cause.rootCause;
+					local.wheelsError = arguments.exception.cause.rootCause;
 				}
 				if (StructKeyExists(loc, "wheelsError")) {
-					loc.rv = $includeAndReturnOutput($template="wheels/styles/header.cfm");
-					loc.rv &= $includeAndReturnOutput($template="wheels/events/onerror/wheelserror.cfm", wheelsError=loc.wheelsError);
-					loc.rv &= $includeAndReturnOutput($template="wheels/styles/footer.cfm");
+					local.rv = $includeAndReturnOutput($template="wheels/styles/header.cfm");
+					local.rv &= $includeAndReturnOutput($template="wheels/events/onerror/wheelserror.cfm", wheelsError=local.wheelsError);
+					local.rv &= $includeAndReturnOutput($template="wheels/styles/footer.cfm");
 				} else {
 					$throw(object=arguments.exception);
 				}
 			} else {
 				$header(statusCode=500, statusText="Internal Server Error");
-				loc.rv = $includeAndReturnOutput($template="#application.wheels.eventPath#/onerror.cfm", exception=arguments.exception, eventName=arguments.eventName);
+				local.rv = $includeAndReturnOutput($template="#application.wheels.eventPath#/onerror.cfm", exception=arguments.exception, eventName=arguments.eventName);
 			}
 		} else {
 			$throw(object=arguments.exception);
 		}
-		return loc.rv;
+		return local.rv;
 	}
 </cfscript>
