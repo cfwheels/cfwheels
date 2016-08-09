@@ -1,6 +1,5 @@
 <cfscript>
 public void function onApplicationStart() {
-	var loc = {};
 
 	// abort if called from incorrect file
 	$abortInvalidRequest();
@@ -11,12 +10,12 @@ public void function onApplicationStart() {
 	// set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x"
 	if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword"))
 	{
-		loc.oldReloadPassword = application.wheels.reloadPassword;
+		local.oldReloadPassword = application.wheels.reloadPassword;
 	}
 	application.$wheels = {};
-	if (StructKeyExists(loc, "oldReloadPassword"))
+	if (StructKeyExists(local, "oldReloadPassword"))
 	{
-		application.$wheels.reloadPassword = loc.oldReloadPassword;
+		application.$wheels.reloadPassword = local.oldReloadPassword;
 	}
 
 	// check and store server engine name, throw error if using a version that we don't support
@@ -36,16 +35,16 @@ public void function onApplicationStart() {
 		application.$wheels.serverName = "Adobe ColdFusion";
 		application.$wheels.serverVersion = server.coldfusion.productVersion;
 	}
-	loc.upgradeTo = $checkMinimumVersion(engine=application.$wheels.serverName, version=application.$wheels.serverVersion);
-	if (Len(loc.upgradeTo) && !StructKeyExists(this, "disableEngineCheck") && !StructKeyExists(url, "disableEngineCheck"))
+	local.upgradeTo = $checkMinimumVersion(engine=application.$wheels.serverName, version=application.$wheels.serverVersion);
+	if (Len(local.upgradeTo) && !StructKeyExists(this, "disableEngineCheck") && !StructKeyExists(url, "disableEngineCheck"))
 	{
-		if (IsBoolean(loc.upgradeTo))
+		if (IsBoolean(local.upgradeTo))
 		{
 			$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please use Lucee or Adobe ColdFusion instead.");
 		}
 		else
 		{
-			$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please upgrade to version #loc.upgradeTo# or higher.");
+			$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please upgrade to version #local.upgradeTo# or higher.");
 		}
 	}
 
@@ -378,16 +377,16 @@ public void function onApplicationStart() {
 	}
 
 	// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
-	loc.allowedGlobalMethods = "get,set,addroute,addDefaultRoutes";
-	loc.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.$wheels.controllerPath, fileName="Wheels", method="$initControllerClass"));
+	local.allowedGlobalMethods = "get,set,addroute,addDefaultRoutes";
+	local.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.$wheels.controllerPath, fileName="Wheels", method="$initControllerClass"));
 	application.$wheels.protectedControllerMethods = "";
-	loc.iEnd = ListLen(loc.protectedControllerMethods);
-	for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+	local.iEnd = ListLen(local.protectedControllerMethods);
+	for (local.i=1; local.i <= local.iEnd; local.i++)
 	{
-		loc.method = ListGetAt(loc.protectedControllerMethods, loc.i);
-		if (Left(loc.method, 1) != "$" && !ListFindNoCase(loc.allowedGlobalMethods, loc.method))
+		local.method = ListGetAt(local.protectedControllerMethods, local.i);
+		if (Left(local.method, 1) != "$" && !ListFindNoCase(local.allowedGlobalMethods, local.method))
 		{
-			application.$wheels.protectedControllerMethods = ListAppend(application.$wheels.protectedControllerMethods, loc.method);
+			application.$wheels.protectedControllerMethods = ListAppend(application.$wheels.protectedControllerMethods, local.method);
 		}
 	}
 
@@ -418,38 +417,38 @@ public void function onApplicationStart() {
 	{
 		if (StructKeyExists(cgi, "PATH_INFO") && Len(cgi.PATH_INFO))
 		{
-			loc.url = cgi.PATH_INFO;
+			local.url = cgi.PATH_INFO;
 		}
 		else if (StructKeyExists(cgi, "PATH_INFO"))
 		{
-			loc.url = "/";
+			local.url = "/";
 		}
 		else
 		{
-			loc.url = cgi.SCRIPT_NAME;
+			local.url = cgi.SCRIPT_NAME;
 		}
 
-		loc.oldQueryString = ListToArray(cgi.QUERY_STRING, "&");
-		loc.newQueryString = ArrayNew(1);
+		local.oldQueryString = ListToArray(cgi.QUERY_STRING, "&");
+		local.newQueryString = ArrayNew(1);
 
-		for (loc.i = 1; loc.i <= ArrayLen(loc.oldQueryString); loc.i++)
+		for (local.i = 1; local.i <= ArrayLen(local.oldQueryString); local.i++)
 		{
-			loc.keyValue = loc.oldQueryString[loc.i];
-			loc.key = ListFirst(loc.keyValue, "=");
+			local.keyValue = local.oldQueryString[local.i];
+			local.key = ListFirst(local.keyValue, "=");
 
-			if (!ListFindNoCase("reload,password", loc.key))
+			if (!ListFindNoCase("reload,password", local.key))
 			{
-				ArrayAppend(loc.newQueryString, loc.keyValue);
+				ArrayAppend(local.newQueryString, local.keyValue);
 			}
 		}
 
-		if (ArrayLen(loc.newQueryString))
+		if (ArrayLen(local.newQueryString))
 		{
-			loc.queryString = ArrayToList(loc.newQueryString, '&');
-			loc.url = "#loc.url#?#loc.queryString#";
+			local.queryString = ArrayToList(local.newQueryString, '&');
+			local.url = "#local.url#?#local.queryString#";
 		}
 
-		$location(url=loc.url, addToken=false);
+		$location(url=local.url, addToken=false);
 	}
 }
 </cfscript> 

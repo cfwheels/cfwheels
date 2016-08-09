@@ -21,20 +21,18 @@
 	}
 
 	public array function verificationChain() { 
-		var loc = {};
-		loc.rv = variables.$class.verifications;
-		return loc.rv;
+		local.rv = variables.$class.verifications;
+		return local.rv;
 	}
 
 	public void function setVerificationChain(required array chain) { 
-		var loc = {};
 
 		// clear current verification chain and then re-add from the passed in chain
 		variables.$class.verifications = [];
-		loc.iEnd = ArrayLen(arguments.chain);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.iEnd = ArrayLen(arguments.chain);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			verifies(argumentCollection=arguments.chain[loc.i]);
+			verifies(argumentCollection=arguments.chain[local.i]);
 		}
 	}
 
@@ -48,77 +46,76 @@
 		struct sessionScope={},
 		struct cookieScope=cookie
 	) {
-		var loc = {};
 
 		// only access the session scope when session management is enabled in the app
 		// default to the wheels setting but get it on a per request basis if possible (from application.cfc)
-		loc.sessionManagement = get("sessionManagement");
+		local.sessionManagement = get("sessionManagement");
 		try
 		{
-			loc.sessionManagement = application.getApplicationSettings().sessionManagement;
+			local.sessionManagement = application.getApplicationSettings().sessionManagement;
 		}
 		catch (any e) {}
 
-		if (StructIsEmpty(arguments.sessionScope) && loc.sessionManagement)
+		if (StructIsEmpty(arguments.sessionScope) && local.sessionManagement)
 		{
 			arguments.sessionScope = session;
 		}
 
-		loc.verifications = verificationChain();
-		loc.$args = "only,except,post,get,ajax,cookie,session,params,cookieTypes,sessionTypes,paramsTypes,handler";
-		loc.abort = false;
-		loc.iEnd = ArrayLen(loc.verifications);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.verifications = verificationChain();
+		local.$args = "only,except,post,get,ajax,cookie,session,params,cookieTypes,sessionTypes,paramsTypes,handler";
+		local.abort = false;
+		local.iEnd = ArrayLen(local.verifications);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.element = loc.verifications[loc.i];
-			if ((!Len(loc.element.only) && !Len(loc.element.except)) || (Len(loc.element.only) && ListFindNoCase(loc.element.only, arguments.action)) || (Len(loc.element.except) && !ListFindNoCase(loc.element.except, arguments.action)))
+			local.element = local.verifications[local.i];
+			if ((!Len(local.element.only) && !Len(local.element.except)) || (Len(local.element.only) && ListFindNoCase(local.element.only, arguments.action)) || (Len(local.element.except) && !ListFindNoCase(local.element.except, arguments.action)))
 			{
-				if (IsBoolean(loc.element.post) && ((loc.element.post && !isPost()) || (!loc.element.post && isPost())))
+				if (IsBoolean(local.element.post) && ((local.element.post && !isPost()) || (!local.element.post && isPost())))
 				{
-					loc.abort = true;
+					local.abort = true;
 				}
-				if (IsBoolean(loc.element.get) && ((loc.element.get && !isGet()) || (!loc.element.get && isGet())))
+				if (IsBoolean(local.element.get) && ((local.element.get && !isGet()) || (!local.element.get && isGet())))
 				{
-					loc.abort = true;
+					local.abort = true;
 				}
-				if (IsBoolean(loc.element.ajax) && ((loc.element.ajax && !isAjax()) || (!loc.element.ajax && isAjax())))
+				if (IsBoolean(local.element.ajax) && ((local.element.ajax && !isAjax()) || (!local.element.ajax && isAjax())))
 				{
-					loc.abort = true;
+					local.abort = true;
 				}
-				if (!$checkVerificationsVars(arguments.params, loc.element.params, loc.element.paramsTypes))
+				if (!$checkVerificationsVars(arguments.params, local.element.params, local.element.paramsTypes))
 				{
-					loc.abort = true;
+					local.abort = true;
 				}
-				if (!$checkVerificationsVars(arguments.sessionScope, loc.element.session, loc.element.sessionTypes))
+				if (!$checkVerificationsVars(arguments.sessionScope, local.element.session, local.element.sessionTypes))
 				{
-					loc.abort = true;
+					local.abort = true;
 				}
-				if (!$checkVerificationsVars(arguments.cookieScope, loc.element.cookie, loc.element.cookieTypes))
+				if (!$checkVerificationsVars(arguments.cookieScope, local.element.cookie, local.element.cookieTypes))
 				{
-					loc.abort = true;
+					local.abort = true;
 				}
 			}
-			if (loc.abort)
+			if (local.abort)
 			{
-				if (Len(loc.element.handler))
+				if (Len(local.element.handler))
 				{
-					$invoke(method=loc.element.handler);
+					$invoke(method=local.element.handler);
 					redirectTo(back="true");
 				}
 				else
 				{
 					// check to see if we should perform a redirect or abort completly
-					loc.redirectArgs = {};
-					for(loc.key in loc.element)
+					local.redirectArgs = {};
+					for(local.key in local.element)
 					{
-						if (!ListFindNoCase(loc.$args, loc.key) && StructKeyExists(loc.element, loc.key))
+						if (!ListFindNoCase(local.$args, local.key) && StructKeyExists(local.element, local.key))
 						{
-							loc.redirectArgs[loc.key] = loc.element[loc.key];
+							local.redirectArgs[local.key] = local.element[local.key];
 						}
 					}
-					if (!StructIsEmpty(loc.redirectArgs))
+					if (!StructIsEmpty(local.redirectArgs))
 					{
-						redirectTo(argumentCollection=loc.redirectArgs);
+						redirectTo(argumentCollection=local.redirectArgs);
 					}
 					else
 					{
@@ -136,37 +133,36 @@
 		required string vars,
 		required string types
 	) {
-		var loc = {};
-		loc.rv = true;
-		loc.iEnd = ListLen(arguments.vars);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.rv = true;
+		local.iEnd = ListLen(arguments.vars);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.item = ListGetAt(arguments.vars, loc.i);
-			if (!StructKeyExists(arguments.scope, loc.item))
+			local.item = ListGetAt(arguments.vars, local.i);
+			if (!StructKeyExists(arguments.scope, local.item))
 			{
-				loc.rv = false;
+				local.rv = false;
 				break;
 			}
 			if (Len(arguments.types))
 			{
-				loc.value = arguments.scope[loc.item];
-				loc.typeCheck = ListGetAt(arguments.types, loc.i);
+				local.value = arguments.scope[local.item];
+				local.typeCheck = ListGetAt(arguments.types, local.i);
 
 				// by default string aren't allowed to be blank
-				loc.typeAllowedBlank = false;
-				if (loc.typeCheck == "blank")
+				local.typeAllowedBlank = false;
+				if (local.typeCheck == "blank")
 				{
-					loc.typeAllowedBlank = true;
-					loc.typeCheck = "string";
+					local.typeAllowedBlank = true;
+					local.typeCheck = "string";
 				}
 
-				if (!IsValid(loc.typeCheck, loc.value) || (loc.typeCheck == "string" && !loc.typeAllowedBlank && !Len(Trim(loc.value))))
+				if (!IsValid(local.typeCheck, local.value) || (local.typeCheck == "string" && !local.typeAllowedBlank && !Len(Trim(local.value))))
 				{
-					loc.rv = false;
+					local.rv = false;
 					break;
 				}
 			}
 		}
-		return loc.rv;
+		return local.rv;
 	}
 </cfscript>   

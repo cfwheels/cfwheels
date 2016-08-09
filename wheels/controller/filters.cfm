@@ -11,59 +11,56 @@
 		string except="",
 		string placement="append"
 	) {
-		var loc = {};
 		arguments.through = $listClean(arguments.through);
 		arguments.only = $listClean(arguments.only);
 		arguments.except = $listClean(arguments.except);
-		loc.namedArguments = "through,type,only,except,placement";
-		loc.iEnd = ListLen(arguments.through);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.namedArguments = "through,type,only,except,placement";
+		local.iEnd = ListLen(arguments.through);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.filter = {};
-			loc.filter.through = ListGetAt(arguments.through, loc.i);
-			loc.filter.type = arguments.type;
-			loc.filter.only = arguments.only;
-			loc.filter.except = arguments.except;
-			loc.filter.arguments = {};
-			if (StructCount(arguments) > ListLen(loc.namedArguments))
+			local.filter = {};
+			local.filter.through = ListGetAt(arguments.through, local.i);
+			local.filter.type = arguments.type;
+			local.filter.only = arguments.only;
+			local.filter.except = arguments.except;
+			local.filter.arguments = {};
+			if (StructCount(arguments) > ListLen(local.namedArguments))
 			{
-				loc.dynamicArgument = loc.filter.through & "Arguments";
-				if (StructKeyExists(arguments, loc.dynamicArgument))
+				local.dynamicArgument = local.filter.through & "Arguments";
+				if (StructKeyExists(arguments, local.dynamicArgument))
 				{
-					loc.filter.arguments = arguments[loc.dynamicArgument];
+					local.filter.arguments = arguments[local.dynamicArgument];
 				}
-				for (loc.key in arguments)
+				for (local.key in arguments)
 				{
-					if (!ListFindNoCase(ListAppend(loc.namedArguments, loc.dynamicArgument), loc.key))
+					if (!ListFindNoCase(ListAppend(local.namedArguments, local.dynamicArgument), local.key))
 					{
-						loc.filter.arguments[loc.key] = arguments[loc.key];
+						local.filter.arguments[local.key] = arguments[local.key];
 					}
 				}
 			}
 			if (arguments.placement == "append")
 			{
-				ArrayAppend(variables.$class.filters, loc.filter);
+				ArrayAppend(variables.$class.filters, local.filter);
 			}
 			else
 			{
-				ArrayPrepend(variables.$class.filters, loc.filter);
+				ArrayPrepend(variables.$class.filters, local.filter);
 			}
 		}
 	}
 
-	public void function setFilterChain(required array chain) {
-		var loc = {};
+	public void function setFilterChain(required array chain) { 
 		// clear current filter chain and then re-add from the passed in chain
 		variables.$class.filters = [];
-		loc.iEnd = ArrayLen(arguments.chain);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.iEnd = ArrayLen(arguments.chain);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			filters(argumentCollection=arguments.chain[loc.i]);
+			filters(argumentCollection=arguments.chain[local.i]);
 		}
 	}
 
-	public array function filterChain(string type="all") {
-		var loc = {};
+	public array function filterChain(string type="all") { 
 		if (!ListFindNoCase("before,after,all", arguments.type))
 		{
 			// throw error because an invalid type was passed in
@@ -72,22 +69,22 @@
 		if (arguments.type == "all")
 		{
 			// return all filters
-			loc.rv = variables.$class.filters;
+			local.rv = variables.$class.filters;
 		}
 		else
 		{
 			// loop over the filters and return all those that match the supplied type
-			loc.rv = [];
-			loc.iEnd = ArrayLen(variables.$class.filters);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			local.rv = [];
+			local.iEnd = ArrayLen(variables.$class.filters);
+			for (local.i=1; local.i <= local.iEnd; local.i++)
 			{
-				if (variables.$class.filters[loc.i].type == arguments.type)
+				if (variables.$class.filters[local.i].type == arguments.type)
 				{
-					ArrayAppend(loc.rv, variables.$class.filters[loc.i]);
+					ArrayAppend(local.rv, variables.$class.filters[local.i]);
 				}
 			}
 		}
-		return loc.rv;
+		return local.rv;
 	}
 
 	/**
@@ -95,20 +92,19 @@
 	*/
 
 	public void function $runFilters(required string type, required string action) {
-		var loc = {};
-		loc.filters = filterChain(arguments.type);
-		loc.iEnd = ArrayLen(loc.filters);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.filters = filterChain(arguments.type);
+		local.iEnd = ArrayLen(local.filters);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.filter = loc.filters[loc.i];
-			if ((!Len(loc.filter.only) && !Len(loc.filter.except)) || (Len(loc.filter.only) && ListFindNoCase(loc.filter.only, arguments.action)) || (Len(loc.filter.except) && !ListFindNoCase(loc.filter.except, arguments.action)))
+			local.filter = local.filters[local.i];
+			if ((!Len(local.filter.only) && !Len(local.filter.except)) || (Len(local.filter.only) && ListFindNoCase(local.filter.only, arguments.action)) || (Len(local.filter.except) && !ListFindNoCase(local.filter.except, arguments.action)))
 			{
-				if (!StructKeyExists(variables, loc.filter.through))
+				if (!StructKeyExists(variables, local.filter.through))
 				{
-					$throw(type="Wheels.FilterNotFound", message="CFWheels tried to run the `#loc.filter.through#` function as a #arguments.type# filter but could not find it.", extendedInfo="Make sure there is a function named `#loc.filter.through#` in the `#variables.$class.name#.cfc` file.");
+					$throw(type="Wheels.FilterNotFound", message="CFWheels tried to run the `#local.filter.through#` function as a #arguments.type# filter but could not find it.", extendedInfo="Make sure there is a function named `#local.filter.through#` in the `#variables.$class.name#.cfc` file.");
 				}
-				loc.result = $invoke(method=loc.filter.through, invokeArgs=loc.filter.arguments);
-				if ((StructKeyExists(loc, "result") && !loc.result) || $performedRenderOrRedirect())
+				local.result = $invoke(method=local.filter.through, invokeArgs=local.filter.arguments);
+				if ((StructKeyExists(local, "result") && !local.result) || $performedRenderOrRedirect())
 				{
 					// the filter function returned false or rendered content so we skip the remaining filters
 					break;

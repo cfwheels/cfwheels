@@ -1,8 +1,7 @@
 <cfscript> 
 	public void function onMissingTemplate(required targetpage) { 
-		var loc = {};
-		loc.lockName = "reloadLock" & application.applicationName;
-		$simpleLock(name=loc.lockName, execute="$runOnMissingTemplate", executeArgs=arguments, type="readOnly", timeout=180);
+		local.lockName = "reloadLock" & application.applicationName;
+		$simpleLock(name=local.lockName, execute="$runOnMissingTemplate", executeArgs=arguments, type="readOnly", timeout=180);
 	} 
 
 	public void function $runOnMissingTemplate(required targetpage) {

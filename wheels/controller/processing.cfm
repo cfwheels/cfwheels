@@ -3,22 +3,21 @@
 	* PUBLIC FUNCTIONS
 	*/  
 	public boolean function processAction() {
-		var loc = {};
 
 		// check if action should be cached and if so cache statically or set the time to use later when caching just the action
-		loc.cache = 0;
+		local.cache = 0;
 		if (get("cacheActions") && $hasCachableActions() && flashIsEmpty() && StructIsEmpty(form))
 		{
-			loc.cachableActions = $cachableActions();
-			loc.iEnd = ArrayLen(loc.cachableActions);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			local.cachableActions = $cachableActions();
+			local.iEnd = ArrayLen(local.cachableActions);
+			for (local.i=1; local.i <= local.iEnd; local.i++)
 			{
-				if (loc.cachableActions[loc.i].action == params.action || loc.cachableActions[loc.i].action == "*")
+				if (local.cachableActions[local.i].action == params.action || local.cachableActions[local.i].action == "*")
 				{
-					if (loc.cachableActions[loc.i].static)
+					if (local.cachableActions[local.i].static)
 					{
-						loc.timeSpan = $timeSpanForCache(loc.cachableActions[loc.i].time);
-						$cache(action="serverCache", timeSpan=loc.timeSpan, useQueryString=true);
+						local.timeSpan = $timeSpanForCache(local.cachableActions[local.i].time);
+						$cache(action="serverCache", timeSpan=local.timeSpan, useQueryString=true);
 						if (!$reCacheRequired())
 						{
 							$abort();
@@ -26,8 +25,8 @@
 					}
 					else
 					{
-						loc.cache = loc.cachableActions[loc.i].time;
-						loc.appendToKey = loc.cachableActions[loc.i].appendToKey;
+						local.cache = local.cachableActions[local.i].time;
+						local.appendToKey = local.cachableActions[local.i].appendToKey;
 					}
 					break;
 				}
@@ -56,39 +55,39 @@
 			// only proceed to call the action if the before filter has not already rendered content
 			if (!$performedRenderOrRedirect())
 			{
-				if (loc.cache)
+				if (local.cache)
 				{
 					// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, calling the controller action (which in turn sets the content to the request scope)
-					loc.category = "action";
+					local.category = "action";
 
 					// create the key for the cache
-					loc.key = $hashedKey(variables.$class.name, variables.params);
+					local.key = $hashedKey(variables.$class.name, variables.params);
 
 					// evaluate variables and append to the cache key when specified
-					if (Len(loc.appendToKey))
+					if (Len(local.appendToKey))
 					{
-						loc.iEnd = ListLen(loc.appendToKey);
-						for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+						local.iEnd = ListLen(local.appendToKey);
+						for (local.i=1; local.i <= local.iEnd; local.i++)
 						{
-							loc.item = ListGetAt(loc.appendToKey, loc.i);
-							if (IsDefined(loc.item))
+							local.item = ListGetAt(local.appendToKey, local.i);
+							if (IsDefined(local.item))
 							{
-								loc.key &= Evaluate(loc.item);
+								local.key &= Evaluate(local.item);
 							}
 						}
 					}
 
-					loc.conditionArgs = {};
-					loc.conditionArgs.key = loc.key;
-					loc.conditionArgs.category = loc.category;
-					loc.executeArgs = {};
-					loc.executeArgs.controller = params.controller;
-					loc.executeArgs.action = params.action;
-					loc.executeArgs.key = loc.key;
-					loc.executeArgs.time = loc.cache;
-					loc.executeArgs.category = loc.category;
-					loc.lockName = loc.category & loc.key & application.applicationName;
-					variables.$instance.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+					local.conditionArgs = {};
+					local.conditionArgs.key = local.key;
+					local.conditionArgs.category = local.category;
+					local.executeArgs = {};
+					local.executeArgs.controller = params.controller;
+					local.executeArgs.action = params.action;
+					local.executeArgs.key = local.key;
+					local.executeArgs.time = local.cache;
+					local.executeArgs.category = local.category;
+					local.lockName = local.category & local.key & application.applicationName;
+					variables.$instance.response = $doubleCheckedLock(name=local.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=local.conditionArgs, executeArgs=local.executeArgs);
 				}
 				if (!$performedRender())
 				{
@@ -111,15 +110,14 @@
 				$debugPoint("afterFilters");
 			}
 		}
-		loc.rv = true;
-		return loc.rv;
+		local.rv = true;
+		return local.rv;
 	}
 
 	/**
 	* PRIVATE FUNCTIONS
 	*/   
 	public void function $callAction(required string action) {
-		var loc = {};
 		if (Left(arguments.action, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action))
 		{
 			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.action#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in CFWheels functions.");
@@ -130,10 +128,10 @@
 		}
 		else if (StructKeyExists(this, "onMissingMethod"))
 		{
-			loc.invokeArgs = {};
-			loc.invokeArgs.missingMethodName = arguments.action;
-			loc.invokeArgs.missingMethodArguments = {};
-			$invoke(method="onMissingMethod", invokeArgs=loc.invokeArgs);
+			local.invokeArgs = {};
+			local.invokeArgs.missingMethodName = arguments.action;
+			local.invokeArgs.missingMethodArguments = {};
+			$invoke(method="onMissingMethod", invokeArgs=local.invokeArgs);
 		}
 		if (!$performedRenderOrRedirect())
 		{
@@ -143,8 +141,8 @@
 			}
 			catch (any e)
 			{
-				loc.file = get("viewPath") & "/" & LCase(variables.$class.name) & "/" & LCase(arguments.action) & ".cfm";
-				if (FileExists(ExpandPath(loc.file)))
+				local.file = get("viewPath") & "/" & LCase(variables.$class.name) & "/" & LCase(arguments.action) & ".cfm";
+				if (FileExists(ExpandPath(local.file)))
 				{
 					$throw(object=e);
 				}
@@ -157,8 +155,8 @@
 					else
 					{
 						$header(statusCode=404, statustext="Not Found");
-						loc.template = get("eventPath") & "/onmissingtemplate.cfm";
-						$includeAndOutput(template=loc.template);
+						local.template = get("eventPath") & "/onmissingtemplate.cfm";
+						$includeAndOutput(template=local.template);
 						$abort();
 					}
 				}
@@ -172,10 +170,9 @@
 		required string key,
 		required string category
 	) {
-		var loc = {};
 		$callAction(action=arguments.action);
 		$addToCache(key=arguments.key, value=variables.$instance.response, time=arguments.time, category=arguments.category);
-		loc.rv = response();
-		return loc.rv;
+		local.rv = response();
+		return local.rv;
 	}
 </cfscript>  

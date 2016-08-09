@@ -1,8 +1,7 @@
 <cfscript>
 	public void function onSessionEnd(required sessionScope, required applicationScope){
-		var loc = {};
-		loc.lockName = "reloadLock" & arguments.applicationScope.applicationName;
-		$simpleLock(name=loc.lockName, execute="$runOnSessionEnd", executeArgs=arguments, type="readOnly", timeout=180);
+		local.lockName = "reloadLock" & arguments.applicationScope.applicationName;
+		$simpleLock(name=local.lockName, execute="$runOnSessionEnd", executeArgs=arguments, type="readOnly", timeout=180);
 	}
 
 	public void function $runOnSessionEnd(required sessionScope, required applicationScope){
