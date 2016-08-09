@@ -5,19 +5,18 @@
 	*/
 
 	public any function flash(string key) {
-		var loc = {};
-		loc.flash = $readFlash();
+		local.flash = $readFlash();
 		if (StructKeyExists(arguments, "key")) {
 			if (flashKeyExists(key=arguments.key)) {
-				loc.flash = loc.flash[arguments.key];
+				local.flash = local.flash[arguments.key];
 			} else {
-				loc.flash = "";
+				local.flash = "";
 			}
 		}
 		// we can just return the flash since it is created at the beginning of the request
 		// this way we always return what is expected - a struct
-		loc.rv = loc.flash;
-		return loc.rv;
+		local.rv = local.flash;
+		return local.rv;
 	}
 
 	public void function flashClear() {
@@ -25,37 +24,33 @@
 	}
 
 	public numeric function flashCount() {
-		var loc = {};
-		loc.flash = $readFlash();
-		loc.rv = StructCount(loc.flash);
-		return loc.rv;
+		local.flash = $readFlash();
+		local.rv = StructCount(local.flash);
+		return local.rv;
 	}
 
 	public any function flashDelete(required string key) {
-		var loc = {};
-		loc.flash = $readFlash();
-		loc.rv = StructDelete(loc.flash, arguments.key, true);
-		$writeFlash(loc.flash);
-		return loc.rv;
+		local.flash = $readFlash();
+		local.rv = StructDelete(local.flash, arguments.key, true);
+		$writeFlash(local.flash);
+		return local.rv;
 	}
 
 	public void function flashInsert() {
-		var loc = {};
-		loc.flash = $readFlash();
-		for (loc.key in arguments) {
-			StructInsert(loc.flash, loc.key, arguments[loc.key], true);
+		local.flash = $readFlash();
+		for (local.key in arguments) {
+			StructInsert(local.flash, local.key, arguments[local.key], true);
 		}
-		$writeFlash(loc.flash);
+		$writeFlash(local.flash);
 	}
 
 	public boolean function flashIsEmpty() {
-		var loc = {};
 		if (flashCount()) {
-			loc.rv = false;
+			local.rv = false;
 		} else {
-			loc.rv = true;
+			local.rv = true;
 		}
-		return loc.rv;
+		return local.rv;
 	}
 
 
@@ -65,10 +60,9 @@
 	}
 
 	public boolean function flashKeyExists(required string key) {
-		var loc = {};
-		loc.flash = $readFlash();
-		loc.rv = StructKeyExists(loc.flash, arguments.key);
-		return loc.rv;
+		local.flash = $readFlash();
+		local.rv = StructKeyExists(local.flash, arguments.key);
+		return local.rv;
 	}
 
 	/**
@@ -76,24 +70,22 @@
 	*/
 
 	public struct function $readFlash() {
-		var loc = {};
-		loc.rv = {};
+		local.rv = {};
 		if (!StructKeyExists(arguments, "$locked")) {
-			loc.lockName = "flashLock" & application.applicationName;
-			loc.rv = $simpleLock(name=loc.lockName, type="readonly", execute="$readFlash", executeArgs=arguments);
+			local.lockName = "flashLock" & application.applicationName;
+			local.rv = $simpleLock(name=local.lockName, type="readonly", execute="$readFlash", executeArgs=arguments);
 		} else if ($getFlashStorage() == "cookie" && StructKeyExists(cookie, "flash")) {
-			loc.rv = DeSerializeJSON(cookie.flash);
+			local.rv = DeSerializeJSON(cookie.flash);
 		} else if ($getFlashStorage() == "session" && StructKeyExists(session, "flash")) {
-			loc.rv = Duplicate(session.flash);
+			local.rv = Duplicate(session.flash);
 		}
-		return loc.rv;
+		return local.rv;
 	}
 
 	public any function $writeFlash(struct flash={}) {
-		var loc = {};
 		if (!StructKeyExists(arguments, "$locked")) {
-			loc.lockName = "flashLock" & application.applicationName;
-			loc.rv = $simpleLock(name=loc.lockName, type="exclusive", execute="$writeFlash", executeArgs=arguments);
+			local.lockName = "flashLock" & application.applicationName;
+			local.rv = $simpleLock(name=local.lockName, type="exclusive", execute="$writeFlash", executeArgs=arguments);
 		} else {
 			if ($getFlashStorage() == "cookie") {
 				cookie.flash = SerializeJSON(arguments.flash);
@@ -101,33 +93,32 @@
 				session.flash = arguments.flash;
 			}
 		}
-		if (StructKeyExists(loc, "rv")) {
-			return loc.rv;
+		if (StructKeyExists(local, "rv")) {
+			return local.rv;
 		}
 	}
 
 	public void function $flashClear() {
-		var loc = {};
 		// only save the old flash if they want to keep anything
 		if (StructKeyExists(request.wheels, "flashKeep")) {
-			loc.flash = $readFlash();
+			local.flash = $readFlash();
 		}
 
 		// clear the current flash
 		flashClear();
 
 		// see if they wanted to keep anything
-		if (StructKeyExists(loc, "flash")) {
+		if (StructKeyExists(local, "flash")) {
 			// delete any keys they don't want to keep
 			if (Len(request.wheels.flashKeep)) {
-				for (loc.key in loc.flash) {
-					if (!ListFindNoCase(request.wheels.flashKeep, loc.key)) {
-						StructDelete(loc.flash, loc.key);
+				for (local.key in local.flash) {
+					if (!ListFindNoCase(request.wheels.flashKeep, local.key)) {
+						StructDelete(local.flash, local.key);
 					}
 				}
 			}
 			// write to the flash
-			$writeFlash(loc.flash);
+			$writeFlash(local.flash);
 		}
 	}
 
@@ -136,8 +127,7 @@
 	}
 
 	public string function $getFlashStorage() {
-		var loc = {};
-		loc.rv = variables.$class.flashStorage;
-		return loc.rv;
+		local.rv = variables.$class.flashStorage;
+		return local.rv;
 	}
 </cfscript>

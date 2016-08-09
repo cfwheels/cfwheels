@@ -32,57 +32,55 @@
 	*/
 	
 	public any function $useLayout(required string $action) {
-		var loc = {};
-		loc.rv = true;
-		loc.layoutType = "template";
+		local.rv = true;
+		local.layoutType = "template";
 		if (isAjax() && StructKeyExists(variables.$class.layout, "ajax") && Len(variables.$class.layout.ajax))
 		{
-			loc.layoutType = "ajax";
+			local.layoutType = "ajax";
 		}
 		if (!StructIsEmpty(variables.$class.layout))
 		{
-			loc.rv = variables.$class.layout.useDefault;
-			if ((StructKeyExists(this, variables.$class.layout[loc.layoutType]) && IsCustomFunction(this[variables.$class.layout[loc.layoutType]])) || IsCustomFunction(variables.$class.layout[loc.layoutType]))
+			local.rv = variables.$class.layout.useDefault;
+			if ((StructKeyExists(this, variables.$class.layout[local.layoutType]) && IsCustomFunction(this[variables.$class.layout[local.layoutType]])) || IsCustomFunction(variables.$class.layout[local.layoutType]))
 			{
 				// if the developer doesn't return anything from the function or if they return a blank string it should use the default layout still
-				loc.invokeArgs = {};
-				loc.invokeArgs.action = arguments.$action;
-				loc.result = $invoke(method=variables.$class.layout[loc.layoutType], invokeArgs=loc.invokeArgs);
-				if (StructKeyExists(loc, "result"))
+				local.invokeArgs = {};
+				local.invokeArgs.action = arguments.$action;
+				local.result = $invoke(method=variables.$class.layout[local.layoutType], invokeArgs=local.invokeArgs);
+				if (StructKeyExists(local, "result"))
 				{
-					loc.rv = loc.result;
+					local.rv = local.result;
 				}
 			}
 			else if ((!StructKeyExists(variables.$class.layout, "except") || !ListFindNoCase(variables.$class.layout.except, arguments.$action)) && (!StructKeyExists(variables.$class.layout, "only") || ListFindNoCase(variables.$class.layout.only, arguments.$action)))
 			{
-				loc.rv = variables.$class.layout[loc.layoutType];
+				local.rv = variables.$class.layout[local.layoutType];
 			}
 		}
-		return loc.rv;
+		return local.rv;
 	}
 
 	public string function $renderLayout(required string $content, required $layout) {
-		var loc = {};
 		if ((IsBoolean(arguments.$layout) && arguments.$layout) || (!IsBoolean(arguments.$layout) && Len(arguments.$layout)))
 		{
 			// store the content in a variable in the request scope so it can be accessed by the includeContent function that the developer uses in layout files
 			// this is done so we avoid passing data to/from it since it would complicate things for the developer
 			contentFor(body=arguments.$content, overwrite=true);
-			loc.viewPath = get("viewPath");
-			loc.include = loc.viewPath;
+			local.viewPath = get("viewPath");
+			local.include = local.viewPath;
 			if (IsBoolean(arguments.$layout))
 			{
-				loc.layoutFileExists = false;
+				local.layoutFileExists = false;
 				if (!ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) && !ListFindNoCase(application.wheels.nonExistingLayoutFiles, variables.params.controller))
 				{
-					loc.file = loc.viewPath & "/" & LCase(variables.params.controller) & "/layout.cfm";
-					if (FileExists(ExpandPath(loc.file)))
+					local.file = local.viewPath & "/" & LCase(variables.params.controller) & "/layout.cfm";
+					if (FileExists(ExpandPath(local.file)))
 					{
-						loc.layoutFileExists = true;
+						local.layoutFileExists = true;
 					}
 					if (get("cacheFileChecking"))
 					{
-						if (loc.layoutFileExists)
+						if (local.layoutFileExists)
 						{
 							application.wheels.existingLayoutFiles = ListAppend(application.wheels.existingLayoutFiles, variables.params.controller);
 						}
@@ -92,27 +90,27 @@
 						}
 					}
 				}
-				if (ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) || loc.layoutFileExists)
+				if (ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) || local.layoutFileExists)
 				{
-					loc.include &= "/" & variables.params.controller & "/" & "layout.cfm";
+					local.include &= "/" & variables.params.controller & "/" & "layout.cfm";
 				}
 				else
 				{
-					loc.include &= "/" & "layout.cfm";
+					local.include &= "/" & "layout.cfm";
 				}
-				loc.rv = $includeAndReturnOutput($template=loc.include);
+				local.rv = $includeAndReturnOutput($template=local.include);
 			}
 			else
 			{
 				arguments.$name = arguments.$layout;
 				arguments.$template = $generateIncludeTemplatePath(argumentCollection=arguments);
-				loc.rv = $includeFile(argumentCollection=arguments);
+				local.rv = $includeFile(argumentCollection=arguments);
 			}
 		}
 		else
 		{
-			loc.rv = arguments.$content;
+			local.rv = arguments.$content;
 		}
-		return loc.rv;
+		return local.rv;
 	}
 </cfscript>

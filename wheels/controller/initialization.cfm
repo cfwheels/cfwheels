@@ -3,17 +3,15 @@
 	* PRIVATE FUNCTIONS
 	*/   
 
-	public any function $createControllerObject(required struct params) {
-		var loc = {}; 
+	public any function $createControllerObject(required struct params) { 
 		// if the controller file exists we instantiate it, otherwise we instantiate the parent controller
 		// this is done so that an action's view page can be rendered without having an actual controller file for it
-		loc.controllerName = $objectFileName(name=variables.$class.name, objectPath=variables.$class.path, type="controller");
-		loc.rv = $createObjectFromRoot(path=variables.$class.path, fileName=loc.controllerName, method="$initControllerObject", name=variables.$class.name, params=arguments.params);
-		return loc.rv;
+		local.controllerName = $objectFileName(name=variables.$class.name, objectPath=variables.$class.path, type="controller");
+		local.rv = $createObjectFromRoot(path=variables.$class.path, fileName=local.controllerName, method="$initControllerObject", name=variables.$class.name, params=arguments.params);
+		return local.rv;
 	}
 
 	public any function $initControllerClass(string name="") {
-		var loc = {};
 			variables.$class.name = arguments.name;
 			variables.$class.path = arguments.path;
 
@@ -41,8 +39,8 @@
 			{
 				init();
 			}
-			loc.rv = this;
-		return loc.rv;
+			local.rv = this;
+		return local.rv;
 	} 
 
 	public void function $setControllerClassData() {
@@ -50,24 +48,23 @@
 	}
  
 	public any function $initControllerObject(required string name, required struct params) {
-		var loc = {};
 
 		// create a struct for storing request specific data
 		variables.$instance = {};
 		variables.$instance.contentFor = {};
 
 		// include controller specific helper files if they exist, cache the file check for performance reasons
-		loc.template = get("viewPath") & "/" & LCase(arguments.name) & "/helpers.cfm";
-		loc.helperFileExists = false;
+		local.template = get("viewPath") & "/" & LCase(arguments.name) & "/helpers.cfm";
+		local.helperFileExists = false;
 		if (!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.name))
 		{
-			if (FileExists(ExpandPath(loc.template)))
+			if (FileExists(ExpandPath(local.template)))
 			{
-				loc.helperFileExists = true;
+				local.helperFileExists = true;
 			}
 			if (get("cacheFileChecking"))
 			{
-				if (loc.helperFileExists)
+				if (local.helperFileExists)
 				{
 					application.wheels.existingHelperFiles = ListAppend(application.wheels.existingHelperFiles, arguments.name);
 				}
@@ -77,23 +74,22 @@
 				}
 			}
 		}
-		if (Len(arguments.name) && (ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) || loc.helperFileExists))
+		if (Len(arguments.name) && (ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) || local.helperFileExists))
 		{
-			$include(template=loc.template);
+			$include(template=local.template);
 		}
 
-		loc.executeArgs = {};
-		loc.executeArgs.name = arguments.name;
-		loc.lockName = "controllerLock" & application.applicationName;
-		$simpleLock(name=loc.lockName, type="readonly", execute="$setControllerClassData", executeArgs=loc.executeArgs);
+		local.executeArgs = {};
+		local.executeArgs.name = arguments.name;
+		local.lockName = "controllerLock" & application.applicationName;
+		$simpleLock(name=local.lockName, type="readonly", execute="$setControllerClassData", executeArgs=local.executeArgs);
 		variables.params = arguments.params;
-		loc.rv = this;
-		return loc.rv;
+		local.rv = this;
+		return local.rv;
 	}
  
 	public struct function $getControllerClassData() {
-		var loc = {};
-		loc.rv = variables.$class;
-		return loc.rv;
+		local.rv = variables.$class;
+		return local.rv;
 	} 
 </cfscript>
