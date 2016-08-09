@@ -1182,11 +1182,6 @@ public string function $buildReleaseZip(
 		"README.md",
 		"rewrite.cfm",
 		"root.cfm",
-		"server-cf10.json",
-		"server-cf11.json",
-		"server-cf2016.json",
-		"server-lucee4.json",
-		"server-lucee5.json",
 		"urlrewrite.xml",
 		"web.config"
 	];
