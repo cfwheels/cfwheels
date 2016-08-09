@@ -5,9 +5,9 @@
 
 	public string function hasManyRadioButton(
 		required string objectName,
-		requiredstring association,
+		required string association,
 		required string property,
-		requiredstring keys,
+		required string keys,
 		required string tagValue,
 		boolean checkIfBlank=false,
 		string label
@@ -106,10 +106,10 @@
 	*/
 
 	public string function $hasManyFormValue(
-		required objectName string,
-		required association string,
-		required property string,
-		required keys string
+		required string objectName,
+		required string association,
+		required string property,
+		required string keys
 	) {
 		var loc = {};
 		loc.rv = "";

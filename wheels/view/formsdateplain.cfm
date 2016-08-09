@@ -196,7 +196,7 @@
 			arguments.selected = $dateForSelectTags("day", arguments.selected, arguments.$now);
 		}
 		arguments.order = "day";
-		return dateSelectTags(argumentCollection=arguments)
+		return dateSelectTags(argumentCollection=arguments);
 	}
 
 	public string function hourSelectTag(

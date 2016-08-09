@@ -29,7 +29,7 @@
 		string protocol,
 		numeric port,
 		string prepend,
-		string append,
+		string append
 	) {
 		var loc = {};
 		$args(name="startFormTag", args=arguments);
