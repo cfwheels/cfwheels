@@ -4,14 +4,13 @@
 	*/
 
 	public string function endFormTag(string prepend, string append) {
-		var loc = {};
 		$args(name="endFormTag", args=arguments);
 		if (StructKeyExists(request.wheels, "currentFormMethod"))
 		{
 			StructDelete(request.wheels, "currentFormMethod");
 		}
-		loc.rv = arguments.prepend & "</form>" & arguments.append;
-		return loc.rv;
+		local.rv = arguments.prepend & "</form>" & arguments.append;
+		return local.rv;
 	}
 
 	public string function startFormTag(
@@ -31,7 +30,6 @@
 		string prepend,
 		string append
 	) {
-		var loc = {};
 		$args(name="startFormTag", args=arguments);
 
 		// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
@@ -49,8 +47,8 @@
 		// deletes the action attribute and instead adds some tricky javascript spam protection to the onsubmit attribute
 		if (arguments.spamProtection)
 		{
-			loc.onsubmit = "this.action='#Left(arguments.action, int((Len(arguments.action)/2)))#'+'#Right(arguments.action, ceiling((Len(arguments.action)/2)))#';";
-			arguments.onsubmit = $addToJavaScriptAttribute(name="onsubmit", content=loc.onsubmit, attributes=arguments);
+			local.onsubmit = "this.action='#Left(arguments.action, int((Len(arguments.action)/2)))#'+'#Right(arguments.action, ceiling((Len(arguments.action)/2)))#';";
+			arguments.onsubmit = $addToJavaScriptAttribute(name="onsubmit", content=local.onsubmit, attributes=arguments);
 			StructDelete(arguments, "action");
 		}
 
@@ -60,22 +58,22 @@
 			arguments.enctype = "multipart/form-data";
 		}
 
-		loc.skip = "multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port,prepend,append";
+		local.skip = "multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port,prepend,append";
 
 		// variables passed in as route arguments should not be added to the html element
 		if (Len(arguments.route))
 		{
-			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments));
+			local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
 		}
 
 		// need to re-add action here even if it was removed due to being a route variable above
-		if (ListFind(loc.skip, "action"))
+		if (ListFind(local.skip, "action"))
 		{
-			loc.skip = ListDeleteAt(loc.skip, ListFind(loc.skip, "action"));
+			local.skip = ListDeleteAt(local.skip, ListFind(local.skip, "action"));
 		}
 
-		loc.rv = arguments.prepend & $tag(name="form", skip=loc.skip, attributes=arguments) & arguments.append;
-		return loc.rv;
+		local.rv = arguments.prepend & $tag(name="form", skip=local.skip, attributes=arguments) & arguments.append;
+		return local.rv;
 	}
 
 	public string function submitTag(
@@ -85,19 +83,18 @@
 		string prepend,
 		string append
 	) {
-		var loc = {};
 		$args(name="submitTag", reserved="type,src", args=arguments);
-		loc.rv = arguments.prepend;
-		loc.append = arguments.append;
+		local.rv = arguments.prepend;
+		local.append = arguments.append;
 		if (Len(arguments.disable))
 		{
-			loc.onclick = "this.disabled=true;";
+			local.onclick = "this.disabled=true;";
 			if (!Len(arguments.image) && !IsBoolean(arguments.disable))
 			{
-				loc.onclick &= "this.value='#JSStringFormat(arguments.disable)#';";
+				local.onclick &= "this.value='#JSStringFormat(arguments.disable)#';";
 			}
-			loc.onclick &= "this.form.submit();";
-			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
+			local.onclick &= "this.form.submit();";
+			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=local.onclick, attributes=arguments);
 		}
 		if (Len(arguments.image))
 		{
@@ -109,16 +106,16 @@
 			StructDelete(arguments, "disable");
 			StructDelete(arguments, "append");
 			StructDelete(arguments, "prepend");
-			loc.rv &= imageTag(argumentCollection=arguments);
-			loc.rv = Replace(loc.rv, "<img", "<input");
+			local.rv &= imageTag(argumentCollection=arguments);
+			local.rv = Replace(local.rv, "<img", "<input");
 		}
 		else
 		{
 			arguments.type = "submit";
-			loc.rv &= $tag(name="input", close=true, skip="image,disable,append,prepend", attributes=arguments);
+			local.rv &= $tag(name="input", close=true, skip="image,disable,append,prepend", attributes=arguments);
 		}
-		loc.rv &= loc.append;
-		return loc.rv;
+		local.rv &= local.append;
+		return local.rv;
 	}
 
 	public string function buttonTag(
@@ -130,34 +127,33 @@
 		string prepend,
 		string append
 	) {
-		var loc = {};
 		$args(name="buttonTag", args=arguments);
 
 		// add onclick attribute to disable the form button
 		if (Len(arguments.disable))
 		{
-			loc.onclick = "this.disabled=true;";
+			local.onclick = "this.disabled=true;";
 			if (!Len(arguments.image) && !IsBoolean(arguments.disable))
 			{
-				loc.onclick &= "this.value='#JSStringFormat(arguments.disable)#';";
+				local.onclick &= "this.value='#JSStringFormat(arguments.disable)#';";
 			}
-			loc.onclick &= "this.form.submit();";
-			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
+			local.onclick &= "this.form.submit();";
+			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=local.onclick, attributes=arguments);
 		}
 
 		// if image is specified then use that as the content
 		if (Len(arguments.image))
 		{
-			loc.args = {};
-			loc.args.type = "image";
-			loc.args.source = arguments.image;
-			arguments.content = imageTag(argumentCollection=loc.args);
+			local.args = {};
+			local.args.type = "image";
+			local.args.source = arguments.image;
+			arguments.content = imageTag(argumentCollection=local.args);
 		}
 
 		// save necessary info from arguments and delete afterwards
-		loc.content = arguments.content;
-		loc.prepend = arguments.prepend;
-		loc.append = arguments.append;
+		local.content = arguments.content;
+		local.prepend = arguments.prepend;
+		local.append = arguments.append;
 		StructDelete(arguments, "content");
 		StructDelete(arguments, "image");
 		StructDelete(arguments, "disable");
@@ -165,8 +161,8 @@
 		StructDelete(arguments, "append");
 
 		// create the button
-		loc.rv = loc.prepend & $element(name="button", content=loc.content, attributes=arguments) & loc.append;
-		return loc.rv;
+		local.rv = local.prepend & $element(name="button", content=local.content, attributes=arguments) & local.append;
+		return local.rv;
 	}
 
 	/**
@@ -178,73 +174,70 @@
 		required string property,
 		boolean applyHtmlEditFormat=true
 	) {
-		var loc = {};
 		if (IsStruct(arguments.objectName))
 		{
-			loc.rv = arguments.objectName[arguments.property];
+			local.rv = arguments.objectName[arguments.property];
 		}
 		else
 		{
-			loc.object = $getObject(arguments.objectName);
-			if (get("showErrorInformation") && !IsObject(loc.object))
+			local.object = $getObject(arguments.objectName);
+			if (get("showErrorInformation") && !IsObject(local.object))
 			{
 				$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 			}
-			if (StructKeyExists(loc.object, arguments.property))
+			if (StructKeyExists(local.object, arguments.property))
 			{
-				loc.rv = loc.object[arguments.property];
+				local.rv = local.object[arguments.property];
 			}
 			else
 			{
-				loc.rv = "";
+				local.rv = "";
 			}
 		}
 		if (arguments.applyHtmlEditFormat)
 		{
-			loc.rv = HTMLEditFormat(loc.rv);
+			local.rv = HTMLEditFormat(local.rv);
 		}
-		return loc.rv;
+		return local.rv;
 	}
 
 	public any function $maxLength(required any objectName, required string property) {
-		var loc = {};
 		if (StructKeyExists(arguments, "maxlength"))
 		{
-			loc.rv = arguments.maxlength;
+			local.rv = arguments.maxlength;
 		}
 		else if (!IsStruct(arguments.objectName))
 		{
-			loc.object = $getObject(arguments.objectName);
-			if (IsObject(loc.object))
+			local.object = $getObject(arguments.objectName);
+			if (IsObject(local.object))
 			{
-				loc.propertyInfo = loc.object.$propertyInfo(arguments.property);
-				if (StructCount(loc.propertyInfo) && ListFindNoCase("cf_sql_char,cf_sql_varchar", loc.propertyInfo.type))
+				local.propertyInfo = local.object.$propertyInfo(arguments.property);
+				if (StructCount(local.propertyInfo) && ListFindNoCase("cf_sql_char,cf_sql_varchar", local.propertyInfo.type))
 				{
-					loc.rv = loc.propertyInfo.size;
+					local.rv = local.propertyInfo.size;
 				}
 			}
 		}
-		if (StructKeyExists(loc, "rv")) {
-			return loc.rv;
+		if (StructKeyExists(local, "rv")) {
+			return local.rv;
 		}
 	}
 
 	public boolean function $formHasError(required any objectName, required string property) {
-		var loc = {};
-		loc.rv = false;
+		local.rv = false;
 		if (!IsStruct(arguments.objectName))
 		{
-			loc.object = $getObject(arguments.objectName);
-			if (get("showErrorInformation") && !IsObject(loc.object))
+			local.object = $getObject(arguments.objectName);
+			if (get("showErrorInformation") && !IsObject(local.object))
 			{
 				$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 			}
-			if (ArrayLen(loc.object.errorsOn(arguments.property)))
+			if (ArrayLen(local.object.errorsOn(arguments.property)))
 			{
-				loc.rv = true;
+				local.rv = true;
 			}
 		}
-		return loc.rv;
+		return local.rv;
 	}
 
 	public string function $createLabel(
@@ -253,24 +246,23 @@
 		required string label,
 		required string prependToLabel
 	) {
-		var loc = {};
-		loc.rv = arguments.prependToLabel;
-		loc.attributes = {};
-		for (loc.key in arguments)
+		local.rv = arguments.prependToLabel;
+		local.attributes = {};
+		for (local.key in arguments)
 		{
-			if (CompareNoCase(Left(loc.key, 5), "label") == 0 && Len(loc.key) > 5 && loc.key != "labelPlacement")
+			if (CompareNoCase(Left(local.key, 5), "label") == 0 && Len(local.key) > 5 && local.key != "labelPlacement")
 			{
-				loc.attributes[ReplaceNoCase(loc.key, "label", "")] = arguments[loc.key];
+				local.attributes[ReplaceNoCase(local.key, "label", "")] = arguments[local.key];
 			}
 		}
 		if (StructKeyExists(arguments, "id"))
 		{
-			loc.attributes.for = arguments.id;
+			local.attributes.for = arguments.id;
 		}
-		loc.rv &= $tag(name="label", attributes=loc.attributes);
-		loc.rv &= arguments.label;
-		loc.rv &= "</label>";
-		return loc.rv;
+		local.rv &= $tag(name="label", attributes=local.attributes);
+		local.rv &= arguments.label;
+		local.rv &= "</label>";
+		return local.rv;
 	}
 
 	public string function $formBeforeElement(
@@ -285,35 +277,34 @@
 		required string errorElement,
 		required string errorClass
 	) {
-		var loc = {};
-		loc.rv = "";
+		local.rv = "";
 		arguments.label = $getFieldLabel(argumentCollection=arguments);
 		if ($formHasError(argumentCollection=arguments) && Len(arguments.errorElement))
 		{
 			// the input has an error and should be wrapped in a tag so we need to start that wrapper tag
-			loc.rv &= $tag(name=arguments.errorElement, class=arguments.errorClass);
+			local.rv &= $tag(name=arguments.errorElement, class=arguments.errorClass);
 		}
 		if (Len(arguments.label) && arguments.labelPlacement != "after")
 		{
-			loc.rv &= $createLabel(argumentCollection=arguments);
+			local.rv &= $createLabel(argumentCollection=arguments);
 			if (arguments.labelPlacement == "aroundRight")
 			{
 				// strip out both the label text and closing label tag since it will be placed after the form input
-				loc.rv = Replace(loc.rv, arguments.label & "</label>", "");
+				local.rv = Replace(local.rv, arguments.label & "</label>", "");
 			}
 			else if (arguments.labelPlacement == "before")
 			{
 				// since the entire label is created we can append to it
-				loc.rv &= arguments.appendToLabel;
+				local.rv &= arguments.appendToLabel;
 			}
 			else
 			{
 				// the label argument is either "around" or "aroundLeft" so we only have to strip out the closing label tag
-				loc.rv = Replace(loc.rv, "</label>", "");
+				local.rv = Replace(local.rv, "</label>", "");
 			}
 		}
-		loc.rv &= arguments.prepend;
-		return loc.rv;
+		local.rv &= arguments.prepend;
+		return local.rv;
 	}
 
 	public string function $formAfterElement(
@@ -327,34 +318,33 @@
 		required string appendToLabel,
 		required string errorElement
 	) {
-		var loc = {};
-		loc.rv = arguments.append;
+		local.rv = arguments.append;
 		arguments.label = $getFieldLabel(argumentCollection=arguments);
 		if (Len(arguments.label) && arguments.labelPlacement != "before")
 		{
 			if (arguments.labelPlacement == "after")
 			{
 				// if the label should be placed after the tag we return the entire label tag
-				loc.rv &= $createLabel(argumentCollection=arguments);
+				local.rv &= $createLabel(argumentCollection=arguments);
 			}
 			else if (arguments.labelPlacement == "aroundRight")
 			{
 				// if the text should be placed to the right of the form input we return both the text and the closing tag
-				loc.rv &= arguments.label & "</label>";
+				local.rv &= arguments.label & "</label>";
 			}
 			else
 			{
 				// the label argument is either "around" or "aroundLeft" so we only have to return the closing label tag
-				loc.rv &= "</label>";
+				local.rv &= "</label>";
 			}
-			loc.rv &= arguments.appendToLabel;
+			local.rv &= arguments.appendToLabel;
 		}
 		if ($formHasError(argumentCollection=arguments) && Len(arguments.errorElement))
 		{
 			// the input has an error and is wrapped in a tag so we need to close that wrapper tag
-			loc.rv &= "</" & arguments.errorElement & ">";
+			local.rv &= "</" & arguments.errorElement & ">";
 		}
-		return loc.rv;
+		return local.rv;
 	}
 
 	public string function $getFieldLabel(
@@ -362,27 +352,26 @@
 		required string property,
 		required string label
 	) {
-		var loc = {};
-		loc.object = false;
+		local.object = false;
 		if (Compare("false", arguments.label) == 0)
 		{
-			loc.rv = "";
+			local.rv = "";
 		}
 		else
 		{
 			if (arguments.label == "useDefaultLabel" && !IsStruct(arguments.objectName))
 			{
-				loc.object = $getObject(arguments.objectName);
-				if (IsObject(loc.object))
+				local.object = $getObject(arguments.objectName);
+				if (IsObject(local.object))
 				{
-					loc.rv = loc.object.$label(arguments.property);
+					local.rv = local.object.$label(arguments.property);
 				}
 			}
 		}
-		if (!StructKeyExists(loc, "rv"))
+		if (!StructKeyExists(local, "rv"))
 		{
-			loc.rv = arguments.label;
+			local.rv = arguments.label;
 		}
-		return loc.rv;
+		return local.rv;
 	}
 </cfscript>

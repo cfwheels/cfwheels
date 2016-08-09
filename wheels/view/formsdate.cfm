@@ -93,10 +93,9 @@
 		boolean combine=true,
 		boolean twelveHour=false
 	) {
-		var loc = {};
-		loc.combine = arguments.combine;
+		local.combine = arguments.combine;
 		StructDelete(arguments, "combine");
-		loc.name = $tagName(arguments.objectName, arguments.property);
+		local.name = $tagName(arguments.objectName, arguments.property);
 		arguments.$id = $tagId(arguments.objectName, arguments.property);
 
 		// in order to support 12-hour format, we have to enforce some rules
@@ -111,47 +110,47 @@
 			}
 		}
 
-		loc.value = $formValue(argumentCollection=arguments);
-		loc.rv = "";
-		loc.firstDone = false;
-		loc.iEnd = ListLen(arguments.order);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.value = $formValue(argumentCollection=arguments);
+		local.rv = "";
+		local.firstDone = false;
+		local.iEnd = ListLen(arguments.order);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.item = ListGetAt(arguments.order, loc.i);
-			loc.marker = "($" & loc.item & ")";
-			if (!loc.combine)
+			local.item = ListGetAt(arguments.order, local.i);
+			local.marker = "($" & local.item & ")";
+			if (!local.combine)
 			{
-				loc.name = $tagName(arguments.objectName, "#arguments.property#-#loc.item#");
-				loc.marker = "";
+				local.name = $tagName(arguments.objectName, "#arguments.property#-#local.item#");
+				local.marker = "";
 			}
-			arguments.name = loc.name & loc.marker;
-			arguments.value = loc.value;
-			if (IsDate(loc.value))
+			arguments.name = local.name & local.marker;
+			arguments.value = local.value;
+			if (IsDate(local.value))
 			{
-				if (arguments.twelveHour && ListFind("hour,ampm", loc.item))
+				if (arguments.twelveHour && ListFind("hour,ampm", local.item))
 				{
-					if (loc.item == "hour")
+					if (local.item == "hour")
 					{
-						arguments.value = TimeFormat(loc.value, 'h');
+						arguments.value = TimeFormat(local.value, 'h');
 					}
-					else if (loc.item == "ampm")
+					else if (local.item == "ampm")
 					{
-						arguments.value = TimeFormat(loc.value, 'tt');
+						arguments.value = TimeFormat(local.value, 'tt');
 					}
 				}
 				else
 				{
-					arguments.value = Evaluate("#loc.item#(loc.value)");
+					arguments.value = Evaluate("#local.item#(local.value)");
 				}
 			}
-			if (loc.firstDone)
+			if (local.firstDone)
 			{
-				loc.rv &= arguments.separator;
+				local.rv &= arguments.separator;
 			}
-			loc.rv &= Evaluate("$#loc.item#SelectTag(argumentCollection=arguments)");
-			loc.firstDone = true;
+			local.rv &= Evaluate("$#local.item#SelectTag(argumentCollection=arguments)");
+			local.firstDone = true;
 		}
-		return loc.rv;
+		return local.rv;
 	}
 
 	public string function $yearMonthHourMinuteSecondSelectTag(
@@ -175,8 +174,7 @@
 		boolean twelveHour=false,
 		date $now=now()
 	) {
-		var loc = {};
-		loc.optionContent = "";
+		local.optionContent = "";
 
 		// only set the default value if the value is blank and includeBlank is false
 		if (!Len(arguments.value) && (IsBoolean(arguments.includeBlank) && !arguments.includeBlank))
@@ -210,54 +208,53 @@
 		{
 			arguments.id = arguments.$id & "-" & arguments.$type;
 		}
-		loc.before = $formBeforeElement(argumentCollection=arguments);
-		loc.after = $formAfterElement(argumentCollection=arguments);
-		loc.content = "";
+		local.before = $formBeforeElement(argumentCollection=arguments);
+		local.after = $formAfterElement(argumentCollection=arguments);
+		local.content = "";
 		if (!IsBoolean(arguments.includeBlank) || arguments.includeBlank)
 		{
-			loc.args = {};
-			loc.args.value = "";
+			local.args = {};
+			local.args.value = "";
 			if (!Len(arguments.value))
 			{
-				loc.args.selected = "selected";
+				local.args.selected = "selected";
 			}
 			if (!IsBoolean(arguments.includeBlank))
 			{
-				loc.optionContent = arguments.includeBlank;
+				local.optionContent = arguments.includeBlank;
 			}
-			loc.content &= $element(name="option", content=loc.optionContent, attributes=loc.args);
+			local.content &= $element(name="option", content=local.optionContent, attributes=local.args);
 		}
 		if (arguments.$loopFrom < arguments.$loopTo)
 		{
-			for (loc.i=arguments.$loopFrom; loc.i <= arguments.$loopTo; loc.i=loc.i+arguments.$step)
+			for (local.i=arguments.$loopFrom; local.i <= arguments.$loopTo; local.i=local.i+arguments.$step)
 			{
-				loc.args = Duplicate(arguments);
-				loc.args.counter = loc.i;
-				loc.args.optionContent = loc.optionContent;
-				loc.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=loc.args);
+				local.args = Duplicate(arguments);
+				local.args.counter = local.i;
+				local.args.optionContent = local.optionContent;
+				local.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=local.args);
 			}
 		}
 		else
 		{
-			for (loc.i=arguments.$loopFrom; loc.i >= arguments.$loopTo; loc.i=loc.i-arguments.$step)
+			for (local.i=arguments.$loopFrom; local.i >= arguments.$loopTo; local.i=local.i-arguments.$step)
 			{
-				loc.args = Duplicate(arguments);
-				loc.args.counter = loc.i;
-				loc.args.optionContent = loc.optionContent;
-				loc.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=loc.args);
+				local.args = Duplicate(arguments);
+				local.args.counter = local.i;
+				local.args.optionContent = local.optionContent;
+				local.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=local.args);
 			}
 		}
-		loc.rv = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
-		return loc.rv;
+		local.rv = local.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=local.content, attributes=arguments) & local.after;
+		return local.rv;
 	}
 
 	public string function $yearMonthHourMinuteSecondSelectTagContent() {
-		var loc = {};
-		loc.args = {};
-		loc.args.value = arguments.counter;
+		local.args = {};
+		local.args.value = arguments.counter;
 		if (arguments.value == arguments.counter)
 		{
-			loc.args.selected = "selected";
+			local.args.selected = "selected";
 		}
 		if (Len(arguments.$optionNames))
 		{
@@ -271,8 +268,8 @@
 		{
 			arguments.optionContent = NumberFormat(arguments.optionContent, "09");
 		}
-		loc.rv = $element(name="option", content=arguments.optionContent, attributes=loc.args);
-		return loc.rv;
+		local.rv = $element(name="option", content=arguments.optionContent, attributes=local.args);
+		return local.rv;
 	}
 
 	public string function $ampmSelectTag(
@@ -281,9 +278,8 @@
 		required string $id,
 		date $now=now()
 	) {
-		var loc = {};
-		loc.options = "AM,PM";
-		loc.optionContent = "";
+		local.options = "AM,PM";
+		local.optionContent = "";
 		if (!Len(arguments.value))
 		{
 			arguments.value = TimeFormat(arguments.$now, "tt");
@@ -292,20 +288,20 @@
 		{
 			arguments.id = arguments.$id & "-ampm";
 		}
-		loc.content = "";
-		loc.iEnd = ListLen(loc.options);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.content = "";
+		local.iEnd = ListLen(local.options);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.option = ListGetAt(loc.options, loc.i);
-			loc.args = {};
-			loc.args.value = loc.option;
-			if (arguments.value == loc.option)
+			local.option = ListGetAt(local.options, local.i);
+			local.args = {};
+			local.args.value = local.option;
+			if (arguments.value == local.option)
 			{
-				loc.args.selected = "selected";
+				local.args.selected = "selected";
 			}
-			loc.content &= $element(name="option", content=loc.option, attributes=loc.args);
+			local.content &= $element(name="option", content=local.option, attributes=local.args);
 		}
-		loc.rv = $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments);
-		return loc.rv;
+		local.rv = $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=local.content, attributes=arguments);
+		return local.rv;
 	}
 </cfscript>
