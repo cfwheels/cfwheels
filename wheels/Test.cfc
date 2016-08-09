@@ -424,27 +424,26 @@ component output=false {
    */
 
   public any function $results(string resultKey="test") {
-    var loc = {};
-		loc.rv = false;
+		local.rv = false;
     if (structkeyexists(request, resultkey)) {
 			request[resultkey].path = TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH;
 
-			loc.summaryLength = ArrayLen(request[resultkey].summary);
-      for (loc.i=1; loc.i <=loc.summaryLength; loc.i++) {
-				request[resultkey].summary[loc.i].cleanTestCase = $cleanTestCase(request[resultkey].summary[loc.i].testCase);
-				request[resultkey].summary[loc.i].packageName = $cleanTestPath(request[resultkey].summary[loc.i].testCase);
+			local.summaryLength = ArrayLen(request[resultkey].summary);
+      for (local.i=1; local.i <=local.summaryLength; local.i++) {
+				request[resultkey].summary[local.i].cleanTestCase = $cleanTestCase(request[resultkey].summary[local.i].testCase);
+				request[resultkey].summary[local.i].packageName = $cleanTestPath(request[resultkey].summary[local.i].testCase);
 			};
 
-      loc.resultsLength = ArrayLen(request[resultkey].results);
-			for (loc.i=1; loc.i <=loc.resultsLength; loc.i++) {
-				request[resultkey].results[loc.i].cleanTestCase = $cleanTestCase(request[resultkey].results[loc.i].testCase);
-				request[resultkey].results[loc.i].cleanTestName = $cleanTestName(request[resultkey].results[loc.i].testName);
-				request[resultkey].results[loc.i].packageName = $cleanTestPath(request[resultkey].results[loc.i].testCase);
+      local.resultsLength = ArrayLen(request[resultkey].results);
+			for (local.i=1; local.i <=local.resultsLength; local.i++) {
+				request[resultkey].results[local.i].cleanTestCase = $cleanTestCase(request[resultkey].results[local.i].testCase);
+				request[resultkey].results[local.i].cleanTestName = $cleanTestName(request[resultkey].results[local.i].testName);
+				request[resultkey].results[local.i].packageName = $cleanTestPath(request[resultkey].results[local.i].testCase);
 			};
 
-			loc.rv = request[resultkey];
+			local.rv = request[resultkey];
 		}
-		return loc.rv;
+		return local.rv;
   }
 
   /***********************
@@ -459,49 +458,48 @@ component output=false {
    * The function wheels uses to run tests
    */
   public any function $wheelsRunner(struct options={}) {
-  	var loc = {};
   	// the key in the request scope that will contain the test results
-  	loc.resultKey = "WheelsTests";
+  	local.resultKey = "WheelsTests";
 
     // save the original environment for overloading
-    loc.wheelsApplicationScope = Duplicate(application);
+    local.wheelsApplicationScope = Duplicate(application);
     // to enable unit testing controllers without actually performing the redirect
     set(functionName="redirectTo", delay=true);
 
   	// not only can we specify the package, but also the test we want to run
-  	loc.test = "";
+  	local.test = "";
   	if (StructKeyExists(arguments.options, "test") && Len(arguments.options.test)) {
-  		loc.test = arguments.options.test;
+  		local.test = arguments.options.test;
   	}
-  	loc.paths = $resolvePaths(arguments.options);
-  	loc.packages = $listTestPackages(arguments.options, loc.paths.test_filter);
+  	local.paths = $resolvePaths(arguments.options);
+  	local.packages = $listTestPackages(arguments.options, local.paths.test_filter);
 
     // run tests
-    loc.i = 0;
-    for (loc.row in loc.packages) {
-      loc.i++;
-  		loc.instance = CreateObject("component", loc.row.package);
+    local.i = 0;
+    for (local.row in local.packages) {
+      local.i++;
+  		local.instance = CreateObject("component", local.row.package);
       // is there a better way to check for existence of a function?
       // if the beforeall method is present, run it once only per request
-      if (StructKeyExists(loc.instance, "beforeAll") && loc.i eq 1) {
-        loc.instance.beforeAll();
+      if (StructKeyExists(local.instance, "beforeAll") && local.i eq 1) {
+        local.instance.beforeAll();
       }
-      if (StructKeyExists(loc.instance, "packageSetup")) {
-        loc.instance.packageSetup();
+      if (StructKeyExists(local.instance, "packageSetup")) {
+        local.instance.packageSetup();
       }
-      loc.instance.$runTest(loc.resultKey, loc.test);
-      if (StructKeyExists(loc.instance, "packageTeardown")) {
-        loc.instance.packageTeardown();
+      local.instance.$runTest(local.resultKey, local.test);
+      if (StructKeyExists(local.instance, "packageTeardown")) {
+        local.instance.packageTeardown();
       }
       // if the afterAll method is present, run it after the last package (once per request)
-      if (StructKeyExists(loc.instance, "afterAll") && loc.i eq loc.packages.recordCount) {
-        loc.instance.afterAll();
+      if (StructKeyExists(local.instance, "afterAll") && local.i eq local.packages.recordCount) {
+        local.instance.afterAll();
       }
   	};
     // swap back the enviroment
-  	StructAppend(application, loc.wheelsApplicationScope, true);
+  	StructAppend(application, local.wheelsApplicationScope, true);
   	// return the results
-  	return $results(loc.resultKey);
+  	return $results(local.resultKey);
   }
 
   /*
@@ -513,21 +511,20 @@ component output=false {
   	required string component,
   	string shouldExtend="Test"
   ) {
-  	var loc = {};
-    loc.name = ListLast(arguments.component, ".");
+    local.name = ListLast(arguments.component, ".");
 
   	if (Len(arguments.shouldExtend)) {
-      loc.metadata = GetComponentMetaData(arguments.component);
-  		if (! StructKeyExists(loc.metadata, "extends") or ListLast(loc.metadata.extends.fullname, ".") neq arguments.shouldExtend) {
+      local.metadata = GetComponentMetaData(arguments.component);
+  		if (! StructKeyExists(local.metadata, "extends") or ListLast(local.metadata.extends.fullname, ".") neq arguments.shouldExtend) {
   			return false;
   		}
     }
     // package names that begin with underscores are not valid
-    if (Left(loc.name, 1) eq "_") {
+    if (Left(local.name, 1) eq "_") {
       return false;
     }
     // don't test Test.cfc base components
-    if (loc.name eq "Test") {
+    if (local.name eq "Test") {
       return false;
     }
     return true;
@@ -562,58 +559,57 @@ component output=false {
    */
   public struct function $resolvePaths(struct options={}) {
 
-    var loc = {};
-    loc.rv = {};
+    local.rv = {};
 
     // default test type
-    loc.type = "core";
+    local.type = "core";
     // testfilter
-    loc.rv.test_filter = "*";
+    local.rv.test_filter = "*";
     // by default we run all packages, however they can specify to run a specific package of tests
-    loc.package = "";
+    local.package = "";
 
     // if they specified a package we should only run that
   	if (StructKeyExists(arguments.options, "package") && Len(arguments.options.package)) {
-  		loc.package = arguments.options.package;
+  		local.package = arguments.options.package;
   	}
     // overwrite the default test type if passed
   	if (structkeyexists(arguments.options, "type") and len(arguments.options.type)) {
-  		loc.type = arguments.options.type;
+  		local.type = arguments.options.type;
   	}
 
     // which tests to run
-    if (loc.type eq "core") {
+    if (local.type eq "core") {
       // core tests
       TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.wheelsComponentPath;
-    } else if (loc.type eq "app") {
+    } else if (local.type eq "app") {
       // app tests
       TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.rootComponentPath;
     } else {
       // specific plugin tests
       TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.rootComponentPath;
-      TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "#application.wheels.pluginComponentPath#.#loc.type#", ".");
+      TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "#application.wheels.pluginComponentPath#.#local.type#", ".");
     }
 
     TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "tests", ".");
 
     // add the package if specified
-    loc.rv.test_path = listappend("#TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH#", loc.package, ".");
+    local.rv.test_path = listappend("#TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH#", local.package, ".");
 
     // clean up testpath
-    loc.rv.test_path = listchangedelims(loc.rv.test_path, ".", "./\");
+    local.rv.test_path = listchangedelims(local.rv.test_path, ".", "./\");
 
     // convert to regular path
-    loc.rv.relative_root_test_path = "/" & listchangedelims(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "/", ".");
-    loc.rv.full_root_test_path = expandpath(loc.rv.relative_root_test_path);
-    loc.rv.relative_test_path = "/" & listchangedelims(loc.rv.test_path, "/", ".");
-    loc.rv.full_test_path = expandPath(loc.rv.relative_test_path);
+    local.rv.relative_root_test_path = "/" & listchangedelims(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "/", ".");
+    local.rv.full_root_test_path = expandpath(local.rv.relative_root_test_path);
+    local.rv.relative_test_path = "/" & listchangedelims(local.rv.test_path, "/", ".");
+    local.rv.full_test_path = expandPath(local.rv.relative_test_path);
 
-  	if (! DirectoryExists(loc.rv.full_test_path)) {
-  		if (FileExists(loc.rv.full_test_path & ".cfc")) {
-        loc.rv.test_filter = reverse(listfirst(reverse(loc.rv.test_path), "."));
-        loc.rv.test_path = reverse(listrest(reverse(loc.rv.test_path), "."));
-        loc.rv.relative_test_path = "/" & listchangedelims(loc.rv.test_path, "/", ".");
-        loc.rv.full_test_path = expandPath(loc.rv.relative_test_path);
+  	if (! DirectoryExists(local.rv.full_test_path)) {
+  		if (FileExists(local.rv.full_test_path & ".cfc")) {
+        local.rv.test_filter = reverse(listfirst(reverse(local.rv.test_path), "."));
+        local.rv.test_path = reverse(listrest(reverse(local.rv.test_path), "."));
+        local.rv.relative_test_path = "/" & listchangedelims(local.rv.test_path, "/", ".");
+        local.rv.full_test_path = expandPath(local.rv.relative_test_path);
       } else {
         throw(
           type="Wheels.Testing",
@@ -624,9 +620,9 @@ component output=false {
     }
 
     // for test results display
-    TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH = loc.rv.test_path;
+    TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH = local.rv.test_path;
 
-    return loc.rv;
+    return local.rv;
   }
 
   /*
@@ -634,27 +630,26 @@ component output=false {
    */
   public query function $listTestPackages(struct options={}, string filter="*") {
 
-    var loc = {};
-    loc.rv = QueryNew("package","Varchar");
+    local.rv = QueryNew("package","Varchar");
 
-    loc.paths = $resolvePaths(arguments.options);
-    $initialiseTestEnvironment(loc.paths, arguments.options);
+    local.paths = $resolvePaths(arguments.options);
+    $initialiseTestEnvironment(local.paths, arguments.options);
 
-  	loc.packages = DirectoryList(loc.paths.full_test_path, true, "query", "#arguments.filter#.cfc");
-  	for (loc.package in loc.packages) {
-      loc.packageName = ListChangeDelims(RemoveChars(loc.package.directory, 1, Len(loc.paths.full_test_path)), ".", "\/");
+  	local.packages = DirectoryList(local.paths.full_test_path, true, "query", "#arguments.filter#.cfc");
+  	for (local.package in local.packages) {
+      local.packageName = ListChangeDelims(RemoveChars(local.package.directory, 1, Len(local.paths.full_test_path)), ".", "\/");
   		// directories that begin with an underscore are ignored
-  		if (! ReFindNoCase("(^|\.)_", loc.packageName)) {
-        loc.packageName = ListPrepend(loc.packageName, loc.paths.test_path, ".");
-        loc.packageName = ListAppend(loc.packageName, ListFirst(loc.package.name, "."), ".");
+  		if (! ReFindNoCase("(^|\.)_", local.packageName)) {
+        local.packageName = ListPrepend(local.packageName, local.paths.test_path, ".");
+        local.packageName = ListAppend(local.packageName, ListFirst(local.package.name, "."), ".");
         // ignore invalid packages
-  			if ($isValidTest(loc.packageName)) {
-  				QueryAddRow(loc.rv);
-          QuerySetCell(loc.rv, "package", loc.packageName);
+  			if ($isValidTest(local.packageName)) {
+  				QueryAddRow(local.rv);
+          QuerySetCell(local.rv, "package", local.packageName);
   			}
       }
     };
-    return loc.rv;
+    return local.rv;
   }
 
   /*
@@ -673,9 +668,8 @@ component output=false {
    * Returns true if a file path is a wheels core file
    */
   public any function $isCoreFile(required string path) {
-    var loc = {};
-    loc.path = Replace(arguments.path, ExpandPath("/"), "", "one");
-    return (Left(loc.path, 7) eq "wheels/" || ListFindNoCase("index.cfm,rewrite.cfm,root.cfm", loc.path));
+    local.path = Replace(arguments.path, ExpandPath("/"), "", "one");
+    return (Left(local.path, 7) eq "wheels/" || ListFindNoCase("index.cfm,rewrite.cfm,root.cfm", local.path));
   }
 
 }
