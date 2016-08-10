@@ -1,18 +1,18 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-	</cffunction>
+	function setup() {
+		_controller = controller(name="dummy");
+	}
 
-	<cffunction name="test_step_argument">
-		<cfset loc.args.name = "countdown">
-		<cfset loc.args.selected = 15>
-		<cfset loc.args.minuteStep = 15>
-		<cfset loc.r = loc.controller.minuteSelectTag(argumentcollection=loc.args)>
-		<cfset loc.e = '<option selected="selected" value="15">'>
-		<cfset assert('loc.r CONTAINS loc.e')>
-		<cfset loc.matches = ReMatchNoCase("\<option", loc.r)>
-		<cfset assert('arraylen(loc.matches) eq 4')>
-	</cffunction>
+	function test_step_argument() {
+		args.name = "countdown";
+		args.selected = 15;
+		args.minuteStep = 15;
+		r = _controller.minuteSelectTag(argumentcollection=args);
+		e = '<option selected="selected" value="15">';
+		assert('r CONTAINS e');
+		matches = ReMatchNoCase("\<option", r);
+		assert('arraylen(matches) eq 4');
+	}
 
-</cfcomponent>
+}
