@@ -4,13 +4,13 @@ component extends="wheels.tests.Test" {
 		params.controller = "Blog";
 		params.action = "edit";
 		params.key = "1";
-		loc.controller = controller(params.controller, params);
-		loc.args = {};
-		loc.args.controller = "Blog";
-		loc.args.action = "edit";
-		loc.args.key = "1";
-		loc.args.params = "param1=foo&param2=bar";
-		loc.args.$URLRewriting = "On";
+		_controller = controller(params.controller, params);
+		args = {};
+		args.controller = "Blog";
+		args.action = "edit";
+		args.key = "1";
+		args.params = "param1=foo&param2=bar";
+		args.$URLRewriting = "On";
 		oldScriptName = request.cgi.script_name;
 	}
 
@@ -20,73 +20,73 @@ component extends="wheels.tests.Test" {
 
 	function test_all_arguments_with_url_rewriting(){
 		request.cgi.script_name = "/rewrite.cfm";
-		loc.e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";
-		loc.r = loc.controller.urlFor(argumentcollection=loc.args);
-		assert("loc.e eq loc.r");
+		e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";
+		r = _controller.urlFor(argumentcollection=args);
+		assert("e eq r");
 	}
 
 	function test_missing_controller_with_url_rewriting(){
 		request.cgi.script_name = "/rewrite.cfm";
-		StructDelete(loc.args, "controller");
-		loc.e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";
-		loc.r = loc.controller.urlFor(argumentcollection=loc.args);
-		assert("loc.e eq loc.r");
+		StructDelete(args, "controller");
+		e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";
+		r = _controller.urlFor(argumentcollection=args);
+		assert("e eq r");
 	}
 
 	function test_missing_action_with_url_rewriting(){
 		request.cgi.script_name = "/rewrite.cfm";
-		StructDelete(loc.args, "action");
-		loc.e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";
-		loc.r = loc.controller.urlFor(argumentcollection=loc.args);
-		assert("loc.e eq loc.r");
+		StructDelete(args, "action");
+		e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";
+		r = _controller.urlFor(argumentcollection=args);
+		assert("e eq r");
 	}
 
 	function test_missing_controller_and_action_with_url_rewriting(){
 		request.cgi.script_name = "/rewrite.cfm";
-		StructDelete(loc.args, "controller");
-		StructDelete(loc.args, "action");
-		loc.e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";
-		loc.r = loc.controller.urlFor(argumentcollection=loc.args);
-		assert("loc.e eq loc.r");
+		StructDelete(args, "controller");
+		StructDelete(args, "action");
+		e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";
+		r = _controller.urlFor(argumentcollection=args);
+		assert("e eq r");
 	}
 
 	function test_all_arguments_without_url_rewriting(){
 		request.cgi.script_name = "/index.cfm";
-		loc.args.$URLRewriting = "Off";
-		loc.webRoot = Replace("#application.wheels.webpath##ListLast(request.cgi.script_name, '/')#", "//", "/");
-		loc.e = "#loc.webRoot#?controller=blog&action=edit&key=1&param1=foo&param2=bar";
-		loc.r = loc.controller.urlFor(argumentcollection=loc.args);
-		assert("loc.e eq loc.r");
+		args.$URLRewriting = "Off";
+		webRoot = Replace("#application.wheels.webpath##ListLast(request.cgi.script_name, '/')#", "//", "/");
+		e = "#webRoot#?controller=blog&action=edit&key=1&param1=foo&param2=bar";
+		r = _controller.urlFor(argumentcollection=args);
+		assert("e eq r");
 	}
 
 	function test_missing_controller_without_url_rewriting(){
 		request.cgi.script_name = "/index.cfm";
-		loc.args.$URLRewriting = "Off";
-		StructDelete(loc.args, "controller");
-		loc.webRoot = Replace("#application.wheels.webpath##ListLast(request.cgi.script_name, '/')#", "//", "/");
-		loc.e = "#loc.webRoot#?controller=blog&action=edit&key=1&param1=foo&param2=bar";
-		loc.r = loc.controller.urlFor(argumentcollection=loc.args);
-		assert("loc.e eq loc.r");
+		args.$URLRewriting = "Off";
+		StructDelete(args, "controller");
+		webRoot = Replace("#application.wheels.webpath##ListLast(request.cgi.script_name, '/')#", "//", "/");
+		e = "#webRoot#?controller=blog&action=edit&key=1&param1=foo&param2=bar";
+		r = _controller.urlFor(argumentcollection=args);
+		assert("e eq r");
 	}
 
 	function test_missing_action_without_url_rewriting(){
 		request.cgi.script_name = "/index.cfm";
-		loc.args.$URLRewriting = "Off";
-		StructDelete(loc.args, "action");
-		loc.webRoot = Replace("#application.wheels.webpath##ListLast(request.cgi.script_name, '/')#", "//", "/");
-		loc.e = "#loc.webRoot#?controller=blog&action=edit&key=1&param1=foo&param2=bar";
-		loc.r = loc.controller.urlFor(argumentcollection=loc.args);
-		assert("loc.e eq loc.r");
+		args.$URLRewriting = "Off";
+		StructDelete(args, "action");
+		webRoot = Replace("#application.wheels.webpath##ListLast(request.cgi.script_name, '/')#", "//", "/");
+		e = "#webRoot#?controller=blog&action=edit&key=1&param1=foo&param2=bar";
+		r = _controller.urlFor(argumentcollection=args);
+		assert("e eq r");
 	}
 
 	function test_missing_controller_and_action_without_url_rewriting(){
 		request.cgi.script_name = "/index.cfm";
-		loc.args.$URLRewriting = "Off";
-		StructDelete(loc.args, "controller");
-		StructDelete(loc.args, "action");
-		loc.webRoot = Replace("#application.wheels.webpath##ListLast(request.cgi.script_name, '/')#", "//", "/");
-		loc.e = "#loc.webRoot#?controller=blog&action=edit&key=1&param1=foo&param2=bar";
-		loc.r = loc.controller.urlFor(argumentcollection=loc.args);
-		assert("loc.e eq loc.r");
+		args.$URLRewriting = "Off";
+		StructDelete(args, "controller");
+		StructDelete(args, "action");
+		webRoot = Replace("#application.wheels.webpath##ListLast(request.cgi.script_name, '/')#", "//", "/");
+		e = "#webRoot#?controller=blog&action=edit&key=1&param1=foo&param2=bar";
+		r = _controller.urlFor(argumentcollection=args);
+		assert("e eq r");
 	}
 }

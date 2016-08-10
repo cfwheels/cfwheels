@@ -1,15 +1,15 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-		<cfset loc.args = {}>
-		<cfset loc.args.word = "this is a test to see if this works or not.">
-	</cffunction>
+	function setup() {
+		_controller = controller(name="dummy");
+		args = {};
+		args.word = "this is a test to see if this works or not.";
+	}
 
-	<cffunction name="test_sentence_should_titleize">
-		<cfset loc.e = loc.controller.titleize(argumentcollection=loc.args)>
-		<cfset loc.r = "This Is A Test To See If This Works Or Not.">
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+	function test_sentence_should_titleize() {
+		e = _controller.titleize(argumentcollection=args);
+		r = "This Is A Test To See If This Works Or Not.";
+		assert("e eq r");
+	}
 
-</cfcomponent>
+}

@@ -1,65 +1,57 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset SavedRoutes = duplicate(application.wheels.routes)>
-		<cfset application.wheels.routes = []>
-		<cfset loc.dispatch = createobject("component", "wheelsMapping.Dispatch")>
-	</cffunction>
+	function setup() {
+		SavedRoutes = duplicate(application.wheels.routes);
+		application.wheels.routes = [];
+		dispatch = createobject("component", "wheelsMapping.Dispatch");
+	}
 
-	<cffunction name="teardown">
-		<cfset application.wheels.routes = SavedRoutes>
-	</cffunction>
-	
- 	<cffunction name="test_route_with_format">
-		<cfset addRoute(name="test", pattern="users/[username].[format]", controller="test", action="test")>
-		<cfscript>
-			loc.args = {};
-			loc.args.pathinfo = "/users/foo.bar";
-			loc.args.urlScope["username"] = "foo.bar";
-			loc.params = loc.dispatch.$paramParser(argumentCollection=loc.args);
-			assert('loc.params.controller eq "Test"');
-			assert('loc.params.action eq "test"');
-			assert('loc.params.username eq "foo"');
-			assert('loc.params.format eq "bar"');
-		</cfscript>
-	</cffunction>
-	
- 	<cffunction name="test_route_with_format_only">
-		<cfset addRoute(name="test", pattern="contact/export.[format]", controller="test", action="test")>
-		<cfscript>
-			loc.args = {};
-			loc.args.pathinfo = "/contact/export.csv";
-			loc.args.urlScope = {};
-			loc.params = loc.dispatch.$paramParser(argumentCollection=loc.args);
-			assert('loc.params.controller eq "Test"');
-			assert('loc.params.action eq "test"');
-			assert('loc.params.format eq "csv"');
-		</cfscript>
-	</cffunction>
+	function teardown() {
+		application.wheels.routes = SavedRoutes;
+	}
 
- 	<cffunction name="test_route_without_format_should_ignore_fullstops">
-		<cfset addRoute(name="test", pattern="users/[username]", controller="test", action="test")>
-		<cfscript>
-			loc.args = {};
-			loc.args.pathinfo = "/users/foo.bar";
-			loc.args.urlScope["username"] = "foo.bar";
-			loc.params = loc.dispatch.$paramParser(argumentCollection=loc.args);
-			assert('loc.params.username eq "foo.bar"');
-		</cfscript>
-	</cffunction>
-	
- 	<cffunction name="test_route_with_format_and_format_not_specified">
-		<cfset addRoute(name="test", pattern="users/[username].[format]", controller="test", action="test")>
-		<cfscript>
-			loc.args = {};
-			loc.args.pathinfo = "/users/foo";
-			loc.args.urlScope["username"] = "foo";
-			loc.params = loc.dispatch.$paramParser(argumentCollection=loc.args);
-			assert('loc.params.controller eq "Test"');
-			assert('loc.params.action eq "test"');
-			assert('loc.params.username eq "foo"');
-			assert('loc.params.format eq ""');
-		</cfscript>
-	</cffunction>
+ 	function test_route_with_format() {
+		addRoute(name="test", pattern="users/[username].[format]", controller="test", action="test");
+		args = {};
+		args.pathinfo = "/users/foo.bar";
+		args.urlScope["username"] = "foo.bar";
+		_params = dispatch.$paramParser(argumentCollection=args);
+		assert('_params.controller eq "Test"');
+		assert('_params.action eq "test"');
+		assert('_params.username eq "foo"');
+		assert('_params.format eq "bar"');
+	}
 
-</cfcomponent>
+ 	function test_route_with_format_only() {
+		addRoute(name="test", pattern="contact/export.[format]", controller="test", action="test");
+		args = {};
+		args.pathinfo = "/contact/export.csv";
+		args.urlScope = {};
+		_params = dispatch.$paramParser(argumentCollection=args);
+		assert('_params.controller eq "Test"');
+		assert('_params.action eq "test"');
+		assert('_params.format eq "csv"');
+	}
+
+ 	function test_route_without_format_should_ignore_fullstops() {
+		addRoute(name="test", pattern="users/[username]", controller="test", action="test");
+		args = {};
+		args.pathinfo = "/users/foo.bar";
+		args.urlScope["username"] = "foo.bar";
+		_params = dispatch.$paramParser(argumentCollection=args);
+		assert('_params.username eq "foo.bar"');
+	}
+
+ 	function test_route_with_format_and_format_not_specified() {
+		addRoute(name="test", pattern="users/[username].[format]", controller="test", action="test");
+		args = {};
+		args.pathinfo = "/users/foo";
+		args.urlScope["username"] = "foo";
+		_params = dispatch.$paramParser(argumentCollection=args);
+		assert('_params.controller eq "Test"');
+		assert('_params.action eq "test"');
+		assert('_params.username eq "foo"');
+		assert('_params.format eq ""');
+	}
+
+}
