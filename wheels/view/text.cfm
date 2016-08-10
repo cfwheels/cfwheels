@@ -1,10 +1,13 @@
-<!--- PUBLIC VIEW HELPER FUNCTIONS --->
-
-<cffunction name="autoLink" returntype="string" access="public" output="false">
-	<cfargument name="text" type="string" required="true">
-	<cfargument name="link" type="string" required="false">
-	<cfargument name="relative" type="boolean" required="false" default="true">
-	<cfscript>
+<cfscript>
+	/*
+	* PUBLIC VIEW HELPER FUNCTIONS
+	*/
+	
+	public string function autoLink(
+		required string text,
+		string link,
+		boolean relative=true
+	) {
 		$args(name="autoLink", args=arguments);
 		if (arguments.link != "emailAddresses")
 		{
@@ -24,57 +27,55 @@
 			arguments.protocol = "mailto:";
 			arguments.text = $autoLinkLoop(argumentCollection=arguments);
 		}
-	</cfscript>
-	<cfreturn arguments.text>
-</cffunction>
+		return arguments.text;
+	}
 
-<cffunction name="excerpt" returntype="string" access="public" output="false">
-	<cfargument name="text" type="string" required="true">
-	<cfargument name="phrase" type="string" required="true">
-	<cfargument name="radius" type="numeric" required="false">
-	<cfargument name="excerptString" type="string" required="false">
-	<cfscript>
-	$args(name="excerpt", args=arguments);
-	local.pos = FindNoCase(arguments.phrase, arguments.text, 1);
-	if (local.pos != 0)
-	{
-		if ((local.pos-arguments.radius) <= 1)
+	public string function excerpt(
+		required string text,
+		required string phrase,
+		numeric radius,
+		string excerptString
+	) {
+		$args(name="excerpt", args=arguments);
+		local.pos = FindNoCase(arguments.phrase, arguments.text, 1);
+		if (local.pos != 0)
 		{
-			local.startPos = 1;
-			local.truncateStart = "";
+			if ((local.pos-arguments.radius) <= 1)
+			{
+				local.startPos = 1;
+				local.truncateStart = "";
+			}
+			else
+			{
+				local.startPos = local.pos - arguments.radius;
+				local.truncateStart = arguments.excerptString;
+			}
+			if ((local.pos+Len(arguments.phrase)+arguments.radius) > Len(arguments.text))
+			{
+				local.endPos = Len(arguments.text);
+				local.truncateEnd = "";
+			}
+			else
+			{
+				local.endPos = local.pos + arguments.radius;
+				local.truncateEnd = arguments.excerptString;
+			}
+			local.rv = local.truncateStart & Mid(arguments.text, local.startPos, ((local.endPos+Len(arguments.phrase))-(local.startPos))) & local.truncateEnd;
 		}
 		else
 		{
-			local.startPos = local.pos - arguments.radius;
-			local.truncateStart = arguments.excerptString;
+			local.rv = "";
 		}
-		if ((local.pos+Len(arguments.phrase)+arguments.radius) > Len(arguments.text))
-		{
-			local.endPos = Len(arguments.text);
-			local.truncateEnd = "";
-		}
-		else
-		{
-			local.endPos = local.pos + arguments.radius;
-			local.truncateEnd = arguments.excerptString;
-		}
-		local.rv = local.truncateStart & Mid(arguments.text, local.startPos, ((local.endPos+Len(arguments.phrase))-(local.startPos))) & local.truncateEnd;
+		return local.rv;
 	}
-	else
-	{
-		local.rv = "";
-	}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
 
-<cffunction name="highlight" returntype="string" access="public" output="false">
-	<cfargument name="text" type="string" required="true">
-	<cfargument name="phrases" type="string" required="true">
-	<cfargument name="delimiter" type="string" required="false">
-	<cfargument name="tag" type="string" required="false">
-	<cfargument name="class" type="string" required="false">
-	<cfscript>
+	public string function highlight(
+		required string text,
+		required string phrases,
+		string delimiter,
+		string tag,
+		string class
+	) {
 		$args(name="highlight", args=arguments);
 		if (!Len(arguments.text) || !Len(arguments.phrases))
 		{
@@ -109,14 +110,10 @@
 			}
 			local.rv = local.newText;
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="simpleFormat" returntype="string" access="public" output="false">
-	<cfargument name="text" type="string" required="true">
-	<cfargument name="wrap" type="boolean" required="false">
-	<cfscript>
+	 public string function simpleFormat(required string text, boolean wrap) {
 		$args(name="simpleFormat", args=arguments);
 		local.rv = Trim(arguments.text);
 		local.rv = Replace(local.rv, "#Chr(13)#", "", "all");
@@ -132,28 +129,24 @@
 		{
 			local.rv = "<p>" & local.rv & "</p>";
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return local.rv;
+	}   
 
-<cffunction name="titleize" returntype="string" access="public" output="false">
-	<cfargument name="word" type="string" required="true">
-	<cfscript>
+	public string function titleize(required string word) {
 		local.rv = "";
 		local.iEnd = ListLen(arguments.word, " ");
 		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
 			local.rv = ListAppend(local.rv, capitalize(ListGetAt(arguments.word, local.i, " ")), " ");
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="truncate" returntype="string" access="public" output="false">
-	<cfargument name="text" type="string" required="true">
-	<cfargument name="length" type="numeric" required="false">
-	<cfargument name="truncateString" type="string" required="false">
-	<cfscript>
+	public string function truncate(
+		required string text,
+		numeric length,
+		string truncateString
+	) {
 		$args(name="truncate", args=arguments);
 		if (Len(arguments.text) > arguments.length)
 		{
@@ -163,15 +156,13 @@
 		{
 			local.rv = arguments.text;
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
-
-<cffunction name="wordTruncate" returntype="string" access="public" output="false">
-	<cfargument name="text" type="string" required="true">
-	<cfargument name="length" type="numeric" required="false">
-	<cfargument name="truncateString" type="string" required="false">
-	<cfscript>
+		return local.rv;
+	}
+	public string function wordTruncate(
+		required string text,
+		numeric length,
+		string truncateString
+	) {
 		$args(name="wordTruncate", args=arguments);
 		local.rv = "";
 		local.wordArray = ListToArray(arguments.text, " ", false);
@@ -188,44 +179,45 @@
 		{
 			local.rv = arguments.text;
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
-
-<!--- PRIVATE FUNCTIONS --->
-
-<cffunction name="$autoLinkLoop" access="public" returntype="string" output="false">
-	<cfargument name="text" type="string" required="true">
-	<cfargument name="regex" type="string" required="true">
-	<cfargument name="protocol" type="string" required="false" default="">
-	<cfscript>
-	local.punctuationRegEx = "([^\w\/-]+)$";
-	local.startPosition = 1;
-	local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
-	while (local.match.pos[1] > 0)
-	{
-		local.startPosition = local.match.pos[1] + local.match.len[1];
-		local.str = Mid(arguments.text, local.match.pos[1], local.match.len[1]);
-		if (Left(local.str, 2) != "<a")
-		{
-			arguments.text = RemoveChars(arguments.text, local.match.pos[1], local.match.len[1]);
-			local.punctuation = ArrayToList(ReMatchNoCase(local.punctuationRegEx, local.str));
-			local.str = REReplaceNoCase(local.str, local.punctuationRegEx, "", "all");
-
-			// make sure that links beginning with "www." have a protocol
-			if (Left(local.str, 4) == "www." && !Len(arguments.protocol))
-			{
-				arguments.protocol = "http://";
-			}
-
-			arguments.href = arguments.protocol & local.str;
-			local.element = $element("a", arguments, local.str, "text,regex,link,protocol,relative") & local.punctuation;
-			arguments.text = Insert(local.element, arguments.text, local.match.pos[1]-1);
-			local.startPosition = local.match.pos[1] + Len(local.element);
-		}
-		local.startPosition++;
-		local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
+		return local.rv;
 	}
-	</cfscript>
-	<cfreturn arguments.text>
-</cffunction>
+
+	/*
+	* PRIVATE FUNCTIONS
+	*/
+
+	public string function $autoLinkLoop(
+		required string text,
+		required string regex,
+		string protocol=""
+	) {
+		local.punctuationRegEx = "([^\w\/-]+)$";
+		local.startPosition = 1;
+		local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
+		while (local.match.pos[1] > 0)
+		{
+			local.startPosition = local.match.pos[1] + local.match.len[1];
+			local.str = Mid(arguments.text, local.match.pos[1], local.match.len[1]);
+			if (Left(local.str, 2) != "<a")
+			{
+				arguments.text = RemoveChars(arguments.text, local.match.pos[1], local.match.len[1]);
+				local.punctuation = ArrayToList(ReMatchNoCase(local.punctuationRegEx, local.str));
+				local.str = REReplaceNoCase(local.str, local.punctuationRegEx, "", "all");
+
+				// make sure that links beginning with "www." have a protocol
+				if (Left(local.str, 4) == "www." && !Len(arguments.protocol))
+				{
+					arguments.protocol = "http://";
+				}
+
+				arguments.href = arguments.protocol & local.str;
+				local.element = $element("a", arguments, local.str, "text,regex,link,protocol,relative") & local.punctuation;
+				arguments.text = Insert(local.element, arguments.text, local.match.pos[1]-1);
+				local.startPosition = local.match.pos[1] + Len(local.element);
+			}
+			local.startPosition++;
+			local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
+		}
+		return arguments.text;
+	}
+</cfscript>
