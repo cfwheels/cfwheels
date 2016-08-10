@@ -1,11 +1,11 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="ControllerWithModel")>
-	</cffunction>
+	function setup() {
+		_controller = controller(name="ControllerWithModel");
+	}
 
-	<cffunction name="test_x_passwordField_valid">
-		<cfset loc.controller.passwordField(objectName="User", property="password")>
-	</cffunction>
+	function test_x_passwordField_valid() {
+		_controller.passwordField(objectName="User", property="password");
+	}
 
-</cfcomponent>
+}

@@ -1,11 +1,11 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="ControllerWithModel")>
-	</cffunction>
+	function setup() {
+		_controller = controller(name="ControllerWithModel");
+	}
 
-	<cffunction name="test_x_hiddenField_valid">
-		<cfset loc.controller.hiddenField(objectName="user", property="firstname")>
-	</cffunction>
+	function test_x_hiddenField_valid() {
+		_controller.hiddenField(objectName="user", property="firstname");
+	}
 
-</cfcomponent>
+}

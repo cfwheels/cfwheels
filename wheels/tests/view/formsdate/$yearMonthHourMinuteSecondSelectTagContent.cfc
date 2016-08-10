@@ -1,31 +1,31 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset pkg.controller = controller("dummy")>
-		<cfset result = "">
-		<cfset results = {}>
-	</cffunction>
+	function setup() {
+		pkg.controller = controller("dummy");
+		result = "";
+		results = {};
+	}
 
-	<cffunction name="testBasic">
-		<cfset result = pkg.controller.$yearMonthHourMinuteSecondSelectTagContent(counter=5, value="", $optionNames="", $type="")>
-		<cfset assert("result IS '<option value=""5"">5</option>'")>
-	</cffunction>
+	function testBasic() {
+		result = pkg.controller.$yearMonthHourMinuteSecondSelectTagContent(counter=5, value="", $optionNames="", $type="");
+		assert("result IS '<option value=""5"">5</option>'");
+	}
 
-	<cffunction name="testSelected">
-		<cfset result = pkg.controller.$yearMonthHourMinuteSecondSelectTagContent(counter=3, value=3, $optionNames="", $type="")>
-		<cfset assert("result IS '<option selected=""selected"" value=""3"">3</option>'")>
-	</cffunction>
+	function testSelected() {
+		result = pkg.controller.$yearMonthHourMinuteSecondSelectTagContent(counter=3, value=3, $optionNames="", $type="");
+		assert("result IS '<option selected=""selected"" value=""3"">3</option>'");
+	}
 
-	<cffunction name="testFormatting">
-		<cfset result = pkg.controller.$yearMonthHourMinuteSecondSelectTagContent(counter=1, value="", $optionNames="", $type="minute")>
-		<cfset assert("result IS '<option value=""1"">01</option>'")>
-		<cfset result = pkg.controller.$yearMonthHourMinuteSecondSelectTagContent(counter=59, value="", $optionNames="", $type="second")>
-		<cfset assert("result IS '<option value=""59"">59</option>'")>
-	</cffunction>
+	function testFormatting() {
+		result = pkg.controller.$yearMonthHourMinuteSecondSelectTagContent(counter=1, value="", $optionNames="", $type="minute");
+		assert("result IS '<option value=""1"">01</option>'");
+		result = pkg.controller.$yearMonthHourMinuteSecondSelectTagContent(counter=59, value="", $optionNames="", $type="second");
+		assert("result IS '<option value=""59"">59</option>'");
+	}
 
-	<cffunction name="testOptionName">
-		<cfset result = pkg.controller.$yearMonthHourMinuteSecondSelectTagContent(counter=1, value="", $optionNames="someName", $type="")>
-		<cfset assert("result IS '<option value=""1"">someName</option>'")>
-	</cffunction>
+	function testOptionName() {
+		result = pkg.controller.$yearMonthHourMinuteSecondSelectTagContent(counter=1, value="", $optionNames="someName", $type="");
+		assert("result IS '<option value=""1"">someName</option>'");
+	}
 
-</cfcomponent>
+}
