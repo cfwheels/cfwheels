@@ -302,6 +302,7 @@
 		return local.rv;
 	}
 
+	public string function $element(
 		required string name, 
 		struct attributes={}, 
 		string content="",
