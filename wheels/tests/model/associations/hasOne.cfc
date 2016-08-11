@@ -1,100 +1,100 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_getting_child">
-		<cfset loc.author = model("author").findOne(order="id")>
-		<cfset loc.dynamicResult = loc.author.profile()>
-		<cfset loc.coreResult = model("profile").findOne(where="authorId=#loc.author.id#")>
-		<cfset assert("loc.dynamicResult.bio IS loc.coreResult.bio")>
-	</cffunction>
+	function test_getting_child() {
+		author = model("author").findOne(order="id");
+		dynamicResult = author.profile();
+		coreResult = model("profile").findOne(where="authorId=#author.id#");
+		assert("dynamicResult.bio IS coreResult.bio");
+	}
 
-	<cffunction name="test_checking_if_child_exist">
-		<cfset loc.author = model("author").findOne(order="id")>
-		<cfset loc.dynamicResult = loc.author.hasProfile()>
-		<cfset loc.coreResult = model("profile").exists(where="authorId=#loc.author.id#")>
-		<cfset assert("loc.dynamicResult IS loc.coreResult")>
-	</cffunction>
+	function test_checking_if_child_exist() {
+		author = model("author").findOne(order="id");
+		dynamicResult = author.hasProfile();
+		coreResult = model("profile").exists(where="authorId=#author.id#");
+		assert("dynamicResult IS coreResult");
+	}
 
-	<cffunction name="test_adding_child_by_setting_foreign_key">
-		<cfset loc.author = model("author").findOne(order="id DESC")>
-		<cfset loc.profile = model("profile").findOne(order="id")>
-		<cftransaction>
-			<cfset loc.author.setProfile(profile=loc.profile, transaction="none")>
-			<cfset loc.profile.reload()>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert("loc.author.id IS loc.profile.authorId")>
-		<cfset loc.profile.reload()>
-		<cftransaction>
-			<cfset loc.author.setProfile(key=loc.profile.id, transaction="none")>
-			<cfset loc.profile.reload()>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert("loc.author.id IS loc.profile.authorId")>
-		<cfset loc.profile.reload()>
-		<cftransaction>
-			<cfset model("profile").updateByKey(key=loc.profile.id, authorId=loc.author.id, transaction="none")>
-			<cfset loc.profile.reload()>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert("loc.author.id IS loc.profile.authorId")>
-	</cffunction>
+	function test_adding_child_by_setting_foreign_key() {
+		author = model("author").findOne(order="id DESC");
+		profile = model("profile").findOne(order="id");
+		transaction {
+			author.setProfile(profile=profile, transaction="none");
+			profile.reload();
+			transaction action="rollback";
+		}
+		assert("author.id IS profile.authorId");
+		profile.reload();
+		transaction {
+			author.setProfile(key=profile.id, transaction="none");
+			profile.reload();
+			transaction action="rollback";
+		}
+		assert("author.id IS profile.authorId");
+		profile.reload();
+		transaction {
+			model("profile").updateByKey(key=profile.id, authorId=author.id, transaction="none");
+			profile.reload();
+			transaction action="rollback";
+		}
+		assert("author.id IS profile.authorId");
+	}
 
-	<cffunction name="test_removing_child_by_nullifying_foreign_key">
-		<cfset loc.author = model("author").findOne(order="id")>
-		<cftransaction>
-			<cfset loc.author.removeProfile(transaction="none")>
-			<cfset assert("model('profile').findOne().authorId IS ''")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cftransaction>
-			<cfset model("profile").updateOne(authorId="", where="authorId=#loc.author.id#", transaction="none")>
-			<cfset assert("model('profile').findOne().authorId IS ''")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-	</cffunction>
+	function test_removing_child_by_nullifying_foreign_key() {
+		author = model("author").findOne(order="id");
+		transaction {
+			author.removeProfile(transaction="none");
+			assert("model('profile').findOne().authorId IS ''");
+			transaction action="rollback";
+		}
+		transaction {
+			model("profile").updateOne(authorId="", where="authorId=#author.id#", transaction="none");
+			assert("model('profile').findOne().authorId IS ''");
+			transaction action="rollback";
+		}
+	}
 
-	<cffunction name="test_deleting_child">
-		<cfset loc.author = model("author").findOne(order="id")>
-		<cfset loc.profileCount = model("profile").count() />
-		<cftransaction>
-			<cfset loc.author.deleteProfile(transaction="none")>
-			<cfset assert("model('profile').count() eq (loc.profileCount - 1)")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cftransaction>
-			<cfset model("profile").deleteOne(where="authorId=#loc.author.id#", transaction="none")>
-			<cfset assert("model('profile').count() eq (loc.profileCount - 1)")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-	</cffunction>
+	function test_deleting_child() {
+		author = model("author").findOne(order="id");
+		profileCount = model("profile").count();
+		transaction {
+			author.deleteProfile(transaction="none");
+			assert("model('profile').count() eq (profileCount - 1)");
+			transaction action="rollback";
+		}
+		transaction {
+			model("profile").deleteOne(where="authorId=#author.id#", transaction="none");
+			assert("model('profile').count() eq (profileCount - 1)");
+			transaction action="rollback";
+		}
+	}
 
-	<cffunction name="test_creating_new_child">
-		<cfset loc.author = model("author").findOne(order="id")>
-		<cfset loc.newProfile = loc.author.newProfile(dateOfBirth="17/12/1981")>
-		<cfset loc.dynamicResult = loc.newProfile.authorId>
-		<cfset loc.newProfile = model("profile").new(authorId=loc.author.id, dateOfBirth="17/12/1981")>
-		<cfset loc.coreResult = loc.newProfile.authorId>
-		<cfset assert("loc.dynamicResult IS loc.coreResult")>
-	</cffunction>
+	function test_creating_new_child() {
+		author = model("author").findOne(order="id");
+		newProfile = author.newProfile(dateOfBirth="17/12/1981");
+		dynamicResult = newProfile.authorId;
+		newProfile = model("profile").new(authorId=author.id, dateOfBirth="17/12/1981");
+		coreResult = newProfile.authorId;
+		assert("dynamicResult IS coreResult");
+	}
 
-	<cffunction name="test_creating_new_child_and_saving_it">
-		<cfset loc.author = model("author").findOne(order="id")>
-		<cftransaction>
-			<cfset loc.newProfile = loc.author.createProfile(dateOfBirth="17/12/1981", transaction="none")>
-			<cfset loc.dynamicResult = loc.newProfile.authorId>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cftransaction>
-			<cfset loc.newProfile = model("profile").create(authorId=loc.author.id, dateOfBirth="17/12/1981", transaction="none")>
-			<cfset loc.coreResult = loc.newProfile.authorId>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert("loc.dynamicResult IS loc.coreResult")>
-	</cffunction>
+	function test_creating_new_child_and_saving_it() {
+		author = model("author").findOne(order="id");
+		transaction {
+			newProfile = author.createProfile(dateOfBirth="17/12/1981", transaction="none");
+			dynamicResult = newProfile.authorId;
+			transaction action="rollback";
+		}
+		transaction {
+			newProfile = model("profile").create(authorId=author.id, dateOfBirth="17/12/1981", transaction="none");
+			coreResult = newProfile.authorId;
+			transaction action="rollback";
+		}
+		assert("dynamicResult IS coreResult");
+	}
 
-	<cffunction name="test_getting_child_with_join_key">
-		<cfset loc.obj = model("user").findOne(order="id", include="author")>
-		<cfset assert('loc.obj.firstName eq loc.obj.author.firstName')>
-	</cffunction>
+	function test_getting_child_with_join_key() {
+		obj = model("user").findOne(order="id", include="author");
+		assert('obj.firstName eq obj.author.firstName');
+	}
 
-</cfcomponent>
+}

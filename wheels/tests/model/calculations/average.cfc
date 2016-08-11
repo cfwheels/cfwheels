@@ -1,68 +1,68 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<!--- integers --->
+	/* integers */
 
-	<cffunction name="test_average_with_integer">
-		<cfset loc.result = model("post").average(property="views")>
-		<cfset assert("loc.result IS 3")>
-	</cffunction>
+	function test_average_with_integer() {
+		result = model("post").average(property="views");
+		assert("result IS 3");
+	}
 
-	<cffunction name="test_average_with_integer_with_non_matching_where">
-		<cfset loc.result = model("post").average(property="views", where="id=0")>
-		<cfset assert("loc.result IS ''")>
-	</cffunction>
+	function test_average_with_integer_with_non_matching_where() {
+		result = model("post").average(property="views", where="id=0");
+		assert("result IS ''");
+	}
 
-	<cffunction name="test_average_with_integer_with_distinct">
-		<cfset loc.result = model("post").average(property="views", distinct="true")>
-		<cfset assert("DecimalFormat(loc.result) IS DecimalFormat(2.50)")>
-	</cffunction>
+	function test_average_with_integer_with_distinct() {
+		result = model("post").average(property="views", distinct="true");
+		assert("DecimalFormat(result) IS DecimalFormat(2.50)");
+	}
 
-	<cffunction name="test_average_with_integer_with_ifNull">
-		<cfset loc.result = model("post").average(property="views", where="id=0", ifNull=0)>
-		<cfset assert("loc.result IS 0")>
-	</cffunction>
+	function test_average_with_integer_with_ifNull() {
+		result = model("post").average(property="views", where="id=0", ifNull=0);
+		assert("result IS 0");
+	}
 
-	<!--- floats --->
+	/* floats */
 
-	<cffunction name="test_average_with_group">
-		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
-			<cfset loc.result = model("post").average(property="averageRating", group="authorId")>
-			<cfset assert("DecimalFormat(loc.result['averageRatingAverage'][1]) IS DecimalFormat(3.40)")>
-		<cfelse>
-			<cfset assert(true)>
-		</cfif>
-	</cffunction>
+	function test_average_with_group() {
+		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+			result = model("post").average(property="averageRating", group="authorId");
+			assert("DecimalFormat(result['averageRatingAverage'][1]) IS DecimalFormat(3.40)");
+		} else {
+			assert(true);
+		}
+	}
 
-	<cffunction name="test_average_with_float">
-		<cfset loc.result = model("post").average(property="averageRating")>
-		<cfset assert("DecimalFormat(loc.result) IS DecimalFormat(3.50)")>
-	</cffunction>
+	function test_average_with_float() {
+		result = model("post").average(property="averageRating");
+		assert("DecimalFormat(result) IS DecimalFormat(3.50)");
+	}
 
-	<cffunction name="test_average_with_float_with_non_matching_where">
-		<cfset loc.result = model("post").average(property="averageRating", where="id=0")>
-		<cfset assert("loc.result IS ''")>
-	</cffunction>
+	function test_average_with_float_with_non_matching_where() {
+		result = model("post").average(property="averageRating", where="id=0");
+		assert("result IS ''");
+	}
 
-	<cffunction name="test_average_with_float_with_distinct">
-		<cfset loc.result = model("post").average(property="averageRating", distinct="true")>
-		<cfset assert("DecimalFormat(loc.result) IS DecimalFormat(3.4)")>
-	</cffunction>
+	function test_average_with_float_with_distinct() {
+		result = model("post").average(property="averageRating", distinct="true");
+		assert("DecimalFormat(result) IS DecimalFormat(3.4)");
+	}
 
-	<cffunction name="test_average_with_float_with_ifNull">
-		<cfset loc.result = model("post").average(property="averageRating", where="id=0", ifNull=0)>
-		<cfset assert("loc.result IS 0")>
-	</cffunction>
+	function test_average_with_float_with_ifNull() {
+		result = model("post").average(property="averageRating", where="id=0", ifNull=0);
+		assert("result IS 0");
+	}
 
-	<!--- include deleted records --->
+	/* include deleted records */
 
-	<cffunction name="test_average_with_include_soft_deletes">
-		<cftransaction action="begin">
-			<cfset loc.post = model("Post").findOne(where="views=0")>
-			<cfset loc.post.delete(transaction="none")>
-			<cfset loc.average = model("Post").average(property="views", includeSoftDeletes=true)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.average eq 3')>
-	</cffunction>
+	function test_average_with_include_soft_deletes() {
+		transaction action="begin" {
+			post = model("Post").findOne(where="views=0");
+			post.delete(transaction="none");
+			average = model("Post").average(property="views", includeSoftDeletes=true);
+			transaction action="rollback";
+		}
+		assert('average eq 3');
+	}
 
-</cfcomponent>
+}

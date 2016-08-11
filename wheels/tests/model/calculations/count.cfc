@@ -1,69 +1,69 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_count">
-		<cfset loc.result = model("author").count()>
-		<cfset assert("loc.result IS 7")>
-	</cffunction>
+	function test_count() {
+		result = model("author").count();
+		assert("result IS 7");
+	}
 
-	<cffunction name="test_count_with_group">
-		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
-			<cfset loc.result = model("post").count(property="views", group="authorId")>
-			<cfset assert("loc.result['count'][2] IS 2")>
-		<cfelse>
-			<cfset assert(true)>
-		</cfif>
-	</cffunction>
+	function test_count_with_group() {
+		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+			result = model("post").count(property="views", group="authorId");
+			assert("result['count'][2] IS 2");
+		} else {
+			assert(true);
+		}
+	}
 
-	<cffunction name="test_count_with_include">
-		<cfset loc.result = model("author").count(include="posts")>
-		<cfset assert("loc.result IS 7")>
-	</cffunction>
+	function test_count_with_include() {
+		result = model("author").count(include="posts");
+		assert("result IS 7");
+	}
 
-	<cffunction name="test_count_with_where">
-		<cfset loc.result = model("author").count(where="lastName = 'Djurner'")>
-		<cfset assert("loc.result IS 1")>
-	</cffunction>
+	function test_count_with_where() {
+		result = model("author").count(where="lastName = 'Djurner'");
+		assert("result IS 1");
+	}
 
-	<cffunction name="test_count_with_non_matching_where">
-		<cfset loc.result = model("author").count(where="id=0")>
-		<cfset assert("loc.result IS 0")>
-	</cffunction>
+	function test_count_with_non_matching_where() {
+		result = model("author").count(where="id=0");
+		assert("result IS 0");
+	}
 
-	<cffunction name="test_count_with_non_matching_where_and_include">
-		<cfset loc.result = model("author").count(where="id = 0", include="posts")>
-		<cfset assert("loc.result IS 0")>
-	</cffunction>
+	function test_count_with_non_matching_where_and_include() {
+		result = model("author").count(where="id = 0", include="posts");
+		assert("result IS 0");
+	}
 
-	<cffunction name="test_count_with_where_and_include">
-		<cfset loc.result = model("author").count(where="lastName = 'Djurner' OR lastName = 'Peters'", include="posts")>
-		<cfset assert("loc.result IS 2")>
-	</cffunction>
+	function test_count_with_where_and_include() {
+		result = model("author").count(where="lastName = 'Djurner' OR lastName = 'Peters'", include="posts");
+		assert("result IS 2");
+	}
 
-	<cffunction name="test_count_with_where_on_included_association">
-		<cfset loc.result = model("author").count(where="title LIKE '%first%' OR title LIKE '%second%' OR title LIKE '%fourth%'", include="posts")>
-		<cfset assert("loc.result IS 2")>
-	</cffunction>
+	function test_count_with_where_on_included_association() {
+		result = model("author").count(where="title LIKE '%first%' OR title LIKE '%second%' OR title LIKE '%fourth%'", include="posts");
+		assert("result IS 2");
+	}
 
-	<cffunction name="test_dynamic_count">
-		<cfset loc.author = model("author").findOne(where="lastName='Djurner'")>
-		<cfset loc.result = loc.author.postCount()>
-		<cfset assert("loc.result IS 3")>
-	</cffunction>
+	function test_dynamic_count() {
+		author = model("author").findOne(where="lastName='Djurner'");
+		result = author.postCount();
+		assert("result IS 3");
+	}
 
-	<cffunction name="test_dynamic_count_with_where">
-		<cfset loc.author = model("author").findOne(where="lastName='Djurner'")>
-		<cfset loc.result = loc.author.postCount(where="title LIKE '%first%' OR title LIKE '%second%'")>
-		<cfset assert("loc.result IS 2")>
-	</cffunction>
+	function test_dynamic_count_with_where() {
+		author = model("author").findOne(where="lastName='Djurner'");
+		result = author.postCount(where="title LIKE '%first%' OR title LIKE '%second%'");
+		assert("result IS 2");
+	}
 
-	<cffunction name="test_count_with_include_soft_deletes">
-		<cftransaction action="begin">
-			<cfset loc.post = model("Post").findOne(where="views=0")>
-			<cfset loc.post.delete(transaction="none")>
-			<cfset loc.count = model("Post").count(property="views", includeSoftDeletes=true)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.count eq 5')>
-	</cffunction>
+	function test_count_with_include_soft_deletes() {
+		transaction action="begin" {
+			post = model("Post").findOne(where="views=0");
+			post.delete(transaction="none");
+			count = model("Post").count(property="views", includeSoftDeletes=true);
+			transaction action="rollback";
+		}
+		assert('count eq 5');
+	}
 
-</cfcomponent>
+}
