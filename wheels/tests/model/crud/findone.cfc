@@ -1,36 +1,36 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.tagModel = model("tag")>
-		<cfset loc.postModel = model("post")>
-	</cffunction>
+	function setup() {
+		tagModel = model("tag");
+		postModel = model("post");
+	}
 
-	<cffunction name="test_self_join">
-		<cfset loc.tag = loc.tagModel.findOne(where="name = 'pear'", include="parent", order="id, id")>
-		<cfset assert("IsObject(loc.tag) and IsObject(loc.tag.parent)")>
-	</cffunction>
+	function test_self_join() {
+		tag = tagModel.findOne(where="name = 'pear'", include="parent", order="id, id");
+		assert("IsObject(tag) and IsObject(tag.parent)");
+	}
 
-	<cffunction name="test_self_join_with_other_associations">
-		<cfset loc.post = loc.postModel.findByKey(key=1, include="classifications(tag(parent))", returnAs="query")>
-		<cfset assert("IsQuery(loc.post) and loc.post.recordcount")>
-	</cffunction>
+	function test_self_join_with_other_associations() {
+		post = postModel.findByKey(key=1, include="classifications(tag(parent))", returnAs="query");
+		assert("IsQuery(post) and post.recordcount");
+	}
 
-	<cffunction name="test_do_not_use_query_param_for_nulls">
-		<cfset result = model("author").findOne(where="lastName IS NULL")>
-		<cfset assert("NOT IsObject(result)")>
-		<cfset result = model("author").findOne(where="lastName IS NOT NULL")>
-		<cfset assert("IsObject(result)")>
-	</cffunction>
+	function test_do_not_use_query_param_for_nulls() {
+		result = model("author").findOne(where="lastName IS NULL");
+		assert("NOT IsObject(result)");
+		result = model("author").findOne(where="lastName IS NOT NULL");
+		assert("IsObject(result)");
+	}
 
-	<cffunction name="test_parsing_numbers_in_where">
-		<cfset result = model("author").findOne(where="firstName = 1")>
-		<cfset assert("NOT IsObject(result)")>
-		<cfset result = model("author").findOne(where="firstName = 1.0")>
-		<cfset assert("NOT IsObject(result)")>
-		<cfset result = model("author").findOne(where="firstName = +1")>
-		<cfset assert("NOT IsObject(result)")>
-		<cfset result = model("author").findOne(where="firstName = -1")>
-		<cfset assert("NOT IsObject(result)")>
-	</cffunction>
+	function test_parsing_numbers_in_where() {
+		result = model("author").findOne(where="firstName = 1");
+		assert("NOT IsObject(result)");
+		result = model("author").findOne(where="firstName = 1.0");
+		assert("NOT IsObject(result)");
+		result = model("author").findOne(where="firstName = +1");
+		assert("NOT IsObject(result)");
+		result = model("author").findOne(where="firstName = -1");
+		assert("NOT IsObject(result)");
+	}
 
-</cfcomponent>
+}
