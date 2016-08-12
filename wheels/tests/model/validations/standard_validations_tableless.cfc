@@ -1,17 +1,17 @@
-<cfcomponent extends="standard_validations">
+component extends="standard_validations" {
 
- 	<cffunction name="setup">
- 		<!--- pre-load models that will be called during test --->
- 		<cfset model('users')>
- 		<cfset model('post')>
-		<cfset oldDataSourceName = application.wheels.dataSourceName>
-		<cfset application.wheels.dataSourceName = "">
-		<cfset StructDelete(application.wheels.models, "UserTableless", false)>
-		<cfset loc.user = model("UserTableless").new()>
-	</cffunction>
+ 	function setup() {
+ 		/* pre-load models that will be called during test */
+ 		model('users');
+ 		model('post');
+		oldDataSourceName = application.wheels.dataSourceName;
+		application.wheels.dataSourceName = "";
+		StructDelete(application.wheels.models, "UserTableless", false);
+		user = model("UserTableless").new();
+	}
 
-	<cffunction name="teardown">
-		<cfset application.wheels.dataSourceName = oldDataSourceName>
-	</cffunction>
+	function teardown() {
+		application.wheels.dataSourceName = oldDataSourceName;
+	}
 
-</cfcomponent>
+}
