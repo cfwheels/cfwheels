@@ -1,41 +1,41 @@
-<cfcomponent extends="Controller">
+component extends="Controller" {
 
-	<cffunction name="init">
-		<cfset provides("html,xml,json,xls")>
-	</cffunction>
+	function init() {
+		provides("html,xml,json,xls");
+	}
 
-	<cffunction name="test">
-		<cfset variableForView = "variableForViewContent">
-		<cfset variableForLayout = "variableForLayoutContent">
-	</cffunction>
+	function test() {
+		variableForView = "variableForViewContent";
+		variableForLayout = "variableForLayoutContent";
+	}
 
-	<cffunction name="testRedirect">
-		<cfset redirectTo(action="dummy")>
-		<cfset request.setInActionAfterRedirect = true>
-		<cfset renderPage(action="test")>
-	</cffunction>
+	function testRedirect() {
+		redirectTo(action="dummy");
+		request.setInActionAfterRedirect = true;
+		renderPage(action="test");
+	}
 
-	<cffunction name="$dataForPartial" returnType="struct" access="private">
-		<cfset var data = {}>
-		<cfset data.fruit = "Apple,Banana,Kiwi">
-		<cfset data.somethingElse = true>
-		<cfreturn data>
-	</cffunction>
+	private struct function $dataForPartial() {
+		var data = {};
+		data.fruit = "Apple,Banana,Kiwi";
+		data.somethingElse = true;
+		return data;
+	}
 
-	<cffunction name="partialDataImplicitPrivate" returnType="struct" access="private">
-		<cfreturn $dataForPartial()>
-	</cffunction>
+	private struct function partialDataImplicitPrivate() {
+		return $dataForPartial();
+	}
 
-	<cffunction name="partialDataImplicitPublic" returnType="struct" access="public">
-		<cfreturn $dataForPartial()>
-	</cffunction>
-	
-	<cffunction name="partialDataExplicitPublic" returnType="struct" access="public">
-		<cfset var data = $dataForPartial()>
-		<cfif StructKeyExists(arguments, "passThrough")>
-			<cfset data.passThroughWorked = true>
-		</cfif>
-		<cfreturn data>
-	</cffunction>
+	public struct function partialDataImplicitPublic() {
+		return $dataForPartial();
+	}
 
-</cfcomponent>
+	public struct function partialDataExplicitPublic() {
+		var data = $dataForPartial();
+		if (StructKeyExists(arguments, "passThrough")) {
+			data.passThroughWorked = true;
+		}
+		return data;
+	}
+
+}

@@ -1,10 +1,10 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-  <cffunction name="init">
-    <cfset table("authors")>
-    <cfset property(name="selectArgDefault", sql="id")>
-    <cfset property(name="selectArgTrue", sql="id", select=true)>
-    <cfset property(name="selectArgFalse", sql="id", select=false)>
-  </cffunction>
+  function init() {
+    table("authors");
+    property(name="selectArgDefault", sql="id");
+    property(name="selectArgTrue", sql="id", select=true);
+    property(name="selectArgFalse", sql="id", select=false);
+  }
 
-</cfcomponent>
+}

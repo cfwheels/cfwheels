@@ -1,21 +1,21 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset hasMany("posts")>
-		<cfset hasOne("profile")>
-		<!--- crazy join to test the joinKey argument --->
-		<cfset belongsTo(name="user", foreignKey="firstName", joinKey="firstName")>
-		<cfset beforeSave("callbackThatReturnsTrue")>
-		<cfset beforeDelete("callbackThatReturnsTrue")>
-		<cfset property(name="firstName", label="First name(s)", defaultValue="Dave")>
-		<cfset property(name="numberofitems", sql="SELECT COUNT(id) FROM posts WHERE authorid = authors.id", select=false)>
-		<cfset property(name="lastName", label="Last name", defaultValue="")>
-		<cfset nestedProperties(associations="profile", allowDelete=true)>
-		<cfset validatesPresenceOf("firstName")>
-	</cffunction>
+	function init() {
+		hasMany("posts");
+		hasOne("profile");
+		/* crazy join to test the joinKey argument */
+		belongsTo(name="user", foreignKey="firstName", joinKey="firstName");
+		beforeSave("callbackThatReturnsTrue");
+		beforeDelete("callbackThatReturnsTrue");
+		property(name="firstName", label="First name(s)", defaultValue="Dave");
+		property(name="numberofitems", sql="SELECT COUNT(id) FROM posts WHERE authorid = authors.id", select=false);
+		property(name="lastName", label="Last name", defaultValue="");
+		nestedProperties(associations="profile", allowDelete=true);
+		validatesPresenceOf("firstName");
+	}
 
-	<cffunction name="callbackThatReturnsTrue">
-		<cfreturn true>
-	</cffunction>
+	function callbackThatReturnsTrue() {
+		return true;
+	}
 
-</cfcomponent>
+}

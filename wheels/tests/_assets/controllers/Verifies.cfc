@@ -1,36 +1,36 @@
-<cfcomponent extends="Controller">
+component extends="Controller" {
 
-	<cffunction name="init">
-		<cfset verifies(only="actionGet", get="true")>
-		<cfset verifies(only="actionPost", post="true")>
-		<cfset verifies(only="actionPostWithRedirect", post="true", action="index", controller="somewhere", error="invalid")>
-		<cfset verifies(only="actionPostWithTypesValid", post="true", params="userid,authorid", paramsTypes="integer,guid")>
-		<cfset verifies(only="actionPostWithTypesInValid", post="true", params="userid,authorid", paramsTypes="integer,guid")>
-		<cfset verifies(only="actionPostWithString", post="true", params="username,password", paramsTypes="string,blank")>
-	</cffunction>
+	function init() {
+		verifies(only="actionGet", get="true");
+		verifies(only="actionPost", post="true");
+		verifies(only="actionPostWithRedirect", post="true", action="index", controller="somewhere", error="invalid");
+		verifies(only="actionPostWithTypesValid", post="true", params="userid,authorid", paramsTypes="integer,guid");
+		verifies(only="actionPostWithTypesInValid", post="true", params="userid,authorid", paramsTypes="integer,guid");
+		verifies(only="actionPostWithString", post="true", params="username,password", paramsTypes="string,blank");
+	}
 
-	<cffunction name="actionGet">
-		<cfset renderText("actionGet")>
-	</cffunction>
+	function actionGet() {
+		renderText("actionGet");
+	}
 
-	<cffunction name="actionPost">
-		<cfset renderText("actionPost")>
-	</cffunction>
+	function actionPost() {
+		renderText("actionPost");
+	}
 
-	<cffunction name="actionPostWithRedirect">
-		<cfset renderText("actionPostWithRedirect")>
-	</cffunction>
+	function actionPostWithRedirect() {
+		renderText("actionPostWithRedirect");
+	}
 
-	<cffunction name="actionPostWithTypesValid">
-		<cfset renderText("actionPostWithTypesValid")>
-	</cffunction>
+	function actionPostWithTypesValid() {
+		renderText("actionPostWithTypesValid");
+	}
 
-	<cffunction name="actionPostWithTypesInValid">
-		<cfset renderText("actionPostWithTypesInValid")>
-	</cffunction>
+	function actionPostWithTypesInValid() {
+		renderText("actionPostWithTypesInValid");
+	}
 
-	<cffunction name="actionPostWithString">
-		<cfset renderText("actionPostWithString")>
-	</cffunction>
+	function actionPostWithString() {
+		renderText("actionPostWithString");
+	}
 
-</cfcomponent>
+}

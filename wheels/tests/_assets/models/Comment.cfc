@@ -1,7 +1,7 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset belongsTo("post")>
-	</cffunction>
+	function init() {
+		belongsTo("post");
+	}
 
-</cfcomponent>
+}
