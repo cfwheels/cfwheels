@@ -1,35 +1,39 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfinclude template="setup.cfm">
-	</cffunction>
+	function setup() {
+		include "setup.cfm";
+	}
 
-	<cffunction name="teardown">
-		<cfinclude template="teardown.cfm">
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="test_flashIsEmpty_valid">
-		<cfset run_flashIsEmpty_valid()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_flashIsEmpty_valid()>
-	</cffunction>
+	function test_flashIsEmpty_valid() {
+		run_flashIsEmpty_valid();
+		_controller.$setFlashStorage("cookie");
+		run_flashIsEmpty_valid();
+	}
 
-	<cffunction name="run_flashIsEmpty_valid">
-		<cfset loc.controller.flashClear()>
-		<cfset result = loc.controller.flashIsEmpty()>
-		<cfset assert("result IS true")>
-	</cffunction>
+	function run_flashIsEmpty_valid() {
+		_controller.flashClear();
+		result = _controller.flashIsEmpty();
+		assert("result IS true");
+	}
 
-	<cffunction name="test_flashIsEmpty_invalid">
-		<cfset run_flashIsEmpty_invalid()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_flashIsEmpty_invalid()>
-	</cffunction>
+	function test_flashIsEmpty_invalid() {
+		run_flashIsEmpty_invalid();
+		_controller.$setFlashStorage("cookie");
+		run_flashIsEmpty_invalid();
+	}
 
-	<cffunction name="run_flashIsEmpty_invalid">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset result = loc.controller.flashIsEmpty()>
-		<cfset assert("result IS false")>
-	</cffunction>
+	/**
+	* HELPERS
+	*/
 
-</cfcomponent>
+	function run_flashIsEmpty_invalid() {
+		_controller.flashInsert(success="Congrats!");
+		result = _controller.flashIsEmpty();
+		assert("result IS false");
+	}
+
+}

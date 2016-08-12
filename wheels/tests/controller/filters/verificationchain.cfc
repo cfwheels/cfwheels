@@ -1,9 +1,9 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cfset params = {controller="dummy", action="dummy"}>	
-	<cfset loc.controller = controller("dummy", params)>
+	params = {controller="dummy", action="dummy"};
+	_controller = controller("dummy", params);
 
-	<cffunction name="test_x">
-	</cffunction>
+	function test_x() {
+	}
 
-</cfcomponent>
+}

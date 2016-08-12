@@ -1,61 +1,61 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset params = {controller="filtering", action="index"}>
-		<cfset loc.controller = controller("filtering", params)>
-		<cfset request.filterTests = StructNew()>
-	</cffunction>
+	function setup() {
+		params = {controller="filtering", action="index"};
+		_controller = controller("filtering", params);
+		request.filterTests = StructNew();
+	}
 
-	<cffunction name="test_should_run_public">
-		<cfset loc.controller.$runFilters(type="before", action="index")>
-		<cfset assert("StructKeyExists(request.filterTests, 'pubTest')")>
-	</cffunction>
+	function test_should_run_public() {
+		_controller.$runFilters(type="before", action="index");
+		assert("StructKeyExists(request.filterTests, 'pubTest')");
+	}
 
-	<cffunction name="test_should_run_private">
-		<cfset loc.controller.$runFilters(type="before", action="index")>
-		<cfset assert("StructKeyExists(request.filterTests, 'privTest')")>
-	</cffunction>
+	function test_should_run_private() {
+		_controller.$runFilters(type="before", action="index");
+		assert("StructKeyExists(request.filterTests, 'privTest')");
+	}
 
-	<cffunction name="test_should_run_in_order">
-		<cfset loc.controller.$runFilters(type="before", action="index")>
-		<cfset assert("request.filterTests.test IS 'bothpubpriv'")>
-	</cffunction>
+	function test_should_run_in_order() {
+		_controller.$runFilters(type="before", action="index");
+		assert("request.filterTests.test IS 'bothpubpriv'");
+	}
 
-	<cffunction name="test_should_not_run_excluded">
-		<cfset loc.controller.$runFilters(type="before", action="doNotRun")>
-		<cfset assert("NOT StructKeyExists(request.filterTests, 'dirTest')")>
-	</cffunction>
+	function test_should_not_run_excluded() {
+		_controller.$runFilters(type="before", action="doNotRun");
+		assert("NOT StructKeyExists(request.filterTests, 'dirTest')");
+	}
 
-	<cffunction name="test_should_run_included_only">
-		<cfset loc.controller.$runFilters(type="before", action="doesNotExist")>
-		<cfset assert("NOT StructKeyExists(request.filterTests, 'pubTest')")>
-	</cffunction>
+	function test_should_run_included_only() {
+		_controller.$runFilters(type="before", action="doesNotExist");
+		assert("NOT StructKeyExists(request.filterTests, 'pubTest')");
+	}
 
-	<cffunction name="test_should_pass_direct_arguments">
-		<cfset loc.controller.$runFilters(type="before", action="index")>
-		<cfset assert("request.filterTests.dirTest IS 1")>
-	</cffunction>
+	function test_should_pass_direct_arguments() {
+		_controller.$runFilters(type="before", action="index");
+		assert("request.filterTests.dirTest IS 1");
+	}
 
-	<cffunction name="test_should_pass_struct_arguments">
-		<cfset loc.controller.$runFilters(type="before", action="index")>
-		<cfset assert("request.filterTests.strTest IS 21")>
-	</cffunction>
+	function test_should_pass_struct_arguments() {
+		_controller.$runFilters(type="before", action="index");
+		assert("request.filterTests.strTest IS 21");
+	}
 
-	<cffunction name="test_should_pass_both_direct_and_struct_arguments">
-		<cfset loc.controller.$runFilters(type="before", action="index")>
-		<cfset assert("request.filterTests.bothTest IS 31")>
-	</cffunction>
+	function test_should_pass_both_direct_and_struct_arguments() {
+		_controller.$runFilters(type="before", action="index");
+		assert("request.filterTests.bothTest IS 31");
+	}
 
-	<cffunction name="test_should_skip_remaining_on_false">
-	</cffunction>
+	function test_should_skip_remaining_on_false() {
+	}
 
-	<cffunction name="test_should_skip_remaining_and_not_render_when_already_rendered">
-	</cffunction>
+	function test_should_skip_remaining_and_not_render_when_already_rendered() {
+	}
 
-	<cffunction name="test_should_run_parent">
-	</cffunction>
+	function test_should_run_parent() {
+	}
 
-	<cffunction name="test_should_run_parent_and_current_in_order">
-	</cffunction>
+	function test_should_run_parent_and_current_in_order() {
+	}
 
-</cfcomponent>
+}

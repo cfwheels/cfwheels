@@ -1,18 +1,18 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfinclude template="setup.cfm">
-		<cfset params = {controller="dummy", action="dummy"}>
-		<cfset loc.controller = controller("dummy", params)>
-	</cffunction>
+	function setup() {
+		include "setup.cfm";
+		params = {controller="dummy", action="dummy"};
+		_controller = controller("dummy", params);
+	}
 
-	<cffunction name="teardown">
-		<cfinclude template="teardown.cfm">
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="test_render_text">
-		<cfset loc.controller.renderText("OMG, look what I rendered!")>
-		<cfset assert("loc.controller.response() IS 'OMG, look what I rendered!'")>
-	</cffunction>
+	function test_render_text() {
+		_controller.renderText("OMG, look what I rendered!");
+		assert("_controller.response() IS 'OMG, look what I rendered!'");
+	}
 
-</cfcomponent>
+}

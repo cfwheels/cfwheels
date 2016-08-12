@@ -2,37 +2,37 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		params = {controller="dummy", action="dummy"};
-		loc.controller = controller("dummy", params);
-		loc.controller.before1 = before1;
-		loc.controller.before2 = before2;
-		loc.controller.before3 = before3;
-		loc.controller.after1 = after1;
-		loc.controller.after2 = after2;
+		_controller = controller("dummy", params);
+		_controller.before1 = before1;
+		_controller.before2 = before2;
+		_controller.before3 = before3;
+		_controller.after1 = after1;
+		_controller.after2 = after2;
 	}
 
 
 	function test_return_correct_type() {
 
-		loc.controller.filters(through="before1", type="before");
-		loc.controller.filters(through="before2", type="before");
-		loc.controller.filters(through="before3", type="before");
-		loc.controller.filters(through="after1", type="after");
-		loc.controller.filters(through="after2", type="after");
+		_controller.filters(through="before1", type="before");
+		_controller.filters(through="before2", type="before");
+		_controller.filters(through="before3", type="before");
+		_controller.filters(through="after1", type="after");
+		_controller.filters(through="after2", type="after");
 
-		loc.before = loc.controller.filterChain("before");
-		loc.after = loc.controller.filterChain("after");
-		loc.all = loc.controller.filterChain();
+		before = _controller.filterChain("before");
+		after = _controller.filterChain("after");
+		all = _controller.filterChain();
 
-		assert('ArrayLen(loc.before) eq 3');
-		assert('loc.before[1].through eq "before1"');
-		assert('loc.before[2].through eq "before2"');
-		assert('loc.before[3].through eq "before3"');
+		assert('ArrayLen(before) eq 3');
+		assert('before[1].through eq "before1"');
+		assert('before[2].through eq "before2"');
+		assert('before[3].through eq "before3"');
 
-		assert('ArrayLen(loc.after) eq 2');
-		assert('loc.after[1].through eq "after1"');
-		assert('loc.after[2].through eq "after2"');
+		assert('ArrayLen(after) eq 2');
+		assert('after[1].through eq "after1"');
+		assert('after[2].through eq "after2"');
 
-		assert('ArrayLen(loc.all) eq 5');
+		assert('ArrayLen(all) eq 5');
 	}
 
 	function before1() {

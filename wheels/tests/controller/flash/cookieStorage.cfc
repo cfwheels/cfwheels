@@ -1,18 +1,18 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfinclude template="setup.cfm">
-	</cffunction>
+	function setup() {
+		include "setup.cfm";
+	}
 
-	<cffunction name="teardown">
-		<cfinclude template="teardown.cfm">
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="test_cookie_storage_should_be_enabled">
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset assert('loc.controller.$getFlashStorage() eq "cookie"')>
-		<cfset loc.controller.$setFlashStorage("session")>
-		<cfset assert('loc.controller.$getFlashStorage() eq "session"')>
-	</cffunction>
+	function test_cookie_storage_should_be_enabled() {
+		_controller.$setFlashStorage("cookie");
+		assert('_controller.$getFlashStorage() eq "cookie"');
+		_controller.$setFlashStorage("session");
+		assert('_controller.$getFlashStorage() eq "session"');
+	}
 
-</cfcomponent>
+}

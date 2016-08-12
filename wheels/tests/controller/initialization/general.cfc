@@ -1,15 +1,15 @@
-<cfcomponent extends="wheels.tests.Test">
-	
-	<cffunction name="test_initializing_by_calling_init_function">
-	</cffunction>
-	
-	<cffunction name="test_creating_controller_when_no_file_exists">
-	</cffunction>
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_creating_controller_when_file_exists">
-	</cffunction>
+	function test_initializing_by_calling_init_function() {
+	}
 
-	<cffunction name="test_including_controller_specific_helper_file">
-	</cffunction>
+	function test_creating_controller_when_no_file_exists() {
+	}
 
-</cfcomponent>
+	function test_creating_controller_when_file_exists() {
+	}
+
+	function test_including_controller_specific_helper_file() {
+	}
+
+}
