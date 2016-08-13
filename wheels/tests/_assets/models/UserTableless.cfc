@@ -1,24 +1,24 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset table(false)>
-		<cfset property(name="username")>
-		<cfset property(name="password")>
-		<cfset property(name="firstname")>
-		<cfset property(name="lastname")>
-		<cfset property(name="birthday")>
-	</cffunction>
+	function init() {
+		table(false);
+		property(name="username");
+		property(name="password");
+		property(name="firstname");
+		property(name="lastname");
+		property(name="birthday");
+	}
 
-	<cffunction name="validateCalled">
-		<cfset this._validateCalled = true>
-	</cffunction>
+	function validateCalled() {
+		this._validateCalled = true;
+	}
 
-	<cffunction name="validateOnCreateCalled">
-		<cfset this._validateOnCreateCalled = true>
-	</cffunction>
+	function validateOnCreateCalled() {
+		this._validateOnCreateCalled = true;
+	}
 
-	<cffunction name="validateOnUpdateCalled">
-		<cfset this._validateOnUpdateCalled = true>
-	</cffunction>
+	function validateOnUpdateCalled() {
+		this._validateOnUpdateCalled = true;
+	}
 
-</cfcomponent>
+}

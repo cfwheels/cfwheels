@@ -1,51 +1,52 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset belongsTo("author")>
-		<cfset validatesPresenceOf("dateOfBirth")>
-		<cfset beforeValidation("beforeValidationCallbackThatSetsProperty,beforeValidationCallbackThatIncreasesVariable")>
-		<cfset beforeCreate("beforeCreateCallbackThatIncreasesVariable")>
-		<cfset beforeSave("beforeSaveCallbackThatIncreasesVariable")>
-		<cfset afterCreate("afterCreateCallbackThatIncreasesVariable")>
-		<cfset beforeSave("afterSaveCallbackThatIncreasesVariable")>
-	</cffunction>
+	function init() {
+		belongsTo("author");
+		validatesPresenceOf("dateOfBirth");
+		beforeValidation("beforeValidationCallbackThatSetsProperty,beforeValidationCallbackThatIncreasesVariable");
+		beforeCreate("beforeCreateCallbackThatIncreasesVariable");
+		beforeSave("beforeSaveCallbackThatIncreasesVariable");
+		afterCreate("afterCreateCallbackThatIncreasesVariable");
+		beforeSave("afterSaveCallbackThatIncreasesVariable");
+	}
 
-	<cffunction name="afterCreateCallbackThatIncreasesVariable" access="private">
-		<cfif not StructKeyExists(this, "afterCreateCallbackCount")>
-			<cfset this.afterCreateCallbackCount = 0>
-		</cfif>
-		<cfset this.afterCreateCallbackCount++>
-	</cffunction>
-	<cffunction name="afterSaveCallbackThatIncreasesVariable" access="private">
-		<cfif not StructKeyExists(this, "afterSaveCallbackCount")>
-			<cfset this.afterSaveCallbackCount = 0>
-		</cfif>
-		<cfset this.afterSaveCallbackCount++>
-	</cffunction>
+	private void function afterCreateCallbackThatIncreasesVariable() {
+		if (not StructKeyExists(this, "afterCreateCallbackCount")) {
+			this.afterCreateCallbackCount = 0;
+		}
+		this.afterCreateCallbackCount++;
+	}
 
-	<cffunction name="beforeCreateCallbackThatIncreasesVariable" access="private">
-		<cfif not StructKeyExists(this, "beforeCreateCallbackCount")>
-			<cfset this.beforeCreateCallbackCount = 0>
-		</cfif>
-		<cfset this.beforeCreateCallbackCount++>
-	</cffunction>
+	private void function afterSaveCallbackThatIncreasesVariable() {
+		if (not StructKeyExists(this, "afterSaveCallbackCount")) {
+			this.afterSaveCallbackCount = 0;
+		}
+		this.afterSaveCallbackCount++;
+	}
 
-	<cffunction name="beforeSaveCallbackThatIncreasesVariable" access="private">
-		<cfif not StructKeyExists(this, "beforeSaveCallbackCount")>
-			<cfset this.beforeSaveCallbackCount = 0>
-		</cfif>
-		<cfset this.beforeSaveCallbackCount++>
-	</cffunction>
+	private void function beforeCreateCallbackThatIncreasesVariable() {
+		if (not StructKeyExists(this, "beforeCreateCallbackCount")) {
+			this.beforeCreateCallbackCount = 0;
+		}
+		this.beforeCreateCallbackCount++;
+	}
 
-	<cffunction name="beforeValidationCallbackThatSetsProperty" access="private">
-		<cfset this.beforeValidationCallbackRegistered = true>
-	</cffunction>
+	private void function beforeSaveCallbackThatIncreasesVariable() {
+		if (not StructKeyExists(this, "beforeSaveCallbackCount")) {
+			this.beforeSaveCallbackCount = 0;
+		}
+		this.beforeSaveCallbackCount++;
+	}
 
-	<cffunction name="beforeValidationCallbackThatIncreasesVariable" access="private">
-		<cfif NOT StructKeyExists(this, "beforeValidationCallbackCount")>
-			<cfset this.beforeValidationCallbackCount = 0>
-		</cfif>
-		<cfset this.beforeValidationCallbackCount++>
-	</cffunction>
+	private void function beforeValidationCallbackThatSetsProperty() {
+		this.beforeValidationCallbackRegistered = true;
+	}
 
-</cfcomponent>
+	private void function beforeValidationCallbackThatIncreasesVariable() {
+		if (NOT StructKeyExists(this, "beforeValidationCallbackCount")) {
+			this.beforeValidationCallbackCount = 0;
+		}
+		this.beforeValidationCallbackCount++;
+	}
+
+}
