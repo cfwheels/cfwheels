@@ -1,14 +1,16 @@
-<cfcomponent mixin="wheels.Controller,wheels.Model">
+component mixin="wheels.Controller,wheels.Model" {
 
-	<cffunction name="init">
-		<cfset this.version = "99.9.9">
-		<cfreturn this>
-	</cffunction>
+	function init() {
+		this.version = "99.9.9";
+		return this;
+	}
 
-	<cffunction name="$DefaultMixin1" returntype="void">
-	</cffunction>
+	public void function $DefaultMixin1() {
+		
+	}
 
-	<cffunction name="$DefaultMixin2" returntype="void">
-	</cffunction>
+	public void function $DefaultMixin2() {
 
-</cfcomponent>
+	}
+
+}

@@ -1,3 +1,5 @@
-<cffunction name="controllerHelperFunction">
-	<cfset request.test.controllerHelperFunctionWasCalled = true>
-</cffunction>
+<cfscript>
+	function controllerHelperFunction() {
+		request.test.controllerHelperFunctionWasCalled = true;
+	}
+</cfscript>

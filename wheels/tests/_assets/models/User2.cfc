@@ -1,16 +1,16 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset settablenameprefix("tbl")>
-		<cfset table("users")>
-		<cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="version">
-		<cfset loc.db = LCase(Replace(loc.dbinfo.database_productname, " ", "", "all"))>
-		<cfif loc.db IS "oracle">
-			<cfset property(name="firstLetter", sql="SUBSTR(tblusers.username, 1, 1)")>
-		<cfelse>
-			<cfset property(name="firstLetter", sql="SUBSTRING(tblusers.username, 1, 1)")>
-		</cfif>
-		<cfset property(name="groupCount", sql="COUNT(tblusers.id)")>
-	</cffunction>
+	function init() {
+		settablenameprefix("tbl");
+		table("users");
+		include "dbinfo.cfm";
+		db = LCase(Replace(db_info.database_productname, " ", "", "all"));
+		if (db IS "oracle") {
+			property(name="firstLetter", sql="SUBSTR(tblusers.username, 1, 1)");
+		} else {
+			property(name="firstLetter", sql="SUBSTRING(tblusers.username, 1, 1)");
+		}
+		property(name="groupCount", sql="COUNT(tblusers.id)");
+	}
 
-</cfcomponent>
+}
