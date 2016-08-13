@@ -46,16 +46,4 @@ component extends="wheels.tests.Test" {
 		assert("request.filterTests.bothTest IS 31");
 	}
 
-	function test_should_skip_remaining_on_false() {
-	}
-
-	function test_should_skip_remaining_and_not_render_when_already_rendered() {
-	}
-
-	function test_should_run_parent() {
-	}
-
-	function test_should_run_parent_and_current_in_order() {
-	}
-
 }
