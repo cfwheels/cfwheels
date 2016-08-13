@@ -1,28 +1,30 @@
-<!--- PUBLIC MODEL CLASS METHODS --->
-
-<cffunction name="findAll" returntype="any" access="public" output="false">
-	<cfargument name="where" type="string" required="false" default="">
-	<cfargument name="order" type="string" required="false">
-	<cfargument name="group" type="string" required="false">
-	<cfargument name="select" type="string" required="false" default="">
-	<cfargument name="distinct" type="boolean" required="false" default="false">
-	<cfargument name="include" type="string" required="false" default="">
-	<cfargument name="maxRows" type="numeric" required="false" default="-1">
-	<cfargument name="page" type="numeric" required="false" default="0">
-	<cfargument name="perPage" type="numeric" required="false">
-	<cfargument name="count" type="numeric" required="false" default="0">
-	<cfargument name="handle" type="string" required="false" default="query">
-	<cfargument name="cache" type="any" required="false" default="">
-	<cfargument name="reload" type="boolean" required="false">
-	<cfargument name="parameterize" type="any" required="false">
-	<cfargument name="returnAs" type="string" required="false">
-	<cfargument name="returnIncluded" type="boolean" required="false">
-	<cfargument name="callbacks" type="boolean" required="false" default="true">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
-	<cfargument name="$limit" type="numeric" required="false" default="0">
-	<cfargument name="$offset" type="numeric" required="false" default="0">
-	<cfscript>
-		var loc = {};
+<cfscript>
+	/*
+	*  PUBLIC MODEL CLASS METHODS
+	*/
+	
+	public any function findAll(
+		string where="",
+		string order,
+		string group,
+		string select="",
+		boolean distinct="false",
+		string include="",
+		numeric maxRows="-1",
+		numeric page="0",
+		numeric perPage,
+		numeric count="0",
+		string handle="query",
+		any cache="",
+		boolean reload,
+		any parameterize,
+		string returnAs,
+		boolean returnIncluded,
+		boolean callbacks="true",
+		boolean includeSoftDeletes="false",
+		numeric $limit="0",
+		numeric $offset="0"
+	) { 
 		$args(name="findAll", args=arguments);
 		arguments.include = $listClean(arguments.include);
 		arguments.where = $cleanInList(arguments.where);
@@ -43,14 +45,14 @@
 			if (Len(arguments.order))
 			{
 				// insert primary keys to order clause unless they are already there, this guarantees that the ordering is unique which is required to make pagination work properly
-				loc.compareList = $listClean(ReplaceNoCase(ReplaceNoCase(arguments.order, " ASC", "", "all"), " DESC", "", "all"));
-				loc.iEnd = ListLen(primaryKeys());
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				local.compareList = $listClean(ReplaceNoCase(ReplaceNoCase(arguments.order, " ASC", "", "all"), " DESC", "", "all"));
+				local.iEnd = ListLen(primaryKeys());
+				for (local.i=1; local.i <= local.iEnd; local.i++)
 				{
-					loc.item = primaryKeys(loc.i);
-					if (!ListFindNoCase(loc.compareList, loc.item) && !ListFindNoCase(loc.compareList, tableName() & "." & loc.item))
+					local.item = primaryKeys(local.i);
+					if (!ListFindNoCase(local.compareList, local.item) && !ListFindNoCase(local.compareList, tableName() & "." & local.item))
 					{
-						arguments.order = ListAppend(arguments.order, loc.item);
+						arguments.order = ListAppend(arguments.order, local.item);
 					}
 				}
 			}
@@ -61,166 +63,166 @@
 			}
 			if (Len(arguments.include))
 			{
-				loc.distinct = true;
+				local.distinct = true;
 			}
 			else
 			{
-				loc.distinct = false;
+				local.distinct = false;
 			}
 			if (arguments.count > 0)
 			{
-				loc.totalRecords = arguments.count;
+				local.totalRecords = arguments.count;
 			}
 			else
 			{
-				loc.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
+				local.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=local.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
 			}
-			loc.currentPage = arguments.page;
-			if (loc.totalRecords == 0)
+			local.currentPage = arguments.page;
+			if (local.totalRecords == 0)
 			{
-				loc.totalPages = 0;
-				loc.rv = "";
+				local.totalPages = 0;
+				local.rv = "";
 			}
 			else
 			{
-				loc.totalPages = Ceiling(loc.totalRecords/arguments.perPage);
-				loc.limit = arguments.perPage;
-				loc.offset = (arguments.perPage * arguments.page) - arguments.perPage;
+				local.totalPages = Ceiling(local.totalRecords/arguments.perPage);
+				local.limit = arguments.perPage;
+				local.offset = (arguments.perPage * arguments.page) - arguments.perPage;
 
 				// if the full range of records is not requested we correct the limit to get the exact amount instead
 				// for example if totalRecords is 57, limit is 10 and offset 50 (i.e. requesting records 51-60) we change the limit to 7
-				if ((loc.limit + loc.offset) > loc.totalRecords)
+				if ((local.limit + local.offset) > local.totalRecords)
 				{
-					loc.limit = loc.totalRecords - loc.offset;
+					local.limit = local.totalRecords - local.offset;
 				}
 
-				if (loc.limit < 1)
+				if (local.limit < 1)
 				{
 					// if limit is 0 or less it means that a page that has no records was asked for so we return an empty query
-					loc.rv = "";
+					local.rv = "";
 				}
 				else
 				{
-					loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=primaryKeys(), where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes, callbacks=false);
-					if (loc.values.RecordCount)
+					local.values = findAll($limit=local.limit, $offset=local.offset, select=primaryKeys(), where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=local.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes, callbacks=false);
+					if (local.values.RecordCount)
 					{
-						loc.paginationWhere = "";
-						loc.iEnd = loc.values.recordCount;
-						for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+						local.paginationWhere = "";
+						local.iEnd = local.values.recordCount;
+						for (local.i=1; local.i <= local.iEnd; local.i++)
 						{
-							loc.keyComboValues = [];
-							loc.jEnd = ListLen(primaryKeys());
-							for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+							local.keyComboValues = [];
+							local.jEnd = ListLen(primaryKeys());
+							for (local.j=1; local.j <= local.jEnd; local.j++)
 							{
-								loc.property = primaryKeys(loc.j);
-								ArrayAppend(loc.keyComboValues, "#tableName()#.#loc.property# = #variables.wheels.class.adapter.$quoteValue(str=loc.values[loc.property][loc.i], type=validationTypeForProperty(loc.property))#");
+								local.property = primaryKeys(local.j);
+								ArrayAppend(local.keyComboValues, "#tableName()#.#local.property# = #variables.wheels.class.adapter.$quoteValue(str=local.values[local.property][local.i], type=validationTypeForProperty(local.property))#");
 							}
-							loc.paginationWhere = ListAppend(loc.paginationWhere, "(" & ArrayToList(loc.keyComboValues, " AND ") & ")", Chr(7));
+							local.paginationWhere = ListAppend(local.paginationWhere, "(" & ArrayToList(local.keyComboValues, " AND ") & ")", Chr(7));
  						}
-						loc.paginationWhere = Replace(loc.paginationWhere, Chr(7), " OR ", "all");
+						local.paginationWhere = Replace(local.paginationWhere, Chr(7), " OR ", "all");
 
  						// this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
  						if (Len(arguments.where) && Len(arguments.include))
  						{
- 							arguments.where = "(#arguments.where#) AND (#loc.paginationWhere#)";
+ 							arguments.where = "(#arguments.where#) AND (#local.paginationWhere#)";
  						}
  						else
 						{
-							arguments.where = loc.paginationWhere;
+							arguments.where = local.paginationWhere;
 						}
 					}
 				}
 			}
 			// store pagination info in the request scope so all pagination methods can access it
-			setPagination(loc.totalRecords, loc.currentPage, arguments.perPage, arguments.handle);
+			setPagination(local.totalRecords, local.currentPage, arguments.perPage, arguments.handle);
 		}
 
-		if (StructKeyExists(loc, "rv") && !Len(loc.rv))
+		if (StructKeyExists(local, "rv") && !Len(local.rv))
 		{
 			if (arguments.returnAs == "query")
 			{
-				loc.rv = QueryNew("");
+				local.rv = QueryNew("");
 			}
 			else if (singularize(arguments.returnAs) == arguments.returnAs)
 			{
-				loc.rv = false;
+				local.rv = false;
 			}
 			else
 			{
-				loc.rv = ArrayNew(1);
+				local.rv = ArrayNew(1);
 			}
 		}
-		else if (!StructKeyExists(loc, "rv"))
+		else if (!StructKeyExists(local, "rv"))
 		{
 			// make the where clause generic for use in caching
-			loc.originalWhere = arguments.where;
+			local.originalWhere = arguments.where;
 			arguments.where = REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all");
 
 			// get info from cache when available, otherwise create the generic select, from, where and order by clause
-			loc.queryShellKey = $hashedKey(variables.wheels.class.modelName, arguments);
-			loc.sql = $getFromCache(loc.queryShellKey, "sql");
-			if (!IsArray(loc.sql))
+			local.queryShellKey = $hashedKey(variables.wheels.class.modelName, arguments);
+			local.sql = $getFromCache(local.queryShellKey, "sql");
+			if (!IsArray(local.sql))
 			{
-				loc.sql = [];
-				ArrayAppend(loc.sql, $selectClause(select=arguments.select, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, returnAs=arguments.returnAs));
-				ArrayAppend(loc.sql, $fromClause(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes));
-				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
-				loc.groupBy = $groupByClause(select=arguments.select, group=arguments.group, include=arguments.include, distinct=arguments.distinct, returnAs=arguments.returnAs);
-				if (Len(loc.groupBy))
+				local.sql = [];
+				ArrayAppend(local.sql, $selectClause(select=arguments.select, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, returnAs=arguments.returnAs));
+				ArrayAppend(local.sql, $fromClause(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes));
+				local.sql = $addWhereClause(sql=local.sql, where=local.originalWhere, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
+				local.groupBy = $groupByClause(select=arguments.select, group=arguments.group, include=arguments.include, distinct=arguments.distinct, returnAs=arguments.returnAs);
+				if (Len(local.groupBy))
 				{
-					ArrayAppend(loc.sql, loc.groupBy);
+					ArrayAppend(local.sql, local.groupBy);
 				}
-				loc.orderBy = $orderByClause(order=arguments.order, include=arguments.include);
-				if (Len(loc.orderBy))
+				local.orderBy = $orderByClause(order=arguments.order, include=arguments.include);
+				if (Len(local.orderBy))
 				{
-					ArrayAppend(loc.sql, loc.orderBy);
+					ArrayAppend(local.sql, local.orderBy);
 				}
-				$addToCache(key=loc.queryShellKey, value=loc.sql, category="sql");
+				$addToCache(key=local.queryShellKey, value=local.sql, category="sql");
 			}
 
 			// add where clause parameters to the generic sql info
-			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=loc.originalWhere);
+			local.sql = $addWhereClauseParameters(sql=local.sql, where=local.originalWhere);
 
 			// return existing query result if it has been run already in current request, otherwise pass off the sql array to the query
-			loc.queryKey = $hashedKey(variables.wheels.class.modelName, arguments, loc.originalWhere);
-			if (application.wheels.cacheQueriesDuringRequest && !arguments.reload && StructKeyExists(request.wheels, loc.queryKey))
+			local.queryKey = $hashedKey(variables.wheels.class.modelName, arguments, local.originalWhere);
+			if (application.wheels.cacheQueriesDuringRequest && !arguments.reload && StructKeyExists(request.wheels, local.queryKey))
 			{
-				loc.findAll = request.wheels[loc.queryKey];
+				local.findAll = request.wheels[local.queryKey];
 			}
 			else
 			{
-				loc.finderArgs = {};
-				loc.finderArgs.sql = loc.sql;
-				loc.finderArgs.maxRows = arguments.maxRows;
-				loc.finderArgs.parameterize = arguments.parameterize;
-				loc.finderArgs.limit = arguments.$limit;
-				loc.finderArgs.offset = arguments.$offset;
-				loc.finderArgs.$primaryKey = primaryKeys();
+				local.finderArgs = {};
+				local.finderArgs.sql = local.sql;
+				local.finderArgs.maxRows = arguments.maxRows;
+				local.finderArgs.parameterize = arguments.parameterize;
+				local.finderArgs.limit = arguments.$limit;
+				local.finderArgs.offset = arguments.$offset;
+				local.finderArgs.$primaryKey = primaryKeys();
 				if (application.wheels.cacheQueries && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
 				{
-					loc.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
+					local.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
 				}
-				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
-				request.wheels[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
+				local.findAll = variables.wheels.class.adapter.$query(argumentCollection=local.finderArgs);
+				request.wheels[local.queryKey] = local.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
-			request.wheels[$hashedKey(loc.findAll.query)] = variables.wheels.class.modelName; // place an identifer in request scope so we can reference this query when passed in to view functions
+			request.wheels[$hashedKey(local.findAll.query)] = variables.wheels.class.modelName; // place an identifer in request scope so we can reference this query when passed in to view functions
 
 			switch (arguments.returnAs)
 			{
 				case "query":
-					loc.rv = loc.findAll.query;
+					local.rv = local.findAll.query;
 
 					// execute callbacks unless we're currently running the count or primary key pagination queries (we only want the callback to run when we have the actual data)
-					if (loc.rv.columnList != "wheelsqueryresult" && !arguments.$limit && !arguments.$offset)
+					if (local.rv.columnList != "wheelsqueryresult" && !arguments.$limit && !arguments.$offset)
 					{
-						$callback("afterFind", arguments.callbacks, loc.rv);
+						$callback("afterFind", arguments.callbacks, local.rv);
 					}
 					break;
 				case "struct": case "structs":
-					loc.rv = $serializeQueryToStructs(query=loc.findAll.query, argumentCollection=arguments);
+					local.rv = $serializeQueryToStructs(query=local.findAll.query, argumentCollection=arguments);
 					break;
 				case "object": case "objects":
-					loc.rv = $serializeQueryToObjects(query=loc.findAll.query, argumentCollection=arguments);
+					local.rv = $serializeQueryToObjects(query=local.findAll.query, argumentCollection=arguments);
 					break;
 				default:
 					if (application.wheels.showErrorInformation)
@@ -228,23 +230,21 @@
 						$throw(type="Wheels.IncorrectArgumentValue", message="Incorrect Arguments", extendedInfo="The `returnAs` may be either `query`, `struct(s)` or `object(s)`");
 					}
 			}
-		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		} 
+		return local.rv;
+	}
 
-<cffunction name="findByKey" returntype="any" access="public" output="false">
-	<cfargument name="key" type="any" required="true">
-	<cfargument name="select" type="string" required="false" default="">
-	<cfargument name="include" type="string" required="false" default="">
-	<cfargument name="cache" type="any" required="false" default="">
-	<cfargument name="reload" type="boolean" required="false">
-	<cfargument name="parameterize" type="any" required="false">
-	<cfargument name="returnAs" type="string" required="false">
-	<cfargument name="callbacks" type="boolean" required="false" default="true">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
-	<cfscript>
-		var loc = {};
+	public any function findByKey(
+		required any key,
+		string select="",
+		string include="",
+		any cache="",
+		boolean reload,
+		any parameterize,
+		string returnAs,
+		boolean callbacks="true",
+		boolean includeSoftDeletes="false"
+	) { 
 		$args(name="findByKey", args=arguments);
 		arguments.include = $listClean(arguments.include);
 		if (Len(arguments.key))
@@ -255,23 +255,21 @@
 		// convert primary key column name(s) / value(s) to a WHERE clause that is then used in the findOne call
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
-		loc.rv = findOne(argumentCollection=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = findOne(argumentCollection=arguments);
+		return local.rv;
+	}
 
-<cffunction name="findOne" returntype="any" access="public" output="false">
-	<cfargument name="where" type="string" required="false" default="">
-	<cfargument name="order" type="string" required="false" default="">
-	<cfargument name="select" type="string" required="false" default="">
-	<cfargument name="include" type="string" required="false" default="">
-	<cfargument name="cache" type="any" required="false" default="">
-	<cfargument name="reload" type="boolean" required="false">
-	<cfargument name="parameterize" type="any" required="false">
-	<cfargument name="returnAs" type="string" required="false">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
-	<cfscript>
-		var loc = {};
+	public any function findOne(
+		string where="",
+		string order="",
+		string select="",
+		string include="",
+		any cache="",
+		boolean reload,
+		any parameterize,
+		string returnAs,
+		boolean includeSoftDeletes="false"
+	) {
 		$args(name="findOne", args=arguments);
 		arguments.include = $listClean(arguments.include);
 		if (!Len(arguments.include) || (StructKeyExists(variables.wheels.class.associations, arguments.include) && variables.wheels.class.associations[arguments.include].type != "hasMany"))
@@ -287,97 +285,81 @@
 			arguments.perPage = 1;
 			arguments.count = 1;
 		}
-		loc.rv = findAll(argumentCollection=arguments);
-		if (IsArray(loc.rv))
+		local.rv = findAll(argumentCollection=arguments);
+		if (IsArray(local.rv))
 		{
-			if (ArrayLen(loc.rv))
+			if (ArrayLen(local.rv))
 			{
-				loc.rv = loc.rv[1];
+				local.rv = local.rv[1];
 			}
 			else
 			{
-				loc.rv = false;
+				local.rv = false;
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="findFirst" returntype="any" access="public" output="false">
-	<cfargument name="property" type="string" required="false" default="#primaryKey()#">
-	<cfargument name="$sort" type="string" required="false" default="ASC">
-	<cfscript>
-		var loc = {};
+	public any function findFirst(string property="#primaryKey()#", string $sort="ASC") { 		
 		$args(args=arguments, name="findFirst", combine="property/properties");
 		arguments.order = "";
-		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.iEnd = ListLen(arguments.property);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.item = ListGetAt(arguments.property, loc.i);
-			arguments.order = ListAppend(arguments.order, loc.item & " " & arguments.$sort);
+			local.item = ListGetAt(arguments.property, local.i);
+			arguments.order = ListAppend(arguments.order, local.item & " " & arguments.$sort);
 		}
 		StructDelete(arguments, "property");
 		StructDelete(arguments, "$sort");
-		loc.rv = findOne(argumentCollection=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = findOne(argumentCollection=arguments);
+		return local.rv;
+	}
 
-<cffunction name="findLast" returntype="any" access="public" output="false">
-	<cfargument name="property" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public any function findLast(string property) {
 		arguments.$sort = "DESC";
-		loc.rv = findFirst(argumentCollection=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = findFirst(argumentCollection=arguments);
+		return local.rv;
+	}
 
-<cffunction name="findAllKeys" returntype="string" access="public" output="false">
-	<cfargument name="quoted" type="boolean" required="false" default="false">
-	<cfargument name="delimiter" type="string" required="false" default=",">
-	<cfscript>
-		var loc = {};
-		loc.quoted = arguments.quoted;
+	public string function findAllKeys(boolean quoted="false", string delimiter=",") {		
+		local.quoted = arguments.quoted;
 		StructDelete(arguments, "quoted");
-		loc.delimiter = arguments.delimiter;
+		local.delimiter = arguments.delimiter;
 		StructDelete(arguments, "delimiter");
 		arguments.select = primaryKey();
 		arguments.callbacks = false;
-		loc.query = findAll(argumentCollection=arguments);
-		if (loc.quoted)
+		local.query = findAll(argumentCollection=arguments);
+		if (local.quoted)
 		{
-			loc.functionName = "QuotedValueList";
+			local.functionName = "QuotedValueList";
 		}
 		else
 		{
-			loc.functionName = "ValueList";
+			local.functionName = "ValueList";
 		}
-		loc.rv = Evaluate("#loc.functionName#(loc.query.#arguments.select#, '#loc.delimiter#')");
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = Evaluate("#local.functionName#(local.query.#arguments.select#, '#local.delimiter#')");	
+		return local.rv;
+	}
 
-<!--- PUBLIC MODEL OBJECT METHODS --->
-
-<cffunction name="reload" returntype="void" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.query = findByKey(key=key(), reload=true, returnAs="query");
-		loc.properties = propertyNames();
-		loc.iEnd = ListLen(loc.properties);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+	/*
+	* PUBLIC MODEL OBJECT METHODS
+	*/
+	public void function reload() { 
+		local.query = findByKey(key=key(), reload=true, returnAs="query");
+		local.properties = propertyNames();
+		local.iEnd = ListLen(local.properties);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
 			try
 			{
 				// coldfusion has a problem with blank boolean values in the query
-				loc.property = ListGetAt(loc.properties, loc.i);
-				this[loc.property] = loc.query[loc.property][1];
+				local.property = ListGetAt(local.properties, local.i);
+				this[local.property] = local.query[local.property][1];
 			}
 			catch (any e)
 			{
-				this[loc.property] = "";
+				this[local.property] = "";
 			}
 		}
-	</cfscript>
-</cffunction>
+	}
+</cfscript>

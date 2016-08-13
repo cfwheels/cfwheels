@@ -1,47 +1,42 @@
-<!--- PUBLIC MODEL INITIALIZATION METHODS --->
+<cfscript>
+	/*
+	* PUBLIC MODEL INITIALIZATION METHODS
+	*/
 
-<cffunction name="accessibleProperties" returntype="void" access="public" output="false">
-	<cfargument name="properties" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
+	public void function accessibleProperties(string properties="") { 
 		if (StructKeyExists(arguments, "property"))
 		{
 			arguments.properties = ListAppend(arguments.properties, arguments.property);
 		}
 
 		// see if any associations should be included in the white list
-		for (loc.association in variables.wheels.class.associations)
+		for (local.association in variables.wheels.class.associations)
 		{
-			if (variables.wheels.class.associations[loc.association].nested.allow)
+			if (variables.wheels.class.associations[local.association].nested.allow)
 			{
-				arguments.properties = ListAppend(arguments.properties, loc.association);
+				arguments.properties = ListAppend(arguments.properties, local.association);
 			}
 		}
 		variables.wheels.class.accessibleProperties.whiteList = $listClean(arguments.properties);
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="protectedProperties" returntype="void" access="public" output="false">
-	<cfargument name="properties" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
+	public void function protectedProperties(string properties="") {
 		if (StructKeyExists(arguments, "property"))
 		{
 			arguments.properties = ListAppend(arguments.properties, arguments.property);
 		}
-		variables.wheels.class.accessibleProperties.blackList = $listClean(arguments.properties);
-	</cfscript>
-</cffunction>
+		variables.wheels.class.accessibleProperties.blackList = $listClean(arguments.properties);		
+	}
 
-<cffunction name="property" returntype="void" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="column" type="string" required="false" default="">
-	<cfargument name="sql" type="string" required="false" default="">
-	<cfargument name="label" type="string" required="false" default="">
-	<cfargument name="defaultValue" type="string" required="false">
-	<cfargument name="select" type="boolean" required="false" default="true">
-	<cfargument name="dataType" type="string" required="false" default="char">
-	<cfscript>
+	public void function property(
+		required string name,
+		string column="",
+		string sql="",
+		string label="",
+		string defaultValue,
+		boolean select="true",
+		string dataType="char"
+	) { 
 		// validate setup
 		if (Len(arguments.column) && Len(arguments.sql))
 		{
@@ -78,133 +73,99 @@
 		{
 			variables.wheels.class.mapping[arguments.name].defaultValue = arguments.defaultValue;
 		}
-	</cfscript>
-</cffunction>
+	}
 
-<!--- PUBLIC MODEL CLASS METHODS --->
-
-<cffunction name="propertyNames" returntype="string" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = variables.wheels.class.propertyList;
+	/*
+	* PUBLIC MODEL CLASS METHODS
+	*/
+	public string function propertyNames() {
+		local.rv = variables.wheels.class.propertyList;
 		if (ListLen(variables.wheels.class.calculatedPropertyList))
 		{
-			loc.rv = ListAppend(loc.rv, variables.wheels.class.calculatedPropertyList);
+			local.rv = ListAppend(local.rv, variables.wheels.class.calculatedPropertyList);
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="columns" returntype="array" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = ListToArray(variables.wheels.class.columnList);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+	public array function columns() { 
+		return ListToArray(variables.wheels.class.columnList);
+	}
 
-<cffunction name="columnForProperty" returntype="any" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		loc.rv = false;
+	public any function columnForProperty(required string property) {		
+		local.rv = false;
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
 		{
-			loc.rv = variables.wheels.class.properties[arguments.property].column;
+			local.rv = variables.wheels.class.properties[arguments.property].column;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="columnDataForProperty" returntype="any" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		loc.rv = false;
+	public any function columnDataForProperty(required string property) {  
+		local.rv = false;
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
 		{
-			loc.rv = variables.wheels.class.properties[arguments.property];
+			local.rv = variables.wheels.class.properties[arguments.property];
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="validationTypeForProperty" returntype="any" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		loc.rv = "string";
+	public any function validationTypeForProperty(required string property) {		
+		local.rv = "string";
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
 		{
-			loc.rv = variables.wheels.class.properties[arguments.property].validationtype;
+			local.rv = variables.wheels.class.properties[arguments.property].validationtype;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<!--- PUBLIC MODEL OBJECT METHODS --->
+	/*
+	* PUBLIC MODEL OBJECT METHODS
+	*/
 
-<cffunction name="key" returntype="string" access="public" output="false">
-	<cfargument name="$persisted" type="boolean" required="false" default="false">
-	<cfargument name="$returnTickCountWhenNew" type="boolean" required="false" default="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = "";
-		loc.iEnd = ListLen(primaryKeys());
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+	public string function key(boolean $persisted="false", boolean $returnTickCountWhenNew="false") {
+		local.rv = "";
+		local.iEnd = ListLen(primaryKeys());
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.property = primaryKeys(loc.i);
-			if (StructKeyExists(this, loc.property))
+			local.property = primaryKeys(local.i);
+			if (StructKeyExists(this, local.property))
 			{
-				if (arguments.$persisted && hasChanged(loc.property))
+				if (arguments.$persisted && hasChanged(local.property))
 				{
-					loc.rv = ListAppend(loc.rv, changedFrom(loc.property));
+					local.rv = ListAppend(local.rv, changedFrom(local.property));
 				}
 				else
 				{
-					loc.rv = ListAppend(loc.rv, this[loc.property]);
+					local.rv = ListAppend(local.rv, this[local.property]);
 				}
 			}
 		}
-		if (!Len(loc.rv) && arguments.$returnTickCountWhenNew)
+		if (!Len(local.rv) && arguments.$returnTickCountWhenNew)
 		{
-			loc.rv = variables.wheels.tickCountId;
+			local.rv = variables.wheels.tickCountId;
 		}
-		</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="hasProperty" returntype="boolean" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		loc.rv = false;
+	public boolean function hasProperty(required string property) {
+		local.rv = false;
 		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]))
 		{
-			loc.rv = true;
+			local.rv = true;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="propertyIsPresent" returntype="boolean" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		loc.rv = false;
+	public boolean function propertyIsPresent(required string property) { 
+		local.rv = false;
 		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]) && IsSimpleValue(this[arguments.property]) && Len(this[arguments.property]))
 		{
-			loc.rv = true;
-		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+			local.rv = true;
+		} 
+		return local.rv;
+	}
 
-<cffunction name="toggle" returntype="boolean" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="save" type="boolean" required="false">
-	<cfscript>
-		var loc = {};
+	public boolean function toggle(required string property, boolean save) {		
 		$args(name="toggle", args=arguments);
 		if (!StructKeyExists(this, arguments.property))
 		{
@@ -215,68 +176,56 @@
 			$throw(type="Wheels.PropertyIsIncorrectType", message="Incorrect Arguments", extendedInfo="You may only toggle a property that evaluates to the boolean value.");
 		}
 		this[arguments.property] = !this[arguments.property];
-		loc.rv = true;
+		local.rv = true;
 		if (arguments.save)
 		{
-			loc.rv = updateProperty(property=arguments.property, value=this[arguments.property]);
-		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+			local.rv = updateProperty(property=arguments.property, value=this[arguments.property]);
+		} 
+		return local.rv;
+	}
 
-<cffunction name="properties" returntype="struct" access="public" output="false">
-	<cfargument name="simple" type="boolean" required="false" default="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = {};
+	public struct function properties(boolean simple="false") { 
+		local.rv = {};
 		// loop through all properties and functions in the this scope
-		for (loc.key in this)
+		for (local.key in this)
 		{
 			// we return anything that is not a function
-			if (!IsCustomFunction(this[loc.key]))
+			if (!IsCustomFunction(this[local.key]))
 			{
 				// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
-				if (ListFindNoCase(propertyNames(), loc.key))
+				if (ListFindNoCase(propertyNames(), local.key))
 				{
-					loc.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), loc.key));
+					local.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), local.key));
 				}
 				// if it's a nested property, apply this function recursively
-				if (IsObject(this[loc.key]) && arguments.simple)
+				if (IsObject(this[local.key]) && arguments.simple)
 				{
-					loc.rv[loc.key] = this[loc.key].properties(argumentCollection=arguments);
+					local.rv[local.key] = this[local.key].properties(argumentCollection=arguments);
 				}
 				// loop thru the array and apply this function to each item
-				else if (IsArray(this[loc.key]) && arguments.simple)
+				else if (IsArray(this[local.key]) && arguments.simple)
 				{
-					loc.rv[loc.key] = [];
-					for (loc.i=1; loc.i <= ArrayLen(this[loc.key]); loc.i++)
+					local.rv[local.key] = [];
+					for (local.i=1; local.i <= ArrayLen(this[local.key]); local.i++)
 					{
-						loc.rv[loc.key][loc.i] = this[loc.key][loc.i].properties(argumentCollection=arguments);
+						local.rv[local.key][local.i] = this[local.key][local.i].properties(argumentCollection=arguments);
 					}
 				}
 				// set property from the this scope in the struct that we will return
 				else
 				{
-					loc.rv[loc.key] = this[loc.key];
+					local.rv[local.key] = this[local.key];
 				}
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="setProperties" returntype="void" access="public" output="false">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#">
-	<cfscript>
+	public void function setProperties(struct properties="#StructNew()#") {
 		$setProperties(argumentCollection=arguments);
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="hasChanged" returntype="boolean" access="public" output="false">
-	<cfargument name="property" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
-
+	public boolean function hasChanged(string property="") {
 		// always return true if $persistedProperties does not exists
 		if (!StructKeyExists(variables, "$persistedProperties"))
 		{
@@ -289,23 +238,23 @@
 			arguments.property = StructKeyList(variables.wheels.class.properties);
 		}
 		arguments.property = ListToArray(arguments.property);
-		loc.iEnd = ArrayLen(arguments.property);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.iEnd = ArrayLen(arguments.property);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.key = arguments.property[loc.i];
-			if (StructKeyExists(this, loc.key))
+			local.key = arguments.property[local.i];
+			if (StructKeyExists(this, local.key))
 			{
-				if (!StructKeyExists(variables.$persistedProperties, loc.key))
+				if (!StructKeyExists(variables.$persistedProperties, local.key))
 				{
 					return true;
 				}
 				else
 				{
 					// convert each datatype to a string for easier comparision
-					loc.type = validationTypeForProperty(loc.key);
-					loc.a = $convertToString(this[loc.key], loc.type);
-					loc.b = $convertToString(variables.$persistedProperties[loc.key], loc.type);
-					if (Compare(loc.a, loc.b) != 0)
+					local.type = validationTypeForProperty(local.key);
+					local.a = $convertToString(this[local.key], local.type);
+					local.b = $convertToString(variables.$persistedProperties[local.key], local.type);
+					if (Compare(local.a, local.b) != 0)
 					{
 						return true;
 					}
@@ -314,114 +263,101 @@
 		}
 		// if we get here, it means that all of the properties that were checked had a value in
 		// $persistedProperties and it matched or some of the properties did not exist in the this scope
-	</cfscript>
-	<cfreturn false>
-</cffunction>
+		return false;
+	}
 
-<cffunction name="changedProperties" returntype="string" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = "";
-		for (loc.key in variables.wheels.class.properties)
+	public string function changedProperties() {
+		local.rv = "";
+		for (local.key in variables.wheels.class.properties)
 		{
-			if (hasChanged(loc.key))
+			if (hasChanged(local.key))
 			{
-				loc.rv = ListAppend(loc.rv, loc.key);
+				local.rv = ListAppend(local.rv, local.key);
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="changedFrom" returntype="string" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		loc.rv = "";
+	public string function changedFrom(required string property) {
+		local.rv = "";
 		if (StructKeyExists(variables, "$persistedProperties") && StructKeyExists(variables.$persistedProperties, arguments.property))
 		{
-			loc.rv = variables.$persistedProperties[arguments.property];
+			local.rv = variables.$persistedProperties[arguments.property];
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="allChanges" returntype="struct" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.rv = {};
+	public struct function allChanges() {
+		local.rv = {};
 		if (hasChanged())
 		{
-			loc.changedProperties = changedProperties();
-			loc.iEnd = ListLen(loc.changedProperties);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			local.changedProperties = changedProperties();
+			local.iEnd = ListLen(local.changedProperties);
+			for (local.i=1; local.i <= local.iEnd; local.i++)
 			{
-				loc.item = ListGetAt(loc.changedProperties, loc.i);
-				loc.rv[loc.item] = {};
-				loc.rv[loc.item].changedFrom = changedFrom(loc.item);
-				if (StructKeyExists(this, loc.item))
+				local.item = ListGetAt(local.changedProperties, local.i);
+				local.rv[local.item] = {};
+				local.rv[local.item].changedFrom = changedFrom(local.item);
+				if (StructKeyExists(this, local.item))
 				{
-					loc.rv[loc.item].changedTo = this[loc.item];
+					local.rv[local.item].changedTo = this[local.item];
 				}
 				else
 				{
-					loc.rv[loc.item].changedTo = "";
+					local.rv[local.item].changedTo = "";
 				}
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="clearChangeInformation" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="false">
-	<cfscript>
+	public void function clearChangeInformation(string property) {
 		$updatePersistedProperties(argumentCollection=arguments);
-	</cfscript>
-</cffunction>
+	}
 
-<!--- PRIVATE METHODS --->
+	/*
+	* PRIVATE METHODS
+	*/
 
-<cffunction name="$setProperties" returntype="any" access="public" output="false">
-	<cfargument name="properties" type="struct" required="true">
-	<cfargument name="filterList" type="string" required="false" default="">
-	<cfargument name="setOnModel" type="boolean" required="false" default="true">
-	<cfargument name="$useFilterLists" type="boolean" required="false" default="true">
-	<cfscript>
-		var loc = {};
-		loc.rv = {};
+	public any function $setProperties(
+		required struct properties,
+		string filterList="",
+		boolean setOnModel="true",
+		boolean $useFilterLists="true"
+	) { 
+		local.rv = {};
 		arguments.filterList = ListAppend(arguments.filterList, "properties,filterList,setOnModel,$useFilterLists");
 
 		// add eventual named arguments to properties struct (named arguments will take precedence)
-		for (loc.key in arguments)
+		for (local.key in arguments)
 		{
-			if (!ListFindNoCase(arguments.filterList, loc.key))
+			if (!ListFindNoCase(arguments.filterList, local.key))
 			{
-				arguments.properties[loc.key] = arguments[loc.key];
+				arguments.properties[local.key] = arguments[local.key];
 			}
 		}
 
 		// loop through the properties and see if they can be set based off of the accessible properties lists
-		for (loc.key in arguments.properties)
+		for (local.key in arguments.properties)
 		{
-			if (StructKeyExists(arguments.properties, loc.key)) // required to ignore null keys
+			if (StructKeyExists(arguments.properties, local.key)) // required to ignore null keys
 			{
-				loc.accessible = true;
-				if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, loc.key))
+				local.accessible = true;
+				if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, local.key))
 				{
-					loc.accessible = false;
+					local.accessible = false;
 				}
-				if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, loc.key))
+				if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, local.key))
 				{
-					loc.accessible = false;
+					local.accessible = false;
 				}
-				if (loc.accessible)
+				if (local.accessible)
 				{
-					loc.rv[loc.key] = arguments.properties[loc.key];
+					local.rv[local.key] = arguments.properties[local.key];
 				}
-				if (loc.accessible && arguments.setOnModel)
+				if (local.accessible && arguments.setOnModel)
 				{
-					$setProperty(property=loc.key, value=loc.rv[loc.key]);
+					$setProperty(property=local.key, value=local.rv[local.key]);
 				}
 			}
 		}
@@ -430,15 +366,14 @@
 		{
 			return;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$setProperty" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="value" type="any" required="true">
-	<cfargument name="associations" type="struct" required="false" default="#variables.wheels.class.associations#">
-	<cfscript>
+	public void function $setProperty(
+		required string property,
+		required any value,
+		struct associations="#variables.wheels.class.associations#"
+	) {
 		if (IsObject(arguments.value))
 		{
 			this[arguments.property] = arguments.value;
@@ -459,77 +394,64 @@
 		{
 			this[arguments.property] = arguments.value;
 		}
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="$updatePersistedProperties" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public void function $updatePersistedProperties(string property) {
 		variables.$persistedProperties = {};
-		for (loc.key in variables.wheels.class.properties)
+		for (local.key in variables.wheels.class.properties)
 		{
-			if (StructKeyExists(this, loc.key) && (!StructKeyExists(arguments, "property") || arguments.property == loc.key))
+			if (StructKeyExists(this, local.key) && (!StructKeyExists(arguments, "property") || arguments.property == local.key))
 			{
-				variables.$persistedProperties[loc.key] = this[loc.key];
+				variables.$persistedProperties[local.key] = this[local.key];
 			}
 		}
-	</cfscript>
-</cffunction>
-
-<cffunction name="$setDefaultValues" returntype="any" access="public" output="false">
-	<cfscript>
-	var loc = {};
-	// persisted properties
-	for (loc.key in variables.wheels.class.properties)
-	{
-		if (StructKeyExists(variables.wheels.class.properties[loc.key], "defaultValue") && (!StructKeyExists(this, loc.key) || !Len(this[loc.key])))
+	}
+	public any function $setDefaultValues(){
+		// persisted properties
+		for (local.key in variables.wheels.class.properties)
 		{
-			// set the default value unless it is blank or a value already exists for that property on the object
-			this[loc.key] = variables.wheels.class.properties[loc.key].defaultValue;
+			if (StructKeyExists(variables.wheels.class.properties[local.key], "defaultValue") && (!StructKeyExists(this, local.key) || !Len(this[local.key])))
+			{
+				// set the default value unless it is blank or a value already exists for that property on the object
+				this[local.key] = variables.wheels.class.properties[local.key].defaultValue;
+			}
+		}
+		// non-persisted properties
+		for (local.key in variables.wheels.class.mapping)
+		{
+			if (StructKeyExists(variables.wheels.class.mapping[local.key], "defaultValue") && (!StructKeyExists(this, local.key) || !Len(this[local.key])))
+			{
+				// set the default value unless it is blank or a value already exists for that property on the object
+				this[local.key] = variables.wheels.class.mapping[local.key].defaultValue;
+			}
 		}
 	}
-	// non-persisted properties
-	for (loc.key in variables.wheels.class.mapping)
-	{
-		if (StructKeyExists(variables.wheels.class.mapping[loc.key], "defaultValue") && (!StructKeyExists(this, loc.key) || !Len(this[loc.key])))
-		{
-			// set the default value unless it is blank or a value already exists for that property on the object
-			this[loc.key] = variables.wheels.class.mapping[loc.key].defaultValue;
-		}
-	}
-	</cfscript>
-</cffunction>
 
-<cffunction name="$propertyInfo" returntype="struct" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		loc.rv = {};
+	public struct function $propertyInfo(required string property) {
+		local.rv = {};
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
 		{
-			loc.rv = variables.wheels.class.properties[arguments.property];
+			local.rv = variables.wheels.class.properties[arguments.property];
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$label" returntype="string" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		var loc = {};
+	public string function $label(required string property) {
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property) && StructKeyExists(variables.wheels.class.properties[arguments.property], "label"))
 		{
-			loc.rv = variables.wheels.class.properties[arguments.property].label;
+			local.rv = variables.wheels.class.properties[arguments.property].label;
 		}
 		else if (StructKeyExists(variables.wheels.class.mapping, arguments.property) && StructKeyExists(variables.wheels.class.mapping[arguments.property], "label"))
 		{
-			loc.rv = variables.wheels.class.mapping[arguments.property].label;
+			local.rv = variables.wheels.class.mapping[arguments.property].label;
 		}
 		else
 		{
-			loc.rv = Humanize(arguments.property);
+			local.rv = Humanize(arguments.property);
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
+</cfscript>  
+
+
+
