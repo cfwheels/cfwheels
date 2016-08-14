@@ -1,61 +1,53 @@
-<!--- PUBLIC MODEL INITIALIZATION METHODS --->
+<cfscript>
+	/*
+	* PUBLIC MODEL INITIALIZATION METHODS
+	*/
 
-<cffunction name="dataSource" returntype="void" access="public" output="false">
-	<cfargument name="datasource" type="string" required="true">
-	<cfargument name="username" type="string" required="false" default="">
-	<cfargument name="password" type="string" required="false" default="">
-	<cfscript>
+	public void function dataSource(
+		required string datasource,
+		string username="",
+		string password=""
+	) { 
 		variables.wheels.class.datasource = arguments.datasource;
 		variables.wheels.class.username = arguments.username;
-		variables.wheels.class.password = arguments.password;
-	</cfscript>
-</cffunction>
+		variables.wheels.class.password = arguments.password; 
+	}
 
-<cffunction name="table" returntype="void" access="public" output="false">
-	<cfargument name="name" type="any" required="true">
-	<cfset variables.wheels.class.tableName = arguments.name>
-</cffunction>
+	public void function table(required any name) {
+		variables.wheels.class.tableName = arguments.name;
+	}
 
-<cffunction name="setTableNamePrefix" returntype="void" access="public" output="false">
-	<cfargument name="prefix" type="string" required="true">
-	<cfscript>
-		variables.wheels.class.tableNamePrefix =  arguments.prefix;
-	</cfscript>
-</cffunction>
+	public void function setTableNamePrefix(required string prefix) { 
+		variables.wheels.class.tableNamePrefix =  arguments.prefix; 
+	}
 
-<cffunction name="setPrimaryKey" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+	public void function setPrimaryKey(required string property) { 
+		local.iEnd = ListLen(arguments.property);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.item = ListGetAt(arguments.property, loc.i);
-			if (!ListFindNoCase(variables.wheels.class.keys, loc.item))
+			local.item = ListGetAt(arguments.property, local.i);
+			if (!ListFindNoCase(variables.wheels.class.keys, local.item))
 			{
-				variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.item);
+				variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, local.item);
 			}
-		}
-	</cfscript>
-</cffunction>
+		} 
+	}
 
-<cffunction name="setPrimaryKeys" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
+	public void function setPrimaryKeys(required string property) {
 		setPrimaryKey(argumentCollection=arguments);
-	</cfscript>
-</cffunction>
+	}
 
-<!--- PUBLIC MODEL CLASS METHODS --->
+	/*
+	* PUBLIC MODEL CLASS METHODS
+	*/
 
-<cffunction name="exists" returntype="boolean" access="public" output="false">
-	<cfargument name="key" type="any" required="false">
-	<cfargument name="where" type="string" required="false">
-	<cfargument name="reload" type="boolean" required="false">
-	<cfargument name="parameterize" type="any" required="false">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false">
-	<cfscript>
-		var loc = {};
+	public boolean function exists(
+		any key,
+		string where,
+		boolean reload,
+		any parameterize,
+		boolean includeSoftDeletes
+	) { 
 		$args(name="exists", args=arguments);
 		if (get("showErrorInformation") && StructKeyExists(arguments, "key") && StructKeyExists(arguments, "where"))
 		{
@@ -66,114 +58,96 @@
 		arguments.callbacks = false;
 		if (StructKeyExists(arguments, "key"))
 		{
-			loc.rv = findByKey(argumentCollection=arguments).recordCount;
+			local.rv = findByKey(argumentCollection=arguments).recordCount;
 		}
 		else
 		{
-			loc.rv = findOne(argumentCollection=arguments).recordCount;
-		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+			local.rv = findOne(argumentCollection=arguments).recordCount;
+		} 
+		return local.rv;
+	}
 
-<cffunction name="columnNames" returntype="string" access="public" output="false">
-	<cfreturn variables.wheels.class.columnList>
-</cffunction>
+	public string function columnNames() {
+		return variables.wheels.class.columnList;
+	}
 
-<cffunction name="primaryKey" returntype="string" access="public" output="false">
-	<cfargument name="position" type="numeric" required="false" default="0">
-	<cfscript>
-		var loc = {};
+	public string function primaryKey(numeric position=0) {		
 		if (arguments.position > 0)
 		{
-			loc.rv = ListGetAt(variables.wheels.class.keys, arguments.position);
+			local.rv = ListGetAt(variables.wheels.class.keys, arguments.position);
 		}
 		else
 		{
-			loc.rv = variables.wheels.class.keys;
+			local.rv = variables.wheels.class.keys;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
-<cffunction name="primaryKeys" returntype="string" access="public" output="false">
-	<cfargument name="position" type="numeric" required="false" default="0">
-	<cfreturn primaryKey(argumentCollection=arguments)>
-</cffunction>
-
-<cffunction name="tableName" returntype="string" access="public" output="false">
-	<cfreturn variables.wheels.class.tableName>
-</cffunction>
-
-<cffunction name="getTableNamePrefix" returntype="string" access="public" output="false">
-	<cfreturn variables.wheels.class.tableNamePrefix>
-</cffunction>
-
-<cffunction name="isClass" returntype="boolean" access="public" output="false">
-	<cfreturn !isInstance(argumentCollection=arguments)>
-</cffunction>
-
-<!--- PUBLIC MODEL OBJECT METHODS --->
-
-<cffunction name="isNew" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		if (!StructKeyExists(variables, "$persistedProperties"))
-		{
-			// no values have been saved to the database so this object is new
-			loc.rv = true;
-		}
-		else
-		{
-			loc.rv = false;
-		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
-<cffunction name="compareTo" access="public" output="false" returntype="boolean">
-	<cfargument name="object" type="component" required="true">
-	<cfreturn Compare(this.$objectId(), arguments.object.$objectId()) IS 0>
-</cffunction>
-
-<cffunction name="isInstance" returntype="boolean" access="public" output="false">
-	<cfreturn StructKeyExists(variables.wheels, "instance")>
-</cffunction>
-
-<!--- PRIVATE METHODS --->
-
-<cffunction name="$objectId" access="public" output="false" returntype="string">
-	<cfreturn variables.wheels.tickCountId>
-</cffunction>
-
-<cffunction name="$buildQueryParamValues" returntype="struct" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		loc.rv = {};
-		loc.rv.value = this[arguments.property];
-		loc.rv.type = variables.wheels.class.properties[arguments.property].type;
-		loc.rv.dataType = variables.wheels.class.properties[arguments.property].dataType;
-		loc.rv.scale = variables.wheels.class.properties[arguments.property].scale;
-		loc.rv.null = (!Len(this[arguments.property]) && variables.wheels.class.properties[arguments.property].nullable);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
-<cffunction name="$keyLengthCheck" returntype="void" access="public" output="false">
-	<cfargument name="key" type="any" required="true">
-	<cfscript>
-	// throw error if the number of keys passed in is not the same as the number of keys defined for the model
-	if (ListLen(primaryKeys()) != ListLen(arguments.key))
-	{
-		$throw(type="Wheels.InvalidArgumentValue", message="The `key` argument contains an invalid value.", extendedInfo="The `key` argument contains a list, however this table doesn't have a composite key. A list of values is allowed for the `key` argument, but this only applies in the case when the table contains a composite key.");
+		return local.rv;
+	} 
+	
+	public string function primaryKeys(numeric position=0) {
+		return primaryKey(argumentCollection=arguments);
 	}
-	</cfscript>
-</cffunction>
 
-<cffunction name="$timestampProperty" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		this[arguments.property] = Now();
-	</cfscript>
-</cffunction>
+	public string function tableName() {
+		return variables.wheels.class.tableName;
+	}
+
+	public string function getTableNamePrefix() {
+		return variables.wheels.class.tableNamePrefix;
+	}
+
+	public string function isClass() {
+		return !isInstance(argumentCollection=arguments);
+	}  
+
+	/*
+	* PUBLIC MODEL OBJECT METHODS
+	*/
+
+	public boolean function isNew() { 
+		if (!StructKeyExists(variables, "$persistedProperties")){
+			// no values have been saved to the database so this object is new
+			local.rv = true;
+		} else {
+			local.rv = false;
+		}
+		return local.rv;
+	}
+
+	public boolean function compareTo(required component object) {
+		return Compare(this.$objectId(), arguments.object.$objectId()) IS 0;
+	}
+
+	public boolean function isInstance() {
+		return StructKeyExists(variables.wheels, "instance");
+	}
+
+	/*
+	* PRIVATE METHODS
+	*/
+
+	public string function $objectId() {
+		return variables.wheels.tickCountId;
+	}
+
+	public struct function $buildQueryParamValues(required string property) { 
+		local.rv = {};
+		local.rv.value = this[arguments.property];
+		local.rv.type = variables.wheels.class.properties[arguments.property].type;
+		local.rv.dataType = variables.wheels.class.properties[arguments.property].dataType;
+		local.rv.scale = variables.wheels.class.properties[arguments.property].scale;
+		local.rv.null = (!Len(this[arguments.property]) && variables.wheels.class.properties[arguments.property].nullable);
+		return local.rv;
+	}
+
+	public void function $keyLengthCheck(required any key) { 
+		// throw error if the number of keys passed in is not the same as the number of keys defined for the model
+		if (ListLen(primaryKeys()) != ListLen(arguments.key))
+		{
+			$throw(type="Wheels.InvalidArgumentValue", message="The `key` argument contains an invalid value.", extendedInfo="The `key` argument contains a list, however this table doesn't have a composite key. A list of values is allowed for the `key` argument, but this only applies in the case when the table contains a composite key.");
+		} 
+	}
+
+	public void function $timestampProperty(required string property) { 
+		this[arguments.property] = Now(); 
+	}
+</cfscript>
