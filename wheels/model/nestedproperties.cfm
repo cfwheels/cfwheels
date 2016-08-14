@@ -1,144 +1,148 @@
-<cfscript> 
-	/*
-	* PUBLIC MODEL INITIALIZATION METHODS 
-	*/
+<!--- PUBLIC MODEL INITIALIZATION METHODS --->
 
-	// Note: lots of naming collisions here with the move from loc-> local due to scope search in CF10 (quelle surprise).
-	// Have added underscores to all local variables to assure uniqueness for now, but really this needs revisiting.
-
-	public void function nestedProperties(
-		string association="",
-		boolean autoSave,
-		boolean allowDelete,
-		string sortProperty,
-		string rejectIfBlank
-	) {
+<cffunction name="nestedProperties" output="false" access="public" returntype="void">
+	<cfargument name="association" type="string" required="false" default="">
+	<cfargument name="autoSave" type="boolean" required="false">
+	<cfargument name="allowDelete" type="boolean" required="false">
+	<cfargument name="sortProperty" type="string" required="false">
+	<cfargument name="rejectIfBlank" type="string" required="false">
+	<cfscript>
+		var loc = {};
 		$args(args=arguments, name="nestedProperties", combine="association/associations");
 		arguments.association = $listClean(arguments.association);
-		local._iEnd = ListLen(arguments.association);
-		for (local._i=1; local._i <= local._iEnd; local._i++)
+		loc.iEnd = ListLen(arguments.association);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			local._association = ListGetAt(arguments.association, local._i);
-			if (StructKeyExists(variables.wheels.class.associations, local._association))
+			loc.association = ListGetAt(arguments.association, loc.i);
+			if (StructKeyExists(variables.wheels.class.associations, loc.association))
 			{
-				variables.wheels.class.associations[local._association].nested.allow = true;
-				variables.wheels.class.associations[local._association].nested.delete = arguments.allowDelete;
-				variables.wheels.class.associations[local._association].nested.autoSave = arguments.autoSave;
-				variables.wheels.class.associations[local._association].nested.sortProperty = arguments.sortProperty;
-				variables.wheels.class.associations[local._association].nested.rejectIfBlank = $listClean(arguments.rejectIfBlank);
+				variables.wheels.class.associations[loc.association].nested.allow = true;
+				variables.wheels.class.associations[loc.association].nested.delete = arguments.allowDelete;
+				variables.wheels.class.associations[loc.association].nested.autoSave = arguments.autoSave;
+				variables.wheels.class.associations[loc.association].nested.sortProperty = arguments.sortProperty;
+				variables.wheels.class.associations[loc.association].nested.rejectIfBlank = $listClean(arguments.rejectIfBlank);
 
 				// add to the white list if it exists
 				if (StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList"))
 				{
-					variables.wheels.class.accessibleProperties.whiteList = ListAppend(variables.wheels.class.accessibleProperties.whiteList, local._association, ",");
+					variables.wheels.class.accessibleProperties.whiteList = ListAppend(variables.wheels.class.accessibleProperties.whiteList, loc.association, ",");
 				}
 			}
 			else if (application.wheels.showErrorInformation)
 			{
-				$throw(type="Wheels.AssociationNotFound", message="The `#local._association#` assocation was not found on the #variables.wheels.class.modelName# model.", extendedInfo="Make sure you have called `hasMany()`, `hasOne()`, or `belongsTo()` before calling the `nestedProperties()` method.");
+				$throw(type="Wheels.AssociationNotFound", message="The `#loc.association#` assocation was not found on the #variables.wheels.class.modelName# model.", extendedInfo="Make sure you have called `hasMany()`, `hasOne()`, or `belongsTo()` before calling the `nestedProperties()` method.");
 			}
 		}
-	}
+	</cfscript>
+</cffunction>
 
-	/*
-	* PRIVATE METHODS 
-	*/
-	public boolean function $validateAssociations(required boolean callbacks) { 
-		local._associations = variables.wheels.class.associations;
-		for (local._association in local._associations)
+<!--- PRIVATE METHODS --->
+
+<cffunction name="$validateAssociations" returntype="boolean" access="public" output="false">
+	<cfargument name="callbacks" type="boolean" required="true">
+	<cfscript>
+		var loc = {};
+		loc.associations = variables.wheels.class.associations;
+		for (loc.association in loc.associations)
 		{
-			if (local._associations[local._association].nested.allow && local._associations[local._association].nested.autoSave && StructKeyExists(this, local._association))
+			if (loc.associations[loc.association].nested.allow && loc.associations[loc.association].nested.autoSave && StructKeyExists(this, loc.association))
 			{
-				local._array = this[local._association];
-				if (IsObject(this[local._association]))
+				loc.array = this[loc.association];
+				if (IsObject(this[loc.association]))
 				{
-					local._array = [this[local._association]];
+					loc.array = [this[loc.association]];
 				}
-				if (IsArray(local._array))
+				if (IsArray(loc.array))
 				{
-					for (local._i=1; local._i <= ArrayLen(local._array); local._i++)
+					for (loc.i=1; loc.i <= ArrayLen(loc.array); loc.i++)
 					{
-						$invoke(componentReference=local._array[local._i], method="valid", invokeArgs=arguments);
+						$invoke(componentReference=loc.array[loc.i], method="valid", invokeArgs=arguments);
 					}
 				}
 			}
 		}
-		return true;
-	}
+	</cfscript>
+	<cfreturn true>
+</cffunction>
 
-	public boolean function $saveAssociations(
-		required any parameterize,
-		required boolean reload,
-		required boolean validate,
-		required boolean callbacks
-	) {		
-		local._rv = true;
-		local._associations = variables.wheels.class.associations;
-		for (local._association in local._associations)
+<cffunction name="$saveAssociations" returntype="boolean" access="public" output="false">
+	<cfargument name="parameterize" type="any" required="true">
+	<cfargument name="reload" type="boolean" required="true">
+	<cfargument name="validate" type="boolean" required="true">
+	<cfargument name="callbacks" type="boolean" required="true">
+	<cfscript>
+		var loc = {};
+		loc.rv = true;
+		loc.associations = variables.wheels.class.associations;
+		for (loc.association in loc.associations)
 		{
-			if (local._associations[local._association].nested.allow && local._associations[local._association].nested.autoSave && StructKeyExists(this, local._association))
+			if (loc.associations[loc.association].nested.allow && loc.associations[loc.association].nested.autoSave && StructKeyExists(this, loc.association))
 			{
-				local._array = this[local._association];
-				if (IsObject(this[local._association]))
+				loc.array = this[loc.association];
+				if (IsObject(this[loc.association]))
 				{
-					local._array = [this[local._association]];
+					loc.array = [this[loc.association]];
 				}
-				if (IsArray(local._array))
+				if (IsArray(loc.array))
 				{
 					// get our expanded information for this association
-					local._info = $expandedAssociations(include=local._association);
-					local._info = local._info[1];
+					loc.info = $expandedAssociations(include=loc.association);
+					loc.info = loc.info[1];
 
-					for (local._i=1; local._i <= ArrayLen(local._array); local._i++)
+					for (loc.i=1; loc.i <= ArrayLen(loc.array); loc.i++)
 					{
-						if (ListFindNoCase("hasMany,hasOne", local._associations[local._association].type))
+						if (ListFindNoCase("hasMany,hasOne", loc.associations[loc.association].type))
 						{
-							$setForeignKeyValues(missingMethodArguments=local._array[local._i], keys=local._info.foreignKey);
+							$setForeignKeyValues(missingMethodArguments=loc.array[loc.i], keys=loc.info.foreignKey);
 						}
-						local._saveResult = $invoke(componentReference=local._array[local._i], method="save", invokeArgs=arguments);
-						if (local._rv)
+						loc.saveResult = $invoke(componentReference=loc.array[loc.i], method="save", invokeArgs=arguments);
+						if (loc.rv)
 						{
 							// don't change the return value when we have already received a false
-							local._rv = local._saveResult;
+							loc.rv = loc.saveResult;
 						}
 					}
 				}
 			}
 		}
-		if (!local._rv)
+		if (!loc.rv)
 		{
 			// if the associations were not saved correctly, roll them back to their new state but keep the errors
 			$resetAssociationsToNew();
 		}
-		return local._rv;
-	}
+		</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
 
-	public boolean function $setAssociations() {  
-		local._associations = variables.wheels.class.associations;
-		for (local._item in local._associations)
+<cffunction name="$setAssociations" returntype="boolean" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.associations = variables.wheels.class.associations;
+		for (loc.item in loc.associations)
 		{
-			local._association = local._associations[local._item];
-			if (local._association.nested.allow && local._association.nested.autoSave && StructKeyExists(this, local._item))
+			loc.association = loc.associations[loc.item];
+			if (loc.association.nested.allow && loc.association.nested.autoSave && StructKeyExists(this, loc.item))
 			{
-				if (ListFindNoCase("belongsTo,hasOne", local._association.type) && IsStruct(this[local._item]))
+				if (ListFindNoCase("belongsTo,hasOne", loc.association.type) && IsStruct(this[loc.item]))
 				{
-					$setOneToOneAssociationProperty(property=local._item, value=this[local._item], association=local._association, delete=true);
+					$setOneToOneAssociationProperty(property=loc.item, value=this[loc.item], association=loc.association, delete=true);
 				}
-				else if (local._association.type == "hasMany" && IsArray(this[local._item]) && ArrayLen(this[local._item]))
-				{ 
-					$setCollectionAssociationProperty(property=local._item, value=this[local._item], association=local._association, delete=true);
+				else if (loc.association.type == "hasMany" && IsArray(this[loc.item]) && ArrayLen(this[loc.item]))
+				{
+					$setCollectionAssociationProperty(property=loc.item, value=this[loc.item], association=loc.association, delete=true);
 				}
 			}
 		}
-		return true;
-	}
+	</cfscript>
+	<cfreturn true>
+</cffunction>
 
-	public void function $setOneToOneAssociationProperty(
-		required string property,
-		required struct value,
-		required struct association,
-		boolean delete="false"
-	) { 
+<cffunction name="$setOneToOneAssociationProperty" returntype="void" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="value" type="struct" required="true">
+	<cfargument name="association" type="struct" required="true">
+	<cfargument name="delete" type="boolean" required="false" default="false">
+	<cfscript>
 		if (!StructKeyExists(this, arguments.property) || !IsObject(this[arguments.property]) || StructKeyExists(this[arguments.property], "_delete"))
 		{
 			this[arguments.property] = $getAssociationObject(argumentCollection=arguments);
@@ -150,104 +154,110 @@
 		else
 		{
 			StructDelete(this, arguments.property);
-		} 
-	}
+		}
+	</cfscript>
+	<cfreturn>
+</cffunction>
 
-	public void function $setCollectionAssociationProperty(
-		required string property,
-		required any value,
-		required struct association,
-		boolean delete=false
-	) { 
-		local._model = model(arguments.association.modelName);
+<cffunction name="$setCollectionAssociationProperty" returntype="void" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="value" type="any" required="true">
+	<cfargument name="association" type="struct" required="true">
+	<cfargument name="delete" type="boolean" required="false" default="false">
+	<cfscript>
+		var loc = {};
+		loc.model = model(arguments.association.modelName);
 		if (!StructKeyExists(this, arguments.property) || !IsArray(this[arguments.property]))
 		{
 			this[arguments.property] = [];
 		}
 		if (IsStruct(arguments.value))
 		{
-			for (local._item in arguments.value)
+			for (loc.item in arguments.value)
 			{
 				// check to see if the id is a tickcount, if so the object is new
-				if (IsNumeric(local._item) && Ceiling(Right(GetTickCount(), 12) / 900000000) == Ceiling(local._item / 900000000))
+				if (IsNumeric(loc.item) && Ceiling(Right(GetTickCount(), 12) / 900000000) == Ceiling(loc.item / 900000000))
 				{
-					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[local._item], association=arguments.association, delete=arguments.delete));
-					$updateCollectionObject(property=arguments.property, value=arguments.value[local._item]);
+					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association, delete=arguments.delete));
+					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.item]);
 				}
 				else
 				{
 					// get our primary keys
-					local._keys = local._model.primaryKey();
-					local._itemArray = ListToArray(local._item, ",", true);
-					local._iEnd = ListLen(local._keys);
-					for (local._i=1; local._i <= local._iEnd; local._i++)
+					loc.keys = loc.model.primaryKey();
+					loc.itemArray = ListToArray(loc.item, ",", true);
+					loc.iEnd = ListLen(loc.keys);
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					{
-						arguments.value[local._item][ListGetAt(local._keys, local._i)] = local._itemArray[local._i];
+						arguments.value[loc.item][ListGetAt(loc.keys, loc.i)] = loc.itemArray[loc.i];
 					}
-					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[local._item], association=arguments.association, delete=arguments.delete));
-					$updateCollectionObject(property=arguments.property, value=arguments.value[local._item]);
+					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association, delete=arguments.delete));
+					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.item]);
 				}
 			}
 		}
 		else if (IsArray(arguments.value))
 		{
-			for (local._i=1; local._i <= ArrayLen(arguments.value); local._i++)
+			for (loc.i=1; loc.i <= ArrayLen(arguments.value); loc.i++)
 			{
-				if (IsObject(arguments.value[local._i]) && ArrayLen(this[arguments.property]) >= local._i && IsObject(this[arguments.property][local._i]) && this[arguments.property][local._i].compareTo(arguments.value[local._i]))
+				if (IsObject(arguments.value[loc.i]) && ArrayLen(this[arguments.property]) >= loc.i && IsObject(this[arguments.property][loc.i]) && this[arguments.property][loc.i].compareTo(arguments.value[loc.i]))
 				{
-					this[arguments.property][local._i] = $getAssociationObject(property=arguments.property, value=arguments.value[local._i], association=arguments.association, delete=arguments.delete);
-					if (!IsStruct(this[arguments.property][local._i]) && !this[arguments.property][local._i])
+					this[arguments.property][loc.i] = $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete);
+					if (!IsStruct(this[arguments.property][loc.i]) && !this[arguments.property][loc.i])
 					{
-						ArrayDeleteAt(this[arguments.property], local._i);
-						local._i--;
+						ArrayDeleteAt(this[arguments.property], loc.i);
+						loc.i--;
 					}
 					else
 					{
-						$updateCollectionObject(property=arguments.property, value=arguments.value[local._i], position=local._i);
+						$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i], position=loc.i);
 					}
 				}
-				else if (IsStruct(arguments.value[local._i]) && ArrayLen(this[arguments.property]) >= local._i && IsObject(this[arguments.property][local._i]))
+				else if (IsStruct(arguments.value[loc.i]) && ArrayLen(this[arguments.property]) >= loc.i && IsObject(this[arguments.property][loc.i]))
 				{
-					this[arguments.property][local._i] = $getAssociationObject(property=arguments.property, value=arguments.value[local._i], association=arguments.association, delete=arguments.delete);
-					if (!IsStruct(this[arguments.property][local._i]) && !this[arguments.property][local._i])
+					this[arguments.property][loc.i] = $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete);
+					if (!IsStruct(this[arguments.property][loc.i]) && !this[arguments.property][loc.i])
 					{
-						ArrayDeleteAt(this[arguments.property], local._i);
-						local._i--;
+						ArrayDeleteAt(this[arguments.property], loc.i);
+						loc.i--;
 					}
 					else
 					{
-						$updateCollectionObject(property=arguments.property, value=arguments.value[local._i], position=local._i);
+						$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i], position=loc.i);
 					}
 				}
 				else
 				{
-					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[local._i], association=arguments.association, delete=arguments.delete));
-					$updateCollectionObject(property=arguments.property, value=arguments.value[local._i]);
+					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete));
+					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i]);
 				}
 			}
 		}
 		// sort the order of the objects in the array if the property is set
 		if (Len(arguments.association.nested.sortProperty))
 		{
-			local._sortedArray = [];
-			local._iEnd = ArrayLen(this[arguments.property]);
-			for (local._i=1; local._i <= local._iEnd; local._i++)
+			loc.sortedArray = [];
+			loc.iEnd = ArrayLen(this[arguments.property]);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				if (!IsNumeric(this[arguments.property][local._i][arguments.association.nested.sortProperty]))
+				if (!IsNumeric(this[arguments.property][loc.i][arguments.association.nested.sortProperty]))
 				{
 					return;
 				}
-				local._sortedArray[this[arguments.property][local._i][arguments.association.nested.sortProperty]] = this[arguments.property][local._i];
+				loc.sortedArray[this[arguments.property][loc.i][arguments.association.nested.sortProperty]] = this[arguments.property][loc.i];
 			}
-			this[arguments.property] = local._sortedArray;
+			this[arguments.property] = loc.sortedArray;
 		}
-	}
+	</cfscript>
+	<cfreturn>
+</cffunction>
 
-	public void function $updateCollectionObject(
-		required string property,
-		required struct value,
-		numeric position="0"
-	) { 
+<cffunction name="$updateCollectionObject" returntype="void" output="false" access="public">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="value" type="struct" required="true">
+	<cfargument name="position" type="numeric" required="false" default="0">
+	<cfscript>
+		var loc = {};
 		if (!arguments.position)
 		{
 			arguments.position = ArrayLen(this[arguments.property]);
@@ -259,118 +269,135 @@
 		else
 		{
 			ArrayDeleteAt(this[arguments.property], arguments.position);
-		} 
-	}
+		}
+	</cfscript>
+</cffunction>
 
-	public any function $getAssociationObject(
-		required string property,
-		required struct value,
-		required struct association,
-		required boolean delete
-	) {
-		local._method = "";
-		local._object = false;
-		local._delete = false;
-		local._arguments = {};
-		local._model = model(arguments.association.modelName);
+<cffunction name="$getAssociationObject" returntype="any" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="value" type="struct" required="true">
+	<cfargument name="association" type="struct" required="true">
+	<cfargument name="delete" type="boolean" required="true">
+	<cfscript>
+		var loc = {};
+		loc.method = "";
+		loc.object = false;
+		loc.delete = false;
+		loc.arguments = {};
+		loc.model = model(arguments.association.modelName);
 
 		// check to see if the struct has all of the keys we need from rejectIfBlank
 		if ($structKeysExist(struct=arguments.value, properties=arguments.association.nested.rejectIfBlank))
 		{
 			// get our primary keys, if they don't exist, then we create a new object
-			local._arguments.key = $createPrimaryKeyList(params=arguments.value, keys=local._model.primaryKey());
+			loc.arguments.key = $createPrimaryKeyList(params=arguments.value, keys=loc.model.primaryKey());
 
 			if (IsObject(arguments.value))
 			{
-				local._object = arguments.value;
+				loc.object = arguments.value;
 			}
-			else if (Len(local._arguments.key))
+			else if (Len(loc.arguments.key))
 			{
-				local._object = local._model.findByKey(argumentCollection=local._arguments);
+				loc.object = loc.model.findByKey(argumentCollection=loc.arguments);
 			}
 			if (StructKeyExists(arguments.value, "_delete") && IsBoolean(arguments.value["_delete"]) && arguments.value["_delete"])
 			{
-				local._delete = true;
+				loc.delete = true;
 			}
-			if (!IsObject(local._object) && !local._delete)
+			if (!IsObject(loc.object) && !loc.delete)
 			{
-				StructDelete(local._arguments, "key");
-				return $invoke(componentReference=local._model, method="new", invokeArgs=local._arguments);
+				StructDelete(loc.arguments, "key");
+				return $invoke(componentReference=loc.model, method="new", invokeArgs=loc.arguments);
 			}
-			else if (Len(local._arguments.key) && local._delete && arguments.association.nested.delete && arguments.delete)
+			else if (Len(loc.arguments.key) && loc.delete && arguments.association.nested.delete && arguments.delete)
 			{
-				$invoke(componentReference=local._model, method="deleteByKey", invokeArgs=local._arguments);
+				$invoke(componentReference=loc.model, method="deleteByKey", invokeArgs=loc.arguments);
 				return false;
 			}
 		}
-		return local._object;
-	}
+	</cfscript>
+	<cfreturn loc.object>
+</cffunction>
 
-	public string function $createPrimaryKeyList(required struct params, required string keys) { 
-		local._rv = "";
-		local._iEnd = ListLen(arguments.keys);
-		for (local._i=1; local._i <= local._iEnd; local._i++)
+<cffunction name="$createPrimaryKeyList" returntype="string" access="public" output="false">
+	<cfargument name="params" type="struct" required="true">
+	<cfargument name="keys" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.rv = "";
+		loc.iEnd = ListLen(arguments.keys);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			local._key = ListGetAt(arguments.keys, local._i);
-			if (!StructKeyExists(arguments.params, local._key) || !Len(arguments.params[local._key]))
+			loc.key = ListGetAt(arguments.keys, loc.i);
+			if (!StructKeyExists(arguments.params, loc.key) || !Len(arguments.params[loc.key]))
 			{
 				return "";
 			}
-			local._rv = ListAppend(local._rv, arguments.params[local._key]);
-		} 
-		return local._rv;
-	}
+			loc.rv = ListAppend(loc.rv, arguments.params[loc.key]);
+		}
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
 
-	public void function $resetToNew() {
+<cffunction name="$resetToNew" returntype="void" access="public" output="true">
+	<cfscript>
+		var loc = {};
 		if ($persistedOnInitialization())
 		{
 			return;
 		}
+
 		// remove the persisted properties container
 		StructDelete(variables, "$persistedProperties");
 
 		// remove any primary keys set by the save
-		local._keys = primaryKeys();
-		local._iEnd = ListLen(local._keys);
-		for (local._i=1; local._i <= local._iEnd; local._i++)
+		loc.keys = primaryKeys();
+		loc.iEnd = ListLen(loc.keys);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			local._item = ListGetAt(local._keys, local._i);
-			StructDelete(this, local._item);
+			loc.item = ListGetAt(loc.keys, loc.i);
+			StructDelete(this, loc.item);
 		}
-	}
+	</cfscript>
+</cffunction>
 
-	public void function $resetAssociationsToNew() {		
-		local._associations = variables.wheels.class.associations;
-		for (local._association in local._associations)
+<cffunction name="$resetAssociationsToNew" returntype="void" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.associations = variables.wheels.class.associations;
+		for (loc.association in loc.associations)
 		{
-			if (local._associations[local._association].nested.allow && local._associations[local._association].nested.autoSave && StructKeyExists(this, local._association))
+			if (loc.associations[loc.association].nested.allow && loc.associations[loc.association].nested.autoSave && StructKeyExists(this, loc.association))
 			{
-				local._array = this[local._association];
-				if (IsObject(this[local._association]))
+				loc.array = this[loc.association];
+				if (IsObject(this[loc.association]))
 				{
-					local._array = [this[local._association]];
+					loc.array = [this[loc.association]];
 				}
-				if (IsArray(local._array))
+				if (IsArray(loc.array))
 				{
-					local._iEnd = ArrayLen(local._array);
-					for (local._i=1; local._i <= local._iEnd; local._i++)
+					loc.iEnd = ArrayLen(loc.array);
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					{
-						local._array[local._i].$resetToNew();
+						loc.array[loc.i].$resetToNew();
 					}
 				}
 			}
 		}
-	}
+	</cfscript>
+</cffunction>
 
-	public boolean function $persistedOnInitialization() {
-		if (StructKeyExists(variables.wheels.instance, "persistedOnInitialization") && variables.wheels.instance.persistedOnInitialization){
-			return true;
-		} else {
-			return false;
-		}	 
-	}
-</cfscript>
-  
-
-
- 
+<cffunction name="$persistedOnInitialization" returntype="boolean" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		if (StructKeyExists(variables.wheels.instance, "persistedOnInitialization") && variables.wheels.instance.persistedOnInitialization)
+		{
+			loc.rv = true;
+		}
+		else
+		{
+			loc.rv = false;
+		}
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>

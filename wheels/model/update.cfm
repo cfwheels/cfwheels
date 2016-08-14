@@ -1,20 +1,18 @@
-<cfscript>
-	/*
-	* PUBLIC MODEL CLASS METHODS
-	*/
+<!--- PUBLIC MODEL CLASS METHODS --->
 
-	public numeric function updateAll(
-		string where="",
-		string include="",
-		struct properties="#StructNew()#",
-		boolean reload,
-		any parameterize,
-		boolean instantiate,
-		boolean validate="true",
-		string transaction="#application.wheels.transactionMode#",
-		boolean callbacks="true",
-		boolean includeSoftDeletes="false"
-	) {
+<cffunction name="updateAll" returntype="numeric" access="public" output="false">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="reload" type="boolean" required="false">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="instantiate" type="boolean" required="false">
+	<cfargument name="validate" type="boolean" required="false" default="true">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
+	<cfscript>
+		var loc = {};
 		$args(name="updateAll", args=arguments);
 		arguments.include = $listClean(arguments.include);
 		arguments.where = $cleanInList(arguments.where);
@@ -23,14 +21,14 @@
 		// find and instantiate each object and call its update function
 		if (arguments.instantiate)
 		{
-			local.rv = 0;
-			local.objects = findAll(where=arguments.where, include=arguments.include, reload=arguments.reload, parameterize=arguments.parameterize, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes, returnIncluded=false, returnAs="objects");
-			local.iEnd = ArrayLen(local.objects);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			loc.rv = 0;
+			loc.objects = findAll(where=arguments.where, include=arguments.include, reload=arguments.reload, parameterize=arguments.parameterize, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes, returnIncluded=false, returnAs="objects");
+			loc.iEnd = ArrayLen(loc.objects);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				if (local.objects[local.i].update(properties=arguments.properties, parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks))
+				if (loc.objects[loc.i].update(properties=arguments.properties, parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks))
 				{
-					local.rv++;
+					loc.rv++;
 				}
 			}
 		}
@@ -38,92 +36,99 @@
 		{
 			arguments.sql = [];
 			ArrayAppend(arguments.sql, "UPDATE #tableName()# SET");
-			local.pos = 0;
-			for (local.key in arguments.properties)
+			loc.pos = 0;
+			for (loc.key in arguments.properties)
 			{
-				local.pos++;
-				ArrayAppend(arguments.sql, "#variables.wheels.class.properties[local.key].column# = ");
-				local.param = {value=arguments.properties[local.key], type=variables.wheels.class.properties[local.key].type, dataType=variables.wheels.class.properties[local.key].dataType, scale=variables.wheels.class.properties[local.key].scale, null=!Len(arguments.properties[local.key])};
-				ArrayAppend(arguments.sql, local.param);
-				if (StructCount(arguments.properties) > local.pos)
+				loc.pos++;
+				ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.key].column# = ");
+				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=!Len(arguments.properties[loc.key])};
+				ArrayAppend(arguments.sql, loc.param);
+				if (StructCount(arguments.properties) > loc.pos)
 				{
 					ArrayAppend(arguments.sql, ",");
 				}
 			}
 			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
-			local.rv = invokeWithTransaction(method="$updateAll", argumentCollection=arguments);
+			loc.rv = invokeWithTransaction(method="$updateAll", argumentCollection=arguments);
 		}
-		return local.rv;
-	}
-	public boolean function updateByKey(
-		required any key,
-		struct properties="#StructNew()#",
-		boolean reload,
-		boolean validate="true",
-		string transaction="#application.wheels.transactionMode#",
-		boolean callbacks="true",
-		boolean includeSoftDeletes="false"
-	) {
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
+<cffunction name="updateByKey" returntype="boolean" access="public" output="false">
+	<cfargument name="key" type="any" required="true">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="reload" type="boolean" required="false">
+	<cfargument name="validate" type="boolean" required="false" default="true">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
+	<cfscript>
+		var loc = {};
 		$args(name="updateByKey", args=arguments);
 		$keyLengthCheck(arguments.key);
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
-		local.rv = updateOne(argumentCollection=arguments);
-		return local.rv;
-	}
+		loc.rv = updateOne(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
 
-	public boolean function updateOne(
-		string where="",
-		string order="",
-		struct properties="#StructNew()#",
-		boolean reload,
-		boolean validate="true",
-		string transaction="#application.wheels.transactionMode#",
-		boolean callbacks="true",
-		boolean includeSoftDeletes="false"
-	) {
+<cffunction name="updateOne" returntype="boolean" access="public" output="false">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="order" type="string" required="false" default="">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="reload" type="boolean" required="false">
+	<cfargument name="validate" type="boolean" required="false" default="true">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
+	<cfscript>
+		var loc = {};
 		$args(name="updateOne", args=arguments);
-		local.object = findOne(where=arguments.where, order=arguments.order, reload=arguments.reload, includeSoftDeletes=arguments.includeSoftDeletes);
+		loc.object = findOne(where=arguments.where, order=arguments.order, reload=arguments.reload, includeSoftDeletes=arguments.includeSoftDeletes);
 		StructDelete(arguments, "where");
 		StructDelete(arguments, "order");
-		if (IsObject(local.object))
+		if (IsObject(loc.object))
 		{
-			local.rv = local.object.update(argumentCollection=arguments);
+			loc.rv = loc.object.update(argumentCollection=arguments);
 		}
 		else
 		{
-			local.rv = false;
+			loc.rv = false;
 		}
-		return local.rv;
-	}
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
 
-	/*
-	* PUBLIC MODEL OBJECT METHODS
-	*/
+<!--- PUBLIC MODEL OBJECT METHODS --->
 
-	public boolean function update(
-		struct properties="#StructNew()#",
-		any parameterize,
-		boolean reload,
-		boolean validate="true",
-		string transaction="#application.wheels.transactionMode#",
-		boolean callbacks="true"
-	){		
+<cffunction name="update" returntype="boolean" access="public" output="false">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="reload" type="boolean" required="false">
+	<cfargument name="validate" type="boolean" required="false" default="true">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
+	<cfscript>
+		var loc = {};
 		$args(name="update", args=arguments);
 		$setProperties(argumentCollection=arguments, filterList="properties,parameterize,reload,validate,transaction,callbacks");
-		local.rv = save(parameterize=arguments.parameterize, reload=arguments.reload, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks);
-		return local.rv;
-	}
+		loc.rv = save(parameterize=arguments.parameterize, reload=arguments.reload, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks);
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
 
-	public boolean function updateProperty(
-		string property,
-		any value,
-		any parameterize,
-		string transaction="#application.wheels.transactionMode#",
-		boolean callbacks="true"
-	) {
- 		$args(name="updateProperty", args=arguments);
+<cffunction name="updateProperty" returntype="boolean" access="public" output="false">
+	<cfargument name="property" type="string" required="false">
+	<cfargument name="value" type="any" required="false">
+	<cfargument name="parameterize" type="any" required="false">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
+	<cfscript>
+		var loc = {};
+		$args(name="updateProperty", args=arguments);
 		arguments.reload = false;
 		arguments.validate = false;
 		if (StructKeyExists(arguments, "property") && StructKeyExists(arguments, "value")) {
@@ -132,20 +137,26 @@
 			StructDelete(arguments, "property");
 			StructDelete(arguments, "value");
 		}
-		local.rv = update(argumentCollection=arguments);
-		return local.rv;
-	}
+		loc.rv = update(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
 
-	/*
-	* PRIVATE METHODS
-	*/
+<!--- PRIVATE METHODS --->
 
-	public numeric function $updateAll() {
-		local.rv = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize).result.recordCount;
-		return local.rv;
-	}
+<cffunction name="$updateAll" returntype="numeric" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.rv = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize).result.recordCount;
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
 
-	public boolean function $update(required any parameterize, required boolean reload) {		
+<cffunction name="$update" returntype="boolean" access="public" output="false">
+	<cfargument name="parameterize" type="any" required="true">
+	<cfargument name="reload" type="boolean" required="true">
+	<cfscript>
+		var loc = {};
 		if (hasChanged())
 		{
 			// perform update since changes have been made
@@ -153,33 +164,32 @@
 			{
 				$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 			}
-			local.sql = [];
-			ArrayAppend(local.sql, "UPDATE #tableName()# SET ");
-			for (local.key in variables.wheels.class.properties)
+			loc.sql = [];
+			ArrayAppend(loc.sql, "UPDATE #tableName()# SET ");
+			for (loc.key in variables.wheels.class.properties)
 			{
 				// include all changed non-key values in the update
-				if (StructKeyExists(this, local.key) && !ListFindNoCase(primaryKeys(), local.key) && hasChanged(local.key))
+				if (StructKeyExists(this, loc.key) && !ListFindNoCase(primaryKeys(), loc.key) && hasChanged(loc.key))
 				{
-					ArrayAppend(local.sql, "#variables.wheels.class.properties[local.key].column# = ");
-					local.param = $buildQueryParamValues(local.key);
-					ArrayAppend(local.sql, local.param);
-					ArrayAppend(local.sql, ",");
+					ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
+					loc.param = $buildQueryParamValues(loc.key);
+					ArrayAppend(loc.sql, loc.param);
+					ArrayAppend(loc.sql, ",");
 				}
 			}
 
 			// only submit the update if we generated an sql set statement
-			if (ArrayLen(local.sql) > 1)
+			if (ArrayLen(loc.sql) > 1)
 			{
-				ArrayDeleteAt(local.sql, ArrayLen(local.sql));
-				local.sql = $addKeyWhereClause(sql=local.sql);
-				local.upd = variables.wheels.class.adapter.$query(sql=local.sql, parameterize=arguments.parameterize);
+				ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
+				loc.sql = $addKeyWhereClause(sql=loc.sql);
+				loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
 				if (arguments.reload)
 				{
 					this.reload();
 				}
 			}
 		}
-		return true;
-	}
-</cfscript> 
- 
+	</cfscript>
+	<cfreturn true>
+</cffunction>
