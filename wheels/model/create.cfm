@@ -10,7 +10,7 @@
 		boolean validate=true,
 		string transaction=application.wheels.transactionMode,
 		boolean callbacks=true
-	) { 
+	) {
 		$args(name="create", args=arguments);
 		local.parameterize = arguments.parameterize;
 		StructDelete(arguments, "parameterize");
@@ -21,10 +21,10 @@
 		return local.rv;
 	}
 
-	public any function new(struct properties={}, boolean callbacks=true) { 
+	public any function new(struct properties={}, boolean callbacks=true) {
 		arguments.properties = $setProperties(argumentCollection=arguments, filterList="properties,reload,transaction,callbacks", setOnModel=false);
 		local.rv = $createInstance(properties=arguments.properties, persisted=false, callbacks=arguments.callbacks);
-		local.rv.$setDefaultValues(); 
+		local.rv.$setDefaultValues();
 		return local.rv;
 	}
 
@@ -37,7 +37,7 @@
 		boolean validate=true,
 		string transaction=application.wheels.transactionMode,
 		boolean callbacks=true
-	) { 
+	) {
 		$args(name="save", args=arguments);
 		clearErrors();
 		local.rv = invokeWithTransaction(method="$save", argumentCollection=arguments);
@@ -54,7 +54,7 @@
 		numeric row=1,
 		boolean base=true,
 		boolean callbacks=true
-	) { 
+	) {
 		local.fileName = $objectFileName(name=variables.wheels.class.modelName, objectPath=variables.wheels.class.path, type="model");
 		local.rv = $createObjectFromRoot(path=variables.wheels.class.path, fileName=local.fileName, method="$initModelObject", name=variables.wheels.class.modelName, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row, base=arguments.base, useFilterLists=(!arguments.persisted));
 
@@ -71,8 +71,8 @@
 		required boolean reload,
 		required boolean validate,
 		required boolean callbacks
-	) { 
-		local.rv = false; 
+	) {
+		local.rv = false;
 		// make sure all of our associations are set properly before saving
 		$setAssociations();
 
@@ -123,7 +123,7 @@
 		else
 		{
 			$validateAssociations(callbacks=arguments.callbacks);
-		} 
+		}
 		return local.rv;
 	}
 
@@ -185,14 +185,14 @@
 		// run the insert sql statement and set the primary key value on the object (if one was returned from the database)
 		local.ins = variables.wheels.class.adapter.$query(sql=local.sql, parameterize=arguments.parameterize, $primaryKey=local.pks);
 		local.generatedKey = variables.wheels.class.adapter.$generatedKey();
-		
+
 		if (StructKeyExists(local.ins.result, local.generatedKey)){
-			this[primaryKeys(1)] = local.ins.result[local.generatedKey];  
+			this[primaryKeys(1)] = local.ins.result[local.generatedKey];
 		}
 
 		if (arguments.reload){
 			this.reload();
-		} 
+		}
 		return true;
 	}
-</cfscript> 
+</cfscript>

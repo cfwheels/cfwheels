@@ -2,7 +2,7 @@
 	/*
 	*  PUBLIC MODEL CLASS METHODS
 	*/
-	
+
 	public any function findAll(
 		string where="",
 		string order,
@@ -24,7 +24,7 @@
 		boolean includeSoftDeletes="false",
 		numeric $limit="0",
 		numeric $offset="0"
-	) { 
+	) {
 		$args(name="findAll", args=arguments);
 		arguments.include = $listClean(arguments.include);
 		arguments.where = $cleanInList(arguments.where);
@@ -230,7 +230,7 @@
 						$throw(type="Wheels.IncorrectArgumentValue", message="Incorrect Arguments", extendedInfo="The `returnAs` may be either `query`, `struct(s)` or `object(s)`");
 					}
 			}
-		} 
+		}
 		return local.rv;
 	}
 
@@ -244,7 +244,7 @@
 		string returnAs,
 		boolean callbacks="true",
 		boolean includeSoftDeletes="false"
-	) { 
+	) {
 		$args(name="findByKey", args=arguments);
 		arguments.include = $listClean(arguments.include);
 		if (Len(arguments.key))
@@ -300,7 +300,7 @@
 		return local.rv;
 	}
 
-	public any function findFirst(string property="#primaryKey()#", string $sort="ASC") { 		
+	public any function findFirst(string property="#primaryKey()#", string $sort="ASC") {
 		$args(args=arguments, name="findFirst", combine="property/properties");
 		arguments.order = "";
 		local.iEnd = ListLen(arguments.property);
@@ -321,7 +321,7 @@
 		return local.rv;
 	}
 
-	public string function findAllKeys(boolean quoted="false", string delimiter=",") {		
+	public string function findAllKeys(boolean quoted="false", string delimiter=",") {
 		local.quoted = arguments.quoted;
 		StructDelete(arguments, "quoted");
 		local.delimiter = arguments.delimiter;
@@ -337,14 +337,14 @@
 		{
 			local.functionName = "ValueList";
 		}
-		local.rv = Evaluate("#local.functionName#(local.query.#arguments.select#, '#local.delimiter#')");	
+		local.rv = Evaluate("#local.functionName#(local.query.#arguments.select#, '#local.delimiter#')");
 		return local.rv;
 	}
 
 	/*
 	* PUBLIC MODEL OBJECT METHODS
 	*/
-	public void function reload() { 
+	public void function reload() {
 		local.query = findByKey(key=key(), reload=true, returnAs="query");
 		local.properties = propertyNames();
 		local.iEnd = ListLen(local.properties);

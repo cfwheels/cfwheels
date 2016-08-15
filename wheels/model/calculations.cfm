@@ -2,7 +2,7 @@
 	/*
 	* PUBLIC MODEL CLASS METHODS
 	*/
-	
+
 	public any function average(
 		required string property,
 		string where="",
@@ -12,7 +12,7 @@
 		any ifNull,
 		boolean includeSoftDeletes="false",
 		string group
-	) { 
+	) {
 		$args(name="average", args=arguments);
 		arguments.type = "AVG";
 		if (StructKeyExists(arguments, "group"))
@@ -50,16 +50,16 @@
 				// we convert the result to a string so that it is the same as what would happen if you calculate an average in ColdFusion code (like we do for integers in this function for example)
 				local.rv = JavaCast("string", local.rv);
 			}
-		} 
+		}
 		return local.rv;
-	} 
+	}
 	public any function count(
 		string where="",
 		string include="",
 		any parameterize,
 		boolean includeSoftDeletes="false",
 		string group
-	) { 
+	) {
 		$args(name="count", args=arguments);
 		arguments.type = "COUNT";
 		arguments.property = ListFirst(primaryKey());
@@ -75,7 +75,7 @@
 		if (!StructKeyExists(arguments, "group") && !IsNumeric(local.rv))
 		{
 			local.rv = 0;
-		} 
+		}
 		return local.rv;
 	}
 
@@ -87,10 +87,10 @@
 		any ifNull,
 		boolean includeSoftDeletes="false",
 		string group
-	) { 
+	) {
 		$args(name="maximum", args=arguments);
 		arguments.type = "MAX";
-		local.rv = $calculate(argumentCollection=arguments); 
+		local.rv = $calculate(argumentCollection=arguments);
 		return local.rv;
 	}
 
@@ -102,10 +102,10 @@
 		any ifNull,
 		boolean includeSoftDeletes="false",
 		string group
-	) { 
+	) {
 		$args(name="minimum", args=arguments);
 		arguments.type = "MIN";
-		local.rv = $calculate(argumentCollection=arguments); 
+		local.rv = $calculate(argumentCollection=arguments);
 		return local.rv;
 	}
 
@@ -118,16 +118,16 @@
 		any ifNull,
 		boolean includeSoftDeletes="false",
 		string group
-	) { 
+	) {
 		$args(name="sum", args=arguments);
 		arguments.type = "SUM";
-		local.rv = $calculate(argumentCollection=arguments); 
+		local.rv = $calculate(argumentCollection=arguments);
 		return local.rv;
 	}
 
 	/*
 	* PRIVATE METHODS
-	*/ 
+	*/
 	public any function $calculate(
 		required string type,
 		required string property,
@@ -198,5 +198,5 @@
 			}
 		}
 		return local.rv;
-	} 
+	}
 </cfscript>

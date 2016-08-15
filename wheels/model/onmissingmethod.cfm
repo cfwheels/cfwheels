@@ -2,8 +2,8 @@
 	/*
 	* PUBLIC DYNAMIC MODEL METHODS
 	*/
-	
-	public any function onMissingMethod(required string missingMethodName, required struct missingMethodArguments) {  
+
+	public any function onMissingMethod(required string missingMethodName, required struct missingMethodArguments) {
 		if (Right(arguments.missingMethodName, 10) == "hasChanged" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "hasChanged", "")))
 		{
 			local.rv = hasChanged(property=ReplaceNoCase(arguments.missingMethodName, "hasChanged", ""));
@@ -177,7 +177,7 @@
 		return local.rv;
 	}
 
-	public string function $dynamicFinderOperator(required string property) {			
+	public string function $dynamicFinderOperator(required string property) {
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property) && variables.wheels.class.properties[arguments.property].dataType == "text")
 			{
 				local.rv = "LIKE";
@@ -189,7 +189,7 @@
 		return local.rv;
 	}
 
-	public any function $associationMethod() {		
+	public any function $associationMethod() {
 		for (local.key in variables.wheels.class.associations)
 		{
 			local.method = "";
@@ -505,14 +505,14 @@
 		return local.rv;
 	}
 
-	public string function $propertyValue(required string name) { 
+	public string function $propertyValue(required string name) {
 		local.rv = "";
 		local.iEnd = ListLen(arguments.name);
 		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
 			local.item = ListGetAt(arguments.name, local.i);
 			local.rv = ListAppend(local.rv, this[local.item]);
-		} 
+		}
 		return local.rv;
 	}
 

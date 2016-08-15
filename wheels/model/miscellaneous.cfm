@@ -7,21 +7,21 @@
 		required string datasource,
 		string username="",
 		string password=""
-	) { 
+	) {
 		variables.wheels.class.datasource = arguments.datasource;
 		variables.wheels.class.username = arguments.username;
-		variables.wheels.class.password = arguments.password; 
+		variables.wheels.class.password = arguments.password;
 	}
 
 	public void function table(required any name) {
 		variables.wheels.class.tableName = arguments.name;
 	}
 
-	public void function setTableNamePrefix(required string prefix) { 
-		variables.wheels.class.tableNamePrefix =  arguments.prefix; 
+	public void function setTableNamePrefix(required string prefix) {
+		variables.wheels.class.tableNamePrefix =  arguments.prefix;
 	}
 
-	public void function setPrimaryKey(required string property) { 
+	public void function setPrimaryKey(required string property) {
 		local.iEnd = ListLen(arguments.property);
 		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
@@ -30,7 +30,7 @@
 			{
 				variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, local.item);
 			}
-		} 
+		}
 	}
 
 	public void function setPrimaryKeys(required string property) {
@@ -47,7 +47,7 @@
 		boolean reload,
 		any parameterize,
 		boolean includeSoftDeletes
-	) { 
+	) {
 		$args(name="exists", args=arguments);
 		if (get("showErrorInformation") && StructKeyExists(arguments, "key") && StructKeyExists(arguments, "where"))
 		{
@@ -63,7 +63,7 @@
 		else
 		{
 			local.rv = findOne(argumentCollection=arguments).recordCount;
-		} 
+		}
 		return local.rv;
 	}
 
@@ -71,7 +71,7 @@
 		return variables.wheels.class.columnList;
 	}
 
-	public string function primaryKey(numeric position=0) {		
+	public string function primaryKey(numeric position=0) {
 		if (arguments.position > 0)
 		{
 			local.rv = ListGetAt(variables.wheels.class.keys, arguments.position);
@@ -81,8 +81,8 @@
 			local.rv = variables.wheels.class.keys;
 		}
 		return local.rv;
-	} 
-	
+	}
+
 	public string function primaryKeys(numeric position=0) {
 		return primaryKey(argumentCollection=arguments);
 	}
@@ -97,13 +97,13 @@
 
 	public string function isClass() {
 		return !isInstance(argumentCollection=arguments);
-	}  
+	}
 
 	/*
 	* PUBLIC MODEL OBJECT METHODS
 	*/
 
-	public boolean function isNew() { 
+	public boolean function isNew() {
 		if (!StructKeyExists(variables, "$persistedProperties")){
 			// no values have been saved to the database so this object is new
 			local.rv = true;
@@ -129,7 +129,7 @@
 		return variables.wheels.tickCountId;
 	}
 
-	public struct function $buildQueryParamValues(required string property) { 
+	public struct function $buildQueryParamValues(required string property) {
 		local.rv = {};
 		local.rv.value = this[arguments.property];
 		local.rv.type = variables.wheels.class.properties[arguments.property].type;
@@ -139,15 +139,15 @@
 		return local.rv;
 	}
 
-	public void function $keyLengthCheck(required any key) { 
+	public void function $keyLengthCheck(required any key) {
 		// throw error if the number of keys passed in is not the same as the number of keys defined for the model
 		if (ListLen(primaryKeys()) != ListLen(arguments.key))
 		{
 			$throw(type="Wheels.InvalidArgumentValue", message="The `key` argument contains an invalid value.", extendedInfo="The `key` argument contains a list, however this table doesn't have a composite key. A list of values is allowed for the `key` argument, but this only applies in the case when the table contains a composite key.");
-		} 
+		}
 	}
 
-	public void function $timestampProperty(required string property) { 
-		this[arguments.property] = Now(); 
+	public void function $timestampProperty(required string property) {
+		this[arguments.property] = Now();
 	}
 </cfscript>

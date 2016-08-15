@@ -2,7 +2,7 @@
 	/*
 	* PRIVATE METHODS
 	*/
-	
+
 	public any function $serializeQueryToObjects(
 	  required query query,
 	  string include="",
@@ -56,7 +56,7 @@
 				}
 			}
 			local.rv[local.i] = $createInstance(properties=local.rv[local.i], persisted=true, callbacks=arguments.callbacks);
-		} 
+		}
 		return local.rv;
 	}
 
@@ -137,7 +137,7 @@
 		string name="#variables.wheels.class.modelName#",
 		numeric row="1",
 		boolean base="true"
-	) {		
+	) {
 		local.rv = {};
 		local.allProperties = ListAppend(variables.wheels.class.propertyList, variables.wheels.class.calculatedPropertyList);
 		local.iEnd = ListLen(local.allProperties);

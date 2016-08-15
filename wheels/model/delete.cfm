@@ -48,11 +48,11 @@
 		boolean callbacks="true",
 		boolean includeSoftDeletes="false",
 		boolean softDelete="true"
-	) { 
+	) {
 		$args(name="deleteByKey", args=arguments);
 		$keyLengthCheck(arguments.key);
 		local.where = $keyWhereString(values=arguments.key);
-		local.rv = deleteOne(where=local.where, reload=arguments.reload, transaction=arguments.transaction, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes, softDelete=arguments.softDelete); 
+		local.rv = deleteOne(where=local.where, reload=arguments.reload, transaction=arguments.transaction, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes, softDelete=arguments.softDelete);
 		return local.rv;
 	}
 
@@ -64,7 +64,7 @@
 		boolean callbacks="true",
 		boolean includeSoftDeletes="false",
 		boolean softDelete="true"
-	) { 
+	) {
 		$args(name="deleteOne", args=arguments);
 		local.object = findOne(where=arguments.where, order=arguments.order, reload=arguments.reload, includeSoftDeletes=arguments.includeSoftDeletes);
 		if (IsObject(local.object))
@@ -99,13 +99,13 @@
 	/*
 	* PRIVATE METHODS
 	*/
-	public numeric function $deleteAll() { 
+	public numeric function $deleteAll() {
 		local.deleted = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
-		local.rv = local.deleted.result.recordCount; 
+		local.rv = local.deleted.result.recordCount;
 		return local.rv;
 	}
 
-	public boolean function $delete() { 
+	public boolean function $delete() {
 		local.rv = false;
 		if ($callback("beforeDelete", arguments.callbacks))
 		{
@@ -117,7 +117,7 @@
 			{
 				local.rv = true;
 			}
-		} 
+		}
 		return local.rv;
 	}
 </cfscript>

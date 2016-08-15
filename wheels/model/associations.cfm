@@ -9,7 +9,7 @@
 		string foreignKey="",
 		string joinKey="",
 		string joinType
-	) { 
+	) {
 		$args(name="belongsTo", args=arguments);
 		arguments.type = "belongsTo";
 		arguments.methods = "#arguments.name#,has#capitalize(arguments.name)#";
@@ -25,7 +25,7 @@
 		string dependent,
 		string shortcut="",
 		string through="#singularize(arguments.shortcut)#,#arguments.name#"
-	) { 
+	) {
 		$args(name="hasMany", args=arguments);
 		local.singularizeName = capitalize(singularize(arguments.name));
 		local.capitalizeName = capitalize(arguments.name);
@@ -41,7 +41,7 @@
 		string joinKey="",
 		string joinType,
 		string dependent
-	) { 
+	) {
 		$args(name="hasOne", args=arguments);
 		local.capitalizeName = capitalize(arguments.name);
 		arguments.type = "hasOne";
@@ -53,7 +53,7 @@
 	* PRIVATE METHODS
 	*/
 
-	public void function $registerAssociation() { 
+	public void function $registerAssociation() {
 
 		// assign the name for the association
 		local.associationName = arguments.name;
@@ -86,10 +86,10 @@
 		arguments.pluralizedName = pluralize(local.associationName);
 
 		// store all the settings for the association in the class struct (one struct per association with the name of the association as the key)
-		variables.wheels.class.associations[local.associationName] = arguments; 
+		variables.wheels.class.associations[local.associationName] = arguments;
 	}
 
-	public void function $deleteDependents() {  
+	public void function $deleteDependents() {
 		for (local.key in variables.wheels.class.associations)
 		{
 			if (ListFindNoCase("hasMany,hasOne", variables.wheels.class.associations[local.key].type) && variables.wheels.class.associations[local.key].dependent != false)
@@ -121,6 +121,6 @@
 						$throw(type="Wheels.InvalidArgument", message="'#variables.wheels.class.associations[local.key].dependent#' is not a valid dependency.", extendedInfo="Use `delete`, `deleteAll`, `removeAll` or false.");
 				}
 			}
-		} 
+		}
 	}
 </cfscript>

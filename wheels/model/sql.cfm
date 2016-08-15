@@ -2,8 +2,8 @@
 	/*
 	* PRIVATE METHODS
 	*/
-	
-	public array function $addDeleteClause(required array sql, required boolean softDelete) {			
+
+	public array function $addDeleteClause(required array sql, required boolean softDelete) {
 		if (variables.wheels.class.softDeletion && arguments.softDelete)
 		{
 			ArrayAppend(arguments.sql, "UPDATE #tableName()# SET #variables.wheels.class.softDeleteColumn# = ");
@@ -13,7 +13,7 @@
 		else
 		{
 			ArrayAppend(arguments.sql, "DELETE FROM #tableName()#");
-		}		
+		}
 		return arguments.sql;
 	}
 
@@ -39,7 +39,7 @@
 	}
 	public array function $addKeyWhereClause(required array sql) {
 
-		
+
 		ArrayAppend(arguments.sql, " WHERE ");
 		local.iEnd = ListLen(primaryKeys());
 		for (local.i=1; local.i <= local.iEnd; local.i++)
@@ -72,7 +72,7 @@
 		return arguments.sql;
 	}
 
-	public string function $orderByClause(required string order, required string include) {		
+	public string function $orderByClause(required string order, required string include) {
 		local.rv = "";
 		if (Len(arguments.order))
 		{
@@ -155,7 +155,7 @@
 		required string group,
 		required boolean distinct,
 		required string returnAs
-	) { 
+	) {
 		local.rv = "";
 		local.args = {};
 		local.args.include = arguments.include;
@@ -413,7 +413,7 @@
 		required string where,
 		string include="",
 		boolean includeSoftDeletes="false"
-	) {	
+	) {
 		local.rv = [];
 		if (Len(arguments.where))
 		{
@@ -550,7 +550,7 @@
 		return local.rv;
 	}
 
-	public array function $addWhereClauseParameters(required array sql, required string where) {		
+	public array function $addWhereClauseParameters(required array sql, required string where) {
 		if (Len(arguments.where))
 		{
 			local.start = 1;
@@ -582,7 +582,7 @@
 		return arguments.sql;
 	}
 
-	public string function $expandProperties(required string list, required array classes) {		
+	public string function $expandProperties(required string list, required array classes) {
 		local.rv = arguments.list;
 		local.matches = REMatch("[A-Za-z1-9]+\.\*", local.rv);
 		local.iEnd = ArrayLen(local.matches);
@@ -616,7 +616,7 @@
 		return local.rv;
 	}
 
-	public array function $expandedAssociations(required string include, boolean includeSoftDeletes="false") {		
+	public array function $expandedAssociations(required string include, boolean includeSoftDeletes="false") {
 		local.rv = [];
 
 		// add the current class name so that the levels list start at the lowest level
@@ -774,7 +774,7 @@
 		any properties="#primaryKeys()#",
 		any values="",
 		any keys=""
-	) {		
+	) {
 		local.rv = "";
 		local.iEnd = ListLen(arguments.properties);
 		for (local.i=1; local.i <= local.iEnd; local.i++)

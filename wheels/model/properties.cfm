@@ -3,7 +3,7 @@
 	* PUBLIC MODEL INITIALIZATION METHODS
 	*/
 
-	public void function accessibleProperties(string properties="") { 
+	public void function accessibleProperties(string properties="") {
 		if (StructKeyExists(arguments, "property"))
 		{
 			arguments.properties = ListAppend(arguments.properties, arguments.property);
@@ -25,7 +25,7 @@
 		{
 			arguments.properties = ListAppend(arguments.properties, arguments.property);
 		}
-		variables.wheels.class.accessibleProperties.blackList = $listClean(arguments.properties);		
+		variables.wheels.class.accessibleProperties.blackList = $listClean(arguments.properties);
 	}
 
 	public void function property(
@@ -36,7 +36,7 @@
 		string defaultValue,
 		boolean select="true",
 		string dataType="char"
-	) { 
+	) {
 		// validate setup
 		if (Len(arguments.column) && Len(arguments.sql))
 		{
@@ -87,11 +87,11 @@
 		return local.rv;
 	}
 
-	public array function columns() { 
+	public array function columns() {
 		return ListToArray(variables.wheels.class.columnList);
 	}
 
-	public any function columnForProperty(required string property) {		
+	public any function columnForProperty(required string property) {
 		local.rv = false;
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
 		{
@@ -100,7 +100,7 @@
 		return local.rv;
 	}
 
-	public any function columnDataForProperty(required string property) {  
+	public any function columnDataForProperty(required string property) {
 		local.rv = false;
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
 		{
@@ -109,7 +109,7 @@
 		return local.rv;
 	}
 
-	public any function validationTypeForProperty(required string property) {		
+	public any function validationTypeForProperty(required string property) {
 		local.rv = "string";
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
 		{
@@ -156,16 +156,16 @@
 		return local.rv;
 	}
 
-	public boolean function propertyIsPresent(required string property) { 
+	public boolean function propertyIsPresent(required string property) {
 		local.rv = false;
 		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]) && IsSimpleValue(this[arguments.property]) && Len(this[arguments.property]))
 		{
 			local.rv = true;
-		} 
+		}
 		return local.rv;
 	}
 
-	public boolean function toggle(required string property, boolean save) {		
+	public boolean function toggle(required string property, boolean save) {
 		$args(name="toggle", args=arguments);
 		if (!StructKeyExists(this, arguments.property))
 		{
@@ -180,11 +180,11 @@
 		if (arguments.save)
 		{
 			local.rv = updateProperty(property=arguments.property, value=this[arguments.property]);
-		} 
+		}
 		return local.rv;
 	}
 
-	public struct function properties(boolean simple="false") { 
+	public struct function properties(boolean simple="false") {
 		local.rv = {};
 		// loop through all properties and functions in the this scope
 		for (local.key in this)
@@ -324,7 +324,7 @@
 		string filterList="",
 		boolean setOnModel="true",
 		boolean $useFilterLists="true"
-	) { 
+	) {
 		local.rv = {};
 		arguments.filterList = ListAppend(arguments.filterList, "properties,filterList,setOnModel,$useFilterLists");
 

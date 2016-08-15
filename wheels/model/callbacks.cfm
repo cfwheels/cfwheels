@@ -74,7 +74,7 @@
 	/*
 	* PRIVATE METHODS
 	*/
-	public void function $registerCallback(required string type, required string methods) {  
+	public void function $registerCallback(required string type, required string methods) {
 		// create this type in the array if it doesn't already exist
 		if (!StructKeyExists(variables.wheels.class.callbacks,arguments.type))
 		{
@@ -94,10 +94,10 @@
 			{
 				ArrayAppend(variables.wheels.class.callbacks[arguments.type], ListGetAt(arguments.methods, local.i));
 			}
-		} 
+		}
 	}
 
-	public void function $clearCallbacks(string type="") { 
+	public void function $clearCallbacks(string type="") {
 		arguments.type = $listClean(list="#arguments.type#", returnAs="array");
 
 		// no type(s) was passed in. get all the callback types registered
@@ -111,10 +111,10 @@
 		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
 			variables.wheels.class.callbacks[arguments.type[local.i]] = [];
-		} 
+		}
 	}
 
-	public any function $callbacks(string type="") { 
+	public any function $callbacks(string type="") {
 		if (Len(arguments.type))
 		{
 			if (StructKeyExists(variables.wheels.class.callbacks, arguments.type))
@@ -129,7 +129,7 @@
 		else
 		{
 			local.rv = variables.wheels.class.callbacks;
-		} 
+		}
 		return local.rv;
 	}
 
@@ -137,7 +137,7 @@
 		required string type,
 		required boolean execute,
 		any collection=""
-	) { 
+	) {
 		if (arguments.execute)
 		{
 			// get all callbacks for the type and loop through them all until the end or one of them returns false
@@ -182,7 +182,7 @@
 		if (!StructKeyExists(local, "rv"))
 		{
 			local.rv = true;
-		} 
+		}
 		return local.rv;
 	}
 
@@ -244,7 +244,7 @@
 		if (!StructKeyExists(request.wheels, local.querykey))
 		{
 			request.wheels[local.querykey] = variables.wheels.class.modelName;
-		}	
+		}
 		return local.rv;
 	}
 </cfscript>

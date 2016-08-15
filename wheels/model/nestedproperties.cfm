@@ -1,6 +1,6 @@
-<cfscript> 
+<cfscript>
 	/*
-	* PUBLIC MODEL INITIALIZATION METHODS 
+	* PUBLIC MODEL INITIALIZATION METHODS
 	*/
 
 	// Note: lots of naming collisions here with the move from loc-> local due to scope search in CF10 (quelle surprise).
@@ -41,9 +41,9 @@
 	}
 
 	/*
-	* PRIVATE METHODS 
+	* PRIVATE METHODS
 	*/
-	public boolean function $validateAssociations(required boolean callbacks) { 
+	public boolean function $validateAssociations(required boolean callbacks) {
 		local._associations = variables.wheels.class.associations;
 		for (local._association in local._associations)
 		{
@@ -71,7 +71,7 @@
 		required boolean reload,
 		required boolean validate,
 		required boolean callbacks
-	) {		
+	) {
 		local._rv = true;
 		local._associations = variables.wheels.class.associations;
 		for (local._association in local._associations)
@@ -113,7 +113,7 @@
 		return local._rv;
 	}
 
-	public boolean function $setAssociations() {  
+	public boolean function $setAssociations() {
 		local._associations = variables.wheels.class.associations;
 		for (local._item in local._associations)
 		{
@@ -125,7 +125,7 @@
 					$setOneToOneAssociationProperty(property=local._item, value=this[local._item], association=local._association, delete=true);
 				}
 				else if (local._association.type == "hasMany" && IsArray(this[local._item]) && ArrayLen(this[local._item]))
-				{ 
+				{
 					$setCollectionAssociationProperty(property=local._item, value=this[local._item], association=local._association, delete=true);
 				}
 			}
@@ -138,7 +138,7 @@
 		required struct value,
 		required struct association,
 		boolean delete="false"
-	) { 
+	) {
 		if (!StructKeyExists(this, arguments.property) || !IsObject(this[arguments.property]) || StructKeyExists(this[arguments.property], "_delete"))
 		{
 			this[arguments.property] = $getAssociationObject(argumentCollection=arguments);
@@ -150,7 +150,7 @@
 		else
 		{
 			StructDelete(this, arguments.property);
-		} 
+		}
 	}
 
 	public void function $setCollectionAssociationProperty(
@@ -158,7 +158,7 @@
 		required any value,
 		required struct association,
 		boolean delete=false
-	) { 
+	) {
 		local._model = model(arguments.association.modelName);
 		if (!StructKeyExists(this, arguments.property) || !IsArray(this[arguments.property]))
 		{
@@ -247,7 +247,7 @@
 		required string property,
 		required struct value,
 		numeric position="0"
-	) { 
+	) {
 		if (!arguments.position)
 		{
 			arguments.position = ArrayLen(this[arguments.property]);
@@ -259,7 +259,7 @@
 		else
 		{
 			ArrayDeleteAt(this[arguments.property], arguments.position);
-		} 
+		}
 	}
 
 	public any function $getAssociationObject(
@@ -306,7 +306,7 @@
 		return local._object;
 	}
 
-	public string function $createPrimaryKeyList(required struct params, required string keys) { 
+	public string function $createPrimaryKeyList(required struct params, required string keys) {
 		local._rv = "";
 		local._iEnd = ListLen(arguments.keys);
 		for (local._i=1; local._i <= local._iEnd; local._i++)
@@ -317,7 +317,7 @@
 				return "";
 			}
 			local._rv = ListAppend(local._rv, arguments.params[local._key]);
-		} 
+		}
 		return local._rv;
 	}
 
@@ -339,7 +339,7 @@
 		}
 	}
 
-	public void function $resetAssociationsToNew() {		
+	public void function $resetAssociationsToNew() {
 		local._associations = variables.wheels.class.associations;
 		for (local._association in local._associations)
 		{
@@ -367,10 +367,9 @@
 			return true;
 		} else {
 			return false;
-		}	 
+		}
 	}
 </cfscript>
-  
 
 
- 
+
