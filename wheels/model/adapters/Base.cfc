@@ -269,7 +269,7 @@
 			StructDelete(local.orgArgs, "$primaryKey");
 			StructAppend(local.args, local.orgArgs);
 		</cfscript>
-		<cfquery attributeCollection="#local.args#"><cfset local.pos = 0><cfloop array="#arguments.sql#" index="local.i"><cfset local.pos = local.pos + 1><cfif IsStruct(local.i)><cfset local.queryParamAttributes = $CFQueryParameters(local.i)><cfif NOT IsBinary(local.i.value) AND local.i.value IS "null" AND local.pos GT 1 AND (Right(arguments.sql[local.pos-1], 2) IS "IS" OR Right(arguments.sql[local.pos-1], 6) IS "IS NOT")>NULL<cfelseif StructKeyExists(local.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam attributeCollection="#local.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(local.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam attributeCollection="#local.queryParamAttributes#"><cfelse>#$quoteValue(str=local.i.value, sqlType=local.i.type)#</cfif></cfif><cfelse><cfset local.i = Replace(PreserveSingleQuotes(local.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(local.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif><cfif StructKeyExists(loc, "comment")>#local.comment#</cfif></cfquery>
+		<cfquery attributeCollection="#local.args#"><cfset local.pos = 0><cfloop array="#arguments.sql#" index="local.i"><cfset local.pos = local.pos + 1><cfif IsStruct(local.i)><cfset local.queryParamAttributes = $CFQueryParameters(local.i)><cfif NOT IsBinary(local.i.value) AND local.i.value IS "null" AND local.pos GT 1 AND (Right(arguments.sql[local.pos-1], 2) IS "IS" OR Right(arguments.sql[local.pos-1], 6) IS "IS NOT")>NULL<cfelseif StructKeyExists(local.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam attributeCollection="#local.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(local.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam attributeCollection="#local.queryParamAttributes#"><cfelse>#$quoteValue(str=local.i.value, sqlType=local.i.type)#</cfif></cfif><cfelse><cfset local.i = Replace(PreserveSingleQuotes(local.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(local.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif><cfif StructKeyExists(local, "comment")>#local.comment#</cfif></cfquery>
 		<cfscript>
 			if (StructKeyExists(query, "name")) {
 				local.rv.query = query.name;
@@ -279,7 +279,7 @@
 			// will be done on insert statement involving auto-incremented primary keys when Railo/ACF cannot retrieve it for us
 			// this happens on non-supported databases (example: H2) and drivers (example: jTDS)
 			local.$id = $identitySelect(queryAttributes=local.args, result=local.result, primaryKey=arguments.$primaryKey);
-			if (StructKeyExists(loc, "$id")) {
+			if (StructKeyExists(local, "$id")) {
 				StructAppend(local.result, local.$id);
 			}
 
