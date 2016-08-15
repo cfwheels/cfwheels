@@ -1,7 +1,6 @@
 <cfcomponent output="false">
 	<cfscript>
 		include "../../global/cfml.cfm";
-		include "../../plugins/injection.cfm";
 
 		public any function init(
 		  required string dataSource,
@@ -258,7 +257,9 @@
 		public string function $comment(required string text) {
 			return "/* " & arguments.text & " */";
 		}
-	</cfscript>
+
+		include "../../plugins/injection.cfm";
+</cfscript>
 
 	<cffunction name="$performQuery" returntype="struct" access="public" output="false">
 		<cfargument name="sql" type="array" required="true">
