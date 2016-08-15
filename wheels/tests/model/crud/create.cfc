@@ -37,7 +37,7 @@ component extends="wheels.tests.Test" {
 	}
 
    	function test_columns_that_are_not_null_should_allow_for_blank_string_during_create() {
-		include "dbinfo.cfm"; // cfdbinfo incompatibility between engines..
+		info = $dbinfo(datasource=application.wheels.dataSourceName, type="version");
 		db = LCase(Replace(info.database_productname, " ", "", "all"));
 		if (db IS "oracle") {
 			/* oracle treates empty strings as null */

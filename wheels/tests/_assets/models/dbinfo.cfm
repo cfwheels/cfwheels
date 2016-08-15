@@ -1,1 +1,0 @@
-<cfdbinfo name="db_info" datasource="#application.wheels.dataSourceName#" type="version">
