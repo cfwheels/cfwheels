@@ -2,84 +2,75 @@
 
 	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
 		<cfscript>
-			var loc = {};
-			loc.rv = "rowid";
+			local.rv = "rowid";
 		</cfscript>
-		<cfreturn loc.rv>
+		<cfreturn local.rv>
 	</cffunction>
 
 	<cffunction name="$randomOrder" returntype="string" access="public" output="false">
 		<cfscript>
-			var loc = {};
-			loc.rv = "dbms_random.value()";
+			local.rv = "dbms_random.value()";
 		</cfscript>
-		<cfreturn loc.rv>
+		<cfreturn local.rv>
 	</cffunction>
 
 	<cffunction name="$defaultValues" returntype="string" access="public" output="false">
 		<cfargument name="$primaryKey" type="string" required="true" hint="the table primaryKey">
 		<cfscript>
-			var loc = {};
-			loc.rv = "(#arguments.$primaryKey#) VALUES(DEFAULT)";
+			local.rv = "(#arguments.$primaryKey#) VALUES(DEFAULT)";
 		</cfscript>
-		<cfreturn loc.rv>
+		<cfreturn local.rv>
 	</cffunction>
 
 	<cffunction name="$tableAlias" returntype="string" access="public" output="false">
 		<cfargument name="table" type="string" required="true">
 		<cfargument name="alias" type="string" required="true">
 		<cfscript>
-			var loc = {};
-			loc.rv = arguments.table & " " & arguments.alias;
+			local.rv = arguments.table & " " & arguments.alias;
 		</cfscript>
-		<cfreturn loc.rv>
+		<cfreturn local.rv>
 	</cffunction>
 
 	<cffunction name="$getType" returntype="string" access="public" output="false">
 		<cfargument name="type" type="string" required="true">
 		<cfargument name="scale" type="string" required="true">
 		<cfscript>
-			var loc = {};
-			switch (arguments.type)
-			{
+			switch (arguments.type) {
 				case "blob": case "bfile":
-					loc.rv = "cf_sql_blob";
+					local.rv = "cf_sql_blob";
 					break;
 				case "char": case "nchar":
-					loc.rv = "cf_sql_char";
+					local.rv = "cf_sql_char";
 					break;
 				case "clob": case "nclob":
-					loc.rv = "cf_sql_clob";
+					local.rv = "cf_sql_clob";
 					break;
 				case "date": case "timestamp":
-					loc.rv = "cf_sql_timestamp";
+					local.rv = "cf_sql_timestamp";
 					break;
 				case "binary_double":
-					loc.rv = "cf_sql_double";
+					local.rv = "cf_sql_double";
 					break;
 				case "number": case "float": case "binary_float":
 					// integer datatypes are represented by number(38,0)
-					if (Val(arguments.scale) == 0)
-					{
-						loc.rv = "cf_sql_integer";
-					}
-					else
-					{
-						loc.rv = "cf_sql_float";
+					if (Val(arguments.scale) == 0) {
+						local.rv = "cf_sql_integer";
+					} else {
+						local.rv = "cf_sql_float";
 					}
 					break;
 				case "long":
-					loc.rv = "cf_sql_longvarchar";
+					local.rv = "cf_sql_longvarchar";
 					break;
 				case "raw":
-					loc.rv = "cf_sql_varbinary";
+					local.rv = "cf_sql_varbinary";
 					break;
 				case "varchar2": case "nvarchar2":
-					loc.rv = "cf_sql_varchar";
+					local.rv = "cf_sql_varchar";
 					break;
 			}
 		</cfscript>
-		<cfreturn loc.rv>
+		<cfreturn local.rv>
 	</cffunction>
 
 	<cffunction name="$query" returntype="struct" access="public" output="false">
@@ -89,43 +80,40 @@
 		<cfargument name="parameterize" type="boolean" required="true">
 		<cfargument name="$primaryKey" type="string" required="false" default="">
 		<cfscript>
-			var loc = {};
 			arguments = $convertMaxRowsToLimit(arguments);
 			arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
 			arguments.sql = $addColumnsToSelectAndGroupBy(arguments.sql);
-			if (arguments.limit > 0)
-			{
-				loc.select = ReplaceNoCase(ReplaceNoCase(arguments.sql[1], "SELECT DISTINCT ", ""), "SELECT ", "");
-				loc.select = $columnAlias(list=$tableName(list=loc.select, action="remove"), action="keep");
-				loc.beforeWhere = "SELECT #loc.select# FROM (SELECT * FROM (SELECT tmp.*, rownum rnum FROM (";
-				loc.afterWhere = ") tmp WHERE rownum <=" & arguments.limit+arguments.offset & ")" & " WHERE rnum >" & arguments.offset & ")";
-				ArrayPrepend(arguments.sql, loc.beforeWhere);
-				ArrayAppend(arguments.sql, loc.afterWhere);
+			if (arguments.limit > 0) {
+				local.select = ReplaceNoCase(ReplaceNoCase(arguments.sql[1], "SELECT DISTINCT ", ""), "SELECT ", "");
+				local.select = $columnAlias(list=$tableName(list=local.select, action="remove"), action="keep");
+				local.beforeWhere = "SELECT #local.select# FROM (SELECT * FROM (SELECT tmp.*, rownum rnum FROM (";
+				local.afterWhere = ") tmp WHERE rownum <=" & arguments.limit+arguments.offset & ")" & " WHERE rnum >" & arguments.offset & ")";
+				ArrayPrepend(arguments.sql, local.beforeWhere);
+				ArrayAppend(arguments.sql, local.afterWhere);
 			}
 
 			// oracle doesn't support limit and offset in sql
 			StructDelete(arguments, "limit");
 			StructDelete(arguments, "offset");
-			loc.rv = $performQuery(argumentCollection=arguments);
-			loc.rv = $handleTimestampObject(loc.rv);
+			local.rv = $performQuery(argumentCollection=arguments);
+			local.rv = $handleTimestampObject(local.rv);
 		</cfscript>
-		<cfreturn loc.rv>
+		<cfreturn local.rv>
 	</cffunction>
 
 	<cffunction name="$identitySelect" returntype="any" access="public" output="false">
 		<cfargument name="queryAttributes" type="struct" required="true">
 		<cfargument name="result" type="struct" required="true">
 		<cfargument name="primaryKey" type="string" required="true">
-		<cfset var loc = StructNew()>
 		<cfset var query = StructNew()>
-		<cfset loc.sql = Trim(arguments.result.sql)>
-		<cfif Left(loc.sql, 11) IS "INSERT INTO">
-			<cfset loc.startPar = Find("(", loc.sql) + 1>
-			<cfset loc.endPar = Find(")", loc.sql)>
-			<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
-			<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
-				<cfset loc.rv = StructNew()>
-				<cfset loc.tbl = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
+		<cfset local.sql = Trim(arguments.result.sql)>
+		<cfif Left(local.sql, 11) IS "INSERT INTO">
+			<cfset local.startPar = Find("(", local.sql) + 1>
+			<cfset local.endPar = Find(")", local.sql)>
+			<cfset local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
+			<cfif NOT ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))>
+				<cfset local.rv = StructNew()>
+				<cfset local.tbl = SpanExcluding(Right(local.sql, Len(local.sql)-12), " ")>
 				<cfif NOT StructKeyExists(arguments.result, $generatedKey()) || application.wheels.serverName IS NOT "Adobe ColdFusion">
 					<!---
 					there isn't a way in oracle to tell what (if any) sequences exists
@@ -134,19 +122,19 @@
 					name through a setting in the model
 					--->
 					<cftry>
-						<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #loc.tbl#_seq.currval AS lastId FROM dual</cfquery>
+						<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #local.tbl#_seq.currval AS lastId FROM dual</cfquery>
 						<cfcatch type="any">
 							<!--- in case the sequence doesn't exists return a blank string for the expected value --->
 							<cfset query.name.lastId = "">
 						</cfcatch>
 					</cftry>
 				<cfelse>
-					<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #arguments.primaryKey# AS lastId FROM #loc.tbl# WHERE ROWID = '#arguments.result[$generatedKey()]#'</cfquery>
+					<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #arguments.primaryKey# AS lastId FROM #local.tbl# WHERE ROWID = '#arguments.result[$generatedKey()]#'</cfquery>
 				</cfif>
-				<cfset loc.lastId = Trim(query.name.lastId)>
+				<cfset local.lastId = Trim(query.name.lastId)>
 				<cfif len(query.name.lastId)>
-					<cfset loc.rv[$generatedKey()] = Trim(loc.lastid)>
-					<cfreturn loc.rv>
+					<cfset local.rv[$generatedKey()] = Trim(local.lastid)>
+					<cfreturn local.rv>
 				</cfif>
 			<cfelse>
 				<!--- since Oracle always returns rowid we need to delete it in those cases where we have manually inserted the primary key, if we don't do this we'll end up setting the rowid value to the object --->
@@ -166,20 +154,17 @@
 		<cfargument name="username" type="string" required="true">
 		<cfargument name="password" type="string" required="true">
 		<cfscript>
-		var loc = {};
-		loc.args = Duplicate(arguments);
-		StructDelete(loc.args, "table");
-		if (!Len(loc.args.username))
-		{
-			StructDelete(loc.args, "username");
+		local.args = Duplicate(arguments);
+		StructDelete(local.args, "table");
+		if (!Len(local.args.username)) {
+			StructDelete(local.args, "username");
 		}
-		if (!Len(loc.args.password))
-		{
-			StructDelete(loc.args, "password");
+		if (!Len(local.args.password)) {
+			StructDelete(local.args, "password");
 		}
-		loc.args.name = "loc.rv";
+		local.args.name = "local.rv";
 		</cfscript>
-		<cfquery attributeCollection="#loc.args#">
+		<cfquery attributeCollection="#local.args#">
 		SELECT
 			TC.COLUMN_NAME
 			,TC.DATA_TYPE AS TYPE_NAME
@@ -213,66 +198,54 @@
 		wheels catches the error and raises a Wheels.TableNotFound error
 		to mimic this we will throw an error if the query result is empty
 		 --->
-		<cfif NOT loc.rv.recordCount>
+		<cfif NOT local.rv.recordCount>
 			<cfthrow>
 		</cfif>
-		<cfreturn loc.rv>
+		<cfreturn local.rv>
 	</cffunction>
 
 	<cffunction name="$handleTimestampObject" hint="Oracle will return timestamp as an object. you need to call timestampValue() to get the string representation">
 		<cfargument name="results" type="struct" required="true">
 		<cfscript>
-			var loc = {};
-
 			// depending on the driver and engine used with oracle, timestamps can be returned as
 			// objects instead of strings.
-			if (StructKeyExists(arguments.results, "query"))
-			{
+			if (StructKeyExists(arguments.results, "query")) {
 				// look for all timestamp columns
-				loc.query = arguments.results.query;
-				if (loc.query.recordCount > 0)
-				{
-					loc.metadata = GetMetaData(loc.query);
-					loc.columns = [];
-					loc.iEnd = ArrayLen(loc.metadata);
-					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-					{
-						loc.column = loc.metadata[loc.i];
-						if (loc.column.typename == "timestamp")
-						{
-							ArrayAppend(loc.columns, loc.column.name);
+				local.query = arguments.results.query;
+				if (local.query.recordCount > 0) {
+					local.metadata = GetMetaData(local.query);
+					local.columns = [];
+					local.iEnd = ArrayLen(local.metadata);
+					for (local.i=1; local.i <= local.iEnd; local.i++) {
+						local.column = local.metadata[local.i];
+						if (local.column.typename == "timestamp") {
+							ArrayAppend(local.columns, local.column.name);
 						}
 					}
 
 					// if we have any timestamp columns
-					if (!ArrayIsEmpty(loc.columns))
-					{
-						loc.iEnd = ArrayLen(loc.columns);
-						for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-						{
-							loc.column = loc.columns[loc.i];
-							loc.jEnd = loc.query.recordCount;
-							for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-							{
-								if (IsObject(loc.query[loc.column][loc.j]))
-								{
+					if (!ArrayIsEmpty(local.columns)) {
+						local.iEnd = ArrayLen(local.columns);
+						for (local.i=1; local.i <= local.iEnd; local.i++) {
+							local.column = local.columns[local.i];
+							local.jEnd = local.query.recordCount;
+							for (local.j=1; local.j <= local.jEnd; local.j++) {
+								if (IsObject(local.query[local.column][local.j])) {
 									// call timestampValue() on objects to convert to string
-									loc.query[loc.column][loc.j] = loc.query[loc.column][loc.j].timestampValue();
-								}
-								else if (IsSimpleValue(loc.query[loc.column][loc.j]) && Len(loc.query[loc.column][loc.j]))
-								{
+									local.query[local.column][local.j] = local.query[local.column][local.j].timestampValue();
+								} else if (IsSimpleValue(local.query[local.column][local.j]) && Len(local.query[local.column][local.j])) {
 									// if the driver does the conversion automatically, there is no need to continue
 									break;
 								}
 							}
 						}
 					}
-					arguments.results.query = loc.query;
+					arguments.results.query = local.query;
 				}
 			}
-			loc.rv = arguments.results;
+			local.rv = arguments.results;
 		</cfscript>
-		<cfreturn loc.rv>
+		<cfreturn local.rv>
 	</cffunction>
 
 	<cfinclude template="../../plugins/injection.cfm">
