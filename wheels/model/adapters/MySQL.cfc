@@ -33,7 +33,7 @@
 				case "bigint":
 					loc.rv = "cf_sql_bigint";
 					break;
-				case "binary":
+				case "binary": case "geometry": case "point": case "linestring": case "polygon": case "multipoint": case "multilinestring": case "multipolygon": case "geometrycollection":
 					loc.rv = "cf_sql_binary";
 					break;
 				case "bit": case "bool":

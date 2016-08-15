@@ -22,6 +22,7 @@ Controller Enhancements
 Bug Fixes
 =========
 * Fixes skipped model instantiation due to Linux file case sensitivity - #643 [Adam Chapman, Tom King]
+* Added spatial datatypes for MySQL - #660 [Normal Cesar]
 
 Miscellaneous
 =============
