@@ -1,83 +1,77 @@
 <cfcomponent extends="Base" output="false">
 
-	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
-		<cfscript>
-			local.rv = "lastId";
-		</cfscript>
-		<cfreturn local.rv>
-	</cffunction>
+	<cfscript>
+	public string function $generatedKey() {
+		local.rv = "lastId";
+		return local.rv;
+	}
 
-	<cffunction name="$randomOrder" returntype="string" access="public" output="false">
-		<cfscript>
-			local.rv = "random()";
-		</cfscript>
-		<cfreturn local.rv>
-	</cffunction>
+	public string function $randomOrder() {
+		local.rv = "random()";
+		return local.rv;
+	}
 
-	<cffunction name="$getType" returntype="string" access="public" output="false">
-		<cfargument name="type" type="string" required="true">
-		<cfscript>
-			switch (arguments.type) {
-				case "bigint": case "int8": case "bigserial": case "serial8":
-					local.rv = "cf_sql_bigint";
-					break;
-				case "bool": case "boolean": case "bit": case "varbit":
-					local.rv = "cf_sql_bit";
-					break;
-				case "bytea":
-					local.rv = "cf_sql_binary";
-					break;
-				case "char": case "character":
-					local.rv = "cf_sql_char";
-					break;
-				case "date": case "timestamp": case "timestamptz":
-					local.rv = "cf_sql_timestamp";
-					break;
-				case "decimal": case "double": case "precision": case "float": case "float4": case "float8":
-					local.rv = "cf_sql_decimal";
-					break;
-				case "integer": case "int": case "int4": case "serial": case "oid":
-					// oid cols should probably be avoided - placed here for completeness
-					local.rv = "cf_sql_integer";
-					break;
-				case "numeric": case "smallmoney": case "money":
-					// postgres has deprecated the money type: http://www.postgresql.org/docs/8.1/static/datatype-money.html
-					local.rv = "cf_sql_numeric";
-					break;
-				case "real":
-					local.rv = "cf_sql_real";
-					break;
-				case "smallint": case "int2":
-					local.rv = "cf_sql_smallint";
-					break;
-				case "text":
-					local.rv = "cf_sql_longvarchar";
-					break;
-				case "time": case "timetz":
-					local.rv = "cf_sql_time";
-					break;
-				case "varchar": case "varying": case "bpchar": case "uuid":
-					local.rv = "cf_sql_varchar";
-					break;
-			}
-		</cfscript>
-		<cfreturn local.rv>
-	</cffunction>
+	public string function $getType(required string type) {
+		switch (arguments.type) {
+			case "bigint": case "int8": case "bigserial": case "serial8":
+				local.rv = "cf_sql_bigint";
+				break;
+			case "bool": case "boolean": case "bit": case "varbit":
+				local.rv = "cf_sql_bit";
+				break;
+			case "bytea":
+				local.rv = "cf_sql_binary";
+				break;
+			case "char": case "character":
+				local.rv = "cf_sql_char";
+				break;
+			case "date": case "timestamp": case "timestamptz":
+				local.rv = "cf_sql_timestamp";
+				break;
+			case "decimal": case "double": case "precision": case "float": case "float4": case "float8":
+				local.rv = "cf_sql_decimal";
+				break;
+			case "integer": case "int": case "int4": case "serial": case "oid":
+				// oid cols should probably be avoided - placed here for completeness
+				local.rv = "cf_sql_integer";
+				break;
+			case "numeric": case "smallmoney": case "money":
+				// postgres has deprecated the money type: http://www.postgresql.org/docs/8.1/static/datatype-money.html
+				local.rv = "cf_sql_numeric";
+				break;
+			case "real":
+				local.rv = "cf_sql_real";
+				break;
+			case "smallint": case "int2":
+				local.rv = "cf_sql_smallint";
+				break;
+			case "text":
+				local.rv = "cf_sql_longvarchar";
+				break;
+			case "time": case "timetz":
+				local.rv = "cf_sql_time";
+				break;
+			case "varchar": case "varying": case "bpchar": case "uuid":
+				local.rv = "cf_sql_varchar";
+				break;
+		}
+		return local.rv;
+	}
 
-	<cffunction name="$query" returntype="struct" access="public" output="false">
-		<cfargument name="sql" type="array" required="true">
-		<cfargument name="limit" type="numeric" required="false" default="0">
-		<cfargument name="offset" type="numeric" required="false" default="0">
-		<cfargument name="parameterize" type="boolean" required="true">
-		<cfargument name="$primaryKey" type="string" required="false" default="">
-		<cfscript>
-			arguments = $convertMaxRowsToLimit(arguments);
-			arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
-			arguments.sql = $addColumnsToSelectAndGroupBy(arguments.sql);
-			local.rv = $performQuery(argumentCollection=arguments);
-		</cfscript>
-		<cfreturn local.rv>
-	</cffunction>
+	public struct function $query(
+	  required array sql,
+	  numeric limit="0",
+	  numeric offset="0",
+	  required boolean parameterize,
+	  string $primaryKey=""
+	) {
+		arguments = $convertMaxRowsToLimit(arguments);
+		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
+		arguments.sql = $addColumnsToSelectAndGroupBy(arguments.sql);
+		local.rv = $performQuery(argumentCollection=arguments);
+		return local.rv;
+	}
+	</cfscript>
 
 	<cffunction name="$identitySelect" returntype="any" access="public" output="false">
 		<cfargument name="queryAttributes" type="struct" required="true">
@@ -100,5 +94,7 @@
 		</cfif>
 	</cffunction>
 
-	<cfinclude template="../../plugins/injection.cfm">
+	<cfscript>
+		include "../../plugins/injection.cfm";
+	</cfscript>
 </cfcomponent>
