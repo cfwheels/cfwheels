@@ -90,7 +90,7 @@
   * Oracle will return timestamp as an object. you need to call timestampValue()
   * to get the string representation
   */
-	public undefined function $handleTimestampObject(required struct results) {
+	public any function $handleTimestampObject(required struct results) {
 		// depending on the driver and engine used with oracle, timestamps
 		// can be returned as objects instead of strings.
 		if (StructKeyExists(arguments.results, "query")) {
