@@ -31,7 +31,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_issue_663() {
-		result = humanize("some input");
+		result = humanize("Some Input");
 		assert("NOT Compare(result, 'Some Input')");
 	}
 
