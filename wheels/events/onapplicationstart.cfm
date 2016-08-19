@@ -123,6 +123,9 @@ public void function onApplicationStart() {
 	application.$wheels.dataSourcePassword = "";
 	application.$wheels.transactionMode = "commit";
 
+	// dbmigrate
+	application.$wheels.dbmigrate = $createObjectFromRoot(path="wheels/dbmigrate", fileName="dbmigrate", method="init");;
+
 	// cache settings
 	application.$wheels.cacheDatabaseSchema = false;
 	application.$wheels.cacheFileChecking = false;
@@ -451,4 +454,4 @@ public void function onApplicationStart() {
 		$location(url=local.url, addToken=false);
 	}
 }
-</cfscript> 
+</cfscript>

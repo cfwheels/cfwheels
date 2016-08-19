@@ -1,0 +1,3 @@
+component {
+	include "basefunctions.cfm";
+}
