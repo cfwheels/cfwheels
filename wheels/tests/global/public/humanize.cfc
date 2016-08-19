@@ -30,4 +30,9 @@ component extends="wheels.tests.Test" {
 		assert("NOT Compare(result, 'Wheels Is ACFML Framework')");
 	}
 
+	function test_issue_663() {
+		result = humanize("some input");
+		assert("NOT Compare(result, 'Some Input')");
+	}
+
 }
