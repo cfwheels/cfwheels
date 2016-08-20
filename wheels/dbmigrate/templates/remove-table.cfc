@@ -20,11 +20,11 @@
 	    		hasError = true;
 		      	catchObject = ex;
 	    	}
-		    
+
 	    </cfscript>
 	     <cfif hasError>
 	    	<cftransaction action="rollback" />
-	    	<cfthrow 
+	    	<cfthrow
 			    detail = "#catchObject.detail#"
 			    errorCode = "1"
 			    message = "#catchObject.message#"
@@ -40,7 +40,7 @@
 	    <cfscript>
 	    	try{
 	    		t = createTable(name='tableName');
-		   
+
 			    t.timestamps();
 			    t.create();
 	    	}
@@ -48,11 +48,11 @@
 	    		hasError = true;
 		      	catchObject = ex;
 	    	}
-		    
+
 	    </cfscript>
 	    <cfif hasError>
 	    	<cftransaction action="rollback" />
-	    	<cfthrow 
+	    	<cfthrow
 			    detail = "#catchObject.detail#"
 			    errorCode = "1"
 			    message = "#catchObject.message#"

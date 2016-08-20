@@ -21,11 +21,11 @@
 	    		hasError = true;
 		      	catchObject = ex;
 	    	}
-		    
+
 	    </cfscript>
 	    <cfif hasError>
 	    	<cftransaction action="rollback" />
-	    	<cfthrow 
+	    	<cfthrow
 			    detail = "#catchObject.detail#"
 			    errorCode = "1"
 			    message = "#catchObject.message#"
@@ -35,7 +35,7 @@
 	    </cfif>
 	 </cftransaction>
   </cffunction>
-  
+
   <cffunction name="down">
   	<cfset hasError = false />
   	<cftransaction>
@@ -47,11 +47,11 @@
 	    		hasError = true;
 		      	catchObject = ex;
 	    	}
-			
+
 	    </cfscript>
 	     <cfif hasError>
 	    	<cftransaction action="rollback" />
-	    	<cfthrow 
+	    	<cfthrow
 			    detail = "#catchObject.detail#"
 			    errorCode = "1"
 			    message = "#catchObject.message#"
