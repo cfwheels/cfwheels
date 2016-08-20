@@ -1,91 +1,87 @@
 <cfsetting enablecfoutputonly="true">
-<cfdump var="#application.wheels.dbmigrate.paths#">
-<cfset dbmigrateMeta = {}>
-<cfinclude template="../dbmigrate/basefunctions.cfm">
-<!--- explicitly set url to avoid odd issue when ses urls enabled --->
-<cfset selfUrl = "?controller=wheels&action=wheels&view=migrate">
-<cfif isDefined("Form.version")>
-	<cfset flashInsert(dbmigrateFeedback=application.wheels.dbmigrate.migrateTo(Form.version))>
-	<cflocation url="#selfUrl#" addtoken="false">
-<cfelseif isDefined("Form.migrationName")>
-	<cfparam name="Form.templateName" default="">
-	<cfparam name="Form.migrationPrefix" default="">
-	<cfset flashInsert(dbmigrateFeedback2=application.wheels.dbmigrate.createMigration(Form.migrationName,Form.templateName,Form.migrationPrefix))>
-	<cflocation url="#selfUrl#" addtoken="false">
-<cfelseif isDefined("url.migrateToVersion") And Len(Trim(url.migrateToVersion)) GT 0 And IsNumeric(url.migrateToVersion)>
-  <cfif isDefined("url.password") And Trim(url.password) EQ application.wheels.reloadPassword>
-  	<cfset flashInsert(dbmigrateFeedback=application.wheels.dbmigrate.migrateTo(url.migrateToVersion))>
-  	<cflocation url="#selfUrl#" addtoken="false">
-  </cfif>
-</cfif>
+<cfscript>
+	include "../dbmigrate/basefunctions.cfm";
 
-<!--- Get current database version --->
-<cfset currentVersion = application.wheels.dbmigrate.getCurrentMigrationVersion()>
+	//explicitly set url to avoid odd issue when ses urls enabled
+	selfUrl = "?controller=wheels&action=wheels&view=migrate";
 
-<!--- Get database type --->
-<cfset databaseType = #$getDBType()#>
+	// Actions:
+	if(isDefined("form.version")){
+		flashInsert(dbmigrateFeedback=application.wheels.dbmigrate.migrateTo(Form.version));
+		location url="#selfUrl#" addtoken="false";
+	} else if(isDefined("Form.migrationName")){
+		param name="form.templateName" default="";
+		param name="form.migrationPrefix" default="";
+		flashInsert(dbmigrateFeedback2=application.wheels.dbmigrate.createMigration(Form.migrationName,Form.templateName,Form.migrationPrefix));
+		location url="#selfUrl#" addtoken="false";
+	} else if(isDefined("url.migrateToVersion") && Len(Trim(url.migrateToVersion)) GT 0 && IsNumeric(url.migrateToVersion)){
+		if(isDefined("url.password") && Trim(url.password) EQ application.wheels.reloadPassword){
+			flashInsert(dbmigrateFeedback=application.wheels.dbmigrate.migrateTo(url.migrateToVersion));
+			location url="#selfUrl#" addtoken="false";
+		}
+	}
 
-<!--- Get current list of migrations --->
-<cfset migrations = application.wheels.dbmigrate.getAvailableMigrations()>
-<cfif ArrayLen(migrations)>
-	<cfset lastVersion = migrations[ArrayLen(migrations)].version>
-<cfelse>
-	<cfset lastVersion = 0>
-</cfif>
+	// Get current database version
+	currentVersion = application.wheels.dbmigrate.getCurrentMigrationVersion();
+
+	//  Get database type
+	databaseType = $getDBType();
+
+	// Get current list of migrations
+	migrations = application.wheels.dbmigrate.getAvailableMigrations();
+	if(ArrayLen(migrations)){
+		 lastVersion = migrations[ArrayLen(migrations)].version;
+	} else {
+		 lastVersion = 0;
+	}
+</cfscript>
 
 <cfoutput>
 
-<cfinclude template="../dbmigrate/css.cfm">
-<div class="row">
-	<h1>Database Migrations</h1>
-	<p>Database Migrations are an easy way to build and alter your database structure using cfscript.</p>
-</div>
+<h1>Database Migrations</h1>
+<p>Database Migrations are an easy way to build and alter your database structure using cfscript.</p>
+
 
 <cfif flashKeyExists("dbmigrateFeedback")>
-	<div class="row">
-		<fieldset>
-			<legend>Migration result</legend>
-			<pre>#flash("dbmigrateFeedback")#</pre>
-		</fieldset>
+	<div class="box">
+	<h3>Migration result</h3>
+	<pre><code>#flash("dbmigrateFeedback")#</code></pre>
 	</div>
 </cfif>
 
-<div class="row">
-	<table class="twelve">
+	<table class="table">
+		<thead>
 		<tr>
 			<th>Database Type</th>
 			<th>Datasource</th>
 			<th>Database Version</th>
 		</tr>
+	</thead>
+	<tbody>
 		<tr>
 			<td>#databaseType#</td>
 			<td>#application.wheels.dataSourceName#</td>
 			<td>#currentVersion#</td>
 		</tr>
+	</tbody>
 	</table>
-</div>
 
 <cfif flashKeyExists("dbmigrateFeedback2")>
-	<div class="row">
-		<pre style="margin-top:10px;" class="alert-box">#flash("dbmigrateFeedback2")#</pre>
-	</div>
+	<pre><code>#flash("dbmigrateFeedback2")#</code></pre>
 </cfif>
 
-<div class="row">
 	<form action="#CGI.script_name & '?' & CGI.query_string#" method="post">
 		<fieldset>
-			<legend>Create new migration file from template</legend>
+			<h5>Create new migration file from template</h5>
 			<cfif ArrayLen(migrations) eq 0>
-				<div class="row">
 					<label for="migrationPrefix">Migration prefix:</label>
 					<select name="migrationPrefix">
 						<option value="timestamp">Timestamp (e.g. #dateformat(now(),'yyyymmdd')##timeformat(now(),'hhmmss')#)  <-- Recommended</option>
 						<option value="numeric">Numeric (e.g. 001)</option>
 					</select>
-				</div>
 			</cfif>
 			<div class="row">
-				<div class="three columns">
+				<div class="column">
 					<label for="templateName">Select template:</label>
 					<select name="templateName" class="">
 						<option value="blank">Blank migration</option>
@@ -111,26 +107,26 @@
 						<option value="execute">Execute operation</option>
 					</select>
 				</div>
-				<div class="eight columns">
-					<label for="migrationName">Migration description: (eg. 'creates member table')</label>
-					<input name="migrationName" type="text" class="">
-				</div>
-				<div class="one columns">
-					<br>
-					<input type="submit" value="Create" class="small button">
+
+				<div class="column">
+					<label for="migrationName">Migration description:</label>
+					<input name="migrationName" type="text" class="" placeholder=" (eg. 'creates member table')">
 				</div>
 			</div>
+
+
+
+
+					<input type="submit" value="Create" class="button button-outline">
+
 		</fieldset>
 	</form>
-</div>
 
 <cfif ArrayLen(migrations) gt 0>
-	<div class="row">
+	<hr />
 		<form action="#CGI.script_name & '?' & CGI.query_string#&requesttimeout=99999" method="post">
 			<fieldset>
-				<legend>Migrate</legend>
-				<div class="row">
-					<div class="ten columns">
+				<h5>Migrate</h5>
 						<label for="version">Migrate to version:</label>
 						<select name="version" >
 							<cfif lastVersion neq 0>
@@ -153,23 +149,21 @@
 								</option>
 							</cfloop>
 						</select>
-					</div>
-					<div class="two columns">
-						<br>
-						<input type="submit" value="Get Migrating!" class="small button">
-					</div>
-				</div>
+
+						<input type="submit" value="Get Migrating!" class="button button-outline">
+
 			</fieldset>
 		</form>
-	</div>
-
-	<div class="row">
-		<label>Available Migrations:</label>
-		<table class="twelve">
+		<hr />
+		<h5>Available Migrations:</h5>
+		<table class="table">
+			<thead>
 			<tr>
 				<th>Version</th>
 				<th>Details</th>
 			</tr>
+		</thead>
+		<tbody>
 			<cfloop array="#migrations#" index="migration">
 				<cfif migration.status eq "migrated">
 					<cfset rowClass = "success label">
@@ -187,8 +181,8 @@
 					</td>
 				</tr>
 			</cfloop>
+			</tbody>
 		</table>
-	</div>
 </cfif>
 
 </cfoutput>
