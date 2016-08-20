@@ -261,7 +261,7 @@
 		}
 		else
 		{
-			$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by CFWheels.", extendedInfo="Use SQL Server, MySQL, Oracle, PostgreSQL or H2.");
+			$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by CFWheels.", extendedInfo="Use SQL Server, MySQL, MariaDB, Oracle, PostgreSQL or H2.");
 		}
 		loc.rv = CreateObject("component", "adapters.#loc.adapterName#").init(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password);
 		application.wheels.adapterName = loc.adapterName;
