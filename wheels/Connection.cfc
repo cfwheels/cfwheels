@@ -37,7 +37,7 @@
 			{
 				loc.adapterName = "SQLServer";
 			}
-			else if (FindNoCase("MySQL", loc.info.driver_name))
+			else if (FindNoCase("MySQL", loc.info.driver_name) || FindNoCase("MariaDB", loc.info.driver_name))
 			{
 				loc.adapterName = "MySQL";
 			}
