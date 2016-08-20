@@ -183,7 +183,7 @@
 		}
 
 		// run the insert sql statement and set the primary key value on the object (if one was returned from the database)
-		local.ins = variables.wheels.class.adapter.$query(sql=local.sql, parameterize=arguments.parameterize, $primaryKey=local.pks);
+		local.ins = variables.wheels.class.adapter.$querySetup(sql=local.sql, parameterize=arguments.parameterize, $primaryKey=local.pks);
 		local.generatedKey = variables.wheels.class.adapter.$generatedKey();
 
 		if (StructKeyExists(local.ins.result, local.generatedKey)){

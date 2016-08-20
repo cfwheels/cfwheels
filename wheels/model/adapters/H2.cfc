@@ -1,6 +1,5 @@
-<cfcomponent extends="Base" output="false">
+component extends="Base" output=false {
 
-	<cfscript>
 	public string function $generatedKey() {
 		local.rv = "generated_key";
 		return local.rv;
@@ -65,7 +64,7 @@
 		return local.rv;
 	}
 
-	public struct function $query(
+	public struct function $querySetup(
 	  required array sql,
 	  numeric limit="0",
 	  numeric offset="0",
@@ -99,29 +98,27 @@
 		}
 		return local.rv;
 	}
-	</cfscript>
 
-	<cffunction name="$identitySelect" returntype="any" access="public" output="false">
-		<cfargument name="queryAttributes" type="struct" required="true">
-		<cfargument name="result" type="struct" required="true">
-		<cfargument name="primaryKey" type="string" required="true">
-		<cfset var query = StructNew()>
-		<cfset local.sql = Trim(arguments.result.sql)>
-		<cfif Left(local.sql, 11) IS "INSERT INTO" AND NOT StructKeyExists(arguments.result, $generatedKey())>
-			<cfset local.startPar = Find("(", local.sql) + 1>
-			<cfset local.endPar = Find(")", local.sql)>
-			<cfset local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
-			<cfif NOT ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))>
-				<cfset local.rv = StructNew()>
-				<cfquery attributeCollection="#arguments.queryAttributes#">SELECT LAST_INSERT_ID() AS lastId</cfquery>
-				<cfset local.rv[$generatedKey()] = query.name.lastId>
-				<cfreturn local.rv>
-			</cfif>
-		</cfif>
-	</cffunction>
+	public any function $identitySelect(
+	  required struct queryAttributes,
+	  required struct result,
+	  required string primaryKey
+	) {
+		var query = {};
+		local.sql = Trim(arguments.result.sql);
+		if (Left(local.sql, 11) IS "INSERT INTO" AND NOT StructKeyExists(arguments.result, $generatedKey())) {
+			local.startPar = Find("(", local.sql) + 1;
+			local.endPar = Find(")", local.sql);
+			local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
+			if (! ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
+				local.rv = {};
+				query = $query(sql="SELECT LAST_INSERT_ID() AS lastId", argumentCollection=arguments.queryAttributes);
+				local.rv[$generatedKey()] = query.lastId;
+				return local.rv;
+			}
+		}
+	}
 
-	<cfscript>
-		include "../../plugins/injection.cfm";
-	</cfscript>
+include "../../plugins/injection.cfm";
 
-</cfcomponent>
+}

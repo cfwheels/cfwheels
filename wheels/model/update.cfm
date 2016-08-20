@@ -141,7 +141,7 @@
 	*/
 
 	public numeric function $updateAll() {
-		local.rv = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize).result.recordCount;
+		local.rv = variables.wheels.class.adapter.$querySetup(sql=arguments.sql, parameterize=arguments.parameterize).result.recordCount;
 		return local.rv;
 	}
 
@@ -172,7 +172,7 @@
 			{
 				ArrayDeleteAt(local.sql, ArrayLen(local.sql));
 				local.sql = $addKeyWhereClause(sql=local.sql);
-				local.upd = variables.wheels.class.adapter.$query(sql=local.sql, parameterize=arguments.parameterize);
+				local.upd = variables.wheels.class.adapter.$querySetup(sql=local.sql, parameterize=arguments.parameterize);
 				if (arguments.reload)
 				{
 					this.reload();

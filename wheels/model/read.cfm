@@ -202,7 +202,7 @@
 				{
 					local.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
 				}
-				local.findAll = variables.wheels.class.adapter.$query(argumentCollection=local.finderArgs);
+				local.findAll = variables.wheels.class.adapter.$querySetup(argumentCollection=local.finderArgs);
 				request.wheels[local.queryKey] = local.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
 			request.wheels[$hashedKey(local.findAll.query)] = variables.wheels.class.modelName; // place an identifer in request scope so we can reference this query when passed in to view functions

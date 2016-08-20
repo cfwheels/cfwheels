@@ -221,3 +221,10 @@
 <cffunction name="$zip" returntype="any" access="public" output="false">
 	<cfzip attributeCollection="#arguments#">
 </cffunction>
+
+<cffunction name="$query" returntype="any" access="public" output="false">
+	<cfargument name="sql" type="string" required="true">
+	<cfset StructDelete(arguments, "name")>
+	<cfquery attributeCollection="#arguments#" name="local.rv">#PreserveSingleQuotes(arguments.sql)#</cfquery>
+	<cfreturn local.rv>
+</cffunction>

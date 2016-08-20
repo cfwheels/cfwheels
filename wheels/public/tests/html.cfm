@@ -2,7 +2,7 @@
 
   <cfset linkParams = "?controller=wheels&action=wheels&view=tests&type=#params.type#">
 
-  <h1>Test Results</h1>
+
 
   <cfif NOT isStruct(testResults)>
 
@@ -10,36 +10,31 @@
 
   <cfelse>
 
-  	<p><a href="#linkParams#">Run All Tests</a> | <a href="#linkParams#&reload=true">Reload Test Data</a></p>
+    <div class="row">
 
-  	<table class="testing">
-  		<tr>
-  			<th class="<cfif testResults.ok>success<cfelse>failed</cfif>">Status</th>
-  			<td class="numeric <cfif testResults.ok>success<cfelse>failed</cfif>"><cfif testResults.ok>Passed<cfelse>Failed</cfif></td>
-  		</tr>
-  		<tr>
-  			<th>Duration</th>
-  			<td class="n">#TimeFormat(testResults.end - testResults.begin, "HH:mm:ss")#</td>
-  		</tr>
-  			<tr>
-  				<th>Packages</th>
-  				<td class="n">#testResults.numCases#</td>
-  			</tr>
-  		<tr>
-  			<th>Tests</th>
-  			<td class="n">#testResults.numTests#</td>
-  		</tr>
-  		<tr>
-  			<th<cfif testResults.numFailures neq 0> class="failed"</cfif>>Failures</th>
-  			<td class="n<cfif testResults.numFailures neq 0> failed</cfif>">#testResults.numFailures#</td>
-  		</tr>
-  		<tr>
-  			<th<cfif testResults.numErrors neq 0> class="failed"</cfif>>Errors</th>
-  			<td class="n<cfif testResults.numErrors neq 0> failed</cfif>">#testResults.numErrors#</td>
-  		</tr>
-  	</table>
+      <div class="column">
+        <h1>Test Results</h1>
+      </div>
 
-  	<table class="testing">
+      <div class="column">
+        <p class="float-right">
+          <a class="button button-outline" href="#linkParams#">Run All Tests</a> <a class="button button-outline" href="#linkParams#&reload=true">Reload Test Data</a>
+        <p>
+      </div>
+
+    </div>
+    <hr />
+    <div class="row">
+      <div class="column"><p class="<cfif testResults.ok>success<cfelse>failed</cfif>">Status: <br /><cfif testResults.ok>Passed<cfelse>Failed</cfif></p></div>
+      <div class="column"><p><strong>Duration</strong><br />#TimeFormat(testResults.end - testResults.begin, "HH:mm:ss")#</p></div>
+      <div class="column"><p><strong>Packages</strong><br />#testResults.numCases#</p></div>
+      <div class="column"><p><strong>Tests</strong><br />#testResults.numTests#</p></div>
+      <div class="column"><p class="<cfif testResults.numFailures neq 0> failed</cfif>"><strong>Failures</strong><br />#testResults.numFailures#</p></div>
+      <div class="column"><p class="<cfif testResults.numErrors neq 0> failed</cfif>"><strong>Errors</strong><br />#testResults.numErrors#</p></div>
+    </div>
+
+    <hr />
+  	<table class="table">
   		<tr>
   			<th>Package</th>
   			<th>Tests</th>
@@ -62,7 +57,7 @@
   		</cfloop>
   	</table>
 
-  	<table class="testing">
+  	<table class="table">
   		<tr>
   			<th>Package</th>
   			<th>Test Name</th>
@@ -87,6 +82,5 @@
   			</cfif>
   		</cfloop>
   	</table>
-
   </cfif>
 </cfoutput>

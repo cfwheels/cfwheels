@@ -100,7 +100,7 @@
 	* PRIVATE METHODS
 	*/
 	public numeric function $deleteAll() {
-		local.deleted = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
+		local.deleted = variables.wheels.class.adapter.$querySetup(sql=arguments.sql, parameterize=arguments.parameterize);
 		local.rv = local.deleted.result.recordCount;
 		return local.rv;
 	}
@@ -112,7 +112,7 @@
 			// delete dependents before the main record in case of foreign key constraints
 			$deleteDependents();
 
-			local.deleted = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
+			local.deleted = variables.wheels.class.adapter.$querySetup(sql=arguments.sql, parameterize=arguments.parameterize);
 			if (local.deleted.result.recordCount == 1 && $callback("afterDelete", arguments.callbacks))
 			{
 				local.rv = true;

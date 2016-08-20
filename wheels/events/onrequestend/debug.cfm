@@ -57,6 +57,10 @@
 			line-height: 1.5em;
 			padding: 0 10px 0 0;
 			vertical-align: top;
+			border-bottom: none;
+		}
+		#wheels-debug-area th {
+			border-bottom: none;
 		}
 		#wheels-debug-area a
 		{

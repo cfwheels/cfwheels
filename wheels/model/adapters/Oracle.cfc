@@ -1,6 +1,5 @@
-<cfcomponent extends="Base" output="false">
+component extends="Base" output="false" {
 
-	<cfscript>
 	public string function $generatedKey() {
 		local.rv = "rowid";
 		return local.rv;
@@ -59,7 +58,7 @@
 		return local.rv;
 	}
 
-	public struct function $query(
+	public struct function $querySetup(
 	  required array sql,
 	  numeric limit=0,
 	  numeric offset=0,
@@ -90,7 +89,7 @@
   * Oracle will return timestamp as an object. you need to call timestampValue()
   * to get the string representation
   */
-	public any function $handleTimestampObject(required struct results) {
+	public struct function $handleTimestampObject(required struct results) {
 		// depending on the driver and engine used with oracle, timestamps
 		// can be returned as objects instead of strings.
 		if (StructKeyExists(arguments.results, "query")) {
@@ -130,116 +129,117 @@
 		local.rv = arguments.results;
 		return local.rv;
 	}
-	</cfscript>
 
-	<cffunction name="$identitySelect" returntype="any" access="public" output="false">
-		<cfargument name="queryAttributes" type="struct" required="true">
-		<cfargument name="result" type="struct" required="true">
-		<cfargument name="primaryKey" type="string" required="true">
-		<cfset var loc = StructNew()>
-		<cfset var query = StructNew()>
-		<cfset loc.sql = Trim(arguments.result.sql)>
-		<cfif Left(loc.sql, 11) IS "INSERT INTO">
-			<cfset loc.startPar = Find("(", loc.sql) + 1>
-			<cfset loc.endPar = Find(")", loc.sql)>
-			<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
-			<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
-				<cfset loc.rv = StructNew()>
-				<cfset loc.tbl = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
-				<cfif NOT StructKeyExists(arguments.result, $generatedKey()) || application.wheels.serverName IS NOT "Adobe ColdFusion">
-					<!---
+	public any function $identitySelect(
+	  required struct queryAttributes,
+	  required struct result,
+	  required string primaryKey
+	) {
+		var query = {};
+		local.sql = Trim(arguments.result.sql);
+		if (Left(local.sql, 11) IS "INSERT INTO") {
+
+			local.startPar = Find("(", local.sql) + 1;
+			local.endPar = Find(")", local.sql);
+			local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
+
+			if (! ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
+				local.rv = StructNew();
+				local.tbl = SpanExcluding(Right(local.sql, Len(local.sql)-12), " ");
+				if (! StructKeyExists(arguments.result, $generatedKey()) || application.wheels.serverName IS NOT "Adobe ColdFusion") {
+					/*
 					there isn't a way in oracle to tell what (if any) sequences exists
 					on a table. hence we'll just have to perform a guess for now.
 					TODO: in 1.2 we need to look at letting the developer specify the sequence
 					name through a setting in the model
-					--->
-					<cftry>
-						<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #loc.tbl#_seq.currval AS lastId FROM dual</cfquery>
-						<cfcatch type="any">
-							<!--- in case the sequence doesn't exists return a blank string for the expected value --->
-							<cfset query.name.lastId = "">
-						</cfcatch>
-					</cftry>
-				<cfelse>
-					<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #arguments.primaryKey# AS lastId FROM #loc.tbl# WHERE ROWID = '#arguments.result[$generatedKey()]#'</cfquery>
-				</cfif>
-				<cfset loc.lastId = Trim(query.name.lastId)>
-				<cfif len(query.name.lastId)>
-					<cfset loc.rv[$generatedKey()] = Trim(loc.lastid)>
-					<cfreturn loc.rv>
-				</cfif>
-			<cfelse>
-				<!--- since Oracle always returns rowid we need to delete it in those cases where we have manually inserted the primary key, if we don't do this we'll end up setting the rowid value to the object --->
-				<cfif StructKeyExists(arguments.result, "rowid")>
-					<cfset StructDelete(arguments.result, "rowid")>
-				</cfif>
-				<cfif StructKeyExists(arguments.result, "generatedkey")>
-					<cfset StructDelete(arguments.result, "generatedkey")>
-				</cfif>
-			</cfif>
-		</cfif>
-	</cffunction>
+					 */
+					try {
+						query = $query(sql="SELECT #local.tbl#_seq.currval AS lastId FROM dual", argumentCollection=arguments.queryAttributes);
+					} catch(any e) {
+						// in case the sequence doesn't exists return a blank string for the expected value
+						query.lastId = "";
+					}
+				} else {
+					query = $query(sql="SELECT #arguments.primaryKey# AS lastId FROM #local.tbl# WHERE ROWID = '#arguments.result[$generatedKey()]#'", argumentCollection=arguments.queryAttributes);
+				}
+				local.lastId = Trim(query.lastId);
+				if (Len(query.lastId)) {
+					local.rv[$generatedKey()] = Trim(local.lastid);
+					return local.rv;
+				}
+			} else {
+				// since Oracle always returns rowid we need to delete it in those cases
+				// where we have manually inserted the primary key, if we don't do this we'll
+				// end up setting the rowid value to the object
+				if (StructKeyExists(arguments.result, "rowid")) {
+					StructDelete(arguments.result, "rowid");
+				}
+				if (StructKeyExists(arguments.result, "generatedkey")) {
+					StructDelete(arguments.result, "generatedkey");
+				}
+			}
+		}
+	}
 
-	<cffunction name="$getColumnInfo" returntype="query" access="public" output="false">
-		<cfargument name="table" type="string" required="true">
-		<cfargument name="datasource" type="string" required="true">
-		<cfargument name="username" type="string" required="true">
-		<cfargument name="password" type="string" required="true">
-		<cfscript>
-		var loc = {};
-		loc.args = Duplicate(arguments);
-		StructDelete(loc.args, "table");
-		if (!Len(loc.args.username))
+	public query function $getColumnInfo(
+	  required string table,
+	  required string datasource,
+	  required string username,
+	  required string password
+	) {
+		local.args = Duplicate(arguments);
+		StructDelete(local.args, "table");
+		if (!Len(local.args.username))
 		{
-			StructDelete(loc.args, "username");
+			StructDelete(local.args, "username");
 		}
-		if (!Len(loc.args.password))
+		if (!Len(local.args.password))
 		{
-			StructDelete(loc.args, "password");
+			StructDelete(local.args, "password");
 		}
-		loc.args.name = "loc.rv";
-		</cfscript>
-		<cfquery attributeCollection="#loc.args#">
-		SELECT
-			TC.COLUMN_NAME
-			,TC.DATA_TYPE AS TYPE_NAME
-			,TC.NULLABLE AS IS_NULLABLE
-			,CASE WHEN PKC.COLUMN_NAME IS NULL THEN 0 ELSE 1 END AS IS_PRIMARYKEY
-			,0 AS IS_FOREIGNKEY
-			,'' AS REFERENCED_PRIMARYKEY
-			,'' AS REFERENCED_PRIMARYKEY_TABLE
-			,NVL(TC.DATA_PRECISION, TC.DATA_LENGTH) AS COLUMN_SIZE
-			,TC.DATA_SCALE AS DECIMAL_DIGITS
-			,TC.DATA_DEFAULT AS COLUMN_DEFAULT_VALUE
-			,TC.DATA_LENGTH AS CHAR_OCTET_LENGTH
-			,TC.COLUMN_ID AS ORDINAL_POSITION
-			,'' AS REMARKS
-		FROM
-			ALL_TAB_COLUMNS TC
-			LEFT JOIN ALL_CONSTRAINTS PK
-				ON (PK.CONSTRAINT_TYPE = 'P'
-				AND PK.TABLE_NAME = TC.TABLE_NAME
-				AND TC.OWNER = PK.OWNER)
-			LEFT JOIN ALL_CONS_COLUMNS PKC
-				ON (PK.CONSTRAINT_NAME = PKC.CONSTRAINT_NAME
-				AND TC.COLUMN_NAME = PKC.COLUMN_NAME
-				AND TC.OWNER = PKC.OWNER)
-		WHERE
-			TC.TABLE_NAME = '#UCase(arguments.table)#'
-		ORDER BY
-			TC.COLUMN_ID
-		</cfquery>
-		<!---
+		local.rv = $query(
+			sql="
+				SELECT
+					TC.COLUMN_NAME
+					,TC.DATA_TYPE AS TYPE_NAME
+					,TC.NULLABLE AS IS_NULLABLE
+					,CASE WHEN PKC.COLUMN_NAME IS NULL THEN 0 ELSE 1 END AS IS_PRIMARYKEY
+					,0 AS IS_FOREIGNKEY
+					,'' AS REFERENCED_PRIMARYKEY
+					,'' AS REFERENCED_PRIMARYKEY_TABLE
+					,NVL(TC.DATA_PRECISION, TC.DATA_LENGTH) AS COLUMN_SIZE
+					,TC.DATA_SCALE AS DECIMAL_DIGITS
+					,TC.DATA_DEFAULT AS COLUMN_DEFAULT_VALUE
+					,TC.DATA_LENGTH AS CHAR_OCTET_LENGTH
+					,TC.COLUMN_ID AS ORDINAL_POSITION
+					,'' AS REMARKS
+				FROM
+					ALL_TAB_COLUMNS TC
+					LEFT JOIN ALL_CONSTRAINTS PK
+						ON (PK.CONSTRAINT_TYPE = 'P'
+						AND PK.TABLE_NAME = TC.TABLE_NAME
+						AND TC.OWNER = PK.OWNER)
+					LEFT JOIN ALL_CONS_COLUMNS PKC
+						ON (PK.CONSTRAINT_NAME = PKC.CONSTRAINT_NAME
+						AND TC.COLUMN_NAME = PKC.COLUMN_NAME
+						AND TC.OWNER = PKC.OWNER)
+				WHERE
+					TC.TABLE_NAME = '#UCase(arguments.table)#'
+				ORDER BY
+					TC.COLUMN_ID
+			",
+			argumentCollection=local.args
+		);
+		/*
 		wheels catches the error and raises a Wheels.TableNotFound error
 		to mimic this we will throw an error if the query result is empty
-		 --->
-		<cfif NOT loc.rv.recordCount>
-			<cfthrow>
-		</cfif>
-		<cfreturn loc.rv>
-	</cffunction>
+		 */
+		if (! local.rv.recordCount) {
+			$throw(type="Wheels.TableNotFound", message="The `#arguments.table#` table could not be found in the database.");
+		}
+		return local.rv;
+	}
 
-	<cfscript>
 	include "../../plugins/injection.cfm";
-	</cfscript>
-</cfcomponent>
+
+}

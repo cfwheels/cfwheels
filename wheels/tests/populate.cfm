@@ -1,6 +1,6 @@
 <!--- get the version of the database we're running against --->
 <cftry>
-	<cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="version">	
+	<cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="version">
 	<cfcatch type="any">
 		<cfthrow message="Datasource not found?" detail="The CFDBINFO call appears to have failed when looking for #application.wheels.dataSourceName#">
 	</cfcatch>
@@ -22,7 +22,7 @@
 <cfif loc.db IS "microsoftsqlserver">
 	<cfset loc.identityColumnType = "int NOT NULL IDENTITY(1,1)">
 	<cfset loc.binaryColumnType = "image">
-<cfelseif loc.db IS "mysql">
+<cfelseif loc.db IS "mysql" or loc.db IS "mariadb">
 	<cfset loc.identityColumnType = "int NOT NULL AUTO_INCREMENT">
 	<cfset loc.storageEngine = "ENGINE=InnoDB">
 <cfelseif loc.db IS "h2">
