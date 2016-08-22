@@ -225,6 +225,13 @@
 <cffunction name="$query" returntype="any" access="public" output="false">
 	<cfargument name="sql" type="string" required="true">
 	<cfset StructDelete(arguments, "name")>
+	<!--- allow the use of query of queries, caveat: Query must be called query. Eg: SELECT * from query --->
+	<cfif StructKeyExists(arguments, "query") && IsQuery(arguments.query)>
+		<cfset var query = Duplicate(arguments.query)>
+	</cfif>
 	<cfquery attributeCollection="#arguments#" name="local.rv">#PreserveSingleQuotes(arguments.sql)#</cfquery>
-	<cfreturn local.rv>
+	<!--- some sql statements may not return a value --->
+	<cfif StructKeyExists(local, "rv")>
+		<cfreturn local.rv>
+	</cfif>
 </cffunction>
