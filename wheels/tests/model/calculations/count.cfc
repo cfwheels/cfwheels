@@ -2,7 +2,7 @@ component extends="wheels.tests.Test" {
 
 	function test_count() {
 		result = model("author").count();
-		assert("result IS 9");
+		assert("result IS 7");
 	}
 
 	function test_count_with_group() {
@@ -16,7 +16,7 @@ component extends="wheels.tests.Test" {
 
 	function test_count_with_include() {
 		result = model("author").count(include="posts");
-		assert("result IS 9");
+		assert("result IS 7");
 	}
 
 	function test_count_with_where() {
