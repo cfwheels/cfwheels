@@ -449,8 +449,6 @@ db.peter = model("author").create(firstName="Peter", lastName="Amiri");
 db.james = model("author").create(firstName="James", lastName="Gibson");
 db.raul = model("author").create(firstName="Raul", lastName="Riera");
 db.andy = model("author").create(firstName="Andy", lastName="Bellenie");
-db.tom = model("author").create(firstName="Tom", lastName="King");
-db.adam = model("author").create(firstName="Adam", lastName="Chapman");
 db.users = model("user").findAll(order="id");
 
 for (db.user in db.users) {
