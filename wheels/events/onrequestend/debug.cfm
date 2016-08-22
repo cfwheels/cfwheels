@@ -128,7 +128,7 @@
 		</tr>
 		<tr>
 			<td><strong>Default Data Source:</strong></td>
-			<td>#capitalize(get("dataSourceName"))# [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=migrate&type=#LCase(loc.i)#">Migrations</a>]</td>
+			<td>#capitalize(get("dataSourceName"))# [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=migrate">Migrations</a>]</td>
 		</tr>
 		<cfif StructKeyExists(application.wheels, "adapterName")>
 			<tr>
