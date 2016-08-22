@@ -230,5 +230,8 @@
 		<cfset var query = Duplicate(arguments.query)>
 	</cfif>
 	<cfquery attributeCollection="#arguments#" name="local.rv">#PreserveSingleQuotes(arguments.sql)#</cfquery>
-	<cfreturn local.rv>
+	<!--- some sql statements may not return a value --->
+	<cfif StructKeyExists(local, "rv")>
+		<cfreturn local.rv>
+	</cfif>
 </cffunction>
