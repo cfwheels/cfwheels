@@ -7,7 +7,7 @@ component extends="wheels.tests.Test" {
 			allAuthors = model("Author").findAll();
 			transaction action="rollback";
 		}
-		assert('allAuthors.recordcount eq 6');
+		assert('allAuthors.recordcount eq 8');
 	}
 
  	function test_soft_delete() {
@@ -52,7 +52,7 @@ component extends="wheels.tests.Test" {
 			allAuthors = model("Author").findAll();
 			transaction action="rollback";
 		}
-		assert('allAuthors.recordcount eq 6');
+		assert('allAuthors.recordcount eq 8');
 	}
 
  	function test_soft_delete_by_key() {
@@ -95,7 +95,7 @@ component extends="wheels.tests.Test" {
 			allAuthors = model("Author").findAll();
 			transaction action="rollback";
 		}
-		assert('allAuthors.recordcount eq 6');
+		assert('allAuthors.recordcount eq 8');
 	}
 
  	function test_soft_delete_one() {

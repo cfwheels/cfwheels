@@ -77,7 +77,7 @@ component extends="wheels.tests.Test" {
 			allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'");
 			transaction action="rollback";
 		}
-		assert('allKermits.recordcount eq 7');
+		assert('allKermits.recordcount eq 9');
 	}
 
  	function test_update_all_for_soft_deleted_records() {
