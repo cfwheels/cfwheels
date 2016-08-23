@@ -81,11 +81,25 @@
 		<cfreturn loc.feedback>
 	</cffunction>
 
-	<cffunction name="getCurrentMigrationVersion" access="public" returntype="string" hint="returns current database version">
-		<cfset var loc = {}>
-		<cfset loc.listPreviouslyMigratedVersions = $getVersionsPreviouslyMigrated()>
-		<cfreturn ListLast(loc.listPreviouslyMigratedVersions)>
-	</cffunction>
+	<cfscript>
+		// returns current database version
+		public string function getCurrentMigrationVersion(){
+			return ListLast($getVersionsPreviouslyMigrated());
+		}
+
+		// Create a migration File
+		public string function createMigration(
+			required string migrationName,
+			string templateName="",
+			string migrationPrefix="timestamp"
+		){
+			if(len(trim(arguments.migrationName)) GT 0){
+				return $copyTemplateMigrationAndRename(argumentCollection=arguments);
+			} else {
+				return "You must supply a migration name (e.g. 'creates member table')";
+			}
+		}
+	</cfscript>
 
 	<cffunction name="getAvailableMigrations" access="public" returntype="array" hint="searches db/migrate folder for migrations">
 		<cfset var loc = {}>
@@ -123,16 +137,6 @@
 		<cfreturn loc.migrations>
 	</cffunction>
 
-	<cffunction name="createMigration" access="public" returntype="string">
-		<cfargument name="migrationName" type="string" required="true" />
-		<cfargument name="templateName" type="string" required="false" default="blank" />
-		<cfargument name="migrationPrefix" type="string" required="false" default="timestamp" />
-		<cfif len(trim(arguments.migrationName)) gt 0>
-			<cfreturn $copyTemplateMigrationAndRename(argumentCollection=arguments)>
-		<cfelse>
-			<cfreturn "You must supply a migration name (e.g. 'creates member table')">
-		</cfif>
-	</cffunction>
 
 	<cffunction name="$setVersionAsMigrated" access="private">
 		<cfargument name="version" required="true" type="string">
