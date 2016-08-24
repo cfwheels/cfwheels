@@ -102,11 +102,18 @@
 	</cfscript>
 
 	<cffunction name="getAvailableMigrations" access="public" returntype="array" hint="searches db/migrate folder for migrations">
+		<cfargument name="path" type="string" required="false" default="#this.paths.migrate#">
+		<cfscript>
+			var loc = {};
+			loc.listVersionsPreviouslyMigrated = $getVersionsPreviouslyMigrated();
+			loc.migrations = ArrayNew(1);
+			loc.migrationRE = "^([\d]{3,14})_([^\.]*)\.cfc$";
+		</cfscript>
 		<cfset var loc = {}>
 		<cfset loc.listVersionsPreviouslyMigrated = $getVersionsPreviouslyMigrated()>
 		<cfset loc.migrations = ArrayNew(1)>
 		<cfset loc.migrationRE = "^([\d]{3,14})_([^\.]*)\.cfc$">
-		<cfif not DirectoryExists(this.paths.migrate)>
+		<cfif !DirectoryExists(this.paths.migrate)>
 			<cfdirectory action="create" directory="#this.paths.migrate#">
 		</cfif>
 		<cfdirectory action="list" name="qMigrationFiles" directory="#this.paths.migrate#" sort="Name" filter="*.cfc" type="file" />
