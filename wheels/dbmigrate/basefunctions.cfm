@@ -1,7 +1,7 @@
 <cfscript>
 
 	if(!StructKeyExists(variables, "$wddx")){
-		include "../global/functions.cfm"
+		include "../global/functions.cfm";
 	}
 
 	public function announce(required string message) {

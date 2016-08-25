@@ -81,18 +81,39 @@
 		<cfreturn loc.feedback>
 	</cffunction>
 
-	<cffunction name="getCurrentMigrationVersion" access="public" returntype="string" hint="returns current database version">
-		<cfset var loc = {}>
-		<cfset loc.listPreviouslyMigratedVersions = $getVersionsPreviouslyMigrated()>
-		<cfreturn ListLast(loc.listPreviouslyMigratedVersions)>
-	</cffunction>
+	<cfscript>
+		// returns current database version
+		public string function getCurrentMigrationVersion(){
+			return ListLast($getVersionsPreviouslyMigrated());
+		}
+
+		// Create a migration File
+		public string function createMigration(
+			required string migrationName,
+			string templateName="",
+			string migrationPrefix="timestamp"
+		){
+			if(len(trim(arguments.migrationName)) GT 0){
+				return $copyTemplateMigrationAndRename(argumentCollection=arguments);
+			} else {
+				return "You must supply a migration name (e.g. 'creates member table')";
+			}
+		}
+	</cfscript>
 
 	<cffunction name="getAvailableMigrations" access="public" returntype="array" hint="searches db/migrate folder for migrations">
+		<cfargument name="path" type="string" required="false" default="#this.paths.migrate#">
+		<cfscript>
+			var loc = {};
+			loc.listVersionsPreviouslyMigrated = $getVersionsPreviouslyMigrated();
+			loc.migrations = ArrayNew(1);
+			loc.migrationRE = "^([\d]{3,14})_([^\.]*)\.cfc$";
+		</cfscript>
 		<cfset var loc = {}>
 		<cfset loc.listVersionsPreviouslyMigrated = $getVersionsPreviouslyMigrated()>
 		<cfset loc.migrations = ArrayNew(1)>
 		<cfset loc.migrationRE = "^([\d]{3,14})_([^\.]*)\.cfc$">
-		<cfif not DirectoryExists(this.paths.migrate)>
+		<cfif !DirectoryExists(this.paths.migrate)>
 			<cfdirectory action="create" directory="#this.paths.migrate#">
 		</cfif>
 		<cfdirectory action="list" name="qMigrationFiles" directory="#this.paths.migrate#" sort="Name" filter="*.cfc" type="file" />
@@ -123,16 +144,6 @@
 		<cfreturn loc.migrations>
 	</cffunction>
 
-	<cffunction name="createMigration" access="public" returntype="string">
-		<cfargument name="migrationName" type="string" required="true" />
-		<cfargument name="templateName" type="string" required="false" default="blank" />
-		<cfargument name="migrationPrefix" type="string" required="false" default="timestamp" />
-		<cfif len(trim(arguments.migrationName)) gt 0>
-			<cfreturn $copyTemplateMigrationAndRename(argumentCollection=arguments)>
-		<cfelse>
-			<cfreturn "You must supply a migration name (e.g. 'creates member table')">
-		</cfif>
-	</cffunction>
 
 	<cffunction name="$setVersionAsMigrated" access="private">
 		<cfargument name="version" required="true" type="string">
