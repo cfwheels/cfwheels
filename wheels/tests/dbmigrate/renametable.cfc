@@ -1,20 +1,19 @@
 component extends="wheels.tests.Test" {
 
-	include "helpers.cfm";
-
 	function setup() {
 		migration = CreateObject("component", "wheels.dbmigrate.Migration").init();
-		$createTable();
-	}
-
-	function teardown() {
-		migration.dropTable("renamedbmigrationtabletests");
 	}
 
 	function test_renameTable_renames_table() {
-		migration.renameTable(oldName='dbmigrationtabletests', newName='renamedbmigrationtabletests');
+		oldTableName = "dbmigration_renametable_tests";
+		newTableName = "dbmigration_renametable_new_tests";
+		t = migration.createTable(oldTableName);
+		t.string(columnNames="stringcolumn");
+		t.create();
+		migration.renameTable(oldName=oldTableName, newName=newTableName);
 		try {
-			model("renamedbmigrationtabletests").findAll();
+			model(newTableName).findAll();
+			migration.dropTable(newTableName);
 			assert("true");
 		} catch(any e) {
 			assert("false");

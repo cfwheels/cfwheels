@@ -1,25 +1,25 @@
 component extends="wheels.tests.Test" {
 
-	include "helpers.cfm";
-
 	function setup() {
 		migration = CreateObject("component", "wheels.dbmigrate.Migration").init();
-		$createTable();
-	}
-
-	function teardown() {
-		$dropTable();
 	}
 
 	function test_addColumn_creates_new_column() {
-		migration.addColumn(table='dbmigrationtabletests', columnType='integer', columnName='somenumber', null=true);
+		tableName = "dbmigration_addcolumn_tests";
+		t = migration.createTable(tableName);
+		t.string(columnNames="stringcolumn");
+		t.create();
+
+		migration.addColumn(table=tableName, columnType='integer', columnName='integercolumn', null=true);
 		info = $dbinfo(
 			datasource=application.wheels.dataSourceName,
-			table="dbmigrationtabletests",
+			table=tableName,
 			type="columns"
 		);
 		actual = ValueList(info.column_name);
-		expected = "somenumber";
+		expected = "integercolumn";
+		migration.dropTable(tableName);
+
 	  assert("ListFindNoCase(actual, expected)", "expected", "actual");
 	}
 }
