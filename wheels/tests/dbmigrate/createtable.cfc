@@ -5,7 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_createTable_generates_table() {
-		tableName = "dbmigration_createtable_tests";
+		tableName = "dbm_createtable_tests";
 		t = migration.createTable(tableName);
 		t.string(columnNames='stringcolumn', limit=255);
 		t.text(columnNames='textcolumn');
@@ -30,7 +30,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_createTable_generates_table_using_MicrosoftSQLServer_datatypes() {
-		tableName = "dbmigration_createtable_MicrosoftSQLServer_tests";
+		tableName = "dbm_createtable_sqlserver_tests";
 		if (migration.adapter.adapterName() eq "MicrosoftSQLServer") {
 			t = migration.createTable(tableName);
 			t.char(columnNames="charcolumn");

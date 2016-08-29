@@ -5,7 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_createTable_generates_table() {
-		tableName = "dbmigration_addrecord_tests";
+		tableName = "dbm_addrecord_tests";
 		recordValue = "#RandRange(0, 99)# bottles of beer on the wall...";
 
 		t = migration.createTable(tableName);

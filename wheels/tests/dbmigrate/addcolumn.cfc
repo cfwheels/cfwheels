@@ -5,7 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_addColumn_creates_new_column() {
-		tableName = "dbmigration_addcolumn_tests";
+		tableName = "dbm_addcolumn_tests";
 		t = migration.createTable(tableName);
 		t.string(columnNames="stringcolumn");
 		t.create();
