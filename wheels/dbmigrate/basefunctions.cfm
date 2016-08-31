@@ -16,20 +16,37 @@
 			username=application.wheels.dataSourceUserName,
 			password=application.wheels.dataSourcePassword
 		);
-		if (local.info.driver_name Contains "SQLServer" || local.info.driver_name Contains "Microsoft SQL Server" || local.info.driver_name Contains "MS SQL Server" || local.info.database_productname Contains "Microsoft SQL Server")
+		if (local.info.driver_name Contains "SQLServer" || local.info.driver_name Contains "Microsoft SQL Server" || local.info.driver_name Contains "MS SQL Server" || local.info.database_productname Contains "Microsoft SQL Server") {
 			local.adapterName = "MicrosoftSQLServer";
-		else if (local.info.driver_name Contains "MySQL")
+		} else if (local.info.driver_name Contains "MySQL") {
 			local.adapterName = "MySQL";
-		else if (local.info.driver_name Contains "Oracle")
+		} else if (local.info.driver_name Contains "Oracle") {
 			local.adapterName = "Oracle";
-		else if (local.info.driver_name Contains "PostgreSQL")
+		} else if (local.info.driver_name Contains "PostgreSQL") {
 			local.adapterName = "PostgreSQL";
-		else if (local.info.driver_name Contains "SQLite")
+		} else if (local.info.driver_name Contains "SQLite") {
 			local.adapterName = "SQLite";
 		// NB: using mySQL adapter for H2 as the cli defaults to this for development
-		else if (local.info.driver_name Contains "H2")
-			local.adapterName = "MySQL";
-		else {
+		} else if (local.info.driver_name Contains "H2") {
+			// determine the emulation mode
+			if (StructKeyExists(server, "lucee")) {
+				local.connectionString = GetApplicationMetaData().datasources[application.wheels.dataSourceName].connectionString;
+			} else {
+				// TODO: use the coldfusion class to dig out dsn info
+				local.connectionString = "";
+			}
+			if (local.connectionString Contains "mode=SQLServer" || local.connectionString Contains "mode=Microsoft SQL Server" || local.connectionString Contains "mode=MS SQL Server" || local.connectionString Contains "mode=Microsoft SQL Server") {
+				local.adapterName = "MicrosoftSQLServer";
+			} else if (local.connectionString Contains "mode=MySQL") {
+				local.adapterName = "MySQL";
+			} else if (local.connectionString Contains "mode=Oracle") {
+				local.adapterName = "Oracle";
+			} else if (local.connectionString Contains "mode=PostgreSQL") {
+				local.adapterName = "PostgreSQL";
+			} else {
+				local.adapterName = "MySQL";
+			}
+		} else {
 			local.adapterName = "";
 		}
 		return local.adapterName;
