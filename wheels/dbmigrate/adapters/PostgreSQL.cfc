@@ -29,6 +29,12 @@
 		<cfreturn arguments.sql>
 	</cffunction>
 
+	<!--- don't quote tables --->
+	<cffunction name="quoteTableName" returntype="string" access="public" hint="surrounds table or index names with quotes">
+		<cfargument name="name" type="string" required="true" hint="column name">
+		<cfreturn arguments.name>
+	</cffunction>
+
 	<!--- postgres uses double quotes --->
 	<cffunction name="quoteColumnName" returntype="string" access="public" hint="surrounds column names with quotes">
 		<cfargument name="name" type="string" required="true" hint="column name">
