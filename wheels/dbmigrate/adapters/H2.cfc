@@ -28,8 +28,8 @@
 		else
 			arguments.sql = arguments.sql & " NOT NULL";
 
-		// if (StructKeyExists(arguments.options, "autoIncrement") && arguments.options.autoIncrement)
-		// 	arguments.sql = arguments.sql & " ";
+		if (StructKeyExists(arguments.options, "autoIncrement") && arguments.options.autoIncrement)
+			arguments.sql = arguments.sql & " AUTO_INCREMENT";
 
 		arguments.sql = arguments.sql & " PRIMARY KEY";
 		</cfscript>
