@@ -119,6 +119,7 @@ public void function onApplicationStart() {
 	{
 		application.$wheels.dataSourceName = LCase(ListLast(GetDirectoryFromPath(GetBaseTemplatePath()), Right(GetDirectoryFromPath(GetBaseTemplatePath()), 1)));
 	}
+	application.$wheels.schemaOwner = "";
 	application.$wheels.dataSourceUserName = "";
 	application.$wheels.dataSourcePassword = "";
 	application.$wheels.transactionMode = "commit";
@@ -451,4 +452,4 @@ public void function onApplicationStart() {
 		$location(url=local.url, addToken=false);
 	}
 }
-</cfscript> 
+</cfscript>

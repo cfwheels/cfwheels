@@ -4,10 +4,12 @@
 
 		public any function init(
 		  required string dataSource,
+			string schemaOwner,
 		  required string username,
 		  required string password
 		) {
 			variables.dataSource = arguments.dataSource;
+			variables.schemaOwner = arguments.schemaOwner;
 			variables.username = arguments.username;
 			variables.password = arguments.password;
 			return this;
@@ -112,6 +114,7 @@
 		public query function $getColumns(required string tableName) {
 			local.args = {};
 			local.args.dataSource = variables.dataSource;
+			local.args.schemaOwner = variables.schemaOwner;
 			local.args.username = variables.username;
 			local.args.password = variables.password;
 			local.args.table = arguments.tableName;
