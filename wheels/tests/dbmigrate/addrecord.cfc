@@ -4,12 +4,12 @@ component extends="wheels.tests.Test" {
 		migration = CreateObject("component", "wheels.dbmigrate.Migration").init();
 	}
 
-	function test_createTable_generates_table() {
+	function test_addRecord_inserts_row_into_table() {
 		tableName = "dbm_addrecord_tests";
 		recordValue = "#RandRange(0, 99)# bottles of beer on the wall...";
 
-		t = migration.createTable(name=tableName, force=true, id=false);
-		t.string(columnNames="beers");
+		t = migration.createTable(name=tableName, force=true);
+		t.string(columnNames="BEERS");
     t.timeStamps();
 		t.create();
 		migration.addRecord(table=tableName, beers=recordValue);

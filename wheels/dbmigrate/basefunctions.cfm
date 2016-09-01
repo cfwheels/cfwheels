@@ -29,6 +29,7 @@
 		// NB: using mySQL adapter for H2 as the cli defaults to this for development
 		} else if (local.info.driver_name Contains "H2") {
 			// determine the emulation mode
+			/*
 			if (StructKeyExists(server, "lucee")) {
 				local.connectionString = GetApplicationMetaData().datasources[application.wheels.dataSourceName].connectionString;
 			} else {
@@ -46,6 +47,8 @@
 			} else {
 				local.adapterName = "MySQL";
 			}
+			*/
+			local.adapterName = "H2";
 		} else {
 			local.adapterName = "";
 		}
