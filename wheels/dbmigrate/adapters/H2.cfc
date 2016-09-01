@@ -53,4 +53,11 @@
 		<cfreturn "ALTER TABLE #arguments.oldName# RENAME TO #arguments.newName#">
 	</cffunction>
 
+	<cffunction name="renameColumnInTable" returntype="string" access="public" hint="generates sql to rename an existing column in a table">
+		<cfargument name="name" type="string" required="true" hint="table name">
+		<cfargument name="columnName" type="string" required="true" hint="old column name">
+		<cfargument name="newColumnName" type="string" required="true" hint="new column name">
+		<cfreturn "ALTER TABLE #arguments.name# ALTER COLUMN #arguments.columnName# RENAME TO #arguments.newColumnName#">
+	</cffunction>
+
 </cfcomponent>
