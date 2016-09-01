@@ -7,7 +7,7 @@ component extends="wheels.tests.Test" {
 	function test_renameTable_renames_table() {
 		oldTableName = "dbm_renametable_tests";
 		newTableName = "dbm_new_renametable_tests";
-		t = migration.createTable(name=oldTableName, force=true);
+		t = migration.createTable(name=oldTableName);
 		t.string(columnNames="stringcolumn");
 		t.create();
 		migration.renameTable(oldName=oldTableName, newName=newTableName);
