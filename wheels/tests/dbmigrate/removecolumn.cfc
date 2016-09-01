@@ -4,7 +4,7 @@ component extends="wheels.tests.Test" {
 		migration = CreateObject("component", "wheels.dbmigrate.Migration").init();
 	}
 
-	function test_addColumn_creates_new_column() {
+	function test_removeColumn_drops_column_from_table() {
 		tableName = "dbm_removecolumn_tests";
 		t = migration.createTable(name=tableName, force=true);
 		t.string(columnNames="stringcolumn");
