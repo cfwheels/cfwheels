@@ -66,7 +66,8 @@
 	<!--- postgres uses double quotes --->
 	<cffunction name="quoteColumnName" returntype="string" access="public" hint="surrounds column names with quotes">
 		<cfargument name="name" type="string" required="true" hint="column name">
-		<cfreturn '"#arguments.name#"'>
+		<!--- <cfreturn '"#arguments.name#"'> --->
+		<cfreturn arguments.name>
 	</cffunction>
 
 	<!--- createTable - use default --->
