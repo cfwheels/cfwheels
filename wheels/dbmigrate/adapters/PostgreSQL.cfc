@@ -29,6 +29,34 @@
 		<cfreturn arguments.sql>
 	</cffunction>
 
+	<!--- seems a waste just to chnage the boolean default from 1,0 to true,false --->
+	<cffunction name="addColumnOptions" returntype="string" access="public">
+		<cfargument name="sql" type="string" required="true" hint="column definition sql">
+		<cfargument name="options" type="struct" required="false" default="#StructNew()#" hint="column options">
+		<cfscript>
+			if(StructKeyExists(arguments.options,'type') && arguments.options.type != 'primaryKey') {
+				if(StructKeyExists(arguments.options,'default') && optionsIncludeDefault(argumentCollection=arguments.options)) {
+					if(arguments.options.default eq "NULL" || (arguments.options.default eq "" && ListFindNoCase("boolean,date,datetime,time,timestamp,decimal,float,integer",arguments.options.type))) {
+						arguments.sql = arguments.sql & " DEFAULT NULL";
+					} else if(arguments.options.type == 'boolean') {
+						arguments.sql = arguments.sql & " DEFAULT #IIf(arguments.options.default,true,false)#";
+					} else if(arguments.options.type == 'string' && arguments.options.default eq "") {
+						arguments.sql = arguments.sql;
+					} else {
+						arguments.sql = arguments.sql & " DEFAULT #quote(value=arguments.options.default,options=arguments.options)#";
+					}
+				}
+				if(StructKeyExists(arguments.options,'null') && !arguments.options.null) {
+					arguments.sql = arguments.sql & " NOT NULL";
+				}
+			}
+		</cfscript>
+		<cfif structKeyExists(arguments.options, "afterColumn") And Len(Trim(arguments.options.afterColumn)) GT 0>
+			<cfset arguments.sql = arguments.sql & " AFTER #arguments.options.afterColumn#">
+		</cfif>
+		<cfreturn arguments.sql>
+	</cffunction>
+
 	<!--- don't quote tables --->
 	<cffunction name="quoteTableName" returntype="string" access="public" hint="surrounds table or index names with quotes">
 		<cfargument name="name" type="string" required="true" hint="column name">
