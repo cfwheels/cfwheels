@@ -7,7 +7,7 @@ component extends="wheels.tests.Test" {
 	function test_createTable_generates_table() {
 		tableName = "dbm_droptable_tests";
 
-		t = migration.createTable(name=tableName);
+		t = migration.createTable(name=tableName, force=true);
 		t.string(columnNames="foo");
     t.timeStamps();
 		t.create();

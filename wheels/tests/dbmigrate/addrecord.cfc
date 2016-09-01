@@ -8,7 +8,7 @@ component extends="wheels.tests.Test" {
 		tableName = "dbm_addrecord_tests";
 		recordValue = "#RandRange(0, 99)# bottles of beer on the wall...";
 
-		t = migration.createTable(name=tableName);
+		t = migration.createTable(name=tableName, force=true);
 		t.string(columnNames="BEERS");
     t.timeStamps();
 		t.create();
