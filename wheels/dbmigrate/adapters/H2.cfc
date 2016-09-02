@@ -60,4 +60,10 @@
 		<cfreturn "ALTER TABLE #arguments.name# ALTER COLUMN #arguments.columnName# RENAME TO #arguments.newColumnName#">
 	</cffunction>
 
+	<cffunction name="changeColumnInTable" returntype="string" access="public" hint="generates sql to change an existing column in a table">
+		<cfargument name="name" type="string" required="true" hint="table name">
+		<cfargument name="column" type="any" required="true" hint="column definition object">
+		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# ALTER COLUMN #arguments.column.toSQL()#">
+	</cffunction>
+
 </cfcomponent>

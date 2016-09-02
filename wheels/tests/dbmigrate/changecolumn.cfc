@@ -14,6 +14,12 @@ component extends="wheels.tests.Test" {
 		t.string(columnNames=columnName, limit=10, null=false);
 		t.create();
 
+		info = $dbinfo(
+			datasource=application.wheels.dataSourceName,
+			table=tableName,
+			type="columns"
+		);
+
 		migration.changeColumn(
 			table=tableName,
 			columnName=columnName,
@@ -32,7 +38,12 @@ component extends="wheels.tests.Test" {
 
 		actual = $query(query=info, dbtype="query", sql="SELECT * FROM query WHERE column_name = '#columnName#'");
 
-		assert("actual.is_nullable");
+		// seems to fail with H2.. the null=true setting doesnt seem to be reflected in the dbinfo?
+		if (ListFindNoCase(actual.columnList, "nullable")) {
+			assert("actual.nullable");
+		} else {
+			assert("actual.is_nullable");
+		}
 		assert("actual.column_size eq 50");
 		assert("actual.column_default_value eq 'foo'");
 	}

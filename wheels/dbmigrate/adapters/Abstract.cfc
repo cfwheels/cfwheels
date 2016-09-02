@@ -79,11 +79,14 @@
 						arguments.sql = arguments.sql & " DEFAULT #quote(value=arguments.options.default,options=arguments.options)#";
 					}
 				}
-				if(StructKeyExists(arguments.options,'null') && !arguments.options.null) {
-					arguments.sql = arguments.sql & " NOT NULL";
+				if(StructKeyExists(arguments.options,'null')) {
+					if (arguments.options.null) {
+						arguments.sql = arguments.sql & " NULL";
+					} else {
+						arguments.sql = arguments.sql & " NOT NULL";
+					}
 				}
 			}
-
 		</cfscript>
 		<cfif structKeyExists(arguments.options, "afterColumn") And Len(Trim(arguments.options.afterColumn)) GT 0>
 			<cfset arguments.sql = arguments.sql & " AFTER #arguments.options.afterColumn#">
