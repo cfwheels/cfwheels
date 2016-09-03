@@ -8,6 +8,7 @@
 		"data"={};
 		data["success"]			= true;
 		data["datasource"]    	= application.wheels.dataSourceName;
+		data["wheelsVersion"]   = application.wheels.version;
 		data["currentVersion"] 	= dbmigrate.getCurrentMigrationVersion();
 		data["databaseType"]   	= $getDBType();
 		data["migrations"]    	= dbmigrate.getAvailableMigrations();
