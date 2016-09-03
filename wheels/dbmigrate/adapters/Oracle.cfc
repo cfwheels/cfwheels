@@ -95,7 +95,12 @@
 	<cffunction name="dropTable" returntype="string" access="public" hint="generates sql to drop a table">
 		<cfargument name="name" type="string" required="true" hint="table name">
 		<cfscript>
-		$execute("DROP SEQUENCE #quoteTableName(arguments.name & "_seq")#");
+		// TODO: delete sequence if exists
+		try {
+			$execute("DROP SEQUENCE #quoteTableName(arguments.name & "_seq")#");
+		} catch(database e) {
+			// catch exception if sequence doesn't exist
+		}
 		announce("Dropped sequence #arguments.name#_seq");
 		</cfscript>
 		<!--- DROP TABLE IF EXISTS IS MORE COMPLEX FOR ORACLE --->
