@@ -6,7 +6,7 @@ component extends="wheels.tests.Test" {
 
 	function test_addIndex_creates_an_index() {
 		tableName = "dbm_addindex_tests";
-		indexName = "idx_foo";
+		indexName = "idx_to_add";
 		t = migration.createTable(name=tableName, force=true);
 		t.integer(columnNames="integercolumn");
 		t.create();
