@@ -22,7 +22,7 @@ component extends="wheels.tests.Test" {
 		t = migration.changeTable(name=tableName);
 		t.string(columnNames='stringcolumn', limit=666, null=true);
 		t.integer(columnNames='integercolumn', default=666, null=true);
-		t.create();
+		t.change();
 
 		info = $dbinfo(
 			datasource=application.wheels.dataSourceName,
