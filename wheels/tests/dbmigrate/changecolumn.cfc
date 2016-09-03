@@ -6,8 +6,7 @@ component extends="wheels.tests.Test" {
 
 	// more tests needed.. changing datatypes.. etc
 
-	// temporarily remove this troublesome test
-	function _test_changeColumn_changes_column() {
+	function test_changeColumn_changes_column() {
 		tableName = "dbm_changecolumn_tests";
 		columnName = "stringcolumn";
 
@@ -39,12 +38,7 @@ component extends="wheels.tests.Test" {
 
 		actual = $query(query=info, dbtype="query", sql="SELECT * FROM query WHERE column_name = '#columnName#'");
 
-		// seems to fail with H2.. the null=true setting doesnt seem to be reflected in the dbinfo?
-		if (ListFindNoCase(actual.columnList, "nullable")) {
-			assert("actual.nullable");
-		} else {
-			assert("actual.is_nullable");
-		}
+		assert("actual.nullable");
 		assert("actual.column_size eq 50");
 		assert("actual.column_default_value eq 'foo'");
 	}
