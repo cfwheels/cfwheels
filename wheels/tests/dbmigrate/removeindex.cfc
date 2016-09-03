@@ -17,6 +17,7 @@ component extends="wheels.tests.Test" {
 			table=tableName,
 			type="index"
 		);
+
 		created = $query(query=info, dbtype="query", sql="SELECT * FROM query WHERE index_name = '#indexName#'");
 
 		migration.removeIndex(table=tableName, indexName=indexName);

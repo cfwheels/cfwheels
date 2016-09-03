@@ -11,7 +11,7 @@ component extends="wheels.tests.Test" {
 		columnName = "stringcolumn";
 
 		t = migration.createTable(name=tableName, force=true);
-		t.string(columnNames=columnName, limit=10, null=false);
+		t.string(columnNames=columnName, limit=10);
 		t.create();
 
 		info = $dbinfo(
@@ -24,9 +24,7 @@ component extends="wheels.tests.Test" {
 			table=tableName,
 			columnName=columnName,
 			columnType='string',
-			limit=50,
-			null=true,
-			default="foo"
+			limit=50
 		);
 
 		info = $dbinfo(
@@ -38,9 +36,7 @@ component extends="wheels.tests.Test" {
 
 		actual = $query(query=info, dbtype="query", sql="SELECT * FROM query WHERE column_name = '#columnName#'");
 
-		assert("actual.nullable");
 		assert("actual.column_size eq 50");
-		assert("actual.column_default_value eq 'foo'");
 	}
 
 }
