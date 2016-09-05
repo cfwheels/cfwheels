@@ -63,25 +63,24 @@ component extends="Base" {
     * drops a table from the database
     */
 	public void function dropTable(required string name) {
-	    	if (application.wheels.serverName != "railo")
-	    	{
-					local.foreignKeys = $getForeignKeys(arguments.name);
-					local.iEnd = ListLen(local.foreignKeys);
-	    		for (local.i=1; local.i <= local.iEnd; local.i++) {
-	    			local.foreignKeyName = ListGetAt(local.foreignKeys,local.i);
-	    			dropForeignKey(table=arguments.name,keyname=local.foreignKeyName);
-	    		}
-	    	}
-		    $execute(this.adapter.dropTable(name=arguments.name));
-		    announce("Dropped table #arguments.name#");
+  	if (application.wheels.serverName != "lucee") {
+			local.foreignKeys = $getForeignKeys(arguments.name);
+			local.iEnd = ListLen(local.foreignKeys);
+  		for (local.i=1; local.i <= local.iEnd; local.i++) {
+  			local.foreignKeyName = ListGetAt(local.foreignKeys,local.i);
+  			dropForeignKey(table=arguments.name,keyname=local.foreignKeyName);
+  		}
+  	}
+    $execute(this.adapter.dropTable(name=arguments.name));
+    announce("Dropped table #arguments.name#");
 	}
 
 	/**
 	* drops a view from the database
 	*/
 	public void function dropView(required string name) {
-	    $execute(this.adapter.dropView(name=arguments.name));
-	    announce("Dropped view #arguments.name#");
+    $execute(this.adapter.dropView(name=arguments.name));
+    announce("Dropped view #arguments.name#");
 	}
 
 	/**
