@@ -284,6 +284,22 @@
 		<cfreturn "DROP INDEX #quoteTableName(arguments.indexName)#">
 	</cffunction>
 
+	<cffunction name="createView" returntype="string" access="public" hint="generates sql to create a view">
+		<cfargument name="name" type="string" required="true" hint="view name">
+		<cfargument name="sql" type="string" required="true" hint="select sql">
+		<cfscript>
+		var loc = {};
+		loc.sql = "CREATE VIEW #quoteTableName(LCase(arguments.name))# AS ";
+		loc.sql = loc.sql & arguments.sql;
+		</cfscript>
+		<cfreturn loc.sql>
+	</cffunction>
+
+	<cffunction name="dropView" returntype="string" access="public" hint="generates sql to drop a view">
+		<cfargument name="name" type="string" required="true" hint="view name">
+		<cfreturn "DROP VIEW IF EXISTS #quoteTableName(LCase(arguments.name))#">
+	</cffunction>
+
 	<cffunction name="addRecordPrefix" returntype="string" access="public" hint="generates sql to remove a database index">
 		<cfreturn "">
 	</cffunction>
