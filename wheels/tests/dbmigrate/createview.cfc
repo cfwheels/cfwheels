@@ -10,7 +10,7 @@ component extends="wheels.tests.Test" {
 		if (ListFindNoCase("MicrosoftSQLServer", migration.adapter.adapterName())) {
 
 			v = migration.createView(name=viewName);
-			v.selectStatement(sql="SELECT * FROM users")
+			v.selectStatement(sql="SELECT * FROM users");
 			v.create();
 
 			info = $dbinfo(
