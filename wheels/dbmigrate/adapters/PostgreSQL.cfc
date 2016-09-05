@@ -21,9 +21,9 @@
 		<cfargument name="sql" type="string" required="true" hint="column definition sql">
 		<cfargument name="options" type="struct" required="false" default="#StructNew()#" hint="column options">
 		<cfscript>
-		if (StructKeyExists(arguments.options, "autoIncrement") && arguments.options.autoIncrement)
+		if (StructKeyExists(arguments.options, "autoIncrement") && arguments.options.autoIncrement) {
 			arguments.sql = ReplaceNoCase(arguments.sql, "INTEGER", "SERIAL", "all");
-
+		}
 		arguments.sql = arguments.sql & " PRIMARY KEY";
 		</cfscript>
 		<cfreturn arguments.sql>
