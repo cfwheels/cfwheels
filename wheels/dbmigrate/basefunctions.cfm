@@ -77,7 +77,7 @@ public string function $getColumns(required string tableName) {
 	if ($getDBType() eq "Oracle") {
 		// oracle thin client jdbc throws error when usgin cfdbinfo to access column data
 		// because of this error wheels can't load models anyway so maybe we don't need to support this driver
-		$query(
+		local.columns = $query(
 			datasource=application.wheels.dataSourceName,
 			username=application.wheels.dataSourceUserName,
 			password=application.wheels.dataSourcePassword,
