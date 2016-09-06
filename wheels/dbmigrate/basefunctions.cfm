@@ -56,8 +56,12 @@
 	}
 
 	private string function $getForeignKeys(required string table) {
-		local.foreignKeys = $dbinfo(type="foreignkeys",table=arguments.table,datasource=application.wheels.dataSourceName,username=application.wheels.dataSourceUserName,password=application.wheels.dataSourcePassword);
-		local.foreignKeyList = ValueList(local.foreignKeys.FKCOLUMN_NAME);
+		local.foreignKeyList = "";
+		local.tables = $dbinfo(type="tables", datasource=application.wheels.dataSourceName,username=application.wheels.dataSourceUserName,password=application.wheels.dataSourcePassword);
+		if (ListFindNoCase(ValueList(local.tables.table_name), arguments.table)) {
+			local.foreignKeys = $dbinfo(type="foreignkeys",table=arguments.table,datasource=application.wheels.dataSourceName,username=application.wheels.dataSourceUserName,password=application.wheels.dataSourcePassword);
+			local.foreignKeyList = ValueList(local.foreignKeys.FKCOLUMN_NAME);
+		}
 		return local.foreignKeyList;
 	}
 </cfscript>
