@@ -37,9 +37,7 @@ component extends="wheels.tests.Test" {
 			dbtype="query",
 			sql="
 				SELECT * FROM query
-				WHERE fk_name = 'FK_#tableName#_#referenceTableName#'
-				AND pktable_name = '#referenceTableName#'
-				AND pkcolumn_name = 'id'
+				WHERE pkcolumn_name = 'id'
 				AND fktable_name = '#tableName#'
 				AND fkcolumn_name = 'barid'
 			"

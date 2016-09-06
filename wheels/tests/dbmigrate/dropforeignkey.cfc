@@ -28,10 +28,11 @@ component extends="wheels.tests.Test" {
 			table=referenceTableName,
 			type="foreignkeys"
 		);
+
 		created = $query(
 			query=info,
 			dbtype="query",
-			sql="SELECT * FROM query WHERE fk_name = 'FK_#tableName#_#referenceTableName#'"
+			sql="SELECT * FROM query WHERE fktable_name = '#tableName#' AND fkcolumn_name = 'barid' AND pkcolumn_name = 'id'"
 		);
 
 		migration.dropForeignKey(table=tableName, keyName="FK_#tableName#_#referenceTableName#");
@@ -43,7 +44,7 @@ component extends="wheels.tests.Test" {
 		dropped = $query(
 			query=info,
 			dbtype="query",
-			sql="SELECT * FROM query WHERE fk_name = 'FK_#tableName#_#referenceTableName#'"
+			sql="SELECT * FROM query WHERE fktable_name = '#tableName#' AND fkcolumn_name = 'barid' AND pkcolumn_name = 'id'"
 		);
 
 		migration.dropTable(tableName);
