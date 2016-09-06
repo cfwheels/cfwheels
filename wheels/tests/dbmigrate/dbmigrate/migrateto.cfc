@@ -59,6 +59,18 @@ component extends="wheels.tests.Test" {
 		assert("!ListFindNoCase(actual, 'hoopsnakes')");
 	}
 
-	// TODO: test that sql scripts have been written to dbmigrate.sqlPath
+	function test_migrateto_generates_sql_files() {
+		dbmigrate.migrateTo(002);
+		dbmigrate.migrateTo(001);
 
+		for (i in ["001_create_bunyips_table_up.sql","002_create_dropbears_table_up.sql","002_create_dropbears_table_down.sql"]) {
+			actual = fileRead(dbmigrate.paths.sql & i);
+			if (i contains "_up.sql") {
+				expected = "CREATE TABLE";
+			} else {
+				expected = "DROP TABLE";
+			}
+			assert("actual contains expected");
+		};
+	}
 }
