@@ -66,4 +66,10 @@
 		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# ALTER COLUMN #arguments.column.toSQL()#">
 	</cffunction>
 
+	<cffunction name="dropForeignKeyFromTable" returntype="string" access="public" hint="generates sql to add a foreign key constraint to a table">
+		<cfargument name="name" type="string" required="true" hint="table name">
+		<cfargument name="keyName" type="any" required="true" hint="foreign key name">
+		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP CONSTRAINT #arguments.keyname#">
+	</cffunction>
+
 </cfcomponent>
