@@ -1,13 +1,18 @@
 <cfcomponent output="false" mixin="none" environment="design,development,maintenance">
 
-	<cffunction name="init">
-		<cfscript>
-			this.paths.migrate   = expandPath("/db/migrate/");
-			this.paths.sql       = expandPath("/db/sql/");
-			this.paths.templates = expandPath("wheels/dbmigrate/templates");
-			return this;
-		</cfscript>
-	</cffunction>
+	<cfscript>
+	public dbmigrate function init(
+		string migratePath = "/db/migrate/",
+		string sqlPath = "/db/sql/",
+		string templatePath = "wheels/dbmigrate/templates/"
+	) {
+		this.paths.migrate   = ExpandPath(arguments.migratePath);
+		this.paths.sql       = ExpandPath(arguments.sqlPath);
+		this.paths.templates = ExpandPath(arguments.templatePath);
+		this.paths.migrateComponents = ArrayToList(ListToArray(arguments.migratePath, "/"), ".");
+		return this;
+	}
+	</cfscript>
 
 	<cffunction name="migrateTo" access="public" returntype="string" hint="migrates database to a specified version">
 		<cfargument name="version" type="string" required="false" default="">
@@ -117,6 +122,7 @@
 			<cfdirectory action="create" directory="#this.paths.migrate#">
 		</cfif>
 		<cfdirectory action="list" name="qMigrationFiles" directory="#this.paths.migrate#" sort="Name" filter="*.cfc" type="file" />
+
 		<cfloop query="qMigrationFiles">
 			<cfif REFind(loc.migrationRE,Name)>
 				<cfset loc.migration = {}>
@@ -127,7 +133,7 @@
 				<cfset loc.migration.details = "description unavailable">
 				<cfset loc.migration.status = "">
 				<cftry>
-					<cfset loc.migration.cfc = $createObjectFromRoot(path="db.migrate",fileName=loc.migration.cfcfile, method="init")>
+					<cfset loc.migration.cfc = $createObjectFromRoot(path=this.paths.migrateComponents, fileName=loc.migration.cfcfile, method="init")>
 
 					<cfset loc.metaData = GetMetaData(loc.migration.cfc)>
 					<cfif structKeyExists(loc.metaData,"hint")>
@@ -161,6 +167,7 @@
 
 	<cfscript>
 
+	// TODO: is this required? it's a private core function.
 	public any function $createObjectFromRoot(
 		required string path,
 		required string fileName,
