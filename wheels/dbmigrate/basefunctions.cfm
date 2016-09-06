@@ -1,132 +1,134 @@
 <cfscript>
+if(!StructKeyExists(variables, "$wddx")){
+	include "../global/functions.cfm";
+}
 
-	if(!StructKeyExists(variables, "$wddx")){
-		include "../global/functions.cfm";
+public function announce(required string message) {
+		param name="request.migrationOutput" default="";
+		Request.migrationOutput = Request.migrationOutput & arguments.message & chr(13);
 	}
 
-	public function announce(required string message) {
- 		param name="request.migrationOutput" default="";
- 		Request.migrationOutput = Request.migrationOutput & arguments.message & chr(13);
- 	}
+	private string function $getDBType() {
+	local.info = $dbinfo(
+		type="version",
+		datasource=application.wheels.dataSourceName,
+		username=application.wheels.dataSourceUserName,
+		password=application.wheels.dataSourcePassword
+	);
+	if (local.info.driver_name Contains "SQLServer" || local.info.driver_name Contains "Microsoft SQL Server" || local.info.driver_name Contains "MS SQL Server" || local.info.database_productname Contains "Microsoft SQL Server") {
+		local.adapterName = "MicrosoftSQLServer";
+	} else if (local.info.driver_name Contains "MySQL") {
+		local.adapterName = "MySQL";
+	} else if (local.info.driver_name Contains "Oracle") {
+		local.adapterName = "Oracle";
+	} else if (local.info.driver_name Contains "PostgreSQL") {
+		local.adapterName = "PostgreSQL";
+	} else if (local.info.driver_name Contains "SQLite") {
+		local.adapterName = "SQLite";
+	// NB: using mySQL adapter for H2 as the cli defaults to this for development
+	} else if (local.info.driver_name Contains "H2") {
+		// determine the emulation mode
+		/*
+		if (StructKeyExists(server, "lucee")) {
+			local.connectionString = GetApplicationMetaData().datasources[application.wheels.dataSourceName].connectionString;
+		} else {
+			// TODO: use the coldfusion class to dig out dsn info
+			local.connectionString = "";
+		}
+		if (local.connectionString Contains "mode=SQLServer" || local.connectionString Contains "mode=Microsoft SQL Server" || local.connectionString Contains "mode=MS SQL Server" || local.connectionString Contains "mode=Microsoft SQL Server") {
+			local.adapterName = "MicrosoftSQLServer";
+		} else if (local.connectionString Contains "mode=MySQL") {
+			local.adapterName = "MySQL";
+		} else if (local.connectionString Contains "mode=Oracle") {
+			local.adapterName = "Oracle";
+		} else if (local.connectionString Contains "mode=PostgreSQL") {
+			local.adapterName = "PostgreSQL";
+		} else {
+			local.adapterName = "MySQL";
+		}
+		*/
+		local.adapterName = "H2";
+	} else {
+		local.adapterName = "";
+	}
+	return local.adapterName;
+}
 
- 	private string function $getDBType() {
-		local.info = $dbinfo(
-			type="version",
+private string function $getForeignKeys(required string table) {
+	local.foreignKeyList = "";
+	local.tables = $dbinfo(type="tables", datasource=application.wheels.dataSourceName,username=application.wheels.dataSourceUserName,password=application.wheels.dataSourcePassword);
+	if (ListFindNoCase(ValueList(local.tables.table_name), arguments.table)) {
+		local.foreignKeys = $dbinfo(type="foreignkeys",table=arguments.table,datasource=application.wheels.dataSourceName,username=application.wheels.dataSourceUserName,password=application.wheels.dataSourcePassword);
+		local.foreignKeyList = ValueList(local.foreignKeys.FKCOLUMN_NAME);
+	}
+	return local.foreignKeyList;
+}
+
+private void function $execute(required string sql) {
+	// trim and remove trailing semicolon (appears to cause problems for Oracle thin client JDBC driver)
+	arguments.sql = REReplace(trim(arguments.sql),";$","","ONE");
+	if (StructKeyExists(Request, "migrationSQLFile")) {
+		$file(action="append", file=Request.migrationSQLFile, output="#arguments.sql#;", addNewLine="yes", fixNewLine="yes");
+	}
+	$query(datasource=application.wheels.dataSourceName, sql=arguments.sql);
+}
+
+public string function $getColumns(required string tableName) {
+	if ($getDBType() eq "Oracle") {
+		// oracle thin client jdbc throws error when usgin cfdbinfo to access column data
+		// because of this error wheels can't load models anyway so maybe we don't need to support this driver
+		$query(
 			datasource=application.wheels.dataSourceName,
 			username=application.wheels.dataSourceUserName,
-			password=application.wheels.dataSourcePassword
+			password=application.wheels.dataSourcePassword,
+			sql="SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = '#this.name#'"
 		);
-		if (local.info.driver_name Contains "SQLServer" || local.info.driver_name Contains "Microsoft SQL Server" || local.info.driver_name Contains "MS SQL Server" || local.info.database_productname Contains "Microsoft SQL Server") {
-			local.adapterName = "MicrosoftSQLServer";
-		} else if (local.info.driver_name Contains "MySQL") {
-			local.adapterName = "MySQL";
-		} else if (local.info.driver_name Contains "Oracle") {
-			local.adapterName = "Oracle";
-		} else if (local.info.driver_name Contains "PostgreSQL") {
-			local.adapterName = "PostgreSQL";
-		} else if (local.info.driver_name Contains "SQLite") {
-			local.adapterName = "SQLite";
-		// NB: using mySQL adapter for H2 as the cli defaults to this for development
-		} else if (local.info.driver_name Contains "H2") {
-			// determine the emulation mode
-			/*
-			if (StructKeyExists(server, "lucee")) {
-				local.connectionString = GetApplicationMetaData().datasources[application.wheels.dataSourceName].connectionString;
-			} else {
-				// TODO: use the coldfusion class to dig out dsn info
-				local.connectionString = "";
-			}
-			if (local.connectionString Contains "mode=SQLServer" || local.connectionString Contains "mode=Microsoft SQL Server" || local.connectionString Contains "mode=MS SQL Server" || local.connectionString Contains "mode=Microsoft SQL Server") {
-				local.adapterName = "MicrosoftSQLServer";
-			} else if (local.connectionString Contains "mode=MySQL") {
-				local.adapterName = "MySQL";
-			} else if (local.connectionString Contains "mode=Oracle") {
-				local.adapterName = "Oracle";
-			} else if (local.connectionString Contains "mode=PostgreSQL") {
-				local.adapterName = "PostgreSQL";
-			} else {
-				local.adapterName = "MySQL";
-			}
-			*/
-			local.adapterName = "H2";
-		} else {
-			local.adapterName = "";
-		}
-		return local.adapterName;
+	} else {
+		local.columns = $dbinfo(
+			datasource=application.wheels.dataSourceName,
+			username=application.wheels.dataSourceUserName,
+			password=application.wheels.dataSourcePassword,
+			type="columns",
+			table=arguments.tableName
+		);
 	}
+	return ValueList(local.columns.COLUMN_NAME);
+}
 
-	private string function $getForeignKeys(required string table) {
-		local.foreignKeyList = "";
-		local.tables = $dbinfo(type="tables", datasource=application.wheels.dataSourceName,username=application.wheels.dataSourceUserName,password=application.wheels.dataSourcePassword);
-		if (ListFindNoCase(ValueList(local.tables.table_name), arguments.table)) {
-			local.foreignKeys = $dbinfo(type="foreignkeys",table=arguments.table,datasource=application.wheels.dataSourceName,username=application.wheels.dataSourceUserName,password=application.wheels.dataSourcePassword);
-			local.foreignKeyList = ValueList(local.foreignKeys.FKCOLUMN_NAME);
-		}
-		return local.foreignKeyList;
-	}
-</cfscript>
-
-<cffunction name="$execute" access="private">
-	<cfargument name="sql" type="string" required="yes">
-	<!--- trim and remove trailing semicolon (appears to cause problems for Oracle thin client JDBC driver) --->
-	<cfset arguments.sql = REReplace(trim(arguments.sql),";$","","ONE")>
-	<cfif StructKeyExists(Request, "migrationSQLFile")>
-		<cffile action="append" file="#Request.migrationSQLFile#" output="#arguments.sql#;" addNewLine="yes" fixNewLine="yes">
-	</cfif>
-	<cfquery datasource="#application.wheels.dataSourceName#">
-	#PreserveSingleQuotes(arguments.sql)#
-	</cfquery>
-</cffunction>
-
-<cffunction name="$getColumns" returntype="string" access="public" output="false">
-	<cfargument name="tableName" type="string" required="yes" hint="table name">
-	<cfset var loc = {}>
-  	<cfif $getDBType() eq "Oracle">
-  		<!--- oracle thin client jdbc throws error when usgin cfdbinfo to access column data --->
-  		<!--- because of this error wheels can't load models anyway so maybe we don't need to support this driver --->
-  		<cfquery name="loc.columns" datasource="#application.wheels.dataSourceName#" username="#application.wheels.dataSourceUserName#" password="#application.wheels.dataSourcePassword#">
-  		SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = '#this.name#'
-  		</cfquery>
-  	<cfelse>
-  		<!--- use cfdbinfo --->
-  		<cfset loc.columns = $dbinfo(type="columns",table=arguments.tableName,datasource=application.wheels.dataSourceName,username=application.wheels.dataSourceUserName,password=application.wheels.dataSourcePassword)>
-  	</cfif>
-	<cfreturn ValueList(loc.columns.COLUMN_NAME)>
-</cffunction>
-
-<cffunction name="$getColumnDefinition" returntype="string" access="private">
-	<cfargument name="tableName" type="string" required="yes" hint="table name">
-	<cfargument name="columnName" type="string" required="yes" hint="column name">
-	<cfset var loc = {}>
-	<cfdbinfo name="loc.columns" type="columns" table="#arguments.tableName#" datasource="#application.wheels.dataSourceName#" username="#application.wheels.dataSourceUserName#" password="#application.wheels.dataSourcePassword#">
-
-	<cfscript>
-	loc.columnDefinition = "";
-	loc.iEnd = loc.columns.RecordCount;
-	for (loc.i=1; loc.i <= loc.iEnd; loc.i++) {
-		if(loc.columns["COLUMN_NAME"][loc.i] == arguments.columnName) {
-			loc.columnType = loc.columns["TYPE_NAME"][loc.i];
-			loc.columnDefinition = loc.columnType;
-			if(ListFindNoCase("char,varchar,int,bigint,smallint,tinyint,binary,varbinary",loc.columnType)) {
-				loc.columnDefinition = loc.columnDefinition & "(#loc.columns["COLUMN_SIZE"][loc.i]#)";
-			} else if(ListFindNoCase("decimal,float,double",loc.columnType)) {
-				loc.columnDefinition = loc.columnDefinition & "(#loc.columns["COLUMN_SIZE"][loc.i]#,#loc.columns["DECIMAL_DIGITS"][loc.i]#)";
+private string function $getColumnDefinition(required string tableName, required string columnName) {
+	local.columns = $dbinfo(
+		datasource=application.wheels.dataSourceName,
+		username=application.wheels.dataSourceUserName,
+		password=application.wheels.dataSourcePassword,
+		type="columns",
+		table=arguments.tableName
+	);
+	local.columnDefinition = "";
+	local.iEnd = local.columns.RecordCount;
+	for (local.i=1; local.i <= local.iEnd; local.i++) {
+		if(local.columns["COLUMN_NAME"][local.i] == arguments.columnName) {
+			local.columnType = local.columns["TYPE_NAME"][local.i];
+			local.columnDefinition = local.columnType;
+			if(ListFindNoCase("char,varchar,int,bigint,smallint,tinyint,binary,varbinary",local.columnType)) {
+				local.columnDefinition = local.columnDefinition & "(#local.columns["COLUMN_SIZE"][local.i]#)";
+			} else if(ListFindNoCase("decimal,float,double",local.columnType)) {
+				local.columnDefinition = local.columnDefinition & "(#local.columns["COLUMN_SIZE"][local.i]#,#local.columns["DECIMAL_DIGITS"][local.i]#)";
 			}
-			if(loc.columns["IS_NULLABLE"][loc.i]) {
-				loc.columnDefinition = loc.columnDefinition & " NULL";
+			if(local.columns["IS_NULLABLE"][local.i]) {
+				local.columnDefinition = local.columnDefinition & " NULL";
 			} else {
-				loc.columnDefinition = loc.columnDefinition & " NOT NULL";
+				local.columnDefinition = local.columnDefinition & " NOT NULL";
 			}
-			if(Len(loc.columns["COLUMN_DEFAULT_VALUE"][loc.i]) == 0) {
-				loc.columnDefinition = loc.columnDefinition & " DEFAULT NULL";
-			} else if(ListFindNoCase("char,varchar,binary,varbinary",loc.columnType)) {
-				loc.columnDefinition = loc.columnDefinition & " DEFAULT '#loc.columns["COLUMN_DEFAULT_VALUE"][loc.i]#'";
-			} else if(ListFindNoCase("int,bigint,smallint,tinyint,decimal,float,double",loc.columnType)) {
-				loc.columnDefinition = loc.columnDefinition & " DEFAULT #loc.columns["COLUMN_DEFAULT_VALUE"][loc.i]#";
+			if(Len(local.columns["COLUMN_DEFAULT_VALUE"][local.i]) == 0) {
+				local.columnDefinition = local.columnDefinition & " DEFAULT NULL";
+			} else if(ListFindNoCase("char,varchar,binary,varbinary",local.columnType)) {
+				local.columnDefinition = local.columnDefinition & " DEFAULT '#local.columns["COLUMN_DEFAULT_VALUE"][local.i]#'";
+			} else if(ListFindNoCase("int,bigint,smallint,tinyint,decimal,float,double",local.columnType)) {
+				local.columnDefinition = local.columnDefinition & " DEFAULT #local.columns["COLUMN_DEFAULT_VALUE"][local.i]#";
 			}
 			break;
 		}
 	}
-	</cfscript>
-	<cfreturn loc.columnDefinition>
-</cffunction>
+	return local.columnDefinition;
+}
+</cfscript>
