@@ -91,6 +91,24 @@
 		<cfreturn Super.renameTable(argumentCollection=arguments)>
 	</cffunction>
 
+	<cfscript>
+		// Look to see if a specific table exists in Oracle
+		// Filter by pattern (tablename) as otherwise Oracle returns c. 30,000 tables...
+		public boolean function tableExists(required string tableName){
+			local.check= $dbinfo(
+				type="tables",
+				datasource=application.wheels.dataSourceName,
+				username=application.wheels.dataSourceUserName,
+				password=application.wheels.dataSourcePassword,
+				pattern=arguments.tableName
+			);
+			if(local.check.recordcount){
+				return true;
+			} else {
+				return false;
+			}
+		}
+	</cfscript>
 	<!--- dropTable - need to drop sequence --->
 	<cffunction name="dropTable" returntype="string" access="public" hint="generates sql to drop a table">
 		<cfargument name="name" type="string" required="true" hint="table name">
@@ -101,10 +119,17 @@
 		} catch(database e) {
 			// catch exception if sequence doesn't exist
 		}
+
 		announce("Dropped sequence #arguments.name#_seq");
+
+		if( tableExists( quoteTableName(arguments.name) ) ){
+			return "DROP TABLE #quoteTableName(LCase(arguments.name))# PURGE";
+		} else {
+			// We can't drop an non existing table, but the way dbmigrate is written means whatever is
+			// returned from this adapter is going to be executed, so here's some dummy SQL.
+			return "SELECT 'I Hate Oracle' FROM dual";
+		}
 		</cfscript>
-		<!--- DROP TABLE IF EXISTS IS MORE COMPLEX FOR ORACLE --->
-		<cfreturn "DROP TABLE #quoteTableName(LCase(arguments.name))# PURGE">
 	</cffunction>
 
 	<cffunction name="addColumnToTable" returntype="string" access="public" hint="generates sql to add a new column to a table">
