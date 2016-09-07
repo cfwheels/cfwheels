@@ -28,6 +28,11 @@ component extends="wheels.Test" output=false {
    * Executes once after the test suite runs
    */
   function afterAll() {
-
+    // cleanup any dbmigrate sql
+    local.sqlPath = Expandpath("wheels/tests/_assets/db/sql");
+    if (DirectoryExists(local.sqlPath)) {
+      directoryDelete(local.sqlPath, true);
+    }
+    directoryCreate(local.sqlPath);
   }
 }
