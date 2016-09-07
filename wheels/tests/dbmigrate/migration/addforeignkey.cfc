@@ -5,8 +5,9 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_addForeignKey_creates_a_foreign_key_constraint() {
-		tableName = "dbm_addfk_foos";
-		referenceTableName = "dbm_addfk_bars";
+		// oracle fk names cannot exceed 30 chars, so these table names must be short
+		tableName = "dbm_afk_foos";
+		referenceTableName = "dbm_afk_bars";
 
 		t = migration.createTable(name=tableName, force=true);
 		t.integer(columnNames="barid");

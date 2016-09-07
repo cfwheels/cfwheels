@@ -5,8 +5,8 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_dropForeignKey_drops_a_foreign_key_constraint() {
-		tableName = "dbm_dropforeignkey_foos";
-		referenceTableName = "dbm_dropforeignkey_bars";
+		tableName = "dbm_dfk_foos";
+		referenceTableName = "dbm_dfk_bars";
 
 		t = migration.createTable(name=tableName, force=true);
 		t.integer(columnNames="barid");
