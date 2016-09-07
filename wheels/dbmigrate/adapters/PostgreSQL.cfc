@@ -88,7 +88,7 @@
 	<cffunction name="changeColumnInTable" returntype="string" access="public" hint="generates sql to change an existing column in a table">
 		<cfargument name="name" type="string" required="true" hint="table name">
 		<cfargument name="column" type="any" required="true" hint="column definition object">
-		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# ALTER COLUMN #arguments.column.toSQL()#">
+		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# ALTER COLUMN #arguments.column.adapter.toSQL(arguments.column)#">
 	</cffunction>
 
 	<!--- renameColumnInTable - use default --->
@@ -108,5 +108,14 @@
 	<!--- addIndex - use default --->
 
 	<!--- removeIndex - use default --->
+
+	<cfscript>
+	// duplicated from columnDefinition for use in changeColumnInTable
+	public string function toSQL(required object column) {
+		local.sql = quoteColumnName(arguments.column.name) & " TYPE " & arguments.column.sqlType();
+		local.sql = addColumnOptions(local.sql);
+		return local.sql;
+	}
+	</cfscript>
 
 </cfcomponent>
