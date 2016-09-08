@@ -153,6 +153,19 @@
 			application.$wheels.cacheQueries = true;
 		}
 
+		// csrf protection settings
+		application.$wheels.csrfStore = "session";
+		application.$wheels.csrfCookieEncryptionAlgorithm = "AES";
+		application.$wheels.csrfCookieEncryptionSecretKey = "";
+		application.$wheels.csrfCookieEncryptionEncoding = "Base64";
+		application.$wheels.csrfCookieName = "_wheels_authenticity";
+		application.$wheels.csrfCookieDomain = "";
+		application.$wheels.csrfCookieEncodeValue = "";
+		application.$wheels.csrfCookieHttpOnly = "";
+		application.$wheels.csrfCookiePath = "/";
+		application.$wheels.csrfCookiePreserveCase = "";
+		application.$wheels.csrfCookieSecure = "";
+
 		// debugging and error settings
 		application.$wheels.showDebugInformation = true;
 		application.$wheels.showErrorInformation = true;
