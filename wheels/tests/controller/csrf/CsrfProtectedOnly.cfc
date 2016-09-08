@@ -1,5 +1,11 @@
 component extends="wheels.tests.Test" {
-  include "csrf_setup.cfm";
+  function setup(){
+    include "setup.cfm";
+  }
+
+  function teardown(){
+    include "teardown.cfm";
+  }
 
   function test_csrf_protection_with_valid_authenticityToken_on_post_request() {
     request.cgi.request_method = "POST";
