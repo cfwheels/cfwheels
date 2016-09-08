@@ -1,11 +1,11 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="ControllerWithModel")>
-	</cffunction>
+	function setup() {
+		_controller = controller(name="ControllerWithModel");
+	}
 
-	<cffunction name="test_x_fileField_valid">
-		<cfset loc.controller.fileField(objectName="user", property="firstname")>
-	</cffunction>
+	function test_x_fileField_valid() {
+		_controller.fileField(objectName="user", property="firstname");
+	}
 
-</cfcomponent>
+}

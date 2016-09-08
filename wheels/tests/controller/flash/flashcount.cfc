@@ -1,19 +1,29 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfinclude template="setup.cfm">
+	function setup() {
+		include "setup.cfm";
+	}
 
-	<cffunction name="test_flashCount_valid">
-		<cfset run_flashCount_valid()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_flashCount_valid()>
-	</cffunction>
-	
-	<cffunction name="run_flashCount_valid">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset loc.controller.flashInsert(anotherKey="Test!")>
-		<cfset result = loc.controller.flashCount()>
-		<cfset compare = loc.controller.flashCount()>
-		<cfset assert("result IS compare")>
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-</cfcomponent>
+	function test_flashCount_valid() {
+		run_flashCount_valid();
+		_controller.$setFlashStorage("cookie");
+		run_flashCount_valid();
+	}
+
+	/**
+	* HELPERS
+	*/
+
+	function run_flashCount_valid() {
+		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(anotherKey="Test!");
+		result = _controller.flashCount();
+		compare = _controller.flashCount();
+		assert("result IS compare");
+	}
+
+}

@@ -1,33 +1,38 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_normal_variable">
-		<cfset loc.result = humanize("wheelsIsAFramework")>
-		<cfset assert("NOT Compare(loc.result, 'Wheels Is A Framework')")>
-	</cffunction>
+	function test_normal_variable() {
+		result = humanize("wheelsIsAFramework");
+		assert("NOT Compare(result, 'Wheels Is A Framework')");
+	}
 
-	<cffunction name="test_variable_starting_with_uppercase">
-		<cfset loc.result = humanize("WheelsIsAFramework")>
-		<cfset assert("NOT Compare(loc.result, 'Wheels Is A Framework')")>
-	</cffunction>
+	function test_variable_starting_with_uppercase() {
+		result = humanize("WheelsIsAFramework");
+		assert("NOT Compare(result, 'Wheels Is A Framework')");
+	}
 
-	<cffunction name="test_abbreviation">
-		<cfset loc.result = humanize("CFML")>
-		<cfset assert("NOT Compare(loc.result, 'CFML')")>
-	</cffunction>
+	function test_abbreviation() {
+		result = humanize("CFML");
+		assert("NOT Compare(result, 'CFML')");
+	}
 
-	<cffunction name="test_abbreviation_as_exception">
-		<cfset loc.result = humanize(text="ACfmlFramework", except="CFML")>
-		<cfset assert("NOT Compare(loc.result, 'A CFML Framework')")>
-	</cffunction>
+	function test_abbreviation_as_exception() {
+		result = humanize(text="ACfmlFramework", except="CFML");
+		assert("NOT Compare(result, 'A CFML Framework')");
+	}
 
-	<cffunction name="test_exception_within_string">
-		<cfset loc.result = humanize(text="ACfmlFramecfmlwork", except="CFML")>
-		<cfset assert("NOT Compare(loc.result, 'A CFML Framecfmlwork')")>
-	</cffunction>
+	function test_exception_within_string() {
+		result = humanize(text="ACfmlFramecfmlwork", except="CFML");
+		assert("NOT Compare(result, 'A CFML Framecfmlwork')");
+	}
 
-	<cffunction name="test_abbreviation_without_exception_cannot_be_done">
-		<cfset loc.result = humanize("wheelsIsACFMLFramework")>
-		<cfset assert("NOT Compare(loc.result, 'Wheels Is ACFML Framework')")>
-	</cffunction>
+	function test_abbreviation_without_exception_cannot_be_done() {
+		result = humanize("wheelsIsACFMLFramework");
+		assert("NOT Compare(result, 'Wheels Is ACFML Framework')");
+	}
 
-</cfcomponent>
+	function test_issue_663() {
+		result = humanize("Some Input");
+		assert("NOT Compare(result, 'Some Input')");
+	}
+
+}

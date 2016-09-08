@@ -1,9 +1,11 @@
-<cfif StructKeyExists(params, "view")>
-	<cfif application.wheels.environment IS "production">
-		<cfabort>
-	<cfelse>
-		<cfinclude template="#params.view#.cfm">
-	</cfif>
-<cfelse>
-	<cfinclude template="congratulations.cfm">
-</cfif>
+<cfscript>
+if (StructKeyExists(params, "view")) {
+	if (application.wheels.environment eq "production") {
+		abort;
+	} else {
+		include "#params.view#.cfm";
+	}
+} else {
+	include "congratulations.cfm";
+}
+</cfscript>

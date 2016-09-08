@@ -1,11 +1,11 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="ControllerWithModel")>
-	</cffunction>
+	function setup() {
+		_controller = controller(name="ControllerWithModel");
+	}
 
-	<cffunction name="test_x_radioButton_valid">
-		<cfset loc.controller.radioButton(objectName="user", property="gender", tagValue="m", label="Male")>
-	</cffunction>
+	function test_x_radioButton_valid() {
+		_controller.radioButton(objectName="user", property="gender", tagValue="m", label="Male");
+	}
 
-</cfcomponent>
+}

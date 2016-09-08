@@ -1,17 +1,27 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfinclude template="setup.cfm">
+	function setup() {
+		include "setup.cfm";
+	}
 
-	<cffunction name="test_flash_key_exists">
-		<cfset run_flash_key_exists()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_flash_key_exists()>
-	</cffunction>
-	
-	<cffunction name="run_flash_key_exists">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset loc.r = loc.controller.flashKeyExists("success")>
-		<cfset assert("loc.r IS true")>
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-</cfcomponent>
+	function test_flash_key_exists() {
+		run_flash_key_exists();
+		_controller.$setFlashStorage("cookie");
+		run_flash_key_exists();
+	}
+
+	/**
+	* HELPERS
+	*/
+
+	function run_flash_key_exists() {
+		_controller.flashInsert(success="Congrats!");
+		r = _controller.flashKeyExists("success");
+		assert("r IS true");
+	}
+
+}

@@ -1,23 +1,33 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfinclude template="setup.cfm">
-	
-	<cffunction name="test_flashKeep_saves_flash_items">
-		<cfset run_flashKeep_saves_flash_items()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_flashKeep_saves_flash_items()>
-	</cffunction>
+	function setup() {
+		include "setup.cfm";
+	}
 
-	<cffunction name="run_flashKeep_saves_flash_items">
-		<cfset loc.controller.flashInsert(tony="Petruzzi", per="Djurner", james="Gibson")>
-		<cfset loc.controller.flashKeep("per,james")>
-		<cfset loc.controller.$flashClear()>
-		<cfset assert('loc.controller.flashCount() eq 2')>
-		<cfset assert('!loc.controller.flashKeyExists("tony")')>
-		<cfset assert('loc.controller.flashKeyExists("per")')>
-		<cfset assert('loc.controller.flashKeyExists("james")')>
-		<cfset assert('loc.controller.flash("per") eq "Djurner"')>
-		<cfset assert('loc.controller.flash("james") eq "Gibson"')>
-	</cffunction>
-	
-</cfcomponent>
+	function teardown() {
+		include "teardown.cfm";
+	}
+
+	function test_flashKeep_saves_flash_items() {
+		run_flashKeep_saves_flash_items();
+		_controller.$setFlashStorage("cookie");
+		run_flashKeep_saves_flash_items();
+	}
+
+	/**
+	* HELPERS
+	*/
+
+	function run_flashKeep_saves_flash_items() {
+		_controller.flashInsert(tony="Petruzzi", per="Djurner", james="Gibson");
+		_controller.flashKeep("per,james");
+		_controller.$flashClear();
+		assert('_controller.flashCount() eq 2');
+		assert('!_controller.flashKeyExists("tony")');
+		assert('_controller.flashKeyExists("per")');
+		assert('_controller.flashKeyExists("james")');
+		assert('_controller.flash("per") eq "Djurner"');
+		assert('_controller.flash("james") eq "Gibson"');
+	}
+
+}

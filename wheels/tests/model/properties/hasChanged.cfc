@@ -1,36 +1,36 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_boolean_handled_properly">
-		<cfset loc.sqltype = model("Sqltype").findOne()>
-		<cfset loc.sqltype.booleanType = "false">
-		<cfset assert('!loc.sqltype.hasChanged("booleanType")')>
- 		<cfset loc.sqltype.booleanType = "no">
-		<cfset assert('!loc.sqltype.hasChanged("booleanType")')>
- 		<cfset loc.sqltype.booleanType = 0>
-		<cfset assert('!loc.sqltype.hasChanged("booleanType")')>
- 		<cfset loc.sqltype.booleanType = "0">
-		<cfset assert('!loc.sqltype.hasChanged("booleanType")')>
-		<cfset loc.sqltype.booleanType = "true">
-		<cfset assert('loc.sqltype.hasChanged("booleanType")')>
- 		<cfset loc.sqltype.booleanType = "yes">
-		<cfset assert('loc.sqltype.hasChanged("booleanType")')>
- 		<cfset loc.sqltype.booleanType = 1>
-		<cfset assert('loc.sqltype.hasChanged("booleanType")')>
- 		<cfset loc.sqltype.booleanType = "1">
-		<cfset assert('loc.sqltype.hasChanged("booleanType")')>
-	</cffunction>
+	function test_boolean_handled_properly() {
+		sqltype = model("Sqltype").findOne();
+		sqltype.booleanType = "false";
+		assert('!sqltype.hasChanged("booleanType")');
+ 		sqltype.booleanType = "no";
+		assert('!sqltype.hasChanged("booleanType")');
+ 		sqltype.booleanType = 0;
+		assert('!sqltype.hasChanged("booleanType")');
+ 		sqltype.booleanType = "0";
+		assert('!sqltype.hasChanged("booleanType")');
+		sqltype.booleanType = "true";
+		assert('sqltype.hasChanged("booleanType")');
+ 		sqltype.booleanType = "yes";
+		assert('sqltype.hasChanged("booleanType")');
+ 		sqltype.booleanType = 1;
+		assert('sqltype.hasChanged("booleanType")');
+ 		sqltype.booleanType = "1";
+		assert('sqltype.hasChanged("booleanType")');
+	}
 
-	<cffunction name="test_should_be_able_to_update_integer_from_null_to_0">
-		<cfset loc.user = model("user").findByKey(1)>
-		<cftransaction>
-			<cfset loc.user.birthDayYear = "">
-			<cfset loc.user.save()>
-			<cfset loc.user.birthDayYear = 0>
-			<cfset loc.user.save()>
-			<cfset loc.user.reload()>
-			<cftransaction action="rollback">
-		</cftransaction>
-		<cfset assert("loc.user.birthDayYear IS 0")>
-	</cffunction>
-	
-</cfcomponent>
+	function test_should_be_able_to_update_integer_from_null_to_0() {
+		user = model("user").findByKey(1);
+		transaction {
+			user.birthDayYear = "";
+			user.save();
+			user.birthDayYear = 0;
+			user.save();
+			user.reload();
+			transaction action="rollback";
+		}
+		assert("user.birthDayYear IS 0");
+	}
+
+}

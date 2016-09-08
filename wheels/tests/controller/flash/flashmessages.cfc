@@ -1,168 +1,178 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfinclude template="setup.cfm">
+	function setup() {
+		include "setup.cfm";
+	}
 
-	<cffunction name="test_normal_output">
-		<cfset run_normal_output()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_normal_output()>
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="run_normal_output">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset loc.controller.flashInsert(alert="Error!")>
-		<cfset result = loc.controller.flashMessages()>
-		<cfset assert("result IS '<div class=""flashMessages""><p class=""alertMessage"">Error!</p><p class=""successMessage"">Congrats!</p></div>'")>
-	</cffunction>
+	function test_normal_output() {
+		run_normal_output();
+		_controller.$setFlashStorage("cookie");
+		run_normal_output();
+	}
 
-	<cffunction name="test_specific_key_only">
-		<cfset run_specific_key_only()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_specific_key_only()>
-	</cffunction>
+	function test_specific_key_only() {
+		run_specific_key_only();
+		_controller.$setFlashStorage("cookie");
+		run_specific_key_only();
+	}
 
-	<cffunction name="run_specific_key_only">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset loc.controller.flashInsert(alert="Error!")>
-		<cfset result = loc.controller.flashMessages(key="alert")>
-		<cfset assert("result IS '<div class=""flashMessages""><p class=""alertMessage"">Error!</p></div>'")>
-	</cffunction>
+	function test_passing_through_id() {
+		run_passing_through_id();
+		_controller.$setFlashStorage("cookie");
+		run_passing_through_id();
+	}
 
-	<cffunction name="test_passing_through_id">
-		<cfset run_passing_through_id()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_passing_through_id()>
-	</cffunction>
+	function test_empty_flash() {
+		run_empty_flash();
+		_controller.$setFlashStorage("cookie");
+		run_empty_flash();
+	}
 
-	<cffunction name="run_passing_through_id">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset result = loc.controller.flashMessages(id="my-id")>
-		<cfset assert("result Contains '<p class=""successMessage"">Congrats!</p>' AND result Contains 'id=""my-id""'")>
-	</cffunction>
+	function test_empty_flash_includeEmptyContainer() {
+		run_empty_flash_includeEmptyContainer();
+		_controller.$setFlashStorage("cookie");
+		run_empty_flash_includeEmptyContainer();
+	}
 
-	<cffunction name="test_empty_flash">
-		<cfset run_empty_flash()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_empty_flash()>
-	</cffunction>
+	function test_skipping_complex_values() {
+		run_skipping_complex_values();
+		_controller.$setFlashStorage("cookie");
+		run_skipping_complex_values();
+	}
 
-	<cffunction name="run_empty_flash">
-		<cfset result = loc.controller.flashMessages()>
-		<cfset assert("result IS ''")>
-	</cffunction>
+	function test_control_order_via_keys_argument() {
+		run_control_order_via_keys_argument();
+		_controller.$setFlashStorage("cookie");
+		run_control_order_via_keys_argument();
+	}
 
-	<cffunction name="test_empty_flash_includeEmptyContainer">
-		<cfset run_empty_flash_includeEmptyContainer()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_empty_flash_includeEmptyContainer()>
-	</cffunction>
+	function test_casing_of_class_attribute() {
+		run_casing_of_class_attribute();
+		_controller.$setFlashStorage("cookie");
+		run_casing_of_class_attribute();
+	}
 
-	<cffunction name="run_empty_flash_includeEmptyContainer">
-		<cfset result = loc.controller.flashMessages(includeEmptyContainer="true")>
-		<cfset assert("result IS '<div class=""flashMessages""></div>'")>
-	</cffunction>
+	function test_casing_of_class_attribute_mixed() {
+		run_casing_of_class_attribute_mixed();
+		_controller.$setFlashStorage("cookie");
+		run_casing_of_class_attribute_mixed();
+	}
 
-	<cffunction name="test_skipping_complex_values">
-		<cfset run_skipping_complex_values()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_skipping_complex_values()>
-	</cffunction>
+	function test_casing_of_class_attribute_upper() {
+		run_casing_of_class_attribute_upper();
+		_controller.$setFlashStorage("cookie");
+		run_casing_of_class_attribute_upper();
+	}
 
-	<cffunction name="run_skipping_complex_values">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset arr = []>
-		<cfset arr[1] = "test">
-		<cfset loc.controller.flashInsert(alert=arr)>
-		<cfset result = loc.controller.flashMessages()>
-		<cfset assert("result IS '<div class=""flashMessages""><p class=""successMessage"">Congrats!</p></div>'")>
-	</cffunction>
+	function test_setting_class() {
+		run_setting_class();
+		_controller.$setFlashStorage("cookie");
+		run_setting_class();
+	}
 
-	<cffunction name="test_control_order_via_keys_argument">
-		<cfset run_control_order_via_keys_argument()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_control_order_via_keys_argument()>
-	</cffunction>
+	/**
+	* HELPERS
+	*/
 
-	<cffunction name="run_control_order_via_keys_argument">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset loc.controller.flashInsert(alert="Error!")>
-		<cfset result = loc.controller.flashMessages(keys="success,alert")>
-		<cfset assert("result IS '<div class=""flashMessages""><p class=""successMessage"">Congrats!</p><p class=""alertMessage"">Error!</p></div>'")>
-		<cfset result = loc.controller.flashMessages(keys="alert,success")>
-		<cfset assert("result IS '<div class=""flashMessages""><p class=""alertMessage"">Error!</p><p class=""successMessage"">Congrats!</p></div>'")>
-	</cffunction>
+	function run_normal_output() {
+		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(alert="Error!");
+		actual = _controller.flashMessages();
+		assert("actual IS '<div class=""flashMessages""><p class=""alertMessage"">Error!</p><p class=""successMessage"">Congrats!</p></div>'");
+	}
 
-	<cffunction name="test_casing_of_class_attribute">
-		<cfset run_casing_of_class_attribute()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_casing_of_class_attribute()>
-	</cffunction>
+	function run_specific_key_only() {
+		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(alert="Error!");
+		actual = _controller.flashMessages(key="alert");
+		assert("actual IS '<div class=""flashMessages""><p class=""alertMessage"">Error!</p></div>'");
+	}
 
-	<cffunction name="run_casing_of_class_attribute">
- 		<cfset loc.controller.flashInsert(something="")>
-		<cfset loc.r = loc.controller.flashMessages()>
-		<cfif application.wheels.serverName eq "Railo" and application.wheels.serverversion.startsWith("3.")>
-			<cfset loc.e = 'class="SOMETHINGMessage"'>
-		<cfelse>
-			<cfset loc.e = 'class="somethingMessage"'>
-		</cfif>
-		<cfset assert('Find(loc.e, loc.r)')>
-		<cfset loc.controller.flashInsert(someThing="")>
-	</cffunction>
+	function run_passing_through_id() {
+		_controller.flashInsert(success="Congrats!");
+		actual = _controller.flashMessages(id="my-id");
+		assert("actual Contains '<p class=""successMessage"">Congrats!</p>' AND actual Contains 'id=""my-id""'");
+	}
 
-	<cffunction name="test_casing_of_class_attribute_mixed">
-		<cfset run_casing_of_class_attribute_mixed()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_casing_of_class_attribute_mixed()>
-	</cffunction>
+	function run_empty_flash() {
+		actual = _controller.flashMessages();
+		assert("actual IS ''");
+	}
 
-	<cffunction name="run_casing_of_class_attribute_mixed">
-		<!---
+	function run_empty_flash_includeEmptyContainer() {
+		actual = _controller.flashMessages(includeEmptyContainer="true");
+		assert("actual IS '<div class=""flashMessages""></div>'");
+	}
+
+	function run_skipping_complex_values() {
+		_controller.flashInsert(success="Congrats!");
+		arr = [];
+		arr[1] = "test";
+		_controller.flashInsert(alert=arr);
+		actual = _controller.flashMessages();
+		assert("actual IS '<div class=""flashMessages""><p class=""successMessage"">Congrats!</p></div>'");
+	}
+
+	function run_control_order_via_keys_argument() {
+		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(alert="Error!");
+		actual = _controller.flashMessages(keys="success,alert");
+		assert("actual IS '<div class=""flashMessages""><p class=""successMessage"">Congrats!</p><p class=""alertMessage"">Error!</p></div>'");
+		actual = _controller.flashMessages(keys="alert,success");
+		assert("actual IS '<div class=""flashMessages""><p class=""alertMessage"">Error!</p><p class=""successMessage"">Congrats!</p></div>'");
+	}
+
+	function run_casing_of_class_attribute() {
+ 		_controller.flashInsert(something="");
+		actual = _controller.flashMessages();
+		if (application.wheels.serverName eq "Railo" and application.wheels.serverversion.startsWith("3.")) {
+			expected = 'class="SOMETHINGMessage"';
+		} else {
+			expected = 'class="somethingMessage"';
+		}
+		assert('Find(expected, actual)');
+		_controller.flashInsert(someThing="");
+	}
+
+	function run_casing_of_class_attribute_mixed() {
+		/*
 		https://jira.jboss.org/browse/RAILO-933
 		note that a workaround for RAILO is to quote the arugment:
-		<cfset controller.flashInsert("someThing"="")>
+		controller.flashInsert("someThing"="");
 		Just remember that this throws a compilation error in ACF
-		 --->
-		<cfset loc.controller.flashInsert(someThing="")>
-		<cfset loc.r = loc.controller.flashMessages()>
-		<cfset loc.r = loc.controller.flashMessages()>
-		<cfif application.wheels.serverName eq "Railo" and application.wheels.serverversion.startsWith("3.")>
-			<cfset loc.e = 'class="SOMETHINGMessage"'>
-		<cfelse>
-			<cfset loc.e = 'class="someThingMessage"'>
-		</cfif>
-		<cfset assert('Find(loc.e, loc.r)')>
-	</cffunction>
+		 */
+		_controller.flashInsert(someThing="");
+		actual = _controller.flashMessages();
+		actual = _controller.flashMessages();
+		if (application.wheels.serverName eq "Railo" and application.wheels.serverversion.startsWith("3.")) {
+			expected = 'class="SOMETHINGMessage"';
+		} else {
+			expected = 'class="someThingMessage"';
+		}
+		assert('Find(expected, actual)');
+	}
 
-	<cffunction name="test_casing_of_class_attribute_upper">
-		<cfset run_casing_of_class_attribute_upper()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_casing_of_class_attribute_upper()>
-	</cffunction>
+	function run_casing_of_class_attribute_upper() {
+		_controller.flashInsert(SOMETHING="");
+		actual = _controller.flashMessages();
+		expected = 'class="SOMETHINGMessage"';
+		assert('Find(expected, expected)');
+	}
 
-	<cffunction name="run_casing_of_class_attribute_upper">
-		<cfset loc.controller.flashInsert(SOMETHING="")>
-		<cfset loc.r = loc.controller.flashMessages()>
-		<cfset loc.e = 'class="SOMETHINGMessage"'>
-		<cfset assert('Find(loc.e, loc.r)')>
-	</cffunction>
+	function run_setting_class() {
+		_controller.flashInsert(success="test");
+		actual = _controller.flashMessages(class="custom-class");
+		expected = 'class="custom-class"';
+		if (application.wheels.serverName eq "Railo" and application.wheels.serverversion.startsWith("3.")) {
+			e2 = 'class="SUCCESSMessage"';
+		} else {
+			e2 = 'class="successMessage"';
+		}
+		assert('Find(expected, actual) AND Find(e2, actual)');
+	}
 
-	<cffunction name="test_setting_class">
-		<cfset run_setting_class()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_setting_class()>
-	</cffunction>
-
-	<cffunction name="run_setting_class">
-		<cfset loc.controller.flashInsert(success="test")>
-		<cfset loc.r = loc.controller.flashMessages(class="custom-class")>
-		<cfset loc.e = 'class="custom-class"'>
-		<cfif application.wheels.serverName eq "Railo" and application.wheels.serverversion.startsWith("3.")>
-			<cfset loc.e2 = 'class="SUCCESSMessage"'>
-		<cfelse>
-			<cfset loc.e2 = 'class="successMessage"'>
-		</cfif>
-		<cfset assert('Find(loc.e, loc.r) AND Find(loc.e2, loc.r)')>
-	</cffunction>
-
-</cfcomponent>
+}

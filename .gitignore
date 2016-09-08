@@ -1,4 +1,6 @@
 .project
+CFIDE
+cfide
 WEB-INF
 /target
 /.settings
@@ -8,3 +10,5 @@ WEB-INF
 /manual/
 /subfolder/
 /bin/
+server.json
+cfwheels.*.zip

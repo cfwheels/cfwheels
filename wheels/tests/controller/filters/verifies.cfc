@@ -1,79 +1,79 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset $savedenv = duplicate(request.cgi)>
-	</cffunction>
+	function setup() {
+		$savedenv = duplicate(request.cgi);
+	}
 
-	<cffunction name="teardown">
-		<cfset request.cgi = $savedenv>
-	</cffunction>
+	function teardown() {
+		request.cgi = $savedenv;
+	}
 
-	<cffunction name="test_valid">
-		<cfset params = {controller="verifies", action="actionGet"}>
-		<cfset loc.controller = controller("verifies", params)>
-		<cfset loc.controller.$processAction("actionGet", params)>
-		<cfset assert('loc.controller.response() eq "actionGet"')>
-	</cffunction>
+	function test_valid() {
+		params = {controller="verifies", action="actionGet"};
+		_controller = controller("verifies", params);
+		_controller.processAction("actionGet", params);
+		assert('_controller.response() eq "actionGet"');
+	}
 
-	<cffunction name="test_invalid_aborted">
-		<cfset request.cgi.request_method = "post">
-		<cfset params = {controller="verifies", action="actionGet"}>
-		<cfset loc.controller = controller("verifies", params)>
-		<cfset loc.controller.$processAction("actionGet", params)>
-		<cfset assert('loc.controller.$abortIssued() eq "true"')>
-		<cfset assert('loc.controller.$performedRenderOrRedirect() eq "false"')>
-	</cffunction>
+	function test_invalid_aborted() {
+		request.cgi.request_method = "post";
+		params = {controller="verifies", action="actionGet"};
+		_controller = controller("verifies", params);
+		_controller.processAction("actionGet", params);
+		assert('_controller.$abortIssued() eq "true"');
+		assert('_controller.$performedRenderOrRedirect() eq "false"');
+	}
 
-	<cffunction name="test_invalid_redirect">
-		<cfset request.cgi.request_method = "get">
-		<cfset params = {controller="verifies", action="actionPostWithRedirect"}>
-		<cfset loc.controller = controller("verifies", params)>
-		<cfset loc.controller.$processAction("actionPostWithRedirect", params)>
-		<cfset assert('loc.controller.$abortIssued() eq "false"')>
-		<cfset assert('loc.controller.$performedRenderOrRedirect() eq "true"')>
-		<cfset assert('loc.controller.$getRedirect().$args.action  eq "index"')>
-		<cfset assert('loc.controller.$getRedirect().$args.controller  eq "somewhere"')>
-		<cfset assert('loc.controller.$getRedirect().$args.error  eq "invalid"')>
-	</cffunction>
+	function test_invalid_redirect() {
+		request.cgi.request_method = "get";
+		params = {controller="verifies", action="actionPostWithRedirect"};
+		_controller = controller("verifies", params);
+		_controller.processAction("actionPostWithRedirect", params);
+		assert('_controller.$abortIssued() eq "false"');
+		assert('_controller.$performedRenderOrRedirect() eq "true"');
+		assert('_controller.getRedirect().$args.action  eq "index"');
+		assert('_controller.getRedirect().$args.controller  eq "somewhere"');
+		assert('_controller.getRedirect().$args.error  eq "invalid"');
+	}
 
-	<cffunction name="test_valid_types">
-		<cfset request.cgi.request_method = "post">
-		<cfset params = {controller="verifies", action="actionPostWithTypesValid", userid="0", authorid="00000000-0000-0000-0000-000000000000"}>
-		<cfset loc.controller = controller("verifies", params)>
-		<cfset loc.controller.$processAction("actionPostWithTypesValid", params)>
-		<cfset assert('loc.controller.response() eq "actionPostWithTypesValid"')>
-	</cffunction>
+	function test_valid_types() {
+		request.cgi.request_method = "post";
+		params = {controller="verifies", action="actionPostWithTypesValid", userid="0", authorid="00000000-0000-0000-0000-000000000000"};
+		_controller = controller("verifies", params);
+		_controller.processAction("actionPostWithTypesValid", params);
+		assert('_controller.response() eq "actionPostWithTypesValid"');
+	}
 
-	<cffunction name="test_invalid_types_guid">
-		<cfset request.cgi.request_method = "post">
-		<cfset params = {controller="verifies", action="actionPostWithTypesInValid", userid="0", authorid="invalidguid"}>
-		<cfset loc.controller = controller("verifies", params)>
-		<cfset loc.controller.$processAction("actionPostWithTypesInValid", params)>
-		<cfset assert('loc.controller.$abortIssued() eq "true"')>
-	</cffunction>
+	function test_invalid_types_guid() {
+		request.cgi.request_method = "post";
+		params = {controller="verifies", action="actionPostWithTypesInValid", userid="0", authorid="invalidguid"};
+		_controller = controller("verifies", params);
+		_controller.processAction("actionPostWithTypesInValid", params);
+		assert('_controller.$abortIssued() eq "true"');
+	}
 
-	<cffunction name="test_invalid_types_integer">
-		<cfset request.cgi.request_method = "post">
-		<cfset params = {controller="verifies", action="actionPostWithTypesInValid", userid="1.234", authorid="00000000-0000-0000-0000-000000000000"}>
-		<cfset loc.controller = controller("verifies", params)>
-		<cfset loc.controller.$processAction("actionPostWithTypesInValid", params)>
-		<cfset assert('loc.controller.$abortIssued() eq "true"')>
-	</cffunction>
+	function test_invalid_types_integer() {
+		request.cgi.request_method = "post";
+		params = {controller="verifies", action="actionPostWithTypesInValid", userid="1.234", authorid="00000000-0000-0000-0000-000000000000"};
+		_controller = controller("verifies", params);
+		_controller.processAction("actionPostWithTypesInValid", params);
+		assert('_controller.$abortIssued() eq "true"');
+	}
 
-	<cffunction name="test_strings_allow_blank">
-		<cfset request.cgi.request_method = "post">
-		<cfset params = {controller="verifies", action="actionPostWithString", username="tony", password=""}>
-		<cfset loc.controller = controller("verifies", params)>
-		<cfset loc.controller.$processAction("actionPostWithString", params)>
-		<cfset assert('loc.controller.$abortIssued() eq "false"')>
-	</cffunction>
+	function test_strings_allow_blank() {
+		request.cgi.request_method = "post";
+		params = {controller="verifies", action="actionPostWithString", username="tony", password=""};
+		_controller = controller("verifies", params);
+		_controller.processAction("actionPostWithString", params);
+		assert('_controller.$abortIssued() eq "false"');
+	}
 
-	<cffunction name="test_strings_cannot_be_blank">
-		<cfset request.cgi.request_method = "post">
-		<cfset params = {controller="verifies", action="actionPostWithString", username="", password=""}>
-		<cfset loc.controller = controller("verifies", params)>
-		<cfset loc.controller.$processAction("actionPostWithString", params)>
-		<cfset assert('loc.controller.$abortIssued() eq "true"')>
-	</cffunction>
+	function test_strings_cannot_be_blank() {
+		request.cgi.request_method = "post";
+		params = {controller="verifies", action="actionPostWithString", username="", password=""};
+		_controller = controller("verifies", params);
+		_controller.processAction("actionPostWithString", params);
+		assert('_controller.$abortIssued() eq "true"');
+	}
 
-</cfcomponent>
+}

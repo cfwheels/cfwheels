@@ -1,8 +1,8 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_columns_returns_array">
-		<cfset loc.columns = model("author").columns() />
-		<cfset assert('IsArray(loc.columns) eq true') />
-	</cffunction>
+	function test_columns_returns_array() {
+		columns = model("author").columns();
+		assert('IsArray(columns) eq true');
+	}
 
-</cfcomponent>
+}

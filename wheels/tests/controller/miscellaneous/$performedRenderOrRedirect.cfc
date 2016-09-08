@@ -1,44 +1,46 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfset variables.counter = 1>
+	function packageSetup() {
+		variables.counteactual = 1;
+	}
 
-	<cffunction name="setup">
-		<cfset params = {controller="dummy", action="dummy"}>
-		<cfset loc.controller = controller("dummy", params)>
-	</cffunction>
+	function setup() {
+		params = {controller="dummy", action="dummy"};
+		_controller = controller("dummy", params);
+	}
 
-	<cffunction name="test_redirect_or_render_has_not_been_performed">
-		<cfset loc.e = false>
-		<cfset loc.r = loc.controller.$performedRedirect()>
-		<cfset assert('loc.e eq loc.r')>
-		<cfset loc.r = loc.controller.$performedRender()>
-		<cfset assert('loc.e eq loc.r')>
-		<cfset loc.r = loc.controller.$performedRenderOrRedirect()>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_redirect_or_render_has_not_been_performed() {
+		expected = false;
+		actual = _controller.$performedRedirect();
+		assert('actual eq expected');
+		actual = _controller.$performedRender();
+		assert('actual eq expected');
+		actual = _controller.$performedRenderOrRedirect();
+		assert('actual eq expected');
+	}
 
-	<cffunction name="test_only_redirect_was_performed">
-		<cfset loc.controller.redirectTo(controller="wheels", action="wheels")>
-		<cfset loc.e = true>
-		<cfset loc.r = loc.controller.$performedRedirect()>
-		<cfset assert('loc.e eq loc.r')>
-		<cfset loc.r = loc.controller.$performedRenderOrRedirect()>
-		<cfset assert('loc.e eq loc.r')>
-		<cfset loc.e = false>
-		<cfset loc.r = loc.controller.$performedRender()>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_only_redirect_was_performed() {
+		_controller.redirectTo(controller="wheels", action="wheels");
+		expected = true;
+		actual = _controller.$performedRedirect();
+		assert('actual eq expected');
+		actual = _controller.$performedRenderOrRedirect();
+		assert('actual eq expected');
+		expected = false;
+		actual = _controller.$performedRender();
+		assert('actual eq expected');
+	}
 
-	<cffunction name="test_only_render_was_performed">
-		<cfset loc.controller.renderNothing()>
-		<cfset loc.e = true>
-		<cfset loc.r = loc.controller.$performedRender()>
-		<cfset assert('loc.e eq loc.r')>
-		<cfset loc.r = loc.controller.$performedRenderOrRedirect()>
-		<cfset assert('loc.e eq loc.r')>
-		<cfset loc.e = false>
-		<cfset loc.r = loc.controller.$performedRedirect()>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_only_render_was_performed() {
+		_controller.renderNothing();
+		expected = true;
+		actual = _controller.$performedRender();
+		assert('actual eq expected');
+		actual = _controller.$performedRenderOrRedirect();
+		assert('actual eq expected');
+		expected = false;
+		actual = _controller.$performedRedirect();
+		assert('actual eq expected');
+	}
 
-</cfcomponent>
+}

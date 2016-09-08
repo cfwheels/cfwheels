@@ -1,8 +1,6 @@
-<cffunction name="onRequestStart" returntype="void" access="public" output="false">
-	<cfargument name="targetPage" type="any" required="true">
-	<cfscript>
-		var loc = {};
-		loc.lockName = "reloadLock" & application.applicationName;
+<cfscript> 
+	public void function onRequestStart(required targetPage) {
+		local.lockName = "reloadLock" & application.applicationName;
 
 		// abort if called from incorrect file
 		$abortInvalidRequest();
@@ -10,7 +8,7 @@
 		// fix for shared application name issue 359
 		if (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "eventPath"))
 		{
-			$simpleLock(name=loc.lockName, execute="onApplicationStart", type="exclusive", timeout=180);
+			$simpleLock(name=local.lockName, execute="onApplicationStart", type="exclusive", timeout=180);
 		}
 
 		// need to setup the wheels struct up here since it's used to store debugging info below if this is a reload request
@@ -20,18 +18,14 @@
 		if (StructKeyExists(url, "reload") && (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(application.wheels.reloadPassword) || (StructKeyExists(url, "password") && url.password == application.wheels.reloadPassword)))
 		{
 			$debugPoint("total,reload");
-			$simpleLock(name=loc.lockName, execute="onApplicationStart", type="exclusive", timeout=180);
+			$simpleLock(name=local.lockName, execute="onApplicationStart", type="exclusive", timeout=180);
 		}
 
 		// run the rest of the request start code
-		$simpleLock(name=loc.lockName, execute="$runOnRequestStart", executeArgs=arguments, type="readOnly", timeout=180);
-	</cfscript>
-</cffunction>
+		$simpleLock(name=local.lockName, execute="$runOnRequestStart", executeArgs=arguments, type="readOnly", timeout=180);
+	}
 
-<cffunction name="$runOnRequestStart" returntype="void" access="public" output="false">
-	<cfargument name="targetPage" type="any" required="true">
-	<cfscript>
-		var loc = {};
+	public void function $runOnRequestStart(required targetPage) {
 		if (application.wheels.showDebugInformation)
 		{
 			// if the first debug point has not already been set in a reload request we set it here
@@ -75,30 +69,30 @@
 			{
 				application.wheels.ipExceptions = url.except;
 			}
-			loc.makeException = false;
+			local.makeException = false;
 			if (Len(application.wheels.ipExceptions))
 			{
 				if (REFindNoCase("[a-z]", application.wheels.ipExceptions))
 				{
 					if (ListFindNoCase(application.wheels.ipExceptions, cgi.http_user_agent))
 					{
-						loc.makeException = true;
+						local.makeException = true;
 					}
 				}
 				else
 				{
-					loc.ipAddress = cgi.remote_addr;
+					local.ipAddress = cgi.remote_addr;
 					if (StructKeyExists(cgi, "http_x_forwarded_for") && Len(cgi.http_x_forwarded_for))
 					{
-						loc.ipAddress = cgi.http_x_forwarded_for;
+						local.ipAddress = cgi.http_x_forwarded_for;
 					}
-					if (ListFind(application.wheels.ipExceptions, loc.ipAddress))
+					if (ListFind(application.wheels.ipExceptions, local.ipAddress))
 					{
-						loc.makeException = true;
+						local.makeException = true;
 					}
 				}
 			}
-			if (!loc.makeException)
+			if (!local.makeException)
 			{
 				$header(statusCode=503, statustext="Service Unavailable");
 				$includeAndOutput(template="#application.wheels.eventPath#/onmaintenance.cfm");
@@ -112,13 +106,13 @@
 		}
 		if (!application.wheels.cacheModelInitialization)
 		{
-			loc.lockName = "modelLock" & application.applicationName;
-			$simpleLock(name=loc.lockName, execute="$clearModelInitializationCache", type="exclusive");
+			local.lockName = "modelLock" & application.applicationName;
+			$simpleLock(name=local.lockName, execute="$clearModelInitializationCache", type="exclusive");
 		}
 		if (!application.wheels.cacheControllerInitialization)
 		{
-			loc.lockName = "controllerLock" & application.applicationName;
-			$simpleLock(name=loc.lockName, execute="$clearControllerInitializationCache", type="exclusive");
+			local.lockName = "controllerLock" & application.applicationName;
+			$simpleLock(name=local.lockName, execute="$clearControllerInitializationCache", type="exclusive");
 		}
 		if (!application.wheels.cacheRoutes)
 		{
@@ -133,5 +127,5 @@
 		{
 			$debugPoint("requestStart");
 		}
-	</cfscript>
-</cffunction>
+	}
+</cfscript>

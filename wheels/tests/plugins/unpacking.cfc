@@ -1,7 +1,9 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.config = {
+	include "helpers.cfm";
+
+	function setup() {
+		config = {
 			path="wheels"
 			,fileName="Plugins"
 			,method="init"
@@ -9,40 +11,20 @@
 			,deletePluginDirectories=false
 			,overwritePlugins=false
 			,loadIncompatiblePlugins=true
-		}>
-		<cfset $deleteTestFolders()>
-	</cffunction>
+		};
+		$deleteTestFolders();
+	}
 
-	<cffunction name="teardown">
-		<cfset $deleteTestFolders()>
-	</cffunction>
+	function teardown() {
+		$deleteTestFolders();
+	}
 
-	<cffunction name="$pluginObj">
-		<cfargument name="config" type="struct" required="true">
-		<cfreturn $createObjectFromRoot(argumentCollection=arguments.config)>
-	</cffunction>
+	function test_unpacking_plugin() {
+		pluginObj = $pluginObj(config);
+		q = DirectoryList(ExpandPath(config.pluginPath), false, "query");
+		dirs = ValueList(q.name);
+		assert('ListFind(dirs, "testdefaultassignmixins")');
+		assert('ListFind(dirs, "testglobalmixins")');
+	}
 
-	<cffunction name="$deleteTestFolders">
-		<cfset var loc = {}>
-		<cfset var q = "">
-		<cfdirectory action="list" directory="#expandPath('/wheelsMapping/tests/_assets/plugins/unpacking')#" type="dir" name="q">
-		<cfloop query="q">
-			<cfset loc.dir = ListChangeDelims(ListAppend(directory, name, "/"), "/", "\")>
-			<cfif DirectoryExists(loc.dir)>
-				<cfdirectory action="delete" recurse="true" directory="#loc.dir#">
-			</cfif>
-		</cfloop>
-	</cffunction>
-
-	<cffunction name="test_unpacking_plugin">
-		<cfset loc.PluginObj = $pluginObj(loc.config)>
-		<cfdirectory action="list" directory="#expandPath(loc.config.pluginPath)#" type="dir" name="loc.q">
-		<cfset loc.dirs = "">
-		<cfloop query="loc.q">
-			<cfset loc.dirs = ListAppend(loc.dirs, name)>
-		</cfloop>
-		<cfset assert('ListFind(loc.dirs, "testdefaultassignmixins")')>
-		<cfset assert('ListFind(loc.dirs, "testglobalmixins")')>
-	</cffunction>
-
-</cfcomponent>
+}

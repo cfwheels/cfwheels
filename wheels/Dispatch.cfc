@@ -1,5 +1,6 @@
-<cfcomponent output="false">
-	<cfinclude template="dispatch/functions.cfm">
-	<cfinclude template="global/functions.cfm">
-	<cfinclude template="plugins/injection.cfm">
-</cfcomponent>
+component output="false"
+{
+	include "dispatch/functions.cfm";
+	include "global/functions.cfm";
+	include "plugins/injection.cfm";
+}

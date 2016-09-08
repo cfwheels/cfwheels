@@ -1,9 +1,9 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset table("users")>
-		<cfset property(name="birthDay", column="birthday")>
-		<cfset automaticValidations(true)>
-	</cffunction>
+	function init() {
+		table("users");
+		property(name="birthDay", column="birthday");
+		automaticValidations(true);
+	}
 
-</cfcomponent>
+}

@@ -1,0 +1,18 @@
+{
+    "force":true,
+    "web":{
+        "http":{
+            "host":"localhost",
+            "port":"60011",
+            "enable":true
+        },
+        "rewrites":{
+            "enable":true,
+            "config":"urlrewrite.xml"
+        }
+    }, 
+    "app":{
+        "cfengine":"adobe@11"
+    },
+    "name":"cf11"
+}

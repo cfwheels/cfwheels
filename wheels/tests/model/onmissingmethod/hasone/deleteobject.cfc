@@ -1,18 +1,18 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.authorModel = model("author")>
-	</cffunction>
+	function setup() {
+		authorModel = model("author");
+	}
 
- 	<cffunction name="test_deleteObject_valid">
-		<cfset loc.author = loc.authorModel.findOne(where="firstName = 'Per'")>
-		<cftransaction action="begin">
-			<cfset loc.updated = loc.author.deleteProfile() />
-			<cfset loc.profile = loc.author.profile()>
-			<cfset assert('loc.updated eq true')>
-			<cfset assert('loc.profile eq false')>
-			<cftransaction action="rollback" />
-		</cftransaction>
-	</cffunction>
+ 	function test_deleteObject_valid() {
+		author = authorModel.findOne(where="firstName = 'Per'");
+		transaction action="begin" {
+			updated = author.deleteProfile();
+			profile = author.profile();
+			assert('updated eq true');
+			assert('profile eq false');
+			transaction action="rollback";
+		}
+	}
 
-</cfcomponent>
+}

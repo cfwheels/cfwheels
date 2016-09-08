@@ -1,25 +1,25 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-	</cffunction>
+	function setup() {
+		_controller = controller(name="dummy");
+	}
 
-	<cffunction name="test_not_checked">
-		<cfset loc.e = loc.controller.checkBoxTag(name="subscribe", value="1", label="Subscribe to our newsletter", checked=false)>
-		<cfset loc.r = '<label for="subscribe-1">Subscribe to our newsletter<input id="subscribe-1" name="subscribe" type="checkbox" value="1" /></label>'>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_not_checked() {
+		e = _controller.checkBoxTag(name="subscribe", value="1", label="Subscribe to our newsletter", checked=false);
+		r = '<label for="subscribe-1">Subscribe to our newsletter<input id="subscribe-1" name="subscribe" type="checkbox" value="1" /></label>';
+		assert('e eq r');
+	}
 
-	<cffunction name="test_checked">
-		<cfset loc.e = loc.controller.checkBoxTag(name="subscribe", value="1", label="Subscribe to our newsletter", checked=true)>
-		<cfset loc.r = '<label for="subscribe-1">Subscribe to our newsletter<input checked="checked" id="subscribe-1" name="subscribe" type="checkbox" value="1" /></label>'>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_checked() {
+		e = _controller.checkBoxTag(name="subscribe", value="1", label="Subscribe to our newsletter", checked=true);
+		r = '<label for="subscribe-1">Subscribe to our newsletter<input checked="checked" id="subscribe-1" name="subscribe" type="checkbox" value="1" /></label>';
+		assert('e eq r');
+	}
 
-	<cffunction name="test_value_blank_and_not_checked">
-		<cfset loc.e = loc.controller.checkBoxTag(name="gender", value="", checked=false)>
-		<cfset loc.r = '<input id="gender" name="gender" type="checkbox" value="" />'>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_value_blank_and_not_checked() {
+		e = _controller.checkBoxTag(name="gender", value="", checked=false);
+		r = '<input id="gender" name="gender" type="checkbox" value="" />';
+		assert('e eq r');
+	}
 
-</cfcomponent>
+}

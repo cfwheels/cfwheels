@@ -1,3 +1,3 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-</cfcomponent>
+}

@@ -1,4 +1,5 @@
-<!--- This file is only needed to get tests to work --->
-<cfcomponent output="false">
-	<cfinclude template="model.cfm">
-</cfcomponent>
+// This file is only needed to get tests to work
+component output="false"
+{
+	include "model.cfm";
+} 

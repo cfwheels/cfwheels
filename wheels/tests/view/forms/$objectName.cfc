@@ -1,38 +1,38 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="ControllerWithNestedModel")>
-	</cffunction>
+	function setup() {
+		_controller = controller(name="ControllerWithNestedModel");
+	}
 
-	<cffunction name="test_$objectName_with_objectName">
-		<cfset loc.objectName = loc.controller.$objectName(objectName="author")>
-		<cfset assert('loc.objectName eq "author"') />
-	</cffunction>
+	function test_$objectName_with_objectName() {
+		objectName = _controller.$objectName(objectName="author");
+		assert('objectName eq "author"');
+	}
 
-	<cffunction name="test_$objectName_with_objectName_as_struct">
-		<cfset loc.struct = { formField = "formValue" }>
-		<cfset loc.objectName = loc.controller.$objectName(objectName=loc.struct)>
-		<cfset assert('IsStruct(loc.objectName) eq true') />
-	</cffunction>
+	function test_$objectName_with_objectName_as_struct() {
+		struct = { formField = "formValue" };
+		objectName = _controller.$objectName(objectName=struct);
+		assert('IsStruct(objectName) eq true');
+	}
 
-	<cffunction name="test_$objectName_hasOne_association">
-		<cfset loc.objectName = loc.controller.$objectName(objectName="author", association="profile")>
-		<cfset assert('loc.objectName eq "author[''profile'']"') />
-	</cffunction>
+	function test_$objectName_hasOne_association() {
+		objectName = _controller.$objectName(objectName="author", association="profile");
+		assert('objectName eq "author[''profile'']"');
+	}
 
-	<cffunction name="test_$objectName_hasMany_association">
-		<cfset loc.objectName = loc.controller.$objectName(objectName="author", association="posts", position="1")>
-		<cfset assert('loc.objectName eq "author[''posts''][1]"') />
-	</cffunction>
+	function test_$objectName_hasMany_association() {
+		objectName = _controller.$objectName(objectName="author", association="posts", position="1");
+		assert('objectName eq "author[''posts''][1]"');
+	}
 
-	<cffunction name="test_$objectName_hasMany_associations_nested">
-		<cfset loc.objectName = loc.controller.$objectName(objectName="author", association="posts,comments", position="1,2")>
-		<cfset assert('loc.objectName eq "author[''posts''][1][''comments''][2]"') />
-	</cffunction>
+	function test_$objectName_hasMany_associations_nested() {
+		objectName = _controller.$objectName(objectName="author", association="posts,comments", position="1,2");
+		assert('objectName eq "author[''posts''][1][''comments''][2]"');
+	}
 
-	<cffunction name="test_$objectName_raises_error_without_correct_positions">
-		<cfset loc.e = raised('loc.controller.$objectName(objectName="author", association="posts,comments", position="1")')>
-		<cfset assert('loc.e eq "Wheels.InvalidArgument"') />
-	</cffunction>
+	function test_$objectName_raises_error_without_correct_positions() {
+		e = raised('_controller.$objectName(objectName="author", association="posts,comments", position="1")');
+		assert('e eq "Wheels.InvalidArgument"');
+	}
 
-</cfcomponent>
+}

@@ -1,24 +1,26 @@
-<!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
+<cfscript>
+	/**
+	* PUBLIC CONTROLLER REQUEST FUNCTIONS
+	*/ 
 
-<cffunction name="sendEmail" returntype="any" access="public" output="false">
-	<cfargument name="template" type="string" required="false" default="">
-	<cfargument name="from" type="string" required="false" default="">
-	<cfargument name="to" type="string" required="false" default="">
-	<cfargument name="subject" type="string" required="false" default="">
-	<cfargument name="layout" type="any" required="false">
-	<cfargument name="file" type="string" required="false" default="">
-	<cfargument name="detectMultipart" type="boolean" required="false">
-	<cfargument name="deliver" type="boolean" required="false" default="true">
-	<cfargument name="writeToFile" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
-		loc.deliver = Duplicate(arguments.deliver);
-		loc.writeToFile = Duplicate(arguments.writeToFile);
+	public any function sendEmail(
+		string template="",
+		string from="",
+		string to="",
+		string subject="",
+		any layout,
+		string file="",
+		boolean detectMultipart,
+		boolean deliver=true,
+		string writeToFile=""
+	) {
+		local.deliver = Duplicate(arguments.deliver);
+		local.writeToFile = Duplicate(arguments.writeToFile);
 
 		$args(args=arguments, name="sendEmail", combine="template/templates/!,layout/layouts,file/files", required="template,from,to,subject");
 
-		loc.nonPassThruArgs = "writetofile,template,templates,layout,layouts,file,files,detectMultipart,deliver,tagContent";
-		loc.mailTagArgs = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,mailparams,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext,remove";
+		local.nonPassThruArgs = "writetofile,template,templates,layout,layouts,file,files,detectMultipart,deliver,tagContent";
+		local.mailTagArgs = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,mailparams,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext,remove";
 
 		// if two templates but only one layout was passed in we set the same layout to be used on both
 		if (ListLen(arguments.template) > 1 && ListLen(arguments.layout) == 1)
@@ -27,41 +29,41 @@
 		}
 
 		// set the variables that should be available to the email view template (i.e. the custom named arguments passed in by the developer)
-		for (loc.key in arguments)
+		for (local.key in arguments)
 		{
-			if (!ListFindNoCase(loc.nonPassThruArgs, loc.key) && !ListFindNoCase(loc.mailTagArgs, loc.key))
+			if (!ListFindNoCase(local.nonPassThruArgs, local.key) && !ListFindNoCase(local.mailTagArgs, local.key))
 			{
-				variables[loc.key] = arguments[loc.key];
-				StructDelete(arguments, loc.key);
+				variables[local.key] = arguments[local.key];
+				StructDelete(arguments, local.key);
 			}
 		}
 
 		// get the content of the email templates and store them as cfmailparts
 		arguments.mailparts = [];
-		loc.iEnd = ListLen(arguments.template);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.iEnd = ListLen(arguments.template);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
 			// include the email template and return it
-			loc.item = ListGetAt(arguments.template, loc.i);
-			loc.content = $renderPage($template=loc.item, $layout=ListGetAt(arguments.layout, loc.i));
-			loc.mailpart = {};
-			loc.mailpart.tagContent = loc.content;
+			local.item = ListGetAt(arguments.template, local.i);
+			local.content = $renderPage($template=local.item, $layout=ListGetAt(arguments.layout, local.i));
+			local.mailpart = {};
+			local.mailpart.tagContent = local.content;
 			if (ArrayIsEmpty(arguments.mailparts))
 			{
-				ArrayAppend(arguments.mailparts, loc.mailpart);
+				ArrayAppend(arguments.mailparts, local.mailpart);
 			}
 			else
 			{
 				// make sure the text version is the first one in the array
-				loc.existingContentCount = ListLen(arguments.mailparts[1].tagContent, "<");
-				loc.newContentCount = ListLen(loc.content, "<");
-				if (loc.newContentCount < loc.existingContentCount)
+				local.existingContentCount = ListLen(arguments.mailparts[1].tagContent, "<");
+				local.newContentCount = ListLen(local.content, "<");
+				if (local.newContentCount < local.existingContentCount)
 				{
-					ArrayPrepend(arguments.mailparts, loc.mailpart);
+					ArrayPrepend(arguments.mailparts, local.mailpart);
 				}
 				else
 				{
-					ArrayAppend(arguments.mailparts, loc.mailpart);
+					ArrayAppend(arguments.mailparts, local.mailpart);
 				}
 				arguments.mailparts[1].type = "text";
 				arguments.mailparts[2].type = "html";
@@ -69,9 +71,9 @@
 		}
 
 		// return a struct containing mailpart content using type as the key
-		loc.rv = {};
-		loc.rv["html"] = "";
-		loc.rv["text"] = "";
+		local.rv = {};
+		local.rv["html"] = "";
+		local.rv["text"] = "";
 		// figure out if the email should be sent as html or text when only one template is used and the developer did not specify the type explicitly
 		if (ArrayLen(arguments.mailparts) == 1)
 		{
@@ -88,14 +90,14 @@
 					arguments.type = "text";
 				}
 			}
-			loc.rv[arguments.type] = arguments.tagContent;
+			local.rv[arguments.type] = arguments.tagContent;
 		}
 		else
 		{
 			// return a struct containing mailparts using type the the key
-			loc.iEnd = ArrayLen(arguments.mailparts);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++) {
-				loc.rv[arguments.mailparts[loc.i].type] = arguments.mailparts[loc.i].tagContent;
+			local.iEnd = ArrayLen(arguments.mailparts);
+			for (local.i=1; local.i <= local.iEnd; local.i++) {
+				local.rv[arguments.mailparts[local.i].type] = arguments.mailparts[local.i].tagContent;
 			}
 		}
 
@@ -103,224 +105,175 @@
 		if (Len(arguments.file))
 		{
 			arguments.mailparams = [];
-			loc.iEnd = ListLen(arguments.file);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			local.iEnd = ListLen(arguments.file);
+			for (local.i=1; local.i <= local.iEnd; local.i++)
 			{
-				loc.item = ListGetAt(arguments.file, loc.i);
-				arguments.mailparams[loc.i] = {};
-				if (!ReFindNoCase("\\|/", loc.item))
+				local.item = ListGetAt(arguments.file, local.i);
+				arguments.mailparams[local.i] = {};
+				if (!ReFindNoCase("\\|/", local.item))
 				{
 					// no directory delimiter is present so append the path
-					loc.item = ExpandPath(get("filePath")) & "/" & loc.item;
+					local.item = ExpandPath(get("filePath")) & "/" & local.item;
 				}
-				arguments.mailparams[loc.i].file = loc.item;
+				arguments.mailparams[local.i].file = local.item;
 			}
 		}
 
 		// delete arguments that we don't want to pass through to the cfmail tag
-		loc.iEnd = ListLen(loc.nonPassThruArgs);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.iEnd = ListLen(local.nonPassThruArgs);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.item = ListGetAt(loc.nonPassThruArgs, loc.i);
-			StructDelete(arguments, loc.item);
+			local.item = ListGetAt(local.nonPassThruArgs, local.i);
+			StructDelete(arguments, local.item);
 		}
 
 		// also return the args passed to cfmail
-		StructAppend(loc.rv, arguments);
+		StructAppend(local.rv, arguments);
 
 		// write the email body to file
-		if (Len(loc.writeToFile))
+		if (Len(local.writeToFile))
 		{
-			loc.output = ListAppend(loc.rv.text, loc.rv.html, "#Chr(13)##Chr(10)##Chr(13)##Chr(10)#");
-			$file(action="write", file="#loc.writeToFile#", output="#loc.output#");
+			local.output = ListAppend(local.rv.text, local.rv.html, "#Chr(13)##Chr(10)##Chr(13)##Chr(10)#");
+			$file(action="write", file="#local.writeToFile#", output="#local.output#");
 		}
 
 		// send the email using the cfmail tag
-		if (loc.deliver)
+		if (local.deliver)
 		{
 			$mail(argumentCollection=arguments);
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
-<cffunction name="sendFile" returntype="any" access="public" output="false">
-	<cfargument name="file" type="string" required="true">
-	<cfargument name="name" type="string" required="false" default="">
-	<cfargument name="type" type="string" required="false" default="">
-	<cfargument name="disposition" type="string" required="false">
-	<cfargument name="directory" type="string" required="false" default="">
-	<cfargument name="deleteFile" type="boolean" required="false" default="false">
-	<cfargument name="$testingMode" type="boolean" required="false" default="false">
-	<cfscript>
-		var loc = {};
+		return local.rv;
+	}
+ 
+	public any function sendFile(
+		required string file,
+		string name="",
+		string type="",
+		string disposition,
+		string directory="",
+		boolean deleteFile=false,
+		boolean $testingMode=false
+	) {
 		$args(name="sendFile", args=arguments);
 
 		// Check whether the resource is a ram resource or physical file
 		if(!listFirst(arguments.file, "://") EQ "ram"){
-			loc.relativeRoot = get("rootPath");
-			if (Right(loc.relativeRoot, 1) != "/")
+			local.relativeRoot = get("rootPath");
+			if (Right(local.relativeRoot, 1) != "/")
 			{
-				loc.relativeRoot &= "/";
+				local.relativeRoot &= "/";
 			}
-			loc.root = ExpandPath(loc.relativeRoot);
-			loc.folder = arguments.directory;
-			if (!Len(loc.folder))
+			local.root = ExpandPath(local.relativeRoot);
+			local.folder = arguments.directory;
+			if (!Len(local.folder))
 			{
-				loc.folder = loc.relativeRoot & get("filePath");
+				local.folder = local.relativeRoot & get("filePath");
 			}
-			if (Left(loc.folder, Len(loc.root)) == loc.root)
+			if (Left(local.folder, Len(local.root)) == local.root)
 			{
-				loc.folder = RemoveChars(loc.folder, 1, Len(loc.root));
+				local.folder = RemoveChars(local.folder, 1, Len(local.root));
 			}
-			loc.fullPath = Replace(loc.folder, "\", "/", "all");
-			loc.fullPath = ListAppend(loc.fullPath, arguments.file, "/");
-			loc.fullPath = ExpandPath(loc.fullPath);
-			loc.fullPath = Replace(loc.fullPath, "\", "/", "all");
-			loc.file = ListLast(loc.fullPath, "/");
-			loc.directory = Reverse(ListRest(Reverse(loc.fullPath), "/"));
+			local.fullPath = Replace(local.folder, "\", "/", "all");
+			local.fullPath = ListAppend(local.fullPath, arguments.file, "/");
+			local.fullPath = ExpandPath(local.fullPath);
+			local.fullPath = Replace(local.fullPath, "\", "/", "all");
+			local.file = ListLast(local.fullPath, "/");
+			local.directory = Reverse(ListRest(Reverse(local.fullPath), "/"));
 
 			// if the file is not found, try searching for it
-			if (!FileExists(loc.fullPath))
+			if (!FileExists(local.fullPath))
 			{
-				loc.match = $directory(action="list", directory=loc.directory, filter="#loc.file#.*");
+				local.match = $directory(action="list", directory=local.directory, filter="#local.file#.*");
 
 				// only extract the extension if we find a single match
-				if (loc.match.recordCount == 1)
+				if (local.match.recordCount == 1)
 				{
-					loc.file &= "." & ListLast(loc.match.name, ".");
-					loc.fullPath = loc.directory & "/" & loc.file;
+					local.file &= "." & ListLast(local.match.name, ".");
+					local.fullPath = local.directory & "/" & local.file;
 				}
 				else
 				{
-					$throw(type="Wheels.FileNotFound", message="A file could not be found.", extendedInfo="Make sure a file with the name `#loc.file#` exists in the `#loc.directory#` folder.");
+					$throw(type="Wheels.FileNotFound", message="A file could not be found.", extendedInfo="Make sure a file with the name `#local.file#` exists in the `#local.directory#` folder.");
 				}
 			}
-			loc.name = loc.file;
+			local.name = local.file;
 		}
 		else {
-			loc.fullPath = arguments.file;
-			loc.file 	 = arguments.file;
+			local.fullPath = arguments.file;
+			local.file 	 = arguments.file;
 			// For ram:// resources, skip the physical file check but still check the thing exists
-			if (!FileExists(loc.fullPath)){
-				$throw(type="Wheels.FileNotFound", message="ram:// resource could not be found.", extendedInfo="Make sure a resource with the name `#loc.file#` exists in memory");
+			if (!FileExists(local.fullPath)){
+				$throw(type="Wheels.FileNotFound", message="ram:// resource could not be found.", extendedInfo="Make sure a resource with the name `#local.file#` exists in memory");
 			}
 			// Make the default display name behaviour the same as physical files
-			loc.name     = replace(arguments.file, "ram://","","one");
+			local.name     = replace(arguments.file, "ram://","","one");
 		}
 
-		loc.extension = ListLast(loc.file, ".");
+		local.extension = ListLast(local.file, ".");
 
 		// replace the display name for the file if supplied
 		if (Len(arguments.name))
 		{
-			loc.name = arguments.name;
+			local.name = arguments.name;
 		}
 
-		loc.mime = arguments.type;
-		if (!Len(loc.mime))
+		local.mime = arguments.type;
+		if (!Len(local.mime))
 		{
-			loc.mime = mimeTypes(loc.extension);
+			local.mime = mimeTypes(local.extension);
 		}
 
 		// if testing, return the variables
 		if (arguments.$testingMode)
 		{
-			StructAppend(loc, arguments, false);
-			loc.rv = loc;
+			StructAppend(local, arguments, false);
+			local.rv = local;
 		}
 		else
 		{
 			// prompt the user to download the file
-			$header(name="content-disposition", value="#arguments.disposition#; filename=""#loc.name#""");
-			$content(type=loc.mime, file=loc.fullPath, deleteFile=arguments.deleteFile);
+			$header(name="content-disposition", value="#arguments.disposition#; filename=""#local.name#""");
+			$content(type=local.mime, file=local.fullPath, deleteFile=arguments.deleteFile);
 		}
-	</cfscript>
-	<cfif StructKeyExists(loc, "rv")>
-		<cfreturn loc.rv>
-	</cfif>
-</cffunction>
-
-<cffunction name="isSecure" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		if (request.cgi.server_port_secure == "true")
-		{
-			loc.rv = true;
+		if(structKeyExists(local,"rv")){
+			return local.rv;
 		}
-		else
-		{
-			loc.rv = false;
-		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+	}
+ 
+	public boolean function isSecure() {
+		return request.cgi.server_port_secure == "true";
+	}
 
-<cffunction name="isAjax" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		if (request.cgi.http_x_requested_with == "XMLHTTPRequest")
-		{
-			loc.rv = true;
-		}
-		else
-		{
-			loc.rv = false;
-		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+	public boolean function isAjax() {
+		return request.cgi.http_x_requested_with == "XMLHTTPRequest";
+	}
 
-<cffunction name="isGet" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		if (request.cgi.request_method == "get")
-		{
-			loc.rv = true;
-		}
-		else
-		{
-			loc.rv = false;
-		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+	public boolean function isGet() {
+		return request.cgi.request_method == "get";
+	}
 
-<cffunction name="isPost" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		if (request.cgi.request_method == "post")
-		{
-			loc.rv = true;
-		}
-		else
-		{
-			loc.rv = false;
-		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+	public boolean function isPost() { 
+		return request.cgi.request_method == "post";
+	} 
 
-<cfscript>
+	public boolean function isPut() {
+		return request.cgi.request_method == "put";
+	}
 
-public boolean function isPut() {
-	return request.cgi.request_method == "put";
-}
+	public boolean function isPatch() {
+		return request.cgi.request_method == "patch";
+	}
 
-public boolean function isPatch() {
-	return request.cgi.request_method == "patch";
-}
+	public boolean function isDelete() {
+		return request.cgi.request_method == "delete";
+	}
 
-public boolean function isDelete() {
-	return request.cgi.request_method == "delete";
-}
-
-public boolean function isHead() {
-	return request.cgi.request_method == "head";
-}
-	
-public boolean function isOptions() {
-	return request.cgi.request_method == "options";
+	public boolean function isHead() {
+		return request.cgi.request_method == "head";
+	}
+		
+	public boolean function isOptions() {
+		return request.cgi.request_method == "options";
 }
 
 </cfscript>

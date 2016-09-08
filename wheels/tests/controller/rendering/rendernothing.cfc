@@ -1,13 +1,18 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfinclude template="setupAndTeardown.cfm">
+	function setup() {
+		include "setup.cfm";
+		params = {controller="dummy", action="dummy"};
+		_controller = controller("dummy", params);
+	}
 
-	<cfset params = {controller="dummy", action="dummy"}>
-	<cfset loc.controller = controller("dummy", params)>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="test_render_nothing">
-		<cfset loc.controller.renderNothing()>
-		<cfset assert("loc.controller.response() IS ''")>
-	</cffunction>
+	function test_render_nothing() {
+		_controller.renderNothing();
+		assert("_controller.response() IS ''");
+	}
 
-</cfcomponent>
+}

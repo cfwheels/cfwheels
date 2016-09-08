@@ -1,24 +1,24 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = createobject("component", "wheelsMapping.tests._assets.controllers.ControllerWithModel")>
-		<cfset loc.args= {}>
-		<cfset loc.args.objectName = "user">
-		<cfset loc.args.label = false>
-	</cffunction>
+	function setup() {
+		_controller = createobject("component", "wheels.tests._assets.controllers.ControllerWithModel");
+		args= {};
+		args.objectName = "user";
+		args.label = false;
+	}
 
-	<cffunction name="test_checked_when_property_value_equals_checkedValue">
-		<cfset loc.args.property = "birthdaymonth">
-		<cfset loc.args.checkedvalue = "11">
-		<cfset debug("loc.controller.checkBox(argumentcollection=loc.args)", false)>
-		<cfset loc.e = '<input checked="checked" id="user-birthdaymonth" name="user[birthdaymonth]" type="checkbox" value="11" /><input id="user-birthdaymonth-checkbox" name="user[birthdaymonth]($checkbox)" type="hidden" value="0" />'>
-		<cfset loc.r = loc.controller.checkBox(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
-		<cfset loc.args.checkedvalue = "12">
-		<cfset debug("loc.controller.checkBox(argumentcollection=loc.args)", false)>
-		<cfset loc.e = '<input id="user-birthdaymonth" name="user[birthdaymonth]" type="checkbox" value="12" /><input id="user-birthdaymonth-checkbox" name="user[birthdaymonth]($checkbox)" type="hidden" value="0" />'>
-		<cfset loc.r = loc.controller.checkBox(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+	function test_checked_when_property_value_equals_checkedValue() {
+		args.property = "birthdaymonth";
+		args.checkedvalue = "11";
+		debug("_controller.checkBox(argumentcollection=args)", false);
+		e = '<input checked="checked" id="user-birthdaymonth" name="user[birthdaymonth]" type="checkbox" value="11" /><input id="user-birthdaymonth-checkbox" name="user[birthdaymonth]($checkbox)" type="hidden" value="0" />';
+		r = _controller.checkBox(argumentcollection=args);
+		assert("e eq r");
+		args.checkedvalue = "12";
+		debug("_controller.checkBox(argumentcollection=args)", false);
+		e = '<input id="user-birthdaymonth" name="user[birthdaymonth]" type="checkbox" value="12" /><input id="user-birthdaymonth-checkbox" name="user[birthdaymonth]($checkbox)" type="hidden" value="0" />';
+		r = _controller.checkBox(argumentcollection=args);
+		assert("e eq r");
+	}
 
-</cfcomponent>
+}

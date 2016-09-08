@@ -1,7 +1,9 @@
-<!--- PRIVATE FUNCTIONS --->
 <cfscript>
+	/**
+	* PUBLIC FUNCTIONS
+	*/
 
-public boolean function $processAction() {
+	public boolean function processAction() {
 		// CSRF protection.
 		$runCsrfProtection(action=params.action);
 
@@ -110,14 +112,12 @@ public boolean function $processAction() {
 		}
 
 		return true;	
-}
+	}
 
-</cfscript>
-
-<cffunction name="$callAction" returntype="void" access="public" output="false">
-	<cfargument name="action" type="string" required="true">
-	<cfscript>
-		var loc = {};
+	/**
+	* PRIVATE FUNCTIONS
+	*/   
+	public void function $callAction(required string action) {
 		if (Left(arguments.action, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action))
 		{
 			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.action#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in CFWheels functions.");
@@ -128,10 +128,10 @@ public boolean function $processAction() {
 		}
 		else if (StructKeyExists(this, "onMissingMethod"))
 		{
-			loc.invokeArgs = {};
-			loc.invokeArgs.missingMethodName = arguments.action;
-			loc.invokeArgs.missingMethodArguments = {};
-			$invoke(method="onMissingMethod", invokeArgs=loc.invokeArgs);
+			local.invokeArgs = {};
+			local.invokeArgs.missingMethodName = arguments.action;
+			local.invokeArgs.missingMethodArguments = {};
+			$invoke(method="onMissingMethod", invokeArgs=local.invokeArgs);
 		}
 		if (!$performedRenderOrRedirect())
 		{
@@ -141,8 +141,8 @@ public boolean function $processAction() {
 			}
 			catch (any e)
 			{
-				loc.file = get("viewPath") & "/" & LCase(variables.$class.name) & "/" & LCase(arguments.action) & ".cfm";
-				if (FileExists(ExpandPath(loc.file)))
+				local.file = get("viewPath") & "/" & LCase(variables.$class.name) & "/" & LCase(arguments.action) & ".cfm";
+				if (FileExists(ExpandPath(local.file)))
 				{
 					$throw(object=e);
 				}
@@ -155,26 +155,24 @@ public boolean function $processAction() {
 					else
 					{
 						$header(statusCode=404, statustext="Not Found");
-						loc.template = get("eventPath") & "/onmissingtemplate.cfm";
-						$includeAndOutput(template=loc.template);
+						local.template = get("eventPath") & "/onmissingtemplate.cfm";
+						$includeAndOutput(template=local.template);
 						$abort();
 					}
 				}
 			}
 		}
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="$callActionAndAddToCache" returntype="string" access="public" output="false">
-	<cfargument name="action" type="string" required="true">
-	<cfargument name="time" type="numeric" required="true">
-	<cfargument name="key" type="string" required="true">
-	<cfargument name="category" type="string" required="true">
-	<cfscript>
-		var loc = {};
+	public string function $callActionAndAddToCache(
+		required string action,
+		required numeric time,
+		required string key,
+		required string category
+	) {
 		$callAction(action=arguments.action);
 		$addToCache(key=arguments.key, value=variables.$instance.response, time=arguments.time, category=arguments.category);
-		loc.rv = response();
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = response();
+		return local.rv;
+	}
+</cfscript>  

@@ -1,7 +1,9 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.config = {
+	include "helpers.cfm";
+
+	function setup() {
+		config = {
 			path="wheels"
 			,fileName="Plugins"
 			,method="init"
@@ -9,19 +11,14 @@
 			,deletePluginDirectories=false
 			,overwritePlugins=false
 			,loadIncompatiblePlugins=true
-		}>
-	</cffunction>
-	
-	<cffunction name="$pluginObj">
-		<cfargument name="config" type="struct" required="true">
-		<cfreturn $createObjectFromRoot(argumentCollection=arguments.config)>
-	</cffunction>
-	
-	<cffunction name="test_raise_incompatible_plugin">
-		<cfset loc.config.pluginPath = "/wheelsMapping/tests/_assets/plugins/incompatible">
-		<cfset loc.e = "Wheels.IncompatiblePlugin">
-		<cfset loc.r = raised('$pluginObj(loc.config)')>
-		<cfset assert('loc.r eq loc.e')>
-	</cffunction>
-	
-</cfcomponent>
+		};
+	}
+
+	function test_raise_incompatible_plugin() {
+		config.pluginPath = "/wheelsMapping/tests/_assets/plugins/incompatible";
+		actual = raised('$pluginObj(config)');
+		expected = "Wheels.IncompatiblePlugin";
+		assert('actual eq expected');
+	}
+
+}

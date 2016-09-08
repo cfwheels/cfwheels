@@ -1,19 +1,19 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.authorModel = model("author")>
-	</cffunction>
- 
- 	<cffunction name="test_deleteObject_valid">
-		<cfset loc.author = loc.authorModel.findOne(where="firstName = 'Per'")>
-		<cfset loc.post = loc.author.findOnePost(order="id")>
-		<cftransaction action="begin">
-			<cfset loc.updated = loc.author.deletePost(loc.post) />
-			<cfset loc.post = model("post").findByKey(key=loc.post.id) />
-			<cfset assert('loc.updated eq true')>
-			<cfset assert('not IsObject(loc.post) and loc.post eq false')>
-			<cftransaction action="rollback" />
-		</cftransaction>
-	</cffunction>
+	function setup() {
+		authorModel = model("author");
+	}
 
-</cfcomponent>
+ 	function test_deleteObject_valid() {
+		author = authorModel.findOne(where="firstName = 'Per'");
+		post = author.findOnePost(order="id");
+		transaction action="begin" {
+			updated = author.deletePost(post);
+			post = model("post").findByKey(key=post.id);
+			assert('updated eq true');
+			assert('not IsObject(post) and post eq false');
+			transaction action="rollback";
+		}
+	}
+
+}

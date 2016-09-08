@@ -1,20 +1,19 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfset loc.controller = controller(name="dummy")>
-	
-	<cffunction name="setup">
-		<cfset loc.controller.$clearCachableActions()>
-	</cffunction>
+	function setup() {
+		_controller = controller(name="dummy");
+		_controller.$clearCachableActions();
+	}
 
-	<cffunction name="test_adding_cachable_action">
-		<cfset loc.controller.caches("dummy1")>
-		<cfset loc.str = {}>
-		<cfset loc.str.action = "dummy2">
-		<cfset loc.str.time = 10>
-		<cfset loc.str.static = true>
-		<cfset loc.controller.$addCachableAction(loc.str)>
-		<cfset loc.r = loc.controller.$cachableActions()>
-		<cfset assert("ArrayLen(loc.r) IS 2 AND loc.r[2].action IS 'dummy2'")>
-	</cffunction>
-	
-</cfcomponent>
+	function test_adding_cachable_action() {
+		_controller.caches("dummy1");
+		str = {};
+		str.action = "dummy2";
+		str.time = 10;
+		str.static = true;
+		_controller.$addCachableAction(str);
+		r = _controller.$cachableActions();
+		assert("ArrayLen(r) IS 2 AND r[2].action IS 'dummy2'");
+	}
+
+}

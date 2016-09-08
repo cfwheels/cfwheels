@@ -1,13 +1,12 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-		<cfset loc.user = model("users")>
-	</cffunction>
+	function setup(){
+		_controller = controller(name="dummy");
+		user = model("users");
+	}
 
-	<cffunction name="test_x_pagination_valid">
-		<cfset loc.e = loc.user.findAll(where="firstname = 'somemoron'", perpage="2", page="1", handle="pagination_test_1", order="id")>
-		<cfset loc.controller.pagination("pagination_test_1")>
-	</cffunction>
-
-</cfcomponent>
+	function test_x_pagination_valid(){
+		e = user.findAll(where="firstname = 'somemoron'", perpage="2", page="1", handle="pagination_test_1", order="id");
+		_controller.pagination("pagination_test_1");
+	}
+}

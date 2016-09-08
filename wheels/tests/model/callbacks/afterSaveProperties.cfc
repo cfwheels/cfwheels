@@ -1,28 +1,28 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_have_access_to_changed_property_values_in_aftersave">
-		<cfset model("user").$registerCallback(type="afterSave", methods="saveHasChanged")>
-		<cfset loc.obj = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.obj.saveHasChanged = saveHasChanged>
-		<cfset loc.obj.getHasObjectChanged = getHasObjectChanged>
-		<cfset assert('loc.obj.hasChanged() eq false')>
-		<cfset loc.obj.password = "xxxxxxx">
-		<cfset assert('loc.obj.hasChanged() eq true')>
-		<cftransaction>
-			<cfset loc.obj.save(transaction="none")>
-			<cfset assert('loc.obj.getHasObjectChanged() eq true')>
-			<cfset assert('loc.obj.hasChanged() eq false')>
-			<cftransaction action="rollback"/>
-		</cftransaction>
-		<cfset model("user").$clearCallbacks(type="afterSave")>
-	</cffunction>
+	function test_have_access_to_changed_property_values_in_aftersave() {
+		model("user").$registerCallback(type="afterSave", methods="saveHasChanged");
+		obj = model("user").findOne(where="username = 'tonyp'");
+		obj.saveHasChanged = saveHasChanged;
+		obj.getHasObjectChanged = getHasObjectChanged;
+		assert('obj.hasChanged() eq false');
+		obj.password = "xxxxxxx";
+		assert('obj.hasChanged() eq true');
+		transaction {
+			obj.save(transaction="none");
+			assert('obj.getHasObjectChanged() eq true');
+			assert('obj.hasChanged() eq false');
+			transaction action="rollback";
+		}
+		model("user").$clearCallbacks(type="afterSave");
+	}
 
-	<cffunction name="saveHasChanged">
-		<cfset hasObjectChanged = hasChanged()>
-	</cffunction>
+	function saveHasChanged() {
+		hasObjectChanged = hasChanged();
+	}
 
-	<cffunction name="getHasObjectChanged">
-		<cfreturn hasObjectChanged>
-	</cffunction>
+	function getHasObjectChanged() {
+		return hasObjectChanged;
+	}
 
-</cfcomponent>
+}

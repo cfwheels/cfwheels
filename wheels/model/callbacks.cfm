@@ -1,125 +1,103 @@
-<!--- PUBLIC MODEL INITIALIZATION METHODS --->
+<cfscript>
+	/*
+	* PUBLIC MODEL INITIALIZATION METHOD
+	*/
 
-<cffunction name="afterCreate" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="afterCreate", argumentCollection=arguments)>
-</cffunction>
+	public void function afterCreate(string methods="") {
+		$registerCallback(type="afterCreate", argumentCollection=arguments);
+	}
 
-<cffunction name="afterDelete" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="afterDelete", argumentCollection=arguments)>
-</cffunction>
+	public void function afterDelete(string methods="") {
+		$registerCallback(type="afterDelete", argumentCollection=arguments);
+	}
 
-<cffunction name="afterFind" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="afterFind", argumentCollection=arguments)>
-</cffunction>
+	public void function afterFind(string methods="") {
+		$registerCallback(type="afterFind", argumentCollection=arguments);
+	}
 
-<cffunction name="afterInitialization" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="afterInitialization", argumentCollection=arguments)>
-</cffunction>
+	public void function afterInitialization(string methods="") {
+		$registerCallback(type="afterInitialization", argumentCollection=arguments);
+	}
 
-<cffunction name="afterNew" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="afterNew", argumentCollection=arguments)>
-</cffunction>
+	public void function afterNew(string methods="") {
+		$registerCallback(type="afterNew", argumentCollection=arguments);
+	}
 
-<cffunction name="afterSave" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="afterSave", argumentCollection=arguments)>
-</cffunction>
+	public void function afterSave(string methods="") {
+		$registerCallback(type="afterSave", argumentCollection=arguments);
+	}
 
-<cffunction name="afterUpdate" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="afterUpdate", argumentCollection=arguments)>
-</cffunction>
+	public void function afterUpdate(string methods="") {
+		$registerCallback(type="afterUpdate", argumentCollection=arguments);
+	}
 
-<cffunction name="afterValidation" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="afterValidation", argumentCollection=arguments)>
-</cffunction>
+	public void function afterValidation(string methods="") {
+		$registerCallback(type="afterValidation", argumentCollection=arguments);
+	}
 
-<cffunction name="afterValidationOnCreate" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="afterValidationOnCreate", argumentCollection=arguments)>
-</cffunction>
+	public void function afterValidationOnCreate(string methods="") {
+		$registerCallback(type="afterValidationOnCreate", argumentCollection=arguments);
+	}
 
-<cffunction name="afterValidationOnUpdate" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="afterValidationOnUpdate", argumentCollection=arguments)>
-</cffunction>
+	public void function afterValidationOnUpdate(string methods="") {
+		$registerCallback(type="afterValidationOnUpdate", argumentCollection=arguments);
+	}
 
-<cffunction name="beforeCreate" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="beforeCreate", argumentCollection=arguments)>
-</cffunction>
+	public void function beforeCreate(string methods="") {
+		$registerCallback(type="beforeCreate", argumentCollection=arguments);
+	}
 
-<cffunction name="beforeDelete" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="beforeDelete", argumentCollection=arguments)>
-</cffunction>
+	public void function beforeDelete(string methods="") {
+		$registerCallback(type="beforeDelete", argumentCollection=arguments);
+	}
 
-<cffunction name="beforeSave" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="beforeSave", argumentCollection=arguments)>
-</cffunction>
+	public void function beforeSave(string methods="") {
+		$registerCallback(type="beforeSave", argumentCollection=arguments);
+	}
 
-<cffunction name="beforeUpdate" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="beforeUpdate", argumentCollection=arguments)>
-</cffunction>
+	public void function beforeUpdate(string methods="") {
+		$registerCallback(type="beforeUpdate", argumentCollection=arguments);
+	}
 
-<cffunction name="beforeValidation" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="beforeValidation", argumentCollection=arguments)>
-</cffunction>
+	public void function beforeValidation(string methods="") {
+		$registerCallback(type="beforeValidation", argumentCollection=arguments);
+	}
 
-<cffunction name="beforeValidationOnCreate" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="beforeValidationOnCreate", argumentCollection=arguments)>
-</cffunction>
+	public void function beforeValidationOnCreate(string methods="") {
+		$registerCallback(type="beforeValidationOnCreate", argumentCollection=arguments);
+	}
 
-<cffunction name="beforeValidationOnUpdate" returntype="void" access="public" output="false">
-	<cfargument name="methods" type="string" required="false" default="">
-	<cfset $registerCallback(type="beforeValidationOnUpdate", argumentCollection=arguments)>
-</cffunction>
+	public void function beforeValidationOnUpdate(string methods="") {
+		$registerCallback(type="beforeValidationOnUpdate", argumentCollection=arguments);
+	}
 
-<!--- PRIVATE METHODS --->
-
-<cffunction name="$registerCallback" returntype="void" access="public" output="false">
-	<cfargument name="type" type="string" required="true">
-	<cfargument name="methods" type="string" required="true">
-	<cfscript>
-		var loc = {};
-
+	/*
+	* PRIVATE METHODS
+	*/
+	public void function $registerCallback(required string type, required string methods) {
 		// create this type in the array if it doesn't already exist
 		if (!StructKeyExists(variables.wheels.class.callbacks,arguments.type))
 		{
 			variables.wheels.class.callbacks[arguments.type] = ArrayNew(1);
 		}
 
-		loc.existingCallbacks = ArrayToList(variables.wheels.class.callbacks[arguments.type]);
+		local.existingCallbacks = ArrayToList(variables.wheels.class.callbacks[arguments.type]);
 		if (StructKeyExists(arguments, "method"))
 		{
 			arguments.methods = arguments.method;
 		}
 		arguments.methods = $listClean(arguments.methods);
-		loc.iEnd = ListLen(arguments.methods);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.iEnd = ListLen(arguments.methods);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			if (!ListFindNoCase(loc.existingCallbacks, ListGetAt(arguments.methods, loc.i)))
+			if (!ListFindNoCase(local.existingCallbacks, ListGetAt(arguments.methods, local.i)))
 			{
-				ArrayAppend(variables.wheels.class.callbacks[arguments.type], ListGetAt(arguments.methods, loc.i));
+				ArrayAppend(variables.wheels.class.callbacks[arguments.type], ListGetAt(arguments.methods, local.i));
 			}
 		}
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="$clearCallbacks" returntype="void" access="public" output="false">
-	<cfargument name="type" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
+	public void function $clearCallbacks(string type="") {
 		arguments.type = $listClean(list="#arguments.type#", returnAs="array");
 
 		// no type(s) was passed in. get all the callback types registered
@@ -129,76 +107,71 @@
 		}
 
 		// loop through each callback type and clear it
-		loc.iEnd = ArrayLen(arguments.type);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.iEnd = ArrayLen(arguments.type);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			variables.wheels.class.callbacks[arguments.type[loc.i]] = [];
+			variables.wheels.class.callbacks[arguments.type[local.i]] = [];
 		}
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="$callbacks" returntype="any" access="public" output="false">
-	<cfargument name="type" type="string" required="false" default="">
-	<cfscript>
+	public any function $callbacks(string type="") {
 		if (Len(arguments.type))
 		{
 			if (StructKeyExists(variables.wheels.class.callbacks, arguments.type))
 			{
-				loc.rv = variables.wheels.class.callbacks[arguments.type];
+				local.rv = variables.wheels.class.callbacks[arguments.type];
 			}
 			else
 			{
-				loc.rv = ArrayNew(1);
+				local.rv = ArrayNew(1);
 			}
 		}
 		else
 		{
-			loc.rv = variables.wheels.class.callbacks;
+			local.rv = variables.wheels.class.callbacks;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$callback" returntype="boolean" access="public" output="false">
-	<cfargument name="type" type="string" required="true">
-	<cfargument name="execute" type="boolean" required="true">
-	<cfargument name="collection" type="any" required="false" default="">
-	<cfscript>
-		var loc = {};
+	public boolean function $callback(
+		required string type,
+		required boolean execute,
+		any collection=""
+	) {
 		if (arguments.execute)
 		{
 			// get all callbacks for the type and loop through them all until the end or one of them returns false
-			loc.callbacks = $callbacks(arguments.type);
-			loc.iEnd = ArrayLen(loc.callbacks);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			local.callbacks = $callbacks(arguments.type);
+			local.iEnd = ArrayLen(local.callbacks);
+			for (local.i=1; local.i <= local.iEnd; local.i++)
 			{
-				loc.method = loc.callbacks[loc.i];
+				local.method = local.callbacks[local.i];
 				if (arguments.type == "afterFind")
 				{
 					// since this is an afterFind callback we need to handle it differently
 					if (IsQuery(arguments.collection))
 					{
-						loc.rv = $queryCallback(method=loc.method, collection=arguments.collection);
+						local.rv = $queryCallback(method=local.method, collection=arguments.collection);
 					}
 					else
 					{
-						loc.invokeArgs = properties();
-						loc.rv = $invoke(method=loc.method, invokeArgs=loc.invokeArgs);
-						if (StructKeyExists(loc, "rv") && IsStruct(loc.rv))
+						local.invokeArgs = properties();
+						local.rv = $invoke(method=local.method, invokeArgs=local.invokeArgs);
+						if (StructKeyExists(local, "rv") && IsStruct(local.rv))
 						{
-							setProperties(loc.rv);
-							StructDelete(loc, "rv");
+							setProperties(local.rv);
+							StructDelete(local, "rv");
 						}
 					}
 				}
 				else
 				{
 					// this is a regular callback so just call the method
-					loc.rv = $invoke(method=loc.method);
+					local.rv = $invoke(method=local.method);
 				}
 
 				// break the loop if the callback returned false
-				if (StructKeyExists(loc, "rv") && IsBoolean(loc.rv) && !loc.rv)
+				if (StructKeyExists(local, "rv") && IsBoolean(local.rv) && !local.rv)
 				{
 					break;
 				}
@@ -206,78 +179,72 @@
 		}
 
 		// return true by default (happens when no callbacks are set or none of the callbacks returned a result)
-		if (!StructKeyExists(loc, "rv"))
+		if (!StructKeyExists(local, "rv"))
 		{
-			loc.rv = true;
+			local.rv = true;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$queryCallback" returntype="boolean" access="public" output="false">
-	<cfargument name="method" type="string" required="true">
-	<cfargument name="collection" type="query" required="true">
-	<cfscript>
-		var loc = {};
-
+	public boolean function $queryCallback(required string method, required query collection) {
 		// we return true by default
 		// will be overridden only if the callback method returns false on one of the iterations
-		loc.rv = true;
+		local.rv = true;
 
 		// loop over all query rows and execute the callback method for each
-		loc.iEnd = arguments.collection.recordCount;
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.iEnd = arguments.collection.recordCount;
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
 			// get the values in the current query row so that we can pass them in as arguments to the callback method
-			loc.invokeArgs = {};
-			loc.jEnd = ListLen(arguments.collection.columnList);
-			for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+			local.invokeArgs = {};
+			local.jEnd = ListLen(arguments.collection.columnList);
+			for (local.j=1; local.j <= local.jEnd; local.j++)
 			{
-				loc.item = ListGetAt(arguments.collection.columnList, loc.j);
+				local.item = ListGetAt(arguments.collection.columnList, local.j);
 				try
 				{
 					// coldfusion has a problem with empty strings in queries for bit types
-					loc.invokeArgs[loc.item] = arguments.collection[loc.item][loc.i];
+					local.invokeArgs[local.item] = arguments.collection[local.item][local.i];
 				}
 				catch (Any e)
 				{
-					loc.invokeArgs[loc.item] = "";
+					local.invokeArgs[local.item] = "";
 				}
 			}
 
 			// execute the callback method
-			loc.result = $invoke(method=arguments.method, invokeArgs=loc.invokeArgs);
+			local.result = $invoke(method=arguments.method, invokeArgs=local.invokeArgs);
 
-			if (StructKeyExists(loc, "result"))
+			if (StructKeyExists(local, "result"))
 			{
-				if (IsStruct(loc.result))
+				if (IsStruct(local.result))
 				{
 					// the arguments struct was returned so we need to add the changed values to the query row
-					for (loc.key in loc.result)
+					for (local.key in local.result)
 					{
 						// add a new column to the query if a value was passed back for a column that did not exist originally
-						if (!ListFindNoCase(arguments.collection.columnList, loc.key))
+						if (!ListFindNoCase(arguments.collection.columnList, local.key))
 						{
-							QueryAddColumn(arguments.collection, loc.key, ArrayNew(1));
+							QueryAddColumn(arguments.collection, local.key, ArrayNew(1));
 						}
-						arguments.collection[loc.key][loc.i] = loc.result[loc.key];
+						arguments.collection[local.key][local.i] = local.result[local.key];
 					}
 				}
-				else if (IsBoolean(loc.result) && !loc.result)
+				else if (IsBoolean(local.result) && !local.result)
 				{
 					// break the loop and return false if the callback returned false
-					loc.rv = false;
+					local.rv = false;
 					break;
 				}
 			}
 		}
 
 		// update the request with a hash of the query if it changed so that we can find it with pagination
-		loc.querykey = $hashedKey(arguments.collection);
-		if (!StructKeyExists(request.wheels, loc.querykey))
+		local.querykey = $hashedKey(arguments.collection);
+		if (!StructKeyExists(request.wheels, local.querykey))
 		{
-			request.wheels[loc.querykey] = variables.wheels.class.modelName;
+			request.wheels[local.querykey] = variables.wheels.class.modelName;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
+</cfscript>

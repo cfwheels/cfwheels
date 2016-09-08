@@ -1,7 +1,9 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.config = {
+	include "helpers.cfm";
+
+	function setup() {
+		config = {
 			path="wheels"
 			,fileName="Plugins"
 			,method="init"
@@ -9,48 +11,25 @@
 			,deletePluginDirectories=false
 			,overwritePlugins=true
 			,loadIncompatiblePlugins=true
-		}>
-		
-		<cfset $writeTestFile()>
-	</cffunction>
-	
-	<cffunction name="$pluginObj">
-		<cfargument name="config" type="struct" required="true">
-		<cfreturn $createObjectFromRoot(argumentCollection=arguments.config)>
-	</cffunction>
-	
-	<cffunction name="$writeTestFile">
-		<cffile action="write" file="#$testFile()#" output="overwritten" addnewline="false">
-	</cffunction>
-	
-	<cffunction name="$readTestFile">
-		<cfset var FileContent = "">
-		<cffile action="read" file="#$testFile()#" variable="FileContent">
-		<cfreturn FileContent>
-	</cffunction>
-	
-	<cffunction name="$testFile">
-		<cfset var theFile = "">
-		<cfset theFile = [loc.config.pluginPath, "testglobalmixins", "index.cfm"]>
-		<cfset theFile = ExpandPath(ArrayToList(theFile, "/"))>
-		<cfreturn theFile>
-	</cffunction>
+		};
+		$writeTestFile();
+	}
 
-	<cffunction name="test_overwrite_plugins">
-		<cfset loc.fileContentBefore = $readTestFile()>
-		<cfset loc.PluginObj = $pluginObj(loc.config)>
-		<cfset loc.fileContentAfter = $readTestFile()>
-		<cfset assert('loc.fileContentBefore eq "overwritten"')>
-		<cfset assert('loc.fileContentAfter neq "overwritten"')>
-	</cffunction>
-	
-	<cffunction name="test_do_not_overwrite_plugins">
-		<cfset loc.config.overwritePlugins = false>
-		<cfset loc.fileContentBefore = $readTestFile()>
-		<cfset loc.PluginObj = $pluginObj(loc.config)>
-		<cfset loc.fileContentAfter = $readTestFile()>
-		<cfset assert('loc.fileContentBefore eq "overwritten"')>
-		<cfset assert('loc.fileContentAfter eq "overwritten"')>
-	</cffunction>
-	
-</cfcomponent>
+	function test_overwrite_plugins() {
+		fileContentBefore = $readTestFile();
+		PluginObj = $pluginObj(config);
+		fileContentAfter = $readTestFile();
+		assert('fileContentBefore eq "overwritten"');
+		assert('fileContentAfter neq "overwritten"');
+	}
+
+	function test_do_not_overwrite_plugins() {
+		config.overwritePlugins = false;
+		fileContentBefore = $readTestFile();
+		PluginObj = $pluginObj(config);
+		fileContentAfter = $readTestFile();
+		assert('fileContentBefore eq "overwritten"');
+		assert('fileContentAfter eq "overwritten"');
+	}
+
+}

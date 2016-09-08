@@ -1,44 +1,44 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-	</cffunction>
+	function setup() {
+		_controller = controller(name="dummy");
+	}
 
-	<cffunction name="test_with_struct">
-		<cfset loc.args.objectname = {firstname="tony",lastname="petruzzi"}>
-		<cfset loc.args.property = "lastname">
+	function test_with_struct() {
+		args.objectname = {firstname="tony",lastname="petruzzi"};
+		args.property = "lastname";
 
-		<cfset loc.e = loc.controller.$tagid(argumentcollection=loc.args)>
-		<cfset loc.r = "lastname">
-		<cfset assert("loc.e eq loc.r")>
+		e = _controller.$tagid(argumentcollection=args);
+		r = "lastname";
+		assert("e eq r");
 
-		<cfset loc.e = loc.controller.$tagname(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+		e = _controller.$tagname(argumentcollection=args);
+		assert("e eq r");
+	}
 
-	<cffunction name="test_with_string">
-		<cfset loc.args.objectname = "wheelsMapping.Test.view.miscellaneous">
-		<cfset loc.args.property = "lastname">
+	function test_with_string() {
+		args.objectname = "wheels.Test.view.miscellaneous";
+		args.property = "lastname";
 
-		<cfset loc.e = loc.controller.$tagid(argumentcollection=loc.args)>
-		<cfset loc.r = "miscellaneous-lastname">
-		<cfset assert("loc.e eq loc.r")>
+		e = _controller.$tagid(argumentcollection=args);
+		r = "miscellaneous-lastname";
+		assert("e eq r");
 
-		<cfset loc.e = loc.controller.$tagname(argumentcollection=loc.args)>
-		<cfset loc.r = "miscellaneous[lastname]">
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+		e = _controller.$tagname(argumentcollection=args);
+		r = "miscellaneous[lastname]";
+		assert("e eq r");
+	}
 
-	<cffunction name="test_with_array">
-		<cfset loc.args.objectname = [1,2,3,4]>
-		<cfset loc.args.property = "lastname">
+	function test_with_array() {
+		args.objectname = [1,2,3,4];
+		args.property = "lastname";
 
-		<cfset loc.e = loc.controller.$tagid(argumentcollection=loc.args)>
-		<cfset loc.r = "lastname">
-		<cfset assert("loc.e eq loc.r")>
+		e = _controller.$tagid(argumentcollection=args);
+		r = "lastname";
+		assert("e eq r");
 
-		<cfset loc.e = loc.controller.$tagname(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+		e = _controller.$tagname(argumentcollection=args);
+		assert("e eq r");
+	}
 
-</cfcomponent>
+}

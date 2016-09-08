@@ -1,28 +1,28 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset model("tag").$registerCallback(type="afterDelete", methods="callbackThatSetsProperty")>
-		<cfset loc.obj = model("tag").findOne()>	
-	</cffunction>
-	
-	<cffunction name="teardown">
-		<cfset model("tag").$clearCallbacks(type="afterDelete")>
-	</cffunction>
+	function setup() {
+		model("tag").$registerCallback(type="afterDelete", methods="callbackThatSetsProperty");
+		obj = model("tag").findOne();
+	}
 
-	<cffunction name="test_existing_object">
-		<cftransaction>
-			<cfset loc.obj.delete(transaction="none")>
-			<cftransaction action="rollback"/>
-		</cftransaction>
-		<cfset assert("StructKeyExists(loc.obj, 'setByCallback')")>
-	</cffunction>
+	function teardown() {
+		model("tag").$clearCallbacks(type="afterDelete");
+	}
 
-	<cffunction name="test_existing_object_with_skipped_callback">
-		<cftransaction>
-			<cfset loc.obj.delete(transaction="none", callbacks="false")>
-			<cftransaction action="rollback"/>
-		</cftransaction>
-		<cfset assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
-	</cffunction>
+	function test_existing_object() {
+		transaction {
+			obj.delete(transaction="none");
+			transaction action="rollback";
+		}
+		assert("StructKeyExists(obj, 'setByCallback')");
+	}
 
-</cfcomponent>
+	function test_existing_object_with_skipped_callback() {
+		transaction {
+			obj.delete(transaction="none", callbacks="false");
+			transaction action="rollback";
+		}
+		assert("NOT StructKeyExists(obj, 'setByCallback')");
+	}
+
+}

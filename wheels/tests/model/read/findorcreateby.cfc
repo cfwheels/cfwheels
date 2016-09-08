@@ -1,13 +1,13 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_findOneOrCreateBy">
-		<cftransaction>
-			<cfset loc.author = model("author").findOrCreateByFirstName(firstName="Per", lastName="Djurner")>
-			<cfset assert('IsObject(loc.author)')>
-			<cfset assert('loc.author.lastname eq "Djurner"')>
-			<cfset assert('loc.author.firstname eq "Per"')>
-			<cftransaction action="rollback">
-		</cftransaction>
-	</cffunction>
+	function test_findOneOrCreateBy() {
+		transaction {
+			author = model("author").findOrCreateByFirstName(firstName="Per", lastName="Djurner");
+			assert('IsObject(author)');
+			assert('author.lastname eq "Djurner"');
+			assert('author.firstname eq "Per"');
+			transaction action="rollback";
+		}
+	}
 
-</cfcomponent>
+}

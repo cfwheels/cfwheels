@@ -1,14 +1,14 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_find_first">
-		<cfset loc.result = model("user").findFirst()>
-		<cfset assert('loc.result.id IS 1')>
-		<cfset loc.result = model("user").findFirst(property="firstName")>
-		<cfset assert("loc.result.firstName IS 'Chris'")>
-		<cfset loc.result = model("user").findFirst(properties="firstName")>
-		<cfset assert("loc.result.firstName IS 'Chris'")>
-		<cfset loc.result = model("user").findFirst(property="firstName", where="id != 2")>
-		<cfset assert("loc.result.firstName IS 'Joe'")>
-	</cffunction>
+	function test_find_first() {
+		result = model("user").findFirst();
+		assert('result.id IS 1');
+		result = model("user").findFirst(property="firstName");
+		assert("result.firstName IS 'Chris'");
+		result = model("user").findFirst(properties="firstName");
+		assert("result.firstName IS 'Chris'");
+		result = model("user").findFirst(property="firstName", where="id != 2");
+		assert("result.firstName IS 'Joe'");
+	}
 
-</cfcomponent>
+}

@@ -1,23 +1,23 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="teardown">
-		<cfset model("tag").$clearCallbacks(type="beforeCreate,beforeUpdate")>
-	</cffunction>
+	function teardown() {
+		model("tag").$clearCallbacks(type="beforeCreate,beforeUpdate");
+	}
 
-	<cffunction name="test_existing_object">
-		<cfset model("tag").$registerCallback(type="beforeCreate", methods="callbackThatSetsProperty")>
-		<cfset model("tag").$registerCallback(type="beforeUpdate", methods="callbackThatReturnsFalse")>
-		<cfset loc.obj = model("tag").findOne()>
-		<cfset loc.obj.name = "somethingElse">
-		<cfset loc.obj.save()>
-		<cfset assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
-	</cffunction>
-	
-	<cffunction name="test_new_object">
-		<cfset model("tag").$registerCallback(type="beforeUpdate", methods="callbackThatSetsProperty")>
-		<cfset model("tag").$registerCallback(type="beforeCreate", methods="callbackThatReturnsFalse")>
-		<cfset loc.obj = model("tag").create()>
-		<cfset assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
-	</cffunction>
-	
-</cfcomponent>
+	function test_existing_object() {
+		model("tag").$registerCallback(type="beforeCreate", methods="callbackThatSetsProperty");
+		model("tag").$registerCallback(type="beforeUpdate", methods="callbackThatReturnsFalse");
+		obj = model("tag").findOne();
+		obj.name = "somethingElse";
+		obj.save();
+		assert("NOT StructKeyExists(obj, 'setByCallback')");
+	}
+
+	function test_new_object() {
+		model("tag").$registerCallback(type="beforeUpdate", methods="callbackThatSetsProperty");
+		model("tag").$registerCallback(type="beforeCreate", methods="callbackThatReturnsFalse");
+		obj = model("tag").create();
+		assert("NOT StructKeyExists(obj, 'setByCallback')");
+	}
+
+}

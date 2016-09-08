@@ -1,110 +1,99 @@
-<cfcomponent extends="Base" output="false">
+component extends="Base" output=false {
 
-	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
-		<cfscript>
-			var loc = {};
-			loc.rv = "lastId";
-		</cfscript>
-		<cfreturn loc.rv>
-	</cffunction>
+	public string function $generatedKey() {
+		local.rv = "lastId";
+		return local.rv;
+	}
 
-	<cffunction name="$randomOrder" returntype="string" access="public" output="false">
-		<cfscript>
-			var loc = {};
-			loc.rv = "random()";
-		</cfscript>
-		<cfreturn loc.rv>
-	</cffunction>
+	public string function $randomOrder() {
+		local.rv = "random()";
+		return local.rv;
+	}
 
-	<cffunction name="$getType" returntype="string" access="public" output="false">
-		<cfargument name="type" type="string" required="true">
-		<cfscript>
-			var loc = {};
-			switch (arguments.type)
-			{
-				case "bigint": case "int8": case "bigserial": case "serial8":
-					loc.rv = "cf_sql_bigint";
-					break;
-				case "bool": case "boolean": case "bit": case "varbit":
-					loc.rv = "cf_sql_bit";
-					break;
-				case "bytea":
-					loc.rv = "cf_sql_binary";
-					break;
-				case "char": case "character":
-					loc.rv = "cf_sql_char";
-					break;
-				case "date": case "timestamp": case "timestamptz":
-					loc.rv = "cf_sql_timestamp";
-					break;
-				case "decimal": case "double": case "precision": case "float": case "float4": case "float8":
-					loc.rv = "cf_sql_decimal";
-					break;
-				case "integer": case "int": case "int4": case "serial": case "oid":
-					// oid cols should probably be avoided - placed here for completeness
-					loc.rv = "cf_sql_integer";
-					break;
-				case "numeric": case "smallmoney": case "money":
-					// postgres has deprecated the money type: http://www.postgresql.org/docs/8.1/static/datatype-money.html
-					loc.rv = "cf_sql_numeric";
-					break;
-				case "real":
-					loc.rv = "cf_sql_real";
-					break;
-				case "smallint": case "int2":
-					loc.rv = "cf_sql_smallint";
-					break;
-				case "text":
-					loc.rv = "cf_sql_longvarchar";
-					break;
-				case "time": case "timetz":
-					loc.rv = "cf_sql_time";
-					break;
-				case "varchar": case "varying": case "bpchar": case "uuid":
-					loc.rv = "cf_sql_varchar";
-					break;
+	public string function $getType(required string type) {
+		switch (arguments.type) {
+			case "bigint": case "int8": case "bigserial": case "serial8":
+				local.rv = "cf_sql_bigint";
+				break;
+			case "bool": case "boolean": case "bit": case "varbit":
+				local.rv = "cf_sql_bit";
+				break;
+			case "bytea":
+				local.rv = "cf_sql_binary";
+				break;
+			case "char": case "character":
+				local.rv = "cf_sql_char";
+				break;
+			case "date": case "timestamp": case "timestamptz":
+				local.rv = "cf_sql_timestamp";
+				break;
+			case "decimal": case "double": case "precision": case "float": case "float4": case "float8":
+				local.rv = "cf_sql_decimal";
+				break;
+			case "integer": case "int": case "int4": case "serial": case "oid":
+				// oid cols should probably be avoided - placed here for completeness
+				local.rv = "cf_sql_integer";
+				break;
+			case "numeric": case "smallmoney": case "money":
+				// postgres has deprecated the money type: http://www.postgresql.org/docs/8.1/static/datatype-money.html
+				local.rv = "cf_sql_numeric";
+				break;
+			case "real":
+				local.rv = "cf_sql_real";
+				break;
+			case "smallint": case "int2":
+				local.rv = "cf_sql_smallint";
+				break;
+			case "text":
+				local.rv = "cf_sql_longvarchar";
+				break;
+			case "time": case "timetz":
+				local.rv = "cf_sql_time";
+				break;
+			case "varchar": case "varying": case "bpchar": case "uuid":
+				local.rv = "cf_sql_varchar";
+				break;
+		}
+		return local.rv;
+	}
+
+	public struct function $querySetup(
+	  required array sql,
+	  numeric limit="0",
+	  numeric offset="0",
+	  required boolean parameterize,
+	  string $primaryKey=""
+	) {
+		arguments = $convertMaxRowsToLimit(arguments);
+		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
+		arguments.sql = $addColumnsToSelectAndGroupBy(arguments.sql);
+		local.rv = $performQuery(argumentCollection=arguments);
+		return local.rv;
+	}
+
+	public any function $identitySelect(
+	  required struct queryAttributes,
+	  required struct result,
+	  required string primaryKey
+	) {
+		var query = {};
+		local.sql = Trim(arguments.result.sql);
+		if (Left(local.sql, 11) IS "INSERT INTO" && ! StructKeyExists(arguments.result, $generatedKey())) {
+			local.startPar = Find("(", local.sql) + 1;
+			local.endPar = Find(")", local.sql);
+			local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
+			if (! ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
+				// Railo/ACF doesn't support PostgreSQL natively when it comes to returning
+				// the primary key value of the last inserted record so we have to do it manually by using the sequence
+				local.rv = {};
+				local.tbl = SpanExcluding(Right(local.sql, Len(local.sql)-12), " ")
+				query = $query(sql="SELECT currval(pg_get_serial_sequence('#local.tbl#', '#arguments.primaryKey#')) AS lastId", argumentCollection=arguments.queryAttributes);
+				local.rv[$generatedKey()] = query.lastId;
+				return local.rv;
 			}
-		</cfscript>
-		<cfreturn loc.rv>
-	</cffunction>
-	
-	<cffunction name="$query" returntype="struct" access="public" output="false">
-		<cfargument name="sql" type="array" required="true">
-		<cfargument name="limit" type="numeric" required="false" default="0">
-		<cfargument name="offset" type="numeric" required="false" default="0">
-		<cfargument name="parameterize" type="boolean" required="true">
-		<cfargument name="$primaryKey" type="string" required="false" default="">
-		<cfscript>
-			var loc = {};
-			arguments = $convertMaxRowsToLimit(arguments);
-			arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
-			arguments.sql = $addColumnsToSelectAndGroupBy(arguments.sql);
-			loc.rv = $performQuery(argumentCollection=arguments);
-		</cfscript>
-		<cfreturn loc.rv>
-	</cffunction>
-	
-	<cffunction name="$identitySelect" returntype="any" access="public" output="false">
-		<cfargument name="queryAttributes" type="struct" required="true">
-		<cfargument name="result" type="struct" required="true">
-		<cfargument name="primaryKey" type="string" required="true">
-		<cfset var loc = StructNew()>
-		<cfset var query = StructNew()>
-		<cfset loc.sql = Trim(arguments.result.sql)>
-		<cfif Left(loc.sql, 11) IS "INSERT INTO" AND NOT StructKeyExists(arguments.result, $generatedKey())>
-			<cfset loc.startPar = Find("(", loc.sql) + 1>
-			<cfset loc.endPar = Find(")", loc.sql)>
-			<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
-			<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
-				<!--- Railo/ACF doesn't support PostgreSQL natively when it comes to returning the primary key value of the last inserted record so we have to do it manually by using the sequence --->
-				<cfset loc.rv = StructNew()>
-				<cfset loc.tbl = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
-				<cfquery attributeCollection="#arguments.queryAttributes#">SELECT currval(pg_get_serial_sequence('#loc.tbl#', '#arguments.primaryKey#')) AS lastId</cfquery>
-				<cfset loc.rv[$generatedKey()] = query.name.lastId>
-				<cfreturn loc.rv>
-			</cfif>
-		</cfif>
-	</cffunction>
+		}
+	}
 
-	<cfinclude template="../../plugins/injection.cfm">
-</cfcomponent>
+	include "../../plugins/injection.cfm";
+
+}

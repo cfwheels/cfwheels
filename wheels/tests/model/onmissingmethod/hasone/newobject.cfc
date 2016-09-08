@@ -1,14 +1,14 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.authorModel = model("author")>
-	</cffunction>
- 
- 	<cffunction name="test_newObject_valid">
-		<cfset loc.author = loc.authorModel.findOne(where="firstName = 'James'")>
-		<cfset loc.profile = loc.author.newProfile() />
-		<cfset assert('IsObject(loc.profile) eq true')>
-		<cfset assert('loc.profile.authorid eq loc.author.id')>
-	</cffunction>
+	function setup() {
+		authorModel = model("author");
+	}
 
-</cfcomponent>
+ 	function test_newObject_valid() {
+		author = authorModel.findOne(where="firstName = 'James'");
+		profile = author.newProfile();
+		assert('IsObject(profile) eq true');
+		assert('profile.authorid eq author.id');
+	}
+
+}

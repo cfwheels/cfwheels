@@ -1,243 +1,243 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.user = model("user")>
-		<cfset loc.shop = model("shop")>
-	</cffunction>
+	function setup() {
+		user = model("user");
+		shop = model("shop");
+	}
 
-	<cffunction name="test_select_distinct_addresses">
-		<cfset loc.q = loc.user.findAll(select="address", distinct="true", order="address")>
-		<cfset assert('loc.q.recordcount eq 4')>
-		<cfset loc.e = "123 Petruzzi St.|456 Peters Dr.|789 Djurner Ave.|987 Riera Blvd.">
-		<cfset loc.r = valuelist(loc.q.address, "|")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_select_distinct_addresses() {
+		q = user.findAll(select="address", distinct="true", order="address");
+		assert('q.recordcount eq 4');
+		e = "123 Petruzzi St.|456 Peters Dr.|789 Djurner Ave.|987 Riera Blvd.";
+		r = valuelist(q.address, "|");
+		assert('e eq r');
+	}
 
-	<cffunction name="test_select_users_groupby_address">
-		<cfset loc.q = loc.user.findAll(select="address", group="address", order="address", result="loc.result")>
-		<cfset assert('loc.q.recordcount eq 4')>
-		<cfset loc.e = "123 Petruzzi St.|456 Peters Dr.|789 Djurner Ave.|987 Riera Blvd.">
-		<cfset loc.r = valuelist(loc.q.address, "|")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_select_users_groupby_address() {
+		q = user.findAll(select="address", group="address", order="address", result="result");
+		assert('q.recordcount eq 4');
+		e = "123 Petruzzi St.|456 Peters Dr.|789 Djurner Ave.|987 Riera Blvd.";
+		r = valuelist(q.address, "|");
+		assert('e eq r');
+	}
 
- 	<cffunction name="test_findByKey">
-		<cfset loc.e = loc.user.findOne(where="lastname = 'Petruzzi'")>
-		<cfset loc.q = loc.user.findByKey(loc.e.id)>
-		<cfset assert('loc.q.id eq loc.e.id')>
-	</cffunction>
+ 	function test_findByKey() {
+		e = user.findOne(where="lastname = 'Petruzzi'");
+		q = user.findByKey(e.id);
+		assert('q.id eq e.id');
+	}
 
- 	<cffunction name="test_findByKey_returns_object_when_key_has_leading_space">
-		<cfset loc.e = loc.shop.findByKey(" shop6")>
-		<cfset assert('isobject(loc.e)')>
-	</cffunction>
+ 	function test_findByKey_returns_object_when_key_has_leading_space() {
+		e = shop.findByKey(" shop6");
+		assert('isobject(e)');
+	}
 
- 	<cffunction name="test_findByKey_returns_false_when_record_not_found">
-		<cfset loc.q = loc.user.findByKey(999999999)>
-		<cfset assert('loc.q eq false')>
-	</cffunction>
+ 	function test_findByKey_returns_false_when_record_not_found() {
+		q = user.findByKey(999999999);
+		assert('q eq false');
+	}
 
- 	<cffunction name="test_findByKey_returns_false_when_passed_blank_string">
-		<cfset loc.q = loc.user.findByKey("")>
-		<cfset assert('loc.q eq false')>
-	</cffunction>
+ 	function test_findByKey_returns_false_when_passed_blank_string() {
+		q = user.findByKey("");
+		assert('q eq false');
+	}
 
- 	<cffunction name="test_findByKey_returns_empty_query_when_record_not_found_with_return_as_equal_query">
-		<cfset loc.q = loc.user.findByKey(key=999999999, returnAs="query")>
-		<cfset assert('loc.q.RecordCount eq false')>
-	</cffunction>
+ 	function test_findByKey_returns_empty_query_when_record_not_found_with_return_as_equal_query() {
+		q = user.findByKey(key=999999999, returnAs="query");
+		assert('q.RecordCount eq false');
+	}
 
- 	<cffunction name="test_findOne">
-		<cfset loc.e = loc.user.findOne(where="lastname = 'Petruzzi'")>
-		<cfset assert('isobject(loc.e)')>
-	</cffunction>
+ 	function test_findOne() {
+		e = user.findOne(where="lastname = 'Petruzzi'");
+		assert('isobject(e)');
+	}
 
- 	<cffunction name="test_findOne_returns_false_when_record_not_found">
-		<cfset loc.e = loc.user.findOne(where="lastname = 'somenamenotfound'")>
-		<cfset assert('loc.e eq false')>
-	</cffunction>
+ 	function test_findOne_returns_false_when_record_not_found() {
+		e = user.findOne(where="lastname = 'somenamenotfound'");
+		assert('e eq false');
+	}
 
- 	<cffunction name="test_findOne_returns_empty_query_when_record_not_found_with_return_as_equal_query">
-		<cfset loc.e = loc.user.findOne(where="lastname = 'somenamenotfound'", returnAs="query")>
-		<cfset assert('loc.e.RecordCount eq false')>
-	</cffunction>
+ 	function test_findOne_returns_empty_query_when_record_not_found_with_return_as_equal_query() {
+		e = user.findOne(where="lastname = 'somenamenotfound'", returnAs="query");
+		assert('e.RecordCount eq false');
+	}
 
-	<cffunction name="test_findOne_returns_false_when_record_not_found_with_inner_join_include">
-		<cfset loc.e = loc.user.findOne(where="lastname= = 'somenamenotfound'", include="galleries") />
-		<cfset assert('loc.e eq false')>
-	</cffunction>
+	function test_findOne_returns_false_when_record_not_found_with_inner_join_include() {
+		e = user.findOne(where="lastname= = 'somenamenotfound'", include="galleries");
+		assert('e eq false');
+	}
 
-	<cffunction name="test_findOne_returns_false_when_record_not_found_with_outer_join_include">
-		<cfset loc.e = loc.user.findOne(where="lastname= = 'somenamenotfound'", include="outerjoinphotogalleries") />
-		<cfset assert('loc.e eq false')>
-	</cffunction>
+	function test_findOne_returns_false_when_record_not_found_with_outer_join_include() {
+		e = user.findOne(where="lastname= = 'somenamenotfound'", include="outerjoinphotogalleries");
+		assert('e eq false');
+	}
 
- 	<cffunction name="test_findAll">
-		<cfset loc.q = loc.user.findAll()>
-		<cfset assert('loc.q.recordcount eq 5')>
-		<cfset loc.q = loc.user.findAll(where="lastname = 'Petruzzi' OR lastname = 'Peters'", order="lastname")>
-		<cfset assert('loc.q.recordcount eq 2')>
-		<cfset assert('valuelist(loc.q.lastname) eq "peters,Petruzzi"')>
-	</cffunction>
+ 	function test_findAll() {
+		q = user.findAll();
+		assert('q.recordcount eq 5');
+		q = user.findAll(where="lastname = 'Petruzzi' OR lastname = 'Peters'", order="lastname");
+		assert('q.recordcount eq 2');
+		assert('valuelist(q.lastname) eq "peters,Petruzzi"');
+	}
 
-	<cffunction name="test_findAllByXXX">
-		<cfset loc.q = loc.user.findAllByZipcode(value="22222", order="id")>
-		<cfset assert('loc.q.recordcount eq 2')>
-		<cfset loc.q = loc.user.findAllByZipcode(value="11111", order="id")>
-		<cfset assert('loc.q.recordcount eq 1')>
-	</cffunction>
+	function test_findAllByXXX() {
+		q = user.findAllByZipcode(value="22222", order="id");
+		assert('q.recordcount eq 2');
+		q = user.findAllByZipcode(value="11111", order="id");
+		assert('q.recordcount eq 1');
+	}
 
-	<cffunction name="test_findByKey_norecords_returns_correct_type">
-		<cfset loc.q = loc.user.findByKey("0")>
-		<cfset debug('loc.q', false)>
-		<cfset assert('isboolean(loc.q) and loc.q eq false')>
+	function test_findByKey_norecords_returns_correct_type() {
+		q = user.findByKey("0");
+		debug('q', false);
+		assert('isboolean(q) and q eq false');
 
-		<cfset loc.q = loc.user.findByKey(key="0", returnas="query")>
-		<cfset debug('loc.q', false)>
-		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
+		q = user.findByKey(key="0", returnas="query");
+		debug('q', false);
+		assert('isquery(q) and q.recordcount eq 0');
 
-		<cfset loc.q = loc.user.findByKey(key="0", returnas="object")>
-		<cfset debug('loc.q', false)>
-		<cfset assert('isboolean(loc.q) and loc.q eq false')>
+		q = user.findByKey(key="0", returnas="object");
+		debug('q', false);
+		assert('isboolean(q) and q eq false');
 
-		<!--- readd when we have implemented the code to throw an error when an incorrect returnAs value is passed in
-		<cfset loc.q = raised('loc.user.findByKey(key="0", returnas="objects")')>
-		<cfset loc.r = "Wheels.IncorrectArgumentValue">
-		<cfset debug('loc.q', false)>
-		<cfset assert('loc.q eq loc.r')> --->
-	</cffunction>
+		/* readd when we have implemented the code to throw an error when an incorrect returnAs value is passed in
+		q = raised('user.findByKey(key="0", returnas="objects")');
+		r = "Wheels.IncorrectArgumentValue";
+		debug('q', false);
+		assert('q eq r'); */
+	}
 
-	<cffunction name="test_findOne_norecords_returns_correct_type">
-		<cfset loc.q = loc.user.findOne(where="id = 0")>
-		<cfset debug('loc.q', false)>
-		<cfset assert('isboolean(loc.q) and loc.q eq false')>
+	function test_findOne_norecords_returns_correct_type() {
+		q = user.findOne(where="id = 0");
+		debug('q', false);
+		assert('isboolean(q) and q eq false');
 
-		<cfset loc.q = loc.user.findOne(where="id = 0", returnas="query")>
-		<cfset debug('loc.q', false)>
-		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
+		q = user.findOne(where="id = 0", returnas="query");
+		debug('q', false);
+		assert('isquery(q) and q.recordcount eq 0');
 
-		<cfset loc.q = loc.user.findOne(where="id = 0", returnas="object")>
-		<cfset debug('loc.q', false)>
-		<cfset assert('isboolean(loc.q) and loc.q eq false')>
+		q = user.findOne(where="id = 0", returnas="object");
+		debug('q', false);
+		assert('isboolean(q) and q eq false');
 
-		<!--- readd when we have implemented the code to throw an error when an incorrect returnAs value is passed in
-		<cfset loc.q = raised('loc.user.findOne(where="id = 0", returnas="objects")')>
-		<cfset loc.r = "Wheels.IncorrectArgumentValue">
-		<cfset debug('loc.q', false)>
-		<cfset assert('loc.q eq loc.r')> --->
-	</cffunction>
+		/* readd when we have implemented the code to throw an error when an incorrect returnAs value is passed in
+		q = raised('user.findOne(where="id = 0", returnas="objects")');
+		r = "Wheels.IncorrectArgumentValue";
+		debug('q', false);
+		assert('q eq r'); */
+	}
 
-	<cffunction name="test_findAll_returnAs_query_noRecords_returns_correct_type">
-		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="query")>
-		<cfset debug('loc.q', false)>
-		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
-	</cffunction>
+	function test_findAll_returnAs_query_noRecords_returns_correct_type() {
+		q = user.findAll(where="id = 0", returnas="query");
+		debug('q', false);
+		assert('isquery(q) and q.recordcount eq 0');
+	}
 
-	<cffunction name="test_findAll_returnAs_structs_noRecords_returns_correct_type">
-		<cfset loc.q = loc.user.findAll(where="id = 0", returnAs="structs")>
-		<cfset debug('loc.q', false)>
-		<cfset assert('isarray(loc.q) and arrayisempty(loc.q)')>
-	</cffunction>
+	function test_findAll_returnAs_structs_noRecords_returns_correct_type() {
+		q = user.findAll(where="id = 0", returnAs="structs");
+		debug('q', false);
+		assert('isarray(q) and arrayisempty(q)');
+	}
 
-	<cffunction name="test_findAll_returnAs_objects_noRecords_returns_correct_type">
-		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="objects")>
-		<cfset debug('loc.q', false)>
-		<cfset assert('isarray(loc.q) and arrayisempty(loc.q)')>
-	</cffunction>
+	function test_findAll_returnAs_objects_noRecords_returns_correct_type() {
+		q = user.findAll(where="id = 0", returnas="objects");
+		debug('q', false);
+		assert('isarray(q) and arrayisempty(q)');
+	}
 
-	<cffunction name="test_findAll_returnAs_invalid_throws_error">
-		<cfset loc.q = raised('loc.user.findAll(where="id = 1", returnas="notvalid")')>
-		<cfset loc.r = "Wheels.IncorrectArgumentValue">
-		<cfset debug('loc.q', false)>
-		<cfset assert('loc.q eq loc.r')>
-	</cffunction>
+	function test_findAll_returnAs_invalid_throws_error() {
+		q = raised('user.findAll(where="id = 1", returnas="notvalid")');
+		r = "Wheels.IncorrectArgumentValue";
+		debug('q', false);
+		assert('q eq r');
+	}
 
-	<cffunction name="test_exists_by_key_valid">
-		<cfset loc.e = loc.user.findOne(where="lastname = 'Petruzzi'")>
-		<cfset loc.r = loc.user.exists(loc.e.id)>
-		<cfset assert('loc.r eq true')>
-	</cffunction>
+	function test_exists_by_key_valid() {
+		e = user.findOne(where="lastname = 'Petruzzi'");
+		r = user.exists(e.id);
+		assert('r eq true');
+	}
 
-	<cffunction name="test_exists_by_key_invalid">
-		<cfset loc.r = loc.user.exists(0)>
-		<cfset assert('loc.r eq false')>
-	</cffunction>
+	function test_exists_by_key_invalid() {
+		r = user.exists(0);
+		assert('r eq false');
+	}
 
-	<cffunction name="test_exists_by_where_one_record_valid">
-		<cfset loc.r = loc.user.exists(where="lastname = 'Petruzzi'")>
-		<cfset assert('loc.r eq true')>
-	</cffunction>
+	function test_exists_by_where_one_record_valid() {
+		r = user.exists(where="lastname = 'Petruzzi'");
+		assert('r eq true');
+	}
 
-	<cffunction name="test_exists_by_where_one_record_invalid">
-		<cfset loc.r = loc.user.exists(where="lastname = 'someoneelse'")>
-		<cfset assert('loc.r eq false')>
-	</cffunction>
+	function test_exists_by_where_one_record_invalid() {
+		r = user.exists(where="lastname = 'someoneelse'");
+		assert('r eq false');
+	}
 
-	<cffunction name="test_exists_by_where_two_records_valid">
-		<cfset loc.r = loc.user.exists(where="zipcode = '22222'")>
-		<cfset assert('loc.r eq true')>
-	</cffunction>
+	function test_exists_by_where_two_records_valid() {
+		r = user.exists(where="zipcode = '22222'");
+		assert('r eq true');
+	}
 
-	<cffunction name="test_exists_any_record">
-		<cfset loc.r = loc.user.exists()>
-		<cfset assert('loc.r eq true')>
-	</cffunction>
+	function test_exists_any_record() {
+		r = user.exists();
+		assert('r eq true');
+	}
 
-	<cffunction name="test_exists_no_records">
-		<cftransaction action="begin">
-			<cfset loc.user.deleteAll()>
-			<cfset loc.r = loc.user.exists()>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.r eq false')>
-	</cffunction>
+	function test_exists_no_records() {
+		transaction action="begin" {
+			user.deleteAll();
+			r = user.exists();
+			transaction action="rollback";
+		}
+		assert('r eq false');
+	}
 
-	<cffunction name="test_allow_negative_values_in_where_clause">
-		<cfset loc.r = loc.user.exists(where="id = -1")>
-		<cfset assert('loc.r eq false')>
-	</cffunction>
+	function test_allow_negative_values_in_where_clause() {
+		r = user.exists(where="id = -1");
+		assert('r eq false');
+	}
 
-	<cffunction name="test_findByKey_with_include_soft_deletes">
-		<cftransaction action="begin">
-			<cfset loc.post1 = model("Post").findOne()>
-			<cfset loc.post1.delete(transaction="none")>
-			<cfset loc.post2 = model("Post").findByKey(key=loc.post1.id, includeSoftDeletes=true)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('IsObject(loc.post2) is true')>
-	</cffunction>
+	function test_findByKey_with_include_soft_deletes() {
+		transaction action="begin" {
+			post1 = model("Post").findOne();
+			post1.delete(transaction="none");
+			post2 = model("Post").findByKey(key=post1.id, includeSoftDeletes=true);
+			transaction action="rollback";
+		}
+		assert('IsObject(post2) is true');
+	}
 
-	<cffunction name="test_findOne_with_include_soft_deletes">
-		<cftransaction action="begin">
-			<cfset loc.post1 = model("Post").findOne()>
-			<cfset loc.post1.delete(transaction="none")>
-			<cfset loc.post2 = model("Post").findOne(where="id=#loc.post1.id#", includeSoftDeletes=true)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('IsObject(loc.post2) is true')>
-	</cffunction>
+	function test_findOne_with_include_soft_deletes() {
+		transaction action="begin" {
+			post1 = model("Post").findOne();
+			post1.delete(transaction="none");
+			post2 = model("Post").findOne(where="id=#post1.id#", includeSoftDeletes=true);
+			transaction action="rollback";
+		}
+		assert('IsObject(post2) is true');
+	}
 
-	<cffunction name="test_findAll_with_include_soft_deletes">
-		<cftransaction action="begin">
-			<cfset model("Post").deleteAll()>
-			<cfset loc.allPosts = model("Post").findAll(includeSoftDeletes=true)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.allPosts.recordcount eq 5')>
-	</cffunction>
+	function test_findAll_with_include_soft_deletes() {
+		transaction action="begin" {
+			model("Post").deleteAll();
+			allPosts = model("Post").findAll(includeSoftDeletes=true);
+			transaction action="rollback";
+		}
+		assert('allPosts.recordcount eq 5');
+	}
 
-	<cffunction name="test_findOne_returns_empty_array_for_included_model_when_none_exist">
-		<cfset loc.e = model("author").findOne(where="lastname = 'Bellenie'", include="posts")>
-		<cfset assert('IsArray(loc.e.posts) && ArrayIsEmpty(loc.e.posts)')>
-	</cffunction>
+	function test_findOne_returns_empty_array_for_included_model_when_none_exist() {
+		e = model("author").findOne(where="lastname = 'Bellenie'", include="posts");
+		assert('IsArray(e.posts) && ArrayIsEmpty(e.posts)');
+	}
 
-	<cffunction name="test_findAll_with_softdeleted_associated_rows">
-		<cftransaction action="begin">
-			<cfset model("Post").deleteAll()>
-			<cfset loc.posts = model("Author").findByKey(key=1, include="Posts", returnAs="query")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.posts.recordcount eq 1')>
-	</cffunction>
+	function test_findAll_with_softdeleted_associated_rows() {
+		transaction action="begin" {
+			model("Post").deleteAll();
+			posts = model("Author").findByKey(key=1, include="Posts", returnAs="query");
+			transaction action="rollback";
+		}
+		assert('posts.recordcount eq 1');
+	}
 
-</cfcomponent>
+}

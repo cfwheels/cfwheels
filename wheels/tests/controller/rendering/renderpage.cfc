@@ -1,33 +1,38 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfinclude template="setupAndTeardown.cfm">
+	function setup() {
+		include "setup.cfm";
+		params = {controller="test", action="test"};
+		_controller = controller("test", params);
+	}
 
-	<cfset params = {controller="test", action="test"}>
-	<cfset loc.controller = controller("test", params)>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="test_rendering_current_action">
-		<cfset result = loc.controller.renderPage()>
-		<cfset assert("loc.controller.response() Contains 'view template content'")>
-	</cffunction>
+	function test_rendering_current_action() {
+		result = _controller.renderPage();
+		assert("_controller.response() Contains 'view template content'");
+	}
 
-	<cffunction name="test_rendering_view_for_another_controller_and_action">
-		<cfset result = loc.controller.renderPage(controller="main", action="template")>
-		<cfset assert("loc.controller.response() Contains 'main controller template content'")>
-	</cffunction>
+	function test_rendering_view_for_another_controller_and_action() {
+		result = _controller.renderPage(controller="main", action="template");
+		assert("_controller.response() Contains 'main controller template content'");
+	}
 
-	<cffunction name="test_rendering_view_for_another_action">
-		<cfset result = loc.controller.renderPage(action="template")>
-		<cfset assert("loc.controller.response() Contains 'specific template content'")>
-	</cffunction>
+	function test_rendering_view_for_another_action() {
+		result = _controller.renderPage(action="template");
+		assert("_controller.response() Contains 'specific template content'");
+	}
 
-	<cffunction name="test_rendering_specific_template">
-		<cfset result = loc.controller.renderPage(template="template")>
-		<cfset assert("loc.controller.response() Contains 'specific template content'")>
-	</cffunction>
+	function test_rendering_specific_template() {
+		result = _controller.renderPage(template="template");
+		assert("_controller.response() Contains 'specific template content'");
+	}
 
-	<cffunction name="test_rendering_and_returning_as_string">
-		<cfset result = loc.controller.renderPage(returnAs="string")>
-		<cfset assert("NOT StructKeyExists(request.wheels, 'response') AND result Contains 'view template content'")>
-	</cffunction>
+	function test_rendering_and_returning_as_string() {
+		result = _controller.renderPage(returnAs="string");
+		assert("NOT StructKeyExists(request.wheels, 'response') AND result Contains 'view template content'");
+	}
 
-</cfcomponent>
+}

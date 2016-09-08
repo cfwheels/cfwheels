@@ -1,7 +1,7 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset table("userphotos")>
-	</cffunction>
+	function init() {
+		table("userphotos");
+	}
 
-</cfcomponent>
+}

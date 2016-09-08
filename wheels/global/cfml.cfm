@@ -187,10 +187,10 @@
 <cffunction name="$dbinfo" returntype="any" access="public" output="false">
 	<cfset var loc = {}>
 	<cfset arguments.name = "loc.rv">
-	<cfif NOT Len(arguments.username)>
+	<cfif StructKeyExists(arguments, "username") && ! Len(arguments.username)>
 		<cfset StructDelete(arguments, "username")>
 	</cfif>
-	<cfif NOT Len(arguments.password)>
+	<cfif StructKeyExists(arguments, "password") && ! Len(arguments.password)>
 		<cfset StructDelete(arguments, "password")>
 	</cfif>
 	<cfdbinfo attributeCollection="#arguments#">
@@ -215,5 +215,23 @@
 	<cfwddx attributeCollection="#arguments#">
 	<cfif StructKeyExists(loc, "output")>
 		<cfreturn loc.output>
+	</cfif>
+</cffunction>
+
+<cffunction name="$zip" returntype="any" access="public" output="false">
+	<cfzip attributeCollection="#arguments#">
+</cffunction>
+
+<cffunction name="$query" returntype="any" access="public" output="false">
+	<cfargument name="sql" type="string" required="true">
+	<cfset StructDelete(arguments, "name")>
+	<!--- allow the use of query of queries, caveat: Query must be called query. Eg: SELECT * from query --->
+	<cfif StructKeyExists(arguments, "query") && IsQuery(arguments.query)>
+		<cfset var query = Duplicate(arguments.query)>
+	</cfif>
+	<cfquery attributeCollection="#arguments#" name="local.rv">#PreserveSingleQuotes(arguments.sql)#</cfquery>
+	<!--- some sql statements may not return a value --->
+	<cfif StructKeyExists(local, "rv")>
+		<cfreturn local.rv>
 	</cfif>
 </cffunction>

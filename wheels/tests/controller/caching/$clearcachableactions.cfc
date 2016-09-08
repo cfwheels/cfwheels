@@ -1,12 +1,13 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfset loc.controller = controller(name="dummy")>
-	
-	<cffunction name="test_clearing_cachable_actions">
-		<cfset loc.controller.caches(action="dummy")>
-		<cfset loc.controller.$clearCachableActions()>
-		<cfset loc.r = loc.controller.$cachableActions()>
-		<cfset assert("ArrayLen(loc.r) IS 0")>
-	</cffunction>
-	
-</cfcomponent>
+	function setup() {
+	  _controller = controller(name="dummy");
+	}
+
+	function test_clearing_cachable_actions() {
+		_controller.caches(action="dummy");
+		_controller.$clearCachableActions();
+		r = _controller.$cachableActions();
+		assert("ArrayLen(r) IS 0");
+	}
+}

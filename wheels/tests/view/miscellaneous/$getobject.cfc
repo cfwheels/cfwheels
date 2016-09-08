@@ -1,23 +1,23 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfinclude template="/wheelsMapping/view/miscellaneous.cfm">
+	include "/wheels/view/miscellaneous.cfm";
 
-	<cffunction name="test_getting_object_from_request_scope">
-		<cfset request.obj = model("post").findOne()>
-		<cfset loc.result = $getObject("request.obj")>
-		<cfset assert("IsObject(loc.result)")>
-	</cffunction>
+	function test_getting_object_from_request_scope() {
+		request.obj = model("post").findOne();
+		result = $getObject("request.obj");
+		assert("IsObject(result)");
+	}
 
-	<cffunction name="test_getting_object_from_default_scope">
-		<cfset obj = model("post").findOne()>
-		<cfset loc.result = $getObject("obj")>
-		<cfset assert("IsObject(loc.result)")>
-	</cffunction>
+	function test_getting_object_from_default_scope() {
+		obj = model("post").findOne();
+		result = $getObject("obj");
+		assert("IsObject(result)");
+	}
 
-	<cffunction name="test_getting_object_from_variables_scope">
-		<cfset variables.obj = model("post").findOne()>
-		<cfset loc.result = $getObject("variables.obj")>
-		<cfset assert("IsObject(loc.result)")>
-	</cffunction>
+	function test_getting_object_from_variables_scope() {
+		variables.obj = model("post").findOne();
+		result = $getObject("variables.obj");
+		assert("IsObject(result)");
+	}
 
-</cfcomponent>
+}

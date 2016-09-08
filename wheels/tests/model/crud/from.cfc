@@ -1,25 +1,27 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_from_clause">
-		<cfset loc.result = model("author").$fromClause(include="")>
-		<cfset assert("loc.result IS 'FROM authors'")>
-	</cffunction>
+	function test_from_clause() {
+		result = model("author").$fromClause(include="");
+		assert("result IS 'FROM authors'");
+	}
 
-	<cffunction name="test_from_clause_with_mapped_table">
-		<cfset model("author").table("tbl_authors")>
-		<cfset loc.result = model("author").$fromClause(include="")>
-		<cfset model("author").table("authors")>
-		<cfset assert("loc.result IS 'FROM tbl_authors'")>
-	</cffunction>
+	function test_from_clause_with_mapped_table() {
+		model("author").table("tbl_authors");
+		result = model("author").$fromClause(include="");
+		model("author").table("authors");
+		assert("result IS 'FROM tbl_authors'");
+	}
 
-	<cffunction name="test_from_clause_with_include">
-		<cfset loc.result = model("author").$fromClause(include="posts")>
-		<cfset assert("loc.result IS 'FROM authors LEFT OUTER JOIN posts ON authors.id = posts.authorid AND posts.deletedat IS NULL'")>
-	</cffunction>
+	function test_from_clause_with_include() {
+		result = model("author").$fromClause(include="posts");
+		assert("result IS 'FROM authors LEFT OUTER JOIN posts ON authors.id = posts.authorid AND posts.deletedat IS NULL'");
+	}
 
-<!---test:
+/*
+test:
 inner/outer join
 composite keys joining
-mapped pkeys--->
+mapped pkeys
+*/
 
-</cfcomponent>
+}

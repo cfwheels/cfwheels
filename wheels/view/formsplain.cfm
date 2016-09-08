@@ -1,119 +1,111 @@
-<!--- PUBLIC VIEW HELPER FUNCTIONS --->
+<cfscript>
+	/**
+	* PUBLIC VIEW HELPER FUNCTIONS
+	*/
 
-<cffunction name="textFieldTag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="value" type="string" required="false" default="">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfargument name="type" type="string" required="false" default="text">
-	<cfscript>
-		var loc = {};
+	public string function textFieldTag(
+		required string name,
+		string value="",
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel,
+		string type="text"
+	) {
 		$args(name="textFieldTag", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.value;
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "value");
-		loc.rv = textField(argumentCollection=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = textField(argumentCollection=arguments);
+		return local.rv;
+	}
 
-<cffunction name="passwordFieldTag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="value" type="string" required="false" default="">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public string function passwordFieldTag(
+		required string name,
+		string value="",
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel
+	) {
 		$args(name="passwordFieldTag", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.value;
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "value");
-		loc.rv = passwordField(argumentCollection=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = passwordField(argumentCollection=arguments);
+		return local.rv;
+	}
 
-<cffunction name="hiddenFieldTag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="value" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
+	public string function hiddenFieldTag(
+		required string name,
+		string value=""
+	) {
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.value;
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "value");
-		loc.rv = hiddenField(argumentCollection=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = hiddenField(argumentCollection=arguments);
+		return local.rv;
+	}
 
-<cffunction name="fileFieldTag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public string function fileFieldTag(
+		required string name,
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel
+	) {
 		$args(name="fileFieldTag", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = "";
 		StructDelete(arguments, "name");
-		loc.rv = fileField(argumentCollection=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = fileField(argumentCollection=arguments);
+		return local.rv;
+	}
 
-<cffunction name="textAreaTag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="content" type="string" required="false" default="">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public string function textAreaTag(
+		required string name,
+		string content="",
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel
+	) {
 		$args(name="textAreaTag", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.content;
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "content");
-		loc.rv = textArea(argumentCollection=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = textArea(argumentCollection=arguments);
+		return local.rv;
+	}
 
-<cffunction name="radioButtonTag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="value" type="string" required="true">
-	<cfargument name="checked" type="boolean" required="false" default="false">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public string function radioButtonTag(
+		required string name,
+		required string value,
+		boolean checked=false,
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel
+	) {
 		$args(name="radioButtonTag", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
@@ -130,24 +122,22 @@
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "value");
 		StructDelete(arguments, "checked");
-		loc.rv = radioButton(argumentCollection=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = radioButton(argumentCollection=arguments);
+		return local.rv;
+	}
 
-<cffunction name="checkBoxTag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="checked" type="boolean" required="false" default="false">
-	<cfargument name="value" type="string" required="false">
-	<cfargument name="uncheckedValue" type="string" required="false" default="">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public string function checkBoxTag(
+		required string name,
+		boolean checked=false,
+		string value,
+		string uncheckedValue="",
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel
+	) {
 		$args(name="checkBoxTag", args=arguments);
 		arguments.checkedValue = arguments.value;
 		arguments.property = arguments.name;
@@ -163,44 +153,42 @@
 		}
 		if (!StructKeyExists(arguments, "id"))
 		{
-			loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.checkedValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
+			local.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.checkedValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
 			arguments.id = $tagId(arguments.objectName, arguments.property);
-			if (len(loc.valueToAppend))
+			if (len(local.valueToAppend))
 			{
-				arguments.id &= "-" & loc.valueToAppend;
+				arguments.id &= "-" & local.valueToAppend;
 			}
 		}
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "value");
 		StructDelete(arguments, "checked");
-		loc.rv = checkBox(argumentCollection=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = checkBox(argumentCollection=arguments);
+		return local.rv;
+	}
 
-<cffunction name="selectTag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="options" type="any" required="true">
-	<cfargument name="selected" type="string" required="false" default="">
-	<cfargument name="includeBlank" type="any" required="false">
-	<cfargument name="multiple" type="boolean" required="false">
-	<cfargument name="valueField" type="string" required="false">
-	<cfargument name="textField" type="string" required="false">
-	<cfargument name="label" type="string" required="false">
-	<cfargument name="labelPlacement" type="string" required="false">
-	<cfargument name="prepend" type="string" required="false">
-	<cfargument name="append" type="string" required="false">
-	<cfargument name="prependToLabel" type="string" required="false">
-	<cfargument name="appendToLabel" type="string" required="false">
-	<cfscript>
-		var loc = {};
+	public string function selectTag(
+		required string name,
+		required any options,
+		string selected="",
+		any includeBlank,
+		boolean multiple,
+		string valueField,
+		string textField,
+		string label,
+		string labelPlacement,
+		string prepend,
+		string append,
+		string prependToLabel,
+		string appendToLabel
+	) {
 		$args(name="selectTag", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.selected;
 		StructDelete(arguments, "name");
 		StructDelete(arguments, "selected");
-		loc.rv = select(argumentCollection=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = select(argumentCollection=arguments);
+		return local.rv;
+	}
+</cfscript>

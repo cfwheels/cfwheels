@@ -1,18 +1,28 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfinclude template="setup.cfm">
+	function setup() {
+		include "setup.cfm";
+	}
 
-	<cffunction name="test_flashClear_valid">
-		<cfset run_flashClear_valid()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_flashClear_valid()>
-	</cffunction>
-	
-	<cffunction name="run_flashClear_valid">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset loc.controller.flashClear()>
-		<cfset result = StructKeyList(loc.controller.flash())>
-		<cfset assert("result IS ''")>
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-</cfcomponent>
+	function test_flashClear_valid() {
+		run_flashClear_valid();
+		_controller.$setFlashStorage("cookie");
+		run_flashClear_valid();
+	}
+
+	/**
+	* HELPERS
+	*/
+
+	function run_flashClear_valid() {
+		_controller.flashInsert(success="Congrats!");
+		_controller.flashClear();
+		result = StructKeyList(_controller.flash());
+		assert("result IS ''");
+	}
+
+}

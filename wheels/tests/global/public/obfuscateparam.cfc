@@ -1,52 +1,52 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset results = {}>
-	</cffunction>
+	function setup() {
+		results = {};
+	}
 
-	<cffunction name="test_obfuscate_999999999">
-		<cfset results.param = obfuscateParam("999999999")>
-		<cfset assert("results.param IS 'eb77359232'")>
-	</cffunction>
+	function test_obfuscate_999999999() {
+		results.param = obfuscateParam("999999999");
+		assert("results.param IS 'eb77359232'");
+	}
 
-	<cffunction name="test_obfuscate_0162823571">
-		<cfset results.param = obfuscateParam("0162823571")>
-		<cfset assert("results.param IS '0162823571'")>
-	</cffunction>
+	function test_obfuscate_0162823571() {
+		results.param = obfuscateParam("0162823571");
+		assert("results.param IS '0162823571'");
+	}
 
-	<cffunction name="test_obfuscate_1">
-		<cfset results.param = obfuscateParam("1")>
-		<cfset assert("results.param IS '9b1c6'")>
-	</cffunction>
+	function test_obfuscate_1() {
+		results.param = obfuscateParam("1");
+		assert("results.param IS '9b1c6'");
+	}
 
-	<cffunction name="test_obfuscate_99">
-		<cfset results.param = obfuscateParam("99")>
-		<cfset assert("results.param IS 'ac10a'")>
-	</cffunction>
+	function test_obfuscate_99() {
+		results.param = obfuscateParam("99");
+		assert("results.param IS 'ac10a'");
+	}
 
-	<cffunction name="test_obfuscate_15765">
-		<cfset results.param = obfuscateParam("15765")>
-		<cfset assert("results.param IS 'b226582'")>
-	</cffunction>
+	function test_obfuscate_15765() {
+		results.param = obfuscateParam("15765");
+		assert("results.param IS 'b226582'");
+	}
 
-	<cffunction name="test_obfuscate_69247541">
-		<cfset results.param = obfuscateParam("69247541")>
-		<cfset assert("results.param IS 'c06d44215'")>
-	</cffunction>
+	function test_obfuscate_69247541() {
+		results.param = obfuscateParam("69247541");
+		assert("results.param IS 'c06d44215'");
+	}
 
-	<cffunction name="test_obfuscate_0413">
-		<cfset results.param = obfuscateParam("0413")>
-		<cfset assert("results.param IS '0413'")>
-	</cffunction>
+	function test_obfuscate_0413() {
+		results.param = obfuscateParam("0413");
+		assert("results.param IS '0413'");
+	}
 
-	<cffunction name="test_per_should_not_obfuscate">
-		<cfset results.param = obfuscateParam("per")>
-		<cfset assert("results.param IS 'per'")>
-	</cffunction>
+	function test_per_should_not_obfuscate() {
+		results.param = obfuscateParam("per");
+		assert("results.param IS 'per'");
+	}
 
-	<cffunction name="test_1111111111_should_not_obfuscate">
-		<cfset results.param = obfuscateParam("1111111111")>
-		<cfset assert("results.param IS '1111111111'")>
-	</cffunction>
+	function test_1111111111_should_not_obfuscate() {
+		results.param = obfuscateParam("1111111111");
+		assert("results.param IS '1111111111'");
+	}
 
-</cfcomponent>
+}

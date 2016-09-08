@@ -1,116 +1,116 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
- 	<cffunction name="test_update">
-		<cftransaction action="begin">
-			<cfset loc.author = model("Author").findOne()>
-			<cfset loc.author.update(firstName="Kermit", lastName="Frog")>
-			<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.allKermits.recordcount eq 1')>
-	</cffunction>
+ 	function test_update() {
+		transaction action="begin" {
+			author = model("Author").findOne();
+			author.update(firstName="Kermit", lastName="Frog");
+			allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'");
+			transaction action="rollback";
+		}
+		assert('allKermits.recordcount eq 1');
+	}
 
- 	<cffunction name="test_dynamic_update_with_named_argument">
-		<cftransaction action="begin">
-			<cfset loc.author = model("author").findOne(where="firstName='Andy'")>
-			<cfset loc.profile = model("profile").findOne(where="bio LIKE 'ColdFusion Developer'")>
-			<cfset loc.author.setProfile(profile=loc.profile)>
-			<cfset loc.updatedProfile = model("profile").findByKey(loc.profile.id)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert("loc.updatedProfile.authorId IS loc.author.id")>
-	</cffunction>
+ 	function test_dynamic_update_with_named_argument() {
+		transaction action="begin" {
+			author = model("author").findOne(where="firstName='Andy'");
+			profile = model("profile").findOne(where="bio LIKE 'ColdFusion Developer'");
+			author.setProfile(profile=profile);
+			updatedProfile = model("profile").findByKey(profile.id);
+			transaction action="rollback";
+		}
+		assert("updatedProfile.authorId IS author.id");
+	}
 
- 	<cffunction name="test_dynamic_update_with_unnamed_argument">
-		<cftransaction action="begin">
-			<cfset loc.author = model("author").findOne(where="firstName='Andy'")>
-			<cfset loc.profile = model("profile").findOne(where="bio LIKE 'ColdFusion Developer'")>
-			<cfset loc.author.setProfile(loc.profile)>
-			<cfset loc.updatedProfile = model("profile").findByKey(loc.profile.id)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert("loc.updatedProfile.authorId IS loc.author.id")>
-	</cffunction>
+ 	function test_dynamic_update_with_unnamed_argument() {
+		transaction action="begin" {
+			author = model("author").findOne(where="firstName='Andy'");
+			profile = model("profile").findOne(where="bio LIKE 'ColdFusion Developer'");
+			author.setProfile(profile);
+			updatedProfile = model("profile").findByKey(profile.id);
+			transaction action="rollback";
+		}
+		assert("updatedProfile.authorId IS author.id");
+	}
 
- 	<cffunction name="test_update_one">
-		<cftransaction action="begin">
-			<cfset model("Author").updateOne(where="firstName='Andy'", firstName="Kermit", lastName="Frog")>
-			<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.allKermits.recordcount eq 1')>
-	</cffunction>
+ 	function test_update_one() {
+		transaction action="begin" {
+			model("Author").updateOne(where="firstName='Andy'", firstName="Kermit", lastName="Frog");
+			allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'");
+			transaction action="rollback";
+		}
+		assert('allKermits.recordcount eq 1');
+	}
 
- 	<cffunction name="test_update_one_for_soft_deleted_records">
-		<cftransaction action="begin">
-			<cfset loc.post = model("Post").deleteOne(where="views=0")>
-			<cfset model("Post").updateOne(where="views=0", title="This is a new title", includeSoftDeletes=true)>
-			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.changedPosts.recordcount eq 1')>
-	</cffunction>
+ 	function test_update_one_for_soft_deleted_records() {
+		transaction action="begin" {
+			post = model("Post").deleteOne(where="views=0");
+			model("Post").updateOne(where="views=0", title="This is a new title", includeSoftDeletes=true);
+			changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true);
+			transaction action="rollback";
+		}
+		assert('changedPosts.recordcount eq 1');
+	}
 
- 	<cffunction name="test_update_by_key">
-		<cftransaction action="begin">
-			<cfset loc.author = model("Author").findOne()>
-			<cfset model("Author").updateByKey(key=loc.author.id, firstName="Kermit", lastName="Frog")>
-			<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.allKermits.recordcount eq 1')>
-	</cffunction>
+ 	function test_update_by_key() {
+		transaction action="begin" {
+			author = model("Author").findOne();
+			model("Author").updateByKey(key=author.id, firstName="Kermit", lastName="Frog");
+			allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'");
+			transaction action="rollback";
+		}
+		assert('allKermits.recordcount eq 1');
+	}
 
- 	<cffunction name="test_update_by_key_for_soft_deleted_records">
-		<cftransaction action="begin">
-			<cfset loc.post = model("Post").findOne(where="views=0")>
-			<cfset model("Post").updateByKey(key=loc.post.id, title="This is a new title", includeSoftDeletes=true)>
-			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.changedPosts.recordcount eq 1')>
-	</cffunction>
+ 	function test_update_by_key_for_soft_deleted_records() {
+		transaction action="begin" {
+			post = model("Post").findOne(where="views=0");
+			model("Post").updateByKey(key=post.id, title="This is a new title", includeSoftDeletes=true);
+			changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true);
+			transaction action="rollback";
+		}
+		assert('changedPosts.recordcount eq 1');
+	}
 
- 	<cffunction name="test_update_all">
-		<cftransaction action="begin">
-			<cfset model("Author").updateAll(firstName="Kermit", lastName="Frog")>
-			<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.allKermits.recordcount eq 7')>
-	</cffunction>
+ 	function test_update_all() {
+		transaction action="begin" {
+			model("Author").updateAll(firstName="Kermit", lastName="Frog");
+			allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'");
+			transaction action="rollback";
+		}
+		assert('allKermits.recordcount eq 7');
+	}
 
- 	<cffunction name="test_update_all_for_soft_deleted_records">
-		<cftransaction action="begin">
-			<cfset model("Post").updateAll(title="This is a new title", includeSoftDeletes=true)>
-			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.changedPosts.recordcount eq 5')>
-	</cffunction>
+ 	function test_update_all_for_soft_deleted_records() {
+		transaction action="begin" {
+			model("Post").updateAll(title="This is a new title", includeSoftDeletes=true);
+			changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true);
+			transaction action="rollback";
+		}
+		assert('changedPosts.recordcount eq 5');
+	}
 
-   	<cffunction name="test_columns_that_are_not_null_should_allow_for_blank_string_during_update">
-		<cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="version">
-		<cfset loc.db = LCase(Replace(loc.dbinfo.database_productname, " ", "", "all"))>
-		<cftransaction action="begin">
-			<cfif loc.db IS "oracle">
-				<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
-				<cfset loc.author.lastName = " ">
-				<cfset loc.author.save()>
-				<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
-			<cfelse>
-				<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
-				<cfset loc.author.lastName = "">
-				<cfset loc.author.save()>
-				<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
-			</cfif>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfif loc.db IS "oracle">
-			<cfset assert("IsObject(loc.author) AND !len(trim(loc.author.lastName))")>
-		<cfelse>
-			<cfset assert("IsObject(loc.author) AND !len(loc.author.lastName)")>
-		</cfif>
-	</cffunction>
+   	function test_columns_that_are_not_null_should_allow_for_blank_string_during_update() {
+    info = $dbinfo(datasource=application.wheels.dataSourceName, type="version");
+		db = LCase(Replace(info.database_productname, " ", "", "all"));
+		transaction action="begin" {
+      if (db IS "oracle") {
+        author = model("author").findOne(where="firstName='Tony'");
+				author.lastName = " ";
+				author.save();
+				author = model("author").findOne(where="firstName='Tony'");
+      } else {
+        author = model("author").findOne(where="firstName='Tony'");
+				author.lastName = "";
+				author.save();
+				author = model("author").findOne(where="firstName='Tony'");
+      }
+			transaction action="rollback";
+		}
+    if (db IS "oracle") {
+      assert("IsObject(author) AND !len(trim(author.lastName))");
+    } else {
+      assert("IsObject(author) AND !len(author.lastName)");
+    }
+	}
 
-</cfcomponent>
+}

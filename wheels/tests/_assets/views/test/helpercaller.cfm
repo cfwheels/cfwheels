@@ -1,2 +1,4 @@
-<cfset globalHelperFunction()>
-<cfset controllerHelperFunction()>
+<cfscript>
+	globalHelperFunction();
+	controllerHelperFunction();
+</cfscript>

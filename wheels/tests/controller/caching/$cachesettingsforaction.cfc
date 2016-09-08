@@ -1,11 +1,12 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfset loc.controller = controller(name="dummy")>
+	function setup() {
+	  _controller = controller(name="dummy");
+	}
 
-	<cffunction name="test_getting_cache_settings_for_action">
-		<cfset loc.controller.caches(action="dummy1", time=100)>
-		<cfset loc.r = loc.controller.$cacheSettingsForAction("dummy1")>
-		<cfset assert("loc.r.time IS 100")>
-	</cffunction>
-	
-</cfcomponent>
+	function test_getting_cache_settings_for_action() {
+		_controller.caches(action="dummy1", time=100);
+		r = _controller.$cacheSettingsForAction("dummy1");
+		assert("r.time IS 100");
+	}
+}

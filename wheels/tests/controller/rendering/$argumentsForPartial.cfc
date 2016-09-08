@@ -1,22 +1,29 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfinclude template="setupAndTeardown.cfm">
+	function setup() {
+		include "setup.cfm";
+		params = {controller="dummy", action="dummy"};
+		_controller = controller("dummy", params);
+	}
 
-	<cfset params = {controller="dummy", action="dummy"}>
-	<cfset loc.controller = controller("dummy", params)>
-	
-	<cffunction name="$injectIntoVariablesScope" output="false">
-		<cfargument name="name" type="string" required="true" />
-		<cfargument name="data" type="any" required="true" />
-		<cfset variables[arguments.name] = arguments.data />
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="test_name_is_not_a_function">
-		<cfset query = QueryNew("a,b,c,e") />
-		<cfset loc.controller.$injectIntoVariablesScope = this.$injectIntoVariablesScope />
-		<cfset loc.controller.$injectIntoVariablesScope(name="query", data=query) />
-		<cfset loc.e = loc.controller.$argumentsForPartial($name="query", $dataFunction=true)>
-		<cfset assert('IsStruct(loc.e) and StructIsEmpty(loc.e)') />
-	</cffunction>
+	function test_name_is_not_a_function() {
+		query = QueryNew("a,b,c,e");
+		_controller.$injectIntoVariablesScope = this.$injectIntoVariablesScope;
+		_controller.$injectIntoVariablesScope(name="query", data=query);
+		actual = _controller.$argumentsForPartial($name="query", $dataFunction=true);
+		assert('IsStruct(actual) and StructIsEmpty(actual)');
+	}
 
-</cfcomponent>
+	/**
+	* HELPERS
+	*/
+
+	function $injectIntoVariablesScope(required string name, required any data) {
+		variables[arguments.name] = arguments.data;
+	}
+
+}

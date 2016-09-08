@@ -1,34 +1,34 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset model("post").$registerCallback(type="afterFind", methods="afterFindCallback")>
-	</cffunction>
-	
-	<cffunction name="teardown">
-		<cfset model("post").$clearCallbacks(type="afterFind")>
-	</cffunction>
+	function setup() {
+		model("post").$registerCallback(type="afterFind", methods="afterFindCallback");
+	}
 
-	<cffunction name="test_setting_property_on_one_object">
-		<cfset loc.post = model("post").findOne()>
-		<cfset assert("loc.post.title IS 'setTitle'")>
-	</cffunction>
+	function teardown() {
+		model("post").$clearCallbacks(type="afterFind");
+	}
 
-	<cffunction name="test_setting_properties_on_multiple_objects">
-		<cfset loc.postsOrg = model("post").findAll(returnAs="objects", callbacks="false", orderby="views DESC")>
-		<cfset loc.views1 = loc.postsOrg[1].views + 100>
-		<cfset loc.views2 = loc.postsOrg[2].views + 100>
-		<cfset loc.posts = model("post").findAll(returnAs="objects", orderby="views DESC")>
-		<cfset assert("loc.posts[1].title IS 'setTitle'")>
-		<cfset assert("loc.posts[2].title IS 'setTitle'")>
-		<cfset assert("loc.posts[1].views EQ loc.views1")>
-		<cfset assert("loc.posts[2].views EQ loc.views2")>
-	</cffunction>
+	function test_setting_property_on_one_object() {
+		post = model("post").findOne();
+		assert("post.title IS 'setTitle'");
+	}
 
-	<cffunction name="test_creation_of_new_column_and_property">
-		<cfset loc.posts = model("post").findAll(order="id DESC")>
-		<cfset assert("loc.posts.something[1] eq 'hello world'")>
-		<cfset loc.posts = model("post").findAll(returnAs="objects")>
-		<cfset assert("loc.posts[1].something eq 'hello world'")>
-	</cffunction>
+	function test_setting_properties_on_multiple_objects() {
+		postsOrg = model("post").findAll(returnAs="objects", callbacks="false", orderby="views DESC");
+		views1 = postsOrg[1].views + 100;
+		views2 = postsOrg[2].views + 100;
+		posts = model("post").findAll(returnAs="objects", orderby="views DESC");
+		assert("posts[1].title IS 'setTitle'");
+		assert("posts[2].title IS 'setTitle'");
+		assert("posts[1].views EQ views1");
+		assert("posts[2].views EQ views2");
+	}
 
-</cfcomponent>
+	function test_creation_of_new_column_and_property() {
+		posts = model("post").findAll(order="id DESC");
+		assert("posts.something[1] eq 'hello world'");
+		posts = model("post").findAll(returnAs="objects");
+		assert("posts[1].something eq 'hello world'");
+	}
+
+}

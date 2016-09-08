@@ -1,20 +1,19 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-		<cfset loc.args = {}>
-		<cfset loc.args.name = "textarea">
-		<cfset loc.args.attributes = {}>
-		<cfset loc.args.attributes.rows = 10>
-		<cfset loc.args.attributes.cols = 40>
-		<cfset loc.args.attributes.name = "textareatest">
-		<cfset loc.args.content = "this is a test to see if textarea renders">
-	</cffunction>
+	function setup() {
+		_controller = controller(name="dummy");
+		args = {};
+		args.name = "textarea";
+		args.attributes = {};
+		args.attributes.rows = 10;
+		args.attributes.cols = 40;
+		args.attributes.name = "textareatest";
+		args.content = "this is a test to see if textarea renders";
+	}
 
-	<cffunction name="test_with_all_options">
-		<cfset loc.e = loc.controller.$element(argumentcollection=loc.args)>
-		<cfset loc.r = '<textarea cols="40" name="textareatest" rows="10">this is a test to see if textarea renders</textarea>'>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
-
-</cfcomponent>
+	function test_with_all_options() {
+		e = _controller.$element(argumentcollection=args);
+		r = '<textarea cols="40" name="textareatest" rows="10">this is a test to see if textarea renders</textarea>';
+		assert("e eq r");
+	}
+}

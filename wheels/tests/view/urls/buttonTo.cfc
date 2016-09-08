@@ -1,34 +1,34 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-		<cfset oldURLRewriting = application.wheels.URLRewriting>
-		<cfset application.wheels.URLRewriting = "On">
-		<cfset oldScriptName = request.cgi.script_name>
-		<cfset request.cgi.script_name = "/rewrite.cfm">
-	</cffunction>
+	function setup() {
+		_controller = controller(name="dummy");
+		oldURLRewriting = application.wheels.URLRewriting;
+		application.wheels.URLRewriting = "On";
+		oldScriptName = request.cgi.script_name;
+		request.cgi.script_name = "/rewrite.cfm";
+	}
 
-	<cffunction name="teardown">
-		<cfset application.wheels.URLRewriting = oldURLRewriting>
-		<cfset request.cgi.script_name = oldScriptName>
-	</cffunction>
+	function teardown() {
+		application.wheels.URLRewriting = oldURLRewriting;
+		request.cgi.script_name = oldScriptName;
+	}
 
-	<cffunction name="test_confirm_is_escaped">
-		<cfset loc.e = '<form action="#application.wheels.webpath#" method="post" onsubmit="return confirm(''Mark as: \''Completed\''?'');"><input type="submit" value="" /></form>'>
-		<cfset loc.r = loc.controller.buttonTo(confirm="Mark as: 'Completed'?")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_confirm_is_escaped() {
+		e = '<form action="#application.wheels.webpath#" method="post" onsubmit="return confirm(''Mark as: \''Completed\''?'');"><input type="submit" value="" /></form>';
+		r = _controller.buttonTo(confirm="Mark as: 'Completed'?");
+		assert('e eq r');
+	}
 
-	<cffunction name="test_disabled_is_escaped">
-		<cfset loc.e = '<form action="#application.wheels.webpath#" method="post"><input onclick="this.disabled=true;this.value=''Mark as: \''Completed\''?'';this.form.submit();" type="submit" value="" /></form>'>
-		<cfset loc.r = loc.controller.buttonTo(disable="Mark as: 'Completed'?")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_disabled_is_escaped() {
+		e = '<form action="#application.wheels.webpath#" method="post"><input onclick="this.disabled=true;this.value=''Mark as: \''Completed\''?'';this.form.submit();" type="submit" value="" /></form>';
+		r = _controller.buttonTo(disable="Mark as: 'Completed'?");
+		assert('e eq r');
+	}
 
-	<cffunction name="test_attributes">
-		<cfset loc.e = '<form action="#application.wheels.webpath#" class="form-class" method="post"><input class="input-class" type="submit" value="" /></form>'>
-		<cfset loc.r = loc.controller.buttonTo(class="form-class", inputClass="input-class")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_attributes() {
+		e = '<form action="#application.wheels.webpath#" class="form-class" method="post"><input class="input-class" type="submit" value="" /></form>';
+		r = _controller.buttonTo(class="form-class", inputClass="input-class");
+		assert('e eq r');
+	}
 
-</cfcomponent>
+}

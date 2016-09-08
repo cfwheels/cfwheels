@@ -1,92 +1,91 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfset params = {controller="test", action="testRedirect"}>
+	function setup() {
+		params = {controller="test", action="testRedirect"};
+		_controller = controller("test", params);
+		copies.request.cgi = request.cgi;
+		copies.application.wheels.viewPath = application.wheels.viewPath;
+	}
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller("test", params)>
-		<cfset copies.request.cgi = request.cgi>
-		<cfset copies.application.wheels.viewPath = application.wheels.viewPath>
-	</cffunction>
-	
-	<cffunction name="teardown">
-		<cfset request.cgi = copies.request.cgi>
-		<cfset application.wheels.viewPath = copies.application.wheels.viewPath>
-	</cffunction>
+	function teardown() {
+		request.cgi = copies.request.cgi;
+		application.wheels.viewPath = copies.application.wheels.viewPath;
+	}
 
-	<cffunction name="test_throw_error_on_double_redirect">
-		<cfset loc.controller.redirectTo(action="test")>
-		<cfset loc.e = "Wheels.RedirectToAlreadyCalled">
-		<cfset loc.r = raised('loc.controller.redirectTo(action="test")')>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+	function test_throw_error_on_double_redirect() {
+		_controller.redirectTo(action="test");
+		expected = "Wheels.RedirectToAlreadyCalled";
+		actual = raised('_controller.redirectTo(action="test")');
+		assert("actual eq expected");
+	}
 
-	<cffunction name="test_remaining_action_code_should_run">
-		<cfset application.wheels.viewPath = "wheels/tests/_assets/views">
-		<cfset loc.controller.$callAction(action="testRedirect")>
-		<cfset loc.r = loc.controller.$getRedirect()>
-		<cfset assert("IsDefined('loc.r.url') AND IsDefined('request.setInActionAfterRedirect')")>
-	</cffunction>
+	function test_remaining_action_code_should_run() {
+		application.wheels.viewPath = "wheels/tests/_assets/views";
+		_controller.$callAction(action="testRedirect");
+		r = _controller.getRedirect();
+		assert("IsDefined('r.url') AND IsDefined('request.setInActionAfterRedirect')");
+	}
 
-	<cffunction name="test_redirect_to_action">
-		<cfset loc.controller.redirectTo(action="test")>
-		<cfset loc.r = loc.controller.$getRedirect()>
-		<cfset assert("loc.controller.$performedRedirect() IS true AND IsDefined('loc.r.url')")>
-	</cffunction>
+	function test_redirect_to_action() {
+		_controller.redirectTo(action="test");
+		r = _controller.getRedirect();
+		assert("_controller.$performedRedirect() IS true AND IsDefined('r.url')");
+	}
 
-	<cffunction name="test_passing_through_to_urlfor">
-		<cfset loc.args = {action="test", onlyPath=false, protocol="https", params="test1=1&test2=2"}>
-		<cfset loc.controller.redirectTo(argumentCollection=loc.args)>
-		<cfset loc.r = loc.controller.$getRedirect()>
-		<cfset assert("loc.r.url Contains loc.args.protocol AND loc.r.url Contains loc.args.params")>
-	</cffunction>
+	function test_passing_through_to_urlfor() {
+		args = {action="test", onlyPath=false, protocol="https", params="test1=1&test2=2"};
+		_controller.redirectTo(argumentCollection=args);
+		r = _controller.getRedirect();
+		assert("r.url Contains args.protocol AND r.url Contains args.params");
+	}
 
-	<cffunction name="test_setting_cflocation_attributes">
-		<cfset loc.controller.redirectTo(action="test", addToken=true, statusCode="301")>
-		<cfset loc.r = loc.controller.$getRedirect()>
-		<cfset assert("loc.r.addToken IS true AND loc.r.statusCode IS 301")>
-	</cffunction>
+	function test_setting_cflocation_attributes() {
+		_controller.redirectTo(action="test", addToken=true, statusCode="301");
+		r = _controller.getRedirect();
+		assert("r.addToken IS true AND r.statusCode IS 301");
+	}
 
-	<cffunction name="test_redirect_to_referrer">
-		<cfset loc.path = "/test-controller/test-action">
-		<cfset request.cgi.http_referer = "http://" & request.cgi.server_name & loc.path>
-		<cfset loc.controller.redirectTo(back=true)>
-		<cfset loc.r = loc.controller.$getRedirect()>
-		<cfset assert("loc.r.url Contains loc.path")>
-	</cffunction>
+	function test_redirect_to_referrer() {
+		path = "/test-controller/test-action";
+		request.cgi.http_referer = "http://" & request.cgi.server_name & path;
+		_controller.redirectTo(back=true);
+		r = _controller.getRedirect();
+		assert("r.url Contains path");
+	}
 
-	<cffunction name="test_appending_params_to_referrer">
-		<cfset loc.path = "/test-controller/test-action">
-		<cfset request.cgi.http_referer = "http://" & request.cgi.server_name & loc.path>
-		<cfset loc.controller.redirectTo(back=true, params="x=1&y=2")>
-		<cfset loc.r = loc.controller.$getRedirect()>
-		<cfset assert("loc.r.url Contains loc.path AND loc.r.url Contains '?x=1&y=2'")>
-	</cffunction>
+	function test_appending_params_to_referrer() {
+		path = "/test-controller/test-action";
+		request.cgi.http_referer = "http://" & request.cgi.server_name & path;
+		_controller.redirectTo(back=true, params="x=1&y=2");
+		r = _controller.getRedirect();
+		assert("r.url Contains path AND r.url Contains '?x=1&y=2'");
+	}
 
-	<cffunction name="test_redirect_to_action_on_blank_referrer">
-		<cfset request.cgi.http_referer = "">
-		<cfset loc.controller.redirectTo(back=true, action="blankRef")>
-		<cfset loc.r = loc.controller.$getRedirect()>
-		<cfset assert("loc.r.url IS '#URLFor(action='blankRef')#'")>
-	</cffunction>
+	function test_redirect_to_action_on_blank_referrer() {
+		request.cgi.http_referer = "";
+		_controller.redirectTo(back=true, action="blankRef");
+		r = _controller.getRedirect();
+		assert("r.url IS '#URLFor(action='blankRef')#'");
+	}
 
-	<cffunction name="test_redirect_to_root_on_blank_referrer">
-		<cfset request.cgi.http_referer = "">
-		<cfset loc.controller.redirectTo(back=true)>
-		<cfset loc.r = loc.controller.$getRedirect()>
-		<cfset assert("loc.r.url IS application.wheels.webPath")>
-	</cffunction>
+	function test_redirect_to_root_on_blank_referrer() {
+		request.cgi.http_referer = "";
+		_controller.redirectTo(back=true);
+		r = _controller.getRedirect();
+		assert("r.url IS application.wheels.webPath");
+	}
 
-	<cffunction name="test_redirect_to_root_on_foreign_referrer">
-		<cfset request.cgi.http_referer = "http://www.google.com">
-		<cfset loc.controller.redirectTo(back=true)>
-		<cfset loc.r = loc.controller.$getRedirect()>
-		<cfset assert("loc.r.url IS application.wheels.webPath")>
-	</cffunction>
+	function test_redirect_to_root_on_foreign_referrer() {
+		request.cgi.http_referer = "http://www.google.com";
+		_controller.redirectTo(back=true);
+		r = _controller.getRedirect();
+		assert("r.url IS application.wheels.webPath");
+	}
 
-	<cffunction name="test_redirect_to_url">
-		<cfset loc.controller.redirectTo(url="http://www.google.com")>
-		<cfset loc.r = loc.controller.$getRedirect()>
-		<cfset assert("loc.controller.$performedRedirect() IS true AND IsDefined('loc.r.url')")>
-	</cffunction>
+	function test_redirect_to_url() {
+		_controller.redirectTo(url="http://www.google.com");
+		r = _controller.getRedirect();
+		assert("_controller.$performedRedirect() IS true AND IsDefined('r.url')");
+	}
 
-</cfcomponent>
+}

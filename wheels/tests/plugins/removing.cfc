@@ -1,7 +1,9 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.config = {
+	include "helpers.cfm";
+
+	function setup() {
+		config = {
 			path="wheels",
 			fileName="Plugins",
 			method="init",
@@ -9,43 +11,25 @@
 			deletePluginDirectories=true,
 			overwritePlugins=false,
 			loadIncompatiblePlugins=true
-		}>
-		<cfset loc.dir = ExpandPath(loc.config.pluginPath)>
-		<cfset loc.dir = ListChangeDelims(loc.dir, "/", "\")>
-		
-		<cfset loc.badDir = ListAppend(loc.dir, "testing", "/")>
-		<cfset loc.goodDir = ListAppend(loc.dir, "testglobalmixins", "/")>
-		<cfset $deleteDirs()>
-		<cfset $createDir()>
-	</cffunction>
-	
- 	<cffunction name="teardown">
-		<cfset $deleteDirs()>
-	</cffunction>
-	
-	<cffunction name="$pluginObj">
-		<cfargument name="config" type="struct" required="true">
-		<cfreturn $createObjectFromRoot(argumentCollection=arguments.config)>
-	</cffunction>
-	
-	<cffunction name="$createDir">
-		<cfdirectory action="create" directory="#loc.badDir#">
-	</cffunction>
-	
-	<cffunction name="$deleteDirs">
-		<cfif DirectoryExists(loc.badDir)>
-			<cfdirectory action="delete" recurse="true" directory="#loc.badDir#">
-		</cfif>
-		<cfif DirectoryExists(loc.goodDir)>
-			<cfdirectory action="delete" recurse="true" directory="#loc.goodDir#">
-		</cfif>
-	</cffunction>
+		};
+		dir = ExpandPath(config.pluginPath);
+		dir = ListChangeDelims(dir, "/", "\");
 
- 	<cffunction name="test_remove_unused_plugin_directories">
-		<cfset assert('DirectoryExists(loc.badDir)')>
-		<cfset loc.PluginObj = $pluginObj(loc.config)>
-		<cfset assert('DirectoryExists(loc.goodDir)')>
-		<cfset assert('not DirectoryExists(loc.badDir)')>
-	</cffunction>
-	
-</cfcomponent>
+		badDir = ListAppend(dir, "testing", "/");
+		goodDir = ListAppend(dir, "testglobalmixins", "/");
+		$deleteDirs();
+		$createDir();
+	}
+
+ 	function teardown() {
+		$deleteDirs();
+	}
+
+ 	function test_remove_unused_plugin_directories() {
+		assert('DirectoryExists(badDir)');
+		PluginObj = $pluginObj(config);
+		assert('DirectoryExists(goodDir)');
+		assert('not DirectoryExists(badDir)');
+	}
+
+}

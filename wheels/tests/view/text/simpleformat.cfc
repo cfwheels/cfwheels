@@ -1,9 +1,9 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-		<cfset loc.args = {}>
-		<cfset loc.args.text = "Lobortis, erat feugiat jus autem
+	function setup() {
+		_controller = controller(name="dummy");
+		args = {};
+		args.text = "Lobortis, erat feugiat jus autem
 
 vel obruo dolor luptatum, os in interdico ex. Sit typicus
 
@@ -15,13 +15,13 @@ luptatum valetudo ne, venio vero regula letalis valde vicis.
 
 Utrum blandit bene refero ut eum eligo cogo duis bene aptent distineo duis quis.
 Hendrerit nostrud abigo vicis
-augue validus cui lucidus.">
-	</cffunction>
+augue validus cui lucidus.";
+	}
 
-	<cffunction name="test_text_should_format">
-		<cfset loc.e = loc.controller.simpleFormat(argumentcollection=loc.args)>
-		<cfset debug(expression='loc.e', display=false, format="text")>
-		<cfset loc.r = "<p>Lobortis, erat feugiat jus autem</p>
+	function test_text_should_format() {
+		e = _controller.simpleFormat(argumentcollection=args);
+		debug(expression='e', display=false, format="text");
+		r = "<p>Lobortis, erat feugiat jus autem</p>
 
 <p>vel obruo dolor luptatum, os in interdico ex. Sit typicus</p>
 
@@ -33,9 +33,9 @@ luptatum valetudo ne, venio vero regula letalis valde vicis.</p>
 
 <p>Utrum blandit bene refero ut eum eligo cogo duis bene aptent distineo duis quis.<br />
 Hendrerit nostrud abigo vicis<br />
-augue validus cui lucidus.</p>">
-		<cfset loc.r = Replace(loc.r, "#Chr(13)#", "", "all")>
-		<cfset assert("htmleditformat(loc.e) eq htmleditformat(loc.r)")>
-	</cffunction>
+augue validus cui lucidus.</p>";
+		r = Replace(r, "#Chr(13)#", "", "all");
+		assert("htmleditformat(e) eq htmleditformat(r)");
+	}
 
-</cfcomponent>
+}

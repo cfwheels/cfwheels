@@ -1,26 +1,24 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfset params = {controller="test", action="test"}>
-	<cfset loc.controller = controller("test", params)>
+	function setup() {
+		params = {controller="test", action="test"};
+		_controller = controller("test", params);
+		oldViewPath = application.wheels.viewPath;
+		application.wheels.viewPath = "wheels/tests/_assets/views";
+	}
 
-	<cffunction name="setup">
-		<cfset oldViewPath = application.wheels.viewPath>
-		<cfset application.wheels.viewPath = "wheels/tests/_assets/views">
-	</cffunction>
+	function teardown() {
+		application.wheels.viewPath = oldViewPath;
+	}
 
-	<cffunction name="teardown">
-		<cfset application.wheels.viewPath = oldViewPath>
-	</cffunction>
+	function test_setting_variable_for_view() {
+		_controller.$callAction(action="test");
+		assert("_controller.response() Contains 'variableForViewContent'");
+	}
 
-	<cffunction name="test_setting_variable_for_view">
-		<cfset loc.controller.$callAction(action="test")>
-		<cfset assert("loc.controller.response() Contains 'variableForViewContent'")>
-	</cffunction>
+	function test_implicitly_calling_render_page() {
+		_controller.$callAction(action="test");
+		assert("_controller.response() Contains 'view template content'");
+	}
 
-	<cffunction name="test_implicitly_calling_render_page">
-		<cfset loc.controller.$callAction(action="test")>
-		<cfset assert("loc.controller.response() Contains 'view template content'")>
-	</cffunction>
-
-
-</cfcomponent>
+}

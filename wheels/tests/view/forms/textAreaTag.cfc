@@ -1,11 +1,11 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-	</cffunction>
+	function setup() {
+		_controller = controller(name="dummy");
+	}
 
-	<cffunction name="test_x_textAreaTag_valid">
-		<cfset loc.controller.textAreaTag(name="description")>
-	</cffunction>
+	function test_x_textAreaTag_valid() {
+		_controller.textAreaTag(name="description");
+	}
 
-</cfcomponent>
+}

@@ -1,15 +1,21 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfinclude template="common.cfm">
+	function setup() {
+		include "setup.cfm";
+	}
 
-	<cffunction name="test_isGet_valid">
-		<cfset request.cgi.request_method = "get">
-		<cfset assert("loc.controller.isGet() eq true")>
-	</cffunction>
-	
-	<cffunction name="test_isGet_invalid">
-		<cfset request.cgi.request_method = "">
-		<cfset assert("loc.controller.isGet() eq false")>
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-</cfcomponent>
+	function test_isGet_valid() {
+		request.cgi.request_method = "get";
+		assert("_controller.isGet() eq true");
+	}
+
+	function test_isGet_invalid() {
+		request.cgi.request_method = "";
+		assert("_controller.isGet() eq false");
+	}
+
+}

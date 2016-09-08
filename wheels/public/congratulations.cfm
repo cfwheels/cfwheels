@@ -8,17 +8,21 @@ Welcome to the wonderful world of CFWheels. We hope you will enjoy it!</p>
 
 <h2>Now What?</h2>
 <p>Now that you have a working installation of CFWheels, you may be wondering what to do next. Here are some suggestions.</p>
-<ul>
-	<li>
-		<a href="http://docs.cfwheels.org/v#thisVersion#/docs/beginner-tutorial-hello-world">View and code along with our
+
+<div class="row">
+	<div class="column">
+		<a class="" href="http://docs.cfwheels.org/v#thisVersion#/docs/beginner-tutorial-hello-world">View and code along with our
 		&quot;Hello World&quot; tutorial.</a>
-	</li>
-	<li>
-		<a href="http://docs.cfwheels.org/v#thisVersion#/docs">Have a look at the rest of our documentation.</a>
-	</li>
-	<li><a href="http://groups.google.com/group/cfwheels">Say &quot;Hello!&quot; to everyone in the Google Group.</a></li>
-	<li>Build the next killer website on the World Wide Web...</li>
-</ul>
+	</div>
+	<div class="column">
+		<a class="" href="http://docs.cfwheels.org/v#thisVersion#/docs">Have a look at the rest of our documentation.</a>
+	</div>
+	<div class="column">
+		<a class="" href="http://groups.google.com/group/cfwheels">Say &quot;Hello!&quot; to everyone in the Google Group.</a>
+	</div>
+	<div class="column">Build the next killer website on the World Wide Web...</div>
+</div>
+
 <p><strong>Good Luck!</strong></p>
 
 <h2>How to Make this Message Go Away</h2>

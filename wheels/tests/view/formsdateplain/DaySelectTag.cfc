@@ -1,9 +1,9 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfset loc.controller = controller(name="dummy")>
+	_controller = controller(name="dummy");
 
-	<cffunction name="_test_x">
-		<cfset assert("1 IS 1")>
-	</cffunction>
+	function _test_x() {
+		assert("1 IS 1");
+	}
 
-</cfcomponent>
+}

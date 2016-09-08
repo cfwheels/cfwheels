@@ -5,10 +5,14 @@ Model Enhancements
 * Support for passing in select=false to property() to not include a calculated property by default in SELECT clauses - #122 [Adam Chapman, Per Djurner]
 * Support for setting calculated properties to a specific data type - [Per Djurner]
 * Added "simple" argument to properties() that returns only simple properties of the object and its nested properties - [Adam Chapman]
+* Support for calling updateProperty() with dynamic argument, e.g. updateProperty(firstName="Per") - [Per Djurner]
+* Support for using boolean transaction argument, e.g. update(transaction=false) - #654 [Adam Chapman]
+* Support for MariaDB - #563 [AlexeiCF, Adam Chapman]
 
 View Enhancements
 =================
-* ?
+* flashMessages() are now in default layout.cfm - #650 [Tom King]
+* Added ability to override value in textField(), passwordField() and hiddenField() - #633 [Per Djurner, Chris Peters]
 
 Controller Enhancements
 =======================
@@ -18,7 +22,9 @@ Controller Enhancements
 
 Bug Fixes
 =========
-* ?
+* Fixes skipped model instantiation due to Linux file case sensitivity - #643 [Adam Chapman, Tom King]
+* Added spatial datatypes for MySQL - #660 [Normal Cesar]
+* Made humanize keep spaces in input - #663 [Per Djurner, Chris Peters]
 
 Miscellaneous
 =============
@@ -26,6 +32,11 @@ Miscellaneous
 * Redirect away after a reload request - [Chris Peters]
 * Support checking IP in "http_x_forwarded_for" when doing maintenance mode exclusions - [Per Djurner]
 * Support checking user agent string when doing maintenance mode exclusions - [Per Djurner]
+* Added junit and json format test results - [Adam Chapman]
+* Added empty application test directories - [Chris Peters, Adam Chapman]
+* Added default urlrewrite.xml to support Tuckey URL rewriting with Commandbox #649 - [Tom King]
+* Added beforeAll(), afterAll(), packageSetup(), packageTeardown() methods to test framework #651 - [Adam Chapman]
+* Added "ErrorEmailFromAddress" and "ErrorEmailToAddress" config settings - #95 [Andy Bellenie, Tony Petruzzi, Per Djurner]
 
 Breaking Changes
 ================
@@ -33,6 +44,7 @@ Breaking Changes
 * Minimum ACF version is now 10.0.16 / 11.0.5.
 * Support for Railo has been dropped.
 * The global setting "clearServerCache" has been renamed to "clearTemplateCache".
+* The updateProperties() method has been removed, use update() instead - #457 [Per Djurner, Chris Peters]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

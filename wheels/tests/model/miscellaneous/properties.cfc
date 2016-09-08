@@ -1,104 +1,110 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_key">
-		<cfset loc.author = model("author").findOne()>
-		<cfset loc.result = loc.author.key()>
-		<cfset assert("loc.result IS loc.author.id")>
-	</cffunction>
+	function test_key() {
+		author = model("author").findOne();
+		result = author.key();
+		assert("result IS author.id");
+	}
 
-	<cffunction name="test_key_with_new">
-		<cfset loc.author = model("author").new(id=1, firstName="Per", lastName="Djurner")>
-		<cfset loc.result = loc.author.key()>
-		<cfset assert("loc.result IS 1")>
-	</cffunction>
+	function test_key_with_new() {
+		author = model("author").new(id=1, firstName="Per", lastName="Djurner");
+		result = author.key();
+		assert("result IS 1");
+	}
 
-	<cffunction name="test_setting_and_getting_properties">
+	function test_setting_and_getting_properties() {
 
-		<cfset loc.user = model("user").new()>
+		user = model("user").new();
 
-		<cfset loc.args = {}>
-		<cfset loc.args.Address = "1313 mockingbird lane">
-		<cfset loc.args.City = "deerfield beach">
-		<cfset loc.args.Fax = "9545551212">
-		<cfset loc.args.FirstName = "anthony">
-		<cfset loc.args.LastName = "Petruzzi">
-		<cfset loc.args.Password = "it's a secret">
-		<cfset loc.args.Phone = "9544826106">
-		<cfset loc.args.State = "fl">
-		<cfset loc.args.UserName = "tonypetruzzi">
-		<cfset loc.args.ZipCode = "33441">
-		<cfset loc.args.Id = "">
-		<cfset loc.args.birthday = "11/01/1975">
-		<cfset loc.args.birthdaymonth = "11">
-		<cfset loc.args.birthdayyear = "1975">
+		args = {};
+		args.Address = "1313 mockingbird lane";
+		args.City = "deerfield beach";
+		args.Fax = "9545551212";
+		args.FirstName = "anthony";
+		args.LastName = "Petruzzi";
+		args.Password = "it's a secret";
+		args.Phone = "9544826106";
+		args.State = "fl";
+		args.UserName = "tonypetruzzi";
+		args.ZipCode = "33441";
+		args.Id = "";
+		args.birthday = "11/01/1975";
+		args.birthdaymonth = "11";
+		args.birthdayyear = "1975";
 
-		<cfset loc.user.setProperties(loc.args)>
+		user.setProperties(args);
 
-		<cfset loc.properties = loc.user.properties()>
+		props = user.properties();
 
-		<cfloop collection="#loc.properties#" item="loc.i">
-			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
-		</cfloop>
+		for (i in props) {
+			actual = props[i];
+			expected = args[i];
+			assert("actual eq expected");
+		};
 
-		<cfset loc.args.FirstName = "per">
-		<cfset loc.args.LastName = "djurner">
+		args.FirstName = "per";
+		args.LastName = "djurner";
 
-		<cfset loc.user.setproperties(firstname="per", lastname="djurner")>
-		<cfset loc.properties = loc.user.properties()>
+		user.setproperties(firstname="per", lastname="djurner");
+		props = user.properties();
 
-		<cfloop collection="#loc.properties#" item="loc.i">
-			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
-		</cfloop>
+		for (i in props) {
+			actual = props[i];
+			expected = args[i];
+			assert("actual eq expected");
+		};
 
-		<cfset loc.args.FirstName = "chris">
-		<cfset loc.args.LastName = "peters">
-		<cfset loc.args.ZipCode = "33333">
+		args.FirstName = "chris";
+		args.LastName = "peters";
+		args.ZipCode = "33333";
 
-		<cfset loc.params = {}>
-		<cfset loc.params.lastname = "peters">
-		<cfset loc.params.zipcode = "33333">
+		_params = {};
+		_params.lastname = "peters";
+		_params.zipcode = "33333";
 
-		<cfset loc.user.setproperties(firstname="chris", properties=loc.params)>
-		<cfset loc.properties = loc.user.properties()>
+		user.setproperties(firstname="chris", properties=_params);
+		props = user.properties();
 
-		<cfloop collection="#loc.properties#" item="loc.i">
-			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
-		</cfloop>
-	</cffunction>
+		for (i in props) {
+			actual = props[i];
+			expected = args[i];
+			assert("actual eq expected");
+		};
+	}
 
-	<cffunction name="test_setting_and_getting_properties_with_named_arguments">
-		<cfset loc.author = model("author").findOne()>
-		<cfset loc.author.setProperties(firstName="a", lastName="b")>
-		<cfset loc.result = loc.author.properties()>
-		<cfset assert('loc.result.firstName eq "a"')>
-		<cfset assert('loc.result.lastName eq "b"')>
-	</cffunction>
+	function test_setting_and_getting_properties_with_named_arguments() {
+		author = model("author").findOne();
+		author.setProperties(firstName="a", lastName="b");
+		result = author.properties();
+		assert('result.firstName eq "a"');
+		assert('result.lastName eq "b"');
+	}
 
-	<cffunction name="test_getting_nested_objects_with_simple_argument">
-		<cfset loc.adam = {firstName="adam", lastName="chapman"}>
-		<cfset loc.postOne = {views="1000", averageRating=1.0, body="This is the single body", title="this is the single title"}>
-		<cfset loc.postTwo = {views="2000", averageRating=2.0, body="This is the arrays first body", title="this is the arrays first title"}>
-		<cfset loc.postThree = {views="3000", averageRating=3.0, body="This is the arrays second body", title="this is the arrays second title"}>
+	function test_getting_nested_objects_with_simple_argument() {
+		adam = {firstName="adam", lastName="chapman"};
+		postOne = {views="1000", averageRating=1.0, body="This is the single body", title="this is the single title"};
+		postTwo = {views="2000", averageRating=2.0, body="This is the arrays first body", title="this is the arrays first title"};
+		postThree = {views="3000", averageRating=3.0, body="This is the arrays second body", title="this is the arrays second title"};
 
-		<cfset loc.author = model("author").new(loc.adam)>
-		<cfset loc.author.post = model("post").new(loc.postOne)>
-		<cfset loc.author.posts = [model("post").new(loc.postTwo), model("post").new(loc.postThree)]>
+		author = model("author").new(adam);
+		author.post = model("post").new(postOne);
+		author.posts = [model("post").new(postTwo), model("post").new(postThree)];
 
-		<cfset loc.simpleAuthor = loc.author.properties(simple=true)>
-		<cfset loc.complexAuthor = loc.author.properties()>
+		simpleAuthor = author.properties(simple=true);
+		complexAuthor = author.properties();
 
-		<cfset loc.in = loc.simpleAuthor>
-		<cfset loc.want = loc.adam>
-		<cfset loc.want.post = loc.postOne>
-		<cfset loc.want.posts = [loc.postTwo, loc.postThree]>
+		actual = simpleAuthor;
+		expected = adam;
+		expected.post = postOne;
+		expected.posts = [postTwo, postThree];
 
-		<cfset assert("IsObject(loc.complexAuthor.post)")>
-		<cfset assert("ListSort(StructKeyList(loc.in), 'textNoCase') eq ListSort(StructKeyList(loc.want), 'textNoCase')")>
-		<cfset assert("ListSort(StructKeyList(loc.in.post), 'textNoCase') eq ListSort(StructKeyList(loc.want.post), 'textNoCase')")>
-		<cfset assert("ListSort(StructKeyList(loc.in.posts[1]), 'textNoCase') eq ListSort(StructKeyList(loc.want.posts[1]), 'textNoCase')")>
-		<cfset assert("ListSort(StructKeyList(loc.in.posts[2]), 'textNoCase') eq ListSort(StructKeyList(loc.want.posts[2]), 'textNoCase')")>
-		<!--- this would be a lot simpler, but the JSON is serialised differently on ACF10 --->
-		<!--- <cfset assert("SerializeJSON(loc.in) eq SerializeJSON(loc.want)")> --->
-	</cffunction>
+		assert("IsObject(complexAuthor.post)");
+		assert("ListSort(StructKeyList(actual), 'textNoCase') eq ListSort(StructKeyList(expected), 'textNoCase')");
+		assert("ListSort(StructKeyList(actual.post), 'textNoCase') eq ListSort(StructKeyList(expected.post), 'textNoCase')");
+		assert("ListSort(StructKeyList(actual.posts[1]), 'textNoCase') eq ListSort(StructKeyList(expected.posts[1]), 'textNoCase')");
+		assert("ListSort(StructKeyList(actual.posts[2]), 'textNoCase') eq ListSort(StructKeyList(expected.posts[2]), 'textNoCase')");
+		/* this would be a lot simpler, but the JSON is serialised differently on ACF10 */
+		/* assert("SerializeJSON(actual) eq SerializeJSON(expected)"); */
+	}
 
-</cfcomponent>
+}

@@ -1,94 +1,94 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset pkg.controller = controller("dummy")>
-		<cfset result = "">
-		<cfset results = {}>
-		<cfset loc.controller = controller(name="dummy")>
-		<cfset loc.args = {}>
-		<cfset loc.args.label = false>
-	</cffunction>
+	function setup() {
+		pkg.controller = controller("dummy");
+		result = "";
+		results = {};
+		_controller = controller(name="dummy");
+		args = {};
+		args.label = false;
+	}
 
-	<cffunction name="testNoLabels">
-		<cfset result = pkg.controller.dateTimeSelectTags(name="theName", label=false)>
-		<cfset assert("result Does Not Contain 'label'")>
-	</cffunction>
+	function testNoLabels() {
+		result = pkg.controller.dateTimeSelectTags(name="theName", label=false);
+		assert("result Does Not Contain 'label'");
+	}
 
-	<cffunction name="testSameLabels">
-		<cfset var loc = {}>
-		<cfset loc.str = pkg.controller.dateTimeSelectTags(name="theName", label="lblText")>
-		<cfset loc.sub = "lblText">
-		<cfset result = (Len(loc.str)-Len(Replace(loc.str,loc.sub,"","all")))/Len(loc.sub)>
-		<cfset assert("result IS 6")>
-	</cffunction>
+	function testSameLabels() {
+		var loc = {};
+		str = pkg.controller.dateTimeSelectTags(name="theName", label="lblText");
+		sub = "lblText";
+		result = (Len(str)-Len(Replace(str,sub,"","all")))/Len(sub);
+		assert("result IS 6");
+	}
 
-	<cffunction name="testSplittingLabels">
-		<cfset result = pkg.controller.dateTimeSelectTags(name="theName", label="labelMonth,labelDay,labelYear,labelHour,labelMinute,labelSecond")>
-		<cfset assert("result Contains 'labelDay' AND result Contains 'labelSecond'")>
-	</cffunction>
+	function testSplittingLabels() {
+		result = pkg.controller.dateTimeSelectTags(name="theName", label="labelMonth,labelDay,labelYear,labelHour,labelMinute,labelSecond");
+		assert("result Contains 'labelDay' AND result Contains 'labelSecond'");
+	}
 
-	<cffunction name="test_dateTimeSelectTags_blank_included_boolean">
-		<cfset loc.args.name = "dateselector">
-		<cfset loc.args.includeBlank = "true">
-		<cfset loc.args.selected = "">
-		<cfset loc.args.startyear = "2000">
-		<cfset loc.args.endyear = "1990">
-		<cfset loc.r = loc.controller.dateTimeSelectTags(argumentcollection=loc.args)>
-		<cfset loc.e = '<option selected="selected" value=""></option>'>
-		<cfset assert("loc.r contains loc.e")>
-		<cfset loc.args.selected = "01/02/2000">
-		<cfset loc.r = loc.controller.dateTimeSelectTags(argumentcollection=loc.args)>
-		<cfset debug('loc.r', false)>
-		<cfset loc.e1 = '<option selected="selected" value="1">January</option>'>
-		<cfset loc.e2 = '<option selected="selected" value="2">2</option>'>
-		<cfset loc.e3 = '<option selected="selected" value="2000">2000</option>'>
-		<cfset assert("loc.r contains loc.e1 && loc.r contains loc.e2 && loc.r contains loc.e3")>
-	</cffunction>
+	function test_dateTimeSelectTags_blank_included_boolean() {
+		args.name = "dateselector";
+		args.includeBlank = "true";
+		args.selected = "";
+		args.startyear = "2000";
+		args.endyear = "1990";
+		r = _controller.dateTimeSelectTags(argumentcollection=args);
+		e = '<option selected="selected" value=""></option>';
+		assert("r contains e");
+		args.selected = "01/02/2000";
+		r = _controller.dateTimeSelectTags(argumentcollection=args);
+		debug('r', false);
+		e1 = '<option selected="selected" value="1">January</option>';
+		e2 = '<option selected="selected" value="2">2</option>';
+		e3 = '<option selected="selected" value="2000">2000</option>';
+		assert("r contains e1 && r contains e2 && r contains e3");
+	}
 
-	<cffunction name="test_dateTimeSelectTags_blank_included_string">
-		<cfset loc.args.name = "dateselector">
-		<cfset loc.args.includeBlank = "--Month--">
-		<cfset loc.args.selected = "">
-		<cfset loc.args.startyear = "2000">
-		<cfset loc.args.endyear = "1990">
-		<cfset loc.r = loc.controller.dateTimeSelectTags(argumentcollection=loc.args)>
-		<cfset loc.e = '<option selected="selected" value="">--Month--</option>'>
-		<cfset assert("loc.r contains loc.e")>
-		<cfset loc.args.selected = "01/02/2000">
-		<cfset loc.r = loc.controller.dateTimeSelectTags(argumentcollection=loc.args)>
-		<cfset debug('loc.r', false)>
-		<cfset loc.e1 = '<option selected="selected" value="1">January</option>'>
-		<cfset loc.e2 = '<option selected="selected" value="2">2</option>'>
-		<cfset loc.e3 = '<option selected="selected" value="2000">2000</option>'>
-		<cfset assert("loc.r contains loc.e1 && loc.r contains loc.e2 && loc.r contains loc.e3")>
-	</cffunction>
+	function test_dateTimeSelectTags_blank_included_string() {
+		args.name = "dateselector";
+		args.includeBlank = "--Month--";
+		args.selected = "";
+		args.startyear = "2000";
+		args.endyear = "1990";
+		r = _controller.dateTimeSelectTags(argumentcollection=args);
+		e = '<option selected="selected" value="">--Month--</option>';
+		assert("r contains e");
+		args.selected = "01/02/2000";
+		r = _controller.dateTimeSelectTags(argumentcollection=args);
+		debug('r', false);
+		e1 = '<option selected="selected" value="1">January</option>';
+		e2 = '<option selected="selected" value="2">2</option>';
+		e3 = '<option selected="selected" value="2000">2000</option>';
+		assert("r contains e1 && r contains e2 && r contains e3");
+	}
 
-	<cffunction name="test_dateTimeSelectTags_blank_not_included">
-		<cfset loc.args.name = "dateselector">
-		<cfset loc.args.includeBlank = "false">
-		<cfset loc.args.selected = "">
-		<cfset loc.args.startyear = "2000">
-		<cfset loc.args.endyear = "1990">
-		<cfset loc.r = loc.controller.dateTimeSelectTags(argumentcollection=loc.args)>
-		<cfset loc.e = '<option selected="selected" value=""></option>'>
-		<cfset assert("loc.r does not contain loc.e")>
-		<cfset loc.args.selected = "01/02/2000">
-		<cfset loc.r = loc.controller.dateTimeSelectTags(argumentcollection=loc.args)>
-		<cfset debug('loc.r', false)>
-		<cfset loc.e1 = '<option selected="selected" value="1">January</option>'>
-		<cfset loc.e2 = '<option selected="selected" value="2">2</option>'>
-		<cfset loc.e3 = '<option selected="selected" value="2000">2000</option>'>
-		<cfset assert("loc.r contains loc.e1 && loc.r contains loc.e2 && loc.r contains loc.e3")>
-	</cffunction>
+	function test_dateTimeSelectTags_blank_not_included() {
+		args.name = "dateselector";
+		args.includeBlank = "false";
+		args.selected = "";
+		args.startyear = "2000";
+		args.endyear = "1990";
+		r = _controller.dateTimeSelectTags(argumentcollection=args);
+		e = '<option selected="selected" value=""></option>';
+		assert("r does not contain e");
+		args.selected = "01/02/2000";
+		r = _controller.dateTimeSelectTags(argumentcollection=args);
+		debug('r', false);
+		e1 = '<option selected="selected" value="1">January</option>';
+		e2 = '<option selected="selected" value="2">2</option>';
+		e3 = '<option selected="selected" value="2000">2000</option>';
+		assert("r contains e1 && r contains e2 && r contains e3");
+	}
 
-	<cffunction name="test_dateTimeSelectTags_twelvehour">
-		<cfset loc.date = CreateDateTime(2014, 8, 4, 12, 30, 35)>
-		<cfset loc.args.name = "x">
-		<cfset loc.args.twelveHour = true>
-		<cfset loc.args.selected = loc.date>
-		<cfset loc.r = loc.controller.dateTimeSelectTags(argumentcollection=loc.args)>
-		<cfset loc.e = '<option selected="selected" value="30">30</option>'>
-		<cfset assert("loc.r Contains loc.e")>
-	</cffunction>
+	function test_dateTimeSelectTags_twelvehour() {
+		date = CreateDateTime(2014, 8, 4, 12, 30, 35);
+		args.name = "x";
+		args.twelveHour = true;
+		args.selected = date;
+		r = _controller.dateTimeSelectTags(argumentcollection=args);
+		e = '<option selected="selected" value="30">30</option>';
+		assert("r Contains e");
+	}
 
-</cfcomponent>
+}

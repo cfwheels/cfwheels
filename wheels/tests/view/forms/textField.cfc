@@ -1,17 +1,19 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="ControllerWithModel")>
-	</cffunction>
+	function setup() {
+		_controller = controller(name="ControllerWithModel");
+	}
 
-	<cffunction name="test_x_textField_valid">
-		<cfset loc.controller.textField(label="First Name", objectName="user", property="firstName")>
-	</cffunction>
+	function test_override_value() {
+		textField = _controller.textField(label="First Name", objectName="user", property="firstName", value="override");
+		foundValue = YesNoFormat(FindNoCase('value="override"', textField));
+		assert('foundValue eq true');
+	}
 
-	<cffunction name="test_maxlength_textfield_valid">
-		<cfset loc.textField = loc.controller.textField(label="First Name", objectName="user", property="firstName")>
-		<cfset loc.foundMaxLength = YesNoFormat(FindNoCase('maxlength="50"', loc.textField)) />
-		<cfset assert('loc.foundMaxLength eq true')>
-	</cffunction>
+	function test_maxlength_textfield_valid() {
+		textField = _controller.textField(label="First Name", objectName="user", property="firstName");
+		foundMaxLength = YesNoFormat(FindNoCase('maxlength="50"', textField));
+		assert('foundMaxLength eq true');
+	}
 
-</cfcomponent>
+}

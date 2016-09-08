@@ -1,18 +1,18 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.authorModel = model("author")>
-	</cffunction>
- 
- 	<cffunction name="test_deleteAllObjects_valid">
-		<cfset loc.author = loc.authorModel.findOne(where="firstName = 'Per'")>
-		<cftransaction action="begin">
-			<cfset loc.updated = loc.author.deleteAllPosts() />
-			<cfset loc.posts = loc.author.posts() />
-			<cfset assert('IsNumeric(loc.updated) and loc.updated eq 3')>
-			<cfset assert('IsQuery(loc.posts) eq true and not loc.posts.Recordcount')>
-			<cftransaction action="rollback" />
-		</cftransaction>
-	</cffunction>
+	function setup() {
+		authorModel = model("author");
+	}
 
-</cfcomponent>
+ 	function test_deleteAllObjects_valid() {
+		author = authorModel.findOne(where="firstName = 'Per'");
+		transaction action="begin" {
+			updated = author.deleteAllPosts();
+			posts = author.posts();
+			assert('IsNumeric(updated) and updated eq 3');
+			assert('IsQuery(posts) eq true and not posts.Recordcount');
+			transaction action="rollback";
+		}
+	}
+
+}

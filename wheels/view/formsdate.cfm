@@ -1,9 +1,9 @@
-<!--- PRIVATE FUNCTIONS --->
+<cfscript>
+	/**
+	* PRIVATE FUNCTIONS
+	*/
 
-<cffunction name="$yearSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="startYear" type="numeric" required="true">
-	<cfargument name="endYear" type="numeric" required="true">
-	<cfscript>
+	public string function $yearSelectTag(required numeric startYear, required numeric endYear) {
 		if (Structkeyexists(arguments, "value") && Val(arguments.value))
 		{
 			if (arguments.value < arguments.startYear && arguments.endYear > arguments.startYear)
@@ -21,15 +21,14 @@
 		arguments.$step = 1;
 		StructDelete(arguments, "startYear");
 		StructDelete(arguments, "endYear");
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
+		return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	}
 
-<cffunction name="$monthSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="monthDisplay" type="string" required="true">
-	<cfargument name="monthNames" type="string" required="true">
-	<cfargument name="monthAbbreviations" type="string" required="true">
-	<cfscript>
+	public string function $monthSelectTag(
+		required string monthDisplay,
+		required string monthNames,
+		required string monthAbbreviations
+	) {
 		arguments.$loopFrom = 1;
 		arguments.$loopTo = 12;
 		arguments.$type = "month";
@@ -45,22 +44,18 @@
 		StructDelete(arguments, "monthDisplay");
 		StructDelete(arguments, "monthNames");
 		StructDelete(arguments, "monthAbbreviations");
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
+		return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	}
 
-<cffunction name="$daySelectTag" returntype="string" access="public" output="false">
-	<cfscript>
+	public string function $daySelectTag() {
 		arguments.$loopFrom = 1;
 		arguments.$loopTo = 31;
 		arguments.$type = "day";
 		arguments.$step = 1;
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
+		return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	}
 
-<cffunction name="$hourSelectTag" returntype="string" access="public" output="false">
-	<cfscript>
+	public string function $hourSelectTag() {
 		arguments.$loopFrom = 0;
 		arguments.$loopTo = 23;
 		arguments.$type = "hour";
@@ -70,45 +65,37 @@
 			arguments.$loopFrom = 1;
 			arguments.$loopTo = 12;
 		}
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
+		return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	}
 
-<cffunction name="$minuteSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="minuteStep" type="numeric" required="true">
-	<cfscript>
+	public string function $minuteSelectTag(required numeric minuteStep) {
 		arguments.$loopFrom = 0;
 		arguments.$loopTo = 59;
 		arguments.$type = "minute";
 		arguments.$step = arguments.minuteStep;
 		StructDelete(arguments, "minuteStep");
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
+		return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	}
 
-<cffunction name="$secondSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="secondStep" type="numeric" required="true">
-	<cfscript>
+	public any function $secondSelectTag(required numeric secondStep) {
 		arguments.$loopFrom = 0;
 		arguments.$loopTo = 59;
 		arguments.$type = "second";
 		arguments.$step = arguments.secondStep;
 		StructDelete(arguments, "secondStep");
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
+		return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	}
 
-<cffunction name="$dateOrTimeSelect" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="$functionName" type="string" required="true">
-	<cfargument name="combine" type="boolean" required="false" default="true">
-	<cfargument name="twelveHour" type="boolean" required="false" default="false">
-	<cfscript>
-		var loc = {};
-		loc.combine = arguments.combine;
+	public string function $dateOrTimeSelect(
+		required any objectName,
+		required string property,
+		required string $functionName,
+		boolean combine=true,
+		boolean twelveHour=false
+	) {
+		local.combine = arguments.combine;
 		StructDelete(arguments, "combine");
-		loc.name = $tagName(arguments.objectName, arguments.property);
+		local.name = $tagName(arguments.objectName, arguments.property);
 		arguments.$id = $tagId(arguments.objectName, arguments.property);
 
 		// in order to support 12-hour format, we have to enforce some rules
@@ -123,73 +110,71 @@
 			}
 		}
 
-		loc.value = $formValue(argumentCollection=arguments);
-		loc.rv = "";
-		loc.firstDone = false;
-		loc.iEnd = ListLen(arguments.order);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.value = $formValue(argumentCollection=arguments);
+		local.rv = "";
+		local.firstDone = false;
+		local.iEnd = ListLen(arguments.order);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.item = ListGetAt(arguments.order, loc.i);
-			loc.marker = "($" & loc.item & ")";
-			if (!loc.combine)
+			local.item = ListGetAt(arguments.order, local.i);
+			local.marker = "($" & local.item & ")";
+			if (!local.combine)
 			{
-				loc.name = $tagName(arguments.objectName, "#arguments.property#-#loc.item#");
-				loc.marker = "";
+				local.name = $tagName(arguments.objectName, "#arguments.property#-#local.item#");
+				local.marker = "";
 			}
-			arguments.name = loc.name & loc.marker;
-			arguments.value = loc.value;
-			if (IsDate(loc.value))
+			arguments.name = local.name & local.marker;
+			arguments.value = local.value;
+			if (IsDate(local.value))
 			{
-				if (arguments.twelveHour && ListFind("hour,ampm", loc.item))
+				if (arguments.twelveHour && ListFind("hour,ampm", local.item))
 				{
-					if (loc.item == "hour")
+					if (local.item == "hour")
 					{
-						arguments.value = TimeFormat(loc.value, 'h');
+						arguments.value = TimeFormat(local.value, 'h');
 					}
-					else if (loc.item == "ampm")
+					else if (local.item == "ampm")
 					{
-						arguments.value = TimeFormat(loc.value, 'tt');
+						arguments.value = TimeFormat(local.value, 'tt');
 					}
 				}
 				else
 				{
-					arguments.value = Evaluate("#loc.item#(loc.value)");
+					arguments.value = Evaluate("#local.item#(local.value)");
 				}
 			}
-			if (loc.firstDone)
+			if (local.firstDone)
 			{
-				loc.rv &= arguments.separator;
+				local.rv &= arguments.separator;
 			}
-			loc.rv &= Evaluate("$#loc.item#SelectTag(argumentCollection=arguments)");
-			loc.firstDone = true;
+			local.rv &= Evaluate("$#local.item#SelectTag(argumentCollection=arguments)");
+			local.firstDone = true;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$yearMonthHourMinuteSecondSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="value" type="string" required="true">
-	<cfargument name="includeBlank" type="any" required="true">
-	<cfargument name="label" type="string" required="true">
-	<cfargument name="labelPlacement" type="string" required="true">
-	<cfargument name="prepend" type="string" required="true">
-	<cfargument name="append" type="string" required="true">
-	<cfargument name="prependToLabel" type="string" required="true">
-	<cfargument name="appendToLabel" type="string" required="true">
-	<cfargument name="errorElement" type="string" required="false" default="">
-	<cfargument name="errorClass" type="string" required="false" default="">
-	<cfargument name="$type" type="string" required="true">
-	<cfargument name="$loopFrom" type="numeric" required="true">
-	<cfargument name="$loopTo" type="numeric" required="true">
-	<cfargument name="$id" type="string" required="true">
-	<cfargument name="$step" type="numeric" required="true">
-	<cfargument name="$optionNames" type="string" required="false" default="">
-	<cfargument name="twelveHour" type="boolean" required="false" default="false">
-	<cfargument name="$now" type="date" required="false" default="#now()#">
-	<cfscript>
-		var loc = {};
-		loc.optionContent = "";
+	public string function $yearMonthHourMinuteSecondSelectTag(
+		required string name,
+		required string value,
+		required any includeBlank,
+		required string label,
+		required string labelPlacement,
+		required string prepend,
+		required string append,
+		required string prependToLabel,
+		required string appendToLabel,
+		string errorElement="",
+		string errorClass="",
+		required string $type,
+		required numeric $loopFrom,
+		required numeric $loopTo,
+		required string $id,
+		required numeric $step,
+		string $optionNames="",
+		boolean twelveHour=false,
+		date $now=now()
+	) {
+		local.optionContent = "";
 
 		// only set the default value if the value is blank and includeBlank is false
 		if (!Len(arguments.value) && (IsBoolean(arguments.includeBlank) && !arguments.includeBlank))
@@ -223,56 +208,53 @@
 		{
 			arguments.id = arguments.$id & "-" & arguments.$type;
 		}
-		loc.before = $formBeforeElement(argumentCollection=arguments);
-		loc.after = $formAfterElement(argumentCollection=arguments);
-		loc.content = "";
+		local.before = $formBeforeElement(argumentCollection=arguments);
+		local.after = $formAfterElement(argumentCollection=arguments);
+		local.content = "";
 		if (!IsBoolean(arguments.includeBlank) || arguments.includeBlank)
 		{
-			loc.args = {};
-			loc.args.value = "";
+			local.args = {};
+			local.args.value = "";
 			if (!Len(arguments.value))
 			{
-				loc.args.selected = "selected";
+				local.args.selected = "selected";
 			}
 			if (!IsBoolean(arguments.includeBlank))
 			{
-				loc.optionContent = arguments.includeBlank;
+				local.optionContent = arguments.includeBlank;
 			}
-			loc.content &= $element(name="option", content=loc.optionContent, attributes=loc.args);
+			local.content &= $element(name="option", content=local.optionContent, attributes=local.args);
 		}
 		if (arguments.$loopFrom < arguments.$loopTo)
 		{
-			for (loc.i=arguments.$loopFrom; loc.i <= arguments.$loopTo; loc.i=loc.i+arguments.$step)
+			for (local.i=arguments.$loopFrom; local.i <= arguments.$loopTo; local.i=local.i+arguments.$step)
 			{
-				loc.args = Duplicate(arguments);
-				loc.args.counter = loc.i;
-				loc.args.optionContent = loc.optionContent;
-				loc.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=loc.args);
+				local.args = Duplicate(arguments);
+				local.args.counter = local.i;
+				local.args.optionContent = local.optionContent;
+				local.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=local.args);
 			}
 		}
 		else
 		{
-			for (loc.i=arguments.$loopFrom; loc.i >= arguments.$loopTo; loc.i=loc.i-arguments.$step)
+			for (local.i=arguments.$loopFrom; local.i >= arguments.$loopTo; local.i=local.i-arguments.$step)
 			{
-				loc.args = Duplicate(arguments);
-				loc.args.counter = loc.i;
-				loc.args.optionContent = loc.optionContent;
-				loc.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=loc.args);
+				local.args = Duplicate(arguments);
+				local.args.counter = local.i;
+				local.args.optionContent = local.optionContent;
+				local.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=local.args);
 			}
 		}
-		loc.rv = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = local.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=local.content, attributes=arguments) & local.after;
+		return local.rv;
+	}
 
-<cffunction name="$yearMonthHourMinuteSecondSelectTagContent">
-	<cfscript>
-		var loc = {};
-		loc.args = {};
-		loc.args.value = arguments.counter;
+	public string function $yearMonthHourMinuteSecondSelectTagContent() {
+		local.args = {};
+		local.args.value = arguments.counter;
 		if (arguments.value == arguments.counter)
 		{
-			loc.args.selected = "selected";
+			local.args.selected = "selected";
 		}
 		if (Len(arguments.$optionNames))
 		{
@@ -286,20 +268,18 @@
 		{
 			arguments.optionContent = NumberFormat(arguments.optionContent, "09");
 		}
-		loc.rv = $element(name="option", content=arguments.optionContent, attributes=loc.args);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = $element(name="option", content=arguments.optionContent, attributes=local.args);
+		return local.rv;
+	}
 
-<cffunction name="$ampmSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="value" type="string" required="true">
-	<cfargument name="$id" type="string" required="true">
-	<cfargument name="$now" type="date" required="false" default="#now()#">
-	<cfscript>
-		var loc = {};
-		loc.options = "AM,PM";
-		loc.optionContent = "";
+	public string function $ampmSelectTag(
+		required string name,
+		required string value,
+		required string $id,
+		date $now=now()
+	) {
+		local.options = "AM,PM";
+		local.optionContent = "";
 		if (!Len(arguments.value))
 		{
 			arguments.value = TimeFormat(arguments.$now, "tt");
@@ -308,20 +288,20 @@
 		{
 			arguments.id = arguments.$id & "-ampm";
 		}
-		loc.content = "";
-		loc.iEnd = ListLen(loc.options);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		local.content = "";
+		local.iEnd = ListLen(local.options);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			loc.option = ListGetAt(loc.options, loc.i);
-			loc.args = {};
-			loc.args.value = loc.option;
-			if (arguments.value == loc.option)
+			local.option = ListGetAt(local.options, local.i);
+			local.args = {};
+			local.args.value = local.option;
+			if (arguments.value == local.option)
 			{
-				loc.args.selected = "selected";
+				local.args.selected = "selected";
 			}
-			loc.content &= $element(name="option", content=loc.option, attributes=loc.args);
+			local.content &= $element(name="option", content=local.option, attributes=local.args);
 		}
-		loc.rv = $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=local.content, attributes=arguments);
+		return local.rv;
+	}
+</cfscript>

@@ -1,12 +1,12 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset afterFind("afterFindCallback")>
-	</cffunction>
+	function init() {
+		afterFind("afterFindCallback");
+	}
 
-	<cffunction name="afterFindCallback">
-		<cfset arguments.method = "done">
-		<cfreturn arguments>
-	</cffunction>
+	function afterFindCallback() {
+		arguments.method = "done";
+		return arguments;
+	}
 
-</cfcomponent>
+}

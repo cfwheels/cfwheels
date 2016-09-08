@@ -1,11 +1,11 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_existing_object">
-		<cfset loc.args.type = "myCustomCallBack">
-		<cfset model("tag").$registerCallback(type=loc.args.type, methods="methodOne")>
-		<cfset loc.r = model("tag").$callbacks(argumentCollection=loc.args)>
-		<cfset assert('IsArray(loc.r)')>
-		<cfset assert('ArrayLen(loc.r) eq 1')>
-	</cffunction>
+	function test_existing_object() {
+		args.type = "myCustomCallBack";
+		model("tag").$registerCallback(type=args.type, methods="methodOne");
+		r = model("tag").$callbacks(argumentCollection=args);
+		assert('IsArray(r)');
+		assert('ArrayLen(r) eq 1');
+	}
 
-</cfcomponent>
+}

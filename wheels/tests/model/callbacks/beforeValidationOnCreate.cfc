@@ -1,21 +1,21 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset model("tag").$registerCallback(type="beforeValidationOnCreate", methods="callbackThatSetsProperty,callbackThatReturnsFalse")>
-	</cffunction>
-	
-	<cffunction name="teardown">
-		<cfset model("tag").$clearCallbacks(type="beforeValidationOnCreate")>
-	</cffunction>
+	function setup() {
+		model("tag").$registerCallback(type="beforeValidationOnCreate", methods="callbackThatSetsProperty,callbackThatReturnsFalse");
+	}
 
-	<cffunction name="test_new_object">
-		<cfset loc.obj = model("tag").create()>
-		<cfset assert("StructKeyExists(loc.obj, 'setByCallback')")>
-	</cffunction>
-	
-	<cffunction name="test_new_object_with_skipped_callback">
-		<cfset loc.obj = model("tag").create(name="mustSetAtLeastOnePropertyOrCreateFails", transaction="rollback", callbacks=false)>
-		<cfset assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
-	</cffunction>
+	function teardown() {
+		model("tag").$clearCallbacks(type="beforeValidationOnCreate");
+	}
 
-</cfcomponent>
+	function test_new_object() {
+		obj = model("tag").create();
+		assert("StructKeyExists(obj, 'setByCallback')");
+	}
+
+	function test_new_object_with_skipped_callback() {
+		obj = model("tag").create(name="mustSetAtLeastOnePropertyOrCreateFails", transaction="rollback", callbacks=false);
+		assert("NOT StructKeyExists(obj, 'setByCallback')");
+	}
+
+}

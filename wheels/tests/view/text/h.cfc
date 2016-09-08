@@ -1,14 +1,14 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-		<cfset loc.content = "<b>This ""is"" a test string & it should format properly</b>">
-	</cffunction>
+	function setup() {
+		_controller = controller(name="dummy");
+		content = "<b>This ""is"" a test string & it should format properly</b>";
+	}
 
-	<cffunction name="test_should_escape_html_entities">
-		<cfset loc.e = XMLFormat(loc.content)>
-		<cfset loc.r = "&lt;b&gt;This &quot;is&quot; a test string &amp; it should format properly&lt;/b&gt;">
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+	function test_should_escape_html_entities() {
+		e = XMLFormat(content);
+		r = "&lt;b&gt;This &quot;is&quot; a test string &amp; it should format properly&lt;/b&gt;";
+		assert("e eq r");
+	}
 
-</cfcomponent>
+}

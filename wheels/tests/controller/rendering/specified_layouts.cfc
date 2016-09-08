@@ -1,184 +1,188 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset request.cgi.http_x_requested_with = "">
-	</cffunction>
+	function setup() {
+		request.cgi.http_x_requested_with = "";
+	}
 
-	<cffunction name="test_using_method">
-		<cfset loc.args = {template="controller_layout_test"}>
-		<cfset params = {controller="dummy", action="index"}>
-		<cfset loc.controller = controller("dummy", params)>
-		<cfset loc.controller.controller_layout_test = controller_layout_test>
-		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
+	function test_using_method() {
+		args = {template="controller_layout_test"};
+		params = {controller="dummy", action="index"};
+		_controller = controller("dummy", params);
+		_controller.controller_layout_test = controller_layout_test;
+		_controller.usesLayout(argumentCollection=args);
 
-		<cfset loc.e = "index_layout">
-		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "index_layout";
+		r = _controller.$useLayout("index");
+		assert('e eq r');
 
-		<cfset loc.e = "show_layout">
-		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "show_layout";
+		r = _controller.$useLayout("show");
+		assert('e eq r');
 
-		<cfset loc.e = "true">
-		<cfset loc.r = loc.controller.$useLayout("list")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "true";
+		r = _controller.$useLayout("list");
+		assert('e eq r');
 
-		<cfset loc.args.usedefault = false>
-		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
+		args.usedefault = false;
+		_controller.usesLayout(argumentCollection=args);
 
-		<cfset loc.e = "false">
-		<cfset loc.r = loc.controller.$useLayout("list")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+		e = "false";
+		r = _controller.$useLayout("list");
+		assert('e eq r');
+	}
 
-	<cffunction name="test_ajax_request_with_no_layout_specified_should_fallback_to_template">
-		<cfset request.cgi.http_x_requested_with = "XMLHTTPRequest">
-		<cfset loc.args = {template="controller_layout_test"}>
-		<cfset params = {controller="dummy", action="index"}>
-		<cfset loc.controller = controller("dummy", params)>
-		<cfset loc.controller.controller_layout_test = controller_layout_test>
-		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
+	function test_ajax_request_with_no_layout_specified_should_fallback_to_template() {
+		request.cgi.http_x_requested_with = "XMLHTTPRequest";
+		args = {template="controller_layout_test"};
+		params = {controller="dummy", action="index"};
+		_controller = controller("dummy", params);
+		_controller.controller_layout_test = controller_layout_test;
+		_controller.usesLayout(argumentCollection=args);
 
-		<cfset loc.e = "index_layout">
-		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+		e = "index_layout";
+		r = _controller.$useLayout("index");
+		assert('e eq r');
+	}
 
-	<cffunction name="test_using_method_ajax">
-		<cfset request.cgi.http_x_requested_with = "XMLHTTPRequest">
-		<cfset loc.args = {template="controller_layout_test", ajax="controller_layout_test_ajax"}>
-		<cfset params = {controller="dummy", action="index"}>
-		<cfset loc.controller = controller("dummy", params)>
-		<cfset loc.controller.controller_layout_test = controller_layout_test>
-		<cfset loc.controller.controller_layout_test_ajax = controller_layout_test_ajax>
-		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
+	function test_using_method_ajax() {
+		request.cgi.http_x_requested_with = "XMLHTTPRequest";
+		args = {template="controller_layout_test", ajax="controller_layout_test_ajax"};
+		params = {controller="dummy", action="index"};
+		_controller = controller("dummy", params);
+		_controller.controller_layout_test = controller_layout_test;
+		_controller.controller_layout_test_ajax = controller_layout_test_ajax;
+		_controller.usesLayout(argumentCollection=args);
 
-		<cfset loc.e = "index_layout_ajax">
-		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "index_layout_ajax";
+		r = _controller.$useLayout("index");
+		assert('e eq r');
 
-		<cfset loc.e = "show_layout_ajax">
-		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "show_layout_ajax";
+		r = _controller.$useLayout("show");
+		assert('e eq r');
 
-		<cfset loc.e = "true">
-		<cfset loc.r = loc.controller.$useLayout("list")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "true";
+		r = _controller.$useLayout("list");
+		assert('e eq r');
 
-		<cfset loc.args.usedefault = false>
-		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
+		args.usedefault = false;
+		_controller.usesLayout(argumentCollection=args);
 
-		<cfset loc.e = "false">
-		<cfset loc.r = loc.controller.$useLayout("list")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+		e = "false";
+		r = _controller.$useLayout("list");
+		assert('e eq r');
+	}
 
-	<cffunction name="test_should_respect_exceptions">
-		<cfset loc.args = {template="mylayout", except="index"}>
-		<cfset params = {controller="dummy", action="index"}>
-		<cfset loc.controller = controller("dummy", params)>
-		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
+	function test_should_respect_exceptions() {
+		args = {template="mylayout", except="index"};
+		params = {controller="dummy", action="index"};
+		_controller = controller("dummy", params);
+		_controller.usesLayout(argumentCollection=args);
 
-		<cfset loc.e = "mylayout">
-		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "mylayout";
+		r = _controller.$useLayout("show");
+		assert('e eq r');
 
-		<cfset loc.e = "true">
-		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "true";
+		r = _controller.$useLayout("index");
+		assert('e eq r');
 
-		<cfset loc.args.usedefault = false>
-		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
+		args.usedefault = false;
+		_controller.usesLayout(argumentCollection=args);
 
-		<cfset loc.e = "false">
-		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+		e = "false";
+		r = _controller.$useLayout("index");
+		assert('e eq r');
+	}
 
-	<cffunction name="test_should_respect_exceptions_ajax">
-		<cfset request.cgi.http_x_requested_with = "XMLHTTPRequest">
-		<cfset loc.args = {template="mylayout", ajax="mylayout_ajax", except="index"}>
-		<cfset params = {controller="dummy", action="index"}>
-		<cfset loc.controller = controller("dummy", params)>
-		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
+	function test_should_respect_exceptions_ajax() {
+		request.cgi.http_x_requested_with = "XMLHTTPRequest";
+		args = {template="mylayout", ajax="mylayout_ajax", except="index"};
+		params = {controller="dummy", action="index"};
+		_controller = controller("dummy", params);
+		_controller.usesLayout(argumentCollection=args);
 
-		<cfset loc.e = "mylayout_ajax">
-		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "mylayout_ajax";
+		r = _controller.$useLayout("show");
+		assert('e eq r');
 
-		<cfset loc.e = "true">
-		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "true";
+		r = _controller.$useLayout("index");
+		assert('e eq r');
 
-		<cfset loc.args.usedefault = false>
-		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
+		args.usedefault = false;
+		_controller.usesLayout(argumentCollection=args);
 
-		<cfset loc.e = "false">
-		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+		e = "false";
+		r = _controller.$useLayout("index");
+		assert('e eq r');
+	}
 
-	<cffunction name="test_should_respect_only">
-		<cfset loc.args = {template="mylayout", only="index"}>
-		<cfset params = {controller="dummy", action="index"}>
-		<cfset loc.controller = controller("dummy", params)>
-		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
+	function test_should_respect_only() {
+		args = {template="mylayout", only="index"};
+		params = {controller="dummy", action="index"};
+		_controller = controller("dummy", params);
+		_controller.usesLayout(argumentCollection=args);
 
-		<cfset loc.e = "true">
-		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "true";
+		r = _controller.$useLayout("show");
+		assert('e eq r');
 
-		<cfset loc.e = "mylayout">
-		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "mylayout";
+		r = _controller.$useLayout("index");
+		assert('e eq r');
 
-		<cfset loc.args.usedefault = false>
-		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
+		args.usedefault = false;
+		_controller.usesLayout(argumentCollection=args);
 
-		<cfset loc.e = "false">
-		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+		e = "false";
+		r = _controller.$useLayout("show");
+		assert('e eq r');
+	}
 
-	<cffunction name="test_should_respect_only_ajax">
-		<cfset request.cgi.http_x_requested_with = "XMLHTTPRequest">
-		<cfset loc.args = {template="mylayout", ajax="mylayout_ajax", only="index"}>
-		<cfset params = {controller="dummy", action="index"}>
-		<cfset loc.controller = controller("dummy", params)>
-		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
+	function test_should_respect_only_ajax() {
+		request.cgi.http_x_requested_with = "XMLHTTPRequest";
+		args = {template="mylayout", ajax="mylayout_ajax", only="index"};
+		params = {controller="dummy", action="index"};
+		_controller = controller("dummy", params);
+		_controller.usesLayout(argumentCollection=args);
 
-		<cfset loc.e = "true">
-		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "true";
+		r = _controller.$useLayout("show");
+		assert('e eq r');
 
-		<cfset loc.e = "mylayout_ajax">
-		<cfset loc.r = loc.controller.$useLayout("index")>
-		<cfset assert('loc.e eq loc.r')>
+		e = "mylayout_ajax";
+		r = _controller.$useLayout("index");
+		assert('e eq r');
 
-		<cfset loc.args.usedefault = false>
-		<cfset loc.controller.usesLayout(argumentCollection=loc.args)>
+		args.usedefault = false;
+		_controller.usesLayout(argumentCollection=args);
 
-		<cfset loc.e = "false">
-		<cfset loc.r = loc.controller.$useLayout("show")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+		e = "false";
+		r = _controller.$useLayout("show");
+		assert('e eq r');
+	}
 
-	<cffunction name="controller_layout_test">
-		<cfif arguments.action eq "index">
-			<cfreturn "index_layout">
-		</cfif>
-		<cfif arguments.action eq "show">
-			<cfreturn "show_layout">
-		</cfif>
-	</cffunction>
+	/**
+	* HELPERS
+	*/
 
-	<cffunction name="controller_layout_test_ajax">
-		<cfif arguments.action eq "index">
-			<cfreturn "index_layout_ajax">
-		</cfif>
-		<cfif arguments.action eq "show">
-			<cfreturn "show_layout_ajax">
-		</cfif>
-	</cffunction>
+	function controller_layout_test() {
+		if (arguments.action eq "index") {
+			return "index_layout";
+		}
+		if (arguments.action eq "show") {
+			return "show_layout";
+		}
+	}
 
-</cfcomponent>
+	function controller_layout_test_ajax() {
+		if (arguments.action eq "index") {
+			return "index_layout_ajax";
+		}
+		if (arguments.action eq "show") {
+			return "show_layout_ajax";
+		}
+	}
+
+}

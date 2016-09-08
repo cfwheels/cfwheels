@@ -1,193 +1,193 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_clearing_all_change_info">
-		<cfset loc.author = model("author").findOne(select="firstName")>
-		<cfset loc.author.firstName = "asfdg9876asdgf">
-		<cfset loc.author.lastName = "asfdg9876asdgf">
-		<cfset loc.result = loc.author.hasChanged()>
-		<cfset assert("loc.result")>
-		<cfset loc.author.clearChangeInformation()>
-		<cfset loc.result = loc.author.hasChanged()>
-		<cfset assert("NOT loc.result")>
-	</cffunction>
+	function test_clearing_all_change_info() {
+		author = model("author").findOne(select="firstName");
+		author.firstName = "asfdg9876asdgf";
+		author.lastName = "asfdg9876asdgf";
+		result = author.hasChanged();
+		assert("result");
+		author.clearChangeInformation();
+		result = author.hasChanged();
+		assert("NOT result");
+	}
 
-	<cffunction name="test_clearing_property_change_info">
-		<cfset loc.author = model("author").findOne(select="firstName")>
-		<cfset loc.author.firstName = "asfdg9876asdgf">
-		<cfset loc.author.lastName = "asfdg9876asdgf">
-		<cfset loc.result = loc.author.hasChanged(property="firstName")>
-		<cfset assert("loc.result")>
-		<cfset loc.result = loc.author.hasChanged(property="lastName")>
-		<cfset assert("loc.result")>
-		<cfset loc.author.clearChangeInformation(property="firstName")>
-		<cfset loc.result = loc.author.hasChanged(property="firstName")>
-		<cfset assert("NOT loc.result")>
-		<cfset loc.result = loc.author.hasChanged(property="lastName")>
-		<cfset assert("loc.result")>
-	</cffunction>
+	function test_clearing_property_change_info() {
+		author = model("author").findOne(select="firstName");
+		author.firstName = "asfdg9876asdgf";
+		author.lastName = "asfdg9876asdgf";
+		result = author.hasChanged(property="firstName");
+		assert("result");
+		result = author.hasChanged(property="lastName");
+		assert("result");
+		author.clearChangeInformation(property="firstName");
+		result = author.hasChanged(property="firstName");
+		assert("NOT result");
+		result = author.hasChanged(property="lastName");
+		assert("result");
+	}
 
-	<cffunction name="test_comparing_existing_properties_only">
-		<cfset loc.author = model("author").findOne(select="firstName")>
-		<cfset loc.result = loc.author.hasChanged()>
-		<cfset assert("NOT loc.result")>
-		<cfset loc.result = loc.author.hasChanged("firstName")>
-		<cfset assert("NOT loc.result")>
-		<cfset loc.author = model("author").findOne()>
-		<cfset StructDelete(loc.author, "firstName")>
-		<cfset loc.result = loc.author.hasChanged()>
-		<cfset assert("NOT loc.result")>
-		<cfset loc.result = loc.author.hasChanged("firstName")>
-		<cfset assert("NOT loc.result")>
-		<cfset loc.result = loc.author.hasChanged("somethingThatDoesNotExist")>
-		<cfset assert("NOT loc.result")>
-	</cffunction>
+	function test_comparing_existing_properties_only() {
+		author = model("author").findOne(select="firstName");
+		result = author.hasChanged();
+		assert("NOT result");
+		result = author.hasChanged("firstName");
+		assert("NOT result");
+		author = model("author").findOne();
+		StructDelete(author, "firstName");
+		result = author.hasChanged();
+		assert("NOT result");
+		result = author.hasChanged("firstName");
+		assert("NOT result");
+		result = author.hasChanged("somethingThatDoesNotExist");
+		assert("NOT result");
+	}
 
-	<cffunction name="test_allChanges">
-		<cfset loc.author = model("author").findOne(order="id")>
-		<cfset loc.author.firstName = "a">
-		<cfset loc.author.lastName = "b">
-		<cfset loc.compareWith.firstName.changedFrom = "Per">
-		<cfset loc.compareWith.firstName.changedTo = "a">
-		<cfset loc.compareWith.lastName.changedFrom = "Djurner">
-		<cfset loc.compareWith.lastName.changedTo = "b">
-		<cfset loc.result = loc.author.allChanges()>
-		<cfset assert("loc.result.toString() IS loc.compareWith.toString()")>
-	</cffunction>
+	function test_allChanges() {
+		author = model("author").findOne(order="id");
+		author.firstName = "a";
+		author.lastName = "b";
+		compareWith.firstName.changedFrom = "Per";
+		compareWith.firstName.changedTo = "a";
+		compareWith.lastName.changedFrom = "Djurner";
+		compareWith.lastName.changedTo = "b";
+		result = author.allChanges();
+		assert("result.toString() IS compareWith.toString()");
+	}
 
-	<cffunction name="test_changedProperties">
-		<cfset loc.author = model("author").findOne()>
-		<cfset loc.author.firstName = "a">
-		<cfset loc.author.lastName = "b">
-		<cfset loc.result = listSort(loc.author.changedProperties(), "textnocase")>
-		<cfset assert("loc.result IS 'firstName,lastName'")>
-	</cffunction>
+	function test_changedProperties() {
+		author = model("author").findOne();
+		author.firstName = "a";
+		author.lastName = "b";
+		result = listSort(author.changedProperties(), "textnocase");
+		assert("result IS 'firstName,lastName'");
+	}
 
-	<cffunction name="test_changedProperties_without_changes">
-		<cfset loc.author = model("author").findOne()>
-		<cfset loc.result = loc.author.changedProperties()>
-		<cfset assert("loc.result IS ''")>
-	</cffunction>
+	function test_changedProperties_without_changes() {
+		author = model("author").findOne();
+		result = author.changedProperties();
+		assert("result IS ''");
+	}
 
-	<cffunction name="test_changedProperties_change_and_back">
-		<cfset loc.author = model("author").findOne()>
-		<cfset loc.author.oldFirstName = loc.author.firstName>
-		<cfset loc.author.firstName = "a">
-		<cfset loc.result = loc.author.changedProperties()>
-		<cfset assert("loc.result IS 'firstName'")>
-		<cfset loc.author.firstName = loc.author.oldFirstName>
-		<cfset loc.result = loc.author.changedProperties()>
-		<cfset assert("loc.result IS ''")>
-	</cffunction>
+	function test_changedProperties_change_and_back() {
+		author = model("author").findOne();
+		author.oldFirstName = author.firstName;
+		author.firstName = "a";
+		result = author.changedProperties();
+		assert("result IS 'firstName'");
+		author.firstName = author.oldFirstName;
+		result = author.changedProperties();
+		assert("result IS ''");
+	}
 
-	<cffunction name="test_isNew">
-		<cftransaction>
-			<cfset loc.author = model("author").new(firstName="Per", lastName="Djurner")>
-			<cfset loc.result = loc.author.isNew()>
-			<cfset assert("loc.result IS true")>
-			<cfset loc.author.save(transaction="none")>
-			<cfset loc.result = loc.author.isNew()>
-			<cfset assert("loc.result IS false")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-	</cffunction>
+	function test_isNew() {
+		transaction {
+			author = model("author").new(firstName="Per", lastName="Djurner");
+			result = author.isNew();
+			assert("result IS true");
+			author.save(transaction="none");
+			result = author.isNew();
+			assert("result IS false");
+			transaction action="rollback";
+		}
+	}
 
-	<cffunction name="test_isNew_with_find">
-		<cfset loc.author = model("author").findOne()>
-		<cfset loc.result = loc.author.isNew()>
-		<cfset assert("loc.result IS false")>
-	</cffunction>
+	function test_isNew_with_find() {
+		author = model("author").findOne();
+		result = author.isNew();
+		assert("result IS false");
+	}
 
-	<cffunction name="test_hasChanged">
-		<cfset loc.author = model("author").findOne(where="lastName = 'Djurner'")>
-		<cfset loc.result = loc.author.hasChanged()>
-		<cfset assert("loc.result IS false")>
-		<cfset loc.author.lastName = "Petruzzi">
-		<cfset loc.result = loc.author.hasChanged()>
-		<cfset assert("loc.result IS true")>
-		<cfset loc.author.lastName = "Djurner">
-		<cfset loc.result = loc.author.hasChanged()>
-		<cfset assert("loc.result IS false")>
-	</cffunction>
+	function test_hasChanged() {
+		author = model("author").findOne(where="lastName = 'Djurner'");
+		result = author.hasChanged();
+		assert("result IS false");
+		author.lastName = "Petruzzi";
+		result = author.hasChanged();
+		assert("result IS true");
+		author.lastName = "Djurner";
+		result = author.hasChanged();
+		assert("result IS false");
+	}
 
-	<cffunction name="test_hasChanged_with_new">
-		<cftransaction>
-			<cfset loc.author = model("author").new()>
-			<cfset loc.result = loc.author.hasChanged()>
-			<cfset assert("loc.result IS true")>
-			<cfset loc.author.firstName = "Per">
-			<cfset loc.author.lastName = "Djurner">
-			<cfset loc.author.save(transaction="none")>
-			<cfset loc.result = loc.author.hasChanged()>
-			<cfset assert("loc.result IS false")>
-			<cfset loc.author.lastName = "Petruzzi">
-			<cfset loc.result = loc.author.hasChanged()>
-			<cfset assert("loc.result IS true")>
-			<cfset loc.author.save(transaction="none")>
-			<cfset loc.result = loc.author.hasChanged()>
-			<cfset assert("loc.result IS false")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-	</cffunction>
+	function test_hasChanged_with_new() {
+		transaction {
+			author = model("author").new();
+			result = author.hasChanged();
+			assert("result IS true");
+			author.firstName = "Per";
+			author.lastName = "Djurner";
+			author.save(transaction="none");
+			result = author.hasChanged();
+			assert("result IS false");
+			author.lastName = "Petruzzi";
+			result = author.hasChanged();
+			assert("result IS true");
+			author.save(transaction="none");
+			result = author.hasChanged();
+			assert("result IS false");
+			transaction action="rollback";
+		}
+	}
 
-	<cffunction name="test_XXXHasChanged">
-		<cfset loc.author = model("author").findOne(where="lastName = 'Djurner'")>
-		<cfset loc.author.lastName = "Petruzzi">
-		<cfset loc.result = loc.author.lastNameHasChanged()>
-		<cfset assert("loc.result IS true")>
-		<cfset loc.result = loc.author.firstNameHasChanged()>
-		<cfset assert("loc.result IS false")>
-	</cffunction>
+	function test_XXXHasChanged() {
+		author = model("author").findOne(where="lastName = 'Djurner'");
+		author.lastName = "Petruzzi";
+		result = author.lastNameHasChanged();
+		assert("result IS true");
+		result = author.firstNameHasChanged();
+		assert("result IS false");
+	}
 
-	<cffunction name="test_changedFrom">
-		<cfset loc.author = model("author").findOne(where="lastName = 'Djurner'")>
-		<cfset loc.author.lastName = "Petruzzi">
-		<cfset loc.result = loc.author.changedFrom(property="lastName")>
-		<cfset assert("loc.result IS 'Djurner'")>
-	</cffunction>
+	function test_changedFrom() {
+		author = model("author").findOne(where="lastName = 'Djurner'");
+		author.lastName = "Petruzzi";
+		result = author.changedFrom(property="lastName");
+		assert("result IS 'Djurner'");
+	}
 
-	<cffunction name="test_XXXChangedFrom">
-		<cfset loc.author = model("author").findOne(where="lastName = 'Djurner'")>
-		<cfset loc.author.lastName = "Petruzzi">
-		<cfset loc.result = loc.author.lastNameChangedFrom(property="lastName")>
-		<cfset assert("loc.result IS 'Djurner'")>
-	</cffunction>
+	function test_XXXChangedFrom() {
+		author = model("author").findOne(where="lastName = 'Djurner'");
+		author.lastName = "Petruzzi";
+		result = author.lastNameChangedFrom(property="lastName");
+		assert("result IS 'Djurner'");
+	}
 
-	<cffunction name="test_date_compare">
-		<cfset loc.user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.user.birthday = "11/01/1975 12:00 AM">
-		<cfset loc.e = loc.user.hasChanged("birthday")>
-		<cfset assert('loc.e eq false')>
-	</cffunction>
+	function test_date_compare() {
+		user = model("user").findOne(where="username = 'tonyp'");
+		user.birthday = "11/01/1975 12:00 AM";
+		e = user.hasChanged("birthday");
+		assert('e eq false');
+	}
 
-	<cffunction name="test_binary_compare">
-		<cftransaction>
-			<cfset loc.photo = model("photo").findOne(order=model("photo").primaryKey())>
-			<cfset assert("NOT loc.photo.hasChanged('fileData')")>
-			<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">
-			<cfset loc.photo.fileData = loc.binaryData>
-			<cfset assert("loc.photo.hasChanged('fileData')")>
-			<cfset loc.photo.galleryid = 99>
-			<cfset loc.photo.save()>
-			<cfset assert("NOT loc.photo.hasChanged('fileData')")>
-			<cfset loc.photo = model("photo").findOne(where="galleryid=99")>
-			<cfset assert("NOT loc.photo.hasChanged('fileData')")>
-			<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.txt')#" variable="loc.binaryData">
-			<cfset loc.photo.fileData = loc.binaryData>
-			<cfset assert("loc.photo.hasChanged('fileData')")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-	</cffunction>
+	function test_binary_compare() {
+		transaction {
+			photo = model("photo").findOne(order=model("photo").primaryKey());
+			assert("NOT photo.hasChanged('fileData')");
+			binaryData = fileReadBinary(expandpath('wheels/tests/_assets/files/cfwheels-logo.png'));
+			photo.fileData = binaryData;
+			assert("photo.hasChanged('fileData')");
+			photo.galleryid = 99;
+			photo.save();
+			assert("NOT photo.hasChanged('fileData')");
+			photo = model("photo").findOne(where="galleryid=99");
+			assert("NOT photo.hasChanged('fileData')");
+			binaryData = fileReadBinary(expandpath('wheels/tests/_assets/files/cfwheels-logo.txt'));
+			photo.fileData = binaryData;
+			assert("photo.hasChanged('fileData')");
+			transaction action="rollback";
+		}
+	}
 
-	<cffunction name="test_float_compare">
-		<cftransaction>
-			<cfset loc.post = model("post").findByKey(2)>
-			<cfset loc.post.averagerating = 3.0000>
-			<cfset loc.post.save(reload=true)>
-			<cfset loc.post.averagerating = "3.0000">
-			<cfset loc.changed = loc.post.hasChanged("averagerating")>
-			<cfset assert('loc.changed eq false')>
-			<cftransaction action="rollback" />
-		</cftransaction>
-	</cffunction>
+	function test_float_compare() {
+		transaction {
+			post = model("post").findByKey(2);
+			post.averagerating = 3.0000;
+			post.save(reload=true);
+			post.averagerating = "3.0000";
+			changed = post.hasChanged("averagerating");
+			assert('changed eq false');
+			transaction action="rollback";
+		}
+	}
 
-</cfcomponent>
+}

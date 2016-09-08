@@ -1,79 +1,84 @@
-<cfcomponent extends="wheelsMapping.Test">
+component extends="wheels.tests.Test" {
 
-	<cfinclude template="setupAndTeardown.cfm">
+	function setup() {
+		include "setup.cfm";
+		params = {controller="test", action="test"};
+		_controller = controller("test", params);
+	}
 
-	<cfset params = {controller="test", action="test"}>
-	<cfset loc.controller = controller("test", params)>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="test_rendering_without_layout">
-		<cfset loc.controller.renderPage(layout=false)>
-		<cfset assert("loc.controller.response() IS 'view template content'")>
-	</cffunction>
+	function test_rendering_without_layout() {
+		_controller.renderPage(layout=false);
+		assert("_controller.response() IS 'view template content'");
+	}
 
-	<cffunction name="test_rendering_with_default_layout_in_controller_folder">
-		<cfset tempFile = expandPath("/wheelsMapping/tests/_assets/views/test/layout.cfm")>
-		<cffile action="write" output="<cfoutput>start:controllerlayout##includeContent()##end:controllerlayout</cfoutput>" file="#tempFile#">
-		<cfset application.wheels.existingLayoutFiles = "test">
-		<cfset loc.controller.renderPage()>
-		<cfset loc.r = loc.controller.response()>
-		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:controllerlayout' AND loc.r Contains 'end:controllerlayout'")>
-		<cfset application.wheels.existingLayoutFiles = "">
-		<cffile action="delete" file="#tempFile#">
-	</cffunction>
+	function test_rendering_with_default_layout_in_controller_folder() {
+		tempFile = expandPath("/wheelsMapping/tests/_assets/views/test/layout.cfm");
+		fileWrite(tempFile, "<cfoutput>start:controllerlayout##includeContent()##end:controllerlayout</cfoutput>");
+		application.wheels.existingLayoutFiles = "test";
+		_controller.renderPage();
+		r = _controller.response();
+		assert("r Contains 'view template content' AND r Contains 'start:controllerlayout' AND r Contains 'end:controllerlayout'");
+		application.wheels.existingLayoutFiles = "";
+		fileDelete(tempFile);
+	}
 
-	<cffunction name="test_rendering_with_default_layout_in_root">
-		<cfset loc.controller.renderPage()>
-		<cfset loc.r = loc.controller.response()>
-		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:defaultlayout' AND loc.r Contains 'end:defaultlayout'")>
-	</cffunction>
+	function test_rendering_with_default_layout_in_root() {
+		_controller.renderPage();
+		r = _controller.response();
+		assert("r Contains 'view template content' AND r Contains 'start:defaultlayout' AND r Contains 'end:defaultlayout'");
+	}
 
-	<cffunction name="test_rendering_with_specific_layout">
-		<cfset loc.controller.renderPage(layout="specificLayout")>
-		<cfset loc.r = loc.controller.response()>
-		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:specificlayout' AND loc.r Contains 'end:specificlayout'")>
-	</cffunction>
+	function test_rendering_with_specific_layout() {
+		_controller.renderPage(layout="specificLayout");
+		r = _controller.response();
+		assert("r Contains 'view template content' AND r Contains 'start:specificlayout' AND r Contains 'end:specificlayout'");
+	}
 
-	<cffunction name="test_removing_cfm_file_extension_when_supplied">
-		<cfset loc.controller.renderPage(layout="specificLayout.cfm")>
-		<cfset loc.r = loc.controller.response()>
-		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:specificlayout' AND loc.r Contains 'end:specificlayout'")>
-	</cffunction>
+	function test_removing_cfm_file_extension_when_supplied() {
+		_controller.renderPage(layout="specificLayout.cfm");
+		r = _controller.response();
+		assert("r Contains 'view template content' AND r Contains 'start:specificlayout' AND r Contains 'end:specificlayout'");
+	}
 
-	<cffunction name="test_rendering_with_specific_layout_in_root">
-		<cfset loc.controller.renderPage(layout="/rootLayout")>
-		<cfset loc.r = loc.controller.response()>
-		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:rootlayout' AND loc.r Contains 'end:rootlayout'")>
-	</cffunction>
+	function test_rendering_with_specific_layout_in_root() {
+		_controller.renderPage(layout="/rootLayout");
+		r = _controller.response();
+		assert("r Contains 'view template content' AND r Contains 'start:rootlayout' AND r Contains 'end:rootlayout'");
+	}
 
-	<cffunction name="test_rendering_with_specific_layout_in_sub_folder">
-		<cfset loc.controller.renderPage(layout="sub/layout")>
-		<cfset loc.r = loc.controller.response()>
-		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:sublayout' AND loc.r Contains 'end:sublayout'")>
-	</cffunction>
+	function test_rendering_with_specific_layout_in_sub_folder() {
+		_controller.renderPage(layout="sub/layout");
+		r = _controller.response();
+		assert("r Contains 'view template content' AND r Contains 'start:sublayout' AND r Contains 'end:sublayout'");
+	}
 
-	<cffunction name="test_rendering_with_specific_layout_from_folder_path">
-		<cfset loc.controller.renderPage(layout="/shared/layout")>
-		<cfset loc.r = loc.controller.response()>
-		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:sharedlayout' AND loc.r Contains 'end:sharedlayout'")>
-	</cffunction>
+	function test_rendering_with_specific_layout_from_folder_path() {
+		_controller.renderPage(layout="/shared/layout");
+		r = _controller.response();
+		assert("r Contains 'view template content' AND r Contains 'start:sharedlayout' AND r Contains 'end:sharedlayout'");
+	}
 
-	<cffunction name="test_view_variable_should_be_available_in_layout_file">
-		<cfset loc.controller.$callAction(action="test")>
-		<cfset loc.controller.renderPage()>
-		<cfset loc.r = loc.controller.response()>
-		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'variableForLayoutContent' AND loc.r Contains 'start:defaultlayout' AND loc.r Contains 'end:defaultlayout'")>
-	</cffunction>
+	function test_view_variable_should_be_available_in_layout_file() {
+		_controller.$callAction(action="test");
+		_controller.renderPage();
+		r = _controller.response();
+		assert("r Contains 'view template content' AND r Contains 'variableForLayoutContent' AND r Contains 'start:defaultlayout' AND r Contains 'end:defaultlayout'");
+	}
 
-	<cffunction name="test_rendering_partial_with_layout">
-		<cfset loc.controller.renderPartial(partial="partialTemplate", layout="partialLayout")>
-		<cfset loc.r = loc.controller.response()>
-		<cfset assert("loc.r Contains 'partial template content' AND loc.r Contains 'start:partiallayout' AND loc.r Contains 'end:partiallayout'")>
-	</cffunction>
+	function test_rendering_partial_with_layout() {
+		_controller.renderPartial(partial="partialTemplate", layout="partialLayout");
+		r = _controller.response();
+		assert("r Contains 'partial template content' AND r Contains 'start:partiallayout' AND r Contains 'end:partiallayout'");
+	}
 
-	<cffunction name="test_rendering_partial_with_specific_layout_in_root">
-		<cfset loc.controller.renderPartial(partial="partialTemplate", layout="/partialRootLayout")>
-		<cfset loc.r = loc.controller.response()>
-		<cfset assert("loc.r Contains 'partial template content' AND loc.r Contains 'start:partialrootlayout' AND loc.r Contains 'end:partialrootlayout'")>
-	</cffunction>
+	function test_rendering_partial_with_specific_layout_in_root() {
+		_controller.renderPartial(partial="partialTemplate", layout="/partialRootLayout");
+		r = _controller.response();
+		assert("r Contains 'partial template content' AND r Contains 'start:partialrootlayout' AND r Contains 'end:partialrootlayout'");
+	}
 
-</cfcomponent>
+}

@@ -1,1 +1,3 @@
-<cfinclude template="request.cfm">
+<cfscript>
+	include "request.cfm";
+</cfscript>

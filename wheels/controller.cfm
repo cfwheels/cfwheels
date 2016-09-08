@@ -1,7 +1,10 @@
-<cfinclude template="controller/functions.cfm">
-<cfinclude template="global/functions.cfm">
-<cfinclude template="view/functions.cfm">
-<cfinclude template="plugins/injection.cfm">
-<cfif StructKeyExists(application, "wheels") AND StructKeyExists(application.wheels, "viewPath")>
-	<cfinclude template="../#application.wheels.viewPath#/helpers.cfm">	
-</cfif>
+<cfscript>
+	include "controller/functions.cfm";
+	include "global/functions.cfm";
+	include "view/functions.cfm";
+	include "plugins/injection.cfm";
+
+	if( StructKeyExists(application, "wheels") AND StructKeyExists(application.wheels, "viewPath")){
+		include "../#application.wheels.viewPath#/helpers.cfm";
+	} 
+</cfscript>
