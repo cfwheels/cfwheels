@@ -31,7 +31,7 @@ component extends="wheels.tests.Test" {
 	function test_with_get_method() {
 		args.method = "get";
 		argsction = _controller.urlfor(argumentCollection=args);
-		e = '<form action="#argsction#" method="get">' & _controller.authenticityTokenField();
+		e = '<form action="#argsction#" method="get">';
 		r = _controller.startFormTag(argumentcollection=args);
 		assert("e eq r");
 	}
