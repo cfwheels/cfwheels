@@ -5,7 +5,7 @@ try {
 } catch(any e) {
 	$throw(message="Datasource not found?", detail="The CFDBINFO call appears to have failed when looking for #application.wheels.dataSourceName#");
 }
-loc.db = LCase(Replace(loc.dbinfo.database_productname, " ", "", "all"))
+loc.db = LCase(Replace(loc.dbinfo.database_productname, " ", "", "all"));
 
 // handle differences in database for identity inserts, column types etc
 loc.storageEngine = "";
@@ -458,7 +458,7 @@ for (loc.user in loc.users) {
 				galleryid=loc.gallery.id
 				,filename="Gallery #loc.gallery.id# Photo Test #loc.j#"
 				,description1="test photo #loc.j# for gallery #loc.gallery.id#"
-			)
+			);
 		};
 	};
 };
