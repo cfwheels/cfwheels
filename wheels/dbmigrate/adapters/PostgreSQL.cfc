@@ -29,25 +29,37 @@
 		<cfreturn arguments.sql>
 	</cffunction>
 
-	<!--- seems a waste just to chnage the boolean default from 1,0 to true,false --->
+	<!--- PostgreSQL alter column statements use extended SQL --->
 	<cffunction name="addColumnOptions" returntype="string" access="public">
 		<cfargument name="sql" type="string" required="true" hint="column definition sql">
 		<cfargument name="options" type="struct" required="false" default="#StructNew()#" hint="column options">
+		<cfargument name="alter" type="boolean" required="false" default="false" hint="generate create or alter flavoured sql">
 		<cfscript>
 			if(StructKeyExists(arguments.options,'type') && arguments.options.type != 'primaryKey') {
 				if(StructKeyExists(arguments.options,'default') && optionsIncludeDefault(argumentCollection=arguments.options)) {
-					if(arguments.options.default eq "NULL" || (arguments.options.default eq "" && ListFindNoCase("boolean,date,datetime,time,timestamp,decimal,float,integer",arguments.options.type))) {
+					if (arguments.alter) {
+						arguments.sql = arguments.sql & " SET";
+					}
+					if(arguments.options.default eq "NULL" || (arguments.options.default eq "" && ListFindNoCase("boolean,date,datetime,time,timestamp,decimal,float,integer", arguments.options.type))) {
 						arguments.sql = arguments.sql & " DEFAULT NULL";
 					} else if(arguments.options.type == 'boolean') {
 						arguments.sql = arguments.sql & " DEFAULT #IIf(arguments.options.default,true,false)#";
 					} else if(arguments.options.type == 'string' && arguments.options.default eq "") {
-						arguments.sql = arguments.sql;
+						arguments.sql = arguments.sql & "DEFAULT ''";
 					} else {
 						arguments.sql = arguments.sql & " DEFAULT #quote(value=arguments.options.default,options=arguments.options)#";
 					}
 				}
-				if(StructKeyExists(arguments.options,'null') && !arguments.options.null) {
-					arguments.sql = arguments.sql & " NOT NULL";
+				if(StructKeyExists(arguments.options,'null')) {
+					if (arguments.alter) {
+						if (arguments.options.null) {
+							arguments.sql = arguments.sql & " DROP NOT NULL";
+						} else {
+							arguments.sql = arguments.sql & " SET NOT NULL";
+						}
+					} else if (!arguments.options.null) {
+						arguments.sql = arguments.sql & " NOT NULL";
+					}
 				}
 			}
 		</cfscript>
@@ -80,15 +92,32 @@
 
 	<!--- dropTable - use default --->
 
+	<!--- addColumnToTable - ? --->
+
 	<!--- NOTE FOR addColumnToTable & changeColumnInTable
 		  Rails adaptor appears to be applying default/nulls in separate queries
 		  Need to check if that is necessary --->
-	<!--- addColumnToTable - ? --->
 
 	<cffunction name="changeColumnInTable" returntype="string" access="public" hint="generates sql to change an existing column in a table">
 		<cfargument name="name" type="string" required="true" hint="table name">
 		<cfargument name="column" type="any" required="true" hint="column definition object">
-		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# ALTER COLUMN #arguments.column.adapter.toSQL(arguments.column)#">
+		<cfscript>
+		for (local.i in ["default","null","afterColumn"]) {
+			if (StructKeyExists(arguments.column, local.i)) {
+				local.opts = {};
+				local.opts.type = arguments.column.type;
+				local.opts[local.i] = arguments.column[local.i];
+				local.columnSQL = addColumnOptions(sql=" ALTER COLUMN #arguments.column.name#", options=local.opts, alter=true);
+				if (! StructKeyExists(local, "sql")) {
+					local.sql = "ALTER TABLE #quoteTableName(LCase(arguments.name))# ALTER COLUMN #arguments.column.name# TYPE #arguments.column.sqlType()#";
+				}
+				if (Len(arguments.column[local.i])) {
+					local.sql = ListAppend(local.sql, local.columnSQL, ",#Chr(13)##Chr(10)#");
+				}
+			}
+		}
+		</cfscript>
+		<cfreturn local.sql>
 	</cffunction>
 
 	<!--- renameColumnInTable - use default --->
@@ -108,14 +137,5 @@
 	<!--- addIndex - use default --->
 
 	<!--- removeIndex - use default --->
-
-	<cfscript>
-	// duplicated from columnDefinition for use in changeColumnInTable
-	public string function toSQL(required object column) {
-		local.sql = quoteColumnName(arguments.column.name) & " TYPE " & arguments.column.sqlType();
-		local.sql = addColumnOptions(local.sql);
-		return local.sql;
-	}
-	</cfscript>
 
 </cfcomponent>

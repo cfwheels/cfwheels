@@ -59,17 +59,14 @@
       <cfargument name="primaryKeys" type="array" required="true">
       <cfscript>
       var loc = {};
-
-	loc.sql = "CONSTRAINT [PK_#arguments.name#] PRIMARY KEY CLUSTERED (";
-
-	for (loc.i = 1; loc.i lte ArrayLen(arguments.primaryKeys); loc.i++)
-	{
-		if (loc.i != 1)
-			loc.sql = loc.sql & ", ";
-		loc.sql = loc.sql & arguments.primaryKeys[loc.i].toColumnNameSQL() & " ASC";
-	}
-
-	loc.sql = loc.sql & ")";
+			loc.sql = "CONSTRAINT [PK_#arguments.name#] PRIMARY KEY CLUSTERED (";
+			for (loc.i = 1; loc.i lte ArrayLen(arguments.primaryKeys); loc.i++) {
+				if (loc.i != 1) {
+					loc.sql = loc.sql & ", ";
+				}
+				loc.sql = loc.sql & arguments.primaryKeys[loc.i].toColumnNameSQL() & " ASC";
+			}
+			loc.sql = loc.sql & ")";
       </cfscript>
       <cfreturn loc.sql />
   </cffunction>
@@ -112,7 +109,24 @@
 	<cffunction name="changeColumnInTable" returntype="string" access="public" hint="generates sql to change an existing column in a table">
 		<cfargument name="name" type="string" required="true" hint="table name">
 		<cfargument name="column" type="any" required="true" hint="column definition object">
-		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# ALTER COLUMN #arguments.column.toSQL()#">
+		<cfscript>
+		local.sql = "";
+		for (local.i in ["default","null","afterColumn"]) {
+			if (StructKeyExists(arguments.column, local.i)) {
+				local.opts = {};
+				local.opts.type = arguments.column.type;
+				local.opts[local.i] = arguments.column[local.i];
+				local.columnSQL = addColumnOptions(sql="", options=local.opts, alter=true);
+				if (local.i == "null") {
+					local.sql = local.sql & "ALTER TABLE #quoteTableName(LCase(arguments.name))# ALTER COLUMN #arguments.column.name# #arguments.column.sqlType()# #local.columnSQL#;";
+				} else if (local.i == "default") {
+					// SQL server will throw an exception if a default constraint exists
+					local.sql = local.sql & "ALTER TABLE #quoteTableName(LCase(arguments.name))# ADD CONSTRAINT DF_#arguments.column.name# #local.columnSQL# FOR #arguments.column.name#;";
+				}
+			}
+		}
+		</cfscript>
+		<cfreturn local.sql>
 	</cffunction>
 
 	<cffunction name="renameColumnInTable" returntype="string" access="public" hint="generates sql to rename an existing column in a table">
