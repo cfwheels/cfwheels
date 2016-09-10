@@ -11,7 +11,7 @@
     EXAMPLE:
       addIndex(table='members',columnNames='username',unique=true);
 */
-component extends="[extends]" hint="[description"] {
+component extends="[extends]" hint="[description]" {
 
 	function up(){
 	  	hasError = false;

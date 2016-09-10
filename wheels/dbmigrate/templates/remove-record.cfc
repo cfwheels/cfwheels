@@ -9,7 +9,7 @@
     EXAMPLE:
       removeRecord(table='members',where='id=1');
 */
-component extends="[extends]" hint="[description"] {
+component extends="[extends]" hint="[description]" {
 
 	function up(){
 	  	hasError = false;

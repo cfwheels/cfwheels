@@ -10,7 +10,7 @@
     EXAMPLE:
       updateRecord(table='members',where='id=1',status='Active');
 */
-component extends="[extends]" hint="[description"] {
+component extends="[extends]" hint="[description]" {
 
 	function up(){
 	  	hasError = false;

@@ -9,7 +9,7 @@
     EXAMPLE:
       addRecord(table='members',id=1,username='admin',password='#Hash("admin")#');
 */
-component extends="[extends]" hint="[description"] {
+component extends="[extends]" hint="[description]" {
 
 	function up(){
 	  	hasError = false;

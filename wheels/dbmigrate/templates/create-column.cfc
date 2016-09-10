@@ -15,7 +15,7 @@
 
     EXAMPLE:
 */
-component extends="[extends]" hint="[description"] {
+component extends="[extends]" hint="[description]" {
 
 	function up(){
 	  	hasError = false;

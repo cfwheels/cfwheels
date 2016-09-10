@@ -17,7 +17,7 @@
     EXAMPLE:
       changeColumn(table='members',columnType='string',columnName='status',limit=50);
 */
-component extends="[extends]" hint="[description"] {
+component extends="[extends]" hint="[description]" {
 
 	function up(){
 	  	hasError = false;

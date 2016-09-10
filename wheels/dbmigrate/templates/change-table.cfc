@@ -10,7 +10,7 @@
       t.string(columnNames="fullName", default="", null=true, limit="255");
       t.change();
 */
-component extends="[extends]" hint="[description"] {
+component extends="[extends]" hint="[description]" {
 
 	function up(){
 	  	hasError = false;

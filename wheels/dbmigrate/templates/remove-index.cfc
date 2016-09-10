@@ -9,7 +9,7 @@
     EXAMPLE:
       removeIndex(table='members',indexName='members_username');
 */
-component extends="[extends]" hint="[description"] {
+component extends="[extends]" hint="[description]" {
 
 	function up(){
 	  	hasError = false;

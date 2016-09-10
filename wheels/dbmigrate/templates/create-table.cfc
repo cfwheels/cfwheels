@@ -17,7 +17,7 @@
       t.integer(columnNames='age', default='', null=true, limit='1');
       t.decimal(columnNames='hourlyWage', default='', null=true, precision='1', scale='2');
 */
-component extends="[extends]" hint="[description"] {
+component extends="[extends]" hint="[description]" {
 
 	function up(){
 	  	hasError = false;

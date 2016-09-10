@@ -10,7 +10,7 @@
     EXAMPLE:
       renameColumn(table='users', columnName='password', newColumnName='');
 */
-component extends="[extends]" hint="[description"] {
+component extends="[extends]" hint="[description]" {
 
 	function up(){
 	  	hasError = false;
