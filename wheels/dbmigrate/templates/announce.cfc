@@ -1,10 +1,10 @@
 component extends="[extends]" hint="[description]" {
 
-  function up(){
+  function up() {
     announce('');
   }
 
-  function down(){
+  function down() {
     announce('');
   }
 

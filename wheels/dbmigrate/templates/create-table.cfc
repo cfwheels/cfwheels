@@ -19,7 +19,7 @@
 */
 component extends="[extends]" hint="[description]" {
 
-	function up(){
+	function up() {
 	  	hasError = false;
 		transaction {
 		  	try{
@@ -41,7 +41,7 @@ component extends="[extends]" hint="[description]" {
 		}
 	}
 
-	function down(){
+	function down() {
 	  	hasError = false;
 		transaction {
 		  	try{
