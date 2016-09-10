@@ -1,10 +1,8 @@
-<cfcomponent>
-	<cfinclude template="../basefunctions.cfm">
+component {
 
-	<cffunction name="typeToSQL" returntype="string">
-		<cfargument name="type" type="string" required="true" hint="column type">
-		<cfargument name="options" type="struct" required="false" default="#StructNew()#" hint="column options">
-		<cfscript>
+	include "../basefunctions.cfm";
+
+	public string function typeToSQL(required string type, struct options = {}) {
 		var sql = '';
 		if(IsDefined("variables.sqlTypes") && structKeyExists(variables.sqlTypes,arguments.type)) {
 			if(IsStruct(variables.sqlTypes[arguments.type])) {
@@ -35,277 +33,284 @@
 				sql = variables.sqlTypes[arguments.type];
 			}
 		}
-		</cfscript>
-		<cfreturn sql>
-	</cffunction>
+		return sql;
+	}
 
-	<cffunction name="addPrimaryKeyOptions" returntype="string" access="public">
-		<cfthrow message="The `addPrimaryKeyOptions` must be implented in the storage specific adapter." />
-	</cffunction>
+	public string function addPrimaryKeyOptions() {
+		throw(message="The `addPrimaryKeyOptions` must be implented in the storage specific adapter.");
+	}
 
-    <cffunction name="primaryKeyConstraint" returntype="string" access="public">
-    	<cfargument name="name" type="string" required="true">
-        <cfargument name="primaryKeys" type="array" required="true">
-        <cfscript>
-        var loc = {};
-
-		loc.sql = "PRIMARY KEY (";
-
-		for (loc.i = 1; loc.i lte ArrayLen(arguments.primaryKeys); loc.i++)
+	public string function primaryKeyConstraint(required string name, required array primaryKeys) {
+		local.sql = "PRIMARY KEY (";
+		for (local.i = 1; local.i lte ArrayLen(arguments.primaryKeys); local.i++)
 		{
-			if (loc.i != 1)
-				loc.sql = loc.sql & ", ";
-			loc.sql = loc.sql & arguments.primaryKeys[loc.i].toColumnNameSQL();
+			if (local.i != 1) {
+				local.sql = local.sql & ", ";
+			}
+			local.sql = local.sql & arguments.primaryKeys[local.i].toColumnNameSQL();
 		}
+		local.sql = local.sql & ")";
+		return local.sql;
+	}
 
-		loc.sql = loc.sql & ")";
-        </cfscript>
-        <cfreturn loc.sql />
-    </cffunction>
-
-	<cffunction name="addColumnOptions" returntype="string" access="public">
-		<cfargument name="sql" type="string" required="true" hint="column definition sql">
-		<cfargument name="options" type="struct" required="false" default="#StructNew()#" hint="column options">
-		<cfscript>
-			if(StructKeyExists(arguments.options,'type') && arguments.options.type != 'primaryKey') {
-				if(StructKeyExists(arguments.options,'default') && optionsIncludeDefault(argumentCollection=arguments.options)) {
-					if(arguments.options.default eq "NULL" || (arguments.options.default eq "" && ListFindNoCase("boolean,date,datetime,time,timestamp,decimal,float,integer",arguments.options.type))) {
-						arguments.sql = arguments.sql & " DEFAULT NULL";
-					} else if(arguments.options.type == 'boolean') {
-						arguments.sql = arguments.sql & " DEFAULT #IIf(arguments.options.default,1,0)#";
-					} else if(arguments.options.type == 'string' && arguments.options.default eq "") {
-						arguments.sql = arguments.sql;
-					} else {
-						arguments.sql = arguments.sql & " DEFAULT #quote(value=arguments.options.default,options=arguments.options)#";
-					}
-				}
-				if(StructKeyExists(arguments.options,'null')) {
-					if (arguments.options.null) {
-						arguments.sql = arguments.sql & " NULL";
-					} else {
-						arguments.sql = arguments.sql & " NOT NULL";
-					}
+	public string function addColumnOptions(required string sql, struct options="#StructNew()#") {
+		if(StructKeyExists(arguments.options,'type') && arguments.options.type != 'primaryKey') {
+			if(StructKeyExists(arguments.options,'default') && optionsIncludeDefault(argumentCollection=arguments.options)) {
+				if(arguments.options.default eq "NULL" || (arguments.options.default eq "" && ListFindNoCase("boolean,date,datetime,time,timestamp,decimal,float,integer",arguments.options.type))) {
+					arguments.sql = arguments.sql & " DEFAULT NULL";
+				} else if(arguments.options.type == 'boolean') {
+					arguments.sql = arguments.sql & " DEFAULT #IIf(arguments.options.default,1,0)#";
+				} else if(arguments.options.type == 'string' && arguments.options.default eq "") {
+					arguments.sql = arguments.sql;
+				} else {
+					arguments.sql = arguments.sql & " DEFAULT #quote(value=arguments.options.default,options=arguments.options)#";
 				}
 			}
-		</cfscript>
-		<cfif structKeyExists(arguments.options, "afterColumn") And Len(Trim(arguments.options.afterColumn)) GT 0>
-			<cfset arguments.sql = arguments.sql & " AFTER #arguments.options.afterColumn#">
-		</cfif>
-		<cfreturn arguments.sql>
-	</cffunction>
-
-	<cffunction name="optionsIncludeDefault" returntype="boolean">
-		<cfargument name="type" type="string" required="false" hint="column type">
-		<cfargument name="default" type="string" required="false" default="" hint="default value">
-		<cfargument name="null" type="boolean" required="false" default="true" hint="whether nulls are allowed">
-		<cfreturn true>
-	</cffunction>
-
-	<cffunction name="quote" returntype="string" access="public" hint="quote value if required">
-		<cfargument name="value" type="string" required="true" hint="value to be quoted">
-		<cfargument name="options" type="struct" required="false" default="#StructNew()#" hint="column options">
-		<cfscript>
-			if (listFindNoCase("CURRENT_TIMESTAMP", arguments.value))
-				return arguments.value;
-
-			if(StructKeyExists(arguments.options,'type') && ListFindNoCase("binary,date,datetime,time,timestamp",arguments.options.type)) {
-				arguments.value = "'#arguments.value#'";
+			if(StructKeyExists(arguments.options,'null')) {
+				if (arguments.options.null) {
+					arguments.sql = arguments.sql & " NULL";
+				} else {
+					arguments.sql = arguments.sql & " NOT NULL";
+				}
 			}
-			else if(StructKeyExists(arguments.options,'type') && ListFindNoCase("text,string",arguments.options.type)) {
-				arguments.value = "'#ReplaceNoCase(arguments.value,"'","''")#'";
-			}
-		</cfscript>
-		<cfreturn arguments.value>
-	</cffunction>
+		}
+		if (structKeyExists(arguments.options, "afterColumn") And Len(Trim(arguments.options.afterColumn)) GT 0) {
+			arguments.sql = arguments.sql & " AFTER #arguments.options.afterColumn#";
+		}
+		return arguments.sql;
+	}
 
-	<cffunction name="quoteTableName" returntype="string" access="public" hint="surrounds table or index names with quotes">
-		<cfargument name="name" type="string" required="true" hint="column name">
-		<cfreturn "'#Replace(arguments.name,".","`.`","ALL")#'">
-	</cffunction>
+	// what's the purpose of this?
+	public boolean function optionsIncludeDefault(
+		string type,
+		string default = "",
+		boolean null = true
+	) {
+		return true;
+	}
 
-	<cffunction name="quoteColumnName" returntype="string" access="public" hint="surrounds column names with quotes">
-		<cfargument name="name" type="string" required="true" hint="column name">
-		<cfreturn "'#arguments.name#'">
-	</cffunction>
+	/**
+  * quote value if required
+  */
+	public string function quote(required string value, struct options = {}) {
+		if (ListFindNoCase("CURRENT_TIMESTAMP", arguments.value)) {
+			return arguments.value;
+		}
+		if(StructKeyExists(arguments.options,'type') && ListFindNoCase("binary,date,datetime,time,timestamp",arguments.options.type)) {
+			arguments.value = "'#arguments.value#'";
+		}
+		else if(StructKeyExists(arguments.options,'type') && ListFindNoCase("text,string",arguments.options.type)) {
+			arguments.value = "'#ReplaceNoCase(arguments.value,"'","''")#'";
+		}
+		return arguments.value;
+	}
 
-	<cffunction name="createTable" returntype="string" access="public" hint="generates sql to create a table">
-		<cfargument name="name" type="string" required="true" hint="table name">
-		<cfargument name="columns" type="array" required="true" hint="array of column definitions">
-		<cfargument name="primaryKeys" type="array" required="false" default="#ArrayNew(1)#" hint="array of primary key definitions">
-		<cfargument name="foreignKeys" type="array" required="false" default="#ArrayNew(1)#" hint="array of foreign key definitions">
-		<cfscript>
-		var loc = {};
-		loc.sql = "CREATE TABLE #quoteTableName(LCase(arguments.name))# (#chr(13)##chr(10)#";
+	/**
+	* surrounds table or index names with quotes
+	*/
+	public string function quoteTableName(required string name) {
+		return "'#Replace(arguments.name,".","`.`","ALL")#'";
+	}
 
-		loc.iEnd = ArrayLen(arguments.primaryKeys);
+	/**
+	* surrounds column names with quotes
+	*/
+	public string function quoteColumnName(required string name) {
+		return "'#arguments.name#'";
+	}
 
-		if (loc.iEnd == 1)
-		{
+	/**
+  * generates sql to create a table
+  */
+	public string function createTable(
+	  required string name,
+	  required array columns,
+	  array primaryKeys = [],
+	  array foreignKeys = []
+	) {
+
+		local.sql = "CREATE TABLE #quoteTableName(LCase(arguments.name))# (#chr(13)##chr(10)#";
+		local.iEnd = ArrayLen(arguments.primaryKeys);
+
+		if (local.iEnd == 1) {
 			// if we have a single primary key, define the column with the primaryKey adapter method
-			loc.sql = loc.sql & " " & arguments.primaryKeys[1].toPrimaryKeySQL() & ",#chr(13)##chr(10)#";
-		}
-		else if (loc.iEnd > 1)
-		{
+			local.sql = local.sql & " " & arguments.primaryKeys[1].toPrimaryKeySQL() & ",#chr(13)##chr(10)#";
+		} else if (local.iEnd > 1) {
 			// add the primary key columns like we would normal columns
-			for (loc.i = 1; loc.i <= loc.iEnd; loc.i++) {
-				loc.sql = loc.sql & " " & arguments.primaryKeys[loc.i].toSQL();
-				if (loc.i != loc.iEnd || ArrayLen(arguments.columns))
-					loc.sql = loc.sql & ",#chr(13)##chr(10)#";
+			for (local.i = 1; local.i <= local.iEnd; local.i++) {
+				local.sql = local.sql & " " & arguments.primaryKeys[local.i].toSQL();
+				if (local.i != local.iEnd || ArrayLen(arguments.columns)) {
+					local.sql = local.sql & ",#chr(13)##chr(10)#";
+				}
 			}
 		}
 
 		// define the columns in the sql
-		loc.iEnd = ArrayLen(arguments.columns);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++) {
-			loc.sql = loc.sql & " " & arguments.columns[loc.i].toSQL();
-			if(loc.i != loc.iEnd) { loc.sql = loc.sql & ",#chr(13)##chr(10)#"; }
+		local.iEnd = ArrayLen(arguments.columns);
+		for (local.i=1; local.i <= local.iEnd; local.i++) {
+			local.sql = local.sql & " " & arguments.columns[local.i].toSQL();
+			if(local.i != local.iEnd) {
+				local.sql = local.sql & ",#chr(13)##chr(10)#";
+			}
 		}
 
 		// if we have multiple primarykeys the adapater might need to add a constraint here
-		if (ArrayLen(arguments.primaryKeys) > 1)
-			loc.sql = loc.sql & ",#chr(13)##chr(10)# " & primaryKeyConstraint(argumentCollection=arguments);
+		if (ArrayLen(arguments.primaryKeys) > 1) {
+			local.sql = local.sql & ",#chr(13)##chr(10)# " & primaryKeyConstraint(argumentCollection=arguments);
+		}
 
 		// define the foreign keys
-		loc.iEnd = ArrayLen(arguments.foreignKeys);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++) {
-			loc.sql = loc.sql & ",#chr(13)##chr(10)# " & arguments.foreignKeys[loc.i].toForeignKeySQL();
+		local.iEnd = ArrayLen(arguments.foreignKeys);
+		for (local.i=1; local.i <= local.iEnd; local.i++) {
+			local.sql = local.sql & ",#chr(13)##chr(10)# " & arguments.foreignKeys[local.i].toForeignKeySQL();
 		}
-		loc.sql = loc.sql & "#chr(13)##chr(10)#)";
-		</cfscript>
-		<cfreturn loc.sql>
-	</cffunction>
+		local.sql = local.sql & "#chr(13)##chr(10)#)";
+		return local.sql;
+	}
 
-	<cffunction name="renameTable" returntype="string" access="public" hint="generates sql to rename a table">
-		<cfargument name="oldName" type="string" required="true" hint="old table name">
-		<cfargument name="newName" type="string" required="true" hint="new table name">
-		<cfreturn "ALTER TABLE #quoteTableName(arguments.oldName)# RENAME #quoteTableName(arguments.newName)#">
-	</cffunction>
+	/**
+	* generates sql to rename a table
+	*/
+	public string function renameTable(required string oldName, required string newName) {
+		return "ALTER TABLE #quoteTableName(arguments.oldName)# RENAME #quoteTableName(arguments.newName)#";
+	}
 
-	<cffunction name="dropTable" returntype="string" access="public" hint="generates sql to drop a table">
-		<cfargument name="name" type="string" required="true" hint="table name">
-		<cfreturn "DROP TABLE IF EXISTS #quoteTableName(LCase(arguments.name))#">
-	</cffunction>
+	/**
+	* generates sql to drop a table
+	*/
+	public string function dropTable(required string name) {
+		return "DROP TABLE IF EXISTS #quoteTableName(LCase(arguments.name))#";
+	}
 
-	<cffunction name="addColumnToTable" returntype="string" access="public" hint="generates sql to add a new column to a table">
-		<cfargument name="name" type="string" required="true" hint="table name">
-		<cfargument name="column" type="any" required="true" hint="column definition object">
-		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# ADD COLUMN #arguments.column.toSQL()#" />
-	</cffunction>
+	/**
+	* generates sql to add a new column to a table
+	*/
+	public string function addColumnToTable(required string name, required any column) {
+		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# ADD COLUMN #arguments.column.toSQL()#";
+	}
 
-	<cffunction name="changeColumnInTable" returntype="string" access="public" hint="generates sql to change an existing column in a table">
-		<cfargument name="name" type="string" required="true" hint="table name">
-		<cfargument name="column" type="any" required="true" hint="column definition object">
-		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# CHANGE #quoteColumnName(arguments.column.name)# #arguments.column.toSQL()#">
-	</cffunction>
+	/**
+	* generates sql to change an existing column in a table
+	*/
+	public string function changeColumnInTable(required string name, required any column) {
+		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# CHANGE #quoteColumnName(arguments.column.name)# #arguments.column.toSQL()#";
+	}
 
-	<cffunction name="renameColumnInTable" returntype="string" access="public" hint="generates sql to rename an existing column in a table">
-		<cfargument name="name" type="string" required="true" hint="table name">
-		<cfargument name="columnName" type="string" required="true" hint="old column name">
-		<cfargument name="newColumnName" type="string" required="true" hint="new column name">
-		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# RENAME COLUMN #quoteColumnName(arguments.columnName)# TO #quoteColumnName(arguments.newColumnName)#">
-	</cffunction>
+	/**
+	* generates sql to rename an existing column in a table
+	*/
+	public string function renameColumnInTable(
+		required string name,
+		required string columnName,
+		required string newColumnName
+	) {
+		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# RENAME COLUMN #quoteColumnName(arguments.columnName)# TO #quoteColumnName(arguments.newColumnName)#";
+	}
 
-	<cffunction name="dropColumnFromTable" returntype="string" access="public" hint="generates sql to add a foreign key constraint to a table">
-		<cfargument name="name" type="string" required="true" hint="table name">
-		<cfargument name="columnName" type="any" required="true" hint="column name">
-		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP COLUMN #quoteColumnName(arguments.columnName)#">
-	</cffunction>
+	/**
+	* generates sql to drop a column from a table
+	*/
+	public string function dropColumnFromTable(required string name, required string columnName) {
+		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP COLUMN #quoteColumnName(arguments.columnName)#";
+	}
 
-	<cffunction name="addForeignKeyToTable" returntype="string" access="public" hint="generates sql to add a foreign key constraint to a table">
-		<cfargument name="name" type="string" required="true" hint="table name">
-		<cfargument name="foreignKey" type="any" required="true" hint="foreign key definition object">
-		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# ADD #arguments.foreignKey.toSQL()#">
-	</cffunction>
+	/**
+	* generates sql to add a foreign key constraint to a table
+	*/
+	public string function addForeignKeyToTable(required string name, required any foreignKey) {
+		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# ADD #arguments.foreignKey.toSQL()#";
+	}
 
-	<cffunction name="dropForeignKeyFromTable" returntype="string" access="public" hint="generates sql to add a foreign key constraint to a table">
-		<cfargument name="name" type="string" required="true" hint="table name">
-		<cfargument name="keyName" type="any" required="true" hint="foreign key name">
-		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP FOREIGN KEY #quoteTableName(arguments.keyname)#">
-	</cffunction>
+	/**
+	* generates sql to drop a foreign key constraint from a table
+	*/
+	public string function dropForeignKeyFromTable(required string name, required string keyName) {
+		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP FOREIGN KEY #quoteTableName(arguments.keyname)#";
+	}
 
-	<cffunction name="foreignKeySQL" returntype="string" access="public" hint="generates sql for foreign key constraint">
-		<cfargument name="name" type="string" required="true" hint="foreign key name">
-		<cfargument name="table" type="string" required="yes" hint="table name">
-		<cfargument name="referenceTable" type="string" required="yes" hint="referenced table name">
-		<cfargument name="column" type="string" required="yes" hint="column name">
-		<cfargument name="referenceColumn" type="string" required="yes" hint="referenced column name">
-		<cfargument name="onUpdate" type="string" required="false" default="">
-		<cfargument name="onDelete" type="string" required="false" default="">
-
-		<cfscript>
-			var loc = { sql = "CONSTRAINT #quoteTableName(arguments.name)# FOREIGN KEY (#quoteColumnName(arguments.column)#) REFERENCES #LCase(arguments.referenceTable)#(#quoteColumnName(arguments.referenceColumn)#)" };
-			for (loc.item in listToArray("onUpdate,onDelete"))
-				{
-					if (len(arguments[loc.item]))
-					{
-						switch (arguments[loc.item])
-						{
-							case "none":
-								loc.sql = loc.sql & " " & uCase(humanize(loc.item)) & " NO ACTION";
-								break;
-
-							case "null":
-								loc.sql = loc.sql & " " & uCase(humanize(loc.item)) & " SET NULL";
-								break;
-
-							default:
-								loc.sql = loc.sql & " " & uCase(humanize(loc.item)) & " CASCADE";
-								break;
-						}
-					}
+	/**
+  * generates sql for foreign key constraint
+  */
+	public string function foreignKeySQL(
+	  required string name,
+	  required string table,
+	  required string referenceTable,
+	  required string column,
+	  required string referenceColumn,
+	  string onUpdate = "",
+	  string onDelete = ""
+	) {
+		local.sql = "CONSTRAINT #quoteTableName(arguments.name)# FOREIGN KEY (#quoteColumnName(arguments.column)#) REFERENCES #LCase(arguments.referenceTable)#(#quoteColumnName(arguments.referenceColumn)#)";
+		for (local.item in listToArray("onUpdate,onDelete")) {
+			if (len(arguments[local.item])) {
+				switch (arguments[local.item]) {
+					case "none":
+						local.sql = local.sql & " " & uCase(humanize(local.item)) & " NO ACTION";
+						break;
+					case "null":
+						local.sql = local.sql & " " & uCase(humanize(local.item)) & " SET NULL";
+						break;
+					default:
+						local.sql = local.sql & " " & uCase(humanize(local.item)) & " CASCADE";
+						break;
 				}
-		</cfscript>
-		<cfreturn loc.sql>
-	</cffunction>
+			}
+		}
+		return local.sql;
+	}
 
-	<cffunction name="addIndex" returntype="string" access="public" hint="generates sql to add database index on a table column">
-		<cfargument name="table" type="string" required="true" hint="table name">
-		<cfargument name="columnNames" type="string" required="true" hint="column names to index">
-		<cfargument name="unique" type="boolean" required="false" default="false" hint="create unique index">
-		<cfargument name="indexName" type="string" required="false" default="#LCase(arguments.table)#_#ListFirst(arguments.columnNames)#" hint="override the default index name">
-		<cfscript>
+	/**
+  * generates sql to add database index on a table column
+  */
+	public string function addIndex(
+	  required string table,
+	  required string columnNames,
+	  boolean unique = false,
+	  string indexName = "#LCase(arguments.table)#_#ListFirst(arguments.columnNames)#"
+	) {
 		var sql = "CREATE ";
-		if(arguments.unique) { sql = sql & "UNIQUE "; }
+		if(arguments.unique) {
+			sql = sql & "UNIQUE ";
+		}
 		sql = sql & "INDEX #quoteTableName(arguments.indexName)# ON #quoteTableName(arguments.table)#(";
 
-		loc.iEnd = ListLen(arguments.columnNames);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++) {
-			sql = sql & quoteColumnName(ListGetAt(arguments.columnNames,loc.i));
-			if(loc.i != loc.iEnd) { sql = sql & ","; }
+		local.iEnd = ListLen(arguments.columnNames);
+		for (local.i=1; local.i <= local.iEnd; local.i++) {
+			sql = sql & quoteColumnName(ListGetAt(arguments.columnNames,local.i));
+			if(local.i != local.iEnd) {
+				sql = sql & ",";
+			}
 		}
 		sql = sql & ")";
-		</cfscript>
-		<cfreturn sql>
-	</cffunction>
+		return sql;
+	}
 
-	<cffunction name="removeIndex" returntype="string" access="public" hint="generates sql to remove a database index">
-		<cfargument name="table" type="string" required="true" hint="table name">
-		<cfargument name="indexName" type="string" required="false" default="" hint="index name">
-		<cfreturn "DROP INDEX #quoteTableName(arguments.indexName)#">
-	</cffunction>
+	/**
+	* generates sql to remove a database index
+	*/
+	public any function removeIndex(required string table, string indexName = "") {
+		return "DROP INDEX #quoteTableName(arguments.indexName)#";
+	}
 
-	<cffunction name="createView" returntype="string" access="public" hint="generates sql to create a view">
-		<cfargument name="name" type="string" required="true" hint="view name">
-		<cfargument name="sql" type="string" required="true" hint="select sql">
-		<cfscript>
-		var loc = {};
-		loc.sql = "CREATE VIEW #quoteTableName(LCase(arguments.name))# AS ";
-		loc.sql = loc.sql & arguments.sql;
-		</cfscript>
-		<cfreturn loc.sql>
-	</cffunction>
+	/**
+  * generates sql to create a view
+  */
+	public string function createView(required string name, required string sql) {
+		return "CREATE VIEW #quoteTableName(LCase(arguments.name))# AS " & arguments.sql;
+	}
 
-	<cffunction name="dropView" returntype="string" access="public" hint="generates sql to drop a view">
-		<cfargument name="name" type="string" required="true" hint="view name">
-		<cfreturn "DROP VIEW IF EXISTS #quoteTableName(LCase(arguments.name))#">
-	</cffunction>
+	/**
+	* generates sql to drop a view
+	*/
+	public string function dropView(required string name) {
+		return "DROP VIEW IF EXISTS #quoteTableName(LCase(arguments.name))#";
+	}
 
-	<cffunction name="addRecordPrefix" returntype="string" access="public" hint="generates sql to remove a database index">
-		<cfreturn "">
-	</cffunction>
+	public string function addRecordPrefix() {
+		return "";
+	}
 
-	<cffunction name="addRecordSuffix" returntype="string" access="public" hint="generates sql to remove a database index">
-		<cfreturn "">
-	</cffunction>
-
-</cfcomponent>
+	public string function addRecordSuffix() {
+		return "";
+	}
+}
