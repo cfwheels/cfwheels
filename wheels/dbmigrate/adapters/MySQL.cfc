@@ -1,6 +1,5 @@
 component extends="Abstract" {
 
-	<cfscript>
 	variables.sqlTypes = {};
 	variables.sqlTypes['biginteger'] = {name='BIGINT UNSIGNED'};
 	variables.sqlTypes['binary'] = {name='BLOB'};
@@ -23,6 +22,9 @@ component extends="Abstract" {
 		return "MySQL";
 	}
 
+	/**
+	* generates sql for primary key options
+	*/
 	public string function addPrimaryKeyOptions(required string sql, struct options = {}) {
 		if (StructKeyExists(arguments.options, "null") && arguments.options.null) {
 			arguments.sql = arguments.sql & " NULL";
@@ -81,7 +83,7 @@ component extends="Abstract" {
   * generates sql to remove a database index
 	* MySQL requires table name as well as index name
   */
-	public string function removeIndex(required string table, string indexName="") {
+	public string function removeIndex(required string table, string indexName = "") {
 		return "DROP INDEX #quoteTableName(arguments.indexName)# ON #quoteTableName(arguments.table)#";
 	}
 }
