@@ -1,107 +1,105 @@
-<cfcomponent extends="Abstract">
+component extends="Abstract" {
 
-	<cfset variables.sqlTypes = {}>
-	<cfset variables.sqlTypes['binary'] = {name='BYTEA'}>
-	<cfset variables.sqlTypes['boolean'] = {name='BOOLEAN'}>
-	<cfset variables.sqlTypes['date'] = {name='DATE'}>
-	<cfset variables.sqlTypes['datetime'] = {name='TIMESTAMP'}>
-	<cfset variables.sqlTypes['decimal'] = {name='DECIMAL'}>
-	<cfset variables.sqlTypes['float'] = {name='FLOAT'}>
-	<cfset variables.sqlTypes['integer'] = {name='INTEGER'}>
-	<cfset variables.sqlTypes['string'] = {name='VARCHAR', limit=255}>
-	<cfset variables.sqlTypes['text'] = {name='TEXT'}>
-	<cfset variables.sqlTypes['time'] = {name='TIME'}>
-	<cfset variables.sqlTypes['timestamp'] = {name='TIMESTAMP'}>
+	variables.sqlTypes = {};
+	variables.sqlTypes['binary'] = {name='BYTEA'};
+	variables.sqlTypes['boolean'] = {name='BOOLEAN'};
+	variables.sqlTypes['date'] = {name='DATE'};
+	variables.sqlTypes['datetime'] = {name='TIMESTAMP'};
+	variables.sqlTypes['decimal'] = {name='DECIMAL'};
+	variables.sqlTypes['float'] = {name='FLOAT'};
+	variables.sqlTypes['integer'] = {name='INTEGER'};
+	variables.sqlTypes['string'] = {name='VARCHAR', limit=255};
+	variables.sqlTypes['text'] = {name='TEXT'};
+	variables.sqlTypes['time'] = {name='TIME'};
+	variables.sqlTypes['timestamp'] = {name='TIMESTAMP'};
 
-	<cffunction name="adapterName" returntype="string" access="public" hint="name of database adapter">
-		<cfreturn "PostgreSQL">
-	</cffunction>
+	/**
+  * name of database adapter
+  */
+	public string function adapterName() {
+		return "PostgreSQL";
+	}
 
-	<cffunction name="addPrimaryKeyOptions" returntype="string" access="public">
-		<cfargument name="sql" type="string" required="true" hint="column definition sql">
-		<cfargument name="options" type="struct" required="false" default="#StructNew()#" hint="column options">
-		<cfscript>
+	/**
+	* generates sql for primary key options
+	*/
+	public string function addPrimaryKeyOptions(required string sql, struct options = {}) {
 		if (StructKeyExists(arguments.options, "autoIncrement") && arguments.options.autoIncrement) {
 			arguments.sql = ReplaceNoCase(arguments.sql, "INTEGER", "SERIAL", "all");
 		}
 		arguments.sql = arguments.sql & " PRIMARY KEY";
-		</cfscript>
-		<cfreturn arguments.sql>
-	</cffunction>
+		return arguments.sql;
+	}
 
-	<!--- PostgreSQL alter column statements use extended SQL --->
-	<cffunction name="addColumnOptions" returntype="string" access="public">
-		<cfargument name="sql" type="string" required="true" hint="column definition sql">
-		<cfargument name="options" type="struct" required="false" default="#StructNew()#" hint="column options">
-		<cfargument name="alter" type="boolean" required="false" default="false" hint="generate create or alter flavoured sql">
-		<cfscript>
-			if(StructKeyExists(arguments.options,'type') && arguments.options.type != 'primaryKey') {
-				if(StructKeyExists(arguments.options,'default') && optionsIncludeDefault(argumentCollection=arguments.options)) {
-					if (arguments.alter) {
-						arguments.sql = arguments.sql & " SET";
-					}
-					if(arguments.options.default eq "NULL" || (arguments.options.default eq "" && ListFindNoCase("boolean,date,datetime,time,timestamp,decimal,float,integer", arguments.options.type))) {
-						arguments.sql = arguments.sql & " DEFAULT NULL";
-					} else if(arguments.options.type == 'boolean') {
-						arguments.sql = arguments.sql & " DEFAULT #IIf(arguments.options.default,true,false)#";
-					} else if(arguments.options.type == 'string' && arguments.options.default eq "") {
-						arguments.sql = arguments.sql & "DEFAULT ''";
-					} else {
-						arguments.sql = arguments.sql & " DEFAULT #quote(value=arguments.options.default,options=arguments.options)#";
-					}
+	/**
+	* PostgreSQL alter column statements use extended SQL
+	*/
+	public string function addColumnOptions(
+	  required string sql,
+	  struct options="#StructNew()#",
+	  boolean alter="false"
+	) {
+
+		if(StructKeyExists(arguments.options,'type') && arguments.options.type != 'primaryKey') {
+			if(StructKeyExists(arguments.options,'default') && optionsIncludeDefault(argumentCollection=arguments.options)) {
+				if (arguments.alter) {
+					arguments.sql = arguments.sql & " SET";
 				}
-				if(StructKeyExists(arguments.options,'null')) {
-					if (arguments.alter) {
-						if (arguments.options.null) {
-							arguments.sql = arguments.sql & " DROP NOT NULL";
-						} else {
-							arguments.sql = arguments.sql & " SET NOT NULL";
-						}
-					} else if (!arguments.options.null) {
-						arguments.sql = arguments.sql & " NOT NULL";
-					}
+				if(arguments.options.default eq "NULL" || (arguments.options.default eq "" && ListFindNoCase("boolean,date,datetime,time,timestamp,decimal,float,integer", arguments.options.type))) {
+					arguments.sql = arguments.sql & " DEFAULT NULL";
+				} else if(arguments.options.type == 'boolean') {
+					arguments.sql = arguments.sql & " DEFAULT #IIf(arguments.options.default,true,false)#";
+				} else if(arguments.options.type == 'string' && arguments.options.default eq "") {
+					arguments.sql = arguments.sql & "DEFAULT ''";
+				} else {
+					arguments.sql = arguments.sql & " DEFAULT #quote(value=arguments.options.default,options=arguments.options)#";
 				}
 			}
-		</cfscript>
-		<cfif structKeyExists(arguments.options, "afterColumn") And Len(Trim(arguments.options.afterColumn)) GT 0>
-			<cfset arguments.sql = arguments.sql & " AFTER #arguments.options.afterColumn#">
-		</cfif>
-		<cfreturn arguments.sql>
-	</cffunction>
+			if(StructKeyExists(arguments.options,'null')) {
+				if (arguments.alter) {
+					if (arguments.options.null) {
+						arguments.sql = arguments.sql & " DROP NOT NULL";
+					} else {
+						arguments.sql = arguments.sql & " SET NOT NULL";
+					}
+				} else if (!arguments.options.null) {
+					arguments.sql = arguments.sql & " NOT NULL";
+				}
+			}
+		}
+		if (structKeyExists(arguments.options, "afterColumn") And Len(Trim(arguments.options.afterColumn)) GT 0) {
+			arguments.sql = arguments.sql & " AFTER #arguments.options.afterColumn#";
+		}
+		return arguments.sql;
+	}
 
-	<!--- don't quote tables --->
-	<cffunction name="quoteTableName" returntype="string" access="public" hint="surrounds table or index names with quotes">
-		<cfargument name="name" type="string" required="true" hint="column name">
-		<cfreturn arguments.name>
-	</cffunction>
+	/**
+  * Don't quote tables
+  */
+	public string function quoteTableName(required string name) {
+		return arguments.name;
+	}
 
-	<!--- postgres uses double quotes --->
-	<cffunction name="quoteColumnName" returntype="string" access="public" hint="surrounds column names with quotes">
-		<cfargument name="name" type="string" required="true" hint="column name">
-		<!--- <cfreturn '"#arguments.name#"'> --->
-		<cfreturn arguments.name>
-	</cffunction>
+	/**
+  * Don't quote columns
+  */
+	public string function quoteColumnName(required string name) {
+		return arguments.name;
+	}
 
-	<!--- createTable - use default --->
+	/**
+  * generates sql to rename a table
+  */
+	public string function renameTable(required string oldName, required string newName) {
+		return "ALTER TABLE #quoteTableName(arguments.oldName)# RENAME TO #quoteTableName(arguments.newName)#";
+	}
 
-	<cffunction name="renameTable" returntype="string" access="public" hint="generates sql to rename a table">
-		<cfargument name="oldName" type="string" required="true" hint="old table name">
-		<cfargument name="newName" type="string" required="true" hint="new table name">
-		<cfreturn "ALTER TABLE #quoteTableName(arguments.oldName)# RENAME TO #quoteTableName(arguments.newName)#">
-	</cffunction>
-
-	<!--- dropTable - use default --->
-
-	<!--- addColumnToTable - ? --->
-
-	<!--- NOTE FOR addColumnToTable & changeColumnInTable
-		  Rails adaptor appears to be applying default/nulls in separate queries
-		  Need to check if that is necessary --->
-
-	<cffunction name="changeColumnInTable" returntype="string" access="public" hint="generates sql to change an existing column in a table">
-		<cfargument name="name" type="string" required="true" hint="table name">
-		<cfargument name="column" type="any" required="true" hint="column definition object">
-		<cfscript>
+	/**
+  * generates sql to change an existing column in a table
+	* NOTE FOR addColumnToTable & changeColumnInTable
+	* Rails adaptor appears to be applying default/nulls in separate queries
+  */
+	public string function changeColumnInTable(required string name, required any column) {
 		for (local.i in ["default","null","afterColumn"]) {
 			if (StructKeyExists(arguments.column, local.i)) {
 				local.opts = {};
@@ -116,26 +114,14 @@
 				}
 			}
 		}
-		</cfscript>
-		<cfreturn local.sql>
-	</cffunction>
+		return local.sql;
+	}
 
-	<!--- renameColumnInTable - use default --->
+	/**
+  * generates sql to add a foreign key constraint to a table
+  */
+	public string function dropForeignKeyFromTable(required string name, required any keyName) {
+		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP CONSTRAINT #quoteTableName(arguments.keyname)#";
+	}
 
-	<!--- dropColumnFromTable - use default --->
-
-	<!--- addForeignKeyToTable - use default --->
-
-	<cffunction name="dropForeignKeyFromTable" returntype="string" access="public" hint="generates sql to add a foreign key constraint to a table">
-		<cfargument name="name" type="string" required="true" hint="table name">
-		<cfargument name="keyName" type="any" required="true" hint="foreign key name">
-		<cfreturn "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP CONSTRAINT #quoteTableName(arguments.keyname)#">
-	</cffunction>
-
-	<!--- foreignKeySQL - use default --->
-
-	<!--- addIndex - use default --->
-
-	<!--- removeIndex - use default --->
-
-</cfcomponent>
+}
