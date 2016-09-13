@@ -2,6 +2,9 @@ component {
 
 	include "../basefunctions.cfm";
 
+	/**
+	* generates sql for a column's data type definition
+	*/
 	public string function typeToSQL(required string type, struct options = {}) {
 		var sql = '';
 		if(IsDefined("variables.sqlTypes") && structKeyExists(variables.sqlTypes,arguments.type)) {
@@ -36,10 +39,16 @@ component {
 		return sql;
 	}
 
+	/**
+	* throw an execption for adapters without its own addPrimaryKeyOptions implementation
+	*/
 	public string function addPrimaryKeyOptions() {
 		throw(message="The `addPrimaryKeyOptions` must be implented in the storage specific adapter.");
 	}
 
+	/**
+	* generates sql for a primary key constraint
+	*/
 	public string function primaryKeyConstraint(required string name, required array primaryKeys) {
 		local.sql = "PRIMARY KEY (";
 		for (local.i = 1; local.i lte ArrayLen(arguments.primaryKeys); local.i++)
@@ -53,6 +62,9 @@ component {
 		return local.sql;
 	}
 
+	/**
+	* generates sql for column options
+	*/
 	public string function addColumnOptions(required string sql, struct options="#StructNew()#") {
 		if(StructKeyExists(arguments.options,'type') && arguments.options.type != 'primaryKey') {
 			if(StructKeyExists(arguments.options,'default') && optionsIncludeDefault(argumentCollection=arguments.options)) {
