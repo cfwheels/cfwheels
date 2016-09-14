@@ -67,7 +67,7 @@ private string function $getForeignKeys(required string table) {
 private void function $execute(required string sql) {
 	// trim and remove trailing semicolon (appears to cause problems for Oracle thin client JDBC driver)
 	arguments.sql = REReplace(trim(arguments.sql),";$","","ONE");
-	if (StructKeyExists(Request, "migrationSQLFile")) {
+	if (StructKeyExists(Request, "migrationSQLFile") && application.wheels.dbmigrateWriteSQLFiles) {
 		$file(action="append", file=Request.migrationSQLFile, output="#arguments.sql#;", addNewLine="yes", fixNewLine="yes");
 	}
 	$query(datasource=application.wheels.dataSourceName, sql=arguments.sql);

@@ -23,7 +23,7 @@ component output="false" mixin="none" environment="design,development,maintenanc
 		if (local.currentVersion eq arguments.version) {
 			local.rv = "Database is currently at version #arguments.version#. No migration required.#chr(13)#";
 		} else {
-			if (! DirectoryExists(this.paths.sql)) {
+			if (! DirectoryExists(this.paths.sql) && application.wheels.dbmigrateWriteSQLFiles) {
 				DirectoryCreate(this.paths.sql);
 			}
 			local.migrations = getAvailableMigrations();
@@ -40,7 +40,9 @@ component output="false" mixin="none" environment="design,development,maintenanc
   							local.rv = local.rv & "#chr(13)#------- " & local.migration.cfcfile & " #RepeatString("-",Max(5,50-Len(local.migration.cfcfile)))##chr(13)#";
   							Request.migrationOutput = "";
   							Request.migrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_down.sql";
-  							FileWrite(Request.migrationSQLFile, "");
+								if (application.wheels.dbmigrateWriteSQLFiles) {
+									FileWrite(Request.migrationSQLFile, "");
+								}
   							local.migration.cfc.down();
   							local.rv = local.rv & Request.migrationOutput;
   							$removeVersionAsMigrated(local.migration.version);
@@ -62,7 +64,9 @@ component output="false" mixin="none" environment="design,development,maintenanc
   							local.rv = local.rv & "#chr(13)#-------- " & local.migration.cfcfile & " #RepeatString("-",Max(5,50-Len(local.migration.cfcfile)))##chr(13)#";
   							Request.migrationOutput = "";
   							Request.migrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_up.sql";
-  							FileWrite(Request.migrationSQLFile, "");
+								if (application.wheels.dbmigrateWriteSQLFiles) {
+									FileWrite(Request.migrationSQLFile, "");
+								}
   							local.migration.cfc.up();
   							local.rv = local.rv & Request.migrationOutput;
   							$setVersionAsMigrated(local.migration.version);
@@ -148,7 +152,7 @@ component output="false" mixin="none" environment="design,development,maintenanc
 	private void function $setVersionAsMigrated(required string version) {
 	  $query(
 	    datasource=application.wheels.dataSourceName,
-	    sql="INSERT INTO schemainfo (version) VALUES ('#$sanitiseVersion(arguments.version)#')"
+	    sql="INSERT INTO #application.wheels.dbmigrateTableName# (version) VALUES ('#$sanitiseVersion(arguments.version)#')"
 	  );
 	}
 
@@ -158,7 +162,7 @@ component output="false" mixin="none" environment="design,development,maintenanc
 	private void function $removeVersionAsMigrated(required string version) {
 	  $query(
 	    datasource=application.wheels.dataSourceName,
-	    sql="DELETE FROM schemainfo WHERE version = '#$sanitiseVersion(arguments.version)#'"
+	    sql="DELETE FROM #application.wheels.dbmigrateTableName# WHERE version = '#$sanitiseVersion(arguments.version)#'"
 	  );
 	}
 
@@ -241,7 +245,7 @@ component output="false" mixin="none" environment="design,development,maintenanc
 		try {
 			local.migratedVersions = $query(
 				datasource=application.wheels.dataSourceName,
-				sql="SELECT version FROM schemainfo ORDER BY version ASC"
+				sql="SELECT version FROM #application.wheels.dbmigrateTableName# ORDER BY version ASC"
 			);
 			if (local.migratedVersions.recordcount eq 0) {
 				return 0;
@@ -251,7 +255,7 @@ component output="false" mixin="none" environment="design,development,maintenanc
 		} catch(any e) {
 			$query(
 				datasource=application.wheels.dataSourceName,
-				sql="CREATE TABLE schemainfo (version VARCHAR(25))"
+				sql="CREATE TABLE #application.wheels.dbmigrateTableName# (version VARCHAR(25))"
 			);
 			return 0;
 		}

@@ -8,13 +8,19 @@ component extends="wheels.tests.Test" {
 			migratePath="wheels/tests/_assets/db/migrate/",
 			sqlPath="wheels/tests/_assets/db/sql/"
 		);
-		for (local.table in ["bunyips","dropbears","hoopsnakes","schemainfo"]) {
+		for (local.table in ["bunyips","dropbears","hoopsnakes","schemainfo","dbmigrateversions"]) {
 			migration.dropTable(local.table);
 		};
+		$cleanSqlDirectory();
+		orginalDbmigrateWriteSQLFiles = Duplicate(application.wheels.dbmigrateWriteSQLFiles);
+		orginalDbmigrateTableName = Duplicate(application.wheels.dbmigrateTableName);
 	}
 
 	function teardown() {
 		$cleanSqlDirectory();
+		// revert to orginal values
+		application.wheels.dbmigrateWriteSQLFiles = orginalDbmigrateWriteSQLFiles;
+		application.wheels.dbmigrateTableName = orginalDbmigrateTableName;
 	}
 
 	function test_migrateto_migrate_up_from_0_to_001() {
@@ -60,11 +66,13 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_migrateto_generates_sql_files() {
+		application.wheels.dbmigrateWriteSQLFiles = true;
+
 		dbmigrate.migrateTo(002);
 		dbmigrate.migrateTo(001);
 
 		for (i in ["001_create_bunyips_table_up.sql","002_create_dropbears_table_up.sql","002_create_dropbears_table_down.sql"]) {
-			actual = fileRead(dbmigrate.paths.sql & i);
+			actual = FileRead(dbmigrate.paths.sql & i);
 			if (i contains "_up.sql") {
 				expected = "CREATE TABLE";
 			} else {
@@ -73,4 +81,27 @@ component extends="wheels.tests.Test" {
 			assert("actual contains expected");
 		};
 	}
+
+	function test_migrateto_migrate_up_does_not_generate_sql_file() {
+		dbmigrate.migrateTo(001);
+	  assert("! DirectoryExists(dbmigrate.paths.sql)");
+	}
+
+	function test_migrateto_uses_specified_versions_table_name() {
+		tableName = "dbmigrateversions";
+		application.wheels.dbmigrateTableName = tableName;
+
+		dbmigrate.migrateTo(001);
+
+		actual = $dbinfo(
+			datasource=application.wheels.dataSourceName,
+			type="columns",
+			table=tableName
+		);
+		expected = "version"
+
+		assert("actual.column_name eq expected");
+	}
+
+
 }

@@ -98,6 +98,8 @@ public void function onApplicationStart() {
 
 	// dbmigrate
 	application.$wheels.dbmigrate = $createObjectFromRoot(path="wheels/dbmigrate", fileName="dbmigrate", method="init");;
+	application.$wheels.dbmigrateTableName = "schemainfo";
+	application.$wheels.dbmigrateWriteSQLFiles = false;
 
 	// cache settings
 	application.$wheels.cacheDatabaseSchema = false;
@@ -192,7 +194,6 @@ public void function onApplicationStart() {
 	if (ListFindNoCase("production,maintenance", application.$wheels.environment)) {
 		application.$wheels.redirectAfterReload = true;
 	}
-
 
 	// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
 	if (StructKeyExists(this, "sessionManagement") && this.sessionManagement) {
