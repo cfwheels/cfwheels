@@ -38,6 +38,6 @@ component extends="Abstract" {
 	* SQLite uses double quotes to escape table and column names
   */
 	public string function quoteColumnName(required string name) {
-		return '"#arguments.name#"';
+		return '"#objectCase(arguments.name)#"';
 	}
 }

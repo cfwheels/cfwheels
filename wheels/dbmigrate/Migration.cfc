@@ -198,8 +198,8 @@ component extends="Base" {
 	public void function addIndex(
 		required string table,
 		required string columnNames,
-		boolean unique="false",
-		string indexName="#LCase(arguments.table)#_#ListFirst(arguments.columnNames)#"
+		boolean unique = "false",
+		string indexName = objectCase("#arguments.table#_#ListFirst(arguments.columnNames)#")
 	) {
 		$execute(this.adapter.addIndex(argumentCollection=arguments));
 		announce("Added index to column(s) #arguments.columnNames# in table #arguments.table#");
@@ -245,7 +245,7 @@ component extends="Base" {
 			if(ListContainsNoCase(local.columnnames, "[id]")) {
 				$execute(this.adapter.addRecordPrefix(arguments.table));
 			}
-			$execute("INSERT INTO #this.adapter.quoteTableName(LCase(arguments.table))# ( #local.columnNames# ) VALUES ( #local.columnValues# )");
+			$execute("INSERT INTO #this.adapter.quoteTableName(arguments.table)# ( #local.columnNames# ) VALUES ( #local.columnValues# )");
 			if(ListContainsNoCase(local.columnnames, "[id]")) {
 				$execute(this.adapter.addRecordSuffix(arguments.table));
 			}
@@ -275,7 +275,7 @@ component extends="Base" {
 			}
 		}
 		if(local.columnUpdates != '') {
-			local.sql = 'UPDATE #this.adapter.quoteTableName(LCase(arguments.table))# SET #local.columnUpdates#';
+			local.sql = 'UPDATE #this.adapter.quoteTableName(arguments.table)# SET #local.columnUpdates#';
 			local.message = 'Updated record(s) in table #arguments.table#';
 			if(arguments.where != '') {
 				local.sql = local.sql & ' WHERE #arguments.where#';
@@ -290,7 +290,7 @@ component extends="Base" {
     * removes existing records from a table
     */
 	public void function removeRecord(required string table, string where="") {
-		local.sql = 'DELETE FROM #this.adapter.quoteTableName(LCase(arguments.table))#';
+		local.sql = 'DELETE FROM #this.adapter.quoteTableName(arguments.table)#';
 		local.message = 'Removed record(s) from table #arguments.table#';
 		if(arguments.where != '') {
 			local.sql = local.sql & ' WHERE #arguments.where#';

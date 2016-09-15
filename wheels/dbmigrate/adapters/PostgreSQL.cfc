@@ -77,14 +77,14 @@ component extends="Abstract" {
   * Don't quote tables
   */
 	public string function quoteTableName(required string name) {
-		return arguments.name;
+		return objectCase(arguments.name);
 	}
 
 	/**
   * Don't quote columns
   */
 	public string function quoteColumnName(required string name) {
-		return arguments.name;
+		return objectCase(arguments.name);
 	}
 
 	/**
@@ -107,7 +107,7 @@ component extends="Abstract" {
 				local.opts[local.i] = arguments.column[local.i];
 				local.columnSQL = addColumnOptions(sql=" ALTER COLUMN #arguments.column.name#", options=local.opts, alter=true);
 				if (! StructKeyExists(local, "sql")) {
-					local.sql = "ALTER TABLE #quoteTableName(LCase(arguments.name))# ALTER COLUMN #arguments.column.name# TYPE #arguments.column.sqlType()#";
+					local.sql = "ALTER TABLE #quoteTableName(objectCase(arguments.name))# ALTER COLUMN #objectCase(arguments.column.name)# TYPE #arguments.column.sqlType()#";
 				}
 				if (Len(arguments.column[local.i])) {
 					local.sql = ListAppend(local.sql, local.columnSQL, ",#Chr(13)##Chr(10)#");
@@ -121,7 +121,7 @@ component extends="Abstract" {
   * generates sql to add a foreign key constraint to a table
   */
 	public string function dropForeignKeyFromTable(required string name, required any keyName) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP CONSTRAINT #quoteTableName(arguments.keyname)#";
+		return "ALTER TABLE #quoteTableName(objectCase(arguments.name))# DROP CONSTRAINT #quoteTableName(arguments.keyname)#";
 	}
 
 }

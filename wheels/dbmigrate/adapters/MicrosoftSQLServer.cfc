@@ -61,42 +61,42 @@ component extends="Abstract" {
 	* Surrounds table names with square brackets
 	*/
 	public string function quoteTableName(required string name) {
-		return "[#Replace(arguments.name,".","`.`","ALL")#]";
+		return "[#Replace(objectCase(arguments.name),".","`.`","ALL")#]";
 	}
 
 	/**
 	* Surrounds column names with square brackets
 	*/
 	public string function quoteColumnName(required string name) {
-		return "[#arguments.name#]";
+		return "[#objectCase(arguments.name)#]";
 	}
 
 	/**
 	* generates sql to rename a table
 	*/
 	public string function renameTable(required string oldName, required string newName) {
-		return "EXEC sp_rename '#arguments.oldName#', '#arguments.newName#'";
+		return "EXEC sp_rename '#objectCase(arguments.oldName)#', '#objectCase(arguments.newName)#'";
 	}
 
 	/**
 	* generates sql to drop a table
 	*/
 	public string function dropTable(required string name) {
-		return "IF EXISTS(SELECT name FROM sysobjects WHERE name = N'#LCase(arguments.name)#' AND xtype='U') DROP TABLE #quoteTableName(LCase(arguments.name))#";
+		return "IF EXISTS(SELECT name FROM sysobjects WHERE name = N'#objectCase(arguments.name)#' AND xtype='U') DROP TABLE #quoteTableName(arguments.name)#";
 	}
 
 	/**
 	* generates sql to drop a view
 	*/
 	public string function dropView(required string name) {
-		return "IF EXISTS(SELECT name FROM sysobjects WHERE name = N'#LCase(arguments.name)#' AND xtype='V') DROP VIEW #quoteTableName(LCase(arguments.name))#";
+		return "IF EXISTS(SELECT name FROM sysobjects WHERE name = N'#objectCase(arguments.name)#' AND xtype='V') DROP VIEW #quoteTableName(arguments.name)#";
 	}
 
 	/**
 	* generates sql to add a new column to a table
 	*/
 	public string function addColumnToTable(required string name, required any column) {
-	  return "ALTER TABLE #quoteTableName(LCase(arguments.name))# ADD #arguments.column.toSQL()#";
+	  return "ALTER TABLE #quoteTableName(arguments.name)# ADD #arguments.column.toSQL()#";
 	}
 
 	/**
@@ -111,10 +111,10 @@ component extends="Abstract" {
 				local.opts[local.i] = arguments.column[local.i];
 				local.columnSQL = addColumnOptions(sql="", options=local.opts, alter=true);
 				if (local.i == "null") {
-					local.sql = local.sql & "ALTER TABLE #quoteTableName(LCase(arguments.name))# ALTER COLUMN #arguments.column.name# #arguments.column.sqlType()# #local.columnSQL#;";
+					local.sql = local.sql & "ALTER TABLE #quoteTableName(arguments.name)# ALTER COLUMN #objectCase(arguments.column.name)# #arguments.column.sqlType()# #local.columnSQL#;";
 				} else if (local.i == "default") {
 					// SQL server will throw an exception if a default constraint exists
-					local.sql = local.sql & "ALTER TABLE #quoteTableName(LCase(arguments.name))# ADD CONSTRAINT DF_#arguments.column.name# #local.columnSQL# FOR #arguments.column.name#;";
+					local.sql = local.sql & "ALTER TABLE #quoteTableName(arguments.name)# ADD CONSTRAINT DF_#objectCase(arguments.column.name)# #local.columnSQL# FOR #objectCase(arguments.column.name)#;";
 				}
 			}
 		}
@@ -129,7 +129,7 @@ component extends="Abstract" {
 		required string columnName,
 		required string newColumnName
 	) {
-		return "EXEC sp_rename '#LCase(arguments.name)#.#arguments.columnName#', '#arguments.newColumnName#'";
+		return "EXEC sp_rename '#objectCase(arguments.name)#.#objectCase(arguments.columnName)#', '#objectCase(arguments.newColumnName)#'";
 	}
 
 	/**
@@ -139,21 +139,21 @@ component extends="Abstract" {
 		$removeCheckConstraints(arguments.name, arguments.columnName);
 		$removeDefaultConstraint(arguments.name, arguments.columnName);
 		$removeIndexes(arguments.name, arguments.columnName);
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP COLUMN #quoteColumnName(arguments.columnName)#";
+		return "ALTER TABLE #quoteTableName(arguments.name)# DROP COLUMN #quoteColumnName(arguments.columnName)#";
 	}
 
 	/**
   * generates sql to add a foreign key constraint to a table
   */
 	public string function dropForeignKeyFromTable(required string name, required any keyName) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP CONSTRAINT #arguments.keyname#";
+		return "ALTER TABLE #quoteTableName(arguments.name)# DROP CONSTRAINT #objectCase(arguments.keyname)#";
 	}
 
 	/**
   * generates sql to remove a database index
   */
 	public string function removeIndex(required string table, string indexName = "") {
-		return "DROP INDEX #arguments.table#.#quoteColumnName(arguments.indexName)#";
+		return "DROP INDEX #objectCase(arguments.table)#.#quoteColumnName(arguments.indexName)#";
 	}
 
 	private void function $removeCheckConstraints(required string name, required string columnName) {
@@ -162,12 +162,12 @@ component extends="Abstract" {
 			sql="
 				SELECT 	constraint_name
 				FROM		information_schema.constraint_column_usage
-				WHERE		table_name = '#arguments.name#'
-				AND 		column_name = '#arguments.columnName#'
+				WHERE		table_name = '#objectCase(arguments.name)#'
+				AND 		column_name = '#objectCase(arguments.columnName)#'
 			"
 		);
 		for (local.row in local.constraints) {
-			$execute("ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP CONSTRAINT #local.row.constraint_name#");
+			$execute("ALTER TABLE #quoteTableName(arguments.name)# DROP CONSTRAINT #local.row.constraint_name#");
 		};
 	}
 
@@ -177,7 +177,7 @@ component extends="Abstract" {
 	private void function $removeDefaultConstraint(required string name, required string columnName) {
 		local.constraints = $query(
 			datasource=application.wheels.dataSourceName,
-			sql="EXEC sp_helpconstraint #quoteTableName(LCase(arguments.name))#, 'nomsg'"
+			sql="EXEC sp_helpconstraint #quoteTableName(arguments.name)#, 'nomsg'"
 		);
 		if (StructKeyExists(local, "constraints") && Val(local.constraints.RecordCount)) {
 			local.constraints = $query(
@@ -185,11 +185,11 @@ component extends="Abstract" {
 				sql="
 					SELECT	*
 					FROM		[loc].[constraints]
-					WHERE		constraint_type = 'DEFAULT on column #arguments.columnName#'
+					WHERE		constraint_type = 'DEFAULT on column #objectCase(arguments.columnName)#'
 				"
 			);
 			for (loc.row in local.constraints) {
-				$execute("ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP CONSTRAINT #local.constraints.constraint_name#");
+				$execute("ALTER TABLE #quoteTableName(arguments.name)# DROP CONSTRAINT #local.constraints.constraint_name#");
 			};
 		}
 	}
@@ -217,8 +217,8 @@ component extends="Abstract" {
 				INNER JOIN sys.tables t
 					ON ind.object_id = t.object_id
 			WHERE
-				t.name = '#arguments.name#'
-				AND col.name = '#arguments.columnName#'
+				t.name = '#objectCase(arguments.name)#'
+				AND col.name = '#objectCase(arguments.columnName)#'
 			"
 		);
 		for (local.row in local.indexes) {
@@ -268,14 +268,14 @@ component extends="Abstract" {
   * prepends sql server identity_insert on to allow inserting primary key values
   */
 	public string function addRecordPrefix(required string table) {
-		return "SET IDENTITY_INSERT #quoteTableName(LCase(arguments.table))# ON";
+		return "SET IDENTITY_INSERT #quoteTableName(arguments.table)# ON";
 	}
 
 	/**
   * appends sql server identity_insert on to disallow inserting primary key values
   */
 	public string function addRecordSuffix(required string table) {
-		return "SET IDENTITY_INSERT #quoteTableName(LCase(arguments.table))# OFF";
+		return "SET IDENTITY_INSERT #quoteTableName(arguments.table)# OFF";
 	}
 
 }

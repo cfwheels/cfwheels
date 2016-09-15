@@ -43,7 +43,7 @@ component extends="Abstract" {
 	* generates sql for primary key constraint
 	*/
 	public string function primaryKeyConstraint(required string name, required array primaryKeys) {
-		local.sql = "CONSTRAINT PK_#arguments.name# PRIMARY KEY (";
+		local.sql = "CONSTRAINT PK_#objectCase(arguments.name)# PRIMARY KEY (";
 		for (local.i = 1; local.i lte local.iEnd; local.i++) {
 			if (local.i != 1) {
 				local.sql = local.sql & ", ";
@@ -60,11 +60,11 @@ component extends="Abstract" {
   * it becomes case sensitive & maybe you also need to use quotes in your queries
   */
 	public string function quoteTableName(required string name) {
-		return arguments.name;
+		return objectCase(arguments.name);
 	}
 
 	public string function quoteColumnName(required string name) {
-		return arguments.name;
+		return objectCase(arguments.name);
 	}
 
 	/**
@@ -76,8 +76,8 @@ component extends="Abstract" {
 	  array foreignKeys = []
 	) {
 		$execute("CREATE SEQUENCE #quoteTableName(arguments.name & "_seq")# START WITH 1 INCREMENT BY 1");
-		announce("Created sequence #arguments.name#_seq");
-		return Super.createTable(argumentCollection=arguments);
+		announce("Created sequence #objectCase(arguments.name)#_seq");
+		return super.createTable(argumentCollection=arguments);
 	}
 
 	/**
@@ -85,8 +85,8 @@ component extends="Abstract" {
   */
 	public string function renameTable(required string oldName, required string newName) {
 		$execute("RENAME #quoteTableName(arguments.oldName & "_seq")# TO #quoteTableName(arguments.newName & "_seq")#");
-		announce("Renamed sequence #arguments.oldName#_seq to #arguments.newName#_seq");
-		return Super.renameTable(argumentCollection=arguments);
+		announce("Renamed sequence #objectCase(arguments.oldName)#_seq to #objectCase(arguments.newName)#_seq");
+		return super.renameTable(argumentCollection=arguments);
 	}
 
 	/**
@@ -99,7 +99,7 @@ component extends="Abstract" {
 			datasource=application.wheels.dataSourceName,
 			username=application.wheels.dataSourceUserName,
 			password=application.wheels.dataSourcePassword,
-			pattern=arguments.tableName
+			pattern=objectCase(arguments.tableName)
 		);
 		if(local.check.recordcount){
 			return true;
@@ -118,10 +118,10 @@ component extends="Abstract" {
 		} catch(database e) {
 			// catch exception if sequence doesn't exist
 		}
-		announce("Dropped sequence #arguments.name#_seq");
+		announce("Dropped sequence #objectCase(arguments.name)#_seq");
 
 		if( tableExists( quoteTableName(arguments.name) ) ){
-			return "DROP TABLE #quoteTableName(LCase(arguments.name))# PURGE";
+			return "DROP TABLE #quoteTableName(arguments.name)# PURGE";
 		} else {
 			// We can't drop an non existing table, but the way dbmigrate is written means whatever is
 			// returned from this adapter is going to be executed, so here's some dummy SQL.
@@ -133,20 +133,20 @@ component extends="Abstract" {
   * generates sql to add a new column to a table
   */
 	public string function addColumnToTable(required string name, required any column) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# ADD #arguments.column.toSQL()#";
+		return "ALTER TABLE #quoteTableName(arguments.name)# ADD #arguments.column.toSQL()#";
 	}
 
 	/**
   * generates sql to change an existing column in a table
   */
 	public string function changeColumnInTable(required string name, required any column) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# MODIFY #arguments.column.toSQL()#";
+		return "ALTER TABLE #quoteTableName(arguments.name)# MODIFY #arguments.column.toSQL()#";
 	}
 
 	/**
   * generates sql to add a foreign key constraint to a table
   */
 	public string function dropForeignKeyFromTable(required string name, required any keyName) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP CONSTRAINT #quoteTableName(arguments.keyname)#";
+		return "ALTER TABLE #quoteTableName(arguments.name)# DROP CONSTRAINT #quoteTableName(arguments.keyname)#";
 	}
 }

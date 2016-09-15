@@ -39,21 +39,21 @@ component extends="Abstract" {
 	* surrounds table or index names with quotes (no quotes for H2)
 	*/
 	public any function quoteTableName(required string name) {
-		return arguments.name;
+		return objectCase(arguments.name);
 	}
 
 	/**
 	* surrounds column names with quotes (no quotes for H2)
 	*/
 	public any function quoteColumnName(required string name) {
-		return arguments.name;
+		return objectCase(arguments.name);
 	}
 
 	/**
 	* generates sql to rename a table
 	*/
 	public string function renameTable(required string oldName, required string newName) {
-		return "ALTER TABLE #arguments.oldName# RENAME TO #arguments.newName#";
+		return "ALTER TABLE #objectCase(arguments.oldName)# RENAME TO #objectCase(arguments.newName)#";
 	}
 
 	/**
@@ -64,20 +64,20 @@ component extends="Abstract" {
 		required string columnName,
 		required string newColumnName
 	) {
-		return "ALTER TABLE #arguments.name# ALTER COLUMN #arguments.columnName# RENAME TO #arguments.newColumnName#";
+		return "ALTER TABLE #objectCase(arguments.name)# ALTER COLUMN #objectCase(arguments.columnName)# RENAME TO #objectCase(arguments.newColumnName)#";
 	}
 
 	/**
 	* generates sql to change an existing column in a table
 	*/
 	public string function changeColumnInTable(required string name, required any column) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# ALTER COLUMN #arguments.column.toSQL()#";
+		return "ALTER TABLE #quoteTableName(objectCase(arguments.name))# ALTER COLUMN #arguments.column.toSQL()#";
 	}
 
 	/**
 	* generates sql to drop a foreign key constraint from a table
 	*/
 	public string function dropForeignKeyFromTable(required string name, required string keyName) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP CONSTRAINT #arguments.keyname#";
+		return "ALTER TABLE #quoteTableName(arguments.name)# DROP CONSTRAINT #objectCase(arguments.keyname)#";
 	}
 }

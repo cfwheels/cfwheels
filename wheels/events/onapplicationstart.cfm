@@ -100,6 +100,7 @@ public void function onApplicationStart() {
 	application.$wheels.dbmigrate = $createObjectFromRoot(path="wheels/dbmigrate", fileName="dbmigrate", method="init");;
 	application.$wheels.dbmigrateTableName = "schemainfo";
 	application.$wheels.dbmigrateWriteSQLFiles = false;
+	application.$wheels.dbmigrateObjectCase = "lower";
 
 	// cache settings
 	application.$wheels.cacheDatabaseSchema = false;
