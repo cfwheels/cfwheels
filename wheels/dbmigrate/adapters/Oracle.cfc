@@ -35,11 +35,11 @@
 		<cfreturn arguments.sql>
 	</cffunction>
 
-    <cffunction name="primaryKeyConstraint" returntype="string" access="public">
-    	<cfargument name="name" type="string" required="true">
-        <cfargument name="primaryKeys" type="array" required="true">
-        <cfscript>
-        var loc = {};
+  <cffunction name="primaryKeyConstraint" returntype="string" access="public">
+  	<cfargument name="name" type="string" required="true">
+    <cfargument name="primaryKeys" type="array" required="true">
+    <cfscript>
+    var loc = {};
 
 		loc.sql = "CONSTRAINT PK_#arguments.name# PRIMARY KEY (";
 
@@ -47,13 +47,13 @@
 		{
 			if (loc.i != 1)
 				loc.sql = loc.sql & ", ";
-			loc.sql = loc.sql & arguments.primaryKeys[loc.i].toColumnNameSQL();
+				loc.sql = loc.sql & arguments.primaryKeys[loc.i].toColumnNameSQL();
 		}
 
 		loc.sql = loc.sql & ")";
-        </cfscript>
-        <cfreturn loc.sql />
-    </cffunction>
+    </cfscript>
+    <cfreturn loc.sql />
+  </cffunction>
 
 	<!--- currently leaving table names and columns unquoted
 		  my understanding is that if you use quotes when creating the tables,
@@ -84,22 +84,25 @@
 	<cffunction name="renameTable" returntype="string" access="public" hint="generates sql to rename a table">
 		<cfargument name="oldName" type="string" required="true" hint="old table name">
 		<cfargument name="newName" type="string" required="true" hint="new table name">
+
 		<cfscript>
 		$execute("RENAME #quoteTableName(arguments.oldName & "_seq")# TO #quoteTableName(arguments.newName & "_seq")#");
 		announce("Renamed sequence #arguments.oldName#_seq to #arguments.newName#_seq");
 		</cfscript>
-		<cfreturn Super.renameTable(argumentCollection=arguments)>
+
+		<cfreturn "ALTER TABLE #quoteTableName(arguments.oldName)# RENAME TO #quoteTableName(arguments.newName)#">
 	</cffunction>
 
 	<!--- dropTable - need to drop sequence --->
 	<cffunction name="dropTable" returntype="string" access="public" hint="generates sql to drop a table">
 		<cfargument name="name" type="string" required="true" hint="table name">
+
 		<cfscript>
-		$execute("DROP SEQUENCE #quoteTableName(arguments.name & "_seq")#");
+		$execute("BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE cfwheels.#quoteTableName(arguments.name & "_seq")#'; EXCEPTION	WHEN OTHERS THEN IF SQLCODE != -2289 THEN RAISE; END IF; END;;");
 		announce("Dropped sequence #arguments.name#_seq");
 		</cfscript>
-		<!--- DROP TABLE IF EXISTS IS MORE COMPLEX FOR ORACLE --->
-		<cfreturn "DROP TABLE #quoteTableName(LCase(arguments.name))# PURGE">
+
+		<cfreturn "BEGIN EXECUTE IMMEDIATE 'DROP TABLE #quoteTableName(LCase(arguments.name))# PURGE'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;;">
 	</cffunction>
 
 	<cffunction name="addColumnToTable" returntype="string" access="public" hint="generates sql to add a new column to a table">
