@@ -86,11 +86,15 @@
 		<cfargument name="newName" type="string" required="true" hint="new table name">
 
 		<cfscript>
+		$execute("drop trigger #arguments.oldName#_trg");
+		announce("Dropping old trigger #arguments.oldName#_trg");
 		$execute("RENAME #quoteTableName(arguments.oldName & "_seq")# TO #quoteTableName(arguments.newName & "_seq")#");
 		announce("Renamed sequence #arguments.oldName#_seq to #arguments.newName#_seq");
+		$execute("ALTER TABLE #quoteTableName(arguments.oldName)# RENAME TO #quoteTableName(arguments.newName)#");
 		</cfscript>
 
-		<cfreturn "ALTER TABLE #quoteTableName(arguments.oldName)# RENAME TO #quoteTableName(arguments.newName)#">
+		<!--- setting up the trigger again after all the renaming is complete --->
+		<cfreturn "CREATE TRIGGER #arguments.newName#_trg BEFORE INSERT ON #arguments.newName# REFERENCING NEW AS New OLD AS Old FOR EACH ROW BEGIN :new.ID := #arguments.newName#_seq.nextval; END #arguments.newName#_trg;;">
 	</cffunction>
 
 	<!--- dropTable - need to drop sequence --->
