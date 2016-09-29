@@ -384,6 +384,10 @@ component extends="Base"  {
 		for (local.i=1; local.i <= local.iEnd; local.i++) {
 			announce("--> added foreign key #this.foreignKeys[local.i].name#");
 		}
+		if(this.adapter.adaptername() eq "Oracle"){
+			$execute("CREATE TRIGGER #this.name#_trg BEFORE INSERT ON #this.name# REFERENCING NEW AS New OLD AS Old FOR EACH ROW BEGIN :new.ID := #this.name#_seq.nextval; END #this.name#_trg;;");
+			announce("Sequence Trigger #LCase(this.name)#_trg");
+		}
 	}
 
 	/**
