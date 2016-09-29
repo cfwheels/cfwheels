@@ -12,15 +12,15 @@ component extends="wheels.tests.Test" {
 			migration.dropTable(local.table);
 		};
 		$cleanSqlDirectory();
-		orginalDbmigrateWriteSQLFiles = Duplicate(application.wheels.dbmigrateWriteSQLFiles);
-		orginalDbmigrateTableName = Duplicate(application.wheels.dbmigrateTableName);
+		originalDbmigrateWriteSQLFiles = Duplicate(application.wheels.dbmigrateWriteSQLFiles);
+		originalDbmigrateTableName = Duplicate(application.wheels.dbmigrateTableName);
 	}
 
 	function teardown() {
 		$cleanSqlDirectory();
 		// revert to orginal values
-		application.wheels.dbmigrateWriteSQLFiles = orginalDbmigrateWriteSQLFiles;
-		application.wheels.dbmigrateTableName = orginalDbmigrateTableName;
+		application.wheels.dbmigrateWriteSQLFiles = originalDbmigrateWriteSQLFiles;
+		application.wheels.dbmigrateTableName = originalDbmigrateTableName;
 	}
 
 	function test_migrateto_migrate_up_from_0_to_001() {

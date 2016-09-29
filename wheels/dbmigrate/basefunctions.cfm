@@ -131,4 +131,19 @@ private string function $getColumnDefinition(required string tableName, required
 	}
 	return local.columnDefinition;
 }
+
+/**
+* Applies case to database objects according to settings
+* Note: some db engines use only lower case, TODO: perhaps add certain adapters to these conditions?
+*/
+private string function objectCase(required string name) {
+	if (application.wheels.dbmigrateObjectCase eq "lower") {
+		return LCase(arguments.name);
+	} else if (application.wheels.dbmigrateObjectCase eq "upper") {
+		return UCase(arguments.name);
+	} else {
+		// use the object name unmolested
+		return arguments.name;
+	}
+}
 </cfscript>

@@ -19,7 +19,7 @@ component extends="Base" {
 				this[local.argumentName] = arguments[local.argumentName];
 			}
 		}
-		this.name = "FK_#LCase(this.table)#_#LCase(this.referenceTable)#";
+		this.name = "FK_#objectCase(this.table)#_#objectCase(this.referenceTable)#";
 		return this;
 	}
 

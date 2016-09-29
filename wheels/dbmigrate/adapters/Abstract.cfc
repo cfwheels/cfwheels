@@ -121,14 +121,14 @@ component {
 	* surrounds table or index names with quotes
 	*/
 	public string function quoteTableName(required string name) {
-		return "'#Replace(arguments.name,".","`.`","ALL")#'";
+		return "'#Replace(objectCase(arguments.name),".","`.`","ALL")#'";
 	}
 
 	/**
 	* surrounds column names with quotes
 	*/
 	public string function quoteColumnName(required string name) {
-		return "'#arguments.name#'";
+		return "'#objectCase(arguments.name)#'";
 	}
 
 	/**
@@ -141,7 +141,7 @@ component {
 	  array foreignKeys = []
 	) {
 
-		local.sql = "CREATE TABLE #quoteTableName(LCase(arguments.name))# (#chr(13)##chr(10)#";
+		local.sql = "CREATE TABLE #quoteTableName(arguments.name)# (#chr(13)##chr(10)#";
 		local.iEnd = ArrayLen(arguments.primaryKeys);
 
 		if (local.iEnd == 1) {
@@ -191,21 +191,21 @@ component {
 	* generates sql to drop a table
 	*/
 	public string function dropTable(required string name) {
-		return "DROP TABLE IF EXISTS #quoteTableName(LCase(arguments.name))#";
+		return "DROP TABLE IF EXISTS #quoteTableName(objectCase(arguments.name))#";
 	}
 
 	/**
 	* generates sql to add a new column to a table
 	*/
 	public string function addColumnToTable(required string name, required any column) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# ADD COLUMN #arguments.column.toSQL()#";
+		return "ALTER TABLE #quoteTableName(objectCase(arguments.name))# ADD COLUMN #arguments.column.toSQL()#";
 	}
 
 	/**
 	* generates sql to change an existing column in a table
 	*/
 	public string function changeColumnInTable(required string name, required any column) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# CHANGE #quoteColumnName(arguments.column.name)# #arguments.column.toSQL()#";
+		return "ALTER TABLE #quoteTableName(objectCase(arguments.name))# CHANGE #quoteColumnName(arguments.column.name)# #arguments.column.toSQL()#";
 	}
 
 	/**
@@ -216,28 +216,28 @@ component {
 		required string columnName,
 		required string newColumnName
 	) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# RENAME COLUMN #quoteColumnName(arguments.columnName)# TO #quoteColumnName(arguments.newColumnName)#";
+		return "ALTER TABLE #quoteTableName(objectCase(arguments.name))# RENAME COLUMN #quoteColumnName(arguments.columnName)# TO #quoteColumnName(arguments.newColumnName)#";
 	}
 
 	/**
 	* generates sql to drop a column from a table
 	*/
 	public string function dropColumnFromTable(required string name, required string columnName) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP COLUMN #quoteColumnName(arguments.columnName)#";
+		return "ALTER TABLE #quoteTableName(objectCase(arguments.name))# DROP COLUMN #quoteColumnName(arguments.columnName)#";
 	}
 
 	/**
 	* generates sql to add a foreign key constraint to a table
 	*/
 	public string function addForeignKeyToTable(required string name, required any foreignKey) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# ADD #arguments.foreignKey.toSQL()#";
+		return "ALTER TABLE #quoteTableName(objectCase(arguments.name))# ADD #arguments.foreignKey.toSQL()#";
 	}
 
 	/**
 	* generates sql to drop a foreign key constraint from a table
 	*/
 	public string function dropForeignKeyFromTable(required string name, required string keyName) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# DROP FOREIGN KEY #quoteTableName(arguments.keyname)#";
+		return "ALTER TABLE #quoteTableName(objectCase(arguments.name))# DROP FOREIGN KEY #quoteTableName(arguments.keyname)#";
 	}
 
 	/**
@@ -252,9 +252,9 @@ component {
 	  string onUpdate = "",
 	  string onDelete = ""
 	) {
-		local.sql = "CONSTRAINT #quoteTableName(arguments.name)# FOREIGN KEY (#quoteColumnName(arguments.column)#) REFERENCES #LCase(arguments.referenceTable)#(#quoteColumnName(arguments.referenceColumn)#)";
-		for (local.item in listToArray("onUpdate,onDelete")) {
-			if (len(arguments[local.item])) {
+		local.sql = "CONSTRAINT #quoteTableName(arguments.name)# FOREIGN KEY (#quoteColumnName(arguments.column)#) REFERENCES #objectCase(arguments.referenceTable)#(#quoteColumnName(arguments.referenceColumn)#)";
+		for (local.item in ListToArray("onUpdate,onDelete")) {
+			if (Len(arguments[local.item])) {
 				switch (arguments[local.item]) {
 					case "none":
 						local.sql = local.sql & " " & uCase(humanize(local.item)) & " NO ACTION";
@@ -278,7 +278,7 @@ component {
 	  required string table,
 	  required string columnNames,
 	  boolean unique = false,
-	  string indexName = "#LCase(arguments.table)#_#ListFirst(arguments.columnNames)#"
+	  string indexName = "#objectCase(arguments.table)#_#ListFirst(arguments.columnNames)#"
 	) {
 		var sql = "CREATE ";
 		if(arguments.unique) {
@@ -308,14 +308,14 @@ component {
   * generates sql to create a view
   */
 	public string function createView(required string name, required string sql) {
-		return "CREATE VIEW #quoteTableName(LCase(arguments.name))# AS " & arguments.sql;
+		return "CREATE VIEW #quoteTableName(arguments.name)# AS " & arguments.sql;
 	}
 
 	/**
 	* generates sql to drop a view
 	*/
 	public string function dropView(required string name) {
-		return "DROP VIEW IF EXISTS #quoteTableName(LCase(arguments.name))#";
+		return "DROP VIEW IF EXISTS #quoteTableName(arguments.name)#";
 	}
 
 	public string function addRecordPrefix() {

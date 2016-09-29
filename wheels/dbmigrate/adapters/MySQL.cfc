@@ -42,14 +42,14 @@ component extends="Abstract" {
   * surrounds table or index names with backticks
   */
 	public string function quoteTableName(required string name) {
-		return "`#Replace(arguments.name,".","`.`","ALL")#`";
+		return "`#Replace(objectCase(arguments.name),".","`.`","ALL")#`";
 	}
 
 	/**
   * surrounds column names with backticks
   */
 	public string function quoteColumnName(required string name) {
-		return "`#arguments.name#`";
+		return "`#objectCase(arguments.name)#`";
 	}
 
 	/**
@@ -76,7 +76,7 @@ component extends="Abstract" {
 	  required string columnName,
 	  required string newColumnName
 	) {
-		return "ALTER TABLE #quoteTableName(LCase(arguments.name))# CHANGE COLUMN #quoteColumnName(arguments.columnName)# #quoteColumnName(arguments.newColumnName)# #$getColumnDefinition(tableName=arguments.name,columnName=arguments.columnName)#";
+		return "ALTER TABLE #quoteTableName(arguments.name)# CHANGE COLUMN #quoteColumnName(arguments.columnName)# #quoteColumnName(arguments.newColumnName)# #$getColumnDefinition(tableName=arguments.name, columnName=arguments.columnName)#";
 	}
 
 	/**

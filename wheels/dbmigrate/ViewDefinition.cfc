@@ -26,7 +26,7 @@ component extends="Base" {
     */
 	public void function create() {
 		$execute(this.adapter.createView(name=this.name, sql=this.selectSql));
-		announce("Created view #LCase(this.name)#");
+		announce("Created view #objectCase(this.name)#");
 	}
 
 }
