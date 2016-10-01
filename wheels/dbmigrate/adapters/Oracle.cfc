@@ -35,6 +35,27 @@
 		<cfreturn arguments.sql>
 	</cffunction>
 
+	<cfscript>
+	/**
+	* Look to see if a specific table exists in Oracle
+	* Filter by pattern (tablename) as otherwise Oracle returns c. 30,000 tables...
+	*/
+	public boolean function tableExists(required string tableName){
+		local.check= $dbinfo(
+			type="tables",
+			datasource=application.wheels.dataSourceName,
+			username=application.wheels.dataSourceUserName,
+			password=application.wheels.dataSourcePassword,
+			pattern=arguments.tableName
+		);
+		if(local.check.recordcount){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	</cfscript>
+
   <cffunction name="primaryKeyConstraint" returntype="string" access="public">
   	<cfargument name="name" type="string" required="true">
     <cfargument name="primaryKeys" type="array" required="true">

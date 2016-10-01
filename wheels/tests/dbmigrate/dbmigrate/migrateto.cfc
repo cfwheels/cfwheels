@@ -27,42 +27,68 @@ component extends="wheels.tests.Test" {
 		dbmigrate.migrateTo(001);
 		info = $dbinfo(
 			datasource=application.wheels.dataSourceName,
-			type="tables"
+			type="tables",
+			pattern="bunyips"
 		);
 
 		actual = ValueList(info.table_name);
 		expected = "bunyips";
-
-	  assert("ListFindNoCase(actual, expected)", "expected", "actual");
+		assert("ListFindNoCase(actual, expected)", "expected", "actual");
 	}
 
+	// Adding pattern for speed
 	function test_migrateto_migrate_up_from_0_to_003() {
 		dbmigrate.migrateTo(003);
-		info = $dbinfo(
+		info1 = $dbinfo(
 			datasource=application.wheels.dataSourceName,
-			type="tables"
+			type="tables",
+			pattern="bunyips"
 		);
+		info2 = $dbinfo(
+			datasource=application.wheels.dataSourceName,
+			type="tables",
+			pattern="dropbears"
+		);
+		info3 = $dbinfo(
+			datasource=application.wheels.dataSourceName,
+			type="tables",
+			pattern="hoopsnakes"
+		);
+		actual1 = ValueList(info1.table_name);
+		actual2 = ValueList(info2.table_name);
+		actual3 = ValueList(info3.table_name);
 
-		actual = ValueList(info.table_name);
-
-	  assert("ListFindNoCase(actual, 'bunyips')");
-		assert("ListFindNoCase(actual, 'dropbears')");
-		assert("ListFindNoCase(actual, 'hoopsnakes')");
+		assert("ListFindNoCase(actual1, 'bunyips')");
+		assert("ListFindNoCase(actual2, 'dropbears')");
+		assert("ListFindNoCase(actual3, 'hoopsnakes')");
 	}
 
 	function test_migrateto_migrate_down_from_003_to_001() {
 		dbmigrate.migrateTo(003);
 		dbmigrate.migrateTo(001);
-		info = $dbinfo(
+		info1 = $dbinfo(
 			datasource=application.wheels.dataSourceName,
-			type="tables"
+			type="tables",
+			pattern="bunyips"
+		);
+		info2 = $dbinfo(
+			datasource=application.wheels.dataSourceName,
+			type="tables",
+			pattern="dropbears"
+		);
+		info3 = $dbinfo(
+			datasource=application.wheels.dataSourceName,
+			type="tables",
+			pattern="hoopsnakes"
 		);
 
-		actual = ValueList(info.table_name);
+		actual1 = ValueList(info1.table_name);
+		actual2 = ValueList(info2.table_name);
+		actual3 = ValueList(info3.table_name);
 
-	  assert("ListFindNoCase(actual, 'bunyips')");
-		assert("!ListFindNoCase(actual, 'dropbears')");
-		assert("!ListFindNoCase(actual, 'hoopsnakes')");
+		assert("ListFindNoCase(actual1, 'bunyips')");
+		assert("!ListFindNoCase(actual2, 'dropbears')");
+		assert("!ListFindNoCase(actual3, 'hoopsnakes')");
 	}
 
 	function test_migrateto_generates_sql_files() {
@@ -74,7 +100,7 @@ component extends="wheels.tests.Test" {
 		for (i in ["001_create_bunyips_table_up.sql","002_create_dropbears_table_up.sql","002_create_dropbears_table_down.sql"]) {
 			actual = FileRead(dbmigrate.paths.sql & i);
 			if (i contains "_up.sql") {
-				expected = "CREATE TABLE";
+				expected = "CREATE SEQUENCE";
 			} else {
 				expected = "DROP TABLE";
 			}
