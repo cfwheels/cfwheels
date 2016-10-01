@@ -98,7 +98,7 @@ component extends="wheels.tests.Test" {
 			type="columns",
 			table=tableName
 		);
-		expected = "version"
+		expected = "version";
 
 		assert("actual.column_name eq expected");
 	}
