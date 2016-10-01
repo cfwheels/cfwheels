@@ -100,7 +100,7 @@ component extends="wheels.tests.Test" {
 		for (i in ["001_create_bunyips_table_up.sql","002_create_dropbears_table_up.sql","002_create_dropbears_table_down.sql"]) {
 			actual = FileRead(dbmigrate.paths.sql & i);
 			if (i contains "_up.sql") {
-				expected = "CREATE SEQUENCE";
+				expected = "CREATE TABLE";
 			} else {
 				expected = "DROP TABLE";
 			}
