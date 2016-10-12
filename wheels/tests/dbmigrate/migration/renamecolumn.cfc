@@ -14,6 +14,9 @@ component extends="wheels.tests.Test" {
 		migration.renameColumn(table=tableName, columnName=oldColumnName, newColumnName=newColumnName);
 
 		actual = model(tableName).findAll().columnList;
+
+		migration.dropTable(tableName);
+		
 		expected = newColumnName;
 		assert("ListFindNoCase(actual, expected)");
 	}

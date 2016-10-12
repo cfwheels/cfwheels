@@ -81,7 +81,7 @@ public string function $getColumns(required string tableName) {
 			datasource=application.wheels.dataSourceName,
 			username=application.wheels.dataSourceUserName,
 			password=application.wheels.dataSourcePassword,
-			sql="SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = '#this.name#'"
+			sql="SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = '#ucase(this.name)#'"
 		);
 	} else {
 		local.columns = $dbinfo(

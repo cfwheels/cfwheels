@@ -20,7 +20,7 @@ component extends="wheels.tests.Test" {
 
 		migration.dropTable(tableName);
 
-		actual = $query(query=info, dbtype="query", sql="SELECT * FROM query WHERE index_name = '#indexName#'");
+		actual = $query(query=info, dbtype="query", sql="SELECT * FROM query WHERE index_name = '#ucase(indexName)#'");
 
 	  assert("actual.recordCount eq 1");
 		assert("actual.non_unique");

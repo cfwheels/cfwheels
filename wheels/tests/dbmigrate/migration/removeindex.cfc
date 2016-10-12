@@ -18,7 +18,7 @@ component extends="wheels.tests.Test" {
 			type="index"
 		);
 
-		created = $query(query=info, dbtype="query", sql="SELECT * FROM query WHERE index_name = '#indexName#'");
+		created = $query(query=info, dbtype="query", sql="SELECT * FROM query WHERE index_name = '#ucase(indexName)#'");
 
 		migration.removeIndex(table=tableName, indexName=indexName);
 		info = $dbinfo(
@@ -26,7 +26,7 @@ component extends="wheels.tests.Test" {
 			table=tableName,
 			type="index"
 		);
-		removed = $query(query=info, dbtype="query", sql="SELECT * FROM query WHERE index_name = '#indexName#'");
+		removed = $query(query=info, dbtype="query", sql="SELECT * FROM query WHERE index_name = '#ucase(indexName)#'");
 
 		migration.dropTable(tableName);
 

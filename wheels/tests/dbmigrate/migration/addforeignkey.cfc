@@ -29,7 +29,7 @@ component extends="wheels.tests.Test" {
 			table=referenceTableName,
 			type="foreignkeys"
 		);
-
+		
 		migration.dropTable(tableName);
 		migration.dropTable(referenceTableName);
 
@@ -38,9 +38,9 @@ component extends="wheels.tests.Test" {
 			dbtype="query",
 			sql="
 				SELECT * FROM query
-				WHERE pkcolumn_name = 'id'
-				AND fktable_name = '#tableName#'
-				AND fkcolumn_name = 'barid'
+				WHERE pkcolumn_name = 'ID'
+				AND fktable_name = '#ucase(tableName)#'
+				AND fkcolumn_name = 'BARID'
 			"
 		);
 
