@@ -376,10 +376,10 @@ component extends="Base"  {
 	public void function create() {
 		if(this.force) {
 			$execute(this.adapter.dropTable(this.name));
-			announce("Dropped table #LCase(this.name)#");
+			announce("Dropped table #objectCase(this.name)#");
 		}
 		$execute(this.adapter.createTable(name=this.name, primaryKeys=this.primaryKeys, columns=this.columns, foreignKeys=this.foreignKeys));
-		announce("Created table #LCase(this.name)#");
+		announce("Created table #objectCase(this.name)#");
 		local.iEnd = ArrayLen(this.foreignKeys);
 		for (local.i=1; local.i <= local.iEnd; local.i++) {
 			announce("--> added foreign key #this.foreignKeys[local.i].name#");

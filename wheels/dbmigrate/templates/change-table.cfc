@@ -1,4 +1,4 @@
-<!---
+/*
     |----------------------------------------------------------------------------------------------|
 	| Parameter  | Required | Type    | Default | Description                                      |
     |----------------------------------------------------------------------------------------------|
@@ -9,58 +9,48 @@
       t = changeTable(name='employees');
       t.string(columnNames="fullName", default="", null=true, limit="255");
       t.change();
---->
-<cfcomponent extends="[extends]" hint="[description]">
-  <cffunction name="up">
-  	<cfset hasError = false />
-  	<cftransaction>
-	    <cfscript>
-	    	try{
-	    		t = changeTable('tableName');
+*/
+component extends="[extends]" hint="[description]" {
 
+	function up() {
+	  	hasError = false;
+		transaction {
+		  	try{
+				t = changeTable('tableName');
 	   			t.change();
-	    	}
-	    	catch (any ex){
-	    		hasError = true;
-		      	catchObject = ex;
-	    	}
+			}
+			catch (any ex){
+				hasError = true;
+				catchObject = ex;
+			}
 
-	    </cfscript>
-	    <cfif hasError>
-	    	<cftransaction action="rollback" />
-	    	<cfthrow
-			    detail = "#catchObject.detail#"
-			    errorCode = "1"
-			    message = "#catchObject.message#"
-			    type = "Any">
-	    <cfelse>
-	    	<cftransaction action="commit" />
-	    </cfif>
-	 </cftransaction>
-  </cffunction>
-  <cffunction name="down">
-  	<cfset hasError = false />
-  	<cftransaction>
-	    <cfscript>
-	    	try{
-	    		removeColumn(table='tableName',columnName='columnName');
-	    	}
-	    	catch (any ex){
-	    		hasError = true;
-		      	catchObject = ex;
-	    	}
+			if (!hasError) {
+				transaction action="commit";
+			else {
+				transaction action="rollback";
+				throw(errorCode="1" detail=catchObject.detail message=catchObject.message type="any");
+			}
+		}
+	}
 
-	    </cfscript>
-	    <cfif hasError>
-	    	<cftransaction action="rollback" />
-	    	<cfthrow
-			    detail = "#catchObject.detail#"
-			    errorCode = "1"
-			    message = "#catchObject.message#"
-			    type = "Any">
-	    <cfelse>
-	    	<cftransaction action="commit" />
-	    </cfif>
-	 </cftransaction>
-  </cffunction>
-</cfcomponent>
+	function down() {
+	  	hasError = false;
+		transaction {
+		  	try{
+				removeColumn(table='tableName',columnName='columnName');
+			}
+			catch (any ex){
+				hasError = true;
+				catchObject = ex;
+			}
+
+			if (!hasError) {
+				transaction action="commit";
+			else {
+				transaction action="rollback";
+				throw(errorCode="1" detail=catchObject.detail message=catchObject.message type="any");
+			}
+		}
+	}
+
+}

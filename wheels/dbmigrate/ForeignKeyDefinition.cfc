@@ -19,13 +19,19 @@ component extends="Base" {
 				this[local.argumentName] = arguments[local.argumentName];
 			}
 		}
-		this.name = "FK_#LCase(this.table)#_#LCase(this.referenceTable)#";
+		this.name = "FK_#objectCase(this.table)#_#objectCase(this.referenceTable)#";
 		return this;
 	}
 
-	// NB Check this with original
-	public string function toSQL(){
-		return "adapter,table,referenceTable,column,referenceColumn,onUpdate,onDelete";
+	public string function toSQL() {
+		local.args = "name,table,referenceTable,column,referenceColumn,onUpdate,onDelete";
+		local.iEnd = ListLen(local.args);
+		local.adapterArgs = {};
+		for (local.i=1; local.i <= local.iEnd; local.i++) {
+			local.argumentName = ListGetAt(local.args, local.i);
+			local.adapterArgs[local.argumentName] = this[local.argumentName];
+		}
+		return this.adapter.foreignKeySQL(argumentcollection=local.adapterArgs);
 	}
 
 	public string function toForeignKeySQL(){

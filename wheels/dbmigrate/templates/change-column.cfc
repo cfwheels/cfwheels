@@ -1,4 +1,4 @@
-<!---
+/*
     |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 	| Parameter     | Required | Type    | Default | Description                                                                                                                                           |
     |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -16,56 +16,47 @@
 
     EXAMPLE:
       changeColumn(table='members',columnType='string',columnName='status',limit=50);
---->
-<cfcomponent extends="[extends]" hint="[description]">
-  <cffunction name="up">
-  	<cfset hasError = false />
-  	<cftransaction>
-	    <cfscript>
-	    	try{
-	    		changeColumn(table='tableName', columnType='', columnName='columnName', default='', null=true);
-	    	}
-	    	catch (any ex){
-	    		hasError = true;
-		      	catchObject = ex;
-	    	}
+*/
+component extends="[extends]" hint="[description]" {
 
-	    </cfscript>
-	   <cfif hasError>
-	    	<cftransaction action="rollback" />
-	    	<cfthrow
-			    detail = "#catchObject.detail#"
-			    errorCode = "1"
-			    message = "#catchObject.message#"
-			    type = "Any">
-	    <cfelse>
-	    	<cftransaction action="commit" />
-	    </cfif>
- 	 </cftransaction>
-  </cffunction>
-  <cffunction name="down">
-  	<cfset hasError = false />
-  	<cftransaction>
-	    <cfscript>
-	    	try{
-	    		changeColumn(table='tableName',columnName='columnName');
-	    	}
-	    	catch (any ex){
-	    		hasError = true;
-		      	catchObject = ex;
-	    	}
+	function up() {
+	  	hasError = false;
+		transaction {
+		  	try{
+				changeColumn(table='tableName', columnType='', columnName='columnName', default='', null=true);
+			}
+			catch (any ex){
+				hasError = true;
+				catchObject = ex;
+			}
 
-	    </cfscript>
-	 	<cfif hasError>
-	    	<cftransaction action="rollback" />
-	    	<cfthrow
-			    detail = "#catchObject.detail#"
-			    errorCode = "1"
-			    message = "#catchObject.message#"
-			    type = "Any">
-	    <cfelse>
-	    	<cftransaction action="commit" />
-	    </cfif>
-	 </cftransaction>
-  </cffunction>
-</cfcomponent>
+			if (!hasError) {
+				transaction action="commit";
+			else {
+				transaction action="rollback";
+				throw(errorCode="1" detail=catchObject.detail message=catchObject.message type="any");
+			}
+		}
+	}
+
+	function down() {
+	  	hasError = false;
+		transaction {
+		  	try{
+				changeColumn(table='tableName',columnName='columnName');
+			}
+			catch (any ex){
+				hasError = true;
+				catchObject = ex;
+			}
+
+			if (!hasError) {
+				transaction action="commit";
+			else {
+				transaction action="rollback";
+				throw(errorCode="1" detail=catchObject.detail message=catchObject.message type="any");
+			}
+		}
+	}
+
+}

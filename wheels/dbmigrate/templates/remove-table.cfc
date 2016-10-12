@@ -1,4 +1,4 @@
-<!---
+/*
     |----------------------------------------------------------------------------------------------|
 	| Parameter  | Required | Type    | Default | Description                                      |
     |----------------------------------------------------------------------------------------------|
@@ -7,59 +7,49 @@
 
     EXAMPLE:
       dropTable(name='employees');
---->
-<cfcomponent extends="[extends]" hint="[description]">
-  <cffunction name="up">
-  	<cfset hasError = false />
-  	<cftransaction>
-	    <cfscript>
-	    	try{
-	    		dropTable(name='tableName');
-	    	}
-	    	catch (any ex){
-	    		hasError = true;
-		      	catchObject = ex;
-	    	}
+*/
+component extends="[extends]" hint="[description]" {
 
-	    </cfscript>
-	     <cfif hasError>
-	    	<cftransaction action="rollback" />
-	    	<cfthrow
-			    detail = "#catchObject.detail#"
-			    errorCode = "1"
-			    message = "#catchObject.message#"
-			    type = "Any">
-	    <cfelse>
-	    	<cftransaction action="commit" />
-	    </cfif>
-	 </cftransaction>
-  </cffunction>
-  <cffunction name="down">
-  	<cfset hasError = false />
-  	<cftransaction>
-	    <cfscript>
-	    	try{
-	    		t = createTable(name='tableName');
+	function up() {
+	  	hasError = false;
+		transaction {
+		  	try{
+				dropTable(name='tableName');
+			}
+			catch (any ex){
+				hasError = true;
+				catchObject = ex;
+			}
 
+			if (!hasError) {
+				transaction action="commit";
+			else {
+				transaction action="rollback";
+				throw(errorCode="1" detail=catchObject.detail message=catchObject.message type="any");
+			}
+		}
+	}
+
+	function down() {
+	  	hasError = false;
+		transaction {
+		  	try{
+				t = createTable(name='tableName');
 			    t.timestamps();
 			    t.create();
-	    	}
-	    	catch (any ex){
-	    		hasError = true;
-		      	catchObject = ex;
-	    	}
+			}
+			catch (any ex){
+				hasError = true;
+				catchObject = ex;
+			}
 
-	    </cfscript>
-	    <cfif hasError>
-	    	<cftransaction action="rollback" />
-	    	<cfthrow
-			    detail = "#catchObject.detail#"
-			    errorCode = "1"
-			    message = "#catchObject.message#"
-			    type = "Any">
-	    <cfelse>
-	    	<cftransaction action="commit" />
-	    </cfif>
-	 </cftransaction>
-  </cffunction>
-</cfcomponent>
+			if (!hasError) {
+				transaction action="commit";
+			else {
+				transaction action="rollback";
+				throw(errorCode="1" detail=catchObject.detail message=catchObject.message type="any");
+			}
+		}
+	}
+
+}

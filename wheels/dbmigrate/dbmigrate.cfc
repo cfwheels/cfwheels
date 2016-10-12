@@ -1,166 +1,172 @@
-<cfcomponent output="false" mixin="none" environment="design,development,maintenance">
+component output="false" mixin="none" environment="design,development,maintenance" {
 
-	<cffunction name="init">
-		<cfscript>
-			this.paths.migrate   = expandPath("/db/migrate/");
-			this.paths.sql       = expandPath("/db/sql/");
-			this.paths.templates = expandPath("wheels/dbmigrate/templates");
-			return this;
-		</cfscript>
-	</cffunction>
+	include "../global/cfml.cfm";
 
-	<cffunction name="migrateTo" access="public" returntype="string" hint="migrates database to a specified version">
-		<cfargument name="version" type="string" required="false" default="">
-		<cfscript>
-			var loc = {};
-			loc.feedback = "";
-			loc.versionsCurrentlyMigrated = $getVersionsPreviouslyMigrated();
-			loc.currentVersion = ListLast(loc.versionsCurrentlyMigrated);
-		</cfscript>
-		<cfif loc.currentVersion eq arguments.version>
-			<cfset loc.feedback = "Database is currently at version #arguments.version#. No migration required.#chr(13)#">
-		<cfelse>
-			<cfif not DirectoryExists(this.paths.sql)>
-				<cfdirectory action="create" directory="#this.paths.sql#">
-			</cfif>
-			<cfset loc.migrations = getAvailableMigrations()>
-			<cfif loc.currentVersion gt arguments.version>
-				<cfset loc.feedback = "Migrating from #loc.currentVersion# down to #arguments.version#.#chr(13)#">
-				<cfloop index="loc.i" from="#ArrayLen(loc.migrations)#" to="1" step="-1">
-					<cfset loc.migration = loc.migrations[loc.i]>
-					<cfif loc.migration.version lte arguments.version><cfbreak></cfif>
-					<cfif loc.migration.status eq "migrated">
-            		<cftransaction action="begin">
-  						<cftry>
-  							<cfset loc.feedback = loc.feedback & "#chr(13)#------- " & loc.migration.cfcfile & " #RepeatString("-",Max(5,50-Len(loc.migration.cfcfile)))##chr(13)#">
-  							<cfset Request.migrationOutput = "">
-  							<cfset Request.migrationSQLFile = "#this.paths.sql#/#loc.migration.cfcfile#_down.sql">
-  							<cffile action="write" file="#Request.migrationSQLFile#" output="">
-  							<cfset loc.migration.cfc.down()>
-  							<cfset loc.feedback = loc.feedback & Request.migrationOutput>
-  							<cfset $removeVersionAsMigrated(loc.migration.version)>
-  							<cfcatch type="any">
-  								<cfset loc.feedback = loc.feedback & "Error migrating to #loc.migration.version#.#chr(13)##CFCATCH.Message##chr(13)##CFCATCH.Detail##chr(13)#">
-                  				<cftransaction action="rollback" />
-  								<cfbreak>
-  							</cfcatch>
-  						</cftry>
-              			<cftransaction action="commit" />
-          				</cftransaction>
-					</cfif>
-				</cfloop>
-			<cfelse>
-				<cfset loc.feedback = "Migrating from #loc.currentVersion# up to #arguments.version#.#chr(13)#">
-				<cfloop index="loc.i" from="1" to="#ArrayLen(loc.migrations)#">
-					<cfset loc.migration = loc.migrations[loc.i]>
-					<cfif loc.migration.version lte arguments.version and loc.migration.status neq "migrated">
-	            		<cftransaction action="begin">
-	  						<cftry>
-	  							<cfset loc.feedback = loc.feedback & "#chr(13)#-------- " & loc.migration.cfcfile & " #RepeatString("-",Max(5,50-Len(loc.migration.cfcfile)))##chr(13)#">
-	  							<cfset Request.migrationOutput = "">
-	  							<cfset Request.migrationSQLFile = "#this.paths.sql#/#loc.migration.cfcfile#_up.sql">
-	  							<cffile action="write" file="#Request.migrationSQLFile#" output="">
+	public dbmigrate function init(
+		string migratePath = "/db/migrate/",
+		string sqlPath = "/db/sql/",
+		string templatePath = "wheels/dbmigrate/templates/"
+	) {
+		this.paths.migrate   = ExpandPath(arguments.migratePath);
+		this.paths.sql       = ExpandPath(arguments.sqlPath);
+		this.paths.templates = ExpandPath(arguments.templatePath);
+		this.paths.migrateComponents = ArrayToList(ListToArray(arguments.migratePath, "/"), ".");
+		return this;
+	}
 
-	  							<cfset loc.migration.cfc.up()>
-	  							<cfset loc.feedback = loc.feedback & Request.migrationOutput>
-	  							<cfset $setVersionAsMigrated(loc.migration.version)>
-	  							<cfcatch type="any">
-	  								<cfset loc.feedback = loc.feedback & "Error migrating to #loc.migration.version#.#chr(13)##CFCATCH.Message##chr(13)##CFCATCH.Detail##chr(13)#">
-	                  				<cftransaction action="rollback" />
-	                 				<cfbreak>
-	  							</cfcatch>
-	  						</cftry>
-	              			<cftransaction action="commit" />
-	            		</cftransaction>
-					<cfelseif loc.migration.version gt arguments.version>
-						<cfbreak>
-					</cfif>
-				</cfloop>
-			</cfif>
-		</cfif>
-		<cfreturn loc.feedback>
-	</cffunction>
-
-	<cfscript>
-		// returns current database version
-		public string function getCurrentMigrationVersion(){
-			return ListLast($getVersionsPreviouslyMigrated());
-		}
-
-		// Create a migration File
-		public string function createMigration(
-			required string migrationName,
-			string templateName="",
-			string migrationPrefix="timestamp"
-		){
-			if(len(trim(arguments.migrationName)) GT 0){
-				return $copyTemplateMigrationAndRename(argumentCollection=arguments);
+	/**
+	* migrates database to a specified version
+	*/
+	public string function migrateTo(string version = "") {
+		local.rv = "";
+		local.currentVersion = ListLast($getVersionsPreviouslyMigrated());
+		if (local.currentVersion eq arguments.version) {
+			local.rv = "Database is currently at version #arguments.version#. No migration required.#chr(13)#";
+		} else {
+			if (! DirectoryExists(this.paths.sql) && application.wheels.dbmigrateWriteSQLFiles) {
+				DirectoryCreate(this.paths.sql);
+			}
+			local.migrations = getAvailableMigrations();
+			if (local.currentVersion gt arguments.version) {
+				local.rv = "Migrating from #local.currentVersion# down to #arguments.version#.#chr(13)#";
+				for ( local.i=ArrayLen( local.migrations ); local.i >= 1; local.i-- ) {
+					local.migration = local.migrations[local.i];
+					if (local.migration.version lte arguments.version) {
+						break;
+					}
+					if (local.migration.status eq "migrated") {
+            transaction action="begin" {
+							try {
+  							local.rv = local.rv & "#chr(13)#------- " & local.migration.cfcfile & " #RepeatString("-",Max(5,50-Len(local.migration.cfcfile)))##chr(13)#";
+  							Request.migrationOutput = "";
+  							Request.migrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_down.sql";
+								if (application.wheels.dbmigrateWriteSQLFiles) {
+									FileWrite(Request.migrationSQLFile, "");
+								}
+  							local.migration.cfc.down();
+  							local.rv = local.rv & Request.migrationOutput;
+  							$removeVersionAsMigrated(local.migration.version);
+							} catch(any e) {
+  							local.rv = local.rv & "Error migrating to #local.migration.version#.#chr(13)##e.message##chr(13)##e.detail##chr(13)#";
+                transaction action="rollback";
+  							break;
+  						}
+              transaction action="commit";
+						}
+					}
+				}
 			} else {
-				return "You must supply a migration name (e.g. 'creates member table')";
+				local.rv = "Migrating from #local.currentVersion# up to #arguments.version#.#chr(13)#";
+				for (local.migration in local.migrations) {
+					if (local.migration.version lte arguments.version && local.migration.status neq "migrated") {
+	          transaction {
+							try {
+  							local.rv = local.rv & "#chr(13)#-------- " & local.migration.cfcfile & " #RepeatString("-",Max(5,50-Len(local.migration.cfcfile)))##chr(13)#";
+  							Request.migrationOutput = "";
+  							Request.migrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_up.sql";
+								if (application.wheels.dbmigrateWriteSQLFiles) {
+									FileWrite(Request.migrationSQLFile, "");
+								}
+  							local.migration.cfc.up();
+  							local.rv = local.rv & Request.migrationOutput;
+  							$setVersionAsMigrated(local.migration.version);
+	  					} catch(any e) {
+								local.rv = local.rv & "Error migrating to #local.migration.version#.#chr(13)##e.message##chr(13)##e.detail##chr(13)#";
+                transaction action="rollback";
+               	break;
+							}
+	            transaction action="commit";
+	        	}
+					} else if (local.migration.version gt arguments.version) {
+						break;
+					}
+				};
 			}
 		}
-	</cfscript>
+		return local.rv;
+	}
 
-	<cffunction name="getAvailableMigrations" access="public" returntype="array" hint="searches db/migrate folder for migrations">
-		<cfargument name="path" type="string" required="false" default="#this.paths.migrate#">
-		<cfscript>
-			var loc = {};
-			loc.listVersionsPreviouslyMigrated = $getVersionsPreviouslyMigrated();
-			loc.migrations = ArrayNew(1);
-			loc.migrationRE = "^([\d]{3,14})_([^\.]*)\.cfc$";
-		</cfscript>
-		<cfset var loc = {}>
-		<cfset loc.listVersionsPreviouslyMigrated = $getVersionsPreviouslyMigrated()>
-		<cfset loc.migrations = ArrayNew(1)>
-		<cfset loc.migrationRE = "^([\d]{3,14})_([^\.]*)\.cfc$">
-		<cfif !DirectoryExists(this.paths.migrate)>
-			<cfdirectory action="create" directory="#this.paths.migrate#">
-		</cfif>
-		<cfdirectory action="list" name="qMigrationFiles" directory="#this.paths.migrate#" sort="Name" filter="*.cfc" type="file" />
-		<cfloop query="qMigrationFiles">
-			<cfif REFind(loc.migrationRE,Name)>
-				<cfset loc.migration = {}>
-				<cfset loc.migration.version = REReplace(Name,loc.migrationRE,"\1")>
-				<cfset loc.migration.name = REReplace(Name,loc.migrationRE,"\2")>
-				<cfset loc.migration.cfcfile = REReplace(Name,loc.migrationRE,"\1_\2")>
-				<cfset loc.migration.loadError = "">
-				<cfset loc.migration.details = "description unavailable">
-				<cfset loc.migration.status = "">
-				<cftry>
-					<cfset loc.migration.cfc = $createObjectFromRoot(path="db.migrate",fileName=loc.migration.cfcfile, method="init")>
+	/**
+	* returns current database version
+	*/
+	public string function getCurrentMigrationVersion(){
+		return ListLast($getVersionsPreviouslyMigrated());
+	}
 
-					<cfset loc.metaData = GetMetaData(loc.migration.cfc)>
-					<cfif structKeyExists(loc.metaData,"hint")>
-						<cfset loc.migration.details = loc.metaData.hint>
-					</cfif>
-					<cfif ListFind(loc.listVersionsPreviouslyMigrated, loc.migration.version) neq 0>
-						<cfset loc.migration.status = "migrated">
-					</cfif>
-					<cfcatch type="any"><cfset loc.migration.loadError = CFCATCH.Message></cfcatch>
-				</cftry>
-				<cfset ArrayAppend(loc.migrations,loc.migration)>
-			</cfif>
-		</cfloop>
-		<cfreturn loc.migrations>
-	</cffunction>
+	/**
+	* Create a migration File
+	*/
+	public string function createMigration(
+		required string migrationName,
+		string templateName="",
+		string migrationPrefix="timestamp"
+	){
+		if(Len(Trim(arguments.migrationName))){
+			return $copyTemplateMigrationAndRename(argumentCollection=arguments);
+		} else {
+			return "You must supply a migration name (e.g. 'creates member table')";
+		}
+	}
 
+	/**
+	* Searches db/migrate folder for migrations
+	*/
+	public array function getAvailableMigrations(string path = this.paths.migrate) {
+		local.rv = [];
+		local.previousMigrationList = $getVersionsPreviouslyMigrated();
+		local.migrationRE = "^([\d]{3,14})_([^\.]*)\.cfc$";
+		if (! DirectoryExists(this.paths.migrate)) {
+			DirectoryCreate(this.paths.migrate);
+		}
+		local.files = DirectoryList(this.paths.migrate, false, "query", "*.cfc", "name");
+		for (local.row in local.files) {
+			if (REFind(local.migrationRE, local.row.name)) {
+				local.migration = {};
+				local.migration.version = REReplace(local.row.name, local.migrationRE,"\1");
+				local.migration.name = REReplace(local.row.name, local.migrationRE,"\2");
+				local.migration.cfcfile = REReplace(local.row.name, local.migrationRE,"\1_\2");
+				local.migration.loadError = "";
+				local.migration.details = "description unavailable";
+				local.migration.status = "";
+				try {
+					local.migration.cfc = $createObjectFromRoot(path=this.paths.migrateComponents, fileName=local.migration.cfcfile, method="init");
+					local.metaData = GetMetaData(local.migration.cfc);
+					if (StructKeyExists(local.metaData,"hint")) {
+						local.migration.details = local.metaData.hint;
+					}
+					if (ListFind(local.previousMigrationList, local.migration.version)) {
+						local.migration.status = "migrated";
+					}
+				} catch(any e) {
+					local.migration.loadError = CFCATCH.Message;
+				}
+				ArrayAppend(local.rv, local.migration);
+			}
+		};
+		return local.rv;
+	}
 
-	<cffunction name="$setVersionAsMigrated" access="private">
-		<cfargument name="version" required="true" type="string">
-		<cfquery datasource="#application.wheels.dataSourceName#">
-		INSERT INTO schemainfo (version) VALUES (<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.version#">)
-		</cfquery>
-	</cffunction>
+	/**
+	* Inserts a record to flag a version as migrated
+	*/
+	private void function $setVersionAsMigrated(required string version) {
+	  $query(
+	    datasource=application.wheels.dataSourceName,
+	    sql="INSERT INTO #application.wheels.dbmigrateTableName# (version) VALUES ('#$sanitiseVersion(arguments.version)#')"
+	  );
+	}
 
-	<cffunction name="$removeVersionAsMigrated" access="private">
-		<cfargument name="version" required="true" type="string">
-		<cfquery datasource="#application.wheels.dataSourceName#" >
-		DELETE FROM schemainfo WHERE version = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.version#">
-		</cfquery>
-	</cffunction>
+	/**
+	* Deletes a record to flag a version as not migrated
+	*/
+	private void function $removeVersionAsMigrated(required string version) {
+	  $query(
+	    datasource=application.wheels.dataSourceName,
+	    sql="DELETE FROM #application.wheels.dbmigrateTableName# WHERE version = '#$sanitiseVersion(arguments.version)#'"
+	  );
+	}
 
-	<cfscript>
-
+	// TODO: is this required? it's a private core function.
 	public any function $createObjectFromRoot(
 		required string path,
 		required string fileName,
@@ -175,8 +181,11 @@
 		return returnValue;
 	}
 
+	/**
+	* Returns the next migration
+	*/
 	public string function $getNextMigrationNumber(string migrationPrefix="") {
-		local.migrationNumber = dateformat(now(),'yyyymmdd') & timeformat(now(),'HHMMSS');
+		local.migrationNumber = DateFormat(Now(),'yyyymmdd') & TimeFormat(Now(),'HHMMSS');
 		if(arguments.migrationPrefix != "timestamp") {
 			local.migrations = getAvailableMigrations();
 			if(ArrayLen(local.migrations) eq 0) {
@@ -194,64 +203,69 @@
 		}
 		return local.migrationNumber;
 	}
-	</cfscript>
 
-	<cffunction name="$copyTemplateMigrationAndRename" displayname="$copyTemplateMigrationAndRename" access="private" returntype="string">
-		<cfargument name="migrationName" type="string" required="true" />
-		<cfargument name="templateName" type="string" required="true" />
-		<cfargument name="migrationPrefix" type="string" required="false" default="" />
+	/**
+	* Creates a migration file based on a template
+	*/
+	private string function $copyTemplateMigrationAndRename(
+		required string migrationName,
+		required string templateName,
+		string migrationPrefix = ""
+	) {
+		local.templateFile = this.paths.templates & "/" & arguments.templateName & ".cfc";
+		local.extendsPath = "wheels.dbmigrate.Migration";
+		if (! FileExists(local.templateFile)) {
+			return "Template #arguments.templateName# could not be found";
+		}
+		if (! DirectoryExists(this.paths.migrate)) {
+			DirectoryCreate(this.paths.migrate);
+		}
+		try {
+			local.templateContent = FileRead(local.templateFile);
+			if (Len(Trim(application.wheels.rootcomponentpath))) {
+				local.extendsPath = application.wheels.rootcomponentpath & ".wheels.dbmigrate.Migration";
+			}
+			local.templateContent = Replace(local.templateContent, "[extends]", local.extendsPath);
+			local.templateContent = Replace(local.templateContent, "[description]", Replace(arguments.migrationName,'"','&quot;','ALL'));
 
-		<cfset var loc = {}/>
-		<cfset loc.templateFile = this.paths.templates & "/" & arguments.templateName & ".cfc"/>
-		<cfset loc.extendsPath = "wheels.dbmigrate.Migration"/>
-		<cfif not FileExists(loc.templateFile)>
-			<cfreturn "Template #arguments.templateName# could not be found">
-		</cfif>
-		<cfif not DirectoryExists(this.paths.migrate)>
-			<cfdirectory action="create" directory="#this.paths.migrate#">
-		</cfif>
-		<cftry>
-			<cffile action="read" file="#loc.templateFile#" variable="loc.templateContent">
+			local.migrationFile = REREplace(arguments.migrationName,"[^A-z0-9]+"," ","ALL");
+			local.migrationFile = REREplace(Trim(local.migrationFile),"[\s]+","_","ALL");
+			local.migrationFile = $getNextMigrationNumber(arguments.migrationPrefix) & "_#local.migrationFile#.cfc";
+			FileWrite("#this.paths.migrate#/#local.migrationFile#", local.templateContent);
+		} catch(any e) {
+			return "There was an error when creating the migration: #e.message#";
+		}
+		return "The migration #local.migrationFile# file was created";
+	}
 
-			<cfif Len(Trim(application.wheels.rootcomponentpath)) GT 0>
-			  <cfset loc.extendsPath = application.wheels.rootcomponentpath & ".wheels.dbmigrate.Migration"/>
-			</cfif>
+	/**
+	* Returns previously migrated versions as a list
+	*/
+	private string function $getVersionsPreviouslyMigrated() {
+		try {
+			local.migratedVersions = $query(
+				datasource=application.wheels.dataSourceName,
+				sql="SELECT version FROM #application.wheels.dbmigrateTableName# ORDER BY version ASC"
+			);
+			if (local.migratedVersions.recordcount eq 0) {
+				return 0;
+			} else {
+				return ValueList(local.migratedVersions.version);
+			}
+		} catch(any e) {
+			$query(
+				datasource=application.wheels.dataSourceName,
+				sql="CREATE TABLE #application.wheels.dbmigrateTableName# (version VARCHAR(25))"
+			);
+			return 0;
+		}
+	}
 
-			<cfset loc.templateContent = replace(loc.templateContent, "[extends]", loc.extendsPath)>
-			<cfset loc.templateContent = replace(loc.templateContent, "[description]", replace(arguments.migrationName,'"','&quot;','ALL'))>
+	/**
+	* Ensures a version as user input is numeric
+	*/
+	private string function $sanitiseVersion(required string version) {
+		return REReplaceNoCase(arguments.version, "[^0-9]", "" ,"all");
+	}
 
-			<cfset loc.migrationFile = REREplace(arguments.migrationName,"[^A-z0-9]+"," ","ALL")>
-			<cfset loc.migrationFile = REREplace(Trim(loc.migrationFile),"[\s]+","_","ALL")>
-			<cfset loc.migrationFile = $getNextMigrationNumber(arguments.migrationPrefix) & "_#loc.migrationFile#.cfc">
-
-			<cffile action="write" file="#this.paths.migrate#/#loc.migrationFile#" output="#loc.templateContent#">
-
-			<cfcatch type="any">
-				<cfreturn "There was an error when creating the migration: #cfcatch.message#">
-			</cfcatch>
-		</cftry>
-		<cfreturn "The migration #loc.migrationFile# file was created" />
-	</cffunction>
-
-
-	<cffunction name="$getVersionsPreviouslyMigrated" access="private" returntype="string">
-		<cfset var loc = {}>
-		<cftry>
-			<cfquery name="loc.qMigratedVersions" datasource="#application.wheels.dataSourceName#" >
-			SELECT version FROM schemainfo ORDER BY version ASC
-			</cfquery>
-			<cfcatch type="database">
-				<cfquery datasource="#application.wheels.dataSourceName#" >
-				CREATE TABLE schemainfo (version VARCHAR(25))
-				</cfquery>
-				<cfreturn "0">
-			</cfcatch>
-		</cftry>
-		<cfif loc.qMigratedVersions.recordcount eq 0>
-			<cfreturn "0">
-		<cfelse>
-			<cfreturn ValueList(loc.qMigratedVersions.version)>
-		</cfif>
-	</cffunction>
-
-</cfcomponent>
+}
