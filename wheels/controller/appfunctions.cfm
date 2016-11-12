@@ -1,5 +1,5 @@
 <cfscript>
-	if (StructKeyExists(server, "railo") OR StructKeyExists(server, "lucee")) {
+	if (StructKeyExists(server, "lucee")) {
 		include "caching.cfm";
 		include "filters.cfm";
 		include "flash.cfm";

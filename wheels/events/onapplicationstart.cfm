@@ -19,16 +19,10 @@ public void function onApplicationStart() {
 	}
 
 	// check and store server engine name, throw error if using a version that we don't support
-	// NB Lucee first as there seems to be some sort of alias in Lucee -> Railo which means server.railo exists
 	if (StructKeyExists(server, "lucee"))
 	{
 		application.$wheels.serverName = "Lucee";
 		application.$wheels.serverVersion = server.lucee.version;
-	}
-	else if (StructKeyExists(server, "railo"))
-	{
-		application.$wheels.serverName = "Railo";
-		application.$wheels.serverVersion = server.railo.version;
 	}
 	else
 	{
@@ -451,4 +445,4 @@ public void function onApplicationStart() {
 		$location(url=local.url, addToken=false);
 	}
 }
-</cfscript> 
+</cfscript>
