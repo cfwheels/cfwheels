@@ -8,27 +8,42 @@ public void function onApplicationStart() {
 	$initializeRequestScope();
 
 	// set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x"
-	if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword")) {
+	if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword"))
+	{
 		local.oldReloadPassword = application.wheels.reloadPassword;
 	}
 	application.$wheels = {};
-	if (StructKeyExists(local, "oldReloadPassword")) {
+	if (StructKeyExists(local, "oldReloadPassword"))
+	{
 		application.$wheels.reloadPassword = local.oldReloadPassword;
 	}
 
 	// check and store server engine name, throw error if using a version that we don't support
-	if (StructKeyExists(server, "lucee")) {
+	// NB Lucee first as there seems to be some sort of alias in Lucee -> Railo which means server.railo exists
+	if (StructKeyExists(server, "lucee"))
+	{
 		application.$wheels.serverName = "Lucee";
 		application.$wheels.serverVersion = server.lucee.version;
-	} else {
+	}
+	else if (StructKeyExists(server, "railo"))
+	{
+		application.$wheels.serverName = "Railo";
+		application.$wheels.serverVersion = server.railo.version;
+	}
+	else
+	{
 		application.$wheels.serverName = "Adobe ColdFusion";
 		application.$wheels.serverVersion = server.coldfusion.productVersion;
 	}
 	local.upgradeTo = $checkMinimumVersion(engine=application.$wheels.serverName, version=application.$wheels.serverVersion);
-	if (Len(local.upgradeTo) && !StructKeyExists(this, "disableEngineCheck") && !StructKeyExists(url, "disableEngineCheck")) {
-		if (IsBoolean(local.upgradeTo)) {
+	if (Len(local.upgradeTo) && !StructKeyExists(this, "disableEngineCheck") && !StructKeyExists(url, "disableEngineCheck"))
+	{
+		if (IsBoolean(local.upgradeTo))
+		{
 			$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please use Lucee or Adobe ColdFusion instead.");
-		} else {
+		}
+		else
+		{
 			$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please upgrade to version #local.upgradeTo# or higher.");
 		}
 	}
@@ -38,9 +53,11 @@ public void function onApplicationStart() {
 
 	// set up containers for routes, caches, settings etc
 	application.$wheels.version = "2.0";
-	try {
+	try
+	{
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
-	} catch (any e) {}
+	}
+	catch (any e) {}
 	application.$wheels.controllers = {};
 	application.$wheels.models = {};
 	application.$wheels.existingHelperFiles = "";
@@ -69,26 +86,37 @@ public void function onApplicationStart() {
 	application.$wheels.wheelsComponentPath = ListAppend(application.$wheels.rootcomponentPath, "wheels", ".");
 
 	// set environment either from the url or the developer's environment.cfm file
-	if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application.$wheels, "reloadPassword") && (!Len(application.$wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.$wheels.reloadPassword))) {
+	if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application.$wheels, "reloadPassword") && (!Len(application.$wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.$wheels.reloadPassword)))
+	{
 		application.$wheels.environment = URL.reload;
-	} else {
+	}
+	else
+	{
 		$include(template="config/environment.cfm");
 	}
 
 	// rewrite settings based on web server rewrite capabilites
 	application.$wheels.rewriteFile = "rewrite.cfm";
-	if (Right(request.cgi.script_name, 12) == "/" & application.$wheels.rewriteFile) {
+	if (Right(request.cgi.script_name, 12) == "/" & application.$wheels.rewriteFile)
+	{
 		application.$wheels.URLRewriting = "On";
-	} else if (Len(request.cgi.path_info)) {
+	}
+	else if (Len(request.cgi.path_info))
+	{
 		application.$wheels.URLRewriting = "Partial";
-	} else {
+	}
+	else
+	{
 		application.$wheels.URLRewriting = "Off";
 	}
 
 	// set datasource name to same as the folder the app resides in unless the developer has set it with the global setting already
-	if (StructKeyExists(this, "dataSource")) {
+	if (StructKeyExists(this, "dataSource"))
+	{
 		application.$wheels.dataSourceName = this.dataSource;
-	} else {
+	}
+	else
+	{
 		application.$wheels.dataSourceName = LCase(ListLast(GetDirectoryFromPath(GetBaseTemplatePath()), Right(GetDirectoryFromPath(GetBaseTemplatePath()), 1)));
 	}
 	application.$wheels.dataSourceUserName = "";
@@ -107,7 +135,8 @@ public void function onApplicationStart() {
 	application.$wheels.cachePartials = false;
 	application.$wheels.cacheQueries = false;
 	application.$wheels.cachePlugins = true;
-	if (application.$wheels.environment != "design") {
+	if (application.$wheels.environment != "design")
+	{
 		application.$wheels.cacheDatabaseSchema = true;
 		application.$wheels.cacheFileChecking = true;
 		application.$wheels.cacheImages = true;
@@ -115,7 +144,8 @@ public void function onApplicationStart() {
 		application.$wheels.cacheControllerInitialization = true;
 		application.$wheels.cacheRoutes = true;
 	}
-	if (application.$wheels.environment != "design" && application.$wheels.environment != "development") {
+	if (application.$wheels.environment != "design" && application.$wheels.environment != "development")
+	{
 		application.$wheels.cacheActions = true;
 		application.$wheels.cachePages = true;
 		application.$wheels.cachePartials = true;
@@ -130,16 +160,21 @@ public void function onApplicationStart() {
 	application.$wheels.excludeFromErrorEmail = "";
 	application.$wheels.errorEmailToAddress = "";
 	application.$wheels.errorEmailFromAddress = "";
-	if (Find(".", request.cgi.server_name)) {
+	if (Find(".", request.cgi.server_name))
+	{
 		application.$wheels.errorEmailAddress = "webmaster@" & Reverse(ListGetAt(Reverse(request.cgi.server_name), 2,".")) & "." & Reverse(ListGetAt(Reverse(request.cgi.server_name), 1, "."));
-	} else {
+	}
+	else
+	{
 		application.$wheels.errorEmailAddress = "";
 	}
-	if (application.$wheels.environment == "production") {
+	if (application.$wheels.environment == "production")
+	{
 		application.$wheels.showErrorInformation = false;
 		application.$wheels.sendEmailOnError = true;
 	}
-	if (application.$wheels.environment != "design" && application.$wheels.environment != "development") {
+	if (application.$wheels.environment != "design" && application.$wheels.environment != "development")
+	{
 		application.$wheels.showDebugInformation = false;
 	}
 
@@ -148,7 +183,8 @@ public void function onApplicationStart() {
 	// ex. {http="asset0.domain1.com,asset2.domain1.com,asset3.domain1.com", https="secure.domain1.com"}
 	application.$wheels.assetQueryString = false;
 	application.$wheels.assetPaths = false;
-	if (application.$wheels.environment != "design" && application.$wheels.environment != "development") {
+	if (application.$wheels.environment != "design" && application.$wheels.environment != "development")
+	{
 		application.$wheels.assetQueryString = true;
 	}
 
@@ -185,16 +221,20 @@ public void function onApplicationStart() {
 	application.$wheels.modelRequireInit = false;
 	application.$wheels.showIncompatiblePlugins = true;
 	application.$wheels.booleanAttributes = "allowfullscreen,async,autofocus,autoplay,checked,compact,controls,declare,default,defaultchecked,defaultmuted,defaultselected,defer,disabled,draggable,enabled,formnovalidate,hidden,indeterminate,inert,ismap,itemscope,loop,multiple,muted,nohref,noresize,noshade,novalidate,nowrap,open,pauseonexit,readonly,required,reversed,scoped,seamless,selected,sortable,spellcheck,translate,truespeed,typemustmatch,visible";
-	if (ListFindNoCase("production,maintenance", application.$wheels.environment)) {
+	if (ListFindNoCase("production,maintenance", application.$wheels.environment))
+	{
 		application.$wheels.redirectAfterReload = true;
 	}
 
 
 	// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
-	if (StructKeyExists(this, "sessionManagement") && this.sessionManagement) {
+	if (StructKeyExists(this, "sessionManagement") && this.sessionManagement)
+	{
 		application.$wheels.sessionManagement = true;
 		application.$wheels.flashStorage = "session";
-	} else {
+	}
+	else
+	{
 		application.$wheels.sessionManagement = false;
 		application.$wheels.flashStorage = "cookie";
 	}
@@ -327,10 +367,12 @@ public void function onApplicationStart() {
 	$include(template="config/#application.$wheels.environment#/settings.cfm");
 
 	// clear query (cfquery) and page (cfcache) caches
-	if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cachekey")) {
+	if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cachekey"))
+	{
 		application.$wheels.cachekey = Hash(CreateUUID());
 	}
-	if (application.$wheels.clearTemplateCacheOnReload) {
+	if (application.$wheels.clearTemplateCacheOnReload)
+	{
 		$cache(action="flush");
 	}
 
@@ -339,9 +381,11 @@ public void function onApplicationStart() {
 	local.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.$wheels.controllerPath, fileName="Wheels", method="$initControllerClass"));
 	application.$wheels.protectedControllerMethods = "";
 	local.iEnd = ListLen(local.protectedControllerMethods);
-	for (local.i=1; local.i <= local.iEnd; local.i++) {
+	for (local.i=1; local.i <= local.iEnd; local.i++)
+	{
 		local.method = ListGetAt(local.protectedControllerMethods, local.i);
-		if (Left(local.method, 1) != "$" && !ListFindNoCase(local.allowedGlobalMethods, local.method)) {
+		if (Left(local.method, 1) != "$" && !ListFindNoCase(local.allowedGlobalMethods, local.method))
+		{
 			application.$wheels.protectedControllerMethods = ListAppend(application.$wheels.protectedControllerMethods, local.method);
 		}
 	}
@@ -350,7 +394,8 @@ public void function onApplicationStart() {
 	$loadPlugins();
 
 	// allow developers to inject plugins into the application variables scope
-	if (!StructIsEmpty(application.$wheels.mixins)) {
+	if (!StructIsEmpty(application.$wheels.mixins))
+	{
 		$include(template="wheels/plugins/injection.cfm");
 	}
 
@@ -368,27 +413,37 @@ public void function onApplicationStart() {
 	$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
 
 	// Redirect away from reloads on GET requests.
-	if (application.wheels.redirectAfterReload && StructKeyExists(url, "reload") && cgi.REQUEST_METHOD == 'get') {
-		if (StructKeyExists(cgi, "PATH_INFO") && Len(cgi.PATH_INFO)) {
+	if (application.wheels.redirectAfterReload && StructKeyExists(url, "reload") && cgi.REQUEST_METHOD == 'get')
+	{
+		if (StructKeyExists(cgi, "PATH_INFO") && Len(cgi.PATH_INFO))
+		{
 			local.url = cgi.PATH_INFO;
-		} else if (StructKeyExists(cgi, "PATH_INFO")) {
+		}
+		else if (StructKeyExists(cgi, "PATH_INFO"))
+		{
 			local.url = "/";
-		} else {
+		}
+		else
+		{
 			local.url = cgi.SCRIPT_NAME;
 		}
 
 		local.oldQueryString = ListToArray(cgi.QUERY_STRING, "&");
 		local.newQueryString = ArrayNew(1);
 
-		for (local.i = 1; local.i <= ArrayLen(local.oldQueryString); local.i++) {
+		for (local.i = 1; local.i <= ArrayLen(local.oldQueryString); local.i++)
+		{
 			local.keyValue = local.oldQueryString[local.i];
 			local.key = ListFirst(local.keyValue, "=");
-			if (!ListFindNoCase("reload,password", local.key)) {
+
+			if (!ListFindNoCase("reload,password", local.key))
+			{
 				ArrayAppend(local.newQueryString, local.keyValue);
 			}
 		}
 
-		if (ArrayLen(local.newQueryString)) {
+		if (ArrayLen(local.newQueryString))
+		{
 			local.queryString = ArrayToList(local.newQueryString, '&');
 			local.url = "#local.url#?#local.queryString#";
 		}
