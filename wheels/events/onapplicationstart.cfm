@@ -25,6 +25,11 @@ public void function onApplicationStart() {
 		application.$wheels.serverName = "Lucee";
 		application.$wheels.serverVersion = server.lucee.version;
 	}
+	else if (StructKeyExists(server, "railo"))
+	{
+		application.$wheels.serverName = "Railo";
+		application.$wheels.serverVersion = server.railo.version;
+	}
 	else
 	{
 		application.$wheels.serverName = "Adobe ColdFusion";
