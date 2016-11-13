@@ -38,9 +38,9 @@
 		}
 		else if (Left(arguments.missingMethodName, 9) == "findOneBy" || Left(arguments.missingMethodName, 9) == "findAllBy")
 		{
-			if (StructKeyExists(server, "railo") || StructKeyExists(server, "lucee"))
+			if (StructKeyExists(server, "lucee"))
 			{
-				// since Railo passes in the method name in all upper case we have to do this here
+				// since Lucee passes in the method name in all upper case we have to do this here
 				local.finderProperties = ListToArray(LCase(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, "And", "|", "all"), "findAllBy", "", "all"), "findOneBy", "", "all")), "|");
 			}
 			else

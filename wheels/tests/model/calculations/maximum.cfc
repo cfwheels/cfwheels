@@ -6,7 +6,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_maximum_with_group() {
-		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+		if (StructKeyExists(application.wheels, "adaptername") && ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
 			result = model("post").maximum(property="views", group="authorId");
 			assert("result['viewsMaximum'][1] IS 5");
 		} else {

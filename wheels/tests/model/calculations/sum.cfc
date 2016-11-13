@@ -6,7 +6,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_sum_with_group() {
-		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+		if (StructKeyExists(application.wheels, "adaptername") && ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
 			result = model("post").sum(property="views", group="authorId");
 			assert("result['viewsSum'][2] IS 5");
 		} else {
@@ -15,7 +15,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_sum_with_group_on_associated_model() {
-		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+		if (StructKeyExists(application.wheels, "adaptername") && ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
 			result = model("post").sum(property="views", include="author", group="lastName");
 			assert("result['viewsSum'][2] IS 5");
 		} else {
@@ -24,7 +24,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_sum_with_group_on_calculated_property() {
-		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+		if (StructKeyExists(application.wheels, "adaptername") && ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
 			result = model("photo").sum(property="galleryId", group="DESCRIPTION1");
 			assert("result['galleryIdSum'][2] IS 10");
 		} else {
@@ -33,7 +33,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_sum_with_group_on_calculated_property_on_associated_model() {
-		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+		if (StructKeyExists(application.wheels, "adaptername") && ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
 			result = model("gallery").sum(property="userId", include="photos", group="DESCRIPTION1");
 			assert("result['userIdSum'][3] IS 3");
 		} else {

@@ -25,7 +25,7 @@ component extends="wheels.tests.Test" {
 	/* floats */
 
 	function test_average_with_group() {
-		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+		if (StructKeyExists(application.wheels, "adaptername") && ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
 			result = model("post").average(property="averageRating", group="authorId");
 			assert("DecimalFormat(result['averageRatingAverage'][1]) IS DecimalFormat(3.40)");
 		} else {
