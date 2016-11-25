@@ -1,45 +1,45 @@
-<cfcomponent extends="Controller">
+component extends="Controller" {
 
-	<cffunction name="init">
-		<cfset aStr.testArg1 = 1>
-		<cfset aStr.testArg2 = 2>
-		<cfset filters(through="dir", testArg=1, except="doNotRun")>
-		<cfset filters(through="str", strArguments=Duplicate(aStr))>
-		<cfset filters(through="both", bothArguments=Duplicate(aStr), testArg=1)>
-		<cfset filters(through="pub,priv", only="index,actOne,actTwo")>
-	</cffunction>
+	function init() {
+		aStr.testArg1 = 1;
+		aStr.testArg2 = 2;
+		filters(through="dir", testArg=1, except="doNotRun");
+		filters(through="str", strArguments=Duplicate(aStr));
+		filters(through="both", bothArguments=Duplicate(aStr), testArg=1);
+		filters(through="pub,priv", only="index,actOne,actTwo");
+	}
 
-	<cffunction name="dir">
-		<cfset request.filterTests.dirTest = arguments.testArg>
-	</cffunction>
+	function dir() {
+		request.filterTests.dirTest = arguments.testArg;
+	}
 
-	<cffunction name="str">
-		<cfset request.filterTests.strTest = StructCount(arguments) & arguments.testArg1>
-	</cffunction>
+	function str() {
+		request.filterTests.strTest = StructCount(arguments) & arguments.testArg1;
+	}
 
-	<cffunction name="both">
-		<cfset request.filterTests.bothTest = StructCount(arguments) & arguments.testArg>
-		<cfif NOT IsDefined("request.filterTests.test") OR request.filterTests.test IS "bothpubpriv">
-			<cfset request.filterTests.test = "">
-		</cfif>
-		<cfset request.filterTests.test = request.filterTests.test & "both">
-	</cffunction>
+	function both() {
+		request.filterTests.bothTest = StructCount(arguments) & arguments.testArg;
+		if (NOT IsDefined("request.filterTests.test") OR request.filterTests.test IS "bothpubpriv") {
+			request.filterTests.test = "";
+		}
+		request.filterTests.test = request.filterTests.test & "both";
+	}
 
-	<cffunction name="pub">
-		<cfset request.filterTests.pubTest = true>
-		<cfif NOT IsDefined("request.filterTests.test") OR request.filterTests.test IS "bothpubpriv">
-			<cfset request.filterTests.test = "">
-		</cfif>
-		<cfset request.filterTests.test = request.filterTests.test & "pub">
-		<cfset request.filterTests.pubTest = true>
-	</cffunction>
+	function pub() {
+		request.filterTests.pubTest = true;
+		if (NOT IsDefined("request.filterTests.test") OR request.filterTests.test IS "bothpubpriv") {
+			request.filterTests.test = "";
+		}
+		request.filterTests.test = request.filterTests.test & "pub";
+		request.filterTests.pubTest = true;
+	}
 
-	<cffunction name="priv" access="private">
-		<cfset request.filterTests.privTest = true>
-		<cfif NOT IsDefined("request.filterTests.test") OR request.filterTests.test IS "bothpubpriv">
-			<cfset request.filterTests.test = "">
-		</cfif>
-		<cfset request.filterTests.test = request.filterTests.test & "priv">
-	</cffunction>
+	private void function priv() {
+		request.filterTests.privTest = true;
+		if (NOT IsDefined("request.filterTests.test") OR request.filterTests.test IS "bothpubpriv") {
+			request.filterTests.test = "";
+		}
+		request.filterTests.test = request.filterTests.test & "priv";
+	}
 
-</cfcomponent>
+}

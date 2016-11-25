@@ -1,29 +1,29 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfif StructKeyExists(request, "test")>
-			<cfset StructDelete(request, "test")>
-		</cfif>
-		<cfset oldViewPath = application.wheels.viewPath>
-		<cfset application.wheels.viewPath = "wheels/tests/_assets/views">
-		<cfset application.wheels.existingHelperFiles = "test">
-		<cfset params = {controller="test", action="helperCaller"}>
-		<cfset loc.controller = controller("test", params)>
-	</cffunction>
-	
-	<cffunction name="test_inclusion_of_global_helper_file">
-		<cfset loc.controller.renderPage()>
-		<cfset assert("StructKeyExists(request.test, 'globalHelperFunctionWasCalled')")>
-	</cffunction>
-	
-	<cffunction name="test_inclusion_of_controller_helper_file">
-		<cfset loc.controller.renderPage()>
-		<cfset assert("StructKeyExists(request.test, 'controllerHelperFunctionWasCalled')")>
-	</cffunction>
+	function setup() {
+		if (StructKeyExists(request, "test")) {
+			StructDelete(request, "test");
+		}
+		oldViewPath = application.wheels.viewPath;
+		application.wheels.viewPath = "wheels/tests/_assets/views";
+		application.wheels.existingHelperFiles = "test";
+		params = {controller="test", action="helperCaller"};
+		_controller = controller("test", params);
+	}
 
-	<cffunction name="teardown">
-		<cfset application.wheels.viewPath = oldViewPath>
-		<cfset application.wheels.existingHelperFiles = "">
-	</cffunction>
+	function test_inclusion_of_global_helper_file() {
+		_controller.renderPage();
+		assert("StructKeyExists(request.test, 'globalHelperFunctionWasCalled')");
+	}
 
-</cfcomponent>
+	function test_inclusion_of_controller_helper_file() {
+		_controller.renderPage();
+		assert("StructKeyExists(request.test, 'controllerHelperFunctionWasCalled')");
+	}
+
+	function teardown() {
+		application.wheels.viewPath = oldViewPath;
+		application.wheels.existingHelperFiles = "";
+	}
+
+}

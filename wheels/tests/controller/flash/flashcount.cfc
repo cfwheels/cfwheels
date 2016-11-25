@@ -1,25 +1,29 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfinclude template="setup.cfm">
-	</cffunction>
+	function setup() {
+		include "setup.cfm";
+	}
 
-	<cffunction name="teardown">
-		<cfinclude template="teardown.cfm">
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="test_flashCount_valid">
-		<cfset run_flashCount_valid()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_flashCount_valid()>
-	</cffunction>
+	function test_flashCount_valid() {
+		run_flashCount_valid();
+		_controller.$setFlashStorage("cookie");
+		run_flashCount_valid();
+	}
 
-	<cffunction name="run_flashCount_valid">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset loc.controller.flashInsert(anotherKey="Test!")>
-		<cfset result = loc.controller.flashCount()>
-		<cfset compare = loc.controller.flashCount()>
-		<cfset assert("result IS compare")>
-	</cffunction>
+	/**
+	* HELPERS
+	*/
 
-</cfcomponent>
+	function run_flashCount_valid() {
+		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(anotherKey="Test!");
+		result = _controller.flashCount();
+		compare = _controller.flashCount();
+		assert("result IS compare");
+	}
+
+}

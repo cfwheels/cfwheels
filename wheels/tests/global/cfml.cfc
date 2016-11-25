@@ -1,23 +1,23 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_$listClean_default_delim">
-		<cfset loc.mylist = "tony,    per   ,  james    ,,, chris   , raul ,,,,  peter">
-		<cfset loc.e = "tony,per,james,chris,raul,peter">
-		<cfset loc.r = $listClean(loc.mylist)>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_$listClean_default_delim() {
+		mylist = "tony,    per   ,  james    ,,, chris   , raul ,,,,  peter";
+		e = "tony,per,james,chris,raul,peter";
+		r = $listClean(mylist);
+		assert('e eq r');
+	}
 
-	<cffunction name="test_$listClean_provide_delim">
-		<cfset loc.mylist = "tony|    per   |  james    | chris   | raul |||  peter">
-		<cfset loc.e = "tony|per|james|chris|raul|peter">
-		<cfset loc.r = $listClean(loc.mylist, "|")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_$listClean_provide_delim() {
+		mylist = "tony|    per   |  james    | chris   | raul |||  peter";
+		e = "tony|per|james|chris|raul|peter";
+		r = $listClean(mylist, "|");
+		assert('e eq r');
+	}
 
-	<cffunction name="test_$listClean_return_array">
-		<cfset loc.mylist = "tony,    per   ,  james    ,,, chris   , raul ,,,,  peter">
-		<cfset loc.r = $listClean(list=loc.mylist, returnAs="array")>
-		<cfset assert('IsArray(loc.r) and ArrayLen(loc.r) eq 6')>
-	</cffunction>
-	
-</cfcomponent>
+	function test_$listClean_return_array() {
+		mylist = "tony,    per   ,  james    ,,, chris   , raul ,,,,  peter";
+		r = $listClean(list=mylist, returnAs="array");
+		assert('IsArray(r) and ArrayLen(r) eq 6');
+	}
+
+}

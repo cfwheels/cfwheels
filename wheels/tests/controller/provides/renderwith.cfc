@@ -1,248 +1,250 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset params = {controller="test", action="test"}>
-		<cfset $$oldViewPath = application.wheels.viewPath>
-		<cfset application.wheels.viewPath = "wheels/tests/_assets/views">
-	</cffunction>
-	
-	<cffunction name="teardown">
-		<cfset params = {controller="test", action="test"}>
-		<cfset application.wheels.viewPath = $$oldViewPath>
-		<cfset $header(name="content-type", value="text/html" , charset="utf-8") />
-	</cffunction>
+	function setup() {
+		params = {controller="test", action="test"};
+		$$oldViewPath = application.wheels.viewPath;
+		application.wheels.viewPath = "wheels/tests/_assets/views";
+	}
 
-	<!--- Helper function for getting correct HTTP statusCode --->
-	<cffunction name="responseCode" output="false">
-	  <cfif StructKeyExists(server, "lucee")>   
-	    <cfreturn getPageContext().getResponse().getStatus()>    
-	  <cfelse>
-	    <cfreturn getPageContext().getFusionContext().getResponse().getStatus()> 
-	  </cfif> 
-	</cffunction>
+	function teardown() {
+		params = {controller="test", action="test"};
+		application.wheels.viewPath = $$oldViewPath;
+		$header(name="content-type", value="text/html" , charset="utf-8");
+	}
 
-	<!--- <cffunction name="test_json_integer">
-		<cfset params = {controller="dummy", action="dummy", format = "json"}>
-		<cfset loc.controller = controller("dummy", params)>
-		<cfset loc.controller.provides("json")>
-		<cfset user = model("user").findAll(where="username = 'tonyp'", returnAs="structs")>
-		<cfset loc.result = loc.controller.renderWith(data=user, zipCode="integer", returnAs="string")>
-		<cfset assert("loc.result Contains ':11111,'")>
-	</cffunction> --->
-	
-	<!--- <cffunction name="test_json_string">
-		<cfset params = {controller="dummy", action="dummy", format = "json"}>
-		<cfset loc.controller = controller("dummy", params)>
-		<cfset loc.controller.provides("json")>
-		<cfset user = model("user").findAll(where="username = 'tonyp'", returnAs="structs")>
-		<cfset loc.result = loc.controller.renderWith(data=user, phone="string", returnAs="string")>
-		<cfset assert("loc.result Contains '1235551212'")>
-	</cffunction> --->
+	/* function test_json_integer() {
+		params = {controller="dummy", action="dummy", format = "json"};
+		_controller = controller("dummy", params);
+		_controller.provides("json");
+		user = model("user").findAll(where="username = 'tonyp'", returnAs="structs");
+		result = _controller.renderWith(data=user, zipCode="integer", returnAs="string");
+		assert("result Contains ':11111,'");
+	} */
 
-	<cffunction name="test_throws_error_without_data_argument">
-		<cfset loc.controller = controller("test", params)>
-		<cftry>
-			<cfset result = loc.controller.renderWith()>
-			<cfcatch type="any">
-				<cfset assert('true eq true') />
-			</cfcatch>
-		</cftry>
-	</cffunction>
+	/* function test_json_string() {
+		params = {controller="dummy", action="dummy", format = "json"};
+		_controller = controller("dummy", params);
+		_controller.provides("json");
+		user = model("user").findAll(where="username = 'tonyp'", returnAs="structs");
+		result = _controller.renderWith(data=user, phone="string", returnAs="string");
+		assert("result Contains '1235551212'");
+	} */
 
-	<cffunction name="test_current_action_as_xml_with_template_returning_string_to_controller">
-		<cfset params.format = "xml">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("xml") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
-		<cfset loc.data = loc.controller.renderWith(data=user, layout=false, returnAs="string")>
-		<cfset assert("loc.data Contains 'xml template content'")>
-	</cffunction>
+	function test_throws_error_without_data_argument() {
+		_controller = controller("test", params);
+		try {
+			result = _controller.renderWith();
+		} catch(any e) {
+			assert('true eq true');
+		}
+	}
 
-	<cffunction name="test_current_action_as_xml_with_template">
-		<cfset params.format = "xml">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("xml") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
-		<cfset loc.controller.renderWith(data=user, layout=false)>
-		<cfset assert("loc.controller.response() Contains 'xml template content'")>
-	</cffunction>
+	function test_current_action_as_xml_with_template_returning_string_to_controller() {
+		params.format = "xml";
+		_controller = controller("test", params);
+		_controller.provides("xml");
+		user = model("user").findOne(where="username = 'tonyp'");
+		data = _controller.renderWith(data=user, layout=false, returnAs="string");
+		assert("data Contains 'xml template content'");
+	}
 
-	<cffunction name="test_current_action_as_xml_without_template">
-		<cfset params.action = "test2">
-		<cfset params.format = "xml">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("xml") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
-		<cfset loc.controller.renderWith(data=user)>
-		<cfset assert("IsXml(loc.controller.response()) eq true")>
-	</cffunction>
+	function test_current_action_as_xml_with_template() {
+		params.format = "xml";
+		_controller = controller("test", params);
+		_controller.provides("xml");
+		user = model("user").findOne(where="username = 'tonyp'");
+		_controller.renderWith(data=user, layout=false);
+		assert("_controller.response() Contains 'xml template content'");
+	}
 
-	<cffunction name="test_current_action_as_xml_without_template_returning_string_to_controller">
-		<cfset params.action = "test2">
-		<cfset params.format = "xml">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("xml") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
-		<cfset loc.data = loc.controller.renderWith(data=user, returnAs="string")>
-		<cfset assert("IsXml(loc.data) eq true")>
-	</cffunction>
+	function test_current_action_as_xml_without_template() {
+		params.action = "test2";
+		params.format = "xml";
+		_controller = controller("test", params);
+		_controller.provides("xml");
+		user = model("user").findOne(where="username = 'tonyp'");
+		_controller.renderWith(data=user);
+		assert("IsXml(_controller.response()) eq true");
+	}
 
-	<cffunction name="test_current_action_as_json_with_template">
-		<cfset params.format = "json">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("json") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
-		<cfset loc.controller.renderWith(data=user, layout=false)>
-		<cfset assert("loc.controller.response() Contains 'json template content'")>
-	</cffunction>
+	function test_current_action_as_xml_without_template_returning_string_to_controller() {
+		params.action = "test2";
+		params.format = "xml";
+		_controller = controller("test", params);
+		_controller.provides("xml");
+		user = model("user").findOne(where="username = 'tonyp'");
+		data = _controller.renderWith(data=user, returnAs="string");
+		assert("IsXml(data) eq true");
+	}
 
-	<cffunction name="test_current_action_as_json_without_template">
-		<cfset params.action = "test2">
-		<cfset params.format = "json">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("json") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
-		<cfset loc.controller.renderWith(data=user)>
-		<cfset assert("IsJSON(loc.controller.response()) eq true")>
-	</cffunction>
+	function test_current_action_as_json_with_template() {
+		params.format = "json";
+		_controller = controller("test", params);
+		_controller.provides("json");
+		user = model("user").findOne(where="username = 'tonyp'");
+		_controller.renderWith(data=user, layout=false);
+		assert("_controller.response() Contains 'json template content'");
+	}
 
-	<cffunction name="test_current_action_as_json_without_template_returning_string_to_controller">
-		<cfset params.action = "test2">
-		<cfset params.format = "json">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("json") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
-		<cfset loc.data = loc.controller.renderWith(data=user, returnAs="string")>
-		<cfset assert("IsJSON(loc.data) eq true")>
-	</cffunction>
+	function test_current_action_as_json_without_template() {
+		params.action = "test2";
+		params.format = "json";
+		_controller = controller("test", params);
+		_controller.provides("json");
+		user = model("user").findOne(where="username = 'tonyp'");
+		_controller.renderWith(data=user);
+		assert("IsJSON(_controller.response()) eq true");
+	}
 
-	<cffunction name="test_current_action_as_pdf_with_template_throws_error">
-		<cfset params.format = "pdf">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("pdf") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
-		<cftry>
-			<cfset loc.controller.renderWith(data=user, layout=false)>
-			<cfset fail(message="Error did not occur.")>
-			<cfcatch type="any">
-				<cfset assert("true eq true")>
-			</cfcatch>
-		</cftry>
-	</cffunction>
+	function test_current_action_as_json_without_template_returning_string_to_controller() {
+		params.action = "test2";
+		params.format = "json";
+		_controller = controller("test", params);
+		_controller.provides("json");
+		user = model("user").findOne(where="username = 'tonyp'");
+		data = _controller.renderWith(data=user, returnAs="string");
+		assert("IsJSON(data) eq true");
+	}
 
-	<cffunction name="test_renderingError_raised_when_template_is_not_found_for_format">
-		<cfset params.format = "xls">
-		<cfset params.action = "notfound">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("xml") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
-		<cfset loc.r = raised('loc.controller.renderWith(data=user, layout=false, returnAs="string")')>
-		<cfset loc.e = "Wheels.renderingError">
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+	function test_current_action_as_pdf_with_template_throws_error() {
+		params.format = "pdf";
+		_controller = controller("test", params);
+		_controller.provides("pdf");
+		user = model("user").findOne(where="username = 'tonyp'");
+		try {
+			_controller.renderWith(data=user, layout=false);
+			fail(message="Error did not occur.");
+		} catch(any e) {
+			assert("true eq true");
+		}
+	}
 
-	<!--- Custom Status Codes; probably no need to test all 75 odd ---> 
-	<cffunction name="test_custom_status_codes_no_argument_passed">
-		<cfset params.format = "json">
-		<cfset params.action = "test2">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("json")>
-		<cfset user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string")> 
-		<cfset assert("responseCode() EQ 200")>  
-	</cffunction>
+	function test_renderingError_raised_when_template_is_not_found_for_format() {
+		params.format = "xls";
+		params.action = "notfound";
+		_controller = controller("test", params);
+		_controller.provides("xml");
+		user = model("user").findOne(where="username = 'tonyp'");
+		actual = raised('_controller.renderWith(data=user, layout=false, returnAs="string")');
+		expected = "Wheels.renderingError";
+		assert("actual eq expected");
+	}
 
-	<cffunction name="test_custom_status_codes_204">
-		<cfset params.format = "json">
-		<cfset params.action = "test2">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("json")>
-		<cfset user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status=204)>  
-		<cfset assert("responseCode() EQ 204")>   
-	</cffunction>
+	/* Custom Status Codes; probably no need to test all 75 odd */
+	function test_custom_status_codes_no_argument_passed() {
+		params.format = "json";
+		params.action = "test2";
+		_controller = controller("test", params);
+		_controller.provides("json");
+		user = model("user").findOne(where="username = 'tonyp'");
+		_controller.renderWith(data=user, layout=false, returnAs="string");
+		assert("responseCode() EQ 200");
+	}
 
-	<cffunction name="test_custom_status_codes_403">
-		<cfset params.format = "json">
-		<cfset params.action = "test2">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("json")>
-		<cfset user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status=403)>  
-		<cfset assert("responseCode() EQ 403")>   
-	</cffunction>
+	function test_custom_status_codes_204() {
+		params.format = "json";
+		params.action = "test2";
+		_controller = controller("test", params);
+		_controller.provides("json");
+		user = model("user").findOne(where="username = 'tonyp'");
+		_controller.renderWith(data=user, layout=false, returnAs="string", status=204);
+		assert("responseCode() EQ 204");
+	}
 
-	<cffunction name="test_custom_status_codes_404">
-		<cfset params.format = "json">
-		<cfset params.action = "test2">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("json")>
-		<cfset user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status=404)>  
-		<cfset assert("responseCode() EQ 404")> 
-	</cffunction>
+	function test_custom_status_codes_403() {
+		params.format = "json";
+		params.action = "test2";
+		_controller = controller("test", params);
+		_controller.provides("json");
+		user = model("user").findOne(where="username = 'tonyp'");
+		_controller.renderWith(data=user, layout=false, returnAs="string", status=403);
+		assert("responseCode() EQ 403");
+	}
 
-	<cffunction name="test_custom_status_codes_OK">
-		<cfset params.format = "json">
-		<cfset params.action = "test2">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("json")>
-		<cfset user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="OK")> 
-		<cfset assert("responseCode() EQ 200")>   
-	</cffunction> 
-	<cffunction name="test_custom_status_codes_Not_Found">
-		<cfset getPageContext().getResponse().setStatus("100")>
-		<cfset params.format = "json">
-		<cfset params.action = "test2">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("json")>
-		<cfset user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="Not Found")>
-		<cfset assert("responseCode() EQ 404")>  
-	</cffunction>
-	<cffunction name="test_custom_status_codes_Method_Not_Allowed">
-		<cfset getPageContext().getResponse().setStatus("100")>
-		<cfset params.format = "json">
-		<cfset params.action = "test2">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("json")>
-		<cfset user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="Method Not Allowed")> 
-		<cfset assert("responseCode() EQ 405")> 
-	</cffunction>
+	function test_custom_status_codes_404() {
+		params.format = "json";
+		params.action = "test2";
+		_controller = controller("test", params);
+		_controller.provides("json");
+		user = model("user").findOne(where="username = 'tonyp'");
+		_controller.renderWith(data=user, layout=false, returnAs="string", status=404);
+		assert("responseCode() EQ 404");
+	}
 
-	<cffunction name="test_custom_status_codes_Method_Not_Allowed_case">
-		<cfset getPageContext().getResponse().setStatus("100")>
-		<cfset params.format = "json">
-		<cfset params.action = "test2">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("json")>
-		<cfset user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.r = loc.controller.renderWith(data=user, layout=false, returnAs="string", status="method not allowed")> 
-		<cfset assert("responseCode() EQ 405")>   
-	</cffunction>  
+	function test_custom_status_codes_OK() {
+		params.format = "json";
+		params.action = "test2";
+		_controller = controller("test", params);
+		_controller.provides("json");
+		user = model("user").findOne(where="username = 'tonyp'");
+		_controller.renderWith(data=user, layout=false, returnAs="string", status="OK");
+		assert("responseCode() EQ 200");
+	}
+	function test_custom_status_codes_Not_Found() {
+		getPageContext().getResponse().setStatus("100");
+		params.format = "json";
+		params.action = "test2";
+		_controller = controller("test", params);
+		_controller.provides("json");
+		user = model("user").findOne(where="username = 'tonyp'");
+		_controller.renderWith(data=user, layout=false, returnAs="string", status="Not Found");
+		assert("responseCode() EQ 404");
+	}
+	function test_custom_status_codes_Method_Not_Allowed() {
+		getPageContext().getResponse().setStatus("100");
+		params.format = "json";
+		params.action = "test2";
+		_controller = controller("test", params);
+		_controller.provides("json");
+		user = model("user").findOne(where="username = 'tonyp'");
+		_controller.renderWith(data=user, layout=false, returnAs="string", status="Method Not Allowed");
+		assert("responseCode() EQ 405");
+	}
 
-	<cffunction name="test_custom_status_codes_bad_numeric">
-		<cfset params.format = "json">
-		<cfset params.action = "test2">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("json")>
-		<cfset user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.r = raised('loc.controller.renderWith(data=user, layout=false, returnAs="string", status=987654321)')> 
-		<cfset loc.e = "Wheels.renderingError"> 
-		<cfset assert("loc.e EQ loc.r")> 
-	</cffunction>
+	function test_custom_status_codes_Method_Not_Allowed_case() {
+		getPageContext().getResponse().setStatus("100");
+		params.format = "json";
+		params.action = "test2";
+		_controller = controller("test", params);
+		_controller.provides("json");
+		user = model("user").findOne(where="username = 'tonyp'");
+		_controller.renderWith(data=user, layout=false, returnAs="string", status="method not allowed");
+		assert("responseCode() EQ 405");
+	}
 
-	<cffunction name="test_custom_status_codes_bad_text">
-		<cfset params.format = "json">
-		<cfset params.action = "test2">
-		<cfset loc.controller = controller("test", params)>
-		<cfset loc.controller.provides("json")>
-		<cfset user = model("user").findOne(where="username = 'tonyp'")>
-		<cfset loc.r = raised('loc.controller.renderWith(data=user, layout=false, returnAs="string", status="THECAKEISALIE")')>
-		<cfset loc.e = "Wheels.renderingError">  
-		<cfset assert("loc.e EQ loc.r")> 
-	</cffunction>
+	function test_custom_status_codes_bad_numeric() {
+		params.format = "json";
+		params.action = "test2";
+		_controller = controller("test", params);
+		_controller.provides("json");
+		user = model("user").findOne(where="username = 'tonyp'");
+		actual = raised('_controller.renderWith(data=user, layout=false, returnAs="string", status=987654321)');
+		expected = "Wheels.renderingError";
+		assert("actual EQ expected");
+	}
 
-</cfcomponent>
+	function test_custom_status_codes_bad_text() {
+		params.format = "json";
+		params.action = "test2";
+		_controller = controller("test", params);
+		_controller.provides("json");
+		user = model("user").findOne(where="username = 'tonyp'");
+		actual = raised('_controller.renderWith(data=user, layout=false, returnAs="string", status="THECAKEISALIE")');
+		expected = "Wheels.renderingError";
+		assert("actual EQ expected");
+	}
+
+	/**
+	* HELPERS
+	*/
+
+	/* Helper function for getting correct HTTP statusCode */
+	function responseCode() {
+		if (StructKeyExists(server, "lucee")) {
+			return getPageContext().getResponse().getStatus();
+		} else {
+			return getPageContext().getFusionContext().getResponse().getStatus();
+		}
+	}
+
+}

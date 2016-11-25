@@ -1,129 +1,128 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-        <cfset loc.user = createobject("component", "wheelsMapping.Model").$initModelClass(name="Users", path=get("modelPath"))>
-        <cfset loc.user.username = "TheLongestNameInTheWorld">
-        <cfset loc.args = {}>
-        <cfset loc.args.property = "username">
-        <cfset loc.args.maximum = "5">
-	</cffunction>
+	function setup() {
+    user = CreateObject("component", "wheelsMapping.Model").$initModelClass(name="Users", path=get("modelPath"));
+    user.username = "TheLongestNameInTheWorld";
+    args = {};
+    args.property = "username";
+    args.maximum = "5";
+	}
 
-	<cffunction name="test_unless_validation_using_expression_valid">
-		<cfset loc.args.unless="1 eq 1">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, true)>
-	</cffunction>
+	function test_unless_validation_using_expression_valid() {
+		args.unless="1 eq 1";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, true);
+	}
 
-	<cffunction name="test_unless_validation_using_expression_invalid">
-		<cfset loc.args.unless="1 eq 0">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, false)>
-	</cffunction>
+	function test_unless_validation_using_expression_invalid() {
+		args.unless="1 eq 0";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, false);
+	}
 
-	<cffunction name="test_unless_validation_using_method_valid">
-		<cfset loc.args.unless="isnew()">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, true)>
-	</cffunction>
+	function test_unless_validation_using_method_valid() {
+		args.unless="isnew()";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, true);
+	}
 
-	<cffunction name="test_unless_validation_using_method_invalid">
-		<cfset loc.args.unless="!isnew()">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, false)>
-	</cffunction>
+	function test_unless_validation_using_method_invalid() {
+		args.unless="!isnew()";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, false);
+	}
 
-	<cffunction name="test_unless_validation_using_method_mixin_and_parameters_valid">
-		<cfset loc.user.stupid_mixin = stupid_mixin>
-		<cfset loc.args.unless="this.stupid_mixin(b='1' , a='2') eq 3">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, true)>
-	</cffunction>
+	function test_unless_validation_using_method_mixin_and_parameters_valid() {
+		user.stupid_mixin = stupid_mixin;
+		args.unless="this.stupid_mixin(b='1' , a='2') eq 3";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, true);
+	}
 
-	<cffunction name="test_unless_validation_using_method_mixin_and_parameters_invalid">
-		<cfset loc.user.stupid_mixin = stupid_mixin>
-		<cfset loc.args.unless="this.stupid_mixin(b='1' , a='2') neq 3">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, false)>
-	</cffunction>
+	function test_unless_validation_using_method_mixin_and_parameters_invalid() {
+		user.stupid_mixin = stupid_mixin;
+		args.unless="this.stupid_mixin(b='1' , a='2') neq 3";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, false);
+	}
 
-	<cffunction name="test_if_validation_using_expression_invalid">
-		<cfset loc.args.condition="1 eq 1">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, false)>
-	</cffunction>
+	function test_if_validation_using_expression_invalid() {
+		args.condition="1 eq 1";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, false);
+	}
 
-	<cffunction name="test_if_validation_using_expression_valid">
-		<cfset loc.args.condition="1 eq 0">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, true)>
-	</cffunction>
+	function test_if_validation_using_expression_valid() {
+		args.condition="1 eq 0";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, true);
+	}
 
-	<cffunction name="test_if_validation_using_method_invalid">
-		<cfset loc.args.condition="isnew()">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, false)>
-	</cffunction>
+	function test_if_validation_using_method_invalid() {
+		args.condition="isnew()";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, false);
+	}
 
-	<cffunction name="test_if_validation_using_method_valid">
-		<cfset loc.args.condition="!isnew()">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, true)>
-	</cffunction>
+	function test_if_validation_using_method_valid() {
+		args.condition="!isnew()";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, true);
+	}
 
-	<cffunction name="test_if_validation_using_method_mixin_and_parameters_invalid">
-		<cfset loc.user.stupid_mixin = stupid_mixin>
-		<cfset loc.args.condition="this.stupid_mixin(b='1' , a='2') eq 3">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, false)>
-	</cffunction>
+	function test_if_validation_using_method_mixin_and_parameters_invalid() {
+		user.stupid_mixin = stupid_mixin;
+		args.condition="this.stupid_mixin(b='1' , a='2') eq 3";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, false);
+	}
 
-	<cffunction name="test_if_validation_using_method_mixin_and_parameters_valid">
-		<cfset loc.user.stupid_mixin = stupid_mixin>
-		<cfset loc.args.condition="this.stupid_mixin(b='1' , a='2') neq 3">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, true)>
-	</cffunction>
+	function test_if_validation_using_method_mixin_and_parameters_valid() {
+		user.stupid_mixin = stupid_mixin;
+		args.condition="this.stupid_mixin(b='1' , a='2') neq 3";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, true);
+	}
 
-	<cffunction name="test_both_validations_if_trigged_unless_not_trigged_valid">
-		<cfset loc.args.condition="1 eq 1">
-		<cfset loc.args.unless="this.username eq 'TheLongestNameInTheWorld'">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, true)>
-	</cffunction>
+	function test_both_validations_if_trigged_unless_not_trigged_valid() {
+		args.condition="1 eq 1";
+		args.unless="this.username eq 'TheLongestNameInTheWorld'";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, true);
+	}
 
-	<cffunction name="test_both_validations_if_trigged_unless_trigged_invalid">
-		<cfset loc.args.condition="1 eq 1">
-		<cfset loc.args.unless="this.username eq ''">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, false)>
-	</cffunction>
+	function test_both_validations_if_trigged_unless_trigged_invalid() {
+		args.condition="1 eq 1";
+		args.unless="this.username eq ''";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, false);
+	}
 
-	<cffunction name="test_both_validations_if_not_trigged_unless_not_trigged_valid">
-		<cfset loc.args.condition="1 eq 0">
-		<cfset loc.args.unless="this.username eq 'TheLongestNameInTheWorld'">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, true)>
-	</cffunction>
+	function test_both_validations_if_not_trigged_unless_not_trigged_valid() {
+		args.condition="1 eq 0";
+		args.unless="this.username eq 'TheLongestNameInTheWorld'";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, true);
+	}
 
-	<cffunction name="test_both_validations_if_not_trigged_unless_trigged_valid">
-		<cfset loc.args.condition="1 eq 0">
-		<cfset loc.args.unless="this.username eq ''">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, true)>
-	</cffunction>
+	function test_both_validations_if_not_trigged_unless_trigged_valid() {
+		args.condition="1 eq 0";
+		args.unless="this.username eq ''";
+		user.validatesLengthOf(argumentCollection=args);
+		assert_test(user, true);
+	}
 
-	<cffunction name="assert_test">
-		<cfargument name="obj" type="any" required="true">
-		<cfargument name="expect" type="boolean" required="true">
-		<cfset loc.e = arguments.obj.valid()>
-		<cfset assert('loc.e eq #arguments.expect#')>
-	</cffunction>
+	/**
+	* HELPERS
+	*/
 
-	<!--- mixin --->
-	<cffunction name="stupid_mixin">
-		<cfargument name="a" type="numeric" required="true">
-		<cfargument name="b" type="numeric" required="true">
-		<cfreturn a + b>
-	</cffunction>
+	function assert_test(required any obj, required boolean expect) {
+		e = arguments.obj.valid();
+		assert('e eq #arguments.expect#');
+	}
 
-</cfcomponent>
+	function stupid_mixin(required numeric a, required numeric b) {
+		return a + b;
+	}
+
+}

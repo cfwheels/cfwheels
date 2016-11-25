@@ -1,3 +1,5 @@
-<cffunction name="globalHelperFunction">
-	<cfset request.test.globalHelperFunctionWasCalled = true>
-</cffunction>
+<cfscript>
+function globalHelperFunction() {
+	request.test.globalHelperFunctionWasCalled = true;
+}
+</cfscript>

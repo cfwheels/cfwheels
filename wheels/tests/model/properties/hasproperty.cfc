@@ -1,28 +1,28 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_returns_true_when_property_is_set">
-		<cfset loc.model = model("author") />
-		<cfset loc.properties = { firstName = "James", lastName = "Gibson" } />
-		<cfset loc.model = loc.model.new(properties=loc.properties) />
-		<cfset assert('loc.model.hasProperty("firstName") eq true') />
-	</cffunction>
+	function test_returns_true_when_property_is_set() {
+		_model = model("author");
+		properties = { firstName = "James", lastName = "Gibson" };
+		_model = _model.new(properties=properties);
+		assert('_model.hasProperty("firstName") eq true');
+	}
 
-	<cffunction name="test_returns_true_when_property_is_blank">
-		<cfset loc.model = model("author").new() />
-		<cfset assert('loc.model.hasProperty("firstName") eq true') />
-	</cffunction>
+	function test_returns_true_when_property_is_blank() {
+		_model = model("author").new();
+		assert('_model.hasProperty("firstName") eq true');
+	}
 
-	<cffunction name="test_returns_false_when_property_does_not_exist">
-		<cfset loc.model = model("author").new() />
-		<cfset StructDelete(loc.model, "lastName")>
-		<cfset assert('loc.model.hasProperty("lastName") eq false') />
-	</cffunction>
+	function test_returns_false_when_property_does_not_exist() {
+		_model = model("author").new();
+		StructDelete(_model, "lastName");
+		assert('_model.hasProperty("lastName") eq false');
+	}
 
-	<cffunction name="test_dynamic_method_call">
-		<cfset loc.model = model("author") />
-		<cfset loc.properties = { firstName = "James", lastName = "Gibson" } />
-		<cfset loc.model = loc.model.new(properties=loc.properties) />
-		<cfset assert('loc.model.hasFirstName() eq true') />
-	</cffunction>
+	function test_dynamic_method_call() {
+		_model = model("author");
+		properties = { firstName = "James", lastName = "Gibson" };
+		_model = _model.new(properties=properties);
+		assert('_model.hasFirstName() eq true');
+	}
 
-</cfcomponent>
+}

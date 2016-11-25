@@ -7,6 +7,7 @@ Model Enhancements
 * Added "simple" argument to properties() that returns only simple properties of the object and its nested properties - [Adam Chapman]
 * Support for calling updateProperty() with dynamic argument, e.g. updateProperty(firstName="Per") - [Per Djurner]
 * Support for using boolean transaction argument, e.g. update(transaction=false) - #654 [Adam Chapman]
+* Support for MariaDB - #563 [AlexeiCF, Adam Chapman]
 
 View Enhancements
 =================
@@ -22,6 +23,8 @@ Controller Enhancements
 Bug Fixes
 =========
 * Fixes skipped model instantiation due to Linux file case sensitivity - #643 [Adam Chapman, Tom King]
+* Added spatial datatypes for MySQL - #660 [Normal Cesar]
+* Made humanize keep spaces in input - #663 [Per Djurner, Chris Peters]
 
 Miscellaneous
 =============

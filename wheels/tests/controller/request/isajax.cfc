@@ -1,21 +1,21 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfinclude template="setup.cfm">
-	</cffunction>
+	function setup() {
+		include "setup.cfm";
+	}
 
-	<cffunction name="teardown">
-		<cfinclude template="teardown.cfm">
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="test_isAjax_valid">
-		<cfset request.cgi.http_x_requested_with = "XMLHTTPRequest">
-		<cfset assert("loc.controller.isAjax() eq true")>
-	</cffunction>
+	function test_isAjax_valid() {
+		request.cgi.http_x_requested_with = "XMLHTTPRequest";
+		assert("_controller.isAjax() eq true");
+	}
 
-	<cffunction name="test_isAjax_invalid">
-		<cfset request.cgi.http_x_requested_with = "">
-		<cfset assert("loc.controller.isAjax() eq false")>
-	</cffunction>
+	function test_isAjax_invalid() {
+		request.cgi.http_x_requested_with = "";
+		assert("_controller.isAjax() eq false");
+	}
 
-</cfcomponent>
+}

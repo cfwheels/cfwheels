@@ -1,8 +1,6 @@
-<cfcomponent extends="wheelsMapping.Controller">
-
-	<cfset user = model("user").new()>
-	<cfset user.addError("firstname", "firstname error1")>
-	<cfset user.addError("firstname", "firstname error2")>
-	<cfset user.addError("firstname", "firstname error2")>
-
-</cfcomponent>
+component extends="wheelsMapping.Controller" {
+	user = model("user").new();
+	user.addError("firstname", "firstname error1");
+	user.addError("firstname", "firstname error2");
+	user.addError("firstname", "firstname error2");
+}

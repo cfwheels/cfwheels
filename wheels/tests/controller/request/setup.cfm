@@ -1,3 +1,5 @@
-<cfset $$oldCGIScope = request.cgi>
-<cfset params = {controller="dummy", action="dummy"}>
-<cfset loc.controller = controller("dummy", params)>
+<cfscript>
+  $$oldCGIScope = request.cgi;
+  params = {controller="dummy", action="dummy"};
+  _controller = controller("dummy", params);
+</cfscript>

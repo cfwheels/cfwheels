@@ -1,26 +1,26 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.authorModel = model("author")>
-		<cfset loc.userModel = model("user")>
-	</cffunction>
- 
- 	<cffunction name="test_objectCount_valid">
-		<cfset loc.author = loc.authorModel.findOne(where="firstName = 'Per'")>
-		<cfset loc.postCount = loc.author.postCount() />
-		<cfset assert('loc.postCount eq 3')>
-	</cffunction>
- 
- 	<cffunction name="test_objectCount_valid_with_combi_key">
-		<cfset loc.user = loc.userModel.findByKey(key=1)>
-		<cfset loc.combiKeyCount = loc.user.combiKeyCount() />
-		<cfset assert('loc.combiKeyCount eq 5')>
-	</cffunction>
+	function setup() {
+		authorModel = model("author");
+		userModel = model("user");
+	}
 
- 	<cffunction name="test_objectCount_returns_zero">
-		<cfset loc.author = loc.authorModel.findOne(where="firstName = 'James'")>
-		<cfset loc.postCount = loc.author.postCount() />
-		<cfset assert('loc.postCount eq 0')>
-	</cffunction>
+ 	function test_objectCount_valid() {
+		author = authorModel.findOne(where="firstName = 'Per'");
+		postCount = author.postCount();
+		assert('postCount eq 3');
+	}
 
-</cfcomponent>
+ 	function test_objectCount_valid_with_combi_key() {
+		user = userModel.findByKey(key=1);
+		combiKeyCount = user.combiKeyCount();
+		assert('combiKeyCount eq 5');
+	}
+
+ 	function test_objectCount_returns_zero() {
+		author = authorModel.findOne(where="firstName = 'James'");
+		postCount = author.postCount();
+		assert('postCount eq 0');
+	}
+
+}

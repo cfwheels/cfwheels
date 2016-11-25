@@ -1,9 +1,9 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset table("photos")>
-		<cfset property(name="DESCRIPTION1", column="description")>
-		<cfset property(name="photoid", column="id")>
-	</cffunction>
+	function init() {
+		table("photos");
+		property(name="DESCRIPTION1", column="description");
+		property(name="photoid", column="id");
+	}
 
-</cfcomponent>
+}

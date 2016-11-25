@@ -1,26 +1,26 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.authorModel = model("author")>
-		<cfset loc.userModel = model("user")>
-	</cffunction>
- 
- 	<cffunction name="test_hasObjects_valid">
-		<cfset loc.author = loc.authorModel.findOne(where="firstName = 'Per'")>
-		<cfset loc.hasPosts = loc.author.hasPosts() />
-		<cfset assert('loc.hasPosts eq true')>
-	</cffunction>
- 
- 	<cffunction name="test_hasObjects_valid_with_combi_key">
-		<cfset loc.user = loc.userModel.findByKey(key=1)>
-		<cfset loc.hasCombiKeys = loc.user.hasCombiKeys() />
-		<cfset assert('loc.hasCombiKeys eq true')>
-	</cffunction>
+	function setup() {
+		authorModel = model("author");
+		userModel = model("user");
+	}
 
- 	<cffunction name="test_hasObjects_returns_false">
-		<cfset loc.author = loc.authorModel.findOne(where="firstName = 'James'")>
-		<cfset loc.hasPosts = loc.author.hasPosts() />
-		<cfset assert('loc.hasPosts eq false')>
-	</cffunction>
+ 	function test_hasObjects_valid() {
+		author = authorModel.findOne(where="firstName = 'Per'");
+		hasPosts = author.hasPosts();
+		assert('hasPosts eq true');
+	}
 
-</cfcomponent>
+ 	function test_hasObjects_valid_with_combi_key() {
+		user = userModel.findByKey(key=1);
+		hasCombiKeys = user.hasCombiKeys();
+		assert('hasCombiKeys eq true');
+	}
+
+ 	function test_hasObjects_returns_false() {
+		author = authorModel.findOne(where="firstName = 'James'");
+		hasPosts = author.hasPosts();
+		assert('hasPosts eq false');
+	}
+
+}

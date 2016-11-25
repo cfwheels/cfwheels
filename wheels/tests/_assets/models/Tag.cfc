@@ -1,49 +1,49 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset belongsTo(name="parent", modelName="tag", foreignKey="parentid", joinType="outer")>
-		<cfset hasMany(name="children", modelName="tag", foreignKey="parentid")>
-		<cfset hasMany(name="classifications")>
- 		<cfset beforeSave("callbackThatReturnsTrue")>
-		<cfset property(name="name", label="Tag name")>
-		<cfset property(name="virtual", label="Virtual property")>
-	</cffunction>
+	function init() {
+		belongsTo(name="parent", modelName="tag", foreignKey="parentid", joinType="outer");
+		hasMany(name="children", modelName="tag", foreignKey="parentid");
+		hasMany(name="classifications");
+ 		beforeSave("callbackThatReturnsTrue");
+		property(name="name", label="Tag name");
+		property(name="virtual", label="Virtual property");
+	}
 
-	<cffunction name="callbackThatIncreasesVariable">
-		<cfif NOT StructKeyExists(this, "callbackCount")>
-			<cfset this.callbackCount = 0>
-		</cfif>
-		<cfset this.callbackCount++>
-	</cffunction>
+	function callbackThatIncreasesVariable() {
+		if (! StructKeyExists(this, "callbackCount")) {
+			this.callbackCount = 0;
+		}
+		this.callbackCount++;
+	}
 
-	<cffunction name="callbackThatReturnsFalse">
-		<cfreturn false>
-	</cffunction>
+	function callbackThatReturnsFalse() {
+		return false;
+	}
 
-	<cffunction name="callbackThatReturnsTrue">
-		<cfreturn true>
-	</cffunction>
+	function callbackThatReturnsTrue() {
+		return true;
+	}
 
-	<cffunction name="callbackThatReturnsNothing">
-	</cffunction>
+	function callbackThatReturnsNothing() {
+	}
 
-	<cffunction name="callbackThatSetsProperty">
-		<cfset this.setByCallback = true>
-	</cffunction>
+	function callbackThatSetsProperty() {
+		this.setByCallback = true;
+	}
 
-	<cffunction name="firstCallback">
-		<cfif NOT StructKeyExists(this, "orderTest")>
-			<cfset this.orderTest = "">
-		</cfif>
-		<cfset this.orderTest = ListAppend(this.orderTest, "first")>
-	</cffunction>
+	function firstCallback() {
+		if (! StructKeyExists(this, "orderTest")) {
+			this.orderTest = "";
+		}
+		this.orderTest = ListAppend(this.orderTest, "first");
+	}
 
-	<cffunction name="secondCallback">
-		<cfif NOT StructKeyExists(this, "orderTest")>
-			<cfset this.orderTest = "">
-		</cfif>
-		<cfset this.orderTest = ListAppend(this.orderTest, "second")>
-		<cfreturn false>
-	</cffunction>
+	function secondCallback() {
+		if (! StructKeyExists(this, "orderTest")) {
+			this.orderTest = "";
+		}
+		this.orderTest = ListAppend(this.orderTest, "second");
+		return false;
+	}
 
-</cfcomponent>
+}

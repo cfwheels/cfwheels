@@ -1,54 +1,58 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset variables.args = {property="lastName", message="[property] is the wrong length", exactly=0, maximum=0, minimum=0, within=""}>
-		<cfset variables.object = model("user").new()>
-	</cffunction>
+	function setup() {
+		args = {property="lastName", message="[property] is the wrong length", exactly=0, maximum=0, minimum=0, within=""};
+		object = model("user").new();
+	}
 
-	<cffunction name="test_Maximum_good">
-		<cfset variables.object.lastName = "LessThan">
-		<cfset variables.object.$validatesLengthOf(argumentCollection=variables.args, maximum=10)>
-		<cfset assert("!variables.object.hasErrors()")>
-	</cffunction>
-	<cffunction name="test_Maximum_bad">
-		<cfset variables.object.lastName = "SomethingMoreThanTenLetters">
-		<cfset variables.object.$validatesLengthOf(argumentCollection=variables.args, maximum=10)>
-		<cfset assert("variables.object.hasErrors()")>
-	</cffunction>
+	function test_Maximum_good() {
+		object.lastName = "LessThan";
+		object.$validatesLengthOf(argumentCollection=args, maximum=10);
+		assert("!object.hasErrors()");
+	}
 	
-	<cffunction name="test_Minimum_good">
-		<cfset variables.object.lastName = "SomethingMoreThanTenLetters">
-		<cfset variables.object.$validatesLengthOf(argumentCollection=variables.args, minimum=10)>
-		<cfset assert("!variables.object.hasErrors()")>
-	</cffunction>
-	<cffunction name="test_Minimum_bad">
-		<cfset variables.object.lastName = "LessThan">
-		<cfset variables.object.$validatesLengthOf(argumentCollection=variables.args, minimum=10)>
-		<cfset assert("variables.object.hasErrors()")>
-	</cffunction>
+	function test_Maximum_bad() {
+		object.lastName = "SomethingMoreThanTenLetters";
+		object.$validatesLengthOf(argumentCollection=args, maximum=10);
+		assert("object.hasErrors()");
+	}
 
-	<cffunction name="test_Within_good">
-		<cfset variables.object.lastName = "6Chars">
-		<cfset loc.within = [4,8]>
-		<cfset variables.object.$validatesLengthOf(argumentCollection=variables.args, within=loc.within)>
-		<cfset assert("!variables.object.hasErrors()")>
-	</cffunction>
-	<cffunction name="test_Within_bad">
-		<cfset variables.object.lastName = "6Chars">
- 		<cfset loc.within = [2,5]>
-		<cfset variables.object.$validatesLengthOf(argumentCollection=variables.args, within=loc.within)>
-		<cfset assert("variables.object.hasErrors()")>
-	</cffunction>
+	function test_Minimum_good() {
+		object.lastName = "SomethingMoreThanTenLetters";
+		object.$validatesLengthOf(argumentCollection=args, minimum=10);
+		assert("!object.hasErrors()");
+	}
 
-	<cffunction name="test_Exactly_good">
-		<cfset variables.object.lastName = "Exactly14Chars">
-		<cfset variables.object.$validatesLengthOf(argumentCollection=variables.args, exactly=14)>
-		<cfset assert("!variables.object.hasErrors()")>
-	</cffunction>
-	<cffunction name="test_Exactly_bad">
-		<cfset variables.object.lastName = "Exactly14Chars">
-		<cfset variables.object.$validatesLengthOf(argumentCollection=variables.args, exactly=99)>
-		<cfset assert("variables.object.hasErrors()")>
-	</cffunction>
+	function test_Minimum_bad() {
+		object.lastName = "LessThan";
+		object.$validatesLengthOf(argumentCollection=args, minimum=10);
+		assert("object.hasErrors()");
+	}
 
-</cfcomponent>
+	function test_Within_good() {
+		object.lastName = "6Chars";
+		within = [4,8];
+		object.$validatesLengthOf(argumentCollection=args, within=within);
+		assert("!object.hasErrors()");
+	}
+
+	function test_Within_bad() {
+		object.lastName = "6Chars";
+ 		within = [2,5];
+		object.$validatesLengthOf(argumentCollection=args, within=within);
+		assert("object.hasErrors()");
+	}
+
+	function test_Exactly_good() {
+		object.lastName = "Exactly14Chars";
+		object.$validatesLengthOf(argumentCollection=args, exactly=14);
+		assert("!object.hasErrors()");
+	}
+
+	function test_Exactly_bad() {
+		object.lastName = "Exactly14Chars";
+		object.$validatesLengthOf(argumentCollection=args, exactly=99);
+		assert("object.hasErrors()");
+	}
+
+}

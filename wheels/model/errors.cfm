@@ -1,105 +1,80 @@
-<!--- PUBLIC MODEL OBJECT METHODS --->
+<cfscript>
+	/*
+	* PUBLIC MODEL OBJECT METHODS
+	*/
 
-<cffunction name="addError" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="message" type="string" required="true">
-	<cfargument name="name" type="string" required="false" default="">
-	<cfscript>
+	public void function addError(
+		required string property,
+		required string message,
+		string name=""
+	) {
 		ArrayAppend(variables.wheels.errors, arguments);
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="addErrorToBase" returntype="void" access="public" output="false">
-	<cfargument name="message" type="string" required="true">
-	<cfargument name="name" type="string" required="false" default="">
-	<cfscript>
+	public void function addErrorToBase(required string message, string name="") {
 		arguments.property = "";
 		addError(argumentCollection=arguments);
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="allErrors" returntype="array" access="public" output="false">
-	<cfreturn variables.wheels.errors>
-</cffunction>
+	public array function allErrors() {
+		return variables.wheels.errors;
+	}
 
-<cffunction name="clearErrors" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="false" default="">
-	<cfargument name="name" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
+	public void function clearErrors(string property="", string name="") {
 		if (!Len(arguments.property) && !Len(arguments.name))
 		{
 			ArrayClear(variables.wheels.errors);
 		}
 		else
 		{
-			loc.iEnd = ArrayLen(variables.wheels.errors);
-			for (loc.i=loc.iEnd; loc.i >= 1; loc.i--)
+			local.iEnd = ArrayLen(variables.wheels.errors);
+			for (local.i=local.iEnd; local.i >= 1; local.i--)
 			{
-				if (variables.wheels.errors[loc.i].property == arguments.property && (variables.wheels.errors[loc.i].name == arguments.name))
+				if (variables.wheels.errors[local.i].property == arguments.property && (variables.wheels.errors[local.i].name == arguments.name))
 				{
-					ArrayDeleteAt(variables.wheels.errors, loc.i);
+					ArrayDeleteAt(variables.wheels.errors, local.i);
 				}
 			}
 		}
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="errorCount" returntype="numeric" access="public" output="false">
-	<cfargument name="property" type="string" required="false" default="">
-	<cfargument name="name" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
+	public numeric function errorCount(string property="", string name="") {
 		if (!Len(arguments.property) && !Len(arguments.name))
 		{
-			loc.rv = ArrayLen(variables.wheels.errors);
+			local.rv = ArrayLen(variables.wheels.errors);
 		}
 		else
 		{
-			loc.rv = ArrayLen(errorsOn(argumentCollection=arguments));
+			local.rv = ArrayLen(errorsOn(argumentCollection=arguments));
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="errorsOn" returntype="array" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="name" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
-		loc.rv = [];
-		loc.iEnd = ArrayLen(variables.wheels.errors);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+	public array function errorsOn(required string property, string name="") {
+		local.rv = [];
+		local.iEnd = ArrayLen(variables.wheels.errors);
+		for (local.i=1; local.i <= local.iEnd; local.i++)
 		{
-			if (variables.wheels.errors[loc.i].property == arguments.property && (variables.wheels.errors[loc.i].name == arguments.name))
+			if (variables.wheels.errors[local.i].property == arguments.property && (variables.wheels.errors[local.i].name == arguments.name))
 			{
-				ArrayAppend(loc.rv, variables.wheels.errors[loc.i]);
+				ArrayAppend(local.rv, variables.wheels.errors[local.i]);
 			}
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="errorsOnBase" returntype="array" access="public" output="false">
-	<cfargument name="name" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
+	public array function errorsOnBase(string name="") {
 		arguments.property = "";
-		loc.rv = errorsOn(argumentCollection=arguments);
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		local.rv = errorsOn(argumentCollection=arguments);
+		return local.rv;
+	}
 
-<cffunction name="hasErrors" returntype="boolean" access="public" output="false">
-	<cfargument name="property" type="string" required="false" default="">
-	<cfargument name="name" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
-		loc.rv = false;
+	public boolean function hasErrors(string property="", string name="") {
+		local.rv = false;
 		if (errorCount(argumentCollection=arguments) > 0)
 		{
-			loc.rv = true;
+			local.rv = true;
 		}
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
+		return local.rv;
+	}
+</cfscript>

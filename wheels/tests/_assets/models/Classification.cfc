@@ -1,8 +1,8 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset belongsTo("post")>
-		<cfset belongsTo("tag")>
-	</cffunction>
+	function init() {
+		belongsTo("post");
+		belongsTo("tag");
+	}
 
-</cfcomponent>
+}

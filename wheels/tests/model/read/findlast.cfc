@@ -1,10 +1,10 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_find_first">
-		<cfset loc.result = model("user").findLast()>
-		<cfset assert('loc.result.id IS 5')>
-		<cfset loc.result = model("user").findLast(properties="id")>
-		<cfset assert('loc.result.id IS 5')>
-	</cffunction>
+	function test_find_first() {
+		result = model("user").findLast();
+		assert('result.id IS 5');
+		result = model("user").findLast(properties="id");
+		assert('result.id IS 5');
+	}
 
-</cfcomponent>
+}

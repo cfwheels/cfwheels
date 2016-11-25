@@ -1,85 +1,89 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfinclude template="setup.cfm">
-	</cffunction>
+	function setup() {
+		include "setup.cfm";
+	}
 
-	<cffunction name="teardown">
-		<cfinclude template="teardown.cfm">
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="test_key_exists">
-		<cfset run_key_exists()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_key_exists()>
-	</cffunction>
+	function test_key_exists() {
+		run_key_exists();
+		_controller.$setFlashStorage("cookie");
+		run_key_exists();
+	}
 
-	<cffunction name="run_key_exists">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset result = loc.controller.flash("success")>
-		<cfset assert("result IS 'Congrats!'")>
-	</cffunction>
+	function run_key_exists() {
+		_controller.flashInsert(success="Congrats!");
+		result = _controller.flash("success");
+		assert("result IS 'Congrats!'");
+	}
 
-	<cffunction name="test_key_does_not_exist">
-		<cfset run_key_does_not_exist()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_key_does_not_exist()>
-	</cffunction>
+	function test_key_does_not_exist() {
+		run_key_does_not_exist();
+		_controller.$setFlashStorage("cookie");
+		run_key_does_not_exist();
+	}
 
-	<cffunction name="run_key_does_not_exist">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset result = loc.controller.flash("invalidkey")>
-		<cfset assert("result IS ''")>
-	</cffunction>
+	function run_key_does_not_exist() {
+		_controller.flashInsert(success="Congrats!");
+		result = _controller.flash("invalidkey");
+		assert("result IS ''");
+	}
 
-	<cffunction name="test_key_is_blank">
-		<cfset run_key_is_blank()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_key_is_blank()>
-	</cffunction>
+	function test_key_is_blank() {
+		run_key_is_blank();
+		_controller.$setFlashStorage("cookie");
+		run_key_is_blank();
+	}
 
-	<cffunction name="run_key_is_blank">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset result = loc.controller.flash("")>
-		<cfset assert("result IS ''")>
-	</cffunction>
+	function run_key_is_blank() {
+		_controller.flashInsert(success="Congrats!");
+		result = _controller.flash("");
+		assert("result IS ''");
+	}
 
-	<cffunction name="test_key_provided_flash_empty">
-		<cfset run_key_provided_flash_empty()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_key_provided_flash_empty()>
-	</cffunction>
+	function test_key_provided_flash_empty() {
+		run_key_provided_flash_empty();
+		_controller.$setFlashStorage("cookie");
+		run_key_provided_flash_empty();
+	}
 
-	<cffunction name="run_key_provided_flash_empty">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset loc.controller.flashClear()>
-		<cfset result = loc.controller.flash("invalidkey")>
-		<cfset assert("result IS ''")>
-	</cffunction>
+	function run_key_provided_flash_empty() {
+		_controller.flashInsert(success="Congrats!");
+		_controller.flashClear();
+		result = _controller.flash("invalidkey");
+		assert("result IS ''");
+	}
 
-	<cffunction name="test_no_key_provided_flash_not_empty">
-		<cfset run_no_key_provided_flash_not_empty()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_no_key_provided_flash_not_empty()>
-	</cffunction>
+	function test_no_key_provided_flash_not_empty() {
+		run_no_key_provided_flash_not_empty();
+		_controller.$setFlashStorage("cookie");
+		run_no_key_provided_flash_not_empty();
+	}
 
-	<cffunction name="run_no_key_provided_flash_not_empty">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset result = loc.controller.flash()>
-		<cfset assert("IsStruct(result) AND StructKeyExists(result, 'success')")>
-	</cffunction>
+	/**
+	* HELPERS
+	*/
 
-	<cffunction name="test_no_key_provided_flash_empty">
-		<cfset run_no_key_provided_flash_empty()>
-		<cfset loc.controller.$setFlashStorage("cookie")>
-		<cfset run_no_key_provided_flash_empty()>
-	</cffunction>
+	function run_no_key_provided_flash_not_empty() {
+		_controller.flashInsert(success="Congrats!");
+		result = _controller.flash();
+		assert("IsStruct(result) AND StructKeyExists(result, 'success')");
+	}
 
-	<cffunction name="run_no_key_provided_flash_empty">
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset loc.controller.flashClear()>
-		<cfset result = loc.controller.flash()>
-		<cfset assert("IsStruct(result) AND StructIsEmpty(result)")>
-	</cffunction>
+	function test_no_key_provided_flash_empty() {
+		run_no_key_provided_flash_empty();
+		_controller.$setFlashStorage("cookie");
+		run_no_key_provided_flash_empty();
+	}
 
-</cfcomponent>
+	function run_no_key_provided_flash_empty() {
+		_controller.flashInsert(success="Congrats!");
+		_controller.flashClear();
+		result = _controller.flash();
+		assert("IsStruct(result) AND StructIsEmpty(result)");
+	}
+
+}
