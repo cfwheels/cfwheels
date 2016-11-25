@@ -142,7 +142,8 @@
 		local.sql2 = [];
 		for (local.key in variables.wheels.class.properties)
 		{
-			if (StructKeyExists(this, local.key))
+			// only include this property if it has a value, or the column is not nullable and has no default set 
+			if (StructKeyExists(this, local.key) && (Len(this[local.key]) or (!variables.wheels.class.properties[local.key].nullable && !Len(variables.wheels.class.properties[local.key].columndefault))))
 			{
 				ArrayAppend(local.sql, variables.wheels.class.properties[local.key].column);
 				ArrayAppend(local.sql, ",");
