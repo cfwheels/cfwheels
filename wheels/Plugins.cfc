@@ -1,6 +1,6 @@
 component output="false" {
 
-	variables.$class = {};
+		variables.$class = {};
 	variables.$class.plugins = {};
 	variables.$class.mixins = {};
 	variables.$class.mixableComponents = "application,dispatch,controller,model,base,sqlserver,mysql,mariadb,oracle,postgresql,h2,test";
@@ -8,14 +8,15 @@ component output="false" {
 	variables.$class.dependantPlugins = "";
 
 	include "global/cfml.cfm";
+	include "plugins/runners.cfm";
 
 	public any function init(
-	  required string pluginPath,
-	  boolean deletePluginDirectories=application.wheels.deletePluginDirectories,
-	  boolean overwritePlugins=application.wheels.overwritePlugins,
-	  boolean loadIncompatiblePlugins=application.wheels.loadIncompatiblePlugins,
-	  string wheelsEnvironment=application.wheels.environment,
-	  string wheelsVersion=application.wheels.version
+		required string pluginPath,
+		boolean deletePluginDirectories=application.wheels.deletePluginDirectories,
+		boolean overwritePlugins=application.wheels.overwritePlugins,
+		boolean loadIncompatiblePlugins=application.wheels.loadIncompatiblePlugins,
+		string wheelsEnvironment=application.wheels.environment,
+		string wheelsVersion=application.wheels.version
 	) {
 		StructAppend(variables.$class, arguments);
 		/* handle pathing for different operating systems */
@@ -30,8 +31,6 @@ component output="false" {
 		$pluginsProcess();
 		/* process mixins */
 		$processMixins();
-		/* incompatibility */
-		$determineIncompatible();
 		/* dependancies */
 		$determineDependancy();
 		return this;
@@ -122,23 +121,6 @@ component output="false" {
 		};
 	}
 
-	public void function $determineIncompatible() {
-		local.excludeMethods = "init,version,pluginVersion";
-		local.loadedMethods = {};
-		for (local.iPlugins in variables.$class.plugins) {
-			local.plugin = variables.$class.plugins[local.iPlugins];
-			for (local.method in local.plugin) {
-				if (! ListFindNoCase(local.excludeMethods, local.method)) {
-					if (StructKeyExists(local.loadedMethods, local.method)) {
-						$throw(type="Wheels.IncompatiblePlugin", message="#local.iPlugins# is incompatible with a previously installed plugin.", extendedInfo="Make sure none of the plugins you have installed override the same CFWheels functions.");
-					} else {
-						local.loadedMethods[local.method] = "";
-					}
-				}
-			};
-		};
-	}
-
 	public void function $determineDependancy() {
 		for (local.iPlugins in variables.$class.plugins) {
 			local.pluginMeta = GetMetaData(variables.$class.plugins[local.iPlugins]);
@@ -158,36 +140,74 @@ component output="false" {
 	*/
 
 	public void function $processMixins() {
+
 		// setup a container for each mixableComponents type
-		for (loc.iMixableComponents in variables.$class.mixableComponents) {
-			variables.$class.mixins[loc.iMixableComponents] = {};
-		};
-		for (loc.iPlugin in variables.$class.plugins) {
+		for (local.iMixableComponents in variables.$class.mixableComponents)
+			variables.$class.mixins[local.iMixableComponents] = {};
+
+		for (local.iPlugin in variables.$class.plugins) {
+
 			// reference the plugin
-			loc.plugin = variables.$class.plugins[loc.iPlugin];
+			local.plugin = variables.$class.plugins[local.iPlugin];
+
 			// grab meta data of the plugin
-			loc.pluginMeta = GetMetaData(loc.plugin);
-			if (! StructKeyExists(loc.pluginMeta, "environment") || ListFindNoCase(loc.pluginMeta.environment, variables.$class.wheelsEnvironment)) {
-				// by default and for backwards compatibility, we inject all methods into all objects
-				loc.pluginMixins = "global";
-				if (StructKeyExists(loc.pluginMeta, "mixin")) {
-					// if the component has a default mixin value, assign that value
-					loc.pluginMixins = loc.pluginMeta["mixin"];
-				}
-				// loop through all plugin methods and enter injection info accordingly (based on the mixin value on the method or the default one set on the entire component)
-				loc.pluginMethods = StructKeyList(loc.plugin);
-				for (loc.iPluginMethods in loc.pluginMethods) {
-					if (IsCustomFunction(loc.plugin[loc.iPluginMethods]) && loc.iPluginMethods neq "init") {
-						loc.methodMeta = GetMetaData(loc.plugin[loc.iPluginMethods]);
-						loc.methodMixins = loc.pluginMixins;
-						if (StructKeyExists(loc.methodMeta, "mixin")) {
-							loc.methodMixins = loc.methodMeta["mixin"];
-						}
+			local.pluginMeta = GetMetaData(local.plugin);
+
+			if (! StructKeyExists(local.pluginMeta, "environment")
+					|| ListFindNoCase(local.pluginMeta.environment, variables.$class.wheelsEnvironment)) {
+
+				// by default and for backwards compatibility, we inject all methods
+				// into all objects
+				local.pluginMixins = "global";
+
+				// if the component has a default mixin value, assign that value
+				if (StructKeyExists(local.pluginMeta, "mixin"))
+					local.pluginMixins = local.pluginMeta["mixin"];
+
+				// loop through all plugin methods and enter injection info accordingly
+				// (based on the mixin value on the method or the default one set on the
+				// entire component)
+				local.pluginMethods = StructKeyList(local.plugin);
+
+				for (local.iPluginMethods in local.pluginMethods) {
+
+					if (IsCustomFunction(local.plugin[local.iPluginMethods])
+							&& local.iPluginMethods neq "init") {
+
+						local.methodMeta = GetMetaData(local.plugin[local.iPluginMethods]);
+
+						local.methodMixins = local.pluginMixins;
+
+						if (StructKeyExists(local.methodMeta, "mixin"))
+							local.methodMixins = local.methodMeta["mixin"];
+
 						// mixin all methods except those marked as none
-						if (loc.methodMixins neq "none") {
-							for (loc.iMixableComponent in variables.$class.mixableComponents) {
-								if (loc.methodMixins EQ "global" || ListFindNoCase(loc.methodMixins, loc.iMixableComponent)) {
-									variables.$class.mixins[loc.iMixableComponent][loc.iPluginMethods] = loc.plugin[loc.iPluginMethods];
+						if (local.methodMixins neq "none") {
+
+							for (local.iMixableComponent in variables.$class.mixableComponents) {
+
+								if (local.methodMixins EQ "global" || ListFindNoCase(local.methodMixins, local.iMixableComponent)) {
+
+									// new secret magic sauce here is to get the mixable method to our framework method
+									// $$pluginRunner. When called, we'll be able to see what the function name called
+									// was and will be able to run our stack of methods easily
+									variables.$class.mixins[local.iMixableComponent][local.iPluginMethods] = $$pluginRunner;
+
+									// other secret sauce for complete backwards compatibility is to set the core scope
+									// here so that we don't create it when plugin injection runs. Here we set the method to
+									// $$pluginContinue and it passes back a data struct that $$pluginRunner
+									// can recognize as a specific call to contine running the stack
+									variables.$class.mixins[local.iMixableComponent]["core"][local.iPluginMethods] = $$pluginContinue;
+
+									// now we create a new struct $stacks that is a struct of method names with each
+									// method name being an array of plugin override methods. This will be put into
+									// variables.$stacks in any object that we mix plugins into and will allow
+									// $$pluginRunner to have access to the functions :D
+									if (!structKeyExists(variables.$class.mixins[local.iMixableComponent], "$stacks")
+											|| !structKeyExists(variables.$class.mixins[local.iMixableComponent]["$stacks"], local.iPluginMethods))
+										variables.$class.mixins[local.iMixableComponent]["$stacks"][local.iPluginMethods] = [];
+
+									arrayPrepend(variables.$class.mixins[local.iMixableComponent]["$stacks"][local.iPluginMethods], local.plugin[local.iPluginMethods])
 								}
 							};
 						}
