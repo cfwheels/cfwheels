@@ -135,12 +135,19 @@
 						{
 							loc.defaultValidationsAllowBlank = true;
 						}
-						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !Len(loc.columns["column_default_value"][loc.i]) && !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !$validationExists(property=loc.property, validation="validatesPresenceOf"))
 						{
-							validatesPresenceOf(properties=loc.property);
+							if (Len(loc.columns["column_default_value"][loc.i]))
+							{
+								validatesPresenceOf(properties=loc.property, when="onUpdate");
+							}
+							else
+							{
+								validatesPresenceOf(properties=loc.property);
+							}
 						}
 
-						// always allowblank if a database default or validatesPresenceOf() has been set
+						// always allow blank if a database default or validatesPresenceOf() has been set
 						if (Len(loc.columns["column_default_value"][loc.i]) || $validationExists(property=loc.property, validation="validatesPresenceOf"))
 						{
 							loc.defaultValidationsAllowBlank = true;
