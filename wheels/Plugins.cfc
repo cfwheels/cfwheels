@@ -197,7 +197,7 @@ component output="false" {
 									// here so that we don't create it when plugin injection runs. Here we set the method to
 									// $$pluginContinue and it passes back a data struct that $$pluginRunner
 									// can recognize as a specific call to contine running the stack
-									variables.$class.mixins[local.iMixableComponent]["core"][local.iPluginMethods] = $$pluginContinue;
+									variables.$class.mixins[local.iMixableComponent]["core"][local.iPluginMethods] = $$pluginRunner;
 
 									// now we create a new struct $stacks that is a struct of method names with each
 									// method name being an array of plugin override methods. This will be put into
