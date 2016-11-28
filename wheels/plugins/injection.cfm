@@ -23,14 +23,15 @@
 		{
 
 			// we need to first get our mixins
-			variables.$wheels.mixins = {};
-			StructAppend(variables.$wheels.mixins, application[$wheels.appKey].mixins[$wheels.className], true);
+			variables.$wheels.mixins = duplicate(application[$wheels.appKey].mixins[$wheels.className]);
 
 			// then loop through the $stacks to set our original functions at the end
 			// of the stack
 			if (structKeyExists(variables.$wheels.mixins, "$stacks"))
 				for (variables.$wheels.method in variables.$wheels.mixins.$stacks)
-					if (structKeyExists(variables, variables.$wheels.method) && isCustomFunction(variables[variables.$wheels.method]))
+					if (structKeyExists(variables, variables.$wheels.method)
+							&& isCustomFunction(variables[variables.$wheels.method])
+							&& getMetaData(variables[variables.$wheels.method]).name != "$$pluginRunner")
 						arrayAppend(variables.$wheels.mixins.$stacks[variables.$wheels.method], variables[variables.$wheels.method]);
 
 			// finally append our entire mixin to the variables scope
