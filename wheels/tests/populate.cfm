@@ -280,7 +280,7 @@ $query(
 		,birthday #loc.datetimeColumnType# NULL
 		,birthdaymonth #loc.intColumnType# NULL
 		,birthdayyear #loc.intColumnType# NULL
-		,birthtime #loc.datetimeColumnType# DEFAULT #loc.dateTimeDefault# NULL
+		,birthtime #loc.datetimeColumnType# DEFAULT #loc.dateTimeDefault# NOT NULL
 		,isactive #loc.intColumnType# NULL
 		,PRIMARY KEY(id)
 	) #loc.storageEngine#
@@ -306,7 +306,7 @@ $query(
 		,birthday #loc.datetimeColumnType# NULL
 		,birthdaymonth #loc.intColumnType# NULL
 		,birthdayyear #loc.intColumnType# NULL
-		,birthtime #loc.datetimeColumnType# DEFAULT #loc.dateTimeDefault# NULL
+		,birthtime #loc.datetimeColumnType# DEFAULT #loc.dateTimeDefault# NOT NULL
 		,isactive #loc.intColumnType# NULL
 		,PRIMARY KEY(id)
 	) #loc.storageEngine#
