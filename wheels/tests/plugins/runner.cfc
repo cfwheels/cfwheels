@@ -29,10 +29,21 @@ component extends="wheels.tests.Test" {
     application.wheels.mixins = PluginObj.getMixins();
     c = controller("test", _params);
     m = model("authors").new();
+    d = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
+  }
+
+  function teardown() {
+    application.wheels.mixins = {};
   }
 
   function test_chaining_return_values_from_multiple_plugin_overrides() {
     result = c.URLFor(controller="wheels", action="wheels");
+    valid = findNoCase("&urlfor02&urlfor01", result);
+    assert('valid neq 0');
+  }
+
+  function test_chaining_return_values_from_multiple_plugin_overrides_in_dispatch() {
+    result = d.URLFor(controller="wheels", action="wheels");
     valid = findNoCase("&urlfor02&urlfor01", result);
     assert('valid neq 0');
   }

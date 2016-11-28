@@ -11,7 +11,7 @@
     <cfreturn local.result />
 	</cffunction>
 
-  <cffunction name="onMissingMethod" returntype="string">
+  <cffunction name="onMissingMethod" returntype="any">
     <cfreturn core.onMissingMethod(argumentCollection=arguments) />
   </cffunction>
 
