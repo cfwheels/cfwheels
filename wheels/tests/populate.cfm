@@ -57,7 +57,7 @@ for (loc.i in loc.tables) {
 			// skip on fail
 		}
 	}
-};
+}
 
 // list of views to delete
 loc.views = "userphotos";
@@ -69,7 +69,7 @@ for (loc.i in loc.views) {
 			// skip on fail
 		}
 	}
-};
+}
 
 // create tables
 $query(
@@ -459,9 +459,9 @@ for (loc.user in loc.users) {
 				,filename="Gallery #loc.gallery.id# Photo Test #loc.j#"
 				,description1="test photo #loc.j# for gallery #loc.gallery.id#"
 			);
-		};
-	};
-};
+		}
+	}
+}
 
 model("user2").create(username="Chris", password="x", firstName="x", lastName="x");
 model("user2").create(username="Tim", password="x", firstName="x", lastName="x");
@@ -479,14 +479,14 @@ for (loc.post in loc.posts) {
 			,url="http://#loc.i#.somecommenter.com"
 			,email="#loc.i#@#loc.i#.com"
 		);
-	};
-};
+	}
+}
 
 // cities and shops
 for (loc.i in [1,2,3,4,5]) {
 	model("city").create(id="3", citycode=loc.i, name="county #loc.i#");
 	model("shop").create(shopid="shop#loc.i#", citycode=loc.i, name="shop #loc.i#");
-};
+}
 model("shop").create(shopid=" shop6", citycode=0, name="x");
 
 // tags
@@ -507,8 +507,8 @@ model("collisiontest").create(method="test");
 for (loc.i in [1,2,3,4,5]) {
 	for (loc.j in [1,2,3,4,5]) {
 		model("CombiKey").create(id1=loc.i, id2=loc.j, userId=loc.j);
-	};
-};
+	}
+}
 
 // sqltype
 model("sqltype").create(stringVariableType="tony", textType="blah blah blah blah");
