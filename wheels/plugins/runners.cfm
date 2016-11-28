@@ -4,6 +4,17 @@
     // get the method name called so that we know which stack to run
     local.methodName = GetFunctionCalledName();
 
+    // some of our plugin developers have decided to var a new variable that
+    // changes the name of the function when called so getFunctionCalledName()
+    // returns something we do not understand so we need to fall back to using
+    // the stack trace to see what function was immediately called before the
+    // function we are currently in
+    //
+    // Documentation should reflect that best practice is to just use the
+    // core.method function
+    if (!structKeyExists(variables.$stacks, local.methodName))
+      local.methodName = callStackGet()[2].function;
+
     // get our stack from $stack via the name this function was called as
     local.stack = variables.$stacks[local.methodName];
 

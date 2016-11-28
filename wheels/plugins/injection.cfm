@@ -29,9 +29,7 @@
 			// of the stack
 			if (structKeyExists(variables.$wheels.mixins, "$stacks"))
 				for (variables.$wheels.method in variables.$wheels.mixins.$stacks)
-					if (structKeyExists(variables, variables.$wheels.method)
-							&& isCustomFunction(variables[variables.$wheels.method])
-							&& getMetaData(variables[variables.$wheels.method]).name != "$$pluginRunner")
+					if (structKeyExists(variables, variables.$wheels.method) && isCustomFunction(variables[variables.$wheels.method]))
 						arrayAppend(variables.$wheels.mixins.$stacks[variables.$wheels.method], variables[variables.$wheels.method]);
 
 			// finally append our entire mixin to the variables scope

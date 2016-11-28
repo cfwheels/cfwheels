@@ -23,4 +23,17 @@
     <cfreturn "$$completelyOverridden" />
   </cffunction>
 
+  <cffunction name="pluralize" returntype="string">
+    <cfset corePluralize = core.pluralize />
+    <cfreturn corePluralize(argumentCollection=arguments) />
+  </cffunction>
+
+  <cffunction name="$helper01">
+    <cfreturn $helper011() />
+  </cffunction>
+
+  <cffunction name="$helper011">
+    <cfreturn "$helper011Responding" />
+  </cffunction>
+
 </cfcomponent>

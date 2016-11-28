@@ -36,6 +36,16 @@ component extends="wheels.tests.Test" {
     application.wheels.mixins = {};
   }
 
+  function test_calling_plugin_methods_from_other_methods() {
+    result = c.$helper01();
+    assert('result eq"$helper011Responding"');
+  }
+
+  function test_calling_core_method_changing_calling_function_name() {
+    result = c.pluralize("book");
+    assert('result eq "books"');
+  }
+
   function test_chaining_return_values_from_multiple_plugin_overrides() {
     result = c.URLFor(controller="wheels", action="wheels");
     valid = findNoCase("&urlfor02&urlfor01", result);
