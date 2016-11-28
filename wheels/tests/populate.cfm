@@ -245,7 +245,7 @@ CREATE TABLE tblusers
 	,birthday #loc.datetimeColumnType# NULL
 	,birthdaymonth #loc.intColumnType# NULL
 	,birthdayyear #loc.intColumnType# NULL
-	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NULL
+	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NOT NULL
 	,isactive #loc.intColumnType# NULL
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
@@ -268,7 +268,7 @@ CREATE TABLE users
 	,birthday #loc.datetimeColumnType# NULL
 	,birthdaymonth #loc.intColumnType# NULL
 	,birthdayyear #loc.intColumnType# NULL
-	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NULL
+	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NOT NULL
 	,isactive #loc.intColumnType# NULL
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#

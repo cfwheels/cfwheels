@@ -99,6 +99,7 @@
 					variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type, loc.columns["decimal_digits"][loc.i]);
 					variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
 					variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
+					variables.wheels.class.properties[loc.property].columndefault = loc.columns["column_default_value"][loc.i];
 
 					// get a boolean value for whether this column can be set to null or not
 					// if we don't get a boolean back we try to translate y/n to proper boolean values in cfml (yes/no)
@@ -135,12 +136,19 @@
 						{
 							loc.defaultValidationsAllowBlank = true;
 						}
-						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !Len(loc.columns["column_default_value"][loc.i]) && !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !$validationExists(property=loc.property, validation="validatesPresenceOf"))
 						{
-							validatesPresenceOf(properties=loc.property);
+							if (Len(loc.columns["column_default_value"][loc.i]))
+							{
+								validatesPresenceOf(properties=loc.property, when="onUpdate");
+							}
+							else
+							{
+								validatesPresenceOf(properties=loc.property);
+							}
 						}
 
-						// always allowblank if a database default or validatesPresenceOf() has been set
+						// always allow blank if a database default or validatesPresenceOf() has been set
 						if (Len(loc.columns["column_default_value"][loc.i]) || $validationExists(property=loc.property, validation="validatesPresenceOf"))
 						{
 							loc.defaultValidationsAllowBlank = true;
