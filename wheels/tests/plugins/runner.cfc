@@ -36,29 +36,34 @@ component extends="wheels.tests.Test" {
     application.wheels.mixins = {};
   }
 
-  function test_calling_plugin_methods_from_other_methods() {
+  function test_call_plugin_methods_from_other_methods() {
     result = c.$helper01();
     assert('result eq"$helper011Responding"');
   }
 
-  function test_calling_core_method_changing_calling_function_name() {
+  function test_call_plugin_method_via_cfinvoke() {
+    result = c.$invoke(method="$helper01", invokeArgs={});
+    assert('result eq"$helper011Responding"');
+  }
+
+  function test_call_core_method_changing_calling_function_name() {
     result = c.pluralize("book");
     assert('result eq "books"');
   }
 
-  function test_chaining_return_values_from_multiple_plugin_overrides() {
+  function test_chain_return_values_from_multiple_plugin_overrides() {
     result = c.URLFor(controller="wheels", action="wheels");
     valid = findNoCase("&urlfor02&urlfor01", result);
     assert('valid neq 0');
   }
 
-  function test_chaining_return_values_from_multiple_plugin_overrides_in_dispatch() {
+  function test_chain_return_values_from_multiple_plugin_overrides_in_dispatch() {
     result = d.URLFor(controller="wheels", action="wheels");
     valid = findNoCase("&urlfor02&urlfor01", result);
     assert('valid neq 0');
   }
 
-  function test_completely_overriding_a_framework_method() {
+  function test_override_a_framework_method() {
     result = c.singularize(word="hahahah");
     assert('result eq "$$completelyOverridden"');
   }

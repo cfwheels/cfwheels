@@ -1,19 +1,36 @@
 <cfscript>
   public any function $$pluginRunner() {
 
-    // get the method name called so that we know which stack to run
+    // get the method name called so that we know which stack to run this is our
+    // default way of seeing which method we're supposed to be running for our
+    // stacks
     local.methodName = GetFunctionCalledName();
 
-    // some of our plugin developers have decided to var a new variable that
+    // if we still don't have what we need our method has been invoked and cf
+    // doesn't give us any information for the stack fr
+    if (!structKeyExists(variables.$stacks, local.methodName)
+        && structKeyExists(request.wheels.invoked, "method"))
+      local.methodName = request.wheels.invoked.method;
+
+    // some of our plugin developers var a new variable that
     // changes the name of the function when called so getFunctionCalledName()
-    // returns something we do not understand so we need to fall back to using
+    // returns something we do not understand. We need to fall back to using
     // the stack trace to see what function was immediately called before the
-    // function we are currently in
+    // function we are currently in. This is our last resort to see what is
+    // going on
     //
     // Documentation should reflect that best practice is to just use the
-    // core.method function
+    // core.method() when calling to a core function
     if (!structKeyExists(variables.$stacks, local.methodName))
       local.methodName = callStackGet()[2].function;
+
+    if (!structKeyExists(variables.$stacks, local.methodName))
+      throw(
+          type="Wheels.MethodUnknown"
+        , message="The plugin system is unable to determine the method you
+          are trying to call."
+      );
+
 
     // get our stack from $stack via the name this function was called as
     local.stack = variables.$stacks[local.methodName];
