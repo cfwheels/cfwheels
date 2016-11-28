@@ -15,9 +15,6 @@
     // called as
     local.stack = variables.$stacks[local.methodName];
 
-    // if (local.methodName == "onMissingMethod")
-    //   $dump(local);
-
     // loop through the stack
     for (local.i = 1; local.i lte arrayLen(local.stack); local.i++) {
 
