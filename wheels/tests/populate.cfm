@@ -47,27 +47,19 @@ if (loc.db IS "microsoftsqlserver") {
 loc.dbinfo = $dbinfo(datasource=application.wheels.dataSourceName, type="tables");
 loc.tableList = ValueList(loc.dbinfo.table_name, Chr(7));
 
-// list of tables to delete
-loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes";
-for (loc.i in loc.tables) {
-	if (ListFindNoCase(loc.tableList, loc.i, Chr(7))) {
-		try {
-			$query(datasource=application.wheels.dataSourceName, sql="DROP TABLE #loc.i#");
-		} catch(any e) {
-			// skip on fail
-		}
-	}
-};
-
 // list of views to delete
 loc.views = "userphotos";
 for (loc.i in loc.views) {
 	if (ListFindNoCase(loc.tableList, loc.i, Chr(7))) {
-		try {
-			$query(datasource=application.wheels.dataSourceName, sql="DROP VIEW #loc.i#");
-		} catch(any e) {
-			// skip on fail
-		}
+		$query(datasource=application.wheels.dataSourceName, sql="DROP VIEW IF EXISTS #loc.i#");
+	}
+};
+
+// list of tables to delete
+loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes";
+for (loc.i in loc.tables) {
+	if (ListFindNoCase(loc.tableList, loc.i, Chr(7))) {
+		$query(datasource=application.wheels.dataSourceName, sql="DROP TABLE IF EXISTS #loc.i#");
 	}
 };
 
