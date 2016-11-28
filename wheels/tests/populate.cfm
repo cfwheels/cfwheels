@@ -160,7 +160,9 @@ CREATE TABLE photos
 	,filename varchar(255) NOT NULL
 	,description varchar(255) NOT NULL
 	,filedata #loc.binaryColumnType# NULL
-	,PRIMARY KEY(id)
+	,PRIMARY KEY(id),
+	KEY `fk_photos_galleryId_idx` (`galleryid`),
+	CONSTRAINT `fk_photos_galleryid` FOREIGN KEY (`galleryid`) REFERENCES `galleries` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) #loc.storageEngine#
 </cfquery>
 
