@@ -35,7 +35,7 @@ component extends="wheels.tests.Test" {
 	function test_sum_with_group_on_calculated_property_on_associated_model() {
 		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
 			result = model("gallery").sum(property="userId", include="photos", group="DESCRIPTION1");
-			assert("result['userIdSum'][3] IS 1");
+			assert("result['userIdSum'][3] IS 3");
 		} else {
 			assert(true);
 		}
