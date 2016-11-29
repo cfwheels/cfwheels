@@ -18,7 +18,6 @@
 
   public Mapper function end() {
     // if last action was a resource, set up REST routes
-    // TODO: consider non-restful routes
     // create plural resource routes
     if (scopeStack[1].$call EQ "resources") {
       collection();
