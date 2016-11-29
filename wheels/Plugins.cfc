@@ -207,7 +207,7 @@ component output="false" {
 											|| !structKeyExists(variables.$class.mixins[local.iMixableComponent]["$stacks"], local.iPluginMethods))
 										variables.$class.mixins[local.iMixableComponent]["$stacks"][local.iPluginMethods] = [];
 
-									arrayPrepend(variables.$class.mixins[local.iMixableComponent]["$stacks"][local.iPluginMethods], local.plugin[local.iPluginMethods])
+									arrayPrepend(variables.$class.mixins[local.iMixableComponent]["$stacks"][local.iPluginMethods], local.plugin[local.iPluginMethods]);
 								}
 							};
 						}
