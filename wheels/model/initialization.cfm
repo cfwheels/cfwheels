@@ -33,6 +33,7 @@
 		variables.wheels.class.username = application.wheels.dataSourceUserName;
 		variables.wheels.class.password = application.wheels.dataSourcePassword;
 		variables.wheels.class.automaticValidations = application.wheels.automaticValidations;
+		variables.wheels.class.automaticAssociations = application.wheels.automaticAssociations;
 		setTableNamePrefix(get("tableNamePrefix"));
 		table(LCase(pluralize(variables.wheels.class.modelName)));
 		loc.callbacks = "afterNew,afterFind,afterInitialization,beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidation,afterValidation,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
@@ -227,17 +228,19 @@
 		}
 
 		// set up automatic associations
-		loc.associations = variables.wheels.class.adapter.$getAssociations(tableName());
-		for (loc.asc in loc.associations) {
-			if (not StructKeyExists(variables.wheels.class.associations, loc.asc.tableName)) {
-				if (loc.asc.method eq "belongsTo") {
-					$invoke(component=this, method=loc.asc.method, name=Singularize(loc.asc.tableName), foreignKey=loc.asc.foreignKey, joinKey=loc.asc.joinKey);
-				} else {
-					$invoke(component=this, method=loc.asc.method, name=loc.asc.tableName, foreignKey=loc.asc.foreignKey, joinKey=loc.asc.joinKey);
+		if (variables.wheels.class.automaticAssociations) {
+			loc.associations = variables.wheels.class.adapter.$getAssociations(tableName());
+			for (loc.asc in loc.associations) {
+				if (not StructKeyExists(variables.wheels.class.associations, loc.asc.tableName)) {
+					if (loc.asc.method eq "belongsTo") {
+						$invoke(component=this, method=loc.asc.method, name=Singularize(loc.asc.tableName), foreignKey=loc.asc.foreignKey, joinKey=loc.asc.joinKey);
+					} else {
+						$invoke(component=this, method=loc.asc.method, name=loc.asc.tableName, foreignKey=loc.asc.foreignKey, joinKey=loc.asc.joinKey);
+					}
 				}
 			}
 		}
-
+		
 	</cfscript>
 	<cfreturn this>
 </cffunction>
