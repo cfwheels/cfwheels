@@ -42,6 +42,13 @@ component extends="wheels.tests.Test" {
     assert('newString eq "/controller/action.asdf"');
   }
 
+  function test_normalizePattern_with_single_quote_in_pattern() {
+    mapper = $mapper();
+    urlString = "////controller///action///.asdf'";
+    newString = mapper.normalizePattern(urlString);
+    assert('newString eq "/controller/action.asdf''"');
+  }
+
   // patternToRegex
 
   function test_patternToRegex_root() {
