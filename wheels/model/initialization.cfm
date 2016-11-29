@@ -231,12 +231,10 @@
 		if (variables.wheels.class.automaticAssociations) {
 			loc.associations = variables.wheels.class.adapter.$getAssociations(tableName());
 			for (loc.asc in loc.associations) {
-				if (not StructKeyExists(variables.wheels.class.associations, loc.asc.tableName)) {
-					if (loc.asc.method eq "belongsTo") {
-						$invoke(component=this, method=loc.asc.method, name=Singularize(loc.asc.tableName), foreignKey=loc.asc.foreignKey, joinKey=loc.asc.joinKey);
-					} else {
-						$invoke(component=this, method=loc.asc.method, name=loc.asc.tableName, foreignKey=loc.asc.foreignKey, joinKey=loc.asc.joinKey);
-					}
+				if (loc.asc.method eq "belongsTo" && !StructKeyExists(variables.wheels.class.associations, Singularize(loc.asc.tableName))) {
+					$invoke(component=this, method=loc.asc.method, name=Singularize(loc.asc.tableName), foreignKey=loc.asc.foreignKey, joinKey=loc.asc.joinKey);
+				} else if (loc.asc.method eq "hasMany" && not StructKeyExists(variables.wheels.class.associations, loc.asc.tableName)) {
+					$invoke(component=this, method=loc.asc.method, name=loc.asc.tableName, foreignKey=loc.asc.foreignKey, joinKey=loc.asc.joinKey);
 				}
 			}
 		}
