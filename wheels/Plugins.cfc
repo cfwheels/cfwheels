@@ -3,7 +3,7 @@ component output="false" {
 	variables.$class = {};
 	variables.$class.plugins = {};
 	variables.$class.mixins = {};
-	variables.$class.mixableComponents = "application,dispatch,controller,model,base,sqlserver,mysql,mariadb,oracle,postgresql,h2,test";
+	variables.$class.mixableComponents = "application,dispatch,controller,mapper,model,base,sqlserver,mysql,mariadb,oracle,postgresql,h2,test";
 	variables.$class.incompatiblePlugins = "";
 	variables.$class.dependantPlugins = "";
 
