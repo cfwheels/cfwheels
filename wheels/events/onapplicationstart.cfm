@@ -67,6 +67,7 @@ public void function onApplicationStart() {
 	application.$wheels.nonExistingLayoutFiles = "";
 	application.$wheels.nonExistingObjectFiles = "";
 	application.$wheels.routes = [];
+	application.$wheels.resourceControllerNaming = "plural";
 	application.$wheels.namedRoutePositions = {};
 	application.$wheels.mixins = {};
 	application.$wheels.cache = {};
