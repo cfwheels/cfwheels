@@ -4,6 +4,7 @@ component extends="Model" {
 
 	function init() {
 		table("photos");
+		automaticAssociations(true);
 	}
 
 }
