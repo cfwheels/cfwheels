@@ -8,37 +8,11 @@
 		application[local.appKey].formats[arguments.extension] = arguments.mimeType;
 	}
 
-	public void function addRoute(
-		string name="",
-		required string pattern,
-		string controller="",
-		string action=""
-	) {
-		local.appKey = $appKey();
-
-		// throw errors when controller or action is not passed in as arguments and not included in the pattern
-		if (!Len(arguments.controller) && !FindNoCase("[controller]", arguments.pattern)) {
-			$throw(type="Wheels.IncorrectArguments", message="The `controller` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `controller` argument to specifically tell CFWheels which controller to call or include it in the pattern to tell CFWheels to determine it dynamically on each request based on the incoming URL.");
-		}
-		if (!Len(arguments.action) && !FindNoCase("[action]", arguments.pattern)) {
-			$throw(type="Wheels.IncorrectArguments", message="The `action` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `action` argument to specifically tell CFWheels which action to call or include it in the pattern to tell CFWheels to determine it dynamically on each request based on the incoming URL.");
-		}
-
-		local.thisRoute = Duplicate(arguments);
-		local.thisRoute.variables = "";
-		if (Find(".", local.thisRoute.pattern)) {
-			local.thisRoute.format = ListLast(local.thisRoute.pattern, ".");
-			local.thisRoute.formatVariable = ReplaceList(local.thisRoute.format, "[,]", "");
-			local.thisRoute.pattern = ListFirst(local.thisRoute.pattern, ".");
-		}
-		local.iEnd = ListLen(local.thisRoute.pattern, "/");
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
-			local.item = ListGetAt(local.thisRoute.pattern, local.i, "/");
-			if (REFind("^\[", local.item)) {
-				local.thisRoute.variables = ListAppend(local.thisRoute.variables, ReplaceList(local.item, "[,]", ""));
-			}
-		}
-		ArrayAppend(application[local.appKey].routes, local.thisRoute);
+	public void function addRoute() {
+		throw(
+				type="Wheels.DeprecatedMethod"
+			, message="Please use `drawRoutes()` in your `/config/routes.cfm` configuration file."
+		);
 	}
 
 	public void function addDefaultRoutes() {
