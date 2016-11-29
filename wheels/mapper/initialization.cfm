@@ -10,7 +10,7 @@
     // set up default variable constraints
     variables.constraints = {};
     variables.constraints["format"] = "\w+";
-    variables.constraints["controller"] = "[^/]+";
+    variables.constraints["controller"] = "[^\/]+";
 
     // set up constraint for globbed routes
     variables.constraints["\*\w+"] = ".+";
