@@ -5,6 +5,8 @@
 			request.wheels = {};
 			request.wheels.params = {};
 			request.wheels.cache = {};
+			request.wheels.stacks = {};
+			request.wheels.invoked = {};
 			request.wheels.tickCountId = GetTickCount();
 
 			// create a structure to track the transaction status for all adapters
@@ -149,14 +151,14 @@
 				local.rv = $wddx(input=local.values);
 			}
 		}
-		return Hash(local.rv); 
+		return Hash(local.rv);
 	}
 
 	public any function $timeSpanForCache(
 		required any cache,
 		numeric defaultCacheTime=application.wheels.defaultCacheTime,
 		string cacheDatePart=application.wheels.cacheDatePart
-	) {		
+	) {
 		local.cache = arguments.defaultCacheTime;
 		if (IsNumeric(arguments.cache))
 		{
@@ -215,7 +217,7 @@
 
 	// This copies all the variables CFWheels needs from the CGI scope to the request scope.
 	public struct function $cgiScope(
-		string keys="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type,http_x_rewrite_url,http_x_original_url,request_uri,redirect_url", 
+		string keys="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type,http_x_rewrite_url,http_x_original_url,request_uri,redirect_url",
 		struct scope=cgi
 	) {
 		local.rv = {};
@@ -348,7 +350,7 @@
 	}
 
 	public struct function $findRoute() {
-		
+
 
 		// throw an error if a route with this name has not been set by developer in the config/routes.cfm file
 		if (application.wheels.showErrorInformation && !StructKeyExists(application.wheels.namedRoutePositions, arguments.route))
@@ -499,7 +501,7 @@
 		required string fileName,
 		required string method
 	) {
-		var rv = ""; 
+		var rv = "";
 		local.returnVariable = "rv";
 		local.method = arguments.method;
 		local.component = ListChangeDelims(arguments.path, ".", "/") & "." & ListChangeDelims(arguments.fileName, ".", "/");
@@ -1074,4 +1076,4 @@
 
 		return local.path;
 	}
-</cfscript>  
+</cfscript>
