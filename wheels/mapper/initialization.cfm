@@ -16,6 +16,7 @@
     variables.constraints["\*\w+"] = ".+";
 
     // fix naming collision with cfwheels get() and controller() methods
+    this.$$get = this.get;
     this.get = variables.$get;
     this.controller = variables.$controller;
 

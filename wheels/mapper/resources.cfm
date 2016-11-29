@@ -19,10 +19,10 @@
    */
   public Mapper function resource(
       required string name, boolean nested=false
-    , string path=hyphenize(arguments.name), string controller, string singular
-    , string plural, string only, string except, boolean shallow
-    , string shallowPath, string shallowName, struct constraints
-    , string $call="resource", boolean $plural=false) {
+    , string path=hyphenize(arguments.name), string controller
+    , string singular, string plural, string only, string except
+    , boolean shallow, string shallowPath, string shallowName
+    , struct constraints, string $call="resource", boolean $plural=false) {
 
     local.args = {};
 
@@ -110,7 +110,7 @@
     } else {
 
       // set controller name based on naming preference
-      switch (application[$appKey()].resourceControllerNaming) {
+      switch ($$get("resourceControllerNaming")) {
         case "name": local.args.controller = arguments.name; break;
         case "singular": local.args.controller = arguments.singular; break;
         default: local.args.controller = arguments.plural;
