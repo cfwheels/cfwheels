@@ -15,12 +15,6 @@
 		);
 	}
 
-	public void function addDefaultRoutes() {
-		addRoute(pattern="[controller]/[action]/[key]");
-		addRoute(pattern="[controller]/[action]");
-		addRoute(pattern="[controller]", action="index");
-	}
-
 	public void function set() {
 		local.appKey = $appKey();
 		if (ArrayLen(arguments) > 1) {
