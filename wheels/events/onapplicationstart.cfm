@@ -405,6 +405,9 @@ public void function onApplicationStart() {
 	// create the dispatcher that will handle all incoming requests
 	application.$wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
 
+	// create the mapper that will handle creating routes
+	application.$wheels.mapper = $createObjectFromRoot(path="wheels", fileName="Mapper", method="init");
+
 	// assign it all to the application scope in one atomic call
 	application.wheels = application.$wheels;
 	StructDelete(application, "$wheels");
