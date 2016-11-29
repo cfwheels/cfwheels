@@ -767,12 +767,6 @@
 		// load developer routes first
 		$include(template="config/routes.cfm");
 
-		// add the wheels default routes at the end if requested
-		if (application[local.appKey].loadDefaultRoutes)
-		{
-			addDefaultRoutes();
-		}
-
 		// set lookup info for the named routes
 		$setNamedRoutePositions();
 	}
