@@ -122,6 +122,10 @@
 	* PUBLIC MODEL OBJECT METHODS
 	*/
 
+	public any function toParam() {
+		return key();
+	}
+
 	public string function key(boolean $persisted="false", boolean $returnTickCountWhenNew="false") {
 		local.rv = "";
 		local.iEnd = ListLen(primaryKeys());
