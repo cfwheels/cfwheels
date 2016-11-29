@@ -274,6 +274,7 @@ CREATE TABLE users
 ) #loc.storageEngine#
 </cfquery>
 
+>>>>>>> 38c13a0739788f4fca654a2a8f101d748db4086e
 
 <!--- create oracle sequences --->
 <cfif loc.db eq "oracle">

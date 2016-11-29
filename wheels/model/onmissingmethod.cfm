@@ -502,7 +502,9 @@
 				local.rv = $invoke(componentReference=local.componentReference, method=local.method, invokeArgs=arguments.missingMethodArguments);
 			}
 		}
-		return local.rv;
+
+		if (structKeyExists(local, "rv"))
+			return local.rv;
 	}
 
 	public string function $propertyValue(required string name) {
