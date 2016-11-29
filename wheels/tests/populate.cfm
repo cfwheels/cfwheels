@@ -162,7 +162,7 @@ CREATE TABLE photos
 ) #loc.storageEngine#
 </cfquery>
 
-<!--- create a foreign key to testing automatic associations --->
+<!--- create a foreign key for testing automatic associations --->
 <cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 ALTER TABLE photos ADD CONSTRAINT fk_photos_galleryid FOREIGN KEY (galleryid) REFERENCES galleries(id)
 </cfquery>
