@@ -99,9 +99,6 @@ component extends="wheels.tests.Test" {
     mapper.draw().match(pattern="/sign-in(.[format])", method="get", to="sessions##new").end();
     routesLen = arrayLen(application.wheels.routes);
     assert("routesLen eq 2");
-    route = application.wheels.routes[1];
-    methodExists = structKeyExists(route, "method");
-    assert('methodExists eq false and route.controller eq "sessions" and route.action eq "new"');
   }
 
   function test_match_with_multiple_optional_pattern_segment() {
@@ -110,8 +107,6 @@ component extends="wheels.tests.Test" {
     mapper.draw().match(pattern="/[controller](/[action](/[key](.[format])))", action="index", method="get").end();
     routesLen = arrayLen(application.wheels.routes);
     assert("routesLen eq 4");
-    route = application.wheels.routes[1];
-    assert('route.variables eq "controller,action,key,format"');
   }
 
 
