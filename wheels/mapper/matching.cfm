@@ -33,7 +33,7 @@
         arguments.module = scopeStack[1].module;
     }
 
-    // interpret 'to' as 'controller#action'
+    // interpret 'to' as 'controller##action'
     if (StructKeyExists(arguments, "to")) {
       arguments.controller = ListFirst(arguments.to, "##");
       arguments.action = ListLast(arguments.to, "##");
@@ -55,7 +55,10 @@
 
     // die if pattern is not defined
     if (NOT StructKeyExists(arguments, "pattern"))
-      throw("Either 'pattern' or 'name' must be defined.");
+      throw(
+          type="Wheels.MapperArgumentMissing"
+        , message="Either 'pattern' or 'name' must be defined."
+      );
 
     // accept either 'method' or 'methods'
     if (StructKeyExists(arguments, "method")) {
