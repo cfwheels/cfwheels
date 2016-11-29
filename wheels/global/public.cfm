@@ -8,6 +8,11 @@
 		application[local.appKey].formats[arguments.extension] = arguments.mimeType;
 	}
 
+	public Mapper function drawRoutes(
+		boolean restful=true, boolean methods=arguments.restful) {
+		return application[$appKey()].mapper.draw(argumentCollection=arguments);
+	}
+
 	public void function addRoute() {
 		throw(
 				type="Wheels.DeprecatedMethod"
