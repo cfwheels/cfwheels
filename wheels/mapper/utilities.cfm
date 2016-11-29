@@ -2,10 +2,15 @@
 
   // PUBLIC UTILITIES
 
-  public string function normalizePattern(required string pattern) {
-
-    local.pattern = REReplace(arguments.pattern, "(^/+|/+$)", "", "ALL");
-    local.pattern = REReplace(local.pattern, "/+\.", ".", "ALL");
+  public string function normalizePattern(required string pattern)
+    hint="Force leading slashes, remove trailing and duplicate slashes" {
+    // first clear the ending slashes
+    local.pattern = REReplace(arguments.pattern, "(^\/+|\/+$)", "", "ALL");
+    // reset middle slashes to singles if they are multiple
+    local.pattern = REReplace(local.pattern, "\/+", "/", "ALL");
+    // remove a slash next to a period
+    local.pattern = REReplace(local.pattern, "\/+\.", ".", "ALL");
+    // return with a prepended slash
     return "/" & Replace(local.pattern, "//", "/", "ALL");
   }
 
@@ -30,24 +35,28 @@
       );
 
     // replace remaining variables with default regex
-    local.regex = REReplace(local.regex, ":::\w+:::", "([^./]+)", "ALL");
-    return REReplace(local.regex, "^/*(.*)/*$", "^\1/?$");
+    local.regex = REReplace(local.regex, ":::\w+:::", "([^.\/]+)", "ALL");
+    return REReplace(local.regex, "^\/*(.*)\/*$", "^\1/?$");
   }
 
   public string function stripRouteVariables(required string pattern)
     hint="Pull list of variables out of route pattern" {
-    return REReplace(ArrayToList(REMatch("\[\*?(\w+)\]", arguments.pattern)), "[\*\[\]]", "", "ALL");
+    local.matchArray = arrayToList(REMatch("\[\*?(\w+)\]", arguments.pattern));
+    return REReplace(local.matchArray, "[\*\[\]]", "", "ALL");
   }
 
   // PRIVATE UTILITIES
 
-  private void function $addRoute()
+  private void function $addRoute(
+    required string pattern, required struct constraints)
     hint="Add route to cfwheels, removing useless params" {
 
     // remove controller and action if they are route variables
-    if (Find("[controller]", arguments.pattern) AND StructKeyExists(arguments, "controller"))
+    if (Find("[controller]", arguments.pattern)
+        AND StructKeyExists(arguments, "controller"))
       StructDelete(arguments, "controller");
-    if (Find("[action]", arguments.pattern) AND StructKeyExists(arguments, "action"))
+    if (Find("[action]", arguments.pattern)
+        AND StructKeyExists(arguments, "action"))
       StructDelete(arguments, "action");
 
     // normalize pattern, convert to regex, and strip out variable names
