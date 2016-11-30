@@ -1,6 +1,6 @@
 component output="false" {
 
-		variables.$class = {};
+	variables.$class = {};
 	variables.$class.plugins = {};
 	variables.$class.mixins = {};
 	variables.$class.mixableComponents = "application,dispatch,controller,model,base,sqlserver,mysql,mariadb,oracle,postgresql,h2,test";
@@ -167,7 +167,7 @@ component output="false" {
 				// loop through all plugin methods and enter injection info accordingly
 				// (based on the mixin value on the method or the default one set on the
 				// entire component)
-				local.pluginMethods = StructKeyList(local.plugin);
+				local.pluginMethods = listSort(StructKeyList(local.plugin), "textnocase", "asc");
 
 				for (local.iPluginMethods in local.pluginMethods) {
 
