@@ -758,6 +758,15 @@
 	}
 
 	public void function $loadRoutes() {
+		$simpleLock(
+				name="$mapperLoadRoutes"
+			, type="exclusive"
+			, timeout=5
+			, execute="$lockedLoadRoutes"
+		);
+	}
+
+	public void function $lockedLoadRoutes() {
 		local.appKey = $appKey();
 
 		// clear out the route info
