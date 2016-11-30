@@ -399,14 +399,15 @@ public void function onApplicationStart() {
 		$include(template="wheels/plugins/injection.cfm");
 	}
 
+	// create the mapper that will handle creating routes before $loadRoutes
+	// and after $loadPlugins
+	application.$wheels.mapper = $createObjectFromRoot(path="wheels", fileName="Mapper", method="init");
+
 	// load developer routes and adds the default wheels routes (unless the developer has specified not to)
 	$loadRoutes();
 
 	// create the dispatcher that will handle all incoming requests
 	application.$wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
-
-	// create the mapper that will handle creating routes
-	application.$wheels.mapper = $createObjectFromRoot(path="wheels", fileName="Mapper", method="init");
 
 	// assign it all to the application scope in one atomic call
 	application.wheels = application.$wheels;
