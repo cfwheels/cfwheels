@@ -571,15 +571,25 @@
 		required string objectPath,
 		required string type
 	) {
+		local.file =
+
 		// by default we return Model or Controller so that the base component gets loaded
 		local.rv = capitalize(arguments.type);
 
-		// we are going to store the full controller / model path in the existing / non-existing lists so we can have controllers / models in multiple places
-		local.fullObjectPath = arguments.objectPath & "/" & arguments.name;
+		// we are going to store the full controller / model path in the
+		// existing / non-existing lists so we can have controllers / models
+		// in multiple places
+		//
+		// The name coming into $objectFileName could have dot notation due to
+		// nested controllers so we need to change delims here on the name
+		local.fullObjectPath = arguments.objectPath & "/" & ListChangeDelims(arguments.name, '/', '.');
 
-		if (!ListFindNoCase(application.wheels.existingObjectFiles, local.fullObjectPath) && !ListFindNoCase(application.wheels.nonExistingObjectFiles, local.fullObjectPath))
-		{
-			// we have not yet checked if this file exists or not so let's do that here (the function below will return the file name with the correct case if it exists, false if not)
+		if (!ListFindNoCase(application.wheels.existingObjectFiles, local.fullObjectPath)
+				&& !ListFindNoCase(application.wheels.nonExistingObjectFiles, local.fullObjectPath)) {
+
+			// we have not yet checked if this file exists or not so let's do that
+			// here (the function below will return the file name with the correct
+			// case if it exists, false if not)
 			local.file = $fileExistsNoCase(Expandpath(arguments.objectPath) & "/" & arguments.name & ".cfc");
 
 			if (IsBoolean(local.file) && !local.file)
@@ -599,18 +609,21 @@
 				{
 					application.wheels.existingObjectFiles = ListAppend(application.wheels.existingObjectFiles, local.fullObjectPath);
 				}
-				local.rv = local.file;
 			}
 		}
-		else
+
+		// if the file exists we return the file name in its proper case
+		local.pos = ListFindNoCase(application.wheels.existingObjectFiles, local.fullObjectPath);
+		if (local.pos)
 		{
-			// if the file exists we return the file name in its proper case
-			local.pos = ListFindNoCase(application.wheels.existingObjectFiles, local.fullObjectPath);
-			if (local.pos)
-			{
-				local.rv = ListLast(ListGetAt(application.wheels.existingObjectFiles, local.pos), "/");
-			}
+			local.file = ListLast(ListGetAt(application.wheels.existingObjectFiles, local.pos), "/");
 		}
+
+		// we've found a file so we'll need to send back the corrected name
+		// argument as it could have dot notation in it from the mapper
+		if (!IsBoolean(local.file))
+			local.rv = ListSetAt(arguments.name, ListLen(arguments.name, "."), local.file, ".");
+
 		return local.rv;
 	}
 
