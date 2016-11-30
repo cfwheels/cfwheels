@@ -22,7 +22,8 @@
     // Documentation should reflect that best practice is to just use the
     // core.method() when calling to a core function
     if (!structKeyExists(variables.$stacks, local.methodName))
-      local.methodName = callStackGet()[2].function;
+
+     local.methodName = callStackGet()[2]["function"];
 
     if (!structKeyExists(variables.$stacks, local.methodName))
       throw(
