@@ -245,6 +245,9 @@
 	) {
 		local.rv = arguments.$baseTemplatePath;
 
+		// handle dot notation in the controller name
+		arguments.$controllerName = ListChangeDelims(arguments.$controllerName, '/', '.');
+
 		// extracts the file part of the path and replace ending ".cfm"
 		local.fileName = ReplaceNoCase(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".cfm", "", "all") & ".cfm";
 
