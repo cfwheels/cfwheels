@@ -164,26 +164,26 @@ CREATE TABLE photos
 
 <!--- create a foreign key for testing automatic associations --->
 <cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
-ALTER TABLE photos ADD CONSTRAINT fk_photos_galleryid FOREIGN KEY (galleryid) REFERENCES galleries(id)
+ALTER TABLE photos ADD CONSTRAINT fk_photos_galleryid FOREIGN KEY (galleryid) REFERENCES galleries(id);
 </cfquery>
 
 <!--- disable foreign key checks/constraints as the test data does not currently have referential integrity --->
 <cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 	<cfswitch expression="#loc.db#">
 		<cfcase value="microsoftsqlserver">
-			ALTER TABLE photos NOCHECK CONSTRAINT fk_photos_galleryid
+			ALTER TABLE photos NOCHECK CONSTRAINT fk_photos_galleryid;
 		</cfcase>
 		<cfcase value="mysql,mariadb">
-			SET FOREIGN_KEY_CHECKS = 0
+			SET FOREIGN_KEY_CHECKS = 0;
 		</cfcase>
 		<cfcase value="h2">
-			SET REFERENTIAL_INTEGRITY FALSE
+			SET REFERENTIAL_INTEGRITY FALSE;
 		</cfcase>
 		<cfcase value="postgresql">
-			ALTER TABLE photos DISABLE TRIGGER ALL
+			ALTER TABLE photos DISABLE TRIGGER ALL;
 		</cfcase>
 		<cfcase value="oracle">
-			ALTER TABLE photos DISABLE CONSTRAINT fk_photos_galleryid
+			ALTER TABLE photos DISABLE CONSTRAINT fk_photos_galleryid;
 		</cfcase>
 	</cfswitch>
 </cfquery>
