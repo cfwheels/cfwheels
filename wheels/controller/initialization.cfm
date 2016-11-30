@@ -46,8 +46,14 @@
 		variables.$instance = {};
 		variables.$instance.contentFor = {};
 
-		// include controller specific helper files if they exist, cache the file check for performance reasons
-		local.template = get("viewPath") & "/" & LCase(arguments.name) & "/helpers.cfm";
+		// include controller specific helper files if they exist,
+		// cache the file check for performance reasons
+		// name could be dot notation so we need to change delims
+		local.template = get("viewPath")
+			& "/"
+			& LCase(ListChangeDelims(arguments.name, '/', '.'))
+			& "/helpers.cfm";
+
 		local.helperFileExists = false;
 		if (!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.name))
 		{
