@@ -22,6 +22,14 @@ component extends="wheels.tests.Test" {
 		assert('user.valid()');
 	}
 
+	function test_validates_presence_of_valid_with_default_on_update() {
+		user = model("UserBlank").findOne(); // use existing user to test update
+		user.birthtime = "";
+		user.save(transaction="rollback");
+		arrResult = user.errorsOn("birthtime");
+		assert("ArrayLen(arrResult) eq 1 AND arrResult[1].message eq 'Birthtime can''t be empty'");
+	}
+
 	function test_validates_length_of_invalid() {
 		user.state = "Too many characters!";
 		user.valid();

@@ -1,6 +1,6 @@
 component output="false" {
 
-		variables.$class = {};
+	variables.$class = {};
 	variables.$class.plugins = {};
 	variables.$class.mixins = {};
 	variables.$class.mixableComponents = "application,dispatch,controller,mapper,model,base,sqlserver,mysql,mariadb,oracle,postgresql,h2,test";
@@ -167,7 +167,7 @@ component output="false" {
 				// loop through all plugin methods and enter injection info accordingly
 				// (based on the mixin value on the method or the default one set on the
 				// entire component)
-				local.pluginMethods = StructKeyList(local.plugin);
+				local.pluginMethods = listSort(StructKeyList(local.plugin), "textnocase", "asc");
 
 				for (local.iPluginMethods in local.pluginMethods) {
 
@@ -207,7 +207,7 @@ component output="false" {
 											|| !structKeyExists(variables.$class.mixins[local.iMixableComponent]["$stacks"], local.iPluginMethods))
 										variables.$class.mixins[local.iMixableComponent]["$stacks"][local.iPluginMethods] = [];
 
-									arrayPrepend(variables.$class.mixins[local.iMixableComponent]["$stacks"][local.iPluginMethods], local.plugin[local.iPluginMethods])
+									arrayPrepend(variables.$class.mixins[local.iMixableComponent]["$stacks"][local.iPluginMethods], local.plugin[local.iPluginMethods]);
 								}
 							};
 						}
