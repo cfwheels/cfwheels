@@ -12,33 +12,27 @@
 	}
 
 	public any function $initControllerClass(string name="") {
-			variables.$class.name = arguments.name;
-			variables.$class.path = arguments.path;
+		variables.$class.name = arguments.name;
+		variables.$class.path = arguments.path;
 
-			variables.$class.verifications = [];
-			variables.$class.filters = [];
-			variables.$class.cachableActions = [];
-			variables.$class.layout = {};
+		variables.$class.verifications = [];
+		variables.$class.filters = [];
+		variables.$class.cachableActions = [];
+		variables.$class.layout = {};
 
-			// default the controller to only respond to html
-			variables.$class.formats = {};
-			variables.$class.formats.default = "html";
-			variables.$class.formats.actions = {};
-			variables.$class.formats.existingTemplates = "";
-			variables.$class.formats.nonExistingTemplates = "";
+		// default the controller to only respond to html
+		variables.$class.formats = {};
+		variables.$class.formats.default = "html";
+		variables.$class.formats.actions = {};
+		variables.$class.formats.existingTemplates = "";
+		variables.$class.formats.nonExistingTemplates = "";
 
-			// setup direct helper methods for named routes
-			for (local.namedRoute in application.wheels.namedRoutePositions) {
-				variables[loc.key & "Path"] = $namedRoute;
-				variables[loc.key & "Url"] = $namedRoute;
-			}
-
-			$setFlashStorage(get("flashStorage"));
-			if (StructKeyExists(variables, "init"))
-			{
-				init();
-			}
-			local.rv = this;
+		$setFlashStorage(get("flashStorage"));
+		if (StructKeyExists(variables, "init"))
+		{
+			init();
+		}
+		local.rv = this;
 		return local.rv;
 	}
 
@@ -51,6 +45,12 @@
 		// create a struct for storing request specific data
 		variables.$instance = {};
 		variables.$instance.contentFor = {};
+
+		// setup direct helper methods for named routes
+		for (local.namedRoute in application.wheels.namedRoutePositions) {
+			variables[local.namedRoute & "Path"] = $namedRoute;
+			variables[local.namedRoute & "Url"] = $namedRoute;
+		}
 
 		// include controller specific helper files if they exist,
 		// cache the file check for performance reasons
