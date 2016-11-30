@@ -27,6 +27,12 @@
 			variables.$class.formats.existingTemplates = "";
 			variables.$class.formats.nonExistingTemplates = "";
 
+			// setup direct helper methods for named routes
+			for (local.namedRoute in application.wheels.namedRoutePositions) {
+				variables[loc.key & "Path"] = $namedRoute;
+				variables[loc.key & "Url"] = $namedRoute;
+			}
+
 			$setFlashStorage(get("flashStorage"));
 			if (StructKeyExists(variables, "init"))
 			{
