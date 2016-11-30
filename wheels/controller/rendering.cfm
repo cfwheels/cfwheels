@@ -10,7 +10,7 @@
 		any cache="",
 		string returnAs="",
 		boolean hideDebugInformation=false
-	) { 
+	) {
 		$args(name="renderPage", args=arguments);
 		$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
 		if (get("showDebugInformation"))
@@ -69,7 +69,7 @@
 			return local.rv;
 		}
 	}
- 
+
 	public void function renderNothing() {
 		variables.$instance.response = "";
 	}
@@ -139,7 +139,7 @@
 	public string function $renderPage() {
 		if (!Len(arguments.$template))
 		{
-			arguments.$template = "/" & arguments.$controller & "/" & arguments.$action;
+			arguments.$template = "/" & ListChangeDelims(arguments.$controller, '/', '.') & "/" & arguments.$action;
 		}
 		arguments.$type = "page";
 		arguments.$name = arguments.$template;
@@ -241,7 +241,7 @@
 		required any $type,
 		string $controllerName=variables.params.controller,
 		string $baseTemplatePath=get('viewPath'),
-		boolean $prependWithUnderscore=true 
+		boolean $prependWithUnderscore=true
 	) {
 		local.rv = arguments.$baseTemplatePath;
 
