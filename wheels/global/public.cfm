@@ -193,126 +193,159 @@
 		numeric port,
 		string $URLRewriting=application.wheels.URLRewriting
 	) {
+
 		$args(name="URLFor", args=arguments);
+
+		local.coreVariables = "controller,action,key,format";
+
 		local.params = {};
-		if (StructKeyExists(variables, "params")) {
+		if (StructKeyExists(variables, "params"))
 			StructAppend(local.params, variables.params);
+
+		// error if host or protocol are passed with onlyPath=true
+		if (application.wheels.showErrorInformation
+				&& arguments.onlyPath
+				&& (Len(arguments.host) OR Len(arguments.protocol))) {
+			$throw(
+					type="Wheels.IncorrectArguments"
+				, message="Can't use the `host` or `protocol` arguments when `onlyPath` is `true`."
+				, extendedInfo="Set `onlyPath` to `false` so that `linkTo` will create absolute URLs and thus allowing you to set the `host` and `protocol` on the link."
+			);
 		}
-		if (application.wheels.showErrorInformation) {
-			if (arguments.onlyPath && (Len(arguments.host) || Len(arguments.protocol) || arguments.port)) {
-				$throw(type="Wheels.IncorrectArguments", message="Can't use the `host`, `protocol` and `port` arguments when `onlyPath` is `true`.", extendedInfo="Set `onlyPath` to `false` so that absolute URLs are created, thus allowing you to set `host`, `protocol` and `port`.");
-			}
-		}
 
-		// get primary key values if an object was passed in
-		if (IsObject(arguments.key)) {
-			arguments.key = arguments.key.key();
-		}
+		// Look up actual route paths instead of providing default Wheels path generation
+		if (arguments.route == "" && arguments.action != "") {
 
-		// build the link (could use some refactoring, lots of duplication related to obfuscating for example)
-		local.rv = application.wheels.webPath & ListLast(request.cgi.script_name, "/");
-		if (Len(arguments.route)) {
-			// link for a named route
-			local.route = $findRoute(argumentCollection=arguments);
-			if (arguments.$URLRewriting == "Off") {
-				local.rv &= "?controller=";
-				if (Len(arguments.controller)) {
-					local.rv &= hyphenize(arguments.controller);
-				} else {
-					local.rv &= hyphenize(local.route.controller);
-				}
-				local.rv &= "&action=";
-				if (Len(arguments.action)) {
-					local.rv &= hyphenize(arguments.action);
-				} else {
-					local.rv &= hyphenize(local.route.action);
-				}
-
-				// add it the format if it exists
-				if (StructKeyExists(local.route, "formatVariable") && StructKeyExists(arguments, local.route.formatVariable)) {
-					local.rv &= "&#local.route.formatVariable#=#arguments[local.route.formatVariable]#";
-				}
-
-				local.iEnd = ListLen(local.route.variables);
-				for (local.i=1; local.i <= local.iEnd; local.i++) {
-					local.property = ListGetAt(local.route.variables, local.i);
-					if (local.property != "controller" && local.property != "action") {
-						local.param = $URLEncode(arguments[local.property]);
-						if (application.wheels.obfuscateUrls) {
-							local.param = obfuscateParam("#local.param#");
-						}
-						local.rv &= "&" & local.property & "=" & local.param;
-					}
-				}
-			} else {
-				local.iEnd = ListLen(local.route.pattern, "/");
-				for (local.i=1; local.i <= local.iEnd; local.i++) {
-					local.property = ListGetAt(local.route.pattern, local.i, "/");
-					if (Find("[", local.property)) {
-						local.property = Mid(local.property, 2, Len(local.property)-2);
-						if (application.wheels.showErrorInformation && !StructKeyExists(arguments, local.property)) {
-							$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The route chosen by CFWheels `#local.route.name#` requires the argument `#local.property#`. Pass the argument `#local.property#` or change your routes to reflect the proper variables needed.");
-						}
-						local.param = $URLEncode(arguments[local.property]);
-						if (local.property == "controller" || local.property == "action") {
-							local.param = hyphenize(local.param);
-						} else if (application.wheels.obfuscateUrls) {
-							// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
-							local.param = obfuscateParam("#local.param#");
-						}
-						local.rv &= "/" & local.param; // get param from arguments
-					} else {
-						local.rv &= "/" & local.property; // add hard coded param from route
-					}
-				}
-				// add it the format if it exists
-				if (StructKeyExists(local.route, "formatVariable") && StructKeyExists(arguments, local.route.formatVariable)) {
-					local.rv &= ".#arguments[local.route.formatVariable]#";
-				}
-			}
-		} else {
-			// link based on controller/action/key
-			// when no controller or action was passed in we link to the current page (controller/action only, not query string etc) by default
-			if (!Len(arguments.controller) && !Len(arguments.action) && StructKeyExists(local.params, "action")) {
-				arguments.action = local.params.action;
-			}
-			if (!Len(arguments.controller) && StructKeyExists(local.params, "controller")) {
+			if (arguments.controller == "")
 				arguments.controller = local.params.controller;
-			}
-			if (Len(arguments.key) && !Len(arguments.action) && StructKeyExists(local.params, "action")) {
-				arguments.action = local.params.action;
-			}
-			local.rv &= "?controller=" & hyphenize(arguments.controller);
-			if (Len(arguments.action)) {
-				local.rv &= "&action=" & hyphenize(arguments.action);
-			}
-			if (Len(arguments.key)) {
-				local.param = $URLEncode(arguments.key);
-				if (application.wheels.obfuscateUrls) {
-					// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
-					local.param = obfuscateParam("#local.param#");
+
+			// determine key and look up cache structure
+			local.key = arguments.controller & "##" & arguments.action;
+			local.cache = request.wheels.urlForCache;
+
+			if (!structKeyExists(local.cache, local.key)) {
+
+				// loop over routes to find matching one
+				for (local.i = 1; local.i <= ArrayLen(application.wheels.routes); local.i++) {
+					local.route = application.wheels.routes[local.i];
+
+					// if found, cache the route name, set up arguments, and break from loop
+					if (StructKeyExists(local.route, "controller")
+							&& local.route.controller == arguments.controller
+							&& StructKeyExists(local.route, "action")
+							&& local.route.action == arguments.action) {
+						arguments.route = local.route.name;
+						local.cache[local.key] = arguments.route;
+						break;
+					}
 				}
-				local.rv &= "&key=" & local.param;
+			}
+
+			arguments.route = local.cache[local.key];
+		}
+
+		// look up route pattern to use
+		if (arguments.route NEQ "") {
+
+			local.route = $findRoute(argumentCollection=arguments);
+			local.variables = local.route.variables;
+			local.rv = local.route.pattern;
+
+		// use default route pattern
+		} else {
+			local.route = {};
+			local.variables = local.coreVariables;
+			local.rv = "/[controller]/[action]/[key].[format]";
+
+			// set controller and action based on controller params
+			if (StructKeyExists(local, "params")) {
+				if (arguments.action == ""
+						&& StructKeyExists(local.params, "action")
+						&& (arguments.controller != ""
+								|| arguments.key != ""
+								|| StructKeyExists(arguments, "format")))
+					arguments.action = local.params.action;
+				if (arguments.controller == ""
+						&& StructKeyExists(local.params, "controller"))
+					arguments.controller = local.params.controller;
 			}
 		}
-		if (arguments.$URLRewriting != "Off") {
-			local.rv = Replace(local.rv, "?controller=", "/");
-			local.rv = Replace(local.rv, "&action=", "/");
-			local.rv = Replace(local.rv, "&key=", "/");
+
+		// replace pattern if there is no rewriting enabled
+		if (arguments.$URLRewriting == "Off") {
+			local.variables = ListPrepend(local.variables, local.coreVariables);
+			local.rv = "?controller=[controller]&action=[action]&key=[key]&format=[format]";
 		}
-		if (arguments.$URLRewriting == "On") {
-			local.rv = Replace(local.rv, application.wheels.rewriteFile, "");
-			local.rv = Replace(local.rv, "//", "/");
+
+		// replace each params variable with the correct value
+		for (local.i = 1; local.i <= ListLen(local.variables); local.i++) {
+			local.property = ListGetAt(local.variables, local.i);
+			local.reg = "\[\*?#local.property#\]";
+
+			// read necessary variables from different sources
+			if (StructKeyExists(arguments, local.property)
+					&& Len(arguments[local.property]))
+				local.value = arguments[local.property];
+			else if (StructKeyExists(local.route, local.property))
+				local.value = local.route[local.property];
+			else if (arguments.route != "" && arguments.$URLRewriting != "Off")
+				$throw(
+						type="Wheels.IncorrectRoutingArguments"
+					, message="Incorrect Arguments"
+					, extendedInfo="The route chosen by Wheels `#local.route.name#` requires the argument `#local.property#`. Pass the argument `#local.property#` or change your routes to reflect the proper variables needed.");
+			else
+				continue;
+
+			// if value is a model object, get its key value
+			if (IsObject(local.value))
+				local.value = local.value.toParam();
+
+			// any value we find from above, URL encode it here
+			local.value = $URLEncode(local.value);
+
+			// if property is not in pattern, store it in the params argument
+			if (!REFind(local.reg, local.rv)) {
+				if (!ListFindNoCase(local.coreVariables, local.property))
+					arguments.params = ListAppend(
+							arguments.params
+						, "#local.property#=#local.value#"
+						, "&"
+					);
+				continue;
+			}
+
+			// transform value before setting it in pattern
+			if (local.property == "controller" || local.property == "action")
+				local.value = hyphenize(local.value);
+			else if (application.wheels.obfuscateUrls)
+				local.value = obfuscateParam(local.value);
+
+			local.rv = REReplace(local.rv, local.reg, local.value);
 		}
-		if (Len(arguments.params)) {
-			local.rv &= $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
-		}
-		if (Len(arguments.anchor)) {
-			local.rv &= "##" & arguments.anchor;
-		}
-		if (!arguments.onlyPath) {
-			local.rv = $prependUrl(path=local.rv, argumentCollection=arguments);
-		}
+
+		// clean up unused keys in pattern
+		local.rv = REReplace(local.rv, "((&|\?)\w+=|\/|\.)\[\*?\w+\]", "", "ALL");
+
+		// apply anchor and additional parameters
+    if (arguments.$URLRewriting != "Off") {
+      local.rv = Replace(local.rv, "?controller=", "/");
+      local.rv = Replace(local.rv, "&action=", "/");
+      local.rv = Replace(local.rv, "&key=", "/");
+    }
+    if (arguments.$URLRewriting == "On") {
+      local.rv = Replace(local.rv, application.wheels.rewriteFile, "");
+      local.rv = Replace(local.rv, "//", "/");
+    }
+    if (Len(arguments.params)) {
+      local.rv &= $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
+    }
+    if (Len(arguments.anchor)) {
+      local.rv &= "##" & arguments.anchor;
+    }
+    if (!arguments.onlyPath) {
+      local.rv = $prependUrl(path=local.rv, argumentCollection=arguments);
+    }
+
 		return local.rv;
 	}
 
