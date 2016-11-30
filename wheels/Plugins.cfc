@@ -21,6 +21,8 @@ component output="false" {
 		StructAppend(variables.$class, arguments);
 		/* handle pathing for different operating systems */
 		variables.$class.pluginPathFull = ReplaceNoCase(ExpandPath(variables.$class.pluginPath), "\", "/", "all");
+		/* sort direction */
+		variables.sort = "ASC";
 		/* extract out plugins */
 		$pluginsExtract();
 		/* remove orphan plugin directories */
@@ -107,7 +109,7 @@ component output="false" {
 
 	public void function $pluginsProcess() {
 		local.plugins = $pluginFolders();
-		local.pluginKeys = StructKeyList(local.plugins);
+		local.pluginKeys = listSort(StructKeyList(local.plugins), "textnocase", variables.sort);
 		local.wheelsVersion = SpanExcluding(variables.$class.wheelsVersion, " ");
 		for (local.pluginKey in local.pluginKeys) {
 			local.pluginValue = local.plugins[local.pluginKey];
@@ -145,7 +147,15 @@ component output="false" {
 		for (local.iMixableComponents in variables.$class.mixableComponents)
 			variables.$class.mixins[local.iMixableComponents] = {};
 
-		for (local.iPlugin in variables.$class.plugins) {
+		// get a sorted list of plugins so that we run through them the same on
+		// every platform
+		local.pluginKeys = listToArray(listSort(
+				structKeyList(variables.$class.plugins)
+			, "textnocase"
+			, variables.sort
+		));
+
+		for (local.iPlugin in local.pluginKeys) {
 
 			// reference the plugin
 			local.plugin = variables.$class.plugins[local.iPlugin];
@@ -167,7 +177,7 @@ component output="false" {
 				// loop through all plugin methods and enter injection info accordingly
 				// (based on the mixin value on the method or the default one set on the
 				// entire component)
-				local.pluginMethods = listSort(StructKeyList(local.plugin), "textnocase", "asc");
+				local.pluginMethods = StructKeyList(local.plugin);
 
 				for (local.iPluginMethods in local.pluginMethods) {
 
@@ -259,13 +269,13 @@ component output="false" {
 	}
 
 	public query function $folders() {
-		local.query = $directory(action="list", directory=variables.$class.pluginPathFull, type="dir");
-		return $query(dbtype="query", query=local.query, sql="select * from query where name not like '.%'");
+		local.query = $directory(action="list", directory=variables.$class.pluginPathFull, type="dir", sort="name #variables.sort#");
+		return $query(dbtype="query", query=local.query, sql="select * from query where name not like '.%' ORDER BY name #variables.sort#");
 	}
 
 	public query function $files() {
-		local.query = $directory(action="list", directory=variables.$class.pluginPathFull, filter="*.zip", type="file", sort="name DESC");
-		return $query(dbtype="query", query=local.query, sql="select * from query where name not like '.%' order by name");
+		local.query = $directory(action="list", directory=variables.$class.pluginPathFull, filter="*.zip", type="file", sort="name #variables.sort#");
+		return $query(dbtype="query", query=local.query, sql="select * from query where name not like '.%' ORDER BY name #variables.sort#");
 	}
 
 }
