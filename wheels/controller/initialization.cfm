@@ -1,9 +1,9 @@
-<cfscript>  
+<cfscript>
 	/**
 	* PRIVATE FUNCTIONS
-	*/   
+	*/
 
-	public any function $createControllerObject(required struct params) { 
+	public any function $createControllerObject(required struct params) {
 		// if the controller file exists we instantiate it, otherwise we instantiate the parent controller
 		// this is done so that an action's view page can be rendered without having an actual controller file for it
 		local.controllerName = $objectFileName(name=variables.$class.name, objectPath=variables.$class.path, type="controller");
@@ -14,13 +14,6 @@
 	public any function $initControllerClass(string name="") {
 			variables.$class.name = arguments.name;
 			variables.$class.path = arguments.path;
-
-			// if our name has pathing in it, remove it and add it to the end of of the $class.path variable
-			if (Find("/", arguments.name))
-			{
-				variables.$class.name = ListLast(arguments.name, "/");
-				variables.$class.path = ListAppend(arguments.path, ListDeleteAt(arguments.name, ListLen(arguments.name, "/"), "/"), "/");
-			}
 
 			variables.$class.verifications = [];
 			variables.$class.filters = [];
@@ -41,12 +34,12 @@
 			}
 			local.rv = this;
 		return local.rv;
-	} 
+	}
 
 	public void function $setControllerClassData() {
 		variables.$class = application.wheels.controllers[arguments.name].$getControllerClassData();
 	}
- 
+
 	public any function $initControllerObject(required string name, required struct params) {
 
 		// create a struct for storing request specific data
@@ -87,9 +80,9 @@
 		local.rv = this;
 		return local.rv;
 	}
- 
+
 	public struct function $getControllerClassData() {
 		local.rv = variables.$class;
 		return local.rv;
-	} 
+	}
 </cfscript>
