@@ -79,7 +79,7 @@
 		local.iEnd =ArrayLen(application.wheels.routes);;
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 
-			local.route = application[$wheelsKey()].routes[local.i];
+			local.route = application.wheels.routes[local.i];
 
 			// if method doesn't match, skip this route
 			if (StructKeyExists(local.route, "methods")
