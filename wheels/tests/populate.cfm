@@ -245,7 +245,7 @@ CREATE TABLE tblusers
 	,birthday #loc.datetimeColumnType# NULL
 	,birthdaymonth #loc.intColumnType# NULL
 	,birthdayyear #loc.intColumnType# NULL
-	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NULL
+	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NOT NULL
 	,isactive #loc.intColumnType# NULL
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
@@ -268,13 +268,11 @@ CREATE TABLE users
 	,birthday #loc.datetimeColumnType# NULL
 	,birthdaymonth #loc.intColumnType# NULL
 	,birthdayyear #loc.intColumnType# NULL
-	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NULL
+	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NOT NULL
 	,isactive #loc.intColumnType# NULL
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
-
->>>>>>> 38c13a0739788f4fca654a2a8f101d748db4086e
 
 <!--- create oracle sequences --->
 <cfif loc.db eq "oracle">
