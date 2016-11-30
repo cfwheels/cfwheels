@@ -17,7 +17,7 @@
 		}
 		variables.$class.formats.default = ListAppend(variables.$class.formats.default, arguments.formats);
 	}
-	
+
 	/*
 	* PUBLIC CONTROLLER REQUEST FUNCTIONS
 	*/
@@ -97,13 +97,13 @@
 				local.status=arguments.status;
 				if(isNumeric(local.status)){
 					local.statusCode=local.status;
-					local.statusText=$returnStatusText(local.status); 
-				} else { 
+					local.statusText=$returnStatusText(local.status);
+				} else {
 					// Try for statuscode;
 					local.statusCode=$returnStatusCode(local.status);
 					local.statusText=local.status;
 				}
-				$header(statusCode=local.statusCode, statusText=local.statusText); 
+				$header(statusCode=local.statusCode, statusText=local.statusText);
 			}
 
 			// if we do not have the local.content variable and we are not rendering html then try to create it
@@ -189,7 +189,7 @@
 		local.rv = "";
 		if (!Len(arguments.template))
 		{
-			local.rv = "/" & arguments.controller & "/" & arguments.action;
+			local.rv = "/" & ListChangeDelims(arguments.controller, '/', '.') & "/" & arguments.action;
 		}
 		else
 		{
@@ -251,28 +251,28 @@
 		return local.rv;
 	}
 
-	public string function $returnStatusText(numeric status=200) { 
+	public string function $returnStatusText(numeric status=200) {
 		local.status      = arguments.status;
 		local.statusCodes = $getStatusCodes();
-		local.rv          =  "";		 
+		local.rv          =  "";
 		if(structKeyExists(local.statuscodes, local.status)){
 			local.rv = local.statuscodes[local.status];
 		} else {
 			$throw(type="Wheels.RenderingError", message="An invalid http response code #local.status# was passed in.");
-		} 
+		}
 		return local.rv;
 	}
 
 	public string function $returnStatusCode(any status=200) {
 		local.status      = arguments.status;
 		local.statusCodes = $getStatusCodes();
-		local.rv          =  "";	 
+		local.rv          =  "";
 		local.lookup=StructFindValue(local.statuscodes, local.status);
 		if(arrayLen(local.lookup)){
       		local.rv = local.lookup[1]["key"];
       	} else {
 			$throw(type="Wheels.RenderingError", message="An invalid http response text #local.status# was passed in.");
-		} 
+		}
 		return local.rv;
 	}
 
@@ -343,4 +343,4 @@
 		};
 		return local.rv;
 	}
-</cfscript>  
+</cfscript>
