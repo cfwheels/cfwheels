@@ -44,17 +44,8 @@ component extends="wheels.tests.Test" {
 		assert("e eq r");
 	}
 
-	function test_with_spamProtection() {
-		args.spamProtection = "true";
-		args.action = "myaction";
-		argsction = _controller.toXHTML(_controller.urlfor(argumentCollection=args));
-		e = '<form method="post" onsubmit="this.action=''#Left(argsction, int((Len(argsction)/2)))#''+''#Right(argsction, ceiling((Len(argsction)/2)))#'';">';
-		r = _controller.startFormTag(argumentcollection=args);
-		assert("e eq r");
-	}
-
-	function test_with_home_route() {
-		args.route = "home";
+	function test_with_root_route() {
+		args.route = "root";
 		argsction = _controller.toXHTML(_controller.urlfor(argumentCollection=args));
 		e = '<form action="#argsction#" method="post">';
 		r = _controller.startFormTag(argumentcollection=args);

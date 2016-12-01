@@ -37,7 +37,7 @@
 		request.wheels.currentFormMethod = arguments.method;
 
 		// if we have a route and method, tap
-		if (structKeyExists(arguments, "route") && structKeyExists(arguments, "method")) {
+		if (len(arguments.route) && structKeyExists(arguments, "method")) {
 
 			// throw a nice wheels error if the developer passes in a route that was not generated
 			if (application.wheels.showErrorInformation
@@ -95,8 +95,8 @@
 
 		local.rv = arguments.prepend & $tag(name="form", skip=local.skip, attributes=arguments) & arguments.append;
 
-		if (local.method != "get")
-			local.returnValue &= hiddenFieldTag(name="_method", value=local.method);
+		if (structKeyExists(local, "method") && local.method != "get")
+			local.rv &= hiddenFieldTag(name="_method", value=local.method);
 
 		return local.rv;
 	}
