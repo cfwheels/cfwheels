@@ -1,23 +1,34 @@
 component extends="wheels.tests.Test" {
 
 	function setup(){
-		copies = Duplicate(application.wheels);
 		_params = {controller="dummy", action="dummy"};
 		_controller = controller("dummy", _params);
-		route = StructNew();
-		route.name = "pagination";
-		route.pattern = "pag/ina/tion/[special]";
-		route.controller = "pagi";
-		route.action = "nation";
-		route.variables = "special";
-		ArrayInsertAt(application.wheels.routes, 2, route);
-		application.wheels.namedRoutePositions.pagination = 2;
+    _originalRoutes = application[$appKey()].routes;
+    _originalRewrite = application.wheels.URLRewriting;
+    $clearRoutes();
+    drawRoutes()
+    	.match(name="pagination", pattern="pag/ina/tion/[special]", to="pagi##nation")
+    .end();
+    $setNamedRoutePositions();
 		application.wheels.URLRewriting = "On";
 	}
 
-	function teardown(){
-		application.wheels = copies;
-	}
+  public void function teardown() {
+    application[$appKey()].routes = _originalRoutes;
+    application.wheels.URLRewriting = _originalRewrite;
+  }
+
+  public void function $clearRoutes() {
+    application[$appKey()].routes = [];
+    application.wheels.namedRoutePositions = {};
+  }
+
+
+  public void function $dump() {
+    teardown();
+    super.$dump(argumentCollection=arguments);
+  }
+
 
 	function test_current_page(){
 
@@ -55,11 +66,12 @@ component extends="wheels.tests.Test" {
  	}
 
  	function test_page_as_route_param_with_route_containing_page_parameter_in_variables(){
+    $clearRoutes();
+    drawRoutes()
+    	.match(name="pagination", pattern="pag/ina/tion/[special]/[page]", to="pagi##nation")
+    .end();
+    $setNamedRoutePositions();
 		authors = model("author").findAll(page=2, perPage=3, order="lastName");
-		addToPattern = "/[page]";
-		addToVariables = ",page";
-		application.wheels.routes[2].pattern = application.wheels.routes[2].pattern & addToPattern;
-		application.wheels.routes[2].variables = application.wheels.routes[2].variables & addToVariables;
 		result = _controller.paginationLinks(route="pagination", special=99);
 		assert("result Contains '/pag/ina/tion/99/3'");
 		result = _controller.paginationLinks(route="pagination", special=99, pageNumberAsParam="false");
