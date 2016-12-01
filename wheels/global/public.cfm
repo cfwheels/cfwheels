@@ -239,13 +239,6 @@
 						break;
 					}
 				}
-
-				// if we've gotten here, there wasn't a route found
-				$throw(
-						type="Wheels.RouteNotFound"
-					, message="Could not find a route for controller `#arguments.controller#` and action `#arguments.action#`."
-					, extendedInfo="Create a new route in `config/routes.cfm` with the name `#arguments.route#`."
-				);
 			}
 
 			if (structKeyExists(local.cache, local.key))
