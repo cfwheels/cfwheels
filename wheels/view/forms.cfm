@@ -16,7 +16,6 @@
 	public string function startFormTag(
 		string method,
 		boolean multipart,
-		boolean spamProtection,
 		string route="",
 		string controller="",
 		string action="",
@@ -32,8 +31,38 @@
 	) {
 		$args(name="startFormTag", args=arguments);
 
+		local.routeAndMethodMatch = false;
+
 		// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
 		request.wheels.currentFormMethod = arguments.method;
+
+		// if we have a route and method, tap
+		if (structKeyExists(arguments, "route") && structKeyExists(arguments, "method")) {
+
+			// throw a nice wheels error if the developer passes in a route that was not generated
+			if (application.wheels.showErrorInformation
+					&& !StructKeyExists(application.wheels.namedRoutePositions, arguments.route))
+				$throw(
+						type="Wheels.RouteNotFound"
+					, message="Route Not Found"
+					, extendedInfo="The route specified `#arguments.route#` does not exist!"
+				);
+
+			// check to see if the route specified has a method to match the one passed in
+			for (local.position in ListToArray(application.wheels.namedRoutePositions[arguments.route]))
+				if (StructKeyExists(application.wheels.routes[local.position], "methods")
+						&& ListFindNoCase(application.wheels.routes[local.position].methods, arguments.method))
+					local.routeAndMethodMatch = true;
+
+			if (local.routeAndMethodMatch) {
+
+				// save the method passed in
+				local.method = arguments.method;
+
+				if (arguments.method != "get")
+					arguments.method = "post";
+			}
+		}
 
 		// set the form's action attribute to the URL that we want to send to
 		if (!ReFindNoCase("^https?:\/\/", arguments.action))
@@ -43,14 +72,6 @@
 
 		// make sure we return XHMTL compliant code
 		arguments.action = toXHTML(arguments.action);
-
-		// deletes the action attribute and instead adds some tricky javascript spam protection to the onsubmit attribute
-		if (arguments.spamProtection)
-		{
-			local.onsubmit = "this.action='#Left(arguments.action, int((Len(arguments.action)/2)))#'+'#Right(arguments.action, ceiling((Len(arguments.action)/2)))#';";
-			arguments.onsubmit = $addToJavaScriptAttribute(name="onsubmit", content=local.onsubmit, attributes=arguments);
-			StructDelete(arguments, "action");
-		}
 
 		// set the form to be able to handle file uploads
 		if (!StructKeyExists(arguments, "enctype") && arguments.multipart)
@@ -73,6 +94,10 @@
 		}
 
 		local.rv = arguments.prepend & $tag(name="form", skip=local.skip, attributes=arguments) & arguments.append;
+
+		if (local.method != "get")
+			local.returnValue &= hiddenFieldTag(name="_method", value=local.method);
+
 		return local.rv;
 	}
 
