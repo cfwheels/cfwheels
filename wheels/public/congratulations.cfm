@@ -32,11 +32,11 @@ Welcome to the wonderful world of CFWheels. We hope you will enjoy it!</p>
 		<p>Open the routes configuration file at <code>config/routes.cfm</code>.</p>
 	</li>
 	<li>
-		<p>You will see a line similar to this for a route named <code>home</code>:</p>
-		<pre><code>addRoute(name=&quot;home&quot;, pattern=&quot;&quot;, controller=&quot;wheels&quot;, action=&quot;wheels&quot;);</code></pre>
+		<p>You will see a line similar to this for a route named <code>root</code>:</p>
+		<pre><code>drawRoutes().root(to=&quot;wheels####wheels&quot;, method=&quot;get&quot;).end();</code></pre>
 	</li>
 	<li>
-		<p>Simply change the <code>controller</code> and <code>action</code> arguments to a controller and action of your choosing.</p>
+		<p>Simply change the <code>to</code> parameter to specify a <code>controller####action</code> of your choosing.</p>
 	</li>
 	<li>
 		<p>Reload your CFWheels application.</p>
