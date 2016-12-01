@@ -1,6 +1,8 @@
 <cfscript>
 
 public function protectFromForgery(string with = "exception", string only = "", string except = "") {
+	$args(args=arguments, name="protectFromForgery");
+
 	// Store settings for this controller in `$class` for later use.
 	variables.$class.csrf.type = arguments.with;
 	variables.$class.csrf.only = arguments.only;
