@@ -241,11 +241,12 @@
 				}
 			}
 
-			arguments.route = local.cache[local.key];
+			if (structKeyExists(local.cache, local.key))
+				arguments.route = local.cache[local.key];
 		}
 
 		// look up route pattern to use
-		if (arguments.route NEQ "") {
+		if (len(arguments.route)) {
 
 			local.route = $findRoute(argumentCollection=arguments);
 			local.variables = local.route.variables;
