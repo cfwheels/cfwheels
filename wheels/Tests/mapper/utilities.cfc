@@ -55,21 +55,21 @@ component extends="wheels.tests.Test" {
     mapper = $mapper();
     pattern = "/";
     regex = mapper.patternToRegex(pattern);
-    assert('regex eq "^/?$"');
+    assert('regex eq "^\/?$"');
   }
 
   function test_patternToRegex_root_with_format() {
     mapper = $mapper();
     pattern = "/.[format]";
     regex = mapper.patternToRegex(pattern);
-    assert('regex eq "^\.(\w+)/?$"');
+    assert('regex eq "^\.(\w+)\/?$"');
   }
 
   function test_patternToRegex_with_basic_catch_all_pattern() {
     mapper = $mapper();
     pattern = "/[controller]/[action]/[key].[format]";
     regex = mapper.patternToRegex(pattern);
-    assert('regex eq "^([^\/]+)/([^.\/]+)/([^.\/]+)\.(\w+)/?$"');
+    assert('regex eq "^([^\/]+)\/([^\.\/]+)\/([^\.\/]+)\.(\w+)\/?$"');
   }
 
   // stripRouteVariables
