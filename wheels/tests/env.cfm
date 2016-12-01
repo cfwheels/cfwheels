@@ -17,4 +17,23 @@ application.wheels.transactionMode = "none";
 
 /* turn off request query caching */
 application.wheels.cacheQueriesDuringRequest = false;
+
+// CSRF
+application.wheels.csrfCookieName = "_wheels_test_authenticity";
+application.wheels.csrfCookieEncryptionAlgorithm = "AES";
+application.wheels.csrfCookieEncryptionSecretKey = GenerateSecretKey("AES");
+application.wheels.csrfCookieEncryptionEncoding = "Base64";
+
+// Setup CSRF token and cookie. The cookie can always be in place, even when the session-based CSRF storage is being
+// tested.
+dummyController = controller("dummy");
+csrfToken = dummyController.$generateCookieAuthenticityToken();
+
+cookie[application.wheels.csrfCookieName] = Encrypt(
+  SerializeJson({ authenticityToken=csrfToken }),
+  application.wheels.csrfCookieEncryptionSecretKey,
+  application.wheels.csrfCookieEncryptionAlgorithm,
+  application.wheels.csrfCookieEncryptionEncoding
+);
+
 </cfscript>

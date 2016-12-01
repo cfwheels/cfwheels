@@ -73,6 +73,11 @@
 		}
 
 		local.rv = arguments.prepend & $tag(name="form", skip=local.skip, attributes=arguments) & arguments.append;
+
+		if (ListFindNoCase("post,put,patch,delete", arguments.method)) {
+			local.rv &= authenticityTokenField();
+		}
+
 		return local.rv;
 	}
 
