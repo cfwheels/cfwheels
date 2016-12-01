@@ -19,11 +19,42 @@
 		string href
 	) {
 		$args(name="linkTo", args=arguments);
-		if (Len(arguments.confirm))
-		{
-			local.onclick = "return confirm('#JSStringFormat(arguments.confirm)#');";
-			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=local.onclick, attributes=arguments);
+
+		// look for passed in rest method
+		if (StructKeyExists(arguments, "method")) {
+
+			// if dealing with delete, keep robots from following link
+			if (arguments.method == "delete") {
+				if (!StructKeyExists(arguments, "rel"))
+					arguments.rel = "";
+				arguments.rel = ListAppend(arguments.rel, "no-follow", " ");
+			}
+
+			// put the method in a data attribute
+			arguments["data-method"] = toXHTML(arguments.method);
+			StructDelete(arguments, "method");
 		}
+
+		// set confirmation text for link
+		if (StructKeyExists(arguments, "confirm")) {
+			arguments["data-confirm"] = toXHTML(arguments.confirm;
+			StructDelete(arguments, "confirm");
+		}
+
+		// set up remote links
+		if (StructKeyExists(arguments, "remote")) {
+			arguments["data-remote"] = arguments.remote;
+			StructDelete(arguments, "remote");
+		}
+
+		// hyphenize any other data attributes
+		for (local.key in arguments) {
+			if (REFind("^data[A-Za-z]", local.key)) {
+				arguments[hyphenize(local.key)] = arguments[local.key];
+				StructDelete(arguments, local.key);
+			}
+		}
+
 		if (!StructKeyExists(arguments, "href"))
 		{
 			arguments.href = URLFor(argumentCollection=arguments);
