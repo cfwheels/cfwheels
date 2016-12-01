@@ -275,7 +275,8 @@
 		// replace pattern if there is no rewriting enabled
 		if (arguments.$URLRewriting == "Off") {
 			local.variables = ListPrepend(local.variables, local.coreVariables);
-			local.rv = "?controller=[controller]&action=[action]&key=[key]&format=[format]";
+			local.rv = application.wheels.webpath & ListLast(request.cgi.script_name, '/');
+			local.rv &= "?controller=[controller]&action=[action]&key=[key]&format=[format]";
 		}
 
 		// replace each params variable with the correct value
