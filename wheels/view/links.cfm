@@ -37,20 +37,20 @@
 
 		// set confirmation text for link
 		if (StructKeyExists(arguments, "confirm")) {
-			arguments["data-confirm"] = toXHTML(arguments.confirm;
+			arguments["data-confirm"] = toXHTML(arguments.confirm);
 			StructDelete(arguments, "confirm");
 		}
 
 		// set up remote links
 		if (StructKeyExists(arguments, "remote")) {
-			arguments["data-remote"] = arguments.remote;
+			arguments["data-remote"] = toXHTML(arguments.remote);
 			StructDelete(arguments, "remote");
 		}
 
 		// hyphenize any other data attributes
 		for (local.key in arguments) {
 			if (REFind("^data[A-Za-z]", local.key)) {
-				arguments[hyphenize(local.key)] = arguments[local.key];
+				arguments[hyphenize(local.key)] = toXHTML(arguments[local.key]);
 				StructDelete(arguments, local.key);
 			}
 		}
