@@ -5,7 +5,17 @@ component extends="wheels.tests.Test" {
 		args = {};
 		args.path = "home";
 		args.format = "" ;
-		args.route = {pattern="", controller="wheels", action="wheels"};
+		args.route = {
+			pattern="/",
+			controller="wheels",
+			action="wheels",
+			regex="^\/?$",
+			variables="",
+			on="",
+			module="",
+			methods="get",
+			name="root"
+		};
 		args.formScope = {};
 		args.urlScope = {};
 	}
