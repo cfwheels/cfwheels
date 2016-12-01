@@ -1,22 +1,18 @@
 <cfscript>
 
 string function csrfMetaTags() {
-  var loc = {};
+  local.metaTags  = $tag(name="meta", attributes={ name="csrf-param", content="authenticityToken" }, close=true);
+  local.metaTags &= $tag(name="meta", attributes={ name="csrf-token", content=$generateAuthenticityToken() }, close=true);
 
-  loc.metaTags  = $tag(name="meta", attributes={ name="csrf-param", content="authenticityToken" }, close=true);
-  loc.metaTags &= $tag(name="meta", attributes={ name="csrf-token", content=$generateAuthenticityToken() }, close=true);
-
-  return loc.metaTags;
+  return local.metaTags;
 }
 
 string function authenticityTokenField() {
-  var loc = {};
-
   // Store a new authenticity token.
-  loc.authenticityToken = $generateAuthenticityToken();
+  local.authenticityToken = $generateAuthenticityToken();
 
   // Return hidden field containing new authenticity token.
-  return hiddenFieldTag(name="authenticityToken", value=loc.authenticityToken);
+  return hiddenFieldTag(name="authenticityToken", value=local.authenticityToken);
 }
   
 </cfscript>

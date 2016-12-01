@@ -1,9 +1,11 @@
 component extends="wheels.tests.Test" {
-  function setup(){
+  function setup() {
+    super.setup();
     include "setup.cfm";
   }
 
-  function teardown(){
+  function teardown() {
+    super.teardown();
     include "teardown.cfm";
   }
 

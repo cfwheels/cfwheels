@@ -1,11 +1,14 @@
 component extends="wheels.tests.Test" {
-  function setup(){
+  function setup() {
+    super.setup();
     include "setup.cfm";
   }
 
-  function teardown(){
+  function teardown() {
+    super.teardown();
     include "teardown.cfm";
   }
+
   function test_csrf_protection_skipped_on_get_request() {
     params = { controller="csrfProtectedWithException", action="index" };
     _controller = controller("csrfProtectedWithException", params);

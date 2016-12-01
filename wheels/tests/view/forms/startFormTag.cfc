@@ -1,8 +1,7 @@
 component extends="wheels.tests.Test" {
-
 	function setup() {
 		_controller = controller(name="dummy");
-		args= {};
+		args = {};
 		args.host = "";
 		args.method = "post";
 		args.multipart = false;
@@ -92,11 +91,9 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_external_link() {
-		args.action = "https://www.cfwheels.com";
 		args.multipart = true;
-		e = '<form action="https://www.cfwheels.com" enctype="multipart/form-data" method="post">' & _controller.authenticityTokenField();
+		e = '<form action="/testcontroller" enctype="multipart/form-data" method="post">' & _controller.authenticityTokenField();
 		r = _controller.startFormTag(argumentcollection=args);
 		assert("e eq r");
 	}
-
 }
