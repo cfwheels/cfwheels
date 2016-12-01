@@ -92,7 +92,8 @@ component extends="wheels.tests.Test" {
 
 	function test_external_link() {
 		args.multipart = true;
-		e = '<form action="/testcontroller" enctype="multipart/form-data" method="post">' & _controller.authenticityTokenField();
+		argsction = _controller.toXHTML(_controller.urlfor(argumentCollection=args));
+		e = '<form action="#argsction#" enctype="multipart/form-data" method="post">' & _controller.authenticityTokenField();
 		r = _controller.startFormTag(argumentcollection=args);
 		assert("e eq r");
 	}
