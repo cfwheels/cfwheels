@@ -41,7 +41,7 @@
     // escape any forward slashes
     local.regex = REReplace(local.regex, "^\/*(.*)\/*$", "^\1/?$");
 
-    local.regex = replaceList(local.regex, "\/,/", "\/,\/");
+    local.regex = REReplace(local.regex, "(\/|\\\/)", "\/", "ALL");
 
     return local.regex;
   }
