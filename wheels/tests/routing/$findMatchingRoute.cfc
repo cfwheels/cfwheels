@@ -11,39 +11,49 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_empty_route() {
-		addRoute(pattern="", controller="pages", action="index");
+		drawRoutes()
+			.root(to="pages##index")
+		.end();
 		r = dispatch.$findMatchingRoute(path="", format="");
 		assert('r.controller eq "pages"');
 		assert('r.action eq "index"');
 	}
 
 	function test_controller_only() {
-		addRoute(pattern="pages", controller="pages", action="index");
-		r = dispatch.$findMatchingRoute(path="/pages", format="");
+		drawRoutes()
+			.match(pattern="pages", to="pages##index")
+		.end();
+		r = dispatch.$findMatchingRoute(path="pages", format="");
 		assert('r.controller eq "pages"');
 		assert('r.action eq "index"');
 	}
 
 	function test_controller_and_action_required() {
-		addRoute(pattern="pages/blah", controller="pages", action="index");
+		drawRoutes()
+			.match(pattern="pages/blah", to="pages##index")
+		.end();
  		r = raised('dispatch.$findMatchingRoute(path="/pages", format="")');
 		assert('r eq "Wheels.RouteNotFound"');
-		r = dispatch.$findMatchingRoute(path="/pages/blah", format="");
+		r = dispatch.$findMatchingRoute(path="pages/blah", format="");
 		assert('r.controller eq "pages"');
 		assert('r.action eq "index"');
 	}
 
 	function test_extra_variables_passed() {
-		addRoute(pattern="pages/blah/[firstname]/[lastname]", controller="pages", action="index");
-		r = dispatch.$findMatchingRoute(path="/pages/blah/tony/petruzzi", format="");
+		drawRoutes()
+			.match(pattern="pages/blah/[firstname]/[lastname]", to="pages##index")
+		.end();
+		r = dispatch.$findMatchingRoute(path="pages/blah/tony/petruzzi", format="");
 		assert('r.controller eq "pages"');
 		assert('r.action eq "index"');
 		assert('r.variables eq "firstname,lastname"');
 	}
 
 	function test_wildcard_route() {
-		addRoute(pattern="*", controller="pages", action="index");
-		r = dispatch.$findMatchingRoute(path="/thisismyroute/therearemanylikeit/butthisoneismine", format="");
+		drawRoutes()
+			.match(pattern="*", to="pages##index")
+		.end();
+		r = dispatch.$findMatchingRoute(path="thisismyroute/therearemanylikeit/butthisoneismine", format="");
 		assert('r.controller eq "pages"');
 		assert('r.action eq "index"');
 	}
