@@ -67,7 +67,7 @@
     }
 
     // remove 'methods' argument if settings disable it
-    if (NOT variables.methods AND StructKeyExists(arguments, "methods"))
+    if (!variables.methods && StructKeyExists(arguments, "methods"))
       StructDelete(arguments, "methods");
 
     // use constraints from stack
@@ -84,7 +84,7 @@
 
     // if both module and controller are set, combine them
     if (StructKeyExists(arguments, "module")
-        AND StructKeyExists(arguments, "controller")) {
+        && StructKeyExists(arguments, "controller")) {
       arguments.controller = arguments.module & "." & arguments.controller;
       StructDelete(arguments, "module");
     }
