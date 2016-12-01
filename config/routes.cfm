@@ -4,5 +4,5 @@
 		The default route is the one that will be called on your application's "home" page.
 	*/
 
-	drawRoutes().root(to="wheels##wheels").end();
+	drawRoutes().root(to="wheels##wheels", method="get").end();
 </cfscript>
