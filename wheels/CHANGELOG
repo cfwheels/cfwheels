@@ -23,6 +23,7 @@ Controller Enhancements
 * Support for passing in ram:// resources to sendFile() - #566 [Tom King]
 * Extended sendMail() so that it can return the text and/or html content of the email - #122 [Adam Chapman]
 * renderWith() can now set http status codes in header with the "status" argument - #549 [Tom King]
+* Cross-Site Request Forgery (CSRF) protection - #613 [Chris Peters]
 
 Bug Fixes
 =========
