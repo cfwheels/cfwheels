@@ -141,7 +141,7 @@ component extends="wheels.tests.Test" {
 		args.formScope["controller"] = "../../../wheels%00";
 		args.formScope["action"] = "../../../test*^&%()%00";
 		_params = dispatch.$createParams(argumentCollection=args);
-		assert('Compare(_params.controller, "Wheels00") eq 0');
+		assert('Compare(_params.controller, "......Wheels00") eq 0');
 		assert('Compare(_params.action, "......test00") eq 0');
 	}
 

@@ -351,8 +351,9 @@
 			local.rv.action = arguments.route.action;
 		}
 
-		// filter out illegal characters from the controller and action arguments
+		// we now need to have dot notation allowed in the controller hence the \.
 		local.rv.controller = ReReplace(local.rv.controller, "[^0-9A-Za-z-_\.]", "", "all");
+		// filter out illegal characters from the controller and action arguments
 		local.rv.action = ReReplace(local.rv.action, "[^0-9A-Za-z-_\.]", "", "all");
 
 		// convert controller to upperCamelCase
