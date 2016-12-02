@@ -245,18 +245,21 @@
 				arguments.route = local.cache[local.key];
 		}
 
+		// build the link
+		local.rv = application.wheels.webPath & ListLast(request.cgi.script_name, "/");
+
 		// look up route pattern to use
 		if (len(arguments.route)) {
 
 			local.route = $findRoute(argumentCollection=arguments);
 			local.variables = local.route.variables;
-			local.rv = local.route.pattern;
+			local.rv &= local.route.pattern;
 
 		// use default route pattern
 		} else {
 			local.route = {};
 			local.variables = local.coreVariables;
-			local.rv = "/[controller]/[action]/[key].[format]";
+			local.rv &= "?controller=[controller]&action=[action]&key=[key]&format=[format]";
 
 			// set controller and action based on controller params
 			if (StructKeyExists(local, "params")) {
@@ -270,13 +273,6 @@
 						&& StructKeyExists(local.params, "controller"))
 					arguments.controller = local.params.controller;
 			}
-		}
-
-		// replace pattern if there is no rewriting enabled
-		if (arguments.$URLRewriting == "Off") {
-			local.variables = ListPrepend(local.variables, local.coreVariables);
-			local.rv = application.wheels.webpath & ListLast(request.cgi.script_name, '/');
-			local.rv &= "?controller=[controller]&action=[action]&key=[key]&format=[format]";
 		}
 
 		// replace each params variable with the correct value
@@ -329,24 +325,30 @@
 		local.rv = REReplace(local.rv, "((&|\?)\w+=|\/|\.)\[\*?\w+\]", "", "ALL");
 
 		// apply anchor and additional parameters
-    if (arguments.$URLRewriting != "Off") {
-      local.rv = Replace(local.rv, "?controller=", "/");
-      local.rv = Replace(local.rv, "&action=", "/");
-      local.rv = Replace(local.rv, "&key=", "/");
-    }
-    if (arguments.$URLRewriting == "On") {
-      local.rv = Replace(local.rv, application.wheels.rewriteFile, "");
-      local.rv = Replace(local.rv, "//", "/");
-    }
-    if (Len(arguments.params)) {
-      local.rv &= $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
-    }
-    if (Len(arguments.anchor)) {
-      local.rv &= "##" & arguments.anchor;
-    }
-    if (!arguments.onlyPath) {
-      local.rv = $prependUrl(path=local.rv, argumentCollection=arguments);
-    }
+		if (arguments.$URLRewriting != "Off") {
+			local.rv = Replace(local.rv, "?controller=", "/");
+			local.rv = Replace(local.rv, "&action=", "/");
+			local.rv = Replace(local.rv, "&key=", "/");
+		}
+		if (arguments.$URLRewriting == "On") {
+			local.rv = Replace(local.rv, application.wheels.rewriteFile, "");
+			local.rv = Replace(local.rv, "//", "/");
+		}
+
+		// apply params
+		if (Len(arguments.params)) {
+			local.rv &= $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
+		}
+
+		// apply anchor
+		if (Len(arguments.anchor)) {
+			local.rv &= "##" & arguments.anchor;
+		}
+
+		// prepend the full url if directed
+		if (!arguments.onlyPath) {
+			local.rv = $prependUrl(path=local.rv, argumentCollection=arguments);
+		}
 
 		return local.rv;
 	}

@@ -26,7 +26,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_confirm_is_escaped() {
-		e = '<a href="#application.wheels.webpath#" onclick="return confirm(''Mark as: \''Completed\''?'');">#application.wheels.webpath#</a>';
+		e = '<a data-confirm="Mark as: ''Completed''?" href="#application.wheels.webpath#">#application.wheels.webpath#</a>';
 		r = _controller.linkTo(confirm="Mark as: 'Completed'?");
 		assert('e eq r');
 	}
