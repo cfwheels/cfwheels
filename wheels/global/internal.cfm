@@ -571,8 +571,6 @@
 		required string objectPath,
 		required string type
 	) {
-		local.file =
-
 		// by default we return Model or Controller so that the base component gets loaded
 		local.rv = capitalize(arguments.type);
 
@@ -590,7 +588,7 @@
 			// we have not yet checked if this file exists or not so let's do that
 			// here (the function below will return the file name with the correct
 			// case if it exists, false if not)
-			local.file = $fileExistsNoCase(Expandpath(arguments.objectPath) & "/" & arguments.name & ".cfc");
+			local.file = $fileExistsNoCase(Expandpath(local.fullObjectPath) & ".cfc");
 
 			if (IsBoolean(local.file) && !local.file)
 			{
@@ -621,7 +619,7 @@
 
 		// we've found a file so we'll need to send back the corrected name
 		// argument as it could have dot notation in it from the mapper
-		if (!IsBoolean(local.file))
+		if (structKeyExists(local, "file") and !IsBoolean(local.file))
 			local.rv = ListSetAt(arguments.name, ListLen(arguments.name, "."), local.file, ".");
 
 		return local.rv;
