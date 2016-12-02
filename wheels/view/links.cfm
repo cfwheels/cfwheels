@@ -36,7 +36,7 @@
 		}
 
 		// set confirmation text for link
-		if (StructKeyExists(arguments, "confirm")) {
+		if (Len(arguments.confirm)) {
 			arguments["data-confirm"] = toXHTML(arguments.confirm);
 			StructDelete(arguments, "confirm");
 		}
