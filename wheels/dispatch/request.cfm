@@ -76,10 +76,7 @@
 		required string path, string requestMethod=$getRequestMethod()) {
 
 		// loop over wheels routes
-		local.iEnd =ArrayLen(application.wheels.routes);;
-		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-
-			local.route = application.wheels.routes[local.i];
+		for (local.route in application.wheels.routes) {
 
 			// if method doesn't match, skip this route
 			if (StructKeyExists(local.route, "methods")
@@ -93,12 +90,12 @@
 			// if route matches regular expression, set it for return
 			if (REFindNoCase(local.route.regex, arguments.path)
 					OR (arguments.path == "" && local.route.pattern == "/")) {
-				local.rv = Duplicate(application.wheels.routes[local.i]);
+				local.rv = Duplicate(local.route);
 				break;
 			}
 		}
 
-		// throw error if not route was found
+		// throw error if no route was found
 		if (NOT StructKeyExists(local, "rv"))
 			$throw(
 					type="Wheels.RouteNotFound"
