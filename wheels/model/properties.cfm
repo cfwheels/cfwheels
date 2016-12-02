@@ -441,18 +441,23 @@
 	}
 
 	public string function $label(required string property) {
-		if (StructKeyExists(variables.wheels.class.properties, arguments.property) && StructKeyExists(variables.wheels.class.properties[arguments.property], "label"))
-		{
+		// Prefer label set via `properties` intializer if it exists.
+		if (StructKeyExists(variables.wheels.class.properties, arguments.property) && StructKeyExists(variables.wheels.class.properties[arguments.property], "label")) {
 			local.rv = variables.wheels.class.properties[arguments.property].label;
-		}
-		else if (StructKeyExists(variables.wheels.class.mapping, arguments.property) && StructKeyExists(variables.wheels.class.mapping[arguments.property], "label"))
-		{
+		// Check to see if the mapping has a label to base the name on.
+		} else if (StructKeyExists(variables.wheels.class.mapping, arguments.property) && StructKeyExists(variables.wheels.class.mapping[arguments.property], "label")) {
 			local.rv = variables.wheels.class.mapping[arguments.property].label;
+		// Otherwise, base the label on the property name.
+		} else {
+			local.rv = humanize(arguments.property);
+
+			// If the property name ends with "id", cut that off.
+			// Example: userId beccomes User
+			if (Right(local.rv, 2) == "id") {
+				local.rv = Left(local.rv, Len(local.rv) - 2);
+			}
 		}
-		else
-		{
-			local.rv = Humanize(arguments.property);
-		}
+
 		return local.rv;
 	}
 </cfscript>

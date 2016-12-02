@@ -352,31 +352,23 @@
 		return local.rv;
 	}
 
-	public string function $getFieldLabel(
-		required any objectName,
-		required string property,
-		required string label
-	) {
+	public string function $getFieldLabel(required any objectName, required string property, required string label) {
 		local.object = false;
-		if (Compare("false", arguments.label) == 0)
-		{
+
+		if (Compare("false", arguments.label) == 0) {
 			local.rv = "";
-		}
-		else
-		{
-			if (arguments.label == "useDefaultLabel" && !IsStruct(arguments.objectName))
-			{
-				local.object = $getObject(arguments.objectName);
-				if (IsObject(local.object))
-				{
-					local.rv = local.object.$label(arguments.property);
-				}
+		} else if (arguments.label == "useDefaultLabel" && !IsStruct(arguments.objectName)) {
+			local.object = $getObject(arguments.objectName);
+
+			if (IsObject(local.object)) {
+				local.rv = local.object.$label(arguments.property);
 			}
 		}
-		if (!StructKeyExists(local, "rv"))
-		{
+
+		if (!StructKeyExists(local, "rv")) {
 			local.rv = arguments.label;
 		}
+
 		return local.rv;
 	}
 </cfscript>
