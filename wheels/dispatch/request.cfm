@@ -396,13 +396,13 @@
 	 */
 	public string function $getRequestMethod() {
 		// if request is a post, check for alternate verb
-		if (cgi.request_method EQ "post" AND StructKeyExists(form, "_method"))
+		if (request.cgi.request_method == "post" && StructKeyExists(form, "_method"))
 			return form["_method"];
 
 		// if request is a get, check for alternate verb
-		if (cgi.request_method EQ "get" AND StructKeyExists(url, "_method"))
+		if (request.cgi.request_method == "get" && StructKeyExists(url, "_method"))
 			return url["_method"];
 
-		return cgi.request_method;
+		return request.cgi.request_method;
 	}
 </cfscript>
