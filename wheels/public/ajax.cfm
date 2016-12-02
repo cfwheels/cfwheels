@@ -20,7 +20,7 @@ if (packages.recordCount) {
 <h1>#titleize(params.type)# Test Packages</h1>
 
 <div id="testingsuitetatus">
-	<p>Status: <span class="queue-status">Waiting to Start</span><br /> 
+	<p>Status: <span class="queue-status">Waiting to Start</span><br />
 	   Queued: <span class="queued-count" data-value=0>0</span><br />
 	   Passed: <span class="passed-count" data-value=0>0</span><br />
 	   Failed: <span class="failed-count" data-value=0>0</span><br />
@@ -30,16 +30,16 @@ if (packages.recordCount) {
 <cfloop query="packages">
 	<div class='test-package' data-currentrow=#currentrow#>
 		<cfset testablePackages = ListToArray(ReplaceNoCase(package, "#preTest#.", "", "one"), ".")>
-		<cfset packagesLen = arrayLen(testablePackages)> 
+		<cfset packagesLen = arrayLen(testablePackages)>
 		<cfloop from="1" to="#packagesLen#" index="i">
 			<cfset href = "#linkParams#&package=#ArrayToList(testablePackages.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#">
-			<cfif i EQ packagesLen>  
-				<a style="display:none;" data-url="#href#" href="#href#" target="_blank">#testablePackages[i]#</a> 
+			<cfif i EQ packagesLen>
+				<a style="display:none;" data-url="#href#" href="#href#" target="_blank">#testablePackages[i]#</a>
 			</cfif>
 		</cfloop>
 	</div>
 </cfloop>
-	 
+
 <!---p>Below is listing of all the #params.type# test packages. Click the part of the package to run it individually.</p>
 <cfloop query="packages">
 	<p class='test-package'>
@@ -53,19 +53,12 @@ if (packages.recordCount) {
 </cfloop--->
 
 </cfoutput>
-<style>
-	.failure-message {border: 1px solid red; padding:10px; margin-bottom: 10px;}
-	.failure-label {font-weight: 700; width:150px; float:left;}
-	.failure-message-item {color: red; font-weight: 700;}
-</style>
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-<script src="https://cdn.rawgit.com/PortableSheep/qJax/master/jquery.qjax.min.js"></script>
 <script>
 $(document).ready(function() {
-	
-	var tests=[], 
+
+	var tests=[],
 		failures=$("#failures"),
-	 	status=$("#testingsuitetatus"); 
+	 	status=$("#testingsuitetatus");
 	var queued=status.find(".queued-count"),
 		passed=status.find(".passed-count"),
 		errors=status.find(".error-count"),
@@ -77,56 +70,56 @@ $(document).ready(function() {
 			"status": "Waiting",
 			"url": $(val).find("a:last").attr("href"),
 			"result": {}
-		});		
+		});
 	});
 
-	setStatus(queued, tests.length); 
+	setStatus(queued, tests.length);
 
 	$(".start-tests").on("click", function(e){
-		console.log("Starting Tests"); 
+		console.log("Starting Tests");
 	    var qInst = $.qjax({
 	          timeout: 10000,
 	          ajaxSettings: {
-	              //Put any $.ajax options you want here, and they'll inherit to each Queue call, unless they're overridden. 
+	              //Put any $.ajax options you want here, and they'll inherit to each Queue call, unless they're overridden.
 	          },
 	          onQueueChange: function(length) {
 	              if (length == 0) {
 	                  //Empty queue
 	              }
 	          },
-	          onStart: function(r) { 
+	          onStart: function(r) {
 				$(status).find(".queue-status").html("Running...");
 				failures.html("");
 	          },
-	          onStop: function(r) { 
+	          onStop: function(r) {
 				$(status).find(".queue-status").html("Finished!");
 	          },
-	          onError: function(r) { 
+	          onError: function(r) {
 	             console.log(r);
 	             console.log('ERROR');
-				 setStatus(errors, 1); 
+				 setStatus(errors, 1);
 	          }
 	      });
 
-          $.each(tests, function(key, value){ 
+          $.each(tests, function(key, value){
 	          var req= qInst.Queue({
 	          	 	url: value.url,
-	          	 	cache: false,  
-					success: function(r) { 
-					if(r["OK"]){ 
+	          	 	cache: false,
+					success: function(r) {
+					if(r["OK"]){
 						console.log("Passed");
 						setStatus(passed, 1);
 					} else {
-					console.log("Failed"); 
-						setStatus(failed, 1);   
-						outputFailure(r);  
-					} 
+					console.log("Failed");
+						setStatus(failed, 1);
+						outputFailure(r);
+					}
 	              }
-	          }); 
+	          });
 		      //Using promise handlers.
 		      //Note: These have to be called immediately, just like they're done with the $.ajax call.
 		      req.done(function(data, status, request) {
-		          //console.log('Do something!'); 
+		          //console.log('Do something!');
 		      }).then(function(data, status, request) {
 		         // console.log('Do something more!');
 		      });
@@ -134,22 +127,22 @@ $(document).ready(function() {
 		      //To queue a function call...
 		      qInst.Queue(function() {
 		          //This is going to be called directly after the queued ajax call above completes.
-		      }); 
+		      });
 		  });
 
-		$(".stop-tests").on("click", function(e){ 
+		$(".stop-tests").on("click", function(e){
 			console.log("Stopping Tests");
 			qInst.Clear();
 		});
 	});
- 
+
 
 	$(".start-tests, .stop-tests, .load-tests").on("click", function(e){
 		e.preventDefault();
 	});
 
 	function setStatus(type, value){
-		var old= $(type).data("value"); 
+		var old= $(type).data("value");
 			c=parseInt(old) + parseInt(value);
 			$(type).data({"value": c});
 			$(type).html(c);
@@ -158,7 +151,7 @@ $(document).ready(function() {
 	function outputFailure(results){
 		var out="";
 		//console.log(results);
-		$.each(results["RESULTS"], function(i, result) { 
+		$.each(results["RESULTS"], function(i, result) {
 			if(result["STATUS"] != "Success"){
 				out="<p class='failure-message'><span class='failure-label'>Package:</span>" + result["PACKAGENAME"] + "<br />"
 					+ "<span class='failure-label'>Test Name:</span>" + result["CLEANTESTNAME"] + "<br />"

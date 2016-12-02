@@ -3,7 +3,7 @@
 <cfoutput>
 
 <h1>Congratulations!</h1>
-<p><strong>You have successfully installed<cfif Len(get("version"))> version #get("version")# of</cfif> CFWheels.</strong><br>
+<p><i class="fa fa-check-circle"></i><strong> You have successfully installed<cfif Len(get("version"))> version #get("version")# of</cfif> CFWheels.</strong><br>
 Welcome to the wonderful world of CFWheels. We hope you will enjoy it!</p>
 
 <h2>Now What?</h2>
@@ -25,7 +25,7 @@ Welcome to the wonderful world of CFWheels. We hope you will enjoy it!</p>
 
 <p><strong>Good Luck!</strong></p>
 
-<h2>How to Make this Message Go Away</h2>
+<h3>How to Make this Message Go Away</h3>
 <p>Want to have another page load when your application loads this URL? You can configure your own <em>home route</em>.</p>
 <ol>
 	<li>
