@@ -165,6 +165,10 @@
 		return local.rv;
 	}
 
+	public boolean function propertyIsBlank(required string property) {
+		return !this.propertyIsPresent(arguments.property);
+	}
+
 	public boolean function toggle(required string property, boolean save) {
 		$args(name="toggle", args=arguments);
 		if (!StructKeyExists(this, arguments.property))

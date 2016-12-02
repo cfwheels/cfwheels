@@ -16,6 +16,10 @@
 		{
 			local.rv = propertyIsPresent(property=ReplaceNoCase(arguments.missingMethodName, "IsPresent", ""));
 		}
+		else if (Right(arguments.missingMethodName, 7) == "IsBlank" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "IsBlank", "")))
+		{
+			local.rv = propertyIsBlank(property=ReplaceNoCase(arguments.missingMethodName, "IsBlank", ""));
+		}
 		else if (Left(arguments.missingMethodName, 9) == "columnFor" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "columnFor", "")))
 		{
 			local.rv = columnForProperty(property=ReplaceNoCase(arguments.missingMethodName, "columnFor", ""));

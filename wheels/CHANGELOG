@@ -12,6 +12,7 @@ Model Enhancements
 * Support for calling updateProperty() with dynamic argument, e.g. updateProperty(firstName="Per") - [Per Djurner]
 * Support for using boolean transaction argument, e.g. update(transaction=false) - #654 [Adam Chapman]
 * Support for MariaDB - #563 [AlexeiCF, Adam Chapman]
+* Model instance isPersisted() and propertyIsBlank() methods - #559 [Chris Peters]
 
 View Enhancements
 =================

@@ -113,6 +113,10 @@
 		return local.rv;
 	}
 
+	public boolean function isPersisted() {
+		return !this.isNew();
+	}
+
 	public boolean function compareTo(required component object) {
 		return Compare(this.$objectId(), arguments.object.$objectId()) IS 0;
 	}
