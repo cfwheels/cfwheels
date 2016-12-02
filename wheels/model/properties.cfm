@@ -158,7 +158,7 @@
 
 	public boolean function propertyIsPresent(required string property) {
 		local.rv = false;
-		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]) && IsSimpleValue(this[arguments.property]) && Len(this[arguments.property]))
+		if (this.hasProperty(arguments.property) && IsSimpleValue(this[arguments.property]) && Len(this[arguments.property]))
 		{
 			local.rv = true;
 		}
