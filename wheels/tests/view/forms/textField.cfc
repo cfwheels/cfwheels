@@ -3,7 +3,7 @@ component extends="wheels.tests.Test" {
 		_controller = controller(name="Cities");
 		textField = _controller.textField(objectName="city", property="countyId");
 		assert('textField contains "County"');
-		assert('not textField contains "County Id"')
+		assert('not textField contains "County Id"');
 	}
 
 	function test_override_value() {
