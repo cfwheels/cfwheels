@@ -2,6 +2,24 @@
 
   // PUBLIC UTILITIES
 
+  public void function compileRegex(rquired string regex) {
+    local.pattern = createObject("java", "java.util.regex.Pattern");
+
+    try {
+      local.regex = local.pattern.compile(arguments.regex);
+      return;
+    } catch (any e) {
+      local.identifier = arguments.pattern;
+      if (structKeyExists(arguments, "name"))
+        local.identifier = arguments.name;
+
+      $throw(
+          type = "Wheels.InvalidRegex"
+        , message = "The route `#local.identifier#` has created invalid regex of `#arguments.regex#`."
+      );
+    }
+  }
+
   public string function normalizePattern(required string pattern)
     hint="Force leading slashes, remove trailing and duplicate slashes" {
     // first clear the ending slashes
@@ -65,6 +83,9 @@
     if (Find("[action]", arguments.pattern)
         AND StructKeyExists(arguments, "action"))
       StructDelete(arguments, "action");
+
+    // compile our regex to make sure the developer is using proper regex
+    compileRegex(argumentCollection=arguments);
 
     // normalize pattern, convert to regex, and strip out variable names
     arguments.pattern = normalizePattern(arguments.pattern);
