@@ -95,7 +95,7 @@
 
 		local.rv = arguments.prepend & $tag(name="form", skip=local.skip, attributes=arguments) & arguments.append;
 
-		if (ListFindNoCase("post,put,patch,delete", arguments.method)) {
+		if (ListFindNoCase("post,put,patch,delete", arguments.method))
 			local.rv &= authenticityTokenField();
 
 		if (structKeyExists(local, "method") && local.method != "get")
