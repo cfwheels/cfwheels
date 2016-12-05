@@ -1,14 +1,9 @@
 component extends="wheels.tests.Test" {
 
-  public void function setup() {
+  public void function packageSetup() {
     _originalRoutes = application[$appKey()].routes;
     $clearRoutes();
 
-    _originalForm = duplicate(form);
-    _originalUrl = duplicate(url);
-    _originalCgiMethod = request.cgi.request_method;
-    structClear(form);
-    structClear(url);
 
     drawRoutes()
       .namespace(module="admin")
@@ -23,8 +18,23 @@ component extends="wheels.tests.Test" {
     d = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
   }
 
-  public void function teardown() {
+  public void function packageTeardown() {
     application.wheels.routes = _originalRoutes;
+  }
+
+  public void function $clearRoutes() {
+    application[$appKey()].routes = [];
+  }
+
+  function setup() {
+    _originalForm = duplicate(form);
+    _originalUrl = duplicate(url);
+    structClear(form);
+    structClear(url);
+    _originalCgiMethod = request.cgi.request_method;
+  }
+
+  function teardown() {
     structClear(form);
     structClear(url);
     structAppend(form, _originalForm, false);
@@ -32,12 +42,9 @@ component extends="wheels.tests.Test" {
     request.cgi["request_method"] = _originalCgiMethod;
   }
 
-  public void function $clearRoutes() {
-    application[$appKey()].routes = [];
-  }
-
   public void function $dump() {
     teardown();
+    packageTeardown();
     super.$dump(argumentCollection=arguments);
   }
 
