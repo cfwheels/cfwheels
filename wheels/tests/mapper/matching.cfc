@@ -109,5 +109,23 @@ component extends="wheels.tests.Test" {
     assert("routesLen eq 4");
   }
 
+  function test_match_with_globing() {
+    $clearRoutes();
+    mapper = $mapper();
+    mapper.draw().match(name="profile", pattern="profiles/*[userseo]/[userid]", to="profile##show").end();
+    routesLen = arrayLen(application.wheels.routes);
+    assert("routesLen eq 1");
+    route = application.wheels.routes[1];
+    assert('REFindNoCase(route.regex, "profiles/this/is/some/seo/text/id123")');
+  }
 
+  function test_match_with_multiple_globs() {
+    $clearRoutes();
+    mapper = $mapper();
+    mapper.draw().match(name="profile", pattern="*[before]/foo/*[after]", to="profile##show").end();
+    routesLen = arrayLen(application.wheels.routes);
+    assert("routesLen eq 1");
+    route = application.wheels.routes[1];
+    assert('REFindNoCase(route.regex, "this/is/before/foo/this/is/after")');
+  }
 }

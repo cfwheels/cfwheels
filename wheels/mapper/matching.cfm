@@ -70,6 +70,17 @@
     if (!variables.methods && StructKeyExists(arguments, "methods"))
       StructDelete(arguments, "methods");
 
+    // see if we have any globing in the pattern and if so
+    // add a constraint for each glob
+    if (REFindNoCase("\*([^\/]+)", arguments.pattern)) {
+      local.globs = REMatch("\*([^\/]+)", arguments.pattern);
+      for (local.glob in local.globs) {
+        local.var = replaceList(local.glob, "*,[,]", "");
+        arguments.pattern = replace(arguments.pattern, local.glob, "[#local.var#]");
+        arguments.constraints[local.var] = ".*";
+      }
+    }
+
     // use constraints from stack
     if (StructKeyExists(scopeStack[1], "constraints"))
       StructAppend(arguments.constraints, scopeStack[1].constraints, false);
