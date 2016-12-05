@@ -52,6 +52,13 @@ component extends="wheels.tests.Test" {
     assert('e eq "Wheels.MapperArgumentMissing"');
   }
 
+  function test_match_raises_error_without_name_or_pattern() {
+    $clearRoutes();
+    mapper = $mapper().draw();
+    e = raised('mapper.match(pattern="[controller](/[action])(/[key])")');
+    assert('e eq "Wheels.InvalidRoute"');
+  }
+
   function test_match_with_basic_arguments_and_controller_scoped() {
     $clearRoutes();
     mapper = $mapper();
