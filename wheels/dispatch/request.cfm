@@ -120,15 +120,6 @@
 		return local.rv;
 	}
 
-	public string function $getFormatFromRequest(required string pathInfo) {
-		local.rv = "";
-		if (Find(".", arguments.pathInfo))
-		{
-			local.rv = ListLast(arguments.pathInfo, ".");
-		}
-		return local.rv;
-	}
-
 	public string function $request(
 		string pathInfo=request.cgi.path_info,
 		string scriptName=request.cgi.script_name,
