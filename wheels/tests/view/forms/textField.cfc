@@ -9,7 +9,7 @@ component extends="wheels.tests.Test" {
 		_controller = controller(name="Galleries");
 		textField = _controller.textField(objectName="gallery", property="userId");
 		assert('textField contains "User"');
-		assert('not textField contains "User Id"')
+		assert('not textField contains "User Id"');
 	}
 
 	function test_override_value() {
