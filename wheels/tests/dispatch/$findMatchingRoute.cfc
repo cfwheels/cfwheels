@@ -41,7 +41,10 @@ component extends="wheels.tests.Test" {
     super.$dump(argumentCollection=arguments);
   }
 
-
+  function test_error_raised_when_route_not_found() {
+    e = raised('d.$findMatchingRoute(path="scouts")');
+    assert('e eq "Wheels.RouteNotFound"');
+  }
 
   function test_find_get_collection_route_that_exists() {
     request.cgi["request_method"] = "GET";
