@@ -12,6 +12,16 @@ component extends="wheels.tests.Test" {
     _originalRoutes = application[$appKey()].routes;
   }
 
+  public boolean function validateRegexPattern(required string pattern) {
+    try {
+      local.jPattern = createObject("java", "java.util.regex.Pattern").compile(arguments.pattern);
+    } catch (any e) {
+      return false;
+    }
+
+    return true;
+  }
+
   // normalizePattern
 
   function test_normalizePattern_no_starting_slash() {
@@ -56,6 +66,7 @@ component extends="wheels.tests.Test" {
     pattern = "/";
     regex = mapper.patternToRegex(pattern);
     assert('regex eq "^\/?$"');
+    assert('validateRegexPattern(regex)');
   }
 
   function test_patternToRegex_root_with_format() {
@@ -63,6 +74,7 @@ component extends="wheels.tests.Test" {
     pattern = "/.[format]";
     regex = mapper.patternToRegex(pattern);
     assert('regex eq "^\.(\w+)\/?$"');
+    assert('validateRegexPattern(regex)');
   }
 
   function test_patternToRegex_with_basic_catch_all_pattern() {
@@ -70,6 +82,7 @@ component extends="wheels.tests.Test" {
     pattern = "/[controller]/[action]/[key].[format]";
     regex = mapper.patternToRegex(pattern);
     assert('regex eq "^([^\/]+)\/([^\.\/]+)\/([^\.\/]+)\.(\w+)\/?$"');
+    assert('validateRegexPattern(regex)');
   }
 
   // stripRouteVariables
