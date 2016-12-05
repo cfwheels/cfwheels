@@ -110,7 +110,18 @@
 					}
 
 					variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
-					variables.wheels.class.properties[loc.property].label = Humanize(loc.property);
+
+					// If property is id, then make it all-caps "ID."
+					if (loc.property == "id") {
+						variables.wheels.class.properties[loc.property].label = "ID";
+					// If property ends with id, then drop it off. (For example, "userid" becomes "User.")
+					} else if (Right(loc.property, 2) == "id") {
+						variables.wheels.class.properties[loc.property].label = humanize(Left(loc.property, Len(loc.property) - 2));
+					// Otherwise, humanize it.
+					} else {
+						variables.wheels.class.properties[loc.property].label = humanize(loc.property);
+					}
+
 					variables.wheels.class.properties[loc.property].validationtype = variables.wheels.class.adapter.$getValidationType(variables.wheels.class.properties[loc.property].type);
 					if (StructKeyExists(variables.wheels.class.mapping, loc.property))
 					{

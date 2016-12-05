@@ -1,9 +1,15 @@
 component extends="wheels.tests.Test" {
+	function test_automatic_label_for_id_property() {
+		_controller = controller(name="Galleries");
+		textField = _controller.textField(objectName="gallery", property="id");
+		assert("FindNoCase('ID', textField)");
+	}
+
 	function test_automatic_label_ending_with_id() {
-		_controller = controller(name="Cities");
-		textField = _controller.textField(objectName="city", property="countyId");
-		assert('textField contains "County"');
-		assert('not textField contains "County Id"')
+		_controller = controller(name="Galleries");
+		textField = _controller.textField(objectName="gallery", property="userId");
+		assert('textField contains "User"');
+		assert('not textField contains "User Id"')
 	}
 
 	function test_override_value() {

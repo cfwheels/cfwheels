@@ -447,15 +447,9 @@
 		// Check to see if the mapping has a label to base the name on.
 		} else if (StructKeyExists(variables.wheels.class.mapping, arguments.property) && StructKeyExists(variables.wheels.class.mapping[arguments.property], "label")) {
 			local.rv = variables.wheels.class.mapping[arguments.property].label;
-		// Otherwise, base the label on the property name.
+		// Fall back on property name otherwise.
 		} else {
 			local.rv = humanize(arguments.property);
-
-			// If the property name ends with "id", cut that off.
-			// Example: userId beccomes User
-			if (Right(local.rv, 2) == "id") {
-				local.rv = Left(local.rv, Len(local.rv) - 2);
-			}
 		}
 
 		return local.rv;

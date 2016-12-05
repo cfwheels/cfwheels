@@ -1,3 +1,3 @@
 component extends="wheelsMapping.Controller" {
-  city = model("city").new();
+  gallery = model("gallery").new();
 }
