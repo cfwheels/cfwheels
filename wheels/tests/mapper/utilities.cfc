@@ -22,6 +22,23 @@ component extends="wheels.tests.Test" {
     return true;
   }
 
+  // compileRegex
+
+  function test_regex_compiles_successfully() {
+    mapper = $mapper();
+    pattern = "[controller]/[action]/[key]";
+    regex = mapper.patternToRegex(pattern=pattern);
+    output = mapper.compileRegex(regex=regex, pattern=pattern);
+    assert('!structKeyExists(variables, "output")');
+  }
+
+  function test_regex_compiles_with_error() {
+    mapper = $mapper();
+    pattern = "[controller]/[action]/[key]";
+    e = raised('mapper.compileRegex(regex="*", pattern="*")');
+    assert('e eq "Wheels.InvalidRegex"');
+  }
+
   // normalizePattern
 
   function test_normalizePattern_no_starting_slash() {
