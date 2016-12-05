@@ -84,13 +84,13 @@
         AND StructKeyExists(arguments, "action"))
       StructDelete(arguments, "action");
 
-    // compile our regex to make sure the developer is using proper regex
-    compileRegex(argumentCollection=arguments);
-
     // normalize pattern, convert to regex, and strip out variable names
     arguments.pattern = normalizePattern(arguments.pattern);
     arguments.regex = patternToRegex(arguments.pattern, arguments.constraints);
     arguments.variables = stripRouteVariables(arguments.pattern);
+
+    // compile our regex to make sure the developer is using proper regex
+    compileRegex(argumentCollection=arguments);
 
     // add route to cfwheels
     ArrayAppend(application[$appKey()].routes, arguments);
