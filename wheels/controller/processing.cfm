@@ -111,12 +111,12 @@
 			}
 		}
 
-		return true;	
+		return true;
 	}
 
 	/**
 	* PRIVATE FUNCTIONS
-	*/   
+	*/
 	public void function $callAction(required string action) {
 		if (Left(arguments.action, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action))
 		{
@@ -141,7 +141,7 @@
 			}
 			catch (any e)
 			{
-				local.file = get("viewPath") & "/" & LCase(variables.$class.name) & "/" & LCase(arguments.action) & ".cfm";
+				local.file = get("viewPath") & "/" & LCase(ListChangeDelims(variables.$class.name, '/', '.')) & "/" & LCase(arguments.action) & ".cfm";
 				if (FileExists(ExpandPath(local.file)))
 				{
 					$throw(object=e);
@@ -150,7 +150,11 @@
 				{
 					if (get("showErrorInformation"))
 					{
-						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.action#` action in the `#variables.$class.name#` controller.", extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(variables.$class.name)#` directory (create the directory as well if it doesn't already exist).");
+						$throw(
+							type="Wheels.ViewNotFound",
+							message="Could not find the view page for the `#arguments.action#` action in the `#variables.$class.name#` controller.",
+							extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(ListChangeDelims(variables.$class.name, '/', '.'))#` directory (create the directory as well if it doesn't already exist)."
+						);
 					}
 					else
 					{
@@ -175,4 +179,4 @@
 		local.rv = response();
 		return local.rv;
 	}
-</cfscript>  
+</cfscript>

@@ -5,12 +5,12 @@
 	public any function $init() {
 		local.rv = this;
 		return local.rv;
-	} 
+	}
 
 	public struct function $createParams(
-		required string path, 
-		required struct route, 
-		required struct formScope, 
+		required string path,
+		required struct route,
+		required struct formScope,
 		required struct urlScope
 	) {
 		local.rv = {};
@@ -27,7 +27,7 @@
 		local.rv = $addRouteName(params=local.rv, route=arguments.route);
 		return local.rv;
 	}
- 
+
 	public struct function $createNestedParamStruct(required struct params) {
 		local.rv = arguments.params;
 		for (local.key in local.rv)
@@ -71,63 +71,41 @@
 		}
 		return local.rv;
 	}
- 
-	public struct function $findMatchingRoute(required string path) {
-		local.iEnd = ArrayLen(application.wheels.routes);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
-		{
-			local.format = "";
-			local.route = application.wheels.routes[local.i];
-			if (StructKeyExists(local.route, "format"))
-			{
-				local.format = local.route.format;
-			}
-			local.currentRoute = local.route.pattern;
-			if (local.currentRoute == "*")
-			{
-				local.rv = local.route;
+
+	public struct function $findMatchingRoute(
+		required string path, string requestMethod=$getRequestMethod()) {
+
+		// loop over wheels routes
+		for (local.route in application.wheels.routes) {
+
+			// if method doesn't match, skip this route
+			if (StructKeyExists(local.route, "methods")
+					&& !ListFindNoCase(local.route.methods, arguments.requestMethod))
+				continue;
+
+			// make sure route has been converted to regex
+			if (!StructKeyExists(local.route, "regex"))
+				local.route.regex = application.wheels.mapper.patternToRegex(local.route.pattern);
+
+			// if route matches regular expression, set it for return
+			if (REFindNoCase(local.route.regex, arguments.path)
+					OR (arguments.path == "" && local.route.pattern == "/")) {
+				local.rv = Duplicate(local.route);
 				break;
 			}
-			else if (arguments.path == "" && local.currentRoute == "")
-			{
-				local.rv = local.route;
-				break;
-			}
-			else if (ListLen(arguments.path, "/") >= ListLen(local.currentRoute, "/") && local.currentRoute != "")
-			{
-				local.match = true;
-				local.jEnd = ListLen(local.currentRoute, "/");
-				for (local.j=1; local.j <= local.jEnd; local.j++)
-				{
-					local.item = ListGetAt(local.currentRoute, local.j, "/");
-					local.thisRoute = ReplaceList(local.item, "[,]", "");
-					local.thisUrl = ListFirst(ListGetAt(arguments.path, local.j, "/"), ".");
-					if (Left(local.item, 1) != "[" && local.thisRoute != local.thisUrl)
-					{
-						local.match = false;
-					}
-				}
-				if (local.match)
-				{
-					local.rv = local.route;
-					if (Len(local.format))
-					{
-						// we need to duplicate the route here otherwise we overwrite the one in the application scope
-						local.rv = Duplicate(local.rv);
-						local.key = ReplaceList(local.format, "[,]", "");
-						local.rv[local.key] = $getFormatFromRequest(pathInfo=arguments.path);
-					}
-					break;
-				}
-			}
 		}
-		if (!StructKeyExists(local, "rv"))
-		{
-			$throw(type="Wheels.RouteNotFound", message="CFWheels couldn't find a route that matched this request.", extendedInfo="Make sure there is a route setup in your `config/routes.cfm` file that matches the `#arguments.path#` request.");
-		}
+
+		// throw error if no route was found
+		if (NOT StructKeyExists(local, "rv"))
+			$throw(
+					type="Wheels.RouteNotFound"
+				, message="Wheels couldn't find a route that matched this request."
+				, extendedInfo="Make sure there is a route setup in your 'config/routes.cfm' file that matches the '#arguments.path#' request."
+			);
+
 		return local.rv;
 	}
- 
+
 	public string function $getPathFromRequest(required string pathInfo, required string scriptName) {
 
 		// we want the path without the leading "/" so this is why we do some checking here
@@ -142,21 +120,12 @@
 		return local.rv;
 	}
 
-	public string function $getFormatFromRequest(required string pathInfo) {
-		local.rv = "";
-		if (Find(".", arguments.pathInfo))
-		{
-			local.rv = ListLast(arguments.pathInfo, ".");
-		}
-		return local.rv;
-	}
-
 	public string function $request(
 		string pathInfo=request.cgi.path_info,
 		string scriptName=request.cgi.script_name,
 		struct formScope=form,
-		struct urlScope=url 
-	) { 
+		struct urlScope=url
+	) {
 		if (get("showDebugInformation"))
 		{
 			$debugPoint("setup");
@@ -193,8 +162,8 @@
 		string pathInfo=request.cgi.path_info,
 		string scriptName=request.cgi.script_name,
 		struct formScope=form,
-		struct urlScope=url 
-	) {  
+		struct urlScope=url
+	) {
 		local.path = $getPathFromRequest(pathInfo=arguments.pathInfo, scriptName=arguments.scriptName);
 		local.route = $findMatchingRoute(path=local.path);
 		local.rv = $createParams(path=local.path, route=local.route, formScope=arguments.formScope, urlScope=arguments.urlScope);
@@ -225,21 +194,16 @@
 		required struct route,
 		required string path
 	) {
+
 		local.rv = arguments.params;
-		if (StructKeyExists(arguments.route, "format") && Len(arguments.route.format))
-		{
-			arguments.path = Reverse(ListRest(Reverse(arguments.path), "."));
+		local.matches = REFindNoCase(arguments.route.regex, arguments.path, 1, true);
+		local.iEnd = ArrayLen(local.matches.pos);
+
+		for (local.i = 2; local.i LTE local.iEnd; local.i++) {
+			local.key = ListGetAt(arguments.route.variables, local.i - 1);
+			local.rv[local.key] = Mid(arguments.path, local.matches.pos[local.i], local.matches.len[local.i]);
 		}
-		local.iEnd = ListLen(arguments.route.pattern, "/");
-		for (local.i=1; local.i <= local.iEnd; local.i++)
-		{
-			local.item = ListGetAt(arguments.route.pattern, local.i, "/");
-			if (Left(local.item, 1) == "[")
-			{
-				local.key = ReplaceList(local.item, "[,]", "");
-				local.rv[local.key] = ListGetAt(arguments.path, local.i, "/");
-			}
-		}
+
 		return local.rv;
 	}
 
@@ -375,12 +339,18 @@
 			local.rv.action = arguments.route.action;
 		}
 
+		// we now need to have dot notation allowed in the controller hence the \.
+		local.rv.controller = ReReplace(local.rv.controller, "[^0-9A-Za-z-_\.]", "", "all");
 		// filter out illegal characters from the controller and action arguments
-		local.rv.controller = ReReplace(local.rv.controller, "[^0-9A-Za-z-_]", "", "all");
 		local.rv.action = ReReplace(local.rv.action, "[^0-9A-Za-z-_\.]", "", "all");
 
-		// convert controller to upperCamelCase and action to normal camelCase
-		local.rv.controller = REReplace(local.rv.controller, "(^|-)([a-z])", "\u\2", "all");
+		// convert controller to upperCamelCase
+		local.cName = ListLast(local.rv.controller, ".");
+		local.cName = REReplace(local.cName, "(^|-)([a-z])", "\u\2", "all");
+		local.cLen = ListLen(local.rv.controller, ".");
+		local.rv.controller = ListSetAt(local.rv.controller, local.cLen, local.cName, ".");
+
+		// action to normal camelCase
 		local.rv.action = REReplace(local.rv.action, "-([a-z])", "\u\1", "all");
 		return local.rv;
 	}
@@ -388,7 +358,7 @@
 	/**
 	*  @hint Adds in the format variable from the route if it exists.
 	*/
-	public struct function $addRouteFormat(required struct params, required struct route) {		
+	public struct function $addRouteFormat(required struct params, required struct route) {
 		local.rv = arguments.params;
 		if (StructKeyExists(arguments.route, "formatVariable") && StructKeyExists(arguments.route, "format"))
 		{
@@ -398,9 +368,9 @@
 	}
 
 	/**
-	*  @hint Adds in the name variable from the route if it exists. 
+	*  @hint Adds in the name variable from the route if it exists.
 	*/
-	public struct function $addRouteName(required struct params, required struct route) {		
+	public struct function $addRouteName(required struct params, required struct route) {
 		local.rv = arguments.params;
 		if (StructKeyExists(arguments.route, "name") && Len(arguments.route.name) && !StructKeyExists(local.rv, "route"))
 		{
@@ -408,4 +378,19 @@
 		}
 		return local.rv;
 	}
-</cfscript>  
+
+	/**
+	 *  @hint Determine HTTP verb used in request
+	 */
+	public string function $getRequestMethod() {
+		// if request is a post, check for alternate verb
+		if (request.cgi.request_method == "post" && StructKeyExists(form, "_method"))
+			return form["_method"];
+
+		// if request is a get, check for alternate verb
+		if (request.cgi.request_method == "get" && StructKeyExists(url, "_method"))
+			return url["_method"];
+
+		return request.cgi.request_method;
+	}
+</cfscript>
