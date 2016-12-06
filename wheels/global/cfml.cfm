@@ -27,12 +27,12 @@
 	<cfset var loc = {}>
 	<cfif StructKeyExists(arguments, "object")>
 		<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
-			<cfinvoke component="#arguments.object#" method="#arguments.execute#" argumentCollection="#arguments.executeArgs#" returnvariable="loc.rv">
+			<cfset loc.rv = $invoke(component="#arguments.object#", method="#arguments.execute#", argumentCollection="#arguments.executeArgs#")>
 		</cflock>
 	<cfelse>
 		<cfset arguments.executeArgs.$locked = true>
 		<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
-			<cfinvoke method="#arguments.execute#" argumentCollection="#arguments.executeArgs#" returnvariable="loc.rv">
+			<cfset loc.rv = $invoke(method="#arguments.execute#", argumentCollection="#arguments.executeArgs#")>
 		</cflock>
 	</cfif>
 	<cfif StructKeyExists(loc, "rv")>
