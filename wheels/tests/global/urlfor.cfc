@@ -12,7 +12,7 @@ component extends="wheels.tests.Test" {
 		_originalObfuscateUrls = application.wheels.obfuscateUrls;
 	}
 
-  public Mapper function $mapper() {
+  public struct function $mapper() {
     local.args = duplicate(config);
     structAppend(local.args, arguments, true);
     return $createObjectFromRoot(argumentCollection=local.args);

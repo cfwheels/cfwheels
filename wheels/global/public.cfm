@@ -8,7 +8,7 @@
 		application[local.appKey].formats[arguments.extension] = arguments.mimeType;
 	}
 
-	public Mapper function drawRoutes(
+	public struct function drawRoutes(
 		boolean restful=true, boolean methods=arguments.restful) {
 		return application[$appKey()].mapper.draw(argumentCollection=arguments);
 	}

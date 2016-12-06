@@ -17,7 +17,7 @@
    * @param  {boolean} $plural
    * @return {Mapper}
    */
-  public Mapper function resource(
+  public struct function resource(
       required string name, boolean nested=false
     , string path=hyphenize(arguments.name), string controller
     , string singular, string plural, string only, string except
@@ -153,15 +153,15 @@
     return this;
   }
 
-  public Mapper function resources(required string name, boolean nested=false) {
+  public struct function resources(required string name, boolean nested=false) {
     return resource($plural=true, $call="resources", argumentCollection=arguments);
   }
 
-  public Mapper function member() {
+  public struct function member() {
     return scope(path=scopeStack[1].memberPath, $call="member");
   }
 
-  public Mapper function collection() {
+  public struct function collection() {
     return scope(path=scopeStack[1].collectionPath, $call="collection");
   }
 </cfscript>

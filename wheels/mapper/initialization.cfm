@@ -1,5 +1,5 @@
 <cfscript>
-  public Mapper function init(
+  public struct function init(
     boolean restful=true, boolean methods=arguments.restful) {
 
     // set up control variables
