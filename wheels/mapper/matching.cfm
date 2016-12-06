@@ -8,7 +8,7 @@
    * @param  {string} module        Namespace to append to controller
    * @param  {string} on            Created resource route under 'member' or 'collection'
    * @param  {struct} constraints
-   * @return {Mapper}
+   * @return {struct}
    */
   public struct function match(
       string name, string pattern, string to
