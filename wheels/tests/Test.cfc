@@ -1,5 +1,4 @@
 component extends="wheels.Test" output=false {
-
   /*
    * Executes once before the test suite runs
    */

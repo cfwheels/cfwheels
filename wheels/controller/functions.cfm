@@ -1,5 +1,6 @@
 <cfscript>
 include "caching.cfm";
+include "csrf.cfm";
 include "filters.cfm";
 include "flash.cfm";
 include "initialization.cfm";

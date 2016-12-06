@@ -97,6 +97,24 @@ component extends="wheels.tests.Test" {
 		assert("result IS false");
 	}
 
+	function test_isPeristed() {
+		transaction {
+			author = model("author").new(firstName="Per", lastName="Djurner");
+			result = author.isPersisted();
+			assert("result is false");
+			author.save(transaction="none");
+			result = author.isPersisted();
+			assert("result is true");
+			transaction action="rollback";
+		}
+	}
+
+	function test_isPersisted_with_find() {
+		author = model("author").findOne();
+		result = author.isPersisted();
+		assert("result is true");
+	}
+
 	function test_hasChanged() {
 		author = model("author").findOne(where="lastName = 'Djurner'");
 		result = author.hasChanged();

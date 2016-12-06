@@ -1,5 +1,9 @@
 2.0 (TBD)
 
+Plugin Enhancements
+==================
+* Update to the plugin system to allow overriding of the same framework method multiple times. - #681 [James Gibson, Tom King]
+
 Model Enhancements
 ==================
 * Support for passing in select=false to property() to not include a calculated property by default in SELECT clauses - #122 [Adam Chapman, Per Djurner]
@@ -8,6 +12,7 @@ Model Enhancements
 * Support for calling updateProperty() with dynamic argument, e.g. updateProperty(firstName="Per") - [Per Djurner]
 * Support for using boolean transaction argument, e.g. update(transaction=false) - #654 [Adam Chapman]
 * Support for MariaDB - #563 [AlexeiCF, Adam Chapman]
+* Model instance isPersisted() and propertyIsBlank() methods - #559 [Chris Peters]
 
 View Enhancements
 =================
@@ -19,6 +24,7 @@ Controller Enhancements
 * Support for passing in ram:// resources to sendFile() - #566 [Tom King]
 * Extended sendMail() so that it can return the text and/or html content of the email - #122 [Adam Chapman]
 * renderWith() can now set http status codes in header with the "status" argument - #549 [Tom King]
+* Cross-Site Request Forgery (CSRF) protection - #613 [Chris Peters]
 
 Bug Fixes
 =========
@@ -42,9 +48,11 @@ Breaking Changes
 ================
 * Minimum Lucee version is now 4.5.1.022.
 * Minimum ACF version is now 10.0.16 / 11.0.5.
-* Support for Railo has been dropped.
+* Support for Railo has been dropped
+* Support for IIS6 (ISAPI rewrite) has been dropped - #668
 * The global setting "clearServerCache" has been renamed to "clearTemplateCache".
 * The updateProperties() method has been removed, use update() instead - #457 [Per Djurner, Chris Peters]
+* Form labels automatically generated based on foreign key properties will drop the "Id" from the end (e.g., the label for the "userId" property will be "User", not "User Id"). - #618 [Chris Peters]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

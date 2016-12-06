@@ -152,6 +152,19 @@ public void function onApplicationStart() {
 		application.$wheels.cacheQueries = true;
 	}
 
+	// csrf protection settings
+	application.$wheels.csrfStore = "session";
+	application.$wheels.csrfCookieEncryptionAlgorithm = "AES";
+	application.$wheels.csrfCookieEncryptionSecretKey = "";
+	application.$wheels.csrfCookieEncryptionEncoding = "Base64";
+	application.$wheels.csrfCookieName = "_wheels_authenticity";
+	application.$wheels.csrfCookieDomain = "";
+	application.$wheels.csrfCookieEncodeValue = "";
+	application.$wheels.csrfCookieHttpOnly = "";
+	application.$wheels.csrfCookiePath = "/";
+	application.$wheels.csrfCookiePreserveCase = "";
+	application.$wheels.csrfCookieSecure = "";
+
 	// debugging and error settings
 	application.$wheels.showDebugInformation = true;
 	application.$wheels.showErrorInformation = true;
@@ -310,6 +323,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prepend="", append="", prependToPage="", prependOnFirst=true, prependOnAnchor=true, appendToPage="", appendOnLast=true, appendOnAnchor=true, classForCurrent="", name="page", showSinglePage=false, pageNumberAsParam=true};
 	application.$wheels.functions.passwordField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
 	application.$wheels.functions.passwordFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+	application.$wheels.functions.protectFromForgery = {with="exception", only="", except=""};
 	application.$wheels.functions.radioButton = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
 	application.$wheels.functions.radioButtonTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
 	application.$wheels.functions.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302, delay=false};

@@ -1,8 +1,7 @@
 component extends="wheels.tests.Test" {
-
 	function setup() {
 		_controller = controller(name="dummy");
-		args= {};
+		args = {};
 		args.host = "";
 		args.method = "post";
 		args.multipart = false;
@@ -14,16 +13,16 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_no_controller_or_action_or_route_should_point_to_current_page() {
-		structdelete(args, "controller");
+		StructDelete(args, "controller");
 		argsction = _controller.urlfor(argumentCollection=args);
-		e = '<form action="#argsction#" method="post">';
+		e = '<form action="#argsction#" method="post">' & _controller.authenticityTokenField();
 		r = _controller.startFormTag(argumentcollection=args);
 		assert('e eq r');
 	}
 
 	function test_with_controller() {
 		argsction = _controller.urlfor(argumentCollection=args);
-		e = '<form action="#argsction#" method="post">';
+		e = '<form action="#argsction#" method="post">' & _controller.authenticityTokenField();
 		r = _controller.startFormTag(argumentcollection=args);
 		assert("e eq r", "testing this out");
 	}
@@ -36,11 +35,41 @@ component extends="wheels.tests.Test" {
 		assert("e eq r");
 	}
 
+	// TODO: Change `method` back to `post` after integrating ColdRoute. Then also test for inclusion of `_method`
+	// hidden field.
+	function test_with_put_method() {
+		args.method = "put";
+		argsction = _controller.urlfor(argumentCollection=args);
+		e = '<form action="#argsction#" method="put">' & _controller.authenticityTokenField();
+		r = _controller.startFormTag(argumentcollection=args);
+		assert("r is e");
+	}
+
+	// TODO: Change `method` back to `post` after integrating ColdRoute. Then also test for inclusion of `_method`
+	// hidden field.
+	function test_with_patch_method() {
+		args.method = "patch";
+		argsction = _controller.urlfor(argumentCollection=args);
+		e = '<form action="#argsction#" method="patch">' & _controller.authenticityTokenField();
+		r = _controller.startFormTag(argumentcollection=args);
+		assert("r is e");
+	}
+
+	// TODO: Change `method` back to `post` after integrating ColdRoute. Then also test for inclusion of `_method`
+	// hidden field.
+	function test_with_delete_method() {
+		args.method = "delete";
+		argsction = _controller.urlfor(argumentCollection=args);
+		e = '<form action="#argsction#" method="delete">' & _controller.authenticityTokenField();
+		r = _controller.startFormTag(argumentcollection=args);
+		assert("r is e");
+	}
+
 	function test_with_multipart() {
 		args.multipart = "true";
 		argsction = _controller.urlfor(argumentCollection=args);
 		e = _controller.startFormTag(argumentcollection=args);
-		r = '<form action="#argsction#" enctype="multipart/form-data" method="post">';
+		r = '<form action="#argsction#" enctype="multipart/form-data" method="post">' & _controller.authenticityTokenField();
 		assert("e eq r");
 	}
 
@@ -48,7 +77,7 @@ component extends="wheels.tests.Test" {
 		args.spamProtection = "true";
 		args.action = "myaction";
 		argsction = _controller.toXHTML(_controller.urlfor(argumentCollection=args));
-		e = '<form method="post" onsubmit="this.action=''#Left(argsction, int((Len(argsction)/2)))#''+''#Right(argsction, ceiling((Len(argsction)/2)))#'';">';
+		e = '<form method="post" onsubmit="this.action=''#Left(argsction, int((Len(argsction)/2)))#''+''#Right(argsction, ceiling((Len(argsction)/2)))#'';">' & _controller.authenticityTokenField();
 		r = _controller.startFormTag(argumentcollection=args);
 		assert("e eq r");
 	}
@@ -56,17 +85,16 @@ component extends="wheels.tests.Test" {
 	function test_with_home_route() {
 		args.route = "home";
 		argsction = _controller.toXHTML(_controller.urlfor(argumentCollection=args));
-		e = '<form action="#argsction#" method="post">';
+		e = '<form action="#argsction#" method="post">' & _controller.authenticityTokenField();
 		r = _controller.startFormTag(argumentcollection=args);
 		assert("e eq r");
 	}
 
 	function test_external_link() {
-		args.action = "https://www.cfwheels.com";
 		args.multipart = true;
-		e = '<form action="https://www.cfwheels.com" enctype="multipart/form-data" method="post">';
+		argsction = _controller.toXHTML(_controller.urlfor(argumentCollection=args));
+		e = '<form action="#argsction#" enctype="multipart/form-data" method="post">' & _controller.authenticityTokenField();
 		r = _controller.startFormTag(argumentcollection=args);
 		assert("e eq r");
 	}
-
 }

@@ -53,13 +53,13 @@ component extends="wheels.tests.Test" {
 
   function test_chain_return_values_from_multiple_plugin_overrides() {
     result = c.URLFor(controller="wheels", action="wheels");
-    valid = findNoCase("&urlfor02&urlfor01", result);
+    valid = findNoCase("&urlfor01&urlfor02", result);
     assert('valid neq 0');
   }
 
   function test_chain_return_values_from_multiple_plugin_overrides_in_dispatch() {
     result = d.URLFor(controller="wheels", action="wheels");
-    valid = findNoCase("&urlfor02&urlfor01", result);
+    valid = findNoCase("&urlfor01&urlfor02", result);
     assert('valid neq 0');
   }
 

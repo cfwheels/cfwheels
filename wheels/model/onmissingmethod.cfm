@@ -4,83 +4,65 @@
 	*/
 
 	public any function onMissingMethod(required string missingMethodName, required struct missingMethodArguments) {
-		if (Right(arguments.missingMethodName, 10) == "hasChanged" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "hasChanged", "")))
-		{
+		if (Right(arguments.missingMethodName, 10) == "hasChanged" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "hasChanged", ""))) {
 			local.rv = hasChanged(property=ReplaceNoCase(arguments.missingMethodName, "hasChanged", ""));
-		}
-		else if (Right(arguments.missingMethodName, 11) == "changedFrom" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "changedFrom", "")))
-		{
+		} else if (Right(arguments.missingMethodName, 11) == "changedFrom" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "changedFrom", ""))) {
 			local.rv = changedFrom(property=ReplaceNoCase(arguments.missingMethodName, "changedFrom", ""));
-		}
-		else if (Right(arguments.missingMethodName, 9) == "IsPresent" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "IsPresent", "")))
-		{
+		} else if (Right(arguments.missingMethodName, 9) == "IsPresent" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "IsPresent", ""))) {
 			local.rv = propertyIsPresent(property=ReplaceNoCase(arguments.missingMethodName, "IsPresent", ""));
-		}
-		else if (Left(arguments.missingMethodName, 9) == "columnFor" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "columnFor", "")))
-		{
+		} else if (Right(arguments.missingMethodName, 7) == "IsBlank" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "IsBlank", ""))) {
+			local.rv = propertyIsBlank(property=ReplaceNoCase(arguments.missingMethodName, "IsBlank", ""));
+		} else if (Left(arguments.missingMethodName, 9) == "columnFor" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "columnFor", ""))) {
 			local.rv = columnForProperty(property=ReplaceNoCase(arguments.missingMethodName, "columnFor", ""));
-		}
-		else if (Left(arguments.missingMethodName, 6) == "toggle" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "toggle", "")))
-		{
+		} else if (Left(arguments.missingMethodName, 6) == "toggle" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "toggle", ""))) {
 			local.rv = toggle(property=ReplaceNoCase(arguments.missingMethodName, "toggle", ""), argumentCollection=arguments.missingMethodArguments);
-		}
-		else if (Left(arguments.missingMethodName, 3) == "has" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "has", "")))
-		{
+		} else if (Left(arguments.missingMethodName, 3) == "has" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "has", ""))) {
 			local.rv = hasProperty(property=ReplaceNoCase(arguments.missingMethodName, "has", ""));
-		}
-		else if (Left(arguments.missingMethodName, 6) == "update" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "update", "")))
-		{
-			if (!StructKeyExists(arguments.missingMethodArguments, "value"))
-			{
-				$throw(type="Wheels.IncorrectArguments", message="The `value` argument is required but was not passed in.", extendedInfo="Pass in a value to the dynamic updateProperty in the `value` argument.");
+		} else if (Left(arguments.missingMethodName, 6) == "update" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "update", ""))) {
+			if (!StructKeyExists(arguments.missingMethodArguments, "value")) {
+				Throw(
+					type="Wheels.IncorrectArguments",
+					message="The `value` argument is required but was not passed in.",
+					extendedInfo="Pass in a value to the dynamic updateProperty in the `value` argument."
+				);
 			}
-			local.rv = updateProperty(property=ReplaceNoCase(arguments.missingMethodName, "update", ""), value=arguments.missingMethodArguments.value);
-		}
-		else if (Left(arguments.missingMethodName, 9) == "findOneBy" || Left(arguments.missingMethodName, 9) == "findAllBy")
-		{
-			if (StructKeyExists(server, "railo") || StructKeyExists(server, "lucee"))
-			{
+
+			local.rv = updateProperty(
+				property=ReplaceNoCase(arguments.missingMethodName, "update", ""),
+				value=arguments.missingMethodArguments.value
+			);
+		} else if (Left(arguments.missingMethodName, 9) == "findOneBy" || Left(arguments.missingMethodName, 9) == "findAllBy") {
+			if (StructKeyExists(server, "lucee")) {
 				// since Railo passes in the method name in all upper case we have to do this here
-				local.finderProperties = ListToArray(LCase(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, "And", "|", "all"), "findAllBy", "", "all"), "findOneBy", "", "all")), "|");
-			}
-			else
-			{
+				local.finderProperties = ListToArray(
+					LCase(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, "And", "|", "all"), "findAllBy", "", "all"), "findOneBy", "", "all")), "|");
+			} else {
 				local.finderProperties = ListToArray(ReplaceNoCase(ReplaceNoCase(Replace(arguments.missingMethodName, "And", "|", "all"), "findAllBy", "", "all"), "findOneBy", "", "all"), "|");
 			}
 
 			// sometimes values will have commas in them, allow the developer to change the delimiter
 			local.delimiter = ",";
-			if (StructKeyExists(arguments.missingMethodArguments, "delimiter"))
-			{
+			if (StructKeyExists(arguments.missingMethodArguments, "delimiter")) {
 				local.delimiter = arguments.missingMethodArguments["delimiter"];
 			}
 
 			// split the values into an array for easier processing
 			local.values = "";
-			if (StructKeyExists(arguments.missingMethodArguments, "value"))
-			{
+			if (StructKeyExists(arguments.missingMethodArguments, "value")) {
 				local.values = arguments.missingMethodArguments.value;
-			}
-			else if (StructKeyExists(arguments.missingMethodArguments, "values"))
-			{
+			} else if (StructKeyExists(arguments.missingMethodArguments, "values")) {
 				local.values = arguments.missingMethodArguments.values;
-			}
-			else
-			{
+			} else {
 				local.values = arguments.missingMethodArguments[1];
 			}
 
-			if (!IsArray(local.values))
-			{
-				if (ArrayLen(local.finderProperties) == 1)
-				{
+			if (!IsArray(local.values)) {
+				if (ArrayLen(local.finderProperties) == 1) {
 					// don't know why but this screws up in CF8
 					local.temp = [];
 					ArrayAppend(local.temp, local.values);
 					local.values = local.temp;
-				}
-				else
-				{
+				} else {
 					local.values = $listClean(list=local.values, delim=local.delimiter, returnAs="array");
 				}
 			}
@@ -90,14 +72,23 @@
 
 			// loop through all the properties they want to query and assign values
 			local.iEnd = ArrayLen(local.finderProperties);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
-			{
-				ArrayAppend(local.addToWhere, "#local.finderProperties[local.i]# #$dynamicFinderOperator(local.finderProperties[local.i])# #variables.wheels.class.adapter.$quoteValue(str=local.values[local.i], type=validationTypeForProperty(local.finderProperties[local.i]))#");
+			for (local.i = 1; local.i <= local.iEnd; local.i++) {
+				local.property = local.finderProperties[local.i];
+				local.value = local.values[local.i];
+
+				ArrayAppend(
+					local.addToWhere,
+					"#local.property# #$dynamicFinderOperator(local.property)# #variables.wheels.class.adapter.$quoteValue(str=local.value, type=validationTypeForProperty(local.property))#"
+				);
 			}
 
 			// construct where clause
 			local.addToWhere = ArrayToList(local.addToWhere, " AND ");
-			arguments.missingMethodArguments.where = IIf(StructKeyExists(arguments.missingMethodArguments, "where") && Len(arguments.missingMethodArguments.where), "'(' & arguments.missingMethodArguments.where & ') AND (' & local.addToWhere & ')'", "local.addToWhere");
+			arguments.missingMethodArguments.where = IIf(
+				StructKeyExists(arguments.missingMethodArguments, "where") && Len(arguments.missingMethodArguments.where),
+				"'(' & arguments.missingMethodArguments.where & ') AND (' & local.addToWhere & ')'",
+				"local.addToWhere"
+			);
 
 			// remove uneeded arguments
 			StructDelete(arguments.missingMethodArguments, "delimiter");
@@ -107,19 +98,20 @@
 
 			// call finder method
 			local.rv = IIf(Left(arguments.missingMethodName, 9) == "findOneBy", "findOne(argumentCollection=arguments.missingMethodArguments)", "findAll(argumentCollection=arguments.missingMethodArguments)");
-		}
-		else if (Left(arguments.missingMethodName, 14) == "findOrCreateBy")
-		{
+		} else if (Left(arguments.missingMethodName, 14) == "findOrCreateBy") {
 			local.rv = $findOrCreateBy(argumentCollection=arguments);
-		}
-		else
-		{
+		} else {
 			local.rv = $associationMethod(argumentCollection=arguments);
 		}
-		if (!StructKeyExists(local, "rv"))
-		{
-			$throw(type="Wheels.MethodNotFound", message="The method `#arguments.missingMethodName#` was not found in the `#variables.wheels.class.modelName#` model.", extendedInfo="Check your spelling or add the method to the model's CFC file.");
+
+		if (!StructKeyExists(local, "rv")) {
+			Throw(
+				type="Wheels.MethodNotFound",
+				message="The method `#arguments.missingMethodName#` was not found in the `#variables.wheels.class.modelName#` model.",
+				extendedInfo="Check your spelling or add the method to the model's CFC file."
+			);
 		}
+
 		return local.rv;
 	}
 

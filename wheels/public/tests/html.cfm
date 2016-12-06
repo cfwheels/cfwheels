@@ -18,21 +18,32 @@
 
       <div class="column">
         <p class="float-right">
-          <a class="button button-outline" href="#linkParams#">Run All Tests</a> <a class="button button-outline" href="#linkParams#&reload=true">Reload Test Data</a>
+          <a class="button button-outline" href="#linkParams#">Run All Tests</a>
+          <a class="button button-outline" href="#linkParams#&reload=true">Reload Test Data</a>
         <p>
       </div>
 
     </div>
     <hr />
     <div class="row">
-      <div class="column"><p class="<cfif testResults.ok>success<cfelse>failed</cfif>">Status: <br /><cfif testResults.ok>Passed<cfelse>Failed</cfif></p></div>
+      <div class="column"><p class="<cfif testResults.ok>success<cfelse>failed</cfif>">Status: <br /><cfif testResults.ok><i class='fa fa-check-circle'></i> Passed<cfelse><i class='fa fa-times-circle'></i> Failed</cfif></p></div>
       <div class="column"><p><strong>Duration</strong><br />#TimeFormat(testResults.end - testResults.begin, "HH:mm:ss")#</p></div>
       <div class="column"><p><strong>Packages</strong><br />#testResults.numCases#</p></div>
       <div class="column"><p><strong>Tests</strong><br />#testResults.numTests#</p></div>
       <div class="column"><p class="<cfif testResults.numFailures neq 0> failed</cfif>"><strong>Failures</strong><br />#testResults.numFailures#</p></div>
       <div class="column"><p class="<cfif testResults.numErrors neq 0> failed</cfif>"><strong>Errors</strong><br />#testResults.numErrors#</p></div>
     </div>
-
+    <cfif !testResults.ok>
+    <div class="row">
+      <div class="column">
+        <p><strong>Show:</strong>
+        <a href="##" data-toggle="all" class='button button-outline toggle'>All</a>
+        <a href="##" data-toggle="failed" class='button button-outline toggle'>Failed</a>
+        <a href="##" data-toggle="passed" class='button button-outline toggle'>Passed</a>
+        </p>
+      </div>
+    </div>
+    </cfif>
     <hr />
   	<table class="table">
   		<tr>
@@ -84,3 +95,29 @@
   	</table>
   </cfif>
 </cfoutput>
+<script>
+$(".toggle").on("click", function(e){
+  var show=$(this).data("toggle");
+    switch (show) {
+    case 'all':
+      $(".errRow").show();
+      $(".sRow").show();
+      $(".toggle").addClass('button-outline');
+      $(this).removeClass('button-outline');
+    break;
+    case 'failed':
+      $(".errRow").show();
+      $(".sRow").hide();
+      $(".toggle").addClass('button-outline');
+      $(this).removeClass('button-outline');
+    break;
+    case 'passed':
+      $(".errRow").hide();
+      $(".sRow").show();
+      $(".toggle").addClass('button-outline');
+      $(this).removeClass('button-outline');
+    break;
+    }
+  e.preventDefault();
+});
+</script>

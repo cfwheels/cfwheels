@@ -46,6 +46,11 @@
 			request.cgi = $cgiScope();
 		}
 
+		// Copy HTTP headers
+		if (!StructKeyExists(request, "headers")) {
+			request.headers = GetHttpRequestData().headers;
+		}
+
 		// reload the plugins on each request if cachePlugins is set to false
 		if (!application.wheels.cachePlugins)
 		{

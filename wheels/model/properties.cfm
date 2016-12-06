@@ -158,11 +158,15 @@
 
 	public boolean function propertyIsPresent(required string property) {
 		local.rv = false;
-		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]) && IsSimpleValue(this[arguments.property]) && Len(this[arguments.property]))
+		if (this.hasProperty(arguments.property) && IsSimpleValue(this[arguments.property]) && Len(this[arguments.property]))
 		{
 			local.rv = true;
 		}
 		return local.rv;
+	}
+
+	public boolean function propertyIsBlank(required string property) {
+		return !this.propertyIsPresent(arguments.property);
 	}
 
 	public boolean function toggle(required string property, boolean save) {
@@ -437,18 +441,17 @@
 	}
 
 	public string function $label(required string property) {
-		if (StructKeyExists(variables.wheels.class.properties, arguments.property) && StructKeyExists(variables.wheels.class.properties[arguments.property], "label"))
-		{
+		// Prefer label set via `properties` intializer if it exists.
+		if (StructKeyExists(variables.wheels.class.properties, arguments.property) && StructKeyExists(variables.wheels.class.properties[arguments.property], "label")) {
 			local.rv = variables.wheels.class.properties[arguments.property].label;
-		}
-		else if (StructKeyExists(variables.wheels.class.mapping, arguments.property) && StructKeyExists(variables.wheels.class.mapping[arguments.property], "label"))
-		{
+		// Check to see if the mapping has a label to base the name on.
+		} else if (StructKeyExists(variables.wheels.class.mapping, arguments.property) && StructKeyExists(variables.wheels.class.mapping[arguments.property], "label")) {
 			local.rv = variables.wheels.class.mapping[arguments.property].label;
+		// Fall back on property name otherwise.
+		} else {
+			local.rv = humanize(arguments.property);
 		}
-		else
-		{
-			local.rv = Humanize(arguments.property);
-		}
+
 		return local.rv;
 	}
 </cfscript>
