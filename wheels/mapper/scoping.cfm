@@ -10,9 +10,9 @@
    * @param  {string}  shallowName   Shallow name prefix
    * @param  {struct}  constraints   Variable patterns to use for matching
    * @param  {string}  $call
-   * @return {Mapper}
+   * @return {struct}
    */
-  public Mapper function scope(string name, string path, string module
+  public struct function scope(string name, string path, string module
     , string controller, boolean shallow, string shallowPath
     , string shallowName, struct constraints, string $call="scope") {
 
@@ -58,19 +58,19 @@
     return this;
   }
 
-  public Mapper function namespace(
+  public struct function namespace(
       required string module
     , string name=arguments.module, string path=hyphenize(arguments.module)) {
     return scope(argumentCollection=arguments, $call="namespace");
   }
 
-  public Mapper function $controller(
+  public struct function $controller(
       required string controller, string name=arguments.controller
     , string path=hyphenize(arguments.controller)) {
     return scope(argumentCollection=arguments, $call="controller");
   }
 
-  public Mapper function constraints()
+  public struct function constraints()
     hint="Set variable patterns to use for matching" {
     return scope(constraints=arguments, $call="constraints");
   }

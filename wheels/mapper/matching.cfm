@@ -8,9 +8,9 @@
    * @param  {string} module        Namespace to append to controller
    * @param  {string} on            Created resource route under 'member' or 'collection'
    * @param  {struct} constraints
-   * @return {Mapper}
+   * @return {struct}
    */
-  public Mapper function match(
+  public struct function match(
       string name, string pattern, string to
     , string methods, string module, string on, struct constraints={}) {
 
@@ -172,27 +172,27 @@
     return this;
   }
 
-  public Mapper function $get(string name) hint="Match a GET url" {
+  public struct function $get(string name) hint="Match a GET url" {
     return match(method="get", argumentCollection=arguments);
   }
 
-  public Mapper function post(string name) hint="Match a POST url" {
+  public struct function post(string name) hint="Match a POST url" {
     return match(method="post", argumentCollection=arguments);
   }
 
-  public Mapper function put(string name) hint="Match a PUT url" {
+  public struct function put(string name) hint="Match a PUT url" {
     return match(method="put", argumentCollection=arguments);
   }
 
-  public Mapper function delete(string name) hint="Match a DELETE url" {
+  public struct function delete(string name) hint="Match a DELETE url" {
     return match(method="delete", argumentCollection=arguments);
   }
 
-  public Mapper function root(string to) hint="Match a root directory" {
+  public struct function root(string to) hint="Match a root directory" {
     return match(name="root", pattern="/(.[format])", argumentCollection=arguments);
   }
 
-  public Mapper function wildcard(string action="index")
+  public struct function wildcard(string action="index")
     hint="Special wildcard matching" {
 
     if (StructKeyExists(scopeStack[1], "controller")) {

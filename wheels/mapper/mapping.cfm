@@ -1,5 +1,5 @@
 <cfscript>
-  public Mapper function draw(
+  public struct function draw(
     boolean restful=true, boolean methods=arguments.restful) {
 
     variables.restful = arguments.restful;
@@ -16,7 +16,7 @@
     return this;
   }
 
-  public Mapper function end() {
+  public struct function end() {
     // if last action was a resource, set up REST routes
     // create plural resource routes
     if (scopeStack[1].$call EQ "resources") {
