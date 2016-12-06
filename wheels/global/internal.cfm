@@ -7,6 +7,7 @@
 			request.wheels.cache = {};
 			request.wheels.stacks = {};
 			request.wheels.invoked = {};
+			request.wheels.urlForCache = {};
 			request.wheels.tickCountId = GetTickCount();
 
 			// create a structure to track the transaction status for all adapters
@@ -573,13 +574,21 @@
 		// by default we return Model or Controller so that the base component gets loaded
 		local.rv = capitalize(arguments.type);
 
-		// we are going to store the full controller / model path in the existing / non-existing lists so we can have controllers / models in multiple places
-		local.fullObjectPath = arguments.objectPath & "/" & arguments.name;
+		// we are going to store the full controller / model path in the
+		// existing / non-existing lists so we can have controllers / models
+		// in multiple places
+		//
+		// The name coming into $objectFileName could have dot notation due to
+		// nested controllers so we need to change delims here on the name
+		local.fullObjectPath = arguments.objectPath & "/" & ListChangeDelims(arguments.name, '/', '.');
 
-		if (!ListFindNoCase(application.wheels.existingObjectFiles, local.fullObjectPath) && !ListFindNoCase(application.wheels.nonExistingObjectFiles, local.fullObjectPath))
-		{
-			// we have not yet checked if this file exists or not so let's do that here (the function below will return the file name with the correct case if it exists, false if not)
-			local.file = $fileExistsNoCase(Expandpath(arguments.objectPath) & "/" & arguments.name & ".cfc");
+		if (!ListFindNoCase(application.wheels.existingObjectFiles, local.fullObjectPath)
+				&& !ListFindNoCase(application.wheels.nonExistingObjectFiles, local.fullObjectPath)) {
+
+			// we have not yet checked if this file exists or not so let's do that
+			// here (the function below will return the file name with the correct
+			// case if it exists, false if not)
+			local.file = $fileExistsNoCase(Expandpath(local.fullObjectPath) & ".cfc");
 
 			if (IsBoolean(local.file) && !local.file)
 			{
@@ -598,18 +607,21 @@
 				{
 					application.wheels.existingObjectFiles = ListAppend(application.wheels.existingObjectFiles, local.fullObjectPath);
 				}
-				local.rv = local.file;
 			}
 		}
-		else
+
+		// if the file exists we return the file name in its proper case
+		local.pos = ListFindNoCase(application.wheels.existingObjectFiles, local.fullObjectPath);
+		if (local.pos)
 		{
-			// if the file exists we return the file name in its proper case
-			local.pos = ListFindNoCase(application.wheels.existingObjectFiles, local.fullObjectPath);
-			if (local.pos)
-			{
-				local.rv = ListLast(ListGetAt(application.wheels.existingObjectFiles, local.pos), "/");
-			}
+			local.file = ListLast(ListGetAt(application.wheels.existingObjectFiles, local.pos), "/");
 		}
+
+		// we've found a file so we'll need to send back the corrected name
+		// argument as it could have dot notation in it from the mapper
+		if (structKeyExists(local, "file") and !IsBoolean(local.file))
+			local.rv = ListSetAt(arguments.name, ListLen(arguments.name, "."), local.file, ".");
+
 		return local.rv;
 	}
 
@@ -758,6 +770,15 @@
 	}
 
 	public void function $loadRoutes() {
+		$simpleLock(
+				name="$mapperLoadRoutes"
+			, type="exclusive"
+			, timeout=5
+			, execute="$lockedLoadRoutes"
+		);
+	}
+
+	public void function $lockedLoadRoutes() {
 		local.appKey = $appKey();
 
 		// clear out the route info
@@ -766,12 +787,6 @@
 
 		// load developer routes first
 		$include(template="config/routes.cfm");
-
-		// add the wheels default routes at the end if requested
-		if (application[local.appKey].loadDefaultRoutes)
-		{
-			addDefaultRoutes();
-		}
 
 		// set lookup info for the named routes
 		$setNamedRoutePositions();
@@ -1075,5 +1090,85 @@
 		$zip(file=local.path, action="delete", filter=local.filter, recurse=true);
 
 		return local.path;
+	}
+
+	public string function $namedRoute() {
+
+		// FIX: numbered arguments with StructDelete() are breaking in CF 9.0.1
+		// this hack fixes it
+		arguments = Duplicate(arguments);
+
+		// determine route name and path type
+		arguments.route = GetFunctionCalledName();
+
+		if (REFindNoCase("Path$", arguments.route)) {
+			arguments.route = REReplaceNoCase(arguments.route, "^(.+)Path$", "\1");
+			arguments.onlyPath = true;
+		} else if (REFindNoCase("Url$", arguments.route)) {
+			arguments.route = REReplaceNoCase(arguments.route, "^(.+)Url$", "\1");
+			arguments.onlyPath = false;
+		}
+
+		// get the matching route and any required variables
+		if (StructKeyExists(application.wheels.namedRoutePositions, arguments.route)) {
+
+			local.routePos = application.wheels.namedRoutePositions[arguments.route];
+
+			// for backwards compatibility, allow local.routePos to be a list
+			if (IsArray(local.routePos))
+				local.pos = local.routePos[1];
+			else
+				local.pos = ListFirst(local.routePos);
+
+			// grab first route found
+			// todo: don't just accept the first route found
+			local.route = application.wheels.routes[local.pos];
+			local.vars = ListToArray(local.route.variables);
+
+			// loop over variables needed for route
+			local.iEnd = ArrayLen(local.vars);
+			for (local.i = 1; local.i LTE local.iEnd; local.i++) {
+				local.key = local.vars[local.i];
+
+				// try to find the correct argument
+				if (StructKeyExists(arguments, local.key)) {
+					local.value = arguments[local.key];
+					StructDelete(arguments, local.key);
+				} else if (StructKeyExists(arguments, local.i)) {
+					local.value = arguments[local.i];
+					StructDelete(arguments, local.i);
+				}
+
+				// if value was passed in
+				if (StructKeyExists(loc, "value")) {
+
+					// just assign simple values
+					if (NOT IsObject(local.value)) {
+						arguments[local.key] = local.value;
+
+					// if object, do special processing
+					} else {
+
+						// if the passed in object is new, link to the plural REST route instead
+						if (local.value.isNew()) {
+							if (StructKeyExists(application.wheels.namedRoutePositions, pluralize(arguments.route))) {
+								arguments.route = pluralize(arguments.route);
+								break;
+							}
+
+						// otherwise, use the Model#toParam method
+						} else {
+							arguments[local.key] = local.value.toParam();
+						}
+					}
+
+					// remove value for next loop
+					StructDelete(local, "value");
+				}
+			}
+		}
+
+		// return correct url with arguments set
+		return urlFor(argumentCollection=arguments);
 	}
 </cfscript>

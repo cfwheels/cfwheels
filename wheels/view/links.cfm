@@ -5,7 +5,6 @@
 
 	public string function linkTo(
 		string text,
-		string confirm="",
 		string route="",
 		string controller="",
 		string action="",
@@ -19,11 +18,26 @@
 		string href
 	) {
 		$args(name="linkTo", args=arguments);
-		if (Len(arguments.confirm))
-		{
-			local.onclick = "return confirm('#JSStringFormat(arguments.confirm)#');";
-			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=local.onclick, attributes=arguments);
+
+		// look for passed in rest method
+		if (StructKeyExists(arguments, "method")) {
+
+			// if dealing with delete, keep robots from following link
+			if (arguments.method == "delete") {
+				if (!StructKeyExists(arguments, "rel"))
+					arguments.rel = "";
+				arguments.rel = ListAppend(arguments.rel, "no-follow", " ");
+			}
 		}
+
+		// hyphenize any other data attributes
+		for (local.key in arguments) {
+			if (REFind("^data[A-Za-z]", local.key)) {
+				arguments[hyphenize(local.key)] = toXHTML(arguments[local.key]);
+				StructDelete(arguments, local.key);
+			}
+		}
+
 		if (!StructKeyExists(arguments, "href"))
 		{
 			arguments.href = URLFor(argumentCollection=arguments);

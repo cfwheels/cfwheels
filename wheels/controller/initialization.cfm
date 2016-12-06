@@ -1,9 +1,9 @@
-<cfscript>  
+<cfscript>
 	/**
 	* PRIVATE FUNCTIONS
-	*/   
+	*/
 
-	public any function $createControllerObject(required struct params) { 
+	public any function $createControllerObject(required struct params) {
 		// if the controller file exists we instantiate it, otherwise we instantiate the parent controller
 		// this is done so that an action's view page can be rendered without having an actual controller file for it
 		local.controllerName = $objectFileName(name=variables.$class.name, objectPath=variables.$class.path, type="controller");
@@ -12,49 +12,54 @@
 	}
 
 	public any function $initControllerClass(string name="") {
-			variables.$class.name = arguments.name;
-			variables.$class.path = arguments.path;
+		variables.$class.name = arguments.name;
+		variables.$class.path = arguments.path;
 
-			// if our name has pathing in it, remove it and add it to the end of of the $class.path variable
-			if (Find("/", arguments.name))
-			{
-				variables.$class.name = ListLast(arguments.name, "/");
-				variables.$class.path = ListAppend(arguments.path, ListDeleteAt(arguments.name, ListLen(arguments.name, "/"), "/"), "/");
-			}
+		variables.$class.verifications = [];
+		variables.$class.filters = [];
+		variables.$class.cachableActions = [];
+		variables.$class.layout = {};
 
-			variables.$class.verifications = [];
-			variables.$class.filters = [];
-			variables.$class.cachableActions = [];
-			variables.$class.layout = {};
+		// default the controller to only respond to html
+		variables.$class.formats = {};
+		variables.$class.formats.default = "html";
+		variables.$class.formats.actions = {};
+		variables.$class.formats.existingTemplates = "";
+		variables.$class.formats.nonExistingTemplates = "";
 
-			// default the controller to only respond to html
-			variables.$class.formats = {};
-			variables.$class.formats.default = "html";
-			variables.$class.formats.actions = {};
-			variables.$class.formats.existingTemplates = "";
-			variables.$class.formats.nonExistingTemplates = "";
-
-			$setFlashStorage(get("flashStorage"));
-			if (StructKeyExists(variables, "init"))
-			{
-				init();
-			}
-			local.rv = this;
+		$setFlashStorage(get("flashStorage"));
+		if (StructKeyExists(variables, "init"))
+		{
+			init();
+		}
+		local.rv = this;
 		return local.rv;
-	} 
+	}
 
 	public void function $setControllerClassData() {
 		variables.$class = application.wheels.controllers[arguments.name].$getControllerClassData();
 	}
- 
+
 	public any function $initControllerObject(required string name, required struct params) {
 
 		// create a struct for storing request specific data
 		variables.$instance = {};
 		variables.$instance.contentFor = {};
 
-		// include controller specific helper files if they exist, cache the file check for performance reasons
-		local.template = get("viewPath") & "/" & LCase(arguments.name) & "/helpers.cfm";
+		// setup direct helper methods for named routes
+		for (local.namedRoute in application.wheels.namedRoutePositions) {
+			variables[local.namedRoute & "Path"] = $namedRoute;
+			variables[local.namedRoute & "Url"] = $namedRoute;
+		}
+
+		// include controller specific helper files if they exist,
+		// cache the file check for performance reasons
+		// name could be dot notation so we need to change delims
+		local.template = get("viewPath")
+			& "/"
+			& LCase(ListChangeDelims(arguments.name, '/', '.'))
+			& "/helpers.cfm";
+
 		local.helperFileExists = false;
 		if (!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.name))
 		{
@@ -87,9 +92,9 @@
 		local.rv = this;
 		return local.rv;
 	}
- 
+
 	public struct function $getControllerClassData() {
 		local.rv = variables.$class;
 		return local.rv;
-	} 
+	}
 </cfscript>
