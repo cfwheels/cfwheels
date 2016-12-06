@@ -5,7 +5,6 @@
 
 	public string function linkTo(
 		string text,
-		string confirm="",
 		string route="",
 		string controller="",
 		string action="",
@@ -29,22 +28,6 @@
 					arguments.rel = "";
 				arguments.rel = ListAppend(arguments.rel, "no-follow", " ");
 			}
-
-			// put the method in a data attribute
-			arguments["data-method"] = toXHTML(arguments.method);
-			StructDelete(arguments, "method");
-		}
-
-		// set confirmation text for link
-		if (Len(arguments.confirm)) {
-			arguments["data-confirm"] = toXHTML(arguments.confirm);
-			StructDelete(arguments, "confirm");
-		}
-
-		// set up remote links
-		if (StructKeyExists(arguments, "remote")) {
-			arguments["data-remote"] = toXHTML(arguments.remote);
-			StructDelete(arguments, "remote");
 		}
 
 		// hyphenize any other data attributes
