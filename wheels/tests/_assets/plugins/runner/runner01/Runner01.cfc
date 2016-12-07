@@ -32,6 +32,10 @@
     <cfreturn $helper011() />
   </cffunction>
 
+  <cffunction name="$helper01ConditionalCheck">
+    <cfreturn false />
+  </cffunction>
+
   <cffunction name="$helper011">
     <cfreturn "$helper011Responding" />
   </cffunction>
