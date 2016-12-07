@@ -81,7 +81,9 @@ component extends="Base" output=false {
 		if (Left(local.sql, 11) IS "INSERT INTO" && ! StructKeyExists(arguments.result, $generatedKey())) {
 			local.startPar = Find("(", local.sql) + 1;
 			local.endPar = Find(")", local.sql);
-			local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
+			local.columnList = "";
+			if (local.endPar)
+				local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
 			if (! ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
 				// Railo/ACF doesn't support PostgreSQL natively when it comes to returning
 				// the primary key value of the last inserted record so we have to do it manually by using the sequence
