@@ -92,11 +92,11 @@
 
     // consider only / except REST routes for resources
     // allow arguments.only to override local.args.only
-    if (ListLen(arguments.only) GT 0)
+    if (structKeyExists(arguments, "only") && ListLen(arguments.only) > 0)
       local.args.actions = LCase(arguments.only);
 
     // remove unwanted routes from local.args.only
-    if (ListLen(arguments.except) GT 0) {
+    if (structKeyExists(arguments, "only") && ListLen(arguments.except) > 0) {
       local.except = ListToArray(arguments.except);
       local.iEnd = ArrayLen(local.except);
       for (local.i=1; local.i LTE local.iEnd; local.i++)
