@@ -37,7 +37,7 @@
     hint="Transform route pattern into regular expression" {
 
     // escape any dots in pattern
-    local.regex = REReplace(arguments.pattern, "([.])", "\\1", "ALL");
+    local.regex = replace(arguments.pattern, ".", "\.", "ALL");
     // further mask pattern variables
     // NOTE: this keeps constraint patterns from being replaced twice
     local.regex = REReplace(local.regex, "\[(\*?\w+)\]", ":::\1:::", "ALL");
@@ -56,9 +56,9 @@
     // replace remaining variables with default regex
     local.regex = REReplace(local.regex, ":::\w+:::", "([^\./]+)", "ALL");
 
-    // escape any forward slashes
     local.regex = REReplace(local.regex, "^\/*(.*)\/*$", "^\1/?$");
 
+    // escape any forward slashes
     local.regex = REReplace(local.regex, "(\/|\\\/)", "\/", "ALL");
 
     return local.regex;

@@ -86,7 +86,7 @@ component extends="Base" output=false {
 				// Railo/ACF doesn't support PostgreSQL natively when it comes to returning
 				// the primary key value of the last inserted record so we have to do it manually by using the sequence
 				local.rv = {};
-				local.tbl = SpanExcluding(Right(local.sql, Len(local.sql)-12), " ")
+				local.tbl = SpanExcluding(Right(local.sql, Len(local.sql)-12), " ");
 				query = $query(sql="SELECT currval(pg_get_serial_sequence('#local.tbl#', '#arguments.primaryKey#')) AS lastId", argumentCollection=arguments.queryAttributes);
 				local.rv[$generatedKey()] = query.lastId;
 				return local.rv;
