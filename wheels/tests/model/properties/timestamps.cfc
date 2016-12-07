@@ -5,8 +5,8 @@ component extends="wheels.tests.Test" {
 			utctime = DateConvert("local2Utc", Now());
 			author = model("Author").findOne();
 			post = author.createPost(title="test post", body="here is some text");
-			assert('DateDiff("s", utctime, post.createdAt) lt 1');  // allow 1 second between test value and inserted value
-			assert('DateDiff("s", utctime, post.updatedAt) lt 1');
+			assert('DateDiff("s", utctime, post.createdAt) lte 1');  // allow 1 second between test value and inserted value
+			assert('DateDiff("s", utctime, post.updatedAt) lte 1');
 			transaction action="rollback";
 		}
 	}
@@ -17,8 +17,8 @@ component extends="wheels.tests.Test" {
 			model("Post").getClass().timeStampMode = "local";
 			author = model("Author").findOne();
 			post = author.createPost(title="test post", body="here is some text");
-			assert('DateDiff("s", localtime, post.createdAt) lt 1'); // allow 1 second between test value and inserted value
-			assert('DateDiff("s", localtime, post.updatedAt) lt 1');
+			assert('DateDiff("s", localtime, post.createdAt) lte 1'); // allow 1 second between test value and inserted value
+			assert('DateDiff("s", localtime, post.updatedAt) lte 1');
 			transaction action="rollback";
 		}
 	}
@@ -31,8 +31,8 @@ component extends="wheels.tests.Test" {
 			model("Post").getClass().timeStampMode = "epoch";
 			author = model("Author").findOne();
 			post = author.createPost(title="test post", body="here is some text", createdAt=Now(), updatedAt=Now());
-			assert('post.createdAtEpoch - epochtime lt 1000'); // allow 1 second between test value and inserted value
-			assert('post.updatedAtEpoch - epochtime lt 1000'); // allow 1 second between test value and inserted value
+			assert('post.createdAtEpoch - epochtime lte 1000'); // allow 1 second between test value and inserted value
+			assert('post.updatedAtEpoch - epochtime lte 1000'); // allow 1 second between test value and inserted value
 			transaction action="rollback";
 		}
 	}
