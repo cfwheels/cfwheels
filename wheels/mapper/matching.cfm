@@ -16,9 +16,9 @@
 
     // evaluate match on member or collection
     if (structKeyExists(arguments, "on")) {
-      if (structKeyExists(arguments, "on") && arguments.on == "member")
+      if (arguments.on == "member")
         return member().match(argumentCollection=arguments, on="").end();
-      if (arguments.on EQ "collection")
+      if (arguments.on == "collection")
         return collection().match(argumentCollection=arguments, on="").end();
     }
 
