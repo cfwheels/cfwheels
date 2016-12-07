@@ -8,17 +8,19 @@
    * @param  {string} module        Namespace to append to controller
    * @param  {string} on            Created resource route under 'member' or 'collection'
    * @param  {struct} constraints
-   * @return {Mapper}
+   * @return {struct}
    */
   public struct function match(
       string name, string pattern, string to
     , string methods, string module, string on, struct constraints={}) {
 
     // evaluate match on member or collection
-    if (arguments.on EQ "member")
-      return member().match(argumentCollection=arguments, on="").end();
-    if (arguments.on EQ "collection")
-      return collection().match(argumentCollection=arguments, on="").end();
+    if (structKeyExists(arguments, "on")) {
+      if (arguments.on == "member")
+        return member().match(argumentCollection=arguments, on="").end();
+      if (arguments.on == "collection")
+        return collection().match(argumentCollection=arguments, on="").end();
+    }
 
     // use scoped controller if found
     if (StructKeyExists(scopeStack[1], "controller")
@@ -54,7 +56,7 @@
     }
 
     // die if pattern is not defined
-    if (NOT StructKeyExists(arguments, "pattern"))
+    if (!StructKeyExists(arguments, "pattern"))
       throw(
           type="Wheels.MapperArgumentMissing"
         , message="Either 'pattern' or 'name' must be defined."

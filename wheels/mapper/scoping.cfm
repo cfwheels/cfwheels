@@ -10,7 +10,7 @@
    * @param  {string}  shallowName   Shallow name prefix
    * @param  {struct}  constraints   Variable patterns to use for matching
    * @param  {string}  $call
-   * @return {Mapper}
+   * @return {struct}
    */
   public struct function scope(string name, string path, string module
     , string controller, boolean shallow, string shallowPath

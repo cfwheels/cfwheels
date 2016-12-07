@@ -15,7 +15,7 @@
    * @param  {struct}  constraints   Variable patterns to use for matching
    * @param  {string}  $call
    * @param  {boolean} $plural
-   * @return {Mapper}
+   * @return {struct}
    */
   public struct function resource(
       required string name, boolean nested=false
