@@ -122,31 +122,43 @@ public string function $generateCookieAuthenticityToken() {
 }
 
 public string function $readAuthenticityTokenFromCookie() {
-		local.cookieName = application.wheels.csrfCookieName;
+	local.cookieName = application.wheels.csrfCookieName;
 
-		// Cookie is there. Read it in.
-		if (StructKeyExists(cookie, local.cookieName)) {
-			local.cookie = cookie[local.cookieName];
+	// If no cookie, return empty string.
+	if (!StructKeyExists(cookie, local.cookieName))
+		return "";
 
-			try {
-				local.cookieAttrs = Decrypt(
-					local.cookie,
-					application.wheels.csrfCookieEncryptionSecretKey,
-					application.wheels.csrfCookieEncryptionAlgorithm,
-					application.wheels.csrfCookieEncryptionEncoding
-				);
-			// If cookie is corrupted, return empty string.
-			} catch (any e) {
-				return "";
-			}
+	// Cookie is there. Read it in.
+	local.cookie = cookie[local.cookieName];
 
-			local.cookieAttrs = DeserializeJson(local.cookieAttrs);
+	try {
+		local.cookieAttrs = Decrypt(
+			local.cookie,
+			application.wheels.csrfCookieEncryptionSecretKey,
+			application.wheels.csrfCookieEncryptionAlgorithm,
+			application.wheels.csrfCookieEncryptionEncoding
+		);
+	// If cookie is corrupted, return empty string.
+	} catch (any e) {
+		return "";
+	}
 
-			return local.cookieAttrs.authenticityToken;
-		// No cookie, return empty string.
-		} else {
-			return "";
-		}
+	// if we don't have cookie attr from above for some strange reason, fail
+	if (!structKeyExists(local, "cookieAttrs"))
+		return "";
+
+	// if we don't have json in cookie attrs, fail
+	if (!isSimpleValue(local.cookieAttrs) || !isJson(local.cookieAttrs))
+		return "";
+
+	// now we have everything we need, deserialize
+	local.cookieAttrs = DeserializeJson(local.cookieAttrs);
+
+	// check to make sure the json we decoded has the authenticity token in it
+	if (!structKeyExists(local.cookieAttrs, "authenticityToken"))
+		return "";
+
+	return local.cookieAttrs.authenticityToken;
 }
 
 public struct function $csrfCookieAttributeCollection(required string value) {
