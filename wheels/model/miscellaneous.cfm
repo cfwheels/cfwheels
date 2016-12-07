@@ -152,6 +152,14 @@
 	}
 
 	public void function $timestampProperty(required string property) {
-		this[arguments.property] = Now();
+		if (variables.wheels.class.timeStampMode eq "utc") {
+			this[arguments.property] = DateConvert("local2Utc", Now());
+		} else if (variables.wheels.class.timeStampMode eq "local") {
+			this[arguments.property] = Now();
+		} else if (variables.wheels.class.timeStampMode eq "epoch") {
+			this[arguments.property] = Now().getTime();
+		} else {
+			$throw(type="Wheels.InvalidTimeStampMode", message="Timestamp mode #variables.wheels.class.timeStampMode# is invalid");
+		}
 	}
 </cfscript>

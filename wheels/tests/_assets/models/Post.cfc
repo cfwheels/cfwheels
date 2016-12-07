@@ -22,4 +22,8 @@ component extends="Model" {
 		}
 	}
 
+	function getClass() {
+		return variables.wheels.class
+	};
+
 }
