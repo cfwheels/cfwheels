@@ -41,8 +41,26 @@ component extends="wheels.tests.Test" {
     assert('result eq"$helper011Responding"');
   }
 
-  function test_call_plugin_method_via_cfinvoke() {
+  function test_call_plugin_method_via_$invoke() {
     result = c.$invoke(method="$helper01", invokeArgs={});
+    assert('result eq"$helper011Responding"');
+  }
+
+  function test_call_plugin_method_via_$simplelock() {
+    result = c.$simpleLock(name="$simpleLockHelper01", type="exclusive", execute="$helper01", executeArgs={}, timeout=5);
+    assert('result eq"$helper011Responding"');
+  }
+
+  function test_call_plugin_method_via_$doublecheckedlock() {
+    result = c.$doubleCheckedLock(
+        name="$doubleCheckedLockHelper01"
+      , condition="$helper01ConditionalCheck"
+      , conditionArgs={}
+      , type="exclusive"
+      , execute="$helper01"
+      , executeArgs={}
+      , timeout=5
+    );
     assert('result eq"$helper011Responding"');
   }
 
