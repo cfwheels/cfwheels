@@ -224,6 +224,7 @@ public void function onApplicationStart() {
 	application.$wheels.softDeleteProperty = "deletedAt";
 	application.$wheels.timeStampOnCreateProperty = "createdAt";
 	application.$wheels.timeStampOnUpdateProperty = "updatedAt";
+	application.$wheels.timeStampMode = "utc";
 	application.$wheels.ipExceptions = "";
 	application.$wheels.overwritePlugins = true;
 	application.$wheels.deletePluginDirectories = true;

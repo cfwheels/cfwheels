@@ -209,6 +209,7 @@
 		}
 
 		// set up soft deletion and time stamping if the necessary columns in the table exist
+		variables.wheels.class.timeStampMode = application.wheels.timeStampMode;
 		if (Len(application.wheels.softDeleteProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.softDeleteProperty))
 		{
 			variables.wheels.class.softDeletion = true;
