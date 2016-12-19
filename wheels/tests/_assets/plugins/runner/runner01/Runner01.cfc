@@ -40,4 +40,8 @@
     <cfreturn "$helper011Responding" />
   </cffunction>
 
+  <cffunction name="includePartial">
+    <cfreturn core.includePartial(argumentCollection = arguments) />
+  </cffunction>
+
 </cfcomponent>
