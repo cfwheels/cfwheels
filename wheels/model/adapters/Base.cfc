@@ -224,7 +224,7 @@
 			return "/* " & arguments.text & " */";
 		}
 
-		include "../../plugins/injection.cfm";
+		include "../../plugins/functions.cfm";
 </cfscript>
 
 	<cffunction name="$performQuery" returntype="struct" access="public" output="false">

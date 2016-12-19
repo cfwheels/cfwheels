@@ -96,6 +96,6 @@ component extends="Base" output=false {
 		}
 	}
 
-	include "../../plugins/injection.cfm";
+	include "../../plugins/functions.cfm";
 
 }

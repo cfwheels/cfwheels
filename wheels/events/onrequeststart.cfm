@@ -1,4 +1,4 @@
-<cfscript> 
+<cfscript>
 	public void function onRequestStart(required targetPage) {
 		local.lockName = "reloadLock" & application.applicationName;
 
@@ -60,7 +60,7 @@
 		// inject methods from plugins directly to Application.cfc
 		if (!StructIsEmpty(application.wheels.mixins))
 		{
-			$include(template="wheels/plugins/injection.cfm");
+			$include(template="wheels/plugins/functions.cfm");
 		}
 
 		if (application.wheels.environment == "maintenance")

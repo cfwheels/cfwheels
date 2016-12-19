@@ -111,7 +111,7 @@ component extends="wheels.tests.Test" {
 
   function test_calling_overridden_method_with_method_nesting() {
     result = c.includePartial(partial="testpartial");
-    assert('trim(result) eq "<p>some content</p>"')
+    assert('trim(result) eq "<p>some content</p>"');
   }
 
   function test_zzz_all_request_stack_counters_gone() {
