@@ -47,19 +47,8 @@
 
     // if the developer has called core.method() without there actually being a
     // core method with that name, throw a nice wheels error
-    if (request.wheels.stacks[local.methodName] > local.stackLen) {
-
-      // make sure we reset our stack counter in case our expection is caught
-      request.wheels.stacks[local.methodName] = 0;
-
-      // throw a method not found error if core.method() doesn't have another
-      // method in the stack
-      $throw(
-          type="Wheels.MethodNotFound"
-        , message="The method `#local.methodName#` is part of a plugin but
-          was not found in the base object."
-      );
-    }
+    if (request.wheels.stacks[local.methodName] > local.stackLen)
+      request.wheels.stacks[local.methodName] = 1;
 
     // get the method in the local scope without needing to be scoped
     var method = local.stack[request.wheels.stacks[local.methodName]];
@@ -69,13 +58,24 @@
     try {
       local.result = method(argumentCollection=arguments);
     } catch (any e) {
-      request.wheels.stacks[local.methodName] = 0;
+
+      // throw a method not found error if core.method() doesn't have another
+      // method in the stack
+      if (e.type == "java.lang.StackOverflowError") {
+        $throw(
+            type="Wheels.MethodNotFound"
+          , message="The method `#local.methodName#` is part of a plugin but
+            was not found in the base object."
+        );
+      }
+
+      structDelete(request.wheels.stacks, local.methodName);
       rethrow;
     }
 
 
     // now that we have a result, remove from our counter
-    request.wheels.stacks[local.methodName]--;
+    structDelete(request.wheels.stacks, local.methodName);
 
     // can't return a null result from a variable
     if (!isNull(local.result))

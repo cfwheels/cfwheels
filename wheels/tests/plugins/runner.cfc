@@ -27,12 +27,14 @@ component extends="wheels.tests.Test" {
     _params = {controller="test", action="index"};
     PluginObj = $pluginObj(config);
     application.wheels.mixins = PluginObj.getMixins();
+    set(viewPath = "wheels/tests/_assets/views");
     c = controller("test", _params);
     m = model("authors").new();
     d = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
   }
 
   function teardown() {
+    set(viewPath = "views");
     application.wheels.mixins = {};
   }
 
@@ -107,16 +109,14 @@ component extends="wheels.tests.Test" {
     assert('result eq "$$returnValue"');
   }
 
-  function test_zzz_all_request_stack_counters_are_returned_to_zero() {
-    stackCounters = request.wheels.stacks;
-    result = true;
-    for (item in stackCounters) {
-      if (stackCounters[item] != 0) {
-        result = false;
-        break;
-      }
-    }
-    assert('result eq true');
+  function test_calling_overridden_method_with_method_nesting() {
+    result = c.includePartial(partial="testpartial");
+    assert('trim(result) eq "<p>some content</p>"')
+  }
+
+  function test_zzz_all_request_stack_counters_gone() {
+    stackCounters = structCount(request.wheels.stacks);
+    assert('stackCounters eq 0');
   }
 
 
