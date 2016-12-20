@@ -26,14 +26,17 @@ component extends="wheels.tests.Test" {
     };
     _params = {controller="test", action="index"};
     PluginObj = $pluginObj(config);
+    previousMixins = duplicate(application.wheels.mixins);
     application.wheels.mixins = PluginObj.getMixins();
+    set(viewPath = "wheels/tests/_assets/views");
     c = controller("test", _params);
     m = model("authors").new();
     d = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
   }
 
   function teardown() {
-    application.wheels.mixins = {};
+    set(viewPath = "views");
+    application.wheels.mixins = previousMixins;
   }
 
   function test_call_plugin_methods_from_other_methods() {
@@ -107,11 +110,16 @@ component extends="wheels.tests.Test" {
     assert('result eq "$$returnValue"');
   }
 
-  function test_zzz_all_request_stack_counters_are_returned_to_zero() {
-    stackCounters = request.wheels.stacks;
+  function test_call_overridden_method_with_identical_method_nesting() {
+    request.wheels.includePartialStack = [];
+    result = c.includePartial(partial="testpartial");
+    assert('trim(result) eq "<p>some content</p>"');
+  }
+
+  function test_zzz_all_request_stack_counters_reset_to_one() {
     result = true;
-    for (item in stackCounters) {
-      if (stackCounters[item] != 0) {
+    for (item in request.wheels.stacks) {
+      if (request.wheels.stacks[item] != 1) {
         result = false;
         break;
       }

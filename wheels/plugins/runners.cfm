@@ -1,6 +1,8 @@
 <cfscript>
   public any function $$pluginRunner() {
 
+    local.previousStack = callStackGet()[2]["function"];
+
     // get the method name called so that we know which stack to run this is our
     // default way of seeing which method we're supposed to be running for our
     // stacks
@@ -9,8 +11,8 @@
     // if we still don't have what we need our method has been invoked and cf
     // doesn't give us any information for the stack fr
     if (!structKeyExists(variables.$stacks, local.methodName)
-        && structKeyExists(request.wheels.invoked, "method"))
-      local.methodName = request.wheels.invoked.method;
+        && arrayLen(request.wheels.invoked))
+      local.methodName = request.wheels.invoked[1].method;
 
     // some of our plugin developers var a new variable that
     // changes the name of the function when called so getFunctionCalledName()
@@ -22,8 +24,7 @@
     // Documentation should reflect that best practice is to just use the
     // core.method() when calling to a core function
     if (!structKeyExists(variables.$stacks, local.methodName))
-
-     local.methodName = callStackGet()[2]["function"];
+     local.methodName = local.previousStack;
 
     if (!structKeyExists(variables.$stacks, local.methodName))
       throw(
@@ -40,24 +41,26 @@
 
     // setup our counter in the request scope so it can be shared as necessary
     if (!structKeyExists(request.wheels.stacks, local.methodName))
-      request.wheels.stacks[local.methodName] = 0;
+      request.wheels.stacks[local.methodName] = 1;
 
-    // ++ the counter for our next method on the stack
-    request.wheels.stacks[local.methodName]++;
+    // ++ the counter for our next method on the stack or reset it to one
+    if (local.methodName == local.previousStack)
+      request.wheels.stacks[local.methodName]++;
+    else
+      request.wheels.stacks[local.methodName] = 1;
 
     // if the developer has called core.method() without there actually being a
     // core method with that name, throw a nice wheels error
     if (request.wheels.stacks[local.methodName] > local.stackLen) {
 
       // make sure we reset our stack counter in case our expection is caught
-      request.wheels.stacks[local.methodName] = 0;
+      request.wheels.stacks[local.methodName] = 1;
 
       // throw a method not found error if core.method() doesn't have another
       // method in the stack
       $throw(
-          type="Wheels.MethodNotFound"
-        , message="The method `#local.methodName#` is part of a plugin but
-          was not found in the base object."
+        type="Wheels.MethodNotFound",
+        message="The method `#local.methodName#` is part of a plugin but was not found in the base object."
       );
     }
 
@@ -69,13 +72,14 @@
     try {
       local.result = method(argumentCollection=arguments);
     } catch (any e) {
-      request.wheels.stacks[local.methodName] = 0;
+      request.wheels.stacks[local.methodName] = 1;
       rethrow;
     }
 
 
     // now that we have a result, remove from our counter
-    request.wheels.stacks[local.methodName]--;
+    if (local.methodName == local.previousStack && request.wheels.stacks[local.methodName] != 1)
+      request.wheels.stacks[local.methodName]--;
 
     // can't return a null result from a variable
     if (!isNull(local.result))

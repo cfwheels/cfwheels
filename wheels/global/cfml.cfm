@@ -165,9 +165,15 @@
 		</cfif>
 		<cfset StructDelete(arguments, "invokeArgs")>
 	</cfif>
-	<cfset request.wheels.invoked = duplicate(arguments)>
+	<cfif !structKeyExists(request, "wheels")>
+		<cfset request.wheels = structNew()>
+	</cfif>
+	<cfif !structKeyExists(request.wheels, "invoked")>
+		<cfset request.wheels.invoked = arrayNew(1)>
+	</cfif>
+	<cfset arrayPrepend(request.wheels.invoked, duplicate(arguments))>
 	<cfinvoke attributeCollection="#arguments#">
-	<cfset request.wheels.invoked = {}>
+	<cfset arrayDeleteAt(request.wheels.invoked, 1)>
 	<cfif StructKeyExists(loc, "rv")>
 		<cfreturn loc.rv>
 	</cfif>

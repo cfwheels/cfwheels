@@ -1,4 +1,4 @@
-<cfscript> 
+<cfscript>
 	public void function onRequestStart(required targetPage) {
 		local.lockName = "reloadLock" & application.applicationName;
 
