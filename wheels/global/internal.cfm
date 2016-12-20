@@ -6,7 +6,7 @@
 			request.wheels.params = {};
 			request.wheels.cache = {};
 			request.wheels.stacks = {};
-			request.wheels.invoked = {};
+			request.wheels.invoked = [];
 			request.wheels.urlForCache = {};
 			request.wheels.tickCountId = GetTickCount();
 

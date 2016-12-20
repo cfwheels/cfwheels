@@ -165,9 +165,9 @@
 		</cfif>
 		<cfset StructDelete(arguments, "invokeArgs")>
 	</cfif>
-	<cfset request.wheels.invoked = duplicate(arguments)>
+	<cfset arrayPrepend(request.wheels.invoked, duplicate(arguments))>
 	<cfinvoke attributeCollection="#arguments#">
-	<cfset request.wheels.invoked = {}>
+	<cfset arrayDeleteAt(request.wheels.invoked, 1)>
 	<cfif StructKeyExists(loc, "rv")>
 		<cfreturn loc.rv>
 	</cfif>
