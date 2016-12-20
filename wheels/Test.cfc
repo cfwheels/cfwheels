@@ -452,7 +452,7 @@ component output=false {
 
   // include main wheels functions & plugins in tests by default
   include "global/functions.cfm";
-  include "plugins/functions.cfm";
+  include "plugins/injection.cfm";
 
   /*
    * The function wheels uses to run tests

@@ -240,6 +240,6 @@ component extends="Base" output="false" {
 		return local.rv;
 	}
 
-	include "../../plugins/functions.cfm";
+	include "../../plugins/injection.cfm";
 
 }
