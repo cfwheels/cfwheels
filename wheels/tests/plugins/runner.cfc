@@ -111,6 +111,7 @@ component extends="wheels.tests.Test" {
   }
 
   function test_call_overridden_method_with_identical_method_nesting() {
+    request.wheels.includePartialStack = [];
     result = c.includePartial(partial="testpartial");
     assert('trim(result) eq "<p>some content</p>"');
   }

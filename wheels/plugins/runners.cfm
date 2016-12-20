@@ -43,9 +43,11 @@
     if (!structKeyExists(request.wheels.stacks, local.methodName))
       request.wheels.stacks[local.methodName] = 1;
 
-    // ++ the counter for our next method on the stack
+    // ++ the counter for our next method on the stack or reset it to one
     if (local.methodName == local.previousStack)
       request.wheels.stacks[local.methodName]++;
+    else
+      request.wheels.stacks[local.methodName] = 1;
 
     // if the developer has called core.method() without there actually being a
     // core method with that name, throw a nice wheels error
@@ -76,7 +78,7 @@
 
 
     // now that we have a result, remove from our counter
-    if (local.methodName == local.previousStack)
+    if (local.methodName == local.previousStack && request.wheels.stacks[local.methodName] != 1)
       request.wheels.stacks[local.methodName]--;
 
     // can't return a null result from a variable
