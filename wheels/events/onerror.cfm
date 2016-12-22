@@ -1,4 +1,4 @@
-<cfscript> 
+<cfscript>
 	public void function onError(required exception, required eventName) {
 
 		// in case the error was caused by a timeout we have to add extra time for error handling.
@@ -8,6 +8,8 @@
 			local.requestTimeout = application.wheels.onErrorRequestTimeout;
 		}
 		$setting(requestTimeout=local.requestTimeout);
+
+		$initializeRequestScope();
 
 		local.lockName = "reloadLock" & application.applicationName;
 		local.rv = $simpleLock(name=local.lockName, execute="$runOnError", executeArgs=arguments, type="readOnly", timeout=180);
