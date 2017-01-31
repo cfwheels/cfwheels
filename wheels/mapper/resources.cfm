@@ -96,7 +96,7 @@
       local.args.actions = LCase(arguments.only);
 
     // remove unwanted routes from local.args.only
-    if (structKeyExists(arguments, "only") && ListLen(arguments.except) > 0) {
+    if (structKeyExists(arguments, "except") && ListLen(arguments.except) > 0) {
       local.except = ListToArray(arguments.except);
       local.iEnd = ArrayLen(local.except);
       for (local.i=1; local.i LTE local.iEnd; local.i++)
