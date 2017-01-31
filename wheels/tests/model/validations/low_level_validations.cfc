@@ -1,21 +1,21 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_validate_and_validateOnCreate_should_be_called_when_creating">
-		<cfset loc.user = model("user").new()>
-		<cfset loc.user.valid()>
-		<cfset assert('StructKeyExists(loc.user, "_validateCalled")')>
-		<cfset assert('loc.user._validateCalled eq true')>
-		<cfset assert('StructKeyExists(loc.user, "_validateOnCreateCalled")')>
-		<cfset assert('loc.user._validateOnCreateCalled eq true')>
-	</cffunction>
-	
-	<cffunction name="test_validate_and_validateOnUpdate_should_be_called_when_updating">
-		<cfset loc.user = model("user").findOne(where="username = 'perd'")>
-		<cfset loc.user.valid()>
-		<cfset assert('StructKeyExists(loc.user, "_validateCalled")')>
-		<cfset assert('loc.user._validateCalled eq true')>
-		<cfset assert('StructKeyExists(loc.user, "_validateOnUpdateCalled")')>
-		<cfset assert('loc.user._validateOnUpdateCalled eq true')>
-	</cffunction>
+	function test_validate_and_validateOnCreate_should_be_called_when_creating() {
+		user = model("user").new();
+		user.valid();
+		assert('StructKeyExists(user, "_validateCalled")');
+		assert('user._validateCalled eq true');
+		assert('StructKeyExists(user, "_validateOnCreateCalled")');
+		assert('user._validateOnCreateCalled eq true');
+	}
 
-</cfcomponent>
+	function test_validate_and_validateOnUpdate_should_be_called_when_updating() {
+		user = model("user").findOne(where="username = 'perd'");
+		user.valid();
+		assert('StructKeyExists(user, "_validateCalled")');
+		assert('user._validateCalled eq true');
+		assert('StructKeyExists(user, "_validateOnUpdateCalled")');
+		assert('user._validateOnUpdateCalled eq true');
+	}
+
+}

@@ -1,6 +1,6 @@
 <!--- get the version of the database we're running against --->
 <cftry>
-	<cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="version">	
+	<cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="version">
 	<cfcatch type="any">
 		<cfthrow message="Datasource not found?" detail="The CFDBINFO call appears to have failed when looking for #application.wheels.dataSourceName#">
 	</cfcatch>
@@ -22,7 +22,7 @@
 <cfif loc.db IS "microsoftsqlserver">
 	<cfset loc.identityColumnType = "int NOT NULL IDENTITY(1,1)">
 	<cfset loc.binaryColumnType = "image">
-<cfelseif loc.db IS "mysql">
+<cfelseif loc.db IS "mysql" or loc.db IS "mariadb">
 	<cfset loc.identityColumnType = "int NOT NULL AUTO_INCREMENT">
 	<cfset loc.storageEngine = "ENGINE=InnoDB">
 <cfelseif loc.db IS "h2">
@@ -47,20 +47,6 @@
 <cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="tables">
 <cfset loc.tableList = ValueList(loc.dbinfo.table_name, chr(7))>
 
-<!--- list of tables to delete --->
-<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes">
-<cfloop list="#loc.tables#" index="loc.i">
-	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
-		<cftry>
-			<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
-			DROP TABLE #loc.i#
-			</cfquery>
-			<cfcatch>
-			</cfcatch>
-		</cftry>
-	</cfif>
-</cfloop>
-
 <!--- list of views to delete --->
 <cfset loc.views = "userphotos">
 <cfloop list="#loc.views#" index="loc.i">
@@ -68,6 +54,20 @@
 		<cftry>
 			<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 			DROP VIEW #loc.i#
+			</cfquery>
+			<cfcatch>
+			</cfcatch>
+		</cftry>
+	</cfif>
+</cfloop>
+
+<!--- list of tables to delete --->
+<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes">
+<cfloop list="#loc.tables#" index="loc.i">
+	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
+		<cftry>
+			<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
+			DROP TABLE #loc.i#
 			</cfquery>
 			<cfcatch>
 			</cfcatch>
@@ -245,7 +245,7 @@ CREATE TABLE tblusers
 	,birthday #loc.datetimeColumnType# NULL
 	,birthdaymonth #loc.intColumnType# NULL
 	,birthdayyear #loc.intColumnType# NULL
-	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NULL
+	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NOT NULL
 	,isactive #loc.intColumnType# NULL
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
@@ -268,12 +268,11 @@ CREATE TABLE users
 	,birthday #loc.datetimeColumnType# NULL
 	,birthdaymonth #loc.intColumnType# NULL
 	,birthdayyear #loc.intColumnType# NULL
-	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NULL
+	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NOT NULL
 	,isactive #loc.intColumnType# NULL
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
-
 
 <!--- create oracle sequences --->
 <cfif loc.db eq "oracle">

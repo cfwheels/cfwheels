@@ -1,8 +1,8 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset hasMany(name="shops", foreignKey="citycode")>
-		<cfset property(name="id", column="countyid")>
-	</cffunction>
+	function init() {
+		hasMany(name="shops", foreignKey="citycode");
+		property(name="id", column="countyid");
+	}
 
-</cfcomponent>
+}

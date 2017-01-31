@@ -1,16 +1,16 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-	</cffunction>
+	function setup() {
+		_controller = controller(name="dummy");
+	}
 
-	<cffunction name="test_selected_value">
-		<cfset loc.args.name = "birthday">
-		<cfset loc.args.selected = 2>
-		<cfset loc.args.$now = "01/31/2011">
-		<cfset loc.r = loc.controller.monthSelectTag(argumentcollection=loc.args)>
-		<cfset loc.e = '<option selected="selected" value="2">'>
-		<cfset assert('loc.r CONTAINS loc.e')>
-	</cffunction>
+	function test_selected_value() {
+		args.name = "birthday";
+		args.selected = 2;
+		args.$now = "01/31/2011";
+		r = _controller.monthSelectTag(argumentcollection=args);
+		e = '<option selected="selected" value="2">';
+		assert('r CONTAINS e');
+	}
 
-</cfcomponent>
+}

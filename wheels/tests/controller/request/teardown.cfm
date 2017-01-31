@@ -1,1 +1,3 @@
-<cfset request.cgi = $$oldCGIScope>
+<cfscript>
+  request.cgi = $$oldCGIScope;
+</cfscript>

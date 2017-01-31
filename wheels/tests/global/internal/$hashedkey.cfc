@@ -1,50 +1,48 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_accepts_undefined_value">
-		<cfargument name="value1" type="string" required="false" default="asdfasdf" />
-		<cfargument name="value2" type="string" required="false" /><!--- this creates an undefined value to test $hashedKey() --->
-		<cfset loc.e = raised('$hashedKey(argumentCollection=arguments)')>
-		<cfset loc.r = "">
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_accepts_undefined_value(string value1="foo", string value2) {
+		/* value2 arg creates an undefined value to test $hashedKey() */
+		e = raised('$hashedKey(argumentCollection=arguments)');
+		r = "";
+		assert('e eq r');
+	}
 
-	<cffunction name="test_accepts_generated_query">
-		<cfargument name="a" type="string" required="false" default="asdfasdf" />
-		<cfargument name="b" type="query" required="false" default="#QueryNew('a,b,c,e')#" /><!--- this creates a query that does not have sql metadata --->
-		<cfset loc.e = raised('$hashedKey(argumentCollection=arguments)')>
-		<cfset loc.r = "">
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_accepts_generated_query(string a="foo", query=QueryNew('a,b,c,e')) {
+		/* query arg creates a query that does not have sql metadata */
+		e = raised('$hashedKey(argumentCollection=arguments)');
+		r = "";
+		assert('e eq r');
+	}
 
-	<cffunction name="test_same_output">
-		<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">
-		<cftransaction action="begin">
-			<cfset loc.photo = model("photo").findOne()>
-			<cfset loc.photo.update(filename="somefilename", fileData=loc.binaryData)>
-			<cfset loc.photo = model("photo").findAll(where="id = #loc.photo.id#")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset loc.a = []>
-		<cfset loc.a[1] = "petruzzi">
-		<cfset loc.a[2] = "gibson">
-		<cfset loc.query = QueryNew('a,b,c,d,e')>
-		<cfset QueryAddRow(loc.query, 1)>
-		<cfset QuerySetCell(loc.query, "a", "tony")>
-		<cfset QuerySetCell(loc.query, "b", "per")>
-		<cfset QuerySetCell(loc.query, "c", "james")>
-		<cfset QuerySetCell(loc.query, "d", "chris")>
-		<cfset QuerySetCell(loc.query, "e", "raul")>
-		<cfset loc.a[3] = loc.query>
-		<cfset loc.a[4] = [1,2,3,4,5,6]>
-		<cfset loc.a[5] = {a=1,b=2,c=3,d=4}>
-		<cfset loc.a[6] = loc.photo>
-		<cfset loc.args = {}>
-		<cfset loc.args.a = loc.a>
-		<cfset loc.e = $hashedKey(argumentCollection=loc.args)>
-		<cfset arrayswap(loc.a, 1,3)>
-		<cfset arrayswap(loc.a, 4,5)>
-		<cfset loc.r = $hashedKey(argumentCollection=loc.args)>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_same_output() {
+		binaryData = fileReadBinary(ExpandPath('wheels/tests/_assets/files/cfwheels-logo.png'));
+		transaction action="begin" {
+			photo = model("photo").findOne();
+			photo.update(filename="somefilename", fileData=binaryData);
+			photo = model("photo").findAll(where="id = #photo.id#");
+			transaction action="rollback";
+		}
+		a = [];
+		a[1] = "petruzzi";
+		a[2] = "gibson";
+		query = QueryNew('a,b,c,d,e');
+		QueryAddRow(query, 1);
+		QuerySetCell(query, "a", "tony");
+		QuerySetCell(query, "b", "per");
+		QuerySetCell(query, "c", "james");
+		QuerySetCell(query, "d", "chris");
+		QuerySetCell(query, "e", "raul");
+		a[3] = query;
+		a[4] = [1,2,3,4,5,6];
+		a[5] = {a=1,b=2,c=3,d=4};
+		a[6] = photo;
+		args = {};
+		args.a = a;
+		e = $hashedKey(argumentCollection=args);
+		arrayswap(a, 1,3);
+		arrayswap(a, 4,5);
+		r = $hashedKey(argumentCollection=args);
+		assert('e eq r');
+	}
 
-</cfcomponent>
+}

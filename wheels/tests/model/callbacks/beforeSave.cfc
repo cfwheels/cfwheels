@@ -1,75 +1,75 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_proceeding_on_true_and_nothing">
-		<cfset model("tag").$registerCallback(type="beforeSave", methods="callbackThatReturnsTrue,callbackThatReturnsNothing")>
-		<cfset loc.obj = model("tag").findOne(order="id")>
-		<cfset loc.oldName = loc.obj.name>
-		<cfset loc.obj.name = "somethingElse">
-		<cfset loc.obj.save()>
-		<cfset loc.obj.reload()>
-		<cfset loc.name = loc.obj.name>
-		<cfset loc.obj.name = loc.oldName>
-		<cfset loc.obj.save()>
-		<cfset model("tag").$clearCallbacks(type="beforeSave")>
-		<cfset assert("loc.name IS NOT loc.oldName")>
-	</cffunction>
+	function test_proceeding_on_true_and_nothing() {
+		model("tag").$registerCallback(type="beforeSave", methods="callbackThatReturnsTrue,callbackThatReturnsNothing");
+		obj = model("tag").findOne(order="id");
+		oldName = obj.name;
+		obj.name = "somethingElse";
+		obj.save();
+		obj.reload();
+		name = obj.name;
+		obj.name = oldName;
+		obj.save();
+		model("tag").$clearCallbacks(type="beforeSave");
+		assert("name IS NOT oldName");
+	}
 
-	<cffunction name="test_aborting_on_false">
-		<cfset model("tag").$registerCallback(type="beforeSave", methods="callbackThatReturnsFalse")>
-		<cfset loc.obj = model("tag").findOne(order="id")>
-		<cfset loc.oldName = loc.obj.name>
-		<cfset loc.obj.name = "somethingElse">
-		<cfset loc.obj.save()>
-		<cfset loc.obj.reload()>
-		<cfset model("tag").$clearCallbacks(type="beforeSave")>
-		<cfset assert("loc.obj.name IS loc.oldName")>
-	</cffunction>
+	function test_aborting_on_false() {
+		model("tag").$registerCallback(type="beforeSave", methods="callbackThatReturnsFalse");
+		obj = model("tag").findOne(order="id");
+		oldName = obj.name;
+		obj.name = "somethingElse";
+		obj.save();
+		obj.reload();
+		model("tag").$clearCallbacks(type="beforeSave");
+		assert("obj.name IS oldName");
+	}
 
-	<cffunction name="test_setting_property">
-		<cfset model("tag").$registerCallback(type="beforeSave", methods="callbackThatSetsProperty")>
-		<cfset loc.obj = model("tag").findOne(order="id")>
-		<cfset loc.existBefore = StructKeyExists(loc.obj, "setByCallback")>
-		<cfset loc.obj.save()>
-		<cfset loc.existAfter = StructKeyExists(loc.obj, "setByCallback")>
-		<cfset model("tag").$clearCallbacks(type="beforeSave")>
-		<cfset assert("NOT loc.existBefore AND loc.existAfter")>
-	</cffunction>
+	function test_setting_property() {
+		model("tag").$registerCallback(type="beforeSave", methods="callbackThatSetsProperty");
+		obj = model("tag").findOne(order="id");
+		existBefore = StructKeyExists(obj, "setByCallback");
+		obj.save();
+		existAfter = StructKeyExists(obj, "setByCallback");
+		model("tag").$clearCallbacks(type="beforeSave");
+		assert("NOT existBefore AND existAfter");
+	}
 
-	<cffunction name="test_setting_property_with_skipped_callback">
-		<cfset model("tag").$registerCallback(type="beforeSave", methods="callbackThatSetsProperty")>
-		<cfset loc.obj = model("tag").findOne(order="id")>
-		<cfset loc.existBefore = StructKeyExists(loc.obj, "setByCallback")>
-		<cfset loc.obj.save(callbacks=false, transaction="rollback")>
-		<cfset loc.existAfter = StructKeyExists(loc.obj, "setByCallback")>
-		<cfset model("tag").$clearCallbacks(type="beforeSave")>
-		<cfset assert("NOT loc.existBefore AND NOT loc.existAfter")>
-	</cffunction>
+	function test_setting_property_with_skipped_callback() {
+		model("tag").$registerCallback(type="beforeSave", methods="callbackThatSetsProperty");
+		obj = model("tag").findOne(order="id");
+		existBefore = StructKeyExists(obj, "setByCallback");
+		obj.save(callbacks=false, transaction="rollback");
+		existAfter = StructKeyExists(obj, "setByCallback");
+		model("tag").$clearCallbacks(type="beforeSave");
+		assert("NOT existBefore AND NOT existAfter");
+	}
 
-	<cffunction name="test_execution_order">
-		<cfset model("tag").$registerCallback(type="beforeSave", methods="firstCallback,secondCallback")>
-		<cfset loc.obj = model("tag").findOne(order="id")>
-		<cfset loc.obj.name = "somethingElse">
-		<cfset loc.obj.save()>
-		<cfset model("tag").$clearCallbacks(type="beforeSave")>
-		<cfset assert("loc.obj.orderTest IS 'first,second'")>
-	</cffunction>
+	function test_execution_order() {
+		model("tag").$registerCallback(type="beforeSave", methods="firstCallback,secondCallback");
+		obj = model("tag").findOne(order="id");
+		obj.name = "somethingElse";
+		obj.save();
+		model("tag").$clearCallbacks(type="beforeSave");
+		assert("obj.orderTest IS 'first,second'");
+	}
 
-	<cffunction name="test_aborting_chain">
-		<cfset model("tag").$registerCallback(type="beforeSave", methods="firstCallback,callbackThatReturnsFalse,secondCallback")>
-		<cfset loc.obj = model("tag").findOne(order="id")>
-		<cfset loc.obj.name = "somethingElse">
-		<cfset loc.obj.save()>
-		<cfset model("tag").$clearCallbacks(type="beforeSave")>
-		<cfset assert("loc.obj.orderTest IS 'first'")>
-	</cffunction>
+	function test_aborting_chain() {
+		model("tag").$registerCallback(type="beforeSave", methods="firstCallback,callbackThatReturnsFalse,secondCallback");
+		obj = model("tag").findOne(order="id");
+		obj.name = "somethingElse";
+		obj.save();
+		model("tag").$clearCallbacks(type="beforeSave");
+		assert("obj.orderTest IS 'first'");
+	}
 
-	<cffunction name="test_setting_in_init_and_clearing">
-		<cfset loc.callbacks = model("author").$callbacks()>
-		<cfset assert("loc.callbacks.beforeSave[1] IS 'callbackThatReturnsTrue'")>
-		<cfset model("author").$clearCallbacks(type="beforeSave")>
-		<cfset assert("ArrayLen(loc.callbacks.beforeSave) IS 0 AND loc.callbacks.beforeDelete[1] IS 'callbackThatReturnsTrue'")>
-		<cfset model("author").$clearCallbacks()>
-		<cfset assert("ArrayLen(loc.callbacks.beforeDelete) IS 0")>
-	</cffunction>
+	function test_setting_in_init_and_clearing() {
+		callbacks = model("author").$callbacks();
+		assert("callbacks.beforeSave[1] IS 'callbackThatReturnsTrue'");
+		model("author").$clearCallbacks(type="beforeSave");
+		assert("ArrayLen(callbacks.beforeSave) IS 0 AND callbacks.beforeDelete[1] IS 'callbackThatReturnsTrue'");
+		model("author").$clearCallbacks();
+		assert("ArrayLen(callbacks.beforeDelete) IS 0");
+	}
 
-</cfcomponent>
+}

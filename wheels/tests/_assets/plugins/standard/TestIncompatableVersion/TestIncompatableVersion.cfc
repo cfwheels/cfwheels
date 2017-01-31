@@ -1,11 +1,13 @@
-<cfcomponent>
+component {
 
-	<cffunction name="init">
-		<cfset this.version = "1.0">
-		<cfreturn this>
-	</cffunction>
+	function init() {
+		this.version = "1.0";
+		return this;
+	}
 
-	<cffunction name="$IncompatableVersionMixinTest" returntype="void">
-	</cffunction>
+	public void function $IncompatableVersionMixinTest() {
 
-</cfcomponent>
+	}
+
+}
+

@@ -1,4 +1,4 @@
-<cfscript> 
+<cfscript>
 	public void function onRequestStart(required targetPage) {
 		local.lockName = "reloadLock" & application.applicationName;
 
@@ -44,6 +44,11 @@
 		if (!StructKeyExists(request, "cgi"))
 		{
 			request.cgi = $cgiScope();
+		}
+
+		// Copy HTTP headers
+		if (!StructKeyExists(request, "headers")) {
+			request.headers = GetHttpRequestData().headers;
 		}
 
 		// reload the plugins on each request if cachePlugins is set to false

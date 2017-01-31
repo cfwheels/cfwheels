@@ -1,39 +1,39 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_getting_parent">
-		<cfset loc.obj = model("post").findOne(order="id")>
-		<cfset loc.dynamicResult = loc.obj.author()>
-		<cfset loc.coreResult = model("author").findByKey(loc.obj.authorId)>
-		<cfset assert("loc.dynamicResult.key() IS loc.coreResult.key()")>
-		<cfset loc.dynamicResult = loc.obj.author(select="lastName", returnAs="query")>
-		<cfset loc.coreResult = model("author").findByKey(key=loc.obj.authorId, select="lastName", returnAs="query")>
-		<cfset assert("IsQuery(loc.dynamicResult) AND ListLen(loc.dynamicResult.columnList) IS 1 AND IsQuery(loc.coreResult) AND ListLen(loc.coreResult.columnList) IS 1 AND loc.dynamicResult.lastName IS loc.coreResult.lastName")>
-	</cffunction>
+	function test_getting_parent() {
+		obj = model("post").findOne(order="id");
+		dynamicResult = obj.author();
+		coreResult = model("author").findByKey(obj.authorId);
+		assert("dynamicResult.key() IS coreResult.key()");
+		dynamicResult = obj.author(select="lastName", returnAs="query");
+		coreResult = model("author").findByKey(key=obj.authorId, select="lastName", returnAs="query");
+		assert("IsQuery(dynamicResult) AND ListLen(dynamicResult.columnList) IS 1 AND IsQuery(coreResult) AND ListLen(coreResult.columnList) IS 1 AND dynamicResult.lastName IS coreResult.lastName");
+	}
 
-	<cffunction name="test_checking_if_parent_exists">
-		<cfset loc.obj = model("post").findOne(order="id")>
-		<cfset loc.dynamicResult = loc.obj.hasAuthor()>
-		<cfset loc.coreResult = model("author").exists(loc.obj.authorId)>
-		<cfset assert("loc.dynamicResult IS loc.coreResult")>
-	</cffunction>
+	function test_checking_if_parent_exists() {
+		obj = model("post").findOne(order="id");
+		dynamicResult = obj.hasAuthor();
+		coreResult = model("author").exists(obj.authorId);
+		assert("dynamicResult IS coreResult");
+	}
 
-	<cffunction name="test_getting_parent_on_new_object">
-		<cfset loc.authorByFind = model("author").findOne(order="id")>
-		<cfset loc.newPost = model("post").new(authorId=loc.authorByFind.id)>
-		<cfset loc.authorByAssociation = loc.newPost.author()>
-		<cfset assert("loc.authorByFind.key() IS loc.authorByAssociation.key()")>
-	</cffunction>
+	function test_getting_parent_on_new_object() {
+		authorByFind = model("author").findOne(order="id");
+		newPost = model("post").new(authorId=authorByFind.id);
+		authorByAssociation = newPost.author();
+		assert("authorByFind.key() IS authorByAssociation.key()");
+	}
 
-	<cffunction name="test_checking_if_parent_exists_on_new_object">
-		<cfset loc.authorByFind = model("author").findOne(order="id")>
-		<cfset loc.newPost = model("post").new(authorId=loc.authorByFind.id)>
-		<cfset loc.authorExistsByAssociation = loc.newPost.hasAuthor()>
-		<cfset assert("loc.authorExistsByAssociation IS true")>
-	</cffunction>
+	function test_checking_if_parent_exists_on_new_object() {
+		authorByFind = model("author").findOne(order="id");
+		newPost = model("post").new(authorId=authorByFind.id);
+		authorExistsByAssociation = newPost.hasAuthor();
+		assert("authorExistsByAssociation IS true");
+	}
 
-	<cffunction name="test_getting_parent_with_join_key">
-		<cfset loc.obj = model("author").findOne(order="id", include="user")>
-		<cfset assert('loc.obj.firstName eq loc.obj.user.firstName')>
-	</cffunction>
+	function test_getting_parent_with_join_key() {
+		obj = model("author").findOne(order="id", include="user");
+		assert('obj.firstName eq obj.user.firstName');
+	}
 
-</cfcomponent>
+}

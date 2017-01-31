@@ -1,1 +1,3 @@
-<cfset application.wheels.viewPath = $$oldViewPath>
+<cfscript>
+  application.wheels.viewPath = $$oldViewPath;
+</cfscript>

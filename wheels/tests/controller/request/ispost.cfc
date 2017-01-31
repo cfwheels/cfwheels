@@ -1,21 +1,21 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfinclude template="setup.cfm">
-	</cffunction>
+	function setup() {
+		include "setup.cfm";
+	}
 
-	<cffunction name="teardown">
-		<cfinclude template="teardown.cfm">
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="test_isPost_valid">
-		<cfset request.cgi.request_method = "post">
-		<cfset assert("loc.controller.isPost() eq true")>
-	</cffunction>
+	function test_isPost_valid() {
+		request.cgi.request_method = "post";
+		assert("_controller.isPost() eq true");
+	}
 
-	<cffunction name="test_isPost_invalid">
-		<cfset request.cgi.request_method = "">
-		<cfset assert("loc.controller.isPost() eq false")>
-	</cffunction>
+	function test_isPost_invalid() {
+		request.cgi.request_method = "";
+		assert("_controller.isPost() eq false");
+	}
 
-</cfcomponent>
+}

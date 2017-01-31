@@ -1,51 +1,51 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_primarykey_returns_key">
-		<cfset loc.author = model("author")>
-		<cfset loc.e = loc.author.$classData().keys>
-		<cfset loc.r = "id">
-		<cfset assert("loc.e IS loc.r")>
-		<cfset loc.r = loc.author.primaryKey()>
-		<cfset assert("loc.e IS loc.r")>
-		<cfset loc.r = loc.author.primaryKeys()>
-		<cfset assert("loc.e IS loc.r")>
-	</cffunction>
+	function test_primarykey_returns_key() {
+		author = model("author");
+		e = author.$classData().keys;
+		r = "id";
+		assert("e IS r");
+		r = author.primaryKey();
+		assert("e IS r");
+		r = author.primaryKeys();
+		assert("e IS r");
+	}
 
-	<cffunction name="test_setprimarykey_appends_keys">
-		<cfset loc.author = model("author")>
-		<cfset loc.author = duplicate(loc.author)>
-		<cfset loc.e = loc.author.$classData().keys>
-		<cfset loc.r = "id">
-		<cfset assert("loc.e IS loc.r")>
-		<cfset loc.author.setprimaryKeys("id2,id3")>
-		<cfset loc.e = "id,id2,id3">
-		<cfset loc.r = loc.author.primaryKeys()>
-		<cfset assert("loc.e IS loc.r")>
-	</cffunction>
+	function test_setprimarykey_appends_keys() {
+		author = model("author");
+		author = duplicate(author);
+		e = author.$classData().keys;
+		r = "id";
+		assert("e IS r");
+		author.setprimaryKeys("id2,id3");
+		e = "id,id2,id3";
+		r = author.primaryKeys();
+		assert("e IS r");
+	}
 
-	<cffunction name="test_setprimarykey_not_append_duplicate_keys">
-		<cfset loc.author = model("author")>
-		<cfset loc.author = duplicate(loc.author)>
-		<cfset loc.e = loc.author.$classData().keys>
-		<cfset loc.r = "id">
-		<cfset assert("loc.e IS loc.r")>
-		<cfset loc.author.setprimaryKeys("id2")>
-		<cfset loc.author.setprimaryKeys("id2")>
-		<cfset loc.e = "id,id2">
-		<cfset loc.r = loc.author.primaryKeys()>
-		<cfset assert("loc.e IS loc.r")>
-	</cffunction>
+	function test_setprimarykey_not_append_duplicate_keys() {
+		author = model("author");
+		author = duplicate(author);
+		e = author.$classData().keys;
+		r = "id";
+		assert("e IS r");
+		author.setprimaryKeys("id2");
+		author.setprimaryKeys("id2");
+		e = "id,id2";
+		r = author.primaryKeys();
+		assert("e IS r");
+	}
 
-	<cffunction name="test_retrieve_primary_key_by_position">
-		<cfset loc.author = model("author")>
-		<cfset loc.author = duplicate(loc.author)>
-		<cfset loc.author.setprimaryKeys("id2,id3")>
-		<cfset loc.e = loc.author.primaryKeys(1)>
-		<cfset loc.r = "id">
-		<cfset assert("loc.e IS loc.r")>
-		<cfset loc.e = loc.author.primaryKeys(2)>
-		<cfset loc.r = "id2">
-		<cfset assert("loc.e IS loc.r")>
-	</cffunction>
+	function test_retrieve_primary_key_by_position() {
+		author = model("author");
+		author = duplicate(author);
+		author.setprimaryKeys("id2,id3");
+		e = author.primaryKeys(1);
+		r = "id";
+		assert("e IS r");
+		e = author.primaryKeys(2);
+		r = "id2";
+		assert("e IS r");
+	}
 
-</cfcomponent>
+}

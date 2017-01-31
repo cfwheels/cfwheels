@@ -1,37 +1,36 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_minimum">
-		<cfset loc.result = model("post").minimum(property="views")>
-		<cfset assert("loc.result IS 0")>
-	</cffunction>
+	function test_minimum() {
+		result = model("post").minimum(property="views");
+		assert("result IS 0");
+	}
 
-	<cffunction name="test_minimum_with_group">
-		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
-			<cfset loc.result = model("post").minimum(property="views", group="authorId")>
-			<cfset assert("loc.result['viewsMinimum'][2] IS 2")>
-		<cfelse>
-			<cfset assert(true)>
-		</cfif>
+	function test_minimum_with_group() {
+		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+			result = model("post").minimum(property="views", group="authorId");
+			assert("result['viewsMinimum'][2] IS 2");
+		} else {
+			assert(true);
+		}
+	}
 
-	</cffunction>
+	function test_minimum_with_non_matching_where() {
+		result = model("post").minimum(property="views", where="id=0");
+		assert("result IS ''");
+	}
 
-	<cffunction name="test_minimum_with_non_matching_where">
-		<cfset loc.result = model("post").minimum(property="views", where="id=0")>
-		<cfset assert("loc.result IS ''")>
-	</cffunction>
+	function test_minimum_with_ifNull() {
+		result = model("post").minimum(property="views", where="id=0", ifNull=0);
+		assert("result IS 0");
+	}
 
-	<cffunction name="test_minimum_with_ifNull">
-		<cfset loc.result = model("post").minimum(property="views", where="id=0", ifNull=0)>
-		<cfset assert("loc.result IS 0")>
-	</cffunction>
+	function test_minimum_with_include_soft_deletes() {
+		transaction action="begin" {
+			post = model("Post").deleteAll(where="views=0", transaction="none");
+			minimum = model("Post").minimum(property="views", includeSoftDeletes=true);
+			transaction action="rollback";
+		}
+		assert('minimum eq 0');
+	}
 
-	<cffunction name="test_minimum_with_include_soft_deletes">
-		<cftransaction action="begin">
-			<cfset loc.post = model("Post").deleteAll(where="views=0", transaction="none")>
-			<cfset loc.minimum = model("Post").minimum(property="views", includeSoftDeletes=true)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.minimum eq 0')>
-	</cffunction>
-
-</cfcomponent>
+}

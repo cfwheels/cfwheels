@@ -1,39 +1,38 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">
-	</cffunction>
+	function setup() {
+		binaryData = fileReadBinary(expandpath('wheels/tests/_assets/files/cfwheels-logo.png'));
+	}
 
- 	<cffunction name="test_update">
-		<cftransaction action="begin">
-			<cfset loc.photo = model("photo").findOne()>
-			<cfset loc.photo.update(filename="somefilename", fileData=loc.binaryData)>
-			<cfset loc.photo = model("photo").findByKey(loc.photo.id)>
-			<cfset loc._binary = loc.photo.filedata>
-			<cftransaction action="rollback" />
-		</cftransaction>
+ 	function test_update() {
+		transaction action="begin" {
+			photo = model("photo").findOne();
+			photo.update(filename="somefilename", fileData=binaryData);
+			photo = model("photo").findByKey(photo.id);
+			_binary = photo.filedata;
+			transaction action="rollback";
+		}
+		assert('IsBinary(ToBinary(_binary))');
+	}
 
-		<cfset assert('IsBinary(ToBinary(loc._binary))')>
-	</cffunction>
-
- 	<cffunction name="test_insert">
-		<cfset loc.gallery = model("gallery").findOne(
+ 	function test_insert() {
+		gallery = model("gallery").findOne(
 			include="user"
 			,where="users.lastname = 'Petruzzi'"
 			,orderby="id"
-		)>
-		<cftransaction action="begin">
-			<cfset loc.photo = model("photo").create(
-				galleryid="#loc.gallery.id#"
+		);
+		transaction action="begin" {
+			photo = model("photo").create(
+				galleryid="#gallery.id#"
 				,filename="somefilename"
-				,fileData=loc.binaryData
+				,fileData=binaryData
 				,description1="something something"
-			)>
-			<cfset loc.photo = model("photo").findByKey(loc.photo.id)>
-			<cfset loc._binary = loc.photo.filedata>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('IsBinary(ToBinary(loc._binary))')>
-	</cffunction>
+			);
+			photo = model("photo").findByKey(photo.id);
+			_binary = photo.filedata;
+			transaction action="rollback";
+		}
+		assert('IsBinary(ToBinary(_binary))');
+	}
 
-</cfcomponent>
+}

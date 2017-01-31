@@ -2,7 +2,7 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		params = {controller="dummy", action="dummy"};
-		loc.controller = controller("dummy", params);
+		_controller = controller("dummy", params);
 	}
 
 
@@ -13,17 +13,17 @@ component extends="wheels.tests.Test" {
 			{through="isLoggedIn,checkIPAddress", except="home,login"},
 			{type="after", through="logConversion", only="thankYou"}
 		];
-		loc.controller.setFilterChain(myFilterChain);
-		filterChainSet = loc.controller.filterChain();
+		_controller.setFilterChain(myFilterChain);
+		filterChainSet = _controller.filterChain();
 		// Undo test
-		loc.controller.setFilterChain(ArrayNew(1));
+		_controller.setFilterChain(ArrayNew(1));
 		// Build filter chain through "normal" filters() function
-		loc.controller.filters(through="restrictAccess");
-		loc.controller.filters(through="isLoggedIn,checkIPAddress", except="home,login");
-		loc.controller.filters(type="after", through="logConversion", only="thankYou");
-		filterChainNormal = loc.controller.filterChain();
+		_controller.filters(through="restrictAccess");
+		_controller.filters(through="isLoggedIn,checkIPAddress", except="home,login");
+		_controller.filters(type="after", through="logConversion", only="thankYou");
+		filterChainNormal = _controller.filterChain();
 		// Undo test
-		loc.controller.setFilterChain(ArrayNew(1));
+		_controller.setFilterChain(ArrayNew(1));
 		// Compare filter chains
 		assert("ArrayLen(filterChainSet) eq ArrayLen(filterChainNormal)");
 		assert("filterChainSet.equals(filterChainNormal)");

@@ -1,1 +1,1 @@
-<cfinvoke component="#loc.component#" method="#loc.method#" returnVariable="#loc.returnVariable#" argumentCollection="#loc.argumentCollection#">
+<cfinvoke component="#local.component#" method="#local.method#" returnVariable="#local.returnVariable#" argumentCollection="#local.argumentCollection#">

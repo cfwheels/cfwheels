@@ -1,97 +1,97 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_singularize">
-		<cfset loc.result = singularize("statuses")>
-		<cfset assert("NOT Compare(loc.result, 'status')")>
-	</cffunction>
+	function test_singularize() {
+		result = singularize("statuses");
+		assert("NOT Compare(result, 'status')");
+	}
 
-	<cffunction name="test_singularize_starting_with_upper_case">
-		<cfset loc.result = singularize("Instances")>
-		<cfset assert("NOT Compare(loc.result, 'Instance')")>
-	</cffunction>
+	function test_singularize_starting_with_upper_case() {
+		result = singularize("Instances");
+		assert("NOT Compare(result, 'Instance')");
+	}
 
-	<cffunction name="test_singularize_two_words">
-		<cfset loc.result = singularize("statusUpdates")>
-		<cfset assert("NOT Compare(loc.result, 'statusUpdate')")>
-	</cffunction>
+	function test_singularize_two_words() {
+		result = singularize("statusUpdates");
+		assert("NOT Compare(result, 'statusUpdate')");
+	}
 
-	<cffunction name="test_singularize_multiple_words">
-		<cfset loc.result = singularize("fancyChristmasTrees")>
-		<cfset assert("NOT Compare(loc.result, 'fancyChristmasTree')")>
-	</cffunction>
+	function test_singularize_multiple_words() {
+		result = singularize("fancyChristmasTrees");
+		assert("NOT Compare(result, 'fancyChristmasTree')");
+	}
 
-	<cffunction name="test_singularize_already_singularized_camel_case">
-		<cfset loc.result = singularize("camelCasedFailure")>
-		<cfset assert("NOT Compare(loc.result, 'camelCasedFailure')")>
-	</cffunction>
+	function test_singularize_already_singularized_camel_case() {
+		result = singularize("camelCasedFailure");
+		assert("NOT Compare(result, 'camelCasedFailure')");
+	}
 
- 	<cffunction name="test_pluralize">
-		<cfset loc.result = pluralize("status")>
-		<cfset assert("NOT Compare(loc.result, 'statuses')")>
-	</cffunction>
+ 	function test_pluralize() {
+		result = pluralize("status");
+		assert("NOT Compare(result, 'statuses')");
+	}
 
-	<cffunction name="test_pluralize_with_count">
-		<cfset loc.result = pluralize("statusUpdate", 0)>
-		<cfset assert("NOT Compare(loc.result, '0 statusUpdates')")>
-		<cfset loc.result = pluralize("statusUpdate", 1)>
-		<cfset assert("NOT Compare(loc.result, '1 statusUpdate')")>
-		<cfset loc.result = pluralize("statusUpdate", 2)>
-		<cfset assert("NOT Compare(loc.result, '2 statusUpdates')")>
-	</cffunction>
+	function test_pluralize_with_count() {
+		result = pluralize("statusUpdate", 0);
+		assert("NOT Compare(result, '0 statusUpdates')");
+		result = pluralize("statusUpdate", 1);
+		assert("NOT Compare(result, '1 statusUpdate')");
+		result = pluralize("statusUpdate", 2);
+		assert("NOT Compare(result, '2 statusUpdates')");
+	}
 
-	<cffunction name="test_pluralize_starting_with_upper_case">
-		<cfset loc.result = pluralize("Instance")>
-		<cfset assert("NOT Compare(loc.result, 'Instances')")>
-	</cffunction>
+	function test_pluralize_starting_with_upper_case() {
+		result = pluralize("Instance");
+		assert("NOT Compare(result, 'Instances')");
+	}
 
-	<cffunction name="test_pluralize_two_words">
-		<cfset loc.result = pluralize("statusUpdate")>
-		<cfset assert("NOT Compare(loc.result, 'statusUpdates')")>
-	</cffunction>
+	function test_pluralize_two_words() {
+		result = pluralize("statusUpdate");
+		assert("NOT Compare(result, 'statusUpdates')");
+	}
 
-	<cffunction name="test_pluralize_issue_450">
-		<cfset loc.result = pluralize("statuscode")>
-		<cfset assert("NOT Compare(loc.result, 'statuscodes')")>
-	</cffunction>
+	function test_pluralize_issue_450() {
+		result = pluralize("statuscode");
+		assert("NOT Compare(result, 'statuscodes')");
+	}
 
-	<cffunction name="test_pluralize_multiple_words">
-		<cfset loc.result = pluralize("fancyChristmasTree")>
-		<cfset assert("NOT Compare(loc.result, 'fancyChristmasTrees')")>
-	</cffunction>
+	function test_pluralize_multiple_words() {
+		result = pluralize("fancyChristmasTree");
+		assert("NOT Compare(result, 'fancyChristmasTrees')");
+	}
 
-	<cffunction name="test_hyphenize_normal_variable">
-		<cfset loc.result = hyphenize("wheelsIsAFramework")>
-		<cfset assert("NOT Compare(loc.result, 'wheels-is-a-framework')")>
-	</cffunction>
+	function test_hyphenize_normal_variable() {
+		result = hyphenize("wheelsIsAFramework");
+		assert("NOT Compare(result, 'wheels-is-a-framework')");
+	}
 
-	<cffunction name="test_hyphenize_variable_starting_with_uppercase">
-		<cfset loc.result = hyphenize("WheelsIsAFramework")>
-		<cfset debug('loc.result', false)>
-		<cfset assert("NOT Compare(loc.result, 'wheels-is-a-framework')")>
-	</cffunction>
+	function test_hyphenize_variable_starting_with_uppercase() {
+		result = hyphenize("WheelsIsAFramework");
+		debug('result', false);
+		assert("NOT Compare(result, 'wheels-is-a-framework')");
+	}
 
-	<cffunction name="test_hyphenize_variable_with_abbreviation">
-		<cfset loc.result = hyphenize("aURLVariable")>
-		<cfset debug('loc.result', false)>
-		<cfset assert("NOT Compare(loc.result, 'a-url-variable')")>
-	</cffunction>
+	function test_hyphenize_variable_with_abbreviation() {
+		result = hyphenize("aURLVariable");
+		debug('result', false);
+		assert("NOT Compare(result, 'a-url-variable')");
+	}
 
-	<cffunction name="test_hyphenize_variable_with_abbreviation_starting_with_uppercase">
-		<cfset loc.result = hyphenize("URLVariable")>
-		<cfset debug('loc.result', false)>
-		<cfset assert("NOT Compare(loc.result, 'url-variable')")>
-	</cffunction>
-	
-	<cffunction name="test_hyphenize_should_only_insert_hyphens_in_mixed_case">
-		<cfset loc.result = hyphenize("ERRORMESSAGE")>
-		<cfset assert("NOT Compare(loc.result, 'errormessage')")>
-		<cfset loc.result = hyphenize("errormessage")>
-		<cfset assert("NOT Compare(loc.result, 'errormessage')")>
-	</cffunction>	
+	function test_hyphenize_variable_with_abbreviation_starting_with_uppercase() {
+		result = hyphenize("URLVariable");
+		debug('result', false);
+		assert("NOT Compare(result, 'url-variable')");
+	}
 
-	<cffunction name="test_singularize_of_address">
-		<cfset loc.result = singularize("address")>
-		<cfset assert("NOT Compare(loc.result, 'address')")>
-	</cffunction>
+	function test_hyphenize_should_only_insert_hyphens_in_mixed_case() {
+		result = hyphenize("ERRORMESSAGE");
+		assert("NOT Compare(result, 'errormessage')");
+		result = hyphenize("errormessage");
+		assert("NOT Compare(result, 'errormessage')");
+	}
 
-</cfcomponent>
+	function test_singularize_of_address() {
+		result = singularize("address");
+		assert("NOT Compare(result, 'address')");
+	}
+
+}

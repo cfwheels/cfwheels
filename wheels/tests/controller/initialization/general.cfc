@@ -1,15 +1,41 @@
-<cfcomponent extends="wheels.tests.Test">
-	
-	<cffunction name="test_initializing_by_calling_init_function">
-	</cffunction>
-	
-	<cffunction name="test_creating_controller_when_no_file_exists">
-	</cffunction>
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_creating_controller_when_file_exists">
-	</cffunction>
+  function setup() {
+    _originalViewPath = get("viewPath");
+    application.wheels.viewPath = "wheels/tests/_assets/views";
+  }
 
-	<cffunction name="test_including_controller_specific_helper_file">
-	</cffunction>
+  function teardown() {
+    application.wheels.viewPath = _originalViewPath;
+    structDelete(variables, "c", false);
+  }
 
-</cfcomponent>
+  function test_creating_controller_when_file_exists() {
+    c = controller(name="test", params={ controller = "Test", action = "test" });
+    assert('isObject(c)');
+    name = c.$getControllerClassData().name;
+    assert('name eq "Test"');
+  }
+
+  function test_initializing_with_nested_controller() {
+    c = controller(name="admin.Admin", params={ controller = "admin.Admin", action = "test" });
+    assert('isObject(c)');
+    name = c.$getControllerClassData().name;
+    assert('name eq "admin.Admin"');
+  }
+
+  function test_creating_controller_when_no_file_exists() {
+    c = controller(name="Admin", params={ controller = "Admin", action = "test" });
+    assert('isObject(c)');
+    name = c.$getControllerClassData().name;
+    assert('name eq "Admin"');
+  }
+
+  function test_creating_controller_when_no_nested_file_exists() {
+    c = controller(name="admin.nothing.Admin", params={ controller = "admin.nothing.Admin", action = "test" });
+    assert('isObject(c)');
+    name = c.$getControllerClassData().name;
+    assert('name eq "admin.nothing.Admin"');
+  }
+
+}

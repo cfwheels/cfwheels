@@ -27,12 +27,12 @@
 	<cfset var loc = {}>
 	<cfif StructKeyExists(arguments, "object")>
 		<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
-			<cfinvoke component="#arguments.object#" method="#arguments.execute#" argumentCollection="#arguments.executeArgs#" returnvariable="loc.rv">
+			<cfset loc.rv = $invoke(component="#arguments.object#", method="#arguments.execute#", argumentCollection="#arguments.executeArgs#")>
 		</cflock>
 	<cfelse>
 		<cfset arguments.executeArgs.$locked = true>
 		<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
-			<cfinvoke method="#arguments.execute#" argumentCollection="#arguments.executeArgs#" returnvariable="loc.rv">
+			<cfset loc.rv = $invoke(method="#arguments.execute#", argumentCollection="#arguments.executeArgs#")>
 		</cflock>
 	</cfif>
 	<cfif StructKeyExists(loc, "rv")>
@@ -165,7 +165,15 @@
 		</cfif>
 		<cfset StructDelete(arguments, "invokeArgs")>
 	</cfif>
+	<cfif !structKeyExists(request, "wheels")>
+		<cfset request.wheels = structNew()>
+	</cfif>
+	<cfif !structKeyExists(request.wheels, "invoked")>
+		<cfset request.wheels.invoked = arrayNew(1)>
+	</cfif>
+	<cfset arrayPrepend(request.wheels.invoked, duplicate(arguments))>
 	<cfinvoke attributeCollection="#arguments#">
+	<cfset arrayDeleteAt(request.wheels.invoked, 1)>
 	<cfif StructKeyExists(loc, "rv")>
 		<cfreturn loc.rv>
 	</cfif>
@@ -187,10 +195,10 @@
 <cffunction name="$dbinfo" returntype="any" access="public" output="false">
 	<cfset var loc = {}>
 	<cfset arguments.name = "loc.rv">
-	<cfif NOT Len(arguments.username)>
+	<cfif StructKeyExists(arguments, "username") && ! Len(arguments.username)>
 		<cfset StructDelete(arguments, "username")>
 	</cfif>
-	<cfif NOT Len(arguments.password)>
+	<cfif StructKeyExists(arguments, "password") && ! Len(arguments.password)>
 		<cfset StructDelete(arguments, "password")>
 	</cfif>
 	<cfdbinfo attributeCollection="#arguments#">
@@ -220,4 +228,18 @@
 
 <cffunction name="$zip" returntype="any" access="public" output="false">
 	<cfzip attributeCollection="#arguments#">
+</cffunction>
+
+<cffunction name="$query" returntype="any" access="public" output="false">
+	<cfargument name="sql" type="string" required="true">
+	<cfset StructDelete(arguments, "name")>
+	<!--- allow the use of query of queries, caveat: Query must be called query. Eg: SELECT * from query --->
+	<cfif StructKeyExists(arguments, "query") && IsQuery(arguments.query)>
+		<cfset var query = Duplicate(arguments.query)>
+	</cfif>
+	<cfquery attributeCollection="#arguments#" name="local.rv">#PreserveSingleQuotes(arguments.sql)#</cfquery>
+	<!--- some sql statements may not return a value --->
+	<cfif StructKeyExists(local, "rv")>
+		<cfreturn local.rv>
+	</cfif>
 </cffunction>

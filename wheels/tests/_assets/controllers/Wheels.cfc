@@ -1,3 +1,3 @@
-<cfcomponent output="false" displayName="Controller">
-	<cfinclude template="../../../controller.cfm">
-</cfcomponent>
+component output="false" displayName="Controller" {
+	include "../../../controller.cfm";
+}

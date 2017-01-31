@@ -1,87 +1,105 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset $$oldViewPath = application.wheels.viewPath>
-		<cfset application.wheels.viewPath = "wheels/tests/_assets/views">
-	</cffunction>
+	function setup() {
+		params = {controller="test", action="test"};
+		_controller = controller("test", params);
+		$$oldViewPath = application.wheels.viewPath;
+		application.wheels.viewPath = "wheels/tests/_assets/views";
+	}
 
-	<cfset params = {controller="test", action="test"}>
-	<cfset loc.controller = controller("test", params)>
+	function test_including_partial() {
+		savecontent variable="result" {
+			WriteOutput(_controller.includePartial(partial="partialTemplate"));
+		}
+		assert("result Contains 'partial template content'");
+	}
 
-	<cffunction name="test_including_partial">
-		<cfsavecontent variable="result"><cfoutput>#loc.controller.includePartial(partial="partialTemplate")#</cfoutput></cfsavecontent>
-		<cfset assert("result Contains 'partial template content'")>
-	</cffunction>
+	function test_including_partial_loading_data() {
+		savecontent variable="result" {
+			WriteOutput(_controller.includePartial(partial="partialDataImplicitPrivate"));
+		}
+		assert("result IS 'Apple,Banana,Kiwi'");
+	}
 
-	<cffunction name="test_including_partial_loading_data">
-		<cfsavecontent variable="result"><cfoutput>#loc.controller.includePartial(partial="partialDataImplicitPrivate")#</cfoutput></cfsavecontent>
-		<cfset assert("result IS 'Apple,Banana,Kiwi'")>
-	</cffunction>
+	function test_including_partial_loading_data_allowed_from_explicit_public_method() {
+		savecontent variable="result" {
+			WriteOutput(_controller.includePartial(partial="partialDataExplicitPublic", dataFunction="partialDataExplicitPublic"));
+		}
+		assert("result IS 'Apple,Banana,Kiwi'");
+	}
 
-	<cffunction name="test_including_partial_loading_data_allowed_from_explicit_public_method">
-		<cfsavecontent variable="result"><cfoutput>#loc.controller.includePartial(partial="partialDataExplicitPublic", dataFunction="partialDataExplicitPublic")#</cfoutput></cfsavecontent>
-		<cfset assert("result IS 'Apple,Banana,Kiwi'")>
-	</cffunction>
+	function test_including_partial_loading_data_allowed_from_explicit_public_method_with_arg() {
+		savecontent variable="result" {
+			WriteOutput(_controller.includePartial(partial="partialDataExplicitPublic", dataFunction="partialDataExplicitPublic", passThrough=1));
+		}
+		assert("result IS 'Apple,Banana,Kiwi,passThroughWorked'");
+	}
 
-	<cffunction name="test_including_partial_loading_data_allowed_from_explicit_public_method_with_arg">
-		<cfsavecontent variable="result"><cfoutput>#loc.controller.includePartial(partial="partialDataExplicitPublic", dataFunction="partialDataExplicitPublic", passThrough=1)#</cfoutput></cfsavecontent>
-		<cfset assert("result IS 'Apple,Banana,Kiwi,passThroughWorked'")>
-	</cffunction>
+	function test_including_partial_loading_data_not_allowed_from_implicit_public_method() {
+		result = "";
+		try {
+			savecontent variable="result" {
+				WriteOutput(_controller.includePartial(partial="partialDataImplicitPublic"));
+			}
+		} catch(any e) {
+			result = e;
+		}
+		assert("!issimplevalue(result)");
+		assert("result.type eq 'expression'");
+	}
 
-	<cffunction name="test_including_partial_loading_data_not_allowed_from_implicit_public_method">
-		<cfset result = "">
-		<cftry>
-		<cfsavecontent variable="result"><cfoutput>#loc.controller.includePartial(partial="partialDataImplicitPublic")#</cfoutput></cfsavecontent>
-			<cfcatch type="any">
-				<cfset result = cfcatch>
-			</cfcatch>
-		</cftry>
-		<cfset assert("!issimplevalue(result)")>
-		<cfset assert("result.type eq 'expression'")>
-	</cffunction>
+	function test_including_partial_with_query() {
+		usersQuery = model("user").findAll(order="firstName");
+		request.partialTests.currentTotal = 0;
+		request.partialTests.thirdUserName = "";
+		savecontent variable="result" {
+			WriteOutput(_controller.includePartial(usersQuery));
+		}
+		assert("request.partialTests.currentTotal IS 15 AND request.partialTests.thirdUserName IS 'Per'");
+	}
 
-	<cffunction name="test_including_partial_with_query">
-		<cfset usersQuery = model("user").findAll(order="firstName")>
-		<cfset request.partialTests.currentTotal = 0>
-		<cfset request.partialTests.thirdUserName = "">
-		<cfsavecontent variable="result"><cfoutput>#loc.controller.includePartial(usersQuery)#</cfoutput></cfsavecontent>
-		<cfset assert("request.partialTests.currentTotal IS 15 AND request.partialTests.thirdUserName IS 'Per'")>
-	</cffunction>
+	function test_including_partial_with_special_query_argument() {
+		usersQuery = model("user").findAll(order="firstName");
+		request.partialTests.currentTotal = 0;
+		request.partialTests.thirdUserName = "";
+		request.partialTests.noQueryArg = true;
+		savecontent variable="result" {
+			WriteOutput(_controller.includePartial(partial="custom", query=usersQuery));
+		}
+		assert("request.partialTests.noQueryArg IS true AND request.partialTests.currentTotal IS 15 AND request.partialTests.thirdUserName IS 'Per'");
+	}
 
-	<cffunction name="test_including_partial_with_special_query_argument">
-		<cfset usersQuery = model("user").findAll(order="firstName")>
-		<cfset request.partialTests.currentTotal = 0>
-		<cfset request.partialTests.thirdUserName = "">
-		<cfset request.partialTests.noQueryArg = true>
-		<cfsavecontent variable="result"><cfoutput>#loc.controller.includePartial(partial="custom", query=usersQuery)#</cfoutput></cfsavecontent>
-		<cfset assert("request.partialTests.noQueryArg IS true AND request.partialTests.currentTotal IS 15 AND request.partialTests.thirdUserName IS 'Per'")>
-	</cffunction>
+	function test_including_partial_with_normal_query_argument() {
+		usersQuery = model("user").findAll(order="firstName");
+		savecontent variable="result" {
+			WriteOutput(_controller.includePartial(partial="custom", customQuery=usersQuery));
+		}
+		assert("Trim(result) IS 'Per'");
+	}
 
-	<cffunction name="test_including_partial_with_normal_query_argument">
-		<cfset usersQuery = model("user").findAll(order="firstName")>
-		<cfsavecontent variable="result"><cfoutput>#loc.controller.includePartial(partial="custom", customQuery=usersQuery)#</cfoutput></cfsavecontent>
-		<cfset assert("Trim(result) IS 'Per'")>
-	</cffunction>
+	function test_including_partial_with_special_objects_argument() {
+		usersArray = model("user").findAll(order="firstName", returnAs="objects");
+		request.partialTests.currentTotal = 0;
+		request.partialTests.thirdUserName = "";
+		request.partialTests.thirdObjectExists = false;
+		request.partialTests.noObjectsArg = true;
+		savecontent variable="result" {
+			WriteOutput(_controller.includePartial(partial="custom", objects=usersArray));
+		}
+		assert("request.partialTests.thirdObjectExists IS true AND request.partialTests.noObjectsArg IS true AND request.partialTests.currentTotal IS 15 AND request.partialTests.thirdUserName IS 'Per'");
+	}
 
-	<cffunction name="test_including_partial_with_special_objects_argument">
-		<cfset usersArray = model("user").findAll(order="firstName", returnAs="objects")>
-		<cfset request.partialTests.currentTotal = 0>
-		<cfset request.partialTests.thirdUserName = "">
-		<cfset request.partialTests.thirdObjectExists = false>
-		<cfset request.partialTests.noObjectsArg = true>
-		<cfsavecontent variable="result"><cfoutput>#loc.controller.includePartial(partial="custom", objects=usersArray)#</cfoutput></cfsavecontent>
-		<cfset assert("request.partialTests.thirdObjectExists IS true AND request.partialTests.noObjectsArg IS true AND request.partialTests.currentTotal IS 15 AND request.partialTests.thirdUserName IS 'Per'")>
-	</cffunction>
+	function test_including_partial_with_object() {
+		userObject = model("user").findOne(order="firstName");
+		request.wheelsTests.objectTestsPassed = false;
+		savecontent variable="result" {
+			WriteOutput(_controller.includePartial(userObject));
+		}
+		assert("request.wheelsTests.objectTestsPassed IS true AND Trim(result) IS 'Chris'");
+	}
 
-	<cffunction name="test_including_partial_with_object">
-		<cfset userObject = model("user").findOne(order="firstName")>
-		<cfset request.wheelsTests.objectTestsPassed = false>
-		<cfsavecontent variable="result"><cfoutput>#loc.controller.includePartial(userObject)#</cfoutput></cfsavecontent>
-		<cfset assert("request.wheelsTests.objectTestsPassed IS true AND Trim(result) IS 'Chris'")>
-	</cffunction>
+	function teardown() {
+		application.wheels.viewPath = $$oldViewPath;
+	}
 
-	<cffunction name="teardown">
-		<cfset application.wheels.viewPath = $$oldViewPath>
-	</cffunction>
-
-</cfcomponent>
+}

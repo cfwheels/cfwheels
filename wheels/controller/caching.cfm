@@ -2,7 +2,7 @@
 
 // PUBLIC CONTROLLER INITIALIZATION FUNCTIONS
 
-public void function caches(string action="", numeric time, boolean static, string appendToKey = "") {
+public void function caches(string action = "", numeric time, boolean static, string appendToKey = "") {
 	$args(args=arguments, name="caches", combine="action/actions");
 	arguments.action = $listClean(arguments.action);
 

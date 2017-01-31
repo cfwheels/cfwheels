@@ -1,7 +1,7 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_automatic_validations_should_validate_primary_keys">
-		<cfset loc.user = model("UserAutoMaticValidations").new(
+	function test_automatic_validations_should_validate_primary_keys() {
+		user = model("UserAutoMaticValidations").new(
 			username='tonyp1'
 			,password='tonyp123'
 			,firstname='Tony'
@@ -16,22 +16,22 @@
 			,birthdaymonth=11
 			,birthdayyear=1975
 			,isactive=1
-		)>
-		
-		<!--- should be valid since id is not passed in --->
-		<cfset assert('loc.user.valid()')>
-		
-		<!--- should _not_ be valid since id is not a number --->		
-		<cfset loc.user.id = 'ABC'>
-		<cfset assert('!loc.user.valid()')>
-		
-		<!--- should be valid since id is blank --->
-		<cfset loc.user.id = ''>
-		<cfset assert('loc.user.valid()')>
-		
-		<!--- should be valid since id is a number --->
-		<cfset loc.user.id = 1>
-		<cfset assert('loc.user.valid()')>
-	</cffunction>
-	
-</cfcomponent>
+		);
+
+		/* should be valid since id is not passed in */
+		assert('user.valid()');
+
+		/* should _not_ be valid since id is not a number */
+		user.id = 'ABC';
+		assert('!user.valid()');
+
+		/* should be valid since id is blank */
+		user.id = '';
+		assert('user.valid()');
+
+		/* should be valid since id is a number */
+		user.id = 1;
+		assert('user.valid()');
+	}
+
+}

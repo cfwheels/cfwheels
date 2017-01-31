@@ -99,6 +99,7 @@
 					variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type, loc.columns["decimal_digits"][loc.i]);
 					variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
 					variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
+					variables.wheels.class.properties[loc.property].columndefault = loc.columns["column_default_value"][loc.i];
 
 					// get a boolean value for whether this column can be set to null or not
 					// if we don't get a boolean back we try to translate y/n to proper boolean values in cfml (yes/no)
@@ -109,7 +110,18 @@
 					}
 
 					variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
-					variables.wheels.class.properties[loc.property].label = Humanize(loc.property);
+
+					// If property is id, then make it all-caps "ID."
+					if (loc.property == "id") {
+						variables.wheels.class.properties[loc.property].label = "ID";
+					// If property ends with id, then drop it off. (For example, "userid" becomes "User.")
+					} else if (Right(loc.property, 2) == "id") {
+						variables.wheels.class.properties[loc.property].label = humanize(Left(loc.property, Len(loc.property) - 2));
+					// Otherwise, humanize it.
+					} else {
+						variables.wheels.class.properties[loc.property].label = humanize(loc.property);
+					}
+
 					variables.wheels.class.properties[loc.property].validationtype = variables.wheels.class.adapter.$getValidationType(variables.wheels.class.properties[loc.property].type);
 					if (StructKeyExists(variables.wheels.class.mapping, loc.property))
 					{
@@ -135,12 +147,19 @@
 						{
 							loc.defaultValidationsAllowBlank = true;
 						}
-						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !Len(loc.columns["column_default_value"][loc.i]) && !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !$validationExists(property=loc.property, validation="validatesPresenceOf"))
 						{
-							validatesPresenceOf(properties=loc.property);
+							if (Len(loc.columns["column_default_value"][loc.i]))
+							{
+								validatesPresenceOf(properties=loc.property, when="onUpdate");
+							}
+							else
+							{
+								validatesPresenceOf(properties=loc.property);
+							}
 						}
 
-						// always allowblank if a database default or validatesPresenceOf() has been set
+						// always allow blank if a database default or validatesPresenceOf() has been set
 						if (Len(loc.columns["column_default_value"][loc.i]) || $validationExists(property=loc.property, validation="validatesPresenceOf"))
 						{
 							loc.defaultValidationsAllowBlank = true;
@@ -190,6 +209,7 @@
 		}
 
 		// set up soft deletion and time stamping if the necessary columns in the table exist
+		variables.wheels.class.timeStampMode = application.wheels.timeStampMode;
 		if (Len(application.wheels.softDeleteProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.softDeleteProperty))
 		{
 			variables.wheels.class.softDeletion = true;
@@ -243,7 +263,7 @@
 		{
 			loc.adapterName = "SQLServer";
 		}
-		else if (FindNoCase("MySQL", loc.info.driver_name))
+		else if (FindNoCase("MySQL", loc.info.driver_name) || FindNoCase("MariaDB", loc.info.driver_name))
 		{
 			loc.adapterName = "MySQL";
 		}
@@ -261,7 +281,7 @@
 		}
 		else
 		{
-			$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by CFWheels.", extendedInfo="Use SQL Server, MySQL, Oracle, PostgreSQL or H2.");
+			$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by CFWheels.", extendedInfo="Use SQL Server, MySQL, MariaDB, Oracle, PostgreSQL or H2.");
 		}
 		loc.rv = CreateObject("component", "adapters.#loc.adapterName#").init(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password);
 		application.wheels.adapterName = loc.adapterName;

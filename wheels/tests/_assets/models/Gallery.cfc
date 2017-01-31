@@ -1,10 +1,10 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset belongsTo(name="user", modelName="user", foreignKey="userid")>
-		<cfset hasMany(name="photos", modelName="photo", foreignKey="galleryid")>
-		<cfset nestedProperties(associations="photos", allowDelete="true")>
-		<cfset validatesPresenceOf("title")>
-	</cffunction>
+	function init() {
+		belongsTo(name="user", modelName="user", foreignKey="userid");
+		hasMany(name="photos", modelName="photo", foreignKey="galleryid");
+		nestedProperties(associations="photos", allowDelete="true");
+		validatesPresenceOf("title");
+	}
 
-</cfcomponent>
+}

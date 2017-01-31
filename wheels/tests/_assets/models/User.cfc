@@ -1,32 +1,32 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset hasMany(name="galleries")>
-		<cfset hasOne(name="combikey")>
-		<!--- crazy join to test the joinKey argument --->
-		<cfset hasOne(name="author", foreignKey="firstName", joinKey="firstName")>
-		<cfset hasMany(name="authors", foreignKey="firstName", joinKey="firstName")>
-		<cfset hasMany(name="combikeys")>
-		<cfset hasMany(name="outerjoinphotogalleries", modelName="gallery", jointype="outer")>
-		<cfset validatesPresenceOf("username,password,firstname,lastname")>
-		<cfset validatesUniquenessOf("username")>
-		<cfset validatesLengthOf(property="username", minimum="4", maximum="20", when="onCreate", message="Please shorten your [property] please. [maximum] characters is the maximum length allowed.")>
-		<cfset validatesLengthOf(property="password", minimum="4", when="onUpdate")>
-		<cfset validate("validateCalled")>
-		<cfset validateOnCreate("validateOnCreateCalled")>
-		<cfset validateOnUpdate("validateOnUpdateCalled")>
-	</cffunction>
+	function init() {
+		hasMany(name="galleries");
+		hasOne(name="combikey");
+		/* crazy join to test the joinKey argument */
+		hasOne(name="author", foreignKey="firstName", joinKey="firstName");
+		hasMany(name="authors", foreignKey="firstName", joinKey="firstName");
+		hasMany(name="combikeys");
+		hasMany(name="outerjoinphotogalleries", modelName="gallery", jointype="outer");
+		validatesPresenceOf("username,password,firstname,lastname");
+		validatesUniquenessOf("username");
+		validatesLengthOf(property="username", minimum="4", maximum="20", when="onCreate", message="Please shorten your [property] please. [maximum] characters is the maximum length allowed.");
+		validatesLengthOf(property="password", minimum="4", when="onUpdate");
+		validate("validateCalled");
+		validateOnCreate("validateOnCreateCalled");
+		validateOnUpdate("validateOnUpdateCalled");
+	}
 
-	<cffunction name="validateCalled">
-		<cfset this._validateCalled = true>
-	</cffunction>
+	function validateCalled() {
+		this._validateCalled = true;
+	}
 
-	<cffunction name="validateOnCreateCalled">
-		<cfset this._validateOnCreateCalled = true>
-	</cffunction>
+	function validateOnCreateCalled() {
+		this._validateOnCreateCalled = true;
+	}
 
-	<cffunction name="validateOnUpdateCalled">
-		<cfset this._validateOnUpdateCalled = true>
-	</cffunction>
+	function validateOnUpdateCalled() {
+		this._validateOnUpdateCalled = true;
+	}
 
-</cfcomponent>
+}

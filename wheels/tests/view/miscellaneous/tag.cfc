@@ -1,30 +1,30 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-		<cfset loc.args = {}>
-		<cfset loc.args.name = "input">
-		<cfset loc.args.close = true>
-		<cfset loc.args.attributes = {}>
-		<cfset loc.args.attributes.type = "text">
-		<cfset loc.args.attributes.class = "wheelstest">
-		<cfset loc.args.attributes.size = "30">
-		<cfset loc.args.attributes.maxlength = "50">
-		<cfset loc.args.attributes.name = "inputtest">
-		<cfset loc.args.attributes.firstname = "tony">
-		<cfset loc.args.attributes.lastname = "petruzzi">
-		<cfset loc.args.attributes._firstname = "tony">
-		<cfset loc.args.attributes._lastname = "petruzzi">
-		<cfset loc.args.attributes.id = "inputtest">
-		<cfset loc.args.skip = "firstname,lastname">
-		<cfset loc.args.skipStartingWith = "_">
-		<cfset loc.args.attributes.onmouseover = "function(this){this.focus();}">
-	</cffunction>
+	function setup() {
+		_controller = controller(name="dummy");
+		args = {};
+		args.name = "input";
+		args.close = true;
+		args.attributes = {};
+		args.attributes.type = "text";
+		args.attributes.class = "wheelstest";
+		args.attributes.size = "30";
+		args.attributes.maxlength = "50";
+		args.attributes.name = "inputtest";
+		args.attributes.firstname = "tony";
+		args.attributes.lastname = "petruzzi";
+		args.attributes._firstname = "tony";
+		args.attributes._lastname = "petruzzi";
+		args.attributes.id = "inputtest";
+		args.skip = "firstname,lastname";
+		args.skipStartingWith = "_";
+		args.attributes.onmouseover = "function(this){this.focus();}";
+	}
 
-	<cffunction name="test_with_all_options">
-		<cfset loc.e = loc.controller.$tag(argumentCollection=loc.args)>
-		<cfset loc.r = '<input class="wheelstest" id="inputtest" maxlength="50" name="inputtest" onmouseover="function(this){this.focus();}" size="30" type="text" />'>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+	function test_with_all_options() {
+		e = _controller.$tag(argumentCollection=args);
+		r = '<input class="wheelstest" id="inputtest" maxlength="50" name="inputtest" onmouseover="function(this){this.focus();}" size="30" type="text" />';
+		assert("e eq r");
+	}
 
-</cfcomponent>
+}

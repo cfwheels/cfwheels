@@ -1,13 +1,13 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-	  loc.controller = controller(name="dummy");
+	  _controller = controller(name="dummy");
 	}
 
-	public void function test_clearing_cachable_actions() {
-		loc.controller.caches(action="dummy");
-		loc.controller.$clearCachableActions();
-		loc.r = loc.controller.$cachableActions();
-		assert("ArrayLen(loc.r) IS 0");
+	function test_clearing_cachable_actions() {
+		_controller.caches(action="dummy");
+		_controller.$clearCachableActions();
+		r = _controller.$cachableActions();
+		assert("ArrayLen(r) IS 0");
 	}
 }

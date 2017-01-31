@@ -1,13 +1,13 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_findAllKeys">
-		<cfset loc.p = model("post").findAll(select="id")>
-		<cfset loc.posts = model("post").findAllKeys()>
-		<cfset loc.keys = ValueList(loc.p.id)>
-		<cfset assert('loc.posts eq loc.keys')>
-		<cfset loc.p = model("post").findAll(select="id")>
-		<cfset loc.posts = model("post").findAllKeys(quoted=true)>
-		<cfset loc.keys = QuotedValueList(loc.p.id)>
-	</cffunction>
+	function test_findAllKeys() {
+		p = model("post").findAll(select="id");
+		posts = model("post").findAllKeys();
+		keys = ValueList(p.id);
+		assert('posts eq keys');
+		p = model("post").findAll(select="id");
+		posts = model("post").findAllKeys(quoted=true);
+		keys = QuotedValueList(p.id);
+	}
 
-</cfcomponent>
+}

@@ -1,72 +1,91 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
+	function setup() {
+		_controller = controller(name="dummy");
+		args = {};
+		args.host = "";
+		args.method = "post";
+		args.multipart = false;
+		args.onlypath = true;
+		args.port = 0;
+		args.protocol = "";
+		args.spamprotection = false;
+		args.controller = "testcontroller";
+	}
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-		<cfset loc.args= {}>
-		<cfset loc.args.host = "">
-		<cfset loc.args.method = "post">
-		<cfset loc.args.multipart = false>
-		<cfset loc.args.onlypath = true>
-		<cfset loc.args.port = 0>
-		<cfset loc.args.protocol = "">
-		<cfset loc.args.spamprotection = false>
-		<cfset loc.args.controller = "testcontroller">
-	</cffunction>
+	function test_no_controller_or_action_or_route_should_point_to_current_page() {
+		StructDelete(args, "controller");
+		argsction = _controller.urlfor(argumentCollection=args);
+		e = '<form action="#argsction#" method="post">' & _controller.authenticityTokenField();
+		r = _controller.startFormTag(argumentcollection=args);
+		assert('e eq r');
+	}
 
-	<cffunction name="test_no_controller_or_action_or_route_should_point_to_current_page">
-		<cfset structdelete(loc.args, "controller")>
-		<cfset loc.argsction = loc.controller.urlfor(argumentCollection=loc.args)>
-		<cfset loc.e = '<form action="#loc.argsction#" method="post">'>
-		<cfset loc.r = loc.controller.startFormTag(argumentcollection=loc.args)>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_with_controller() {
+		argsction = _controller.urlfor(argumentCollection=args);
+		e = '<form action="#argsction#" method="post">' & _controller.authenticityTokenField();
+		r = _controller.startFormTag(argumentcollection=args);
+		assert("e eq r", "testing this out");
+	}
 
-	<cffunction name="test_with_controller">
-		<cfset loc.argsction = loc.controller.urlfor(argumentCollection=loc.args)>
-		<cfset loc.e = '<form action="#loc.argsction#" method="post">'>
-		<cfset loc.r = loc.controller.startFormTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r", "testing this out")>
-	</cffunction>
+	function test_with_get_method() {
+		args.method = "get";
+		argsction = _controller.urlfor(argumentCollection=args);
+		e = '<form action="#argsction#" method="get">';
+		r = _controller.startFormTag(argumentcollection=args);
+		assert("e eq r");
+	}
 
-	<cffunction name="test_with_get_method">
-		<cfset loc.args.method = "get">
-		<cfset loc.argsction = loc.controller.urlfor(argumentCollection=loc.args)>
-		<cfset loc.e = '<form action="#loc.argsction#" method="get">'>
-		<cfset loc.r = loc.controller.startFormTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+	// TODO: Change `method` back to `post` after integrating ColdRoute. Then also test for inclusion of `_method`
+	// hidden field.
+	function test_with_put_method() {
+		args.method = "put";
+		argsction = _controller.urlfor(argumentCollection=args);
+		e = '<form action="#argsction#" method="put">' & _controller.authenticityTokenField();
+		r = _controller.startFormTag(argumentcollection=args);
+		assert("r is e");
+	}
 
-	<cffunction name="test_with_multipart">
-		<cfset loc.args.multipart = "true">
-		<cfset loc.argsction = loc.controller.urlfor(argumentCollection=loc.args)>
-		<cfset loc.e = loc.controller.startFormTag(argumentcollection=loc.args)>
-		<cfset loc.r = '<form action="#loc.argsction#" enctype="multipart/form-data" method="post">'>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+	// TODO: Change `method` back to `post` after integrating ColdRoute. Then also test for inclusion of `_method`
+	// hidden field.
+	function test_with_patch_method() {
+		args.method = "patch";
+		argsction = _controller.urlfor(argumentCollection=args);
+		e = '<form action="#argsction#" method="patch">' & _controller.authenticityTokenField();
+		r = _controller.startFormTag(argumentcollection=args);
+		assert("r is e");
+	}
 
-	<cffunction name="test_with_spamProtection">
-		<cfset loc.args.spamProtection = "true">
-		<cfset loc.args.action = "myaction">
-		<cfset loc.argsction = loc.controller.toXHTML(loc.controller.urlfor(argumentCollection=loc.args))>
-		<cfset loc.e = '<form method="post" onsubmit="this.action=''#Left(loc.argsction, int((Len(loc.argsction)/2)))#''+''#Right(loc.argsction, ceiling((Len(loc.argsction)/2)))#'';">'>
-		<cfset loc.r = loc.controller.startFormTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+	// TODO: Change `method` back to `post` after integrating ColdRoute. Then also test for inclusion of `_method`
+	// hidden field.
+	function test_with_delete_method() {
+		args.method = "delete";
+		argsction = _controller.urlfor(argumentCollection=args);
+		e = '<form action="#argsction#" method="delete">' & _controller.authenticityTokenField();
+		r = _controller.startFormTag(argumentcollection=args);
+		assert("r is e");
+	}
 
-	<cffunction name="test_with_home_route">
-		<cfset loc.args.route = "home">
-		<cfset loc.argsction = loc.controller.toXHTML(loc.controller.urlfor(argumentCollection=loc.args))>
-		<cfset loc.e = '<form action="#loc.argsction#" method="post">'>
-		<cfset loc.r = loc.controller.startFormTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+	function test_with_multipart() {
+		args.multipart = "true";
+		argsction = _controller.urlfor(argumentCollection=args);
+		e = _controller.startFormTag(argumentcollection=args);
+		r = '<form action="#argsction#" enctype="multipart/form-data" method="post">' & _controller.authenticityTokenField();
+		assert("e eq r");
+	}
 
-	<cffunction name="test_external_link">
-		<cfset loc.args.action = "https://www.cfwheels.com">
-		<cfset loc.args.multipart = true>
-		<cfset loc.e = '<form action="https://www.cfwheels.com" enctype="multipart/form-data" method="post">'>
-		<cfset loc.r = loc.controller.startFormTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
+	function test_with_root_route() {
+		args.route = "root";
+		argsction = _controller.toXHTML(_controller.urlfor(argumentCollection=args));
+		e = '<form action="#argsction#" method="post">' & _controller.authenticityTokenField();
+		r = _controller.startFormTag(argumentcollection=args);
+		assert("e eq r");
+	}
 
-</cfcomponent>
+	function test_external_link() {
+		args.multipart = true;
+		argsction = _controller.toXHTML(_controller.urlfor(argumentCollection=args));
+		e = '<form action="#argsction#" enctype="multipart/form-data" method="post">' & _controller.authenticityTokenField();
+		r = _controller.startFormTag(argumentcollection=args);
+		assert("e eq r");
+	}
+}

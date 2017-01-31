@@ -1,40 +1,34 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-		<cfset oldURLRewriting = application.wheels.URLRewriting>
-		<cfset application.wheels.URLRewriting = "On">
-		<cfset oldScriptName = request.cgi.script_name>
-		<cfset request.cgi.script_name = "/rewrite.cfm">
-	</cffunction>
+	function setup() {
+		_controller = controller(name="dummy");
+		oldURLRewriting = application.wheels.URLRewriting;
+		application.wheels.URLRewriting = "On";
+		oldScriptName = request.cgi.script_name;
+		request.cgi.script_name = "/rewrite.cfm";
+	}
 
-	<cffunction name="teardown">
-		<cfset application.wheels.URLRewriting = oldURLRewriting>
-		<cfset request.cgi.script_name = oldScriptName>
-	</cffunction>
+	function teardown() {
+		application.wheels.URLRewriting = oldURLRewriting;
+		request.cgi.script_name = oldScriptName;
+	}
 
-	<cffunction name="test_ampersand_and_equals_sign_encoding">
-		<cfset loc.e = '<a href="#application.wheels.webpath#x/x?a=cats%26dogs%3Dtrouble&amp;b=1">x</a>'>
-		<cfset loc.r = loc.controller.linkTo(text="x", controller="x", action="x", params="a=cats%26dogs%3Dtrouble&b=1")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_ampersand_and_equals_sign_encoding() {
+		e = '<a href="#application.wheels.webpath#x/x?a=cats%26dogs%3Dtrouble&amp;b=1">x</a>';
+		r = _controller.linkTo(text="x", controller="x", action="x", params="a=cats%26dogs%3Dtrouble&b=1");
+		assert('e eq r');
+	}
 
-	<cffunction name="test_controller_action_only">
-		<cfset loc.e = '<a href="#application.wheels.webpath#account/logout">Log Out</a>'>
-		<cfset loc.r = loc.controller.linkTo(text="Log Out", controller="account", action="logout")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_controller_action_only() {
+		e = '<a href="#application.wheels.webpath#account/logout">Log Out</a>';
+		r = _controller.linkTo(text="Log Out", controller="account", action="logout");
+		assert('e eq r');
+	}
 
-	<cffunction name="test_confirm_is_escaped">
-		<cfset loc.e = '<a href="#application.wheels.webpath#" onclick="return confirm(''Mark as: \''Completed\''?'');">#application.wheels.webpath#</a>'>
-		<cfset loc.r = loc.controller.linkTo(confirm="Mark as: 'Completed'?")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
+	function test_external_links() {
+		e = '<a href="http://www.cfwheels.com">CFWheels</a>';
+		r = _controller.linkTo(href="http://www.cfwheels.com", text="CFWheels");
+		assert('e eq r');
+	}
 
-	<cffunction name="test_external_links">
-		<cfset loc.e = '<a href="http://www.cfwheels.com">CFWheels</a>'>
-		<cfset loc.r = loc.controller.linkTo(href="http://www.cfwheels.com", text="CFWheels")>
-		<cfset assert('loc.e eq loc.r')>
-	</cffunction>
-
-</cfcomponent>
+}

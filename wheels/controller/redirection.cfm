@@ -2,11 +2,12 @@
 	/**
 	*  PUBLIC CONTROLLER REQUEST FUNCTIONS
 	*/
-	public void function redirectTo( 
+	public void function redirectTo(
 		boolean back=false,
 		boolean addToken,
 		numeric statusCode,
 		string route="",
+		string method="",
 		string controller="",
 		string action="",
 		any key="",

@@ -1,25 +1,29 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset belongsTo("author")>
-		<cfset hasMany("comments")>
-		<cfset hasMany("classifications")>
-		<cfset validatesUniquenessOf("title")>
-		<cfset property(name="titleAlias", sql="title", select=false)>
-		<cfset property(name="firstId", sql="MAX(posts.id)", select=false)>
-	</cffunction>
+	function init() {
+		belongsTo("author");
+		hasMany("comments");
+		hasMany("classifications");
+		validatesUniquenessOf("title");
+		property(name="titleAlias", sql="title", select=false);
+		property(name="firstId", sql="MAX(posts.id)", select=false);
+	}
 
-	<cffunction name="afterFindCallback">
-		<cfif StructIsEmpty(arguments)>
-			<cfset this.title = "setTitle">
-			<cfset this.views = this.views + 100>
-			<cfset this.something = "hello world">
-		<cfelse>
-			<cfset arguments.title = "setTitle">
-			<cfset arguments.views = arguments.views + 100>
-			<cfset arguments.something = "hello world">
-			<cfreturn arguments>
-		</cfif>
-	</cffunction>
+	function afterFindCallback() {
+		if (StructIsEmpty(arguments)) {
+			this.title = "setTitle";
+			this.views = this.views + 100;
+			this.something = "hello world";
+		} else {
+			arguments.title = "setTitle";
+			arguments.views = arguments.views + 100;
+			arguments.something = "hello world";
+			return arguments;
+		}
+	}
 
-</cfcomponent>
+	function getClass() {
+		return variables.wheels.class;
+	};
+
+}

@@ -1,51 +1,61 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.dispatch = createobject("component", "wheelsMapping.Dispatch")>
-		<cfset SavedRoutes = duplicate(application.wheels.routes)>
-		<cfset application.wheels.routes = []>
-	</cffunction>
+	function setup() {
+		dispatch = createobject("component", "wheelsMapping.Dispatch");
+		SavedRoutes = duplicate(application.wheels.routes);
+		application.wheels.routes = [];
+	}
 
-	<cffunction name="teardown">
-		<cfset application.wheels.routes = SavedRoutes>
-	</cffunction>
+	function teardown() {
+		application.wheels.routes = SavedRoutes;
+	}
 
-	<cffunction name="test_empty_route">
-		<cfset addRoute(pattern="", controller="pages", action="index")>
-		<cfset loc.r = loc.dispatch.$findMatchingRoute(path="", format="")>
-		<cfset assert('loc.r.controller eq "pages"')>
-		<cfset assert('loc.r.action eq "index"')>
-	</cffunction>
+	function test_empty_route() {
+		drawRoutes()
+			.root(to="pages##index")
+		.end();
+		r = dispatch.$findMatchingRoute(path="", format="");
+		assert('r.controller eq "pages"');
+		assert('r.action eq "index"');
+	}
 
-	<cffunction name="test_controller_only">
-		<cfset addRoute(pattern="pages", controller="pages", action="index")>
-		<cfset loc.r = loc.dispatch.$findMatchingRoute(path="/pages", format="")>
-		<cfset assert('loc.r.controller eq "pages"')>
-		<cfset assert('loc.r.action eq "index"')>
-	</cffunction>
+	function test_controller_only() {
+		drawRoutes()
+			.match(pattern="pages", to="pages##index")
+		.end();
+		r = dispatch.$findMatchingRoute(path="pages", format="");
+		assert('r.controller eq "pages"');
+		assert('r.action eq "index"');
+	}
 
-	<cffunction name="test_controller_and_action_required">
-		<cfset addRoute(pattern="pages/blah", controller="pages", action="index")>
- 		<cfset loc.r = raised('loc.dispatch.$findMatchingRoute(path="/pages", format="")')>
-		<cfset assert('loc.r eq "Wheels.RouteNotFound"')>
-		<cfset loc.r = loc.dispatch.$findMatchingRoute(path="/pages/blah", format="")>
-		<cfset assert('loc.r.controller eq "pages"')>
-		<cfset assert('loc.r.action eq "index"')>
-	</cffunction>
+	function test_controller_and_action_required() {
+		drawRoutes()
+			.match(pattern="pages/blah", to="pages##index")
+		.end();
+ 		r = raised('dispatch.$findMatchingRoute(path="/pages", format="")');
+		assert('r eq "Wheels.RouteNotFound"');
+		r = dispatch.$findMatchingRoute(path="pages/blah", format="");
+		assert('r.controller eq "pages"');
+		assert('r.action eq "index"');
+	}
 
-	<cffunction name="test_extra_variables_passed">
-		<cfset addRoute(pattern="pages/blah/[firstname]/[lastname]", controller="pages", action="index")>
-		<cfset loc.r = loc.dispatch.$findMatchingRoute(path="/pages/blah/tony/petruzzi", format="")>
-		<cfset assert('loc.r.controller eq "pages"')>
-		<cfset assert('loc.r.action eq "index"')>
-		<cfset assert('loc.r.variables eq "firstname,lastname"')>
-	</cffunction>
-	
-	<cffunction name="test_wildcard_route">
-		<cfset addRoute(pattern="*", controller="pages", action="index")>
-		<cfset loc.r = loc.dispatch.$findMatchingRoute(path="/thisismyroute/therearemanylikeit/butthisoneismine", format="")>
-		<cfset assert('loc.r.controller eq "pages"')>
-		<cfset assert('loc.r.action eq "index"')>
-	</cffunction>
+	function test_extra_variables_passed() {
+		drawRoutes()
+			.match(pattern="pages/blah/[firstname]/[lastname]", to="pages##index")
+		.end();
+		r = dispatch.$findMatchingRoute(path="pages/blah/tony/petruzzi", format="");
+		assert('r.controller eq "pages"');
+		assert('r.action eq "index"');
+		assert('r.variables eq "firstname,lastname"');
+	}
 
-</cfcomponent>
+	function test_wildcard_route() {
+		drawRoutes()
+			.match(pattern="*", to="pages##index")
+		.end();
+		r = dispatch.$findMatchingRoute(path="thisismyroute/therearemanylikeit/butthisoneismine", format="");
+		assert('r.controller eq "pages"');
+		assert('r.action eq "index"');
+	}
+
+}

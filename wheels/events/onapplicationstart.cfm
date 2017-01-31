@@ -67,6 +67,7 @@ public void function onApplicationStart() {
 	application.$wheels.nonExistingLayoutFiles = "";
 	application.$wheels.nonExistingObjectFiles = "";
 	application.$wheels.routes = [];
+	application.$wheels.resourceControllerNaming = "plural";
 	application.$wheels.namedRoutePositions = {};
 	application.$wheels.mixins = {};
 	application.$wheels.cache = {};
@@ -152,6 +153,19 @@ public void function onApplicationStart() {
 		application.$wheels.cacheQueries = true;
 	}
 
+	// csrf protection settings
+	application.$wheels.csrfStore = "session";
+	application.$wheels.csrfCookieEncryptionAlgorithm = "AES";
+	application.$wheels.csrfCookieEncryptionSecretKey = "";
+	application.$wheels.csrfCookieEncryptionEncoding = "Base64";
+	application.$wheels.csrfCookieName = "_wheels_authenticity";
+	application.$wheels.csrfCookieDomain = "";
+	application.$wheels.csrfCookieEncodeValue = "";
+	application.$wheels.csrfCookieHttpOnly = "";
+	application.$wheels.csrfCookiePath = "/";
+	application.$wheels.csrfCookiePreserveCase = "";
+	application.$wheels.csrfCookieSecure = "";
+
 	// debugging and error settings
 	application.$wheels.showDebugInformation = true;
 	application.$wheels.showErrorInformation = true;
@@ -210,11 +224,11 @@ public void function onApplicationStart() {
 	application.$wheels.softDeleteProperty = "deletedAt";
 	application.$wheels.timeStampOnCreateProperty = "createdAt";
 	application.$wheels.timeStampOnUpdateProperty = "updatedAt";
+	application.$wheels.timeStampMode = "utc";
 	application.$wheels.ipExceptions = "";
 	application.$wheels.overwritePlugins = true;
 	application.$wheels.deletePluginDirectories = true;
 	application.$wheels.loadIncompatiblePlugins = true;
-	application.$wheels.loadDefaultRoutes = true;
 	application.$wheels.automaticValidations = true;
 	application.$wheels.setUpdatedAtOnCreate = true;
 	application.$wheels.useExpandedColumnAliases = false;
@@ -310,6 +324,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prepend="", append="", prependToPage="", prependOnFirst=true, prependOnAnchor=true, appendToPage="", appendOnLast=true, appendOnAnchor=true, classForCurrent="", name="page", showSinglePage=false, pageNumberAsParam=true};
 	application.$wheels.functions.passwordField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
 	application.$wheels.functions.passwordFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+	application.$wheels.functions.protectFromForgery = {with="exception", only="", except=""};
 	application.$wheels.functions.radioButton = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
 	application.$wheels.functions.radioButtonTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
 	application.$wheels.functions.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302, delay=false};
@@ -377,7 +392,7 @@ public void function onApplicationStart() {
 	}
 
 	// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
-	local.allowedGlobalMethods = "get,set,addroute,addDefaultRoutes";
+	local.allowedGlobalMethods = "get,set,drawRoutes";
 	local.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.$wheels.controllerPath, fileName="Wheels", method="$initControllerClass"));
 	application.$wheels.protectedControllerMethods = "";
 	local.iEnd = ListLen(local.protectedControllerMethods);
@@ -398,6 +413,10 @@ public void function onApplicationStart() {
 	{
 		$include(template="wheels/plugins/injection.cfm");
 	}
+
+	// create the mapper that will handle creating routes before $loadRoutes
+	// and after $loadPlugins
+	application.$wheels.mapper = $createObjectFromRoot(path="wheels", fileName="Mapper", method="init");
 
 	// load developer routes and adds the default wheels routes (unless the developer has specified not to)
 	$loadRoutes();
@@ -451,4 +470,4 @@ public void function onApplicationStart() {
 		$location(url=local.url, addToken=false);
 	}
 }
-</cfscript> 
+</cfscript>

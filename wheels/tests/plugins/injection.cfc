@@ -1,7 +1,9 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.config = {
+	include "helpers.cfm";
+
+	function setup() {
+		config = {
 			path="wheels"
 			,fileName="Plugins"
 			,method="init"
@@ -9,38 +11,33 @@
 			,deletePluginDirectories=false
 			,overwritePlugins=false
 			,loadIncompatiblePlugins=true
-		}>
-		<cfset loc.PluginObj = $pluginObj(loc.config)>
-		<cfset application.wheels.mixins = loc.PluginObj.getMixins()>
-		<cfset loc.m = model("authors").new()>
-		<cfset loc.params = {controller="test", action="index"}>	
-		<cfset loc.c = controller("test", loc.params)>
-		<cfset loc.d = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init")>
-		<cfset loc.t = createObject("component","wheels.Test")>
-	</cffunction>
-	
-	<cffunction name="teardown">
-		<cfset application.wheels.mixins = {}>
-	</cffunction>
-	
-	<cffunction name="$pluginObj">
-		<cfargument name="config" type="struct" required="true">
-		<cfreturn $createObjectFromRoot(argumentCollection=arguments.config)>
-	</cffunction>
-	
-	<cffunction name="test_global_method">
-		<cfset assert('StructKeyExists(loc.m, "$GlobalTestMixin")')>
-		<cfset assert('StructKeyExists(loc.c, "$GlobalTestMixin")')>
-		<cfset assert('StructKeyExists(loc.d, "$GlobalTestMixin")')>
-		<cfset assert('StructKeyExists(loc.t, "$GlobalTestMixin")')>
-	</cffunction>
-	
-	<cffunction name="test_component_specific">
-		<cfset assert('StructKeyExists(loc.m, "$MixinForModels")')>
-		<cfset assert('StructKeyExists(loc.m, "$MixinForModelsAndContollers")')>
-		<cfset assert('StructKeyExists(loc.c, "$MixinForControllers")')>
-		<cfset assert('StructKeyExists(loc.c, "$MixinForModelsAndContollers")')>		
-		<cfset assert('StructKeyExists(loc.d, "$MixinForDispatch")')>
-	</cffunction>
+		};
+		PluginObj = $pluginObj(config);
+		application.wheels.mixins = PluginObj.getMixins();
+		m = model("authors").new();
+		_params = {controller="test", action="index"};
+		c = controller("test", _params);
+		d = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
+		t = createObject("component","wheels.Test");
+	}
 
-</cfcomponent>
+	function teardown() {
+		application.wheels.mixins = {};
+	}
+
+	function test_global_method() {
+		assert('StructKeyExists(m, "$GlobalTestMixin")');
+		assert('StructKeyExists(c, "$GlobalTestMixin")');
+		assert('StructKeyExists(d, "$GlobalTestMixin")');
+		assert('StructKeyExists(t, "$GlobalTestMixin")');
+	}
+
+	function test_component_specific() {
+		assert('StructKeyExists(m, "$MixinForModels")');
+		assert('StructKeyExists(m, "$MixinForModelsAndContollers")');
+		assert('StructKeyExists(c, "$MixinForControllers")');
+		assert('StructKeyExists(c, "$MixinForModelsAndContollers")');
+		assert('StructKeyExists(d, "$MixinForDispatch")');
+	}
+
+}

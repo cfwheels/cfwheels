@@ -1,1 +1,3 @@
-<cfset loc.controller.flashClear()>
+<cfscript>
+_controller.flashClear();
+</cfscript>

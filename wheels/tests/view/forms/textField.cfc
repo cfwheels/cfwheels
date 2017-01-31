@@ -1,19 +1,28 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
+	function test_automatic_label_for_id_property() {
+		_controller = controller(name="Galleries");
+		textField = _controller.textField(objectName="gallery", property="id");
+		assert("FindNoCase('ID', textField)");
+	}
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="ControllerWithModel")>
-	</cffunction>
+	function test_automatic_label_ending_with_id() {
+		_controller = controller(name="Galleries");
+		textField = _controller.textField(objectName="gallery", property="userId");
+		assert('textField contains "User"');
+		assert('not textField contains "User Id"');
+	}
 
-	<cffunction name="test_override_value">
-		<cfset loc.textField = loc.controller.textField(label="First Name", objectName="user", property="firstName", value="override")>
-		<cfset loc.foundValue = YesNoFormat(FindNoCase('value="override"', loc.textField))>
-		<cfset assert('loc.foundValue eq true')>
-	</cffunction>
+	function test_override_value() {
+		_controller = controller(name="ControllerWithModel");
+		textField = _controller.textField(label="First Name", objectName="user", property="firstName", value="override");
+		foundValue = YesNoFormat(FindNoCase('value="override"', textField));
+		assert('foundValue eq true');
+	}
 
-	<cffunction name="test_maxlength_textfield_valid">
-		<cfset loc.textField = loc.controller.textField(label="First Name", objectName="user", property="firstName")>
-		<cfset loc.foundMaxLength = YesNoFormat(FindNoCase('maxlength="50"', loc.textField)) />
-		<cfset assert('loc.foundMaxLength eq true')>
-	</cffunction>
-
-</cfcomponent>
+	function test_maxlength_textfield_valid() {
+		_controller = controller(name="ControllerWithModel");
+		textField = _controller.textField(label="First Name", objectName="user", property="firstName");
+		foundMaxLength = YesNoFormat(FindNoCase('maxlength="50"', textField));
+		assert('foundMaxLength eq true');
+	}
+}

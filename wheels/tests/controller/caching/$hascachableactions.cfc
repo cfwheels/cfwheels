@@ -1,16 +1,16 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.controller = controller(name="dummy")>
-		<cfset loc.controller.$clearCachableActions()>
-	</cffunction>
+	function setup() {
+		_controller = controller(name="dummy");
+		_controller.$clearCachableActions();
+	}
 
-	<cffunction name="test_checking_cachable_action">
-		<cfset loc.result = loc.controller.$hasCachableActions()>
-		<cfset assert("loc.result IS false")>
-		<cfset loc.controller.caches("dummy1")>
-		<cfset loc.result = loc.controller.$hasCachableActions()>
-		<cfset assert("loc.result IS true")>
-	</cffunction>
+	function test_checking_cachable_action() {
+		result = _controller.$hasCachableActions();
+		assert("result IS false");
+		_controller.caches("dummy1");
+		result = _controller.$hasCachableActions();
+		assert("result IS true");
+	}
 
-</cfcomponent>
+}

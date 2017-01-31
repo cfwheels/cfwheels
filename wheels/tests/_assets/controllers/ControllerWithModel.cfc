@@ -1,5 +1,3 @@
-<cfcomponent extends="wheelsMapping.Controller">
-
-	<cfset user = model("user").findOne(where="lastname = 'Petruzzi'")>
-
-</cfcomponent>
+component extends="wheelsMapping.Controller" {
+	user = model("user").findOne(where="lastname = 'Petruzzi'");
+}

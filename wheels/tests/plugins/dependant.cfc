@@ -1,7 +1,9 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset loc.config = {
+	include "helpers.cfm";
+
+	function setup() {
+		config = {
 			path="wheels"
 			,fileName="Plugins"
 			,method="init"
@@ -9,19 +11,16 @@
 			,deletePluginDirectories=false
 			,overwritePlugins=false
 			,loadIncompatiblePlugins=true
-		}>
-	</cffunction>
-	
-	<cffunction name="$pluginObj">
-		<cfargument name="config" type="struct" required="true">
-		<cfreturn $createObjectFromRoot(argumentCollection=arguments.config)>
-	</cffunction>
-	
-	<cffunction name="test_dependant_plugin">
-		<cfset loc.config.pluginPath = "/wheelsMapping/tests/_assets/plugins/dependant">
-		<cfset loc.PluginObj = $pluginObj(loc.config)>
-		<cfset loc.iplugins = loc.PluginObj.getDependantPlugins()>
-		<cfset assert('loc.iplugins eq "TestPlugin1|TestPlugin2,TestPlugin1|TestPlugin3"')>
-	</cffunction>
-	
-</cfcomponent>
+		};
+	}
+
+	function test_dependant_plugin() {
+		config.pluginPath = "/wheelsMapping/tests/_assets/plugins/dependant";
+		PluginObj = $pluginObj(config);
+		iplugins = PluginObj.getDependantPlugins();
+		assert('iplugins eq "TestPlugin1|TestPlugin2,TestPlugin1|TestPlugin3"');
+	}
+
+
+
+}

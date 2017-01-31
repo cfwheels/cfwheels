@@ -1,13 +1,13 @@
-<cfcomponent extends="Model">
+component extends="Model" {
 
-	<cffunction name="init">
-		<cfset table("tags")>
-		<cfset afterSave("callbackThatReturnsFalse")>
-		<cfset afterDelete("callbackThatReturnsFalse")>
-	</cffunction>
+	function init() {
+		table("tags");
+		afterSave("callbackThatReturnsFalse");
+		afterDelete("callbackThatReturnsFalse");
+	}
 
-	<cffunction name="callbackThatReturnsFalse">
-		<cfreturn false>
-	</cffunction>
+	function callbackThatReturnsFalse() {
+		return false;
+	}
 
-</cfcomponent>
+}

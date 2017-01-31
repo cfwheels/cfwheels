@@ -6,5 +6,5 @@
 
 	if( StructKeyExists(application, "wheels") AND StructKeyExists(application.wheels, "viewPath")){
 		include "../#application.wheels.viewPath#/helpers.cfm";
-	} 
+	}
 </cfscript>

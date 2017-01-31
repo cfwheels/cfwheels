@@ -1,36 +1,40 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfinclude template="setup.cfm">
-	</cffunction>
+	function setup() {
+		include "setup.cfm";
+	}
 
-	<cffunction name="teardown">
-		<cfinclude template="teardown.cfm">
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="test_flashDelete_invalid">
-		<cfset run_flashDelete_invalid()>
-		<cfset application.wheels.flashStorage = "cookie">
-		<cfset run_flashDelete_invalid()>
-	</cffunction>
+	function test_flashDelete_invalid() {
+		run_flashDelete_invalid();
+		application.wheels.flashStorage = "cookie";
+		run_flashDelete_invalid();
+	}
 
-	<cffunction name="run_flashDelete_invalid">
-		<cfset loc.controller.flashClear()>
-		<cfset result = loc.controller.flashDelete(key="success")>
-		<cfset assert("result IS false")>
-	</cffunction>
+	function run_flashDelete_invalid() {
+		_controller.flashClear();
+		result = _controller.flashDelete(key="success");
+		assert("result IS false");
+	}
 
-	<cffunction name="test_flashDelete_valid">
-		<cfset run_flashDelete_valid()>
-		<cfset application.wheels.flashStorage = "cookie">
-		<cfset run_flashDelete_valid()>
-	</cffunction>
+	function test_flashDelete_valid() {
+		run_flashDelete_valid();
+		application.wheels.flashStorage = "cookie";
+		run_flashDelete_valid();
+	}
 
-	<cffunction name="run_flashDelete_valid">
-		<cfset loc.controller.flashClear()>
-		<cfset loc.controller.flashInsert(success="Congrats!")>
-		<cfset result = loc.controller.flashDelete(key="success")>
-		<cfset assert("result IS true")>
-	</cffunction>
+	/**
+	* HELPERS
+	*/
 
-</cfcomponent>
+	function run_flashDelete_valid() {
+		_controller.flashClear();
+		_controller.flashInsert(success="Congrats!");
+		result = _controller.flashDelete(key="success");
+		assert("result IS true");
+	}
+
+}

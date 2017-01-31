@@ -1,148 +1,152 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfset params = {controller="test", action="test"}>
-		<cfset loc.controller = controller("dummy", params)>
-		<cfset args = StructNew()>
-		<cfset args.subject = "dummy subject">
-		<cfset args.to = "to-dummy@dummy.com">
-		<cfset args.from = "from-dummy@dummy.com">
-		<cfset args.deliver = false>
-		<cfset oldViewPath = application.wheels.viewPath>
-		<cfset application.wheels.viewPath = "wheels/tests/_assets/views">
-		<cfset oldFilePath = application.wheels.filePath>
-		<cfset application.wheels.filePath = "wheels/tests/_assets/files">
-		<cfset oldArgs = application.wheels.functions.sendEmail>
-		<cfset textBody = "dummy plain email body">
-		<cfset HTMLBody = "<p>dummy html email body</p>">
-		<cfset filePath = ExpandPath(application.wheels.filePath) & "/" & "emailcontent.txt">
-	</cffunction>
+	function setup() {
+		params = {controller="test", action="test"};
+		_controller = controller("dummy", params);
+		args = StructNew();
+		args.subject = "dummy subject";
+		args.to = "to-dummy@dummy.com";
+		args.from = "from-dummy@dummy.com";
+		args.deliver = false;
+		oldViewPath = application.wheels.viewPath;
+		application.wheels.viewPath = "wheels/tests/_assets/views";
+		oldFilePath = application.wheels.filePath;
+		application.wheels.filePath = "wheels/tests/_assets/files";
+		oldArgs = application.wheels.functions.sendEmail;
+		textBody = "dummy plain email body";
+		HTMLBody = "<p>dummy html email body</p>";
+		filePath = ExpandPath(application.wheels.filePath) & "/" & "emailcontent.txt";
+	}
 
- 	<cffunction name="test_allow_default_for_from_to_and_subject">
-		<cfset application.wheels.functions.sendEmail.from = "sender@example.com">
-		<cfset application.wheels.functions.sendEmail.to = "recipient@example.com">
-		<cfset application.wheels.functions.sendEmail.subject = "test email">
-		<cfset loc.r = default_args(template="")>
-		<cfset assert('loc.r.from eq "sender@example.com"')>
-		<cfset assert('loc.r.to eq "recipient@example.com"')>
-		<cfset assert('loc.r.subject eq "test email"')>
-		<cfset loc.r = default_args(template="", from="custom_sender@example.com", to="custom_recipient@example.com", subject="custom suject")>
-		<cfset assert('loc.r.from eq "custom_sender@example.com"')>
-		<cfset assert('loc.r.to eq "custom_recipient@example.com"')>
-		<cfset assert('loc.r.subject eq "custom suject"')>
-	</cffunction>
+ 	function test_allow_default_for_from_to_and_subject() {
+		application.wheels.functions.sendEmail.from = "sender@example.com";
+		application.wheels.functions.sendEmail.to = "recipient@example.com";
+		application.wheels.functions.sendEmail.subject = "test email";
+		r = default_args(template="");
+		assert('r.from eq "sender@example.com"');
+		assert('r.to eq "recipient@example.com"');
+		assert('r.subject eq "test email"');
+		r = default_args(template="", from="custom_sender@example.com", to="custom_recipient@example.com", subject="custom suject");
+		assert('r.from eq "custom_sender@example.com"');
+		assert('r.to eq "custom_recipient@example.com"');
+		assert('r.subject eq "custom suject"');
+	}
 
-	<cffunction name="test_sendemail_plain">
-		<cfset args.template = "plainEmailTemplate">
-		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("ListLen(StructKeyList(result)) IS 6")>
-		<cfset assert("StructKeyExists(result, 'to')")>
-		<cfset assert("StructKeyExists(result, 'from')")>
-		<cfset assert("StructKeyExists(result, 'subject')")>
-		<cfset assert("result.type IS 'text'")>
-		<cfset assert("result.text IS textBody")>
-		<cfset assert("result.html IS ''")>
-	</cffunction>
+	function test_sendemail_plain() {
+		args.template = "plainEmailTemplate";
+		result = _controller.sendEmail(argumentCollection=args);
+		assert("ListLen(StructKeyList(result)) IS 6");
+		assert("StructKeyExists(result, 'to')");
+		assert("StructKeyExists(result, 'from')");
+		assert("StructKeyExists(result, 'subject')");
+		assert("result.type IS 'text'");
+		assert("result.text IS textBody");
+		assert("result.html IS ''");
+	}
 
-	<cffunction name="test_sendemail_html">
-		<cfset args.template = "HTMLEmailTemplate">
-		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.type IS 'html'")>
-		<cfset assert("result.text IS ''")>
-		<cfset assert("result.html IS HTMLBody")>
-	</cffunction>
+	function test_sendemail_html() {
+		args.template = "HTMLEmailTemplate";
+		result = _controller.sendEmail(argumentCollection=args);
+		assert("result.type IS 'html'");
+		assert("result.text IS ''");
+		assert("result.html IS HTMLBody");
+	}
 
-	<cffunction name="test_sendemail_detectmultipart_with_html">
-		<cfset args.template = "HTMLEmailTemplate">
-		<cfset args.detectMultipart = true>
-		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.type IS 'html'")>
-	</cffunction>
+	function test_sendemail_detectmultipart_with_html() {
+		args.template = "HTMLEmailTemplate";
+		args.detectMultipart = true;
+		result = _controller.sendEmail(argumentCollection=args);
+		assert("result.type IS 'html'");
+	}
 
-	<cffunction name="test_sendemail_detectmultipart_with_plain">
-		<cfset args.template = "plainEmailTemplate">
-		<cfset args.detectMultipart = true>
-		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.type IS 'text'")>
-	</cffunction>
+	function test_sendemail_detectmultipart_with_plain() {
+		args.template = "plainEmailTemplate";
+		args.detectMultipart = true;
+		result = _controller.sendEmail(argumentCollection=args);
+		assert("result.type IS 'text'");
+	}
 
-	<cffunction name="test_sendemail_type_argument_without_detectmultipart">
-		<cfset args.template = "plainEmailTemplate">
-		<cfset args.type = "html">
-		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.type IS 'html'")>
-	</cffunction>
+	function test_sendemail_type_argument_without_detectmultipart() {
+		args.template = "plainEmailTemplate";
+		args.type = "html";
+		result = _controller.sendEmail(argumentCollection=args);
+		assert("result.type IS 'html'");
+	}
 
-	<cffunction name="test_sendemail_combined_in_correct_order">
-		<cfset args.templates = "HTMLEmailTemplate,plainEmailTemplate">
-		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.mailparts[1].type IS 'text' AND result.mailparts[2].tagContent IS HTMLBody")>
-	</cffunction>
+	function test_sendemail_combined_in_correct_order() {
+		args.templates = "HTMLEmailTemplate,plainEmailTemplate";
+		result = _controller.sendEmail(argumentCollection=args);
+		assert("result.mailparts[1].type IS 'text' AND result.mailparts[2].tagContent IS HTMLBody");
+	}
 
-	<cffunction name="test_sendemail_with_layout">
-		<cfset args.template = "HTMLEmailTemplate">
-		<cfset args.layout = "emailLayout">
-		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.html Contains '<div>'")>
-	</cffunction>
+	function test_sendemail_with_layout() {
+		args.template = "HTMLEmailTemplate";
+		args.layout = "emailLayout";
+		result = _controller.sendEmail(argumentCollection=args);
+		assert("result.html Contains '<div>'");
+	}
 
-	<cffunction name="test_sendemail_with_attachment">
-		<cfset args.template = "plainEmailTemplate">
-		<cfset args.file = "cfwheels-logo.png">
-		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.mailparams[1].file Contains '_assets' AND result.mailparams[1].file Contains 'cfwheels-logo.png'")>
-	</cffunction>
+	function test_sendemail_with_attachment() {
+		args.template = "plainEmailTemplate";
+		args.file = "cfwheels-logo.png";
+		result = _controller.sendEmail(argumentCollection=args);
+		assert("result.mailparams[1].file Contains '_assets' AND result.mailparams[1].file Contains 'cfwheels-logo.png'");
+	}
 
-	<cffunction name="test_sendemail_with_attachments_external">
-		<cfset args.template = "plainEmailTemplate">
-		<cfset args.file = "cfwheels-logo.png,http://www.example.com/test.txt,c:\inetpub\wwwroot\cfwheels\something.pdf">
-		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.mailparams[1].file Contains '_assets' AND result.mailparams[1].file Contains 'cfwheels-logo.png'")>
-		<cfset assert("result.mailparams[2].file eq 'http://www.example.com/test.txt'")>
-		<cfset assert("result.mailparams[3].file eq 'c:\inetpub\wwwroot\cfwheels\something.pdf'")>
-	</cffunction>
+	function test_sendemail_with_attachments_external() {
+		args.template = "plainEmailTemplate";
+		args.file = "cfwheels-logo.png,http://www.example.com/test.txt,c:\inetpub\wwwroot\cfwheels\something.pdf";
+		result = _controller.sendEmail(argumentCollection=args);
+		assert("result.mailparams[1].file Contains '_assets' AND result.mailparams[1].file Contains 'cfwheels-logo.png'");
+		assert("result.mailparams[2].file eq 'http://www.example.com/test.txt'");
+		assert("result.mailparams[3].file eq 'c:\inetpub\wwwroot\cfwheels\something.pdf'");
+	}
 
-	<cffunction name="test_sendemail_with_custom_argument">
-		<cfset args.template = "plainEmailTemplate">
-		<cfset args.customArgument = "IPassedInThisAsACustomArgument">
-		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.text Contains 'IPassedInThisAsACustomArgument'")>
-	</cffunction>
+	function test_sendemail_with_custom_argument() {
+		args.template = "plainEmailTemplate";
+		args.customArgument = "IPassedInThisAsACustomArgument";
+		result = _controller.sendEmail(argumentCollection=args);
+		assert("result.text Contains 'IPassedInThisAsACustomArgument'");
+	}
 
-	<cffunction name="test_sendemail_from_different_path">
-		<cfset args.template = "/shared/anotherPlainEmailTemplate">
-		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.text IS 'another dummy plain email body'")>
-	</cffunction>
+	function test_sendemail_from_different_path() {
+		args.template = "/shared/anotherPlainEmailTemplate";
+		result = _controller.sendEmail(argumentCollection=args);
+		assert("result.text IS 'another dummy plain email body'");
+	}
 
-	<cffunction name="test_sendemail_from_sub_folder">
-		<cfset args.template = "sub/anotherHTMLEmailTemplate">
-		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.html IS '<p>another dummy html email body</p>'")>
-	</cffunction>
+	function test_sendemail_from_sub_folder() {
+		args.template = "sub/anotherHTMLEmailTemplate";
+		result = _controller.sendEmail(argumentCollection=args);
+		assert("result.html IS '<p>another dummy html email body</p>'");
+	}
 
-	<cffunction name="test_sendemail_with_writetofile">
-		<cfset args.templates = "HTMLEmailTemplate,plainEmailTemplate">
-		<cfset args.writeToFile = filePath>
-		<cfif FileExists(filePath)>
-			<cffile action="delete" file="#filePath#">
-		</cfif>
-		<cfset loc.controller.sendEmail(argumentCollection=args)>
-		<cffile action="read" file="#filePath#" variable="fileContent">
-		<cffile action="delete" file="#filePath#">
-		<cfset assert("fileContent contains HTMLBody")>
-		<cfset assert("fileContent contains textBody")>
-	</cffunction>
+	function test_sendemail_with_writetofile() {
+		args.templates = "HTMLEmailTemplate,plainEmailTemplate";
+		args.writeToFile = filePath;
+		if (FileExists(filePath)) {
+			fileDelete(filePath);
+		}
+		_controller.sendEmail(argumentCollection=args);
+		fileContent = fileRead(filePath);
+		fileDelete(filePath);
+		assert("fileContent contains HTMLBody");
+		assert("fileContent contains textBody");
+	}
 
-	<cffunction name="teardown">
-		<cfset application.wheels.viewPath = oldViewPath>
-		<cfset application.wheels.filePath = oldFilePath>
-		<cfset application.wheels.functions.sendEmail = oldArgs>
-	</cffunction>
+	function teardown() {
+		application.wheels.viewPath = oldViewPath;
+		application.wheels.filePath = oldFilePath;
+		application.wheels.functions.sendEmail = oldArgs;
+	}
 
-	<cffunction name="default_args">
-		<cfset $args(args=arguments, name="sendEmail", required="template,from,to,subject")>
-		<cfreturn arguments>
-	</cffunction>
+	/**
+	* HELPERS
+	*/
 
-</cfcomponent>
+	function default_args() {
+		$args(args=arguments, name="sendEmail", required="template,from,to,subject");
+		return arguments;
+	}
+
+}

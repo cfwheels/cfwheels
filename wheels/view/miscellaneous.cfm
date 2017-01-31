@@ -1,11 +1,14 @@
-<!--- PUBLIC VIEW HELPER FUNCTIONS --->
+<cfscript>
+	/*
+	* PUBLIC VIEW HELPER FUNCTIONS
+	*/
 
-<cffunction name="flashMessages" returntype="string" access="public" output="false">
-	<cfargument name="keys" type="string" required="false">
-	<cfargument name="class" type="string" required="false">
-	<cfargument name="includeEmptyContainer" type="boolean" required="false">
-	<cfargument name="lowerCaseDynamicClassValues" type="boolean" required="false">
-	<cfscript>
+	public string function flashMessages(
+		string keys,
+		string class,
+		boolean includeEmptyContainer,
+		boolean lowerCaseDynamicClassValues
+	) {
 		$args(name="flashMessages", args=arguments, combine="keys/key");
 		local.flash = $readFlash();
 		local.rv = "";
@@ -48,15 +51,11 @@
 		{
 			local.rv = $element(name="div", skip="key,keys,includeEmptyContainer,lowerCaseDynamicClassValues", content=local.listItems, attributes=arguments);
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="contentFor" returntype="void" access="public" output="false">
-	<cfargument name="position" type="any" required="false" default="last">
-	<cfargument name="overwrite" type="any" required="false" default="false">
-	<cfscript>
-
+	public void function contentFor(any position="last", any overwrite="false") {
+		
 		// position in the array for the content
 		local.position = "last";
 
@@ -144,45 +143,33 @@
 				}
 			}
 		}
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="includeLayout" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="false" default="layout">
-	<cfscript>
+	public string function includeLayout(string name="layout") { 
 		arguments.partial = arguments.name;
 		StructDelete(arguments, "name");
 		arguments.$prependWithUnderscore = false;
 		return includePartial(argumentCollection=arguments);
-	</cfscript>
-</cffunction>
+	}
 
-<cffunction name="includePartial" returntype="string" access="public" output="false">
-	<cfargument name="partial" type="any" required="true">
-	<cfargument name="group" type="string" required="false" default="">
-	<cfargument name="cache" type="any" required="false" default="">
-	<cfargument name="layout" type="string" required="false">
-	<cfargument name="spacer" type="string" required="false">
-	<cfargument name="dataFunction" type="any" required="false">
-	<cfargument name="$prependWithUnderscore" type="boolean" required="false" default="true">
-	<cfscript>
+	public string function includePartial(
+		required any partial,
+		string group="",
+		any cache="",
+		string layout,
+		string spacer,
+		any dataFunction,
+		boolean $prependWithUnderscore=true
+	) {
 		$args(name="includePartial", args=arguments);
-		local.rv = $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,group,cache,layout,spacer,dataFunction"));
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,group,cache,layout,spacer,dataFunction"));
+	}
 
-<cffunction name="contentForLayout" returntype="string" access="public" output="false">
-	<cfscript>
-		local.rv = includeContent("body");
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+	public string function contentForLayout() {
+		return includeContent("body");
+	}
 
-<cffunction name="includeContent" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="false" default="body">
-	<cfargument name="defaultValue" type="string" required="false" default="">
-	<cfscript>
+	public string function includeContent(string name="body", string defaultValue="") {
 		if (StructKeyExists(arguments, "default"))
 		{
 			arguments.defaultValue = arguments.default;
@@ -196,14 +183,10 @@
 		{
 			local.rv = arguments.defaultValue;
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="cycle" returntype="string" access="public" output="false">
-	<cfargument name="values" type="string" required="true">
-	<cfargument name="name" type="string" required="false" default="default">
-	<cfscript>
+	public string function cycle(required string values, string name="default") {
 		if (!StructKeyExists(request.wheels, "cycle"))
 		{
 			request.wheels.cycle = {};
@@ -221,31 +204,27 @@
 			}
 			request.wheels.cycle[arguments.name] = ListGetAt(arguments.values, local.foundAt + 1);
 		}
-		local.rv = request.wheels.cycle[arguments.name];
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return request.wheels.cycle[arguments.name];
+	}
 
-<cffunction name="resetCycle" returntype="void" access="public" output="false">
-	<cfargument name="name" type="string" required="false" default="default">
-	<cfscript>
+	public void function resetCycle(string name="default") {
 		if (StructKeyExists(request.wheels, "cycle") && StructKeyExists(request.wheels.cycle, arguments.name))
 		{
 			StructDelete(request.wheels.cycle, arguments.name);
 		}
-	</cfscript>
-</cffunction>
+	}
 
-<!--- PRIVATE FUNCTIONS --->
+	/*
+	* PRIVATE FUNCTIONS
+	*/
 
-<cffunction name="$tag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="attributes" type="struct" required="false" default="#StructNew()#">
-	<cfargument name="close" type="boolean" required="false" default="false">
-	<cfargument name="skip" type="string" required="false" default="">
-	<cfargument name="skipStartingWith" type="string" required="false" default="">
-	<cfscript>
-
+	public string function $tag(
+		required string name, 
+		struct attributes={}, 
+		boolean close=false,
+		string skip="",
+		string skipStartingWith=""
+	) {
 		// start the HTML tag and give it its name
 		local.rv = "<" & arguments.name;
 
@@ -284,15 +263,10 @@
 		{
 			local.rv &= ">";
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$tagAttribute" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="value" type="string" required="true">
-	<cfscript>
-
+	public string function $tagAttribute(required string name, required string value) {
 		// for custom data attributes we convert underscores / camelCase to hyphens to get around the issue with not being able to use a hyphen in an argument name in CFML
 		if (Left(arguments.name, 4) == "data")
 		{
@@ -325,30 +299,26 @@
 				}
 			}
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$element" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="attributes" type="struct" required="false" default="#StructNew()#">
-	<cfargument name="content" type="string" required="false" default="">
-	<cfargument name="skip" type="string" required="false" default="">
-	<cfargument name="skipStartingWith" type="string" required="false" default="">
-	<cfscript>
-		var rv = "";
-		rv = arguments.content;
+	public string function $element(
+		required string name, 
+		struct attributes={}, 
+		string content="",
+		string skip="",
+		string skipStartingWith=""
+	) {
+		local.rv = arguments.content;
 		StructDelete(arguments, "content");
-		rv = $tag(argumentCollection=arguments) & rv & "</" & arguments.name & ">";
-	</cfscript>
-	<cfreturn rv>
-</cffunction>
+		return $tag(argumentCollection=arguments) & local.rv & "</" & arguments.name & ">";
+	}
 
-<cffunction name="$objectName" returntype="any" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="association" type="string" required="false" default="">
-	<cfargument name="position" type="string" required="false" default="">
-	<cfscript>
+	public any function $objectName(
+		required any objectName,
+		string association="",
+		string position=""
+	) {
 		local.currentModelObject = false;
 		local.hasManyAssociationCount = 0;
 
@@ -383,15 +353,14 @@
 				}
 			}
 		}
-	</cfscript>
-	<cfreturn arguments.objectName>
-</cffunction>
+		return arguments.objectName;
+	}
 
-<cffunction name="$tagId" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="valueToAppend" type="string" default="">
-	<cfscript>
+	public string function $tagId(
+		required any objectName,
+		required string property,
+		string valueToAppend=""
+	) {
 		if (IsSimpleValue(arguments.objectName))
 		{
 			// form element for object(s)
@@ -421,14 +390,10 @@
 		{
 			local.rv &= "-" & arguments.valueToAppend;
 		}
-	</cfscript>
-	<cfreturn REReplace(local.rv, "-+", "-", "all")>
-</cffunction>
+		return REReplace(local.rv, "-+", "-", "all");
+	}
 
-<cffunction name="$tagName" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
+	public string function $tagName(required any objectName, required string property) {
 		if (IsSimpleValue(arguments.objectName))
 		{
 			local.rv = ListLast(arguments.objectName, ".");
@@ -449,13 +414,10 @@
 		{
 			local.rv = arguments.property;
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$swapArrayPositionsForIds" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true" />
-	<cfscript>
+	public string function $swapArrayPositionsForIds(required any objectName) {
 		local.rv = arguments.objectName;
 
 		// we could have multiple nested arrays so we need to traverse the objectName to find where we have array positions and
@@ -477,15 +439,14 @@
 				local.rv = ListSetAt(local.rv, local.i, $getObject(local.objectReference).key($returnTickCountWhenNew=true) & "]", "[");
 			}
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$addToJavaScriptAttribute" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="content" type="string" required="true">
-	<cfargument name="attributes" type="struct" required="true">
-	<cfscript>
+	public string function $addToJavaScriptAttribute(
+		required string name,
+		required string content,
+		required struct attributes
+	) {
 		if (StructKeyExists(arguments.attributes, arguments.name))
 		{
 			local.rv = arguments.attributes[arguments.name];
@@ -499,13 +460,10 @@
 		{
 			local.rv = arguments.content;
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$getObject" returntype="any" access="public" output="false">
-	<cfargument name="objectName" type="string" required="true">
-	<cfscript>
+	public any function $getObject(required string objectname) {
 		try
 		{
 			if (Find(".", arguments.objectName) || Find("[", arguments.objectName))
@@ -529,14 +487,10 @@
 				$throw(argumentCollection=e);
 			}
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return local.rv;
+	}
 
-<cffunction name="$innerArgs" returntype="struct" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="args" type="struct" required="true">
-	<cfscript>
+	public struct function $innerArgs(required string name, required struct args) {
 		local.rv = {};
 		local.element = arguments.name;
 		for (local.key in arguments.args)
@@ -548,6 +502,6 @@
 				StructDelete(arguments.args, local.key);
 			}
 		}
-	</cfscript>
-	<cfreturn local.rv>
-</cffunction>
+		return local.rv;
+	}
+</cfscript>  

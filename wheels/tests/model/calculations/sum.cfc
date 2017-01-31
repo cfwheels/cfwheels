@@ -1,74 +1,74 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_sum">
-		<cfset loc.result = model("post").sum(property="views")>
-		<cfset assert("loc.result IS 15")>
-	</cffunction>
+	function test_sum() {
+		result = model("post").sum(property="views");
+		assert("result IS 15");
+	}
 
-	<cffunction name="test_sum_with_group">
-		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
-			<cfset loc.result = model("post").sum(property="views", group="authorId")>
-			<cfset assert("loc.result['viewsSum'][2] IS 5")>
-		<cfelse>
-			<cfset assert(true)>
-		</cfif>
-	</cffunction>
+	function test_sum_with_group() {
+		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+			result = model("post").sum(property="views", group="authorId");
+			assert("result['viewsSum'][2] IS 5");
+		} else {
+			assert(true);
+		}
+	}
 
-	<cffunction name="test_sum_with_group_on_associated_model">
-		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
-			<cfset loc.result = model("post").sum(property="views", include="author", group="lastName")>
-			<cfset assert("loc.result['viewsSum'][2] IS 5")>
-		<cfelse>
-			<cfset assert(true)>
-		</cfif>
-	</cffunction>
+	function test_sum_with_group_on_associated_model() {
+		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+			result = model("post").sum(property="views", include="author", group="lastName");
+			assert("result['viewsSum'][2] IS 5");
+		} else {
+			assert(true);
+		}
+	}
 
-	<cffunction name="test_sum_with_group_on_calculated_property">
-		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
-			<cfset loc.result = model("photo").sum(property="galleryId", group="DESCRIPTION1")>
-			<cfset assert("loc.result['galleryIdSum'][2] IS 10")>
-		<cfelse>
-			<cfset assert(true)>
-		</cfif>
-	</cffunction>
+	function test_sum_with_group_on_calculated_property() {
+		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+			result = model("photo").sum(property="galleryId", group="DESCRIPTION1");
+			assert("result['galleryIdSum'][2] IS 10");
+		} else {
+			assert(true);
+		}
+	}
 
-	<cffunction name="test_sum_with_group_on_calculated_property_on_associated_model">
-		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
-			<cfset loc.result = model("gallery").sum(property="userId", include="photos", group="DESCRIPTION1")>
-			<cfset assert("loc.result['userIdSum'][3] IS 3")>
-		<cfelse>
-			<cfset assert(true)>
-		</cfif>
-	</cffunction>
+	function test_sum_with_group_on_calculated_property_on_associated_model() {
+		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+			result = model("gallery").sum(property="userId", include="photos", group="DESCRIPTION1");
+			assert("result['userIdSum'][3] IS 3");
+		} else {
+			assert(true);
+		}
+	}
 
-	<cffunction name="test_sum_with_where">
-		<cfset loc.author = model("author").findOne(where="lastName='Djurner'")>
-		<cfset loc.result = model("post").sum(property="views", where="authorid=#loc.author.id#")>
-		<cfset assert("loc.result IS 10")>
-	</cffunction>
+	function test_sum_with_where() {
+		author = model("author").findOne(where="lastName='Djurner'");
+		result = model("post").sum(property="views", where="authorid=#author.id#");
+		assert("result IS 10");
+	}
 
-	<cffunction name="test_sum_with_non_matching_where">
-		<cfset loc.result = model("post").sum(property="views", where="id=0")>
-		<cfset assert("loc.result IS ''")>
-	</cffunction>
+	function test_sum_with_non_matching_where() {
+		result = model("post").sum(property="views", where="id=0");
+		assert("result IS ''");
+	}
 
-	<cffunction name="test_sum_with_distinct">
-		<cfset loc.result = model("post").sum(property="views", distinct=true)>
-		<cfset assert("loc.result IS 10")>
-	</cffunction>
+	function test_sum_with_distinct() {
+		result = model("post").sum(property="views", distinct=true);
+		assert("result IS 10");
+	}
 
-	<cffunction name="test_sum_with_ifNull">
-		<cfset loc.result = model("post").sum(property="views", where="id=0", ifNull=0)>
-		<cfset assert("loc.result IS 0")>
-	</cffunction>
+	function test_sum_with_ifNull() {
+		result = model("post").sum(property="views", where="id=0", ifNull=0);
+		assert("result IS 0");
+	}
 
-	<cffunction name="test_sum_with_include_soft_deletes">
-		<cftransaction action="begin">
-			<cfset loc.post = model("Post").deleteAll(transaction="none")>
-			<cfset loc.sum = model("Post").sum(property="views", includeSoftDeletes=true)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.sum eq 15')>
-	</cffunction>
+	function test_sum_with_include_soft_deletes() {
+		transaction action="begin" {
+			post = model("Post").deleteAll(transaction="none");
+			sum = model("Post").sum(property="views", includeSoftDeletes=true);
+			transaction action="rollback";
+		}
+		assert('sum eq 15');
+	}
 
-</cfcomponent>
+}

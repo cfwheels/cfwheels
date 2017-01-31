@@ -1,23 +1,23 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="setup">
-		<cfinclude template="setup.cfm">
-		<cfset params = {controller="test", action="test"}>
-		<cfset loc.controller = controller("test", params)>
-	</cffunction>
+	function setup() {
+		include "setup.cfm";
+		params = {controller="test", action="test"};
+		_controller = controller("test", params);
+	}
 
-	<cffunction name="teardown">
-		<cfinclude template="teardown.cfm">
-	</cffunction>
+	function teardown() {
+		include "teardown.cfm";
+	}
 
-	<cffunction name="test_rendering_partial">
-		<cfset result = loc.controller.renderPartial(partial="partialTemplate")>
-		<cfset assert("loc.controller.response() Contains 'partial template content'")>
-	</cffunction>
+	function test_rendering_partial() {
+		result = _controller.renderPartial(partial="partialTemplate");
+		assert("_controller.response() Contains 'partial template content'");
+	}
 
-	<cffunction name="test_rendering_partial_and_returning_as_string">
-		<cfset result = loc.controller.renderPartial(partial="partialTemplate", returnAs="string")>
-		<cfset assert("NOT StructKeyExists(request.wheels, 'response') AND result Contains 'partial template content'")>
-	</cffunction>
+	function test_rendering_partial_and_returning_as_string() {
+		result = _controller.renderPartial(partial="partialTemplate", returnAs="string");
+		assert("NOT StructKeyExists(request.wheels, 'response') AND result Contains 'partial template content'");
+	}
 
-</cfcomponent>
+}

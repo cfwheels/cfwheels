@@ -1,41 +1,41 @@
-<cfcomponent extends="wheels.tests.Test">
+component extends="wheels.tests.Test" {
 
-	<cffunction name="test_maximum">
-		<cfset loc.result = model("post").maximum(property="views")>
-		<cfset assert("loc.result IS 5")>
-	</cffunction>
+	function test_maximum() {
+		result = model("post").maximum(property="views");
+		assert("result IS 5");
+	}
 
-	<cffunction name="test_maximum_with_group">
-		<cfif ListFindNoCase("MySQL,SQLServer", get("adaptername"))>
-			<cfset loc.result = model("post").maximum(property="views", group="authorId")>
-			<cfset assert("loc.result['viewsMaximum'][1] IS 5")>
-		<cfelse>
-			<cfset assert(true)>
-		</cfif>
-	</cffunction>
+	function test_maximum_with_group() {
+		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
+			result = model("post").maximum(property="views", group="authorId");
+			assert("result['viewsMaximum'][1] IS 5");
+		} else {
+			assert(true);
+		}
+	}
 
-	<cffunction name="test_maximum_with_where">
-		<cfset loc.result = model("post").maximum(property="views", where="title LIKE 'Title%'")>
-		<cfset assert("loc.result IS 5")>
-	</cffunction>
+	function test_maximum_with_where() {
+		result = model("post").maximum(property="views", where="title LIKE 'Title%'");
+		assert("result IS 5");
+	}
 
-	<cffunction name="test_maximum_with_non_matching_where">
-		<cfset loc.result = model("post").maximum(property="views", where="id=0")>
-		<cfset assert("loc.result IS ''")>
-	</cffunction>
+	function test_maximum_with_non_matching_where() {
+		result = model("post").maximum(property="views", where="id=0");
+		assert("result IS ''");
+	}
 
-	<cffunction name="test_maximum_with_ifNull">
-		<cfset loc.result = model("post").maximum(property="views", where="id=0", ifNull=0)>
-		<cfset assert("loc.result IS 0")>
-	</cffunction>
+	function test_maximum_with_ifNull() {
+		result = model("post").maximum(property="views", where="id=0", ifNull=0);
+		assert("result IS 0");
+	}
 
-	<cffunction name="test_maximum_with_include_soft_deletes">
-		<cftransaction action="begin">
-			<cfset loc.post = model("Post").deleteAll(where="views=5", transaction="none")>
-			<cfset loc.maximum = model("Post").maximum(property="views", includeSoftDeletes=true)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset assert('loc.maximum eq 5')>
-	</cffunction>
+	function test_maximum_with_include_soft_deletes() {
+		transaction action="begin" {
+			post = model("Post").deleteAll(where="views=5", transaction="none");
+			maximum = model("Post").maximum(property="views", includeSoftDeletes=true);
+			transaction action="rollback";
+		}
+		assert('maximum eq 5');
+	}
 
-</cfcomponent>
+}
