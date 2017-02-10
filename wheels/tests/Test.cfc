@@ -5,9 +5,8 @@ component extends="wheels.Test" output=false {
 	 * Populates the test database on reload or if there are no tables in the database.
 	 */
 	function beforeAll() {
-		var loc = {};
-		loc.tables = $dbinfo(datasource=application.wheels.dataSourceName, type="tables");
-		if ((StructKeyExists(url, "reload") && url.reload == true) || !loc.tables.recordCount) {
+		local.tables = $dbinfo(datasource=application.wheels.dataSourceName, type="tables");
+		if ((StructKeyExists(url, "reload") && url.reload == true) || !local.tables.recordCount) {
 			include "populate.cfm";
 		}
 	}
