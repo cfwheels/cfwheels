@@ -5,6 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_removeColumn_drops_column_from_table() {
+		if(!application.testenv.isOracle){
 		tableName = "dbm_removecolumn_tests";
 		t = migration.createTable(name=tableName, force=true);
 		t.string(columnNames="stringcolumn");
@@ -22,5 +23,6 @@ component extends="wheels.tests.Test" {
 		migration.dropTable(tableName);
 
 	  assert("ListFindNoCase(actual, expected) eq 0", "expected", "actual");
+	}
 	}
 }

@@ -5,6 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_removeRecord_deletes_rows_from_table() {
+		if(!application.testenv.isOracle){
 		tableName = "dbm_removerecord_tests";
 
 		t = migration.createTable(name=tableName, force=true);
@@ -27,6 +28,7 @@ component extends="wheels.tests.Test" {
 
 		migration.dropTable(tableName);
 		assert("actual.RecordCount eq expected");
+	}
 	}
 
 }

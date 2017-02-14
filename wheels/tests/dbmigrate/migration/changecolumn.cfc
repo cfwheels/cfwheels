@@ -8,6 +8,7 @@ component extends="wheels.tests.Test" {
 	// more tests needed.. changing datatypes.. etc
 
 	function test_changeColumn_changes_column() {
+		if(!application.testenv.isOracle){
 			tableName = "dbm_changecolumn_tests";
 			columnName = "stringcolumn";
 
@@ -45,7 +46,7 @@ component extends="wheels.tests.Test" {
 				//when I look at the table, I do see the default value as 'foo'.  I don't know if it's a bug in Coldfusion or something
 				//else.
 			}
-
+		}
 	}
 
 }

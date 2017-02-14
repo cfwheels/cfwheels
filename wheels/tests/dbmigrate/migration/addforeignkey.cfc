@@ -5,6 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_addForeignKey_creates_a_foreign_key_constraint() {
+		if(!application.testenv.isOracle){
 		// oracle fk names cannot exceed 30 chars, so these table names must be short
 		tableName = "dbm_afk_foos";
 		referenceTableName = "dbm_afk_bars";
@@ -52,6 +53,7 @@ component extends="wheels.tests.Test" {
 		);
 
 	  assert("actual.recordCount eq 1");
+	}
 	}
 
 }

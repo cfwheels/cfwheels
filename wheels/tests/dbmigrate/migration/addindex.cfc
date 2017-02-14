@@ -5,6 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_addIndex_creates_an_index() {
+		if(!application.testenv.isOracle){
 		tableName = "dbm_addindex_tests";
 		indexName = "idx_to_add";
 		t = migration.createTable(name=tableName, force=true);
@@ -32,7 +33,7 @@ component extends="wheels.tests.Test" {
 	    assert("actual.recordCount eq 1");
 		assert("actual.non_unique");
 	}
-
+}
 	// todo: multi column index
 
 	// todo: unique index

@@ -24,6 +24,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_migrateto_migrate_up_from_0_to_001() {
+		if(!application.testenv.isOracle){
 		dbmigrate.migrateTo(001);
 		info = $dbinfo(
 			datasource=application.wheels.dataSourceName,
@@ -35,9 +36,11 @@ component extends="wheels.tests.Test" {
 		expected = "bunyips";
 		assert("ListFindNoCase(actual, expected)", "expected", "actual");
 	}
+	}
 
 	// Adding pattern for speed
 	function test_migrateto_migrate_up_from_0_to_003() {
+		if(!application.testenv.isOracle){
 		dbmigrate.migrateTo(003);
 		info1 = $dbinfo(
 			datasource=application.wheels.dataSourceName,
@@ -62,8 +65,10 @@ component extends="wheels.tests.Test" {
 		assert("ListFindNoCase(actual2, 'dropbears')");
 		assert("ListFindNoCase(actual3, 'hoopsnakes')");
 	}
+	}
 
 	function test_migrateto_migrate_down_from_003_to_001() {
+		if(!application.testenv.isOracle){
 		dbmigrate.migrateTo(003);
 		dbmigrate.migrateTo(001);
 		info1 = $dbinfo(
@@ -90,8 +95,10 @@ component extends="wheels.tests.Test" {
 		assert("!ListFindNoCase(actual2, 'dropbears')");
 		assert("!ListFindNoCase(actual3, 'hoopsnakes')");
 	}
+	}
 
 	function test_migrateto_generates_sql_files() {
+		if(!application.testenv.isOracle){
 		application.wheels.dbmigrateWriteSQLFiles = true;
 
 		dbmigrate.migrateTo(002);
@@ -111,13 +118,17 @@ component extends="wheels.tests.Test" {
 			assert("actual contains expected");
 		};
 	}
+	}
 
 	function test_migrateto_migrate_up_does_not_generate_sql_file() {
+		if(!application.testenv.isOracle){
 		dbmigrate.migrateTo(001);
 	  assert("! DirectoryExists(dbmigrate.paths.sql)");
 	}
+	}
 
 	function test_migrateto_uses_specified_versions_table_name() {
+		if(!application.testenv.isOracle){
 		tableName = "dbmigrateversions";
 		application.wheels.dbmigrateTableName = tableName;
 
@@ -131,6 +142,7 @@ component extends="wheels.tests.Test" {
 		expected = "version";
 
 		assert("actual.column_name eq expected");
+	}
 	}
 
 

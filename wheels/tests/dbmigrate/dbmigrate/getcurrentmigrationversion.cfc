@@ -18,9 +18,11 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_getCurrentMigrationVersion_returns_expected_value() {
-		expected = "002";
-		dbmigrate.migrateTo(expected);
-		actual = dbmigrate.getCurrentMigrationVersion();
-		assert("actual eq expected");
+		if(!application.testenv.isOracle){
+			expected = "002";
+			dbmigrate.migrateTo(expected);
+			actual = dbmigrate.getCurrentMigrationVersion();
+			assert("actual eq expected");
+		}
 	}
 }

@@ -5,6 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_createView_generates_view() {
+		if(!application.testenv.isOracle){
 		viewName = "dbm_createview";
 		// only supported with these adapters
 		if (ListFindNoCase("MicrosoftSQLServer", migration.adapter.adapterName())) {
@@ -23,5 +24,6 @@ component extends="wheels.tests.Test" {
 
 			assert("actual.recordCount eq 1");
 		}
+	}
 	}
 }

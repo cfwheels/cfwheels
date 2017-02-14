@@ -5,6 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_execute_runs_query() {
+		if(!application.testenv.isOracle){
 		tableName = "dbm_execute_tests";
 
 		t = migration.createTable(name=tableName, force=true);
@@ -26,6 +27,7 @@ component extends="wheels.tests.Test" {
 
 		migration.dropTable(tableName);
 		assert("actual.RecordCount eq expected");
+	}
 	}
 
 }

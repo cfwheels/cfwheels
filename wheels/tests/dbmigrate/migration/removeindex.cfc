@@ -5,6 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_removeIndex_removes_an_index() {
+		if(!application.testenv.isOracle){
 		tableName = "dbm_removeindex_tests";
 		indexName = "idx_to_remove";
 		t = migration.createTable(name=tableName, force=true);
@@ -35,5 +36,6 @@ component extends="wheels.tests.Test" {
 		migration.dropTable(tableName);
 	    assert("created.recordCount eq 1");
 		assert("removed.recordCount eq 0");
+	}
 	}
 }

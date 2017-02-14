@@ -5,6 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_createTable_generates_table() {
+		if(!application.testenv.isOracle){
 		tableName = "dbm_createtable_tests";
 		t = migration.createTable(name=tableName, force=true);
 		t.string(columnNames='stringcolumn', limit=255);
@@ -28,8 +29,10 @@ component extends="wheels.tests.Test" {
 		migration.dropTable(tableName);
 		assert("actual eq expected");
 	}
+	}
 
 	function test_createTable_generates_table_using_MicrosoftSQLServer_datatypes() {
+		if(!application.testenv.isOracle){
 		tableName = "dbm_createtable_sqlserver_tests";
 		if (migration.adapter.adapterName() eq "MicrosoftSQLServer") {
 			t = migration.createTable(name=tableName, force=true);
@@ -41,6 +44,7 @@ component extends="wheels.tests.Test" {
 			migration.dropTable(tableName);
 		  assert("actual eq expected");
 		}
+	}
 	}
 
 }

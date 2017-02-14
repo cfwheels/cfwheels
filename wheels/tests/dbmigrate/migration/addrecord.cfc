@@ -5,6 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_addRecord_inserts_row_into_table() {
+		if(!application.testenv.isOracle){
 		tableName = "dbm_addrecord_tests";
 		recordValue = "#RandRange(0, 99)# bottles of beer on the wall...";
 
@@ -21,6 +22,7 @@ component extends="wheels.tests.Test" {
 
 		migration.dropTable(tableName);
 		assert("actual.RecordCount eq expected");
+	}
 	}
 
 }

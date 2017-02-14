@@ -12,7 +12,7 @@ component extends="wheels.tests.Test" {
 	// it's tricky to test the objectCase as some db engines support mixed case database object names (MSSQL does)
 	function test_addColumn_creates_new_column() {
 		application.wheels.dbmigrateObjectCase = ""; // keep the specified case
-
+		if(!application.testenv.isOracle){
 		tableName = "dbm_addcolumn_tests";
 		columnName = "integerCOLUMN";
 		t = migration.createTable(name=tableName, force=true);
@@ -30,5 +30,6 @@ component extends="wheels.tests.Test" {
 		migration.dropTable(tableName);
 
 	  assert("ListFindNoCase(actual, expected)", "expected", "actual");
+	}
 	}
 }
