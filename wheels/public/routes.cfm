@@ -1,29 +1,10 @@
-<h1>Route List:</h1>
-   <!---  <cfset $dump(application.wheels.routes) /> --->
-<style>
-  div.scroll-box {
-    overflow: scroll;
-    height: 600px;
-  }
-
-  table#route-dump {
-    font-family: monospace;
-  }
-
-  table#route-dump th,
-  table#route-dump td {
-    text-align: left;
-    padding: 0.1em 1em;
-  }
-
-  table#route-dump th.right,
-  table#route-dump td.right {
-    text-align: right;
-  }
-</style>
 <cfoutput>
-<div class="scroll-box">
-  <table id="route-dump" cellpadding="0" cellspacing="0" border="0">
+
+<h1>Route List <small class="muted">(#arraylen(application.wheels.routes)# routes)</small></h1>
+
+<input type="text" name="route-search" id="route-search" placeholder="Type to filter..." />
+  <table id="route-dump">
+  <thead>
     <tr>
       <th class="right">Name</th>
       <th>Method</th>
@@ -32,11 +13,13 @@
       <th>Controller</th>
       <th>Action</th>
     </tr>
+  </thead>
+  <tbody>
     <cfloop array="#application.wheels.routes#" index="local.i">
       <tr>
         <td class="right">
           <cfif StructKeyExists(local.i, "name")>
-            #local.i.name#
+            <code>#local.i.name#</code>
           </cfif>
         </td>
         <td>
@@ -44,20 +27,48 @@
             #UCase(local.i.methods)#
           </cfif>
         </td>
-        <td>#local.i.pattern#</td>
-        <td>#local.i.regex#</td>
+        <td><code>#local.i.pattern#</td></code>
+        <td><code>#local.i.regex#</td></code>
         <td>
           <cfif StructKeyExists(local.i, "controller")>
-            #local.i.controller#
+            <code>#local.i.controller#</code>
           </cfif>
         </td>
         <td>
           <cfif StructKeyExists(local.i, "action")>
-            #local.i.action#
+            <code>#local.i.action#</code>
           </cfif>
         </td>
       </tr>
     </cfloop>
+    </tbody>
   </table>
-</div>
 </cfoutput>
+<script>
+$(document).ready(function(){
+  // Write on keyup event of keyword input element
+  $("#route-search").keyup(function(){
+    // When value of the input is not blank
+    if( $(this).val() != "")
+    {
+      // Show only matching TR, hide rest of them
+      $("#route-dump tbody>tr").hide();
+      $("#route-dump td:contains-ci('" + $(this).val() + "')").parent("tr").show();
+    }
+    else
+    {
+      // When there is no input or clean again, show everything back
+      $("#route-dump tbody>tr").show();
+    }
+  });
+});
+// jQuery expression for case-insensitive filter
+$.extend($.expr[":"],
+{
+    "contains-ci": function(elem, i, match, array)
+  {
+    return (elem.textContent || elem.innerText || $(elem).text() || "").toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+  }
+});
+
+</script>

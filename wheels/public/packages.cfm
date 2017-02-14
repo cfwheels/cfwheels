@@ -30,16 +30,19 @@ if (packages.recordCount) {
       </div>
 
     </div>
-<p></p>
 
-<cfloop query="packages">
 	<p>
-		<cfset testablePackages = ListToArray(ReplaceNoCase(package, "#preTest#.", "", "one"), ".")>
-		<cfset packagesLen = arrayLen(testablePackages)>
-		<cfloop from="1" to="#packagesLen#" index="i">
-			<cfset href = "#linkParams#&package=#ArrayToList(testablePackages.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#">
-			<a href="#href#" target="_blank">#testablePackages[i]#</a><cfif i neq packagesLen> .</cfif>
+	<cfif packages.recordcount>
+		<cfloop query="packages">
+				<cfset testablePackages = ListToArray(ReplaceNoCase(package, "#preTest#.", "", "one"), ".")>
+				<cfset packagesLen = arrayLen(testablePackages)>
+				<cfloop from="1" to="#packagesLen#" index="i">
+					<cfset href = "#linkParams#&package=#ArrayToList(testablePackages.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#">
+					<a href="#href#" target="_blank">#testablePackages[i]#</a><cfif i neq packagesLen> .</cfif>
+				</cfloop><br />
 		</cfloop>
+	<cfelse>
+		<span class="failure-message-item">No Test Packages Found</span>
+	</cfif>
 	</p>
-</cfloop>
 </cfoutput>
