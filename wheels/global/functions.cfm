@@ -1,4 +1,4 @@
-<cfscript> 
+<cfscript>
 	include "cfml.cfm";
 	include "internal.cfm";
 	include "public.cfm";
