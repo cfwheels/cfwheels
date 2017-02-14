@@ -221,11 +221,7 @@
 
 			// determine key and look up cache structure
 			local.key = arguments.controller & "##" & arguments.action;
-			if(structKeyExists(request.wheels, "urlForCache")){
-				local.cache = request.wheels.urlForCache;
-			} else {
-				local.cache={};
-			}
+			local.cache = request.wheels.urlForCache;
 
 			if (!structKeyExists(local.cache, local.key)) {
 

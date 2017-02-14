@@ -40,8 +40,6 @@
     local.stackLen = arrayLen(local.stack);
 
     // setup our counter in the request scope so it can be shared as necessary
-    if (!structKeyExists(request.wheels, "stacks"))
-      request.wheels.stacks={};
     if (!structKeyExists(request.wheels.stacks, local.methodName))
       request.wheels.stacks[local.methodName] = 1;
 

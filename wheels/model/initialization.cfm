@@ -302,10 +302,6 @@
 		variables.wheels = {};
 		variables.wheels.instance = {};
 		variables.wheels.errors = [];
-		if(!structKeyExists(request.wheels, "tickCountId"))
-			request.wheels.tickCountId = GetTickCount();
-		if(!structKeyExists(request.wheels, "transactions"))
-			request.wheels.transactions = {};
 
 		// assign an object id for the instance (only use the last 12 digits to avoid creating an exponent)
 		request.wheels.tickCountId = Right(request.wheels.tickCountId, 12) + 1;
