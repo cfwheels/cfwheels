@@ -21,7 +21,7 @@ component extends="Base" output="false" {
 	}
 
 	public string function $getType(required string type, required string scale) {
-		switch (arguments.type) {
+		switch (LCase(arguments.type)) {
 			case "blob": case "bfile":
 				local.rv = "cf_sql_blob";
 				break;
@@ -37,7 +37,7 @@ component extends="Base" output="false" {
 			case "binary_double":
 				local.rv = "cf_sql_double";
 				break;
-			case "number": case "float": case "binary_float":
+			case "number": case "float": case "decimal": case "binary_float":
 				// integer datatypes are represented by number(38,0)
 				if (Val(arguments.scale) == 0) {
 					local.rv = "cf_sql_integer";
