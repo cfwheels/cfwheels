@@ -10,9 +10,8 @@
 
     // if we still don't have what we need our method has been invoked and cf
     // doesn't give us any information for the stack fr
-    if (!structKeyExists(variables.$stacks, local.methodName)
-        && arrayLen(request.wheels.invoked))
-      local.methodName = request.wheels.invoked[1].method;
+    if (!structKeyExists(variables.$stacks, local.methodName) && structKeyExists(request, "$wheelsInvoked") && arrayLen(request.$wheelsInvoked))
+      local.methodName = request.$wheelsInvoked[1].method;
 
     // some of our plugin developers var a new variable that
     // changes the name of the function when called so getFunctionCalledName()
