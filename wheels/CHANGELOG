@@ -13,6 +13,7 @@ Model Enhancements
 * Support for using boolean transaction argument, e.g. update(transaction=false) - #654 [Adam Chapman]
 * Support for MariaDB - #563 [AlexeiCF, Adam Chapman]
 * Model instance isPersisted() and propertyIsBlank() methods - #559 [Chris Peters]
+* Database Migrations (dbmigrate) now available in the core - #664 [Adam Chapman, Tom King, Mike Grogan]
 
 View Enhancements
 =================
@@ -53,6 +54,8 @@ Breaking Changes
 * The global setting "clearServerCache" has been renamed to "clearTemplateCache".
 * The updateProperties() method has been removed, use update() instead - #457 [Per Djurner, Chris Peters]
 * Form labels automatically generated based on foreign key properties will drop the "Id" from the end (e.g., the label for the "userId" property will be "User", not "User Id"). - #618 [Chris Peters]
+* Database migration files should now extend `wheels.dbmigrate.Migration`, not `plugins.dbmigrate.Migration`
+* Routes from 1.x will need to be updated to the new routing system
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
