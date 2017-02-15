@@ -32,9 +32,9 @@ component extends="[extends]" hint="[description]" {
 
 			if (!hasError) {
 				transaction action="commit";
-			else {
+			} else {
 				transaction action="rollback";
-				throw(errorCode="1" detail=catchObject.detail message=catchObject.message type="any");
+				throw(errorCode="1", detail=catchObject.detail, message=catchObject.message, type="any");
 			}
 		}
 	}
@@ -52,9 +52,9 @@ component extends="[extends]" hint="[description]" {
 
 			if (!hasError) {
 				transaction action="commit";
-			else {
+			} else {
 				transaction action="rollback";
-				throw(errorCode="1" detail=catchObject.detail message=catchObject.message type="any");
+				throw(errorCode="1", detail=catchObject.detail, message=catchObject.message, type="any");
 			}
 		}
 	}
