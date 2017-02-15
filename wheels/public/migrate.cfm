@@ -8,16 +8,16 @@
 	// Actions:
 	if(isDefined("form.version")){
 		flashInsert(dbmigrateFeedback=application.wheels.dbmigrate.migrateTo(Form.version));
-		location url="#selfUrl#" addtoken="false";
+		location(selfUrl, false);
 	} else if(isDefined("Form.migrationName")){
 		param name="form.templateName" default="";
 		param name="form.migrationPrefix" default="";
 		flashInsert(dbmigrateFeedback2=application.wheels.dbmigrate.createMigration(Form.migrationName,Form.templateName,Form.migrationPrefix));
-		location url="#selfUrl#" addtoken="false";
+		location(selfUrl, false);
 	} else if(isDefined("url.migrateToVersion") && Len(Trim(url.migrateToVersion)) GT 0 && IsNumeric(url.migrateToVersion)){
 		if(isDefined("url.password") && Trim(url.password) EQ application.wheels.reloadPassword){
 			flashInsert(dbmigrateFeedback=application.wheels.dbmigrate.migrateTo(url.migrateToVersion));
-			location url="#selfUrl#" addtoken="false";
+			location(selfUrl, false);
 		}
 	}
 
