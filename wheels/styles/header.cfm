@@ -1,5 +1,5 @@
 <cfscript>
-wheelsInternalAssetPath=application.wheels.rootpath & "wheels/public/assets";
+wheelsInternalAssetPath=application.wheels.webpath & "wheels/public/assets";
 </cfscript>
 <cfoutput>
 <!DOCTYPE html>
