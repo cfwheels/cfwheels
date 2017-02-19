@@ -3,8 +3,8 @@ component output="false" mixin="none" environment="design,development,maintenanc
 	include "../global/cfml.cfm";
 
 	public dbmigrate function init(
-		string migratePath = "/db/migrate/",
-		string sqlPath = "/db/sql/",
+		string migratePath = application.wheels.webpath & "/db/migrate/",
+		string sqlPath = application.wheels.webpath & "/db/sql/",
 		string templatePath = "wheels/dbmigrate/templates/"
 	) {
 		this.paths.migrate   = ExpandPath(arguments.migratePath);
