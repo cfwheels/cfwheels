@@ -48,6 +48,11 @@
 	public string function processRequest(required struct params) {
 		local.controller = controller(name=arguments.params.controller, params=arguments.params);
 		local.controller.processAction();
+
+		// Set the Content-Type header in case it was set to something else (e.g. application/json) during processing.
+		// It's fine to do this because we always want to return the test page as text/html.
+		$header(name="Content-Type", value="text/html", charset="UTF-8");
+
 		return local.controller.response();
 	}
 
