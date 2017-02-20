@@ -36,8 +36,10 @@
           $get(pattern="edit(.[format])", action="edit", name="edit");
         if (ListFind(scopeStack[1].actions, "show"))
           $get(pattern="(.[format])", action="show");
-        if (ListFind(scopeStack[1].actions, "update"))
+        if (ListFind(scopeStack[1].actions, "update")) {
+          patch(pattern="(.[format])", action="update");
           put(pattern="(.[format])", action="update");
+				}
         if (ListFind(scopeStack[1].actions, "delete"))
           delete(pattern="(.[format])", action="delete");
       end();
@@ -59,8 +61,10 @@
           $get(pattern="edit(.[format])", action="edit", name="edit");
         if (ListFind(scopeStack[1].actions, "show"))
           $get(pattern="(.[format])", action="show");
-        if (ListFind(scopeStack[1].actions, "update"))
+        if (ListFind(scopeStack[1].actions, "update")) {
+          patch(pattern="(.[format])", action="update");
           put(pattern="(.[format])", action="update");
+				}
         if (ListFind(scopeStack[1].actions, "delete"))
           delete(pattern="(.[format])", action="delete");
       end();
