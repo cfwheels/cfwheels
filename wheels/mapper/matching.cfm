@@ -186,6 +186,10 @@
     return match(method="put", argumentCollection=arguments);
   }
 
+  public struct function patch(string name) hint="Match a PATCH url" {
+    return match(method="patch", argumentCollection=arguments);
+  }
+
   public struct function delete(string name) hint="Match a DELETE url" {
     return match(method="delete", argumentCollection=arguments);
   }

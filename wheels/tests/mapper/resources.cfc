@@ -40,7 +40,7 @@ component extends="wheels.tests.Test" {
     mapper = $mapper();
     mapper.draw().resource(name="pigeon").end();
     routesLen = arrayLen(application.wheels.routes);
-    assert("routesLen eq 12");
+    assert("routesLen eq 14");
   }
 
   function test_resource_produces_routes_with_list() {
@@ -48,7 +48,7 @@ component extends="wheels.tests.Test" {
     mapper = $mapper();
     mapper.draw().resource(name="pigeon,pudding").end();
     routesLen = arrayLen(application.wheels.routes);
-    assert("routesLen eq 24");
+    assert("routesLen eq 28");
   }
 
   function test_resource_raises_error_with_list_and_nesting() {
@@ -65,7 +65,7 @@ component extends="wheels.tests.Test" {
     mapper = $mapper();
     mapper.draw().resources(name="pigeons").end();
     routesLen = arrayLen(application.wheels.routes);
-    assert("routesLen eq 14");
+    assert("routesLen eq 16");
   }
 
   function test_resources_produces_routes_with_list() {
@@ -73,7 +73,7 @@ component extends="wheels.tests.Test" {
     mapper = $mapper();
     mapper.draw().resources(name="pigeons,birds").end();
     routesLen = arrayLen(application.wheels.routes);
-    assert("routesLen eq 28");
+    assert("routesLen eq 32");
   }
 
   function test_resources_raises_error_with_list_and_nesting() {
