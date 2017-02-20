@@ -192,36 +192,28 @@
 		return local.rv;
 	}
 
-	public struct function properties(boolean simple="false") {
+	public struct function properties(string returnAs = "struct") {
 		local.rv = {};
+		local.returnAs = singularize(arguments.returnAs);
 		// loop through all properties and functions in the this scope
-		for (local.key in this)
-		{
+		for (local.key in this) {
 			// we return anything that is not a function
-			if (!IsCustomFunction(this[local.key]))
-			{
+			if (!IsCustomFunction(this[local.key])) {
 				// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
-				if (ListFindNoCase(propertyNames(), local.key))
-				{
+				if (ListFindNoCase(propertyNames(), local.key)) {
 					local.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), local.key));
 				}
 				// if it's a nested property, apply this function recursively
-				if (IsObject(this[local.key]) && arguments.simple)
-				{
+				if (IsObject(this[local.key]) && local.returnAs neq "object") {
 					local.rv[local.key] = this[local.key].properties(argumentCollection=arguments);
-				}
-				// loop thru the array and apply this function to each item
-				else if (IsArray(this[local.key]) && arguments.simple)
-				{
+				} else if (IsArray(this[local.key]) && local.returnAs neq "object") {
+					// apply this function to each array item
 					local.rv[local.key] = [];
-					for (local.i=1; local.i <= ArrayLen(this[local.key]); local.i++)
-					{
+					for (local.i=1; local.i <= ArrayLen(this[local.key]); local.i++) {
 						local.rv[local.key][local.i] = this[local.key][local.i].properties(argumentCollection=arguments);
 					}
-				}
-				// set property from the this scope in the struct that we will return
-				else
-				{
+				} else {
+					// set property from the this scope in the struct that we will return
 					local.rv[local.key] = this[local.key];
 				}
 			}

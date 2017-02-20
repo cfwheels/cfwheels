@@ -8,7 +8,7 @@ Model Enhancements
 ==================
 * Support for passing in select=false to property() to not include a calculated property by default in SELECT clauses - #122 [Adam Chapman, Per Djurner]
 * Support for setting calculated properties to a specific data type - [Per Djurner]
-* Added "simple" argument to properties() that returns only simple properties of the object and its nested properties - [Adam Chapman]
+* Added "returnAs" argument to properties() to return nested objects' properties as structs - [Adam Chapman]
 * Support for calling updateProperty() with dynamic argument, e.g. updateProperty(firstName="Per") - [Per Djurner]
 * Support for using boolean transaction argument, e.g. update(transaction=false) - #654 [Adam Chapman]
 * Support for MariaDB - #563 [AlexeiCF, Adam Chapman]
