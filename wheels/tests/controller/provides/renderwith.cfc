@@ -138,7 +138,7 @@ component extends="wheels.tests.Test" {
 		_controller.provides("json");
 		user = model("user").findOne(where="username = 'tonyp'");
 		_controller.renderWith(data=user, layout=false, returnAs="string");
-		assert("responseCode() EQ 200");
+		assert("statusCode() EQ 200");
 	}
 
 	function test_custom_status_codes_204() {
@@ -148,7 +148,7 @@ component extends="wheels.tests.Test" {
 		_controller.provides("json");
 		user = model("user").findOne(where="username = 'tonyp'");
 		_controller.renderWith(data=user, layout=false, returnAs="string", status=204);
-		assert("responseCode() EQ 204");
+		assert("statusCode() EQ 204");
 	}
 
 	function test_custom_status_codes_403() {
@@ -158,7 +158,7 @@ component extends="wheels.tests.Test" {
 		_controller.provides("json");
 		user = model("user").findOne(where="username = 'tonyp'");
 		_controller.renderWith(data=user, layout=false, returnAs="string", status=403);
-		assert("responseCode() EQ 403");
+		assert("statusCode() EQ 403");
 	}
 
 	function test_custom_status_codes_404() {
@@ -168,7 +168,7 @@ component extends="wheels.tests.Test" {
 		_controller.provides("json");
 		user = model("user").findOne(where="username = 'tonyp'");
 		_controller.renderWith(data=user, layout=false, returnAs="string", status=404);
-		assert("responseCode() EQ 404");
+		assert("statusCode() EQ 404");
 	}
 
 	function test_custom_status_codes_OK() {
@@ -178,7 +178,7 @@ component extends="wheels.tests.Test" {
 		_controller.provides("json");
 		user = model("user").findOne(where="username = 'tonyp'");
 		_controller.renderWith(data=user, layout=false, returnAs="string", status="OK");
-		assert("responseCode() EQ 200");
+		assert("statusCode() EQ 200");
 	}
 	function test_custom_status_codes_Not_Found() {
 		getPageContext().getResponse().setStatus("100");
@@ -188,7 +188,7 @@ component extends="wheels.tests.Test" {
 		_controller.provides("json");
 		user = model("user").findOne(where="username = 'tonyp'");
 		_controller.renderWith(data=user, layout=false, returnAs="string", status="Not Found");
-		assert("responseCode() EQ 404");
+		assert("statusCode() EQ 404");
 	}
 	function test_custom_status_codes_Method_Not_Allowed() {
 		getPageContext().getResponse().setStatus("100");
@@ -198,7 +198,7 @@ component extends="wheels.tests.Test" {
 		_controller.provides("json");
 		user = model("user").findOne(where="username = 'tonyp'");
 		_controller.renderWith(data=user, layout=false, returnAs="string", status="Method Not Allowed");
-		assert("responseCode() EQ 405");
+		assert("statusCode() EQ 405");
 	}
 
 	function test_custom_status_codes_Method_Not_Allowed_case() {
@@ -209,7 +209,7 @@ component extends="wheels.tests.Test" {
 		_controller.provides("json");
 		user = model("user").findOne(where="username = 'tonyp'");
 		_controller.renderWith(data=user, layout=false, returnAs="string", status="method not allowed");
-		assert("responseCode() EQ 405");
+		assert("statusCode() EQ 405");
 	}
 
 	function test_custom_status_codes_bad_numeric() {
@@ -232,19 +232,6 @@ component extends="wheels.tests.Test" {
 		actual = raised('_controller.renderWith(data=user, layout=false, returnAs="string", status="THECAKEISALIE")');
 		expected = "Wheels.renderingError";
 		assert("actual EQ expected");
-	}
-
-	/**
-	* HELPERS
-	*/
-
-	/* Helper function for getting correct HTTP statusCode */
-	function responseCode() {
-		if (StructKeyExists(server, "lucee")) {
-			return getPageContext().getResponse().getStatus();
-		} else {
-			return getPageContext().getFusionContext().getResponse().getStatus();
-		}
 	}
 
 }

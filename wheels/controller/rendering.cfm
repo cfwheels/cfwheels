@@ -100,6 +100,17 @@
 		}
 	}
 
+	/**
+	 * Returns the status code (e.g. 200, 404 etc) of the response we're about to send.
+	 */
+	public numeric function statusCode() {
+		if (StructKeyExists(server, "lucee")) {
+			return getPageContext().getResponse().getStatus();
+		} else {
+			return getPageContext().getFusionContext().getResponse().getStatus();
+		}
+	}
+
 	public string function response() {
 		if ($performedRender()) {
 			local.rv = Trim(variables.$instance.response);
