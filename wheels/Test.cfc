@@ -120,6 +120,11 @@ component output=false {
    */
 
    public void function assert(required string expression) {
+
+		// Convert "yes" / "no" to true / false.
+		arguments.expression = arguments.expression == "yes" ? true : arguments.expression;
+		arguments.expression = arguments.expression == "no" ? false : arguments.expression;
+
      var token = "";
      var tokenValue = "";
      var message = "assert failed: #arguments.expression#";
