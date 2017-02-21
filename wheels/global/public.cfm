@@ -41,6 +41,20 @@
 	*/
 
 	/**
+	 * Returns the status code (e.g. 200, 404 etc) of the response we're about to send.
+	 * Set back the status code to 200 so the test suite does not use the same code that the action that was tested did.
+	 */
+	public numeric function statusCode() {
+		if (StructKeyExists(server, "lucee")) {
+			local.rv = getPageContext().getResponse().getStatus();
+		} else {
+			local.rv = getPageContext().getFusionContext().getResponse().getStatus();
+		}
+		cfheader(statusCode=200, statusText="OK");
+		return local.rv;
+	}
+
+	/**
 	 * Creates a controller and calls an action on it.
 	 * Which controller and action that's called is determined by the params passed in.
 	 * Primarily used for testing purposes.
