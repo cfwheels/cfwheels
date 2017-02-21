@@ -192,11 +192,15 @@
 		return local.rv;
 	}
 
-	public struct function properties(string returnAs = "struct") {
+	public struct function properties(string returnIncludedAs = "struct", boolean returnIncluded = true) {
 		local.rv = {};
-		local.returnAs = singularize(arguments.returnAs);
+		local.returnIncludedAs = singularize(arguments.returnIncludedAs);
 		// loop through all properties and functions in the this scope
 		for (local.key in this) {
+			// don't return nested properties if returnIncluded is false
+			if (!arguments.returnIncluded && !IsSimpleValue(this[local.key])) {
+				continue;
+			}
 			// we return anything that is not a function
 			if (!IsCustomFunction(this[local.key])) {
 				// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
@@ -204,9 +208,9 @@
 					local.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), local.key));
 				}
 				// if it's a nested property, apply this function recursively
-				if (IsObject(this[local.key]) && local.returnAs neq "object") {
+				if (IsObject(this[local.key]) && local.returnIncludedAs neq "object") {
 					local.rv[local.key] = this[local.key].properties(argumentCollection=arguments);
-				} else if (IsArray(this[local.key]) && local.returnAs neq "object") {
+				} else if (IsArray(this[local.key]) && local.returnIncludedAs neq "object") {
 					// apply this function to each array item
 					local.rv[local.key] = [];
 					for (local.i=1; local.i <= ArrayLen(this[local.key]); local.i++) {
