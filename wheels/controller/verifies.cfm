@@ -15,17 +15,17 @@
 		string cookieTypes="",
 		string sessionTypes="",
 		string paramsTypes=""
-	) { 
+	) {
 		$args(name="verifies", args=arguments);
 		ArrayAppend(variables.$class.verifications, Duplicate(arguments));
 	}
 
-	public array function verificationChain() { 
+	public array function verificationChain() {
 		local.rv = variables.$class.verifications;
 		return local.rv;
 	}
 
-	public void function setVerificationChain(required array chain) { 
+	public void function setVerificationChain(required array chain) {
 
 		// clear current verification chain and then re-add from the passed in chain
 		variables.$class.verifications = [];
@@ -38,7 +38,7 @@
 
 	/**
 	*  PRIVATE FUNCTIONS
-	*/ 
+	*/
 	public void function $runVerifications(
 		required string action,
 		required struct params,
@@ -99,8 +99,16 @@
 			{
 				if (Len(local.element.handler))
 				{
+
+					// Invoke the specified handler function.
+					// The assumption is that the developer aborts or redirects from within the handler function.
+					// Processing will return if the developer forgot that or if they made a delayed redirect (e.g. when testing).
+					// If a delayed redirect was not made we redirect to the previous page as a last resort to end processing.
 					$invoke(method=local.element.handler);
-					redirectTo(back="true");
+					if (!$performedRedirect()) {
+						redirectTo(back="true");
+					}
+
 				}
 				else
 				{
@@ -127,7 +135,7 @@
 			}
 		}
 	}
- 
+
 	public boolean function $checkVerificationsVars(
 		required struct scope,
 		required string vars,
@@ -165,4 +173,4 @@
 		}
 		return local.rv;
 	}
-</cfscript>   
+</cfscript>
