@@ -8,7 +8,6 @@
 		This way you don't have to explicitly add a route every time you create a new action in a controller.
 		See http://docs.cfwheels.org/docs/using-routes for more info.
 	*/
-
 	drawRoutes()
 		.wildcard()
 		.root(to="wheels##wheels", method="get")

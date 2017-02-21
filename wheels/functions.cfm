@@ -1,5 +1,4 @@
 <cfscript>
-
 this.name = Hash(GetDirectoryFromPath(GetBaseTemplatePath()));
 this.mappings["/wheelsMapping"] = GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels";
 this.mappings["/wheels"] = GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels";
@@ -31,5 +30,4 @@ if (StructKeyExists(server, "lucee")) {
 	include "wheels/events/onrequestend.cfm";
 	include "wheels/events/onrequeststart.cfm";
 }
-
 </cfscript>
