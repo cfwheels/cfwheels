@@ -1,5 +1,4 @@
-// This file is only needed to get tests to work
-component output="false"
-{
+// This file is only needed to get tests to work.
+component output="false" {
 	include "model.cfm";
-} 
+}
