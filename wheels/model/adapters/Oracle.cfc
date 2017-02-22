@@ -20,7 +20,7 @@ component extends="Base" output="false" {
 		return local.rv;
 	}
 
-	public string function $getType(required string type, numeric scale) {
+	public string function $getType(required string type, string scale) {
 		switch (LCase(arguments.type)) {
 			case "blob": case "bfile":
 				local.rv = "cf_sql_blob";
