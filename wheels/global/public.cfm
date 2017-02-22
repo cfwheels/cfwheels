@@ -50,7 +50,7 @@
 		} else {
 			local.rv = getPageContext().getFusionContext().getResponse().getStatus();
 		}
-		cfheader(statusCode=200, statusText="OK");
+		$header(statusCode=200, statusText="OK");
 		return local.rv;
 	}
 
