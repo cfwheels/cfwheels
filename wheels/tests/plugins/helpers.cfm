@@ -37,7 +37,7 @@ function $deleteDirs() {
 
 function $deleteTestFolders() {
   var loc = {};
-  var q = DirectoryList(expandPath('/wheelsMapping/tests/_assets/plugins/unpacking'), false, "query");
+  var q = DirectoryList(expandPath('/wheels/tests/_assets/plugins/unpacking'), false, "query");
   for (row in q) {
     dir = ListChangeDelims(ListAppend(row.directory, row.name, "/"), "/", "\");
     if (DirectoryExists(dir)) {

@@ -1,4 +1,4 @@
-component extends="wheelsMapping.Test" {
+component extends="wheels.Test" {
   function setup() {
     loc.controller = controller(name="dummy");
   }

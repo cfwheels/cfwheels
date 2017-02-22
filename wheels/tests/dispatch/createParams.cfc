@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		dispatch = createobject("component", "wheelsMapping.Dispatch");
+		dispatch = createobject("component", "wheels.Dispatch");
 		args = {};
 		args.path = "home";
 		args.format = "" ;

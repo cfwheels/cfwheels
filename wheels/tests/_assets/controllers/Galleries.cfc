@@ -1,3 +1,3 @@
-component extends="wheelsMapping.Controller" {
+component extends="wheels.Controller" {
   gallery = model("gallery").new();
 }

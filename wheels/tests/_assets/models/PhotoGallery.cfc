@@ -1,4 +1,4 @@
-component extends="wheelsMapping.model" {
+component extends="wheels.model" {
 
 	function init() {
 		belongsTo(name="user", modelName="user", foreignKey="userid");

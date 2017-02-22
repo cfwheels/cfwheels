@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-    user = CreateObject("component", "wheelsMapping.Model").$initModelClass(name="Users", path=get("modelPath"));
+    user = CreateObject("component", "wheels.Model").$initModelClass(name="Users", path=get("modelPath"));
     user.username = "TheLongestNameInTheWorld";
     args = {};
     args.property = "username";

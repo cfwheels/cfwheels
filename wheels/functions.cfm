@@ -1,6 +1,5 @@
 <cfscript>
 this.name = Hash(GetDirectoryFromPath(GetBaseTemplatePath()));
-this.mappings["/wheelsMapping"] = GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels";
 this.mappings["/wheels"] = GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels";
 this.sessionManagement = true;
 if (StructKeyExists(server, "lucee")) {

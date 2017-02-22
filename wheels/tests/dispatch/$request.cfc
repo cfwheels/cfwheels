@@ -4,7 +4,7 @@ component extends="wheels.tests.Test" {
     _params = {controller="test", action="index"};
     _originalRoutes = application[$appKey()].routes;
 		application.wheels.routes = [];
-		dispatch = createobject("component", "wheelsMapping.Dispatch");
+		dispatch = createobject("component", "wheels.Dispatch");
   }
 
   public void function teardown() {

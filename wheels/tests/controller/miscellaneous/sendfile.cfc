@@ -59,7 +59,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_specifying_a_directory() {
-		args.directory = expandPath("/wheelsMapping/tests/_assets");
+		args.directory = expandPath("/wheels/tests/_assets");
 		args.file = "files/cfwheels-logo.png";
 		r = _controller.sendFile(argumentCollection=args);
 		assert('r.file eq "cfwheels-logo.png"');

@@ -16,7 +16,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_rendering_with_default_layout_in_controller_folder() {
-		tempFile = expandPath("/wheelsMapping/tests/_assets/views/test/layout.cfm");
+		tempFile = expandPath("/wheels/tests/_assets/views/test/layout.cfm");
 		fileWrite(tempFile, "<cfoutput>start:controllerlayout##includeContent()##end:controllerlayout</cfoutput>");
 		application.wheels.existingLayoutFiles = "test";
 		_controller.renderPage();
