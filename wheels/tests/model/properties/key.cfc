@@ -16,4 +16,16 @@ component extends="wheels.tests.Test" {
     assert("Len(actual) gt 0", "actual");
   }
 
+  function test_key() {
+		author = model("author").findOne();
+		result = author.key();
+		assert("result IS author.id");
+	}
+
+	function test_key_with_new() {
+		author = model("author").new(id=1, firstName="Per", lastName="Djurner");
+		result = author.key();
+		assert("result IS 1");
+	}
+
 }

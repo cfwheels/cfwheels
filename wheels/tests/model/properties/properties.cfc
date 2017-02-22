@@ -4,6 +4,74 @@ component extends="wheels.tests.Test" {
 	  _debug = false;
 	}
 
+	function test_setting_and_getting_properties() {
+
+		user = model("user").new();
+
+		args = {};
+		args.Address = "1313 mockingbird lane";
+		args.City = "deerfield beach";
+		args.Fax = "9545551212";
+		args.FirstName = "anthony";
+		args.LastName = "Petruzzi";
+		args.Password = "it's a secret";
+		args.Phone = "9544826106";
+		args.State = "fl";
+		args.UserName = "tonypetruzzi";
+		args.ZipCode = "33441";
+		args.Id = "";
+		args.birthday = "11/01/1975";
+		args.birthdaymonth = "11";
+		args.birthdayyear = "1975";
+
+		user.setProperties(args);
+
+		props = user.properties();
+
+		for (i in props) {
+			actual = props[i];
+			expected = args[i];
+			assert("actual eq expected");
+		};
+
+		args.FirstName = "per";
+		args.LastName = "djurner";
+
+		user.setproperties(firstname="per", lastname="djurner");
+		props = user.properties();
+
+		for (i in props) {
+			actual = props[i];
+			expected = args[i];
+			assert("actual eq expected");
+		};
+
+		args.FirstName = "chris";
+		args.LastName = "peters";
+		args.ZipCode = "33333";
+
+		_params = {};
+		_params.lastname = "peters";
+		_params.zipcode = "33333";
+
+		user.setproperties(firstname="chris", properties=_params);
+		props = user.properties();
+
+		for (i in props) {
+			actual = props[i];
+			expected = args[i];
+			assert("actual eq expected");
+		};
+	}
+
+	function test_setting_and_getting_properties_with_named_arguments() {
+		author = model("author").findOne();
+		author.setProperties(firstName="a", lastName="b");
+		result = author.properties();
+		assert('result.firstName eq "a"');
+		assert('result.lastName eq "b"');
+	}
+
 	function test_properties_returns_expected_struct_keys() {
 		author = model("author").new(firstName="Foo", lastName="Bar");
 
