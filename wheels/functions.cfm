@@ -1,7 +1,22 @@
 <cfscript>
+
+// Give this application a unique name by taking the path to the root and hashing it.
 this.name = Hash(GetDirectoryFromPath(GetBaseTemplatePath()));
+
+// Add mapping to the root of the site (e.g. C:\inetpub\wwwroot\, C:\inetpub\wwwroot\appfolder\).
+// This is useful when extending controllers and models in parent folders (e.g. extends="app.controllers.Controller").
+this.mappings["/app"] = GetDirectoryFromPath(GetBaseTemplatePath());
+
+// Add mapping to the wheels folder inside the app folder (e.g. C:\inetpub\wwwroot\appfolder\wheels).
+// This is used extensively when writing tests.
 this.mappings["/wheels"] = GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels";
+
+// We turn on "sessionManagement" by default since the Flash uses it.
 this.sessionManagement = true;
+
+// Include developer's app config so they can set their own variables in this scope (or override "sessionManagement").
+// Include Wheels controller and global functions.
+// Include Wheels event functions (which in turn includes the developer's event files).
 if (StructKeyExists(server, "lucee")) {
 	include "../config/app.cfm";
 	include "controller/appfunctions.cfm";
@@ -29,4 +44,5 @@ if (StructKeyExists(server, "lucee")) {
 	include "wheels/events/onrequestend.cfm";
 	include "wheels/events/onrequeststart.cfm";
 }
+
 </cfscript>
