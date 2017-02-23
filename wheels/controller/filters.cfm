@@ -1,20 +1,24 @@
 <cfscript>
 
-// PUBLIC CONTROLLER INITIALIZATION FUNCTIONS
-
+/**
+ * Controller initialization function.
+ * Tells CFWheels to run a function before an action is run or after an action has been run.
+ * Docs: http://docs.cfwheels.org/docs/filters
+ * Tests: wheels/tests/controller/filters/filters.cfc
+ */
 public void function filters(
 	required string through,
-	string type = "before",
-	string only = "",
-	string except = "",
-	string placement = "append"
+	string type="before",
+	string only="",
+	string except="",
+	string placement="append"
 ) {
 	arguments.through = $listClean(arguments.through);
 	arguments.only = $listClean(arguments.only);
 	arguments.except = $listClean(arguments.except);
 	local.namedArguments = "through,type,only,except,placement";
 	local.iEnd = ListLen(arguments.through);
-	for (local.i=1; local.i <= local.iEnd; local.i++) {
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.filter = {};
 		local.filter.through = ListGetAt(arguments.through, local.i);
 		local.filter.type = arguments.type;
@@ -40,46 +44,63 @@ public void function filters(
 	}
 }
 
+/**
+ * Controller initialization function.
+ * Use this function if you need a more low level way of setting the entire filter chain for a controller.
+ * Docs: http://docs.cfwheels.org/docs/setfilterchain
+ * Tests: wheels/tests/controller/filters/setfilterchain.cfc
+ */
 public void function setFilterChain(required array chain) {
 	// Clear current filter chain and then re-add from the passed in chain
 	variables.$class.filters = [];
 	local.iEnd = ArrayLen(arguments.chain);
-	for (local.i=1; local.i <= local.iEnd; local.i++) {
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		filters(argumentCollection=arguments.chain[local.i]);
 	}
 }
 
-public array function filterChain(string type = "all") {
+/**
+ * Controller initialization function.
+ * Returns an array of all the filters set on current controller in the order in which they will be executed.
+ * Docs: http://docs.cfwheels.org/docs/filterchain
+ * Tests: wheels/tests/controller/filters/filterchain.cfc
+ */
+public array function filterChain(string type="all") {
+
+	// Throw error if an invalid type was passed in.
 	if (!ListFindNoCase("before,after,all", arguments.type)) {
-		// Throw error because an invalid type was passed in
 		$throw(
 			type="Wheels.InvalidFilterType",
 			message="The filter type of `#arguments.type#` is invalid.",
 			extendedInfo="Please use either `before` or `after`."
 		);
 	}
+
+	// Set all filters to be returned, or loop over them and set only those that match the supplied type to be returned.
 	if (arguments.type == "all") {
-		// Return all filters
 		local.rv = variables.$class.filters;
 	} else {
-		// Loop over the filters and return all those that match the supplied type
 		local.rv = [];
 		local.iEnd = ArrayLen(variables.$class.filters);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			if (variables.$class.filters[local.i].type == arguments.type) {
 				ArrayAppend(local.rv, variables.$class.filters[local.i]);
 			}
 		}
 	}
+
 	return local.rv;
 }
 
-// PRIVATE FUNCTIONS
-
+/**
+ * Internal function.
+ * Called twice when processing a request, first for "before" filters and then for "after" filters.
+ * Tests: wheels/tests/controller/caching/$runfilters.cfc
+ */
 public void function $runFilters(required string type, required string action) {
 	local.filters = filterChain(arguments.type);
 	local.iEnd = ArrayLen(local.filters);
-	for (local.i=1; local.i <= local.iEnd; local.i++) {
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.filter = local.filters[local.i];
 		loc.listsNotSpecified = !Len(local.filter.only) && !Len(local.filter.except);
 		loc.inOnlyList = Len(local.filter.only) && ListFindNoCase(local.filter.only, arguments.action);
@@ -93,10 +114,12 @@ public void function $runFilters(required string type, required string action) {
 				);
 			}
 			local.result = $invoke(method=local.filter.through, invokeArgs=local.filter.arguments);
+
+			// If the filter returned false, rendered content or made a delayed redirect we skip the remaining filters.
 			if ((StructKeyExists(local, "result") && !local.result) || $performedRenderOrRedirect()) {
-				// The filter function returned false or rendered content so we skip the remaining filters
 				break;
 			}
+
 		}
 	}
 }
