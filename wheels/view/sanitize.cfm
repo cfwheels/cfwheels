@@ -1,6 +1,7 @@
 <cfscript>
 
 /**
+ * View helper function.
  * Removes all links from an HTML string, leaving just the link text.
  * Docs: http://docs.cfwheels.org/docs/striplinks
  * Tests: wheels/tests/view/sanitize/striplinks.cfc
@@ -10,6 +11,7 @@ public string function stripLinks(required string html) {
 }
 
 /**
+ * View helper function.
  * Removes all HTML tags from a string.
  * Docs: http://docs.cfwheels.org/docs/striptags
  * Tests: wheels/tests/view/sanitize/striptags.cfc

@@ -1,6 +1,7 @@
 <cfscript>
 
 /**
+ * View helper function.
  * Returns a string describing the difference between the dates passed in.
  * Docs: http://docs.cfwheels.org/docs/distanceoftimeinwords
  * Tests: wheels/tests/view/dates/distanceoftimeinwords.cfc
@@ -60,6 +61,7 @@ public string function distanceOfTimeInWords(required date fromTime, required da
 }
 
 /**
+ * View helper function.
  * Returns a string describing the approximate time difference between the date passed in and the current date.
  * Docs: http://docs.cfwheels.org/docs/timeagoinwords
  * Tests: wheels/tests/view/dates/timeagoinwords.cfc
@@ -70,6 +72,7 @@ public any function timeAgoInWords(required date fromTime, boolean includeSecond
 }
 
 /**
+ * View helper function.
  * Returns a string describing the approximate time difference between the current date and the date passed in.
  * Docs: http://docs.cfwheels.org/docs/timeuntilinwords
  * Tests: wheels/tests/view/dates/timeuntilinwords.cfc

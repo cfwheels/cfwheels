@@ -1,6 +1,7 @@
 <cfscript>
 
 /**
+ * View helper function.
  * Turns all URLs and email addresses into clickable links.
  * Docs: http://docs.cfwheels.org/docs/autolink
  * Tests: wheels/tests/view/text/autolink.cfc
@@ -30,7 +31,8 @@ public string function autoLink(required string text, string link, boolean relat
 }
 
 /**
- * Helper for the autoLink function.
+ * Internal function.
+ * Called from the autoLink function.
  */
 public string function $autoLinkLoop(required string text, required string regex, string protocol="") {
 	local.punctuationRegEx = "([^\w\/-]+)$";
@@ -61,6 +63,7 @@ public string function $autoLinkLoop(required string text, required string regex
 }
 
 /**
+ * View helper function.
  * Extracts an excerpt from text that matches the first instance of a given phrase.
  * Docs: http://docs.cfwheels.org/docs/excerpt
  * Tests: wheels/tests/view/text/excerpt.cfc
@@ -99,6 +102,7 @@ public string function excerpt(required string text, required string phrase, num
 }
 
 /**
+ * View helper function.
  * Highlights the phrase(s) everywhere in the text if found by wrapping it in span tags.
  * Docs: http://docs.cfwheels.org/docs/highlight
  * Tests: wheels/tests/view/text/highlight.cfc
@@ -147,6 +151,7 @@ public string function highlight(
 }
 
 /**
+ * View helper function.
  * Replaces single new line characters with HTML break elements and double with paragraph elements.
  * Docs: http://docs.cfwheels.org/docs/simpleformat
  * Tests: wheels/tests/view/text/simpleformat.cfc
@@ -169,6 +174,7 @@ public string function simpleFormat(required string text, boolean wrap) {
 }
 
 /**
+ * View helper function.
  * Capitalizes all words in the text to create a nicer looking title.
  * Docs: http://docs.cfwheels.org/docs/titleize
  * Tests: wheels/tests/view/text/titleize.cfc
@@ -183,6 +189,7 @@ public string function titleize(required string word) {
 }
 
 /**
+ * View helper function.
  * Truncates text to the specified length and replaces the rest with a truncate string (e.g. "...").
  * Docs: http://docs.cfwheels.org/docs/truncate
  * Tests: wheels/tests/view/text/truncate.cfc
@@ -198,6 +205,7 @@ public string function truncate(required string text, numeric length, string tru
 }
 
 /**
+ * View helper function.
  * Truncates text to the specified number of words and replaces the rest with a truncate string (e.g. "...").
  * Docs: http://docs.cfwheels.org/docs/wordtruncate
  * Tests: wheels/tests/view/text/wordtruncate.cfc
