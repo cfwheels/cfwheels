@@ -2,8 +2,8 @@
 
 /**
  * Turns all URLs and email addresses into clickable links.
- * http://docs.cfwheels.org/docs/autolink
- * Tests are in wheels/tests/view/text/autolink.cfc.
+ * Docs: http://docs.cfwheels.org/docs/autolink
+ * Tests: wheels/tests/view/text/autolink.cfc
  */
 public string function autoLink(required string text, string link, boolean relative=true) {
 	$args(name="autoLink", args=arguments);
@@ -30,9 +30,40 @@ public string function autoLink(required string text, string link, boolean relat
 }
 
 /**
+ * Helper for the autoLink function.
+ */
+public string function $autoLinkLoop(required string text, required string regex, string protocol="") {
+	local.punctuationRegEx = "([^\w\/-]+)$";
+	local.startPosition = 1;
+	local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
+	while (local.match.pos[1] > 0) {
+		local.startPosition = local.match.pos[1] + local.match.len[1];
+		local.str = Mid(arguments.text, local.match.pos[1], local.match.len[1]);
+		if (Left(local.str, 2) != "<a") {
+			arguments.text = RemoveChars(arguments.text, local.match.pos[1], local.match.len[1]);
+			local.punctuation = ArrayToList(ReMatchNoCase(local.punctuationRegEx, local.str));
+			local.str = REReplaceNoCase(local.str, local.punctuationRegEx, "", "all");
+
+			// Make sure that links beginning with "www." have a protocol.
+			if (Left(local.str, 4) == "www." && !Len(arguments.protocol)) {
+				arguments.protocol = "http://";
+			}
+
+			arguments.href = arguments.protocol & local.str;
+			local.element = $element("a", arguments, local.str, "text,regex,link,protocol,relative") & local.punctuation;
+			arguments.text = Insert(local.element, arguments.text, local.match.pos[1]-1);
+			local.startPosition = local.match.pos[1] + Len(local.element);
+		}
+		local.startPosition++;
+		local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
+	}
+	return arguments.text;
+}
+
+/**
  * Extracts an excerpt from text that matches the first instance of a given phrase.
- * http://docs.cfwheels.org/docs/excerpt
- * Tests are in wheels/tests/view/text/excerpt.cfc.
+ * Docs: http://docs.cfwheels.org/docs/excerpt
+ * Tests: wheels/tests/view/text/excerpt.cfc
  */
 public string function excerpt(required string text, required string phrase, numeric radius, string excerptString) {
 	$args(name="excerpt", args=arguments);
@@ -43,6 +74,7 @@ public string function excerpt(required string text, required string phrase, num
 		return "";
 	}
 
+	// Set start info based on whether the excerpt text found, including its radius, comes before the start of the string.
 	if ((local.pos - arguments.radius) <= 1) {
 		local.startPos = 1;
 		local.truncateStart = "";
@@ -51,6 +83,7 @@ public string function excerpt(required string text, required string phrase, num
 		local.truncateStart = arguments.excerptString;
 	}
 
+	// Set end info based on whether the excerpt text found, including its radius, comes after the end of the string.
 	if ((local.pos + Len(arguments.phrase) + arguments.radius) > Len(arguments.text)) {
 		local.endPos = Len(arguments.text);
 		local.truncateEnd = "";
@@ -58,6 +91,7 @@ public string function excerpt(required string text, required string phrase, num
 		local.endPos = local.pos + arguments.radius;
 		local.truncateEnd = arguments.excerptString;
 	}
+
 	local.len = (local.endPos + Len(arguments.phrase)) - local.startPos;
 	local.mid = Mid(arguments.text, local.startPos, local.len);
 	local.rv = local.truncateStart & local.mid & local.truncateEnd;
@@ -65,9 +99,9 @@ public string function excerpt(required string text, required string phrase, num
 }
 
 /**
- * Highlights the phrase(s) everywhere in the text if found by wrapping it in a span tag.
- * http://docs.cfwheels.org/docs/highlight
- * Tests are in wheels/tests/view/text/highlight.cfc.
+ * Highlights the phrase(s) everywhere in the text if found by wrapping it in span tags.
+ * Docs: http://docs.cfwheels.org/docs/highlight
+ * Tests: wheels/tests/view/text/highlight.cfc
  */
 public string function highlight(
 	required string text,
@@ -78,7 +112,7 @@ public string function highlight(
 ) {
 	$args(name="highlight", args=arguments);
 
-	// Return the passed in text as is if it's blank or the passed in phrase is blank.
+	// Return the passed in text unchanged if it's blank or the passed in phrase is blank.
 	if (!Len(arguments.text) || !Len(arguments.phrases)) {
 		return arguments.text;
 	}
@@ -112,111 +146,78 @@ public string function highlight(
 	return local.rv;
 }
 
+/**
+ * Replaces single new line characters with HTML break elements and double with paragraph elements.
+ * Docs: http://docs.cfwheels.org/docs/simpleformat
+ * Tests: wheels/tests/view/text/simpleformat.cfc
+ */
 public string function simpleFormat(required string text, boolean wrap) {
 	$args(name="simpleFormat", args=arguments);
 	local.rv = Trim(arguments.text);
 	local.rv = Replace(local.rv, "#Chr(13)#", "", "all");
 	local.rv = Replace(local.rv, "#Chr(10)##Chr(10)#", "</p><p>", "all");
-	local.rv = Replace(local.rv, "#Chr(10)#", "<br />", "all");
+	local.rv = Replace(local.rv, "#Chr(10)#", "<br>", "all");
 
-	// add back in our returns so we can strip the tags and re-apply them without issue
-	// this is good to be edited the textarea text in it's original format (line returns)
+	// Put the new line characters back in (good for editing in textareas with the original formatting for example).
 	local.rv = Replace(local.rv, "</p><p>", "</p>#Chr(10)##Chr(10)#<p>", "all");
-	local.rv = Replace(local.rv, "<br />", "<br />#Chr(10)#", "all");
+	local.rv = Replace(local.rv, "<br>", "<br>#Chr(10)#", "all");
 
-	if (arguments.wrap)
-	{
+	if (arguments.wrap) {
 		local.rv = "<p>" & local.rv & "</p>";
 	}
 	return local.rv;
 }
 
-	public string function titleize(required string word) {
-		local.rv = "";
-		local.iEnd = ListLen(arguments.word, " ");
-		for (local.i=1; local.i <= local.iEnd; local.i++)
-		{
-			local.rv = ListAppend(local.rv, capitalize(ListGetAt(arguments.word, local.i, " ")), " ");
-		}
-		return local.rv;
+/**
+ * Capitalizes all words in the text to create a nicer looking title.
+ * Docs: http://docs.cfwheels.org/docs/titleize
+ * Tests: wheels/tests/view/text/titleize.cfc
+ */
+public string function titleize(required string word) {
+	local.rv = "";
+	local.iEnd = ListLen(arguments.word, " ");
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
+		local.rv = ListAppend(local.rv, capitalize(ListGetAt(arguments.word, local.i, " ")), " ");
 	}
+	return local.rv;
+}
 
-	public string function truncate(
-		required string text,
-		numeric length,
-		string truncateString
-	) {
-		$args(name="truncate", args=arguments);
-		if (Len(arguments.text) > arguments.length)
-		{
-			local.rv = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
-		}
-		else
-		{
-			local.rv = arguments.text;
-		}
-		return local.rv;
+/**
+ * Truncates text to the specified length and replaces the rest with a truncate string (e.g. "...").
+ * Docs: http://docs.cfwheels.org/docs/truncate
+ * Tests: wheels/tests/view/text/truncate.cfc
+ */
+public string function truncate(required string text, numeric length, string truncateString) {
+	$args(name="truncate", args=arguments);
+	if (Len(arguments.text) > arguments.length) {
+		local.rv = Left(arguments.text, arguments.length - Len(arguments.truncateString)) & arguments.truncateString;
+	} else {
+		local.rv = arguments.text;
 	}
-	public string function wordTruncate(
-		required string text,
-		numeric length,
-		string truncateString
-	) {
-		$args(name="wordTruncate", args=arguments);
-		local.rv = "";
-		local.wordArray = ListToArray(arguments.text, " ", false);
-		local.wordLen = ArrayLen(local.wordArray);
-		if (local.wordLen > arguments.length)
-		{
-			for (local.i=1; local.i <= arguments.length; local.i++)
-			{
-				local.rv = ListAppend(local.rv, local.wordArray[local.i], " ");
-			}
-			local.rv &= arguments.truncateString;
-		}
-		else
-		{
-			local.rv = arguments.text;
-		}
-		return local.rv;
-	}
+	return local.rv;
+}
 
-	/*
-	* PRIVATE FUNCTIONS
-	*/
+/**
+ * Truncates text to the specified number of words and replaces the rest with a truncate string (e.g. "...").
+ * Docs: http://docs.cfwheels.org/docs/wordtruncate
+ * Tests: wheels/tests/view/text/wordtruncate.cfc
+ */
+public string function wordTruncate(required string text, numeric length, string truncateString) {
+	$args(name="wordTruncate", args=arguments);
+	local.words = ListToArray(arguments.text, " ", false);
 
-	public string function $autoLinkLoop(
-		required string text,
-		required string regex,
-		string protocol=""
-	) {
-		local.punctuationRegEx = "([^\w\/-]+)$";
-		local.startPosition = 1;
-		local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
-		while (local.match.pos[1] > 0)
-		{
-			local.startPosition = local.match.pos[1] + local.match.len[1];
-			local.str = Mid(arguments.text, local.match.pos[1], local.match.len[1]);
-			if (Left(local.str, 2) != "<a")
-			{
-				arguments.text = RemoveChars(arguments.text, local.match.pos[1], local.match.len[1]);
-				local.punctuation = ArrayToList(ReMatchNoCase(local.punctuationRegEx, local.str));
-				local.str = REReplaceNoCase(local.str, local.punctuationRegEx, "", "all");
-
-				// make sure that links beginning with "www." have a protocol
-				if (Left(local.str, 4) == "www." && !Len(arguments.protocol))
-				{
-					arguments.protocol = "http://";
-				}
-
-				arguments.href = arguments.protocol & local.str;
-				local.element = $element("a", arguments, local.str, "text,regex,link,protocol,relative") & local.punctuation;
-				arguments.text = Insert(local.element, arguments.text, local.match.pos[1]-1);
-				local.startPosition = local.match.pos[1] + Len(local.element);
-			}
-			local.startPosition++;
-			local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
-		}
+	// When there are fewer (or same) words in the string than the number to be truncated we can just return it unchanged.
+	if (ArrayLen(local.words) <= arguments.length) {
 		return arguments.text;
 	}
+
+	local.rv = "";
+	local.iEnd = arguments.length;
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
+		local.rv = ListAppend(local.rv, local.words[local.i], " ");
+	}
+	local.rv &= arguments.truncateString;
+	return local.rv;
+}
+
 </cfscript>
