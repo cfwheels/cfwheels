@@ -19,7 +19,7 @@ public string function autoLink(required string text, string link, boolean relat
 		local.rv = $autoLinkLoop(text=local.rv, argumentCollection=arguments);
 	}
 
-	// Create anchor elements with a mailto attribute for all email addresses found in the text.
+	// Create anchor elements with a "mailto:" link in an href attribute for all email addresses found in the text.
 	if (arguments.link != "urls") {
 		arguments.regex = "(?:(?:<a\s[^>]+)?(?:[^@\s]+)@(?:(?:[-a-z0-9]+\.)+[a-z]{2,}))";
 		arguments.protocol = "mailto:";
