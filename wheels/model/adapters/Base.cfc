@@ -288,4 +288,34 @@
 		<cfreturn local.rv>
 	</cffunction>
 
+	<cffunction name="$getAssociations" returnformat="void" output="false" mixin="controller">
+		<cfargument name="tableName" type="string" required="true">
+		<cfscript>
+			local.result = ArrayNew(1);
+			local.dbinfoargs = {datasource=variables.datasource, username=variables.username, password=variables.password};
+			local.qrytables = $dbinfo(argumentCollection=local.dbinfoargs, type="tables");
+			for (local.table in local.qrytables) {
+				local.qryfkeys = $dbinfo(argumentCollection=local.dbinfoargs, type="foreignkeys", table=local.table.table_name);
+				for (local.fkey in local.qryfkeys) {
+					if (local.fkey.fktable_name eq arguments.tableName) {
+						ArrayAppend(local.result, {
+							method = "belongsTo",
+							foreignKey = local.fkey.fkcolumn_name,
+							joinKey = local.fkey.pkcolumn_name,
+							tableName = local.fkey.pktable_name
+						});
+					} else if (local.fkey.pktable_name eq arguments.tableName) {
+						ArrayAppend(local.result, {
+							method = "hasMany",
+							foreignKey = local.fkey.fkcolumn_name,
+							joinKey = local.fkey.pkcolumn_name,
+							tableName = local.fkey.fktable_name
+						});
+					}
+				}
+			}
+		</cfscript>
+		<cfreturn local.result>
+	</cffunction>
+
 </cfcomponent>

@@ -55,22 +55,20 @@
 			<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 			DROP VIEW #loc.i#
 			</cfquery>
-			<cfcatch>
-			</cfcatch>
+			<cfcatch></cfcatch>
 		</cftry>
 	</cfif>
 </cfloop>
 
 <!--- list of tables to delete --->
-<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes">
+<cfset loc.tables = "authors,cities,classifications,comments,photos,galleries,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes">
 <cfloop list="#loc.tables#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
 		<cftry>
 			<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 			DROP TABLE #loc.i#
 			</cfquery>
-			<cfcatch>
-			</cfcatch>
+			<cfcatch></cfcatch>
 		</cftry>
 	</cfif>
 </cfloop>
@@ -162,6 +160,32 @@ CREATE TABLE photos
 	,filedata #loc.binaryColumnType# NULL
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
+</cfquery>
+
+<!--- create a foreign key for testing automatic associations --->
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
+ALTER TABLE photos ADD CONSTRAINT fk_photos_galleryid FOREIGN KEY (galleryid) REFERENCES galleries(id);
+</cfquery>
+
+<!--- disable foreign key checks/constraints as the test data does not currently have referential integrity --->
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
+	<cfswitch expression="#loc.db#">
+		<cfcase value="microsoftsqlserver">
+			ALTER TABLE photos NOCHECK CONSTRAINT fk_photos_galleryid;
+		</cfcase>
+		<cfcase value="mysql,mariadb">
+			SET FOREIGN_KEY_CHECKS = 0;
+		</cfcase>
+		<cfcase value="h2">
+			SET REFERENTIAL_INTEGRITY FALSE;
+		</cfcase>
+		<cfcase value="postgresql">
+			ALTER TABLE photos DISABLE TRIGGER ALL;
+		</cfcase>
+		<cfcase value="oracle">
+			ALTER TABLE photos DISABLE CONSTRAINT fk_photos_galleryid;
+		</cfcase>
+	</cfswitch>
 </cfquery>
 
 <cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">

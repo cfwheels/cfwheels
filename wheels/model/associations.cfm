@@ -3,6 +3,10 @@
 	* PUBLIC MODEL INITIALIZATION METHODS
 	*/
 
+	public void function automaticAssociations(required boolean value) {
+		variables.wheels.class.automaticAssociations = arguments.value;
+	}
+
 	public void function belongsTo(
 		required string name,
 		string modelName="",
