@@ -9,6 +9,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_valid() {
+		request.cgi.request_method = "get";
 		params = {controller="verifies", action="actionGet"};
 		_controller = controller("verifies", params);
 		_controller.processAction("actionGet", params);
