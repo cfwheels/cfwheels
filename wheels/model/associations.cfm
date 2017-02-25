@@ -1,126 +1,166 @@
 <cfscript>
-	/*
-	* PUBLIC MODEL INITIALIZATION METHODS
-	*/
 
-	public void function belongsTo(
-		required string name,
-		string modelName="",
-		string foreignKey="",
-		string joinKey="",
-		string joinType
-	) {
-		$args(name="belongsTo", args=arguments);
-		arguments.type = "belongsTo";
-		arguments.methods = "#arguments.name#,has#capitalize(arguments.name)#";
-		$registerAssociation(argumentCollection=arguments);
-	}
+/*
+ * Model initialization method.
+ * Sets up a "belongsTo" association between this model and the specified one.
+ */
+public void function belongsTo(
+	required string name,
+	string modelName="",
+	string foreignKey="",
+	string joinKey="",
+	string joinType
+) {
+	$args(name="belongsTo", args=arguments);
+	arguments.type = "belongsTo";
 
-	public void function hasMany(
-		required string name,
-		string modelName="",
-		string foreignKey="",
-		string joinKey="",
-		string joinType,
-		string dependent,
-		string shortcut="",
-		string through="#singularize(arguments.shortcut)#,#arguments.name#"
-	) {
-		$args(name="hasMany", args=arguments);
-		local.singularizeName = capitalize(singularize(arguments.name));
-		local.capitalizeName = capitalize(arguments.name);
-		arguments.type = "hasMany";
-		arguments.methods = "#arguments.name#,#local.singularizeName#Count,add#local.singularizeName#,create#local.singularizeName#,delete#local.singularizeName#,deleteAll#local.capitalizeName#,findOne#local.singularizeName#,has#local.capitalizeName#,new#local.singularizeName#,remove#local.singularizeName#,removeAll#local.capitalizeName#";
-		$registerAssociation(argumentCollection=arguments);
-	}
+	// The dynamic shortcut methods to add to this class (e.g. "post" , "hasPost").
+	arguments.methods = "";
+	arguments.methods = ListAppend(arguments.name);
+	arguments.methods = ListAppend("has#capitalize(arguments.name)#");
 
-	public void function hasOne(
-		required string name,
-		string modelName="",
-		string foreignKey="",
-		string joinKey="",
-		string joinType,
-		string dependent
-	) {
-		$args(name="hasOne", args=arguments);
-		local.capitalizeName = capitalize(arguments.name);
-		arguments.type = "hasOne";
-		arguments.methods = "#arguments.name#,create#local.capitalizeName#,delete#local.capitalizeName#,has#local.capitalizeName#,new#local.capitalizeName#,remove#local.capitalizeName#,set#local.capitalizeName#";
-		$registerAssociation(argumentCollection=arguments);
-	}
+	$registerAssociation(argumentCollection=arguments);
+}
 
-	/*
-	* PRIVATE METHODS
-	*/
+/*
+ * Model initialization method.
+ * Sets up a "hasMany" association between this model and the specified one.
+ */
+public void function hasMany(
+	required string name,
+	string modelName="",
+	string foreignKey="",
+	string joinKey="",
+	string joinType,
+	string dependent,
+	string shortcut="",
+	string through="#singularize(arguments.shortcut)#,#arguments.name#"
+) {
+	$args(name="hasMany", args=arguments);
+	local.singularizedName = capitalize(singularize(arguments.name));
+	local.capitalizedName = capitalize(arguments.name);
+	arguments.type = "hasMany";
 
-	public void function $registerAssociation() {
+	// The dynamic shortcut methods to add to this class (e.g. "comment", "commentCount", "addComment", "createComment" etc).
+	arguments.methods = "";
+	arguments.methods = ListAppend(arguments.name);
+	arguments.methods = ListAppend("#local.singularizedName#Count");
+	arguments.methods = ListAppend("add#local.singularizedName#");
+	arguments.methods = ListAppend("create#local.singularizedName#");
+	arguments.methods = ListAppend("delete#local.singularizedName#");
+	arguments.methods = ListAppend("deleteAll#local.capitalizedName#");
+	arguments.methods = ListAppend("findOne#local.singularizedName#");
+	arguments.methods = ListAppend("has#local.capitalizedName#");
+	arguments.methods = ListAppend("new#local.singularizedName#");
+	arguments.methods = ListAppend("remove#local.singularizedName#");
+	arguments.methods = ListAppend("removeAll#local.capitalizedName#");
 
-		// assign the name for the association
-		local.associationName = arguments.name;
+	$registerAssociation(argumentCollection=arguments);
+}
 
-		// default our nesting to false and set other nesting properties
-		arguments.nested = {};
-		arguments.nested.allow = false;
-		arguments.nested.delete = false;
-		arguments.nested.autosave = false;
-		arguments.nested.sortProperty = "";
-		arguments.nested.rejectIfBlank = "";
+/*
+ * Model initialization method.
+ * Sets up a "hasOne" association between this model and the specified one.
+ */
+public void function hasOne(
+	required string name,
+	string modelName="",
+	string foreignKey="",
+	string joinKey="",
+	string joinType,
+	string dependent
+) {
+	$args(name="hasOne", args=arguments);
+	local.capitalizedName = capitalize(arguments.name);
+	arguments.type = "hasOne";
 
-		// remove the name argument from the arguments struct
-		StructDelete(arguments, "name");
+	// The dynamic shortcut methods to add to this class (e.g. "profile", "createProfile", "deleteProfile" etc).
+	arguments.methods = "";
+	arguments.methods = ListAppend(arguments.name);
+	arguments.methods = ListAppend("create#local.capitalizedName#");
+	arguments.methods = ListAppend("delete#local.capitalizedName#");
+	arguments.methods = ListAppend("has#local.capitalizedName#");
+	arguments.methods = ListAppend("new#local.capitalizedName#");
+	arguments.methods = ListAppend("remove#local.capitalizedName#");
+	arguments.methods = ListAppend("set#local.capitalizedName#");
 
-		// infer model name and foreign key from association name unless developer specified it already
-		if (!Len(arguments.modelName))
-		{
-			if (arguments.type == "hasMany")
-			{
-				arguments.modelName = singularize(local.associationName);
-			}
-			else
-			{
-				arguments.modelName = local.associationName;
-			}
-		}
+	$registerAssociation(argumentCollection=arguments);
+}
 
-		// set pluralized association name, to be used when aliasing the table
-		arguments.pluralizedName = pluralize(local.associationName);
+/*
+ * Internal function.
+ * Registers the association info in the model object on the application scope.
+ */
+public void function $registerAssociation() {
 
-		// store all the settings for the association in the class struct (one struct per association with the name of the association as the key)
-		variables.wheels.class.associations[local.associationName] = arguments;
-	}
+	// Assign the name for the association.
+	local.associationName = arguments.name;
 
-	public void function $deleteDependents() {
-		for (local.key in variables.wheels.class.associations)
-		{
-			if (ListFindNoCase("hasMany,hasOne", variables.wheels.class.associations[local.key].type) && variables.wheels.class.associations[local.key].dependent != false)
-			{
-				local.all = "";
-				if (variables.wheels.class.associations[local.key].type == "hasMany")
-				{
-					local.all = "All";
-				}
-				switch (variables.wheels.class.associations[local.key].dependent)
-				{
-					case "delete":
-						local.invokeArgs = {};
-						local.invokeArgs.instantiate = true;
-						$invoke(componentReference=this, method="delete#local.all##local.key#", invokeArgs=local.invokeArgs);
-						break;
-					case "remove":
-						local.invokeArgs = {};
-						local.invokeArgs.instantiate = true;
-						$invoke(componentReference=this, method="remove#local.all##local.key#", invokeArgs=local.invokeArgs);
-						break;
-					case "deleteAll":
-						$invoke(componentReference=this, method="delete#local.all##local.key#");
-						break;
-					case "removeAll":
-						$invoke(componentReference=this, method="remove#local.all##local.key#");
-						break;
-					default:
-						$throw(type="Wheels.InvalidArgument", message="'#variables.wheels.class.associations[local.key].dependent#' is not a valid dependency.", extendedInfo="Use `delete`, `deleteAll`, `removeAll` or false.");
-				}
-			}
+	// Default our nesting to false and set other nesting properties.
+	arguments.nested = {};
+	arguments.nested.allow = false;
+	arguments.nested.delete = false;
+	arguments.nested.autosave = false;
+	arguments.nested.sortProperty = "";
+	arguments.nested.rejectIfBlank = "";
+
+	// Infer model name from association name unless developer specified it already.
+	if (!Len(arguments.modelName)) {
+		if (arguments.type == "hasMany") {
+			arguments.modelName = singularize(local.associationName);
+		} else {
+			arguments.modelName = local.associationName;
 		}
 	}
+
+	// Set pluralized association name, to be used when aliasing the table.
+	arguments.pluralizedName = pluralize(local.associationName);
+
+	// Store all the settings for the association in the class data.
+	// One struct per association with the name of the association as the key.
+	// We delete the name from the arguments because we use it as the key and don't need to store it elsewhere.
+	StructDelete(arguments, "name");
+	variables.wheels.class.associations[local.associationName] = arguments;
+}
+
+/*
+ * Internal function.
+ * Called when a model object is deleted (e.g. post.delete()).
+ * Deletes all associated records (or sets their foreign key values to NULL).
+ */
+public void function $deleteDependents() {
+	for (local.key in variables.wheels.class.associations) {
+		if (ListFindNoCase("hasMany,hasOne", variables.wheels.class.associations[local.key].type) && variables.wheels.class.associations[local.key].dependent != false) {
+			local.all = "";
+			if (variables.wheels.class.associations[local.key].type == "hasMany") {
+				local.all = "All";
+			}
+			switch (variables.wheels.class.associations[local.key].dependent) {
+				case "delete":
+					local.invokeArgs = {};
+					local.invokeArgs.instantiate = true;
+					$invoke(componentReference=this, method="delete#local.all##local.key#", invokeArgs=local.invokeArgs);
+					break;
+				case "remove":
+					local.invokeArgs = {};
+					local.invokeArgs.instantiate = true;
+					$invoke(componentReference=this, method="remove#local.all##local.key#", invokeArgs=local.invokeArgs);
+					break;
+				case "deleteAll":
+					$invoke(componentReference=this, method="delete#local.all##local.key#");
+					break;
+				case "removeAll":
+					$invoke(componentReference=this, method="remove#local.all##local.key#");
+					break;
+				default:
+					$throw(
+						type="Wheels.InvalidArgument",
+						message="'#variables.wheels.class.associations[local.key].dependent#' is not a valid dependency.",
+						extendedInfo="Use `delete`, `deleteAll`, `remove`, `removeAll` or `false`."
+					);
+			}
+		}
+	}
+}
+
 </cfscript>
