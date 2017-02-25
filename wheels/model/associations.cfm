@@ -16,8 +16,8 @@ public void function belongsTo(
 
 	// The dynamic shortcut methods to add to this class (e.g. "post" , "hasPost").
 	arguments.methods = "";
-	arguments.methods = ListAppend(arguments.name);
-	arguments.methods = ListAppend("has#capitalize(arguments.name)#");
+	arguments.methods = ListAppend(arguments.methods, arguments.name);
+	arguments.methods = ListAppend(arguments.methods, "has#capitalize(arguments.name)#");
 
 	$registerAssociation(argumentCollection=arguments);
 }
@@ -43,17 +43,17 @@ public void function hasMany(
 
 	// The dynamic shortcut methods to add to this class (e.g. "comment", "commentCount", "addComment", "createComment" etc).
 	arguments.methods = "";
-	arguments.methods = ListAppend(arguments.name);
-	arguments.methods = ListAppend("#local.singularizedName#Count");
-	arguments.methods = ListAppend("add#local.singularizedName#");
-	arguments.methods = ListAppend("create#local.singularizedName#");
-	arguments.methods = ListAppend("delete#local.singularizedName#");
-	arguments.methods = ListAppend("deleteAll#local.capitalizedName#");
-	arguments.methods = ListAppend("findOne#local.singularizedName#");
-	arguments.methods = ListAppend("has#local.capitalizedName#");
-	arguments.methods = ListAppend("new#local.singularizedName#");
-	arguments.methods = ListAppend("remove#local.singularizedName#");
-	arguments.methods = ListAppend("removeAll#local.capitalizedName#");
+	arguments.methods = ListAppend(arguments.methods, arguments.name);
+	arguments.methods = ListAppend(arguments.methods, "#local.singularizedName#Count");
+	arguments.methods = ListAppend(arguments.methods, "add#local.singularizedName#");
+	arguments.methods = ListAppend(arguments.methods, "create#local.singularizedName#");
+	arguments.methods = ListAppend(arguments.methods, "delete#local.singularizedName#");
+	arguments.methods = ListAppend(arguments.methods, "deleteAll#local.capitalizedName#");
+	arguments.methods = ListAppend(arguments.methods, "findOne#local.singularizedName#");
+	arguments.methods = ListAppend(arguments.methods, "has#local.capitalizedName#");
+	arguments.methods = ListAppend(arguments.methods, "new#local.singularizedName#");
+	arguments.methods = ListAppend(arguments.methods, "remove#local.singularizedName#");
+	arguments.methods = ListAppend(arguments.methods, "removeAll#local.capitalizedName#");
 
 	$registerAssociation(argumentCollection=arguments);
 }
@@ -76,13 +76,13 @@ public void function hasOne(
 
 	// The dynamic shortcut methods to add to this class (e.g. "profile", "createProfile", "deleteProfile" etc).
 	arguments.methods = "";
-	arguments.methods = ListAppend(arguments.name);
-	arguments.methods = ListAppend("create#local.capitalizedName#");
-	arguments.methods = ListAppend("delete#local.capitalizedName#");
-	arguments.methods = ListAppend("has#local.capitalizedName#");
-	arguments.methods = ListAppend("new#local.capitalizedName#");
-	arguments.methods = ListAppend("remove#local.capitalizedName#");
-	arguments.methods = ListAppend("set#local.capitalizedName#");
+	arguments.methods = ListAppend(arguments.methods, arguments.name);
+	arguments.methods = ListAppend(arguments.methods, "create#local.capitalizedName#");
+	arguments.methods = ListAppend(arguments.methods, "delete#local.capitalizedName#");
+	arguments.methods = ListAppend(arguments.methods, "has#local.capitalizedName#");
+	arguments.methods = ListAppend(arguments.methods, "new#local.capitalizedName#");
+	arguments.methods = ListAppend(arguments.methods, "remove#local.capitalizedName#");
+	arguments.methods = ListAppend(arguments.methods, "set#local.capitalizedName#");
 
 	$registerAssociation(argumentCollection=arguments);
 }
