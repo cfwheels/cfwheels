@@ -3,6 +3,8 @@
 /*
  * Model initialization method.
  * Sets up a "belongsTo" association between this model and the specified one.
+ * Docs: http://docs.cfwheels.org/docs/belongsto
+ * Tests: wheels/tests/model/associations/belongsto.cfc
  */
 public void function belongsTo(
 	required string name,
@@ -25,6 +27,8 @@ public void function belongsTo(
 /*
  * Model initialization method.
  * Sets up a "hasMany" association between this model and the specified one.
+ * Docs: http://docs.cfwheels.org/docs/hasmany
+ * Tests: wheels/tests/model/associations/hasmany.cfc
  */
 public void function hasMany(
 	required string name,
@@ -41,7 +45,7 @@ public void function hasMany(
 	local.capitalizedName = capitalize(arguments.name);
 	arguments.type = "hasMany";
 
-	// The dynamic shortcut methods to add to this class (e.g. "comment", "commentCount", "addComment", "createComment" etc).
+	// The dynamic shortcut methods to add to this class (e.g. "comment", "commentCount", "addComment" etc).
 	arguments.methods = "";
 	arguments.methods = ListAppend(arguments.methods, arguments.name);
 	arguments.methods = ListAppend(arguments.methods, "#local.singularizedName#Count");
@@ -61,6 +65,8 @@ public void function hasMany(
 /*
  * Model initialization method.
  * Sets up a "hasOne" association between this model and the specified one.
+ * Docs: http://docs.cfwheels.org/docs/hasone
+ * Tests: wheels/tests/model/associations/hasone.cfc
  */
 public void function hasOne(
 	required string name,
@@ -130,12 +136,13 @@ public void function $registerAssociation() {
  */
 public void function $deleteDependents() {
 	for (local.key in variables.wheels.class.associations) {
-		if (ListFindNoCase("hasMany,hasOne", variables.wheels.class.associations[local.key].type) && variables.wheels.class.associations[local.key].dependent != false) {
+		local.association = variables.wheels.class.associations[local.key];
+		if (ListFindNoCase("hasMany,hasOne", local.association.type) && local.association.dependent != false) {
 			local.all = "";
-			if (variables.wheels.class.associations[local.key].type == "hasMany") {
+			if (local.association.type == "hasMany") {
 				local.all = "All";
 			}
-			switch (variables.wheels.class.associations[local.key].dependent) {
+			switch (local.association.dependent) {
 				case "delete":
 					local.invokeArgs = {};
 					local.invokeArgs.instantiate = true;
@@ -155,7 +162,7 @@ public void function $deleteDependents() {
 				default:
 					$throw(
 						type="Wheels.InvalidArgument",
-						message="'#variables.wheels.class.associations[local.key].dependent#' is not a valid dependency.",
+						message="'#local.association.dependent#' is not a valid dependency.",
 						extendedInfo="Use `delete`, `deleteAll`, `remove`, `removeAll` or `false`."
 					);
 			}
