@@ -237,7 +237,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(loc.flashKeys, loc.i);
-			loc.class = loc.item & "Message";
+			loc.class = lCase( loc.item ) & "Message";
 			if (arguments.lowerCaseDynamicClassValues)
 				loc.class = LCase(loc.class);
 			loc.attributes = {class=loc.class};
