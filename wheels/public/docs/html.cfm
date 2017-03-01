@@ -32,13 +32,13 @@
 							</tr>
 						</thead>
 						<tbody>
-						<cfloop array="#meta.parameters#" item="_param">
+						<cfloop from="1" to="#arraylen(meta.parameters)#" index="_param">
 							<tr>
-								<td><cfif structkeyExists(_param, "name")>#_param.name#</cfif></td>
-								<td><cfif structkeyExists(_param, "type")>#_param.type#</cfif></td>
-								<td><cfif structkeyExists(_param, "Required")>#_param.required#</cfif></td>
-								<td><cfif structkeyExists(_param, "default")>#_param.default#</cfif></td>
-								<td><cfif structkeyExists(_param, "hint")>#_param.hint#</cfif></td>
+								<td><cfif structkeyExists(meta.parameters[_param], "name")>#meta.parameters[_param]['name']#</cfif></td>
+								<td><cfif structkeyExists(meta.parameters[_param], "type")>#meta.parameters[_param]['type']#</cfif></td>
+								<td><cfif structkeyExists(meta.parameters[_param], "Required")>#meta.parameters[_param]['required']#</cfif></td>
+								<td><cfif structkeyExists(meta.parameters[_param], "default")>#meta.parameters[_param]['default']#</cfif></td>
+								<td><cfif structkeyExists(meta.parameters[_param], "hint")>#meta.parameters[_param]['hint']#</cfif></td>
 							</tr>
 						</cfloop>
 						</tbody>
