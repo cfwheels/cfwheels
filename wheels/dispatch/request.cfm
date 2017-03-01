@@ -15,6 +15,7 @@
 	) {
 		local.rv = {};
 		local.rv = $mergeUrlAndFormScopes(params=local.rv, urlScope=arguments.urlScope, formScope=arguments.formScope);
+		local.rv = $parseJsonBody(params=local.rv);
 		local.rv = $mergeRoutePattern(params=local.rv, route=arguments.route, path=arguments.path);
 		local.rv = $decryptParams(params=local.rv);
 		local.rv = $translateBlankCheckBoxSubmissions(params=local.rv);
@@ -183,6 +184,41 @@
 
 		// get rid of the fieldnames
 		StructDelete(arguments.params, "fieldnames");
+		return arguments.params;
+	}
+
+	/**
+	 * Internal function.
+	 * If content type is JSON, deserialize it into a struct and add to the params scope.
+	 */
+	public struct function $parseJsonBody(required struct params) {
+		local.request = GetHttpRequestData();
+		if (StructKeyExists(local.request, "headers") && StructKeyExists(local.request, "content")) {
+			local.headers = local.request.headers;
+			local.content = local.request.content;
+			if (StructKeyExists(local.headers, "Content-Type")) {
+				local.type = local.headers["Content-Type"];
+
+				// Only proceed if the content type is JSON.
+				// Allow multiple JSON content types by checking the start and end of the string.
+				// This way we allow both "application/json" and "application/vnd.api+json" (JSON API) for example.
+				if (Left(local.type, 12) == "application/" && Right(local.type, 4) == "json") {
+
+					// On ACF we need to convert from binary to a string before we can work with it.
+					if (IsBinary(local.content)) {
+						local.content = ToString(local.content);
+					}
+
+					// If what we have now is valid JSON, deserialize it to a struct and append to params.
+					// Call with "false" so existing form and URL values take precedence.
+					if (IsJSON(local.content)) {
+						StructAppend(arguments.params, DeserializeJSON(local.content), false);
+					}
+
+				}
+
+			}
+		}
 		return arguments.params;
 	}
 

@@ -26,6 +26,7 @@ Controller Enhancements
 * Extended sendMail() so that it can return the text and/or html content of the email - #122 [Adam Chapman]
 * renderWith() can now set http status codes in header with the "status" argument - #549 [Tom King]
 * Cross-Site Request Forgery (CSRF) protection - #613 [Chris Peters]
+* Parse JSON body and add to params struct - [Tom King, Per Djurner]
 
 Bug Fixes
 =========
