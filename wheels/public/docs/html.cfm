@@ -37,7 +37,13 @@
 								<td><cfif structkeyExists(meta.parameters[_param], "name")>#meta.parameters[_param]['name']#</cfif></td>
 								<td><cfif structkeyExists(meta.parameters[_param], "type")>#meta.parameters[_param]['type']#</cfif></td>
 								<td><cfif structkeyExists(meta.parameters[_param], "Required")>#meta.parameters[_param]['required']#</cfif></td>
-								<td><cfif structkeyExists(meta.parameters[_param], "default")>#meta.parameters[_param]['default']#</cfif></td>
+								<td>
+								<cfif
+									structKeyExists(application.wheels.functions, func)
+									AND structKeyExists(application.wheels.functions[func], meta.parameters[_param]['name'])>
+									#application.wheels.functions[func][meta.parameters[_param]['name']]#
+								</cfif>
+								<cfif structkeyExists(meta.parameters[_param], "default")>#meta.parameters[_param]['default']#</cfif></td>
 								<td><cfif structkeyExists(meta.parameters[_param], "hint")>#meta.parameters[_param]['hint']#</cfif></td>
 							</tr>
 						</cfloop>
