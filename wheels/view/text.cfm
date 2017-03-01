@@ -1,10 +1,19 @@
 <cfscript>
 
 /**
- * View helper function.
- * Turns all URLs and email addresses into clickable links.
- * Docs: http://docs.cfwheels.org/docs/autolink
- * Tests: wheels/tests/view/text/autolink.cfc
+ * Turns all URLs and email addresses into hyperlinks.
+ *
+ * ```
+ * #autoLink("Download CFWheels from http://cfwheels.org/download")#
+ * -> Download CFWheels from <a href="http://cfwheels.org/download">http://cfwheels.org/download</a>
+ * #autoLink("Email us at info@cfwheels.org")#
+ * -> Email us at <a href="mailto:info@cfwheels.org">info@cfwheels.org</a>
+ * ```
+ *
+ * @text The text to create links in.
+ * @link Whether to link URLs, email addresses or both. Possible values are: all (default), URLs and emailAddresses.
+ * @relative Should we autolink relative urls
+ *
  */
 public string function autoLink(required string text, string link, boolean relative=true) {
 	$args(name="autoLink", args=arguments);
@@ -63,10 +72,18 @@ public string function $autoLinkLoop(required string text, required string regex
 }
 
 /**
- * View helper function.
  * Extracts an excerpt from text that matches the first instance of a given phrase.
- * Docs: http://docs.cfwheels.org/docs/excerpt
- * Tests: wheels/tests/view/text/excerpt.cfc
+ *
+ * ```
+ * #excerpt(text="ColdFusion CFWheels is a Rails-like MVC framework for Adobe ColdFusion, Railo and Lucee", phrase="framework", radius=5)#
+ * -> ... MVC framework for ...
+ * ```
+ *
+ * @text The text to extract an excerpt from.
+ * @phrase The phrase to extract.
+ * @radius Number of characters to extract surrounding the phrase.
+ * @excerptString String to replace first and/or last characters with.
+ *
  */
 public string function excerpt(required string text, required string phrase, numeric radius, string excerptString) {
 	$args(name="excerpt", args=arguments);
@@ -102,10 +119,19 @@ public string function excerpt(required string text, required string phrase, num
 }
 
 /**
- * View helper function.
- * Highlights the phrase(s) everywhere in the text if found by wrapping it in span tags.
- * Docs: http://docs.cfwheels.org/docs/highlight
- * Tests: wheels/tests/view/text/highlight.cfc
+ * Highlights the phrase(s) everywhere in the text if found by wrapping it in a span tag.
+ *
+ * ```
+ * #highlight(text="You searched for: Wheels", phrases="Wheels")#
+ * -> You searched for: <span class="highlight">Wheels</span>
+ * ```
+ *
+ * @text Text to search.
+ * @phrases List of phrases to highlight.
+ * @delimiter Delimiter to use in phrases argument.
+ * @tag HTML tag to use to wrap the highlighted phrase(s).
+ * @class Class to use in the tags wrapping highlighted phrase(s).
+ *
  */
 public string function highlight(
 	required string text,
@@ -151,10 +177,32 @@ public string function highlight(
 }
 
 /**
- * View helper function.
- * Replaces single new line characters with HTML break elements and double with paragraph elements.
- * Docs: http://docs.cfwheels.org/docs/simpleformat
- * Tests: wheels/tests/view/text/simpleformat.cfc
+ * Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards).
+ *
+ * ```
+ * <!--- How most of your calls will look --->
+ * #simpleFormat(post.bodyText)#
+ * <!--- Demonstrates what output looks like with specific data --->
+ * <cfsavecontent variable="comment">
+ * 	I love this post!
+ * 	Here''s why:
+ * 	* Short
+ * 	* Succinct
+ * 	* Awesome
+ * </cfsavecontent>
+ * #simpleFormat(comment)#
+ * -> <p>I love this post!</p>
+ *    <p>
+ *        Here''s why:<br />
+ * 	   * Short<br />
+ * 	   * Succinct<br />
+ * 	   * Awesome
+ *    </p>
+ * ```
+ *
+ * @text The text to format.
+ * @wrap Set to true to wrap the result in a paragraph.
+ *
  */
 public string function simpleFormat(required string text, boolean wrap) {
 	$args(name="simpleFormat", args=arguments);
@@ -174,10 +222,15 @@ public string function simpleFormat(required string text, boolean wrap) {
 }
 
 /**
- * View helper function.
  * Capitalizes all words in the text to create a nicer looking title.
- * Docs: http://docs.cfwheels.org/docs/titleize
- * Tests: wheels/tests/view/text/titleize.cfc
+ *
+ * ```
+ * #titleize("Wheels is a framework for ColdFusion")#
+ * -> CFWheels Is A Framework For ColdFusion
+ * ```
+ *
+ * @word The text to turn into a title.
+ *
  */
 public string function titleize(required string word) {
 	local.rv = "";
@@ -189,10 +242,19 @@ public string function titleize(required string word) {
 }
 
 /**
- * View helper function.
- * Truncates text to the specified length and replaces the rest with a truncate string (e.g. "...").
- * Docs: http://docs.cfwheels.org/docs/truncate
- * Tests: wheels/tests/view/text/truncate.cfc
+ * Truncates text to the specified length and replaces the last characters with the specified truncate string (which defaults to "...").
+ *
+ * ```
+ * #truncate(text="Wheels is a framework for ColdFusion", length=20)#
+ * -> CFWheels is a frame...
+ * #truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")#
+ * -> CFWheels is a framework f (more)
+ * ```
+ *
+ * @text The text to truncate.
+ * @length Length to truncate the text to.
+ * @truncateString String to replace the last characters with.
+ *
  */
 public string function truncate(required string text, numeric length, string truncateString) {
 	$args(name="truncate", args=arguments);
@@ -205,10 +267,19 @@ public string function truncate(required string text, numeric length, string tru
 }
 
 /**
- * View helper function.
- * Truncates text to the specified number of words and replaces the rest with a truncate string (e.g. "...").
- * Docs: http://docs.cfwheels.org/docs/wordtruncate
- * Tests: wheels/tests/view/text/wordtruncate.cfc
+ * Truncates text to the specified length of words and replaces the remaining characters with the specified truncate string (which defaults to "...").
+ *
+ * ```
+ * #wordTruncate(text="Wheels is a framework for ColdFusion", length=4)#
+ * -> CFWheels is a framework...
+ * #truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")#
+ * -> CFWheels is a framework for (more)
+ * ```
+ *
+ * @text The text to truncate.
+ * @length Number of words to truncate the text to.
+ * @truncateString String to replace the last characters with.
+ *
  */
 public string function wordTruncate(required string text, numeric length, string truncateString) {
 	$args(name="wordTruncate", args=arguments);
