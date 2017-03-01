@@ -1,0 +1,28 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    clear:both;
+}
+#left {
+    position: fixed;
+    width: 18%;
+    overflow-y: scroll;
+    top: 0;
+    bottom: 0;
+}
+#right {
+    width: 80%;
+    height: 100%;
+    position: absolute;
+    right: 10px;
+}
+td,th {padding:0.4rem 0.4rem;}
+pre {padding:15px;}
+
+.doclink {display: block;}
+
+#doc-search {border-radius: 0; padding:15px;}
+
+caption {text-align: left;}
+
+.functitle {font-weight: 700; font-family: monospace;}

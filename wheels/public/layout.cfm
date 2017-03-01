@@ -3,8 +3,15 @@
     request.wheels.showDebugInformation = false;
     writeOutput(includeContent());
   } else {
-    include "../styles/header.cfm";
-    writeOutput(includeContent());
-    include "../styles/footer.cfm";
+  	if(structKeyExists(params, "view") && params.view == "docs"){
+    	request.wheels.showDebugInformation = false;
+	    include "../styles/docs.cfm";
+	    writeOutput(includeContent());
+	    include "../styles/docs_footer.cfm";
+	} else {
+	    include "../styles/header.cfm";
+	    writeOutput(includeContent());
+	    include "../styles/footer.cfm";
+	}
   }
 </cfscript>

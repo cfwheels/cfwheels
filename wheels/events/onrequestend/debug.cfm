@@ -105,7 +105,7 @@
 			<td>CFWheels #get("version")#
 				<cfif loc.hasFrameworkTests or loc.hasFrameworkBuildFile>
 					<cfsavecontent variable="coreLinks">
-						<cfif loc.hasFrameworkTests><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=core">Run Tests</a>, <a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=core">View Tests</a>,</cfif>
+						<cfif loc.hasFrameworkTests><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=core">Run Tests</a>, <a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=core">View Tests</a>,</cfif> <a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=docs&type=core">View Docs</a>,
 						<cfif loc.hasFrameworkBuildFile><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=build">Build</a></cfif>
 					</cfsavecontent>
 					[#Trim(coreLinks)#]
