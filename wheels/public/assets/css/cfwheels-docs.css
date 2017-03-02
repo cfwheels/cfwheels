@@ -10,6 +10,8 @@ html, body {
     top: 0;
     bottom: 0;
 }
+
+
 #right {
     width: 80%;
     height: 100%;
@@ -19,10 +21,22 @@ html, body {
 td,th {padding:0.4rem 0.4rem;}
 pre {padding:15px;}
 
-.doclink {display: block;}
 
 #doc-search {border-radius: 0; padding:15px;}
 
 caption {text-align: left;}
 
 .functitle {font-weight: 700; font-family: monospace;}
+
+.filtercategory {
+    background-color: #f5f5f5;
+    color: #B00701;
+    padding:0.4rem;
+    font-size: small;
+}
+
+#left .filtercategory {
+    display:block;
+}
+
+#left .doclink {display: block;}

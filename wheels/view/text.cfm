@@ -1,7 +1,6 @@
 <cfscript>
 
 /**
- * View helper function.
  * Turns all URLs and email addresses into hyperlinks.
  *
  * ```
@@ -10,7 +9,7 @@
  * #autoLink("Email us at info@cfwheels.org")#
  * -> Email us at <a href="mailto:info@cfwheels.org">info@cfwheels.org</a>
  * ```
- *
+ * @doc.category View Helper
  * @text The text to create links in.
  * @link Whether to link URLs, email addresses or both. Possible values are: all (default), URLs and emailAddresses.
  * @relative Should we autolink relative urls
@@ -79,7 +78,7 @@ public string function $autoLinkLoop(required string text, required string regex
  * #excerpt(text="ColdFusion CFWheels is a Rails-like MVC framework for Adobe ColdFusion, Railo and Lucee", phrase="framework", radius=5)#
  * -> ... MVC framework for ...
  * ```
- *
+ * @doc.category View Helper
  * @text The text to extract an excerpt from.
  * @phrase The phrase to extract.
  * @radius Number of characters to extract surrounding the phrase.
@@ -126,7 +125,7 @@ public string function excerpt(required string text, required string phrase, num
  * #highlight(text="You searched for: Wheels", phrases="Wheels")#
  * -> You searched for: <span class="highlight">Wheels</span>
  * ```
- *
+ * @doc.category View Helper
  * @text Text to search.
  * @phrases List of phrases to highlight.
  * @delimiter Delimiter to use in phrases argument.
@@ -200,7 +199,7 @@ public string function highlight(
  * 	   * Awesome
  *    </p>
  * ```
- *
+ * @doc.category View Helper
  * @text The text to format.
  * @wrap Set to true to wrap the result in a paragraph.
  *
@@ -229,7 +228,7 @@ public string function simpleFormat(required string text, boolean wrap) {
  * #titleize("Wheels is a framework for ColdFusion")#
  * -> CFWheels Is A Framework For ColdFusion
  * ```
- *
+ * @doc.category View Helper
  * @word The text to turn into a title.
  *
  */
@@ -251,7 +250,7 @@ public string function titleize(required string word) {
  * #truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")#
  * -> CFWheels is a framework f (more)
  * ```
- *
+ * @doc.category View Helper
  * @text The text to truncate.
  * @length Length to truncate the text to.
  * @truncateString String to replace the last characters with.
@@ -273,10 +272,11 @@ public string function truncate(required string text, numeric length, string tru
  * ```
  * #wordTruncate(text="Wheels is a framework for ColdFusion", length=4)#
  * -> CFWheels is a framework...
- * #truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")#
+ *
+ * #wordTruncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")#
  * -> CFWheels is a framework for (more)
  * ```
- *
+ * @doc.category View Helper
  * @text The text to truncate.
  * @length Number of words to truncate the text to.
  * @truncateString String to replace the last characters with.
