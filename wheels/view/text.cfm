@@ -1,6 +1,7 @@
 <cfscript>
 
 /**
+ * View helper function.
  * Turns all URLs and email addresses into hyperlinks.
  *
  * ```
