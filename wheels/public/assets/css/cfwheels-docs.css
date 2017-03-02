@@ -3,21 +3,53 @@ html, body {
     margin: 0;
     clear:both;
 }
-#left {
+
+#sections {
     position: fixed;
-    width: 18%;
+    width: 15%;
     overflow-y: scroll;
     top: 0;
     bottom: 0;
+    left:0;
+}
+
+#left {
+    position: fixed;
+    width: 20%;
+    overflow-y: scroll;
+    top: 0;
+    bottom: 0;
+    left:15%;
 }
 
 
 #right {
-    width: 80%;
+    width: 65%;
     height: 100%;
     position: absolute;
     right: 10px;
+    padding:25px;
 }
+#sections .section {
+    font-weight: 700;
+    background: #f5f5f5;
+}
+#sections .section, #sections .subsection {
+    display:block;
+    font-family: monospace;
+}
+#sections .subsection {
+    padding-left: 8px;
+}
+#sections .section:hover,
+#sections .subsection:hover,
+#left .functionlink:hover{
+    background: #9b4dca;
+    color: white;
+}
+
+h1.header {display: block; font-size: 2.4rem; background-color: #f4f4f4; padding:1rem;}
+
 td,th {padding:0.4rem 0.4rem;}
 pre {padding:15px;}
 
@@ -28,15 +60,14 @@ caption {text-align: left;}
 
 .functitle {font-weight: 700; font-family: monospace;}
 
-.filtercategory {
+.filtersection, .filtersubsection {
     background-color: #f5f5f5;
     color: #B00701;
     padding:0.4rem;
     font-size: small;
 }
 
-#left .filtercategory {
-    display:block;
-}
 
-#left .doclink {display: block; font-family: monospace;}
+#left .functionlink {display: block; font-family: monospace;}
+
+
