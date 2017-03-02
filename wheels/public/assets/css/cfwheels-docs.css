@@ -39,4 +39,4 @@ caption {text-align: left;}
     display:block;
 }
 
-#left .doclink {display: block;}
+#left .doclink {display: block; font-family: monospace;}

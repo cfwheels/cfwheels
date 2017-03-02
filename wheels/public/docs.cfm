@@ -19,10 +19,13 @@
 		case "core":
 			docs.controller.scope 		= controller("dummy");
 			docs.controller.functions 	= listSort(StructKeyList(docs.controller.scope), "textnocase");
+			docs.model.scope 			= createObject("component", "wheels.Model");
+			docs.model.functions 		= listSort(StructKeyList(docs.model.scope), "textnocase");
 		break;
 		case "app":
 		break;
 	}
+
 
 	for(doc in docs){
 		for(func in listToArray(docs[doc]['functions'])){
@@ -34,7 +37,6 @@
 			}
 		}
 	}
-
 	// Searches for ``` in hint description output
 	string function hintOutput(str){
 		local.rv=HTMLEditFormat(arguments.str);
