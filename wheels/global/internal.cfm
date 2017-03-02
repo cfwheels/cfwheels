@@ -1,7 +1,6 @@
 <cfscript>
 	public void function $initializeRequestScope() {
-		if (!StructKeyExists(request, "wheels"))
-		{
+		if (!StructKeyExists(request, "wheels")) {
 			request.wheels = {};
 			request.wheels.params = {};
 			request.wheels.cache = {};
@@ -9,8 +8,13 @@
 			request.wheels.urlForCache = {};
 			request.wheels.tickCountId = GetTickCount();
 
-			// create a structure to track the transaction status for all adapters
+			// Copy HTTP request data (contains content, headers, method and protocol).
+			// This makes internal testing easier since we can overwrite it temporarily from the test suite.
+			request.wheels.httpRequestData = GetHttpRequestData();
+
+			// Create a structure to track the transaction status for all adapters.
 			request.wheels.transactions = {};
+
 		}
 	}
 
