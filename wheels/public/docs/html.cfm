@@ -16,6 +16,7 @@
 				<cfset meta=GetMetaData(controllerScope[func])>
 					<div id="#lcase(func)#" class="docsection">
 					<h3 class="functitle">#lcase(func)#()</h3>
+					<p>Returns: #meta.returnType#</p>
 					<cfif structKeyExists(meta, "hint")>
 						#hintOutput(meta.hint)#
 					</cfif>
