@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		request.migrationOutput = "";
+		request.$wheelsMigrationOutput = "";
 		migration = CreateObject("component", "wheels.dbmigrate.Migration").init();
 	}
 
@@ -13,7 +13,7 @@ component extends="wheels.tests.Test" {
 		migration.announce(napalm);
 		migration.announce(truth);
 
-		actual = request.migrationOutput;
+		actual = request.$wheelsMigrationOutput;
 		expected = napalm & Chr(13) & truth & Chr(13);
 
 	  assert("actual eq expected");

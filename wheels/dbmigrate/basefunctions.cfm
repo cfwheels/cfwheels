@@ -4,8 +4,8 @@ if(!StructKeyExists(variables, "$wddx")){
 }
 
 public function announce(required string message) {
-	param name="request.migrationOutput" default="";
-	Request.migrationOutput = Request.migrationOutput & arguments.message & chr(13);
+	param name="request.$wheelsMigrationOutput" default="";
+	request.$wheelsMigrationOutput = request.$wheelsMigrationOutput & arguments.message & chr(13);
 }
 
 public string function $getDBType() {
@@ -66,8 +66,8 @@ private string function $getForeignKeys(required string table) {
 private void function $execute(required string sql) {
 	// trim and remove trailing semicolon (appears to cause problems for Oracle thin client JDBC driver)
 	arguments.sql = REReplace(trim(arguments.sql),";$","","ONE");
-	if (StructKeyExists(Request, "migrationSQLFile") && application.wheels.dbmigrateWriteSQLFiles) {
-		$file(action="append", file=Request.migrationSQLFile, output="#arguments.sql#;", addNewLine="yes", fixNewLine="yes");
+	if (StructKeyExists(request, "$wheelsMigrationSQLFile") && application.wheels.dbmigrateWriteSQLFiles) {
+		$file(action="append", file=request.$wheelsMigrationSQLFile, output="#arguments.sql#;", addNewLine="yes", fixNewLine="yes");
 	}
 	$query(datasource=application.wheels.dataSourceName, sql=arguments.sql);
 }

@@ -38,13 +38,13 @@ component output="false" mixin="none" environment="design,development,maintenanc
             transaction action="begin" {
 							try {
   							local.rv = local.rv & "#chr(13)#------- " & local.migration.cfcfile & " #RepeatString("-",Max(5,50-Len(local.migration.cfcfile)))##chr(13)#";
-  							Request.migrationOutput = "";
-  							Request.migrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_down.sql";
+  							request.$wheelsMigrationOutput = "";
+  							request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_down.sql";
 								if (application.wheels.dbmigrateWriteSQLFiles) {
-									FileWrite(Request.migrationSQLFile, "");
+									FileWrite(request.$wheelsMigrationSQLFile, "");
 								}
   							local.migration.cfc.down();
-  							local.rv = local.rv & Request.migrationOutput;
+  							local.rv = local.rv & request.$wheelsMigrationOutput;
   							$removeVersionAsMigrated(local.migration.version);
 							} catch(any e) {
   							local.rv = local.rv & "Error migrating to #local.migration.version#.#chr(13)##e.message##chr(13)##e.detail##chr(13)#";
@@ -62,13 +62,13 @@ component output="false" mixin="none" environment="design,development,maintenanc
 	          transaction {
 							try {
   							local.rv = local.rv & "#chr(13)#-------- " & local.migration.cfcfile & " #RepeatString("-",Max(5,50-Len(local.migration.cfcfile)))##chr(13)#";
-  							Request.migrationOutput = "";
-  							Request.migrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_up.sql";
+  							request.$wheelsMigrationOutput = "";
+  							request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_up.sql";
 								if (application.wheels.dbmigrateWriteSQLFiles) {
-									FileWrite(Request.migrationSQLFile, "");
+									FileWrite(request.$wheelsMigrationSQLFile, "");
 								}
   							local.migration.cfc.up();
-  							local.rv = local.rv & Request.migrationOutput;
+  							local.rv = local.rv & request.$wheelsMigrationOutput;
   							$setVersionAsMigrated(local.migration.version);
 	  					} catch(any e) {
 								local.rv = local.rv & "Error migrating to #local.migration.version#.#chr(13)##e.message##chr(13)##e.detail##chr(13)#";
