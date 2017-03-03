@@ -25,7 +25,7 @@ if (packages.recordCount) {
 
       <div class="column">
         <p class="float-right">
-         <a class="button button-outline" href="#linkParams#" target="_blank">Run All Tests</a> <a  class="button button-outline" href="#linkParams#&reload=true" target="_blank">Reload Test Data</a>
+         <a class="button button-outline" href="#linkParams#">Run All Tests</a> <a  class="button button-outline" href="#linkParams#&reload=true">Reload Test Data</a>
         <p>
       </div>
 
@@ -38,7 +38,7 @@ if (packages.recordCount) {
 				<cfset packagesLen = arrayLen(testablePackages)>
 				<cfloop from="1" to="#packagesLen#" index="i">
 					<cfset href = "#linkParams#&package=#ArrayToList(testablePackages.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#">
-					<a href="#href#" target="_blank">#testablePackages[i]#</a><cfif i neq packagesLen> .</cfif>
+					<a href="#href#">#testablePackages[i]#</a><cfif i neq packagesLen> .</cfif>
 				</cfloop><br />
 		</cfloop>
 	<cfelse>

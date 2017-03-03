@@ -15,7 +15,7 @@ if (packages.recordCount) {
 }
 </cfscript>
 <cfoutput>
-<p><a href="#linkParams#" target="_blank">Run All Tests</a> | <a href="#linkParams#&reload=true" target="_blank">Reload Test Data</a></p>
+<p><a href="#linkParams#">Run All Tests</a> | <a href="#linkParams#&reload=true">Reload Test Data</a></p>
 <p>Ajax Test: <a href="##" class="start-tests">Start</a> | <a href="##" class="stop-tests">Stop </a> | <a href="?controller=wheels&action=wheels&view=ajax&type=#params.type#&reload=true">Reload</a></p>
 <h1>#titleize(params.type)# Test Packages</h1>
 
@@ -34,7 +34,7 @@ if (packages.recordCount) {
 		<cfloop from="1" to="#packagesLen#" index="i">
 			<cfset href = "#linkParams#&package=#ArrayToList(testablePackages.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#">
 			<cfif i EQ packagesLen>
-				<a style="display:none;" data-url="#href#" href="#href#" target="_blank">#testablePackages[i]#</a>
+				<a style="display:none;" data-url="#href#" href="#href#">#testablePackages[i]#</a>
 			</cfif>
 		</cfloop>
 	</div>
@@ -47,7 +47,7 @@ if (packages.recordCount) {
 		<cfset packagesLen = arrayLen(testablePackages)>
 		<cfloop from="1" to="#packagesLen#" index="i">
 			<cfset href = "#linkParams#&package=#ArrayToList(testablePackages.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#">
-			<a href="#href#" target="_blank">#testablePackages[i]#</a><cfif i neq packagesLen> .</cfif>
+			<a href="#href#">#testablePackages[i]#</a><cfif i neq packagesLen> .</cfif>
 		</cfloop>
 	</p>
 </cfloop--->
