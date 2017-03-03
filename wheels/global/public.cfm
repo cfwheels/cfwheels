@@ -44,7 +44,7 @@
 	 */
 	public any function processRequest(required struct params, string returnAs) {
 		local.controller = controller(name=arguments.params.controller, params=arguments.params);
-		local.controller.processAction();
+		local.controller.$processAction();
 		local.response = local.controller.response();
 		if (StructKeyExists(arguments, "returnAs") && arguments.returnAs == "struct") {
 			local.rv = {};

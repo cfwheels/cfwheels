@@ -14,7 +14,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedExcept", action="update", authenticityToken=CSRFGenerateToken() };
     _controller = controller("csrfProtectedExcept", params);
 
-    _controller.processAction("update", params);
+    _controller.$processAction("update", params);
     assert('_controller.response() eq "Update ran."');
   }
 
@@ -24,7 +24,7 @@ component extends="wheels.tests.Test" {
     _controller = controller("csrfProtectedExcept", params);
 
     try {
-      _controller.processAction("update", params);
+      _controller.$processAction("update", params);
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     } catch (any e) {
       type = e.Type;
@@ -38,7 +38,7 @@ component extends="wheels.tests.Test" {
     _controller = controller("csrfProtectedExcept", params);
 
     try {
-      _controller.processAction("update", params);
+      _controller.$processAction("update", params);
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     } catch (any e) {
       type = e.Type;
@@ -53,7 +53,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedExcept", action="update" };
     _controller = controller("csrfProtectedExcept", params);
 
-    _controller.processAction("update", params);
+    _controller.$processAction("update", params);
     assert('_controller.response() eq "Update ran."');
   }
 
@@ -64,7 +64,7 @@ component extends="wheels.tests.Test" {
     _controller = controller("csrfProtectedExcept", params);
 
     try {
-      _controller.processAction("update", params);
+      _controller.$processAction("update", params);
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     } catch (any e) {
       type = e.Type;
@@ -80,7 +80,7 @@ component extends="wheels.tests.Test" {
     _controller = controller("csrfProtectedExcept", params);
 
     try {
-      _controller.processAction("update", params);
+      _controller.$processAction("update", params);
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     } catch (any e) {
       type = e.Type;
@@ -93,7 +93,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedExcept", action="show", authenticityToken=CSRFGenerateToken() };
     _controller = controller("csrfProtectedExcept", params);
 
-    _controller.processAction("update", params);
+    _controller.$processAction("update", params);
     assert('_controller.response() eq "Show ran."');
   }
 
@@ -102,7 +102,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedExcept", action="show" };
     _controller = controller("csrfProtectedExcept", params);
 
-    _controller.processAction("update", params);
+    _controller.$processAction("update", params);
     assert('_controller.response() eq "Show ran."');
   }
 
@@ -111,7 +111,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedExcept", action="show", authenticityToken="#CSRFGenerateToken()#1" };
     _controller = controller("csrfProtectedExcept", params);
 
-    _controller.processAction("update", params);
+    _controller.$processAction("update", params);
     assert('_controller.response() eq "Show ran."');
   }
 
@@ -122,7 +122,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedExcept", action="show" };
     _controller = controller("csrfProtectedExcept", params);
 
-    _controller.processAction("update", params);
+    _controller.$processAction("update", params);
     assert('_controller.response() eq "Show ran."');
   }
 
@@ -132,7 +132,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedExcept", action="show" };
     _controller = controller("csrfProtectedExcept", params);
 
-    _controller.processAction("update", params);
+    _controller.$processAction("update", params);
     assert('_controller.response() eq "Show ran."');
   }
 
@@ -143,7 +143,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedExcept", action="show" };
     _controller = controller("csrfProtectedExcept", params);
 
-    _controller.processAction("update", params);
+    _controller.$processAction("update", params);
     assert('_controller.response() eq "Show ran."');
   }
 }

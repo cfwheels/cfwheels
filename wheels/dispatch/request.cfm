@@ -156,7 +156,7 @@ public string function $request(
 
 	// Create the requested controller and call the action on it.
 	local.controller = controller(name=local.params.controller, params=local.params);
-	local.controller.processAction();
+	local.controller.$processAction();
 
 	// If there is a delayed redirect pending we execute it here thus halting the rest of the request.
 	if (local.controller.$performedRedirect()) {

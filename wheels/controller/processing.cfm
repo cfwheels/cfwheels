@@ -3,7 +3,7 @@
 	* PUBLIC FUNCTIONS
 	*/
 
-	public boolean function processAction() {
+	public boolean function $processAction() {
 		// CSRF protection.
 		$runCsrfProtection(action=params.action);
 
