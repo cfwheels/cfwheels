@@ -4,65 +4,75 @@
 	param name="params.format" default="html";
 
 	sections=[
-		"Model Initialization",
-		"Model Class",
-		"Model Object",
-		"View Helpers",
-		"Controller",
-		"Global Helpers",
-		"Configuration"
+		{
+			"name" = "Model Initialization",
+			"categories" = [
+				"Association Functions",
+				"Callback Functions",
+				"Miscellaneous Functions",
+				"Validation Functions"
+			]
+		},
+		{
+			"name" = "Model Class",
+			"categories" = [
+				"Create Functions",
+				"Delete Functions",
+				"Miscellaneous Functions",
+				"Read Functions",
+				"Statistics Functions",
+				"Update Functions"
+			]
+		},
+		{
+			"name" = "Model Object",
+			"categories" = [
+				"Change Functions",
+				"CRUD Functions",
+				"Error Functions",
+				"Miscellaneous Functions"
+			]
+		},
+		{
+			"name" = "View Helpers",
+			"categories" = [
+				"Asset Functions",
+				"Date Functions",
+				"Error Functions",
+				"Form Association Functions",
+				"Form Object Functions",
+				"Form Tag Functions",
+				"General Form Functions",
+				"Link Functions",
+				"Miscellaneous Functions",
+				"Sanitization Functions",
+				"Text Functions"
+			]
+		},
+		{
+			"name" = "Controller",
+			"categories" = [
+				"Initialization Functions",
+				"Flash Functions",
+				"Rendering Functions",
+				"Pagination Functions",
+				"Provides Functions",
+				"Miscellaneous Functions"
+			]
+		},
+		{
+			"name" = "Global Helpers",
+			"categories" = [
+				"Miscellaneous Functions",
+				"String Functions"
+			]
+		},
+		{
+			"name" = "Configuration",
+			"categories" = []
+		}
 	];
 
-	subsections=[
-		"Model Initialization" = [
-			"Association Functions",
-			"Callback Functions",
-			"Miscellaneous Functions",
-			"Validation Functions"
-		],
-		"Model Class"= [
-			"Create Functions",
-			"Delete Functions",
-			"Miscellaneous Functions",
-			"Read Functions",
-			"Statistics Functions",
-			"Update Functions"
-		],
-		"Model Object"= [
-			"Change Functions",
-			"CRUD Functions",
-			"Error Functions",
-			"Miscellaneous Functions"
-		],
-		"View Helpers"= [
-			"Asset Functions",
-			"Date Functions",
-			"Error Functions",
-			"Form Association Functions",
-			"Form Object Functions",
-			"Form Tag Functions",
-			"General Form Functions",
-			"Link Functions",
-			"Miscellaneous Functions",
-			"Sanitization Functions",
-			"Text Functions"
-		],
-		"Controller"= [
-			"Initialization Functions",
-			"Flash Functions",
-			"Rendering Functions",
-			"Pagination Functions",
-			"Provides Functions",
-			"Miscellaneous Functions"
-		],
-		"Global Helpers"= [
-			"Miscellaneous Functions",
-			"String Functions"
-		],
-		"Configuration"= [
-
-		]
-	];
 	docs={
 		"controller" = {
 			"scope" = "",
@@ -107,7 +117,9 @@
 	}
 	// Searches for ``` in hint description output
 	string function hintOutput(str){
-		local.rv=HTMLEditFormat(arguments.str);
+		local.rv=arguments.str;
+		local.rv=HTMLEditFormat(local.rv);
+		// Look for codeblock
 		local.rv=replace(local.rv, "```", "<pre>", "one");
 		local.rv=replace(local.rv, "```", "</pre>", "one");
 		return trim(local.rv);
