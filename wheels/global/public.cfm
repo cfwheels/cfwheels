@@ -36,38 +36,64 @@
 		}
 	}
 
-	/*
-	* PUBLIC HELPER FUNCTIONS
-	*/
-
-	/**
-	 * Returns the status code (e.g. 200, 404 etc) of the response we're about to send.
-	 * Set back the status code to 200 so the test suite does not use the same code that the action that was tested did.
-	 */
-	public numeric function statusCode() {
-		if (StructKeyExists(server, "lucee")) {
-			local.rv = getPageContext().getResponse().getStatus();
-		} else {
-			local.rv = getPageContext().getFusionContext().getResponse().getStatus();
-		}
-		$header(statusCode=200, statusText="OK");
-		return local.rv;
-	}
-
 	/**
 	 * Creates a controller and calls an action on it.
 	 * Which controller and action that's called is determined by the params passed in.
+	 * Returns the result of the request either as a string or in a struct with body, status and type.
 	 * Primarily used for testing purposes.
 	 */
-	public string function processRequest(required struct params) {
+	public any function processRequest(required struct params, string returnAs) {
 		local.controller = controller(name=arguments.params.controller, params=arguments.params);
 		local.controller.processAction();
+		local.response = local.controller.response();
+		if (StructKeyExists(arguments, "returnAs") && arguments.returnAs == "struct") {
+			local.rv = {};
+			local.rv.status = $statusCode();
+			local.rv.type = $contentType();
+			local.rv.body = local.response;
+		} else {
+			local.rv = local.response;
+		}
+
+		// Set back the status code to 200 so the test suite does not use the same code that the action that was tested did.
+		// If the test suite fails it will set the status code to 500 later.
+		$header(statusCode=200, statusText="OK");
 
 		// Set the Content-Type header in case it was set to something else (e.g. application/json) during processing.
 		// It's fine to do this because we always want to return the test page as text/html.
 		$header(name="Content-Type", value="text/html", charset="UTF-8");
 
-		return local.controller.response();
+		return local.rv;
+	}
+
+	/**
+	 * Internal function
+	 * Get the status code (e.g. 200, 404 etc) of the response we're about to send.
+	 */
+	public string function $statusCode() {
+		if (StructKeyExists(server, "lucee")) {
+			local.response = getPageContext().getResponse();
+		} else {
+			local.response = getPageContext().getFusionContext().getResponse();
+		}
+		return local.response.getStatus();
+	}
+
+	/**
+	 * Internal function
+	 * Gets the value of the content type header (blank string if it doesn't exist) of the response we're about to send.
+	 */
+	public string function $contentType() {
+		local.rv = "";
+		if (StructKeyExists(server, "lucee")) {
+			local.response = getPageContext().getResponse();
+		} else {
+			local.response = getPageContext().getFusionContext().getResponse();
+		}
+		if (local.response.containsHeader("Content-Type")) {
+			local.rv = local.response.getHeader("Content-Type");
+		}
+		return local.rv;
 	}
 
 	public struct function pagination(string handle="query") {
