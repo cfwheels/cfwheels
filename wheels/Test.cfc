@@ -549,7 +549,15 @@ component output=false {
    * cleans up the test name so they are more readable
    */
   public string function $cleanTestName(required string name) {
-    return humanize(Trim(REReplaceNoCase(ListRest(arguments.name, "_"), "_|-", " ", "all")));
+    local.rv = arguments.name;
+		if (Find("_", local.rv)) {
+	    local.rv = humanize(Trim(REReplaceNoCase(ListRest(local.rv, "_"), "_|-", " ", "all")));
+		} else {
+			local.rv = REReplaceNoCase(local.rv, "_|-", " ", "all");
+			local.rv = Right(local.rv, Len(local.rv) - 4);
+			local.rv = Trim(capitalize(LCase(humanize(local.rv))));
+		}
+		return local.rv;
   }
 
   /*
