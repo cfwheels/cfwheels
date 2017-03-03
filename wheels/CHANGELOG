@@ -10,6 +10,7 @@ Model Enhancements
 * Support for MariaDB - #563 [AlexeiCF, Adam Chapman]
 * Model instance isPersisted() and propertyIsBlank() methods - #559 [Chris Peters]
 * Database Migrations (dbmigrate) now available in the core - #664 [Adam Chapman, Tom King, Mike Grogan]
+* New "timeStampMode" setting ("utc", "local" or "epoch") for the "createdAt" and "updatedAt" columns - [Andy Bellenie]
 
 View Enhancements
 =================
@@ -18,6 +19,7 @@ View Enhancements
 
 Controller Enhancements
 =======================
+* Support for HTTP verbs, scopes, namespaces, and resources in routes (ColdRoute) [Don Humphreys, James Gibson, Tom King]
 * Support for passing in ram:// resources to sendFile() - #566 [Tom King]
 * Extended sendMail() so that it can return the text and/or html content of the email - #122 [Adam Chapman]
 * renderWith() can now set http status codes in header with the "status" argument - #549 [Tom King]
@@ -29,6 +31,9 @@ Bug Fixes
 * Fixes skipped model instantiation due to Linux file case sensitivity - #643 [Adam Chapman, Tom King]
 * Added spatial datatypes for MySQL - #660 [Normal Cesar]
 * Made humanize keep spaces in input - #663 [Per Djurner, Chris Peters]
+* Avoid double redirect error when doing delayed redirects from a verification handler function - [Per Djurner]
+* Fixes attempts to insert nulls for blank strings - #654 [Andy Bellenie, Per Djurner]
+* Fix for using validatePresenceOf() with default on update - [Andy Bellenie]
 
 Miscellaneous
 =============
@@ -43,6 +48,8 @@ Miscellaneous
 * Added beforeAll(), afterAll(), packageSetup(), packageTeardown() methods to test framework #651 - [Adam Chapman]
 * Added "ErrorEmailFromAddress" and "ErrorEmailToAddress" config settings - #95 [Andy Bellenie, Tony Petruzzi, Per Djurner]
 * Support for passing in any "truthy" value to assert() in tests - [Per Djurner]
+* Added "app" mapping pointing to the root of the app - [Per Djurner]
+* Added a "processRequest" function that simplifies testing controllers - [Per Djurner]
 
 Breaking Changes
 ================
