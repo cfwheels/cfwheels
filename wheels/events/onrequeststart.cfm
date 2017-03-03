@@ -43,8 +43,8 @@ public void function $runOnRequestStart(required targetPage) {
 	}
 
 	// Copy HTTP headers.
-	if (!StructKeyExists(request, "headers")) {
-		request.headers = GetHttpRequestData().headers;
+	if (!StructKeyExists(request, "$wheelsHeader")) {
+		request.$wheelsHeaders = GetHttpRequestData().headers;
 	}
 
 	// Reload the plugins on each request if cachePlugins is set to false.
