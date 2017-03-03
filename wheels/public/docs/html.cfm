@@ -5,9 +5,9 @@
 		<h1 class="header">Sections</h1>
 		<p style="padding-left:10px;">
 		<cfloop from="1" to="#arraylen(sections)#" index="s">
-			<a href=""	data-section="#cssClassLink(sections[s])#" class="section">#sections[s]#</a>
-			<cfloop from="1" to="#arraylen(subsections[s])#" index="ss">
-				<a href=""	data-section="#cssClassLink(sections[s])#"	data-subsection="#cssClassLink(subsections[s][ss])#" class="subsection">#subsections[s][ss]#</a>
+			<a href=""	data-section="#cssClassLink(sections[s]['name'])#" class="section">#sections[s]['name']#</a>
+			<cfloop from="1" to="#arraylen(sections[s]['categories'])#" index="ss">
+				<a href=""	data-section="#cssClassLink(sections[s]['name'])#"	data-subsection="#cssClassLink(sections[s]['categories'][ss])#" class="subsection">#sections[s]['categories'][ss]#</a>
 			</cfloop>
 		</cfloop>
 		</p>
@@ -63,7 +63,10 @@
 						<a href="" class="filtersubsection" title="Show all Functions in this category">
 						<i class="fa fa-tag"></i> #meta["doc.category"]#</a>
 					</cfif>
-					Returns: #meta.returnType# | #doc#</p>
+					<cfif structKeyExists(meta, "returnType")>
+						Returns: #meta.returnType# |
+					</cfif>
+					 #doc#</p>
 					<cfif structKeyExists(meta, "hint")>
 						#hintOutput(meta.hint)#
 					</cfif>
