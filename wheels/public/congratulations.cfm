@@ -33,7 +33,7 @@ Welcome to the wonderful world of CFWheels. We hope you will enjoy it!</p>
 	</li>
 	<li>
 		<p>You will see a line similar to this for a route named <code>root</code>:</p>
-		<pre><code>drawRoutes().root(to=&quot;wheels####wheels&quot;, method=&quot;get&quot;).end();</code></pre>
+		<pre><code>.root(to=&quot;wheels####wheels&quot;, method=&quot;get&quot;)</code></pre>
 	</li>
 	<li>
 		<p>Simply change the <code>to</code> parameter to specify a <code>controller####action</code> of your choosing.</p>
