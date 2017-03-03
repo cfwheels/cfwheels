@@ -10,6 +10,7 @@ wheelsInternalAssetPath=application.wheels.webpath & "wheels/public/assets";
 	<meta name="robots" content="noindex,nofollow">
 	<link rel="stylesheet" href="#wheelsInternalAssetPath#/css/normalize.min.css">
 	<link rel="stylesheet" href="#wheelsInternalAssetPath#/css/milligram.min.css">
+	<link rel="stylesheet" href="#wheelsInternalAssetPath#/css/font-awesome.min.css">
 	<link rel="stylesheet" href="#wheelsInternalAssetPath#/css/cfwheels-docs.css">
 	<script src="#wheelsInternalAssetPath#/js/jquery-2.2.4.min.js"></script>
 </head>
