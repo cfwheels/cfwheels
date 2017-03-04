@@ -175,7 +175,11 @@
 			}
 			local.fullPath = Replace(local.folder, "\", "/", "all");
 			local.fullPath = ListAppend(local.fullPath, arguments.file, "/");
-			local.fullPath = ExpandPath(local.fullPath);
+
+			// only expand the fullPath if it is relative 
+			if (find("..",local.fullPath)){
+				local.fullPath = ExpandPath(local.fullPath);
+			}		
 			local.fullPath = Replace(local.fullPath, "\", "/", "all");
 			local.file = ListLast(local.fullPath, "/");
 			local.directory = Reverse(ListRest(Reverse(local.fullPath), "/"));
