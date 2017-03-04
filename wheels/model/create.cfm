@@ -23,6 +23,13 @@
  * @doc.section Model Class
  * @doc.category Create Functions
  *
+ * @properties See documentation for `new`.
+ * @parameterize See documentation for `findAll`.
+ * @reload See documentation for `save`.
+ * @validate See documentation for `save`.
+ * @transaction See documentation for `save`.
+ * @callbacks See documentation for `save`.
+ *
  */
 public any function create(
 	struct properties={},
@@ -70,6 +77,10 @@ public any function create(
  *
  * @doc.section Model Class
  * @doc.category Create Functions
+ *
+ * @properties The properties you want to set on the object (can also be passed in as named arguments).
+ * @callbacks See documentation for `save`.
+ *
  */
 public any function new(struct properties={}, boolean callbacks=true) {
 	arguments.properties = $setProperties(
@@ -102,6 +113,13 @@ public any function new(struct properties={}, boolean callbacks=true) {
  *
  * @doc.section Model Object
  * @doc.category CRUD Functions
+ *
+ * @parameterize See documentation for `findAll`.
+ * @reload Set to `true` to reload the object from the database once an insert / update has completed.
+ * @validate Set to `false` to skip validations for this operation.
+ * @transaction Set this to `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.
+ * @callbacks Set to `false` to disable callbacks for this operation.
+ *
  */
 public boolean function save(
 	any parameterize,
