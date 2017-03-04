@@ -1,6 +1,6 @@
 <cfscript>
 
-public function protectFromForgery(string with = "exception", string only = "", string except = "") {
+public function protectFromForgery(string with="exception", string only="", string except="") {
 	$args(args=arguments, name="protectFromForgery");
 
 	// Store settings for this controller in `$class` for later use.
@@ -12,7 +12,6 @@ public function protectFromForgery(string with = "exception", string only = "", 
 public function $runCsrfProtection(string action) {
 	if (StructKeyExists(variables.$class, "csrf")) {
 		local.csrf = variables.$class.csrf;
-
 		if ((!Len(local.csrf.only) && !Len(local.csrf.except)) || (Len(local.csrf.only) && ListFindNoCase(local.csrf.only, arguments.action)) || (Len(local.csrf.except) && !ListFindNoCase(local.csrf.except, arguments.action))) {
 			$storeAuthenticityToken();
 			$flagRequestAsProtected();
@@ -31,11 +30,10 @@ public function $verifyAuthenticityToken() {
 		switch (variables.$class.csrf.type) {
 			case "abort":
 				Abort;
-
 			default:
-				Throw(
-					"This POSTed request was attempted without a valid authenticity token.",
-					"Wheels.InvalidAuthenticityToken"
+				$throw(
+					type="Wheels.InvalidAuthenticityToken",
+					message="This POSTed request was attempted without a valid authenticity token."
 				);
 		}
 	}
@@ -46,9 +44,7 @@ public boolean function $isVerifiedRequest() {
 }
 
 public boolean function $isRequestProtectedFromForgery() {
-	return StructKeyExists(request.$wheels, "protectedFromForgery")
-		&& IsBoolean(request.$wheels.protectedFromForgery)
-		&& request.$wheels.protectedFromForgery;
+	return StructKeyExists(request.$wheels, "protectedFromForgery") && IsBoolean(request.$wheels.protectedFromForgery) && request.$wheels.protectedFromForgery;
 }
 
 public function $setAuthenticityToken() {
@@ -73,7 +69,6 @@ public boolean function $isAnyAuthenticityTokenValid() {
 	} else {
 		local.isValid = false;
 	}
-
 	return local.isValid;
 }
 
@@ -96,12 +91,10 @@ public string function $generateCookieAuthenticityToken() {
 	// If cookie doesn't yet exist, create it.
 	if (!Len(local.authenticityToken)) {
 		local.authenticityToken = GenerateSecretKey(application.wheels.csrfCookieEncryptionAlgorithm);
-
 		local.value = SerializeJson({
 			sessionId=CreateUuid(),
 			authenticityToken=local.authenticityToken
 		});
-
 		local.value = Encrypt(
 			local.value,
 			application.wheels.csrfCookieEncryptionSecretKey,
@@ -111,10 +104,12 @@ public string function $generateCookieAuthenticityToken() {
 
 		if (application.wheels.csrfStore == "cookie") {
 			cookie[application.wheels.csrfCookieName] = $csrfCookieAttributeCollection(local.value);
-		// Tests will mock the cookie in the request scope.
 		} else {
+
+			// Tests will mock the cookie in the request scope.
 			request[application.wheels.csrfCookieName] = $csrfCookieAttributeCollection(local.value);
 			request[application.wheels.csrfCookieName].authenticityToken = local.authenticityToken;
+
 		}
 	}
 
@@ -125,8 +120,9 @@ public string function $readAuthenticityTokenFromCookie() {
 	local.cookieName = application.wheels.csrfCookieName;
 
 	// If no cookie, return empty string.
-	if (!StructKeyExists(cookie, local.cookieName))
+	if (!StructKeyExists(cookie, local.cookieName)) {
 		return "";
+	}
 
 	// Cookie is there. Read it in.
 	local.cookie = cookie[local.cookieName];
@@ -138,46 +134,48 @@ public string function $readAuthenticityTokenFromCookie() {
 			application.wheels.csrfCookieEncryptionAlgorithm,
 			application.wheels.csrfCookieEncryptionEncoding
 		);
-	// If cookie is corrupted, return empty string.
 	} catch (any e) {
+
+		// When cookie is corrupted, return empty string.
+		return "";
+
+	}
+
+	// If we don't have cookie attr from above for some strange reason, fail.
+	if (!structKeyExists(local, "cookieAttrs")) {
 		return "";
 	}
 
-	// if we don't have cookie attr from above for some strange reason, fail
-	if (!structKeyExists(local, "cookieAttrs"))
+	// If we don't have JSON in cookie attrs, fail.
+	if (!isSimpleValue(local.cookieAttrs) || !isJson(local.cookieAttrs)) {
 		return "";
+	}
 
-	// if we don't have json in cookie attrs, fail
-	if (!isSimpleValue(local.cookieAttrs) || !isJson(local.cookieAttrs))
-		return "";
-
-	// now we have everything we need, deserialize
+	// Now we have everything we need, deserialize.
 	local.cookieAttrs = DeserializeJson(local.cookieAttrs);
 
-	// check to make sure the json we decoded has the authenticity token in it
-	if (!structKeyExists(local.cookieAttrs, "authenticityToken"))
+	// Check to make sure the JSON we decoded has the authenticity token in it.
+	if (!structKeyExists(local.cookieAttrs, "authenticityToken")) {
 		return "";
+	}
 
 	return local.cookieAttrs.authenticityToken;
 }
 
 public struct function $csrfCookieAttributeCollection(required string value) {
 	local.cookieStruct = {
-		value=arguments.value,
-		encodeValue=application.wheels.csrfCookieEncodeValue,
-		httpOnly=application.wheels.csrfCookieHttpOnly,
-		preserveCase=application.wheels.csrfCookiePreserveCase,
-		secure=application.wheels.csrfCookieSecure
+		value = arguments.value,
+		encodeValue = application.wheels.csrfCookieEncodeValue,
+		httpOnly = application.wheels.csrfCookieHttpOnly,
+		preserveCase = application.wheels.csrfCookiePreserveCase,
+		secure = application.wheels.csrfCookieSecure
 	};
-
 	if (Len(application.wheels.csrfCookieDomain)) {
 		local.cookieStruct.domain = application.wheels.csrfCookieDomain;
 	}
-
 	if (Len(application.wheels.csrfCookiePath)) {
 		local.cookieStruct.path = application.wheels.csrfCookiePath;
 	}
-
 	return local.cookieStruct;
 }
 

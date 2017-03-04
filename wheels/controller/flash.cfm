@@ -59,8 +59,7 @@ public void function flashKeep(string key = "") {
 
 public boolean function flashKeyExists(required string key) {
 	local.flash = $readFlash();
-	local.rv = StructKeyExists(local.flash, arguments.key);
-	return local.rv;
+	return StructKeyExists(local.flash, arguments.key);
 }
 
 // PRIVATE FUNCTIONS
@@ -95,15 +94,16 @@ public any function $writeFlash(struct flash = {}) {
 }
 
 public void function $flashClear() {
-	// Only save the old flash if they want to keep anything
+
+	// Only save the old flash if they want to keep anything.
 	if (StructKeyExists(request.wheels, "flashKeep")) {
 		local.flash = $readFlash();
 	}
 
-	// Clear the current flash
+	// Clear the current flash.
 	flashClear();
 
-	// See if they wanted to keep anything
+	// See if they wanted to keep anything.
 	if (StructKeyExists(local, "flash")) {
 		// Delete any keys they don't want to keep
 		if (Len(request.wheels.flashKeep)) {
@@ -116,6 +116,7 @@ public void function $flashClear() {
 
 		// Write to the flash
 		$writeFlash(local.flash);
+
 	}
 }
 
@@ -124,8 +125,7 @@ public void function $setFlashStorage(required string storage) {
 }
 
 public string function $getFlashStorage() {
-	local.rv = variables.$class.flashStorage;
-	return local.rv;
+	return variables.$class.flashStorage;
 }
 
 </cfscript>
