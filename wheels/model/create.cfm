@@ -61,16 +61,16 @@ public any function create(
  * Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.
  *
  * ```
- * Create a new author in memory (not saved to the database).
+ * // Create a new author in memory (not saved to the database).
  * newAuthor = model("author").new();
  *
- * Create a new author based on properties in a struct.
+ * // Create a new author based on properties in a struct.
  * newAuthor = model("author").new(params.authorStruct);
  *
- * Create a new author by passing in named arguments.
+ * // Create a new author by passing in named arguments.
  * newAuthor = model("author").new(firstName="John", lastName="Doe");
  *
- * If you have a `hasOne` or `hasMany` association setup from `customer` to `order` you can do a scoped call (the `newOrder` method below will call `model("order").new(customerId=aCustomer.id)` internally).
+ * // If you have a `hasOne` or `hasMany` association setup from `customer` to `order` you can do a scoped call (the `newOrder` method below will call `model("order").new(customerId=aCustomer.id)` internally).
  * aCustomer = model("customer").findByKey(params.customerId);
  * anOrder = aCustomer.newOrder(shipping=params.shipping);
  * ```
@@ -98,11 +98,11 @@ public any function new(struct properties={}, boolean callbacks=true) {
  * Returns `true` if the object was saved successfully to the database, `false` if not.
  *
  * ```
- * Save the user object to the database (will automatically do an `INSERT` or `UPDATE` statement depending on if the record is new or already exists.
+ * // Save the user object to the database (will automatically do an `INSERT` or `UPDATE` statement depending on if the record is new or already exists.
  * user.save();
  *
- * Save the user object directly in an if statement without using `cfqueryparam` and take appropriate action based on the result.
- * if (user.save(parameterize=false)) {
+ * // Save the user object directly in an if statement and take appropriate action based on the result.
+ * if (user.save()) {
  *   flashInsert(notice="The user was saved!");
  *   redirectTo(action="edit");
  * } else {
@@ -130,11 +130,14 @@ public boolean function save(
 ) {
 	$args(name="save", args=arguments);
 	clearErrors();
-	return invokeWithTransaction(method="$save", argumentCollection=arguments);
+	return invokeWithTransaction(argumentCollection=arguments, method="$save");
 }
 
 /**
- * Internal function
+ * Internal function.
+ * Create a new object instance.
+ * Called from the new function above.
+ * Also called from findByKey, findOne and findAll when returnAs is object(s).
  */
 public any function $createInstance(
 	required struct properties,
@@ -157,11 +160,14 @@ public any function $createInstance(
 		persisted=arguments.persisted,
 		properties=arguments.properties,
 		row=arguments.row,
-		useFilterLists=(!arguments.persisted)
+		useFilterLists=!arguments.persisted
 	);
 
-	// If the object should be persisted, call afterFind, else call afterNew.
-	if ((arguments.persisted && local.rv.$callback("afterFind", arguments.callbacks)) || (!arguments.persisted && local.rv.$callback("afterNew", arguments.callbacks))) {
+	// If the object should be persisted, run afterFind callback, otherwise run afterNew callback.
+	// Then proceed to afterInitialization callback unless the previous callback method returned false.
+	local.afterFindResult = arguments.persisted && local.rv.$callback("afterFind", arguments.callbacks);
+	local.afterNewResult = !arguments.persisted && local.rv.$callback("afterNew", arguments.callbacks);
+	if (local.afterFindResult || local.afterNewResult) {
 		local.rv.$callback("afterInitialization", arguments.callbacks);
 	}
 
@@ -169,7 +175,10 @@ public any function $createInstance(
 }
 
 /**
- * Internal function
+ * Internal function.
+ * Create a new record in the database or update it if it already exists.
+ * Also set associations and run all related callbacks.
+ * Called from the save function above (inside a transaction).
  */
 public boolean function $save(
 	required any parameterize,
@@ -217,7 +226,8 @@ public boolean function $save(
 }
 
 /**
- * Internal function
+ * Internal function.
+ * ???
  */
 public boolean function $create(required any parameterize, required boolean reload) {
 	if (variables.wheels.class.timeStampingOnCreate) {
