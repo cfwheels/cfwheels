@@ -1,4 +1,27 @@
+
+<cfscript>
+
+	savecontent variable="t1" {
+writeOutput('
+```
+// Create a new author and save it to the database. newAuthor = model("author").create(params.author);
+// Same as above using named arguments. newAuthor = model("author").create(firstName="John", lastName="Doe");
+// Same as above using both named arguments and a struct. newAuthor = model("author").create(active=1, properties=params.author);
+// If you have a `hasOne` or `hasMany` association setup from `customer` to `order` you can do a scoped call (the `createOrder` method below will call `model("order").create(customerId=aCustomer.id, shipping=params.shipping)` internally).
+aCustomer = model("customer").findByKey(params.customerId);
+anOrder = aCustomer.createOrder(shipping=params.shipping);
+```
+'
+);
+
+	}
+	//writeoutput(hintOutput(t1));
+
+	</cfscript>
+
 <cfoutput>
+
+
 <div class="row">
 	<!--- Section/SubSection List --->
 	<div id="sections">
@@ -68,7 +91,7 @@
 					</cfif>
 					 #doc#</p>
 					<cfif structKeyExists(meta, "hint")>
-						#hintOutput(meta.hint)#
+						<div class="hint">#hintOutput(meta.hint)#</div>
 					</cfif>
 					<cfif isArray(meta.parameters) && arraylen(meta.parameters)>
 						<table>

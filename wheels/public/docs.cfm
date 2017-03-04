@@ -115,16 +115,21 @@
 			}
 		}
 	}
+
+
 	// Searches for ``` in hint description output
 	string function hintOutput(str){
 		local.rv=arguments.str;
-		local.rv=HTMLEditFormat(local.rv);
-		// Look for codeblock
-		local.rv=replace(local.rv, "```", "<pre>", "one");
-		local.rv=replace(local.rv, "```", "</pre>", "one");
+		// Replace backtick blocks with pre
+		local.rv = ReReplaceNoCase(local.rv, '```(.+?)```', '<pre>\1</pre>', "ALL");
+		// Replace single backticks with code when NOT in <pre>
+		local.rv = ReReplaceNoCase(local.rv, '(?!<pre[^>]*>)(`(\w+)`)(?![^<]*<\/pre>)', '<code>\2</code>', "ALL");
+		// Look for comments and add some line breaks back in
+		local.rv = ReReplaceNoCase(local.rv, '\/\/ (.*?)\. ', "<br>// \1<br>", "ALL");
+		local.rv = ReReplaceNoCase(local.rv, ';', "\1;<br>", "ALL");
+
 		return trim(local.rv);
 	}
-
 	// Creates a css class from category
 	string function cssClassLink(str){
 		local.rv=lcase(arguments.str);
