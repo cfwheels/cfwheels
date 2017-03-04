@@ -434,13 +434,13 @@ component output=false {
 			request[resultkey].path = TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH;
 
 			local.summaryLength = ArrayLen(request[resultkey].summary);
-      for (local.i=1; local.i <=local.summaryLength; local.i++) {
+      for (local.i = 1; local.i <=local.summaryLength; local.i++) {
 				request[resultkey].summary[local.i].cleanTestCase = $cleanTestCase(request[resultkey].summary[local.i].testCase);
 				request[resultkey].summary[local.i].packageName = $cleanTestPath(request[resultkey].summary[local.i].testCase);
 			};
 
       local.resultsLength = ArrayLen(request[resultkey].results);
-			for (local.i=1; local.i <=local.resultsLength; local.i++) {
+			for (local.i = 1; local.i <=local.resultsLength; local.i++) {
 				request[resultkey].results[local.i].cleanTestCase = $cleanTestCase(request[resultkey].results[local.i].testCase);
 				request[resultkey].results[local.i].cleanTestName = $cleanTestName(request[resultkey].results[local.i].testName);
 				request[resultkey].results[local.i].packageName = $cleanTestPath(request[resultkey].results[local.i].testCase);

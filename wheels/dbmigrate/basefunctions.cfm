@@ -104,7 +104,7 @@ private string function $getColumnDefinition(required string tableName, required
 	);
 	local.columnDefinition = "";
 	local.iEnd = local.columns.RecordCount;
-	for (local.i=1; local.i <= local.iEnd; local.i++) {
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		if(local.columns["COLUMN_NAME"][local.i] == arguments.columnName) {
 			local.columnType = local.columns["TYPE_NAME"][local.i];
 			local.columnDefinition = local.columnType;

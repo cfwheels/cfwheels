@@ -319,7 +319,7 @@
 				local.columns = "";
 				local.info = GetMetaData(arguments.options);
 				local.iEnd = ArrayLen(local.info);
-				for (local.i=1; local.i <= local.iEnd; local.i++)
+				for (local.i = 1; local.i <= local.iEnd; local.i++)
 				{
 					local.columns = ListAppend(local.columns, local.info[local.i].name);
 				}
@@ -337,7 +337,7 @@
 				{
 					// take the first numeric field in the query as the value field and the first non numeric as the text field
 					local.iEnd = arguments.options.RecordCount;
-					for (local.i=1; local.i <= local.iEnd; local.i++)
+					for (local.i = 1; local.i <= local.iEnd; local.i++)
 					{
 						local.jEnd = ListLen(local.columns);
 						for (local.j=1; local.j <= local.jEnd; local.j++)
@@ -361,7 +361,7 @@
 				}
 			}
 			local.iEnd = arguments.options.RecordCount;
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				local.rv &= $option(objectValue=local.value, optionValue=arguments.options[arguments.valueField][local.i], optionText=arguments.options[arguments.textField][local.i]);
 			}
@@ -370,7 +370,7 @@
 		{
 			local.sortedKeys = ListSort(StructKeyList(arguments.options), "textnocase"); // sort struct keys alphabetically
 			local.iEnd = ListLen(local.sortedKeys);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				local.key = ListGetAt(local.sortedKeys, local.i);
 				local.rv &= $option(objectValue=local.value, optionValue=LCase(local.key), optionText=arguments.options[local.key]);
@@ -385,7 +385,7 @@
 			}
 
 			local.iEnd = ArrayLen(arguments.options);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				local.optionValue = "";
 				local.optionText = "";

@@ -66,7 +66,7 @@ component extends="Base" {
 	  	if (application.wheels.serverName != "lucee") {
 				local.foreignKeys = $getForeignKeys(arguments.name);
 				local.iEnd = ListLen(local.foreignKeys);
-	  		for (local.i=1; local.i <= local.iEnd; local.i++) {
+	  		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 	  			local.foreignKeyName = ListGetAt(local.foreignKeys,local.i);
 	  			dropForeignKey(table=arguments.name,keyname=local.foreignKeyName);
 	  		}

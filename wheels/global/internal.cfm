@@ -51,7 +51,7 @@
 				local.str = "";
 				local.keyList = ListSort(StructKeyList(arguments.value), "textnocase", "asc");
 				local.iEnd = ListLen(local.keyList);
-				for (local.i=1; local.i <= local.iEnd; local.i++)
+				for (local.i = 1; local.i <= local.iEnd; local.i++)
 				{
 					local.key = ListGetAt(local.keyList, local.i);
 					local.str = ListAppend(local.str, local.key & "=" & arguments.value[local.key]);
@@ -112,7 +112,7 @@
 	) {
 		local.rv = ListToArray(arguments.list, arguments.delim);
 		local.iEnd = ArrayLen(local.rv);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.rv[local.i] = Trim(local.rv[local.i]);
 		}
@@ -134,7 +134,7 @@
 		local.values = [];
 		local.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
 		local.iEnd = ListLen(local.keyList);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			ArrayAppend(local.values, arguments[ListGetAt(local.keyList, local.i)]);
 		}
@@ -171,7 +171,7 @@
 		local.list = "0,0,0,0";
 		local.dateParts = "d,h,n,s";
 		local.iEnd = ListLen(local.dateParts);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			if (arguments.cacheDatePart == ListGetAt(local.dateParts, local.i))
 			{
@@ -208,7 +208,7 @@
 	public boolean function $structKeysExist(required struct struct, string keys="") {
 		local.rv = true;
 		local.iEnd = ListLen(arguments.keys);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			if (!StructKeyExists(arguments.struct, ListGetAt(arguments.keys, local.i)) || (IsSimpleValue(arguments.struct[ListGetAt(arguments.keys, local.i)]) && !Len(arguments.struct[ListGetAt(arguments.keys, local.i)])))
 			{
@@ -226,7 +226,7 @@
 	) {
 		local.rv = {};
 		local.iEnd = ListLen(arguments.keys);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.item = ListGetAt(arguments.keys, local.i);
 			local.rv[local.item] = arguments.scope[local.item];
@@ -367,7 +367,7 @@
 		{
 			// there are several routes with this name so we need to figure out which one to use by checking the passed in arguments
 			local.iEnd = ListLen(local.routePos);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				local.rv = application.wheels.routes[ListGetAt(local.routePos, local.i)];
 				local.foundRoute = true;
@@ -418,7 +418,7 @@
 
 		local.rv = "";
 		local.iEnd = ListLen(arguments.params, "&");
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.temp = listToArray(ListGetAt(arguments.params, local.i, "&"), "=");
 			local.rv &= local.delim & local.temp[1] & "=";
@@ -452,7 +452,7 @@
 		if (Len(arguments.combine))
 		{
 			local.iEnd = ListLen(arguments.combine);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				local.item = ListGetAt(arguments.combine, local.i);
 				local.first = ListGetAt(local.item, 1, "/");
@@ -470,7 +470,7 @@
 			if (ListLen(arguments.reserved))
 			{
 				local.iEnd = ListLen(arguments.reserved);
-				for (local.i=1; local.i <= local.iEnd; local.i++)
+				for (local.i = 1; local.i <= local.iEnd; local.i++)
 				{
 					local.item = ListGetAt(arguments.reserved, local.i);
 					if (StructKeyExists(arguments.args, local.item))
@@ -489,7 +489,7 @@
 		if (Len(arguments.required))
 		{
 			local.iEnd = ListLen(arguments.required);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				local.arg = ListGetAt(arguments.required, local.i);
 				if (!StructKeyExists(arguments.args, local.arg))
@@ -520,7 +520,7 @@
 			request.wheels.execution = {};
 		}
 		local.iEnd = ListLen(arguments.name);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.item = ListGetAt(arguments.name, local.i);
 			if (StructKeyExists(request.wheels.execution, local.item))
@@ -557,7 +557,7 @@
 
 		// loop through the file list and return the file name if exists regardless of case (the == operator is case insensitive)
 		local.iEnd = ListLen(local.fileList);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.foundFile = ListGetAt(local.fileList, local.i);
 			if (local.foundFile == local.file)
@@ -636,7 +636,7 @@
 		// let's allow for multiple controller paths so that plugins can contain controllers
 		// the last path is the one we will instantiate the base controller on if the controller is not found on any of the paths
 		local.iEnd = ListLen(arguments.controllerPaths);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.controllerPath = ListGetAt(arguments.controllerPaths, local.i);
 			local.fileName = $objectFileName(name=arguments.name, objectPath=local.controllerPath, type=arguments.type);
@@ -758,7 +758,7 @@
 		// let's allow for multiple model paths so that plugins can contain models
 		// the last path is the one we will instantiate the base model on if the model is not found on any of the paths
 		local.iEnd = ListLen(arguments.modelPaths);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.modelPath = ListGetAt(arguments.modelPaths, local.i);
 			local.fileName = $objectFileName(name=arguments.name, objectPath=local.modelPath, type=arguments.type);
@@ -798,7 +798,7 @@
 	public void function $setNamedRoutePositions() {
 		local.appKey = $appKey();
 		local.iEnd = ArrayLen(application[local.appKey].routes);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.route = application[local.appKey].routes[local.i];
 			if (StructKeyExists(local.route, "name") && len(local.route.name))
@@ -963,14 +963,14 @@
 				local.rules = ArrayNew(2);
 				local.count = 1;
 				local.iEnd = ListLen(local.ruleList);
-				for (local.i=1; local.i <= local.iEnd; local.i=local.i+2)
+				for (local.i = 1; local.i <= local.iEnd; local.i=local.i+2)
 				{
 					local.rules[local.count][1] = ListGetAt(local.ruleList, local.i);
 					local.rules[local.count][2] = ListGetAt(local.ruleList, local.i+1);
 					local.count = local.count + 1;
 				}
 				local.iEnd = ArrayLen(local.rules);
-				for (local.i=1; local.i <= local.iEnd; local.i++)
+				for (local.i = 1; local.i <= local.iEnd; local.i++)
 				{
 					if(REFindNoCase(local.rules[local.i][1], local.text))
 					{

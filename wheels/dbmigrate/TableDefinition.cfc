@@ -12,7 +12,7 @@ component extends="Base"  {
 		this.foreignKeys = ArrayNew(1);
 		this.columns = ArrayNew(1);
 		local.iEnd = ListLen(local.args);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.argumentName = ListGetAt(local.args,local.i);
 			if(StructKeyExists(arguments,local.argumentName)) {
 				this[local.argumentName] = arguments[local.argumentName];
@@ -89,7 +89,7 @@ component extends="Base"  {
 	) {
 		arguments.columnType = "biginteger";
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -106,7 +106,7 @@ component extends="Base"  {
 	) {
 		arguments.columnType = "binary";
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -123,7 +123,7 @@ component extends="Base"  {
 	) {
 		arguments.columnType = "boolean";
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -140,7 +140,7 @@ component extends="Base"  {
 	) {
 		arguments.columnType = "date";
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -157,7 +157,7 @@ component extends="Base"  {
 	) {
 		arguments.columnType = "datetime";
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -176,7 +176,7 @@ component extends="Base"  {
 	) {
 		arguments.columnType = "decimal";
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -193,7 +193,7 @@ component extends="Base"  {
 	) {
 		arguments.columnType = "float";
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -211,7 +211,7 @@ component extends="Base"  {
 	) {
 		arguments.columnType = "integer";
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -229,7 +229,7 @@ component extends="Base"  {
 	) {
 		arguments.columnType = "string";
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -247,7 +247,7 @@ component extends="Base"  {
 	) {
 		arguments.columnType = "char";
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -264,7 +264,7 @@ component extends="Base"  {
 	) {
 		arguments.columnType = "text";
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -281,7 +281,7 @@ component extends="Base"  {
 	) {
 		arguments.columnType = "uniqueidentifier";
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -298,7 +298,7 @@ component extends="Base"  {
 	) {
 		arguments.columnType = "time";
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -315,7 +315,7 @@ component extends="Base"  {
 		string columnType="datetime"
 	) {
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
 			column(argumentCollection=arguments);
 		}
@@ -343,7 +343,7 @@ component extends="Base"  {
 		string onDelete=""
 	) {
 		local.iEnd = ListLen(arguments.referenceNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.referenceName = ListGetAt(arguments.referenceNames,local.i);
 
 			// get all possible arguments for the column
@@ -381,7 +381,7 @@ component extends="Base"  {
 		$execute(this.adapter.createTable(name=this.name, primaryKeys=this.primaryKeys, columns=this.columns, foreignKeys=this.foreignKeys));
 		announce("Created table #objectCase(this.name)#");
 		local.iEnd = ArrayLen(this.foreignKeys);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			announce("--> added foreign key #this.foreignKeys[local.i].name#");
 		}
 		if(this.adapter.adaptername() eq "Oracle"){
@@ -396,7 +396,7 @@ component extends="Base"  {
 	public void function change(boolean addColumns="false") {
 		local.existingColumns = $getColumns(this.name);
 		local.iEnd = ArrayLen(this.columns);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			if(arguments.addColumns || !ListFindNoCase(local.existingColumns,this.columns[local.i].name)) {
 				$execute(this.adapter.addColumnToTable(name=this.name,column=this.columns[local.i]));
 				announce("Added column #this.columns[local.i].name# to table #this.name#");
@@ -406,7 +406,7 @@ component extends="Base"  {
 			}
 		}
 		local.iEnd = ArrayLen(this.foreignKeys);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			$execute(this.adapter.addForeignKeyToTable(name=this.name,foreignKey=this.foreignKeys[local.i]));
 			announce("Added foreign key #this.foreignKeys[local.i].name# to table #this.name#");
 		}

@@ -114,7 +114,7 @@
 		local.rv = "";
 		local.firstDone = false;
 		local.iEnd = ListLen(arguments.order);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.item = ListGetAt(arguments.order, local.i);
 			local.marker = "($" & local.item & ")";
@@ -290,7 +290,7 @@
 		}
 		local.content = "";
 		local.iEnd = ListLen(local.options);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.option = ListGetAt(local.options, local.i);
 			local.args = {};

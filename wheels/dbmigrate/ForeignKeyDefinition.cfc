@@ -13,7 +13,7 @@ component extends="Base" {
 	){
 		local.args = "adapter,table,referenceTable,column,referenceColumn,onUpdate,onDelete";
 		local.iEnd = ListLen(local.args);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.argumentName = ListGetAt(local.args,local.i);
 			if(StructKeyExists(arguments,local.argumentName)) {
 				this[local.argumentName] = arguments[local.argumentName];
@@ -27,7 +27,7 @@ component extends="Base" {
 		local.args = "name,table,referenceTable,column,referenceColumn,onUpdate,onDelete";
 		local.iEnd = ListLen(local.args);
 		local.adapterArgs = {};
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.argumentName = ListGetAt(local.args, local.i);
 			local.adapterArgs[local.argumentName] = this[local.argumentName];
 		}

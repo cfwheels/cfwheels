@@ -502,7 +502,7 @@
 	public string function $propertyValue(required string name) {
 		local.rv = "";
 		local.iEnd = ListLen(arguments.name);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.item = ListGetAt(arguments.name, local.i);
 			local.rv = ListAppend(local.rv, this[local.item]);
@@ -516,7 +516,7 @@
 		boolean setToNull="false"
 	) {
 		local.iEnd = ListLen(arguments.keys);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.item = ListGetAt(arguments.keys, local.i);
 			if (arguments.setToNull)

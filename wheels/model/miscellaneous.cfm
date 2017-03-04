@@ -23,7 +23,7 @@
 
 	public void function setPrimaryKey(required string property) {
 		local.iEnd = ListLen(arguments.property);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.item = ListGetAt(arguments.property, local.i);
 			if (!ListFindNoCase(variables.wheels.class.keys, local.item))

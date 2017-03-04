@@ -26,7 +26,7 @@
 			for (local.key in arguments) {
 				if (local.key != "functionName") {
 					local.iEnd = ListLen(arguments.functionName);
-					for (local.i=1; local.i <= local.iEnd; local.i++) {
+					for (local.i = 1; local.i <= local.iEnd; local.i++) {
 						application[local.appKey].functions[Trim(ListGetAt(arguments.functionName, local.i))][local.key] = arguments[local.key];
 					}
 				}
@@ -192,7 +192,7 @@
 			local.iEnd = Len(arguments.param);
 			local.a = (10^local.iEnd) + Reverse(arguments.param);
 			local.b = 0;
-			for (local.i=1; local.i <= local.iEnd; local.i++) {
+			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.b += Left(Right(arguments.param, local.i), 1);
 			}
 			if (IsValid("integer", local.a)) {
@@ -210,12 +210,12 @@
 				local.z = BitXor(InputBasen(local.rv, 16), 461);
 				local.rv = "";
 				local.iEnd = Len(local.z) - 1;
-				for (local.i=1; local.i <= local.iEnd; local.i++) {
+				for (local.i = 1; local.i <= local.iEnd; local.i++) {
 					local.rv &= Left(Right(local.z, local.i), 1);
 				}
 				local.checkSumTest = 0;
 				local.iEnd = Len(local.rv);
-				for (local.i=1; local.i <= local.iEnd; local.i++) {
+				for (local.i = 1; local.i <= local.iEnd; local.i++) {
 					local.checkSumTest += Left(Right(local.rv, local.i), 1);
 				}
 				local.c1 = ToString(FormatBaseN(local.checkSumTest+154, 10));
@@ -420,7 +420,7 @@
 
 		if (Len(arguments.except)) {
 			local.iEnd = ListLen(arguments.except, " ");
-			for (local.i=1; local.i <= local.iEnd; local.i++) {
+			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.item = ListGetAt(arguments.except, local.i);
 				local.rv = ReReplaceNoCase(local.rv, "#local.item#(?:\b)", "#local.item#", "all");
 			}

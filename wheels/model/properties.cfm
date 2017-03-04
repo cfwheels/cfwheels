@@ -129,7 +129,7 @@
 	public string function key(boolean $persisted="false", boolean $returnTickCountWhenNew="false") {
 		local.rv = "";
 		local.iEnd = ListLen(primaryKeys());
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.property = primaryKeys(local.i);
 			if (StructKeyExists(this, local.property))
@@ -213,7 +213,7 @@
 				} else if (IsArray(this[local.key]) && local.returnIncludedAs neq "object") {
 					// apply this function to each array item
 					local.rv[local.key] = [];
-					for (local.i=1; local.i <= ArrayLen(this[local.key]); local.i++) {
+					for (local.i = 1; local.i <= ArrayLen(this[local.key]); local.i++) {
 						local.rv[local.key][local.i] = this[local.key][local.i].properties(argumentCollection=arguments);
 					}
 				} else {
@@ -243,7 +243,7 @@
 		}
 		arguments.property = ListToArray(arguments.property);
 		local.iEnd = ArrayLen(arguments.property);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.key = arguments.property[local.i];
 			if (StructKeyExists(this, local.key))
@@ -297,7 +297,7 @@
 		{
 			local.changedProperties = changedProperties();
 			local.iEnd = ListLen(local.changedProperties);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				local.item = ListGetAt(local.changedProperties, local.i);
 				local.rv[local.item] = {};

@@ -30,7 +30,7 @@
 			local.rv = arguments.structs;
 		}
 		local.iEnd = ArrayLen(local.rv);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			if (Len(arguments.include) && arguments.returnIncluded)
 			{
@@ -71,7 +71,7 @@
 
 		// loop through all of our records and create an object for each row in the query
 		local.iEnd = arguments.query.recordCount;
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			// create a new struct
 			local.struct = $queryRowToStruct(properties=arguments.query, row=local.i);
@@ -141,7 +141,7 @@
 		local.rv = {};
 		local.allProperties = ListAppend(variables.wheels.class.propertyList, variables.wheels.class.calculatedPropertyList);
 		local.iEnd = ListLen(local.allProperties);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			// wrap in try/catych because coldfusion has a problem with empty strings in queries for bit types
 			try
@@ -167,7 +167,7 @@
 	public string function $keyFromStruct(required struct struct) {
 		local.rv = "";
 		local.iEnd = ListLen(primaryKeys());
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.property = primaryKeys(local.i);
 			if (StructKeyExists(arguments.struct, local.property))

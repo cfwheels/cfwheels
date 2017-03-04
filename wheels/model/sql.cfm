@@ -30,7 +30,7 @@
 
 			// add join statement for each include separated by space
 			local.iEnd = ArrayLen(local.associations);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				local.rv = ListAppend(local.rv, local.associations[local.i].join, " ");
 			}
@@ -42,7 +42,7 @@
 
 		ArrayAppend(arguments.sql, " WHERE ");
 		local.iEnd = ListLen(primaryKeys());
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.key = primaryKeys(local.i);
 			ArrayAppend(arguments.sql, variables.wheels.class.properties[local.key].column & " = ");
@@ -96,7 +96,7 @@
 
 				local.rv = "";
 				local.iEnd = ListLen(arguments.order);
-				for (local.i=1; local.i <= local.iEnd; local.i++)
+				for (local.i = 1; local.i <= local.iEnd; local.i++)
 				{
 					local.iItem = Trim(ListGetAt(arguments.order, local.i));
 					if (!Find(" ASC", local.iItem) && !Find(" DESC", local.iItem))
@@ -216,7 +216,7 @@
 		if (!Len(arguments.list))
 		{
 			local.iEnd = ArrayLen(local.classes);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				local.classData = local.classes[local.i];
 				arguments.list = ListAppend(arguments.list, local.classData.propertyList);
@@ -240,7 +240,7 @@
 			local.addedProperties = "";
 			local.addedPropertiesByModel = {};
 			local.iEnd = ListLen(arguments.list);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				local.iItem = Trim(ListGetAt(arguments.list, local.i));
 
@@ -335,7 +335,7 @@
 				local.newSelect = "";
 				local.addedProperties = "";
 				local.iEnd = ListLen(local.rv);
-				for (local.i=1; local.i <= local.iEnd; local.i++)
+				for (local.i = 1; local.i <= local.iEnd; local.i++)
 				{
 					local.iItem = ListGetAt(local.rv, local.i);
 
@@ -402,7 +402,7 @@
 	) {
 		local.whereClause = $whereClause(where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 		local.iEnd = ArrayLen(local.whereClause);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			ArrayAppend(arguments.sql, local.whereClause[local.i]);
 		}
@@ -429,7 +429,7 @@
 			local.wherePos = ArrayLen(local.rv) + 1;
 			local.params = ArrayNew(1);
 			local.where = ReplaceList(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "AND,OR", "#Chr(7)#AND,#Chr(7)#OR");
-			for (local.i=1; local.i <= ListLen(local.where, Chr(7)); local.i++)
+			for (local.i = 1; local.i <= ListLen(local.where, Chr(7)); local.i++)
 			{
 				local.param = {};
 				local.element = Replace(ListGetAt(local.where, local.i, Chr(7)), Chr(7), "", "one");
@@ -505,7 +505,7 @@
 			// add to sql array
 			local.where = " " & local.where & " ";
 			local.iEnd = ListLen(local.where, "?");
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				local.item = ListGetAt(local.where, local.i, "?");
 				if (Len(Trim(local.item)))
@@ -586,7 +586,7 @@
 		local.rv = arguments.list;
 		local.matches = REMatch("[A-Za-z1-9]+\.\*", local.rv);
 		local.iEnd = ArrayLen(local.matches);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.match = local.matches[local.i];
 			local.fields = "";
@@ -632,7 +632,7 @@
 		local.tables = tableName();
 
 		local.pos = 1;
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			// look for the next delimiter sequence in the string and set it (can be single delims or a chain, e.g ',' or ')),'
 			local.delimFind = ReFind("[(\(|\)|,)]+", local.include, local.pos, true);
@@ -777,7 +777,7 @@
 	) {
 		local.rv = "";
 		local.iEnd = ListLen(arguments.properties);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.key = Trim(ListGetAt(arguments.properties, local.i));
 			if (Len(arguments.values))

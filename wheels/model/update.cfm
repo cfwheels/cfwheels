@@ -26,7 +26,7 @@
 			local.rv = 0;
 			local.objects = findAll(where=arguments.where, include=arguments.include, reload=arguments.reload, parameterize=arguments.parameterize, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes, returnIncluded=false, returnAs="objects");
 			local.iEnd = ArrayLen(local.objects);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				if (local.objects[local.i].update(properties=arguments.properties, parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks))
 				{

@@ -213,7 +213,7 @@
 
 		// loop through all methods and properties and add info for each to the `class` struct
 		local.iEnd = ListLen(arguments.methods);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			// only loop once by default (will be used on the lower level validation helpers that do not take arguments: validate, validateOnCreate and validateOnUpdate)
 			local.jEnd = 1;
@@ -283,7 +283,7 @@
 
 		// loop over the passed in types
 		local.iEnd = ListLen(arguments.type);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.item = ListGetAt(arguments.type, local.i);
 
@@ -329,7 +329,7 @@
 		// since cf8 can't handle cfscript operators (==, != etc) inside an Evaluate() call we replace them with eq, neq etc in a try / catch
 		local.evaluate = "condition,unless";
 		local.iEnd = ListLen(local.evaluate);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.item = ListGetAt(local.evaluate, local.i);
 			if (StructKeyExists(arguments, local.item) && Len(arguments[local.item]))
@@ -477,7 +477,7 @@
 			// example: "userName='Joe'" becomes "userName='Joe' AND account=1" if scope is "account" for example
 			arguments.scope = $listClean(arguments.scope);
 			local.iEnd = ListLen(arguments.scope);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				local.item = ListGetAt(arguments.scope, local.i);
 				local.part = local.item & "=" & variables.wheels.class.adapter.$quoteValue(str=this[local.item], type=validationTypeForProperty(local.item));
@@ -509,7 +509,7 @@
 				{
 					local.eventArray = variables.wheels.class.validations[local.key];
 					local.iEnd = ArrayLen(local.eventArray);
-					for (local.i=1; local.i <= local.iEnd; local.i++)
+					for (local.i = 1; local.i <= local.iEnd; local.i++)
 					{
 						if (StructKeyExists(local.eventArray[local.i].args, "property") && local.eventArray[local.i].args.property == arguments.property && local.eventArray[local.i].method == "$#arguments.validation#")
 						{

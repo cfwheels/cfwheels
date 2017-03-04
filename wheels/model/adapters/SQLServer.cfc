@@ -97,7 +97,7 @@ component extends="Base" output=false {
 				local.doneColumns = "";
 				local.done = 0;
 				local.iEnd = ListLen(local.order);
-				for (local.i=1; local.i <= local.iEnd; local.i++) {
+				for (local.i = 1; local.i <= local.iEnd; local.i++) {
 					local.item = ListGetAt(local.order, local.i);
 					local.column = SpanExcluding(Reverse(SpanExcluding(Reverse(local.item), ".")), " ");
 					if (ListFind(local.doneColumns, local.column)) {
@@ -122,7 +122,7 @@ component extends="Base" output=false {
 
 			// we need to add columns from the inner order clause to the select clauses in the inner two queries
 			local.iEnd = ListLen(local.thirdOrder);
-			for (local.i=1; local.i <= local.iEnd; local.i++) {
+			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.item = REReplace(REReplace(ListGetAt(local.thirdOrder, local.i), " ASC\b", ""), " DESC\b", "");
 				if (!ListFindNoCase(local.thirdSelect, local.item)) {
 					local.thirdSelect = ListAppend(local.thirdSelect, local.item);

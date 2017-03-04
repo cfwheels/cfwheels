@@ -99,7 +99,7 @@ component extends="Base" output="false" {
 				local.metadata = GetMetaData(local.query);
 				local.columns = [];
 				local.iEnd = ArrayLen(local.metadata);
-				for (local.i=1; local.i <= local.iEnd; local.i++) {
+				for (local.i = 1; local.i <= local.iEnd; local.i++) {
 					local.column = local.metadata[local.i];
 					if (local.column.typename == "timestamp") {
 						ArrayAppend(local.columns, local.column.name);
@@ -109,7 +109,7 @@ component extends="Base" output="false" {
 				// if we have any timestamp columns
 				if (!ArrayIsEmpty(local.columns)) {
 					local.iEnd = ArrayLen(local.columns);
-					for (local.i=1; local.i <= local.iEnd; local.i++) {
+					for (local.i = 1; local.i <= local.iEnd; local.i++) {
 						local.column = local.columns[local.i];
 						local.jEnd = local.query.recordCount;
 						for (local.j=1; local.j <= local.jEnd; local.j++) {

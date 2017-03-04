@@ -21,7 +21,7 @@
 		public string function $tableName(required string list, required string action) {
 			local.rv = "";
 			local.iEnd = ListLen(arguments.list);
-			for (local.i=1; local.i <= local.iEnd; local.i++) {
+			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.item = ListGetAt(arguments.list, local.i);
 				if (arguments.action == "remove") {
 					// removes table names
@@ -40,7 +40,7 @@
 		public string function $columnAlias(required string list, required string action) {
 			local.rv = "";
 			local.iEnd = ListLen(arguments.list);
-			for (local.i=1; local.i <= local.iEnd; local.i++) {
+			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.item = ListGetAt(arguments.list, local.i);
 				if (Find(" AS ", local.item)) {
 					local.sort = "";
@@ -95,7 +95,7 @@
 			local.rv = arguments.sql;
 			if (IsSimpleValue(local.rv[ArrayLen(local.rv)]) && Left(local.rv[ArrayLen(local.rv)], 8) == "ORDER BY" && IsSimpleValue(local.rv[ArrayLen(local.rv)-1]) && Left(local.rv[ArrayLen(local.rv)-1], 8) == "GROUP BY") {
 				local.iEnd = ListLen(local.rv[ArrayLen(local.rv)]);
-				for (local.i=1; local.i <= local.iEnd; local.i++) {
+				for (local.i = 1; local.i <= local.iEnd; local.i++) {
 					local.item = Trim(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(ListGetAt(local.rv[ArrayLen(local.rv)], local.i), "ORDER BY ", ""), " ASC", ""), " DESC", ""));
 					if (!ListFindNoCase(ReplaceNoCase(local.rv[ArrayLen(local.rv)-1], "GROUP BY ", ""), local.item) && !$isAggregateFunction(local.item)) {
 						local.key = ArrayLen(local.rv)-1;

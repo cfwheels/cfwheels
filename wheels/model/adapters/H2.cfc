@@ -85,7 +85,7 @@ component extends="Base" output=false {
 		// to create a new query result that excludes these tables
 		local.rv = QueryNew(local.columns.columnList);
 		local.iEnd = local.columns.recordCount;
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			// yes, it should actually be "table_schem" below, not a typo
 			if (local.columns["table_schem"][local.i] != "information_schema") {
 				QueryAddRow(local.rv);

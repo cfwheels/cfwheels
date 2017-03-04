@@ -28,7 +28,7 @@
 		// generate markup for each Flash item in the list
 		local.listItems = "";
 		local.iEnd = ListLen(local.flashKeys);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.item = ListGetAt(local.flashKeys, local.i);
 			local.class = local.item & "Message";
@@ -55,7 +55,7 @@
 	}
 
 	public void function contentFor(any position="last", any overwrite="false") {
-		
+
 		// position in the array for the content
 		local.position = "last";
 
@@ -145,7 +145,7 @@
 		}
 	}
 
-	public string function includeLayout(string name="layout") { 
+	public string function includeLayout(string name="layout") {
 		arguments.partial = arguments.name;
 		StructDelete(arguments, "name");
 		arguments.$prependWithUnderscore = false;
@@ -219,8 +219,8 @@
 	*/
 
 	public string function $tag(
-		required string name, 
-		struct attributes={}, 
+		required string name,
+		struct attributes={},
 		boolean close=false,
 		string skip="",
 		string skipStartingWith=""
@@ -244,7 +244,7 @@
 		// since the order of a struct can differ we sort the attributes in alphabetical order before placing them in the HTML tag (we could just place them in random order in the HTML but that would complicate testing for example)
 		local.sortedKeys = ListSort(StructKeyList(arguments.attributes), "textnocase");
 		local.iEnd = ListLen(local.sortedKeys);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.key = ListGetAt(local.sortedKeys, local.i);
 			// place the attribute name and value in the string unless it should be skipped according to the arguments or if it's an internal argument (starting with a "$" sign)
@@ -303,8 +303,8 @@
 	}
 
 	public string function $element(
-		required string name, 
-		struct attributes={}, 
+		required string name,
+		struct attributes={},
 		string content="",
 		string skip="",
 		string skipStartingWith=""
@@ -335,7 +335,7 @@
 		if (IsSimpleValue(arguments.objectName) && ListLen(arguments.associations))
 		{
 			local.iEnd = ListLen(arguments.associations);
-			for (local.i=1; local.i <= local.iEnd; local.i++)
+			for (local.i = 1; local.i <= local.iEnd; local.i++)
 			{
 				local.association = ListGetAt(arguments.associations, local.i);
 				local.currentModelObject = $getObject(arguments.objectName);
@@ -424,7 +424,7 @@
 		// swap all of the out for object ids
 		local.array = ListToArray(ReplaceList(local.rv, "],'", ""), "[", true);
 		local.iEnd = ArrayLen(local.array);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			// if we find a digit, we need to replace it with an id
 			if (REFind("\d", local.array[local.i]))
@@ -504,4 +504,4 @@
 		}
 		return local.rv;
 	}
-</cfscript>  
+</cfscript>

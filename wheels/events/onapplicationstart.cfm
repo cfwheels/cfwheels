@@ -360,7 +360,7 @@ public void function onApplicationStart() {
 	local.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.$wheels.controllerPath, fileName="Wheels", method="$initControllerClass"));
 	application.$wheels.protectedControllerMethods = "";
 	local.iEnd = ListLen(local.protectedControllerMethods);
-	for (local.i=1; local.i <= local.iEnd; local.i++) {
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.method = ListGetAt(local.protectedControllerMethods, local.i);
 		if (Left(local.method, 1) != "$" && !ListFindNoCase(local.allowedGlobalMethods, local.method)) {
 			application.$wheels.protectedControllerMethods = ListAppend(application.$wheels.protectedControllerMethods, local.method);

@@ -159,7 +159,7 @@ component {
 
 		// define the columns in the sql
 		local.iEnd = ArrayLen(arguments.columns);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.sql = local.sql & " " & arguments.columns[local.i].toSQL();
 			if(local.i != local.iEnd) {
 				local.sql = local.sql & ",#chr(13)##chr(10)#";
@@ -173,7 +173,7 @@ component {
 
 		// define the foreign keys
 		local.iEnd = ArrayLen(arguments.foreignKeys);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.sql = local.sql & ",#chr(13)##chr(10)# " & arguments.foreignKeys[local.i].toForeignKeySQL();
 		}
 		local.sql = local.sql & "#chr(13)##chr(10)#)";
@@ -287,7 +287,7 @@ component {
 		sql = sql & "INDEX #quoteTableName(arguments.indexName)# ON #quoteTableName(arguments.table)#(";
 
 		local.iEnd = ListLen(arguments.columnNames);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			sql = sql & quoteColumnName(ListGetAt(arguments.columnNames,local.i));
 			if(local.i != local.iEnd) {
 				sql = sql & ",";

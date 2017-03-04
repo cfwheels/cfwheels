@@ -47,7 +47,7 @@
 				// insert primary keys to order clause unless they are already there, this guarantees that the ordering is unique which is required to make pagination work properly
 				local.compareList = $listClean(ReplaceNoCase(ReplaceNoCase(arguments.order, " ASC", "", "all"), " DESC", "", "all"));
 				local.iEnd = ListLen(primaryKeys());
-				for (local.i=1; local.i <= local.iEnd; local.i++)
+				for (local.i = 1; local.i <= local.iEnd; local.i++)
 				{
 					local.item = primaryKeys(local.i);
 					if (!ListFindNoCase(local.compareList, local.item) && !ListFindNoCase(local.compareList, tableName() & "." & local.item))
@@ -108,7 +108,7 @@
 					{
 						local.paginationWhere = "";
 						local.iEnd = local.values.recordCount;
-						for (local.i=1; local.i <= local.iEnd; local.i++)
+						for (local.i = 1; local.i <= local.iEnd; local.i++)
 						{
 							local.keyComboValues = [];
 							local.jEnd = ListLen(primaryKeys());
@@ -304,7 +304,7 @@
 		$args(args=arguments, name="findFirst", combine="property/properties");
 		arguments.order = "";
 		local.iEnd = ListLen(arguments.property);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			local.item = ListGetAt(arguments.property, local.i);
 			arguments.order = ListAppend(arguments.order, local.item & " " & arguments.$sort);
@@ -348,7 +348,7 @@
 		local.query = findByKey(key=key(), reload=true, returnAs="query");
 		local.properties = propertyNames();
 		local.iEnd = ListLen(local.properties);
-		for (local.i=1; local.i <= local.iEnd; local.i++)
+		for (local.i = 1; local.i <= local.iEnd; local.i++)
 		{
 			try
 			{

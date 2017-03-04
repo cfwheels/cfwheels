@@ -99,7 +99,7 @@
     if (structKeyExists(arguments, "except") && ListLen(arguments.except) > 0) {
       local.except = ListToArray(arguments.except);
       local.iEnd = ArrayLen(local.except);
-      for (local.i=1; local.i LTE local.iEnd; local.i++)
+      for (local.i = 1; local.i LTE local.iEnd; local.i++)
         local.args.actions = REReplace(local.args.actions, "\b#local.except[local.i]#\b(,?|$)", "");
     }
 

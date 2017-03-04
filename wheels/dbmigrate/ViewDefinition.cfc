@@ -4,7 +4,7 @@ component extends="Base" {
 		local.args = "adapter,name,selectSql";
 		this.selectSql = "";
 		local.iEnd = ListLen(local.args);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.argumentName = ListGetAt(local.args,local.i);
 			if(StructKeyExists(arguments,local.argumentName)) {
 				this[local.argumentName] = arguments[local.argumentName];

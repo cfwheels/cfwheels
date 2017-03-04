@@ -33,7 +33,7 @@ public any function sendEmail(
 	// Get the content of the email templates and store them as cfmailparts.
 	arguments.mailparts = [];
 	local.iEnd = ListLen(arguments.template);
-	for (local.i=1; local.i <= local.iEnd; local.i++) {
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 
 		// Include the email template and return it,
 		local.item = ListGetAt(arguments.template, local.i);
