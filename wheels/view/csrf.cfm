@@ -14,5 +14,5 @@ string function authenticityTokenField() {
   // Return hidden field containing new authenticity token.
   return hiddenFieldTag(name="authenticityToken", value=local.authenticityToken);
 }
-  
+
 </cfscript>

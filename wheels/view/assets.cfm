@@ -1,5 +1,35 @@
 <cfscript>
 
+/**
+ * Returns a link tag for a stylesheet (or several) based on the supplied arguments.
+ *
+ * ```
+ * <head>
+ *   <!--- Includes `stylesheets/styles.css`. --->
+ *   #styleSheetLinkTag("styles")#
+ *   <!--- Includes `stylesheets/blog.css` and `stylesheets/comments.css`. --->
+ *   #styleSheetLinkTag("blog,comments")#
+ *   <!--- Includes printer style sheet. --->
+ *   #styleSheetLinkTag(source="print", media="print")#
+ *   <!--- Includes external style sheet. --->
+ *   #styleSheetLinkTag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/cupertino/jquery-ui.css")#
+ * </head>
+ * <body>
+ *   <!--- This will still appear in the `head`. --->
+ *   #styleSheetLinkTag(source="tabs", head=true)#
+ * </body>
+ * ```
+ *
+ * @doc.section View Helpers
+ * @doc.category Asset Functions
+ *
+ * @sources The name of one or many CSS files in the stylesheets folder, minus the .css extension (can also be called with the source argument). Pass a full URL to generate a tag for an external style sheet.
+ * @type The type attribute for the link tag.
+ * @media The media attribute for the link tag.
+ * @head Set to `true` to place the output in the head area of the HTML page instead of the default behavior (which is to place the output where the function is called from).
+ * @delim The delimiter to use for the list of stylesheets.
+ *
+ */
 public string function styleSheetLinkTag(string sources="", string type, string media, string head, string delim=",") {
 	$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
 	if (!Len(arguments.type)) {
@@ -36,6 +66,33 @@ public string function styleSheetLinkTag(string sources="", string type, string 
 	return local.rv;
 }
 
+/**
+ * Returns a script tag for a JavaScript file (or several) based on the supplied arguments.
+ *
+ * ```
+ * <head>
+ *   <!--- Includes `javascripts/main.js`. --->
+ *   #javaScriptIncludeTag("main")#
+ *   <!--- Includes `javascripts/blog.js` and `javascripts/accordion.js`. --->
+ *   #javaScriptIncludeTag("blog,accordion")#
+ *   <!--- Includes external JavaScript file. --->
+ *   #javaScriptIncludeTag("https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js")#
+ * </head>
+ * <body>
+ *   <!--- Will still appear in the `head`. --->
+ *   #javaScriptIncludeTag(source="tabs", head=true)#
+ * </body>
+ * ```
+ *
+ * @doc.section View Helpers
+ * @doc.category Asset Functions
+ *
+ * @sources The name of one or many JavaScript files in the javascripts folder, minus the .js extension (can also be called with the source argument). Pass a full URL to access an external JavaScript file.
+ * @type The type attribute for the script tag.
+ * @head Set to true to place the output in the head area of the HTML page instead of the default behavior, which is to place the output where the function is called from.
+ * @delim The delimiter to use for the list of javascripts.
+ *
+ */
 public string function javaScriptIncludeTag(string sources="", string type, string head, string delim=",") {
 	$args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
 	if (!Len(arguments.type)) {
@@ -68,13 +125,29 @@ public string function javaScriptIncludeTag(string sources="", string type, stri
 	return local.rv;
 }
 
-public string function imageTag(
-	required string source,
-	boolean onlyPath,
-	string host,
-	string protocol,
-	numeric port
-) {
+/**
+ * Returns an `img` tag.
+ * If the image is stored in the local images folder, the tag will also set the `width`, `height`, and `alt` attributes for you.
+ * You can pass any additional arguments (e.g. `class`, `rel`, `id`), and the generated tag will also include those values as HTML attributes.
+ *
+ * ```
+ * <!--- Outputs an `img` tag for `images/logo.png`. --->
+ * #imageTag("logo.png")#
+ *
+ * <!--- Outputs an `img` tag for `http://cfwheels.org/images/logo.png`. --->
+ * #imageTag(source="http://cfwheels.org/images/logo.png", alt="ColdFusion on Wheels")#
+ *
+ * <!--- Outputs an `img` tag with the `class` attribute set. --->
+ * #imageTag(source="logo.png", class="logo")#
+ * ```
+ *
+ * @doc.section View Helpers
+ * @doc.category Asset Functions
+ *
+ * @source The file name of the image if it's available in the local file system (i.e. ColdFusion will be able to access it). Provide the full URL if the image is on a remote server.
+ *
+ */
+public string function imageTag(required string source, boolean onlyPath, string host, string protocol, numeric port) {
 	$args(name="imageTag", reserved="src", args=arguments);
 
 	// Ugly fix due to the fact that id can't be passed along to cfinvoke.
@@ -93,7 +166,13 @@ public string function imageTag(
 		local.executeArgs = arguments;
 		local.executeArgs.category = local.category;
 		local.executeArgs.key = local.key;
-		local.rv = $doubleCheckedLock(name=local.lockName, condition="$getFromCache", execute="$addImageTagToCache", conditionArgs=local.conditionArgs, executeArgs=local.executeArgs);
+		local.rv = $doubleCheckedLock(
+			condition="$getFromCache",
+			conditionArgs=local.conditionArgs,
+			execute="$addImageTagToCache",
+			executeArgs=local.executeArgs,
+			name=local.lockName
+		);
 	} else {
 		local.rv = $imageTag(argumentCollection=arguments);
 	}
@@ -106,12 +185,21 @@ public string function imageTag(
 	return local.rv;
 }
 
+/**
+ * Internal function.
+ * Calls $imageTag and adds the result to the cache.
+ * Called from the imageTag function above if images are set to be cached and the image is not already in the cache.
+ */
 public string function $addImageTagToCache() {
 	local.rv = $imageTag(argumentCollection=arguments);
 	$addToCache(key=arguments.key, value=local.rv, category=arguments.category);
 	return local.rv;
 }
 
+/**
+ * Internal function.
+ * Called from the imageTag function above to do all of the work (create the tag, get width / height using cfimage etc).
+ */
 public string function $imageTag() {
 	local.localFile = true;
 	if (Left(arguments.source, 7) == "http://" || Left(arguments.source, 8) == "https://") {
@@ -121,12 +209,21 @@ public string function $imageTag() {
 		arguments.src = arguments.source;
 	} else {
 		arguments.src = get("webPath") & get("imagePath") & "/" & arguments.source;
-		local.file = GetDirectoryFromPath(GetBaseTemplatePath()) & get("imagePath") & "/" & SpanExcluding(arguments.source, "?");
+		local.file = GetDirectoryFromPath(GetBaseTemplatePath());
+		local.file &= get("imagePath") & "/" & SpanExcluding(arguments.source, "?");
 		if (get("showErrorInformation")) {
 			if (local.localFile && !FileExists(local.file)) {
-				$throw(type="Wheels.ImageFileNotFound", message="CFWheels could not find `#local.file#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
+				$throw(
+					type="Wheels.ImageFileNotFound",
+					message="CFWheels could not find `#local.file#` on the local file system.",
+					extendedInfo="Pass in a correct relative path from the `images` folder to an image."
+				);
 			} else if (!IsImageFile(local.file)) {
-				$throw(type="Wheels.ImageFormatNotSupported", message="CFWheels can't read image files with that format.", extendedInfo="Use one of these image types instead: #GetReadableImageFormats()#.");
+				$throw(
+					type="Wheels.ImageFormatNotSupported",
+					message="CFWheels can't read image files with that format.",
+					extendedInfo="Use one of these image types instead: #GetReadableImageFormats()#."
+				);
 			}
 		}
 		if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height")) {
@@ -165,6 +262,11 @@ public string function $imageTag() {
 	return $tag(name="img", skip="source,key,category,onlyPath,host,protocol,port", close=true, attributes=arguments);
 }
 
+/**
+ * Internal function.
+ * Appends a query string to the asset (a new query string is created on each app reload).
+ * Used to force local browser caches to refresh when there is an update to assets (CSS, JavaScript etc).
+ */
 public string function $appendQueryString() {
 	local.rv = "";
 	local.assetQueryString = get("assetQueryString");
@@ -183,19 +285,24 @@ public string function $appendQueryString() {
 	return local.rv;
 }
 
+/**
+ * Internal function.
+ */
 public string function $assetDomain(required string pathToAsset) {
 	local.rv = arguments.pathToAsset;
 	local.assetPaths = get("assetPaths");
+
+	// Check for incorrect settings and throw errors.
 	if (get("showErrorInformation")) {
 		if (!IsStruct(local.assetPaths) && !IsBoolean(local.assetPaths)) {
-			$throw(type="Wheels.IncorrectConfiguration", message="The setting `assetsPaths` must be false or a struct.");
+			$throw(type="Wheels.IncorrectConfiguration", message="The setting `assetsPaths` must be `false` or a struct.");
 		}
 		if (IsStruct(local.assetPaths) && !ListFindNoCase(StructKeyList(local.assetPaths), "http")) {
-			$throw(type="Wheels.IncorrectConfiguration", message="The `assetPaths` setting struct must contain the key `http`");
+			$throw(type="Wheels.IncorrectConfiguration", message="The `assetPaths` struct must contain the key `http`");
 		}
 	}
 
-	// return nothing if assetPaths is not a struct
+	// Return nothing if assetPaths is not a struct.
 	if (!IsStruct(local.assetPaths)) {
 		return local.rv;
 	}
@@ -210,17 +317,17 @@ public string function $assetDomain(required string pathToAsset) {
 	}
 	local.domainLen = ListLen(local.domainList);
 	if (local.domainLen > 1) {
-		// now comes the interesting part, lets take the pathToAsset argument, hash it and create a number from it
-		// so that we can do mod based off the length of the domain list
-		// this is an easy way to apply the same sub-domain to each asset, so we do not create more work for the server
-		// at the same time we are getting a very random hash value to rotate the domains over the assets evenly
+
+		// Now comes the interesting part, lets take the pathToAsset argument, hash it and create a number from it so that we can do mod based off the length of the domain list.
+		// This is an easy way to apply the same sub-domain to each asset, so we do not create more work for the server.
+		// At the same time we are getting a very random hash value to rotate the domains over the assets evenly.
 		local.pathNumber = Right(REReplace(Hash(arguments.pathToAsset), "[A-Za-z]", "", "all"), 5);
 		local.position = (local.pathNumber % local.domainLen) + 1;
+
 	} else {
 		local.position = local.domainLen;
 	}
-	local.rv = local.protocol & Trim(ListGetAt(local.domainList, local.position)) & arguments.pathToAsset;
-	return local.rv;
+	return local.protocol & Trim(ListGetAt(local.domainList, local.position)) & arguments.pathToAsset;
 }
 
 </cfscript>
