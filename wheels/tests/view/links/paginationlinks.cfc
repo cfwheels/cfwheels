@@ -23,13 +23,6 @@ component extends="wheels.tests.Test" {
     application.wheels.namedRoutePositions = {};
   }
 
-
-  public void function $dump() {
-    teardown();
-    super.$dump(argumentCollection=arguments);
-  }
-
-
 	function test_current_page(){
 
 		authors = model("author").findAll(page=2, perPage=3, order="lastName");

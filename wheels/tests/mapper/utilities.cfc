@@ -38,11 +38,6 @@ component extends="wheels.tests.Test" {
     application[$appKey()].routes = [];
   }
 
-  public void function $dump() {
-    teardown();
-    super.$dump(argumentCollection=arguments);
-  }
-
   // compileRegex
 
   function test_regex_compiles_successfully() {

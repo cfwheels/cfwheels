@@ -28,11 +28,6 @@ component extends="wheels.tests.Test" {
     application[$appKey()].routes = [];
   }
 
-  public void function $dump() {
-    teardown();
-    super.$dump(argumentCollection=arguments);
-  }
-
   // resource
 
   function test_resource_produces_routes() {

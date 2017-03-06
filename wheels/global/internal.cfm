@@ -336,7 +336,7 @@
 					$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
 				}
 			}
-			$abort();
+			abort;
 		}
 	}
 

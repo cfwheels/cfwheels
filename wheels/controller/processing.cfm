@@ -140,7 +140,7 @@ public void function $callAction(required string action) {
 					$header(statusCode=404, statustext="Not Found");
 					local.template = get("eventPath") & "/onmissingtemplate.cfm";
 					$includeAndOutput(template=local.template);
-					$abort();
+					abort;
 				}
 			}
 		}

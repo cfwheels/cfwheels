@@ -28,11 +28,6 @@ component extends="wheels.tests.Test" {
     application[$appKey()].routes = [];
   }
 
-  public void function $dump() {
-    teardown();
-    super.$dump(argumentCollection=arguments);
-  }
-
 	function test_issue_455() {
 		mapper = $mapper();
 		mapper.draw().match(name="user_2", pattern="user/[user_id]/[controller]/[action]").end();

@@ -101,10 +101,6 @@
 	<cfheader attributeCollection="#arguments#">
 </cffunction>
 
-<cffunction name="$abort" returntype="void" access="public" output="false">
-	<cfabort attributeCollection="#arguments#">
-</cffunction>
-
 <cffunction name="$include" returntype="void" access="public" output="false">
 	<cfargument name="template" type="string" required="true">
 	<cfset var loc = {}>
@@ -200,15 +196,6 @@
 	</cfif>
 	<cfdbinfo attributeCollection="#arguments#">
 	<cfreturn loc.rv>
-</cffunction>
-
-<cffunction name="$dump" returntype="void" access="public" output="true">
-	<cfargument name="var" type="any" required="true">
-	<cfargument name="abort" type="boolean" required="false" default="true">
-	<cfdump var="#arguments.var#">
-	<cfif arguments.abort>
-		<cfabort>
-	</cfif>
 </cffunction>
 
 <cffunction name="$wddx" returntype="any" access="public" output="false">

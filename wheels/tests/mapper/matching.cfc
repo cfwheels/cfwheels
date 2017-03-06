@@ -28,11 +28,6 @@ component extends="wheels.tests.Test" {
     application[$appKey()].routes = [];
   }
 
-  public void function $dump() {
-    teardown();
-    super.$dump(argumentCollection=arguments);
-  }
-
   // match
 
   function test_match_with_basic_arguments() {

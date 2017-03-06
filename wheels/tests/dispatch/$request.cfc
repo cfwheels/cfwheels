@@ -11,11 +11,6 @@ component extends="wheels.tests.Test" {
     application[$appKey()].routes = _originalRoutes;
   }
 
-  public void function $dump() {
-    teardown();
-    super.$dump(argumentCollection=arguments);
-  }
-
  	function test_route_with_format() {
 		drawRoutes()
 			.match(pattern="users/[username].[format]", controller="test", action="test")

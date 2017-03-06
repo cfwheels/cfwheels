@@ -28,11 +28,6 @@ component extends="wheels.tests.Test" {
     application[$appKey()].routes = [];
   }
 
-  public void function $dump() {
-    teardown();
-    super.$dump(argumentCollection=arguments);
-  }
-
   function test_mapper_init_defaults() {
     mapper = $mapper();
     mapper.inspect = $inspect;

@@ -42,12 +42,6 @@ component extends="wheels.tests.Test" {
     request.cgi["request_method"] = _originalCgiMethod;
   }
 
-  public void function $dump() {
-    teardown();
-    packageTeardown();
-    super.$dump(argumentCollection=arguments);
-  }
-
   function test_error_raised_when_route_not_found() {
     e = raised('d.$findMatchingRoute(path="scouts")');
     assert('e eq "Wheels.RouteNotFound"');

@@ -80,7 +80,7 @@ public void function $runOnRequestStart(required targetPage) {
 		if (!local.makeException) {
 			$header(statusCode=503, statustext="Service Unavailable");
 			$includeAndOutput(template="#application.wheels.eventPath#/onmaintenance.cfm");
-			$abort();
+			abort;
 		}
 	}
 	if (Right(arguments.targetPage, 4) == ".cfc") {
