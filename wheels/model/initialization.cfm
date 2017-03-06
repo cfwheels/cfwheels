@@ -30,6 +30,7 @@
 		variables.wheels.class.callbacks = {};
 		variables.wheels.class.keys = "";
 		variables.wheels.class.dataSource = application.wheels.dataSourceName;
+		variables.wheels.class.schemaOwner = application.wheels.schemaOwner;
 		variables.wheels.class.username = application.wheels.dataSourceUserName;
 		variables.wheels.class.password = application.wheels.dataSourcePassword;
 		variables.wheels.class.automaticValidations = application.wheels.automaticValidations;
@@ -283,7 +284,7 @@
 		{
 			$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by CFWheels.", extendedInfo="Use SQL Server, MySQL, MariaDB, Oracle, PostgreSQL or H2.");
 		}
-		loc.rv = CreateObject("component", "adapters.#loc.adapterName#").init(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password);
+		loc.rv = CreateObject("component", "adapters.#loc.adapterName#").init(dataSource=variables.wheels.class.dataSource, schemaOwner=variables.wheels.class.schemaOwner, username=variables.wheels.class.username, password=variables.wheels.class.password);
 		application.wheels.adapterName = loc.adapterName;
 	</cfscript>
 	<cfreturn loc.rv>

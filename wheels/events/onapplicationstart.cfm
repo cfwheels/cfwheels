@@ -93,6 +93,7 @@ public void function onApplicationStart() {
 	} else {
 		application.$wheels.dataSourceName = LCase(ListLast(GetDirectoryFromPath(GetBaseTemplatePath()), Right(GetDirectoryFromPath(GetBaseTemplatePath()), 1)));
 	}
+	application.$wheels.schemaOwner = "";
 	application.$wheels.dataSourceUserName = "";
 	application.$wheels.dataSourcePassword = "";
 	application.$wheels.transactionMode = "commit";
