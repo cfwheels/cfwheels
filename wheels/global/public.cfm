@@ -43,13 +43,30 @@ public any function processRequest(required struct params, string returnAs) {
 	local.controller = controller(name=arguments.params.controller, params=arguments.params);
 	local.controller.processAction();
 	local.response = local.controller.response();
-	if (StructKeyExists(arguments, "returnAs") && arguments.returnAs == "struct") {
-		local.rv = {};
-		local.rv.status = $statusCode();
-		local.rv.type = $contentType();
-		local.rv.body = local.response;
+
+	// Get redirect info.
+	// If a delayed redirect was made we use the status code for that and set the body to a blank string.
+	// If not we use the current status code and response and set the redirect info to a blank string.
+	local.redirectDetails = local.controller.getRedirect();
+	if (StructCount(local.redirectDetails)) {
+		local.body = "";
+		local.redirect = local.redirectDetails.url;
+		local.status = local.redirectDetails.statusCode;
 	} else {
-		local.rv = local.response;
+		local.status = $statusCode();
+		local.body = local.response;
+		local.redirect = "";
+	}
+
+	if (StructKeyExists(arguments, "returnAs") && arguments.returnAs == "struct") {
+		local.rv = {
+			body = local.body,
+			redirect = local.redirect,
+			status = local.status,
+			type = $contentType()
+		};
+	} else {
+		local.rv = local.body;
 	}
 
 	// Set back the status code to 200 so the test suite does not use the same code that the action that was tested did.
