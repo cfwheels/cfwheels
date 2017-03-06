@@ -11,8 +11,9 @@ public struct function drawRoutes(boolean restful=true, boolean methods=argument
 
 public void function addRoute() {
 	throw(
-		type="Wheels.DeprecatedMethod",
-		message="Please use `drawRoutes()` in your `/config/routes.cfm` configuration file."
+		type="Wheels.DeprecatedFunction",
+		message="This function has been deprecated.",
+		extendedInfo="Please use `drawRoutes()` in your `/config/routes.cfm` file instead."
 	);
 }
 

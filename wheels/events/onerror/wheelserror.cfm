@@ -3,7 +3,13 @@
 <p><strong>#REReplace(arguments.wheelsError.message, "`([^`]*)`", "<tt>\1</tt>", "all")#</strong></p>
 <cfif StructKeyExists(arguments.wheelsError, "extendedInfo") AND Len(arguments.wheelsError.extendedInfo)>
 	<h2>Suggested action</h2>
-	<p>#REReplace(arguments.wheelsError.extendedInfo, "`([^`]*)`", "<tt>\1</tt>", "all")#</p>
+	<cfset loc.info = REReplace(arguments.wheelsError.extendedInfo, "`([^`]*)`", "<tt>\1</tt>", "all")>
+	<cftry>
+		<cfset loc.info = REReplaceNoCase(loc.info, "<tt>([a-z]*\(\))</tt>", "<a href=""#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=docs&type=core"">\1</a>")>
+	<cfcatch>
+	</cfcatch>
+	</cftry>
+	<p>#loc.info#</p>
 </cfif>
 <cfset loc.path = GetDirectoryFromPath(GetBaseTemplatePath())>
 <cfset loc.errorPos = 0>
