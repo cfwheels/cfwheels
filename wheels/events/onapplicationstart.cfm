@@ -1,4 +1,5 @@
 <cfscript>
+
 public void function onApplicationStart() {
 
 	// abort if called from incorrect file
@@ -421,4 +422,5 @@ public void function onApplicationStart() {
 		$location(url=local.url, addToken=false);
 	}
 }
+
 </cfscript>

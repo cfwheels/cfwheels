@@ -16,7 +16,7 @@ public boolean function $processAction() {
 					local.timeSpan = $timeSpanForCache(local.action.time);
 					$cache(action="serverCache", timeSpan=local.timeSpan, useQueryString=true);
 					if (!$reCacheRequired()) {
-						Abort;
+						abort;
 					}
 				} else {
 					local.cache = local.action.time;

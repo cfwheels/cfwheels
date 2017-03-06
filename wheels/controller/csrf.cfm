@@ -29,7 +29,7 @@ public function $verifyAuthenticityToken() {
 	if (!$isVerifiedRequest()) {
 		switch (variables.$class.csrf.type) {
 			case "abort":
-				Abort;
+				abort;
 			default:
 				$throw(
 					type="Wheels.InvalidAuthenticityToken",
