@@ -28,19 +28,12 @@ Welcome to the wonderful world of CFWheels. We hope you will enjoy it!</p>
 <h3>How to Make this Message Go Away</h3>
 <p>Want to have another page load when your application loads this URL? You can configure your own <em>home route</em>.</p>
 <ol>
-	<li>
-		<p>Open the routes configuration file at <code>config/routes.cfm</code>.</p>
+	<li>Open the routes configuration file at <code>config/routes.cfm</code>.</li>
+	<li>You will see a line similar to this for a route named <code>root</code>:
+	<pre><code>.root(to=&quot;wheels####wheels&quot;, method=&quot;get&quot;)</code></pre>
 	</li>
-	<li>
-		<p>You will see a line similar to this for a route named <code>root</code>:</p>
-		<pre><code>.root(to=&quot;wheels####wheels&quot;, method=&quot;get&quot;)</code></pre>
-	</li>
-	<li>
-		<p>Simply change the <code>to</code> parameter to specify a <code>controller####action</code> of your choosing.</p>
-	</li>
-	<li>
-		<p>Reload your CFWheels application.</p>
-	</li>
+	<li>Simply change the <code>to</code> parameter to specify a <code>controller####action</code> of your choosing.</li>
+	<li>Reload your CFWheels application.</li>
 </ol>
 
 </cfoutput>
