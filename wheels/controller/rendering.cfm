@@ -300,7 +300,7 @@ public string function $includeFile(required any $name, required any $template, 
 					arguments.current = local.i;
 					arguments.totalCount = local.iEnd;
 					local.jEnd = ListLen(local.query.columnList);
-					for (local.j=1; local.j <= local.jEnd; local.j++) {
+					for (local.j = 1; local.j <= local.jEnd; local.j++) {
 						local.property = ListGetAt(local.query.columnList, local.j);
 						try {
 							arguments[local.property] = local.query[local.property][local.i];

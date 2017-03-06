@@ -112,7 +112,7 @@ component extends="Base" output="false" {
 					for (local.i = 1; local.i <= local.iEnd; local.i++) {
 						local.column = local.columns[local.i];
 						local.jEnd = local.query.recordCount;
-						for (local.j=1; local.j <= local.jEnd; local.j++) {
+						for (local.j = 1; local.j <= local.jEnd; local.j++) {
 							if (IsObject(local.query[local.column][local.j])) {
 								// call timestampValue() on objects to convert to string
 								local.query[local.column][local.j] = local.query[local.column][local.j].timestampValue();

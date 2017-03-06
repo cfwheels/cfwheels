@@ -168,7 +168,7 @@ public boolean function $queryCallback(required string method, required query co
 		// get the values in the current query row so that we can pass them in as arguments to the callback method
 		local.invokeArgs = {};
 		local.jEnd = ListLen(arguments.collection.columnList);
-		for (local.j=1; local.j <= local.jEnd; local.j++) {
+		for (local.j = 1; local.j <= local.jEnd; local.j++) {
 			local.item = ListGetAt(arguments.collection.columnList, local.j);
 			try {
 				// coldfusion has a problem with empty strings in queries for bit types

@@ -322,7 +322,7 @@ public struct function $findRoute() {
 			local.rv = application.wheels.routes[ListGetAt(local.routePos, local.i)];
 			local.foundRoute = true;
 			local.jEnd = ListLen(local.rv.variables);
-			for (local.j=1; local.j <= local.jEnd; local.j++) {
+			for (local.j = 1; local.j <= local.jEnd; local.j++) {
 				local.variable = ListGetAt(local.rv.variables, local.j);
 				if (!StructKeyExists(arguments, local.variable) || !Len(arguments[local.variable])) {
 					local.foundRoute = false;
