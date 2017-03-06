@@ -1,10 +1,12 @@
 <cfscript>
 
 /**
- * Controller initialization function.
  * Tells CFWheels to run a function before an action is run or after an action has been run.
- * Docs: http://docs.cfwheels.org/docs/filters
- * Tests: wheels/tests/controller/filters/filters.cfc
+ *
+ * @doc.section Controller
+ * @doc.category Initialization Functions
+ * @doc.test wheels/tests/controller/filters/filters.cfc
+ *
  */
 public void function filters(
 	required string through,
@@ -45,10 +47,12 @@ public void function filters(
 }
 
 /**
- * Controller initialization function.
  * Use this function if you need a more low level way of setting the entire filter chain for a controller.
- * Docs: http://docs.cfwheels.org/docs/setfilterchain
- * Tests: wheels/tests/controller/filters/setfilterchain.cfc
+ *
+ * @doc.section Controller
+ * @doc.category Initialization Functions
+ * @doc.test wheels/tests/controller/filters/setfilterchain.cfc
+ *
  */
 public void function setFilterChain(required array chain) {
 	// Clear current filter chain and then re-add from the passed in chain
@@ -60,10 +64,12 @@ public void function setFilterChain(required array chain) {
 }
 
 /**
- * Controller initialization function.
  * Returns an array of all the filters set on current controller in the order in which they will be executed.
- * Docs: http://docs.cfwheels.org/docs/filterchain
- * Tests: wheels/tests/controller/filters/filterchain.cfc
+ *
+ * @doc.section Controller
+ * @doc.category Initialization Functions
+ * @doc.test wheels/tests/controller/filters/filterchain.cfc
+ *
  */
 public array function filterChain(string type="all") {
 

@@ -1,7 +1,12 @@
 <cfscript>
 
-// PUBLIC CONTROLLER REQUEST FUNCTIONS
-
+/**
+ * Returns the value of a specific key in the Flash (or the entire Flash as a struct if no key is passed in).
+ *
+ * @doc.section Controller
+ * @doc.category Flash Functions
+ *
+ */
 public any function flash(string key) {
 	local.flash = $readFlash();
 	if (StructKeyExists(arguments, "key")) {
@@ -12,22 +17,42 @@ public any function flash(string key) {
 		}
 	}
 
-	// We can just return the flash since it is created at the beginning of the request
-	// This way we always return what is expected - a struct
-	local.rv = local.flash;
-	return local.rv;
+	// We can just return the flash since it is created at the beginning of the request.
+	// This way we always return what is expected - a struct.
+	return local.flash;
 }
 
+/**
+ * Deletes everything from the Flash.
+ *
+ * @doc.section Controller
+ * @doc.category Flash Functions
+ *
+ */
 public void function flashClear() {
 	$writeFlash();
 }
 
+/**
+ * Returns how many keys exist in the Flash.
+ *
+ * @doc.section Controller
+ * @doc.category Flash Functions
+ *
+ */
 public numeric function flashCount() {
 	local.flash = $readFlash();
 	local.rv = StructCount(local.flash);
 	return local.rv;
 }
 
+/**
+ * Deletes a specific key from the Flash. Returns true if the key exists.
+ *
+ * @doc.section Controller
+ * @doc.category Flash Functions
+ *
+ */
 public any function flashDelete(required string key) {
 	local.flash = $readFlash();
 	local.rv = StructDelete(local.flash, arguments.key, true);
@@ -35,6 +60,13 @@ public any function flashDelete(required string key) {
 	return local.rv;
 }
 
+/**
+ * Inserts a new key / value into the Flash.
+ *
+ * @doc.section Controller
+ * @doc.category Flash Functions
+ *
+ */
 public void function flashInsert() {
 	local.flash = $readFlash();
 	for (local.key in arguments) {
@@ -43,27 +75,48 @@ public void function flashInsert() {
 	$writeFlash(local.flash);
 }
 
+/**
+ * Returns whether or not the Flash is empty.
+ *
+ * @doc.section Controller
+ * @doc.category Flash Functions
+ *
+ */
 public boolean function flashIsEmpty() {
 	if (flashCount()) {
-		local.rv = false;
+		return false;
 	} else {
-		local.rv = true;
+		return true;
 	}
-	return local.rv;
 }
 
+/**
+ * Make the entire Flash or specific key in it stick around for one more request.
+ *
+ * @doc.section Controller
+ * @doc.category Flash Functions
+ *
+ */
 public void function flashKeep(string key = "") {
 	$args(args=arguments, name="flashKeep", combine="key/keys");
 	request.wheels.flashKeep = arguments.key;
 }
 
+/**
+ * Checks if a specific key exists in the Flash.
+ *
+ * @doc.section Controller
+ * @doc.category Flash Functions
+ *
+ */
 public boolean function flashKeyExists(required string key) {
 	local.flash = $readFlash();
 	return StructKeyExists(local.flash, arguments.key);
 }
 
-// PRIVATE FUNCTIONS
-
+/**
+ * Internal function.
+ */
 public struct function $readFlash() {
 	local.rv = {};
 	if (!StructKeyExists(arguments, "$locked")) {
@@ -77,6 +130,9 @@ public struct function $readFlash() {
 	return local.rv;
 }
 
+/**
+ * Internal function.
+ */
 public any function $writeFlash(struct flash = {}) {
 	if (!StructKeyExists(arguments, "$locked")) {
 		local.lockName = "flashLock" & application.applicationName;
@@ -93,6 +149,9 @@ public any function $writeFlash(struct flash = {}) {
 	}
 }
 
+/**
+ * Internal function.
+ */
 public void function $flashClear() {
 
 	// Only save the old flash if they want to keep anything.
@@ -105,7 +164,7 @@ public void function $flashClear() {
 
 	// See if they wanted to keep anything.
 	if (StructKeyExists(local, "flash")) {
-		// Delete any keys they don't want to keep
+		// Delete any keys they don't want to keep.
 		if (Len(request.wheels.flashKeep)) {
 			for (local.key in local.flash) {
 				if (!ListFindNoCase(request.wheels.flashKeep, local.key)) {
@@ -114,16 +173,23 @@ public void function $flashClear() {
 			}
 		}
 
-		// Write to the flash
+		// Write to the flash.
 		$writeFlash(local.flash);
 
 	}
+
 }
 
+/**
+ * Internal function.
+ */
 public void function $setFlashStorage(required string storage) {
 	variables.$class.flashStorage = arguments.storage;
 }
 
+/**
+ * Internal function.
+ */
 public string function $getFlashStorage() {
 	return variables.$class.flashStorage;
 }

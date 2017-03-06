@@ -1,10 +1,12 @@
 <cfscript>
 
 /**
- * Controller initialization function.
- * Tells CFWheels to cache one or more controller actions.
- * Docs: http://docs.cfwheels.org/docs/caches
- * Tests: wheels/tests/controller/caching/caches.cfc
+ * Tells CFWheels to cache one or more actions.
+ *
+ * @doc.section Controller
+ * @doc.category Initialization Functions
+ * @doc.test wheels/tests/controller/caching/caches.cfc
+ *
  */
 public void function caches(string action="", numeric time, boolean static, string appendToKey="") {
 	$args(args=arguments, name="caches", combine="action/actions");
