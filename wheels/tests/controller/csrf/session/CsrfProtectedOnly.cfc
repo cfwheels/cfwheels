@@ -14,7 +14,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedOnly", action="create", authenticityToken=CSRFGenerateToken() };
     _controller = controller("csrfProtectedOnly", params);
 
-    _controller.$processAction("create", params);
+    _controller.processAction("create", params);
     assert('_controller.response() eq "Create ran."');
   }
 
@@ -24,7 +24,7 @@ component extends="wheels.tests.Test" {
     _controller = controller("csrfProtectedOnly", params);
 
     try {
-      _controller.$processAction("create", params);
+      _controller.processAction("create", params);
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     }
     catch (any e) {
@@ -39,7 +39,7 @@ component extends="wheels.tests.Test" {
     _controller = controller("csrfProtectedOnly", params);
 
     try {
-      _controller.$processAction("create", params);
+      _controller.processAction("create", params);
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     }
     catch (any e) {
@@ -55,7 +55,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedOnly", action="create", authenticityToken=CSRFGenerateToken() };
     _controller = controller("csrfProtectedOnly", params);
 
-    _controller.$processAction("create", params);
+    _controller.processAction("create", params);
     assert('_controller.response() eq "Create ran."');
   }
 
@@ -66,7 +66,7 @@ component extends="wheels.tests.Test" {
     _controller = controller("csrfProtectedOnly", params);
 
     try {
-      _controller.$processAction("create", params);
+      _controller.processAction("create", params);
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     }
     catch (any e) {
@@ -83,7 +83,7 @@ component extends="wheels.tests.Test" {
     _controller = controller("csrfProtectedOnly", params);
 
     try {
-      _controller.$processAction("create", params);
+      _controller.processAction("create", params);
       fail("Wheels.InvalidAuthenticityToken error did not occur.");
     }
     catch (any e) {
@@ -97,7 +97,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedOnly", action="index", authenticityToken=CSRFGenerateToken() };
     _controller = controller("csrfProtectedOnly", params);
 
-    _controller.$processAction("create", params);
+    _controller.processAction("create", params);
     assert('_controller.response() eq "Index ran."');
   }
 
@@ -106,7 +106,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedOnly", action="index" };
     _controller = controller("csrfProtectedOnly", params);
 
-    _controller.$processAction("create", params);
+    _controller.processAction("create", params);
     assert('_controller.response() eq "Index ran."');
   }
 
@@ -115,7 +115,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedOnly", action="index", authenticityToken="#CSRFGenerateToken()#1" };
     _controller = controller("csrfProtectedOnly", params);
 
-    _controller.$processAction("create", params);
+    _controller.processAction("create", params);
     assert('_controller.response() eq "Index ran."');
   }
 
@@ -126,7 +126,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedOnly", action="index" };
     _controller = controller("csrfProtectedOnly", params);
 
-    _controller.$processAction("create", params);
+    _controller.processAction("create", params);
     assert('_controller.response() eq "Index ran."');
   }
 
@@ -136,7 +136,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedOnly", action="index" };
     _controller = controller("csrfProtectedOnly", params);
 
-    _controller.$processAction("create", params);
+    _controller.processAction("create", params);
     assert('_controller.response() eq "Index ran."');
   }
 
@@ -147,7 +147,7 @@ component extends="wheels.tests.Test" {
     params = { controller="csrfProtectedOnly", action="index", authenticityToken="#CSRFGenerateToken()#1" };
     _controller = controller("csrfProtectedOnly", params);
 
-    _controller.$processAction("create", params);
+    _controller.processAction("create", params);
     assert('_controller.response() eq "Index ran."');
   }
 }
