@@ -129,7 +129,7 @@
 						meta["categoryClass"]=cssClassLink(meta["doc.category"]);
 						structDelete(meta, "doc.category");
 					}
-					meta["pathToExtended"]="docs/reference/" & lcase(functionName) & ".md";
+					meta["pathToExtended"]=expandPath("wheels/public/docs/reference/" & lcase(functionName) & ".md");
 					// Check for extended docs
 					meta["hasExtended"]=fileExists(meta.pathToExtended)?true:false;
 					if(meta.hasExtended){

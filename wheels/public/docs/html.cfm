@@ -81,8 +81,6 @@
 						</cfloop>
 						</tbody>
 						</table>
-					<cfelse>
-						<p>No Parameters</p>
 					</cfif>
 
 					<cfif meta.hasExtended>
