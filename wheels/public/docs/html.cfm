@@ -51,10 +51,6 @@
 						<div class="hint">#hintOutput(meta.hint)#</div>
 					</cfif>
 
-					<cfif meta.hasExtended>
-						<div class="md">#meta.extended#</div>
-					</cfif>
-
 					<cfif isArray(meta.parameters) && arraylen(meta.parameters)>
 						<table>
 						<caption>Parameters</caption>
@@ -88,6 +84,11 @@
 					<cfelse>
 						<p>No Parameters</p>
 					</cfif>
+
+					<cfif meta.hasExtended>
+						<div class="md">#meta.extended#</div>
+					</cfif>
+
 				</div><!--/ #lcase(meta.name)# -->
 		</cfloop>
     	</div><!--/col-->
