@@ -5,21 +5,6 @@
  * If the validation fails, the unsaved object (with errors added to it) is still returned.
  * Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.
  *
- * ```
- * // Create a new author and save it to the database.
- * newAuthor = model("author").create(params.author);
- *
- * // Same as above using named arguments.
- * newAuthor = model("author").create(firstName="John", lastName="Doe");
- *
- * // Same as above using both named arguments and a struct.
- * newAuthor = model("author").create(active=1, properties=params.author);
- *
- * // If you have a `hasOne` or `hasMany` association setup from `customer` to `order` you can do a scoped call (the `createOrder` method below will call `model("order").create(customerId=aCustomer.id, shipping=params.shipping)` internally).
- * aCustomer = model("customer").findByKey(params.customerId);
- * anOrder = aCustomer.createOrder(shipping=params.shipping);
- * ```
- *
  * @doc.section Model Class
  * @doc.category Create Functions
  *
@@ -60,21 +45,6 @@ public any function create(
  * The object is not saved to the database, it only exists in memory.
  * Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.
  *
- * ```
- * // Create a new author in memory (not saved to the database).
- * newAuthor = model("author").new();
- *
- * // Create a new author based on properties in a struct.
- * newAuthor = model("author").new(params.authorStruct);
- *
- * // Create a new author by passing in named arguments.
- * newAuthor = model("author").new(firstName="John", lastName="Doe");
- *
- * // If you have a `hasOne` or `hasMany` association setup from `customer` to `order` you can do a scoped call (the `newOrder` method below will call `model("order").new(customerId=aCustomer.id)` internally).
- * aCustomer = model("customer").findByKey(params.customerId);
- * anOrder = aCustomer.newOrder(shipping=params.shipping);
- * ```
- *
  * @doc.section Model Class
  * @doc.category Create Functions
  *
@@ -96,20 +66,6 @@ public any function new(struct properties={}, boolean callbacks=true) {
 /**
  * Saves the object if it passes validation and callbacks.
  * Returns `true` if the object was saved successfully to the database, `false` if not.
- *
- * ```
- * // Save the user object to the database (will automatically do an `INSERT` or `UPDATE` statement depending on if the record is new or already exists.
- * user.save();
- *
- * // Save the user object directly in an if statement and take appropriate action based on the result.
- * if (user.save()) {
- *   flashInsert(notice="The user was saved!");
- *   redirectTo(action="edit");
- * } else {
- *   flashInsert(alert="Error, please correct!");
- *   renderPage(action="edit");
- * }
- * ```
  *
  * @doc.section Model Object
  * @doc.category CRUD Functions
@@ -135,7 +91,7 @@ public boolean function save(
 
 /**
  * Internal function.
- * Create a new object instance.
+ * Creates a new object instance.
  * Called from the new function above.
  * Also called from findByKey, findOne and findAll when returnAs is object(s).
  */
@@ -176,7 +132,7 @@ public any function $createInstance(
 
 /**
  * Internal function.
- * Create a new record in the database or update it if it already exists.
+ * Creates a new record in the database or update it if it already exists.
  * Also set associations and run all related callbacks.
  * Called from the save function above (inside a transaction).
  */
@@ -227,7 +183,7 @@ public boolean function $save(
 
 /**
  * Internal function.
- * ???
+ * Create an INSERT statement and run to create the record.
  */
 public boolean function $create(required any parameterize, required boolean reload) {
 	if (variables.wheels.class.timeStampingOnCreate) {

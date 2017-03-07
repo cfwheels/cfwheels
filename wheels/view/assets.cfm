@@ -3,23 +3,6 @@
 /**
  * Returns a link tag for a stylesheet (or several) based on the supplied arguments.
  *
- * ```
- * <head>
- *   <!--- Includes `stylesheets/styles.css`. --->
- *   #styleSheetLinkTag("styles")#
- *   <!--- Includes `stylesheets/blog.css` and `stylesheets/comments.css`. --->
- *   #styleSheetLinkTag("blog,comments")#
- *   <!--- Includes printer style sheet. --->
- *   #styleSheetLinkTag(source="print", media="print")#
- *   <!--- Includes external style sheet. --->
- *   #styleSheetLinkTag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/cupertino/jquery-ui.css")#
- * </head>
- * <body>
- *   <!--- This will still appear in the `head`. --->
- *   #styleSheetLinkTag(source="tabs", head=true)#
- * </body>
- * ```
- *
  * @doc.section View Helpers
  * @doc.category Asset Functions
  *
@@ -69,21 +52,6 @@ public string function styleSheetLinkTag(string sources="", string type, string 
 /**
  * Returns a script tag for a JavaScript file (or several) based on the supplied arguments.
  *
- * ```
- * <head>
- *   <!--- Includes `javascripts/main.js`. --->
- *   #javaScriptIncludeTag("main")#
- *   <!--- Includes `javascripts/blog.js` and `javascripts/accordion.js`. --->
- *   #javaScriptIncludeTag("blog,accordion")#
- *   <!--- Includes external JavaScript file. --->
- *   #javaScriptIncludeTag("https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js")#
- * </head>
- * <body>
- *   <!--- Will still appear in the `head`. --->
- *   #javaScriptIncludeTag(source="tabs", head=true)#
- * </body>
- * ```
- *
  * @doc.section View Helpers
  * @doc.category Asset Functions
  *
@@ -129,17 +97,6 @@ public string function javaScriptIncludeTag(string sources="", string type, stri
  * Returns an `img` tag.
  * If the image is stored in the local images folder, the tag will also set the `width`, `height`, and `alt` attributes for you.
  * You can pass any additional arguments (e.g. `class`, `rel`, `id`), and the generated tag will also include those values as HTML attributes.
- *
- * ```
- * <!--- Outputs an `img` tag for `images/logo.png`. --->
- * #imageTag("logo.png")#
- *
- * <!--- Outputs an `img` tag for `http://cfwheels.org/images/logo.png`. --->
- * #imageTag(source="http://cfwheels.org/images/logo.png", alt="ColdFusion on Wheels")#
- *
- * <!--- Outputs an `img` tag with the `class` attribute set. --->
- * #imageTag(source="logo.png", class="logo")#
- * ```
  *
  * @doc.section View Helpers
  * @doc.category Asset Functions
