@@ -149,16 +149,18 @@
 	// Searches for ``` in hint description output
 	string function hintOutput(str){
 		local.rv=arguments.str;
-		// Try for hint
+		local.rv=ReReplaceNoCase(local.rv, '`(\w+)`', '<code>\1</code>', "ALL");
+		local.rv=simpleFormat(local.rv);
+		/* Try for hint
 		local.hint=ReMatch('.+?```', local.rv );
 		if(arraylen(local.hint)){
-			local.hint=ReReplaceNoCase(local.hint[1], '```', '', 'all');
+			///local.hint=ReReplaceNoCase(local.hint[1], '```', '', 'all');
 			local.hint=ReReplaceNoCase(local.hint, '`(\w+)`', '<code>\1</code>', "ALL");
 			local.hint=simpleFormat(local.hint);
 		} else {
 			local.hint="";
-		}
-		// Try for code example(s?)
+		}*/
+		/* Try for code example(s?)
 		local.code=ReMatch('```(.+?)```', local.rv );
 		if(arraylen(local.code)){
 			local.code = local.code[1];
@@ -172,9 +174,8 @@
 			//local.code = ReReplaceNoCase(local.code, ';', "\1;<br>", "ALL");
 		} else {
 			local.code="";
-		}
+		}*/
 
-		local.rv=local.hint & local.code;
 		return trim(local.rv);
 	}
 
