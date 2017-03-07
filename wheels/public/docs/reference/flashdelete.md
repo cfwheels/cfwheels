@@ -1,0 +1,3 @@
+```coldfusion
+flashDelete(key="errorMessage");
+```

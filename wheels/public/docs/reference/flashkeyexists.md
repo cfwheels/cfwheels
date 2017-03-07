@@ -1,0 +1,3 @@
+```coldfusion
+errorExists = flashKeyExists("error");
+```

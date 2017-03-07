@@ -1,0 +1,7 @@
+```coldfusion
+primaryKey([ position ])
+```
+```coldfusion
+// Get the name of the primary key of the table mapped to the `employee` model (which is the `employees` table by default)
+keyName = model("employee").primaryKey()>
+```

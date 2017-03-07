@@ -1,0 +1,10 @@
+```coldfusion
+pluralize(word [, count, returnCount ])
+```
+```coldfusion
+// Pluralize a word, will result in "people" 
+#pluralize("person")#
+
+// Pluralize based on the count passed in 
+Your search returned #pluralize(word="person", count=users.RecordCount)#
+```

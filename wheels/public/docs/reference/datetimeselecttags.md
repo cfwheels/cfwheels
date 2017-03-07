@@ -1,0 +1,7 @@
+```coldfusion
+// This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object
+#dateTimeSelectTags(name="dateTimeStart", selected=params.dateTimeStart)#
+
+// Show fields for month, day, hour, and minute
+#dateTimeSelectTags(name="dateTimeStart", selected=params.dateTimeStart, dateOrder="month,day", timeOrder="hour,minute")#
+```

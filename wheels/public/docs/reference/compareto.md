@@ -1,0 +1,7 @@
+```coldfusion
+// Load a user requested in the URL/form and restrict access if it doesn't match the user stored in the session
+user = model("user").findByKey(params.key);
+if(!user.compareTo(session.user)){
+	renderPage(action="accessDenied");
+}
+```

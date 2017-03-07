@@ -1,0 +1,7 @@
+```coldfusion
+propertyNames()
+```
+```coldfusion
+// Get a list of the property names in use in the user model
+propNames = model("user").propertyNames()>
+```

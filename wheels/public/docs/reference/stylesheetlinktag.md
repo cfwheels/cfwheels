@@ -1,0 +1,21 @@
+```coldfusion
+styleSheetLinkTag([ sources, type, media, head, delim ])
+```
+```coldfusion
+// view code 
+<head>
+    // Includes `stylesheets/styles.css` 
+    #styleSheetLinkTag("styles")#
+    // Includes `stylesheets/blog.css` and `stylesheets/comments.css` 
+    #styleSheetLinkTag("blog,comments")#
+    // Includes printer style sheet 
+    #styleSheetLinkTag(source="print", media="print")#
+    // Includes external style sheet 
+    #styleSheetLinkTag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/cupertino/jquery-ui.css")#
+</head>
+
+<body>
+    // This will still appear in the `head` 
+    #styleSheetLinkTag(source="tabs", head=true)#
+</body>
+```

@@ -1,0 +1,3 @@
+```coldfusion
+<span class="cm-s-neo"><span class="cm-comment">// Make sure that the user selects either "CFWheels" or "Rails" as their framework</span> <span class="cm-variable">validatesInclusionOf</span>( <span class="cm-variable">property</span><span class="cm-operator">=</span><span class="cm-string">"frameworkOfChoice"</span>, <span class="cm-variable">list</span><span class="cm-operator">=</span><span class="cm-string">"cfwheels,rails"</span>, <span class="cm-variable">message</span><span class="cm-operator">=</span><span class="cm-string">"Please try again, and this time, select a decent framework!"</span> );</span>
+```

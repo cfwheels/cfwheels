@@ -1,0 +1,6 @@
+```coldfusion
+// Basic usage usually involves a `label`, `name`, and `value` 
+<cfoutput>
+    #passwordFieldTag(label="Password", name="password", value=params.password)#
+</cfoutput>
+```

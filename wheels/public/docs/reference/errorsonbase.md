@@ -1,0 +1,4 @@
+```coldfusion
+// Get all general type errors for the user object
+errors = user.errorsOnBase();
+```

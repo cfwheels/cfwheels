@@ -1,0 +1,8 @@
+```coldfusion
+updateProperties([ properties, parameterize, validate, transaction, callbacks ])
+```
+```coldfusion
+// Sets the `new` property to `1` through `updateProperties()`
+product = model("product").findByKey(56)>
+product.updateProperties(new=1)>
+```

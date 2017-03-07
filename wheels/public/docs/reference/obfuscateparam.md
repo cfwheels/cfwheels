@@ -1,0 +1,7 @@
+```coldfusion
+obfuscateParam(param)
+```
+```coldfusion
+// Obfuscate the primary key value `99`
+newValue = obfuscateParam(99)>
+```

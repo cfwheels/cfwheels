@@ -1,0 +1,9 @@
+```coldfusion
+toXHTML(text)
+```
+```coldfusion
+// Outputs `productId=5&amp;amp;categoryId=12&amp;amp;returningCustomer=1` 
+<cfoutput>
+    #toXHTML("productId=5&amp;categoryId=12&amp;returningCustomer=1")#
+</cfoutput>
+```

@@ -1,0 +1,32 @@
+```coldfusion
+// Alternating table row colors
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Phone</th>
+		</tr>
+	</thead>
+	<tbody>
+		<cfoutput query="employees">
+			<tr class="#cycle("odd,even")#">
+				<td>#employees.name#</td>
+				<td>#employees.phone#</td>
+			</tr>
+		</cfoutput>
+	</tbody>
+</table>
+
+// Alternating row colors and shrinking emphasis
+<cfoutput query="employees" group="departmentId">
+	<div class="#cycle(values="even,odd", name="row")#">
+		<ul>
+			<cfoutput>
+				rank = cycle(values="president,vice-president,director,manager,specialist,intern", name="position")>
+				<li class="#rank#">#categories.categoryName#</li>
+				resetCycle("emphasis")>
+			</cfoutput>
+		</ul>
+	</div>
+</cfoutput>
+```

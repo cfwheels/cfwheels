@@ -1,98 +1,60 @@
-
-<cfscript>
-
-	savecontent variable="t1" {
-writeOutput('
-```
-// Create a new author and save it to the database. newAuthor = model("author").create(params.author);
-// Same as above using named arguments. newAuthor = model("author").create(firstName="John", lastName="Doe");
-// Same as above using both named arguments and a struct. newAuthor = model("author").create(active=1, properties=params.author);
-// If you have a `hasOne` or `hasMany` association setup from `customer` to `order` you can do a scoped call (the `createOrder` method below will call `model("order").create(customerId=aCustomer.id, shipping=params.shipping)` internally).
-aCustomer = model("customer").findByKey(params.customerId);
-anOrder = aCustomer.createOrder(shipping=params.shipping);
-```
-'
-);
-
-	}
-	//writeoutput(hintOutput(t1));
-
-	</cfscript>
-
 <cfoutput>
 
-
 <div class="row">
-	<!--- Section/SubSection List --->
+	<!--- Section/category List --->
 	<div id="sections">
 		<h1 class="header">Sections</h1>
 		<p style="padding-left:10px;">
-		<cfloop from="1" to="#arraylen(sections)#" index="s">
-			<a href=""	data-section="#cssClassLink(sections[s]['name'])#" class="section">#sections[s]['name']#</a>
-			<cfloop from="1" to="#arraylen(sections[s]['categories'])#" index="ss">
-				<a href=""	data-section="#cssClassLink(sections[s]['name'])#"	data-subsection="#cssClassLink(sections[s]['categories'][ss])#" class="subsection">#sections[s]['categories'][ss]#</a>
+		<cfloop from="1" to="#arraylen(docs.sections)#" index="s">
+			<a href=""	data-section="#cssClassLink(docs.sections[s]['name'])#" class="section">#docs.sections[s]['name']#</a>
+			<cfloop from="1" to="#arraylen(docs.sections[s]['categories'])#" index="ss">
+				<a href=""	data-section="#cssClassLink(docs.sections[s]['name'])#"	data-category="#cssClassLink(docs.sections[s]['categories'][ss])#" class="category">#docs.sections[s]['categories'][ss]#</a>
 			</cfloop>
 		</cfloop>
 		</p>
 	</div>
 	<!--- A-Z Functions --->
     <div id="left">
-		<h1 class="header">All Functions</h1>
+		<h1 class="header">A-Z Functions <small>(<span>#arraylen(docs.functions)#</span>)</small></h1>
 		<input type="text" name="doc-search" id="doc-search" placeholder="Type to filter..." />
-    	<p style="padding-left:15px">
-		<a href="" class="docreset"><i class="fa fa-eye"></i> All</a>
-
-    	<cfloop collection="#docs#" item="doc">
-			<span style="display: block; font-weight: 700">#doc#</span>
-
-			<cfloop list="#docs[doc]['functions']#" index="func">
-
-				<cfscript>
-				sectionCSSClass=structKeyExists(docs[doc]["meta"][func], "doc.section")
-					? cssClassLink(docs[doc]["meta"][func]['doc.section']): "";
-				subsectionCSSClass=structKeyExists(docs[doc]["meta"][func], "doc.category")
-					? cssClassLink(docs[doc]["meta"][func]['doc.category']): "";
-				</cfscript>
-
-				<cfif left(func, 1) NEQ "$">
-					<a href="" class="functionlink" data-section="#sectionCSSClass#" data-subsection="#subsectionCSSClass#" data-function="#lcase(func)#">#titleize(lcase(func))#()</a>
-				</cfif>
+    	<p>
+			<a href="" class="docreset"><i class="fa fa-eye"></i> All</a>
+			<cfloop from="1" to="#arraylen(docs.functions)#" index="func">
+			<cfset meta=docs.functions[func]>
+				<a href="" class="functionlink"	data-section="#meta.sectionClass#" data-category="#meta.categoryClass#" data-function="#lcase(meta.name)#">#meta.name#()</a>
 			</cfloop>
-		</cfloop>
 		</p>
     </div><!--/col-->
     <!--- Function Definition Output --->
     <div id="right">
-    	<cfloop collection="#docs#" item="doc">
-		<cfloop list="#docs[doc]['functions']#" index="func">
-			<cfif left(func, 1) NEQ "$">
-				<cfscript>
-					meta=docs[doc]["meta"][func];
-					sectionCSSClass=structKeyExists(meta, "doc.section")
-					? cssClassLink(meta['doc.section']): "";
-					subsectionCSSClass=structKeyExists(meta, "doc.category")
-					? cssClassLink(meta['doc.category']): "";
-
-				</cfscript>
-					<div id="#lcase(func)#" data-section="#sectionCSSClass#" data-subsection="#subsectionCSSClass#" class="functiondefinition">
-
-					<h3 class="functitle">#lcase(func)#()</h3>
+		<cfloop from="1" to="#arraylen(docs.functions)#" index="func">
+			<cfset meta=docs.functions[func]>
+			<div id="#lcase(meta.name)#"
+				data-section="#meta.sectionClass#"
+				data-category="#meta.categoryClass#"
+				class="functiondefinition">
+					<h3 class="functitle">#meta.name#()</h3>
 					<p>
-					<cfif len(sectionCSSClass)>
-						<a href="" class="filtersection" title="Show all Functions in this category">
-						<i class="fa fa-tag"></i> #meta["doc.section"]#</a>
+					<cfif len(meta.section)>
+						<a href="" class="filtersection tag" title="Show all Functions in this category">
+						<i class="fa fa-tag"></i> #meta.section#</a>
 					</cfif>
-					<cfif len(subsectionCSSClass)>
-						<a href="" class="filtersubsection" title="Show all Functions in this category">
-						<i class="fa fa-tag"></i> #meta["doc.category"]#</a>
+					<cfif len(meta.category)>
+						<a href="" class="filtercategory tag" title="Show all Functions in this category">
+						<i class="fa fa-tag"></i> #meta.category#</a>
 					</cfif>
 					<cfif structKeyExists(meta, "returnType")>
 						Returns: #meta.returnType# |
 					</cfif>
-					 #doc#</p>
+					  </p>
 					<cfif structKeyExists(meta, "hint")>
 						<div class="hint">#hintOutput(meta.hint)#</div>
 					</cfif>
+
+					<cfif meta.hasExtended>
+						<div class="md">#meta.extended#</div>
+					</cfif>
+
 					<cfif isArray(meta.parameters) && arraylen(meta.parameters)>
 						<table>
 						<caption>Parameters</caption>
@@ -126,10 +88,8 @@ anOrder = aCustomer.createOrder(shipping=params.shipping);
 					<cfelse>
 						<p>No Parameters</p>
 					</cfif>
-					</div><!--/ #lcase(func)# -->
-				</cfif>
-			</cfloop>
-			</cfloop>
+				</div><!--/ #lcase(meta.name)# -->
+		</cfloop>
     	</div><!--/col-->
 </div><!--/row-->
 
@@ -137,36 +97,46 @@ anOrder = aCustomer.createOrder(shipping=params.shipping);
 <script>
 $(document).ready(function(){
 
-	getCategories();
+	$.each($(".md"), function( index, md ) {
+		var converter = new showdown.Converter();
+	  	var markdown=$(md).html();
+	  	$(md).html(converter.makeHtml(markdown));
+	});
 
 	$(".section").on("click", function(e){
 		filterBySection($(this).data("section"));
+		updateFunctionCount();
 		e.preventDefault();
 	});
-	$(".subsection").on("click", function(e){
-		filterBySubSection($(this).data("section"), $(this).data("subsection"));
+	$(".category").on("click", function(e){
+		filterBycategory($(this).data("section"), $(this).data("category"));
+		updateFunctionCount();
 		e.preventDefault();
 	});
 
 	$(".docreset").on("click", function(e){
 		$(".functiondefinition").show();
 		$(".functionlink").show();
+		updateFunctionCount();
 		e.preventDefault();
 	});
 
 	$(".functionlink").on("click", function(e){
 		filterByFunctionName($(this).data("function"));
+		updateFunctionCount();
 		e.preventDefault();
 	});
 
 	$(".filtersection").on("click", function(e){
 		filterBySection($(this).closest(".functiondefinition").data("section"));
+		updateFunctionCount();
 		e.preventDefault();
 	});
 
-	$(".filtersubsection").on("click", function(e){
+	$(".filtercategory").on("click", function(e){
 		var parent=$(this).closest(".functiondefinition");
-		filterBySubSection(parent.data("section"),parent.data("subsection"));
+		filterBycategory(parent.data("section"),parent.data("category"));
+		updateFunctionCount();
 		e.preventDefault();
 	});
 
@@ -174,11 +144,11 @@ $(document).ready(function(){
 		$("#right").find(".functiondefinition").hide().end()
 				   .find("#" + name).show();
 	}
-	function filterBySubSection(section, subsection){
+	function filterBycategory(section, category){
 		$("#left").find(".functionlink").hide().end()
-				   .find('[data-section="' + section + '"][data-subsection="' + subsection + '"]').show();
+				   .find('[data-section="' + section + '"][data-category="' + category + '"]').show();
 		$("#right").find(".functiondefinition").hide().end()
-				   .find('[data-section="' + section + '"][data-subsection="' + subsection + '"]').show();
+				   .find('[data-section="' + section + '"][data-category="' + category + '"]').show();
 	}
 	function filterBySection(section){
 		$("#left").find(".functionlink").hide().end()
@@ -192,12 +162,15 @@ $(document).ready(function(){
 		$("#right").find(".functiondefinition").hide().end()
 				   .find("." + category).show();
 	}
-
-	function getCategories(){
-		var categories=$(".functiondefinition").classes();
-		categories.splice( $.inArray("functiondefinition", categories), 1 );
-		categories.splice( $.inArray("", categories), 1 );
+	function updateFunctionCount(){
+		$("#left h1.header span").html($("#left a.functionlink:visible").length);
 	}
+
+	//function getCategories(){
+	//	var categories=$(".functiondefinition").classes();
+	//	categories.splice( $.inArray("functiondefinition", categories), 1 );
+	//	categories.splice( $.inArray("", categories), 1 );
+	//}
 
   // Write on keyup event of keyword input element
   $("#doc-search").keyup(function(){
@@ -207,11 +180,13 @@ $(document).ready(function(){
       // Show only matching TR, hide rest of them
       $("#left a").hide();
       $("#left a:contains-ci('" + $(this).val() + "')").show();
+		updateFunctionCount();
     }
     else
     {
       // When there is no input or clean again, show everything back
       $("#left a").show();
+      updateFunctionCount();
     }
   });
 });

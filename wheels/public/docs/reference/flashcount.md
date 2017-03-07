@@ -1,0 +1,3 @@
+```coldfusion
+count = flashCount();
+```

@@ -1,0 +1,11 @@
+```coldfusion
+// This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object 
+<cfoutput>
+    #secondSelectTag(name="secondsToLaunch", selected=params.secondsToLaunch)#
+</cfoutput>
+
+// Only show 15-second intervals 
+<cfoutput>
+	#secondSelectTag(name="secondsToLaunch", value=params.secondsToLaunch, secondStep=15)#
+</cfoutput>
+```

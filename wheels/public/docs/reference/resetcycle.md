@@ -1,0 +1,14 @@
+```coldfusion
+// alternating row colors and shrinking emphasis
+<cfoutput query="employees" group="departmentId">
+	<div class="#cycle(values="even,odd", name="row")#">
+		<ul>
+			<cfoutput>
+				rank = cycle(values="president,vice-president,director,manager,specialist,intern", name="position")>
+				<li class="#rank#">#categories.categoryName#</li>
+				resetCycle("emphasis")>
+			</cfoutput>
+		</ul>
+	</div>
+</cfoutput>
+```

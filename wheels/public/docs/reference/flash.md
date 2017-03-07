@@ -1,0 +1,7 @@
+```coldfusion
+// Get the current value of notice in the Flash
+notice = flash("notice");
+
+// Get the entire Flash as a struct
+flashContents = flash();
+```

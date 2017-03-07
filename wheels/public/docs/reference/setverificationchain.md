@@ -1,0 +1,8 @@
+```coldfusion
+// Set verification chain directly in an array
+setVerificationChain([
+	{only="handleForm", post=true},
+	{only="edit", get=true, params="userId", paramsTypes="integer"},
+	{only="edit", get=true, params="userId", paramsTypes="integer", handler="index", error="Invalid userId"}
+]);
+```

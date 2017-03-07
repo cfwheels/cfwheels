@@ -1,0 +1,3 @@
+```coldfusion
+requestIsPost = isPost();
+```

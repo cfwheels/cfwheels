@@ -1,0 +1,3 @@
+```coldfusion
+empty = flashIsEmpty();
+```

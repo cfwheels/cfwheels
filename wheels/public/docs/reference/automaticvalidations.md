@@ -1,0 +1,6 @@
+```coldfusion
+// In `models/User.cfc`, disable automatic validations. In this case, automatic validations are probably enabled globally, but we want to disable just for this model.
+init(){
+	automaticValidations(false);
+}
+```

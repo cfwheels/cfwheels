@@ -1,0 +1,4 @@
+```coldfusion
+// Get a list of all the column names in the table mapped to the `author` model
+columns = model("author").columnNames();
+```

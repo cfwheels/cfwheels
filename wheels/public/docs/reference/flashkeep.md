@@ -1,0 +1,10 @@
+```coldfusion
+// Keep the entire Flash for the next request
+flashKeep();
+
+// Keep the "error" key in the Flash for the next request
+flashKeep("error");
+
+// Keep both the "error" and "success" keys in the Flash for the next request
+flashKeep("error,success");
+```

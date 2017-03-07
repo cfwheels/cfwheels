@@ -1,0 +1,5 @@
+
+```coldfusion
+// Get all errors related to the email address of the user object
+errors = user.errorsOn(>"emailAddress");
+```

@@ -1,0 +1,6 @@
+```coldfusion
+// This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object 
+<cfoutput>
+    #monthSelectTag(name="monthOfBirthday", selected=params.monthOfBirthday)#
+</cfoutput>
+```

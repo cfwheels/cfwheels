@@ -1,0 +1,4 @@
+```coldfusion
+// Add an error to the `email` property
+this.addError(property="email", message="Sorry, you are not allowed to use that email. Try again, please.");
+```

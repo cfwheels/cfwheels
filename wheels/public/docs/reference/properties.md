@@ -1,0 +1,8 @@
+```coldfusion
+properties()
+```
+```coldfusion
+// Get a structure of all the properties for an object
+user = model("user").findByKey(1)>
+props = user.properties()>
+```

@@ -1,0 +1,4 @@
+```coldfusion
+// Get the original value from an obfuscated one
+originalValue = deobfuscateParam("b7ab9a50");
+```

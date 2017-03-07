@@ -1,0 +1,6 @@
+```coldfusion
+// Get an object, set a value and then see if the property exists
+employee = model("employee").new();
+// returns column name, in this case "firstname" if the convention is used
+employee.columnForProperty("firstName");
+```

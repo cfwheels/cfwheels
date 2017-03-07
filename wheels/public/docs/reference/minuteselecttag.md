@@ -1,0 +1,11 @@
+```coldfusion
+// This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object 
+<cfoutput>
+    #minuteSelectTag(name="minuteOfMeeting", value=params.minuteOfMeeting)#
+</cfoutput>
+
+// Only show 15-minute intervals 
+<cfoutput>
+	#minuteSelectTag(name="minuteOfMeeting", value=params.minuteOfMeeting, minuteStep=15)#
+</cfoutput>
+```

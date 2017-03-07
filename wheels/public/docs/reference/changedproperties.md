@@ -1,0 +1,7 @@
+```coldfusion
+// Get an object, change it, and then ask for its changes (will return a list of the property names that have changed, not the values themselves)
+member = model("member").findByKey(params.memberId);
+member.firstName = params.newFirstName;
+member.email = params.newEmail;
+changedProperties = member.changedProperties();
+```

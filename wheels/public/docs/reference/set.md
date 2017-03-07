@@ -1,0 +1,10 @@
+```coldfusion
+// Example 1: Set the `URLRewriting` setting to `Partial`
+set(URLRewriting="Partial")>
+
+// Example 2: Set default values for the arguments in the `buttonTo` view helper. This works for the majority of Wheels functions/arguments.
+set(functionName="buttonTo", onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable="")>
+
+// Example 3: Set the default values for a form helper to get the form marked up to your preferences
+set(functionName="textField", labelPlacement="before", prependToLabel="<div>", append="</div>", appendToLabel="<br />")>
+```

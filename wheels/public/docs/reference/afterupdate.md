@@ -1,0 +1,4 @@
+```coldfusion
+// Instruct CFWheels to call the `fixObj` method
+afterUpdate("fixObj");
+```

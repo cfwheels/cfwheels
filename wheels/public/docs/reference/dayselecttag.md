@@ -1,0 +1,4 @@
+```coldfusion
+// This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object
+#daySelectTag(name="dayOfWeek", selected=params.dayOfWeek)#
+```

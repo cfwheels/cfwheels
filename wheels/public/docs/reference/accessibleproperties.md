@@ -1,0 +1,6 @@
+```coldfusion
+// In `models/User.cfc`, only `isActive` can be set through mass assignment operations like `updateAll()`
+init(){
+	accessibleProperties("isActive");
+}
+```

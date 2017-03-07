@@ -1,0 +1,10 @@
+```coldfusion
+dataSource(datasource [, username, password ])
+```
+```coldfusion
+// In models/User.cfc
+init(){
+    // Tell Wheels to use the data source named `users_source` instead of the default one whenever this model makes SQL calls
+	dataSource("users_source");
+	}
+```
