@@ -5,6 +5,7 @@
   } else {
   	if(structKeyExists(params, "view") && params.view == "docs"){
     	request.wheels.showDebugInformation = false;
+    	setting showdebugoutput="no";
 	    include "../styles/docs.cfm";
 	    writeOutput(includeContent());
 	    include "../styles/docs_footer.cfm";
