@@ -1,10 +1,6 @@
 <cfscript>
 
-public string function errorMessagesFor(
-	required string objectName,
-	string class,
-	boolean showDuplicates
-) {
+public string function errorMessagesFor(required string objectName, string class, boolean showDuplicates) {
 	$args(name="errorMessagesFor", args=arguments);
 	local.object = $getObject(arguments.objectName);
 	if (get("showErrorInformation") && !IsObject(local.object)) {

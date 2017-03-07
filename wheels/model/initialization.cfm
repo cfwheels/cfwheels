@@ -1,5 +1,3 @@
-<!--- PRIVATE METHODS --->
-
 <cffunction name="$initModelClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="path" type="string" required="true">
@@ -13,8 +11,7 @@
 		variables.wheels.class.path = arguments.path;
 
 		// if our name has pathing in it, remove it and add it to the end of of the $class.path variable
-		if (Find("/", arguments.name))
-		{
+		if (Find("/", arguments.name)) {
 			variables.wheels.class.modelName = ListLast(arguments.name, "/");
 			variables.wheels.class.path = ListAppend(arguments.path, ListDeleteAt(arguments.name, ListLen(arguments.name, "/"), "/"), "/");
 		}
@@ -37,14 +34,12 @@
 		table(LCase(pluralize(variables.wheels.class.modelName)));
 		loc.callbacks = "afterNew,afterFind,afterInitialization,beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidation,afterValidation,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
 		loc.iEnd = ListLen(loc.callbacks);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++) {
 			variables.wheels.class.callbacks[ListGetAt(loc.callbacks, loc.i)] = ArrayNew(1);
 		}
 		loc.validations = "onSave,onCreate,onUpdate";
 		loc.iEnd = ListLen(loc.validations);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++) {
 			variables.wheels.class.validations[ListGetAt(loc.validations, loc.i)] = ArrayNew(1);
 		}
 
@@ -53,20 +48,16 @@
 		variables.wheels.class.calculatedPropertyList = "";
 
 		// run developer's init method if it exists
-		if (StructKeyExists(variables, "init"))
-		{
+		if (StructKeyExists(variables, "init")) {
 			init();
-		}
-		else if (get("modelRequireInit"))
-		{
+		} else if (get("modelRequireInit")) {
 			$throw(type="Wheels.ModelInitMissing", message="An init function is required for Model: #variables.wheels.class.modelName#", extendedInfo="Create an init function in /models/#variables.wheels.class.modelName#");
 		}
 
 		// make sure that the tablename has the respected prefix
 		table(getTableNamePrefix() & tableName());
 
-		if (!IsBoolean(variables.wheels.class.tableName) || variables.wheels.class.tableName)
-		{
+		if (!IsBoolean(variables.wheels.class.tableName) || variables.wheels.class.tableName) {
 			// load the database adapter
 			variables.wheels.class.adapter = $assignAdapter();
 
@@ -75,17 +66,13 @@
 
 			loc.processedColumns = "";
 			loc.iEnd = loc.columns.recordCount;
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++) {
 				// set up properties and column mapping
-				if (!ListFind(loc.processedColumns, loc.columns["column_name"][loc.i]))
-				{
+				if (!ListFind(loc.processedColumns, loc.columns["column_name"][loc.i])) {
 					// default the column to map to a property with the same name
 					loc.property = loc.columns["column_name"][loc.i];
-					for (loc.key in variables.wheels.class.mapping)
-					{
-						if (StructKeyExists(variables.wheels.class.mapping[loc.key], "type") && variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property)
-						{
+					for (loc.key in variables.wheels.class.mapping) {
+						if (StructKeyExists(variables.wheels.class.mapping[loc.key], "type") && variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property) {
 							// developer has chosen to map this column to a property with a different name so set that here
 							loc.property = loc.key;
 							break;
@@ -104,8 +91,7 @@
 					// get a boolean value for whether this column can be set to null or not
 					// if we don't get a boolean back we try to translate y/n to proper boolean values in cfml (yes/no)
 					variables.wheels.class.properties[loc.property].nullable = Trim(loc.columns["is_nullable"][loc.i]);
-					if (!IsBoolean(variables.wheels.class.properties[loc.property].nullable))
-					{
+					if (!IsBoolean(variables.wheels.class.properties[loc.property].nullable)) {
 						variables.wheels.class.properties[loc.property].nullable = ReplaceList(variables.wheels.class.properties[loc.property].nullable, "N,Y", "No,Yes");
 					}
 
@@ -123,63 +109,49 @@
 					}
 
 					variables.wheels.class.properties[loc.property].validationtype = variables.wheels.class.adapter.$getValidationType(variables.wheels.class.properties[loc.property].type);
-					if (StructKeyExists(variables.wheels.class.mapping, loc.property))
-					{
-						if (StructKeyExists(variables.wheels.class.mapping[loc.property], "label"))
-						{
+					if (StructKeyExists(variables.wheels.class.mapping, loc.property)) {
+						if (StructKeyExists(variables.wheels.class.mapping[loc.property], "label")) {
 							variables.wheels.class.properties[loc.property].label = variables.wheels.class.mapping[loc.property].label;
 						}
-						if (StructKeyExists(variables.wheels.class.mapping[loc.property], "defaultValue"))
-						{
+						if (StructKeyExists(variables.wheels.class.mapping[loc.property], "defaultValue")) {
 							variables.wheels.class.properties[loc.property].defaultValue = variables.wheels.class.mapping[loc.property].defaultValue;
 						}
 					}
-					if (loc.columns["is_primarykey"][loc.i])
-					{
+					if (loc.columns["is_primarykey"][loc.i]) {
 						setPrimaryKey(loc.property);
 					}
-					if (variables.wheels.class.automaticValidations && !ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", loc.property))
-					{
+					if (variables.wheels.class.automaticValidations && !ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", loc.property)) {
 						loc.defaultValidationsAllowBlank = variables.wheels.class.properties[loc.property].nullable;
 
 						// primary keys should be allowed to be blank
-						if (ListFindNoCase(primaryKeys(), loc.property))
-						{
+						if (ListFindNoCase(primaryKeys(), loc.property)) {
 							loc.defaultValidationsAllowBlank = true;
 						}
-						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !$validationExists(property=loc.property, validation="validatesPresenceOf"))
-						{
-							if (Len(loc.columns["column_default_value"][loc.i]))
-							{
+						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !$validationExists(property=loc.property, validation="validatesPresenceOf")) {
+							if (Len(loc.columns["column_default_value"][loc.i])) {
 								validatesPresenceOf(properties=loc.property, when="onUpdate");
-							}
-							else
-							{
+							} else {
 								validatesPresenceOf(properties=loc.property);
 							}
 						}
 
 						// always allow blank if a database default or validatesPresenceOf() has been set
-						if (Len(loc.columns["column_default_value"][loc.i]) || $validationExists(property=loc.property, validation="validatesPresenceOf"))
-						{
+						if (Len(loc.columns["column_default_value"][loc.i]) || $validationExists(property=loc.property, validation="validatesPresenceOf")) {
 							loc.defaultValidationsAllowBlank = true;
 						}
 
 						// set length validations if the developer has not
-						if (variables.wheels.class.properties[loc.property].validationtype == "string" && !$validationExists(property=loc.property, validation="validatesLengthOf"))
-						{
+						if (variables.wheels.class.properties[loc.property].validationtype == "string" && !$validationExists(property=loc.property, validation="validatesLengthOf")) {
 							validatesLengthOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, maximum=variables.wheels.class.properties[loc.property].size);
 						}
 
 						// set numericality validations if the developer has not
-						if (ListFindNoCase("integer,float", variables.wheels.class.properties[loc.property].validationtype) && !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
-						{
+						if (ListFindNoCase("integer,float", variables.wheels.class.properties[loc.property].validationtype) && !$validationExists(property=loc.property, validation="validatesNumericalityOf")) {
 							validatesNumericalityOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, onlyInteger=(variables.wheels.class.properties[loc.property].validationtype == "integer"));
 						}
 
 						// set date validations if the developer has not (checks both dates or times as per the IsDate() function)
-						if (variables.wheels.class.properties[loc.property].validationtype == "datetime" && !$validationExists(property=loc.property, validation="validatesFormatOf"))
-						{
+						if (variables.wheels.class.properties[loc.property].validationtype == "datetime" && !$validationExists(property=loc.property, validation="validatesFormatOf")) {
 							validatesFormatOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, type="date");
 						}
 					}
@@ -188,18 +160,17 @@
 					loc.processedColumns = ListAppend(loc.processedColumns, loc.columns["column_name"][loc.i]);
 				}
 			}
-			// raise error when no primary key has been defined for the table
-			if (!Len(primaryKeys()))
-			{
+
+			// Raise error when no primary key has been defined for the table.
+			if (!Len(primaryKeys())) {
 				$throw(type="Wheels.NoPrimaryKey", message="No primary key exists on the `#tableName()#` table.", extendedInfo="Set an appropriate primary key on the `#tableName()#` table.");
 			}
+
 		}
 
 		// add calculated properties
-		for (loc.key in variables.wheels.class.mapping)
-		{
-			if (StructKeyExists(variables.wheels.class.mapping[loc.key], "type") && variables.wheels.class.mapping[loc.key].type != "column")
-			{
+		for (loc.key in variables.wheels.class.mapping) {
+			if (StructKeyExists(variables.wheels.class.mapping[loc.key], "type") && variables.wheels.class.mapping[loc.key].type != "column") {
 				variables.wheels.class.calculatedPropertyList = ListAppend(variables.wheels.class.calculatedPropertyList, loc.key);
 				variables.wheels.class.calculatedProperties[loc.key] = {};
 				variables.wheels.class.calculatedProperties[loc.key][variables.wheels.class.mapping[loc.key].type] = variables.wheels.class.mapping[loc.key].value;
@@ -210,31 +181,22 @@
 
 		// set up soft deletion and time stamping if the necessary columns in the table exist
 		variables.wheels.class.timeStampMode = application.wheels.timeStampMode;
-		if (Len(application.wheels.softDeleteProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.softDeleteProperty))
-		{
+		if (Len(application.wheels.softDeleteProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.softDeleteProperty)) {
 			variables.wheels.class.softDeletion = true;
 			variables.wheels.class.softDeleteColumn = variables.wheels.class.properties[application.wheels.softDeleteProperty].column;
-		}
-		else
-		{
+		} else {
 			variables.wheels.class.softDeletion = false;
 		}
-		if (Len(application.wheels.timeStampOnCreateProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnCreateProperty))
-		{
+		if (Len(application.wheels.timeStampOnCreateProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnCreateProperty)) {
 			variables.wheels.class.timeStampingOnCreate = true;
 			variables.wheels.class.timeStampOnCreateProperty = application.wheels.timeStampOnCreateProperty;
-		}
-		else
-		{
+		} else {
 			variables.wheels.class.timeStampingOnCreate = false;
 		}
-		if (Len(application.wheels.timeStampOnUpdateProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnUpdateProperty))
-		{
+		if (Len(application.wheels.timeStampOnUpdateProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnUpdateProperty)) {
 			variables.wheels.class.timeStampingOnUpdate = true;
 			variables.wheels.class.timeStampOnUpdateProperty = application.wheels.timeStampOnUpdateProperty;
-		}
-		else
-		{
+		} else {
 			variables.wheels.class.timeStampingOnUpdate = false;
 		}
 	</cfscript>
@@ -244,51 +206,50 @@
 <cffunction name="$assignAdapter" returntype="any" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		if (application.wheels.showErrorInformation)
-		{
-			try
-			{
+		if (application.wheels.showErrorInformation) {
+			try {
 				loc.info = $dbinfo(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password, type="version");
+			} catch (any e) {
+				$throw(
+					type="Wheels.DataSourceNotFound",
+					message="The data source could not be reached.",
+					extendedInfo="Make sure your database is reachable and that your data source settings are correct. You either need to setup a data source with the name `#variables.wheels.class.dataSource#` in the Administrator or tell CFWheels to use a different data source in `config/settings.cfm`."
+				);
 			}
-			catch (any e)
-			{
-				$throw(type="Wheels.DataSourceNotFound", message="The data source could not be reached.", extendedInfo="Make sure your database is reachable and that your data source settings are correct. You either need to setup a data source with the name `#variables.wheels.class.dataSource#` in the Administrator or tell CFWheels to use a different data source in `config/settings.cfm`.");
-			}
+		} else {
+			loc.info = $dbinfo(
+				type="version",
+				dataSource=variables.wheels.class.dataSource,
+				username=variables.wheels.class.username,
+				password=variables.wheels.class.password
+			);
 		}
-		else
-		{
-			loc.info = $dbinfo(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password, type="version");
-		}
-		if (FindNoCase("SQLServer", loc.info.driver_name) || FindNoCase("SQL Server", loc.info.driver_name))
-		{
+		if (FindNoCase("SQLServer", loc.info.driver_name) || FindNoCase("SQL Server", loc.info.driver_name)) {
 			loc.adapterName = "SQLServer";
-		}
-		else if (FindNoCase("MySQL", loc.info.driver_name) || FindNoCase("MariaDB", loc.info.driver_name))
-		{
+		} else if (FindNoCase("MySQL", loc.info.driver_name) || FindNoCase("MariaDB", loc.info.driver_name)) {
 			loc.adapterName = "MySQL";
-		}
-		else if (FindNoCase("Oracle", loc.info.driver_name))
-		{
+		} else if (FindNoCase("Oracle", loc.info.driver_name)) {
 			loc.adapterName = "Oracle";
-		}
-		else if (FindNoCase("PostgreSQL", loc.info.driver_name))
-		{
+		} else if (FindNoCase("PostgreSQL", loc.info.driver_name)) {
 			loc.adapterName = "PostgreSQL";
-		}
-		else if (FindNoCase("H2", loc.info.driver_name))
-		{
+		} else if (FindNoCase("H2", loc.info.driver_name)) {
 			loc.adapterName = "H2";
+		} else {
+			$throw(
+				type="Wheels.DatabaseNotSupported",
+				message="#loc.info.database_productname# is not supported by CFWheels.",
+				extendedInfo="Use SQL Server, MySQL, MariaDB, Oracle, PostgreSQL or H2."
+			);
 		}
-		else
-		{
-			$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by CFWheels.", extendedInfo="Use SQL Server, MySQL, MariaDB, Oracle, PostgreSQL or H2.");
-		}
-		loc.rv = CreateObject("component", "adapters.#loc.adapterName#").init(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password);
+		loc.rv = CreateObject("component", "adapters.#loc.adapterName#").init(
+			dataSource=variables.wheels.class.dataSource,
+			username=variables.wheels.class.username,
+			password=variables.wheels.class.password
+		);
 		application.wheels.adapterName = loc.adapterName;
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
-
 
 <cffunction name="$initModelObject" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
@@ -308,24 +269,20 @@
 		variables.wheels.tickCountId = request.wheels.tickCountId;
 
 		// copy class variables from the object in the application scope
-		if (!StructKeyExists(variables.wheels, "class"))
-		{
+		if (!StructKeyExists(variables.wheels, "class")) {
 			loc.lockName = "classLock" & application.applicationName;
 			variables.wheels.class = $simpleLock(name=loc.lockName, type="readOnly", object=application.wheels.models[arguments.name], execute="$classData");
 		}
 
 		// setup object properties in the this scope
-		if (IsQuery(arguments.properties) && arguments.properties.recordCount != 0)
-		{
+		if (IsQuery(arguments.properties) && arguments.properties.recordCount != 0) {
 			arguments.properties = $queryRowToStruct(argumentCollection=arguments);
 		}
 
-		if (IsStruct(arguments.properties) && !StructIsEmpty(arguments.properties))
-		{
+		if (IsStruct(arguments.properties) && !StructIsEmpty(arguments.properties)) {
 			$setProperties(properties=arguments.properties, setOnModel=true, $useFilterLists=arguments.useFilterLists);
 		}
-		if (arguments.persisted)
-		{
+		if (arguments.persisted) {
 			$updatePersistedProperties();
 		}
 		variables.wheels.instance.persistedOnInitialization = arguments.persisted;

@@ -90,7 +90,7 @@ component extends="Base" output=false {
 			if (local.columns["table_schem"][local.i] != "information_schema") {
 				QueryAddRow(local.rv);
 				local.jEnd = ListLen(local.columns.columnList);
-				for (local.j=1; local.j <= local.jEnd; local.j++) {
+				for (local.j = 1; local.j <= local.jEnd; local.j++) {
 					local.item = ListGetAt(local.columns.columnList, local.j);
 					QuerySetCell(local.rv, local.item, local.columns[local.item][local.i]);
 				}

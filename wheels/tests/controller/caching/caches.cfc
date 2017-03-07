@@ -16,7 +16,7 @@ component extends="wheels.tests.Test" {
 		$$oldViewPath = application.wheels.viewPath;
 		application.wheels.viewPath = "wheels/tests/_assets/views";
 		_controller.caches(action="test");
-		result = _controller.$processAction("test", params);
+		result = _controller.processAction("test", params);
 		application.wheels.viewPath = $$oldViewPath;
 		assert("result IS true");
 	}

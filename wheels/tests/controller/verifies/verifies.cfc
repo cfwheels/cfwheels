@@ -12,7 +12,7 @@ component extends="wheels.tests.Test" {
 		request.cgi.request_method = "get";
 		params = {controller="verifies", action="actionGet"};
 		_controller = controller("verifies", params);
-		_controller.$processAction("actionGet", params);
+		_controller.processAction("actionGet", params);
 		assert('_controller.response() eq "actionGet"');
 	}
 
@@ -20,7 +20,7 @@ component extends="wheels.tests.Test" {
 		request.cgi.request_method = "post";
 		params = {controller="verifies", action="actionGet"};
 		_controller = controller("verifies", params);
-		_controller.$processAction("actionGet", params);
+		_controller.processAction("actionGet", params);
 		assert('_controller.$abortIssued() eq "true"');
 		assert('_controller.$performedRenderOrRedirect() eq "false"');
 	}
@@ -29,7 +29,7 @@ component extends="wheels.tests.Test" {
 		request.cgi.request_method = "get";
 		params = {controller="verifies", action="actionPostWithRedirect"};
 		_controller = controller("verifies", params);
-		_controller.$processAction("actionPostWithRedirect", params);
+		_controller.processAction("actionPostWithRedirect", params);
 		assert('_controller.$abortIssued() eq "false"');
 		assert('_controller.$performedRenderOrRedirect() eq "true"');
 		assert('_controller.getRedirect().$args.action  eq "index"');
@@ -41,7 +41,7 @@ component extends="wheels.tests.Test" {
 		request.cgi.request_method = "post";
 		params = {controller="verifies", action="actionPostWithTypesValid", userid="0", authorid="00000000-0000-0000-0000-000000000000"};
 		_controller = controller("verifies", params);
-		_controller.$processAction("actionPostWithTypesValid", params);
+		_controller.processAction("actionPostWithTypesValid", params);
 		assert('_controller.response() eq "actionPostWithTypesValid"');
 	}
 
@@ -49,7 +49,7 @@ component extends="wheels.tests.Test" {
 		request.cgi.request_method = "post";
 		params = {controller="verifies", action="actionPostWithTypesInValid", userid="0", authorid="invalidguid"};
 		_controller = controller("verifies", params);
-		_controller.$processAction("actionPostWithTypesInValid", params);
+		_controller.processAction("actionPostWithTypesInValid", params);
 		assert('_controller.$abortIssued() eq "true"');
 	}
 
@@ -57,7 +57,7 @@ component extends="wheels.tests.Test" {
 		request.cgi.request_method = "post";
 		params = {controller="verifies", action="actionPostWithTypesInValid", userid="1.234", authorid="00000000-0000-0000-0000-000000000000"};
 		_controller = controller("verifies", params);
-		_controller.$processAction("actionPostWithTypesInValid", params);
+		_controller.processAction("actionPostWithTypesInValid", params);
 		assert('_controller.$abortIssued() eq "true"');
 	}
 
@@ -65,7 +65,7 @@ component extends="wheels.tests.Test" {
 		request.cgi.request_method = "post";
 		params = {controller="verifies", action="actionPostWithString", username="tony", password=""};
 		_controller = controller("verifies", params);
-		_controller.$processAction("actionPostWithString", params);
+		_controller.processAction("actionPostWithString", params);
 		assert('_controller.$abortIssued() eq "false"');
 	}
 
@@ -73,7 +73,7 @@ component extends="wheels.tests.Test" {
 		request.cgi.request_method = "post";
 		params = {controller="verifies", action="actionPostWithString", username="", password=""};
 		_controller = controller("verifies", params);
-		_controller.$processAction("actionPostWithString", params);
+		_controller.processAction("actionPostWithString", params);
 		assert('_controller.$abortIssued() eq "true"');
 	}
 

@@ -269,7 +269,7 @@ public boolean function $create(required any parameterize, required boolean relo
 		// Map the primary keys down to the SQL columns.
 		local.pks = ListToArray(primaryKeys());
 		local.iEnd = ArrayLen(local.pks);
-		for(local.i = 1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.pks[local.i] = variables.wheels.class.properties[local.pks[local.i]].column;
 		}
 		local.pks = ArrayToList(local.pks);

@@ -31,7 +31,7 @@ public string function startFormTag(
 	request.wheels.currentFormMethod = arguments.method;
 
 	// if we have a route and method, tap
-	if (len(arguments.route) && structKeyExists(arguments, "method")) {
+	if (Len(arguments.route) && StructKeyExists(arguments, "method")) {
 
 		// throw a nice wheels error if the developer passes in a route that was not generated
 		if (application.wheels.showErrorInformation && !StructKeyExists(application.wheels.namedRoutePositions, arguments.route)) {
