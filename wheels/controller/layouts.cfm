@@ -1,5 +1,12 @@
 <cfscript>
 
+/**
+ * Used within a controller's init() function to specify controller- or action-specific layouts.
+ *
+ * @doc.section Controller
+ * @doc.category Initialization Functions
+ *
+ */
 public void function usesLayout(
 	required string template,
 	string ajax="",
@@ -21,6 +28,9 @@ public void function usesLayout(
 	variables.$class.layout = arguments;
 }
 
+/**
+ * Internal function.
+ */
 public any function $useLayout(required string $action) {
 	local.rv = true;
 	local.layoutType = "template";
@@ -44,6 +54,9 @@ public any function $useLayout(required string $action) {
 	return local.rv;
 }
 
+/**
+ * Internal function.
+ */
 public string function $renderLayout(required string $content, required $layout) {
 	if ((IsBoolean(arguments.$layout) && arguments.$layout) || (!IsBoolean(arguments.$layout) && Len(arguments.$layout))) {
 		// store the content in a variable in the request scope so it can be accessed by the includeContent function that the developer uses in layout files

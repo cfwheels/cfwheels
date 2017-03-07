@@ -1,5 +1,12 @@
 <cfscript>
 
+/**
+ * Instructs CFWheels to verify that some specific criterias are met before running an action. Note that all undeclared arguments will be passed to redirectTo() call if a handler is not specified.
+ *
+ * @doc.section Controller
+ * @doc.category Initialization Functions
+ *
+ */
 public void function verifies(
 	string only="",
 	string except="",
@@ -18,10 +25,24 @@ public void function verifies(
 	ArrayAppend(variables.$class.verifications, Duplicate(arguments));
 }
 
+/**
+ * Returns an array of all the verifications set on this controller in the order in which they will be executed.
+ *
+ * @doc.section Controller
+ * @doc.category Initialization Functions
+ *
+ */
 public array function verificationChain() {
 	return variables.$class.verifications;
 }
 
+/**
+ * Use this function if you need a more low level way of setting the entire verification chain for a controller.
+ *
+ * @doc.section Controller
+ * @doc.category Initialization Functions
+ *
+ */
 public void function setVerificationChain(required array chain) {
 
 	// clear current verification chain and then re-add from the passed in chain
@@ -32,6 +53,9 @@ public void function setVerificationChain(required array chain) {
 	}
 }
 
+/**
+ * Internal function.
+ */
 public void function $runVerifications(
 	required string action,
 	required struct params,
@@ -108,6 +132,9 @@ public void function $runVerifications(
 	}
 }
 
+/**
+ * Internal function.
+ */
 public boolean function $checkVerificationsVars(
 	required struct scope,
 	required string vars,

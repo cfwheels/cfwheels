@@ -1,5 +1,12 @@
 <cfscript>
 
+/**
+ * Redirects the browser to the supplied controller/action/key, route or back to the referring page. Internally, this function uses the URLFor function to build the link and the cflocation tag to perform the redirect.
+ *
+ * @doc.section Controller
+ * @doc.category Miscellaneous Functions
+ *
+ */
 public void function redirectTo(
 	boolean back=false,
 	boolean addToken,
@@ -20,13 +27,13 @@ public void function redirectTo(
 ) {
 	$args(name="redirectTo", args=arguments);
 
-	// set flash if passed in
+	// Set flash if passed in.
+	// If more than the arguments listed in the function declaration was passed in it's possible that one of them is intended for the flash.
 	local.functionInfo = GetMetaData(variables.redirectTo);
 	if (StructCount(arguments) > ArrayLen(local.functionInfo.parameters)) {
-		// since more than the arguments listed in the function declaration was passed in it's possible that one of them is intended for the flash
 
-		// create a list of all the argument names that should not be set to the flash
-		// this includes arguments to the function itself or ones meant for a route
+		// Create a list of all the argument names that should not be set to the flash.
+		// This includes arguments to the function itself or ones meant for a route.
 		local.nonFlashArgumentNames = "";
 		if (Len(arguments.route)) {
 			local.nonFlashArgumentNames = ListAppend(local.nonFlashArgumentNames, $findRoute(argumentCollection=arguments).variables);
@@ -36,7 +43,7 @@ public void function redirectTo(
 			local.nonFlashArgumentNames = ListAppend(local.nonFlashArgumentNames, local.functionInfo.parameters[local.i].name);
 		}
 
-		// loop through arguments and when the first flash argument is found we set it
+		// Loop through arguments and when the first flash argument is found we set it.
 		local.argumentNames = StructKeyList(arguments);
 		local.iEnd = ListLen(local.argumentNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -48,15 +55,18 @@ public void function redirectTo(
 				flashInsert(argumentCollection=local.flashArguments);
 			}
 		}
+
 	}
 
-	// set the url that will be used in the cflocation tag
+	// Set the url that will be used in the cflocation tag.
 	if (arguments.back) {
 		if (Len(request.cgi.http_referer) && FindNoCase(request.cgi.server_name, request.cgi.http_referer)) {
-			// referrer exists and points to the same domain so it's ok to redirect to it
+
+			// Referrer exists and points to the same domain so it's ok to redirect to it.
 			local.url = request.cgi.http_referer;
 			if (Len(arguments.params)) {
-				// append params to the referrer url
+
+				// Append params to the referrer url.
 				local.params = $constructParams(arguments.params);
 				if (Find("?", request.cgi.http_referer)) {
 					local.params = Replace(local.params, "?", "&");
@@ -64,14 +74,17 @@ public void function redirectTo(
 					local.params = Replace(local.params, "&", "?", "one");
 				}
 				local.url &= local.params;
+
 			}
 		} else {
-			// we can't redirect to the referrer so we either use a fallback route/controller/action combo or send to the root of the site
+
+			// We can't redirect to the referrer so we either use a fallback route/controller/action combo or send to the root of the site.
 			if (Len(arguments.route) || Len(arguments.controller) || Len(arguments.action)) {
 				local.url = URLFor(argumentCollection=arguments);
 			} else {
 				local.url = get("webPath");
 			}
+
 		}
 	} else if (Len(arguments.url)) {
 		local.url = arguments.url;
@@ -79,23 +92,30 @@ public void function redirectTo(
 		local.url = URLFor(argumentCollection=arguments);
 	}
 
-	// schedule or perform the redirect right away
+	// Schedule or perform the redirect right away.
 	if (arguments.delay) {
 		if (StructKeyExists(variables.$instance, "redirect")) {
-			// throw an error if the developer has already scheduled a redirect previously in this request
+
+			// Throw an error if the developer has already scheduled a redirect previously in this request.
 			$throw(type="Wheels.RedirectToAlreadyCalled", message="`redirectTo()` was already called.");
+
 		} else {
-			// schedule a redirect that will happen after the action code has been completed
+
+			// Schedule a redirect that will happen after the action code has been completed.
 			variables.$instance.redirect = {};
 			variables.$instance.redirect.url = local.url;
 			variables.$instance.redirect.addToken = arguments.addToken;
 			variables.$instance.redirect.statusCode = arguments.statusCode;
 			variables.$instance.redirect.$args = arguments;
+
 		}
 	} else {
-		// do the redirect now using cflocation
+
+		// Do the redirect now using cflocation.
 		$location(url=local.url, addToken=arguments.addToken, statusCode=arguments.statusCode);
+
 	}
+
 }
 
 </cfscript>
