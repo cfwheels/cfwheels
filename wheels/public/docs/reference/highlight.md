@@ -1,4 +1,4 @@
 ```coldfusion
-#highlight(text="You searched for: Wheels", phrases="Wheels")#
--> You searched for: <span class="highlight">Wheels</span>
+<!--- Will output: You searched for: <span class="highlight">CFWheels</span> --->
+#highlight(text="You searched for: CFWheels", phrases="CFWheels")#
 ```

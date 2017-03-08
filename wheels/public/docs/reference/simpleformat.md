@@ -1,22 +1,24 @@
 ```coldfusion
-// How most of your calls will look 
+<!--- How most of your calls will look. --->
 #simpleFormat(post.bodyText)#
 
-// Demonstrates what output looks like with specific data 
+<!--- Demonstrates what output looks like with specific data. --->
 <cfsavecontent variable="comment">
 	I love this post!
 
-	Here''s why:
+	Here's why:
 	* Short
 	* Succinct
 	* Awesome
 </cfsavecontent>
 #simpleFormat(comment)#
--> <p>I love this post!</p>
-   <p>
-       Here''s why:<br />
-	   * Short<br />
-	   * Succinct<br />
-	   * Awesome
-   </p>
+
+<!---
+	<p>I love this post!</p>
+
+	<p>Here's why:<br>
+	* Short<br>
+	* Succinct<br>
+	* Awesome</p>
+--->
 ```
