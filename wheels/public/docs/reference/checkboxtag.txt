@@ -1,4 +1,3 @@
-
 <!--- Example 1: Basic usage involves a `label`, `name`, and `value` --->
 #checkBoxTag(name="subscribe", value="true", label="Subscribe to our newsletter", checked=false)#
 
@@ -15,4 +14,3 @@ toppings = model("topping").findAll(order="name");
 		#checkBoxTag(name="toppings", value="true", label=toppings.name, checked=YesNoFormat(ListFind(ValueList(selectedToppings.id), toppings.id))#
 	</cfoutput>
 </fieldset>
-

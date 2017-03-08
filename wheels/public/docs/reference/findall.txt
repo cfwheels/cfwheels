@@ -1,4 +1,3 @@
-
 // Getting only 5 users and ordering them randomly
 fiveRandomUsers = model("user").findAll(maxRows=5, order="random");
 
@@ -18,4 +17,3 @@ books = model("book").findAllByReleaseYearAndType( "#params.year#,#params.type#"
 // If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `comments` method below will call `model("comment").findAll(where="postId=#post.id#")` internally)
 post = model("post").findByKey(params.postId);
 comments = post.comments();
-

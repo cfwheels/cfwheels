@@ -1,7 +1,3 @@
-
-invokeWithTransaction(method [, transaction, isolation ])
-
-
 // This is the method to be run inside a transaction
 <cffunction name="transferFunds" returntype="boolean" output="false">
     <cfargument name="personFrom">
@@ -14,7 +10,6 @@ invokeWithTransaction(method [, transaction, isolation ])
     </cfif>
 </cffunction>
 
-david = model("Person").findOneByName("David")>
-mary = model("Person").findOneByName("Mary")>
-invokeWithTransaction(method="transferFunds", personFrom=david, personTo=mary, amount=100)>
-
+david = model("Person").findOneByName("David");
+mary = model("Person").findOneByName("Mary");
+invokeWithTransaction(method="transferFunds", personFrom=david, personTo=mary, amount=100);

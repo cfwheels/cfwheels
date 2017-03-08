@@ -1,4 +1,3 @@
-
 // Controller code
 cities = model("city").findAll()>
 
@@ -11,4 +10,3 @@ cities = model("city").findAll()>
 <cfoutput>
 	#selectTag(name="cityId", options=cities, valueField="id", textField="name")#
 </cfoutput>
-

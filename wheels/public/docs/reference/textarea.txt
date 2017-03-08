@@ -1,4 +1,3 @@
-
 // Provide `label` and required `objectName` and `property` 
 <cfoutput>
     #textArea(label="Overview", objectName="article", property="overview")#
@@ -12,4 +11,3 @@
 		#textArea(label="Caption ####i##", objectName="site", association="screenshots", position=i, property="caption")#
 	</cfloop>
 </fieldset>
-

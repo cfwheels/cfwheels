@@ -1,7 +1,3 @@
-
-isClass()
-
-
 // Use the passed in `id` when we're already in an instance 
 <cffunction name="memberIsAdmin">
     <cfif isClass()>
@@ -10,4 +6,3 @@ isClass()
         <cfreturn this.admin>
     </cfif>
 </cffunction>
-

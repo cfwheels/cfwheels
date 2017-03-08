@@ -1,4 +1,3 @@
-
 // Redirect to an action after successfully saving a user
 if (user.save())
 {
@@ -13,4 +12,3 @@ redirectTo(route="profile", screenName="Joe");
 
 // Redirect back to the page the user came from
 redirectTo(back=true);
-

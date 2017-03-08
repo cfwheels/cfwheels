@@ -1,4 +1,3 @@
-
 // Get the amount of the highest salary for all employees
 highestSalary = model("employee").maximum("salary");
 
@@ -7,4 +6,3 @@ highestSalary = model("employee").maximum(property="salary", where="departmentId
 
 // Make sure a numeric value is always returned, even if no records are found to calculate the maximum for
 highestSalary = model("employee").maximum(property="salary", where="salary > ##params.minSalary##", ifNull=0);
-

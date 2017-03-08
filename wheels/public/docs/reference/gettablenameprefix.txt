@@ -1,7 +1,3 @@
-
-getTableNamePrefix()
-
-
 // Get the table name prefix for this user when running a custom query
 <cffunction name="getDisabledUsers" returntype="query">
     var loc = {}>

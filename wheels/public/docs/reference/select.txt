@@ -1,4 +1,3 @@
-
 // Example 1: Basic `select` field with `label` and required `objectName` and `property` arguments
 // - Controller code
 authors = model("author").findAll()>
@@ -19,4 +18,3 @@ statuses = model("status").findAll(order="name")>
 		#select(label="Order #shipments.orders[i].orderNum#", objectName="shipment", association="orders", position=i, property="statusId", options=statuses)#
 	</cfloop>
 </cfoutput>
-

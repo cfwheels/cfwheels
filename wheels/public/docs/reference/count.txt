@@ -1,4 +1,3 @@
-
 // Count how many authors there are in the table
 authorCount = model("author").count();
 
@@ -12,4 +11,3 @@ authorWithBooksOnACount = model("author").count(include="books", where="booktitl
 // The `commentCount` method will call `model("comment").count(where="postId=##post.id##")` internally
 aPost = model("post").findByKey(params.postId);
 amount = aPost.commentCount();
-

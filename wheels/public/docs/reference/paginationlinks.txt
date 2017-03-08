@@ -1,4 +1,3 @@
-
 // Example 1: List authors page by page, 25 at a time
 // Controller code
 <cfparam name="params.page" default="1">
@@ -38,4 +37,3 @@ comments = model("comment").findAll(page=params.page, order="createdAt")>
 <ul>
     <cfoutput>##paginationLinks(route="paginatedCommentListing", year=2009, month="feb", day=10)##</cfoutput>
 </ul>
-

@@ -1,4 +1,3 @@
-
 <!--- Basic example of a check box for a boolean field --->
 #checkBox(objectName="photo", property="isPublic", label="Display this photo publicly.")#
 
@@ -11,4 +10,3 @@
         </div>
     </div>
 </cfloop>
-

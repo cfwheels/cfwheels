@@ -1,4 +1,3 @@
-
 // View code 
 <cfoutput>
     #timeSelect(objectName="business", property="openUntil")#
@@ -13,4 +12,3 @@
 <cfoutput>
 	#timeSelect(objectName="appointment", property="dateTimeStart", minuteStep=15)#
 </cfoutput>
-

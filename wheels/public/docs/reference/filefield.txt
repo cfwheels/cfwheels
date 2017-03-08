@@ -1,4 +1,3 @@
-
 <!--- Provide a `label` and the required `objectName` and `property` --->
 #fileField(label="Photo", objectName="photo", property="imageFile")#
 
@@ -11,4 +10,3 @@
 		#textField(label="Caption ####i##", objectName="site", association="screenshots", position=i, property="caption")#
 	</cfloop>
 </fieldset>
-

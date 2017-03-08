@@ -1,8 +1,4 @@
-
-hasManyRadioButton(objectName, association, property, keys, tagValue [, checkIfBlank, label ])
-
-
-// Show radio buttons for associating a default address with the current author 
+<!--- Show radio buttons for associating a default address with the current author --->
 <cfloop query="addresses">
     #hasManyRadioButton(
         label=addresses.title,
@@ -11,4 +7,3 @@ hasManyRadioButton(objectName, association, property, keys, tagValue [, checkIfB
         keys="#author.key()#,#addresses.id#"
     )#
 </cfloop>
-

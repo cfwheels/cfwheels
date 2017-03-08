@@ -1,4 +1,3 @@
-
 <!--- Will output: Download CFWheels from <a href="http://cfwheels.org/download">http://cfwheels.org/download</a> --->
 #autoLink("Download CFWheels from http://cfwheels.org/download")#
 

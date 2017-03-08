@@ -1,4 +1,3 @@
-
 // Render a view page for a different action within the same controller
 renderPage(action="edit");
 
@@ -16,4 +15,3 @@ renderPage(layout="/layouts/blog");
 
 // Don''t render the view immediately but rather return and store in a variable for further processing
 myView = renderPage(returnAs="string");
-

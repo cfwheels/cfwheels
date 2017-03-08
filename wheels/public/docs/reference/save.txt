@@ -1,4 +1,3 @@
-
 // Save the user object to the database (will automatically do an `INSERT` or `UPDATE` statement depending on if the record is new or already exists
 user.save()>
 
@@ -10,4 +9,3 @@ user.save()>
 	flashInsert(alert="Error, please correct!")>
 	renderPage(action="edit")>
 </cfif>
-

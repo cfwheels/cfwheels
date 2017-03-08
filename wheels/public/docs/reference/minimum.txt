@@ -1,4 +1,3 @@
-
 // Get the amount of the lowest salary for all employees
 lowestSalary = model("employee").minimum("salary");
 
@@ -7,4 +6,3 @@ lowestSalary = model("employee").minimum(property="salary", where="departmentId=
 
 // Make sure a numeric amount is always returned, even when there were no records analyzed by the query
 lowestSalary = model("employee").minimum(property="salary", where="salary BETWEEN ##params.min## AND ##params.max##", ifNull=0);
-

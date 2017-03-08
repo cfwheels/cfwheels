@@ -1,6 +1,2 @@
-
-// Basic usage usually involves a `name` and `value` 
-<cfoutput>
-    #hiddenFieldTag(name="userId", value=user.id)#
-</cfoutput>
-
+<!--- Basic usage usually involves a `name` and `value` --->
+#hiddenFieldTag(name="userId", value=user.id)#

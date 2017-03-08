@@ -1,9 +1,2 @@
-
-hyphenize(string)
-
-
-// Outputs "my-blog-post" 
-<cfoutput>
-    #hyphenize("myBlogPost")#
-</cfoutput>
-
+<!---Outputs "my-blog-post" --->
+#hyphenize("myBlogPost")#

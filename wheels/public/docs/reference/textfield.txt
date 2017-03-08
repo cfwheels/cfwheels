@@ -1,4 +1,3 @@
-
 // Provide a `label` and the required `objectName` and `property` 
 <cfoutput>
     #textField(label="First Name", objectName="user", property="firstName")#
@@ -11,4 +10,3 @@
 		#textField(label="Phone ####i##", objectName="contact", association="phoneNumbers", position=i, property="phoneNumber")#
 	</cfloop>
 </fieldset>
-

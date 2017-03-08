@@ -1,4 +1,3 @@
-
 // Keep the entire Flash for the next request
 flashKeep();
 
@@ -7,4 +6,3 @@ flashKeep("error");
 
 // Keep both the "error" and "success" keys in the Flash for the next request
 flashKeep("error,success");
-

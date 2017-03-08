@@ -1,8 +1,4 @@
-
-hasManyCheckBox(objectName, association, keys [, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass ])
-
-
-// Show check boxes for associating authors with the current book 
+<!--- Show check boxes for associating authors with the current book --->
 <cfloop query="authors">
     #hasManyCheckBox(
         label=authors.fullName,
@@ -11,4 +7,3 @@ hasManyCheckBox(objectName, association, keys [, label, labelPlacement, prepend,
         keys="#book.key()#,#authors.id#"
     )#
 </cfloop>
-

@@ -1,7 +1,2 @@
-
-timeAgoInWords(fromTime [, includeSeconds, toTime ])
-
-
 aWhileAgo = Now() - 30>
 <cfoutput>#timeAgoInWords(aWhileAgo)#</cfoutput>
-

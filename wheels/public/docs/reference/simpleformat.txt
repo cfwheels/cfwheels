@@ -1,4 +1,3 @@
-
 <!--- How most of your calls will look. --->
 #simpleFormat(post.bodyText)#
 
@@ -21,4 +20,3 @@
 	* Succinct<br>
 	* Awesome</p>
 --->
-

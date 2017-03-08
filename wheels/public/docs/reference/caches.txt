@@ -1,4 +1,3 @@
-
 // Cache the `termsOfUse` action
 caches("termsOfUse");
 
@@ -10,4 +9,3 @@ caches(actions="termsOfUse,codeOfConduct", static=true);
 
 // Cache content separately based on region
 caches(action="home", key="request.region");
-

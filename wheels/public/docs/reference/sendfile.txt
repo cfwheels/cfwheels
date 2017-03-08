@@ -1,4 +1,3 @@
-
 // Send a PDF file to the user
 sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf");
 
@@ -7,4 +6,3 @@ sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", name="Tutorial.pdf");
 
 // Send a file that is located outside of the web root
 sendFile(file="../../tutorials/wheels_tutorial_20081028_J657D6HX.pdf");
-

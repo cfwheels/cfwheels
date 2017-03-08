@@ -1,4 +1,3 @@
-
 <!--- View Code --->
 <cfoutput>
     #startFormTag(action="something")#
@@ -6,4 +5,3 @@
         #buttonTag(content="Submit this form", value="save")#
     #endFormTag()#
 </cfoutput>
-

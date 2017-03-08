@@ -1,10 +1,5 @@
-
-humanize(text [, except ])
-
-
-// Humanize a string, will result in "Wheels Is A Framework" 
+<!--- Humanize a string, will result in "Wheels Is A Framework" --->
 #humanize("wheelsIsAFramework")#
 
-// Humanize a string, force wheels to replace "Cfml" with "CFML" 
-#humanize("wheelsIsACFMLFramework", "CFML")#
-
+<!--- Humanize a string, force wheels to replace "Cfml" with "CFML" --->
+#humanize("wheelsIsACfmlFramework", "CFML")#

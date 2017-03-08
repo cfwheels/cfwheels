@@ -1,7 +1,3 @@
-
-isInstance()
-
-
 // Use the passed in `id` when we're not already in an instance 
 <cffunction name="memberIsAdmin">
     <cfif isInstance()>
@@ -10,4 +6,3 @@ isInstance()
         <cfreturn this.findByKey(arguments.id).admin>
     </cfif>
 </cffunction>
-

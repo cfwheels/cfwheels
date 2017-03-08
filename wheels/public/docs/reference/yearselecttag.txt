@@ -1,4 +1,3 @@
-
 // View code
 <cfoutput>
     #yearSelectTag(name="yearOfBirthday", selected=params.yearOfBirthday)#
@@ -10,4 +9,3 @@ eighteenYearsAgo = Now() - 18;
 <cfoutput>
 	#yearSelectTag(name="yearOfBirthday", selected=params.yearOfBirthday, startYear=fiftyYearsAgo, endYear=eighteenYearsAgo)#
 </cfoutput>
-

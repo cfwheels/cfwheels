@@ -1,4 +1,3 @@
-
 // Getting the most recent order as an object from the database
 order = model("order").findOne(order="datePurchased DESC");
 
@@ -15,4 +14,3 @@ profile = user.profile();
 // If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `findOneComment` method below will call `model("comment").findOne(where="postId=#post.id#")` internally)
 post = model("post").findByKey(params.postId);
 comment = post.findOneComment(where="text='I Love Wheels!'");
-

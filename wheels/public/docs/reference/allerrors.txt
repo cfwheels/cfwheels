@@ -1,7 +1,5 @@
-
 // Get all the errors for the `user` object
 errorInfo = user.allErrors();
-
 
 // Sample Return of Function
 [
@@ -16,4 +14,3 @@ errorInfo = user.allErrors();
     property:'password'
   }
 ]
-

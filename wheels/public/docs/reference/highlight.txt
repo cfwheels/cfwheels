@@ -1,4 +1,2 @@
-
-<!--- Will output: You searched for: <span class="highlight">CFWheels</span> --->
+<!--- Will output: You searched for: <span class="highlight">CFWheels --->
 #highlight(text="You searched for: CFWheels", phrases="CFWheels")#
-

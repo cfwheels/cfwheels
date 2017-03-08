@@ -1,4 +1,3 @@
-
 // Specify that instances of this model has many comments (the table for the associated model, not the current, should have the foreign key set on it).
 hasMany("comments");
 
@@ -20,4 +19,3 @@ belongsTo("publication");
 
 // In the models/Publication `init()` method
 hasMany("subscriptions");
-

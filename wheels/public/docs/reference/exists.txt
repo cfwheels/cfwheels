@@ -1,4 +1,3 @@
-
 // Checking if Joe exists in the database
 result = model("user").exists(where="firstName = 'Joe'");
 
@@ -19,4 +18,3 @@ userHasProfile = user.hasProfile();
 // If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `hasComments` method below will call `model("comment").exists(where="postid=#post.id#")` internally.)
 post = model("post").findByKey(params.postId);
 postHasComments = post.hasComments();
-

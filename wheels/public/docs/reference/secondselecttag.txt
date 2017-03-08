@@ -1,4 +1,3 @@
-
 // This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object 
 <cfoutput>
     #secondSelectTag(name="secondsToLaunch", selected=params.secondsToLaunch)#
@@ -8,4 +7,3 @@
 <cfoutput>
 	#secondSelectTag(name="secondsToLaunch", value=params.secondsToLaunch, secondStep=15)#
 </cfoutput>
-
