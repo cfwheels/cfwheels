@@ -1,0 +1,3 @@
+
+provides("html,xml,json");
+

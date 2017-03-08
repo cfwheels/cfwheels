@@ -1,8 +1,0 @@
-```coldfusion
-updateProperty(property, value [, parameterize, transaction, callbacks ])
-```
-```coldfusion
-// Sets the `new` property to `1` through updateProperty()
-product = model("product").findByKey(56)>
-product.updateProperty("new", 1)>
-```

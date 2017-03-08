@@ -1,4 +1,0 @@
-```coldfusion
-<!--- Will output: CFWheels Is A Framework For ColdFusion --->
-#titleize("CFWheels is a framework for ColdFusion")#
-```

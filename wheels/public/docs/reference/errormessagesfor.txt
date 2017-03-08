@@ -1,0 +1,4 @@
+
+<!--- view code --->
+#errorMessagesFor(objectName="user")#
+

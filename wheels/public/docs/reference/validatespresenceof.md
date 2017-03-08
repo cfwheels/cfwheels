@@ -1,4 +1,0 @@
-```coldfusion
-// Make sure that the user data can not be saved to the database without the `emailAddress` property. (It must exist and not be an empty string)
-validatesPresenceOf("emailAddress");
-```

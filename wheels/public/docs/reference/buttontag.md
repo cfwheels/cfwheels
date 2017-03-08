@@ -1,9 +1,0 @@
-```coldfusion
-<!--- View Code --->
-<cfoutput>
-    #startFormTag(action="something")#
-        <!--- Form Controls go here --->
-        #buttonTag(content="Submit this form", value="save")#
-    #endFormTag()#
-</cfoutput>
-```

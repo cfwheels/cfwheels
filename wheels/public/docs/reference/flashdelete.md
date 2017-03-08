@@ -1,3 +1,0 @@
-```coldfusion
-flashDelete(key="errorMessage");
-```

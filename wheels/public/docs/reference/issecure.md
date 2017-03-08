@@ -1,7 +1,0 @@
-```coldfusion
-// Redirect non-secure connections to the secure version
-if (!isSecure())
-{
-	redirectTo(protocol="https");
-}
-```

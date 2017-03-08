@@ -1,5 +1,0 @@
-
-```coldfusion
-<!--- view code --->
-#errorMessageOn(objectName="user", property="email")#
-```

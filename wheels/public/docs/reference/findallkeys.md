@@ -1,7 +1,0 @@
-```coldfusion
-// basic usage
-primaryKeyList = model("artist").findAllKeys();
-
-// Quote values, use a different delimiter and filter results with the "where" argument
-primaryKeyList = model("artist").findAllKeys(quoted=true, delimiter="-", where="active=1");
-```

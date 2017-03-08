@@ -1,0 +1,3 @@
+
+requestIsPost = isPost();
+

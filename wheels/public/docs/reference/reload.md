@@ -1,9 +1,0 @@
-```coldfusion
-reload()
-```
-```coldfusion
-// Get an object, call a method on it that could potentially change values, and then reload the values from the database
-employee = model("employee").findByKey(params.key)>
-employee.someCallThatChangesValuesInTheDatabase()>
-employee.reload()>
-```

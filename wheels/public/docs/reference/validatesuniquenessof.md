@@ -1,7 +1,0 @@
-```coldfusion
-// Make sure that two users with the same username won't ever exist in the database table
-validatesUniquenessOf(property="username", message="Sorry, that username is already taken.");
-
-// Same as above but allow identical usernames as long as they belong to a different account
-validatesUniquenessOf(property="username", scope="accountId");
-```

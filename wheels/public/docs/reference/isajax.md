@@ -1,3 +1,0 @@
-```coldfusion
-requestIsAjax = isAjax();
-```

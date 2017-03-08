@@ -1,4 +1,0 @@
-```coldfusion
-<!--- Will output: CFWheels is a framework for ColdFusion. --->
-#stripTags('<strong>Wheels</strong> is a framework for <a href="http://www.adobe.com/products/coldfusion">ColdFusion</a>.')#
-```

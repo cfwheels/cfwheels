@@ -1,4 +1,0 @@
-```coldfusion
-<!--- Capitalize a sentence, will result in "Wheels is a framework"--->
-#capitalize("wheels is a framework")#
-```

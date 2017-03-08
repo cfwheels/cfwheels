@@ -1,8 +1,0 @@
-```coldfusion
-setProperties([ properties ])
-```
-```coldfusion
-// Update the properties of the object with the params struct containing the values of a form post
-user = model("user").findByKey(1)>
-user.setProperties(params.user)>
-```

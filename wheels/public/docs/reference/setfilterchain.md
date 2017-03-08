@@ -1,8 +1,0 @@
-```coldfusion
-		// Set filter chain directly in an array
-		setFilterChain([
-			{through="restrictAccess"},
-			{through="isLoggedIn,checkIPAddress", except="home,login"},
-			{type="after", through="logConversion", only="thankYou"}
-		]);
-```

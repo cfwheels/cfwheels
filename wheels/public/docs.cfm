@@ -147,10 +147,11 @@
 			}
 		}
 		// Check for extended documentation
-		local.rv["pathToExtended"]=expandPath("wheels/public/docs/reference/" & lcase(functionName) & ".md");
+		local.rv["pathToExtended"]=expandPath("wheels/public/docs/reference/" & lcase(functionName) & ".txt");
 		local.rv["hasExtended"]=fileExists(local.rv.pathToExtended)?true:false;
 		if(local.rv.hasExtended){
-			local.rv["extended"]=fileread(local.rv.pathToExtended);
+			local.rv["extended"]="<pre>" & htmleditformat(fileread(local.rv.pathToExtended)) & "</pre>";
+			local.rv["extended"]=trim(local.rv["extended"]);
 		}
 		return local.rv;
 	}

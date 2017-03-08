@@ -1,8 +1,0 @@
-```coldfusion
-// Get an object, change it, and then ask for its changes
-// (will return a struct containing the changes, both property names and their values)
-member = model("member").findByKey(params.memberId);
-member.firstName = params.newFirstName;
-member.email = params.newEmail;
-allChanges = member.allChanges();
-```

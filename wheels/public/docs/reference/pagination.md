@@ -1,8 +1,0 @@
-```coldfusion
-allAuthors = model("author").findAll(page=1, perPage=25, order="lastName", handle="authorsData");
-paginationData = pagination("authorsData");
-
-#pagination().currentPage#
-#pagination().totalPages#
-#pagination().totalRecords#
-```

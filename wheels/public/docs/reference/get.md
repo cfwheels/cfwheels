@@ -1,7 +1,0 @@
-```coldfusion
-// Get the current value for the `tableNamePrefix` Wheels setting
-setting = get("tableNamePrefix");
-
-// Get the default for the `message` argument of the `validatesConfirmationOf` method
-setting = get(functionName="validatesConfirmationOf", name="message");
-```

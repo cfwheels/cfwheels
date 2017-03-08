@@ -1,5 +1,0 @@
-```coldfusion
-// This will provide the formats defined in the `init()` function
-products = model("product").findAll();
-renderWith(products);
-```

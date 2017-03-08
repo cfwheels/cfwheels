@@ -1,7 +1,0 @@
-```coldfusion
-// Get filter chain
-myFilterChain = filterChain();
-
-// Get filter chain for after filters only
-myFilterChain = filterChain(type="after");
-```

@@ -1,4 +1,0 @@
-```coldfusion
-// Get the columns names in the order they are in the database
-employee = model("employee").columns();
-```

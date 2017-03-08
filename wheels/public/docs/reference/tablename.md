@@ -1,7 +1,0 @@
-```coldfusion
-tableName()
-```
-```coldfusion
-// Check what table the user model uses
-whatAmIMappedTo = model("user").tableName()>
-```

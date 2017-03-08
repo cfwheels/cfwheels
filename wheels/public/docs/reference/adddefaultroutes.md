@@ -1,4 +1,0 @@
-```coldfusion
-// Adds the default routes to your application (done in `config/routes.cfm`)
-addDefaultRoutes();
-```

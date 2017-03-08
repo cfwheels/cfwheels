@@ -1,3 +1,0 @@
-```coldfusion
-flashClear();
-```

@@ -1,8 +1,0 @@
-```coldfusion
-// Add the `js` format
-addFormat(extension="js", mimeType="text/javascript");
-
-// Add the `ppt` and `pptx` formats
-addFormat(extension="ppt", mimeType="application/vnd.ms-powerpoint");
-addFormat(extension="pptx", mimeType="application/vnd.ms-powerpoint");
-```

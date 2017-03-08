@@ -1,4 +1,0 @@
-```coldfusion
-// Render a blank white page to the client
-renderNothing();
-```

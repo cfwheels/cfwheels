@@ -1,8 +1,0 @@
-```coldfusion
-// Render just the text "Done!" to the client
-renderText("Done!");
-
-// Render serialized product data to the client
-products = model("product").findAll();
-renderText(SerializeJson(products));
-```

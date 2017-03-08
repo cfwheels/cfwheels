@@ -1,0 +1,10 @@
+
+toggle([ save ])
+
+
+// Get an object, and toggle a boolean property
+user = model("user").findByKey(58)>
+isSuccess = user.toggle("isActive")>// returns whether the object was saved properly
+// You can also use a dynamic helper for this
+isSuccess = user.toggleIsActive()>
+

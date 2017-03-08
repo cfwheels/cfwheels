@@ -1,4 +1,0 @@
-```coldfusion
-<!--- Outputs "CFWheels is a framework..." --->
-#wordTruncate(text="CFWheels is a framework for ColdFusion", length=4)#
-```

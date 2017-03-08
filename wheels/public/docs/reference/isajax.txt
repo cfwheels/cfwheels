@@ -1,0 +1,3 @@
+
+requestIsAjax = isAjax();
+

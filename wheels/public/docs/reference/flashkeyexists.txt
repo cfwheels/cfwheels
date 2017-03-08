@@ -1,0 +1,3 @@
+
+errorExists = flashKeyExists("error");
+

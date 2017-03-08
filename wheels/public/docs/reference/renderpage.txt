@@ -1,0 +1,19 @@
+
+// Render a view page for a different action within the same controller
+renderPage(action="edit");
+
+// Render a view page for a different action within a different controller
+renderPage(controller="blog", action="new");
+
+// Another way to render the blog/new template from within a different controller
+renderPage(template="/blog/new");
+
+// Render the view page for the current action but without a layout and cache it for 60 minutes
+renderPage(layout=false, cache=60);
+
+// Load a layout from a different folder within `views`
+renderPage(layout="/layouts/blog");
+
+// Don''t render the view immediately but rather return and store in a variable for further processing
+myView = renderPage(returnAs="string");
+

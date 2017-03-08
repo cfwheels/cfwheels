@@ -1,8 +1,0 @@
-```coldfusion
-key()
-```
-```coldfusion
-// Get an object and then get the primary key value(s)
-employee = model("employee").findByKey(params.key)>
-val = employee.key()>
-```

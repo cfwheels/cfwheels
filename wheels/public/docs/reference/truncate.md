@@ -1,7 +1,0 @@
-```coldfusion
-<!--- Will output: CFWheels is a fra... --->
-#truncate(text="CFWheels is a framework for ColdFusion", length=20)#
-
-<!--- Will output: CFWheels is a framework (more) --->
-#truncate(text="CFWheels is a framework for ColdFusion", truncateString=" (more)")#
-```

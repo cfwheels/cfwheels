@@ -1,7 +1,0 @@
-```coldfusion
-// Clear all errors on the object as a whole
-this.clearErrors();
-
-// Clear all errors on `firstName`
-this.clearErrors("firstName");
-```

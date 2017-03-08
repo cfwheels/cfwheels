@@ -1,6 +1,0 @@
-```coldfusion
-// Get verification chain, remove the first item, and set it back
-myVerificationChain = verificationChain();
-ArrayDeleteAt(myVerificationChain, 1);
-setVerificationChain(myVerificationChain);
-```

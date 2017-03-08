@@ -1,3 +1,0 @@
-```coldfusion
-setResponse(newReponse);
-```

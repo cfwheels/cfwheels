@@ -1,0 +1,7 @@
+
+timeUntilInWords(toTime [, includeSeconds, fromTime ])
+
+
+aLittleAhead = Now() + 30>
+<cfoutput>#timeUntilInWords(aLittleAhead)#</cfoutput>
+

@@ -1,4 +1,0 @@
-```coldfusion
-// Delete the user with the primary key value of `1`
-result = model("user").deleteByKey(1);
-```
