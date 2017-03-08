@@ -1,4 +1,3 @@
-
 // Tell CFWheels to verify that the `handleForm` action is always a `POST` request when executed
 verifies(only="handleForm", post=true);
 
@@ -10,4 +9,3 @@ verifies(only="edit", get=true, params="userId", paramsTypes="integer", handler=
 
 // Just like above, only this time instead of specifying a handler, we want to `redirect` the visitor to the index action of the controller and show an error in The Flash when the request is invalid
 verifies(only="edit", get=true, params="userId", paramsTypes="integer", action="index", error="Invalid userId");
-

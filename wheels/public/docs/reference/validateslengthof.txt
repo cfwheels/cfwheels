@@ -1,4 +1,3 @@
-
 // Make sure that the `firstname` and `lastName` properties are not more than
 // 50 characters and use square brackets to dynamically insert the property
 // name when the error message is displayed to the user. (The `firstName`
@@ -15,4 +14,3 @@ validatesLengthOf(
     within="4,20",
     message="The password length must be between 4 and 20 characters."
 );
-

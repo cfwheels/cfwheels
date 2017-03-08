@@ -4,4 +4,3 @@
 // If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `removeAllComments` method below will call `model("comment").updateAll(postid="", where="postId=#post.id#")` internally.)  
 <cfset post = model("post").findByKey(params.postId)> 
 <cfset post.removeAllComments()>
-
