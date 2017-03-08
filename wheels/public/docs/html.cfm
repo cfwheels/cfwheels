@@ -44,7 +44,7 @@
 						<i class="fa fa-tag"></i> #meta.category#</a>
 					</cfif>
 					<cfif structKeyExists(meta, "returnType")>
-						Returns: #meta.returnType# |
+						<span class="tag"><i class="fa fa-reply"></i> #meta.returnType#</span>
 					</cfif>
 					  </p>
 					<cfif structKeyExists(meta, "hint")>

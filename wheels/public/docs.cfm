@@ -79,17 +79,11 @@
 	temp={
 		"controller" = {
 			"scope" = "",
-			"functions" = "",
-			"meta" = {},
-			"categories" = [],
-			"sections" = []
+			"functions" = ""
 		},
 		"model" = {
 			"scope" = "",
-			"functions" = "",
-			"meta" = {},
-			"categories" = [],
-			"sections" = []
+			"functions" = ""
 		}
 	};
 	switch(params.type){
@@ -109,73 +103,58 @@
 		for(functionName in listToArray(temp[doctype]['functions']) ){
 			// Ignore internal functions
 			if(left(functionName, 1) != "$"){
-				// Check this isn't a dup
+				// Check this isn't a dupe
 				if( !ArrayFind(docs.functions, function(struct){
 				   return struct.name == functionName;
 				})){
 					// Set metadata
-					meta=GetMetaData(temp[doctype]["scope"][functionName]);
-					meta["section"]="";
-					meta["sectionClass"]="";
-					meta["category"]="";
-					meta["categoryClass"]="";
-					if(structKeyExists(meta, "doc.section")){
-						meta["section"]=meta["doc.section"];
-						meta["sectionClass"]=cssClassLink(meta["doc.section"]);
-						structDelete(meta, "doc.section");
-					}
-					if(structKeyExists(meta, "doc.category")){
-						meta["category"]=meta["doc.category"];
-						meta["categoryClass"]=cssClassLink(meta["doc.category"]);
-						structDelete(meta, "doc.category");
-					}
-					meta["pathToExtended"]=expandPath("wheels/public/docs/reference/" & lcase(functionName) & ".md");
-					// Check for extended docs
-					meta["hasExtended"]=fileExists(meta.pathToExtended)?true:false;
-					if(meta.hasExtended){
-						meta["extended"]=fileread(meta.pathToExtended);
-						//writeDump(meta);
-						//abort;
-					}
+					meta=parseMetaData(GetMetaData(temp[doctype]["scope"][functionName]));
 					arrayAppend(docs.functions, meta);
 				}
 			}
 		}
 		docs.functions = arrayOfStructsSort(docs.functions, "name");
-
 	}
 
+	// Take a metdata struct and get some additional info
+	// Rebuilding the struct to ensure case for serialization
+	struct function parseMetaData(meta){
+		local.m=arguments.meta;
+		local.rv["name"]=structKeyExists(local.m, "name")?local.m.name:"";
+		local.rv["parameters"]=structKeyExists(local.m, "parameters")?local.m.parameters:[];
+		local.rv["returntype"]=structKeyExists(local.m, "returntype")?local.m.returntype:"";
+		local.rv["hint"]=structKeyExists(local.m, "hint")?local.m.hint:"";
+		local.rv["section"]="";
+		local.rv["sectionClass"]="";
+		local.rv["category"]="";
+		local.rv["categoryClass"]="";
+		// Look for [something: Foo] style tags in hint
+		if(structKeyExists(local.rv, "hint")){
+			local.tags=ReMatchNoCase('\[((.*?):(.*?))\]', local.rv.hint);
+			if(arrayLen(local.tags)){
+				for(tag in local.tags){
+					tagName=replace(listFirst(tag, ":"), "[","","one");
+					tagValue=replace(listLast(tag, ":"), "]","","one");
+					local.rv[tagName]=tagValue;
+					local.rv[tagName & "Class"]=cssClassLink(tagValue);
+				}
+				local.rv["hint"]=REReplaceNoCase(local.rv["hint"], "\[((.*?):(.*?))\]", "", "ALL");
+			}
+		}
+		// Check for extended documentation
+		local.rv["pathToExtended"]=expandPath("wheels/public/docs/reference/" & lcase(functionName) & ".md");
+		local.rv["hasExtended"]=fileExists(local.rv.pathToExtended)?true:false;
+		if(local.rv.hasExtended){
+			local.rv["extended"]=fileread(local.rv.pathToExtended);
+		}
+		return local.rv;
+	}
 
 	// Searches for ``` in hint description output
 	string function hintOutput(str){
 		local.rv=arguments.str;
 		local.rv=ReReplaceNoCase(local.rv, '`(\w+)`', '<code>\1</code>', "ALL");
 		local.rv=simpleFormat(local.rv);
-		/* Try for hint
-		local.hint=ReMatch('.+?```', local.rv );
-		if(arraylen(local.hint)){
-			///local.hint=ReReplaceNoCase(local.hint[1], '```', '', 'all');
-			local.hint=ReReplaceNoCase(local.hint, '`(\w+)`', '<code>\1</code>', "ALL");
-			local.hint=simpleFormat(local.hint);
-		} else {
-			local.hint="";
-		}*/
-		/* Try for code example(s?)
-		local.code=ReMatch('```(.+?)```', local.rv );
-		if(arraylen(local.code)){
-			local.code = local.code[1];
-			local.code = Trim(local.code);
-			local.code = Replace(local.code, Chr(13), "", "all");
-			local.code = Replace(local.code, Chr(10) & Chr(9) & Chr(9), Chr(10), "all");
-			local.code = HTMLEditFormat(local.code);
-			local.code = ReReplaceNoCase(local.code, '```(.+?)```', '<pre>\1</pre>', "ALL");
-			local.code = ReReplaceNoCase(local.code, '(?!<pre[^>]*>)(`(\w+)`)(?![^<]*<\/pre>)', '<code>\2</code>', "ALL");
-			local.code = ReReplaceNoCase(local.code, '\/\/ (.*?)\. ', "<br>// \1<br>", "ALL");
-			//local.code = ReReplaceNoCase(local.code, ';', "\1;<br>", "ALL");
-		} else {
-			local.code="";
-		}*/
-
 		return trim(local.rv);
 	}
 

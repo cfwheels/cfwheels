@@ -3,8 +3,8 @@
 /**
 * Removes all links from an HTML string, leaving just the link text.
 *
-* @doc.section View Helpers
-* @doc.category Sanitization Functions
+* [section: View Helpers]
+* [category: Sanitization Functions]
 * @doc.tests wheels/tests/view/sanitize/striplinks.cfc
 * @html string true The HTML to remove links from.
 *
@@ -16,8 +16,8 @@ public string function stripLinks(required string html) {
 /**
 * Removes all HTML tags from a string.
 *
-* @doc.section View Helpers
-* @doc.category Sanitization Functions
+* [section: View Helpers]
+* [category: Sanitization Functions]
 * @doc.tests wheels/tests/view/sanitize/striptags.cfc
 * @html string true The HTML to remove tag markup from.
 *
