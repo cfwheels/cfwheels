@@ -100,13 +100,7 @@
 </cfoutput>
 <script>
 $(document).ready(function(){
-
-	$.each($(".md"), function( index, md ) {
-		var converter = new showdown.Converter();
-	  	var markdown=$(md).html();
-	  	$(md).html(converter.makeHtml(markdown));
-	});
-
+ 
 	$(".section").on("click", function(e){
 		filterBySection($(this).data("section"));
 		updateFunctionCount();
