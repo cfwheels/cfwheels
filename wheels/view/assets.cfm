@@ -3,8 +3,8 @@
 /**
  * Returns a link tag for a stylesheet (or several) based on the supplied arguments.
  *
- * @doc.section View Helpers
- * @doc.category Asset Functions
+ * [section: View Helpers]
+ * [category: Asset Functions]
  *
  * @sources The name of one or many CSS files in the stylesheets folder, minus the .css extension (can also be called with the source argument). Pass a full URL to generate a tag for an external style sheet.
  * @type The type attribute for the link tag.
@@ -52,8 +52,8 @@ public string function styleSheetLinkTag(string sources="", string type, string 
 /**
  * Returns a script tag for a JavaScript file (or several) based on the supplied arguments.
  *
- * @doc.section View Helpers
- * @doc.category Asset Functions
+ * [section: View Helpers]
+ * [category: Asset Functions]
  *
  * @sources The name of one or many JavaScript files in the javascripts folder, minus the .js extension (can also be called with the source argument). Pass a full URL to access an external JavaScript file.
  * @type The type attribute for the script tag.
@@ -98,8 +98,8 @@ public string function javaScriptIncludeTag(string sources="", string type, stri
  * If the image is stored in the local images folder, the tag will also set the `width`, `height`, and `alt` attributes for you.
  * You can pass any additional arguments (e.g. `class`, `rel`, `id`), and the generated tag will also include those values as HTML attributes.
  *
- * @doc.section View Helpers
- * @doc.category Asset Functions
+ * [section: View Helpers]
+ * [category: Asset Functions]
  *
  * @source The file name of the image if it's available in the local file system (i.e. ColdFusion will be able to access it). Provide the full URL if the image is on a remote server.
  *

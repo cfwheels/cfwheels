@@ -103,13 +103,17 @@
 		for(functionName in listToArray(temp[doctype]['functions']) ){
 			// Ignore internal functions
 			if(left(functionName, 1) != "$"){
-				// Check this isn't a dupe
+				// Check this isn't a dupe, but record which scope this was from
 				if( !ArrayFind(docs.functions, function(struct){
 				   return struct.name == functionName;
 				})){
 					// Set metadata
-					meta=parseMetaData(GetMetaData(temp[doctype]["scope"][functionName]));
+					meta=parseMetaData(GetMetaData(temp[doctype]["scope"][functionName]), doctype);
 					arrayAppend(docs.functions, meta);
+				} else {
+					if(!ArrayFind(meta.availableIn, doctype)){
+						arrayAppend(meta.availableIn, doctype);
+					}
 				}
 			}
 		}
@@ -118,7 +122,7 @@
 
 	// Take a metdata struct and get some additional info
 	// Rebuilding the struct to ensure case for serialization
-	struct function parseMetaData(meta){
+	struct function parseMetaData(meta, doctype){
 		local.m=arguments.meta;
 		local.rv["name"]=structKeyExists(local.m, "name")?local.m.name:"";
 		local.rv["parameters"]=structKeyExists(local.m, "parameters")?local.m.parameters:[];
@@ -128,6 +132,7 @@
 		local.rv["sectionClass"]="";
 		local.rv["category"]="";
 		local.rv["categoryClass"]="";
+		local.rv["availableIn"]=[doctype];
 		// Look for [something: Foo] style tags in hint
 		if(structKeyExists(local.rv, "hint")){
 			local.tags=ReMatchNoCase('\[((.*?):(.*?))\]', local.rv.hint);
