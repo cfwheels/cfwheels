@@ -1,4 +1,4 @@
 ```coldfusion
 // Instruct CFWheels to call the `fixObj` method
-beforeUpdate("fixObj")>
+beforeUpdate("fixObj");
 ```

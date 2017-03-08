@@ -1,14 +1,14 @@
 ```coldfusion
-// Example 1: Basic usage involves a `label`, `name`, and `value`
+<!--- Example 1: Basic usage involves a `label`, `name`, and `value` --->
 #checkBoxTag(name="subscribe", value="true", label="Subscribe to our newsletter", checked=false)#
 
-// Example 2: Loop over a query to display choices and whether or not they are checked
-// - Controller code
+<!--- Example 2: Loop over a query to display choices and whether or not they are checked --->
+// Controller code
 pizza = model("pizza").findByKey(session.pizzaId);
 selectedToppings = pizza.toppings();
 toppings = model("topping").findAll(order="name");
 
-// View code
+<!--- View code --->
 <fieldset>
 	<legend>Toppings</legend>
 	<cfoutput query="toppings">

@@ -1,8 +1,8 @@
 ```coldfusion
-// Basic example of a check box for a boolean field
+<!--- Basic example of a check box for a boolean field --->
 #checkBox(objectName="photo", property="isPublic", label="Display this photo publicly.")#
 
-// Shows check boxes for selecting public access for all photos provided by the `photos` association and nested properties
+<!--- Shows check boxes for selecting public access for all photos provided by the `photos` association and nested properties --->
 <cfloop from="1" to="#ArrayLen(user.photos)#" index="i">
     <div>
         <h3>#user.photos[i].title#:</h3>

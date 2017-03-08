@@ -1,8 +1,8 @@
 ```coldfusion
-// view code 
+<!--- View Code --->
 <cfoutput>
     #startFormTag(action="something")#
-        // form controls go here 
+        <!--- Form Controls go here --->
         #buttonTag(content="Submit this form", value="save")#
     #endFormTag()#
 </cfoutput>
