@@ -1,7 +1,7 @@
 ```coldfusion
-// View code
+<!--- View code --->
 #dateTimeSelect(objectName="article", property="publishedAt")#
 
-// Show fields for month, day, hour, and minute
+<!--- Show fields for month, day, hour, and minute --->
 #dateTimeSelect(objectName="appointment", property="dateTimeStart", dateOrder="month,day", timeOrder="hour,minute")#
 ```

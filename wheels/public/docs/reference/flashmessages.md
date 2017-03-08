@@ -4,12 +4,10 @@ flashInsert(success="Your post was successfully submitted.");
 flashInsert(alert="Don''t forget to tweet about this post!");
 flashInsert(error="This is an error message.");
 
-// In the layout or view
-<cfoutput>
-	#flashMessages()#
-</cfoutput>
-//
-	Generates this (sorted alphabetically):
+<!--- In the layout or view --->
+#flashMessages()#
+
+<!--- Generates this (sorted alphabetically):--->
 	<div class="flashMessages">
 		<p class="alertMessage">
 			Don''t forget to tweet about this post!
@@ -23,12 +21,10 @@ flashInsert(error="This is an error message.");
 	</div>
 
 
-// Only show the "success" key in the view
-<cfoutput>
-	#flashMessages(key="success")#
-</cfoutput>
-//
-	Generates this:
+<!---  Only show the "success" key in the view --->
+#flashMessages(key="success")#
+
+<!--- Generates this: --->
 	<div class="flashMessage">
 		<p class="successMessage">
 			Your post was successfully submitted.
@@ -36,12 +32,10 @@ flashInsert(error="This is an error message.");
 	</div>
 
 
-// Show only the "success" and "alert" keys in the view, in that order
-<cfoutput>
-	#flashMessages(keys="success,alert")#
-</cfoutput>
-//
-	Generates this (sorted alphabetically):
+<!--- Show only the "success" and "alert" keys in the view, in that order --->
+#flashMessages(keys="success,alert")#
+
+<!--- Generates this (sorted alphabetically):--->
 	<div class="flashMessages">
 		<p class="successMessage">
 			Your post was successfully submitted.

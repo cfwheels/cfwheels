@@ -1,5 +1,5 @@
 ```coldfusion
-// Alternating table row colors
+<!--- Alternating table row colors --->
 <table>
 	<thead>
 		<tr>
@@ -17,7 +17,7 @@
 	</tbody>
 </table>
 
-// Alternating row colors and shrinking emphasis
+<!--- Alternating row colors and shrinking emphasis --->
 <cfoutput query="employees" group="departmentId">
 	<div class="#cycle(values="even,odd", name="row")#">
 		<ul>

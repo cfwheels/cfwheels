@@ -1,7 +1,7 @@
 ```coldfusion
-// This "Tag" version of function accepts `name` and `selected` instead of binding to a model object
+<!--- This "Tag" version of function accepts `name` and `selected` instead of binding to a model object --->
 #dateSelectTags(name="dateStart", selected=params.dateStart)#
 
-// Show fields for month and year only
+<!--- Show fields for month and year only --->
 #dateSelectTags(name="expiration", selected=params.expiration, order="month,year")#
 ```

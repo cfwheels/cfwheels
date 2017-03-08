@@ -1,4 +1,4 @@
 ```coldfusion
-// In `views/layout.cfm`
+<!--- In `views/layout.cfm` --->
 #contentForLayout()#
 ```

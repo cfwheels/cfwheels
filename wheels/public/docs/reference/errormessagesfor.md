@@ -1,4 +1,4 @@
 ```coldfusion
-// view code
+<!--- view code --->
 #errorMessagesFor(objectName="user")#
 ```

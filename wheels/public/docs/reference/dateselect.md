@@ -1,7 +1,7 @@
 ```coldfusion
-// View code
+<!--- View code --->
 #dateSelect(objectName="user", property="dateOfBirth")#
 
-// Show fields to select month and year
+<!--- Show fields to select month and year --->
 #dateSelect(objectName="order", property="expirationDate", order="month,year")#
 ```

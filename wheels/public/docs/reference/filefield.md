@@ -1,10 +1,9 @@
 ```coldfusion
-// Provide a `label` and the required `objectName` and `property` 
-<cfoutput>
-    #fileField(label="Photo", objectName="photo", property="imageFile")#
-</cfoutput>
+<!--- Provide a `label` and the required `objectName` and `property` --->
+#fileField(label="Photo", objectName="photo", property="imageFile")#
 
-// Display fields for photos provided by the `screenshots` association and nested properties 
+
+<!--- Display fields for photos provided by the `screenshots` association and nested properties --->
 <fieldset>
 	<legend>Screenshots</legend>
 	<cfloop from="1" to="##ArrayLen(site.screenshots)##" index="i">

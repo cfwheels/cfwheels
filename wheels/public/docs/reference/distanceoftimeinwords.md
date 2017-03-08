@@ -1,6 +1,6 @@
 ```coldfusion
 aWhileAgo = Now() - 30;
 rightNow = Now();
-// Output:
+<!--- Output --->
 #distanceOfTimeInWords(aWhileAgo, rightNow)#
 ```
