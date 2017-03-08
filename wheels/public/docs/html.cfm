@@ -46,6 +46,11 @@
 					<cfif structKeyExists(meta, "returnType")>
 						<span class="tag"><i class="fa fa-reply"></i> #meta.returnType#</span>
 					</cfif>
+					<cfif structKeyExists(meta, "availableIn") && arrayLen(meta.availableIn)>
+						<cfloop from="1" to="#arrayLen(meta.availableIn)#" index="a">
+							<span class="tag"><i class="fa fa-bolt"></i> #meta.availableIn[a]#</span>
+						</cfloop>
+					</cfif>
 					  </p>
 					<cfif structKeyExists(meta, "hint")>
 						<div class="hint">#hintOutput(meta.hint)#</div>
