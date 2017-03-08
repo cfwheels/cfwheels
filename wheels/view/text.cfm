@@ -5,9 +5,10 @@
  *
  * [section: View Helpers]
  * [category: Text Functions]
+ *
  * @text The text to create links in.
  * @link Whether to link URLs, email addresses or both. Possible values are: all (default), URLs and emailAddresses.
- * @relative Should we autolink relative urls
+ * @relative Should we autolink relative urls.
  *
  */
 public string function autoLink(required string text, string link, boolean relative=true) {
@@ -71,6 +72,7 @@ public string function $autoLinkLoop(required string text, required string regex
  *
  * [section: View Helpers]
  * [category: Text Functions]
+ *
  * @text The text to extract an excerpt from.
  * @phrase The phrase to extract.
  * @radius Number of characters to extract surrounding the phrase.
@@ -115,6 +117,7 @@ public string function excerpt(required string text, required string phrase, num
  *
  * [section: View Helpers]
  * [category: Text Functions]
+ *
  * @text Text to search.
  * @phrases List of phrases to highlight.
  * @delimiter Delimiter to use in phrases argument.
@@ -170,6 +173,7 @@ public string function highlight(
  *
  * [section: View Helpers]
  * [category: Text Functions]
+ *
  * @text The text to format.
  * @wrap Set to true to wrap the result in a paragraph.
  *
@@ -196,6 +200,7 @@ public string function simpleFormat(required string text, boolean wrap) {
  *
  * [section: View Helpers]
  * [category: Text Functions]
+ *
  * @word The text to turn into a title.
  *
  */
@@ -213,6 +218,7 @@ public string function titleize(required string word) {
  *
  * [section: View Helpers]
  * [category: Text Functions]
+ *
  * @text The text to truncate.
  * @length Length to truncate the text to.
  * @truncateString String to replace the last characters with.
@@ -233,6 +239,7 @@ public string function truncate(required string text, numeric length, string tru
  *
  * [section: View Helpers]
  * [category: Text Functions]
+ *
  * @text The text to truncate.
  * @length Number of words to truncate the text to.
  * @truncateString String to replace the last characters with.
