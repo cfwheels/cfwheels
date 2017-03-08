@@ -5,7 +5,6 @@
  *
  * @doc.section Controller
  * @doc.category Initialization Functions
- * @doc.test wheels/tests/controller/filters/filters.cfc
  *
  */
 public void function filters(
@@ -51,7 +50,6 @@ public void function filters(
  *
  * @doc.section Controller
  * @doc.category Initialization Functions
- * @doc.test wheels/tests/controller/filters/setfilterchain.cfc
  *
  */
 public void function setFilterChain(required array chain) {
@@ -68,7 +66,6 @@ public void function setFilterChain(required array chain) {
  *
  * @doc.section Controller
  * @doc.category Initialization Functions
- * @doc.test wheels/tests/controller/filters/filterchain.cfc
  *
  */
 public array function filterChain(string type="all") {
@@ -101,7 +98,6 @@ public array function filterChain(string type="all") {
 /**
  * Internal function.
  * Called twice when processing a request, first for "before" filters and then for "after" filters.
- * Tests: wheels/tests/controller/caching/$runfilters.cfc
  */
 public void function $runFilters(required string type, required string action) {
 	local.filters = filterChain(arguments.type);

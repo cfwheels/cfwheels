@@ -204,7 +204,6 @@ public struct function $mergeUrlAndFormScopes(
 /**
  * Internal function.
  * If content type is JSON, deserialize it into a struct and add to the params struct.
- * Tests: wheels/tests/dispatch/request/$parsejsonbody.cfc
  */
 public struct function $parseJsonBody(required struct params) {
 	local.headers = request.wheels.httpRequestData.headers;

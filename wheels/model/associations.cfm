@@ -4,7 +4,6 @@
  * Model initialization method.
  * Sets up a "belongsTo" association between this model and the specified one.
  * Docs: http://docs.cfwheels.org/docs/belongsto
- * Tests: wheels/tests/model/associations/belongsto.cfc
  */
 public void function belongsTo(
 	required string name,
@@ -28,7 +27,6 @@ public void function belongsTo(
  * Model initialization method.
  * Sets up a "hasMany" association between this model and the specified one.
  * Docs: http://docs.cfwheels.org/docs/hasmany
- * Tests: wheels/tests/model/associations/hasmany.cfc
  */
 public void function hasMany(
 	required string name,
@@ -66,7 +64,6 @@ public void function hasMany(
  * Model initialization method.
  * Sets up a "hasOne" association between this model and the specified one.
  * Docs: http://docs.cfwheels.org/docs/hasone
- * Tests: wheels/tests/model/associations/hasone.cfc
  */
 public void function hasOne(
 	required string name,

@@ -3,10 +3,13 @@
 /**
  * Tells CFWheels to cache one or more actions.
  *
- * @doc.section Controller
- * @doc.category Initialization Functions
- * @doc.test wheels/tests/controller/caching/caches.cfc
+ * [section: Controller]
+ * [category: Initialization Functions]
  *
+ * @action Action(s) to cache. This argument is also aliased as actions.
+ * @time 60 Minutes to cache the action(s) for.
+ * @static false Set to true to tell CFWheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions). Please note that the onSessionStart and onRequestStart events still execute though.
+ * @appendToKey List of variables to be evaluated at runtime and included in the cache key so that content can be cached separately.
  */
 public void function caches(string action="", numeric time, boolean static, string appendToKey="") {
 	$args(args=arguments, name="caches", combine="action/actions");
@@ -33,7 +36,6 @@ public void function caches(string action="", numeric time, boolean static, stri
 /**
  * Internal function.
  * Called from the caches function.
- * Tests: wheels/tests/controller/caching/$addcachableaction.cfc
  */
 public void function $addCachableAction(required struct action) {
 	ArrayAppend(variables.$class.cachableActions, arguments.action);
@@ -42,7 +44,6 @@ public void function $addCachableAction(required struct action) {
 /**
  * Internal function.
  * Called when processing a request, and from other functions in this file, to get all cachable actions.
- * Tests: wheels/tests/controller/caching/$cachableactions.cfc
  */
 public array function $cachableActions() {
 	return variables.$class.cachableActions;
@@ -51,7 +52,6 @@ public array function $cachableActions() {
 /**
  * Internal function.
  * Get cache info, only called from the test suite
- * Tests: wheels/tests/controller/caching/$cachesettingsforaction.cfc
  */
 public any function $cacheSettingsForAction(required string action) {
 	local.rv = false;
@@ -70,7 +70,6 @@ public any function $cacheSettingsForAction(required string action) {
 /**
  * Internal function.
  * Delete all cache info, only called from the test suite.
- * Tests: wheels/tests/controller/caching/$clearcachableactions.cfc
  */
 public void function $clearCachableActions() {
 	ArrayClear(variables.$class.cachableActions);
@@ -79,7 +78,6 @@ public void function $clearCachableActions() {
 /**
  * Internal function.
  * Called when processing a request to see if any actions are cachable.
- * Tests: wheels/tests/controller/caching/$hascachableactions.cfc
  */
 public boolean function $hasCachableActions() {
 	if (ArrayIsEmpty($cachableActions())) {
@@ -92,7 +90,6 @@ public boolean function $hasCachableActions() {
 /**
  * Internal function
  * Set cache info, only called from the test suite.
- * Tests: wheels/tests/controller/caching/$setcachableactions.cfc
  */
 public void function $setCachableActions(required array actions) {
 	variables.$class.cachableActions = arguments.actions;

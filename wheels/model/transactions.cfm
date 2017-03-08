@@ -4,7 +4,6 @@
  * Model class method.
  * Runs the specified method within a single database transaction.
  * Docs: http://docs.cfwheels.org/docs/invokewithtransaction
- * Tests: wheels/tests/model/transactions/invokewithtransaction.cfc
  */
 public any function invokeWithTransaction(
 	required string method,

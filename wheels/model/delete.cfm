@@ -4,7 +4,6 @@
  * Model class method.
  * Deletes all records that match the "where" argument.
  * Docs: http://docs.cfwheels.org/docs/deleteall
- * Tests: wheels/tests/model/delete/deleteall.cfc
  */
 public numeric function deleteAll(
 	string where = "",
@@ -62,7 +61,6 @@ public numeric function deleteAll(
  * Model class method.
  * Finds the record with the supplied "key" and deletes it.
  * Docs: http://docs.cfwheels.org/docs/deletebykey
- * Tests: wheels/tests/model/delete/deletebykey.cfc
  */
 public boolean function deleteByKey(
 	required any key,
@@ -89,7 +87,6 @@ public boolean function deleteByKey(
  * Model class method.
  * Gets an object based on conditions and deletes it.
  * Docs: http://docs.cfwheels.org/docs/deleteone
- * Tests: wheels/tests/model/delete/deleteone.cfc
  */
 public boolean function deleteOne(
 	string where = "",
@@ -123,7 +120,6 @@ public boolean function deleteOne(
  * Model object method.
  * Deletes the object, which means the row is deleted from the database.
  * Docs: http://docs.cfwheels.org/docs/delete
- * Tests: wheels/tests/model/delete/delete.cfc
  */
 public boolean function delete(
 	any parameterize,
