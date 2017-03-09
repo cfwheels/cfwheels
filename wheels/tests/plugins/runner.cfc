@@ -89,7 +89,7 @@ component extends="wheels.tests.Test" {
     assert('result eq "$$completelyOverridden"');
   }
 
-  // our $$pluginRunner will error out due to core.onMissingMethod() being called
+  // our $pluginRunner will error out due to core.onMissingMethod() being called
   // too many times
   function test_raise_error_running_multiple_override_methods_without_core_method() {
     args = {missingMethodName="asdf", missingMethodArguments={ value="asdf"}};
