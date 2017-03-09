@@ -74,6 +74,7 @@ html, body {
 h1.header {display: block; font-size: 2.4rem; background-color: #f4f4f4; padding:1rem;}
 
 td,th {padding:0.4rem 0.4rem;}
+tr td.code {font-family: monospace;}
 
 pre {padding:15px;}
 
