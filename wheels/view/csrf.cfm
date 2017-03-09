@@ -1,5 +1,10 @@
 <cfscript>
-
+/**
+* Include this in your layouts' &lt;head&gt; sections to include meta tags containing the authenticity token for use by JavaScript AJAX requests needing to `POST` data to your application.
+*
+* [section: View Helpers]
+* [category: Miscellaneous Functions]
+*/
 string function csrfMetaTags() {
   local.metaTags  = $tag(name="meta", attributes={ name="csrf-param", content="authenticityToken" }, close=true);
   local.metaTags &= $tag(name="meta", attributes={ name="csrf-token", content=$generateAuthenticityToken() }, close=true);
@@ -7,6 +12,12 @@ string function csrfMetaTags() {
   return local.metaTags;
 }
 
+/**
+* Returns a hidden form field containing a new authenticity token.
+*
+* [section: View Helpers]
+* [category: General Form Functions]
+*/
 string function authenticityTokenField() {
   // Store a new authenticity token.
   local.authenticityToken = $generateAuthenticityToken();
