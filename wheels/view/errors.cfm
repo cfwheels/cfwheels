@@ -5,9 +5,9 @@
  * [section: View Helpers]
  * [category: Error Functions]
  *
- * @objectName string Yes The variable name of the object to display error messages for.
- * @class string No errorMessage CSS class to set on the ul element.
- * @showDuplicates boolean No true Whether or not to show duplicate error messages.
+ * @objectName The variable name of the object to display error messages for.
+ * @class CSS class to set on the ul element.
+ * @showDuplicates Whether or not to show duplicate error messages.
  *
  */
 public string function errorMessagesFor(required string objectName, string class, boolean showDuplicates) {
@@ -43,12 +43,12 @@ public string function errorMessagesFor(required string objectName, string class
  * [section: View Helpers]
  * [category: Error Functions]
  *
- * @objectName string Yes The variable name of the object to display the error message for.
- * @property string Yes The name of the property to display the error message for.
- * @prependText string No String to prepend to the error message.
- * @appendText string No String to append to the error message.
- * @wrapperElement string No span HTML element to wrap the error message in.
- * @class string No errorMessage CSS class to set on the wrapper element.
+ * @objectName The variable name of the object to display the error message for.
+ * @property The name of the property to display the error message for.
+ * @prependText String to prepend to the error message.
+ * @appendText String to append to the error message.
+ * @wrapperElement HTML element to wrap the error message in.
+ * @class CSS class to set on the wrapper element.
  *
  */
 public string function errorMessageOn(
