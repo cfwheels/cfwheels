@@ -1,9 +1,5 @@
-// This "Tag" version of function accepts `name` and `selected` instead of binding to a model object 
-<cfoutput>
-    #timeSelectTags(name="timeOfMeeting" selected=params.timeOfMeeting)#
-</cfoutput>
+<!--- This "Tag" version of function accepts `name` and `selected` instead of binding to a model object --->
+#timeSelectTags(name="timeOfMeeting" selected=params.timeOfMeeting)#
 
-// Show fields for `hour` and `minute` only 
-<cfoutput>
-	#timeSelectTags(name="timeOfMeeting", selected=params.timeOfMeeting, order="hour,minute")#
-</cfoutput>
+<!--- Show fields for `hour` and `minute` only --->
+#timeSelectTags(name="timeOfMeeting", selected=params.timeOfMeeting, order="hour,minute")#

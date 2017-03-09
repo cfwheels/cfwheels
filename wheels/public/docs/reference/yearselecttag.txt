@@ -1,11 +1,9 @@
-// View code
-<cfoutput>
-    #yearSelectTag(name="yearOfBirthday", selected=params.yearOfBirthday)#
-</cfoutput>
+<!--- View Code --->
+#yearSelectTag(name="yearOfBirthday", selected=params.yearOfBirthday)#
 
 // Only allow selection of year to be for the past 50 years, minimum being 18 years ago
 fiftyYearsAgo = Now() - 50;
 eighteenYearsAgo = Now() - 18;
-<cfoutput>
-	#yearSelectTag(name="yearOfBirthday", selected=params.yearOfBirthday, startYear=fiftyYearsAgo, endYear=eighteenYearsAgo)#
-</cfoutput>
+
+<!--- View Code --->
+#yearSelectTag(name="yearOfBirthday", selected=params.yearOfBirthday, startYear=fiftyYearsAgo, endYear=eighteenYearsAgo)#

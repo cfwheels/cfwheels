@@ -1,4 +1,3 @@
-
 // Make sure that two users with the same username won't ever exist in the database table
 validatesUniquenessOf(property="username", message="Sorry, that username is already taken.");
 

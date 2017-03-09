@@ -1,2 +1,2 @@
 aWhileAgo = Now() - 30>
-<cfoutput>#timeAgoInWords(aWhileAgo)#</cfoutput>
+#timeAgoInWords(aWhileAgo)#
