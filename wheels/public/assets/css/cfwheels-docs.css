@@ -45,7 +45,10 @@ html, body {
 }
 
 #sections a:hover,
-#left a:hover {
+#left a:hover{
+    background: #e9d8f3;
+}
+#left a.active {
     background: #9b4dca;
     color: white;
 }

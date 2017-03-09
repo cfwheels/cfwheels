@@ -100,14 +100,20 @@
 </cfoutput>
 <script>
 $(document).ready(function(){
- 
+
+	checkForUrlHash();
+
+	$(window).on('hashchange',function(){
+		filterByFunctionName(location.hash.slice(1));
+	});
+
 	$(".section").on("click", function(e){
 		filterBySection($(this).data("section"));
 		updateFunctionCount();
 		e.preventDefault();
 	});
 	$(".category").on("click", function(e){
-		filterBycategory($(this).data("section"), $(this).data("category"));
+		filterByCategory($(this).data("section"), $(this).data("category"));
 		updateFunctionCount();
 		e.preventDefault();
 	});
@@ -121,6 +127,8 @@ $(document).ready(function(){
 
 	$(".functionlink").on("click", function(e){
 		filterByFunctionName($(this).data("function"));
+		$(".functionlink").removeClass("active");
+		$(this).addClass("active");
 		updateFunctionCount();
 		e.preventDefault();
 	});
@@ -133,7 +141,7 @@ $(document).ready(function(){
 
 	$(".filtercategory").on("click", function(e){
 		var parent=$(this).closest(".functiondefinition");
-		filterBycategory(parent.data("section"),parent.data("category"));
+		filterByCategory(parent.data("section"),parent.data("category"));
 		updateFunctionCount();
 		e.preventDefault();
 	});
@@ -141,8 +149,9 @@ $(document).ready(function(){
 	function filterByFunctionName(name){
 		$("#right").find(".functiondefinition").hide().end()
 				   .find("#" + name).show();
+		window.location.hash="#" + name;
 	}
-	function filterBycategory(section, category){
+	function filterByCategory(section, category){
 		$("#left").find(".functionlink").hide().end()
 				   .find('[data-section="' + section + '"][data-category="' + category + '"]').show();
 		$("#right").find(".functiondefinition").hide().end()
@@ -154,14 +163,13 @@ $(document).ready(function(){
 		$("#right").find(".functiondefinition").hide().end()
 				   .find('[data-section="' + section + '"]').show();
 	}
-	function filterByCategory(category){
-		$("#left").find(".functionlink").hide().end()
-				   .find("." + category).show();
-		$("#right").find(".functiondefinition").hide().end()
-				   .find("." + category).show();
-	}
 	function updateFunctionCount(){
 		$("#left h1.header span").html($("#left a.functionlink:visible").length);
+	}
+
+	function checkForUrlHash(){
+		var match = location.hash.match(/^#?(.*)$/)[1];
+		if (match){filterByFunctionName(match);}
 	}
 
 	//function getCategories(){
