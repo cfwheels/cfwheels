@@ -47,9 +47,7 @@ public any function invokeWithTransaction(
 			transaction action="begin" isolation=arguments.isolation {
 				try {
 					local.rv = $invoke(method=arguments.method, componentReference=this, invokeArgs=local.methodArgs);
-					if (IsBoolean(local.rv) and local.rv) {
-						transaction action=arguments.transaction;
-					} else {
+					if (!IsBoolean(local.rv) or !local.rv or arguments.transaction eq "rollback") {
 						transaction action="rollback";
 					}
 				} catch (any e) {
