@@ -11,6 +11,7 @@ Model Enhancements
 * Model instance isPersisted() and propertyIsBlank() methods - #559 [Chris Peters]
 * Database Migrations (dbmigrate) now available in the core - #664 [Adam Chapman, Tom King, Mike Grogan]
 * New "timeStampMode" setting ("utc", "local" or "epoch") for the "createdAt" and "updatedAt" columns - [Andy Bellenie]
+* Allow nested transactions - #732 [Andy Bellenie]
 
 View Enhancements
 =================
