@@ -164,6 +164,13 @@
 				local.rv["hint"]=REReplaceNoCase(local.rv["hint"], "\[((.*?):(.*?))\]", "", "ALL");
 			}
 		}
+		// Check for param defaults within wheels settings
+		for(param in local.rv["parameters"]){
+			if(structKeyExists(application.wheels.functions, local.rv["name"])
+				&& structKeyExists(application.wheels.functions[local.rv["name"]], param['name'])){
+					param['default']=application.wheels.functions[local.rv["name"]][param['name']];
+				}
+		}  
 		// Check for extended documentation
 		local.rv["pathToExtended"]=expandPath("wheels/public/docs/reference/" & lcase(functionName) & ".txt");
 		local.rv["hasExtended"]=fileExists(local.rv.pathToExtended)?true:false;
