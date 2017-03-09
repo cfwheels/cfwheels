@@ -1,10 +1,6 @@
-
 <cfscript>
-	param name="params.type" default="core";
-	param name="params.format" default="html";
-
-	docs={
-		"sections"=[
+		/*
+		Just here at the moment for reference
 		{
 			"name" = "Model Initialization",
 			"categories" = [
@@ -71,9 +67,13 @@
 		{
 			"name" = "Configuration",
 			"categories" = []
-		}
-	],
-	"functions"=[]
+		}*/
+	param name="params.type" default="core";
+	param name="params.format" default="html";
+
+	docs={
+		"sections"=[],
+		"functions"=[]
 	};
 
 	temp={
@@ -86,16 +86,11 @@
 			"functions" = ""
 		}
 	};
-	switch(params.type){
-		case "core":
-			temp.controller.scope 		= controller("dummy");
-			temp.controller.functions 	= listSort(StructKeyList(temp.controller.scope), "textnocase");
-			temp.model.scope 			= createObject("component", "wheels.Model");
-			temp.model.functions 		= listSort(StructKeyList(temp.model.scope), "textnocase");
-		break;
-		case "app":
-		break;
-	}
+
+	temp.controller.scope 		= createObject("component", "app.controllers.Controller");
+	temp.controller.functions 	= listSort(StructKeyList(temp.controller.scope), "textnocase");
+	temp.model.scope 			= createObject("component", "app.models.Model");
+	temp.model.functions 		= listSort(StructKeyList(temp.model.scope), "textnocase");
 
 	// Merge
 	for(doctype in temp){
@@ -119,6 +114,29 @@
 		}
 		docs.functions = arrayOfStructsSort(docs.functions, "name");
 	}
+
+	// Look for custom categories:
+	for(doc in docs.functions){
+		if(structKeyExists(doc, "section") && len(doc.section)){
+			if( !ArrayFind(docs.sections, function(struct){
+				   return struct.name == doc.section;
+			})){
+				arrayAppend(docs.sections, {
+					"name": doc.section,
+					"categories": []
+				});
+			}
+			for(subsection in docs.sections){
+				if(subsection.name == doc.section
+					&& len(doc.category)
+					&& !arrayFind(subsection.categories, doc.category)){
+						arrayAppend(subsection.categories, doc.category);
+				}
+				arraySort(subsection.categories, "textnocase");
+			}
+		}
+	}
+	docs.sections = arrayOfStructsSort(docs.sections, "name");
 
 	// Take a metdata struct and get some additional info
 	// Rebuilding the struct to ensure case for serialization
