@@ -1,9 +1,14 @@
 <cfscript>
 
 /**
- * View helper function.
- * Returns a string describing the difference between the dates passed in.
- * Docs: http://docs.cfwheels.org/docs/distanceoftimeinwords
+ * Pass in two dates to this method, and it will return a string describing the difference between them.
+ *
+ * [section: View Helpers]
+ * [category: Date Functions]
+ *
+ * @fromTime date Yes Date to compare from..
+ * @toTime date Yes , Date to compare to.
+ * @includeSeconds boolean No false Whether or not to include the number of seconds in the returned string.
  */
 public string function distanceOfTimeInWords(required date fromTime, required date toTime, boolean includeSeconds) {
 	$args(name="distanceOfTimeInWords", args=arguments);
@@ -60,9 +65,14 @@ public string function distanceOfTimeInWords(required date fromTime, required da
 }
 
 /**
- * View helper function.
  * Returns a string describing the approximate time difference between the date passed in and the current date.
- * Docs: http://docs.cfwheels.org/docs/timeagoinwords
+ *
+ * [section: View Helpers]
+ * [category: Date Functions]
+ *
+ * @fromTime date Yes Date to compare from..
+ * @includeSeconds boolean No false Whether or not to include the number of seconds in the returned string.
+ * @toTime date No [runtime expression] Date to compare to.
  */
 public any function timeAgoInWords(required date fromTime, boolean includeSeconds, date toTime=Now()) {
 	$args(name="timeAgoInWords", args=arguments);
@@ -70,9 +80,14 @@ public any function timeAgoInWords(required date fromTime, boolean includeSecond
 }
 
 /**
- * View helper function.
  * Returns a string describing the approximate time difference between the current date and the date passed in.
- * Docs: http://docs.cfwheels.org/docs/timeuntilinwords
+ *
+ * [section: View Helpers]
+ * [category: Date Functions]
+ *
+ * @toTime date Yes Date to compare to.
+ * @includeSeconds boolean No false Whether or not to include the number of seconds in the returned string.
+ * @fromTime date No [runtime expression] Date to compare from.
  */
 public string function timeUntilInWords(required date toTime, boolean includeSeconds, date fromTime=Now()) {
 	$args(name="timeUntilInWords", args=arguments);

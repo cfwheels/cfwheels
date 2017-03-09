@@ -1,6 +1,4 @@
-// view code 
-<cfoutput>
-    #startFormTag(action="create", spamProtection=true)#
-        // your form controls 
-    #endFormTag()#
-</cfoutput>
+<!--- View Code --->
+#startFormTag(action="create")#
+    <!--- your form controls --->
+#endFormTag()#

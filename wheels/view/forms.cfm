@@ -1,5 +1,14 @@
 <cfscript>
-
+/**
+ * Builds and returns a string containing the closing form tag.
+ *
+ * [section: View Helpers]
+ * [category: General Form Functions]
+ *
+ * @prepend string false See documentation for textField
+ * @append string false See documentation for textField
+ *
+ */
 public string function endFormTag(string prepend, string append) {
 	$args(name="endFormTag", args=arguments);
 	if (StructKeyExists(request.wheels, "currentFormMethod")) {
@@ -7,7 +16,29 @@ public string function endFormTag(string prepend, string append) {
 	}
 	return arguments.prepend & "</form>" & arguments.append;
 }
-
+/**
+ * Builds and returns a string containing the opening form tag. The form's action will be built according to the same rules as URLFor. Note: Pass any additional arguments like class, rel, and id, and the generated tag will also include those values as HTML attributes.
+ *
+ * [section: View Helpers]
+ * [category: General Form Functions]
+ *
+ * @method string false post The type of method to use in the form tag. get and post are the options.
+ * @multipart boolean false false Set to true if the form should be able to upload files.
+ * @spamProtection boolean false false Set to true to protect the form against spammers (done with JavaScript).
+ * @route string false Name of a route that you have configured in config/routes.cfm.
+ * @controller string false Name of the controller to include in the URL.
+ * @action string false Name of the action to include in the URL.
+ * @key any false Key(s) to include in the URL.
+ * @params string false Any additional parameters to be set in the query string (example: wheels=cool&x=y). Please note that CFWheels uses the & and = characters to split the parameters and encode them properly for you (using URLEncodedFormat() internally). However, if you need to pass in & or = as part of the value, then you need to encode them (and only them), example: a=cats%26dogs%3Dtrouble!&b=1.
+ * @anchor string false Sets an anchor name to be appended to the path.
+ * @onlyPath boolean false true If true, returns only the relative URL (no protocol, host name or port).
+ * @host string false Set this to override the current host.
+ * @protocol string false Set this to override the current protocol.
+ * @port numeric false 0 Set this to override the current port number.
+ * @prepend string false String to prepend to the form control. Useful to wrap the form control with HTML tags.
+ * @append string false String to append to the form control. Useful to wrap the form control with HTML tags.
+ *
+ */
 public string function startFormTag(
 	string method,
 	boolean multipart,
@@ -95,6 +126,19 @@ public string function startFormTag(
 	return local.rv;
 }
 
+/**
+ * Builds and returns a string containing a submit button form control. Note: Pass any additional arguments like class, rel, and id, and the generated tag will also include those values as HTML attributes.
+ *
+ * [section: View Helpers]
+ * [category: General Form Functions]
+ *
+ * @value string false Save changes Message to display in the button form control.
+ * @image string false File name of the image file to use in the button form control.
+ * @disable any false Whether or not to disable the button upon clicking. (prevents double-clicking.)
+ * @prepend string false See documentation for textField
+ * @append string false See documentation for textField
+ *
+ */
 public string function submitTag(
 	string value,
 	string image,
@@ -132,6 +176,21 @@ public string function submitTag(
 	return local.rv;
 }
 
+/**
+ * Builds and returns a string containing a button form control.
+ *
+ * [section: View Helpers]
+ * [category: General Form Functions]
+ *
+ * @content string false Save changes Content to display inside the button.
+ * @type string false submit The type for the button: button, reset, or submit.
+ * @value string false save The value of the button when submitted.
+ * @image string false File name of the image file to use in the button form control.
+ * @disable any false Whether or not to disable the button upon clicking (prevents double-clicking).
+ * @prepend string false See documentation for textField
+ * @append string false See documentation for textField
+ *
+ */
 public string function buttonTag(
 	string content,
 	string type,
@@ -175,6 +234,9 @@ public string function buttonTag(
 	return local.prepend & $element(name="button", content=local.content, attributes=arguments) & local.append;
 }
 
+/**
+ * Internal function.
+ */
 public string function $formValue(required any objectName, required string property, boolean applyHtmlEditFormat=true) {
 	if (IsStruct(arguments.objectName)) {
 		local.rv = arguments.objectName[arguments.property];
@@ -195,6 +257,9 @@ public string function $formValue(required any objectName, required string prope
 	return local.rv;
 }
 
+/**
+ * Internal function.
+ */
 public any function $maxLength(required any objectName, required string property) {
 	if (StructKeyExists(arguments, "maxlength")) {
 		local.rv = arguments.maxlength;
@@ -212,6 +277,9 @@ public any function $maxLength(required any objectName, required string property
 	}
 }
 
+/**
+ * Internal function.
+ */
 public boolean function $formHasError(required any objectName, required string property) {
 	local.rv = false;
 	if (!IsStruct(arguments.objectName)) {
@@ -226,6 +294,9 @@ public boolean function $formHasError(required any objectName, required string p
 	return local.rv;
 }
 
+/**
+ * Internal function.
+ */
 public string function $createLabel(
 	required any objectName,
 	required string property,
@@ -248,6 +319,9 @@ public string function $createLabel(
 	return local.rv;
 }
 
+/**
+ * Internal function.
+ */
 public string function $formBeforeElement(
 	required any objectName,
 	required string property,
@@ -283,6 +357,9 @@ public string function $formBeforeElement(
 	return local.rv;
 }
 
+/**
+ * Internal function.
+ */
 public string function $formAfterElement(
 	required any objectName,
 	required string property,
@@ -316,6 +393,9 @@ public string function $formAfterElement(
 	return local.rv;
 }
 
+/**
+ * Internal function.
+ */
 public string function $getFieldLabel(required any objectName, required string property, required string label) {
 	local.object = false;
 	if (Compare("false", arguments.label) == 0) {
