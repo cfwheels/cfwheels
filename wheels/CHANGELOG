@@ -51,6 +51,7 @@ Miscellaneous
 * Support for passing in any "truthy" value to assert() in tests - [Per Djurner]
 * Added "app" mapping pointing to the root of the app - [Per Djurner]
 * Added a "processRequest" function that simplifies testing controllers - [Per Djurner]
+* Added new embedded documentation viewer/generator for JavaDoc - #734 [Tom King]
 
 Breaking Changes
 ================
