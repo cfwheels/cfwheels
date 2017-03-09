@@ -6,9 +6,9 @@
  * [section: View Helpers]
  * [category: Date Functions]
  *
- * @fromTime date Yes Date to compare from..
- * @toTime date Yes , Date to compare to.
- * @includeSeconds boolean No false Whether or not to include the number of seconds in the returned string.
+ * @fromTime Date to compare from..
+ * @toTime Date to compare to.
+ * @includeSeconds Whether or not to include the number of seconds in the returned string.
  */
 public string function distanceOfTimeInWords(required date fromTime, required date toTime, boolean includeSeconds) {
 	$args(name="distanceOfTimeInWords", args=arguments);
@@ -70,9 +70,9 @@ public string function distanceOfTimeInWords(required date fromTime, required da
  * [section: View Helpers]
  * [category: Date Functions]
  *
- * @fromTime date Yes Date to compare from..
- * @includeSeconds boolean No false Whether or not to include the number of seconds in the returned string.
- * @toTime date No [runtime expression] Date to compare to.
+ * @fromTime Date to compare from..
+ * @includeSeconds Whether or not to include the number of seconds in the returned string.
+ * @toTime Date to compare to.
  */
 public any function timeAgoInWords(required date fromTime, boolean includeSeconds, date toTime=Now()) {
 	$args(name="timeAgoInWords", args=arguments);
@@ -85,9 +85,9 @@ public any function timeAgoInWords(required date fromTime, boolean includeSecond
  * [section: View Helpers]
  * [category: Date Functions]
  *
- * @toTime date Yes Date to compare to.
- * @includeSeconds boolean No false Whether or not to include the number of seconds in the returned string.
- * @fromTime date No [runtime expression] Date to compare from.
+ * @toTime Date to compare to.
+ * @includeSeconds Whether or not to include the number of seconds in the returned string.
+ * @fromTime Date to compare from.
  */
 public string function timeUntilInWords(required date toTime, boolean includeSeconds, date fromTime=Now()) {
 	$args(name="timeUntilInWords", args=arguments);

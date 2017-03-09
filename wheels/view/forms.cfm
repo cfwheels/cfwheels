@@ -5,8 +5,8 @@
  * [section: View Helpers]
  * [category: General Form Functions]
  *
- * @prepend string false See documentation for textField
- * @append string false See documentation for textField
+ * @prepend See documentation for textField
+ * @append See documentation for textField
  *
  */
 public string function endFormTag(string prepend, string append) {
@@ -22,21 +22,21 @@ public string function endFormTag(string prepend, string append) {
  * [section: View Helpers]
  * [category: General Form Functions]
  *
- * @method string false post The type of method to use in the form tag. get and post are the options.
- * @multipart boolean false false Set to true if the form should be able to upload files.
- * @spamProtection boolean false false Set to true to protect the form against spammers (done with JavaScript).
- * @route string false Name of a route that you have configured in config/routes.cfm.
- * @controller string false Name of the controller to include in the URL.
- * @action string false Name of the action to include in the URL.
- * @key any false Key(s) to include in the URL.
- * @params string false Any additional parameters to be set in the query string (example: wheels=cool&x=y). Please note that CFWheels uses the & and = characters to split the parameters and encode them properly for you (using URLEncodedFormat() internally). However, if you need to pass in & or = as part of the value, then you need to encode them (and only them), example: a=cats%26dogs%3Dtrouble!&b=1.
- * @anchor string false Sets an anchor name to be appended to the path.
- * @onlyPath boolean false true If true, returns only the relative URL (no protocol, host name or port).
- * @host string false Set this to override the current host.
- * @protocol string false Set this to override the current protocol.
- * @port numeric false 0 Set this to override the current port number.
- * @prepend string false String to prepend to the form control. Useful to wrap the form control with HTML tags.
- * @append string false String to append to the form control. Useful to wrap the form control with HTML tags.
+ * @method The type of method to use in the form tag. get and post are the options.
+ * @multipart Set to true if the form should be able to upload files.
+ * @spamProtection Set to true to protect the form against spammers (done with JavaScript).
+ * @route Name of a route that you have configured in config/routes.cfm.
+ * @controller Name of the controller to include in the URL.
+ * @action Name of the action to include in the URL.
+ * @key Key(s) to include in the URL.
+ * @params Any additional parameters to be set in the query string (example: wheels=cool&x=y). Please note that CFWheels uses the & and = characters to split the parameters and encode them properly for you (using URLEncodedFormat() internally). However, if you need to pass in & or = as part of the value, then you need to encode them (and only them), example: a=cats%26dogs%3Dtrouble!&b=1.
+ * @anchor Sets an anchor name to be appended to the path.
+ * @onlyPath If true, returns only the relative URL (no protocol, host name or port).
+ * @host Set this to override the current host.
+ * @protocol Set this to override the current protocol.
+ * @port Set this to override the current port number.
+ * @prepend String to prepend to the form control. Useful to wrap the form control with HTML tags.
+ * @append String to append to the form control. Useful to wrap the form control with HTML tags.
  *
  */
 public string function startFormTag(
@@ -132,11 +132,11 @@ public string function startFormTag(
  * [section: View Helpers]
  * [category: General Form Functions]
  *
- * @value string false Save changes Message to display in the button form control.
- * @image string false File name of the image file to use in the button form control.
- * @disable any false Whether or not to disable the button upon clicking. (prevents double-clicking.)
- * @prepend string false See documentation for textField
- * @append string false See documentation for textField
+ * @value Save changes Message to display in the button form control.
+ * @image File name of the image file to use in the button form control.
+ * @disable Whether or not to disable the button upon clicking. (prevents double-clicking.)
+ * @prepend See documentation for textField
+ * @append See documentation for textField
  *
  */
 public string function submitTag(
@@ -182,13 +182,13 @@ public string function submitTag(
  * [section: View Helpers]
  * [category: General Form Functions]
  *
- * @content string false Save changes Content to display inside the button.
- * @type string false submit The type for the button: button, reset, or submit.
- * @value string false save The value of the button when submitted.
- * @image string false File name of the image file to use in the button form control.
- * @disable any false Whether or not to disable the button upon clicking (prevents double-clicking).
- * @prepend string false See documentation for textField
- * @append string false See documentation for textField
+ * @content Save changes Content to display inside the button.
+ * @type The type for the button: button, reset, or submit.
+ * @value The value of the button when submitted.
+ * @image File name of the image file to use in the button form control.
+ * @disable Whether or not to disable the button upon clicking (prevents double-clicking).
+ * @prepend See documentation for textField
+ * @append See documentation for textField
  *
  */
 public string function buttonTag(
