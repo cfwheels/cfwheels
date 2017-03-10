@@ -52,6 +52,7 @@ Miscellaneous
 * Added "app" mapping pointing to the root of the app - [Per Djurner]
 * Added a "processRequest" function that simplifies testing controllers - [Per Djurner]
 * Added new embedded documentation viewer/generator for JavaDoc - #734 [Tom King]
+* Removes all references to Railo - #656 (Adam Chapman)
 
 Breaking Changes
 ================
@@ -64,6 +65,7 @@ Breaking Changes
 * Form labels automatically generated based on foreign key properties will drop the "Id" from the end (e.g., the label for the "userId" property will be "User", not "User Id") - #618 [Chris Peters]
 * Database migration files should now extend `wheels.dbmigrate.Migration`, not `plugins.dbmigrate.Migration`
 * Routes from 1.x will need to be updated to the new routing system
+* Removes javascript arguments in link & form functions - #627 (Adam Chapman)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
