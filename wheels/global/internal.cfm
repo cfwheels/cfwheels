@@ -956,7 +956,7 @@ public string function $namedRoute() {
 
 		// loop over variables needed for route
 		local.iEnd = ArrayLen(local.vars);
-		for (local.i = 1; local.i LTE local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.key = local.vars[local.i];
 
 			// try to find the correct argument
@@ -971,23 +971,18 @@ public string function $namedRoute() {
 			// if value was passed in
 			if (StructKeyExists(local, "value")) {
 				// just assign simple values
-				if (NOT IsObject(local.value)) {
+				if (!IsObject(local.value)) {
 					arguments[local.key] = local.value;
-
 				// if object, do special processing
-				} else {
-
+				} else if (local.value.isNew()) {
 					// if the passed in object is new, link to the plural REST route instead
-					if (local.value.isNew()) {
-						if (StructKeyExists(application.wheels.namedRoutePositions, pluralize(arguments.route))) {
-							arguments.route = pluralize(arguments.route);
-							break;
-						}
-
-					// otherwise, use the Model#toParam method
-					} else {
-						arguments[local.key] = local.value.toParam();
+					if (StructKeyExists(application.wheels.namedRoutePositions, pluralize(arguments.route))) {
+						arguments.route = pluralize(arguments.route);
+						break;
 					}
+				// otherwise, use the Model#toParam method
+				} else {
+					arguments[local.key] = local.value.toParam();
 				}
 
 				// remove value for next loop
