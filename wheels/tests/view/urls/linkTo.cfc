@@ -31,4 +31,10 @@ component extends="wheels.tests.Test" {
 		assert('e eq r');
 	}
 
+	function test_linkto_arguments() {
+		e = '<a confirm="confirm-value" disabled="disabled-value" href="/">CFWheels</a>';
+		r = _controller.linkTo(href="/", text="CFWheels", confirm="confirm-value", disabled="disabled-value");
+		assert('e eq r');
+	}
+
 }

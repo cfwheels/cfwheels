@@ -18,8 +18,8 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_with_disable() {
-		r = _controller.buttonTag(disable="Are you sure?");
-		e = '<button onclick="this.disabled=true;this.value=''Are you sure?'';this.form.submit();" type="submit" value="save">Save changes</button>';
+		r = _controller.buttonTag(disable="disable-value");
+		e = '<button disable="disable-value" type="submit" value="save">Save changes</button>';
 		assert('e eq r');
 	}
 

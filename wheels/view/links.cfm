@@ -43,7 +43,7 @@ public string function linkTo(
 	if (!StructKeyExists(arguments, "text")) {
 		arguments.text = arguments.href;
 	}
-	local.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
+	local.skip = "text,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
 	if (Len(arguments.route)) {
 		// variables passed in as route arguments should not be added to the html element
 		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
@@ -53,9 +53,7 @@ public string function linkTo(
 
 public string function buttonTo(
 	string text,
-	string confirm,
 	string image,
-	any disable,
 	string route="",
 	string controller="",
 	string action="",
@@ -71,16 +69,11 @@ public string function buttonTo(
 	arguments.action = URLFor(argumentCollection=arguments);
 	arguments.action = toXHTML(arguments.action);
 	arguments.method = "post";
-	if (Len(arguments.confirm)) {
-		local.onsubmit = "return confirm('#JSStringFormat(arguments.confirm)#');";
-		arguments.onsubmit = $addToJavaScriptAttribute(name="onsubmit", content=local.onsubmit, attributes=arguments);
-	}
 	local.args = $innerArgs(name="input", args=arguments);
 	local.args.value = arguments.text;
 	local.args.image = arguments.image;
-	local.args.disable = arguments.disable;
 	local.content = submitTag(argumentCollection=local.args);
-	local.skip = "disable,image,text,confirm,route,controller,key,params,anchor,onlyPath,host,protocol,port";
+	local.skip = "image,text,route,controller,key,params,anchor,onlyPath,host,protocol,port";
 	if (Len(arguments.route)) {
 		// variables passed in as route arguments should not be added to the html element
 		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));

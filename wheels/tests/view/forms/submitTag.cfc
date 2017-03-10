@@ -5,22 +5,22 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_defaults() {
-		e = _controller.submitTag();
-		r = '<input type="submit" value="Save changes" />';
+		actual = _controller.submitTag();
+		expected = '<input type="submit" value="Save changes" />';
 		debug('e', false);
-		assert('e eq r');
+		assert('actual eq expected');
 	}
 
-	function test_disabled_is_escaped() {
-		e = _controller.submitTag(disable="Mark as: 'Completed'?");
-		r = '<input onclick="this.disabled=true;this.value=''Mark as: \''Completed\''?'';this.form.submit();" type="submit" value="Save changes" />';
-		assert('e eq r');
+	function test_submittag_arguments() {
+		actual = _controller.submitTag(disable="disable-value");
+		expected = '<input disable="disable-value" type="submit" value="Save changes" />';
+		assert('actual eq expected');
 	}
 
 	function test_append_prepend() {
-		e = _controller.submitTag(append="a", prepend="p");
-		r = 'p<input type="submit" value="Save changes" />a';
-		assert('e eq r');
+		actual = _controller.submitTag(append="a", prepend="p");
+		expected = 'p<input type="submit" value="Save changes" />a';
+		assert('actual eq expected');
 	}
 
 }

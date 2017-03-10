@@ -134,7 +134,6 @@ public string function startFormTag(
  *
  * @value Save changes Message to display in the button form control.
  * @image File name of the image file to use in the button form control.
- * @disable Whether or not to disable the button upon clicking. (prevents double-clicking.)
  * @prepend See documentation for textField
  * @append See documentation for textField
  *
@@ -142,35 +141,25 @@ public string function startFormTag(
 public string function submitTag(
 	string value,
 	string image,
-	any disable,
 	string prepend,
 	string append
 ) {
 	$args(name="submitTag", reserved="type,src", args=arguments);
 	local.rv = arguments.prepend;
 	local.append = arguments.append;
-	if (Len(arguments.disable)) {
-		local.onclick = "this.disabled=true;";
-		if (!Len(arguments.image) && !IsBoolean(arguments.disable)) {
-			local.onclick &= "this.value='#JSStringFormat(arguments.disable)#';";
-		}
-		local.onclick &= "this.form.submit();";
-		arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=local.onclick, attributes=arguments);
-	}
 	if (Len(arguments.image)) {
 		// create an img tag and then just replace "img" with "input"
 		arguments.type = "image";
 		arguments.source = arguments.image;
 		StructDelete(arguments, "value");
 		StructDelete(arguments, "image");
-		StructDelete(arguments, "disable");
 		StructDelete(arguments, "append");
 		StructDelete(arguments, "prepend");
 		local.rv &= imageTag(argumentCollection=arguments);
 		local.rv = Replace(local.rv, "<img", "<input");
 	} else {
 		arguments.type = "submit";
-		local.rv &= $tag(name="input", close=true, skip="image,disable,append,prepend", attributes=arguments);
+		local.rv &= $tag(name="input", close=true, skip="image,append,prepend", attributes=arguments);
 	}
 	local.rv &= local.append;
 	return local.rv;
@@ -186,7 +175,6 @@ public string function submitTag(
  * @type The type for the button: button, reset, or submit.
  * @value The value of the button when submitted.
  * @image File name of the image file to use in the button form control.
- * @disable Whether or not to disable the button upon clicking (prevents double-clicking).
  * @prepend See documentation for textField
  * @append See documentation for textField
  *
@@ -196,21 +184,10 @@ public string function buttonTag(
 	string type,
 	string value,
 	string image,
-	any disable,
 	string prepend,
 	string append
 ) {
 	$args(name="buttonTag", args=arguments);
-
-	// add onclick attribute to disable the form button
-	if (Len(arguments.disable)) {
-		local.onclick = "this.disabled=true;";
-		if (!Len(arguments.image) && !IsBoolean(arguments.disable)) {
-			local.onclick &= "this.value='#JSStringFormat(arguments.disable)#';";
-		}
-		local.onclick &= "this.form.submit();";
-		arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=local.onclick, attributes=arguments);
-	}
 
 	// if image is specified then use that as the content
 	if (Len(arguments.image)) {
@@ -226,7 +203,6 @@ public string function buttonTag(
 	local.append = arguments.append;
 	StructDelete(arguments, "content");
 	StructDelete(arguments, "image");
-	StructDelete(arguments, "disable");
 	StructDelete(arguments, "prepend");
 	StructDelete(arguments, "append");
 

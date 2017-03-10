@@ -357,23 +357,6 @@ public string function $swapArrayPositionsForIds(required any objectName) {
 	return local.rv;
 }
 
-public string function $addToJavaScriptAttribute(
-	required string name,
-	required string content,
-	required struct attributes
-) {
-	if (StructKeyExists(arguments.attributes, arguments.name)) {
-		local.rv = arguments.attributes[arguments.name];
-		if (Right(local.rv, 1) != ";") {
-			local.rv &= ";";
-		}
-		local.rv &= arguments.content;
-	} else {
-		local.rv = arguments.content;
-	}
-	return local.rv;
-}
-
 public any function $getObject(required string objectname) {
 	try {
 		if (Find(".", arguments.objectName) || Find("[", arguments.objectName)) {
