@@ -927,7 +927,6 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 }
 
 public string function $namedRoute() {
-
 	// determine route name and path type
 	arguments.route = GetFunctionCalledName();
 
@@ -970,8 +969,7 @@ public string function $namedRoute() {
 			}
 
 			// if value was passed in
-			if (StructKeyExists(loc, "value")) {
-
+			if (StructKeyExists(local, "value")) {
 				// just assign simple values
 				if (NOT IsObject(local.value)) {
 					arguments[local.key] = local.value;
@@ -1001,4 +999,5 @@ public string function $namedRoute() {
 	// return correct url with arguments set
 	return urlFor(argumentCollection=arguments);
 }
+
 </cfscript>
