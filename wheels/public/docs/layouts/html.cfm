@@ -1,5 +1,5 @@
+<cfparam name="docs">
 <cfoutput>
-
 <div class="row">
 	<!--- Section/category List --->
 	<div id="sections">
@@ -171,12 +171,6 @@ $(document).ready(function(){
 		var match = location.hash.match(/^#?(.*)$/)[1];
 		if (match){filterByFunctionName(match);}
 	}
-
-	//function getCategories(){
-	//	var categories=$(".functiondefinition").classes();
-	//	categories.splice( $.inArray("functiondefinition", categories), 1 );
-	//	categories.splice( $.inArray("", categories), 1 );
-	//}
 
   // Write on keyup event of keyword input element
   $("#doc-search").keyup(function(){
