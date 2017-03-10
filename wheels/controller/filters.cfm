@@ -104,10 +104,10 @@ public void function $runFilters(required string type, required string action) {
 	local.iEnd = ArrayLen(local.filters);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.filter = local.filters[local.i];
-		loc.listsNotSpecified = !Len(local.filter.only) && !Len(local.filter.except);
-		loc.inOnlyList = Len(local.filter.only) && ListFindNoCase(local.filter.only, arguments.action);
-		loc.notInExceptionList = Len(local.filter.except) && !ListFindNoCase(local.filter.except, arguments.action);
-		if (loc.listsNotSpecified || loc.inOnlyList || loc.notInExceptionList) {
+		local.listsNotSpecified = !Len(local.filter.only) && !Len(local.filter.except);
+		local.inOnlyList = Len(local.filter.only) && ListFindNoCase(local.filter.only, arguments.action);
+		local.notInExceptionList = Len(local.filter.except) && !ListFindNoCase(local.filter.except, arguments.action);
+		if (local.listsNotSpecified || local.inOnlyList || local.notInExceptionList) {
 			if (!StructKeyExists(variables, local.filter.through)) {
 				$throw(
 					type="Wheels.FilterNotFound",
