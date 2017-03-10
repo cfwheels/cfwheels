@@ -129,30 +129,15 @@ component extends="wheels.tests.Test" {
 	function run_casing_of_class_attribute() {
  		_controller.flashInsert(something="");
 		actual = _controller.flashMessages();
-		if (application.wheels.serverName eq "Railo" and application.wheels.serverversion.startsWith("3.")) {
-			expected = 'class="SOMETHINGMessage"';
-		} else {
-			expected = 'class="somethingMessage"';
-		}
+		expected = 'class="somethingMessage"';
 		assert('Find(expected, actual)');
 		_controller.flashInsert(someThing="");
 	}
 
 	function run_casing_of_class_attribute_mixed() {
-		/*
-		https://jira.jboss.org/browse/RAILO-933
-		note that a workaround for RAILO is to quote the arugment:
-		controller.flashInsert("someThing"="");
-		Just remember that this throws a compilation error in ACF
-		 */
 		_controller.flashInsert(someThing="");
 		actual = _controller.flashMessages();
-		actual = _controller.flashMessages();
-		if (application.wheels.serverName eq "Railo" and application.wheels.serverversion.startsWith("3.")) {
-			expected = 'class="SOMETHINGMessage"';
-		} else {
-			expected = 'class="someThingMessage"';
-		}
+		expected = 'class="someThingMessage"';
 		assert('Find(expected, actual)');
 	}
 
@@ -167,11 +152,7 @@ component extends="wheels.tests.Test" {
 		_controller.flashInsert(success="test");
 		actual = _controller.flashMessages(class="custom-class");
 		expected = 'class="custom-class"';
-		if (application.wheels.serverName eq "Railo" and application.wheels.serverversion.startsWith("3.")) {
-			e2 = 'class="SUCCESSMessage"';
-		} else {
-			e2 = 'class="successMessage"';
-		}
+		e2 = 'class="successMessage"';
 		assert('Find(expected, actual) AND Find(e2, actual)');
 	}
 

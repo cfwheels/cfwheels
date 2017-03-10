@@ -371,7 +371,7 @@ public string function $constructParams(required string params, string $URLRewri
 			local.param = Replace(local.param, "%253D", "%3D", "all");
 
 			if (application.wheels.obfuscateUrls && !ListFindNoCase("cfid,cftoken", local.temp[1])) {
-				// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
+				// wrap in double quotes because in lucee we have to pass it in as a string otherwise leading zeros are stripped
 				local.param = obfuscateParam("#local.param#");
 			}
 			local.rv &= local.param;

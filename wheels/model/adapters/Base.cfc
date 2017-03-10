@@ -249,9 +249,9 @@
 				StructDelete(local.args, "password");
 			}
 
-			// set queries in Railo/Lucee to not preserve single quotes on the entire
+			// set queries in Lucee to not preserve single quotes on the entire
 			// cfquery block (we'll handle this individually in the SQL statement instead)
-			if (application.wheels.serverName == "Railo" || application.wheels.serverName == "Lucee") {
+			if (application.wheels.serverName == "Lucee") {
 				local.args.psq = false;
 			}
 
@@ -276,7 +276,7 @@
 			}
 
 			// get/set the primary key value if necessary
-			// will be done on insert statement involving auto-incremented primary keys when Railo/ACF cannot retrieve it for us
+			// will be done on insert statement involving auto-incremented primary keys when Lucee/ACF cannot retrieve it for us
 			// this happens on non-supported databases (example: H2) and drivers (example: jTDS)
 			local.$id = $identitySelect(queryAttributes=local.args, result=local.result, primaryKey=arguments.$primaryKey);
 			if (StructKeyExists(local, "$id")) {

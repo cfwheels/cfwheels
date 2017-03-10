@@ -85,7 +85,7 @@ component extends="Base" output=false {
 			if (local.endPar)
 				local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
 			if (! ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
-				// Railo/ACF doesn't support PostgreSQL natively when it comes to returning
+				// Lucee/ACF doesn't support PostgreSQL natively when it comes to returning
 				// the primary key value of the last inserted record so we have to do it manually by using the sequence
 				local.rv = {};
 				local.tbl = SpanExcluding(Right(local.sql, Len(local.sql)-12), " ");
