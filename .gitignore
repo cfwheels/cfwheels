@@ -13,3 +13,5 @@ WEB-INF
 /db/sql/
 server.json
 cfwheels.*.zip
+settings.json
+.vscode
