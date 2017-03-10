@@ -1,5 +1,11 @@
 <cfscript>
-
+/**
+* Tells CFWheels to protect `POST`ed requests from CSRF vulnerabilities. Instructs the controller to verify that `params.authenticityToken` or `X-CSRF-Token` HTTP header is provided along with the request containing a valid authenticity token. Call this method within a controller's `init` method, preferably the base `Controller.cfc`	 file, to protect the entire application.
+*
+* @with How to handle invalid authenticity token checks. Valid values are error (throws a Wheels.InvalidAuthenticityToken error) and abort (aborts the request silently and sends a blank response to the client).
+* @only List of actions that this check should only run on. Leave blank for all.
+* @except List of actions that this check should be omitted from running on. Leave blank for no exceptions.
+*/
 public function protectFromForgery(string with="exception", string only="", string except="") {
 	$args(args=arguments, name="protectFromForgery");
 
@@ -9,6 +15,9 @@ public function protectFromForgery(string with="exception", string only="", stri
 	variables.$class.csrf.except = arguments.except;
 }
 
+/**
+ * Internal function.
+ */
 public function $runCsrfProtection(string action) {
 	if (StructKeyExists(variables.$class, "csrf")) {
 		local.csrf = variables.$class.csrf;
@@ -20,11 +29,15 @@ public function $runCsrfProtection(string action) {
 		}
 	}
 }
-
+/**
+ * Internal function.
+ */
 public function $flagRequestAsProtected() {
 	request.$wheels.protectedFromForgery = true;
 }
-
+/**
+ * Internal function.
+ */
 public function $verifyAuthenticityToken() {
 	if (!$isVerifiedRequest()) {
 		switch (variables.$class.csrf.type) {
@@ -38,15 +51,21 @@ public function $verifyAuthenticityToken() {
 		}
 	}
 }
-
+/**
+ * Internal function.
+ */
 public boolean function $isVerifiedRequest() {
 	return isGet() || isHead() || isOptions() || $isAnyAuthenticityTokenValid();
 }
-
+/**
+ * Internal function.
+ */
 public boolean function $isRequestProtectedFromForgery() {
 	return StructKeyExists(request.$wheels, "protectedFromForgery") && IsBoolean(request.$wheels.protectedFromForgery) && request.$wheels.protectedFromForgery;
 }
-
+/**
+ * Internal function.
+ */
 public function $setAuthenticityToken() {
 	if (!$isVerifiedRequest() && isAjax()) {
 		if (StructKeyExists(request.$wheelsHeaders, "X-CSRF-Token")) {
@@ -54,11 +73,15 @@ public function $setAuthenticityToken() {
 		}
 	}
 }
-
+/**
+ * Internal function.
+ */
 public function $storeAuthenticityToken() {
 	$generateAuthenticityToken();
 }
-
+/**
+ * Internal function.
+ */
 public boolean function $isAnyAuthenticityTokenValid() {
 	if ($isRequestProtectedFromForgery() && StructKeyExists(params, "authenticityToken")) {
 		if (application.wheels.csrfStore == "session") {
@@ -71,7 +94,9 @@ public boolean function $isAnyAuthenticityTokenValid() {
 	}
 	return local.isValid;
 }
-
+/**
+ * Internal function.
+ */
 public string function $generateAuthenticityToken() {
 	if (application.wheels.csrfStore == "session") {
 		return CSRFGenerateToken();
@@ -79,12 +104,16 @@ public string function $generateAuthenticityToken() {
 		return $generateCookieAuthenticityToken();
 	}
 }
-
+/**
+ * Internal function.
+ */
 public boolean function $isCookieAuthenticityTokenValid() {
 	local.authenticityToken = $generateCookieAuthenticityToken();
 	return Len(local.authenticityToken) && local.authenticityToken == params.authenticityToken;
 }
-
+/**
+ * Internal function.
+ */
 public string function $generateCookieAuthenticityToken() {
 	local.authenticityToken = $readAuthenticityTokenFromCookie();
 
@@ -115,7 +144,9 @@ public string function $generateCookieAuthenticityToken() {
 
 	return local.authenticityToken;
 }
-
+/**
+ * Internal function.
+ */
 public string function $readAuthenticityTokenFromCookie() {
 	local.cookieName = application.wheels.csrfCookieName;
 
@@ -161,7 +192,9 @@ public string function $readAuthenticityTokenFromCookie() {
 
 	return local.cookieAttrs.authenticityToken;
 }
-
+/**
+ * Internal function.
+ */
 public struct function $csrfCookieAttributeCollection(required string value) {
 	local.cookieStruct = {
 		value = arguments.value,
