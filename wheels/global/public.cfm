@@ -105,7 +105,10 @@ public string function $contentType() {
 		local.response = getPageContext().getFusionContext().getResponse();
 	}
 	if (local.response.containsHeader("Content-Type")) {
-		local.rv = local.response.getHeader("Content-Type");
+		local.header = local.response.getHeader("Content-Type");
+		if (!IsNull(local.header)) {
+			local.rv = local.header;
+		}
 	}
 	return local.rv;
 }

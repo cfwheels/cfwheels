@@ -6,9 +6,9 @@ component extends="wheels.tests.Test" {
 			controller = "wheels",
 			route = "root"
 		};
-		local.result = processRequest(local.params);
-		local.expected = "Congratulations";
-		assert(Find(local.expected, local.result));
+		result = processRequest(local.params);
+		expected = "Congratulations";
+		assert("Find(expected, result)");
 	}
 
 	function test_process_request_return_as_struct() {
@@ -17,9 +17,9 @@ component extends="wheels.tests.Test" {
 			controller = "wheels",
 			route = "root"
 		};
-		local.result = processRequest(params=local.params, returnAs="struct").status;
-		local.expected = 200;
-		assert(Compare(local.expected, local.result) == 0);
+		result = processRequest(params=local.params, returnAs="struct").status;
+		expected = 200;
+		assert("Compare(expected, result) == 0");
 	}
 
 }
