@@ -180,16 +180,17 @@ component extends="Abstract" {
 			sql="EXEC sp_helpconstraint #quoteTableName(arguments.name)#, 'nomsg'"
 		);
 		if (StructKeyExists(local, "constraints") && Val(local.constraints.RecordCount)) {
-			local.constraints = $query(
-				datasource=application.wheels.dataSourceName,
+			local.defaults = $query(
+				dbtype="query",
+				query=local.constraints,
 				sql="
 					SELECT	*
-					FROM		[loc].[constraints]
-					WHERE		constraint_type = 'DEFAULT on column #objectCase(arguments.columnName)#'
+					FROM	query
+					WHERE	constraint_type = 'DEFAULT on column #objectCase(arguments.columnName)#'
 				"
 			);
-			for (loc.row in local.constraints) {
-				$execute("ALTER TABLE #quoteTableName(arguments.name)# DROP CONSTRAINT #local.constraints.constraint_name#");
+			for (local.row in local.defaults) {
+				$execute("ALTER TABLE #quoteTableName(arguments.name)# DROP CONSTRAINT #local.row.constraint_name#");
 			};
 		}
 	}
