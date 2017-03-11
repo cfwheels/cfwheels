@@ -205,10 +205,9 @@
 
 <cffunction name="$assignAdapter" returntype="any" access="public" output="false">
 	<cfscript>
-		var loc = {};
-		if (application.wheels.showErrorInformation) {
+		if (get("showErrorInformation")) {
 			try {
-				loc.info = $dbinfo(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password, type="version");
+				local.info = $dbinfo(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password, type="version");
 			} catch (any e) {
 				$throw(
 					type="Wheels.DataSourceNotFound",
@@ -217,38 +216,38 @@
 				);
 			}
 		} else {
-			loc.info = $dbinfo(
+			local.info = $dbinfo(
 				type="version",
 				dataSource=variables.wheels.class.dataSource,
 				username=variables.wheels.class.username,
 				password=variables.wheels.class.password
 			);
 		}
-		if (FindNoCase("SQLServer", loc.info.driver_name) || FindNoCase("SQL Server", loc.info.driver_name)) {
-			loc.adapterName = "SQLServer";
-		} else if (FindNoCase("MySQL", loc.info.driver_name) || FindNoCase("MariaDB", loc.info.driver_name)) {
-			loc.adapterName = "MySQL";
-		} else if (FindNoCase("Oracle", loc.info.driver_name)) {
-			loc.adapterName = "Oracle";
-		} else if (FindNoCase("PostgreSQL", loc.info.driver_name)) {
-			loc.adapterName = "PostgreSQL";
-		} else if (FindNoCase("H2", loc.info.driver_name)) {
-			loc.adapterName = "H2";
+		if (FindNoCase("SQLServer", local.info.driver_name) || FindNoCase("SQL Server", local.info.driver_name)) {
+			local.adapterName = "SQLServer";
+		} else if (FindNoCase("MySQL", local.info.driver_name) || FindNoCase("MariaDB", local.info.driver_name)) {
+			local.adapterName = "MySQL";
+		} else if (FindNoCase("Oracle", local.info.driver_name)) {
+			local.adapterName = "Oracle";
+		} else if (FindNoCase("PostgreSQL", local.info.driver_name)) {
+			local.adapterName = "PostgreSQL";
+		} else if (FindNoCase("H2", local.info.driver_name)) {
+			local.adapterName = "H2";
 		} else {
 			$throw(
 				type="Wheels.DatabaseNotSupported",
-				message="#loc.info.database_productname# is not supported by CFWheels.",
+				message="#local.info.database_productname# is not supported by CFWheels.",
 				extendedInfo="Use SQL Server, MySQL, MariaDB, Oracle, PostgreSQL or H2."
 			);
 		}
-		loc.rv = CreateObject("component", "adapters.#loc.adapterName#").init(
+		local.rv = CreateObject("component", "adapters.#local.adapterName#").init(
 			dataSource=variables.wheels.class.dataSource,
 			username=variables.wheels.class.username,
 			password=variables.wheels.class.password
 		);
-		application.wheels.adapterName = loc.adapterName;
+		application.wheels.adapterName = local.adapterName;
+		return local.rv;
 	</cfscript>
-	<cfreturn loc.rv>
 </cffunction>
 
 <cffunction name="$initModelObject" returntype="any" access="public" output="false">
@@ -291,14 +290,18 @@
 	<cfreturn loc.rv>
 </cffunction>
 
-<cffunction name="$classData" returntype="struct" access="public" output="false">
-	<cfreturn variables.wheels.class>
-</cffunction>
+<cfscript>
 
-<cffunction name="$softDeletion" returntype="boolean" access="public" output="false">
-	<cfreturn variables.wheels.class.softDeletion>
-</cffunction>
+public struct function $classData() {
+	return variables.wheels.class;
+}
 
-<cffunction name="$softDeleteColumn" returntype="string" access="public" output="false">
-	<cfreturn variables.wheels.class.softDeleteColumn>
-</cffunction>
+public boolean function $softDeletion() {
+	return variables.wheels.class.softDeletion;
+}
+
+public string function $softDeleteColumn() {
+	return variables.wheels.class.softDeleteColumn;
+}
+
+</cfscript>
