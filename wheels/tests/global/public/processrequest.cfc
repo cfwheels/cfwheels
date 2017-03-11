@@ -19,7 +19,7 @@ component extends="wheels.tests.Test" {
 		};
 		result = processRequest(params=local.params, returnAs="struct").status;
 		expected = 200;
-		assert("Compare(expected, result) == 0");
+		assert("Compare(expected, result) eq 0");
 	}
 
 }
