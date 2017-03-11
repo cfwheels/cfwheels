@@ -1,18 +1,49 @@
 <cfscript>
-
+/**
+* Adds an error on a specific property.
+*
+* [section: Model Object]
+* [category: Error Functions]
+*
+* @property The name of the property you want to add an error on.
+* @message The error message (such as "Please enter a correct name in the form field" for example).
+* @name A name to identify the error by (useful when you need to distinguish one error from another one set on the same object and you don't want to use the error message itself for that).
+*/
 public void function addError(required string property, required string message, string name="") {
 	ArrayAppend(variables.wheels.errors, arguments);
 }
-
+/**
+* Adds an error on a specific property.
+*
+* [section: Model Object]
+* [category: Error Functions]
+*
+* @message The error message (such as "Please enter a correct name in the form field" for example).
+* @name A name to identify the error by (useful when you need to distinguish one error from another one set on the same object and you don't want to use the error message itself for that).
+*/
 public void function addErrorToBase(required string message, string name="") {
 	arguments.property = "";
 	addError(argumentCollection=arguments);
 }
-
+/**
+* Returns an array of all the errors on the object.
+*
+* [section: Model Object]
+* [category: Error Functions]
+*/
 public array function allErrors() {
 	return variables.wheels.errors;
 }
 
+/**
+* Clears out all errors set on the object or only the ones set for a specific property or name.
+*
+* [section: Model Object]
+* [category: Error Functions]
+*
+* @property Specify a property name here if you want to clear all errors set on that property.
+* @name Specify an error name here if you want to clear all errors set with that error name.
+*/
 public void function clearErrors(string property="", string name="") {
 	if (!Len(arguments.property) && !Len(arguments.name)) {
 		ArrayClear(variables.wheels.errors);
@@ -26,7 +57,15 @@ public void function clearErrors(string property="", string name="") {
 		}
 	}
 }
-
+/**
+* Returns the number of errors this object has associated with it. Specify property or name if you wish to count only specific errors.
+*
+* [section: Model Object]
+* [category: Error Functions]
+*
+* @property Specify a property name here if you want to count only errors set on a specific property.
+* @name Specify an error name here if you want to count only errors set with a specific error name.
+*/
 public numeric function errorCount(string property="", string name="") {
 	if (!Len(arguments.property) && !Len(arguments.name)) {
 		return ArrayLen(variables.wheels.errors);
@@ -34,7 +73,15 @@ public numeric function errorCount(string property="", string name="") {
 		return ArrayLen(errorsOn(argumentCollection=arguments));
 	}
 }
-
+/**
+* Returns an array of all errors associated with the supplied property (and error name if passed in).
+*
+* [section: Model Object]
+* [category: Error Functions]
+*
+* @property Specify the property name to return errors for here.
+* @name If you want to return only errors on the above property set with a specific error name you can specify it here.
+*/
 public array function errorsOn(required string property, string name="") {
 	local.rv = [];
 	local.iEnd = ArrayLen(variables.wheels.errors);
@@ -46,12 +93,27 @@ public array function errorsOn(required string property, string name="") {
 	}
 	return local.rv;
 }
-
+/**
+* Returns an array of all errors associated with the object as a whole (not related to any specific property).
+*
+* [section: Model Object]
+* [category: Error Functions]
+*
+* @name Specify an error name here to only return errors for that error name.*
+*/
 public array function errorsOnBase(string name="") {
 	arguments.property = "";
 	return errorsOn(argumentCollection=arguments);
 }
-
+/**
+* Returns true if the object has any errors. You can also limit to only check a specific property or name for errors.
+*
+* [section: Model Object]
+* [category: Error Functions]
+*
+* @property Name of the property to check if there are any errors set on.
+* @name Error name to check if there are any errors set with.
+*/
 public boolean function hasErrors(string property="", string name="") {
 	if (errorCount(argumentCollection=arguments) > 0) {
 		return true;
