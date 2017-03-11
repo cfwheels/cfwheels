@@ -60,20 +60,19 @@
   	<cfargument name="name" type="string" required="true">
     <cfargument name="primaryKeys" type="array" required="true">
     <cfscript>
-    var loc = {};
 
-		loc.sql = "CONSTRAINT PK_#arguments.name# PRIMARY KEY (";
+		local.sql = "CONSTRAINT PK_#arguments.name# PRIMARY KEY (";
 
-		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+		for (local.i = 1; local.i lte local.iEnd; local.i++)
 		{
-			if (loc.i != 1)
-				loc.sql = loc.sql & ", ";
-				loc.sql = loc.sql & arguments.primaryKeys[loc.i].toColumnNameSQL();
+			if (local.i != 1)
+				local.sql = local.sql & ", ";
+				local.sql = local.sql & arguments.primaryKeys[local.i].toColumnNameSQL();
 		}
 
-		loc.sql = loc.sql & ")";
+		local.sql = local.sql & ")";
     </cfscript>
-    <cfreturn loc.sql />
+    <cfreturn local.sql />
   </cffunction>
 
 	<!--- currently leaving table names and columns unquoted
