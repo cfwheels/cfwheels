@@ -1,73 +1,194 @@
 <cfscript>
-
+/**
+* Registers method(s) that should be called after a new object is created.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function afterCreate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterCreate");
 }
-
+/**
+* Registers method(s) that should be called after an object is deleted.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function afterDelete(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterDelete");
 }
-
+/**
+* Registers method(s) that should be called after an existing object has been initialized (which is usually done with the findByKey or findOne method).
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function afterFind(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterFind");
 }
-
+/**
+* Registers method(s) that should be called after an object has been initialized.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function afterInitialization(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterInitialization");
 }
-
+/**
+* Registers method(s) that should be called after a new object has been initialized (which is usually done with the new method).
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods Method name or list of method names that should be called when this callback event occurs in an object's life cycle (can also be called with the method argument).
+*/
 public void function afterNew(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterNew");
 }
-
+/**
+* Registers method(s) that should be called after an object is saved.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function afterSave(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterSave");
 }
-
+/**
+* Registers method(s) that should be called after an existing object is updated.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function afterUpdate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterUpdate");
 }
-
+/**
+* Registers method(s) that should be called after an object is validated.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function afterValidation(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterValidation");
 }
-
+/**
+* Registers method(s) that should be called after a new object is validated.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function afterValidationOnCreate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterValidationOnCreate");
 }
-
+/**
+* Registers method(s) that should be called after an existing object is validated.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function afterValidationOnUpdate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterValidationOnUpdate");
 }
-
+/**
+* Registers method(s) that should be called before a new object is created.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function beforeCreate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeCreate");
 }
-
+/**
+* Registers method(s) that should be called before an object is deleted.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function beforeDelete(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeDelete");
 }
-
+/**
+*  Registers method(s) that should be called before an object is saved.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function beforeSave(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeSave");
 }
-
+/**
+* Registers method(s) that should be called before an existing object is updated.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function beforeUpdate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeUpdate");
 }
-
+/**
+* Registers method(s) that should be called before an object is validated.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function beforeValidation(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeValidation");
 }
-
+/**
+* Registers method(s) that should be called before a new object is validated.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function beforeValidationOnCreate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeValidationOnCreate");
 }
-
+/**
+* Registers method(s) that should be called before an existing object is validated.
+*
+* [section: Model Initialization]
+* [category: Callback Functions]
+*
+* @methods See documentation for afterNew.
+*/
 public void function beforeValidationOnUpdate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeValidationOnUpdate");
 }
-
+/**
+* Internal Function
+*/
 public void function $registerCallback(required string type, required string methods) {
 	// create this type in the array if it doesn't already exist
 	if (!StructKeyExists(variables.wheels.class.callbacks,arguments.type)) {
@@ -86,7 +207,9 @@ public void function $registerCallback(required string type, required string met
 		}
 	}
 }
-
+/**
+* Internal Function
+*/
 public void function $clearCallbacks(string type="") {
 	arguments.type = $listClean(list="#arguments.type#", returnAs="array");
 
@@ -101,7 +224,9 @@ public void function $clearCallbacks(string type="") {
 		variables.wheels.class.callbacks[arguments.type[local.i]] = [];
 	}
 }
-
+/**
+* Internal Function
+*/
 public any function $callbacks(string type="") {
 	if (Len(arguments.type)) {
 		if (StructKeyExists(variables.wheels.class.callbacks, arguments.type)) {
@@ -114,7 +239,9 @@ public any function $callbacks(string type="") {
 	}
 	return local.rv;
 }
-
+/**
+* Internal Function
+*/
 public boolean function $callback(
 	required string type,
 	required boolean execute,
@@ -156,7 +283,9 @@ public boolean function $callback(
 	}
 	return local.rv;
 }
-
+/**
+* Internal Function
+*/
 public boolean function $queryCallback(required string method, required query collection) {
 	// we return true by default
 	// will be overridden only if the callback method returns false on one of the iterations
