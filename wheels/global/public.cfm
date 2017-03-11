@@ -301,8 +301,8 @@ public string function URLFor(
 		local.key = arguments.controller & "##" & arguments.action;
 		local.cache = request.wheels.urlForCache;
 		if (!StructKeyExists(local.cache, local.key)) {
-			loc.iEnd = ArrayLen(application.wheels.routes);
-			for (local.i = 1; local.i <= loc.iEnd; local.i++) {
+			local.iEnd = ArrayLen(application.wheels.routes);
+			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.route = application.wheels.routes[local.i];
 				local.controllerMatch = StructKeyExists(local.route, "controller") && local.route.controller == arguments.controller;
 				local.actionMatch = StructKeyExists(local.route, "action") && local.route.action == arguments.action;
