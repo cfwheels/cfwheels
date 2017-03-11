@@ -144,7 +144,7 @@
 
       // confirm nesting of optional segments
       if (REFind("\).*\(", arguments.pattern))
-        $throw(
+        Throw(
             type="Wheels.InvalidRoute"
           , message="Optional pattern segments must be nested."
         );

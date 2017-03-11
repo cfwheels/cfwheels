@@ -116,7 +116,7 @@ public string function $contentType() {
 public struct function pagination(string handle="query") {
 	if (get("showErrorInformation")) {
 		if (!StructKeyExists(request.wheels, arguments.handle)) {
-			$throw(
+			Throw(
 				type="Wheels.QueryHandleNotFound",
 				message="CFWheels couldn't find a query with the handle of `#arguments.handle#`.",
 				extendedInfo="Make sure your `findAll` call has the `page` argument specified and matching `handle` argument if specified."
@@ -284,7 +284,7 @@ public string function URLFor(
 	// Throw error if host or protocol are passed with onlyPath=true.
 	local.hostOrProtocolNotEmpty = Len(arguments.host) || Len(arguments.protocol);
 	if (application.wheels.showErrorInformation && arguments.onlyPath && local.hostOrProtocolNotEmpty) {
-		$throw(
+		Throw(
 			type="Wheels.IncorrectArguments",
 			message="Can't use the `host` or `protocol` arguments when `onlyPath` is `true`.",
 			extendedInfo="Set `onlyPath` to `false` so that `linkTo` will create absolute URLs and thus allowing you to set the `host` and `protocol` on the link."
@@ -354,7 +354,7 @@ public string function URLFor(
 		} else if (StructKeyExists(local.route, local.property)) {
 			local.value = local.route[local.property];
 		} else if (Len(arguments.route) && arguments.$URLRewriting != "Off") {
-			$throw(
+			Throw(
 				type="Wheels.IncorrectRoutingArguments",
 				message="Incorrect Arguments",
 				extendedInfo="The route chosen by Wheels `#local.route.name#` requires the argument `#local.property#`. Pass the argument `#local.property#` or change your routes to reflect the proper variables needed."

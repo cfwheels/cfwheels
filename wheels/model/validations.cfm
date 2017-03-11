@@ -54,7 +54,7 @@ public void function validatesFormatOf(
 	$args(name="validatesFormatOf", args=arguments);
 	if (get("showErrorInformation")) {
 		if (Len(arguments.type) && !ListFindNoCase("creditcard,date,email,eurodate,guid,social_security_number,ssn,telephone,time,URL,USdate,UUID,variableName,zipcode,boolean", arguments.type)) {
-			$throw(
+			Throw(
 				type="Wheels.IncorrectArguments",
 				message="The `#arguments.type#` type is not supported.",
 				extendedInfo="Use one of the supported types: `creditcard`, `date`, `email`, `eurodate`, `guid`, `social_security_number`, `ssn`, `telephone`, `time`, `URL`, `USdate`, `UUID`, `variableName`, `zipcode`, `boolean`"
@@ -175,7 +175,7 @@ public void function $registerValidation(required string when) {
 	if (application.wheels.showErrorInformation) {
 		if (StructKeyExists(arguments, "properties")) {
 			if (!Len(arguments.properties)) {
-				$throw(
+				Throw(
 					type="Wheels.IncorrectArguments",
 					message="The `property` or `properties` argument is required but was not passed in.",
 					extendedInfo="Please pass in the names of the properties you want to validate. Use either the `property` argument (for a single property) or the `properties` argument (for a list of properties) to do this."

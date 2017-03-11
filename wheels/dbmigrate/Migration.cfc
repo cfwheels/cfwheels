@@ -3,7 +3,7 @@ component extends="Base" {
 	public Migration function init() {
 		var dbType = $getDBType();
 		if(dbType == '') {
-			$throw(type="wheels.model.migrate.DatabaseNotSupported", message="#dbType# is not supported by DBMigrate plugin.", extendedInfo="Use Microsoft SQL Server, MySQL, Oracle, SQLite or PostgreSQL.");
+			Throw(type="wheels.model.migrate.DatabaseNotSupported", message="#dbType# is not supported by DBMigrate plugin.", extendedInfo="Use Microsoft SQL Server, MySQL, Oracle, SQLite or PostgreSQL.");
 		} else {
 			this.adapter = CreateObject("component","adapters.#dbType#");
 		}

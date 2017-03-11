@@ -72,7 +72,7 @@ public array function filterChain(string type="all") {
 
 	// Throw error if an invalid type was passed in.
 	if (!ListFindNoCase("before,after,all", arguments.type)) {
-		$throw(
+		Throw(
 			type="Wheels.InvalidFilterType",
 			message="The filter type of `#arguments.type#` is invalid.",
 			extendedInfo="Please use either `before` or `after`."
@@ -109,7 +109,7 @@ public void function $runFilters(required string type, required string action) {
 		local.notInExceptionList = Len(local.filter.except) && !ListFindNoCase(local.filter.except, arguments.action);
 		if (local.listsNotSpecified || local.inOnlyList || local.notInExceptionList) {
 			if (!StructKeyExists(variables, local.filter.through)) {
-				$throw(
+				Throw(
 					type="Wheels.FilterNotFound",
 					message="CFWheels tried to run the `#local.filter.through#` function as a #arguments.type# filter but could not find it.",
 					extendedInfo="Make sure there is a function named `#local.filter.through#` in the `#variables.$class.name#.cfc` file."

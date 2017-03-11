@@ -134,10 +134,6 @@
 	<cffile attributeCollection="#arguments#">
 </cffunction>
 
-<cffunction name="$throw" returntype="void" access="public" output="false">
-	<cfthrow attributeCollection="#arguments#">
-</cffunction>
-
 <cffunction name="$invoke" returntype="any" access="public" output="false">
 	<cfset var loc = {}>
 	<cfset arguments.returnVariable = "loc.rv">

@@ -97,7 +97,7 @@ public void function redirectTo(
 		if (StructKeyExists(variables.$instance, "redirect")) {
 
 			// Throw an error if the developer has already scheduled a redirect previously in this request.
-			$throw(type="Wheels.RedirectToAlreadyCalled", message="`redirectTo()` was already called.");
+			Throw(type="Wheels.RedirectToAlreadyCalled", message="`redirectTo()` was already called.");
 
 		} else {
 

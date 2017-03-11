@@ -8,7 +8,7 @@ public void function provides(string formats="") {
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.item = ListGetAt(arguments.formats, local.i);
 		if (get("showErrorInformation") && !ListFindNoCase(local.possibleFormats, local.item)) {
-			$throw(
+			Throw(
 				type="Wheels.InvalidFormat",
 				message="An invalid format of `#local.item#` has been specified.
 				The possible values are #local.possibleFormats#."
@@ -26,7 +26,7 @@ public void function onlyProvides(string formats="", string action=variables.par
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.item = ListGetAt(arguments.formats, local.i);
 		if (get("showErrorInformation") && !ListFindNoCase(local.possibleFormats, local.item)) {
-			$throw(
+			Throw(
 				type="Wheels.InvalidFormat",
 				message="An invalid format of `#local.item#` has been specified. The possible values are #local.possibleFormats#."
 			);
@@ -68,7 +68,7 @@ public any function renderWith(
 
 		// throw an error if we rendered a pdf template and we got here, the cfdocument call should have stopped processing
 		if (local.contentType == "pdf" && get("showErrorInformation") && local.templatePathExists) {
-			$throw(
+			Throw(
 				type="Wheels.PdfRenderingError",
 				message="When rendering the a PDF file, don't specify the filename attribute. This will stream the PDF straight to the browser."
 			);
@@ -76,7 +76,7 @@ public any function renderWith(
 
 		// throw an error if we do not have a template to render the content type that we do not have defaults for
 		if (!ListFindNoCase("json,xml", local.contentType) && !StructKeyExists(local, "content") && get("showErrorInformation")) {
-			$throw(
+			Throw(
 				type="Wheels.RenderingError",
 				message="To render the #local.contentType# content type, create the template `#local.templateName#.cfm` for the #arguments.controller# controller."
 			);
@@ -224,7 +224,7 @@ public string function $returnStatusText(numeric status=200) {
 	if (StructKeyExists(local.statuscodes, local.status)) {
 		local.rv = local.statuscodes[local.status];
 	} else {
-		$throw(
+		Throw(
 			type="Wheels.RenderingError",
 			message="An invalid http response code #local.status# was passed in."
 		);
@@ -240,7 +240,7 @@ public string function $returnStatusCode(any status=200) {
 	if (ArrayLen(local.lookup)) {
 		local.rv = local.lookup[1]["key"];
 	} else {
-		$throw(
+		Throw(
 			type="Wheels.RenderingError",
 			message="An invalid http response text #local.status# was passed in."
 		);

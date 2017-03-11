@@ -119,7 +119,7 @@
 				try {
 					local.rv = $getColumnInfo(argumentCollection=local.args);
 				} catch (any e) {
-					$throw(type="Wheels.TableNotFound", message="The `#arguments.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#arguments.tableName#` to your database or tell CFWheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating an `init` method inside it and then calling `table(""tbl_users"")` from within it. #e.message# #e.detail#");
+					Throw(type="Wheels.TableNotFound", message="The `#arguments.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#arguments.tableName#` to your database or tell CFWheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating an `init` method inside it and then calling `table(""tbl_users"")` from within it. #e.message# #e.detail#");
 				}
 			} else {
 				local.rv = $getColumnInfo(argumentCollection=local.args);
@@ -163,7 +163,7 @@
 
 		public struct function $CFQueryParameters(required struct settings) {
 			if (!StructKeyExists(arguments.settings, "value")) {
-				$throw(type="Wheels.QueryParamValue", message="The value for `cfqueryparam` cannot be determined", extendedInfo="This is usually caused by a syntax error in the `WHERE` statement, such as forgetting to quote strings for example.");
+				Throw(type="Wheels.QueryParamValue", message="The value for `cfqueryparam` cannot be determined", extendedInfo="This is usually caused by a syntax error in the `WHERE` statement, such as forgetting to quote strings for example.");
 			}
 			local.rv = {};
 			local.rv.cfsqltype = arguments.settings.type;

@@ -66,7 +66,7 @@ public string function startFormTag(
 
 		// throw a nice wheels error if the developer passes in a route that was not generated
 		if (application.wheels.showErrorInformation && !StructKeyExists(application.wheels.namedRoutePositions, arguments.route)) {
-			$throw(
+			Throw(
 				type="Wheels.RouteNotFound",
 				message="Route Not Found",
 				extendedInfo="The route specified `#arguments.route#` does not exist!"
@@ -219,7 +219,7 @@ public string function $formValue(required any objectName, required string prope
 	} else {
 		local.object = $getObject(arguments.objectName);
 		if (get("showErrorInformation") && !IsObject(local.object)) {
-			$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
+			Throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 		}
 		if (StructKeyExists(local.object, arguments.property)) {
 			local.rv = local.object[arguments.property];
@@ -261,7 +261,7 @@ public boolean function $formHasError(required any objectName, required string p
 	if (!IsStruct(arguments.objectName)) {
 		local.object = $getObject(arguments.objectName);
 		if (get("showErrorInformation") && !IsObject(local.object)) {
-			$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
+			Throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 		}
 		if (ArrayLen(local.object.errorsOn(arguments.property))) {
 			local.rv = true;

@@ -108,7 +108,7 @@ public boolean function processAction() {
 
 public void function $callAction(required string action) {
 	if (Left(arguments.action, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action)) {
-		$throw(
+		Throw(
 			type="Wheels.ActionNotAllowed",
 			message="You are not allowed to execute the `#arguments.action#` method as an action.",
 			extendedInfo="Make sure your action does not have the same name as any of the built-in CFWheels functions."
@@ -128,10 +128,10 @@ public void function $callAction(required string action) {
 		} catch (any e) {
 			local.file = get("viewPath") & "/" & LCase(ListChangeDelims(variables.$class.name, '/', '.')) & "/" & LCase(arguments.action) & ".cfm";
 			if (FileExists(ExpandPath(local.file))) {
-				$throw(object=e);
+				Throw(object=e);
 			} else {
 				if (get("showErrorInformation")) {
-					$throw(
+					Throw(
 						type="Wheels.ViewNotFound",
 						message="Could not find the view page for the `#arguments.action#` action in the `#variables.$class.name#` controller.",
 						extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(ListChangeDelims(variables.$class.name, '/', '.'))#` directory (create the directory as well if it doesn't already exist)."

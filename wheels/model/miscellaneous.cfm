@@ -84,7 +84,7 @@ public void function setPrimaryKeys(required string property) {
 public boolean function exists(any key, string where, boolean reload, any parameterize, boolean includeSoftDeletes) {
 	$args(name="exists", args=arguments);
 	if (get("showErrorInformation") && StructKeyExists(arguments, "key") && StructKeyExists(arguments, "where")) {
-			$throw(type="Wheels.IncorrectArguments", message="You cannot pass in both `key` and `where`.");
+			Throw(type="Wheels.IncorrectArguments", message="You cannot pass in both `key` and `where`.");
 	}
 	arguments.select = primaryKey();
 	arguments.returnAs = "query";
@@ -235,7 +235,7 @@ public struct function $buildQueryParamValues(required string property) {
 public void function $keyLengthCheck(required any key) {
 	// throw error if the number of keys passed in is not the same as the number of keys defined for the model
 	if (ListLen(primaryKeys()) != ListLen(arguments.key)) {
-		$throw(
+		Throw(
 			type="Wheels.InvalidArgumentValue",
 			message="The `key` argument contains an invalid value.",
 			extendedInfo="The `key` argument contains a list, however this table doesn't have a composite key. A list of values is allowed for the `key` argument, but this only applies in the case when the table contains a composite key."
@@ -254,7 +254,7 @@ public void function $timestampProperty(required string property) {
 	} else if (variables.wheels.class.timeStampMode eq "epoch") {
 		this[arguments.property] = Now().getTime();
 	} else {
-		$throw(type="Wheels.InvalidTimeStampMode", message="Timestamp mode #variables.wheels.class.timeStampMode# is invalid");
+		Throw(type="Wheels.InvalidTimeStampMode", message="Timestamp mode #variables.wheels.class.timeStampMode# is invalid");
 	}
 }
 

@@ -179,7 +179,7 @@ public void function $combineArguments(
 	}
 	if (arguments.required && application.wheels.showErrorInformation) {
 		if (!StructKeyExists(arguments.args, local.first) || !Len(arguments.args[local.first])) {
-			$throw(type="Wheels.IncorrectArguments", message="The `#local.second#` or `#local.first#` argument is required but was not passed in.", extendedInfo="#arguments.extendedInfo#");
+			Throw(type="Wheels.IncorrectArguments", message="The `#local.second#` or `#local.first#` argument is required but was not passed in.", extendedInfo="#arguments.extendedInfo#");
 		}
 	}
 }
@@ -311,7 +311,7 @@ public struct function $findRoute() {
 
 	// throw an error if a route with this name has not been set by developer in the config/routes.cfm file
 	if (application.wheels.showErrorInformation && !StructKeyExists(application.wheels.namedRoutePositions, arguments.route)) {
-		$throw(type="Wheels.RouteNotFound", message="Could not find the `#arguments.route#` route.", extendedInfo="Create a new route in `config/routes.cfm` with the name `#arguments.route#`.");
+		Throw(type="Wheels.RouteNotFound", message="Could not find the `#arguments.route#` route.", extendedInfo="Create a new route in `config/routes.cfm` with the name `#arguments.route#`.");
 	}
 
 	local.routePos = application.wheels.namedRoutePositions[arguments.route];
@@ -406,7 +406,7 @@ public void function $args(
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.item = ListGetAt(arguments.reserved, local.i);
 				if (StructKeyExists(arguments.args, local.item)) {
-					$throw(
+					Throw(
 						type="Wheels.IncorrectArguments",
 						message="The `#local.item#` argument cannot be passed in since it will be set automatically by Wheels."
 					);
@@ -424,7 +424,7 @@ public void function $args(
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.arg = ListGetAt(arguments.required, local.i);
 			if (!StructKeyExists(arguments.args, local.arg)) {
-				$throw(type="Wheels.IncorrectArguments", message="The `#local.arg#` argument is required but not passed in.");
+				Throw(type="Wheels.IncorrectArguments", message="The `#local.arg#` argument is required but not passed in.");
 			}
 		}
 	}

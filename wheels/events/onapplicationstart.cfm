@@ -28,9 +28,9 @@ public void function onApplicationStart() {
 	local.upgradeTo = $checkMinimumVersion(engine=application.$wheels.serverName, version=application.$wheels.serverVersion);
 	if (Len(local.upgradeTo) && !StructKeyExists(this, "disableEngineCheck") && !StructKeyExists(url, "disableEngineCheck")) {
 		if (IsBoolean(local.upgradeTo)) {
-			$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please use Lucee or Adobe ColdFusion instead.");
+			Throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please use Lucee or Adobe ColdFusion instead.");
 		} else {
-			$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please upgrade to version #local.upgradeTo# or higher.");
+			Throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please upgrade to version #local.upgradeTo# or higher.");
 		}
 	}
 
