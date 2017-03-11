@@ -5,17 +5,16 @@
 	<cfargument name="conditionArgs" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="timeout" type="numeric" required="false" default="30">
-	<cfset var loc = {}>
-	<cfset loc.rv = $invoke(method=arguments.condition, invokeArgs=arguments.conditionArgs)>
-	<cfif IsBoolean(loc.rv) AND NOT loc.rv>
+	<cfset local.rv = $invoke(method=arguments.condition, invokeArgs=arguments.conditionArgs)>
+	<cfif IsBoolean(local.rv) AND NOT local.rv>
 		<cflock name="#arguments.name#" timeout="#arguments.timeout#">
-			<cfset loc.rv = $invoke(method=arguments.condition, invokeArgs=arguments.conditionArgs)>
-			<cfif IsBoolean(loc.rv) AND NOT loc.rv>
-				<cfset loc.rv = $invoke(method=arguments.execute, invokeArgs=arguments.executeArgs)>
+			<cfset local.rv = $invoke(method=arguments.condition, invokeArgs=arguments.conditionArgs)>
+			<cfif IsBoolean(local.rv) AND NOT local.rv>
+				<cfset local.rv = $invoke(method=arguments.execute, invokeArgs=arguments.executeArgs)>
 			</cfif>
 		</cflock>
 	</cfif>
-	<cfreturn loc.rv>
+	<cfreturn local.rv>
 </cffunction>
 
 <cffunction name="$simpleLock" returntype="any" access="public" output="false">
@@ -24,19 +23,18 @@
 	<cfargument name="execute" type="string" required="true">
 	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="timeout" type="numeric" required="false" default="30">
-	<cfset var loc = {}>
 	<cfif StructKeyExists(arguments, "object")>
 		<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
-			<cfset loc.rv = $invoke(component="#arguments.object#", method="#arguments.execute#", argumentCollection="#arguments.executeArgs#")>
+			<cfset local.rv = $invoke(component="#arguments.object#", method="#arguments.execute#", argumentCollection="#arguments.executeArgs#")>
 		</cflock>
 	<cfelse>
 		<cfset arguments.executeArgs.$locked = true>
 		<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
-			<cfset loc.rv = $invoke(method="#arguments.execute#", argumentCollection="#arguments.executeArgs#")>
+			<cfset local.rv = $invoke(method="#arguments.execute#", argumentCollection="#arguments.executeArgs#")>
 		</cflock>
 	</cfif>
-	<cfif StructKeyExists(loc, "rv")>
-		<cfreturn loc.rv>
+	<cfif StructKeyExists(local, "rv")>
+		<cfreturn local.rv>
 	</cfif>
 </cffunction>
 
@@ -186,8 +184,7 @@
 </cffunction>
 
 <cffunction name="$dbinfo" returntype="any" access="public" output="false">
-	<cfset var loc = {}>
-	<cfset arguments.name = "loc.rv">
+	<cfset arguments.name = "local.rv">
 	<cfif StructKeyExists(arguments, "username") && ! Len(arguments.username)>
 		<cfset StructDelete(arguments, "username")>
 	</cfif>
@@ -195,18 +192,17 @@
 		<cfset StructDelete(arguments, "password")>
 	</cfif>
 	<cfdbinfo attributeCollection="#arguments#">
-	<cfreturn loc.rv>
+	<cfreturn local.rv>
 </cffunction>
 
 <cffunction name="$wddx" returntype="any" access="public" output="false">
 	<cfargument name="input" type="any" required="true">
 	<cfargument name="action" type="string" required="false" default="cfml2wddx">
 	<cfargument name="useTimeZoneInfo" type="boolean" required="false" default="true">
-	<cfset var loc = {}>
-	<cfset arguments.output = "loc.output">
+	<cfset arguments.output = "local.output">
 	<cfwddx attributeCollection="#arguments#">
-	<cfif StructKeyExists(loc, "output")>
-		<cfreturn loc.output>
+	<cfif StructKeyExists(local, "output")>
+		<cfreturn local.output>
 	</cfif>
 </cffunction>
 

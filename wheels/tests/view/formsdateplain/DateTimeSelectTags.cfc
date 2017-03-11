@@ -15,7 +15,6 @@ component extends="wheels.tests.Test" {
 	}
 
 	function testSameLabels() {
-		var loc = {};
 		str = pkg.controller.dateTimeSelectTags(name="theName", label="lblText");
 		sub = "lblText";
 		result = (Len(str)-Len(Replace(str,sub,"","all")))/Len(sub);
