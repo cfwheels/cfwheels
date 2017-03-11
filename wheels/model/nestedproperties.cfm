@@ -3,6 +3,18 @@
 // Note: lots of naming collisions here with the move from loc-> local due to scope search in CF10 (quelle surprise).
 // Have added underscores to all local variables to assure uniqueness for now, but really this needs revisiting.
 
+/**
+* Allows for nested objects, structs, and arrays to be set from params and other generated data.
+*
+* [section: Model Initialization]
+* [category: Miscellaneous Functions]
+*
+* @association The association (or list of associations) you want to allow to be set through the params. This argument is also aliased as associations.
+* @autoSave boolean false true Whether to save the association(s) when the parent object is saved.
+* @allowDelete false Set allowDelete to true to tell CFWheels to look for the property _delete in your model. If present and set to a value that evaluates to true, the model will be deleted when saving the parent.
+* @sortProperty Set sortProperty to a property on the object that you would like to sort by. The property should be numeric, should start with 1, and should be consecutive. Only valid with hasMany associations.
+* @rejectIfBlank A list of properties that should not be blank. If any of the properties are blank, any CRUD operations will be rejected.
+*/
 public void function nestedProperties(
 	string association="",
 	boolean autoSave,
@@ -37,6 +49,9 @@ public void function nestedProperties(
 	}
 }
 
+/**
+* Internal Function
+*/
 public boolean function $validateAssociations(required boolean callbacks) {
 	local._associations = variables.wheels.class.associations;
 	for (local._association in local._associations) {
@@ -55,6 +70,9 @@ public boolean function $validateAssociations(required boolean callbacks) {
 	return true;
 }
 
+/**
+* Internal Function
+*/
 public boolean function $saveAssociations(
 	required any parameterize,
 	required boolean reload,
@@ -99,6 +117,9 @@ public boolean function $saveAssociations(
 	return local._rv;
 }
 
+/**
+* Internal Function
+*/
 public boolean function $setAssociations() {
 	local._associations = variables.wheels.class.associations;
 	for (local._item in local._associations) {
@@ -114,6 +135,9 @@ public boolean function $setAssociations() {
 	return true;
 }
 
+/**
+* Internal Function
+*/
 public void function $setOneToOneAssociationProperty(
 	required string property,
 	required struct value,
@@ -130,6 +154,9 @@ public void function $setOneToOneAssociationProperty(
 	}
 }
 
+/**
+* Internal Function
+*/
 public void function $setCollectionAssociationProperty(
 	required string property,
 	required any value,
@@ -196,6 +223,9 @@ public void function $setCollectionAssociationProperty(
 	}
 }
 
+/**
+* Internal Function
+*/
 public void function $updateCollectionObject(required string property, required struct value, numeric position=0) {
 	if (!arguments.position) {
 		arguments.position = ArrayLen(this[arguments.property]);
@@ -207,6 +237,9 @@ public void function $updateCollectionObject(required string property, required 
 	}
 }
 
+/**
+* Internal Function
+*/
 public any function $getAssociationObject(
 	required string property,
 	required struct value,
@@ -243,6 +276,9 @@ public any function $getAssociationObject(
 	return local._object;
 }
 
+/**
+* Internal Function
+*/
 public string function $createPrimaryKeyList(required struct params, required string keys) {
 	local._rv = "";
 	local._iEnd = ListLen(arguments.keys);
@@ -256,6 +292,9 @@ public string function $createPrimaryKeyList(required struct params, required st
 	return local._rv;
 }
 
+/**
+* Internal Function
+*/
 public void function $resetToNew() {
 	if ($persistedOnInitialization()) {
 		return;
@@ -272,6 +311,9 @@ public void function $resetToNew() {
 	}
 }
 
+/**
+* Internal Function
+*/
 public void function $resetAssociationsToNew() {
 	local._associations = variables.wheels.class.associations;
 	for (local._association in local._associations) {
@@ -290,6 +332,9 @@ public void function $resetAssociationsToNew() {
 	}
 }
 
+/**
+* Internal Function
+*/
 public boolean function $persistedOnInitialization() {
 	if (StructKeyExists(variables.wheels.instance, "persistedOnInitialization") && variables.wheels.instance.persistedOnInitialization){
 		return true;
