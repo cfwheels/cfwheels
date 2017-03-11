@@ -249,47 +249,49 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$initModelObject" returntype="any" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="properties" type="any" required="true">
-	<cfargument name="persisted" type="boolean" required="true">
-	<cfargument name="row" type="numeric" required="false" default="1">
-	<cfargument name="base" type="boolean" required="false" default="true">
-	<cfargument name="useFilterLists" type="boolean" required="false" default="true">
-	<cfscript>
-		var loc = {};
-		variables.wheels = {};
-		variables.wheels.instance = {};
-		variables.wheels.errors = [];
-
-		// assign an object id for the instance (only use the last 12 digits to avoid creating an exponent)
-		request.wheels.tickCountId = Right(request.wheels.tickCountId, 12) + 1;
-		variables.wheels.tickCountId = request.wheels.tickCountId;
-
-		// copy class variables from the object in the application scope
-		if (!StructKeyExists(variables.wheels, "class")) {
-			loc.lockName = "classLock" & application.applicationName;
-			variables.wheels.class = $simpleLock(name=loc.lockName, type="readOnly", object=application.wheels.models[arguments.name], execute="$classData");
-		}
-
-		// setup object properties in the this scope
-		if (IsQuery(arguments.properties) && arguments.properties.recordCount != 0) {
-			arguments.properties = $queryRowToStruct(argumentCollection=arguments);
-		}
-
-		if (IsStruct(arguments.properties) && !StructIsEmpty(arguments.properties)) {
-			$setProperties(properties=arguments.properties, setOnModel=true, $useFilterLists=arguments.useFilterLists);
-		}
-		if (arguments.persisted) {
-			$updatePersistedProperties();
-		}
-		variables.wheels.instance.persistedOnInitialization = arguments.persisted;
-		loc.rv = this;
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
 <cfscript>
+
+public any function $initModelObject(
+	required string name,
+	required any properties,
+	required boolean persisted,
+	numeric row=1,
+	boolean base=true,
+	boolean useFilterLists=true
+) {
+	variables.wheels = {};
+	variables.wheels.instance = {};
+	variables.wheels.errors = [];
+
+	// assign an object id for the instance (only use the last 12 digits to avoid creating an exponent)
+	request.wheels.tickCountId = Right(request.wheels.tickCountId, 12) + 1;
+	variables.wheels.tickCountId = request.wheels.tickCountId;
+
+	// copy class variables from the object in the application scope
+	if (!StructKeyExists(variables.wheels, "class")) {
+		local.lockName = "classLock" & application.applicationName;
+		variables.wheels.class = $simpleLock(
+			execute="$classData",
+			name=local.lockName,
+			object=application.wheels.models[arguments.name],
+			type="readOnly"
+		);
+	}
+
+	// setup object properties in the this scope
+	if (IsQuery(arguments.properties) && arguments.properties.recordCount != 0) {
+		arguments.properties = $queryRowToStruct(argumentCollection=arguments);
+	}
+
+	if (IsStruct(arguments.properties) && !StructIsEmpty(arguments.properties)) {
+		$setProperties(properties=arguments.properties, setOnModel=true, $useFilterLists=arguments.useFilterLists);
+	}
+	if (arguments.persisted) {
+		$updatePersistedProperties();
+	}
+	variables.wheels.instance.persistedOnInitialization = arguments.persisted;
+	return this;
+}
 
 public struct function $classData() {
 	return variables.wheels.class;
