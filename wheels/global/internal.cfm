@@ -980,9 +980,9 @@ public string function $namedRoute() {
 						arguments.route = pluralize(arguments.route);
 						break;
 					}
-				// otherwise, use the Model#toParam method
+				// otherwise, use the Model#key method
 				} else {
-					arguments[local.key] = local.value.toParam();
+					arguments[local.key] = local.value.key();
 				}
 
 				// remove value for next loop

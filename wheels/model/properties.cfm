@@ -171,13 +171,6 @@ public any function validationTypeForProperty(required string property) {
 }
 
 /**
-* TODO: Document?
-*/
-public any function toParam() {
-	return key();
-}
-
-/**
 * Returns the value of the primary key for the object. If you have a single primary key named id, then someObject.key() is functionally equivalent to someObject.id. This method is more useful when you do dynamic programming and don't know the name of the primary key or when you use composite keys (in which case it's convenient to use this method to get a list of both key values returned).
 *
 * [section: Model Object]

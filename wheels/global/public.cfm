@@ -365,7 +365,7 @@ public string function URLFor(
 
 		// If value is a model object, get its key value.
 		if (IsObject(local.value)) {
-			local.value = local.value.toParam();
+			local.value = local.value.key();
 		}
 
 		// Any value we find from above, URL encode it here.
