@@ -45,7 +45,7 @@ component extends="Base" {
 		local.optionalArguments = "referenceTable,referenceColumn,column";
 		local.iEnd = ListLen(local.optionalArguments);
 		for (local.i=1; local.i <= local.iEnd; local.i++) {
-			local.argumentName = ListGetAt(loc.optionalArguments,local.i);
+			local.argumentName = ListGetAt(local.optionalArguments,local.i);
 			if(StructKeyExists(this, local.argumentName)) {
 				local.options[local.argumentName] = this[local.argumentName];
 			}
