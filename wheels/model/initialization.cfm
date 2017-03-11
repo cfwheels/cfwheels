@@ -202,54 +202,56 @@
 	<cfreturn this>
 </cffunction>
 
-<cffunction name="$assignAdapter" returntype="any" access="public" output="false">
-	<cfscript>
-		if (get("showErrorInformation")) {
-			try {
-				local.info = $dbinfo(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password, type="version");
-			} catch (any e) {
-				$throw(
-					type="Wheels.DataSourceNotFound",
-					message="The data source could not be reached.",
-					extendedInfo="Make sure your database is reachable and that your data source settings are correct. You either need to setup a data source with the name `#variables.wheels.class.dataSource#` in the Administrator or tell CFWheels to use a different data source in `config/settings.cfm`."
-				);
-			}
-		} else {
+<cfscript>
+
+public any function $assignAdapter() {
+	if (get("showErrorInformation")) {
+		try {
 			local.info = $dbinfo(
 				type="version",
 				dataSource=variables.wheels.class.dataSource,
 				username=variables.wheels.class.username,
 				password=variables.wheels.class.password
 			);
-		}
-		if (FindNoCase("SQLServer", local.info.driver_name) || FindNoCase("SQL Server", local.info.driver_name)) {
-			local.adapterName = "SQLServer";
-		} else if (FindNoCase("MySQL", local.info.driver_name) || FindNoCase("MariaDB", local.info.driver_name)) {
-			local.adapterName = "MySQL";
-		} else if (FindNoCase("Oracle", local.info.driver_name)) {
-			local.adapterName = "Oracle";
-		} else if (FindNoCase("PostgreSQL", local.info.driver_name)) {
-			local.adapterName = "PostgreSQL";
-		} else if (FindNoCase("H2", local.info.driver_name)) {
-			local.adapterName = "H2";
-		} else {
+		} catch (any e) {
 			$throw(
-				type="Wheels.DatabaseNotSupported",
-				message="#local.info.database_productname# is not supported by CFWheels.",
-				extendedInfo="Use SQL Server, MySQL, MariaDB, Oracle, PostgreSQL or H2."
+				type="Wheels.DataSourceNotFound",
+				message="The data source could not be reached.",
+				extendedInfo="Make sure your database is reachable and that your data source settings are correct. You either need to setup a data source with the name `#variables.wheels.class.dataSource#` in the Administrator or tell CFWheels to use a different data source in `config/settings.cfm`."
 			);
 		}
-		local.rv = CreateObject("component", "adapters.#local.adapterName#").init(
+	} else {
+		local.info = $dbinfo(
+			type="version",
 			dataSource=variables.wheels.class.dataSource,
 			username=variables.wheels.class.username,
 			password=variables.wheels.class.password
 		);
-		application.wheels.adapterName = local.adapterName;
-		return local.rv;
-	</cfscript>
-</cffunction>
-
-<cfscript>
+	}
+	if (FindNoCase("SQLServer", local.info.driver_name) || FindNoCase("SQL Server", local.info.driver_name)) {
+		local.adapterName = "SQLServer";
+	} else if (FindNoCase("MySQL", local.info.driver_name) || FindNoCase("MariaDB", local.info.driver_name)) {
+		local.adapterName = "MySQL";
+	} else if (FindNoCase("Oracle", local.info.driver_name)) {
+		local.adapterName = "Oracle";
+	} else if (FindNoCase("PostgreSQL", local.info.driver_name)) {
+		local.adapterName = "PostgreSQL";
+	} else if (FindNoCase("H2", local.info.driver_name)) {
+		local.adapterName = "H2";
+	} else {
+		$throw(
+			type="Wheels.DatabaseNotSupported",
+			message="#local.info.database_productname# is not supported by CFWheels.",
+			extendedInfo="Use SQL Server, MySQL, MariaDB, Oracle, PostgreSQL or H2."
+		);
+	}
+	set(adapterName=local.adapterName);
+	return CreateObject("component", "adapters.#local.adapterName#").init(
+		dataSource=variables.wheels.class.dataSource,
+		username=variables.wheels.class.username,
+		password=variables.wheels.class.password
+	);
+}
 
 public any function $initModelObject(
 	required string name,
