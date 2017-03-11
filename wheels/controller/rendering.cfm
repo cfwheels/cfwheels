@@ -252,7 +252,7 @@ public string function $includeFile(required any $name, required any $template, 
 				local.groupQueryCount = 1;
 				arguments.group = QueryNew(local.query.columnList);
 				if (get("showErrorInformation") && !ListFindNoCase(local.query.columnList, arguments.$group)) {
-					$throw(
+					Throw(
 						type="Wheels.GroupColumnNotFound",
 						message="CFWheels couldn't find a query column with the name of `#arguments.$group#`.",
 						extendedInfo="Make sure your finder method has the column `#arguments.$group#` specified in the `select` argument. If the column does not exist, create it."

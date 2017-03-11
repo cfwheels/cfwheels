@@ -13,7 +13,7 @@
       if (structKeyExists(arguments, "name"))
         local.identifier = arguments.name;
 
-      $throw(
+      Throw(
           type = "Wheels.InvalidRegex"
         , message = "The route `#local.identifier#` has created invalid regex of `#arguments.regex#`."
       );

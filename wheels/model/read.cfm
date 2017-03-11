@@ -28,7 +28,7 @@ public any function findAll(
 
 	// we only allow direct associations to be loaded when returning objects
 	if (get("showErrorInformation") && Len(arguments.returnAs) && arguments.returnAs != "query" && Find("(", arguments.include) && arguments.returnIncluded) {
-		$throw(
+		Throw(
 			type="Wheels",
 			message="Incorrect Arguments",
 			extendedInfo="You may only include direct associations to this object when returning an array of objects."
@@ -38,7 +38,7 @@ public any function findAll(
 	// count records and get primary keys for pagination
 	if (arguments.page) {
 		if (get("showErrorInformation") && arguments.perPage <= 0) {
-			$throw(type="Wheels",
+			Throw(type="Wheels",
 				message="Incorrect Argument",
 				extendedInfo="The `perPage` argument should be a positive numeric value."
 			);
@@ -186,7 +186,7 @@ public any function findAll(
 				break;
 			default:
 				if (application.wheels.showErrorInformation) {
-					$throw(
+					Throw(
 						type="Wheels.IncorrectArgumentValue",
 						message="Incorrect Arguments",
 						extendedInfo="The `returnAs` may be either `query`, `struct(s)` or `object(s)`"

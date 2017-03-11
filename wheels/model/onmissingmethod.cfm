@@ -228,7 +228,7 @@ public any function $associationMethod() {
 						} else if (StructKeyExists(arguments.missingMethodArguments, "key")) {
 							local.method = "updateByKey";
 						} else {
-							$throw(
+							Throw(
 								type="Wheels.IncorrectArguments",
 								message="The `#local.key#` or `key` named argument is required.",
 								extendedInfo="When using multiple arguments for #local.name#() you must supply an object using the argument `#local.key#` or a key using the argument `key`, e.g. #local.name#(#local.key#=post) or #local.name#(key=post.id)."
@@ -274,7 +274,7 @@ public any function $associationMethod() {
 						} else if (StructKeyExists(arguments.missingMethodArguments, "key")) {
 							local.method = "updateByKey";
 						} else {
-							$throw(
+							Throw(
 								type="Wheels.IncorrectArguments",
 								message="The `#local.singularKey#` or `key` named argument is required.",
 								extendedInfo="When using multiple arguments for #local.name#() you must supply an object using the argument `#local.singularKey#` or a key using the argument `key`, e.g. #local.name#(#local.singularKey#=post) or #local.name#(key=post.id)."
@@ -302,7 +302,7 @@ public any function $associationMethod() {
 						} else if (StructKeyExists(arguments.missingMethodArguments, "key")) {
 							local.method = "updateByKey";
 						} else {
-							$throw(
+							Throw(
 								type="Wheels.IncorrectArguments",
 								message="The `#local.singularKey#` or `key` named argument is required.",
 								extendedInfo="When using multiple arguments for #local.name#() you must supply an object using the argument `#local.singularKey#` or a key using the argument `key`, e.g. #local.name#(#local.singularKey#=post) or #local.name#(key=post.id)."
@@ -330,7 +330,7 @@ public any function $associationMethod() {
 						} else if (StructKeyExists(arguments.missingMethodArguments, "key")) {
 							local.method = "deleteByKey";
 						} else {
-							$throw(
+							Throw(
 								type="Wheels.IncorrectArguments",
 								message="The `#local.singularKey#` or `key` named argument is required.",
 								extendedInfo="When using multiple arguments for #local.name#() you must supply an object using the argument `#local.singularKey#` or a key using the argument `key`, e.g. #local.name#(#local.singularKey#=post) or #local.name#(key=post.id)."

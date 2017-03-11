@@ -182,7 +182,7 @@ public void function $deleteDependents() {
 					$invoke(componentReference=this, method="remove#local.all##local.key#");
 					break;
 				default:
-					$throw(
+					Throw(
 						type="Wheels.InvalidArgument",
 						message="'#local.association.dependent#' is not a valid dependency.",
 						extendedInfo="Use `delete`, `deleteAll`, `remove`, `removeAll` or `false`."

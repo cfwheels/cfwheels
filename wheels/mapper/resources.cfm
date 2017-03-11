@@ -31,7 +31,7 @@
 
       // error if the user asked for a nested resource
       if (arguments.nested)
-        $throw(
+        Throw(
             type="Wheels.InvalidResource"
           , message="Multiple resources in same declaration cannot be nested."
         );

@@ -50,36 +50,35 @@
 </cffunction>
 
 <cffunction name="$mail" returntype="void" access="public" output="false">
-	<cfset var loc = {}>
 	<cfif StructKeyExists(arguments, "mailparts")>
-		<cfset loc.mailparts = arguments.mailparts>
+		<cfset local.mailparts = arguments.mailparts>
 		<cfset StructDelete(arguments, "mailparts")>
 	</cfif>
 	<cfif StructKeyExists(arguments, "mailparams")>
-		<cfset loc.mailparams = arguments.mailparams>
+		<cfset local.mailparams = arguments.mailparams>
 		<cfset StructDelete(arguments, "mailparams")>
 	</cfif>
 	<cfif StructKeyExists(arguments, "tagContent")>
-		<cfset loc.tagContent = arguments.tagContent>
+		<cfset local.tagContent = arguments.tagContent>
 		<cfset StructDelete(arguments, "tagContent")>
 	</cfif>
 	<cfmail attributeCollection="#arguments#">
-		<cfif StructKeyExists(loc, "mailparams")>
-			<cfloop array="#loc.mailparams#" index="loc.i">
-				<cfmailparam attributeCollection="#loc.i#">
+		<cfif StructKeyExists(local, "mailparams")>
+			<cfloop array="#local.mailparams#" index="local.i">
+				<cfmailparam attributeCollection="#local.i#">
 			</cfloop>
 		</cfif>
-		<cfif StructKeyExists(loc, "mailparts")>
-			<cfloop array="#loc.mailparts#" index="loc.i">
-				<cfset loc.innerTagContent = loc.i.tagContent>
-				<cfset StructDelete(loc.i, "tagContent")>
-				<cfmailpart attributeCollection="#loc.i#">
-					#loc.innerTagContent#
+		<cfif StructKeyExists(local, "mailparts")>
+			<cfloop array="#local.mailparts#" index="local.i">
+				<cfset local.innerTagContent = local.i.tagContent>
+				<cfset StructDelete(local.i, "tagContent")>
+				<cfmailpart attributeCollection="#local.i#">
+					#local.innerTagContent#
 				</cfmailpart>
 			</cfloop>
 		</cfif>
-		<cfif StructKeyExists(loc, "tagContent")>
-			#loc.tagContent#
+		<cfif StructKeyExists(local, "tagContent")>
+			#local.tagContent#
 		</cfif>
 	</cfmail>
 </cffunction>
@@ -132,10 +131,6 @@
 
 <cffunction name="$file" returntype="any" access="public" output="false">
 	<cffile attributeCollection="#arguments#">
-</cffunction>
-
-<cffunction name="$throw" returntype="void" access="public" output="false">
-	<cfthrow attributeCollection="#arguments#">
 </cffunction>
 
 <cffunction name="$invoke" returntype="any" access="public" output="false">

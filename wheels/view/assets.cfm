@@ -170,13 +170,13 @@ public string function $imageTag() {
 		local.file &= get("imagePath") & "/" & SpanExcluding(arguments.source, "?");
 		if (get("showErrorInformation")) {
 			if (local.localFile && !FileExists(local.file)) {
-				$throw(
+				Throw(
 					type="Wheels.ImageFileNotFound",
 					message="CFWheels could not find `#local.file#` on the local file system.",
 					extendedInfo="Pass in a correct relative path from the `images` folder to an image."
 				);
 			} else if (!IsImageFile(local.file)) {
-				$throw(
+				Throw(
 					type="Wheels.ImageFormatNotSupported",
 					message="CFWheels can't read image files with that format.",
 					extendedInfo="Use one of these image types instead: #GetReadableImageFormats()#."
@@ -252,10 +252,10 @@ public string function $assetDomain(required string pathToAsset) {
 	// Check for incorrect settings and throw errors.
 	if (get("showErrorInformation")) {
 		if (!IsStruct(local.assetPaths) && !IsBoolean(local.assetPaths)) {
-			$throw(type="Wheels.IncorrectConfiguration", message="The setting `assetsPaths` must be `false` or a struct.");
+			Throw(type="Wheels.IncorrectConfiguration", message="The setting `assetsPaths` must be `false` or a struct.");
 		}
 		if (IsStruct(local.assetPaths) && !ListFindNoCase(StructKeyList(local.assetPaths), "http")) {
-			$throw(type="Wheels.IncorrectConfiguration", message="The `assetPaths` struct must contain the key `http`");
+			Throw(type="Wheels.IncorrectConfiguration", message="The `assetPaths` struct must contain the key `http`");
 		}
 	}
 

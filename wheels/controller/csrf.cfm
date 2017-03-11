@@ -44,7 +44,7 @@ public function $verifyAuthenticityToken() {
 			case "abort":
 				abort;
 			default:
-				$throw(
+				Throw(
 					type="Wheels.InvalidAuthenticityToken",
 					message="This POSTed request was attempted without a valid authenticity token."
 				);

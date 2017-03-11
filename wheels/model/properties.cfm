@@ -61,14 +61,14 @@ public void function property(
 ) {
 	// validate setup
 	if (Len(arguments.column) && Len(arguments.sql)) {
-		$throw(
+		Throw(
 			type="Wheels",
 			message="Incorrect Arguments",
 			extendedInfo="You cannot specify both a column and a sql statement when setting up the mapping for this property."
 		);
 	}
 	if (Len(arguments.sql) && StructKeyExists(arguments, "defaultValue")) {
-		$throw(
+		Throw(
 			type="Wheels",
 			message="Incorrect Arguments",
 			extendedInfo="You cannot specify a default value for calculated properties."
@@ -258,14 +258,14 @@ public boolean function propertyIsBlank(required string property) {
 public boolean function toggle(required string property, boolean save) {
 	$args(name="toggle", args=arguments);
 	if (!StructKeyExists(this, arguments.property)) {
-		$throw(
+		Throw(
 			type="Wheels.PropertyDoesNotExist",
 			message="Property Does Not Exist",
 			extendedInfo="You may only toggle a property that exists on this model."
 		);
 	}
 	if (!IsBoolean(this[arguments.property])) {
-		$throw(
+		Throw(
 			type="Wheels.PropertyIsIncorrectType",
 			message="Incorrect Arguments",
 			extendedInfo="You may only toggle a property that evaluates to the boolean value."

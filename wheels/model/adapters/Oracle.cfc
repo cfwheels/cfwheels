@@ -235,7 +235,7 @@ component extends="Base" output="false" {
 		to mimic this we will throw an error if the query result is empty
 		 */
 		if (! local.rv.recordCount) {
-			$throw(type="Wheels.TableNotFound", message="The `#arguments.table#` table could not be found in the database.");
+			Throw(type="Wheels.TableNotFound", message="The `#arguments.table#` table could not be found in the database.");
 		}
 		return local.rv;
 	}

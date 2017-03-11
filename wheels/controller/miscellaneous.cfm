@@ -164,7 +164,7 @@ public any function sendFile(
 				local.file &= "." & ListLast(local.match.name, ".");
 				local.fullPath = local.directory & "/" & local.file;
 			} else {
-				$throw(
+				Throw(
 					type="Wheels.FileNotFound",
 					message="A file could not be found.",
 					extendedInfo="Make sure a file with the name `#local.file#` exists in the `#local.directory#` folder."
@@ -177,7 +177,7 @@ public any function sendFile(
 		local.file = arguments.file;
 		// For ram:// resources, skip the physical file check but still check the thing exists
 		if (!FileExists(local.fullPath)) {
-			$throw(
+			Throw(
 				type="Wheels.FileNotFound",
 				message="ram:// resource could not be found.",
 				extendedInfo="Make sure a resource with the name `#local.file#` exists in memory"

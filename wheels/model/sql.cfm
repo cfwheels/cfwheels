@@ -103,7 +103,7 @@ public string function $orderByClause(required string order, required string inc
 						}
 					}
 					if (application.wheels.showErrorInformation && !Len(local.toAdd)) {
-						$throw(
+						Throw(
 							type="Wheels.ColumnNotFound",
 							message="Wheels looked for the column mapped to the `#local.property#` property but couldn't find it in the database table.",
 							extendedInfo="Verify the `order` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct."
@@ -391,7 +391,7 @@ public array function $whereClause(
 					}
 				}
 				if (application.wheels.showErrorInformation && !StructKeyExists(local.param, "column")) {
-					$throw(
+					Throw(
 						type="Wheels.ColumnNotFound",
 						message="Wheels looked for the column mapped to the `#local.param.property#` property but couldn't find it in the database table.",
 						extendedInfo="Verify the `where` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct."
@@ -493,7 +493,7 @@ public string function $expandProperties(required string list, required array cl
 		if (Len(local.fields)) {
 			local.rv = Replace(local.rv, local.match, local.fields, "all");
 		} else if (application.wheels.showErrorInformation) {
-			$throw(
+			Throw(
 				type="Wheels.ModelNotFound",
 				message="Wheels looked for the model mapped to table name `#local.tableName#` but couldn't find it.",
 				extendedInfo="Verify the `select` argument and/or your model association mappings are correct."
@@ -534,7 +534,7 @@ public array function $expandedAssociations(required string include, boolean inc
 
 		// throw an error if the association was not found
 		if (application.wheels.showErrorInformation && !StructKeyExists(local.classAssociations, local.name)) {
-			$throw(
+			Throw(
 				type="Wheels.AssociationNotFound",
 				message="An association named `#local.name#` could not be found on the `#ListLast(local.levels)#` model.",
 				extendedInfo="Setup an association in the `init` method of the `models/#capitalize(ListLast(local.levels))#.cfc` file and name it `#local.name#`. You can use the `belongsTo`, `hasOne` or `hasMany` method to set it up."

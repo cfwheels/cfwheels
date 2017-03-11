@@ -14,7 +14,7 @@ public string function errorMessagesFor(required string objectName, string class
 	$args(name="errorMessagesFor", args=arguments);
 	local.object = $getObject(arguments.objectName);
 	if (get("showErrorInformation") && !IsObject(local.object)) {
-		$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
+		Throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 	}
 	local.errors = local.object.allErrors();
 	local.rv = "";
@@ -62,7 +62,7 @@ public string function errorMessageOn(
 	$args(name="errorMessageOn", args=arguments);
 	local.object = $getObject(arguments.objectName);
 	if (get("showErrorInformation") && !IsObject(local.object)) {
-		$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
+		Throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 	}
 	local.error = local.object.errorsOn(arguments.property);
 	local.rv = "";

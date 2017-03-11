@@ -44,7 +44,7 @@ component extends="Base"  {
 
 		// don't allow multiple autoIncrement primarykeys
 		if (ArrayLen(this.primaryKeys) && arguments.autoIncrement)
-			$throw(message="You cannot have multiple auto increment primary keys.");
+			Throw(message="You cannot have multiple auto increment primary keys.");
 
 		local.column = CreateObject("component", "ColumnDefinition").init(argumentCollection=arguments);
 		ArrayAppend(this.primaryKeys, local.column);

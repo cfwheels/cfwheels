@@ -264,7 +264,7 @@ public any function $objectName(
 	$combineArguments(args=arguments, combine="associations,association");
 
 	if (IsObject(arguments.objectName)) {
-		$throw(type="Wheels.InvalidArgument", message="The `objectName` argument passed is not of type string.");
+		Throw(type="Wheels.InvalidArgument", message="The `objectName` argument passed is not of type string.");
 	}
 
 	// only try to create the object name if we have a simple value
@@ -279,7 +279,7 @@ public any function $objectName(
 			if (local.expanded.type == "hasMany") {
 				local.hasManyAssociationCount++;
 				if (get("showErrorInformation") && local.hasManyAssociationCount > ListLen(arguments.positions)) {
-					$throw(
+					Throw(
 						type="Wheels.InvalidArgument",
 						message="You passed the hasMany association of `#local.association#` but did not provide a corresponding position.");
 				}
@@ -367,11 +367,11 @@ public any function $getObject(required string objectname) {
 		}
 	} catch (any e) {
 		if (get("showErrorInformation")) {
-			$throw(
+			Throw(
 				type="Wheels.ObjectNotFound",
 				message="CFWheels tried to find the model object `#arguments.objectName#` for the form helper, but it does not exist.");
 		} else {
-			$throw(argumentCollection=e);
+			Throw(object=e);
 		}
 	}
 	return local.rv;
