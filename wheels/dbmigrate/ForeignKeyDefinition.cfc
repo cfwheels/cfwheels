@@ -41,17 +41,16 @@ component extends="Base" {
 	}
 
 	public string function addForeignKeyOptions(required string sql){
-		var loc = {};
-		loc.options = {};
-		loc.optionalArguments = "referenceTable,referenceColumn,column";
-		loc.iEnd = ListLen(loc.optionalArguments);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++) {
-			loc.argumentName = ListGetAt(loc.optionalArguments,loc.i);
-			if(StructKeyExists(this,loc.argumentName)) {
-				loc.options[loc.argumentName] = this[loc.argumentName];
+		local.options = {};
+		local.optionalArguments = "referenceTable,referenceColumn,column";
+		local.iEnd = ListLen(local.optionalArguments);
+		for (local.i=1; local.i <= local.iEnd; local.i++) {
+			local.argumentName = ListGetAt(loc.optionalArguments,local.i);
+			if(StructKeyExists(this, local.argumentName)) {
+				local.options[local.argumentName] = this[local.argumentName];
 			}
 		}
-		arguments.sql = this.adapter.addForeignKeyOptions(sql=arguments.sql,options=loc.options);
+		arguments.sql = this.adapter.addForeignKeyOptions(sql=arguments.sql,options=local.options);
 		return arguments.sql;
 	}
 }
