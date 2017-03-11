@@ -134,8 +134,7 @@
 </cffunction>
 
 <cffunction name="$invoke" returntype="any" access="public" output="false">
-	<cfset var loc = {}>
-	<cfset arguments.returnVariable = "loc.rv">
+	<cfset arguments.returnVariable = "local.rv">
 	<cfif StructKeyExists(arguments, "componentReference")>
 		<cfset arguments.component = arguments.componentReference>
 		<cfset StructDelete(arguments, "componentReference")>
@@ -148,8 +147,8 @@
 		<cfif StructCount(arguments.argumentCollection) IS NOT ListLen(StructKeyList(arguments.argumentCollection))>
 			<!--- work-around for fasthashremoved cf8 bug --->
 			<cfset arguments.argumentCollection = StructNew()>
-			<cfloop list="#StructKeyList(arguments.invokeArgs)#" index="loc.i">
-				<cfset arguments.argumentCollection[loc.i] = arguments.invokeArgs[loc.i]>
+			<cfloop list="#StructKeyList(arguments.invokeArgs)#" index="local.i">
+				<cfset arguments.argumentCollection[local.i] = arguments.invokeArgs[local.i]>
 			</cfloop>
 		</cfif>
 		<cfset StructDelete(arguments, "invokeArgs")>
@@ -160,8 +159,8 @@
 	<cfset arrayPrepend(request.$wheelsInvoked, duplicate(arguments))>
 	<cfinvoke attributeCollection="#arguments#">
 	<cfset arrayDeleteAt(request.$wheelsInvoked, 1)>
-	<cfif StructKeyExists(loc, "rv")>
-		<cfreturn loc.rv>
+	<cfif StructKeyExists(local, "rv")>
+		<cfreturn local.rv>
 	</cfif>
 </cffunction>
 

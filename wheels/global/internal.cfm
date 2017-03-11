@@ -435,13 +435,12 @@ public any function $createObjectFromRoot(
 	required string fileName,
 	required string method
 ) {
-	var rv = "";
-	local.returnVariable = "rv";
+	local.returnVariable = "local.rv";
 	local.method = arguments.method;
 	local.component = ListChangeDelims(arguments.path, ".", "/") & "." & ListChangeDelims(arguments.fileName, ".", "/");
 	local.argumentCollection = arguments;
 	include "../../root.cfm";
-	return rv;
+	return local.rv;
 }
 
 public void function $debugPoint(required string name) {
