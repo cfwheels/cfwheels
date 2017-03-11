@@ -14,7 +14,6 @@
 * @callbacks Set to false to disable callbacks for this operation.
 * @includeSoftDeletes You can set this argument to true to include soft-deleted records in the results.
 * @softDelete Set to false to permanently delete a record, even if it has a soft delete column.
-*
 */
 public numeric function deleteAll(
 	string where = "",
@@ -80,9 +79,7 @@ public numeric function deleteAll(
 * @callbacks Set to false to disable callbacks for this operation.
 * @includeSoftDeletes  You can set this argument to true to include soft-deleted records in the results.
 * @softDelete Set to false to permanently delete a record, even if it has a soft delete column.
-*
 */
-
 public boolean function deleteByKey(
 	required any key,
 	boolean reload,
@@ -104,11 +101,21 @@ public boolean function deleteByKey(
 	);
 }
 
+
 /**
- * Model class method.
- * Gets an object based on conditions and deletes it.
- * Docs: http://docs.cfwheels.org/docs/deleteone
- */
+* Gets an object based on conditions and deletes it.
+*
+* [section: Model Class]
+* [category: Delete Functions]
+*
+* @where This argument maps to the WHERE clause of the query. The following operators are supported: =, !=, <>, <, <=, >, >=, LIKE, NOT LIKE, IN, NOT IN, IS NULL, IS NOT NULL, AND, and `OR. (Note that the key words need to be written in upper case.) You can also use parentheses to group statements. You do not need to specify the table name(s); Wheels will do that for you.
+* @order Maps to the ORDER BY clause of the query. You do not need to specify the table name(s); Wheels will do that for you.
+* @reload Set to true to force Wheels to query the database even though an identical query may have been run in the same request. (The default in Wheels is to get the second query from the request-level cache.)
+* @transaction Set this to commit to update the database when the save has completed, rollback to run all the database queries but not commit them, or none to skip transaction handling altogether.
+* @callbacks Set to false to disable callbacks for this operation.
+* @includeSoftDeletes You can set this argument to true to include soft-deleted records in the results.
+* @softDelete Set to false to permanently delete a record, even if it has a soft delete column.
+*/
 public boolean function deleteOne(
 	string where = "",
 	string order = "",
@@ -138,10 +145,17 @@ public boolean function deleteOne(
 }
 
 /**
- * Model object method.
- * Deletes the object, which means the row is deleted from the database.
- * Docs: http://docs.cfwheels.org/docs/delete
- */
+* Deletes the object, which means the row is deleted from the database (unless prevented by a beforeDelete callback). Returns true on successful deletion of the row, false otherwise.
+*
+* [section: Model Object]
+* [category: CRUD Functions]
+*
+* @parameterize Set to true to use cfqueryparam on all columns, or pass in a list of property names to use cfqueryparam on those only.
+* @transaction Set this to commit to update the database when the save has completed, rollback to run all the database queries but not commit them, or none to skip transaction handling altogether.
+* @callbacks Set to false to disable callbacks for this operation.
+* @includeSoftDeletes You can set this argument to true to include soft-deleted records in the results.
+* @softDelete Set to false to permanently delete a record, even if it has a soft delete column.*
+*/
 public boolean function delete(
 	any parameterize,
 	string transaction = application.wheels.transactionMode,
