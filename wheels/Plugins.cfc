@@ -76,18 +76,18 @@ component output="false" {
 
 	public void function $pluginsExtract() {
 		// get all plugin zip files
-		loc.plugins = $pluginFiles();
-		for (loc.p in loc.plugins) {
-			loc.plugin = loc.plugins[loc.p];
-			if (! loc.plugin.folderExists || (loc.plugin.folderExists && variables.$class.overwritePlugins)) {
-				if (! loc.plugin.folderExists) {
+		local.plugins = $pluginFiles();
+		for (local.p in local.plugins) {
+			local.plugin = local.plugins[local.p];
+			if (! local.plugin.folderExists || (local.plugin.folderExists && variables.$class.overwritePlugins)) {
+				if (! local.plugin.folderExists) {
 					try {
-						DirectoryCreate(loc.plugin.folderPath);
+						DirectoryCreate(local.plugin.folderPath);
 					} catch(any e) {
 						//
 					}
 				}
-				$zip(action="unzip", destination=loc.plugin.folderPath, file=loc.plugin.file, overwrite=true);
+				$zip(action="unzip", destination=local.plugin.folderPath, file=local.plugin.file, overwrite=true);
 			}
 		};
 	}
