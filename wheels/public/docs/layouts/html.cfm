@@ -21,7 +21,7 @@
 			<a href="" class="docreset"><i class="fa fa-eye"></i> All</a>
 			<cfloop from="1" to="#arraylen(docs.functions)#" index="func">
 			<cfset meta=docs.functions[func]>
-				<a href="" class="functionlink"	data-section="#meta.sectionClass#" data-category="#meta.categoryClass#" data-function="#lcase(meta.name)#">#meta.name#()</a>
+				<a href="" class="functionlink"	data-section="#meta.tags.sectionClass#" data-category="#meta.tags.categoryClass#" data-function="#lcase(meta.name)#">#meta.name#()</a>
 			</cfloop>
 		</p>
     </div><!--/col-->
@@ -30,18 +30,18 @@
 		<cfloop from="1" to="#arraylen(docs.functions)#" index="func">
 			<cfset meta=docs.functions[func]>
 			<div id="#lcase(meta.name)#"
-				data-section="#meta.sectionClass#"
-				data-category="#meta.categoryClass#"
+				data-section="#meta.tags.sectionClass#"
+				data-category="#meta.tags.categoryClass#"
 				class="functiondefinition">
 					<h3 class="functitle">#meta.name#()</h3>
 					<p>
-					<cfif len(meta.section)>
+					<cfif len(meta.tags.section)>
 						<a href="" class="filtersection tag" title="Show all Functions in this category">
-						<i class="fa fa-tag"></i> #meta.section#</a>
+						<i class="fa fa-tag"></i> #meta.tags.section#</a>
 					</cfif>
-					<cfif len(meta.category)>
+					<cfif len(meta.tags.category)>
 						<a href="" class="filtercategory tag" title="Show all Functions in this category">
-						<i class="fa fa-tag"></i> #meta.category#</a>
+						<i class="fa fa-tag"></i> #meta.tags.category#</a>
 					</cfif>
 					<cfif structKeyExists(meta, "returnType")>
 						<span class="tag"><i class="fa fa-reply"></i> #meta.returnType#</span>
@@ -81,15 +81,15 @@
 									#application.wheels.functions[func][meta.parameters[_param]['name']]#
 								</cfif>
 								<cfif structkeyExists(meta.parameters[_param], "default")>#meta.parameters[_param]['default']#</cfif></td>
-								<td><cfif structkeyExists(meta.parameters[_param], "hint")>#meta.parameters[_param]['hint']#</cfif></td>
+								<td><cfif structkeyExists(meta.parameters[_param], "hint")>#$backTickReplace(meta.parameters[_param]['hint'])#</cfif></td>
 							</tr>
 						</cfloop>
 						</tbody>
 						</table>
 					</cfif>
 
-					<cfif meta.hasExtended>
-						<div class="md">#meta.extended#</div>
+					<cfif meta.extended.hasExtended>
+						<div class="md">#meta.extended.docs#</div>
 					</cfif>
 
 				</div><!--/ #lcase(meta.name)# -->

@@ -119,20 +119,20 @@
 
 	// Look for custom categories:
 	for(doc in docs.functions){
-		if(structKeyExists(doc, "section") && len(doc.section)){
+		if(structKeyExists(doc.tags, "section") && len(doc.tags.section)){
 			if( !ArrayFind(docs.sections, function(struct){
-				   return struct.name == doc.section;
+				   return struct.name == doc.tags.section;
 			})){
 				arrayAppend(docs.sections, {
-					"name": doc.section,
+					"name": doc.tags.section,
 					"categories": []
 				});
 			}
 			for(subsection in docs.sections){
-				if(subsection.name == doc.section
-					&& len(doc.category)
-					&& !arrayFind(subsection.categories, doc.category)){
-						arrayAppend(subsection.categories, doc.category);
+				if(subsection.name == doc.tags.section
+					&& len(doc.tags.category)
+					&& !arrayFind(subsection.categories, doc.tags.category)){
+						arrayAppend(subsection.categories, doc.tags.category);
 				}
 				arraySort(subsection.categories, "textnocase");
 			}
