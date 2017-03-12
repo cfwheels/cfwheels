@@ -40,14 +40,20 @@
 					local.rv.tags[tagName & "Class"]=$cssClassLink(tagValue);
 				}
 			}
-			local.rv["hint"]=REReplaceNoCase(local.rv["hint"], "\[((.*?):(.*?))\]", "", "ALL");
+			local.rv.hint=REReplaceNoCase(local.rv.hint, "\[((.*?):(.*?))\]", "", "ALL");
 		}
 		// Check for param defaults within wheels settings
+		paramCount=1;
 		for(param in local.rv["parameters"]){
-			if(structKeyExists(application.wheels.functions, local.rv["name"])
-				&& structKeyExists(application.wheels.functions[local.rv["name"]], param['name'])){
-					param['default']=application.wheels.functions[local.rv["name"]][param['name']];
+			if(structKeyExists(application.wheels.functions, local.rv.name)
+				&& structKeyExists(application.wheels.functions[local.rv.name], param.name)){
+					param['default']=application.wheels.functions[local.rv.name][param.name];
 				}
+			// Hide internal params
+			if(left(param.name, 1) == "$"){
+				arrayDelete(local.rv.parameters, paramCount);
+			}
+			paramCount++;
 		}
 		// Check for extended documentation
 		local.rv["extended"]=$getExtendedCodeExamples("wheels/public/docs/reference/", functionName);
