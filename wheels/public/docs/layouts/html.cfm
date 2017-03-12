@@ -6,9 +6,9 @@
 		<h1 class="header">Sections</h1>
 		<p style="padding-left:10px;">
 		<cfloop from="1" to="#arraylen(docs.sections)#" index="s">
-			<a href=""	data-section="#cssClassLink(docs.sections[s]['name'])#" class="section">#docs.sections[s]['name']#</a>
+			<a href=""	data-section="#$cssClassLink(docs.sections[s]['name'])#" class="section">#docs.sections[s]['name']#</a>
 			<cfloop from="1" to="#arraylen(docs.sections[s]['categories'])#" index="ss">
-				<a href=""	data-section="#cssClassLink(docs.sections[s]['name'])#"	data-category="#cssClassLink(docs.sections[s]['categories'][ss])#" class="category">#docs.sections[s]['categories'][ss]#</a>
+				<a href=""	data-section="#$cssClassLink(docs.sections[s]['name'])#"	data-category="#$cssClassLink(docs.sections[s]['categories'][ss])#" class="category">#docs.sections[s]['categories'][ss]#</a>
 			</cfloop>
 		</cfloop>
 		</p>
@@ -53,7 +53,7 @@
 					</cfif>
 					  </p>
 					<cfif structKeyExists(meta, "hint")>
-						<div class="hint">#hintOutput(meta.hint)#</div>
+						<div class="hint">#$hintOutput(meta.hint)#</div>
 					</cfif>
 
 					<cfif isArray(meta.parameters) && arraylen(meta.parameters)>

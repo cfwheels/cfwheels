@@ -105,7 +105,7 @@
 				   return struct.name == functionName;
 				})){
 					// Set metadata
-					meta=parseMetaData(GetMetaData(temp[doctype]["scope"][functionName]), doctype);
+					meta=$parseMetaData(GetMetaData(temp[doctype]["scope"][functionName]), doctype);
 					arrayAppend(docs.functions, meta);
 				} else {
 					if(!ArrayFind(meta.availableIn, doctype)){

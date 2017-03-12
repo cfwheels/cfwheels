@@ -9,7 +9,7 @@
 	* @meta metadata struct as returned from getMetaData()
 	* @doctype ie. Controller || Model
 	*/
-	struct function parseMetaData(required struct meta, required string doctype){
+	struct function $parseMetaData(required struct meta, required string doctype){
 		local.m=arguments.meta;
 		local.rv["name"]=structKeyExists(local.m, "name")?local.m.name:"";
 		local.rv["parameters"]=structKeyExists(local.m, "parameters")?local.m.parameters:[];
@@ -28,7 +28,7 @@
 					tagName=replace(listFirst(tag, ":"), "[","","one");
 					tagValue=replace(listLast(tag, ":"), "]","","one");
 					local.rv[tagName]=tagValue;
-					local.rv[tagName & "Class"]=cssClassLink(tagValue);
+					local.rv[tagName & "Class"]=$cssClassLink(tagValue);
 				}
 				local.rv["hint"]=REReplaceNoCase(local.rv["hint"], "\[((.*?):(.*?))\]", "", "ALL");
 			}
@@ -54,7 +54,7 @@
 	*
 	* @str The Hint String
 	*/
-	string function hintOutput(str){
+	string function $hintOutput(str){
 		local.rv=ReReplaceNoCase(arguments.str, '`(\w+)`', '<code>\1</code>', "ALL");
 		return simpleFormat(trim(local.rv));
 	}
@@ -63,7 +63,7 @@
 	*
 	* @str The String
 	*/
-	string function cssClassLink(str){
+	string function $cssClassLink(str){
 		return trim(replace(lcase(str), " ", "", "all"));
 	}
 
