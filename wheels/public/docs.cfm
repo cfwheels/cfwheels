@@ -9,9 +9,16 @@
 	* @meta metadata struct as returned from getMetaData()
 	* @doctype ie. Controller || Model
 	*/
-	struct function $parseMetaData(required struct meta, required string doctype){
+	struct function $parseMetaData(required struct meta, required string doctype, required string functionName){
 		local.m=arguments.meta;
 		local.rv["name"]=structKeyExists(local.m, "name")?local.m.name:"";
+		local.rv["isPlugin"]=false;
+		local.rv["availableIn"]=[doctype];
+		// Pluginrunner override: see #735
+		if(left(local.rv.name, 1) == "$"){
+			local.rv["name"]=lcase(functionName);
+			local.rv["isPlugin"]=true;
+		}
 		local.rv["parameters"]=structKeyExists(local.m, "parameters")?local.m.parameters:[];
 		local.rv["returntype"]=structKeyExists(local.m, "returntype")?local.m.returntype:"";
 		local.rv["hint"]=structKeyExists(local.m, "hint")?local.m.hint:"";
@@ -21,7 +28,7 @@
 			"category"="",
 			"categoryClass"=""
 		};
-		local.rv["availableIn"]=[doctype];
+
 		// Look for [something: Foo] style tags in hint
 		if(structKeyExists(local.rv, "hint")){
 			local.tags=ReMatchNoCase('\[((.*?):(.*?))\]', local.rv.hint);
@@ -44,6 +51,11 @@
 		}
 		// Check for extended documentation
 		local.rv["extended"]=$getExtendedCodeExamples("wheels/public/docs/reference/", functionName);
+
+		if(local.rv["name"] CONTAINS "$"){
+			writeDump(local);
+			abort;
+		}
 		return local.rv;
 	}
 
@@ -55,7 +67,7 @@
 	*/
 	struct function $getExtendedCodeExamples(pathToExtended, functionName){
 		local.rv={};
-		local.rv["path"]=expandPath(pathToExtended) & functionName & ".txt";
+		local.rv["path"]=expandPath(pathToExtended) & lcase(functionName) & ".txt";
 		local.rv["hasExtended"]=fileExists(local.rv.path)?true:false;
 		local.rv["docs"]="";
 		if(local.rv.hasExtended){

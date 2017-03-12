@@ -11,6 +11,7 @@
 				<a href=""	data-section="#$cssClassLink(docs.sections[s]['name'])#"	data-category="#$cssClassLink(docs.sections[s]['categories'][ss])#" class="category">#docs.sections[s]['categories'][ss]#</a>
 			</cfloop>
 		</cfloop>
+		<a href=""	data-section=""	data-category="" class="section">Uncategorized</a>
 		</p>
 	</div>
 	<!--- A-Z Functions --->
@@ -42,6 +43,9 @@
 					<cfif len(meta.tags.category)>
 						<a href="" class="filtercategory tag" title="Show all Functions in this category">
 						<i class="fa fa-tag"></i> #meta.tags.category#</a>
+					</cfif>
+					<cfif meta.isPlugin>
+						<span class="tag"><i class="fa fa-plug"></i> Plugin</span>
 					</cfif>
 					<cfif structKeyExists(meta, "returnType")>
 						<span class="tag"><i class="fa fa-reply"></i> #meta.returnType#</span>
