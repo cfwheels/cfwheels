@@ -40,6 +40,7 @@ public void function set() {
 	* Primarily used for testing purposes.
 	*/
 public any function processRequest(required struct params, string returnAs) {
+	$args(name="processRequest", args=arguments);
 	local.controller = controller(name=arguments.params.controller, params=arguments.params);
 	local.controller.processAction();
 	local.response = local.controller.response();
@@ -58,7 +59,7 @@ public any function processRequest(required struct params, string returnAs) {
 		local.redirect = "";
 	}
 
-	if (StructKeyExists(arguments, "returnAs") && arguments.returnAs == "struct") {
+	if (arguments.returnAs == "struct") {
 		local.rv = {
 			body = local.body,
 			redirect = local.redirect,
