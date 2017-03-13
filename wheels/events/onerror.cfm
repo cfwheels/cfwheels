@@ -8,7 +8,7 @@ public void function onError(required exception, required eventName) {
 	if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "onErrorRequestTimeout")) {
 		local.requestTimeout = application.wheels.onErrorRequestTimeout;
 	}
-	$setting(requestTimeout=local.requestTimeout);
+	setting requestTimeout=local.requestTimeout;
 
 	$initializeRequestScope();
 	local.lockName = "reloadLock" & application.applicationName;
