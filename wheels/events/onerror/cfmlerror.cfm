@@ -10,20 +10,20 @@
 		</cfif>
 	</p>
 	<cfif StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "tagContext") && ArrayLen(arguments.exception.cause.tagContext)>
-		<cfset loc.tagContext = arguments.exception.cause.tagContext>
+		<cfset local.tagContext = arguments.exception.cause.tagContext>
 	<cfelseif StructKeyExists(arguments.exception, "rootCause") && StructKeyExists(arguments.exception.rootCause, "tagContext") && ArrayLen(arguments.exception.rootCause.tagContext)>
-		<cfset loc.tagContext = arguments.exception.rootCause.tagContext>
+		<cfset local.tagContext = arguments.exception.rootCause.tagContext>
 	</cfif>
-	<cfif StructKeyExists(loc, "tagContext")>
+	<cfif StructKeyExists(local, "tagContext")>
 		<p><strong>Location:</strong><br>
-		<cfset loc.path = GetDirectoryFromPath(GetBaseTemplatePath())>
-		<cfset loc.pos = 0>
-		<cfloop array="#arguments.exception.cause.tagContext#" index="loc.i">
-			<cfset loc.pos = loc.pos + 1>
-			<cfset loc.template = Replace(arguments.exception.cause.tagContext[loc.pos].template, loc.path, "")>
+		<cfset local.path = GetDirectoryFromPath(GetBaseTemplatePath())>
+		<cfset local.pos = 0>
+		<cfloop array="#arguments.exception.cause.tagContext#" index="local.i">
+			<cfset local.pos = local.pos + 1>
+			<cfset local.template = Replace(arguments.exception.cause.tagContext[local.pos].template, local.path, "")>
 			<!--- show all non wheels lines --->
-			<cfif loc.template Does Not Contain "wheels" AND FindOneOf("/\", loc.template) IS NOT 0>
-				Line #arguments.exception.cause.tagContext[loc.pos].line# in #loc.template#<br>
+			<cfif local.template Does Not Contain "wheels" AND FindOneOf("/\", local.template) IS NOT 0>
+				Line #arguments.exception.cause.tagContext[local.pos].line# in #local.template#<br>
 			</cfif>
 		</cfloop>
 		</p>
@@ -44,28 +44,28 @@
 	</cfif>
 	<p><strong>User Agent:</strong><br>#cgi.http_user_agent#</p>
 	<p><strong>Date & Time:</strong><br>#DateFormat(now(), "MMMM D, YYYY")# at #TimeFormat(now(), "h:MM TT")#</p>
-	<cfset loc.scopes = "CGI,Form,URL,Application,Session,Request,Cookie,Arguments.Exception">
-	<cfset loc.skip = "">
+	<cfset local.scopes = "CGI,Form,URL,Application,Session,Request,Cookie,Arguments.Exception">
+	<cfset local.skip = "">
 	<cfif IsDefined("application.wheels.excludeFromErrorEmail")>
-		<cfset loc.skip = application.wheels.excludeFromErrorEmail>
+		<cfset local.skip = application.wheels.excludeFromErrorEmail>
 	</cfif>
 	<!--- always skip cause since it's just a copy of rootCause anyway --->
-	<cfset loc.skip = ListAppend(loc.skip, "exception.cause")>
+	<cfset local.skip = ListAppend(local.skip, "exception.cause")>
 	<h1>Details</h1>
-	<cfloop list="#loc.scopes#" index="loc.i">
-		<cfset loc.scopeName = ListLast(loc.i, ".")>
-		<cfif NOT ListFindNoCase(loc.skip, loc.scopeName) AND IsDefined(loc.scopeName)>
+	<cfloop list="#local.scopes#" index="local.i">
+		<cfset local.scopeName = ListLast(local.i, ".")>
+		<cfif NOT ListFindNoCase(local.skip, local.scopeName) AND IsDefined(local.scopeName)>
 			<cftry>
-				<cfset loc.scope = Evaluate(loc.i)>
-				<cfif IsStruct(loc.scope)>
-					<p><strong>#loc.scopeName#</strong>
-					<cfset loc.hide = "wheels">
-					<cfloop list="#loc.skip#" index="loc.j">
-						<cfif loc.j Contains "." AND ListFirst(loc.j, ".") IS loc.scopeName>
-							<cfset loc.hide = ListAppend(loc.hide, ListRest(loc.j, "."))>
+				<cfset local.scope = Evaluate(local.i)>
+				<cfif IsStruct(local.scope)>
+					<p><strong>#local.scopeName#</strong>
+					<cfset local.hide = "wheels">
+					<cfloop list="#local.skip#" index="local.j">
+						<cfif local.j Contains "." AND ListFirst(local.j, ".") IS local.scopeName>
+							<cfset local.hide = ListAppend(local.hide, ListRest(local.j, "."))>
 						</cfif>
 					</cfloop>
-					<cfdump var="#loc.scope#" format="text" showUDFs="false" hide="#loc.hide#">
+					<cfdump var="#local.scope#" format="text" showUDFs="false" hide="#local.hide#">
 					</p>
 				</cfif>
 				<cfcatch type="any"><!--- just keep going, we need to send out error emails ---></cfcatch>

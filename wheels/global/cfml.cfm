@@ -100,26 +100,27 @@
 
 <cffunction name="$include" returntype="void" access="public" output="false">
 	<cfargument name="template" type="string" required="true">
-	<cfset var loc = {}>
 	<cfinclude template="../../#LCase(arguments.template)#">
 </cffunction>
 
 <cffunction name="$includeAndOutput" returntype="void" access="public" output="true">
 	<cfargument name="template" type="string" required="true">
-	<cfset var loc = {}>
 	<cfinclude template="../../#LCase(arguments.template)#">
 </cffunction>
 
 <cffunction name="$includeAndReturnOutput" returntype="string" access="public" output="false">
 	<cfargument name="$template" type="string" required="true">
-	<cfset var loc = {}>
+
+	<!--- Make it so the developer can reference passed in arguments in the loc scope if they prefer. --->
 	<cfif StructKeyExists(arguments, "$type") AND arguments.$type IS "partial">
-		<!--- make it so the developer can reference passed in arguments in the loc scope if they prefer --->
-		<cfset loc = arguments>
+		<cfset local = arguments>
 	</cfif>
-	<!--- we prefix rv with "wheels" here to make sure the variable does not get overwritten in the included template --->
-	<cfsavecontent variable="loc.wheelsrv"><cfinclude template="../../#LCase(arguments.$template)#"></cfsavecontent>
-	<cfreturn loc.wheelsrv>
+
+	<!--- Include the template and return the result. --->
+	<!--- Variable is set to $wheels to limit chances of it being overwritten in the included template. --->
+	<cfsavecontent variable="local.$wheels"><cfinclude template="../../#LCase(arguments.$template)#"></cfsavecontent>
+	<cfreturn local.$wheels>
+
 </cffunction>
 
 <cffunction name="$directory" returntype="any" access="public" output="false">
