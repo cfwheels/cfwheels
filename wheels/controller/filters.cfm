@@ -3,9 +3,8 @@
 /**
  * Tells CFWheels to run a function before an action is run or after an action has been run.
  *
- * @doc.section Controller
- * @doc.category Initialization Functions
- *
+ * [section: Controller]
+ * [category: Initialization Functions]
  */
 public void function filters(
 	required string through,
@@ -48,8 +47,8 @@ public void function filters(
 /**
  * Use this function if you need a more low level way of setting the entire filter chain for a controller.
  *
- * @doc.section Controller
- * @doc.category Initialization Functions
+ * [section: Controller]
+ * [category: Initialization Functions]
  *
  */
 public void function setFilterChain(required array chain) {
@@ -64,8 +63,8 @@ public void function setFilterChain(required array chain) {
 /**
  * Returns an array of all the filters set on current controller in the order in which they will be executed.
  *
- * @doc.section Controller
- * @doc.category Initialization Functions
+ * [section: Controller]
+ * [category: Initialization Functions]
  *
  */
 public array function filterChain(string type="all") {

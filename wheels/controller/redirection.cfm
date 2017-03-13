@@ -1,12 +1,12 @@
 <cfscript>
 
 /**
- * Redirects the browser to the supplied controller/action/key, route or back to the referring page. Internally, this function uses the URLFor function to build the link and the cflocation tag to perform the redirect.
- *
- * @doc.section Controller
- * @doc.category Miscellaneous Functions
- *
- */
+* Redirects the browser to the supplied controller/action/key, route or back to the referring page. Internally, this function uses the URLFor function to build the link and the cflocation tag to perform the redirect.
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
+*
+*/
 public void function redirectTo(
 	boolean back=false,
 	boolean addToken,

@@ -3,9 +3,10 @@
 /**
  * Returns the value of a specific key in the Flash (or the entire Flash as a struct if no key is passed in).
  *
- * @doc.section Controller
- * @doc.category Flash Functions
+ * [section: Controller]
+ * [category: Flash Functions]
  *
+ * @key The key to get the value for.
  */
 public any function flash(string key) {
 	local.flash = $readFlash();
@@ -25,9 +26,8 @@ public any function flash(string key) {
 /**
  * Deletes everything from the Flash.
  *
- * @doc.section Controller
- * @doc.category Flash Functions
- *
+ * [section: Controller]
+ * [category: Flash Functions]
  */
 public void function flashClear() {
 	$writeFlash();
@@ -36,9 +36,8 @@ public void function flashClear() {
 /**
  * Returns how many keys exist in the Flash.
  *
- * @doc.section Controller
- * @doc.category Flash Functions
- *
+ * [section: Controller]
+ * [category: Flash Functions]
  */
 public numeric function flashCount() {
 	local.flash = $readFlash();
@@ -49,9 +48,10 @@ public numeric function flashCount() {
 /**
  * Deletes a specific key from the Flash. Returns true if the key exists.
  *
- * @doc.section Controller
- * @doc.category Flash Functions
+ * [section: Controller]
+ * [category: Flash Functions]
  *
+ * @key The key to delete
  */
 public any function flashDelete(required string key) {
 	local.flash = $readFlash();
@@ -63,9 +63,8 @@ public any function flashDelete(required string key) {
 /**
  * Inserts a new key / value into the Flash.
  *
- * @doc.section Controller
- * @doc.category Flash Functions
- *
+ * [section: Controller]
+ * [category: Flash Functions]
  */
 public void function flashInsert() {
 	local.flash = $readFlash();
@@ -78,9 +77,8 @@ public void function flashInsert() {
 /**
  * Returns whether or not the Flash is empty.
  *
- * @doc.section Controller
- * @doc.category Flash Functions
- *
+ * [section: Controller]
+ * [category: Flash Functions]
  */
 public boolean function flashIsEmpty() {
 	if (flashCount()) {
@@ -93,9 +91,8 @@ public boolean function flashIsEmpty() {
 /**
  * Make the entire Flash or specific key in it stick around for one more request.
  *
- * @doc.section Controller
- * @doc.category Flash Functions
- *
+ * [section: Controller]
+ * [category: Flash Functions]
  */
 public void function flashKeep(string key = "") {
 	$args(args=arguments, name="flashKeep", combine="key/keys");
@@ -105,9 +102,10 @@ public void function flashKeep(string key = "") {
 /**
  * Checks if a specific key exists in the Flash.
  *
- * @doc.section Controller
- * @doc.category Flash Functions
+ * [section: Controller]
+ * [category: Flash Functions]
  *
+ * @key The key to check
  */
 public boolean function flashKeyExists(required string key) {
 	local.flash = $readFlash();

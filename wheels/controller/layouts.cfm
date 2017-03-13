@@ -1,11 +1,16 @@
 <cfscript>
 
 /**
- * Used within a controller's init() function to specify controller- or action-specific layouts.
- *
- * @doc.section Controller
- * @doc.category Initialization Functions
- *
+* Used within a controller's init() function to specify controller- or action-specific layouts.
+*
+* [section: Controller]
+* [category: Initialization Functions]
+*
+* @template string true Name of the layout template or function name you want to use.
+* @ajax string false Name of the layout template you want to use for AJAX requests.
+* @except string false List of actions that should not get the layout.
+* @only string false List of actions that should only get the layout.
+* @useDefault boolean false true When specifying conditions or a function, pass true to use the default layout.cfm if none of the conditions are met.
  */
 public void function usesLayout(
 	required string template,

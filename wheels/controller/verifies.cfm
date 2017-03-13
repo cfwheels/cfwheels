@@ -1,12 +1,24 @@
 <cfscript>
 
 /**
- * Instructs CFWheels to verify that some specific criterias are met before running an action. Note that all undeclared arguments will be passed to redirectTo() call if a handler is not specified.
- *
- * @doc.section Controller
- * @doc.category Initialization Functions
- *
- */
+* Instructs CFWheels to verify that some specific criterias are met before running an action. Note that all undeclared arguments will be passed to redirectTo() call if a handler is not specified.
+*
+* [section: Controller]
+* [category: Initialization Functions]
+*
+* @only List of action names to limit this verification to.
+* @except List of action names to exclude this verification from.
+* @post Set to true to verify that this is a POST request.
+* @get Set to true to verify that this is a GET request.
+* @ajax Set to true to verify that this is an AJAX request.
+* @cookie Verify that the passed in variable name exists in the cookie scope.
+* @session Verify that the passed in variable name exists in the session scope.
+* @params Verify that the passed in variable name exists in the params struct.
+* @handler Pass in the name of a function that should handle failed verifications. The default is to just abort the request when a verification fails.
+* @cookieTypes List of types to check each listed cookie value against (will be passed through to your CFML engine's IsValid function).
+* @sessionTypes List of types to check each list session value against (will be passed through to your CFML engine's IsValid function).
+* @paramsTypes List of types to check each params value against (will be passed through to your CFML engine's IsValid function).
+*/
 public void function verifies(
 	string only="",
 	string except="",
@@ -26,23 +38,24 @@ public void function verifies(
 }
 
 /**
- * Returns an array of all the verifications set on this controller in the order in which they will be executed.
- *
- * @doc.section Controller
- * @doc.category Initialization Functions
- *
- */
+* Returns an array of all the verifications set on this controller in the order in which they will be executed.
+*
+* [section: Controller]
+* [category: Initialization Functions]
+*
+*/
 public array function verificationChain() {
 	return variables.$class.verifications;
 }
 
 /**
- * Use this function if you need a more low level way of setting the entire verification chain for a controller.
- *
- * @doc.section Controller
- * @doc.category Initialization Functions
- *
- */
+* Use this function if you need a more low level way of setting the entire verification chain for a controller.
+*
+* [section: Controller]
+* [category: Initialization Functions]
+*
+* @chain An array of structs, each of which represent an argumentCollection that get passed to the verifies function. This should represent the entire verification chain that you want to use for this controller.
+*/
 public void function setVerificationChain(required array chain) {
 
 	// clear current verification chain and then re-add from the passed in chain

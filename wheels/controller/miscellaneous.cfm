@@ -1,5 +1,19 @@
 <cfscript>
-
+/**
+* Sends an email using a template and an optional layout to wrap it in. Besides the CFWheels-specific arguments documented here, you can also pass in any argument that is accepted by the cfmail tag as well as your own arguments to be used by the view.
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
+*
+* @template The path to the email template or two paths if you want to send a multipart email. if the detectMultipart argument is false, the template for the text version should be the first one in the list. This argument is also aliased as templates.
+* @from Email address to send from.
+* @to List of email addresses to send the email to.
+* @subject The subject line of the email.
+* @layout Layout(s) to wrap the email template in. This argument is also aliased as layouts.
+* @file A list of the names of the files to attach to the email. This will reference files stored in the files folder (or a path relative to it). This argument is also aliased as files.
+* @detectMultipart true When set to true and multiple values are provided for the template argument, CFWheels will detect which of the templates is text and which one is HTML (by counting the < characters).
+*
+*/
 public any function sendEmail(
 	string template="",
 	string from="",
@@ -123,6 +137,20 @@ public any function sendEmail(
 	return local.rv;
 }
 
+/**
+* Sends a file to the user (from the files folder or a path relative to it by default).
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
+*
+* @file string true The file to send to the user.
+* @name string false The file name to show in the browser download dialog box.
+* @type string false The HTTP content type to deliver the file as.
+* @disposition string false attachment Set to inline to have the browser handle the opening of the file (possibly inline in the browser) or set to attachment to force a download dialog box.
+* @directory string false Directory outside of the webroot where the file exists. Must be a full path.
+* @deleteFile boolean false false Pass in true to delete the file on the server after sending it.
+*/
+
 public any function sendFile(
 	required string file,
 	string name="",
@@ -212,39 +240,84 @@ public any function sendFile(
 		return local.rv;
 	}
 }
-
+/**
+*  Returns whether CFWheels is communicating over a secure port.
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
+*/
 public boolean function isSecure() {
 	return request.cgi.server_port_secure == "true";
 }
-
+/**
+*  Returns whether the page was called from JavaScript or not.
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
+*/
 public boolean function isAjax() {
 	return request.cgi.http_x_requested_with == "XMLHTTPRequest";
 }
-
+/**
+*  Returns whether the request was a normal GET request or not.
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
+*/
 public boolean function isGet() {
 	return request.cgi.request_method == "get";
 }
-
+/**
+*  Returns whether the request came from a form POST submission or not.
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
+*/
 public boolean function isPost() {
 	return request.cgi.request_method == "post";
 }
-
+/**
+*  Returns whether the request was a PUT request or not.
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
+*/
 public boolean function isPut() {
 	return request.cgi.request_method == "put";
 }
-
+/**
+*  Returns whether the request was a PATCH request or not.
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
+*/
 public boolean function isPatch() {
 	return request.cgi.request_method == "patch";
 }
-
+/**
+*  Returns whether the request was a DELETE request or not.
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
+*/
 public boolean function isDelete() {
 	return request.cgi.request_method == "delete";
 }
-
+/**
+*  Returns whether the request was a HEAD request or not.
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
+*/
 public boolean function isHead() {
 	return request.cgi.request_method == "head";
 }
-
+/**
+*  Returns whether the request was a OPTIONS request or not.
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
+*/
 public boolean function isOptions() {
 	return request.cgi.request_method == "options";
 }

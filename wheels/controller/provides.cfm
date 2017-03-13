@@ -1,5 +1,12 @@
 <cfscript>
-
+/**
+* Defines formats that the controller will respond with upon request. The format can be requested through a URL variable called format, by appending the format name to the end of a URL as an extension (when URL rewriting is enabled), or in the request header.
+*
+* [section: Controller]
+* [category: Initialization Functions]
+*
+* @formats Formats to instruct the controller to provide. Valid values are html (the default), xml, json, csv, pdf, and xls.
+*/
 public void function provides(string formats="") {
 	$combineArguments(args=arguments, combine="formats,format", required=true);
 	arguments.formats = $listClean(arguments.formats);
@@ -17,7 +24,15 @@ public void function provides(string formats="") {
 	}
 	variables.$class.formats.default = ListAppend(variables.$class.formats.default, arguments.formats);
 }
-
+/**
+* Use this in an individual controller action to define which formats the action will respond with. This can be used to define provides behavior in individual actions or to override a global setting set with provides in the controller's init().
+*
+* [section: Controller]
+* [category: Provides Functions]
+*
+* @formats See documentation for provides.
+* @action Name of action, defaults to current.
+*/
 public void function onlyProvides(string formats="", string action=variables.params.action) {
 	$combineArguments(args=arguments, combine="formats,format", required=true);
 	arguments.formats = $listClean(arguments.formats);
@@ -34,7 +49,22 @@ public void function onlyProvides(string formats="", string action=variables.par
 	}
 	variables.$class.formats.actions[arguments.action] = arguments.formats;
 }
-
+/**
+* Instructs the controller to render the data passed in to the format that is requested. If the format requested is json or xml, CFWheels will transform the data into that format automatically. For other formats (or to override the automatic formatting), you can also create a view template in this format: nameofaction.xml.cfm, nameofaction.json.cfm, nameofaction.pdf.cfm, etc.
+*
+* [section: Controller]
+* [category: Provides Functions]
+*
+* @data Data to format and render.
+* @controller See documentation for renderPage.
+* @action See documentation for renderPage.
+* @template See documentation for renderPage.
+* @layout See documentation for renderPage.
+* @cache See documentation for renderPage.
+* @returnAs See documentation for renderPage.
+* @hideDebugInformation See documentation for renderPage.
+* @status force request to return with specific HTTP status code
+*/
 public any function renderWith(
 	required any data,
 	string controller=variables.params.controller,
@@ -154,6 +184,9 @@ public any function renderWith(
 	}
 }
 
+/**
+* Internal Function
+*/
 public string function $acceptableFormats() {
 	local.rv = variables.$class.formats.default;
 	if (StructKeyExists(variables.$class.formats, arguments.action)) {
@@ -162,6 +195,9 @@ public string function $acceptableFormats() {
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public string function $generateRenderWithTemplatePath(
 	required string controller,
 	required string action,
@@ -180,6 +216,9 @@ public string function $generateRenderWithTemplatePath(
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public boolean function $formatTemplatePathExists(required string $name) {
 	local.templatePath = $generateIncludeTemplatePath($type="page", $name=arguments.$name, $template=arguments.$name);
 	local.rv = false;
@@ -201,6 +240,9 @@ public boolean function $formatTemplatePathExists(required string $name) {
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public string function $requestContentType(struct params=variables.params, string httpAccept=request.cgi.http_accept) {
 	local.rv = "html";
 	if (StructKeyExists(arguments.params, "format")) {
@@ -217,6 +259,10 @@ public string function $requestContentType(struct params=variables.params, strin
 	return local.rv;
 }
 
+/**
+* Internal Function
+* Returns a response text for any status code
+*/
 public string function $returnStatusText(numeric status=200) {
 	local.status = arguments.status;
 	local.statusCodes = $getStatusCodes();
@@ -232,6 +278,10 @@ public string function $returnStatusText(numeric status=200) {
 	return local.rv;
 }
 
+/**
+* Internal Function
+* Returns a response code from the status code list
+*/
 public string function $returnStatusCode(any status=200) {
 	local.status = arguments.status;
 	local.statusCodes = $getStatusCodes();
@@ -248,6 +298,10 @@ public string function $returnStatusCode(any status=200) {
 	return local.rv;
 }
 
+/**
+* Internal Function
+* Returns a list of HTTP Status Codes and their response names
+*/
 public struct function $getStatusCodes() {
 	local.rv = {
 		100 = 'Continue',
