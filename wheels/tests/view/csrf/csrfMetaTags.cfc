@@ -1,18 +1,18 @@
 component extends="wheels.Test" {
   function setup() {
-    loc.controller = controller(name="dummy");
+    _controller = controller(name="dummy");
   }
 
   function test_contains_csrfparam_meta_tag() {
-    loc.tags = loc.controller.csrfMetaTags();
-    loc.csrfParamTag = '<meta content="authenticityToken" name="csrf-param" />';
-    assert("loc.tags contains '#loc.csrfParamTag#'");
+    tags = _controller.csrfMetaTags();
+    csrfParamTag = '<meta content="authenticityToken" name="csrf-param" />';
+    assert("tags contains '#csrfParamTag#'");
   }
 
   function test_contains_csrftoken_meta_tag() {
-    loc.token = CSRFGenerateToken();
-    loc.tags = loc.controller.csrfMetaTags();
-    loc.csrfTokenTag = '<meta content="#loc.token#" name="csrf-token" />';
-    assert("loc.tags contains '#loc.csrfTokenTag#'");
+    local.token = CSRFGenerateToken();
+    tags = _controller.csrfMetaTags();
+    csrfTokenTag = '<meta content="#local.token#" name="csrf-token" />';
+    assert("tags contains '#csrfTokenTag#'");
   }
 }

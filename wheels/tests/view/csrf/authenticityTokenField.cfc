@@ -1,12 +1,12 @@
 component extends="wheels.Test" {
   function setup() {
-    loc.controller = controller(name="dummy");
+    _controller = controller(name="dummy");
   }
 
   function test_authenticityTokenField() {
-    loc.token = CSRFGenerateToken();
-    loc.tag = loc.controller.authenticityTokenField();
-    loc.authenticityTokenField = '<input id="authenticityToken" name="authenticityToken" type="hidden" value="#loc.token#" />';
-    assert("loc.tag is '#loc.authenticityTokenField#'");
+    local.token = CSRFGenerateToken();
+    tag = _controller.authenticityTokenField();
+    authenticityTokenField = '<input id="authenticityToken" name="authenticityToken" type="hidden" value="#local.token#" />';
+    assert("tag is '#authenticityTokenField#'");
   }
 }
