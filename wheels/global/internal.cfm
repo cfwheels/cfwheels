@@ -1,5 +1,8 @@
 <cfscript>
 
+/**
+* Internal Function
+*/
 public void function $initializeRequestScope() {
 	if (!StructKeyExists(request, "wheels")) {
 		request.wheels = {};
@@ -19,6 +22,9 @@ public void function $initializeRequestScope() {
 	}
 }
 
+/**
+* Internal Function
+*/
 public xml function $toXml(required any data) {
 	// only instantiate the toXml object once per request
 	if (!StructKeyExists(request.wheels, "toXml")) {
@@ -27,6 +33,9 @@ public xml function $toXml(required any data) {
 	return request.wheels.toXml.toXml(arguments.data);
 }
 
+/**
+* Internal Function
+*/
 public string function $convertToString(required any value, string type="") {
 	if (!Len(arguments.type)) {
 		if (IsArray(arguments.value)) {
@@ -82,6 +91,9 @@ public string function $convertToString(required any value, string type="") {
 	return arguments.value;
 }
 
+/**
+* Internal Function
+*/
 public any function $cleanInlist(required string where) {
 	local.rv = arguments.where;
 	local.regex = "IN\s?\(.*?,\s.*?\)";
@@ -96,7 +108,11 @@ public any function $cleanInlist(required string where) {
 	return local.rv;
 }
 
-// removes whitespace between list elements. optional argument to return the list as an array.
+//
+/**
+* Internal Function
+* removes whitespace between list elements. optional argument to return the list as an array
+*/
 public any function $listClean(
 	required string list,
 	string delim=",",
@@ -113,7 +129,10 @@ public any function $listClean(
 	return local.rv;
 }
 
-// Creates a unique string based on any arguments passed in (used as a key for caching mostly).
+/**
+* Internal Function
+* Creates a unique string based on any arguments passed in (used as a key for caching mostly).
+*/
 public string function $hashedKey() {
 	local.rv = "";
 
@@ -144,6 +163,9 @@ public string function $hashedKey() {
 	return Hash(local.rv);
 }
 
+/**
+* Internal Function
+*/
 public any function $timeSpanForCache(
 	required any cache,
 	numeric defaultCacheTime=application.wheels.defaultCacheTime,
@@ -165,6 +187,9 @@ public any function $timeSpanForCache(
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public void function $combineArguments(
 	required struct args,
 	required string combine,
@@ -184,7 +209,11 @@ public void function $combineArguments(
 	}
 }
 
-// Check to see if all keys in the list exist for the structure and have length.
+
+/**
+* Internal Function
+* Check to see if all keys in the list exist for the structure and have length.
+*/
 public boolean function $structKeysExist(required struct struct, string keys="") {
 	local.rv = true;
 	local.iEnd = ListLen(arguments.keys);
@@ -197,7 +226,10 @@ public boolean function $structKeysExist(required struct struct, string keys="")
 	return local.rv;
 }
 
-// This copies all the variables CFWheels needs from the CGI scope to the request scope.
+/**
+* Internal Function
+* This copies all the variables CFWheels needs from the CGI scope to the request scope
+*/
 public struct function $cgiScope(
 	string keys="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type,http_x_rewrite_url,http_x_original_url,request_uri,redirect_url",
 	struct scope=cgi
@@ -256,8 +288,14 @@ public struct function $cgiScope(
 	return local.rv;
 }
 
-// Creates a struct of the named arguments passed in to a function (i.e. the ones not explicitly defined in the arguments list).
-// @defined = List of already defined arguments that should not be added.
+//
+
+/**
+* Internal Function
+* Creates a struct of the named arguments passed in to a function (i.e. the ones not explicitly defined in the arguments list).
+*
+* @defined = List of already defined arguments that should not be added.
+*/
 public struct function $namedArguments(required string $defined) {
 	local.rv = {};
 	for (local.key in arguments) {
@@ -268,6 +306,9 @@ public struct function $namedArguments(required string $defined) {
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public struct function $dollarify(required struct input, required string on) {
 	for (local.key in arguments.input) {
 		if (ListFindNoCase(arguments.on, local.key)) {
@@ -278,6 +319,9 @@ public struct function $dollarify(required struct input, required string on) {
 	return arguments.input;
 }
 
+/**
+* Internal Function
+*/
 public void function $abortInvalidRequest() {
 	local.applicationPath = Replace(GetCurrentTemplatePath(), "\", "/", "all");
 	local.callingPath = Replace(GetBaseTemplatePath(), "\", "/", "all");
@@ -294,6 +338,9 @@ public void function $abortInvalidRequest() {
 	}
 }
 
+/**
+* Internal Function
+*/
 public string function $URLEncode(string param="") {
 	local.rv = URLEncodedFormat(arguments.param);
 
@@ -303,10 +350,16 @@ public string function $URLEncode(string param="") {
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public string function $routeVariables() {
 	return $findRoute(argumentCollection=arguments).variables;
 }
 
+/**
+* Internal Function
+*/
 public struct function $findRoute() {
 
 	// throw an error if a route with this name has not been set by developer in the config/routes.cfm file
@@ -338,6 +391,9 @@ public struct function $findRoute() {
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public any function $cachedModelClassExists(required string name) {
 	local.rv = false;
 	if (StructKeyExists(application.wheels.models, arguments.name)) {
@@ -346,6 +402,9 @@ public any function $cachedModelClassExists(required string name) {
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public string function $constructParams(required string params, string $URLRewriting=application.wheels.URLRewriting) {
 	// change to using ampersand so we can use it as a list delim below and so we don't "double replace" it
 	arguments.params = Replace(arguments.params, "&amp;", "&", "all");
@@ -380,6 +439,9 @@ public string function $constructParams(required string params, string $URLRewri
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public void function $args(
 	required struct args,
 	required string name,
@@ -430,6 +492,9 @@ public void function $args(
 	}
 }
 
+/**
+* Internal Function
+*/
 public any function $createObjectFromRoot(
 	required string path,
 	required string fileName,
@@ -443,6 +508,9 @@ public any function $createObjectFromRoot(
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public void function $debugPoint(required string name) {
 	if (!StructKeyExists(request.wheels, "execution")) {
 		request.wheels.execution = {};
@@ -458,6 +526,9 @@ public void function $debugPoint(required string name) {
 	}
 }
 
+/**
+* Internal Function
+*/
 public any function $cachedControllerClassExists(required string name) {
 	local.rv = false;
 	if (StructKeyExists(application.wheels.controllers, arguments.name)) {
@@ -466,6 +537,9 @@ public any function $cachedControllerClassExists(required string name) {
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public any function $fileExistsNoCase(required string absolutePath) {
 	// return false by default when the file does not exist in the directory
 	local.rv = false;
@@ -490,6 +564,9 @@ public any function $fileExistsNoCase(required string absolutePath) {
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public string function $objectFileName(
 	required string name,
 	required string objectPath,
@@ -543,6 +620,9 @@ public string function $objectFileName(
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public any function $createControllerClass(
 	required string name,
 	string controllerPaths=get("controllerPath"),
@@ -563,6 +643,9 @@ public any function $createControllerClass(
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public void function $addToCache(
 	required string key,
 	required any value,
@@ -599,6 +682,9 @@ public void function $addToCache(
 	}
 }
 
+/**
+* Internal Function
+*/
 public any function $getFromCache(required string key, string category="main") {
 	local.rv = false;
 	try {
@@ -617,10 +703,16 @@ public any function $getFromCache(required string key, string category="main") {
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public void function $removeFromCache(required string key, string category="main") {
 	StructDelete(application.wheels.cache[arguments.category], arguments.key);
 }
 
+/**
+* Internal Function
+*/
 public numeric function $cacheCount(string category="") {
 	if (Len(arguments.category)) {
 		local.rv = StructCount(application.wheels.cache[arguments.category]);
@@ -633,6 +725,9 @@ public numeric function $cacheCount(string category="") {
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public void function $clearCache(string category="") {
 	if (Len(arguments.category)){
 		StructClear(application.wheels.cache[arguments.category]);
@@ -641,6 +736,9 @@ public void function $clearCache(string category="") {
 	}
 }
 
+/**
+* Internal Function
+*/
 public any function $createModelClass(
 	required string name,
 	string modelPaths=application.wheels.modelPath,
@@ -661,10 +759,16 @@ public any function $createModelClass(
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public void function $loadRoutes() {
 	$simpleLock(name="$mapperLoadRoutes", type="exclusive", timeout=5, execute="$lockedLoadRoutes");
 }
 
+/**
+* Internal Function
+*/
 public void function $lockedLoadRoutes() {
 	local.appKey = $appKey();
 
@@ -679,6 +783,9 @@ public void function $lockedLoadRoutes() {
 	$setNamedRoutePositions();
 }
 
+/**
+* Internal Function
+*/
 public void function $setNamedRoutePositions() {
 	local.appKey = $appKey();
 	local.iEnd = ArrayLen(application[local.appKey].routes);
@@ -693,10 +800,16 @@ public void function $setNamedRoutePositions() {
 	}
 }
 
+/**
+* Internal Function
+*/
 public void function $clearModelInitializationCache() {
 	StructClear(application.wheels.models);
 }
 
+/**
+* Internal Function
+*/
 public void function $clearControllerInitializationCache() {
 	StructClear(application.wheels.controllers);
 }
@@ -748,6 +861,9 @@ private string function $checkMinimumVersion(required string engine, required st
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public void function $loadPlugins() {
 	local.appKey = $appKey();
 	local.pluginPath = application[local.appKey].webPath & application[local.appKey].pluginPath;
@@ -758,6 +874,9 @@ public void function $loadPlugins() {
 	application[local.appKey].mixins = application[local.appKey].PluginObj.getMixins();
 }
 
+/**
+* Internal Function
+*/
 public string function $appKey() {
 	local.rv = "wheels";
 	if (StructKeyExists(application, "$wheels")) {
@@ -766,6 +885,9 @@ public string function $appKey() {
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public string function $singularizeOrPluralize(
 	required string text,
 	required string which,
@@ -842,6 +964,9 @@ public string function $singularizeOrPluralize(
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public string function $prependUrl(required string path) {
 	local.rv = arguments.path;
 	if (arguments.port != 0) {
@@ -866,6 +991,10 @@ public string function $prependUrl(required string path) {
 	return local.rv;
 }
 
+/**
+* Internal Function
+* NB: url rewriting files need to be removed from here
+*/
 public string function $buildReleaseZip(string version=application.wheels.version, string directory=Expandpath("/")) {
 	local.path = arguments.directory & "cfwheels.#arguments.version#.zip";
 
@@ -925,6 +1054,9 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 	return local.path;
 }
 
+/**
+* Internal Function
+*/
 public string function $namedRoute() {
 	// determine route name and path type
 	arguments.route = GetFunctionCalledName();

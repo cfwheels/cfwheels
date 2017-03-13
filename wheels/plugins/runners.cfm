@@ -1,5 +1,7 @@
 <cfscript>
-
+/**
+* Internal Function
+*/
 public any function $pluginRunner() {
 
 	local.previousStack = callStackGet()[2]["function"];
