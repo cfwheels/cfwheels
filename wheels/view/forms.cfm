@@ -24,7 +24,6 @@ public string function endFormTag(string prepend, string append) {
  *
  * @method The type of method to use in the form tag. get and post are the options.
  * @multipart Set to true if the form should be able to upload files.
- * @spamProtection Set to true to protect the form against spammers (done with JavaScript).
  * @route Name of a route that you have configured in config/routes.cfm.
  * @controller Name of the controller to include in the URL.
  * @action Name of the action to include in the URL.
@@ -104,7 +103,7 @@ public string function startFormTag(
 		arguments.enctype = "multipart/form-data";
 	}
 
-	local.skip = "multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port,prepend,append";
+	local.skip = "multipart,route,controller,key,params,anchor,onlyPath,host,protocol,port,prepend,append";
 
 	// variables passed in as route arguments should not be added to the html element
 	if (Len(arguments.route)) {

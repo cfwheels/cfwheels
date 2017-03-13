@@ -8,7 +8,6 @@ component extends="wheels.tests.Test" {
 		args.onlypath = true;
 		args.port = 0;
 		args.protocol = "";
-		args.spamprotection = false;
 		args.controller = "testcontroller";
 	}
 

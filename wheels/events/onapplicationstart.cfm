@@ -306,7 +306,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.sendEmail = {layout=false, detectMultipart=true, from="", to="", subject=""};
 	application.$wheels.functions.sendFile = {disposition="attachment"};
 	application.$wheels.functions.simpleFormat = {wrap=true};
-	application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, spamProtection=false, prepend="", append=""};
+	application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, prepend="", append=""};
 	application.$wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false};
 	application.$wheels.functions.submitTag = {value="Save changes", image="", prepend="", append=""};
 	application.$wheels.functions.sum = {distinct=false, parameterize=true, ifNull=""};
