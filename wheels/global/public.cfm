@@ -480,7 +480,14 @@ public string function mimeTypes(required string extension, string fallback="app
 	}
 	return local.rv;
 }
-
+/**
+* Converts camelCase strings to lowercase strings with hyphens as word delimiters instead. Example: myVariable becomes my-variable.
+*
+* [section: Global Helpers]
+* [category: String Functions]
+*
+* @string string Yes The string to hyphenize.
+*/
 public string function hyphenize(required string string) {
 	local.rv = REReplace(arguments.string, "([A-Z][a-z])", "-\l\1", "all");
 	local.rv = REReplace(local.rv, "([a-z])([A-Z])", "\1-\l\2", "all");
