@@ -14,21 +14,6 @@ this.mappings["/wheels"] = GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels
 // We turn on "sessionManagement" by default since the Flash uses it.
 this.sessionManagement = true;
 
-this.javaSettings={
-	"LoadPaths"=[]
-}
-
-// If a plugin has a jar or class file, automatically add the mapping to this.javasettings
-// This is perhaps a little high up in the load order? Need to double check effects of user overrides to `this`.
-this.pluginFolders=DirectoryList(
-	path=GetDirectoryFromPath(GetBaseTemplatePath()) & "plugins", recurse="true", filter="*.class|*.jar|*.java");
-	
-for (folder in this.pluginFolders) {
-	if(!ArrayFind(this.javaSettings.LoadPaths, GetDirectoryFromPath(folder))){
-		ArrayAppend(this.javaSettings.LoadPaths, GetDirectoryFromPath(folder));
-	}
-}
-
 // Include developer's app config so they can set their own variables in this scope (or override "sessionManagement").
 // Include Wheels controller and global functions.
 // Include Wheels event functions (which in turn includes the developer's event files).
