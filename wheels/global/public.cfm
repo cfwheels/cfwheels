@@ -425,6 +425,14 @@ public string function URLFor(
 	return local.rv;
 }
 
+/**
+* Capitalizes all words in the text to create a nicer looking title.
+*
+* [section: Global Helpers]
+* [category: String Functions]
+*
+* @string String to capitalize.
+*/
 public string function capitalize(required string text) {
 	local.rv = arguments.text;
 	if (Len(local.rv)) {
@@ -433,6 +441,16 @@ public string function capitalize(required string text) {
 	return local.rv;
 }
 
+/**
+* Returns readable text by capitalizing and converting camel casing to multiple words.
+*
+* [section: Global Helpers]
+* [category: String Functions]
+*
+* @text Text to humanize.
+* @except A list of strings (space separated) to replace within the output.
+*
+*/
 public string function humanize(required string text, string except="") {
 	// add a space before every capitalized word
 	local.rv = REReplace(arguments.text, "([[:upper:]])", " \1", "all");
@@ -456,6 +474,16 @@ public string function humanize(required string text, string except="") {
 	return local.rv;
 }
 
+/**
+* Returns the plural form of the passed in word. Can also pluralize a word based on a value passed to the count argument.
+*
+* [section: Global Helpers]
+* [category: String Functions]
+*
+* @word The word to pluralize.
+* @count Pluralization will occur when this value is not 1.
+* @returnCount Will return count prepended to the pluralization when true and count is not -1.
+*/
 public string function pluralize(required string word, numeric count="-1", boolean returnCount="true") {
 	return $singularizeOrPluralize(
 		count=arguments.count,
@@ -465,10 +493,26 @@ public string function pluralize(required string word, numeric count="-1", boole
 	);
 }
 
+/**
+* Returns the singular form of the passed in word.
+*
+* [section: Global Helpers]
+* [category: String Functions]
+*
+* @string String to singularize.
+*/
 public string function singularize(required string word) {
 		return $singularizeOrPluralize(text=arguments.word, which="singularize");
 }
 
+/**
+* Returns an XHTML-compliant string.
+*
+* [section: Global Helpers]
+* [category: String Functions]
+*
+* @string String to make XHTML-compliant.
+*/
 public string function toXHTML(required string text) {
 	return Replace(arguments.text, "&", "&amp;", "all");
 }
@@ -480,13 +524,14 @@ public string function mimeTypes(required string extension, string fallback="app
 	}
 	return local.rv;
 }
+
 /**
 * Converts camelCase strings to lowercase strings with hyphens as word delimiters instead. Example: myVariable becomes my-variable.
 *
 * [section: Global Helpers]
 * [category: String Functions]
 *
-* @string string Yes The string to hyphenize.
+* @string The string to hyphenize.
 */
 public string function hyphenize(required string string) {
 	local.rv = REReplace(arguments.string, "([A-Z][a-z])", "-\l\1", "all");
