@@ -911,8 +911,17 @@ public string function $singularizeOrPluralize(
 			local.prepend = Mid(local.text, 1, Len(local.text)-local.upperCasePos);
 			local.text = Reverse(Mid(Reverse(local.text), 1, local.upperCasePos));
 		}
-		local.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water,feedback";
-		local.irregulars = "child,children,foot,feet,man,men,move,moves,person,people,sex,sexes,tooth,teeth,woman,women";
+
+		// Get global settings for uncountable and irregular words.
+		// For the irregular ones we need to convert them from a struct to a list.
+		local.uncountables = $listClean(application.wheels.uncountables);
+		local.irregulars = "";
+		local.words = application.wheels.irregulars;
+		for (local.word in local.words) {
+			local.irregulars = ListAppend(local.irregulars, LCase(local.word));
+			local.irregulars = ListAppend(local.irregulars, local.words[local.word]);
+		}
+
 		if (ListFindNoCase(local.uncountables, local.text)) {
 			local.rv = local.text;
 			local.ruleMatched = true;

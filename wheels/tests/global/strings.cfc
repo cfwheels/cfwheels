@@ -1,5 +1,16 @@
 component extends="wheels.tests.Test" {
 
+	function test_user_setting() {
+		local.oldIrregulars = application.wheels.irregulars;
+		local.irregulars = local.oldIrregulars;
+		StructAppend(local.irregulars, {pac = "tupac"});
+		application.wheels.irregulars = local.irregulars;
+		result1 = pluralize("pac");
+		result2 = singularize("tupac");
+		application.wheels.irregulars = local.oldIrregulars;
+		assert("NOT Compare(result1, 'tupac') AND NOT Compare(result2, 'pac')");
+	}
+
 	function test_singularize() {
 		result = singularize("statuses");
 		assert("NOT Compare(result, 'status')");

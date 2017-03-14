@@ -53,6 +53,7 @@ Miscellaneous
 * Added a "processRequest" function that simplifies testing controllers - [Per Djurner]
 * Added new embedded documentation viewer/generator for JavaDoc - #734 [Tom King]
 * Removes all references to Railo - #656 (Adam Chapman)
+* Made uncountable and irregular words configurable - #739 [Per Djurner]
 
 Breaking Changes
 ================

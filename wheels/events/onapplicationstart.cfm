@@ -187,6 +187,8 @@ public void function onApplicationStart() {
 	application.$wheels.controllerPath = "controllers";
 
 	// miscellaneous settings
+	application.$wheels.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water,feedback";
+	application.$wheels.irregulars = {child="children", foot="feet", man="men", move="moves", person="people", sex="sexes", tooth="teeth", woman="women"};
 	application.$wheels.dataAttributeDelimiter = "_";
 	application.$wheels.tableNamePrefix = "";
 	application.$wheels.obfuscateURLs = false;
