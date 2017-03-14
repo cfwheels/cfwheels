@@ -11,12 +11,11 @@
 component extends="[extends]" hint="[description]" {
 
 	function up() {
-	  	hasError = false;
+	  hasError = false;
 		transaction {
-		  	try{
+			try {
 				dropTable(name='tableName');
-			}
-			catch (any ex){
+			} catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}
@@ -31,14 +30,13 @@ component extends="[extends]" hint="[description]" {
 	}
 
 	function down() {
-	  	hasError = false;
+		hasError = false;
 		transaction {
-		  	try{
+			try {
 				t = createTable(name='tableName');
 			    t.timestamps();
 			    t.create();
-			}
-			catch (any ex){
+			} catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}

@@ -1,10 +1,10 @@
 /*
-    |----------------------------------------------------------------------------|
+  |----------------------------------------------------------------------------|
 	| Parameter     | Required | Type    | Default | Description                 |
-    |----------------------------------------------------------------------------|
+  |----------------------------------------------------------------------------|
 	| table         | Yes      | string  |         | table name                  |
 	| indexName     | Yes      | string  |         | name of the index to remove |
-    |----------------------------------------------------------------------------|
+  |----------------------------------------------------------------------------|
 
     EXAMPLE:
       removeIndex(table='members',indexName='members_username');
@@ -12,12 +12,12 @@
 component extends="[extends]" hint="[description]" {
 
 	function up() {
-	  	hasError = false;
+	  hasError = false;
 		transaction {
-		  	try{
+			try {
 				removeIndex(table='tableName', indexName='');
 			}
-			catch (any ex){
+			catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}
@@ -32,12 +32,12 @@ component extends="[extends]" hint="[description]" {
 	}
 
 	function down() {
-	  	hasError = false;
+	  hasError = false;
 		transaction {
-		  	try{
-				addIndex(table='tableName',columnNames='columnName',unique=true);
+			try {
+				addIndex(table='tableName', columnNames='columnName', unique=true);
 			}
-			catch (any ex){
+			catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}

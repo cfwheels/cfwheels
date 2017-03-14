@@ -1,10 +1,10 @@
 /*
-    |-------------------------------------------------------------------------------------------|
+  |-------------------------------------------------------------------------------------------|
 	| Parameter     | Required | Type    | Default | Description                                |
-    |-------------------------------------------------------------------------------------------|
+  |-------------------------------------------------------------------------------------------|
 	| table         | Yes      | string  |         | Name of table to remove records from       |
 	| where         | No       | string  |         | Where condition                            |
-    |-------------------------------------------------------------------------------------------|
+  |-------------------------------------------------------------------------------------------|
 
     EXAMPLE:
       removeRecord(table='members',where='id=1');
@@ -12,12 +12,11 @@
 component extends="[extends]" hint="[description]" {
 
 	function up() {
-	  	hasError = false;
+	  hasError = false;
 		transaction {
-		  	try{
-				removeRecord(table='tableName',where='');
-			}
-			catch (any ex){
+			try {
+				removeRecord(table='tableName', where='');
+			} catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}
@@ -32,12 +31,12 @@ component extends="[extends]" hint="[description]" {
 	}
 
 	function down() {
-	  	hasError = false;
+	  hasError = false;
 		transaction {
-		  	try{
-				addRecord(table='tableName',field='');
+			try {
+				addRecord(table='tableName', field='');
 			}
-			catch (any ex){
+			catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}

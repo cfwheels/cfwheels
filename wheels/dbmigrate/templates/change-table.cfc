@@ -13,13 +13,12 @@
 component extends="[extends]" hint="[description]" {
 
 	function up() {
-	  	hasError = false;
+	  hasError = false;
 		transaction {
-		  	try{
+			try {
 				t = changeTable('tableName');
-	   			t.change();
-			}
-			catch (any ex){
+	   		t.change();
+			} catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}
@@ -34,12 +33,11 @@ component extends="[extends]" hint="[description]" {
 	}
 
 	function down() {
-	  	hasError = false;
+	  hasError = false;
 		transaction {
-		  	try{
-				removeColumn(table='tableName',columnName='columnName');
-			}
-			catch (any ex){
+		  try {
+				removeColumn(table='tableName', columnName='columnName');
+			} catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}

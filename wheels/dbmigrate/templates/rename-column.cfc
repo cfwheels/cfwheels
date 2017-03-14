@@ -1,11 +1,11 @@
 /*
-    |----------------------------------------------------------------------|
+  |----------------------------------------------------------------------|
 	| Parameter     | Required | Type    | Default | Description           |
-    |----------------------------------------------------------------------|
+  |----------------------------------------------------------------------|
 	| table         | Yes      | string  |         | existing table name   |
 	| columnName    | Yes      | string  |         | existing column name  |
 	| newColumnName | No       | string  |         | new name for column   |
-    |----------------------------------------------------------------------|
+  |----------------------------------------------------------------------|
 
     EXAMPLE:
       renameColumn(table='users', columnName='password', newColumnName='');
@@ -13,12 +13,11 @@
 component extends="[extends]" hint="[description]" {
 
 	function up() {
-	  	hasError = false;
+	  hasError = false;
 		transaction {
-		  	try{
+			try {
 				renameColumn(table='tableName', columnName='columnName', newColumnName='newColumnName');
-			}
-			catch (any ex){
+			} catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}
@@ -33,12 +32,11 @@ component extends="[extends]" hint="[description]" {
 	}
 
 	function down() {
-	  	hasError = false;
+	  hasError = false;
 		transaction {
-		  	try{
+			try {
 				renameColumn(table='tableName', columnName='columnName', newColumnName='newColumnName');
-			}
-			catch (any ex){
+			} catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}

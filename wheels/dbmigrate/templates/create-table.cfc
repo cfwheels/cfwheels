@@ -1,12 +1,12 @@
 /*
-    |----------------------------------------------------------------------------------------------|
+  |----------------------------------------------------------------------------------------------|
 	| Parameter  | Required | Type    | Default | Description                                      |
-    |----------------------------------------------------------------------------------------------|
+  |----------------------------------------------------------------------------------------------|
 	| name       | Yes      | string  |         | table name, in pluralized form                   |
 	| force      | No       | boolean | false   | drop existing table of same name before creating |
 	| id         | No       | boolean | true    | if false, defines a table with no primary key    |
-	| primaryKey | No       | string  | id      | overrides default primary key name
-    |----------------------------------------------------------------------------------------------|
+	| primaryKey | No       | string  | id      | overrides default primary key name               |
+  |----------------------------------------------------------------------------------------------|
 
     EXAMPLE:
       t = createTable(name='employees',force=false,id=true,primaryKey='empId');
@@ -20,14 +20,13 @@
 component extends="[extends]" hint="[description]" {
 
 	function up() {
-	  	hasError = false;
+	  hasError = false;
 		transaction {
-		  	try{
+			try {
 				t = createTable(name='tableName');
 				t.timestamps();
 				t.create();
-			}
-			catch (any ex){
+			} catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}
@@ -42,12 +41,11 @@ component extends="[extends]" hint="[description]" {
 	}
 
 	function down() {
-	  	hasError = false;
+	  hasError = false;
 		transaction {
-		  	try{
+			try {
 				dropTable('tableName');
-			}
-			catch (any ex){
+			} catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}

@@ -1,12 +1,11 @@
 component extends="[extends]" hint="[description]" {
 
 	function up() {
-	  	hasError = false;
+	  hasError = false;
 		transaction {
-		  	try{
+			try {
 				//your code goes here
-			}
-			catch (any ex){
+			} catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}
@@ -21,12 +20,11 @@ component extends="[extends]" hint="[description]" {
 	}
 
 	function down() {
-	  	hasError = false;
+	  hasError = false;
 		transaction {
-		  	try{
+		  try {
 				//your code goes here
-			}
-			catch (any ex){
+			} catch (any ex) {
 				hasError = true;
 				catchObject = ex;
 			}
