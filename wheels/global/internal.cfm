@@ -914,9 +914,10 @@ public string function $singularizeOrPluralize(
 
 		// Get global settings for uncountable and irregular words.
 		// For the irregular ones we need to convert them from a struct to a list.
-		local.uncountables = $listClean(application.wheels.uncountables);
+		local.appKey = $appKey();
+		local.uncountables = $listClean(application[local.appKey].uncountables);
 		local.irregulars = "";
-		local.words = application.wheels.irregulars;
+		local.words = application[local.appKey].irregulars;
 		for (local.word in local.words) {
 			local.irregulars = ListAppend(local.irregulars, LCase(local.word));
 			local.irregulars = ListAppend(local.irregulars, local.words[local.word]);
