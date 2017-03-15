@@ -1,5 +1,29 @@
 <cfscript>
 
+/**
+* Builds and returns a string containing three select form controls (month, day, and year) based on a name and value.
+*
+* [section: View Helpers]
+* [category: Form Tag Functions]
+*
+* @name See documentation for textFieldTag.
+* @selected See documentation for selectTag.
+* @order See documentation for dateSelect.
+* @separator See documentation for dateSelect.
+* @startYear See documentation for dateSelect.
+* @endYear See documentation for dateSelect.
+* @monthDisplay See documentation for dateSelect.
+* @monthNames See documentation for dateSelect.
+* @monthAbbreviations See documentation for dateSelect.
+* @includeBlank See documentation for select.
+* @label See documentation for dateSelect.
+* @labelPlacement See documentation for textField.
+* @prepend See documentation for textField.
+* @append See documentation for textField.
+* @prependToLabel See documentation for textField.
+* @appendToLabel See documentation for textField.
+* @combine See documentation for dateSelect.
+*/
 public string function dateSelectTags(
 	required string name,
 	string selected="",
@@ -30,6 +54,28 @@ public string function dateSelectTags(
 	return $dateOrTimeSelect(argumentCollection=arguments);
 }
 
+/**
+* Builds and returns a string containing three select form controls for hour, minute, and second based on name.
+*
+* [section: View Helpers]
+* [category: Form Tag Functions]
+*
+* @name See documentation for textFieldTag.
+* @selected See documentation for selectTag.
+* @order See documentation for timeSelect.
+* @separator See documentation for timeSelect.
+* @minuteStep See documentation for timeSelect.
+* @secondStep See documentation for timeSelect.
+* @includeBlank See documentation for select.
+* @label See documentation for dateSelect.
+* @labelPlacement See documentation for textField.
+* @prepend See documentation for textField.
+* @append See documentation for textField.
+* @prependToLabel See documentation for textField.
+* @appendToLabel See documentation for textField.
+* @combine See documentation for dateSelect.
+* @twelveHour See documentation for timeSelect.
+*/
 public string function timeSelectTags(
 	required string name,
 	string selected="",
