@@ -1,5 +1,7 @@
 <cfscript>
-
+/**
+* Internal Function
+*/
 public string function $yearSelectTag(required numeric startYear, required numeric endYear) {
 	if (Structkeyexists(arguments, "value") && Val(arguments.value)) {
 		if (arguments.value < arguments.startYear && arguments.endYear > arguments.startYear) {
@@ -17,6 +19,9 @@ public string function $yearSelectTag(required numeric startYear, required numer
 	return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
 }
 
+/**
+* Internal Function
+*/
 public string function $monthSelectTag(
 	required string monthDisplay,
 	required string monthNames,
@@ -37,6 +42,9 @@ public string function $monthSelectTag(
 	return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
 }
 
+/**
+* Internal Function
+*/
 public string function $daySelectTag() {
 	arguments.$loopFrom = 1;
 	arguments.$loopTo = 31;
@@ -45,6 +53,9 @@ public string function $daySelectTag() {
 	return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
 }
 
+/**
+* Internal Function
+*/
 public string function $hourSelectTag() {
 	arguments.$loopFrom = 0;
 	arguments.$loopTo = 23;
@@ -57,6 +68,9 @@ public string function $hourSelectTag() {
 	return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
 }
 
+/**
+* Internal Function
+*/
 public string function $minuteSelectTag(required numeric minuteStep) {
 	arguments.$loopFrom = 0;
 	arguments.$loopTo = 59;
@@ -66,6 +80,9 @@ public string function $minuteSelectTag(required numeric minuteStep) {
 	return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
 }
 
+/**
+* Internal Function
+*/
 public any function $secondSelectTag(required numeric secondStep) {
 	arguments.$loopFrom = 0;
 	arguments.$loopTo = 59;
@@ -75,6 +92,9 @@ public any function $secondSelectTag(required numeric secondStep) {
 	return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
 }
 
+/**
+* Internal Function
+*/
 public string function $dateOrTimeSelect(
 	required any objectName,
 	required string property,
@@ -130,6 +150,9 @@ public string function $dateOrTimeSelect(
 	return local.rv;
 }
 
+/**
+* Internal Function
+*/
 public string function $yearMonthHourMinuteSecondSelectTag(
 	required string name,
 	required string value,
@@ -208,6 +231,9 @@ public string function $yearMonthHourMinuteSecondSelectTag(
 	return local.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=local.content, attributes=arguments) & local.after;
 }
 
+/**
+* Internal Function
+*/
 public string function $yearMonthHourMinuteSecondSelectTagContent() {
 	local.args = {};
 	local.args.value = arguments.counter;
@@ -225,6 +251,9 @@ public string function $yearMonthHourMinuteSecondSelectTagContent() {
 	return $element(name="option", content=arguments.optionContent, attributes=local.args);
 }
 
+/**
+* Internal Function
+*/
 public string function $ampmSelectTag(
 	required string name,
 	required string value,
