@@ -1,5 +1,11 @@
 <cfscript>
-
+/**
+* Process the specified action of the controller; this is exposed in the API primarily for testing purposes; you would
+* not usually call it directly unless in the test suite
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
+*/
 public boolean function processAction() {
 	// CSRF protection.
 	$runCsrfProtection(action=params.action);
@@ -106,6 +112,9 @@ public boolean function processAction() {
 	return true;
 }
 
+/**
+* Internal Function
+*/
 public void function $callAction(required string action) {
 	if (Left(arguments.action, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action)) {
 		Throw(
@@ -147,6 +156,9 @@ public void function $callAction(required string action) {
 	}
 }
 
+/**
+* Internal Function
+*/
 public string function $callActionAndAddToCache(
 	required string action,
 	required numeric time,
