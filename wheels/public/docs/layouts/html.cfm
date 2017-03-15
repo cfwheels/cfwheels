@@ -73,20 +73,23 @@
 							</tr>
 						</thead>
 						<tbody>
-						<cfloop from="1" to="#arraylen(meta.parameters)#" index="_param">
-							<tr>
-								<td class='code'><cfif structkeyExists(meta.parameters[_param], "name")>#meta.parameters[_param]['name']#</cfif></td>
-								<td class='code'><cfif structkeyExists(meta.parameters[_param], "type")>#meta.parameters[_param]['type']#</cfif></td>
-								<td class='code'><cfif structkeyExists(meta.parameters[_param], "Required")>#meta.parameters[_param]['required']#</cfif></td>
-								<td class='code'>
-								<cfif
-									structKeyExists(application.wheels.functions, func)
-									AND structKeyExists(application.wheels.functions[func], meta.parameters[_param]['name'])>
-									#application.wheels.functions[func][meta.parameters[_param]['name']]#
-								</cfif>
-								<cfif structkeyExists(meta.parameters[_param], "default")>#meta.parameters[_param]['default']#</cfif></td>
-								<td><cfif structkeyExists(meta.parameters[_param], "hint")>#$backTickReplace(meta.parameters[_param]['hint'])#</cfif></td>
-							</tr>
+						<cfloop from="1" to="#arraylen(meta.parameters)#" index="p">
+						<cfset _param=meta.parameters[p]>
+							<cfif !left(_param.name, 1) EQ "$">
+								<tr>
+									<td class='code'>#_param.name#</td>
+									<td class='code'>#_param.type#</td>
+									<td class='code'>#_param.required#</td>
+									<td class='code'>
+									<cfif
+										structKeyExists(application.wheels.functions, func)
+										AND structKeyExists(application.wheels.functions[func], _param.name)>
+										#application.wheels.functions[func][_param.name]#
+									</cfif>
+									<cfif structkeyExists(_param, "default")>#_param.default#</cfif></td>
+									<td><cfif structkeyExists(_param, "hint")>#$backTickReplace(_param.hint)#</cfif></td>
+								</tr>
+							</cfif>
 						</cfloop>
 						</tbody>
 						</table>
