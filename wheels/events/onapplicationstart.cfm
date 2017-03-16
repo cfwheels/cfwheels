@@ -374,7 +374,7 @@ public void function onApplicationStart() {
 
 	// allow developers to inject plugins into the application variables scope
 	if (!StructIsEmpty(application.$wheels.mixins)) {
-		$include(template="wheels/plugins/injection.cfm");
+		$include(template="wheels/plugins/standalone/injection.cfm");
 	}
 
 	// create the mapper that will handle creating routes before $loadRoutes

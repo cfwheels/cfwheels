@@ -54,7 +54,7 @@ public void function $runOnRequestStart(required targetPage) {
 
 	// Inject methods from plugins directly to Application.cfc.
 	if (!StructIsEmpty(application.wheels.mixins)) {
-		$include(template="wheels/plugins/injection.cfm");
+		$include(template="wheels/plugins/standalone/injection.cfm");
 	}
 
 	if (application.wheels.environment == "maintenance") {

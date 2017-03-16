@@ -1,4 +1,5 @@
 <cfscript>
+// This file is included from Application.cfc in the root folder.
 
 // Put variables we just need internally inside a wheels struct.
 this.wheels = {};
