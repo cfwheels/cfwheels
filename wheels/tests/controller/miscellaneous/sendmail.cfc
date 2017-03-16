@@ -15,7 +15,7 @@
 		<cfset application.wheels.filePath = "wheels/tests/_assets/files">
 		<cfset oldArgs = application.wheels.functions.sendEmail>
 	</cffunction>
-	
+
  	<cffunction name="test_allow_default_for_from_to_and_subject">
 		<cfset application.wheels.functions.sendEmail.from = "sender@example.com">
 		<cfset application.wheels.functions.sendEmail.to = "recipient@example.com">
@@ -61,7 +61,7 @@
 		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
 		<cfset assert("result.mailparams[1].file Contains '_assets' AND result.mailparams[1].file Contains 'cfwheels-logo.png'")>
 	</cffunction>
-	
+
 	<cffunction name="test_send_with_attachments_external">
 		<cfset args.template = "plainEmailTemplate">
 		<cfset args.file = "cfwheels-logo.png,http://www.example.com/test.txt,c:\inetpub\wwwroot\cfwheels\something.pdf,relative/cfwheels-logo.png">
@@ -96,7 +96,7 @@
 		<cfset application.wheels.filePath = oldFilePath>
 		<cfset application.wheels.functions.sendEmail = oldArgs>
 	</cffunction>
-	
+
 	<cffunction name="default_args">
 		<cfset $args(args=arguments, name="sendEmail", required="template,from,to,subject")>
 		<cfreturn arguments>

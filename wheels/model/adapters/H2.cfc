@@ -3,11 +3,11 @@
 	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
 		<cfreturn "generated_key">
 	</cffunction>
-	
+
 	<cffunction name="$randomOrder" returntype="string" access="public" output="false">
 		<cfreturn "RAND()">
 	</cffunction>
-	
+
 	<cffunction name="$getType" returntype="string" access="public" output="false">
 		<cfargument name="type" type="string" required="true">
 		<cfscript>
@@ -34,7 +34,7 @@
 		</cfscript>
 		<cfreturn loc.returnValue>
 	</cffunction>
-	
+
 	<cffunction name="$query" returntype="struct" access="public" output="false">
 		<cfargument name="sql" type="array" required="true">
 		<cfargument name="limit" type="numeric" required="false" default=0>
@@ -50,7 +50,7 @@
 		</cfscript>
 		<cfreturn loc.returnValue>
 	</cffunction>
-	
+
 	<cffunction name="$identitySelect" returntype="any" access="public" output="false">
 		<cfargument name="queryAttributes" type="struct" required="true">
 		<cfargument name="result" type="struct" required="true">
@@ -70,14 +70,14 @@
 			</cfif>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="$getColumns" returntype="query" access="public" output="false">
 		<cfscript>
 			var loc = {};
-			
+
 			// get column details using cfdbinfo in the base adapter
 			loc.columns = super.$getColumns(argumentCollection=arguments);
-			
+
 			// since cfdbinfo incorrectly returns information_schema tables we need to create a new query result that excludes these tables
 			loc.returnValue = QueryNew(loc.columns.columnList);
 			loc.iEnd = loc.columns.recordCount;
@@ -94,7 +94,7 @@
 					}
 				}
 			}
-			return loc.returnValue; 
+			return loc.returnValue;
 		</cfscript>
 	</cffunction>
 

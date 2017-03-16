@@ -4,10 +4,13 @@
 
 # CFEclipse specific
 .project
+/target/
+/.settings/
+/.classpath
 
 # Railo
 WEB-INF
-		
+
 # unpacked plugin folders
 plugins/**/*
 
