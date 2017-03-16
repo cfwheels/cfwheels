@@ -211,13 +211,16 @@ public string function $tag(
 }
 
 public string function $tagAttribute(required string name, required string value) {
-	// for custom data attributes we convert underscores / camelCase to hyphens to get around the issue with not being able to use a hyphen in an argument name in CFML
-	if (Left(arguments.name, 4) == "data") {
-		local.delim = application.wheels.dataAttributeDelimiter;
-		if (Len(local.delim)) {
-			arguments.name = Replace(REReplace(arguments.name, "([a-z])([#local.delim#])", "\1-\2", "all"), "-#local.delim#", "-", "all");
-		}
+
+	// For custom data attributes we convert underscores and camel case to hyphens.
+	// E.g. "dataDomCache" and "data_dom_cache" becomes "data-dom-cache".
+	// This is to get around the issue with not being able to use a hyphen in an argument name in CFML.
+	if (Left(arguments.name, 5) == "data_") {
+		arguments.name = Replace(arguments.name, "_", "-", "all");
+	} else if (Left(arguments.name, 4) == "data") {
+		arguments.name = hyphenize(arguments.name);
 	}
+
 	arguments.name = LCase(arguments.name);
 
 	// set standard attribute name / value to use as the default to return (e.g. name / value part of <input name="value">)

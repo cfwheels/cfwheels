@@ -28,14 +28,6 @@ public string function linkTo(
 		}
 	}
 
-	// hyphenize any other data attributes
-	for (local.key in arguments) {
-		if (REFind("^data[A-Za-z]", local.key)) {
-			arguments[hyphenize(local.key)] = toXHTML(arguments[local.key]);
-			StructDelete(arguments, local.key);
-		}
-	}
-
 	if (!StructKeyExists(arguments, "href")) {
 		arguments.href = URLFor(argumentCollection=arguments);
 	}

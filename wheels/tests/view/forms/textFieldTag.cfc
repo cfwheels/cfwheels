@@ -15,24 +15,24 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_data_attribute_underscore_conversion() {
-		delim = application.wheels.dataAttributeDelimiter;
-		application.wheels.dataAttributeDelimiter = "_";
 		result = _controller.textFieldTag(name="num", type="range", min=5, max=10, data_dom_cache="cache", data_role="button");
 		correct = '<input data-dom-cache="cache" data-role="button" id="num" max="10" min="5" name="num" type="range" value="" />';
 		assert('result IS correct');
-		application.wheels.dataAttributeDelimiter = delim;
+	}
+
+	function test_data_attribute_camelcase_conversion_when_not_in_quotes() {
+		result = _controller.textFieldTag(name="num", type="range", min=5, max=10, dataDomCache="cache", dataRole="button");
+		correct = '<input data-dom-cache="cache" data-role="button" id="num" max="10" min="5" name="num" type="range" value="" />';
+		assert('result IS correct');
 	}
 
 	function test_data_attribute_camelcase_conversion() {
-		delim = application.wheels.dataAttributeDelimiter;
-		application.wheels.dataAttributeDelimiter = "A-Z";
 		args = {};
 		args["dataDomCache"] = "cache";
 		args["dataRole"] = "button";
 		result = _controller.textFieldTag(name="num", type="range", min=5, max=10, argumentCollection=args);
 		correct = '<input data-dom-cache="cache" data-role="button" id="num" max="10" min="5" name="num" type="range" value="" />';
 		assert('result IS correct');
-		application.wheels.dataAttributeDelimiter = delim;
 	}
 
 	function test_data_attribute_set_to_true() {
