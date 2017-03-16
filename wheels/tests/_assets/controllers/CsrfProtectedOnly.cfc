@@ -1,4 +1,4 @@
-component extends="wheels.Controller" {
+component extends="Controller" {
   function init() {
     protectFromForgery(only="create");
   }

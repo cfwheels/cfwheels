@@ -1,3 +1,3 @@
-component extends="wheels.Controller" {
+component extends="Controller" {
   gallery = model("gallery").new();
 }
