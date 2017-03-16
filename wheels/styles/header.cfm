@@ -1,5 +1,5 @@
 <cfscript>
-wheelsInternalAssetPath=application.wheels.webpath & "wheels/public/assets";
+wheelsInternalAssetPath=get("webpath") & "wheels/public/assets";
 </cfscript>
 <cfoutput>
 <!DOCTYPE html>
@@ -18,7 +18,7 @@ wheelsInternalAssetPath=application.wheels.webpath & "wheels/public/assets";
 <body>
 	<header>
 		<div id="logo">
-			<a href="http://cfwheels.org/">
+			<a href="#get("webpath")#">
 				<img src='#wheelsInternalAssetPath#/img/logo.png' alt="CFWheels Logo" />
 			</a>
 		</div>
