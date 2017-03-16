@@ -1,4 +1,4 @@
-component extends="wheels.model" {
+component extends="Model" {
 
 	function init() {
 		property(name="DESCRIPTION1", column="description");
