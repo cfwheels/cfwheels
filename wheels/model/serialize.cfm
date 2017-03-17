@@ -1,5 +1,7 @@
 <cfscript>
-
+/**
+* Internal Function
+**/
 public any function $serializeQueryToObjects(
 	required query query,
 	string include="",
@@ -12,6 +14,9 @@ public any function $serializeQueryToObjects(
 	return local.rv;
 }
 
+/**
+* Internal Function
+**/
 public any function $serializeStructsToObjects(
 	required any structs,
 	required string include,
@@ -49,6 +54,9 @@ public any function $serializeStructsToObjects(
 	return local.rv;
 }
 
+/**
+* Internal Function
+**/
 public any function $serializeQueryToStructs(
 	required query query,
 	required string include,
@@ -112,6 +120,9 @@ public any function $serializeQueryToStructs(
 	return local.rv;
 }
 
+/**
+* Internal Function
+**/
 public struct function $queryRowToStruct(
 	required any properties,
 	string name="#variables.wheels.class.modelName#",
@@ -139,6 +150,9 @@ public struct function $queryRowToStruct(
 	return local.rv;
 }
 
+/**
+* Internal Function
+**/
 public string function $keyFromStruct(required struct struct) {
 	local.rv = "";
 	local.iEnd = ListLen(primaryKeys());

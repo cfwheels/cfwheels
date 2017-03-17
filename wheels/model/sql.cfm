@@ -1,5 +1,8 @@
 <cfscript>
 
+/**
+* Internal Function
+**/
 public array function $addDeleteClause(required array sql, required boolean softDelete) {
 	if (variables.wheels.class.softDeletion && arguments.softDelete) {
 		ArrayAppend(arguments.sql, "UPDATE #tableName()# SET #variables.wheels.class.softDeleteColumn# = ");
@@ -11,6 +14,9 @@ public array function $addDeleteClause(required array sql, required boolean soft
 	return arguments.sql;
 }
 
+/**
+* Internal Function
+**/
 public string function $fromClause(required string include, boolean includeSoftDeletes="false") {
 
 	// start the from statement with the SQL keyword and the table name for the current model
@@ -30,6 +36,9 @@ public string function $fromClause(required string include, boolean includeSoftD
 	return local.rv;
 }
 
+/**
+* Internal Function
+**/
 public array function $addKeyWhereClause(required array sql) {
 	ArrayAppend(arguments.sql, " WHERE ");
 	local.iEnd = ListLen(primaryKeys());
@@ -55,6 +64,9 @@ public array function $addKeyWhereClause(required array sql) {
 	return arguments.sql;
 }
 
+/**
+* Internal Function
+**/
 public string function $orderByClause(required string order, required string include) {
 	local.rv = "";
 	if (Len(arguments.order)) {
@@ -117,6 +129,9 @@ public string function $orderByClause(required string order, required string inc
 	return local.rv;
 }
 
+/**
+* Internal Function
+**/
 public string function $groupByClause(
 	required string select,
 	required string include,
@@ -143,6 +158,9 @@ public string function $groupByClause(
 	return local.rv;
 }
 
+/**
+* Internal Function
+**/
 public string function $selectClause(
 	required string select,
 	required string include,
@@ -154,6 +172,9 @@ public string function $selectClause(
 	return local.rv;
 }
 
+/**
+* Internal Function
+**/
 public string function $createSQLFieldList(
 	required string clause,
 	required string list,
@@ -315,6 +336,9 @@ public string function $createSQLFieldList(
 	return local.rv;
 }
 
+/**
+* Internal Function
+**/
 public array function $addWhereClause(
 	required array sql,
 	required string where,
@@ -329,6 +353,9 @@ public array function $addWhereClause(
 	return arguments.sql;
 }
 
+/**
+* Internal Function
+**/
 public array function $whereClause(
 	required string where,
 	string include="",
@@ -446,6 +473,9 @@ public array function $whereClause(
 	return local.rv;
 }
 
+/**
+* Internal Function
+**/
 public array function $addWhereClauseParameters(required array sql, required string where) {
 	if (Len(arguments.where)) {
 		local.start = 1;
@@ -472,6 +502,9 @@ public array function $addWhereClauseParameters(required array sql, required str
 	return arguments.sql;
 }
 
+/**
+* Internal Function
+**/
 public string function $expandProperties(required string list, required array classes) {
 	local.rv = arguments.list;
 	local.matches = REMatch("[A-Za-z1-9]+\.\*", local.rv);
@@ -503,6 +536,9 @@ public string function $expandProperties(required string list, required array cl
 	return local.rv;
 }
 
+/**
+* Internal Function
+**/
 public array function $expandedAssociations(required string include, boolean includeSoftDeletes="false") {
 	local.rv = [];
 
@@ -633,6 +669,9 @@ public array function $expandedAssociations(required string include, boolean inc
 	return local.rv;
 }
 
+/**
+* Internal Function
+**/
 public string function $keyWhereString(any properties=primaryKeys(), any values="", any keys="") {
 	local.rv = "";
 	local.iEnd = ListLen(arguments.properties);
