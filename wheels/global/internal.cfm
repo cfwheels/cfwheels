@@ -1013,6 +1013,7 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 		"controllers",
 		"events",
 		"files",
+		"global",
 		"images",
 		"javascripts",
 		"miscellaneous",
@@ -1022,15 +1023,13 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 		"tests",
 		"views",
 		"wheels",
-		".htaccess",
 		"Application.cfc",
 		"index.cfm",
-		"IsapiRewrite4.ini",
+		"LICENSE",
 		"README.md",
 		"rewrite.cfm",
 		"root.cfm",
 		"urlrewrite.xml",
-		"web.config"
 	];
 
 	// directories & files to be removed
