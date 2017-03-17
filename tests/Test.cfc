@@ -1,6 +1,6 @@
 /*
 	This is the parent test component that all your test components should extend.
-	Do not delete this file.
+	Do not delete this file (the functions can be safely deleted though).
 */
 component extends="wheels.Test" {
 

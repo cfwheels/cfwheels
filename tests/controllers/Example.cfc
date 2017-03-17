@@ -1,3 +1,6 @@
+/*
+	This is an example file, it can be safely deleted.
+*/
 component extends="app.tests.Test" {
 
 	/*
