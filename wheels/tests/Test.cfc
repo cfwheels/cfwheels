@@ -1,4 +1,4 @@
-component extends="Wheels" {
+component extends="wheels.Test" {
 
 	/*
 	 * Executes once before the test suite runs.

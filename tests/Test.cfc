@@ -2,7 +2,7 @@
 	This is the parent test component that all your test components should extend.
 	Do not delete this file.
 */
-component extends="Wheels" {
+component extends="wheels.Test" {
 
 	/*
 	 * Executes once before the test suite runs.

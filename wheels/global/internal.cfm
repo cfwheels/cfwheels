@@ -1029,7 +1029,7 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 		"README.md",
 		"rewrite.cfm",
 		"root.cfm",
-		"urlrewrite.xml",
+		"urlrewrite.xml"
 	];
 
 	// directories & files to be removed
