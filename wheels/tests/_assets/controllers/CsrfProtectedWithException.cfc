@@ -1,6 +1,6 @@
 component extends="Controller" {
   function init() {
-    protectFromForgery();
+    protectsFromForgery();
   }
 
   function index() {

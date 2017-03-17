@@ -1,6 +1,6 @@
 component extends="Controller" {
   function init() {
-    protectFromForgery(except="show");
+    protectsFromForgery(except="show");
   }
 
   function show() {

@@ -6,7 +6,7 @@
  *
  * NOTE: When extending this controller and implementing `init()` in the child controller, don't
  * forget to call this base controller's `init()` via `super.init()`, or else the call to
- * `protectFromForgery` below will be skipped.
+ * `protectsFromForgery` below will be skipped.
  *
  * Example controller extending this one:
  *
@@ -22,6 +22,6 @@
  */
 component extends="wheels.Controller" {
 	function init() {
-		protectFromForgery();
+		protectsFromForgery();
 	}
 }

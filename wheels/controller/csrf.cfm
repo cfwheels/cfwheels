@@ -6,8 +6,8 @@
 * @only List of actions that this check should only run on. Leave blank for all.
 * @except List of actions that this check should be omitted from running on. Leave blank for no exceptions.
 */
-public function protectFromForgery(string with="exception", string only="", string except="") {
-	$args(args=arguments, name="protectFromForgery");
+public function protectsFromForgery(string with="exception", string only="", string except="") {
+	$args(args=arguments, name="protectsFromForgery");
 
 	// Store settings for this controller in `$class` for later use.
 	variables.$class.csrf.type = arguments.with;
