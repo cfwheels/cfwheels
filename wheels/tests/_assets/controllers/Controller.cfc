@@ -1,2 +1,2 @@
-component extends="Wheels" {
+component extends="wheels.Controller" {
 }
