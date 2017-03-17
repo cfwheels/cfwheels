@@ -34,8 +34,8 @@
 			local.tags=ReMatchNoCase('\[((.*?):(.*?))\]', local.rv.hint);
 			if(arrayLen(local.tags)){
 				for(tag in local.tags){
-					tagName=replace(listFirst(tag, ":"), "[","","one");
-					tagValue=replace(listLast(tag, ":"), "]","","one");
+					tagName=trim(replace(listFirst(tag, ":"), "[","","one"));
+					tagValue=trim(replace(listLast(tag, ":"), "]","","one"));
 					local.rv.tags[tagName]=tagValue;
 					local.rv.tags[tagName & "Class"]=$cssClassLink(tagValue);
 				}
