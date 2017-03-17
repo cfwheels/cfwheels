@@ -67,6 +67,9 @@ Breaking Changes
 * Database migration files should now extend `wheels.dbmigrate.Migration`, not `plugins.dbmigrate.Migration`
 * Routes from 1.x will need to be updated to the new routing system
 * Removes javascript arguments in link & form functions - #627 (Adam Chapman)
+* The events/functions.cfm file has been moved to global/functions.cfm.
+* The models/Model.cfc file should extend "wheels.Model" instead of "Wheels" (models/Wheels.cfc can be deleted).
+* The controllers/Controller.cfc file should extend "wheels.Controller" instead of "Wheels" (controllers/Wheels.cfc can be deleted).
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
