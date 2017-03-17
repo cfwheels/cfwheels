@@ -1,5 +1,20 @@
 <cfscript>
 
+/**
+* Calculates the average value for a given property. Uses the SQL function AVG. If no records can be found to perform the calculation on you can use the ifNull argument to decide what should be returned.
+*
+* [section: Model Class]
+* [category: Statistics Functions]
+*
+* @property Name of the property to calculate the average for.
+* @where See documentation for findAll.
+* @include See documentation for findAll.
+* @distinct When true, AVG will be performed only on each unique instance of a value, regardless of how many times the value occurs.
+* @parameterize See documentation for findAll.
+* @ifNull The value returned if no records are found. Common usage is to set this to 0 to make sure a numeric value is always returned instead of a blank string.
+* @includeSoftDeletes See documentation for findAll.
+* @group See documentation for findAll.
+*/
 public any function average(
 	required string property,
 	string where="",
@@ -41,6 +56,20 @@ public any function average(
 	}
 	return local.rv;
 }
+
+/**
+* Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function COUNT. If no records can be found to perform the calculation on, 0 is returned.
+*
+* [section: Model Class]
+* [category: Statistics Functions]
+*
+* @where This argument maps to the WHERE clause of the query. The following operators are supported: =, !=, <>, <, <=, >, >=, LIKE, NOT LIKE, IN, NOT IN, IS NULL, IS NOT NULL, AND, and OR (note that the key words need to be written in upper case). You can also use parentheses to group statements. You do not need to specify the table name(s); CFWheels will do that for you. Instead of using the where argument, you can create cleaner code by making use of a concept called Dynamic Finders.
+* @include Associations that should be included in the query using INNER or LEFT OUTER joins (which join type that is used depends on how the association has been set up in your model). If all included associations are set on the current model, you can specify them in a list (e.g. department,addresses,emails). You can build more complex include strings by using parentheses when the association is set on an included model, like album(artist(genre)), for example. These complex include strings only work when returnAs is set to query though.
+* @reload Set to true to force CFWheels to query the database even though an identical query may have been run in the same request. (The default in CFWheels is to get the second query from the request-level cache.)
+* @parameterize Set to true to use cfqueryparam on all columns, or pass in a list of property names to use cfqueryparam on those only.
+* @includeSoftDeletes You can set this argument to true to include soft-deleted records in the results.
+* @group Maps to the GROUP BY clause of the query. You do not need to specify the table name(s); CFWheels will do that for you.
+*/
 public any function count(
 	string where="",
 	string include="",
@@ -63,6 +92,20 @@ public any function count(
 	return local.rv;
 }
 
+/**
+* Calculates the maximum value for a given property. Uses the SQL function MAX. If no records can be found to perform the calculation on you can use the ifNull argument to decide what should be returned.
+*
+* [section: Model Class]
+* [category: Statistics Functions]
+*
+* @property Name of the property to get the highest value for (must be a property of a numeric data type).
+* @where See documentation for findAll.
+* @include See documentation for findAll.
+* @parameterizeSee documentation for findAll.
+* @ifNull See documentation for average.
+* @includeSoftDeletes boolean false false See documentation for findAll.
+* @group See documentation for findAll.
+*/
 public any function maximum(
 	required string property,
 	string where="",
@@ -77,6 +120,20 @@ public any function maximum(
 	return $calculate(argumentCollection=arguments);
 }
 
+/**
+* Calculates the minimum value for a given property. Uses the SQL function MIN. If no records can be found to perform the calculation on you can use the ifNull argument to decide what should be returned.
+*
+* [section: Model Class]
+* [category: Statistics Functions]
+*
+* @property Name of the property to get the lowest value for (must be a property of a numeric data type).
+* @where See documentation for findAll.
+* @include See documentation for findAll.
+* @parameterize See documentation for findAll.
+* @ifNull See documentation for average.
+* @includeSoftDeletes See documentation for findAll.
+* @group See documentation for findAll.
+*/
 public any function minimum(
 	required string property,
 	string where="",
@@ -91,6 +148,21 @@ public any function minimum(
 	return $calculate(argumentCollection=arguments);
 }
 
+/**
+* Calculates the sum of values for a given property. Uses the SQL function SUM. If no records can be found to perform the calculation on you can use the ifNull argument to decide what should be returned.
+*
+* [section: Model Class]
+* [category: Statistics Functions]
+*
+* @property Name of the property to get the sum for (must be a property of a numeric data type).
+* @where This argument maps to the WHERE clause of the query. The following operators are supported: =, !=, <>, <, <=, >, >=, LIKE, NOT LIKE, IN, NOT IN, IS NULL, IS NOT NULL, AND, and OR (note that the key words need to be written in upper case). You can also use parentheses to group statements. You do not need to specify the table name(s); CFWheels will do that for you. Instead of using the where argument, you can create cleaner code by making use of a concept called Dynamic Finders.
+* @include Associations that should be included in the query using INNER or LEFT OUTER joins (which join type that is used depends on how the association has been set up in your model). If all included associations are set on the current model, you can specify them in a list (e.g. department,addresses,emails). You can build more complex include strings by using parentheses when the association is set on an included model, like album(artist(genre)), for example. These complex include strings only work when returnAs is set to query though.
+* @distinct When true, SUM returns the sum of unique values only.
+* @parameterize any false true Set to true to use cfqueryparam on all columns, or pass in a list of property names to use cfqueryparam on those only.
+* @ifNull The value returned if no records are found. Common usage is to set this to 0 to make sure a numeric value is always returned instead of a blank string.
+* @includeSoftDeletes You can set this argument to true to include soft-deleted records in the results.
+* @group Maps to the GROUP BY clause of the query. You do not need to specify the table name(s); CFWheels will do that for you.
+*/
 public any function sum(
 	required string property,
 	string where="",
@@ -106,6 +178,9 @@ public any function sum(
 	return $calculate(argumentCollection=arguments);
 }
 
+/**
+* Internal Function
+**/
 public any function $calculate(
 	required string type,
 	required string property,

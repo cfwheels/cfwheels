@@ -1,5 +1,7 @@
 <cfscript>
-
+/**
+* Internal Function
+*/
 public any function $initModelClass(required string name, required string path) {
 	variables.wheels = {};
 	variables.wheels.errors = [];
@@ -208,6 +210,9 @@ public any function $initModelClass(required string name, required string path) 
 	return this;
 }
 
+/**
+* Internal Function
+*/
 public any function $assignAdapter() {
 	if (get("showErrorInformation")) {
 		try {
@@ -257,6 +262,9 @@ public any function $assignAdapter() {
 	);
 }
 
+/**
+* Internal Function
+*/
 public any function $initModelObject(
 	required string name,
 	required any properties,
@@ -299,14 +307,23 @@ public any function $initModelObject(
 	return this;
 }
 
+/**
+* Internal Function
+*/
 public struct function $classData() {
 	return variables.wheels.class;
 }
 
+/**
+* Internal Function
+*/
 public boolean function $softDeletion() {
 	return variables.wheels.class.softDeletion;
 }
 
+/**
+* Internal Function
+*/
 public string function $softDeleteColumn() {
 	return variables.wheels.class.softDeleteColumn;
 }

@@ -1,5 +1,31 @@
 <cfscript>
 
+/**
+* Returns records from the database table mapped to this model according to the arguments passed in (use the where argument to decide which records to get, use the order argument to set the order in which those records should be returned, and so on). The records will be returned as either a cfquery result set, an array of objects, or an array of structs (depending on what the returnAs argument is set to).
+*
+* [section: Model Class]
+* [category: Read Functions]
+*
+* @where This argument maps to the WHERE clause of the query. The following operators are supported: =, !=, <>, <, <=, >, >=, LIKE, NOT LIKE, IN, NOT IN, IS NULL, IS NOT NULL, AND, and OR (note that the key words need to be written in upper case). You can also use parentheses to group statements. You do not need to specify the table name(s); CFWheels will do that for you. Instead of using the where argument, you can create cleaner code by making use of a concept called Dynamic Finders.
+* @order Maps to the ORDER BY clause of the query. You do not need to specify the table name(s); Wheels will do that for you.
+* @group Maps to the GROUP BY clause of the query. You do not need to specify the table name(s); CFWheels will do that for you.
+* @select Determines how the SELECT clause for the query used to return data will look. You can pass in a list of the properties (which map to columns) that you want returned from your table(s). If you don't set this argument at all, Wheels will select all properties from your table(s). If you specify a table name (e.g. users.email) or alias a column (e.g.fn AS firstName) in the list, then the entire list will be passed through unchanged and used in the SELECT clause of the query. By default, all column names in tables JOINed via the include argument will be prepended with the singular version of the included table name.
+* @distinct Whether to add the DISTINCT keyword to your SELECT clause. Wheels will, when necessary, add this automatically (when using pagination and a hasMany association is used in the include argument, to name one example).
+* @include Associations that should be included in the query using INNER or LEFT OUTER joins (which join type that is used depends on how the association has been set up in your model). If all included associations are set on the current model, you can specify them in a list (e.g. department,addresses,emails). You can build more complex include strings by using parentheses when the association is set on an included model, like album(artist(genre)), for example. These complex include strings only work when returnAs is set to query though.
+* @maxRows Maximum number of records to retrieve. Passed on to the maxRows cfquery attribute. The default, -1, means that all records will be retrieved.
+* @page If you want to paginate records, you can do so by specifying a page number here. For example, getting records 11-20 would be page number 2 when perPage is kept at the default setting (10 records per page). The default, 0, means that records won't be paginated and that the perPage, count, and handle arguments will be ignored.
+* @perPage When using pagination, you can specify how many records you want to fetch per page here. This argument is only used when the page argument has been passed in.
+* @count When using pagination and you know in advance how many records you want to paginate through, you can pass in that value here. Doing so will prevent Wheels from running a COUNT query to get this value. This argument is only used when the page argument has been passed in.
+* @handle Handle to use for the query in pagination. This is useful when you're paginating multiple queries and need to reference them in the paginationLinks() function, for example. This argument is only used when the page argument has been passed in.
+* @cache If you want to cache the query, you can do so by specifying the number of minutes you want to cache the query for here. If you set it to true, the default cache time will be used (60 minutes).
+* @reload Set to true to force CFWheels to query the database even though an identical query may have been run in the same request. (The default in CFWheels is to get the second query from the request-level cache.)
+* @parameterize Set to true to use cfqueryparam on all columns, or pass in a list of property names to use cfqueryparam on those only.
+* @returnAs Set to objects to return an array of objects, set to structs to return an array of structs, or set to query to return a query result set.
+* @returnIncluded When returnAs is set to objects, you can set this argument to false to prevent returning objects fetched from associations specified in the include argument. This is useful when you only need to include associations for use in the WHERE clause only and want to avoid the performance hit that comes with object creation.
+* @callbacks You can set this argument to false to prevent running the execution of callbacks for a method call.
+* @includeSoftDeletes You can set this argument to true to include soft-deleted records in the results.
+*
+*/
 public any function findAll(
 	string where="",
 	string order,
@@ -197,6 +223,22 @@ public any function findAll(
 	return local.rv;
 }
 
+/**
+* Fetches the requested record by primary key and returns it as an object. Returns false if no record is found. You can override this behavior to return a cfquery result set instead, similar to what's described in the documentation for findOne().
+*
+* [section: Model Class]
+* [category: Read Functions]
+*
+* @key Primary key value(s) of the record. Separate with comma if passing in multiple primary key values. Accepts a string, list, or a numeric value.
+* @select Determines how the SELECT clause for the query used to return data will look. You can pass in a list of the properties (which map to columns) that you want returned from your table(s). If you don't set this argument at all, Wheels will select all properties from your table(s). If you specify a table name (e.g. users.email) or alias a column (e.g.fn AS firstName) in the list, then the entire list will be passed through unchanged and used in the SELECT clause of the query. By default, all column names in tables JOINed via the include argument will be prepended with the singular version of the included table name.
+* @include Associations that should be included in the query using INNER or LEFT OUTER joins (which join type that is used depends on how the association has been set up in your model). If all included associations are set on the current model, you can specify them in a list (e.g. department,addresses,emails). You can build more complex include strings by using parentheses when the association is set on an included model, like album(artist(genre)), for example. These complex include strings only work when returnAs is set to query though.
+* @cache If you want to cache the query, you can do so by specifying the number of minutes you want to cache the query for here. If you set it to true, the default cache time will be used (60 minutes).
+* @reload Set to true to force Wheels to query the database even though an identical query may have been run in the same request. (The default in Wheels is to get the second query from the request-level cache.)
+* @parameterize Set to true to use cfqueryparam on all columns, or pass in a list of property names to use cfqueryparam on those only.
+* @returnAs Set this to objects to return an array of objects. Set this to query to return a query result set.
+* @callbacks You can set this argument to false to prevent running the execution of callbacks for a method call.
+* @includeSoftDeletes You can set this argument to true to include soft-deleted records in the results.
+*/
 public any function findByKey(
 	required any key,
 	string select="",
@@ -220,6 +262,23 @@ public any function findByKey(
 
 	return findOne(argumentCollection=arguments);
 }
+
+/**
+* Fetches the first record found based on the WHERE and ORDER BY clauses. With the default settings (i.e. the returnAs argument set to object), a model object will be returned if the record is found and the boolean value false if not. Instead of using the where argument, you can create cleaner code by making use of a concept called dynamic finders.
+*
+* [section: Model Class]
+* [category: Read Functions]
+*
+* @key This argument maps to the WHERE clause of the query. The following operators are supported: =, !=, <>, <, <=, >, >=, LIKE, NOT LIKE, IN, NOT IN, IS NULL, IS NOT NULL, AND, and OR. (Note that the key words need to be written in upper case.) You can also use parentheses to group statements. You do not need to specify the table name(s); Wheels will do that for you.
+* @order Maps to the ORDER BY clause of the query. You do not need to specify the table name(s); Wheels will do that for you.
+* @select Determines how the SELECT clause for the query used to return data will look. You can pass in a list of the properties (which map to columns) that you want returned from your table(s). If you don't set this argument at all, Wheels will select all properties from your table(s). If you specify a table name (e.g. users.email) or alias a column (e.g.fn AS firstName) in the list, then the entire list will be passed through unchanged and used in the SELECT clause of the query. By default, all column names in tables JOINed via the include argument will be prepended with the singular version of the included table name.
+* @include Associations that should be included in the query using INNER or LEFT OUTER joins (which join type that is used depends on how the association has been set up in your model). If all included associations are set on the current model, you can specify them in a list (e.g. department,addresses,emails). You can build more complex include strings by using parentheses when the association is set on an included model, like album(artist(genre)), for example. These complex include strings only work when returnAs is set to query though.
+* @cache If you want to cache the query, you can do so by specifying the number of minutes you want to cache the query for here. If you set it to true, the default cache time will be used (60 minutes).
+* @reload Set to true to force Wheels to query the database even though an identical query may have been run in the same request. (The default in Wheels is to get the second query from the request-level cache.)
+* @parameterize Set to true to use cfqueryparam on all columns, or pass in a list of property names to use cfqueryparam on those only.
+* @returnAs Set this to objects to return an array of objects. Set this to query to return a query result set.
+* @includeSoftDeletes You can set this argument to true to include soft-deleted records in the results.
+*/
 
 public any function findOne(
 	string where="",
@@ -257,6 +316,14 @@ public any function findOne(
 	return local.rv;
 }
 
+/**
+* Fetches the first record ordered by primary key value. Use the property argument to order by something else. Returns a model object.
+*
+* [section: Model Class]
+* [category: Read Functions]
+*
+* @property Name of the property to order by. This argument is also aliased as properties.
+*/
 public any function findFirst(string property="#primaryKey()#", string $sort="ASC") {
 	$args(args=arguments, name="findFirst", combine="property/properties");
 	arguments.order = "";
@@ -270,11 +337,29 @@ public any function findFirst(string property="#primaryKey()#", string $sort="AS
 	return findOne(argumentCollection=arguments);
 }
 
+/**
+* Fetches the last record ordered by primary key value. Use the property argument to order by something else. Returns a model object.
+*
+* [section: Model Class]
+* [category: Read Functions]
+*
+* @property See documentation for findFirst.
+*/
 public any function findLast(string property) {
 	arguments.$sort = "DESC";
 	return findFirst(argumentCollection=arguments);
 }
 
+
+/**
+* Returns all primary key values in a list. In addition to quoted and delimiter you can pass in any argument that findAll() accepts.
+*
+* [section: Model Class]
+* [category: Read Functions]
+*
+* @quoted Set to true to enclose each value in single-quotation marks.
+* @delimiter The delimiter character to separate the list items with.
+*/
 public string function findAllKeys(boolean quoted="false", string delimiter=",") {
 	local.quoted = arguments.quoted;
 	StructDelete(arguments, "quoted");
@@ -290,7 +375,13 @@ public string function findAllKeys(boolean quoted="false", string delimiter=",")
 	}
 	return Evaluate("#local.functionName#(local.query.#arguments.select#, '#local.delimiter#')");
 }
-
+/**
+* Reloads the property values of this object from the database.
+*
+* [section: Model Object]
+* [category: Miscellaneous Functions]
+*
+*/
 public void function reload() {
 	local.query = findByKey(key=key(), reload=true, returnAs="query");
 	local.properties = propertyNames();
