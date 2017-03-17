@@ -1,3 +1,3 @@
 component output="false" displayName="Test" {
-	include "test.cfm";
+	include "../test.cfm";
 }
