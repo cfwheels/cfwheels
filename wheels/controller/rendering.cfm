@@ -5,13 +5,13 @@
 * [section: Controller]
 * [category: Rendering Functions]
 *
-* @controller string false Controller to include the view page for.
-* @action string false Action to include the view page for.
-* @template string false A specific template to render. Prefix with a leading slash / if you need to build a path from the root views folder.
-* @layout any false The layout to wrap the content in. Prefix with a leading slash / if you need to build a path from the root views folder. Pass false to not load a layout at all.
-* @cache any false Number of minutes to cache the content for.
-* @returnAs string false Set to string to return the result instead of automatically sending it to the client.
-* @hideDebugInformation boolean false false Set to true to hide the debug information at the end of the output. This is useful when you're testing XML output in an environment where the global setting for showDebugInformation is true.
+* @controller Controller to include the view page for.
+* @action Action to include the view page for.
+* @template A specific template to render. Prefix with a leading slash / if you need to build a path from the root views folder.
+* @layout The layout to wrap the content in. Prefix with a leading slash / if you need to build a path from the root views folder. Pass false to not load a layout at all.
+* @cache Number of minutes to cache the content for.
+* @returnAs Set to string to return the result instead of automatically sending it to the client.
+* @hideDebugInformation Set to true to hide the debug information at the end of the output. This is useful when you're testing XML output in an environment where the global setting for showDebugInformation is true.
 */
 public any function renderPage(
 	string controller=variables.params.controller,
@@ -91,6 +91,7 @@ public void function renderNothing() {
 * [section: Controller]
 * [category: Rendering Functions]
 *
+* @text The Text to Render
 */
 public void function renderText(required any text) {
 	variables.$instance.response = arguments.text;
@@ -101,6 +102,11 @@ public void function renderText(required any text) {
 * [section: Controller]
 * [category: Rendering Functions]
 *
+* @partial The name of the partial file to be used. Prefix with a leading slash / if you need to build a path from the root views folder. Do not include the partial filename's underscore and file extension.
+* @cacheSee documentation for renderPage.
+* @layout See documentation for renderPage.
+* @returnAs See documentation for renderPage.
+* @dataFunctiontrue Name of a controller function to load data from.
 */
 public any function renderPartial(
 	required string partial,
@@ -140,12 +146,17 @@ public string function response() {
 * [section: Controller]
 * [category: Rendering Functions]
 *
+* @content The content to send to the Client
 */
 public void function setResponse(required string content) {
 	variables.$instance.response = arguments.content;
 }
 /**
 * Mainly used for testing to establish whether the current request has performed a redirect
+* Primarily used for testing
+*
+* [section: Controller]
+* [category: Miscellaneous Functions]
 */
 public struct function getRedirect() {
 	if ($performedRedirect()) {
