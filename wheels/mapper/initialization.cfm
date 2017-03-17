@@ -15,9 +15,7 @@
     // set up constraint for globbed routes
     variables.constraints["\*\w+"] = ".+";
 
-    // fix naming collision with cfwheels get() and controller() methods
-    this.$$get = variables.$$get = duplicate(this.get);
-    this.get = variables.get = duplicate(variables.$get);
+    // fix naming collision with cfwheels controller() methods
     this.controller = variables.controller = duplicate(variables.$controller);
 
     return this;
