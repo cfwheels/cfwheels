@@ -1,23 +1,27 @@
 <cfscript>
-  public struct function init(
-    boolean restful=true, boolean methods=arguments.restful) {
 
-    // set up control variables
-    variables.scopeStack = [];
-    variables.restful = arguments.restful;
-    variables.methods = arguments.restful OR arguments.methods;
+/**
+ * Internal Function
+ */
+public struct function init(boolean restful=true, boolean methods=arguments.restful) {
 
-    // set up default variable constraints
-    variables.constraints = {};
-    variables.constraints["format"] = "\w+";
-    variables.constraints["controller"] = "[^\/]+";
+	// Set up control variables.
+	variables.scopeStack = [];
+	variables.restful = arguments.restful;
+	variables.methods = arguments.restful OR arguments.methods;
 
-    // set up constraint for globbed routes
-    variables.constraints["\*\w+"] = ".+";
+	// Set up default variable constraints.
+	variables.constraints = {};
+	variables.constraints["format"] = "\w+";
+	variables.constraints["controller"] = "[^\/]+";
 
-    // fix naming collision with cfwheels controller() methods
-    this.controller = variables.controller = duplicate(variables.$controller);
+	// Set up constraint for globbed routes.
+	variables.constraints["\*\w+"] = ".+";
 
-    return this;
-  }
+	// Fix naming collision with cfwheels controller() methods.
+	this.controller = variables.controller = Duplicate(variables.$controller);
+
+	return this;
+}
+
 </cfscript>
