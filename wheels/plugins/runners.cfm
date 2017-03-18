@@ -1,9 +1,8 @@
 <cfscript>
 /**
-* Internal Function
-*/
+ * Internal Function
+ */
 public any function $pluginRunner() {
-
 	local.previousStack = callStackGet()[2]["function"];
 
 	// get the method name called so that we know which stack to run this is our
@@ -13,8 +12,9 @@ public any function $pluginRunner() {
 
 	// if we still don't have what we need our method has been invoked and cf
 	// doesn't give us any information for the stack fr
-	if (!structKeyExists(variables.$stacks, local.methodName) && structKeyExists(request, "$wheelsInvoked") && arrayLen(request.$wheelsInvoked))
+	if (!StructKeyExists(variables.$stacks, local.methodName) && StructKeyExists(request, "$wheelsInvoked") && ArrayLen(request.$wheelsInvoked)) {
 		local.methodName = request.$wheelsInvoked[1].method;
+	}
 
 	// some of our plugin developers var a new variable that
 	// changes the name of the function when called so getFunctionCalledName()
@@ -25,16 +25,16 @@ public any function $pluginRunner() {
 	//
 	// Documentation should reflect that best practice is to just use the
 	// core.method() when calling to a core function
-	if (!structKeyExists(variables.$stacks, local.methodName))
+	if (!StructKeyExists(variables.$stacks, local.methodName)) {
 		local.methodName = local.previousStack;
+	}
 
-	if (!structKeyExists(variables.$stacks, local.methodName))
-		throw(
-				type="Wheels.MethodUnknown"
-			, message="The plugin system is unable to determine the method you
-				are trying to call."
+	if (!StructKeyExists(variables.$stacks, local.methodName)) {
+		Throw(
+				type="Wheels.MethodUnknown",
+				message="The plugin system is unable to determine the method you are trying to call."
 		);
-
+	}
 
 	// get our stack from $stack via the name this function was called as
 	local.stack = variables.$stacks[local.methodName];
@@ -42,14 +42,16 @@ public any function $pluginRunner() {
 	local.stackLen = arrayLen(local.stack);
 
 	// setup our counter in the request scope so it can be shared as necessary
-	if (!structKeyExists(request.wheels.stacks, local.methodName))
+	if (!StructKeyExists(request.wheels.stacks, local.methodName)) {
 		request.wheels.stacks[local.methodName] = 1;
+	}
 
 	// ++ the counter for our next method on the stack or reset it to one
-	if (local.methodName == local.previousStack)
+	if (local.methodName == local.previousStack) {
 		request.wheels.stacks[local.methodName]++;
-	else
+	} else {
 		request.wheels.stacks[local.methodName] = 1;
+	}
 
 	// if the developer has called core.method() without there actually being a
 	// core method with that name, throw a nice wheels error
@@ -78,14 +80,15 @@ public any function $pluginRunner() {
 		rethrow;
 	}
 
-
 	// now that we have a result, remove from our counter
-	if (local.methodName == local.previousStack && request.wheels.stacks[local.methodName] != 1)
+	if (local.methodName == local.previousStack && request.wheels.stacks[local.methodName] != 1) {
 		request.wheels.stacks[local.methodName]--;
+	}
 
 	// can't return a null result from a variable
-	if (!isNull(local.result))
+	if (!isNull(local.result)) {
 		return local.result;
+	}
 
 	// return null
 	return;
