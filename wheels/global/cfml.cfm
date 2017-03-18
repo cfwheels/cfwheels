@@ -183,6 +183,14 @@
 		<cfset StructDelete(arguments, "password")>
 	</cfif>
 	<cfdbinfo attributeCollection="#arguments#">
+
+	<!--- Override name of database adapter when running internal tests --->
+	<cfif arguments.type IS "version" AND StructKeyExists(url, "controller") AND StructKeyExists(url, "action") AND StructKeyExists(url, "view") AND StructKeyExists(url, "type") AND StructKeyExists(url, "adapter")>
+		<cfif url.controller IS "wheels" AND url.action IS "wheels" AND url.view IS "tests" AND url.type IS "core">
+			<cfset QuerySetCell(local.rv, "driver_name", url.adapter)>
+		</cfif>
+	</cfif>
+
 	<cfreturn local.rv>
 </cffunction>
 
