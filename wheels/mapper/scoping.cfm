@@ -1,18 +1,18 @@
 <cfscript>
 
 /**
-	* Set certain parameters for future calls
-	* @param  {string}  name          Named route prefix
-	* @param  {string}  path          Path prefix
-	* @param  {string}  module        Namespace to append to controllers
-	* @param  {string}  controller    Controller to use in routes
-	* @param  {boolean} shallow       Turn on shallow resources
-	* @param  {string}  shallowPath   Shallow path prefix
-	* @param  {string}  shallowName   Shallow name prefix
-	* @param  {struct}  constraints   Variable patterns to use for matching
-	* @param  {string}  $call
-	* @return {struct}
-	*/
+ * Internal function.
+ * Set certain parameters for future calls.
+ *
+ * @name Named route prefix.
+ * @path Path prefix.
+ * @module Namespace to append to controllers.
+ * @controller Controller to use in routes.
+ * @shallow Turn on shallow resources.
+ * @shallowPath Shallow path prefix.
+ * @shallowName Shallow name prefix.
+ * @constraints Variable patterns to use for matching.
+ */
 public struct function scope(
 	string name,
 	string path,
@@ -45,7 +45,7 @@ public struct function scope(
 		arguments.module = variables.scopeStack[1].module & "." & arguments.module;
 	}
 
-	// combine name with scope name
+	// Combine name with scope name.
 	if (StructKeyExists(arguments, "name") && StructKeyExists(variables.scopeStack[1], "name")) {
 		arguments.name = variables.scopeStack[1].name & capitalize(arguments.name);
 	}

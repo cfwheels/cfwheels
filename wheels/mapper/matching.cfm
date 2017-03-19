@@ -10,7 +10,6 @@
  * @methods HTTP verbs that match route.
  * @module Namespace to append to controller.
  * @on Created resource route under "member" or "collection".
- * @constraints
  *
  */
 public struct function match(
@@ -71,10 +70,7 @@ public struct function match(
 
 	// Die if pattern is not defined.
 	if (!StructKeyExists(arguments, "pattern")) {
-		Throw(
-			type="Wheels.MapperArgumentMissing",
-			message="Either 'pattern' or 'name' must be defined."
-		);
+		Throw(type="Wheels.MapperArgumentMissing", message="Either 'pattern' or 'name' must be defined.");
 	}
 
 	// Accept either "method" or "methods".

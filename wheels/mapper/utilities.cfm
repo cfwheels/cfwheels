@@ -81,7 +81,7 @@ public string function stripRouteVariables(required string pattern) {
 
 /**
  * Private internal function.
- * Add route to CFWheels, removing useless params.
+ * Add route to Wheels, removing useless params.
  */
 private void function $addRoute(
 	required string pattern, required struct constraints) {
@@ -102,8 +102,9 @@ private void function $addRoute(
 	// compile our regex to make sure the developer is using proper regex
 	compileRegex(argumentCollection=arguments);
 
-	// add route to cfwheels
+	// add route to Wheels
 	ArrayAppend(application[$appKey()].routes, arguments);
+
 }
 
 /**
