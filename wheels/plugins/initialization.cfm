@@ -75,8 +75,8 @@ public void function $pluginsExtract() {
 	local.plugins = $pluginFiles();
 	for (local.p in local.plugins) {
 		local.plugin = local.plugins[local.p];
-		if (! local.plugin.folderExists || (local.plugin.folderExists && variables.$class.overwritePlugins)) {
-			if (! local.plugin.folderExists) {
+		if (!local.plugin.folderExists || (local.plugin.folderExists && variables.$class.overwritePlugins)) {
+			if (!local.plugin.folderExists) {
 				try {
 					DirectoryCreate(local.plugin.folderPath);
 				} catch(any e) {
@@ -105,14 +105,14 @@ public void function $pluginDelete() {
 
 public void function $pluginsProcess() {
 	local.plugins = $pluginFolders();
-	local.pluginKeys = listSort(StructKeyList(local.plugins), "textnocase", variables.sort);
+	local.pluginKeys = ListSort(StructKeyList(local.plugins), "textnocase", variables.sort);
 	local.wheelsVersion = SpanExcluding(variables.$class.wheelsVersion, " ");
 	for (local.pluginKey in local.pluginKeys) {
 		local.pluginValue = local.plugins[local.pluginKey];
 		local.plugin = CreateObject("component", $componentPathToPlugin(local.pluginKey, local.pluginValue.name)).init();
-		if (! StructKeyExists(local.plugin, "version") || ListFind(local.plugin.version, local.wheelsVersion) || variables.$class.loadIncompatiblePlugins) {
+		if (!StructKeyExists(local.plugin, "version") || ListFind(local.plugin.version, local.wheelsVersion) || variables.$class.loadIncompatiblePlugins) {
 			variables.$class.plugins[local.pluginKey] = local.plugin;
-			if (StructKeyExists(local.plugin, "version") && ! ListFind(local.plugin.version, local.wheelsVersion)) {
+			if (StructKeyExists(local.plugin, "version") && !ListFind(local.plugin.version, local.wheelsVersion)) {
 				variables.$class.incompatiblePlugins = ListAppend(variables.$class.incompatiblePlugins, local.pluginKey);
 			}
 		}
@@ -125,7 +125,7 @@ public void function $determineDependancy() {
 		if (StructKeyExists(local.pluginMeta, "dependency")) {
 			for (local.iDependency in local.pluginMeta.dependency) {
 				local.iDependency = trim(local.iDependency);
-				if (! StructKeyExists(variables.$class.plugins, local.iDependency)) {
+				if (!StructKeyExists(variables.$class.plugins, local.iDependency)) {
 					variables.$class.dependantPlugins = ListAppend(variables.$class.dependantPlugins, Reverse(SpanExcluding(Reverse(local.pluginMeta.name), ".")) & "|" & local.iDependency);
 				}
 			};
@@ -140,16 +140,13 @@ public void function $determineDependancy() {
 public void function $processMixins() {
 
 	// setup a container for each mixableComponents type
-	for (local.iMixableComponents in variables.$class.mixableComponents)
+	for (local.iMixableComponents in variables.$class.mixableComponents) {
 		variables.$class.mixins[local.iMixableComponents] = {};
+	}
 
 	// get a sorted list of plugins so that we run through them the same on
 	// every platform
-	local.pluginKeys = listToArray(listSort(
-			structKeyList(variables.$class.plugins)
-		, "textnocase"
-		, variables.sort
-	));
+	local.pluginKeys = ListToArray(ListSort(structKeyList(variables.$class.plugins), "textnocase", variables.sort));
 
 	for (local.iPlugin in local.pluginKeys) {
 
@@ -159,16 +156,16 @@ public void function $processMixins() {
 		// grab meta data of the plugin
 		local.pluginMeta = GetMetaData(local.plugin);
 
-		if (! StructKeyExists(local.pluginMeta, "environment")
-				|| ListFindNoCase(local.pluginMeta.environment, variables.$class.wheelsEnvironment)) {
+		if (!StructKeyExists(local.pluginMeta, "environment") || ListFindNoCase(local.pluginMeta.environment, variables.$class.wheelsEnvironment)) {
 
 			// by default and for backwards compatibility, we inject all methods
 			// into all objects
 			local.pluginMixins = "global";
 
 			// if the component has a default mixin value, assign that value
-			if (StructKeyExists(local.pluginMeta, "mixin"))
+			if (StructKeyExists(local.pluginMeta, "mixin")) {
 				local.pluginMixins = local.pluginMeta["mixin"];
+			}
 
 			// loop through all plugin methods and enter injection info accordingly
 			// (based on the mixin value on the method or the default one set on the
@@ -176,23 +173,17 @@ public void function $processMixins() {
 			local.pluginMethods = StructKeyList(local.plugin);
 
 			for (local.iPluginMethods in local.pluginMethods) {
-
-				if (IsCustomFunction(local.plugin[local.iPluginMethods])
-						&& local.iPluginMethods neq "init") {
-
+				if (IsCustomFunction(local.plugin[local.iPluginMethods]) && local.iPluginMethods neq "init") {
 					local.methodMeta = GetMetaData(local.plugin[local.iPluginMethods]);
-
 					local.methodMixins = local.pluginMixins;
-
-					if (StructKeyExists(local.methodMeta, "mixin"))
+					if (StructKeyExists(local.methodMeta, "mixin")) {
 						local.methodMixins = local.methodMeta["mixin"];
+					}
 
 					// mixin all methods except those marked as none
-					if (local.methodMixins neq "none") {
-
+					if (local.methodMixins != "none") {
 						for (local.iMixableComponent in variables.$class.mixableComponents) {
-
-							if (local.methodMixins EQ "global" || ListFindNoCase(local.methodMixins, local.iMixableComponent)) {
+							if (local.methodMixins == "global" || ListFindNoCase(local.methodMixins, local.iMixableComponent)) {
 
 								// new secret magic sauce here is to get the mixable method to our framework method
 								// $pluginRunner. When called, we'll be able to see what the function name called
@@ -209,18 +200,18 @@ public void function $processMixins() {
 								// method name being an array of plugin override methods. This will be put into
 								// variables.$stacks in any object that we mix plugins into and will allow
 								// $pluginRunner to have access to the functions :D
-								if (!structKeyExists(variables.$class.mixins[local.iMixableComponent], "$stacks")
-										|| !structKeyExists(variables.$class.mixins[local.iMixableComponent]["$stacks"], local.iPluginMethods))
+								if (!StructKeyExists(variables.$class.mixins[local.iMixableComponent], "$stacks") || !StructKeyExists(variables.$class.mixins[local.iMixableComponent]["$stacks"], local.iPluginMethods)) {
 									variables.$class.mixins[local.iMixableComponent]["$stacks"][local.iPluginMethods] = [];
+								}
 
-								arrayPrepend(variables.$class.mixins[local.iMixableComponent]["$stacks"][local.iPluginMethods], local.plugin[local.iPluginMethods]);
+								ArrayPrepend(variables.$class.mixins[local.iMixableComponent]["$stacks"][local.iPluginMethods], local.plugin[local.iPluginMethods]);
 							}
-						};
+						}
 					}
 				}
-			};
+			}
 		}
-	};
+	}
 }
 
 /**
