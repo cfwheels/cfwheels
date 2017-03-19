@@ -343,7 +343,7 @@ public any function findFirst(string property="#primaryKey()#", string $sort="AS
 * [section: Model Class]
 * [category: Read Functions]
 *
-* @property See documentation for findFirst.
+* @property See documentation for [doc:findFirst].
 */
 public any function findLast(string property) {
 	arguments.$sort = "DESC";

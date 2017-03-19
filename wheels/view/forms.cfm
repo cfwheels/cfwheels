@@ -5,8 +5,8 @@
  * [section: View Helpers]
  * [category: General Form Functions]
  *
- * @prepend See documentation for textField
- * @append See documentation for textField
+ * @prepend See documentation for [doc:textField]
+ * @append See documentation for [doc:textField]
  *
  */
 public string function endFormTag(string prepend, string append) {
@@ -133,8 +133,8 @@ public string function startFormTag(
  *
  * @value Save changes Message to display in the button form control.
  * @image File name of the image file to use in the button form control.
- * @prepend See documentation for textField
- * @append See documentation for textField
+ * @prepend See documentation for [doc:textField]
+ * @append See documentation for [doc:textField]
  *
  */
 public string function submitTag(
@@ -174,8 +174,8 @@ public string function submitTag(
  * @type The type for the button: button, reset, or submit.
  * @value The value of the button when submitted.
  * @image File name of the image file to use in the button form control.
- * @prepend See documentation for textField
- * @append See documentation for textField
+ * @prepend See documentation for [doc:textField]
+ * @append See documentation for [doc:textField]
  *
  */
 public string function buttonTag(

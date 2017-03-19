@@ -7,13 +7,13 @@
 * [category: Statistics Functions]
 *
 * @property Name of the property to calculate the average for.
-* @where See documentation for findAll.
-* @include See documentation for findAll.
+* @where See documentation for [doc:findAll].
+* @include See documentation for [doc:findAll].
 * @distinct When true, AVG will be performed only on each unique instance of a value, regardless of how many times the value occurs.
-* @parameterize See documentation for findAll.
+* @parameterize See documentation for [doc:findAll].
 * @ifNull The value returned if no records are found. Common usage is to set this to 0 to make sure a numeric value is always returned instead of a blank string.
-* @includeSoftDeletes See documentation for findAll.
-* @group See documentation for findAll.
+* @includeSoftDeletes See documentation for [doc:findAll].
+* @group See documentation for [doc:findAll].
 */
 public any function average(
 	required string property,
@@ -99,12 +99,12 @@ public any function count(
 * [category: Statistics Functions]
 *
 * @property Name of the property to get the highest value for (must be a property of a numeric data type).
-* @where See documentation for findAll.
-* @include See documentation for findAll.
-* @parameterizeSee documentation for findAll.
-* @ifNull See documentation for average.
-* @includeSoftDeletes boolean false false See documentation for findAll.
-* @group See documentation for findAll.
+* @where See documentation for [doc:findAll].
+* @include See documentation for [doc:findAll].
+* @parameterizeSee documentation for [doc:findAll].
+* @ifNull See documentation for [doc:average].
+* @includeSoftDeletes boolean false false See documentation for [doc:findAll].
+* @group See documentation for [doc:findAll].
 */
 public any function maximum(
 	required string property,
@@ -127,12 +127,12 @@ public any function maximum(
 * [category: Statistics Functions]
 *
 * @property Name of the property to get the lowest value for (must be a property of a numeric data type).
-* @where See documentation for findAll.
-* @include See documentation for findAll.
-* @parameterize See documentation for findAll.
-* @ifNull See documentation for average.
-* @includeSoftDeletes See documentation for findAll.
-* @group See documentation for findAll.
+* @where See documentation for [doc:findAll].
+* @include See documentation for [doc:findAll].
+* @parameterize See documentation for [doc:findAll].
+* @ifNull See documentation for [doc:average].
+* @includeSoftDeletes See documentation for [doc:findAll].
+* @group See documentation for [doc:findAll].
 */
 public any function minimum(
 	required string property,

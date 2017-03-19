@@ -61,24 +61,24 @@ public string function dateSelect(
 * [section: View Helpers]
 * [category: Form Object Functions]
 *
-* @objectName See documentation for textField.
-* @property See documentation for textField.
-* @association See documentation for textfield.
-* @position See documentation for textfield.
+* @objectName See documentation for [doc:textField].
+* @property See documentation for [doc:textField].
+* @association See documentation for [doc:textField].
+* @position See documentation for [doc:textField].
 * @order Use to change the order of or exclude time select tags.
 * @separator Use to change the character that is displayed between the time select tags.
 * @minuteStep Pass in 10 to only show minute 10, 20, 30, etc.
 * @secondStep Pass in 10 to only show seconds 10, 20, 30, etc.
 * @includeBlank See documentation for select.
-* @label See documentation for dateSelect.
-* @labelPlacement See documentation for textField.
-* @prepend See documentation for textField.
-* @append See documentation for textField.
-* @prependToLabel See documentation for textField.
-* @appendToLabel See documentation for textField.
-* @errorElement See documentation for textField.
-* @errorClass See documentation for textField.
-* @combine See documentation for dateSelect.
+* @label See documentation for [doc:dateSelect].
+* @labelPlacement See documentation for [doc:textField].
+* @prepend See documentation for [doc:textField].
+* @append See documentation for [doc:textField].
+* @prependToLabel See documentation for [doc:textField].
+* @appendToLabel See documentation for [doc:textField].
+* @errorElement See documentation for [doc:textField].
+* @errorClass See documentation for [doc:textField].
+* @combine See documentation for [doc:dateSelect].
 * @twelveHour whether to display the hours in 24 or 12 hour format. 12 hour format has AM/PM drop downs
 */
 public string function timeSelect(

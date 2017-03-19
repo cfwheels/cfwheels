@@ -83,12 +83,12 @@ public void function hasMany(
 * [section: Model Initialization]
 * [category: Association Functions]
 *
-* @name string true See documentation for belongsTo.
-* @modelName string false See documentation for belongsTo.
-* @foreignKey string false See documentation for belongsTo.
-* @joinKey string false See documentation for belongsTo.
-* @joinType string false outer See documentation for belongsTo.
-* @dependent string false false See documentation for hasMany.
+* @name string true See documentation for [doc:belongsTo].
+* @modelName string false See documentation for [doc:belongsTo].
+* @foreignKey string false See documentation for [doc:belongsTo].
+* @joinKey string false See documentation for [doc:belongsTo].
+* @joinType string false outer See documentation for [doc:belongsTo].
+* @dependent string false false See documentation for [doc:hasMany].
 */
 public void function hasOne(
 	required string name,

@@ -6,23 +6,23 @@
 * [section: View Helpers]
 * [category: Form Tag Functions]
 *
-* @name See documentation for textFieldTag.
-* @selected See documentation for selectTag.
-* @order See documentation for dateSelect.
-* @separator See documentation for dateSelect.
-* @startYear See documentation for dateSelect.
-* @endYear See documentation for dateSelect.
-* @monthDisplay See documentation for dateSelect.
-* @monthNames See documentation for dateSelect.
-* @monthAbbreviations See documentation for dateSelect.
+* @name See documentation for [doc:textFieldTag].
+* @selected See documentation for [doc:selectTag].
+* @order See documentation for [doc:dateSelect].
+* @separator See documentation for [doc:dateSelect].
+* @startYear See documentation for [doc:dateSelect].
+* @endYear See documentation for [doc:dateSelect].
+* @monthDisplay See documentation for [doc:dateSelect].
+* @monthNames See documentation for [doc:dateSelect].
+* @monthAbbreviations See documentation for [doc:dateSelect].
 * @includeBlank See documentation for select.
-* @label See documentation for dateSelect.
-* @labelPlacement See documentation for textField.
-* @prepend See documentation for textField.
-* @append See documentation for textField.
-* @prependToLabel See documentation for textField.
-* @appendToLabel See documentation for textField.
-* @combine See documentation for dateSelect.
+* @label See documentation for [doc:dateSelect].
+* @labelPlacement See documentation for [doc:textField].
+* @prepend See documentation for [doc:textField].
+* @append See documentation for [doc:textField].
+* @prependToLabel See documentation for [doc:textField].
+* @appendToLabel See documentation for [doc:textField].
+* @combine See documentation for [doc:dateSelect].
 */
 public string function dateSelectTags(
 	required string name,
@@ -60,21 +60,21 @@ public string function dateSelectTags(
 * [section: View Helpers]
 * [category: Form Tag Functions]
 *
-* @name See documentation for textFieldTag.
-* @selected See documentation for selectTag.
-* @order See documentation for timeSelect.
-* @separator See documentation for timeSelect.
-* @minuteStep See documentation for timeSelect.
-* @secondStep See documentation for timeSelect.
+* @name See documentation for [doc:textFieldTag].
+* @selected See documentation for [doc:selectTag].
+* @order See documentation for [doc:timeSelect].
+* @separator See documentation for [doc:timeSelect].
+* @minuteStep See documentation for [doc:timeSelect].
+* @secondStep See documentation for [doc:timeSelect].
 * @includeBlank See documentation for select.
-* @label See documentation for dateSelect.
-* @labelPlacement See documentation for textField.
-* @prepend See documentation for textField.
-* @append See documentation for textField.
-* @prependToLabel See documentation for textField.
-* @appendToLabel See documentation for textField.
-* @combine See documentation for dateSelect.
-* @twelveHour See documentation for timeSelect.
+* @label See documentation for [doc:dateSelect].
+* @labelPlacement See documentation for [doc:textField].
+* @prepend See documentation for [doc:textField].
+* @append See documentation for [doc:textField].
+* @prependToLabel See documentation for [doc:textField].
+* @appendToLabel See documentation for [doc:textField].
+* @combine See documentation for [doc:dateSelect].
+* @twelveHour See documentation for [doc:timeSelect].
 */
 public string function timeSelectTags(
 	required string name,

@@ -48,7 +48,7 @@ public any function create(
 * [category: Create Functions]
 *
 * @properties The properties you want to set on the object (can also be passed in as named arguments).
-* @callbacks See documentation for `save`.
+* @callbacks See documentation for [doc:save].
 *
 */
 public any function new(struct properties={}, boolean callbacks=true) {
@@ -69,7 +69,7 @@ public any function new(struct properties={}, boolean callbacks=true) {
 * [section: Model Class]
 * [category: CRUD Functions]
 *
-* @parameterize See documentation for `findAll`.
+* @parameterize See documentation for [doc:findAll].
 * @reload Set to `true` to reload the object from the database once an insert / update has completed.
 * @validate Set to `false` to skip validations for this operation.
 * @transaction Set this to `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.

@@ -5,7 +5,7 @@
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function afterCreate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterCreate");
@@ -16,7 +16,7 @@ public void function afterCreate(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function afterDelete(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterDelete");
@@ -27,7 +27,7 @@ public void function afterDelete(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function afterFind(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterFind");
@@ -38,7 +38,7 @@ public void function afterFind(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function afterInitialization(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterInitialization");
@@ -60,7 +60,7 @@ public void function afterNew(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function afterSave(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterSave");
@@ -71,7 +71,7 @@ public void function afterSave(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function afterUpdate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterUpdate");
@@ -82,7 +82,7 @@ public void function afterUpdate(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function afterValidation(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterValidation");
@@ -93,7 +93,7 @@ public void function afterValidation(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function afterValidationOnCreate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterValidationOnCreate");
@@ -104,7 +104,7 @@ public void function afterValidationOnCreate(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function afterValidationOnUpdate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="afterValidationOnUpdate");
@@ -115,7 +115,7 @@ public void function afterValidationOnUpdate(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function beforeCreate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeCreate");
@@ -126,7 +126,7 @@ public void function beforeCreate(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function beforeDelete(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeDelete");
@@ -137,7 +137,7 @@ public void function beforeDelete(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function beforeSave(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeSave");
@@ -148,7 +148,7 @@ public void function beforeSave(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function beforeUpdate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeUpdate");
@@ -159,7 +159,7 @@ public void function beforeUpdate(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function beforeValidation(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeValidation");
@@ -170,7 +170,7 @@ public void function beforeValidation(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function beforeValidationOnCreate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeValidationOnCreate");
@@ -181,7 +181,7 @@ public void function beforeValidationOnCreate(string methods="") {
 * [section: Model Initialization]
 * [category: Callback Functions]
 *
-* @methods See documentation for afterNew.
+* @methods See documentation for [doc:afterNew].
 */
 public void function beforeValidationOnUpdate(string methods="") {
 	$registerCallback(argumentCollection=arguments, type="beforeValidationOnUpdate");

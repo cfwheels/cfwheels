@@ -18,9 +18,9 @@ public void function automaticValidations(required boolean value) {
 * [category: Validation Functions ]
 *
 * @methods Method name or list of method names to call. (Can also be called with the method argument.)
-* @condition See documentation for validatesConfirmationOf.
-* @unless See documentation for validatesConfirmationOf.
-* @when See documentation for validatesConfirmationOf.
+* @condition See documentation for [doc:validatesConfirmationOf].
+* @unless See documentation for [doc:validatesConfirmationOf].
+* @when See documentation for [doc:validatesConfirmationOf].
 */
 public void function validate(string methods="", string condition="", string unless="", string when="onSave") {
 	$registerValidation(argumentCollection=arguments);
@@ -32,9 +32,9 @@ public void function validate(string methods="", string condition="", string unl
 * [section: Model Initialization]
 * [category: Validation Functions ]
 *
-* @methods See documentation for validate.
-* @condition See documentation for validatesConfirmationOf.
-* @unless See documentation for validatesConfirmationOf.
+* @methods See documentation for [doc:validate].
+* @condition See documentation for [doc:validatesConfirmationOf].
+* @unless See documentation for [doc:validatesConfirmationOf].
 *
 */
 public void function validateOnCreate(string methods="", string condition="", string unless="") {
@@ -47,9 +47,9 @@ public void function validateOnCreate(string methods="", string condition="", st
 * [section: Model Initialization]
 * [category: Validation Functions ]
 *
-* @methods See documentation for validate.
-* @condition See documentation for validatesConfirmationOf.
-* @unless See documentation for validatesConfirmationOf.
+* @methods See documentation for [doc:validate].
+* @condition See documentation for [doc:validatesConfirmationOf].
+* @unless See documentation for [doc:validatesConfirmationOf].
 */
 public void function validateOnUpdate(string methods="", string condition="", string unless="") {
 	$registerValidation(when="onUpdate", argumentCollection=arguments);
@@ -84,13 +84,13 @@ public void function validatesConfirmationOf(
 * [section: Model Initialization]
 * [category: Validation Functions ]
 *
-* @properties See documentation for validatesConfirmationOf.
+* @properties See documentation for [doc:validatesConfirmationOf].
 * @list Single value or list of values that should not be allowed.
-* @message is reserved See documentation for validatesConfirmationOf.
-* @when See documentation for validatesConfirmationOf.
+* @message is reserved See documentation for [doc:validatesConfirmationOf].
+* @when See documentation for [doc:validatesConfirmationOf].
 * @allowBlank If set to true, validation will be skipped if the property value is an empty string or doesn't exist at all. This is useful if you only want to run this validation after it passes the validatesPresenceOf test, thus avoiding duplicate error messages if it doesn't.
-* @condition See documentation for validatesConfirmationOf.
-* @unless See documentation for validatesConfirmationOf.
+* @condition See documentation for [doc:validatesConfirmationOf].
+* @unless See documentation for [doc:validatesConfirmationOf].
 */
 public void function validatesExclusionOf(
 	string properties="",
@@ -214,13 +214,13 @@ public void function validatesLengthOf(
 * [section: Model Initialization]
 * [category: Validation Functions ]
 *
-* @properties See documentation for validatesConfirmationOf.
-* @message See documentation for validatesConfirmationOf.
-* @when See documentation for validatesConfirmationOf.
-* @allowBlank See documentation for validatesExclusionOf.
+* @properties See documentation for [doc:validatesConfirmationOf].
+* @message See documentation for [doc:validatesConfirmationOf].
+* @when See documentation for [doc:validatesConfirmationOf].
+* @allowBlank See documentation for [doc:validatesExclusionOf].
 * @onlyInteger Specifies whether the property value must be an integer.
-* @condition See documentation for validatesConfirmationOf.
-* @unless See documentation for validatesConfirmationOf.
+* @condition See documentation for [doc:validatesConfirmationOf].
+* @unless See documentation for [doc:validatesConfirmationOf].
 * @oddSpecifies whether or not the value must be an odd number.
 * @evenSpecifies whether or not the value must be an even number.
 * @greaterThan Specifies whether or not the value must be greater than the supplied value.
@@ -255,11 +255,11 @@ public void function validatesNumericalityOf(
 * [section: Model Initialization]
 * [category: Validation Functions ]
 *
-* @properties See documentation for validatesConfirmationOf.
-* @message See documentation for validatesConfirmationOf.
-* @when See documentation for validatesConfirmationOf.
-* @condition See documentation for validatesConfirmationOf.
-* @unless See documentation for validatesConfirmationOf.
+* @properties See documentation for [doc:validatesConfirmationOf].
+* @message See documentation for [doc:validatesConfirmationOf].
+* @when See documentation for [doc:validatesConfirmationOf].
+* @condition See documentation for [doc:validatesConfirmationOf].
+* @unless See documentation for [doc:validatesConfirmationOf].
 */
 public void function validatesPresenceOf(
 	string properties="",
