@@ -1,6 +1,39 @@
 <cfscript>
 
 /**
+* Internal function
+* Get the status code (e.g. 200, 404 etc) of the response we're about to send.
+*/
+public string function $statusCode() {
+	if (StructKeyExists(server, "lucee")) {
+		local.response = getPageContext().getResponse();
+	} else {
+		local.response = getPageContext().getFusionContext().getResponse();
+	}
+	return local.response.getStatus();
+}
+
+/**
+* Internal function
+* Gets the value of the content type header (blank string if it doesn't exist) of the response we're about to send.
+*/
+public string function $contentType() {
+	local.rv = "";
+	if (StructKeyExists(server, "lucee")) {
+		local.response = getPageContext().getResponse();
+	} else {
+		local.response = getPageContext().getFusionContext().getResponse();
+	}
+	if (local.response.containsHeader("Content-Type")) {
+		local.header = local.response.getHeader("Content-Type");
+		if (!IsNull(local.header)) {
+			local.rv = local.header;
+		}
+	}
+	return local.rv;
+}
+
+/**
 * Internal Function
 */
 public void function $initializeRequestScope() {

@@ -92,11 +92,11 @@
 
     // consider only / except REST routes for resources
     // allow arguments.only to override local.args.only
-    if (structKeyExists(arguments, "only") && ListLen(arguments.only) > 0)
+    if (StructKeyExists(arguments, "only") && ListLen(arguments.only) > 0)
       local.args.actions = LCase(arguments.only);
 
     // remove unwanted routes from local.args.only
-    if (structKeyExists(arguments, "except") && ListLen(arguments.except) > 0) {
+    if (StructKeyExists(arguments, "except") && ListLen(arguments.except) > 0) {
       local.except = ListToArray(arguments.except);
       local.iEnd = ArrayLen(local.except);
       for (local.i = 1; local.i LTE local.iEnd; local.i++)
@@ -118,14 +118,14 @@
     }
 
     // if parent resource is found
-    if (StructKeyExists(scopeStack[1], "member")) {
+    if (StructKeyExists(variables.scopeStack[1], "member")) {
 
       // use member and nested path
-      local.args.name = scopeStack[1].member;
-      local.args.path = scopeStack[1].nestedPath;
+      local.args.name = variables.scopeStack[1].member;
+      local.args.path = variables.scopeStack[1].nestedPath;
 
       // store parent resource (and avoid too deep nesting)
-      local.args.parentResource = Duplicate(scopeStack[1]);
+      local.args.parentResource = Duplicate(variables.scopeStack[1]);
       if (StructKeyExists(local.args.parentResource, "parentResource"))
         StructDelete(local.args.parentResource, "parentResource");
     }
@@ -158,10 +158,10 @@
   }
 
   public struct function member() {
-    return scope(path=scopeStack[1].memberPath, $call="member");
+    return scope(path=variables.scopeStack[1].memberPath, $call="member");
   }
 
   public struct function collection() {
-    return scope(path=scopeStack[1].collectionPath, $call="collection");
+    return scope(path=variables.scopeStack[1].collectionPath, $call="collection");
   }
 </cfscript>

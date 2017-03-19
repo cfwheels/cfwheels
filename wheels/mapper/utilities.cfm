@@ -1,158 +1,197 @@
 <cfscript>
 
-  // PUBLIC UTILITIES
+/**
+ * Internal function.
+ */
+public void function compileRegex(rquired string regex) {
+	local.pattern = CreateObject("java", "java.util.regex.Pattern");
+	try {
+		local.regex = local.pattern.compile(arguments.regex);
+		return;
+	} catch (any e) {
+		local.identifier = arguments.pattern;
+		if (StructKeyExists(arguments, "name")) {
+			local.identifier = arguments.name;
+		}
+		Throw(
+			type="Wheels.InvalidRegex",
+			message="The route `#local.identifier#` has created invalid regex of `#arguments.regex#`."
+		);
+	}
+}
 
-  public void function compileRegex(rquired string regex) {
-    local.pattern = createObject("java", "java.util.regex.Pattern");
+/**
+ * Internal function.
+ * Force leading slashes, remove trailing and duplicate slashes.
+ */
+public string function normalizePattern(required string pattern) {
 
-    try {
-      local.regex = local.pattern.compile(arguments.regex);
-      return;
-    } catch (any e) {
-      local.identifier = arguments.pattern;
-      if (structKeyExists(arguments, "name"))
-        local.identifier = arguments.name;
+	// First clear the ending slashes.
+	local.pattern = REReplace(arguments.pattern, "(^\/+|\/+$)", "", "all");
 
-      Throw(
-          type = "Wheels.InvalidRegex"
-        , message = "The route `#local.identifier#` has created invalid regex of `#arguments.regex#`."
-      );
-    }
-  }
+	// Reset middle slashes to singles if they are multiple.
+	local.pattern = REReplace(local.pattern, "\/+", "/", "all");
 
-  public string function normalizePattern(required string pattern)
-    hint="Force leading slashes, remove trailing and duplicate slashes" {
-    // first clear the ending slashes
-    local.pattern = REReplace(arguments.pattern, "(^\/+|\/+$)", "", "ALL");
-    // reset middle slashes to singles if they are multiple
-    local.pattern = REReplace(local.pattern, "\/+", "/", "ALL");
-    // remove a slash next to a period
-    local.pattern = REReplace(local.pattern, "\/+\.", ".", "ALL");
-    // return with a prepended slash
-    return "/" & Replace(local.pattern, "//", "/", "ALL");
-  }
+	// Remove a slash next to a period.
+	local.pattern = REReplace(local.pattern, "\/+\.", ".", "all");
 
-  public string function patternToRegex(
-    required string pattern, struct constraints={})
-    hint="Transform route pattern into regular expression" {
+	// Return with a prepended slash.
+	return "/" & Replace(local.pattern, "//", "/", "all");
 
-    // escape any dots in pattern
-    local.regex = replace(arguments.pattern, ".", "\.", "ALL");
-    // further mask pattern variables
-    // NOTE: this keeps constraint patterns from being replaced twice
-    local.regex = REReplace(local.regex, "\[(\*?\w+)\]", ":::\1:::", "ALL");
+}
 
-    // replace known variable keys using constraints
-    local.constraints = StructCopy(arguments.constraints);
-    StructAppend(local.constraints, variables.constraints, false);
-    for (local.key in local.constraints)
-      local.regex = REReplaceNoCase(
-          local.regex
-        , ":::#local.key#:::"
-        , "(#local.constraints[local.key]#)"
-        , "ALL"
-      );
+/**
+ * Internal function.
+ * Transform route pattern into regular expression.
+ */
+public string function patternToRegex(required string pattern, struct constraints={}) {
 
-    // replace remaining variables with default regex
-    local.regex = REReplace(local.regex, ":::\w+:::", "([^\./]+)", "ALL");
+	// Escape any dots in pattern.
+	local.regex = Replace(arguments.pattern, ".", "\.", "all");
 
-    local.regex = REReplace(local.regex, "^\/*(.*)\/*$", "^\1/?$");
+	// Further mask pattern variables.
+	// This keeps constraint patterns from being replaced twice.
+	local.regex = REReplace(local.regex, "\[(\*?\w+)\]", ":::\1:::", "all");
 
-    // escape any forward slashes
-    local.regex = REReplace(local.regex, "(\/|\\\/)", "\/", "ALL");
+	// Replace known variable keys using constraints.
+	local.constraints = StructCopy(arguments.constraints);
+	StructAppend(local.constraints, variables.constraints, false);
+	for (local.key in local.constraints) {
+		local.regex = REReplaceNoCase(local.regex, ":::#local.key#:::", "(#local.constraints[local.key]#)", "all");
+	}
 
-    return local.regex;
-  }
+	// Replace remaining variables with default regex.
+	local.regex = REReplace(local.regex, ":::\w+:::", "([^\./]+)", "all");
 
-  public string function stripRouteVariables(required string pattern)
-    hint="Pull list of variables out of route pattern" {
-    local.matchArray = arrayToList(REMatch("\[\*?(\w+)\]", arguments.pattern));
-    return REReplace(local.matchArray, "[\*\[\]]", "", "ALL");
-  }
+	local.regex = REReplace(local.regex, "^\/*(.*)\/*$", "^\1/?$");
 
-  // PRIVATE UTILITIES
+	// Escape any forward slashes.
+	local.regex = REReplace(local.regex, "(\/|\\\/)", "\/", "all");
 
-  private void function $addRoute(
-    required string pattern, required struct constraints)
-    hint="Add route to cfwheels, removing useless params" {
+	return local.regex;
+}
 
-    // remove controller and action if they are route variables
-    if (Find("[controller]", arguments.pattern)
-        AND StructKeyExists(arguments, "controller"))
-      StructDelete(arguments, "controller");
-    if (Find("[action]", arguments.pattern)
-        AND StructKeyExists(arguments, "action"))
-      StructDelete(arguments, "action");
+/**
+ * Internal function.
+ * Pull list of variables out of route pattern.
+ */
+public string function stripRouteVariables(required string pattern) {
+	local.matchArray = ArrayToList(REMatch("\[\*?(\w+)\]", arguments.pattern));
+	return REReplace(local.matchArray, "[\*\[\]]", "", "all");
+}
 
-    // normalize pattern, convert to regex, and strip out variable names
-    arguments.pattern = normalizePattern(arguments.pattern);
-    arguments.regex = patternToRegex(arguments.pattern, arguments.constraints);
-    arguments.variables = stripRouteVariables(arguments.pattern);
+/**
+ * Private internal function.
+ * Add route to CFWheels, removing useless params.
+ */
+private void function $addRoute(
+	required string pattern, required struct constraints) {
 
-    // compile our regex to make sure the developer is using proper regex
-    compileRegex(argumentCollection=arguments);
+	// Remove controller and action if they are route variables.
+	if (Find("[controller]", arguments.pattern) && StructKeyExists(arguments, "controller")) {
+		StructDelete(arguments, "controller");
+	}
+	if (Find("[action]", arguments.pattern) && StructKeyExists(arguments, "action")) {
+		StructDelete(arguments, "action");
+	}
 
-    // add route to cfwheels
-    ArrayAppend(application[$appKey()].routes, arguments);
-  }
+	// Normalize pattern, convert to regex, and strip out variable names.
+	arguments.pattern = normalizePattern(arguments.pattern);
+	arguments.regex = patternToRegex(arguments.pattern, arguments.constraints);
+	arguments.variables = stripRouteVariables(arguments.pattern);
 
-  private string function $member()
-    hint="Get member name if defined" {
-    return structKeyExists(scopeStack[1], "member") ? scopeStack[1].member : "";
-  }
+	// compile our regex to make sure the developer is using proper regex
+	compileRegex(argumentCollection=arguments);
 
-  private string function $collection()
-    hint="Get collection name if defined" {
-    return structKeyExists(scopeStack[1], "collection") ? scopeStack[1].collection : "";
-  }
+	// add route to cfwheels
+	ArrayAppend(application[$appKey()].routes, arguments);
+}
 
-  private string function $scopeName()
-    hint="Get scoped route name if defined" {
-    return structKeyExists(scopeStack[1], "name") ? scopeStack[1].name : "";
-  }
+/**
+ * Private internal function.
+ * Get member name if defined.
+ */
+private string function $member() {
+	return StructKeyExists(variables.scopeStack[1], "member") ? variables.scopeStack[1].member : "";
+}
 
-  private boolean function $shallow()
-    hint="See if resource is shallow" {
-    return structKeyExists(scopeStack[1], "shallow") && scopeStack[1].shallow == true;
-  }
+/**
+ * Private internal function.
+ * Get collection name if defined.
+ */
+private string function $collection() {
+	return StructKeyExists(variables.scopeStack[1], "collection") ? variables.scopeStack[1].collection : "";
+}
 
-  private string function $shallowName()
-    hint="Get scoped shallow route name if defined" {
-    return structKeyExists(scopeStack[1], "shallowName") ? scopeStack[1].shallowName : "";
-  }
+/**
+ * Private internal function.
+ * Get scoped route name if defined.
+ */
+private string function $scopeName() {
+	return StructKeyExists(variables.scopeStack[1], "name") ? variables.scopeStack[1].name : "";
+}
 
-  private string function $shallowPath()
-    hint="Get scoped shallow path if defined" {
-    return structKeyExists(scopeStack[1], "shallowPath") ? scopeStack[1].shallowPath : "";
-  }
+/**
+ * Private internal function.
+ * See if resource is shallow.
+ */
+private boolean function $shallow() {
+	return StructKeyExists(variables.scopeStack[1], "shallow") && variables.scopeStack[1].shallow == true;
+}
 
-  private string function $shallowNameForCall() {
-    if (ListFindNoCase("collection,new", scopeStack[1].$call)
-        && StructKeyExists(scopeStack[1], "parentResource"))
-      return ListAppend($shallowName(), scopeStack[1].parentResource.member);
-    return $shallowName();
-  }
+/**
+ * Private internal function.
+ * Get scoped shallow route name if defined.
+ */
+private string function $shallowName() {
+	return StructKeyExists(variables.scopeStack[1], "shallowName") ? variables.scopeStack[1].shallowName : "";
+}
 
-  private string function $shallowPathForCall() {
+/**
+ * Private internal function.
+ * Get scoped shallow path if defined.
+ */
+private string function $shallowPath() {
+	return StructKeyExists(variables.scopeStack[1], "shallowPath") ? variables.scopeStack[1].shallowPath : "";
+}
 
-    local.path = "";
-    switch (scopeStack[1].$call) {
-      case "member":
-        local.path = scopeStack[1].memberPath;
-        break;
-      case "collection":
-      case "new":
-        if (StructKeyExists(scopeStack[1], "parentResource"))
-          local.path = scopeStack[1].parentResource.nestedPath;
-        local.path &= "/" & scopeStack[1].collectionPath;
-        break;
-    }
-    return $shallowPath() & "/" & local.path;
-  }
+/**
+ * Private internal function.
+ */
+private string function $shallowNameForCall() {
+	if (ListFindNoCase("collection,new", variables.scopeStack[1].$call) && StructKeyExists(variables.scopeStack[1], "parentResource")) {
+		return ListAppend($shallowName(), variables.scopeStack[1].parentResource.member);
+	}
+	return $shallowName();
+}
 
-  private void function $resetScopeStack() {
-    variables.scopeStack = [];
-    ArrayPrepend(scopeStack, {});
-    variables.scopeStack[1].$call = "draw";
-  }
+/**
+ * Private internal function.
+ */
+private string function $shallowPathForCall() {
+	local.path = "";
+	switch (variables.scopeStack[1].$call) {
+		case "member":
+			local.path = variables.scopeStack[1].memberPath;
+			break;
+		case "collection":
+		case "new":
+			if (StructKeyExists(variables.scopeStack[1], "parentResource")) {
+				local.path = variables.scopeStack[1].parentResource.nestedPath;
+			}
+			local.path &= "/" & variables.scopeStack[1].collectionPath;
+			break;
+	}
+	return $shallowPath() & "/" & local.path;
+}
+
+/**
+ * Private internal function.
+ */
+private void function $resetScopeStack() {
+	variables.scopeStack = [];
+	ArrayPrepend(variables.scopeStack, {});
+	variables.scopeStack[1].$call = "draw";
+}
+
 </cfscript>
