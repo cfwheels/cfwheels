@@ -7,12 +7,12 @@
 * [section: Model Class]
 * [category: Create Functions]
 *
-* @properties See documentation for `new`.
-* @parameterize See documentation for `findAll`.
-* @reload See documentation for `save`.
-* @validate See documentation for `save`.
-* @transaction See documentation for `save`.
-* @callbacks See documentation for `save`.
+* @properties See documentation for [doc:new].
+* @parameterize See documentation for [doc:findAll].
+* @reload See documentation for [doc:save].
+* @validate See documentation for [doc:save].
+* @transaction See documentation for [doc:save].
+* @callbacks See documentation for [doc:save].
 *
 */
 public any function create(

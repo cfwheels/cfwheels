@@ -1,6 +1,9 @@
 <cfscript>
 /**
-* TODO: Document?
+* This function is not designed to be called directly from your code, but provides functionality for dyanmic finders such as `findOneByEmail()`
+*
+* [section: Model Class]
+* [category: Miscellaneous Functions]
 */
 public any function onMissingMethod(required string missingMethodName, required struct missingMethodArguments) {
 	if (Right(arguments.missingMethodName, 10) == "hasChanged" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "hasChanged", ""))) {

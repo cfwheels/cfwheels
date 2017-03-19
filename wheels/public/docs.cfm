@@ -3,6 +3,17 @@
 	param name="params.format" default="html";
 	// Embedded Documentation Helpers
 
+	// Example Expected comment
+	/**
+	* I am the function hint. Backticks replaced with code; tags below get replaced.
+	* Tags must appear before Params
+	*
+	* [section: Doc Section]
+	* [category: Doc Category] (optional)
+	*
+	* @paramName Hint for Param. Backticks replaced with code; [doc: AFunctionName] replaced with link
+	*/
+
 	/**
 	* Take a metadata struct as from getMetaData() and get some additional info
 	*
@@ -22,32 +33,27 @@
 		local.rv["parameters"]=structKeyExists(local.m, "parameters")?local.m.parameters:[];
 		local.rv["returntype"]=structKeyExists(local.m, "returntype")?local.m.returntype:"";
 		local.rv["hint"]=structKeyExists(local.m, "hint")?local.m.hint:"";
-		local.rv["tags"]={
-			"section"="",
-			"sectionClass"="",
-			"category"="",
-			"categoryClass"=""
-		};
+		local.rv["tags"]={};
 
 		// Look for [something: Foo] style tags in hint
 		if(structKeyExists(local.rv, "hint")){
-			local.tags=ReMatchNoCase('\[((.*?):(.*?))\]', local.rv.hint);
-			if(arrayLen(local.tags)){
-				for(tag in local.tags){
-					tagName=trim(replace(listFirst(tag, ":"), "[","","one"));
-					tagValue=trim(replace(listLast(tag, ":"), "]","","one"));
-					local.rv.tags[tagName]=tagValue;
-					local.rv.tags[tagName & "Class"]=$cssClassLink(tagValue);
-				}
-			}
-			local.rv.hint=REReplaceNoCase(local.rv.hint, "\[((.*?):(.*?))\]", "", "ALL");
+			local.rv.tags["section"]=$getDocTag(local.rv.hint, "section");
+			local.rv.tags["sectionClass"]=$cssClassLink(local.rv.tags.section);
+			local.rv.tags["category"]=$getDocTag(local.rv.hint, "category");
+			local.rv.tags["categoryClass"]=$cssClassLink(local.rv.tags.category);
+			local.rv.hint=$replaceDocLink(local.rv.hint);
+			local.rv.hint=$stripDocTags(local.rv.hint);
 		}
+
 		// Check for param defaults within wheels settings
 		for(param in local.rv["parameters"]){
 			if(structKeyExists(application.wheels.functions, local.rv.name)
 				&& structKeyExists(application.wheels.functions[local.rv.name], param.name)){
 					param['default']=application.wheels.functions[local.rv.name][param.name];
 				}
+			if(structKeyExists(param, "hint")){
+				param['hint']=$replaceDocLink(param.hint);
+			}
 		}
 		// Check for extended documentation
 		local.rv["extended"]=$getExtendedCodeExamples("wheels/public/docs/reference/", functionName);
@@ -58,6 +64,51 @@
 		}
 		return local.rv;
 	}
+
+	/**
+	* Retrieve a [tag: foo] style tag
+	* Returns a comma delim list of matches
+	*
+	* @string String to search
+	* @tagname Tag to find
+	**/
+	string function $getDocTag(required string string, required string tagname){
+		local.rv="";
+		local.string=arguments.string;
+		local.tagname=arguments.tagname;
+		local.tags=ReMatchNoCase('\[((' & local.tagname & '?):(.*?))\]', local.string);
+		if(arrayLen(local.tags)){
+			for(local.tag in local.tags){
+				local.rv=listAppend(local.rv, replace(listLast(local.tag, ":"), "]","","one"));
+			}
+		}
+		return local.rv;
+	}
+	/**
+	* Directly replace a doc tag i.e format [doc:functionName] to a hashLink
+	*
+	* @string String to search
+	**/
+	string function $replaceDocLink(required string string){
+		local.rv=arguments.string;
+		local.tags=ReMatchNoCase('\[((doc?):(.*?))\]', local.rv);
+		if(arrayLen(local.tags)){
+			for(local.tag in local.tags){
+				local.link=replace(listLast(local.tag, ":"), "]","","one");
+				local.rv=replaceNoCase(local.rv, local.tag, "<a href='##" & lcase(local.link) & "'>" & local.link & "</a>");
+			}
+		}
+		return local.rv;
+	}
+	/**
+	* Strip [tag: foo] style tags
+	*
+	* @string String to search
+	**/
+	string function $stripDocTags(required string string){
+		return REReplaceNoCase(arguments.string, "\[((.*?):(.*?))\]", "", "ALL");
+	}
+
 
 	/**
 	* Check for Extended Docs
