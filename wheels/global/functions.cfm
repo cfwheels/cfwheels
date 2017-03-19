@@ -5,8 +5,8 @@ if (!StructKeyExists(variables, "$wheelsInclude") || ListFind(variables.$wheelsI
 if (!StructKeyExists(variables, "$wheelsInclude") || ListFind(variables.$wheelsInclude, "internal")) {
 	include "internal.cfm";
 }
-if (!StructKeyExists(variables, "$wheelsInclude") || ListFind(variables.$wheelsInclude, "public")) {
-	include "public.cfm";
+if (!StructKeyExists(variables, "$wheelsInclude") || ListFind(variables.$wheelsInclude, "misc")) {
+	include "misc.cfm";
 }
 if (!StructKeyExists(variables, "$wheelsInclude") || ListFind(variables.$wheelsInclude, "util")) {
 	include "util.cfm";
