@@ -1,53 +1,65 @@
 <cfscript>
+
 /**
-	* Match a url
-	* @param  {string} name          Name for route. Used for path helpers.
-	* @param  {string} pattern       Pattern to match for route
-	* @param  {string} to            Set controller##action for route
-	* @param  {string} methods       HTTP verbs that match route
-	* @param  {string} module        Namespace to append to controller
-	* @param  {string} on            Created resource route under 'member' or 'collection'
-	* @param  {struct} constraints
-	* @return {struct}
-	*/
+ * Internal function.
+ * Match a url.
+ *
+ * @name Name for route. Used for path helpers.
+ * @pattern Pattern to match for route.
+ * @to Set controller##action for route.
+ * @methods HTTP verbs that match route.
+ * @module Namespace to append to controller.
+ * @on Created resource route under "member" or "collection".
+ * @constraints
+ *
+ */
 public struct function match(
-		string name, string pattern, string to
-	, string methods, string module, string on, struct constraints={}) {
+	string name,
+	string pattern,
+	string to,
+	string methods,
+	string module,
+	string on,
+	struct constraints={}
+) {
 
-	// evaluate match on member or collection
+	// Evaluate match on member or collection.
 	if (StructKeyExists(arguments, "on")) {
-		if (arguments.on == "member")
+		if (arguments.on == "member") {
 			return member().match(argumentCollection=arguments, on="").end();
-		if (arguments.on == "collection")
+		}
+		if (arguments.on == "collection") {
 			return collection().match(argumentCollection=arguments, on="").end();
+		}
 	}
 
-	// use scoped controller if found
-	if (StructKeyExists(variables.scopeStack[1], "controller")
-			AND NOT StructKeyExists(arguments, "controller"))
+	// Use scoped controller if found.
+	if (StructKeyExists(variables.scopeStack[1], "controller") && !StructKeyExists(arguments, "controller")) {
 		arguments.controller = variables.scopeStack[1].controller;
-
-	// use scoped module if found
-	if (StructKeyExists(variables.scopeStack[1], "module")) {
-		if (StructKeyExists(arguments, "module"))
-			arguments.module &= "." & variables.scopeStack[1].module;
-		else
-			arguments.module = variables.scopeStack[1].module;
 	}
 
-	// interpret 'to' as 'controller##action'
+	// Use scoped module if found.
+	if (StructKeyExists(variables.scopeStack[1], "module")) {
+		if (StructKeyExists(arguments, "module")) {
+			arguments.module &= "." & variables.scopeStack[1].module;
+		} else {
+			arguments.module = variables.scopeStack[1].module;
+		}
+	}
+
+	// Interpret "to" as "controller##action".
 	if (StructKeyExists(arguments, "to")) {
 		arguments.controller = ListFirst(arguments.to, "##");
 		arguments.action = ListLast(arguments.to, "##");
 		StructDelete(arguments, "to");
 	}
 
-	// pull route name from arguments if it exists
+	// Pull route name from arguments if it exists.
 	local.name = "";
 	if (StructKeyExists(arguments, "name")) {
 		local.name = arguments.name;
 
-		// guess pattern and/or action
+		// Guess pattern and/or action.
 		if (!StructKeyExists(arguments, "pattern")) {
 			arguments.pattern = hyphenize(arguments.name);
 		}
@@ -57,7 +69,7 @@ public struct function match(
 
 	}
 
-	// die if pattern is not defined
+	// Die if pattern is not defined.
 	if (!StructKeyExists(arguments, "pattern")) {
 		Throw(
 			type="Wheels.MapperArgumentMissing",
@@ -65,18 +77,18 @@ public struct function match(
 		);
 	}
 
-	// accept either 'method' or 'methods'
+	// Accept either "method" or "methods".
 	if (StructKeyExists(arguments, "method")) {
 		arguments.methods = arguments.method;
 		StructDelete(arguments, "method");
 	}
 
-	// remove 'methods' argument if settings disable it
-	if (!variables.methods && StructKeyExists(arguments, "methods"))
+	// Remove 'methods' argument if settings disable it.
+	if (!variables.methods && StructKeyExists(arguments, "methods")) {
 		StructDelete(arguments, "methods");
+	}
 
-	// see if we have any globing in the pattern and if so
-	// add a constraint for each glob
+	// See if we have any globing in the pattern and if so add a constraint for each glob.
 	if (REFindNoCase("\*([^\/]+)", arguments.pattern)) {
 		local.globs = REMatch("\*([^\/]+)", arguments.pattern);
 		for (local.glob in local.globs) {
@@ -86,124 +98,136 @@ public struct function match(
 		}
 	}
 
-	// use constraints from stack
-	if (StructKeyExists(variables.scopeStack[1], "constraints"))
+	// Use constraints from stack.
+	if (StructKeyExists(variables.scopeStack[1], "constraints")) {
 		StructAppend(arguments.constraints, variables.scopeStack[1].constraints, false);
+	}
 
-	// add shallow path to pattern
-	if ($shallow())
+	// Add shallow path to pattern.
+	// Or, add scoped path to pattern.
+	if ($shallow()) {
 		arguments.pattern = $shallowPathForCall() & "/" & arguments.pattern;
-
-	// or, add scoped path to pattern
-	else if (StructKeyExists(variables.scopeStack[1], "path"))
+	} else if (StructKeyExists(variables.scopeStack[1], "path")) {
 		arguments.pattern = variables.scopeStack[1].path & "/" & arguments.pattern;
+	}
 
-	// if both module and controller are set, combine them
-	if (StructKeyExists(arguments, "module")
-			&& StructKeyExists(arguments, "controller")) {
+	// If both module and controller are set, combine them.
+	if (StructKeyExists(arguments, "module") && StructKeyExists(arguments, "controller")) {
 		arguments.controller = arguments.module & "." & arguments.controller;
 		StructDelete(arguments, "module");
 	}
 
-	// build named routes in correct order according to rails conventions
+	// Build named routes in correct order according to rails conventions.
 	switch (variables.scopeStack[1].$call) {
 		case "resource":
 		case "resources":
 		case "collection":
-			local.nameStruct = [
-					local.name
-				, $shallow() ? $shallowNameForCall() : $scopeName()
-				, $collection()
-			];
+			local.nameStruct = [local.name, $shallow() ? $shallowNameForCall() : $scopeName(), $collection()];
 			break;
 		case "member":
 		case "new":
-			local.nameStruct = [
-					local.name
-				, $shallow() ? $shallowNameForCall() : $scopeName()
-				, $member()
-			];
+			local.nameStruct = [local.name, $shallow() ? $shallowNameForCall() : $scopeName(), $member()];
 			break;
 		default:
-			local.nameStruct = [
-					$scopeName()
-				, $collection()
-				, local.name
-			];
+			local.nameStruct = [$scopeName(), $collection(), local.name];
 	}
 
-	// transform array into named route
+	// Transform array into named route.
 	local.name = ArrayToList(local.nameStruct);
-	local.name = REReplace(local.name, "^,+|,+$", "", "ALL");
-	local.name = REReplace(local.name, ",+(\w)", "\U\1", "ALL");
-	local.name = REReplace(local.name, ",", "", "ALL");
+	local.name = REReplace(local.name, "^,+|,+$", "", "all");
+	local.name = REReplace(local.name, ",+(\w)", "\U\1", "all");
+	local.name = REReplace(local.name, ",", "", "all");
 
-	// if we have a name, add it to arguments
-	if (Len(local.name))
+	// If we have a name, add it to arguments.
+	if (Len(local.name)) {
 		arguments.name = local.name;
+	}
 
-	// handle optional pattern segments
-	if (arguments.pattern CONTAINS "(") {
+	// Handle optional pattern segments.
+	if (Find("(", arguments.pattern)) {
 
-		// confirm nesting of optional segments
-		if (REFind("\).*\(", arguments.pattern))
-			Throw(
-					type="Wheels.InvalidRoute"
-				, message="Optional pattern segments must be nested."
-			);
+		// Confirm nesting of optional segments.
+		if (REFind("\).*\(", arguments.pattern)) {
+			Throw(type="Wheels.InvalidRoute", message="Optional pattern segments must be nested.");
+		}
 
-		// strip closing parens from pattern
-		local.pattern = Replace(arguments.pattern, ")", "", "ALL");
+		// Strip closing parens from pattern.
+		local.pattern = Replace(arguments.pattern, ")", "", "all");
 
-		// loop over all possible patterns
+		// Loop over all possible patterns.
 		while (Len(local.pattern)) {
 
-			// add current route to wheels
-			$addRoute(
-					argumentCollection=arguments
-				, pattern=Replace(local.pattern, "(", "", "ALL")
-			);
+			// Add current route to Wheels.
+			$addRoute(argumentCollection=arguments, pattern=Replace(local.pattern, "(", "", "all"));
 
-			// remove last optional segment
+			// Remove last optional segment.
 			local.pattern = REReplace(local.pattern, "(^|\()[^(]+$", "");
+
 		}
 
 	} else {
 
-		// add route to wheels as is
+		// Add route to Wheels as is.
 		$addRoute(argumentCollection=arguments);
+
 	}
 
 	return this;
 }
 
-public struct function $get(string name) hint="Match a GET url" {
+/**
+ * Internal function.
+ * Match a GET url.
+ */
+public struct function $get(string name) {
 	return match(method="get", argumentCollection=arguments);
 }
 
-public struct function post(string name) hint="Match a POST url" {
+/**
+ * Internal function.
+ * Match a POST url.
+ */
+public struct function post(string name) {
 	return match(method="post", argumentCollection=arguments);
 }
 
-public struct function put(string name) hint="Match a PUT url" {
+/**
+ * Internal function.
+ * Match a PUT url.
+ */
+public struct function put(string name) {
 	return match(method="put", argumentCollection=arguments);
 }
 
-public struct function patch(string name) hint="Match a PATCH url" {
+/**
+ * Internal function.
+ * Match a PATCH url.
+ */
+public struct function patch(string name) {
 	return match(method="patch", argumentCollection=arguments);
 }
 
-public struct function delete(string name) hint="Match a DELETE url" {
+/**
+ * Internal function.
+ * Match a DELETE url.
+ */
+public struct function delete(string name) {
 	return match(method="delete", argumentCollection=arguments);
 }
 
-public struct function root(string to) hint="Match a root directory" {
+/**
+ * Internal function.
+ * Match a root directory.
+ */
+public struct function root(string to) {
 	return match(name="root", pattern="/(.[format])", argumentCollection=arguments);
 }
 
-public struct function wildcard(string action="index")
-	hint="Special wildcard matching" {
-
+/**
+ * Internal function.
+ * Special wildcard matching
+ */
+public struct function wildcard(string action="index") {
 	if (StructKeyExists(variables.scopeStack[1], "controller")) {
 		match(name="wildcard", pattern="[action]/[key](.[format])", action=arguments.action);
 		match(name="wildcard", pattern="[action](.[format])", action=arguments.action);

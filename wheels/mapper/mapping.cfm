@@ -49,6 +49,7 @@ public struct function end() {
 			delete(pattern="(.[format])", action="delete");
 		}
 		end();
+
 	} else if (variables.scopeStack[1].$call == "resource") {
 
 		// Create singular resource routes.
@@ -77,6 +78,7 @@ public struct function end() {
 			delete(pattern="(.[format])", action="delete");
 		}
 		end();
+
 	}
 
 	// Remove top of stack to end nesting.

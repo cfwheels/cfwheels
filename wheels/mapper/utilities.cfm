@@ -47,28 +47,27 @@ public string function normalizePattern(required string pattern) {
 public string function patternToRegex(required string pattern, struct constraints={}) {
 
 	// Escape any dots in pattern.
-	local.regex = Replace(arguments.pattern, ".", "\.", "all");
+	local.rv = Replace(arguments.pattern, ".", "\.", "all");
 
 	// Further mask pattern variables.
 	// This keeps constraint patterns from being replaced twice.
-	local.regex = REReplace(local.regex, "\[(\*?\w+)\]", ":::\1:::", "all");
+	local.rv = REReplace(local.rv, "\[(\*?\w+)\]", ":::\1:::", "all");
 
 	// Replace known variable keys using constraints.
 	local.constraints = StructCopy(arguments.constraints);
 	StructAppend(local.constraints, variables.constraints, false);
 	for (local.key in local.constraints) {
-		local.regex = REReplaceNoCase(local.regex, ":::#local.key#:::", "(#local.constraints[local.key]#)", "all");
+		local.rv = REReplaceNoCase(local.rv, ":::#local.key#:::", "(#local.constraints[local.key]#)", "all");
 	}
 
 	// Replace remaining variables with default regex.
-	local.regex = REReplace(local.regex, ":::\w+:::", "([^\./]+)", "all");
-
-	local.regex = REReplace(local.regex, "^\/*(.*)\/*$", "^\1/?$");
+	local.rv = REReplace(local.rv, ":::\w+:::", "([^\./]+)", "all");
+	local.rv = REReplace(local.rv, "^\/*(.*)\/*$", "^\1/?$");
 
 	// Escape any forward slashes.
-	local.regex = REReplace(local.regex, "(\/|\\\/)", "\/", "all");
+	local.rv = REReplace(local.rv, "(\/|\\\/)", "\/", "all");
 
-	return local.regex;
+	return local.rv;
 }
 
 /**
