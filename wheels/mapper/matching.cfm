@@ -1,8 +1,10 @@
 <cfscript>
 
 /**
- * Internal function.
  * Match a url.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  *
  * @name Name for route. Used for path helpers.
  * @pattern Pattern to match for route.
@@ -10,7 +12,6 @@
  * @methods HTTP verbs that match route.
  * @module Namespace to append to controller.
  * @on Created resource route under "member" or "collection".
- *
  */
 public struct function match(
 	string name,
@@ -172,56 +173,70 @@ public struct function match(
 }
 
 /**
- * Internal function.
  * Match a GET url.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  */
 public struct function $get(string name) {
 	return match(method="get", argumentCollection=arguments);
 }
 
 /**
- * Internal function.
  * Match a POST url.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  */
 public struct function post(string name) {
 	return match(method="post", argumentCollection=arguments);
 }
 
 /**
- * Internal function.
  * Match a PUT url.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  */
 public struct function put(string name) {
 	return match(method="put", argumentCollection=arguments);
 }
 
 /**
- * Internal function.
  * Match a PATCH url.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  */
 public struct function patch(string name) {
 	return match(method="patch", argumentCollection=arguments);
 }
 
 /**
- * Internal function.
  * Match a DELETE url.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  */
 public struct function delete(string name) {
 	return match(method="delete", argumentCollection=arguments);
 }
 
 /**
- * Internal function.
  * Match a root directory.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  */
 public struct function root(string to) {
 	return match(name="root", pattern="/(.[format])", argumentCollection=arguments);
 }
 
 /**
- * Internal function.
- * Special wildcard matching
+ * Special wildcard matching.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  */
 public struct function wildcard(string action="index") {
 	if (StructKeyExists(variables.scopeStack[1], "controller")) {

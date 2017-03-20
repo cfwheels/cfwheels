@@ -1,8 +1,10 @@
 <cfscript>
 
 /**
- * Internal function.
  * Set certain parameters for future calls.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  *
  * @name Named route prefix.
  * @path Path prefix.
@@ -68,7 +70,10 @@ public struct function scope(
 }
 
 /**
- * Internal function.
+ * ???.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  */
 public struct function namespace(
 	required string module,
@@ -79,7 +84,10 @@ public struct function namespace(
 }
 
 /**
- * Internal function.
+ * ???.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  */
 public struct function controller(
 	required string controller,
@@ -90,8 +98,10 @@ public struct function controller(
 }
 
 /**
- * Internal function.
  * Set variable patterns to use for matching.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  */
 public struct function constraints() {
 	return scope(constraints=arguments, $call="constraints");

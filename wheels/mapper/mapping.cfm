@@ -14,10 +14,14 @@ public struct function draw(boolean restful=true, boolean methods=arguments.rest
 }
 
 /**
- * Internal function.
- * If last action was a resource, set up REST routes.
+ * Call this to end your route configuration.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  */
 public struct function end() {
+	// If last action was a resource, set up REST routes.
+
 	if (variables.scopeStack[1].$call == "resources") {
 
 		// Create plural resource routes.

@@ -1,8 +1,10 @@
 <cfscript>
 
 /**
- * Internal function.
- * Set up singular REST resource.
+ * Set up a singular REST resource.
+ *
+ * [section: Configuration]
+ * [category: Routing]
  *
  * @name Name of resource.
  * @nested Whether or not additional calls will be nested.
@@ -16,7 +18,6 @@
  * @shallowPath Shallow path prefix.
  * @shallowName Shallow name prefix.
  * @constraints Variable patterns to use for matching.
- *
  */
 public struct function resource(
 	required string name,
@@ -169,7 +170,23 @@ public struct function resource(
 }
 
 /**
- * Internal function.
+ * Set up a plural REST resource.
+ *
+ * [section: Configuration]
+ * [category: Routing]
+ *
+ * @name See documentation for [doc:resource].
+ * @nested See documentation for [doc:resource].
+ * @path See documentation for [doc:resource].
+ * @controller See documentation for [doc:resource].
+ * @singular See documentation for [doc:resource].
+ * @plural See documentation for [doc:resource].
+ * @only See documentation for [doc:resource].
+ * @except See documentation for [doc:resource].
+ * @shallow See documentation for [doc:resource].
+ * @shallowPath See documentation for [doc:resource].
+ * @shallowName See documentation for [doc:resource].
+ * @constraints See documentation for [doc:resource].
  */
 public struct function resources(required string name, boolean nested=false) {
 	return resource($plural=true, $call="resources", argumentCollection=arguments);
