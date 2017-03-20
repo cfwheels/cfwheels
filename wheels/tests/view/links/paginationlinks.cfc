@@ -7,7 +7,7 @@ component extends="wheels.tests.Test" {
     _originalRewrite = application.wheels.URLRewriting;
     $clearRoutes();
     drawRoutes()
-    	.match(name="pagination", pattern="pag/ina/tion/[special]", to="pagi##nation")
+    	.$match(name="pagination", pattern="pag/ina/tion/[special]", to="pagi##nation")
     .end();
     $setNamedRoutePositions();
 		application.wheels.URLRewriting = "On";
@@ -61,7 +61,7 @@ component extends="wheels.tests.Test" {
  	function test_page_as_route_param_with_route_containing_page_parameter_in_variables(){
     $clearRoutes();
     drawRoutes()
-    	.match(name="pagination", pattern="pag/ina/tion/[special]/[page]", to="pagi##nation")
+    	.$match(name="pagination", pattern="pag/ina/tion/[special]/[page]", to="pagi##nation")
     .end();
     $setNamedRoutePositions();
 		authors = model("author").findAll(page=2, perPage=3, order="lastName");

@@ -21,7 +21,7 @@ component extends="wheels.tests.Test" {
 
 	function test_controller_only() {
 		drawRoutes()
-			.match(pattern="pages", to="pages##index")
+			.$match(pattern="pages", to="pages##index")
 		.end();
 		r = dispatch.$findMatchingRoute(path="pages", format="");
 		assert('r.controller eq "pages"');
@@ -30,7 +30,7 @@ component extends="wheels.tests.Test" {
 
 	function test_controller_and_action_required() {
 		drawRoutes()
-			.match(pattern="pages/blah", to="pages##index")
+			.$match(pattern="pages/blah", to="pages##index")
 		.end();
  		r = raised('dispatch.$findMatchingRoute(path="/pages", format="")');
 		assert('r eq "Wheels.RouteNotFound"');
@@ -41,7 +41,7 @@ component extends="wheels.tests.Test" {
 
 	function test_extra_variables_passed() {
 		drawRoutes()
-			.match(pattern="pages/blah/[firstname]/[lastname]", to="pages##index")
+			.$match(pattern="pages/blah/[firstname]/[lastname]", to="pages##index")
 		.end();
 		r = dispatch.$findMatchingRoute(path="pages/blah/tony/petruzzi", format="");
 		assert('r.controller eq "pages"');
@@ -51,7 +51,7 @@ component extends="wheels.tests.Test" {
 
 	function test_wildcard_route() {
 		drawRoutes()
-			.match(pattern="*", to="pages##index")
+			.$match(pattern="*", to="pages##index")
 		.end();
 		r = dispatch.$findMatchingRoute(path="thisismyroute/therearemanylikeit/butthisoneismine", format="");
 		assert('r.controller eq "pages"');

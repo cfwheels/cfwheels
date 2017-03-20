@@ -1,10 +1,8 @@
 <cfscript>
 
 /**
+ * Internal function.
  * Match a url.
- *
- * [section: Configuration]
- * [category: Routing]
  *
  * @name Name for route. Used for path helpers.
  * @pattern Pattern to match for route.
@@ -13,7 +11,7 @@
  * @module Namespace to append to controller.
  * @on Created resource route under "member" or "collection".
  */
-public struct function match(
+public struct function $match(
 	string name,
 	string pattern,
 	string to,
@@ -26,10 +24,10 @@ public struct function match(
 	// Evaluate match on member or collection.
 	if (StructKeyExists(arguments, "on")) {
 		if (arguments.on == "member") {
-			return member().match(argumentCollection=arguments, on="").end();
+			return member().$match(argumentCollection=arguments, on="").end();
 		}
 		if (arguments.on == "collection") {
-			return collection().match(argumentCollection=arguments, on="").end();
+			return collection().$match(argumentCollection=arguments, on="").end();
 		}
 	}
 
@@ -179,7 +177,7 @@ public struct function match(
  * [category: Routing]
  */
 public struct function get(string name) {
-	return match(method="get", argumentCollection=arguments);
+	return $match(method="get", argumentCollection=arguments);
 }
 
 /**
@@ -189,7 +187,7 @@ public struct function get(string name) {
  * [category: Routing]
  */
 public struct function post(string name) {
-	return match(method="post", argumentCollection=arguments);
+	return $match(method="post", argumentCollection=arguments);
 }
 
 /**
@@ -199,7 +197,7 @@ public struct function post(string name) {
  * [category: Routing]
  */
 public struct function put(string name) {
-	return match(method="put", argumentCollection=arguments);
+	return $match(method="put", argumentCollection=arguments);
 }
 
 /**
@@ -209,7 +207,7 @@ public struct function put(string name) {
  * [category: Routing]
  */
 public struct function patch(string name) {
-	return match(method="patch", argumentCollection=arguments);
+	return $match(method="patch", argumentCollection=arguments);
 }
 
 /**
@@ -219,7 +217,7 @@ public struct function patch(string name) {
  * [category: Routing]
  */
 public struct function delete(string name) {
-	return match(method="delete", argumentCollection=arguments);
+	return $match(method="delete", argumentCollection=arguments);
 }
 
 /**
@@ -229,7 +227,7 @@ public struct function delete(string name) {
  * [category: Routing]
  */
 public struct function root(string to) {
-	return match(name="root", pattern="/(.[format])", argumentCollection=arguments);
+	return $match(name="root", pattern="/(.[format])", argumentCollection=arguments);
 }
 
 /**
@@ -240,11 +238,11 @@ public struct function root(string to) {
  */
 public struct function wildcard(string action="index") {
 	if (StructKeyExists(variables.scopeStack[1], "controller")) {
-		match(name="wildcard", pattern="[action]/[key](.[format])", action=arguments.action);
-		match(name="wildcard", pattern="[action](.[format])", action=arguments.action);
+		$match(name="wildcard", pattern="[action]/[key](.[format])", action=arguments.action);
+		$match(name="wildcard", pattern="[action](.[format])", action=arguments.action);
 	} else {
-		match(name="wildcard", pattern="[controller]/[action]/[key](.[format])", action=arguments.action);
-		match(name="wildcard", pattern="[controller](/[action](.[format]))", action=arguments.action);
+		$match(name="wildcard", pattern="[controller]/[action]/[key](.[format])", action=arguments.action);
+		$match(name="wildcard", pattern="[controller](/[action](.[format]))", action=arguments.action);
 	}
 	return this;
 }
