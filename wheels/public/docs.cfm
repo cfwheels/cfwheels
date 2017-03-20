@@ -79,7 +79,7 @@
 		local.tags=ReMatchNoCase('\[((' & local.tagname & '?):(.*?))\]', local.string);
 		if(arrayLen(local.tags)){
 			for(local.tag in local.tags){
-				local.rv=listAppend(local.rv, replace(listLast(local.tag, ":"), "]","","one"));
+				local.rv=listAppend(local.rv, trim(replace(listLast(local.tag, ":"), "]","","one")));
 			}
 		}
 		return local.rv;
