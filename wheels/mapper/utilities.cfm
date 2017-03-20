@@ -3,7 +3,7 @@
 /**
  * Internal function.
  */
-public void function compileRegex(rquired string regex) {
+public void function $compileRegex(rquired string regex) {
 	local.pattern = CreateObject("java", "java.util.regex.Pattern");
 	try {
 		local.regex = local.pattern.compile(arguments.regex);
@@ -24,7 +24,7 @@ public void function compileRegex(rquired string regex) {
  * Internal function.
  * Force leading slashes, remove trailing and duplicate slashes.
  */
-public string function normalizePattern(required string pattern) {
+public string function $normalizePattern(required string pattern) {
 
 	// First clear the ending slashes.
 	local.pattern = REReplace(arguments.pattern, "(^\/+|\/+$)", "", "all");
@@ -44,7 +44,7 @@ public string function normalizePattern(required string pattern) {
  * Internal function.
  * Transform route pattern into regular expression.
  */
-public string function patternToRegex(required string pattern, struct constraints={}) {
+public string function $patternToRegex(required string pattern, struct constraints={}) {
 
 	// Escape any dots in pattern.
 	local.rv = Replace(arguments.pattern, ".", "\.", "all");
@@ -74,7 +74,7 @@ public string function patternToRegex(required string pattern, struct constraint
  * Internal function.
  * Pull list of variables out of route pattern.
  */
-public string function stripRouteVariables(required string pattern) {
+public string function $stripRouteVariables(required string pattern) {
 	local.matchArray = ArrayToList(REMatch("\[\*?(\w+)\]", arguments.pattern));
 	return REReplace(local.matchArray, "[\*\[\]]", "", "all");
 }
@@ -95,12 +95,12 @@ private void function $addRoute(
 	}
 
 	// Normalize pattern, convert to regex, and strip out variable names.
-	arguments.pattern = normalizePattern(arguments.pattern);
-	arguments.regex = patternToRegex(arguments.pattern, arguments.constraints);
-	arguments.variables = stripRouteVariables(arguments.pattern);
+	arguments.pattern = $normalizePattern(arguments.pattern);
+	arguments.regex = $patternToRegex(arguments.pattern, arguments.constraints);
+	arguments.variables = $stripRouteVariables(arguments.pattern);
 
 	// compile our regex to make sure the developer is using proper regex
-	compileRegex(argumentCollection=arguments);
+	$compileRegex(argumentCollection=arguments);
 
 	// add route to Wheels
 	ArrayAppend(application[$appKey()].routes, arguments);

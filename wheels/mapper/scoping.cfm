@@ -39,7 +39,7 @@ public struct function scope(
 
 	// Combine path with scope path.
 	if (StructKeyExists(variables.scopeStack[1], "path") && StructKeyExists(arguments, "path")) {
-		arguments.path = normalizePattern(variables.scopeStack[1].path & "/" & arguments.path);
+		arguments.path = $normalizePattern(variables.scopeStack[1].path & "/" & arguments.path);
 	}
 
 	// Combine module with scope module.
@@ -54,7 +54,7 @@ public struct function scope(
 
 	// Combine shallow path with scope shallow path.
 	if (StructKeyExists(variables.scopeStack[1], "shallowPath") && StructKeyExists(arguments, "shallowPath")) {
-		arguments.shallowPath = normalizePattern(variables.scopeStack[1].shallowPath & "/" & arguments.shallowPath);
+		arguments.shallowPath = $normalizePattern(variables.scopeStack[1].shallowPath & "/" & arguments.shallowPath);
 	}
 
 	// Copy existing constraints if they were previously set.

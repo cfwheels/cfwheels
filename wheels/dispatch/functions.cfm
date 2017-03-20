@@ -94,7 +94,7 @@ public struct function $findMatchingRoute(required string path, string requestMe
 
 		// Make sure route has been converted to regular expression.
 		if (!StructKeyExists(local.route, "regex")) {
-			local.route.regex = application.wheels.mapper.patternToRegex(local.route.pattern);
+			local.route.regex = application.wheels.mapper.$patternToRegex(local.route.pattern);
 		}
 
 		// If route matches regular expression, set it for return.
