@@ -94,12 +94,15 @@
 	temp.model.scope 			= createObject("component", "app.models.Model");
 	temp.model.functions 		= listSort(StructKeyList(temp.model.scope), "textnocase");
 
+	// Array of functions to ignore
+	ignore = ["init"];
+
 	// Merge
 	for(doctype in temp){
 		// Populate A-Z function List
 		for(functionName in listToArray(temp[doctype]['functions']) ){
 			// Ignore internal functions
-			if(left(functionName, 1) != "$"){
+			if(left(functionName, 1) != "$" && !ArrayFindNoCase(ignore, functionName)){
 				// Check this isn't a dupe, but record which scope this was from
 				if( !ArrayFind(docs.functions, function(struct){
 				   return struct.name == functionName;
