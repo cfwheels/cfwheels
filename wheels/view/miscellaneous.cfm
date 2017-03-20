@@ -281,7 +281,7 @@ public any function $objectName(
 			local.expanded = local.expanded[1];
 			if (local.expanded.type == "hasMany") {
 				local.hasManyAssociationCount++;
-				if (get("showErrorInformation") && local.hasManyAssociationCount > ListLen(arguments.positions)) {
+				if ($get("showErrorInformation") && local.hasManyAssociationCount > ListLen(arguments.positions)) {
 					Throw(
 						type="Wheels.InvalidArgument",
 						message="You passed the hasMany association of `#local.association#` but did not provide a corresponding position.");
@@ -369,7 +369,7 @@ public any function $getObject(required string objectname) {
 			local.rv = variables[arguments.objectName];
 		}
 	} catch (any e) {
-		if (get("showErrorInformation")) {
+		if ($get("showErrorInformation")) {
 			Throw(
 				type="Wheels.ObjectNotFound",
 				message="CFWheels tried to find the model object `#arguments.objectName#` for the form helper, but it does not exist.");

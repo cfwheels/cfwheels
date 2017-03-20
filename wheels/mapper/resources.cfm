@@ -114,7 +114,7 @@ public struct function resource(
 	if (StructKeyExists(arguments, "controller")) {
 		local.args.controller = arguments.controller;
 	} else {
-		switch (get("resourceControllerNaming")) {
+		switch ($get("resourceControllerNaming")) {
 			case "name":
 				local.args.controller = arguments.name;
 				break;

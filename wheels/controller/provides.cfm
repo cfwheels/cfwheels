@@ -10,11 +10,11 @@
 public void function provides(string formats="") {
 	$combineArguments(args=arguments, combine="formats,format", required=true);
 	arguments.formats = $listClean(arguments.formats);
-	local.possibleFormats = StructKeyList(get("formats"));
+	local.possibleFormats = StructKeyList($get("formats"));
 	local.iEnd = ListLen(arguments.formats);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.item = ListGetAt(arguments.formats, local.i);
-		if (get("showErrorInformation") && !ListFindNoCase(local.possibleFormats, local.item)) {
+		if ($get("showErrorInformation") && !ListFindNoCase(local.possibleFormats, local.item)) {
 			Throw(
 				type="Wheels.InvalidFormat",
 				message="An invalid format of `#local.item#` has been specified.
@@ -36,11 +36,11 @@ public void function provides(string formats="") {
 public void function onlyProvides(string formats="", string action=variables.params.action) {
 	$combineArguments(args=arguments, combine="formats,format", required=true);
 	arguments.formats = $listClean(arguments.formats);
-	local.possibleFormats = StructKeyList(get("formats"));
+	local.possibleFormats = StructKeyList($get("formats"));
 	local.iEnd = ListLen(arguments.formats);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.item = ListGetAt(arguments.formats, local.i);
-		if (get("showErrorInformation") && !ListFindNoCase(local.possibleFormats, local.item)) {
+		if ($get("showErrorInformation") && !ListFindNoCase(local.possibleFormats, local.item)) {
 			Throw(
 				type="Wheels.InvalidFormat",
 				message="An invalid format of `#local.item#` has been specified. The possible values are #local.possibleFormats#."
@@ -97,7 +97,7 @@ public any function renderWith(
 		}
 
 		// throw an error if we rendered a pdf template and we got here, the cfdocument call should have stopped processing
-		if (local.contentType == "pdf" && get("showErrorInformation") && local.templatePathExists) {
+		if (local.contentType == "pdf" && $get("showErrorInformation") && local.templatePathExists) {
 			Throw(
 				type="Wheels.PdfRenderingError",
 				message="When rendering the a PDF file, don't specify the filename attribute. This will stream the PDF straight to the browser."
@@ -105,7 +105,7 @@ public any function renderWith(
 		}
 
 		// throw an error if we do not have a template to render the content type that we do not have defaults for
-		if (!ListFindNoCase("json,xml", local.contentType) && !StructKeyExists(local, "content") && get("showErrorInformation")) {
+		if (!ListFindNoCase("json,xml", local.contentType) && !StructKeyExists(local, "content") && $get("showErrorInformation")) {
 			Throw(
 				type="Wheels.RenderingError",
 				message="To render the #local.contentType# content type, create the template `#local.templateName#.cfm` for the #arguments.controller# controller."
@@ -113,7 +113,7 @@ public any function renderWith(
 		}
 
 		// Set our header based on our mime type.
-		local.formats = get("formats");
+		local.formats = $get("formats");
 		local.value = local.formats[local.contentType] & "; charset=utf-8";
 		$header(name="content-type", value=local.value, charset="utf-8");
 
@@ -226,7 +226,7 @@ public boolean function $formatTemplatePathExists(required string $name) {
 		if (FileExists(ExpandPath(local.templatePath))) {
 			local.rv = true;
 		}
-		if (get("cacheFileChecking")) {
+		if ($get("cacheFileChecking")) {
 			if (local.rv) {
 				variables.$class.formats.existingTemplates = ListAppend(variables.$class.formats.existingTemplates, arguments.$name);
 			} else {
@@ -248,7 +248,7 @@ public string function $requestContentType(struct params=variables.params, strin
 	if (StructKeyExists(arguments.params, "format")) {
 		local.rv = arguments.params.format;
 	} else {
-		local.formats = get("formats");
+		local.formats = $get("formats");
 		for (local.item in local.formats) {
 			if (FindNoCase(local.formats[local.item], arguments.httpAccept)) {
 				local.rv = local.item;

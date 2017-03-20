@@ -67,7 +67,7 @@ public string function $renderLayout(required string $content, required $layout)
 		// store the content in a variable in the request scope so it can be accessed by the includeContent function that the developer uses in layout files
 		// this is done so we avoid passing data to/from it since it would complicate things for the developer
 		contentFor(body=arguments.$content, overwrite=true);
-		local.viewPath = get("viewPath");
+		local.viewPath = $get("viewPath");
 		local.include = local.viewPath;
 		if (IsBoolean(arguments.$layout)) {
 			local.layoutFileExists = false;
@@ -76,7 +76,7 @@ public string function $renderLayout(required string $content, required $layout)
 				if (FileExists(ExpandPath(local.file))) {
 					local.layoutFileExists = true;
 				}
-				if (get("cacheFileChecking")) {
+				if ($get("cacheFileChecking")) {
 					if (local.layoutFileExists) {
 						application.wheels.existingLayoutFiles = ListAppend(application.wheels.existingLayoutFiles, variables.params.controller);
 					} else {

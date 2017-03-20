@@ -30,7 +30,7 @@ public any function $initModelClass(required string name, required string path) 
 	variables.wheels.class.username = application.wheels.dataSourceUserName;
 	variables.wheels.class.password = application.wheels.dataSourcePassword;
 	variables.wheels.class.automaticValidations = application.wheels.automaticValidations;
-	setTableNamePrefix(get("tableNamePrefix"));
+	setTableNamePrefix($get("tableNamePrefix"));
 	table(LCase(pluralize(variables.wheels.class.modelName)));
 	local.callbacks = "afterNew,afterFind,afterInitialization,beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidation,afterValidation,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
 	local.iEnd = ListLen(local.callbacks);
@@ -50,7 +50,7 @@ public any function $initModelClass(required string name, required string path) 
 	// run developer's init method if it exists
 	if (StructKeyExists(variables, "init")) {
 		init();
-	} else if (get("modelRequireInit")) {
+	} else if ($get("modelRequireInit")) {
 		Throw(
 			type="Wheels.ModelInitMissing",
 			message="An init function is required for Model: #variables.wheels.class.modelName#",
@@ -214,7 +214,7 @@ public any function $initModelClass(required string name, required string path) 
 * Internal Function
 */
 public any function $assignAdapter() {
-	if (get("showErrorInformation")) {
+	if ($get("showErrorInformation")) {
 		try {
 			local.info = $dbinfo(
 				type="version",
@@ -254,7 +254,7 @@ public any function $assignAdapter() {
 			extendedInfo="Use SQL Server, MySQL, MariaDB, Oracle, PostgreSQL or H2."
 		);
 	}
-	set(adapterName=local.adapterName);
+	$set(adapterName=local.adapterName);
 	return CreateObject("component", "adapters.#local.adapterName#").init(
 		dataSource=variables.wheels.class.dataSource,
 		username=variables.wheels.class.username,

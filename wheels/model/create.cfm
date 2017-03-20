@@ -20,7 +20,7 @@ public any function create(
 	any parameterize,
 	boolean reload,
 	boolean validate=true,
-	string transaction=get("transactionMode"),
+	string transaction=$get("transactionMode"),
 	boolean callbacks=true
 ) {
 	$args(name="create", args=arguments);
@@ -80,7 +80,7 @@ public boolean function save(
 	any parameterize,
 	boolean reload,
 	boolean validate=true,
-	string transaction=get("transactionMode"),
+	string transaction=$get("transactionMode"),
 	boolean callbacks=true
 ) {
 	$args(name="save", args=arguments);
@@ -188,7 +188,7 @@ public boolean function $create(required any parameterize, required boolean relo
 	if (variables.wheels.class.timeStampingOnCreate) {
 		$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
 	}
-	if (get("setUpdatedAtOnCreate") && variables.wheels.class.timeStampingOnUpdate) {
+	if ($get("setUpdatedAtOnCreate") && variables.wheels.class.timeStampingOnUpdate) {
 		$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 	}
 

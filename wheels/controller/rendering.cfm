@@ -24,7 +24,7 @@ public any function renderPage(
 ) {
 	$args(name="renderPage", args=arguments);
 	$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
-	if (get("showDebugInformation")) {
+	if ($get("showDebugInformation")) {
 		$debugPoint("view");
 	}
 
@@ -43,7 +43,7 @@ public any function renderPage(
 		request.wheels.showDebugInformation = true;
 	}
 
-	if (get("cachePages") && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache))) {
+	if ($get("cachePages") && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache))) {
 		local.category = "action";
 		local.key = $hashedKey(arguments, variables.params);
 		local.lockName = local.category & local.key & application.applicationName;
@@ -68,7 +68,7 @@ public any function renderPage(
 	} else {
 		variables.$instance.response = local.page;
 	}
-	if (get("showDebugInformation")) {
+	if ($get("showDebugInformation")) {
 		$debugPoint("view");
 	}
 	if (StructKeyExists(local, "rv")) {
@@ -172,7 +172,7 @@ public struct function getRedirect() {
 public string function $renderPageAndAddToCache() {
 	local.rv = $renderPage(argumentCollection=arguments);
 	if (!IsNumeric(arguments.$cache)) {
-		arguments.$cache = get("defaultCacheTime");
+		arguments.$cache = $get("defaultCacheTime");
 	}
 	$addToCache(key=arguments.key, value=local.rv, time=arguments.$cache, category=arguments.category);
 	return local.rv;
@@ -198,7 +198,7 @@ public string function $renderPage() {
 public string function $renderPartialAndAddToCache() {
 	local.rv = $renderPartial(argumentCollection=arguments);
 	if (!IsNumeric(arguments.$cache)) {
-		arguments.$cache = get("defaultCacheTime");
+		arguments.$cache = $get("defaultCacheTime");
 	}
 	$addToCache(key=arguments.key, value=local.rv, time=arguments.$cache, category=arguments.category);
 	return local.rv;
@@ -256,7 +256,7 @@ public string function $renderPartial() {
 * Internal Function
 */
 public string function $includeOrRenderPartial() {
-	if (get("cachePartials") && (isNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache))) {
+	if ($get("cachePartials") && (isNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache))) {
 		local.category = "partial";
 		local.key = $hashedKey(arguments);
 		local.lockName = local.category & local.key & application.applicationName;
@@ -286,7 +286,7 @@ public string function $generateIncludeTemplatePath(
 	required any $name,
 	required any $type,
 	string $controllerName=variables.params.controller,
-	string $baseTemplatePath=get("viewPath"),
+	string $baseTemplatePath=$get("viewPath"),
 	boolean $prependWithUnderscore=true
 ) {
 	local.rv = arguments.$baseTemplatePath;
@@ -331,7 +331,7 @@ public string function $includeFile(required any $name, required any $template, 
 				local.groupValue = "";
 				local.groupQueryCount = 1;
 				arguments.group = QueryNew(local.query.columnList);
-				if (get("showErrorInformation") && !ListFindNoCase(local.query.columnList, arguments.$group)) {
+				if ($get("showErrorInformation") && !ListFindNoCase(local.query.columnList, arguments.$group)) {
 					Throw(
 						type="Wheels.GroupColumnNotFound",
 						message="CFWheels couldn't find a query column with the name of `#arguments.$group#`.",

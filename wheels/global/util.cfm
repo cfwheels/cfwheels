@@ -1,15 +1,10 @@
 <cfscript>
 
 /**
- * Returns the current setting for the supplied Wheels setting or the current default for the supplied Wheels function argument.
- *
- * [section: Global Helpers]
- * [category: Miscellaneous Functions]
- *
- * @name Variable name to get setting for.
- * @functionName Function name to get setting for.
+ * Internal function.
+ * Called from get().
  */
-public any function get(required string name, string functionName="") {
+public any function $get(required string name, string functionName="") {
 	local.appKey = $appKey();
 	if (Len(arguments.functionName)) {
 		local.rv = application[local.appKey].functions[arguments.functionName][arguments.name];
@@ -20,11 +15,10 @@ public any function get(required string name, string functionName="") {
 }
 
 /**
- * Use to configure a global setting or set a default for a function.
- *
- * [section: Configuration]
+ * Internal function.
+ * Called from set().
  */
-public void function set() {
+public void function $set() {
 	local.appKey = $appKey();
 	if (ArrayLen(arguments) > 1) {
 		for (local.key in arguments) {

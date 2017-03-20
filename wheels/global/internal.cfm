@@ -658,7 +658,7 @@ public string function $objectFileName(
 */
 public any function $createControllerClass(
 	required string name,
-	string controllerPaths=get("controllerPath"),
+	string controllerPaths=$get("controllerPath"),
 	string type="controller"
 ) {
 	// let's allow for multiple controller paths so that plugins can contain controllers
@@ -947,9 +947,9 @@ public string function $singularizeOrPluralize(
 
 		// Get global settings for uncountable and irregular words.
 		// For the irregular ones we need to convert them from a struct to a list.
-		local.uncountables = $listClean(get("uncountables"));
+		local.uncountables = $listClean($get("uncountables"));
 		local.irregulars = "";
-		local.words = get("irregulars");
+		local.words = $get("irregulars");
 		for (local.word in local.words) {
 			local.irregulars = ListAppend(local.irregulars, LCase(local.word));
 			local.irregulars = ListAppend(local.irregulars, local.words[local.word]);

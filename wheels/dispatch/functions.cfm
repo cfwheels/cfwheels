@@ -141,7 +141,7 @@ public string function $request(
 	struct formScope=form,
 	struct urlScope=url
 ) {
-	if (get("showDebugInformation")) {
+	if ($get("showDebugInformation")) {
 		$debugPoint("setup");
 	}
 
@@ -150,7 +150,7 @@ public string function $request(
 	// Set params in the request scope as well so we can display it in the debug info outside of the controller context.
 	request.wheels.params = local.params;
 
-	if (get("showDebugInformation")) {
+	if ($get("showDebugInformation")) {
 		$debugPoint("setup");
 	}
 
@@ -255,7 +255,7 @@ public struct function $mergeRoutePattern(required struct params, required struc
  */
 public struct function $decryptParams(required struct params) {
 	local.rv = arguments.params;
-	if (get("obfuscateUrls")) {
+	if ($get("obfuscateUrls")) {
 		for (local.key in local.rv) {
 			if (local.key != "controller" && local.key != "action") {
 				try {

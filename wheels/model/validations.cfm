@@ -132,7 +132,7 @@ public void function validatesFormatOf(
 	string unless=""
 ) {
 	$args(name="validatesFormatOf", args=arguments);
-	if (get("showErrorInformation")) {
+	if ($get("showErrorInformation")) {
 		if (Len(arguments.type) && !ListFindNoCase("creditcard,date,email,eurodate,guid,social_security_number,ssn,telephone,time,URL,USdate,UUID,variableName,zipcode,boolean", arguments.type)) {
 			Throw(
 				type="Wheels.IncorrectArguments",

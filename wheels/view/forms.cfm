@@ -217,7 +217,7 @@ public string function $formValue(required any objectName, required string prope
 		local.rv = arguments.objectName[arguments.property];
 	} else {
 		local.object = $getObject(arguments.objectName);
-		if (get("showErrorInformation") && !IsObject(local.object)) {
+		if ($get("showErrorInformation") && !IsObject(local.object)) {
 			Throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 		}
 		if (StructKeyExists(local.object, arguments.property)) {
@@ -259,7 +259,7 @@ public boolean function $formHasError(required any objectName, required string p
 	local.rv = false;
 	if (!IsStruct(arguments.objectName)) {
 		local.object = $getObject(arguments.objectName);
-		if (get("showErrorInformation") && !IsObject(local.object)) {
+		if ($get("showErrorInformation") && !IsObject(local.object)) {
 			Throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 		}
 		if (ArrayLen(local.object.errorsOn(arguments.property))) {

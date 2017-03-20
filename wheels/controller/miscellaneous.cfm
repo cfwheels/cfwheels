@@ -107,7 +107,7 @@ public any function sendEmail(
 			arguments.mailparams[local.i] = {};
 			if (!ReFindNoCase("\\|/", local.item)) {
 				// no directory delimiter is present so append the path
-				local.item = ExpandPath(get("filePath")) & "/" & local.item;
+				local.item = ExpandPath($get("filePath")) & "/" & local.item;
 			}
 			arguments.mailparams[local.i].file = local.item;
 		}
@@ -164,14 +164,14 @@ public any function sendFile(
 
 	// Check whether the resource is a ram resource or physical file.
 	if (!ListFirst(arguments.file, "://") == "ram") {
-		local.relativeRoot = get("rootPath");
+		local.relativeRoot = $get("rootPath");
 		if (Right(local.relativeRoot, 1) != "/") {
 			local.relativeRoot &= "/";
 		}
 		local.root = ExpandPath(local.relativeRoot);
 		local.folder = arguments.directory;
 		if (!Len(local.folder)) {
-			local.folder = local.relativeRoot & get("filePath");
+			local.folder = local.relativeRoot & $get("filePath");
 		}
 		if (Left(local.folder, Len(local.root)) == local.root) {
 			local.folder = RemoveChars(local.folder, 1, Len(local.root));

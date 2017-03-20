@@ -14,7 +14,7 @@ public boolean function processAction() {
 	// the action.
 	local.cache = 0;
 
-	if (get("cacheActions") && $hasCachableActions() && flashIsEmpty() && StructIsEmpty(form)) {
+	if ($get("cacheActions") && $hasCachableActions() && flashIsEmpty() && StructIsEmpty(form)) {
 		local.cachableActions = $cachableActions();
 		for (local.action in local.cachableActions) {
 			if (local.action.action == params.action || local.action.action == "*") {
@@ -33,7 +33,7 @@ public boolean function processAction() {
 		}
 	}
 
-	if (get("showDebugInformation")) {
+	if ($get("showDebugInformation")) {
 		$debugPoint("beforeFilters");
 	}
 
@@ -45,7 +45,7 @@ public boolean function processAction() {
 		// Run before filters if they exist on the controller.
 		$runFilters(type="before", action=params.action);
 
-		if (get("showDebugInformation")) {
+		if ($get("showDebugInformation")) {
 			$debugPoint("beforeFilters,action");
 		}
 
@@ -96,7 +96,7 @@ public boolean function processAction() {
 
 		// Run after filters with surrounding debug points. (Don't run the filters if a delayed redirect will occur
 		// though.)
-		if (get("showDebugInformation")) {
+		if ($get("showDebugInformation")) {
 			$debugPoint("action,afterFilters");
 		}
 
@@ -104,7 +104,7 @@ public boolean function processAction() {
 			$runFilters(type="after", action=params.action);
 		}
 
-		if (get("showDebugInformation")) {
+		if ($get("showDebugInformation")) {
 			$debugPoint("afterFilters");
 		}
 	}
@@ -135,11 +135,11 @@ public void function $callAction(required string action) {
 		try {
 			renderPage();
 		} catch (any e) {
-			local.file = get("viewPath") & "/" & LCase(ListChangeDelims(variables.$class.name, '/', '.')) & "/" & LCase(arguments.action) & ".cfm";
+			local.file = $get("viewPath") & "/" & LCase(ListChangeDelims(variables.$class.name, '/', '.')) & "/" & LCase(arguments.action) & ".cfm";
 			if (FileExists(ExpandPath(local.file))) {
 				Throw(object=e);
 			} else {
-				if (get("showErrorInformation")) {
+				if ($get("showErrorInformation")) {
 					Throw(
 						type="Wheels.ViewNotFound",
 						message="Could not find the view page for the `#arguments.action#` action in the `#variables.$class.name#` controller.",
@@ -147,7 +147,7 @@ public void function $callAction(required string action) {
 					);
 				} else {
 					$header(statusCode=404, statustext="Not Found");
-					local.template = get("eventPath") & "/onmissingtemplate.cfm";
+					local.template = $get("eventPath") & "/onmissingtemplate.cfm";
 					$includeAndOutput(template=local.template);
 					abort;
 				}

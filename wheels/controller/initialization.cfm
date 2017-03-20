@@ -48,7 +48,7 @@ public any function $initControllerClass(string name="") {
 	variables.$class.formats.existingTemplates = "";
 	variables.$class.formats.nonExistingTemplates = "";
 
-	$setFlashStorage(get("flashStorage"));
+	$setFlashStorage($get("flashStorage"));
 
 	// Call the developer's "init" function if it exists.
 	if (StructKeyExists(variables, "init")) {
@@ -76,7 +76,7 @@ public any function $initControllerObject(required string name, required struct 
 
 	// Set file name to look for (e.g. "views/folder/helpers.cfm").
 	// Name could be dot notation so we need to change delimiters.
-	local.template = get("viewPath") & "/" & LCase(ListChangeDelims(arguments.name, '/', '.')) & "/helpers.cfm";
+	local.template = $get("viewPath") & "/" & LCase(ListChangeDelims(arguments.name, '/', '.')) & "/helpers.cfm";
 
 	// Check if the file exists on the file system if we have not already checked in a previous request.
 	// When the file is not found in either the existing or nonexisting list we know that we have not yet checked for it.
@@ -85,7 +85,7 @@ public any function $initControllerObject(required string name, required struct 
 		if (FileExists(ExpandPath(local.template))) {
 			local.helperFileExists = true;
 		}
-		if (get("cacheFileChecking")) {
+		if ($get("cacheFileChecking")) {
 			if (local.helperFileExists) {
 				application.wheels.existingHelperFiles = ListAppend(application.wheels.existingHelperFiles, arguments.name);
 			} else {

@@ -31,9 +31,9 @@ public string function styleSheetLinkTag(string sources="", string type, string 
 			arguments.href = arguments.sources[local.i];
 		} else {
 			if (Left(local.item, 1) == "/") {
-				arguments.href = get("webPath") & Right(local.item, Len(local.item)-1);
+				arguments.href = $get("webPath") & Right(local.item, Len(local.item)-1);
 			} else {
-				arguments.href = get("webPath") & get("stylesheetPath") & "/" & local.item;
+				arguments.href = $get("webPath") & $get("stylesheetPath") & "/" & local.item;
 			}
 			if (!ListFindNoCase("css,cfm", ListLast(local.item, "."))) {
 				arguments.href &= ".css";
@@ -75,9 +75,9 @@ public string function javaScriptIncludeTag(string sources="", string type, stri
 			arguments.src = arguments.sources[local.i];
 		} else {
 			if (Left(local.item, 1) == "/") {
-				arguments.src = get("webPath") & Right(local.item, Len(local.item)-1);
+				arguments.src = $get("webPath") & Right(local.item, Len(local.item)-1);
 			} else {
-				arguments.src = get("webPath") & get("javascriptPath") & "/" & local.item;
+				arguments.src = $get("webPath") & $get("javascriptPath") & "/" & local.item;
 			}
 			if (!ListFindNoCase("js,cfm", ListLast(local.item, "."))) {
 				arguments.src &= ".js";
@@ -113,7 +113,7 @@ public string function imageTag(required string source, boolean onlyPath, string
 		StructDelete(arguments, "id");
 	}
 
-	if (get("cacheImages")) {
+	if ($get("cacheImages")) {
 		local.category = "image";
 		local.key = $hashedKey(arguments);
 		local.lockName = local.category & local.key & application.applicationName;
@@ -165,10 +165,10 @@ public string function $imageTag() {
 	if (!local.localFile) {
 		arguments.src = arguments.source;
 	} else {
-		arguments.src = get("webPath") & get("imagePath") & "/" & arguments.source;
+		arguments.src = $get("webPath") & $get("imagePath") & "/" & arguments.source;
 		local.file = GetDirectoryFromPath(GetBaseTemplatePath());
-		local.file &= get("imagePath") & "/" & SpanExcluding(arguments.source, "?");
-		if (get("showErrorInformation")) {
+		local.file &= $get("imagePath") & "/" & SpanExcluding(arguments.source, "?");
+		if ($get("showErrorInformation")) {
 			if (local.localFile && !FileExists(local.file)) {
 				Throw(
 					type="Wheels.ImageFileNotFound",
@@ -226,7 +226,7 @@ public string function $imageTag() {
  */
 public string function $appendQueryString() {
 	local.rv = "";
-	local.assetQueryString = get("assetQueryString");
+	local.assetQueryString = $get("assetQueryString");
 
 	// If assetQueryString is a boolean value, it means we just reloaded, so create a new query string based off of now.
 	// The only problem with this is if the app doesn't get used a lot and the application is left alone for a period longer than the application scope is allowed to exist.
@@ -235,7 +235,7 @@ public string function $appendQueryString() {
 	}
 	if (!IsNumeric(local.assetQueryString) && IsBoolean(local.assetQueryString)) {
 		local.assetQueryString = Hash(DateFormat(Now(), "yyyymmdd") & TimeFormat(Now(), "HHmmss"));
-		set(assetQueryString=local.assetQueryString);
+		$set(assetQueryString=local.assetQueryString);
 	}
 
 	local.rv &= "?" & local.assetQueryString;
@@ -247,10 +247,10 @@ public string function $appendQueryString() {
  */
 public string function $assetDomain(required string pathToAsset) {
 	local.rv = arguments.pathToAsset;
-	local.assetPaths = get("assetPaths");
+	local.assetPaths = $get("assetPaths");
 
 	// Check for incorrect settings and throw errors.
-	if (get("showErrorInformation")) {
+	if ($get("showErrorInformation")) {
 		if (!IsStruct(local.assetPaths) && !IsBoolean(local.assetPaths)) {
 			Throw(type="Wheels.IncorrectConfiguration", message="The setting `assetsPaths` must be `false` or a struct.");
 		}

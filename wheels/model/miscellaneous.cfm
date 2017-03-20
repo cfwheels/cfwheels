@@ -83,7 +83,7 @@ public void function setPrimaryKeys(required string property) {
 */
 public boolean function exists(any key, string where, boolean reload, any parameterize, boolean includeSoftDeletes) {
 	$args(name="exists", args=arguments);
-	if (get("showErrorInformation") && StructKeyExists(arguments, "key") && StructKeyExists(arguments, "where")) {
+	if ($get("showErrorInformation") && StructKeyExists(arguments, "key") && StructKeyExists(arguments, "where")) {
 			Throw(type="Wheels.IncorrectArguments", message="You cannot pass in both `key` and `where`.");
 	}
 	arguments.select = primaryKey();

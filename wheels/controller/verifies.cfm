@@ -79,7 +79,7 @@ public void function $runVerifications(
 
 	// only access the session scope when session management is enabled in the app
 	// default to the wheels setting but get it on a per request basis if possible (from application.cfc)
-	local.sessionManagement = get("sessionManagement");
+	local.sessionManagement = $get("sessionManagement");
 	try {
 		local.sessionManagement = application.getApplicationSettings().sessionManagement;
 	} catch (any e) {}

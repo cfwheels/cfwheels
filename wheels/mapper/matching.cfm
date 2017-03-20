@@ -178,7 +178,7 @@ public struct function match(
  * [section: Configuration]
  * [category: Routing]
  */
-public struct function $get(string name) {
+public struct function get(string name) {
 	return match(method="get", argumentCollection=arguments);
 }
 

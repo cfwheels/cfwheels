@@ -97,7 +97,7 @@ public void function redirectTo(
 			if (Len(arguments.route) || Len(arguments.controller) || Len(arguments.action)) {
 				local.url = URLFor(argumentCollection=arguments);
 			} else {
-				local.url = get("webPath");
+				local.url = $get("webPath");
 			}
 
 		}

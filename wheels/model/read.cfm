@@ -53,7 +53,7 @@ public any function findAll(
 	arguments.where = $cleanInList(arguments.where);
 
 	// we only allow direct associations to be loaded when returning objects
-	if (get("showErrorInformation") && Len(arguments.returnAs) && arguments.returnAs != "query" && Find("(", arguments.include) && arguments.returnIncluded) {
+	if ($get("showErrorInformation") && Len(arguments.returnAs) && arguments.returnAs != "query" && Find("(", arguments.include) && arguments.returnIncluded) {
 		Throw(
 			type="Wheels",
 			message="Incorrect Arguments",
@@ -63,7 +63,7 @@ public any function findAll(
 
 	// count records and get primary keys for pagination
 	if (arguments.page) {
-		if (get("showErrorInformation") && arguments.perPage <= 0) {
+		if ($get("showErrorInformation") && arguments.perPage <= 0) {
 			Throw(type="Wheels",
 				message="Incorrect Argument",
 				extendedInfo="The `perPage` argument should be a positive numeric value."
