@@ -30,7 +30,7 @@ component extends="wheels.tests.Test" {
 
 	function test_issue_455() {
 		mapper = $mapper();
-		mapper.draw().$match(name="user_2", pattern="user/[user_id]/[controller]/[action]").end();
+		mapper.$draw().$match(name="user_2", pattern="user/[user_id]/[controller]/[action]").end();
 		$setNamedRoutePositions();
 		application.wheels.URLRewriting = "Off";
 		application.wheels.obfuscateUrls = true;
@@ -40,7 +40,7 @@ component extends="wheels.tests.Test" {
 
 	function test_links_are_properly_hyphenated() {
 		mapper = $mapper();
-		mapper.draw().$match(name="user_2", pattern="user/[user_id]/[controller]/[action]").end();
+		mapper.$draw().$match(name="user_2", pattern="user/[user_id]/[controller]/[action]").end();
 		$setNamedRoutePositions();
 		application.wheels.URLRewriting = "On";
 		e = "/user/5559/survey-templates/index";
@@ -50,7 +50,7 @@ component extends="wheels.tests.Test" {
 
 	function test_format_properly_add_with_route() {
 		mapper = $mapper();
-		mapper.draw().$match(name="user_2", pattern="user/[user_id]/[controller]/[action].[format]").end();
+		mapper.$draw().$match(name="user_2", pattern="user/[user_id]/[controller]/[action].[format]").end();
 		$setNamedRoutePositions();
 		application.wheels.URLRewriting = "On";
 		e = "/user/5559/survey-templates/index.csv";
@@ -60,7 +60,7 @@ component extends="wheels.tests.Test" {
 
 	function test_using_onlypath_correctly_detects_https() {
 		mapper = $mapper();
-		mapper.draw().$match(name="user_2", pattern="user/[user_id]/[controller]/[action].[format]").end();
+		mapper.$draw().$match(name="user_2", pattern="user/[user_id]/[controller]/[action].[format]").end();
 		$setNamedRoutePositions();
 		request.cgi.server_protocol = "";
 		request.cgi.server_port_secure = 1;

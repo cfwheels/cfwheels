@@ -191,7 +191,7 @@ private string function $shallowPathForCall() {
 private void function $resetScopeStack() {
 	variables.scopeStack = [];
 	ArrayPrepend(variables.scopeStack, {});
-	variables.scopeStack[1].$call = "draw";
+	variables.scopeStack[1].$call = "$draw";
 }
 
 </cfscript>

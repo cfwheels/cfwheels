@@ -3,7 +3,7 @@
 /**
  * Internal function.
  */
-public struct function draw(boolean restful=true, boolean methods=arguments.restful) {
+public struct function $draw(boolean restful=true, boolean methods=arguments.restful) {
 	variables.restful = arguments.restful;
 	variables.methods = arguments.restful || arguments.methods;
 
