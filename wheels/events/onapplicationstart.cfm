@@ -379,7 +379,7 @@ public void function onApplicationStart() {
 
 	// create the mapper that will handle creating routes before $loadRoutes
 	// and after $loadPlugins
-	application.$wheels.mapper = $createObjectFromRoot(path="wheels", fileName="Mapper", method="init");
+	application.$wheels.mapper = $createObjectFromRoot(path="wheels", fileName="Mapper", method="$init");
 
 	// load developer routes and adds the default wheels routes (unless the developer has specified not to)
 	$loadRoutes();

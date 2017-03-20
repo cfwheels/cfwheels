@@ -4,7 +4,7 @@ component extends="wheels.tests.Test" {
     config = {
       path="wheels"
       ,fileName="Mapper"
-      ,method="init"
+      ,method="$init"
     };
     _params = {controller="test", action="index"};
     _originalRoutes = application[$appKey()].routes;

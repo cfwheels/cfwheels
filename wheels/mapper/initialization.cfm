@@ -3,7 +3,7 @@
 /**
  * Internal function.
  */
-public struct function init(boolean restful=true, boolean methods=arguments.restful) {
+public struct function $init(boolean restful=true, boolean methods=arguments.restful) {
 
 	// Set up control variables.
 	variables.scopeStack = [];
