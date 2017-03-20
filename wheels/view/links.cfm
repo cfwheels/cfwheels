@@ -1,5 +1,24 @@
 <cfscript>
 
+/**
+* Creates a link to another page in your application. Pass in the name of a route to use your configured routes or a controller/action/key combination. Note: Pass any additional arguments like class, rel, and id, and the generated tag will also include those values as HTML attributes.
+*
+* [section: View Helpers]
+* [category: Link Functions]
+*
+* @text The text content of the link.
+* @route Name of a route that you have configured in config/routes.cfm.
+* @controller Name of the controller to include in the URL.
+* @action Name of the action to include in the URL.
+* @key Key(s) to include in the URL.
+* @params Any additional parameters to be set in the query string (example: wheels=cool&x=y). Please note that CFWheels uses the & and = characters to split the parameters and encode them properly for you (using URLEncodedFormat() internally). However, if you need to pass in & or = as part of the value, then you need to encode them (and only them), example: a=cats%26dogs%3Dtrouble!&b=1.
+* @anchor Sets an anchor name to be appended to the path.
+* @onlyPath If true, returns only the relative URL (no protocol, host name or port).
+* @host Set this to override the current host.
+* @protocol Set this to override the current protocol.
+* @port Set this to override the current port number.
+* @href Pass a link to an external site here if you want to bypass the CFWheels routing system altogether and link to an external URL.
+*/
 public string function linkTo(
 	string text,
 	string route="",
@@ -42,7 +61,26 @@ public string function linkTo(
 	}
 	return $element(name="a", skip=local.skip, content=arguments.text, attributes=arguments);
 }
-
+/**
+* Creates a form containing a single button that submits to the URL. The URL is built the same way as the linkTo function.
+*
+* [section: View Helpers]
+* [category: Link Functions]
+*
+* @text The text content of the button.
+* @image If you want to use an image for the button pass in the link to it here (relative from the images folder).
+* @disable Pass in true if you want the button to be disabled when clicked (can help prevent multiple clicks), or pass in a string if you want the button disabled and the text on the button updated (to "please wait...", for example).
+* @route See documentation for [doc:URLFor].
+* @controller See documentation for [doc:URLFor].
+* @action See documentation for [doc:URLFor].
+* @key See documentation for [doc:URLFor].
+* @params See documentation for [doc:URLFor].
+* @anchor See documentation for [doc:URLFor].
+* @onlyPath See documentation for [doc:URLFor].
+* @host See documentation for [doc:URLFor].
+* @protocol See documentation for [doc:URLFor].
+* @port See documentation for [doc:URLFor].
+*/
 public string function buttonTo(
 	string text,
 	string image,
@@ -73,6 +111,16 @@ public string function buttonTo(
 	return $element(name="form", skip=local.skip, content=local.content, attributes=arguments);
 }
 
+/**
+* Creates a mailto link tag to the specified email address, which is also used as the name of the link unless name is specified.
+*
+* [section: View Helpers]
+* [category: Link Functions]
+*
+* @emailAddress The email address to link to.
+* @name A string to use as the link text ("Joe" or "Support Department", for example).
+* @encode Pass true here to encode the email address, making it harder for bots to harvest it for example.
+*/
 public string function mailTo(
 	required string emailAddress,
 	string name="",
@@ -99,6 +147,30 @@ public string function mailTo(
 	return local.rv;
 }
 
+/**
+* Builds and returns a string containing links to pages based on a paginated query. Uses linkTo() internally to build the link, so you need to pass in a route name or a controller/action/key combination. All other linkTo() arguments can be supplied as well, in which case they are passed through directly to linkTo(). If you have paginated more than one query in the controller, you can use the handle argument to reference them. (Don't forget to pass in a handle to the findAll() function in your controller first.)
+*
+* [section: View Helpers]
+* [category: Link Functions]
+*
+* @windowSize The number of page links to show around the current page.
+* @alwaysShowAnchors Whether or not links to the first and last page should always be displayed.
+* @anchorDivider String to place next to the anchors on either side of the list.
+* @linkToCurrentPage Whether or not the current page should be linked to.
+* @prepend String or HTML to be prepended before result.
+* @append String or HTML to be appended after result.
+* @prependToPage String or HTML to be prepended before each page number.
+* @prependOnFirst Whether or not to prepend the prependToPage string on the first page in the list.
+* @prependOnAnchor Whether or not to prepend the prependToPage string on the anchors.
+* @appendToPage String or HTML to be appended after each page number.
+* @appendOnLast Whether or not to append the appendToPage string on the last page in the list.
+* @appendOnAnchor Whether or not to append the appendToPage string on the anchors.
+* @classForCurrent Class name for the current page number (if linkToCurrentPage is true, the class name will go on the a element. If not, a span element will be used).
+* @handle The handle given to the query that the pagination links should be displayed for.
+* @name The name of the param that holds the current page number.
+* @showSinglePage Will show a single page when set to true. (The default behavior is to return an empty string when there is only one page in the pagination).
+* @pageNumberAsParam Decides whether to link the page number as a param or as part of a route. (The default behavior is true).
+*/
 public string function paginationLinks(
 	numeric windowSize,
 	boolean alwaysShowAnchors,
