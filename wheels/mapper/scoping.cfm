@@ -70,8 +70,6 @@ public struct function scope(
 }
 
 /**
- * ???.
- *
  * [section: Configuration]
  * [category: Routing]
  */
@@ -84,8 +82,6 @@ public struct function namespace(
 }
 
 /**
- * ???.
- *
  * [section: Configuration]
  * [category: Routing]
  */

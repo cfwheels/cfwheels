@@ -193,14 +193,16 @@ public struct function resources(required string name, boolean nested=false) {
 }
 
 /**
- * Internal function.
+ * [section: Configuration]
+ * [category: Routing]
  */
 public struct function member() {
 	return scope(path=variables.scopeStack[1].memberPath, $call="member");
 }
 
 /**
- * Internal function.
+ * [section: Configuration]
+ * [category: Routing]
  */
 public struct function collection() {
 	return scope(path=variables.scopeStack[1].collectionPath, $call="collection");
