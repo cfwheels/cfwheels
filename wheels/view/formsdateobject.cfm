@@ -69,7 +69,7 @@ public string function dateSelect(
 * @separator Use to change the character that is displayed between the time select tags.
 * @minuteStep Pass in 10 to only show minute 10, 20, 30, etc.
 * @secondStep Pass in 10 to only show seconds 10, 20, 30, etc.
-* @includeBlank See documentation for select.
+* @includeBlank See documentation for [doc:select].
 * @label See documentation for [doc:dateSelect].
 * @labelPlacement See documentation for [doc:textField].
 * @prepend See documentation for [doc:textField].
