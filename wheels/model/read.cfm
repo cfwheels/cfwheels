@@ -20,7 +20,7 @@
  * @cache If you want to cache the query, you can do so by specifying the number of minutes you want to cache the query for here. If you set it to true, the default cache time will be used (60 minutes).
  * @reload Set to true to force CFWheels to query the database even though an identical query may have been run in the same request. (The default in CFWheels is to get the second query from the request-level cache.)
  * @parameterize Set to true to use cfqueryparam on all columns, or pass in a list of property names to use cfqueryparam on those only.
- * @queryName Variable name to use for the query (this can be useful when you need to spot it easily in debug output for example).
+ * @name Variable name to use for the query (this can be useful when you need to spot it easily in debug output for example).
  * @returnAs Set to objects to return an array of objects, set to structs to return an array of structs, or set to query to return a query result set.
  * @returnIncluded When returnAs is set to objects, you can set this argument to false to prevent returning objects fetched from associations specified in the include argument. This is useful when you only need to include associations for use in the WHERE clause only and want to avoid the performance hit that comes with object creation.
  * @callbacks You can set this argument to false to prevent running the execution of callbacks for a method call.
@@ -41,7 +41,7 @@ public any function findAll(
 	any cache="",
 	boolean reload,
 	any parameterize,
-	string queryName="#variables.wheels.class.modelName#FindAllQuery",
+	string name="#variables.wheels.class.modelName#FindAllQuery",
 	string returnAs,
 	boolean returnIncluded,
 	boolean callbacks="true",
@@ -92,8 +92,8 @@ public any function findAll(
 		if (arguments.count > 0) {
 			local.totalRecords = arguments.count;
 		} else {
-			arguments.queryName &= "PaginationCount";
-			local.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=local.distinct, parameterize=arguments.parameterize, queryName=arguments.queryName, includeSoftDeletes=arguments.includeSoftDeletes);
+			arguments.name &= "PaginationCount";
+			local.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=local.distinct, parameterize=arguments.parameterize, name=arguments.name, includeSoftDeletes=arguments.includeSoftDeletes);
 		}
 		local.currentPage = arguments.page;
 		if (local.totalRecords == 0) {
@@ -114,8 +114,8 @@ public any function findAll(
 				// if limit is 0 or less it means that a page that has no records was asked for so we return an empty query
 				local.rv = "";
 			} else {
-				arguments.queryName &= "PaginationIds";
-				local.values = findAll($limit=local.limit, $offset=local.offset, select=primaryKeys(), where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=local.distinct, parameterize=arguments.parameterize, queryName=arguments.queryName, includeSoftDeletes=arguments.includeSoftDeletes, callbacks=false);
+				arguments.name &= "PaginationIds";
+				local.values = findAll($limit=local.limit, $offset=local.offset, select=primaryKeys(), where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=local.distinct, parameterize=arguments.parameterize, name=arguments.name, includeSoftDeletes=arguments.includeSoftDeletes, callbacks=false);
 				if (local.values.RecordCount) {
 					local.paginationWhere = "";
 					local.iEnd = local.values.recordCount;
@@ -187,7 +187,7 @@ public any function findAll(
 			local.finderArgs.sql = local.sql;
 			local.finderArgs.maxRows = arguments.maxRows;
 			local.finderArgs.parameterize = arguments.parameterize;
-			local.finderArgs.queryName = arguments.queryName;
+			local.finderArgs.name = arguments.name;
 			local.finderArgs.limit = arguments.$limit;
 			local.finderArgs.offset = arguments.$offset;
 			local.finderArgs.$primaryKey = primaryKeys();
@@ -239,7 +239,7 @@ public any function findAll(
  * @cache If you want to cache the query, you can do so by specifying the number of minutes you want to cache the query for here. If you set it to true, the default cache time will be used (60 minutes).
  * @reload Set to true to force Wheels to query the database even though an identical query may have been run in the same request. (The default in Wheels is to get the second query from the request-level cache.)
  * @parameterize Set to true to use cfqueryparam on all columns, or pass in a list of property names to use cfqueryparam on those only.
- * @queryName See documentation for [doc:findAll].
+ * @name See documentation for [doc:findAll].
  * @returnAs Set this to objects to return an array of objects. Set this to query to return a query result set.
  * @callbacks You can set this argument to false to prevent running the execution of callbacks for a method call.
  * @includeSoftDeletes You can set this argument to true to include soft-deleted records in the results.
@@ -251,7 +251,7 @@ public any function findByKey(
 	any cache="",
 	boolean reload,
 	any parameterize,
-	string queryName="#variables.wheels.class.modelName#FindByKeyQuery",
+	string name="#variables.wheels.class.modelName#FindByKeyQuery",
 	string returnAs,
 	boolean callbacks="true",
 	boolean includeSoftDeletes="false"
@@ -282,7 +282,7 @@ public any function findByKey(
  * @cache If you want to cache the query, you can do so by specifying the number of minutes you want to cache the query for here. If you set it to true, the default cache time will be used (60 minutes).
  * @reload Set to true to force Wheels to query the database even though an identical query may have been run in the same request. (The default in Wheels is to get the second query from the request-level cache.)
  * @parameterize Set to true to use cfqueryparam on all columns, or pass in a list of property names to use cfqueryparam on those only.
- * @queryName See documentation for [doc:findAll].
+ * @name See documentation for [doc:findAll].
  * @returnAs Set this to objects to return an array of objects. Set this to query to return a query result set.
  * @includeSoftDeletes You can set this argument to true to include soft-deleted records in the results.
  */
@@ -294,7 +294,7 @@ public any function findOne(
 	any cache="",
 	boolean reload,
 	any parameterize,
-	string queryName="#variables.wheels.class.modelName#FindOneQuery",
+	string name="#variables.wheels.class.modelName#FindOneQuery",
 	string returnAs,
 	boolean includeSoftDeletes="false"
 ) {
