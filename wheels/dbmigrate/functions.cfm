@@ -139,7 +139,7 @@ public array function getAvailableMigrations(string path=this.paths.migrate) {
 					local.migration.status = "migrated";
 				}
 			} catch(any e) {
-				local.migration.loadError = CFCATCH.Message;
+				local.migration.loadError = e.message;
 			}
 			ArrayAppend(local.rv, local.migration);
 		}
