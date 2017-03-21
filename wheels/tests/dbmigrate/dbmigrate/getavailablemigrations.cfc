@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		dbmigrate = CreateObject("component", "wheels.dbmigrate.dbmigrate").init(
+		dbmigrate = CreateObject("component", "wheels.dbmigrate").init(
 			migratePath="wheels/tests/_assets/db/migrate/"
 		);
 	}
