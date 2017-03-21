@@ -114,7 +114,7 @@ public any function findAll(
 				// if limit is 0 or less it means that a page that has no records was asked for so we return an empty query
 				local.rv = "";
 			} else {
-				arguments.name &= "PaginationIds";
+				arguments.name = Replace(arguments.name, "PaginationCount", "PaginationIds");
 				local.values = findAll($limit=local.limit, $offset=local.offset, select=primaryKeys(), where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=local.distinct, parameterize=arguments.parameterize, name=arguments.name, includeSoftDeletes=arguments.includeSoftDeletes, callbacks=false);
 				if (local.values.RecordCount) {
 					local.paginationWhere = "";
@@ -187,6 +187,9 @@ public any function findAll(
 			local.finderArgs.sql = local.sql;
 			local.finderArgs.maxRows = arguments.maxRows;
 			local.finderArgs.parameterize = arguments.parameterize;
+			if (!arguments.$limit) {
+				arguments.name = Replace(arguments.name, "PaginationIds", "PaginationData");
+			}
 			local.finderArgs.name = arguments.name;
 			local.finderArgs.limit = arguments.$limit;
 			local.finderArgs.offset = arguments.$offset;
