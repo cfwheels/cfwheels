@@ -1,4 +1,4 @@
-// Get a post object and then delete it from the database
+// Get a post object and then delete it from the database.
 post = model("post").findByKey(33);
 post.delete();
 

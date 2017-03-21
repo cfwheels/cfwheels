@@ -1,15 +1,12 @@
-// This is the method to be run inside a transaction
-<cffunction name="transferFunds" returntype="boolean" output="false">
-    <cfargument name="personFrom">
-    <cfargument name="personTo">
-    <cfargument name="amount">
-    <cfif arguments.personFrom.withdraw(arguments.amount) and arguments.personTo.deposit(arguments.amount)>
-        <cfreturn true>
-    <cfelse>
-        <cfreturn false>
-    </cfif>
-</cffunction>
+// This is the method to be run inside a transaction.
+public boolean function transferFunds(required any personFrom, required any personTo, required numeric amount) {
+	if (arguments.personFrom.withdraw(arguments.amount) && arguments.personTo.deposit(arguments.amount)) {
+		return true;
+	} else {
+		return false;
+	}
+}
 
-david = model("Person").findOneByName("David");
-mary = model("Person").findOneByName("Mary");
-invokeWithTransaction(method="transferFunds", personFrom=david, personTo=mary, amount=100);
+local.david = model("Person").findOneByName("David");
+local.mary = model("Person").findOneByName("Mary");
+invokeWithTransaction(method="transferFunds", personFrom=local.david, personTo=local.mary, amount=100);

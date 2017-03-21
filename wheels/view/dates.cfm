@@ -6,7 +6,7 @@
  * [section: View Helpers]
  * [category: Date Functions]
  *
- * @fromTime Date to compare from..
+ * @fromTime Date to compare from.
  * @toTime Date to compare to.
  * @includeSeconds Whether or not to include the number of seconds in the returned string.
  */
@@ -70,7 +70,7 @@ public string function distanceOfTimeInWords(required date fromTime, required da
  * [section: View Helpers]
  * [category: Date Functions]
  *
- * @fromTime Date to compare from..
+ * @fromTime Date to compare from.
  * @includeSeconds Whether or not to include the number of seconds in the returned string.
  * @toTime Date to compare to.
  */

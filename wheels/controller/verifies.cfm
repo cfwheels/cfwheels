@@ -1,24 +1,24 @@
 <cfscript>
 
 /**
-* Instructs CFWheels to verify that some specific criterias are met before running an action. Note that all undeclared arguments will be passed to redirectTo() call if a handler is not specified.
-*
-* [section: Controller]
-* [category: Initialization Functions]
-*
-* @only List of action names to limit this verification to.
-* @except List of action names to exclude this verification from.
-* @post Set to true to verify that this is a POST request.
-* @get Set to true to verify that this is a GET request.
-* @ajax Set to true to verify that this is an AJAX request.
-* @cookie Verify that the passed in variable name exists in the cookie scope.
-* @session Verify that the passed in variable name exists in the session scope.
-* @params Verify that the passed in variable name exists in the params struct.
-* @handler Pass in the name of a function that should handle failed verifications. The default is to just abort the request when a verification fails.
-* @cookieTypes List of types to check each listed cookie value against (will be passed through to your CFML engine's IsValid function).
-* @sessionTypes List of types to check each list session value against (will be passed through to your CFML engine's IsValid function).
-* @paramsTypes List of types to check each params value against (will be passed through to your CFML engine's IsValid function).
-*/
+ * Instructs CFWheels to verify that some specific criterias are met before running an action. Note that all undeclared arguments will be passed to redirectTo() call if a handler is not specified.
+ *
+ * [section: Controller]
+ * [category: Initialization Functions]
+ *
+ * @only List of action names to limit this verification to.
+ * @except List of action names to exclude this verification from.
+ * @post Set to true to verify that this is a POST request.
+ * @get Set to true to verify that this is a GET request.
+ * @ajax Set to true to verify that this is an AJAX request.
+ * @cookie Verify that the passed in variable name exists in the cookie scope.
+ * @session Verify that the passed in variable name exists in the session scope.
+ * @params Verify that the passed in variable name exists in the params struct.
+ * @handler Pass in the name of a function that should handle failed verifications. The default is to just abort the request when a verification fails.
+ * @cookieTypes List of types to check each listed cookie value against (will be passed through to your CFML engine's IsValid function).
+ * @sessionTypes List of types to check each list session value against (will be passed through to your CFML engine's IsValid function).
+ * @paramsTypes List of types to check each params value against (will be passed through to your CFML engine's IsValid function).
+ */
 public void function verifies(
 	string only="",
 	string except="",
@@ -38,32 +38,32 @@ public void function verifies(
 }
 
 /**
-* Returns an array of all the verifications set on this controller in the order in which they will be executed.
-*
-* [section: Controller]
-* [category: Initialization Functions]
-*
+ * Returns an array of all the verifications set on this controller in the order in which they will be executed.
+ *
+ * [section: Controller]
+ * [category: Initialization Functions]
 */
 public array function verificationChain() {
 	return variables.$class.verifications;
 }
 
 /**
-* Use this function if you need a more low level way of setting the entire verification chain for a controller.
-*
-* [section: Controller]
-* [category: Initialization Functions]
-*
-* @chain An array of structs, each of which represent an argumentCollection that get passed to the verifies function. This should represent the entire verification chain that you want to use for this controller.
-*/
+ * Use this function if you need a more low level way of setting the entire verification chain for a controller.
+ *
+ * [section: Controller]
+ * [category: Initialization Functions]
+ *
+ * @chain An array of structs, each of which represent an argumentCollection that get passed to the verifies function. This should represent the entire verification chain that you want to use for this controller.
+ */
 public void function setVerificationChain(required array chain) {
 
-	// clear current verification chain and then re-add from the passed in chain
+	// Clear current verification chain and then re-add from the passed in chain.
 	variables.$class.verifications = [];
 	local.iEnd = ArrayLen(arguments.chain);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		verifies(argumentCollection=arguments.chain[local.i]);
 	}
+
 }
 
 /**
@@ -77,8 +77,8 @@ public void function $runVerifications(
 	struct cookieScope=cookie
 ) {
 
-	// only access the session scope when session management is enabled in the app
-	// default to the wheels setting but get it on a per request basis if possible (from application.cfc)
+	// Only access the session scope when session management is enabled in the app.
+	// Default to the Wheels setting but get it on a per request basis if possible (from Application.cfc).
 	local.sessionManagement = $get("sessionManagement");
 	try {
 		local.sessionManagement = application.getApplicationSettings().sessionManagement;
@@ -126,7 +126,8 @@ public void function $runVerifications(
 				}
 
 			} else {
-				// check to see if we should perform a redirect or abort completly
+
+				// Check to see if we should perform a redirect or abort completely.
 				local.redirectArgs = {};
 				for (local.key in local.element) {
 					if (!ListFindNoCase(local.$args, local.key) && StructKeyExists(local.element, local.key)) {
@@ -138,9 +139,12 @@ public void function $runVerifications(
 				} else {
 					variables.$instance.abort = true;
 				}
+
 			}
-			// an abort was issued, no need to process further in the chain
+
+			// An abort was issued, no need to process further in the chain.
 			break;
+
 		}
 	}
 }
@@ -165,7 +169,7 @@ public boolean function $checkVerificationsVars(
 			local.value = arguments.scope[local.item];
 			local.typeCheck = ListGetAt(arguments.types, local.i);
 
-			// by default string aren't allowed to be blank
+			// By default string aren't allowed to be blank.
 			local.typeAllowedBlank = false;
 			if (local.typeCheck == "blank") {
 				local.typeAllowedBlank = true;

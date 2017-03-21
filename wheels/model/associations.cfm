@@ -1,16 +1,17 @@
 <cfscript>
+
 /**
-* Sets up a belongsTo association between this model and the specified one.
-* Use this association when this model contains a foreign key referencing another model.
-*
-* [section: Model Initialization]
-* [category: Association Functions]
-*
-* @name Gives the association a name that you refer to when working with the association (in the include argument to findAll, to name one example).
-* @modelName Name of associated model (usually not needed if you follow CFWheels conventions because the model name will be deduced from the name argument).
-* @foreignKey Foreign key property name (usually not needed if you follow CFWheels conventions since the foreign key name will be deduced from the name argument).
-* @joinKey Column name to join to if not the primary key (usually not needed if you follow wheels conventions since the join key will be the tables primary key/keys).
-* @joinType inner Use to set the join type when joining associated tables. Possible values are inner (for INNER JOIN) and outer (for LEFT OUTER JOIN).
+ * Sets up a belongsTo association between this model and the specified one.
+ * Use this association when this model contains a foreign key referencing another model.
+ *
+ * [section: Model Initialization]
+ * [category: Association Functions]
+ *
+ * @name Gives the association a name that you refer to when working with the association (in the include argument to findAll, to name one example).
+ * @modelName Name of associated model (usually not needed if you follow CFWheels conventions because the model name will be deduced from the name argument).
+ * @foreignKey Foreign key property name (usually not needed if you follow CFWheels conventions since the foreign key name will be deduced from the name argument).
+ * @joinKey Column name to join to if not the primary key (usually not needed if you follow wheels conventions since the join key will be the tables primary key/keys).
+ * @joinType Use to set the join type when joining associated tables. Possible values are inner (for INNER JOIN) and outer (for LEFT OUTER JOIN).
 */
 public void function belongsTo(
 	required string name,
@@ -31,20 +32,20 @@ public void function belongsTo(
 }
 
 /**
-* Sets up a hasMany association between this model and the specified one.
-*
-* [section: Model Initialization]
-* [category: Association Functions]
-*
-* @name Gives the association a name that you refer to when working with the association (in the include argument to findAll, to name one example).
-* @modelName Name of associated model (usually not needed if you follow CFWheels conventions because the model name will be deduced from the name argument).
-* @foreignKey Foreign key property name (usually not needed if you follow CFWheels conventions since the foreign key name will be deduced from the name argument).
-* @joinKey Column name to join to if not the primary key (usually not needed if you follow wheels conventions since the join key will be the tables primary key/keys).
-* @joinType Use to set the join type when joining associated tables. Possible values are inner (for INNER JOIN) and outer (for LEFT OUTER JOIN).
-* @dependent Defines how to handle dependent models when you delete a record from this model. Set to delete to instantiate associated models and call their delete method, deleteAll to delete without instantiating, removeAll to remove the foreign key, or false to do nothing.
-* @shortcut Set this argument to create an additional dynamic method that gets the object(s) from the other side of a many-to-many association.
-* @through Set this argument if you need to override CFWheels conventions when using the shortcut argument. Accepts a list of two association names representing the chain from the opposite side of the many-to-many relationship to this model.
-*/
+ * Sets up a hasMany association between this model and the specified one.
+ *
+ * [section: Model Initialization]
+ * [category: Association Functions]
+ *
+ * @name Gives the association a name that you refer to when working with the association (in the include argument to findAll, to name one example).
+ * @modelName Name of associated model (usually not needed if you follow CFWheels conventions because the model name will be deduced from the name argument).
+ * @foreignKey Foreign key property name (usually not needed if you follow CFWheels conventions since the foreign key name will be deduced from the name argument).
+ * @joinKey Column name to join to if not the primary key (usually not needed if you follow wheels conventions since the join key will be the tables primary key/keys).
+ * @joinType Use to set the join type when joining associated tables. Possible values are inner (for INNER JOIN) and outer (for LEFT OUTER JOIN).
+ * @dependent Defines how to handle dependent models when you delete a record from this model. Set to delete to instantiate associated models and call their delete method, deleteAll to delete without instantiating, removeAll to remove the foreign key, or false to do nothing.
+ * @shortcut Set this argument to create an additional dynamic method that gets the object(s) from the other side of a many-to-many association.
+ * @through Set this argument if you need to override CFWheels conventions when using the shortcut argument. Accepts a list of two association names representing the chain from the opposite side of the many-to-many relationship to this model.
+ */
 public void function hasMany(
 	required string name,
 	string modelName="",
@@ -78,18 +79,18 @@ public void function hasMany(
 }
 
 /**
-* Sets up a hasOne association between this model and the specified one.
-*
-* [section: Model Initialization]
-* [category: Association Functions]
-*
-* @name string true See documentation for [doc:belongsTo].
-* @modelName string false See documentation for [doc:belongsTo].
-* @foreignKey string false See documentation for [doc:belongsTo].
-* @joinKey string false See documentation for [doc:belongsTo].
-* @joinType string false outer See documentation for [doc:belongsTo].
-* @dependent string false false See documentation for [doc:hasMany].
-*/
+ * Sets up a hasOne association between this model and the specified one.
+ *
+ * [section: Model Initialization]
+ * [category: Association Functions]
+ *
+ * @name See documentation for [doc:belongsTo].
+ * @modelName See documentation for [doc:belongsTo].
+ * @foreignKey See documentation for [doc:belongsTo].
+ * @joinKey See documentation for [doc:belongsTo].
+ * @joinType See documentation for [doc:belongsTo].
+ * @dependent See documentation for [doc:hasMany].
+ */
 public void function hasOne(
 	required string name,
 	string modelName="",

@@ -13,5 +13,5 @@ renderPage(layout=false, cache=60);
 // Load a layout from a different folder within `views`
 renderPage(layout="/layouts/blog");
 
-// Don''t render the view immediately but rather return and store in a variable for further processing
+// Don't render the view immediately but rather return and store in a variable for further processing
 myView = renderPage(returnAs="string");

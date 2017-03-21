@@ -1,6 +1,6 @@
 // In the controller action
 flashInsert(success="Your post was successfully submitted.");
-flashInsert(alert="Don''t forget to tweet about this post!");
+flashInsert(alert="Don't forget to tweet about this post!");
 flashInsert(error="This is an error message.");
 
 <!--- In the layout or view --->
@@ -9,7 +9,7 @@ flashInsert(error="This is an error message.");
 <!--- Generates this (sorted alphabetically):--->
 <div class="flashMessages">
 	<p class="alertMessage">
-		Don''t forget to tweet about this post!
+		Don't forget to tweet about this post!
 	</p>
 	<p class="errorMessage">
 		This is an error message.
@@ -40,6 +40,6 @@ flashInsert(error="This is an error message.");
 		Your post was successfully submitted.
 	</p>
 	<p class="alertMessage">
-		Don''t forget to tweet about this post!
+		Don't forget to tweet about this post!
 	</p>
 </div>
