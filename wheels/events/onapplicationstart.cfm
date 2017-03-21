@@ -98,7 +98,7 @@ public void function onApplicationStart() {
 	application.$wheels.transactionMode = "commit";
 
 	// dbmigrate
-	application.$wheels.dbmigrate = $createObjectFromRoot(path="wheels/dbmigrate", fileName="dbmigrate", method="init");;
+	application.$wheels.dbmigrate = $createObjectFromRoot(path="wheels", fileName="dbmigrate", method="init");
 	application.$wheels.dbmigrateTableName = "schemainfo";
 	application.$wheels.dbmigrateWriteSQLFiles = false;
 	application.$wheels.dbmigrateObjectCase = "lower";
