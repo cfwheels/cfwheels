@@ -41,6 +41,7 @@ public any function findAll(
 	any cache="",
 	boolean reload,
 	any parameterize,
+	string queryName="#variables.wheels.class.modelName#FindAllQuery",
 	string returnAs,
 	boolean returnIncluded,
 	boolean callbacks="true",
@@ -91,7 +92,7 @@ public any function findAll(
 		if (arguments.count > 0) {
 			local.totalRecords = arguments.count;
 		} else {
-			local.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=local.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
+			local.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=local.distinct, parameterize=arguments.parameterize, queryName=arguments.queryName, includeSoftDeletes=arguments.includeSoftDeletes);
 		}
 		local.currentPage = arguments.page;
 		if (local.totalRecords == 0) {
@@ -112,7 +113,7 @@ public any function findAll(
 				// if limit is 0 or less it means that a page that has no records was asked for so we return an empty query
 				local.rv = "";
 			} else {
-				local.values = findAll($limit=local.limit, $offset=local.offset, select=primaryKeys(), where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=local.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes, callbacks=false);
+				local.values = findAll($limit=local.limit, $offset=local.offset, select=primaryKeys(), where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=local.distinct, parameterize=arguments.parameterize, queryName=arguments.queryName, includeSoftDeletes=arguments.includeSoftDeletes, callbacks=false);
 				if (local.values.RecordCount) {
 					local.paginationWhere = "";
 					local.iEnd = local.values.recordCount;
@@ -184,6 +185,7 @@ public any function findAll(
 			local.finderArgs.sql = local.sql;
 			local.finderArgs.maxRows = arguments.maxRows;
 			local.finderArgs.parameterize = arguments.parameterize;
+			local.finderArgs.queryName = arguments.queryName;
 			local.finderArgs.limit = arguments.$limit;
 			local.finderArgs.offset = arguments.$offset;
 			local.finderArgs.$primaryKey = primaryKeys();
@@ -246,6 +248,7 @@ public any function findByKey(
 	any cache="",
 	boolean reload,
 	any parameterize,
+	string queryName="#variables.wheels.class.modelName#FindByKeyQuery",
 	string returnAs,
 	boolean callbacks="true",
 	boolean includeSoftDeletes="false"
@@ -288,6 +291,7 @@ public any function findOne(
 	any cache="",
 	boolean reload,
 	any parameterize,
+	string queryName="#variables.wheels.class.modelName#FindOneQuery",
 	string returnAs,
 	boolean includeSoftDeletes="false"
 ) {
