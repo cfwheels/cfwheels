@@ -12,7 +12,7 @@ Model Enhancements
 * Database Migrations (dbmigrate) now available in the core - #664 [Adam Chapman, Tom King, Mike Grogan]
 * New "timeStampMode" setting ("utc", "local" or "epoch") for the "createdAt" and "updatedAt" columns - [Andy Bellenie]
 * Allow nested transactions - #732 [Andy Bellenie]
-* Pass in "name" to finders to set the variable name for the query - [Per Djurner]
+* The "handle" argument to finders now set the variable name for the query so it's easier to find in the debug output - [Per Djurner]
 
 View Enhancements
 =================
