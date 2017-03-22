@@ -1,75 +1,6 @@
 <cfscript>
 // Core API embedded documentation
 
-		/*
-		Just here at the moment for reference
-		{
-			"name" = "Model Initialization",
-			"categories" = [
-				"Association Functions",
-				"Callback Functions",
-				"Miscellaneous Functions",
-				"Validation Functions"
-			]
-		},
-		{
-			"name" = "Model Class",
-			"categories" = [
-				"Create Functions",
-				"Delete Functions",
-				"Miscellaneous Functions",
-				"Read Functions",
-				"Statistics Functions",
-				"Update Functions"
-			]
-		},
-		{
-			"name" = "Model Object",
-			"categories" = [
-				"Change Functions",
-				"CRUD Functions",
-				"Error Functions",
-				"Miscellaneous Functions"
-			]
-		},
-		{
-			"name" = "View Helpers",
-			"categories" = [
-				"Asset Functions",
-				"Date Functions",
-				"Error Functions",
-				"Form Association Functions",
-				"Form Object Functions",
-				"Form Tag Functions",
-				"General Form Functions",
-				"Link Functions",
-				"Miscellaneous Functions",
-				"Sanitization Functions",
-				"Text Functions"
-			]
-		},
-		{
-			"name" = "Controller",
-			"categories" = [
-				"Initialization Functions",
-				"Flash Functions",
-				"Rendering Functions",
-				"Pagination Functions",
-				"Provides Functions",
-				"Miscellaneous Functions"
-			]
-		},
-		{
-			"name" = "Global Helpers",
-			"categories" = [
-				"Miscellaneous Functions",
-				"String Functions"
-			]
-		},
-		{
-			"name" = "Configuration",
-			"categories" = []
-		}*/
 	param name="params.type" default="core";
 	param name="params.format" default="html";
 
@@ -101,9 +32,12 @@
 	for(doctype in temp){
 		// Populate A-Z function List
 		for(functionName in listToArray(temp[doctype]['functions']) ){
-			// Ignore internal functions
-			if(left(functionName, 1) != "$" && !ArrayFindNoCase(ignore, functionName)){
-				// Check this isn't a dupe, but record which scope this was from
+			// Check this is actually a function: dbmigrate stores a struct for instance
+			// Don't display internal functions, duplicates or anything in the ignore list
+			if(left(functionName, 1) != "$"
+				&& !ArrayFindNoCase(ignore, functionName)
+				&& !isStruct(temp[doctype]["scope"][functionName])
+			){
 				if( !ArrayFind(docs.functions, function(struct){
 				   return struct.name == functionName;
 				})){
