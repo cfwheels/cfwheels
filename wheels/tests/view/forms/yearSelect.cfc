@@ -21,7 +21,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_startyear_lt_endyear_value_gt_startyear() {
-		_controller.changeBirthday("1995");
+		_controller.changeBirthday(CreateDate(1995, 11, 1));
 		args.startyear = "1980";
 		args.endyear = "1990";
 		r = _controller.dateSelect(argumentCollection=args);
@@ -40,7 +40,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_startyear_gt_endyear_value_gt_endyear() {
-		_controller.changeBirthday("1995");
+		_controller.changeBirthday(CreateDate(1995, 11, 1));
 		args.startyear = "1990";
 		args.endyear = "1980";
 		r = _controller.dateSelect(argumentCollection=args);

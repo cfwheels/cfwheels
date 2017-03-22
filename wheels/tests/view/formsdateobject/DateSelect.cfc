@@ -29,10 +29,6 @@ component extends="wheels.tests.Test" {
 		e = dateSelect_year_str(args.property);
 		r = _controller.dateSelect(argumentcollection=args);
 		assert("e eq r");
-		args.property = "birthdayyear";
-		e = dateSelect_year_str(args.property);
-		r = _controller.dateSelect(argumentcollection=args);
-		assert("e eq r");
 	}
 
 	function test_dateselect_year_is_less_than_startyear() {
