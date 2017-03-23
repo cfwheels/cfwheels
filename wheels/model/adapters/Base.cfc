@@ -289,5 +289,61 @@ component output=false {
 		return "/* " & arguments.text & " */";
 	}
 
+	/**
+	 * Internal function.
+	 */
+	public struct function $performQuery(
+	  required array sql,
+	  required boolean parameterize,
+	  numeric limit=0,
+	  numeric offset=0,
+	  string $primaryKey="",
+	  string $debugName="query"
+	) {
+		local.queryAttributes = {};
+		local.queryAttributes.dataSource = variables.dataSource;
+		local.queryAttributes.username = variables.username;
+		local.queryAttributes.password = variables.password;
+		local.queryAttributes.result = "local.$wheels.result";
+		local.queryAttributes.name = "local." & arguments.$debugName;
+		if (StructKeyExists(local.queryAttributes, "username") && !Len(local.queryAttributes.username)) {
+			StructDelete(local.queryAttributes, "username");
+		}
+		if (StructKeyExists(local.queryAttributes, "password") && !Len(local.queryAttributes.password)) {
+			StructDelete(local.queryAttributes, "password");
+		}
+
+		// Set queries in Lucee to not preserve single quotes on the entire cfquery block (we'll handle this individually in the SQL statement instead).
+		if ($get("serverName") == "Lucee") {
+			local.queryAttributes.psq = false;
+		}
+
+		// Add a key as a comment for cached queries to ensure query is unique for the life of this application.
+		local.comment = "";
+		if (StructKeyExists(arguments, "cachedwithin")) {
+			local.comment = $comment("cachekey:#$get("cacheKey")#");
+		}
+
+		// Overloaded arguments are settings for the query.
+		local.orgArgs = Duplicate(arguments);
+		StructDelete(local.orgArgs, "sql");
+		StructDelete(local.orgArgs, "parameterize");
+		StructDelete(local.orgArgs, "$debugName");
+		StructDelete(local.orgArgs, "limit");
+		StructDelete(local.orgArgs, "offset");
+		StructDelete(local.orgArgs, "$primaryKey");
+		StructAppend(local.queryAttributes, local.orgArgs);
+		return $executeQuery(
+			queryAttributes=local.queryAttributes,
+			sql=arguments.sql,
+			parameterize=arguments.parameterize,
+			limit=arguments.limit,
+			offset=arguments.offset,
+			comment=local.comment,
+			debugName=arguments.$debugName,
+			primaryKey=arguments.$primaryKey
+		);
+	}
+
 	include "../../plugins/standalone/injection.cfm";
 }
