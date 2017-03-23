@@ -41,7 +41,7 @@ component extends="wheels.tests.Test" {
 			savecontent variable="result" {
 				WriteOutput(_controller.includePartial(partial="partialDataImplicitPublic"));
 			}
-		} catch(any e) {
+		} catch (any e) {
 			result = e;
 		}
 		assert("!issimplevalue(result)");

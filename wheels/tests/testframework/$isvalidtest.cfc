@@ -5,7 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_package_is_invalid() {
-		assert('! $isValidTest("wheels.tests._assets.testframework.ValidTestPackage", "Foo")');
+		assert('!$isValidTest("wheels.tests._assets.testframework.ValidTestPackage", "Foo")');
 	}
 
 	function test_package_named_Test_is_invalid() {

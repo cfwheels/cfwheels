@@ -34,7 +34,7 @@ component extends="wheels.tests.Test" {
 		_controller = controller("test", params);
 		try {
 			result = _controller.renderWith();
-		} catch(any e) {
+		} catch (any e) {
 			assert('true eq true');
 		}
 	}
@@ -114,7 +114,7 @@ component extends="wheels.tests.Test" {
 		try {
 			_controller.renderWith(data=user, layout=false);
 			fail(message="Error did not occur.");
-		} catch(any e) {
+		} catch (any e) {
 			assert("true eq true");
 		}
 	}

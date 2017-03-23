@@ -123,7 +123,7 @@ component extends="wheels.tests.Test" {
 	function test_migrateto_migrate_up_does_not_generate_sql_file() {
 		if(!application.testenv.isOracle){
 		dbmigrate.migrateTo(001);
-	  assert("! DirectoryExists(dbmigrate.paths.sql)");
+	  assert("!DirectoryExists(dbmigrate.paths.sql)");
 	}
 	}
 

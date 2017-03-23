@@ -20,7 +20,7 @@ component extends="wheels.tests.Test" {
 				sql="SELECT * FROM #tableName#"
 			);
 			assert("false");
-		} catch(any e) {
+		} catch (any e) {
 			raised("database");
 		}
 	}

@@ -47,7 +47,7 @@ public string function migrateTo(string version="") {
 							local.migration.cfc.down();
 							local.rv = local.rv & request.$wheelsMigrationOutput;
 							$removeVersionAsMigrated(local.migration.version);
-						} catch(any e) {
+						} catch (any e) {
 							local.rv = local.rv & "Error migrating to #local.migration.version#.#Chr(13)##e.message##Chr(13)##e.detail##Chr(13)#";
 							transaction action="rollback";
 							break;
@@ -71,7 +71,7 @@ public string function migrateTo(string version="") {
 							local.migration.cfc.up();
 							local.rv = local.rv & request.$wheelsMigrationOutput;
 							$setVersionAsMigrated(local.migration.version);
-						} catch(any e) {
+						} catch (any e) {
 							local.rv = local.rv & "Error migrating to #local.migration.version#.#Chr(13)##e.message##Chr(13)##e.detail##Chr(13)#";
 							transaction action="rollback";
 							break;
@@ -138,7 +138,7 @@ public array function getAvailableMigrations(string path=this.paths.migrate) {
 				if (ListFind(local.previousMigrationList, local.migration.version)) {
 					local.migration.status = "migrated";
 				}
-			} catch(any e) {
+			} catch (any e) {
 				local.migration.loadError = e.message;
 			}
 			ArrayAppend(local.rv, local.migration);
@@ -221,7 +221,7 @@ private string function $copyTemplateMigrationAndRename(
 		local.migrationFile = REREplace(Trim(local.migrationFile),"[\s]+", "_", "all");
 		local.migrationFile = $getNextMigrationNumber(arguments.migrationPrefix) & "_#local.migrationFile#.cfc";
 		FileWrite("#this.paths.migrate#/#local.migrationFile#", local.templateContent);
-	} catch(any e) {
+	} catch (any e) {
 		return "There was an error when creating the migration: #e.message#";
 	}
 	return "The migration #local.migrationFile# file was created";
@@ -241,7 +241,7 @@ private string function $getVersionsPreviouslyMigrated() {
 		} else {
 			return ValueList(local.migratedVersions.version);
 		}
-	} catch(any e) {
+	} catch (any e) {
 		$query(
 			datasource=application.wheels.dataSourceName,
 			sql="CREATE TABLE #application.wheels.dbmigrateTableName# (version VARCHAR(25))"

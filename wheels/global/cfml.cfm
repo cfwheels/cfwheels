@@ -176,10 +176,10 @@
 
 <cffunction name="$dbinfo" returntype="any" access="public" output="false">
 	<cfset arguments.name = "local.rv">
-	<cfif StructKeyExists(arguments, "username") && ! Len(arguments.username)>
+	<cfif StructKeyExists(arguments, "username") && !Len(arguments.username)>
 		<cfset StructDelete(arguments, "username")>
 	</cfif>
-	<cfif StructKeyExists(arguments, "password") && ! Len(arguments.password)>
+	<cfif StructKeyExists(arguments, "password") && !Len(arguments.password)>
 		<cfset StructDelete(arguments, "password")>
 	</cfif>
 	<cfdbinfo attributeCollection="#arguments#">

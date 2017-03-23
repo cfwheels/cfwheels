@@ -132,7 +132,7 @@ if (!StructKeyExists(request, "TESTING_FRAMEWORK_DEBUGGING")) {
 		var i = "";
 		var evaluatedTokens = "";
 
-		if (! evaluate(arguments.expression)) {
+		if (!evaluate(arguments.expression)) {
 
 			for (i in arguments) {
 
@@ -146,12 +146,12 @@ if (!StructKeyExists(request, "TESTING_FRAMEWORK_DEBUGGING")) {
 
 				for (token in listToArray("#expr# #reReplace(expr, "[([\])]", " ")#", " +=-*/%##")) {
 
-					if (! structKeyExists(evaluatedTokens, token)) {
+					if (!structKeyExists(evaluatedTokens, token)) {
 
 					evaluatedTokens[token] = true;
 					tokenValue = "__INVALID__";
 
-					if (! (isNumeric(token) or isBoolean(token))) {
+					if (!(isNumeric(token) or isBoolean(token))) {
 							try {
 								tokenValue = evaluate(token);
 							} catch(expression e) {
@@ -161,10 +161,10 @@ if (!StructKeyExists(request, "TESTING_FRAMEWORK_DEBUGGING")) {
 					/*
 						Format token value according to type
 					*/
-					if ((! isSimpleValue(tokenValue)) or (tokenValue neq "__INVALID__")) {
+					if ((!isSimpleValue(tokenValue)) or (tokenValue neq "__INVALID__")) {
 
 						if (isSimpleValue(tokenValue)) {
-							if (! (isNumeric(tokenValue) or isBoolean(tokenValue))) {
+							if (!(isNumeric(tokenValue) or isBoolean(tokenValue))) {
 								tokenValue ="'#tokenValue#'";
 							}
 						} else {
@@ -227,7 +227,7 @@ public any function debug(required string expression, boolean display=true) {
 		writeDump(attributeCollection=attributeArgs);
 	}
 
-	if (! StructKeyExists(request["TESTING_FRAMEWORK_DEBUGGING"], TESTING_FRAMEWORK_VARS.RUNNING_TEST)) {
+	if (!StructKeyExists(request["TESTING_FRAMEWORK_DEBUGGING"], TESTING_FRAMEWORK_VARS.RUNNING_TEST)) {
 		request["TESTING_FRAMEWORK_DEBUGGING"][TESTING_FRAMEWORK_VARS.RUNNING_TEST] = [];
 	}
 	arrayAppend(request["TESTING_FRAMEWORK_DEBUGGING"][TESTING_FRAMEWORK_VARS.RUNNING_TEST], dump);
@@ -240,7 +240,7 @@ public any function debug(required string expression, boolean display=true) {
 public string function raised(required string expression) {
 	try {
 		evaluate(arguments.expression);
-	} catch(any e) {
+	} catch (any e) {
 		return trim(e.type);
 	}
 	return "";
@@ -272,7 +272,7 @@ public boolean function $runTest(string resultKey="test", string testname="") {
 	/*
 		Check for and if necessary set up the structure to store test results
 	*/
-	if (! StructKeyExists(request, resultKey)) {
+	if (!StructKeyExists(request, resultKey)) {
 		$resetTestResults(resultKey);
 	}
 
@@ -310,7 +310,7 @@ public boolean function $runTest(string resultKey="test", string testname="") {
 				status = "Success";
 				request[resultkey].numSuccesses = request[resultkey].numSuccesses + 1;
 
-			} catch(any e) {
+			} catch (any e) {
 
 				message = e.message;
 
@@ -512,7 +512,7 @@ public boolean function $isValidTest(
 
 	if (Len(arguments.shouldExtend)) {
 		local.metadata = GetComponentMetaData(arguments.component);
-		if (! StructKeyExists(local.metadata, "extends") or ListLast(local.metadata.extends.fullname, ".") neq arguments.shouldExtend) {
+		if (!StructKeyExists(local.metadata, "extends") or ListLast(local.metadata.extends.fullname, ".") neq arguments.shouldExtend) {
 			return false;
 		}
 	}
@@ -609,7 +609,7 @@ public struct function $resolvePaths(struct options={}) {
 	local.rv.relative_test_path = "/" & listchangedelims(local.rv.test_path, "/", ".");
 	local.rv.full_test_path = expandPath(local.rv.relative_test_path);
 
-	if (! DirectoryExists(local.rv.full_test_path)) {
+	if (!DirectoryExists(local.rv.full_test_path)) {
 		if (FileExists(local.rv.full_test_path & ".cfc")) {
 			local.rv.test_filter = reverse(listfirst(reverse(local.rv.test_path), "."));
 			local.rv.test_path = reverse(listrest(reverse(local.rv.test_path), "."));
@@ -644,7 +644,7 @@ public query function $listTestPackages(struct options={}, string filter="*") {
 	for (local.package in local.packages) {
 		local.packageName = ListChangeDelims(RemoveChars(local.package.directory, 1, Len(local.paths.full_test_path)), ".", "\/");
 		// directories that begin with an underscore are ignored
-		if (! ReFindNoCase("(^|\.)_", local.packageName)) {
+		if (!ReFindNoCase("(^|\.)_", local.packageName)) {
 			local.packageName = ListPrepend(local.packageName, local.paths.test_path, ".");
 			local.packageName = ListAppend(local.packageName, ListFirst(local.package.name, "."), ".");
 			// ignore invalid packages

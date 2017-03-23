@@ -372,7 +372,7 @@ public array function $whereClause(
 
 		ArrayAppend(local.rv, "WHERE");
 		local.wherePos = ArrayLen(local.rv) + 1;
-		local.params = ArrayNew(1);
+		local.params = [];
 		local.where = ReplaceList(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "AND,OR", "#Chr(7)#AND,#Chr(7)#OR");
 		for (local.i = 1; local.i <= ListLen(local.where, Chr(7)); local.i++) {
 			local.param = {};

@@ -192,7 +192,7 @@ component extends="wheels.tests.Test" {
 		hash = model("tag").$hashedConnectionArgs();
 		try {
 			tag = model("tag").create(id="", name="Kermit", description="The Frog", transaction="rollback");
-		} catch(any e) {
+		} catch (any e) {
 
 		}
 		assert('request.wheels.transactions[hash] is false');
@@ -203,7 +203,7 @@ component extends="wheels.tests.Test" {
 		tag.afterSave(methods="crashMe");
 		try {
 			tag.save();
-			} catch(any e) {
+			} catch (any e) {
 				results = model("tag").findAll(where="name = 'Kermit'");
 			}
 		assert("results.recordcount IS 0");

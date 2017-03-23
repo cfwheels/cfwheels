@@ -1,15 +1,24 @@
 component extends="Base" output=false {
 
+	/**
+	 * Override the default set by the base adapter.
+	 */
 	public string function $generatedKey() {
-		local.rv = "lastId";
-		return local.rv;
+		return "lastId";
 	}
 
+	/**
+	 * Override the default set by the base adapter.
+	 */
 	public string function $randomOrder() {
-		local.rv = "random()";
-		return local.rv;
+		return "random()";
 	}
 
+	/**
+	 * Map database types to the ones used in CFML.
+	 * Using oid cols should probably be avoided, included here for completeness.
+	 * PostgreSQL has deprecated the money type, included here for completeness.
+	 */
 	public string function $getType(required string type) {
 		switch (arguments.type) {
 			case "bigint": case "int8": case "bigserial": case "serial8":
@@ -31,11 +40,9 @@ component extends="Base" output=false {
 				local.rv = "cf_sql_decimal";
 				break;
 			case "integer": case "int": case "int4": case "serial": case "oid":
-				// oid cols should probably be avoided - placed here for completeness
 				local.rv = "cf_sql_integer";
 				break;
 			case "numeric": case "smallmoney": case "money":
-				// postgres has deprecated the money type: http://www.postgresql.org/docs/8.1/static/datatype-money.html
 				local.rv = "cf_sql_numeric";
 				break;
 			case "real":
@@ -57,20 +64,25 @@ component extends="Base" output=false {
 		return local.rv;
 	}
 
+	/**
+	 * Internal function.
+	 */
 	public struct function $querySetup(
 	  required array sql,
-	  numeric limit="0",
-	  numeric offset="0",
+	  numeric limit=0,
+	  numeric offset=0,
 	  required boolean parameterize,
 	  string $primaryKey=""
 	) {
 		arguments = $convertMaxRowsToLimit(arguments);
 		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
 		arguments.sql = $addColumnsToSelectAndGroupBy(arguments.sql);
-		local.rv = $performQuery(argumentCollection=arguments);
-		return local.rv;
+		return $performQuery(argumentCollection=arguments);
 	}
 
+	/**
+	 * Internal function.
+	 */
 	public any function $identitySelect(
 	  required struct queryAttributes,
 	  required struct result,
@@ -78,24 +90,25 @@ component extends="Base" output=false {
 	) {
 		var query = {};
 		local.sql = Trim(arguments.result.sql);
-		if (Left(local.sql, 11) IS "INSERT INTO" && ! StructKeyExists(arguments.result, $generatedKey())) {
+		if (Left(local.sql, 11) == "INSERT INTO" && !StructKeyExists(arguments.result, $generatedKey())) {
 			local.startPar = Find("(", local.sql) + 1;
 			local.endPar = Find(")", local.sql);
 			local.columnList = "";
-			if (local.endPar)
+			if (local.endPar) {
 				local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
-			if (! ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
-				// Lucee/ACF doesn't support PostgreSQL natively when it comes to returning
-				// the primary key value of the last inserted record so we have to do it manually by using the sequence
+			}
+
+			// Lucee/ACF doesn't support PostgreSQL natively when it comes to returning the primary key value of the last inserted record so we have to do it manually by using the sequence.
+			if (!ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
 				local.rv = {};
 				local.tbl = SpanExcluding(Right(local.sql, Len(local.sql)-12), " ");
 				query = $query(sql="SELECT currval(pg_get_serial_sequence('#local.tbl#', '#arguments.primaryKey#')) AS lastId", argumentCollection=arguments.queryAttributes);
 				local.rv[$generatedKey()] = query.lastId;
 				return local.rv;
 			}
+
 		}
 	}
 
 	include "../../plugins/standalone/injection.cfm";
-
 }

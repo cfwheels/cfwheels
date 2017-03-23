@@ -16,7 +16,7 @@ component extends="wheels.tests.Test" {
 			model(newTableName).findAll();
 			migration.dropTable(newTableName);
 			assert("true");
-		} catch(any e) {
+		} catch (any e) {
 			assert("false");
 		}
 	}

@@ -106,7 +106,7 @@ component extends="Abstract" {
 				local.opts.type = arguments.column.type;
 				local.opts[local.i] = arguments.column[local.i];
 				local.columnSQL = addColumnOptions(sql=" ALTER COLUMN #arguments.column.name#", options=local.opts, alter=true);
-				if (! StructKeyExists(local, "sql")) {
+				if (!StructKeyExists(local, "sql")) {
 					local.sql = "ALTER TABLE #quoteTableName(objectCase(arguments.name))# ALTER COLUMN #objectCase(arguments.column.name)# TYPE #arguments.column.sqlType()#";
 				}
 				if (Len(arguments.column[local.i])) {

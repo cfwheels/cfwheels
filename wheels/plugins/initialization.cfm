@@ -79,7 +79,7 @@ public void function $pluginsExtract() {
 			if (!local.plugin.folderExists) {
 				try {
 					DirectoryCreate(local.plugin.folderPath);
-				} catch(any e) {
+				} catch (any e) {
 					//
 				}
 			}

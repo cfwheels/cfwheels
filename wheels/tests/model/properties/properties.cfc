@@ -121,7 +121,7 @@ component extends="wheels.tests.Test" {
 
 		debug("actual", _debug);
 
-		assert('! IsObject(actual)');
+		assert('!IsObject(actual)');
 		assert('IsStruct(actual)');
 	}
 

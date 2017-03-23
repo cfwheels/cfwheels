@@ -20,7 +20,7 @@
 public numeric function updateAll(
 	string where="",
 	string include="",
-	struct properties="#StructNew()#",
+	struct properties={},
 	boolean reload,
 	any parameterize,
 	boolean instantiate,
@@ -80,7 +80,7 @@ public numeric function updateAll(
 */
 public boolean function updateByKey(
 	required any key,
-	struct properties="#StructNew()#",
+	struct properties={},
 	boolean reload,
 	boolean validate="true",
 	string transaction="#application.wheels.transactionMode#",
@@ -113,7 +113,7 @@ public boolean function updateByKey(
 public boolean function updateOne(
 	string where="",
 	string order="",
-	struct properties="#StructNew()#",
+	struct properties={},
 	boolean reload,
 	boolean validate="true",
 	string transaction="#application.wheels.transactionMode#",
@@ -151,7 +151,7 @@ public boolean function updateOne(
 * @callbacks Set to false to disable callbacks for this operation.
 */
 public boolean function update(
-	struct properties="#StructNew()#",
+	struct properties={},
 	any parameterize,
 	boolean reload,
 	boolean validate="true",

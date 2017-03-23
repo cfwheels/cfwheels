@@ -10,7 +10,7 @@ component extends="Model" {
 	}
 
 	function callbackThatIncreasesVariable() {
-		if (! StructKeyExists(this, "callbackCount")) {
+		if (!StructKeyExists(this, "callbackCount")) {
 			this.callbackCount = 0;
 		}
 		this.callbackCount++;
@@ -32,14 +32,14 @@ component extends="Model" {
 	}
 
 	function firstCallback() {
-		if (! StructKeyExists(this, "orderTest")) {
+		if (!StructKeyExists(this, "orderTest")) {
 			this.orderTest = "";
 		}
 		this.orderTest = ListAppend(this.orderTest, "first");
 	}
 
 	function secondCallback() {
-		if (! StructKeyExists(this, "orderTest")) {
+		if (!StructKeyExists(this, "orderTest")) {
 			this.orderTest = "";
 		}
 		this.orderTest = ListAppend(this.orderTest, "second");

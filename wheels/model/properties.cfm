@@ -322,7 +322,7 @@ public struct function properties(string returnIncludedAs = "struct", boolean re
 *
 * @properties The properties you want to set on the object (can also be passed in as named arguments).
 */
-public void function setProperties(struct properties="#StructNew()#") {
+public void function setProperties(struct properties={}) {
 	$setProperties(argumentCollection=arguments);
 }
 

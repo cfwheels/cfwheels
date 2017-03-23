@@ -380,7 +380,7 @@ component extends="wheels.tests.Test" {
 	function test_validatesUniquenessOf_valid() {
 		user.firstname = "Tony";
 		user.validatesUniquenessOf(property="firstname");
-		if (! IsBoolean(user.tableName()) OR user.tableName()) {
+		if (!IsBoolean(user.tableName()) OR user.tableName()) {
 			assert('!user.valid()');
 		} else {
 			assert('user.valid()');

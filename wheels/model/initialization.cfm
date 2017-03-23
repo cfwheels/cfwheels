@@ -255,7 +255,7 @@ public any function $assignAdapter() {
 		);
 	}
 	$set(adapterName=local.adapterName);
-	return CreateObject("component", "adapters.#local.adapterName#").init(
+	return CreateObject("component", "adapters.#local.adapterName#").$init(
 		dataSource=variables.wheels.class.dataSource,
 		username=variables.wheels.class.username,
 		password=variables.wheels.class.password

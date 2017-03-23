@@ -1,20 +1,15 @@
 component extends="Base" output=false {
 
-	public string function $generatedKey() {
-		local.rv = "generated_key";
-		return local.rv;
-	}
-
-	public string function $randomOrder() {
-		local.rv = "RAND()";
-		return local.rv;
-	}
-
+	/**
+	 * Override the default set by the base adapter.
+	 */
 	public string function $defaultValues() {
-		local.rv = "() VALUES()";
-		return local.rv;
+		return "() VALUES()";
 	}
 
+	/**
+	 * Map database types to the ones used in CFML.
+	 */
 	public string function $getType(required string type) {
 		switch (arguments.type) {
 			case "bigint":
@@ -69,6 +64,9 @@ component extends="Base" output=false {
 		return local.rv;
 	}
 
+	/**
+	 * Internal function.
+	 */
 	public struct function $querySetup(
 	  required array sql,
 	  numeric limit=0,
@@ -78,10 +76,12 @@ component extends="Base" output=false {
 	) {
 		arguments = $convertMaxRowsToLimit(arguments);
 		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
-		local.rv = $performQuery(argumentCollection=arguments);
-		return local.rv;
+		return $performQuery(argumentCollection=arguments);
 	}
 
+	/**
+	 * Internal function.
+	 */
 	public any function $identitySelect(
 	  required struct queryAttributes,
 	  required struct result,
@@ -89,11 +89,11 @@ component extends="Base" output=false {
 	) {
 		var query = {};
 		local.sql = Trim(arguments.result.sql);
-		if (Left(local.sql, 11) IS "INSERT INTO" AND NOT StructKeyExists(arguments.result, $generatedKey())) {
+		if (Left(local.sql, 11) == "INSERT INTO" && !StructKeyExists(arguments.result, $generatedKey())) {
 			local.startPar = Find("(", local.sql) + 1;
 			local.endPar = Find(")", local.sql);
 			local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
-			if (! ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
+			if (!ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
 				local.rv = {};
 				query = $query(sql="SELECT LAST_INSERT_ID() AS lastId", argumentCollection=arguments.queryAttributes);
 				local.rv[$generatedKey()] = query.lastId;
@@ -103,5 +103,4 @@ component extends="Base" output=false {
 	}
 
 	include "../../plugins/standalone/injection.cfm";
-
 }

@@ -40,7 +40,7 @@ component extends="wheels.tests.Test" {
 		post = model("post").findOne(order="id DESC");
 		transaction {
 			author.addPost(post=post, transaction="none");
-			/* we need to test if authorId is set on the post object as well and not just in the database! */
+			/* we need to test if authorId is set on the post object as well and not just in the database!*/
 			post.reload();
 			transaction action="rollback";
 		}
@@ -66,7 +66,7 @@ component extends="wheels.tests.Test" {
 		post = model("post").findOne(order="id DESC");
 		transaction {
 			author.removePost(post=post, transaction="none");
-			/* we need to test if authorId is set to blank on the post object as well and not just in the database! */
+			/* we need to test if authorId is set to blank on the post object as well and not just in the database!*/
 			post.reload();
 			transaction action="rollback";
 		}
