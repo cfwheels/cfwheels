@@ -58,7 +58,7 @@ component extends="Base" output=false {
 	}
 
 	/**
-	 * Internal function.
+	 * Call functions to make adapter specific changes to arguments before executing query.
 	 */
 	public struct function $querySetup(
 	  required array sql,
@@ -67,27 +67,25 @@ component extends="Base" output=false {
 	  required boolean parameterize,
 	  string $primaryKey=""
 	) {
-		arguments = $convertMaxRowsToLimit(arguments);
-		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
-		arguments.sql = $addColumnsToSelectAndGroupBy(arguments.sql);
-		arguments.sql = $moveAggregateToHaving(arguments.sql);
+		$convertMaxRowsToLimit(args=arguments);
+		$removeColumnAliasesInOrderClause(args=arguments);
+		$addColumnsToSelectAndGroupBy(args=arguments);
+		$moveAggregateToHaving(args=arguments);
 		return $performQuery(argumentCollection=arguments);
 	}
 
 	/**
+	 * Override Base adapter's function.
 	 * When using H2, cfdbinfo incorrectly returns information_schema tables.
 	 * To fix we create a new query result that excludes these tables.
-	 * Done by overriding $getColumns in the base adapter.
+	 * Yes, it should actually be "table_schem" below, not a typo.
 	 */
 	public query function $getColumns() {
 		local.columns = super.$getColumns(argumentCollection=arguments);
 		local.rv = QueryNew(local.columns.columnList);
 		local.iEnd = local.columns.recordCount;
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-
-			// Yes, it should actually be "table_schem" below, not a typo.
 			if (local.columns["table_schem"][local.i] != "information_schema") {
-
 				QueryAddRow(local.rv);
 				local.jEnd = ListLen(local.columns.columnList);
 				for (local.j = 1; local.j <= local.jEnd; local.j++) {
@@ -97,29 +95,6 @@ component extends="Base" output=false {
 			}
 		}
 		return local.rv;
-	}
-
-	/**
-	 * Internal function.
-	 */
-	public any function $identitySelect(
-	  required struct queryAttributes,
-	  required struct result,
-	  required string primaryKey
-	) {
-		var query = {};
-		local.sql = Trim(arguments.result.sql);
-		if (Left(local.sql, 11) == "INSERT INTO" && !StructKeyExists(arguments.result, $generatedKey())) {
-			local.startPar = Find("(", local.sql) + 1;
-			local.endPar = Find(")", local.sql);
-			local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
-			if (!ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
-				local.rv = {};
-				query = $query(sql="SELECT LAST_INSERT_ID() AS lastId", argumentCollection=arguments.queryAttributes);
-				local.rv[$generatedKey()] = query.lastId;
-				return local.rv;
-			}
-		}
 	}
 
 	include "../../plugins/standalone/injection.cfm";

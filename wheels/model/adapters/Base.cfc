@@ -21,6 +21,33 @@ component output=false {
 	}
 
 	/**
+	 * Called after a query has executed.
+	 * If the query was an INSERT and the generated auto-incrementing primary key is not in the result we get it manually.
+	 * If the primary key was part of the INSERT (i.e. it wasn't auto-incrementing) we don't need to check it though.
+	 * This process is typically needed on non-supported databases (example: H2) and drivers (example: jTDS).
+	 * We return void or a struct containing the key name / value.
+	 */
+	public any function $identitySelect(
+	  required struct queryAttributes,
+	  required struct result,
+	  required string primaryKey
+	) {
+		var query = {};
+		local.sql = Trim(arguments.result.sql);
+		if (Left(local.sql, 11) == "INSERT INTO" && !StructKeyExists(arguments.result, $generatedKey())) {
+			local.startPar = Find("(", local.sql) + 1;
+			local.endPar = Find(")", local.sql);
+			local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
+			if (!ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
+				local.rv = {};
+				query = $query(sql="SELECT LAST_INSERT_ID() AS lastId", argumentCollection=arguments.queryAttributes);
+				local.rv[$generatedKey()] = query.lastId;
+				return local.rv;
+			}
+		}
+	}
+
+	/**
 	 * Set a default for the string to use to order records randomly.
 	 * Individual database adapters will override when necessary.
 	 */
@@ -95,15 +122,14 @@ component output=false {
 
 	/**
 	 * Remove the column aliases from the order by clause (this is passed in so that we can handle sub queries with calculated properties).
+	 * The args argument is the original arguments passed in by reference so we just modify it without passing it back.
 	 */
-	public array function $removeColumnAliasesInOrderClause(required array sql) {
-		local.rv = arguments.sql;
-		if (IsSimpleValue(local.rv[ArrayLen(local.rv)]) && Left(local.rv[ArrayLen(local.rv)], 9) == "ORDER BY ") {
-			local.pos = ArrayLen(local.rv);
-			local.list = ReplaceNoCase(local.rv[local.pos], "ORDER BY ", "");
-			local.rv[local.pos] = "ORDER BY " & $columnAlias(list=local.list, action="remove");
+	public void function $removeColumnAliasesInOrderClause(required struct args) {
+		if (IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql)]) && Left(arguments.args.sql[ArrayLen(arguments.args.sql)], 9) == "ORDER BY ") {
+			local.pos = ArrayLen(arguments.args.sql);
+			local.list = ReplaceNoCase(arguments.args.sql[local.pos], "ORDER BY ", "");
+			arguments.args.sql[local.pos] = "ORDER BY " & $columnAlias(list=local.list, action="remove");
 		}
-		return local.rv;
 	}
 
 	/**
@@ -130,21 +156,19 @@ component output=false {
 	}
 
 	/**
-	 * Internal function.
+	 * The args argument is the original arguments passed in by reference so we just modify it without passing it back.
 	 */
-	public array function $addColumnsToSelectAndGroupBy(required array sql) {
-		local.rv = arguments.sql;
-		if (IsSimpleValue(local.rv[ArrayLen(local.rv)]) && Left(local.rv[ArrayLen(local.rv)], 8) == "ORDER BY" && IsSimpleValue(local.rv[ArrayLen(local.rv)-1]) && Left(local.rv[ArrayLen(local.rv)-1], 8) == "GROUP BY") {
-			local.iEnd = ListLen(local.rv[ArrayLen(local.rv)]);
+	public void function $addColumnsToSelectAndGroupBy(required struct args) {
+		if (IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql)]) && Left(arguments.args.sql[ArrayLen(arguments.args.sql)], 8) == "ORDER BY" && IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql)-1]) && Left(arguments.args.sql[ArrayLen(arguments.args.sql)-1], 8) == "GROUP BY") {
+			local.iEnd = ListLen(arguments.args.sql[ArrayLen(arguments.args.sql)]);
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
-				local.item = Trim(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(ListGetAt(local.rv[ArrayLen(local.rv)], local.i), "ORDER BY ", ""), " ASC", ""), " DESC", ""));
-				if (!ListFindNoCase(ReplaceNoCase(local.rv[ArrayLen(local.rv)-1], "GROUP BY ", ""), local.item) && !$isAggregateFunction(local.item)) {
-					local.key = ArrayLen(local.rv)-1;
-					local.rv[local.key] = ListAppend(local.rv[local.key], local.item);
+				local.item = Trim(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(ListGetAt(arguments.args.sql[ArrayLen(arguments.args.sql)], local.i), "ORDER BY ", ""), " ASC", ""), " DESC", ""));
+				if (!ListFindNoCase(ReplaceNoCase(arguments.args.sql[ArrayLen(arguments.args.sql)-1], "GROUP BY ", ""), local.item) && !$isAggregateFunction(local.item)) {
+					local.key = ArrayLen(arguments.args.sql)-1;
+					arguments.args.sql[local.key] = ListAppend(arguments.args.sql[local.key], local.item);
 				}
 			}
 		}
-		return local.rv;
 	}
 
 	/**
@@ -269,17 +293,14 @@ component output=false {
 	}
 
 	/**
-	 * Internal function.
+	 * Remove the maxRows argument and add a limit argument instead.
+	 * The args argument is the original arguments passed in by reference so we just modify it without passing it back.
 	 */
-	public struct function $convertMaxRowsToLimit(required struct args) {
-		local.rv = arguments.args;
-		if (StructKeyExists(local.rv, "maxRows") && local.rv.maxRows > 0) {
-			if (local.rv.maxRows > 0) {
-				local.rv.limit = local.rv.maxRows;
-			}
-			StructDelete(local.rv, "maxRows");
+	public void function $convertMaxRowsToLimit(required struct args) {
+		if (StructKeyExists(arguments.args, "maxRows") && arguments.args.maxRows > 0) {
+			arguments.args.limit = arguments.args.maxRows;
+			StructDelete(arguments.args, "maxRows");
 		}
-		return local.rv;
 	}
 
 	/**
@@ -292,56 +313,56 @@ component output=false {
 	/**
 	 * Check if SQL contains a GROUP BY clause and an aggregate function in the WHERE clause.
 	 * If so, move the SQL to a new HAVING clause instead (after GROUP BY).
+	 * The args argument is the original arguments passed in by reference so we just modify it without passing it back.
 	 */
-	public array function $moveAggregateToHaving(required array sql) {
+	public void function $moveAggregateToHaving(required struct args) {
 		local.hasAggregate = false;
 		local.hasGroupBy = false;
 		local.havingPos = 0;
-		local.iEnd = ArrayLen(arguments.sql);
+		local.iEnd = ArrayLen(arguments.args.sql);
 		for (local.i=1; local.i <= local.iEnd; local.i++) {
-			if (IsSimpleValue(arguments.sql[local.i]) && Left(arguments.sql[local.i], 8) == "GROUP BY") {
+			if (IsSimpleValue(arguments.args.sql[local.i]) && Left(arguments.args.sql[local.i], 8) == "GROUP BY") {
 				local.hasGroupBy = true;
 				local.havingPos = local.i + 1;
 			}
-			if (IsSimpleValue(arguments.sql[local.i]) && $isAggregateFunction(arguments.sql[local.i])) {
+			if (IsSimpleValue(arguments.args.sql[local.i]) && $isAggregateFunction(arguments.args.sql[local.i])) {
 				local.hasAggregate = true;
 			}
 		}
 		if (local.hasGroupBy && local.hasAggregate) {
-			ArrayAppend(arguments.sql, "");
-			ArrayInsertAt(arguments.sql, local.havingPos, "HAVING");
+			ArrayAppend(arguments.args.sql, "");
+			ArrayInsertAt(arguments.args.sql, local.havingPos, "HAVING");
 			local.sql = [];
-			local.iEnd = ArrayLen(arguments.sql);
+			local.iEnd = ArrayLen(arguments.args.sql);
 			for (local.i=1; local.i <= local.iEnd; local.i++) {
-				if (IsSimpleValue(arguments.sql[local.i])) {
-					if ($isAggregateFunction(arguments.sql[local.i])) {
+				if (IsSimpleValue(arguments.args.sql[local.i])) {
+					if ($isAggregateFunction(arguments.args.sql[local.i])) {
 						ArrayDeleteAt(local.sql, ArrayLen(local.sql));
 						local.i++;
 						local.havingPos = local.havingPos - 3;
 					} else {
-						ArrayAppend(local.sql, arguments.sql[local.i]);
+						ArrayAppend(local.sql, arguments.args.sql[local.i]);
 					}
 				} else {
-					ArrayAppend(local.sql, arguments.sql[local.i]);
+					ArrayAppend(local.sql, arguments.args.sql[local.i]);
 				}
 			}
 			local.pos = local.havingPos;
-			local.iEnd = ArrayLen(arguments.sql);
+			local.iEnd = ArrayLen(arguments.args.sql);
 			for (local.i=1; local.i <= local.iEnd; local.i++) {
-				if (IsSimpleValue(arguments.sql[local.i]) && $isAggregateFunction(arguments.sql[local.i])) {
+				if (IsSimpleValue(arguments.args.sql[local.i]) && $isAggregateFunction(arguments.args.sql[local.i])) {
 					if (local.pos != local.havingPos) {
 						local.pos++;
-						ArrayInsertAt(local.sql, local.pos, arguments.sql[local.i-1]);
+						ArrayInsertAt(local.sql, local.pos, arguments.args.sql[local.i-1]);
 					}
 					local.pos++;
-					ArrayInsertAt(local.sql, local.pos, arguments.sql[local.i]);
+					ArrayInsertAt(local.sql, local.pos, arguments.args.sql[local.i]);
 					local.pos++;
-					ArrayInsertAt(local.sql, local.pos, arguments.sql[local.i+1]);
+					ArrayInsertAt(local.sql, local.pos, arguments.args.sql[local.i+1]);
 				}
 			}
-			arguments.sql = local.sql;
+			arguments.args.sql = local.sql;
 		}
-		return arguments.sql;
 	}
 
 	/**

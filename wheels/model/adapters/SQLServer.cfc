@@ -1,20 +1,6 @@
 component extends="Base" output=false {
 
 	/**
-	 * Override the default set by the base adapter.
-	 */
-	public string function $generatedKey() {
-		return "identitycol";
-	}
-
-	/**
-	 * Override the default set by the base adapter.
-	 */
-	public string function $randomOrder() {
-		return "NEWID()";
-	}
-
-	/**
 	 * Map database types to the ones used in CFML.
 	 */
 	public string function $getType(required string type) {
@@ -78,7 +64,7 @@ component extends="Base" output=false {
 	}
 
 	/**
-	 * Internal function.
+	 * Call functions to make adapter specific changes to arguments before executing query.
 	 */
 	public struct function $querySetup(
 	  required array sql,
@@ -179,19 +165,26 @@ component extends="Base" output=false {
 			ArrayAppend(arguments.sql, local.afterWhere);
 
 		} else {
-			arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
+			$removeColumnAliasesInOrderClause(args=arguments);
 		}
 
 		// SQL Server doesn't support limit and offset in SQL.
 		StructDelete(arguments, "limit");
 		StructDelete(arguments, "offset");
 
-		arguments.sql = $moveAggregateToHaving(arguments.sql);
+		$moveAggregateToHaving(args=arguments);
 		return $performQuery(argumentCollection=arguments);
 	}
 
 	/**
-	 * Internal function.
+	 * Override Base adapter's function.
+	 */
+	public string function $generatedKey() {
+		return "identitycol";
+	}
+
+	/**
+	 * Override Base adapter's function.
 	 */
 	public any function $identitySelect(
 	  required struct queryAttributes,
@@ -211,6 +204,13 @@ component extends="Base" output=false {
 				return local.rv;
 			}
 		}
+	}
+
+	/**
+	 * Override Base adapter's function.
+	 */
+	public string function $randomOrder() {
+		return "NEWID()";
 	}
 
 	include "../../plugins/standalone/injection.cfm";

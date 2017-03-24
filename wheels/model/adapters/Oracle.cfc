@@ -1,34 +1,6 @@
 component extends="Base" output="false" {
 
 	/**
-	 * Override the default set by the base adapter.
-	 */
-	public string function $generatedKey() {
-		return "rowid";
-	}
-
-	/**
-	 * Override the default set by the base adapter.
-	 */
-	public string function $randomOrder() {
-		return "dbms_random.value()";
-	}
-
-	/**
-	 * Override the default set by the base adapter.
-	 */
-	public string function $defaultValues(required string $primaryKey) {
-		return "(#arguments.$primaryKey#) VALUES(DEFAULT)";
-	}
-
-	/**
-	 * Override the default set by the base adapter.
-	 */
-	public string function $tableAlias(required string table, required string alias) {
-		return arguments.table & " " & arguments.alias;
-	}
-
-	/**
 	 * Map database types to the ones used in CFML.
 	 */
 	public string function $getType(required string type, string scale) {
@@ -72,7 +44,7 @@ component extends="Base" output="false" {
 	}
 
 	/**
-	 * Internal function.
+	 * Call functions to make adapter specific changes to arguments before executing query.
 	 */
 	public struct function $querySetup(
 	  required array sql,
@@ -81,9 +53,9 @@ component extends="Base" output="false" {
 	  required boolean parameterize,
 	  string $primaryKey=""
 	) {
-		arguments = $convertMaxRowsToLimit(arguments);
-		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
-		arguments.sql = $addColumnsToSelectAndGroupBy(arguments.sql);
+		$convertMaxRowsToLimit(args=arguments);
+		$removeColumnAliasesInOrderClause(args=arguments);
+		$addColumnsToSelectAndGroupBy(args=arguments);
 		if (arguments.limit > 0) {
 			local.select = ReplaceNoCase(ReplaceNoCase(arguments.sql[1], "SELECT DISTINCT ", ""), "SELECT ", "");
 			local.select = $columnAlias(list=$tableName(list=local.select, action="remove"), action="keep");
@@ -97,7 +69,7 @@ component extends="Base" output="false" {
 		StructDelete(arguments, "limit");
 		StructDelete(arguments, "offset");
 
-		arguments.sql = $moveAggregateToHaving(arguments.sql);
+		$moveAggregateToHaving(args=arguments);
 		local.rv = $performQuery(argumentCollection=arguments);
 		local.rv = $handleTimestampObject(local.rv);
 		return local.rv;
@@ -153,62 +125,24 @@ component extends="Base" output="false" {
 		return arguments.results;
 	}
 
+
 	/**
-	 * Internal function.
+	 * Override Base adapter's function.
 	 */
-	public any function $identitySelect(
-	  required struct queryAttributes,
-	  required struct result,
-	  required string primaryKey
-	) {
-		var query = {};
-		local.sql = Trim(arguments.result.sql);
-		if (Left(local.sql, 11) == "INSERT INTO") {
-			local.startPar = Find("(", local.sql) + 1;
-			local.endPar = Find(")", local.sql);
-			local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
-			if (!ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
-				local.rv = {};
-				local.tbl = SpanExcluding(Right(local.sql, Len(local.sql)-12), " ");
-				if (!StructKeyExists(arguments.result, $generatedKey()) || application.wheels.serverName != "Adobe ColdFusion") {
-
-					// There isn't a way in oracle to tell what (if any) sequences exist on a table, hence we'll just have to perform a guess for now.
-					// We need to look at letting the developer specify the sequence name through a setting in the model.
-					try {
-						query = $query(sql="SELECT #local.tbl#_seq.currval AS lastId FROM dual", argumentCollection=arguments.queryAttributes);
-					} catch (any e) {
-
-						// In case the sequence doesn't exist, return a blank string for the expected value.
-						query.lastId = "";
-
-					}
-
-				} else {
-					query = $query(sql="SELECT #arguments.primaryKey# AS lastId FROM #local.tbl# WHERE ROWID = '#arguments.result[$generatedKey()]#'", argumentCollection=arguments.queryAttributes);
-				}
-				local.lastId = Trim(query.lastId);
-				if (Len(query.lastId)) {
-					local.rv[$generatedKey()] = Trim(local.lastid);
-					return local.rv;
-				}
-			} else {
-
-				// Since Oracle always returns rowid we need to delete it in those cases where we have manually inserted the primary key.
-				// If we don't do this we'll end up setting the rowid value to the object.
-				if (StructKeyExists(arguments.result, "rowid")) {
-					StructDelete(arguments.result, "rowid");
-				}
-				if (StructKeyExists(arguments.result, "generatedkey")) {
-					StructDelete(arguments.result, "generatedkey");
-				}
-
-			}
-		}
+	public string function $defaultValues(required string $primaryKey) {
+		return "(#arguments.$primaryKey#) VALUES(DEFAULT)";
 	}
 
 	/**
-	 * Unfortunately we don't get the correct info when using cfdbinfo with Oracle.
-	 * To fix we override $getColumns in the base adapter and run our own query instead.
+	 * Override Base adapter's function.
+	 */
+	public string function $generatedKey() {
+		return "rowid";
+	}
+
+	/**
+	 * Override Base adapter's function.
+	 * Unfortunately we don't get the correct info when using cfdbinfo with Oracle so we run our own query instead.
 	 */
 	public query function $getColumnInfo(
 	  required string table,
@@ -263,6 +197,73 @@ component extends="Base" output="false" {
 		}
 
 		return local.rv;
+	}
+
+	/**
+	 * Override Base adapter's function.
+	 */
+	public any function $identitySelect(
+	  required struct queryAttributes,
+	  required struct result,
+	  required string primaryKey
+	) {
+		var query = {};
+		local.sql = Trim(arguments.result.sql);
+		if (Left(local.sql, 11) == "INSERT INTO") {
+			local.startPar = Find("(", local.sql) + 1;
+			local.endPar = Find(")", local.sql);
+			local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
+			if (!ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
+				local.rv = {};
+				local.tbl = SpanExcluding(Right(local.sql, Len(local.sql)-12), " ");
+				if (!StructKeyExists(arguments.result, $generatedKey()) || application.wheels.serverName != "Adobe ColdFusion") {
+
+					// There isn't a way in oracle to tell what (if any) sequences exist on a table, hence we'll just have to perform a guess for now.
+					// We need to look at letting the developer specify the sequence name through a setting in the model.
+					try {
+						query = $query(sql="SELECT #local.tbl#_seq.currval AS lastId FROM dual", argumentCollection=arguments.queryAttributes);
+					} catch (any e) {
+
+						// In case the sequence doesn't exist, return a blank string for the expected value.
+						query.lastId = "";
+
+					}
+
+				} else {
+					query = $query(sql="SELECT #arguments.primaryKey# AS lastId FROM #local.tbl# WHERE ROWID = '#arguments.result[$generatedKey()]#'", argumentCollection=arguments.queryAttributes);
+				}
+				local.lastId = Trim(query.lastId);
+				if (Len(query.lastId)) {
+					local.rv[$generatedKey()] = Trim(local.lastid);
+					return local.rv;
+				}
+			} else {
+
+				// Since Oracle always returns rowid we need to delete it in those cases where we have manually inserted the primary key.
+				// If we don't do this we'll end up setting the rowid value to the object.
+				if (StructKeyExists(arguments.result, "rowid")) {
+					StructDelete(arguments.result, "rowid");
+				}
+				if (StructKeyExists(arguments.result, "generatedkey")) {
+					StructDelete(arguments.result, "generatedkey");
+				}
+
+			}
+		}
+	}
+
+	/**
+	 * Override Base adapter's function.
+	 */
+	public string function $randomOrder() {
+		return "dbms_random.value()";
+	}
+
+	/**
+	 * Override Base adapter's function.
+	 */
+	public string function $tableAlias(required string table, required string alias) {
+		return arguments.table & " " & arguments.alias;
 	}
 
 	include "../../plugins/standalone/injection.cfm";

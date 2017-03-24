@@ -21,10 +21,12 @@
 	</cfif>
 	<cfscript>
 
-		// Get / set the primary key value if necessary.
-		// Will be done on insert statement involving auto-incremented primary keys when Lucee/ACF cannot retrieve it for us.
-		// This happens on non-supported databases (example: H2) and drivers (example: jTDS).
-		local.$wheels.id = $identitySelect(queryAttributes=arguments.queryAttributes, result=local.$wheels.result, primaryKey=arguments.primaryKey);
+		// Get / set the primary key name / value when Lucee / ACF cannot retrieve it for us.
+		local.$wheels.id = $identitySelect(
+			primaryKey=arguments.primaryKey,
+			queryAttributes=arguments.queryAttributes,
+			result=local.$wheels.result
+		);
 		if (StructKeyExists(local.$wheels, "id")) {
 			StructAppend(local.$wheels.result, local.$wheels.id);
 		}

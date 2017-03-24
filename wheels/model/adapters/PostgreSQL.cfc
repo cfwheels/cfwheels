@@ -1,20 +1,6 @@
 component extends="Base" output=false {
 
 	/**
-	 * Override the default set by the base adapter.
-	 */
-	public string function $generatedKey() {
-		return "lastId";
-	}
-
-	/**
-	 * Override the default set by the base adapter.
-	 */
-	public string function $randomOrder() {
-		return "random()";
-	}
-
-	/**
 	 * Map database types to the ones used in CFML.
 	 * Using oid cols should probably be avoided, included here for completeness.
 	 * PostgreSQL has deprecated the money type, included here for completeness.
@@ -65,7 +51,7 @@ component extends="Base" output=false {
 	}
 
 	/**
-	 * Internal function.
+	 * Call functions to make adapter specific changes to arguments before executing query.
 	 */
 	public struct function $querySetup(
 	  required array sql,
@@ -74,15 +60,22 @@ component extends="Base" output=false {
 	  required boolean parameterize,
 	  string $primaryKey=""
 	) {
-		arguments = $convertMaxRowsToLimit(arguments);
-		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
-		arguments.sql = $addColumnsToSelectAndGroupBy(arguments.sql);
-		arguments.sql = $moveAggregateToHaving(arguments.sql);
+		$convertMaxRowsToLimit(args=arguments);
+		$removeColumnAliasesInOrderClause(args=arguments);
+		$addColumnsToSelectAndGroupBy(args=arguments);
+		$moveAggregateToHaving(args=arguments);
 		return $performQuery(argumentCollection=arguments);
 	}
 
 	/**
-	 * Internal function.
+	 * Override Base adapter's function.
+	 */
+	public string function $generatedKey() {
+		return "lastId";
+	}
+
+	/**
+	 * Override Base adapter's function.
 	 */
 	public any function $identitySelect(
 	  required struct queryAttributes,
@@ -109,6 +102,13 @@ component extends="Base" output=false {
 			}
 
 		}
+	}
+
+	/**
+	 * Override Base adapter's function.
+	 */
+	public string function $randomOrder() {
+		return "random()";
 	}
 
 	include "../../plugins/standalone/injection.cfm";

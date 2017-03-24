@@ -1,13 +1,6 @@
 component extends="Base" output=false {
 
 	/**
-	 * Override the default set by the base adapter.
-	 */
-	public string function $defaultValues() {
-		return "() VALUES()";
-	}
-
-	/**
 	 * Map database types to the ones used in CFML.
 	 */
 	public string function $getType(required string type) {
@@ -65,7 +58,7 @@ component extends="Base" output=false {
 	}
 
 	/**
-	 * Internal function.
+	 * Call functions to make adapter specific changes to arguments before executing query.
 	 */
 	public struct function $querySetup(
 	  required array sql,
@@ -74,33 +67,17 @@ component extends="Base" output=false {
 	  required boolean parameterize,
 	  string $primaryKey=""
 	) {
-		arguments = $convertMaxRowsToLimit(arguments);
-		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
-		arguments.sql = $moveAggregateToHaving(arguments.sql);
+		$convertMaxRowsToLimit(args=arguments);
+		$removeColumnAliasesInOrderClause(args=arguments);
+		$moveAggregateToHaving(args=arguments);
 		return $performQuery(argumentCollection=arguments);
 	}
 
 	/**
-	 * Internal function.
+	 * Override Base adapter's function.
 	 */
-	public any function $identitySelect(
-	  required struct queryAttributes,
-	  required struct result,
-	  required string primaryKey
-	) {
-		var query = {};
-		local.sql = Trim(arguments.result.sql);
-		if (Left(local.sql, 11) == "INSERT INTO" && !StructKeyExists(arguments.result, $generatedKey())) {
-			local.startPar = Find("(", local.sql) + 1;
-			local.endPar = Find(")", local.sql);
-			local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
-			if (!ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
-				local.rv = {};
-				query = $query(sql="SELECT LAST_INSERT_ID() AS lastId", argumentCollection=arguments.queryAttributes);
-				local.rv[$generatedKey()] = query.lastId;
-				return local.rv;
-			}
-		}
+	public string function $defaultValues() {
+		return "() VALUES()";
 	}
 
 	include "../../plugins/standalone/injection.cfm";
