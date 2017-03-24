@@ -13,6 +13,7 @@ Model Enhancements
 * New "timeStampMode" setting ("utc", "local" or "epoch") for the "createdAt" and "updatedAt" columns - [Andy Bellenie]
 * Allow nested transactions - #732 [Andy Bellenie]
 * The "handle" argument to finders now set the variable name for the query so it's easier to find in the debug output - [Per Djurner]
+* Support added for HAVING when using aggregate functions in the "where" argument - #483 [Per Djurner]
 
 View Enhancements
 =================
