@@ -1,12 +1,12 @@
 <cfscript>
 
 /**
- * Configure and return dbmigrate object.
+ * Configure and return dbmigrate object. Now uses /app mapping
  */
 public struct function init(
-	string migratePath="/db/migrate/",
-	string sqlPath="/db/sql/",
-	string templatePath="wheels/dbmigrate/templates/"
+	string migratePath="/app/db/migrate/",
+	string sqlPath="/app/db/sql/",
+	string templatePath="/wheels/dbmigrate/templates/"
 ) {
 	this.paths.migrate = ExpandPath(arguments.migratePath);
 	this.paths.sql = ExpandPath(arguments.sqlPath);
@@ -17,6 +17,11 @@ public struct function init(
 
 /**
  * Migrates database to a specified version.
+ *
+ * [section: Configuration]
+ * [category: Database Migrations]
+ *
+ * @version The Database schema version to migrate to
  */
 public string function migrateTo(string version="") {
 	local.rv = "";
@@ -89,13 +94,19 @@ public string function migrateTo(string version="") {
 
 /**
  * Returns current database version.
+ *
+ * [section: Configuration]
+ * [category: Database Migrations]
  */
 public string function getCurrentMigrationVersion() {
 	return ListLast($getVersionsPreviouslyMigrated());
 }
 
 /**
- * Create a migration file.
+ * Creates a migration file.
+ *
+ * [section: Configuration]
+ * [category: Database Migrations]
  */
 public string function createMigration(
 	required string migrationName,
@@ -111,6 +122,9 @@ public string function createMigration(
 
 /**
  * Searches db/migrate folder for migrations.
+ *
+ * [section: Configuration]
+ * [category: Database Migrations]
  */
 public array function getAvailableMigrations(string path=this.paths.migrate) {
 	local.rv = [];
