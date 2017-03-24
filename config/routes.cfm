@@ -7,7 +7,7 @@
 	 * See http://docs.cfwheels.org/docs/using-routes for more info.
 	 */
 	drawRoutes()
-		// The "wildcard" call enables automatic mapping of "controller/action/key" type routes.
+		// The "wildcard" call enables automatic mapping of "controller/action" type routes.
 		// This way you don't need to explicitly add a route every time you create a new action in a
 		// controller.
 		.wildcard()

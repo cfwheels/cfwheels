@@ -231,18 +231,44 @@ public struct function root(string to) {
 }
 
 /**
- * Special wildcard matching.
+ * Special wildcard matching generates routes with `[controller]/[action]` and `[controller]` patterns.
  *
  * [section: Configuration]
  * [category: Routing]
+ *
+ * @method List of HTTP methods (verbs) to generate the wildcard routes for. We strongly recommend leaving the default value of `get` and using other routing mappers if you need to `POST` to a URL endpoint. For better readability, you can also pass this argument as `methods`.
+ * @action Default action to specify if the value for the `[action]` placeholder is not provided.
  */
-public struct function wildcard(string action="index") {
+public struct function wildcard(string method="get", string action="index") {
+  if (StructKeyExists(arguments, "methods") && Len(arguments.methods)) {
+    local.methods = arguments.methods;
+  } else if (Len(arguments.method)) {
+    local.methods = ListToArray(arguments.method);
+  } else {
+    local.methods = ["get", "post", "put", "patch", "delete"];
+  }
+
 	if (StructKeyExists(variables.scopeStack[1], "controller")) {
-		$match(name="wildcard", pattern="[action]/[key](.[format])", action=arguments.action);
-		$match(name="wildcard", pattern="[action](.[format])", action=arguments.action);
+    for (local.method in local.methods) {
+		  $match(method=local.method, name="wildcard", pattern="[action](.[format])", action=arguments.action);
+      $match(method=local.method, name="wildcard", pattern="(.[format])", action=arguments.action);
+    }
 	} else {
-		$match(name="wildcard", pattern="[controller]/[action]/[key](.[format])", action=arguments.action);
-		$match(name="wildcard", pattern="[controller](/[action](.[format]))", action=arguments.action);
+    for (local.method in local.methods) {
+		  $match(
+        method=local.method,
+        name="wildcard",
+        pattern="[controller]/[action](.[format])",
+        action=arguments.action
+      );
+
+      $match(
+        method=local.method,
+        name="wildcard",
+        pattern="[controller](.[format]))",
+        action=arguments.action
+      );
+    }
 	}
 	return this;
 }
