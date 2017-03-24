@@ -71,6 +71,7 @@ Breaking Changes
 * The events/functions.cfm file has been moved to global/functions.cfm.
 * The models/Model.cfc file should extend "wheels.Model" instead of "Wheels" (models/Wheels.cfc can be deleted).
 * The controllers/Controller.cfc file should extend "wheels.Controller" instead of "Wheels" (controllers/Wheels.cfc can be deleted).
+* The global setting "timeStampMode" defaults to UTC - #695 (Andy Bellenie)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
