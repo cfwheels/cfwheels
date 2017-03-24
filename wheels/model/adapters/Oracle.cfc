@@ -97,6 +97,7 @@ component extends="Base" output="false" {
 		StructDelete(arguments, "limit");
 		StructDelete(arguments, "offset");
 
+		arguments.sql = $moveAggregateToHaving(arguments.sql);
 		local.rv = $performQuery(argumentCollection=arguments);
 		local.rv = $handleTimestampObject(local.rv);
 		return local.rv;

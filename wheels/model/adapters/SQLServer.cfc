@@ -186,6 +186,7 @@ component extends="Base" output=false {
 		StructDelete(arguments, "limit");
 		StructDelete(arguments, "offset");
 
+		arguments.sql = $moveAggregateToHaving(arguments.sql);
 		return $performQuery(argumentCollection=arguments);
 	}
 

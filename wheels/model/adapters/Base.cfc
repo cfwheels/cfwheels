@@ -123,7 +123,7 @@ component output=false {
 
 			// Extract and analyze the function name.
 			local.name = Mid(arguments.sql, local.match.pos[1]+1, local.match.len[1]-2);
-			local.rv = ListContains("AVG,COUNT,MAX,MIN,SUM", local.name);
+			local.rv = ListContains("AVG,COUNT,MAX,MIN,SUM", local.name) ? true : false;
 
 		}
 		return local.rv;
@@ -287,6 +287,61 @@ component output=false {
 	 */
 	public string function $comment(required string text) {
 		return "/* " & arguments.text & " */";
+	}
+
+	/**
+	 * Check if SQL contains a GROUP BY clause and an aggregate function in the WHERE clause.
+	 * If so, move the SQL to a new HAVING clause instead (after GROUP BY).
+	 */
+	public array function $moveAggregateToHaving(required array sql) {
+		local.hasAggregate = false;
+		local.hasGroupBy = false;
+		local.havingPos = 0;
+		local.iEnd = ArrayLen(arguments.sql);
+		for (local.i=1; local.i <= local.iEnd; local.i++) {
+			if (IsSimpleValue(arguments.sql[local.i]) && Left(arguments.sql[local.i], 8) == "GROUP BY") {
+				local.hasGroupBy = true;
+				local.havingPos = local.i + 1;
+			}
+			if (IsSimpleValue(arguments.sql[local.i]) && $isAggregateFunction(arguments.sql[local.i])) {
+				local.hasAggregate = true;
+			}
+		}
+		if (local.hasGroupBy && local.hasAggregate) {
+			ArrayAppend(arguments.sql, "");
+			ArrayInsertAt(arguments.sql, local.havingPos, "HAVING");
+			local.sql = [];
+			local.iEnd = ArrayLen(arguments.sql);
+			for (local.i=1; local.i <= local.iEnd; local.i++) {
+				if (IsSimpleValue(arguments.sql[local.i])) {
+					if ($isAggregateFunction(arguments.sql[local.i])) {
+						ArrayDeleteAt(local.sql, ArrayLen(local.sql));
+						local.i++;
+						local.havingPos = local.havingPos - 3;
+					} else {
+						ArrayAppend(local.sql, arguments.sql[local.i]);
+					}
+				} else {
+					ArrayAppend(local.sql, arguments.sql[local.i]);
+				}
+			}
+			local.pos = local.havingPos;
+			local.iEnd = ArrayLen(arguments.sql);
+			for (local.i=1; local.i <= local.iEnd; local.i++) {
+				if (IsSimpleValue(arguments.sql[local.i]) && $isAggregateFunction(arguments.sql[local.i])) {
+					if (local.pos != local.havingPos) {
+						local.pos++;
+						ArrayInsertAt(local.sql, local.pos, arguments.sql[local.i-1]);
+					}
+					local.pos++;
+					ArrayInsertAt(local.sql, local.pos, arguments.sql[local.i]);
+					local.pos++;
+					ArrayInsertAt(local.sql, local.pos, arguments.sql[local.i+1]);
+				}
+			}
+			arguments.sql = local.sql;
+		}
+		return arguments.sql;
 	}
 
 	/**

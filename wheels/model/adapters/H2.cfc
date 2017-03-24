@@ -70,6 +70,7 @@ component extends="Base" output=false {
 		arguments = $convertMaxRowsToLimit(arguments);
 		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
 		arguments.sql = $addColumnsToSelectAndGroupBy(arguments.sql);
+		arguments.sql = $moveAggregateToHaving(arguments.sql);
 		return $performQuery(argumentCollection=arguments);
 	}
 

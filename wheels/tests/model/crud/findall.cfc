@@ -42,4 +42,13 @@ component extends="wheels.tests.Test" {
 		assert("authors.recordCount IS 2");
 	}
 
+	function test_moving_aggregate_functions_in_where_to_having() {
+		results1 = model("user").findAll(select="id, state, salesTotal", group="state", where="salesTotal > 10", order="id");
+		assert("results1.recordCount IS 2 AND results1['salesTotal'][2] IS 20");
+		results2 = model("user").findAll(select="id, state, salesTotal", group="state", where="id >= 1 AND salesTotal > 10", order="salesTotal DESC");
+		assert("results2.recordCount IS 2 AND results2['salesTotal'][1] IS 20");
+		results3 = model("user").findAll(select="id, state, salesTotal", group="state", where="salesTotal > 15");
+		assert("results3.recordCount IS 1 AND results3['salesTotal'][1] IS 20");
+	}
+
 }
