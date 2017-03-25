@@ -30,7 +30,6 @@
 			local.rv["name"]=lcase(functionName);
 			local.rv["isPlugin"]=true;
 		}
-		// Make Model and Controller have the "base" function name but prefix mapper + migrate
 		local.rv["slug"]=$createFunctionSlug(doctype, local.rv.name);
 		local.rv["parameters"]=structKeyExists(local.m, "parameters")?local.m.parameters:[];
 		local.rv["returntype"]=structKeyExists(local.m, "returntype")?local.m.returntype:"";
@@ -66,7 +65,6 @@
 	* Creates a function slug
 	*/
 	string function $createFunctionSlug(required string doctype, required string functionName){
-		//return (doctype == "model" || doctype == "controller")? functionName: doctype & '.' & functionName;
 		return doctype & '.' & functionName;
 	}
 
