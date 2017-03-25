@@ -79,7 +79,7 @@
 								<tr>
 									<td class='code'>#_param.name#</td>
 									<td class='code'>#_param.type#</td>
-									<td class='code'>#_param.required#</td>
+									<td class='code'>#YesNoFormat(_param.required)#</td>
 									<td class='code'>
 									<cfif
 										structKeyExists(application.wheels.functions, func)
