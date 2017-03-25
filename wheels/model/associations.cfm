@@ -32,7 +32,7 @@ public void function belongsTo(
 }
 
 /**
- * Sets up a hasMany association between this model and the specified one.
+ * Sets up a `hasMany` association between this model and the specified one.
  *
  * [section: Model Initialization]
  * [category: Association Functions]
@@ -79,7 +79,7 @@ public void function hasMany(
 }
 
 /**
- * Sets up a hasOne association between this model and the specified one.
+ * Sets up a `hasOne` association between this model and the specified one.
  *
  * [section: Model Initialization]
  * [category: Association Functions]
@@ -117,7 +117,6 @@ public void function hasOne(
 }
 
 /*
- * Internal function.
  * Registers the association info in the model object on the application scope.
  */
 public void function $registerAssociation() {
@@ -153,7 +152,6 @@ public void function $registerAssociation() {
 }
 
 /*
- * Internal function.
  * Called when a model object is deleted (e.g. post.delete()).
  * Deletes all associated records (or sets their foreign key values to NULL).
  */
