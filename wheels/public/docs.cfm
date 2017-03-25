@@ -30,6 +30,8 @@
 			local.rv["name"]=lcase(functionName);
 			local.rv["isPlugin"]=true;
 		}
+		// Make Model and Controller have the "base" function name but prefix mapper + migrate
+		local.rv["slug"]=$createFunctionSlug(doctype, local.rv.name);
 		local.rv["parameters"]=structKeyExists(local.m, "parameters")?local.m.parameters:[];
 		local.rv["returntype"]=structKeyExists(local.m, "returntype")?local.m.returntype:"";
 		local.rv["hint"]=structKeyExists(local.m, "hint")?local.m.hint:"";
@@ -55,14 +57,17 @@
 				param['hint']=$replaceDocLink(param.hint);
 			}
 		}
-		// Check for extended documentation
-		local.rv["extended"]=$getExtendedCodeExamples("wheels/public/docs/reference/", functionName);
-
-		if(local.rv["name"] CONTAINS "$"){
-			writeDump(local);
-			abort;
-		}
+		// Check for extended documentation: note this is not looked for by slug, i.e. controller/humanize.txt
+		local.rv["extended"]=$getExtendedCodeExamples("wheels/public/docs/reference/", local.rv.slug);
 		return local.rv;
+	}
+
+	/**
+	* Creates a function slug
+	*/
+	string function $createFunctionSlug(required string doctype, required string functionName){
+		//return (doctype == "model" || doctype == "controller")? functionName: doctype & '.' & functionName;
+		return doctype & '.' & functionName;
 	}
 
 	/**
@@ -116,9 +121,9 @@
 	* @pathToExtended The Path to the Extended doc txt files
 	* @functionName The Function Name
 	*/
-	struct function $getExtendedCodeExamples(pathToExtended, functionName){
+	struct function $getExtendedCodeExamples(pathToExtended, slug){
 		local.rv={};
-		local.rv["path"]=expandPath(pathToExtended) & lcase(functionName) & ".txt";
+		local.rv["path"]=expandPath(pathToExtended) & lcase(replace(slug, ".", "/", "one")) & ".txt";
 		local.rv["hasExtended"]=fileExists(local.rv.path)?true:false;
 		local.rv["docs"]="";
 		if(local.rv.hasExtended){
