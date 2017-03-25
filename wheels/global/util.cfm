@@ -125,7 +125,15 @@ public string function singularize(required string word) {
 public string function toXHTML(required string text) {
 	return Replace(arguments.text, "&", "&amp;", "all");
 }
-
+/**
+ * Returns an associated MIME type based on a file extension.
+ *
+ * [section: Global Helpers]
+ * [category: Miscellaneous Functions]
+ *
+ * @extension The extension to get the MIME type for.
+ * @fallback The fallback MIME type to return.
+ */
 public string function mimeTypes(required string extension, string fallback="application/octet-stream") {
 	local.rv = arguments.fallback;
 	if (StructKeyExists(application.wheels.mimetypes, arguments.extension)) {

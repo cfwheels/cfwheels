@@ -16,7 +16,7 @@ public struct function init(
 }
 
 /**
- * Migrates database to a specified version.
+ * Migrates database to a specified version. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
  * [section: Configuration]
  * [category: Database Migrations]
@@ -93,7 +93,7 @@ public string function migrateTo(string version="") {
 }
 
 /**
- * Returns current database version.
+ * Returns current database version. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
  * [section: Configuration]
  * [category: Database Migrations]
@@ -103,7 +103,7 @@ public string function getCurrentMigrationVersion() {
 }
 
 /**
- * Creates a migration file.
+ * Creates a migration file. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
  * [section: Configuration]
  * [category: Database Migrations]
@@ -121,10 +121,12 @@ public string function createMigration(
 }
 
 /**
- * Searches db/migrate folder for migrations.
+ * Searches db/migrate folder for migrations. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
  * [section: Configuration]
  * [category: Database Migrations]
+ *
+ * @path Path to Migration Files: defaults to /db/migrate/
  */
 public array function getAvailableMigrations(string path=this.paths.migrate) {
 	local.rv = [];

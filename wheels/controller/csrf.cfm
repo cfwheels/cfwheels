@@ -1,11 +1,14 @@
 <cfscript>
 /**
-* Tells CFWheels to protect `POST`ed requests from CSRF vulnerabilities. Instructs the controller to verify that `params.authenticityToken` or `X-CSRF-Token` HTTP header is provided along with the request containing a valid authenticity token. Call this method within a controller's `init` method, preferably the base `Controller.cfc`	 file, to protect the entire application.
-*
-* @with How to handle invalid authenticity token checks. Valid values are error (throws a Wheels.InvalidAuthenticityToken error) and abort (aborts the request silently and sends a blank response to the client).
-* @only List of actions that this check should only run on. Leave blank for all.
-* @except List of actions that this check should be omitted from running on. Leave blank for no exceptions.
-*/
+ * Tells CFWheels to protect `POST`ed requests from CSRF vulnerabilities. Instructs the controller to verify that `params.authenticityToken` or `X-CSRF-Token` HTTP header is provided along with the request containing a valid authenticity token. Call this method within a controller's `init` method, preferably the base `Controller.cfc`	 file, to protect the entire application.
+ *
+ * [section: Controller]
+ * [category: Initialization Functions]
+ *
+ * @with How to handle invalid authenticity token checks. Valid values are error (throws a Wheels.InvalidAuthenticityToken error) and abort (aborts the request silently and sends a blank response to the client).
+ * @only List of actions that this check should only run on. Leave blank for all.
+ * @except List of actions that this check should be omitted from running on. Leave blank for no exceptions.
+ */
 public function protectsFromForgery(string with="exception", string only="", string except="") {
 	$args(args=arguments, name="protectsFromForgery");
 
