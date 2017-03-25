@@ -1,8 +1,8 @@
-// Use the passed in `id` when we're not already in an instance 
-<cffunction name="memberIsAdmin">
-    <cfif isInstance()>
-        <cfreturn this.admin>
-    <cfelse>
-        <cfreturn this.findByKey(arguments.id).admin>
-    </cfif>
-</cffunction>
+// Use the passed in `id` when we're not already in an instance
+function memberIsAdmin(){
+	if(isInstance()){
+		return this.admin;
+	} else {
+		return this.findByKey(arguments.id).admin;
+	}
+}
