@@ -1,7 +1,6 @@
 <cfscript>
 
 /**
- * Internal function.
  * Returns itself (the Dispatch object).
  */
 public any function $init() {
@@ -9,7 +8,6 @@ public any function $init() {
 }
 
 /**
- * Internal function.
  * Create a struct to hold the params, merge form and url scopes into it, add JSON body etc.
  */
 public struct function $createParams(
@@ -22,7 +20,7 @@ public struct function $createParams(
 	local.rv = $mergeUrlAndFormScopes(params=local.rv, urlScope=arguments.urlScope, formScope=arguments.formScope);
 	local.rv = $parseJsonBody(params=local.rv);
 	local.rv = $mergeRoutePattern(params=local.rv, route=arguments.route, path=arguments.path);
-	local.rv = $decryptParams(params=local.rv);
+	local.rv = $deobfuscateParams(params=local.rv);
 	local.rv = $translateBlankCheckBoxSubmissions(params=local.rv);
 	local.rv = $translateDatePartSubmissions(params=local.rv);
 	local.rv = $createNestedParamStruct(params=local.rv);
@@ -110,7 +108,7 @@ public struct function $findMatchingRoute(required string path, string requestMe
 		Throw(
 			type="Wheels.RouteNotFound",
 			message="Wheels couldn't find a route that matched this request.",
-			extendedInfo="Make sure there is a route setup in your 'config/routes.cfm' file that matches the '#arguments.path#' request."
+			extendedInfo="Make sure there is a route setup in your `config/routes.cfm` file that matches the `#arguments.path#` request."
 		);
 	}
 
@@ -118,22 +116,19 @@ public struct function $findMatchingRoute(required string path, string requestMe
 }
 
 /**
- * Internal function.
+ * Return the path without the leading "/".
  */
 public string function $getPathFromRequest(required string pathInfo, required string scriptName) {
-
-	// We want the path without the leading "/" so this is why we do some checking here.
 	if (arguments.pathInfo == arguments.scriptName || arguments.pathInfo == "/" || !Len(arguments.pathInfo)) {
-		local.rv = "";
+		return "";
 	} else {
-		local.rv = Right(arguments.pathInfo, Len(arguments.pathInfo) - 1);
+		return Right(arguments.pathInfo, Len(arguments.pathInfo) - 1);
 	}
-
-	return local.rv;
 }
 
 /**
- * Internal function.
+ * Parse incoming params, create controller object, call an action on it and return the response.
+ * Called from index.cfm in the root so what we return here is the final result of the request processing.
  */
 public string function $request(
 	string pathInfo=request.cgi.path_info,
@@ -170,7 +165,7 @@ public string function $request(
 }
 
 /**
- * Internal function.
+ * Find the route that matches the path, create params struct and return it.
  */
 public struct function $paramParser(
 	string pathInfo=request.cgi.path_info,
@@ -184,7 +179,6 @@ public struct function $paramParser(
 }
 
 /**
- * Internal function.
  * Merges the URL and form scope into a single structure, URL scope has precedence.
  */
 public struct function $mergeUrlAndFormScopes(
@@ -202,7 +196,6 @@ public struct function $mergeUrlAndFormScopes(
 }
 
 /**
- * Internal function.
  * If content type is JSON, deserialize it into a struct and add to the params struct.
  */
 public struct function $parseJsonBody(required struct params) {
@@ -234,7 +227,6 @@ public struct function $parseJsonBody(required struct params) {
 }
 
 /**
- * Internal function.
  * Parses the route pattern, identifies the variable markers within the pattern and assigns the value from the url variables with the path.
  */
 public struct function $mergeRoutePattern(required struct params, required struct route, required string path) {
@@ -249,11 +241,10 @@ public struct function $mergeRoutePattern(required struct params, required struc
 }
 
 /**
- * Internal function.
  * Loops through the params struct passed in and attempts to deobfuscate it.
  * Ignores the controller and action params values.
  */
-public struct function $decryptParams(required struct params) {
+public struct function $deobfuscateParams(required struct params) {
 	local.rv = arguments.params;
 	if ($get("obfuscateUrls")) {
 		for (local.key in local.rv) {
@@ -268,7 +259,6 @@ public struct function $decryptParams(required struct params) {
 }
 
 /**
- * Internal function.
  * Loops through the params struct and handle the cases where checkboxes are unchecked.
  */
 public struct function $translateBlankCheckBoxSubmissions(required struct params) {
@@ -291,7 +281,6 @@ public struct function $translateBlankCheckBoxSubmissions(required struct params
 }
 
 /**
- * Internal function.
  * Combines date parts into a single value.
  */
 public struct function $translateDatePartSubmissions(required struct params) {
@@ -357,7 +346,6 @@ public struct function $translateDatePartSubmissions(required struct params) {
 }
 
 /**
- * Internal function.
  * Ensure that the controller and action params exist and are camelized.
  */
 public struct function $ensureControllerAndAction(required struct params, required struct route) {
@@ -388,7 +376,6 @@ public struct function $ensureControllerAndAction(required struct params, requir
 }
 
 /**
- * Internal function.
  * Adds in the format variable from the route if it exists.
  */
 public struct function $addRouteFormat(required struct params, required struct route) {
@@ -400,7 +387,6 @@ public struct function $addRouteFormat(required struct params, required struct r
 }
 
 /**
- * Internal function.
  * Adds in the name variable from the route if it exists.
  */
 public struct function $addRouteName(required struct params, required struct route) {
@@ -412,7 +398,6 @@ public struct function $addRouteName(required struct params, required struct rou
 }
 
 /**
- * Internal function.
  * Determine HTTP verb used in request.
  */
 public string function $getRequestMethod() {
