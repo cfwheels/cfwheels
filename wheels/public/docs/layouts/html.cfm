@@ -63,7 +63,6 @@
 
 					<cfif isArray(meta.parameters) && arraylen(meta.parameters)>
 						<table>
-						<caption>Parameters</caption>
 						<thead>
 							<tr>
 								<th>Name</th>
