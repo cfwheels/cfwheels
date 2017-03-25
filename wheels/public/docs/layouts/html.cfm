@@ -30,7 +30,7 @@
     <div id="right">
 		<cfloop from="1" to="#arraylen(docs.functions)#" index="func">
 			<cfset meta=docs.functions[func]>
-			<div id="#lcase(meta.slug)#"
+			<div id="#lcase(meta.name)#"
 				data-section="#meta.tags.sectionClass#"
 				data-category="#meta.tags.categoryClass#"
 				data-function="#lcase(meta.slug)#"
@@ -111,6 +111,10 @@ $(document).ready(function(){
 
 	checkForUrlHash();
 
+	$(window).on('hashchange',function(){
+		filterByFunctionName(location.hash.slice(1));
+	});
+
 	$(".section").on("click", function(e){
 		filterBySection($(this).data("section"));
 		updateFunctionCount();
@@ -152,7 +156,8 @@ $(document).ready(function(){
 
 	function filterByFunctionName(name){
 		$("#right").find(".functiondefinition").hide().end()
-				   .find("[data-function='" + name + "']").show();
+				   .find("[data-function='" + name + "']").show().end()
+				   .find("#" + name).show();
 		window.location.hash="#" + name;
 	}
 	function filterByCategory(section, category){
