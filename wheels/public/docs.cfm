@@ -44,6 +44,7 @@
 			local.rv.tags["categoryClass"]=$cssClassLink(local.rv.tags.category);
 			local.rv.hint=$replaceDocLink(local.rv.hint);
 			local.rv.hint=$stripDocTags(local.rv.hint);
+			local.rv.hint=$backTickReplace(local.rv.hint);
 		}
 
 		// Check for param defaults within wheels settings
@@ -147,7 +148,7 @@
 	* @str The String to search
 	*/
 	string function $backTickReplace(str){
-		return ReReplaceNoCase(arguments.str, '`(\w+)`', '<code>\1</code>', "ALL");
+		return ReReplaceNoCase(arguments.str, '`(.*?)`', '<code>\1</code>', "ALL");
 	}
 	/**
 	* Turns "My Thing" into "mything"
