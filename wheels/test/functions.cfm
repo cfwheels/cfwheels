@@ -283,8 +283,11 @@ public boolean function $runTest(string resultKey="test", string testname="") {
 		invoking methods starting in "test".  Wrap with calls to setup()
 		and teardown() if provided.
 	*/
-
-	functions = getMetadata(this).functions;
+	if(!structKeyExists(getMetadata(this), "functions")){
+		functions="";
+	} else {
+		functions = getMetadata(this).functions;
+	}
 	for (func in functions) {
 		keyList = ListAppend(keyList, func.name);
 	};
