@@ -266,6 +266,7 @@ public boolean function $runTest(string resultKey="test", string testname="") {
 	var numTestErrors = 0;
 	var newline = chr(10) & chr(13);
 	var func = "";
+	var functions = "";
 	var tagContext = "";
 	var context = "";
 
