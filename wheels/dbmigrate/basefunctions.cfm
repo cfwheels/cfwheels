@@ -8,51 +8,6 @@ public function announce(required string message) {
 	request.$wheelsMigrationOutput = request.$wheelsMigrationOutput & arguments.message & chr(13);
 }
 
-public string function $getDBType() {
-	local.info = $dbinfo(
-		type="version",
-		datasource=application.wheels.dataSourceName,
-		username=application.wheels.dataSourceUserName,
-		password=application.wheels.dataSourcePassword
-	);
-	local.adapterName="";
-	if (local.info.driver_name Contains "SQLServer" || local.info.driver_name Contains "Microsoft SQL Server" || local.info.driver_name Contains "MS SQL Server" || local.info.database_productname Contains "Microsoft SQL Server") {
-		local.adapterName = "MicrosoftSQLServer";
-	} else if (local.info.driver_name Contains "MySQL") {
-		local.adapterName = "MySQL";
-	} else if (local.info.driver_name Contains "Oracle") {
-		local.adapterName = "Oracle";
-	} else if (local.info.driver_name Contains "PostgreSQL") {
-		local.adapterName = "PostgreSQL";
-	} else if (local.info.driver_name Contains "SQLite") {
-		local.adapterName = "SQLite";
-	// NB: using mySQL adapter for H2 as the cli defaults to this for development
-	} else if (local.info.driver_name Contains "H2") {
-	// determine the emulation mode
-	/*
-	if (StructKeyExists(server, "lucee")) {
-		local.connectionString = GetApplicationMetaData().datasources[application.wheels.dataSourceName].connectionString;
-	} else {
-		// TODO: use the coldfusion class to dig out dsn info
-		local.connectionString = "";
-	}
-	if (local.connectionString Contains "mode=SQLServer" || local.connectionString Contains "mode=Microsoft SQL Server" || local.connectionString Contains "mode=MS SQL Server" || local.connectionString Contains "mode=Microsoft SQL Server") {
-		local.adapterName = "MicrosoftSQLServer";
-	} else if (local.connectionString Contains "mode=MySQL") {
-		local.adapterName = "MySQL";
-	} else if (local.connectionString Contains "mode=Oracle") {
-		local.adapterName = "Oracle";
-	} else if (local.connectionString Contains "mode=PostgreSQL") {
-		local.adapterName = "PostgreSQL";
-	} else {
-		local.adapterName = "MySQL";
-	}
-	*/
-		local.adapterName = "H2";
-	}
-	return local.adapterName;
-}
-
 private string function $getForeignKeys(required string table) {
 	local.foreignKeyList = "";
 	local.tables = $dbinfo(type="tables", datasource=application.wheels.dataSourceName,username=application.wheels.dataSourceUserName,password=application.wheels.dataSourcePassword);
@@ -73,7 +28,7 @@ private void function $execute(required string sql) {
 }
 
 public string function $getColumns(required string tableName) {
-	if ($getDBType() eq "Oracle") {
+	if ($get("adapterName") eq "Oracle") {
 		// oracle thin client jdbc throws error when usgin cfdbinfo to access column data
 		// because of this error wheels can't load models anyway so maybe we don't need to support this driver
 		local.columns = $query(
