@@ -4,6 +4,7 @@
  * Returns the current setting for the supplied Wheels setting or the current default for the supplied Wheels function argument.
  *
  * [section: Configuration]
+ * [category: Miscellaneous Functions]
  *
  * @name Variable name to get setting for.
  * @functionName Function name to get setting for.
@@ -16,6 +17,7 @@ public any function get(required string name, string functionName="") {
  * Use to configure a global setting or set a default for a function.
  *
  * [section: Configuration]
+ * [category: Miscellaneous Functions]
  */
 public void function set() {
 	$set(argumentCollection=arguments);
@@ -25,6 +27,7 @@ public void function set() {
  * Adds a new MIME format to your Wheels application for use with responding to multiple formats.
  *
  * [section: Configuration]
+ * [category: Miscellaneous Functions]
  *
  * @extension File extension to add.
  * @mimeType Matching MIME type to associate with the file extension.

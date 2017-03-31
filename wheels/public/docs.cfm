@@ -9,7 +9,7 @@
 	* Tags must appear before Params
 	*
 	* [section: Doc Section]
-	* [category: Doc Category] (optional)
+	* [category: Doc Category] (optional, but recommended)
 	*
 	* @paramName Hint for Param. Backticks replaced with code; [doc: AFunctionName] replaced with link
 	*/
