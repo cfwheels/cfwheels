@@ -95,9 +95,6 @@ public void function $runOnRequestStart(required targetPage) {
 		local.lockName = "controllerLock" & application.applicationName;
 		$simpleLock(name=local.lockName, execute="$clearControllerInitializationCache", type="exclusive");
 	}
-	if (!application.wheels.cacheRoutes) {
-		$loadRoutes();
-	}
 	if (!application.wheels.cacheDatabaseSchema) {
 		$clearCache("sql");
 	}

@@ -103,13 +103,12 @@ public void function onApplicationStart() {
 	application.$wheels.dbmigrateWriteSQLFiles = false;
 	application.$wheels.dbmigrateObjectCase = "lower";
 
-	// cache settings
+	// Cache settings.
 	application.$wheels.cacheDatabaseSchema = true;
 	application.$wheels.cacheFileChecking = true;
 	application.$wheels.cacheImages = true;
 	application.$wheels.cacheModelInitialization = true;
 	application.$wheels.cacheControllerInitialization = true;
-	application.$wheels.cacheRoutes = true;
 	application.$wheels.cacheActions = false;
 	application.$wheels.cachePages = false;
 	application.$wheels.cachePartials = false;

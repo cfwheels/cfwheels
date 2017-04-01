@@ -56,6 +56,8 @@ Miscellaneous
 * Added new embedded documentation viewer/generator for JavaDoc - #734 [Tom King]
 * Removes all references to Railo - #656 (Adam Chapman)
 * Made uncountable and irregular words configurable - #739 [Per Djurner]
+* Removed design mode - [Per Djurner]
+* Removed "cacheRoutes" setting - [Per Djurner]
 
 Breaking Changes
 ================
