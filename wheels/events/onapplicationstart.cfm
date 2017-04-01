@@ -2,13 +2,13 @@
 
 public void function onApplicationStart() {
 
-	// abort if called from incorrect file
+	// Abort if called from incorrect file.
 	$abortInvalidRequest();
 
-	// setup the wheels storage struct for the current request
+	// Setup the CFWheels storage struct for the current request.
 	$initializeRequestScope();
 
-	// set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x"
+	// Set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x".
 	if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword")) {
 		local.oldReloadPassword = application.wheels.reloadPassword;
 	}
@@ -17,7 +17,7 @@ public void function onApplicationStart() {
 		application.$wheels.reloadPassword = local.oldReloadPassword;
 	}
 
-	// check and store server engine name, throw error if using a version that we don't support
+	// Check and store server engine name, throw error if using a version that we don't support.
 	if (StructKeyExists(server, "lucee")) {
 		application.$wheels.serverName = "Lucee";
 		application.$wheels.serverVersion = server.lucee.version;
@@ -27,17 +27,28 @@ public void function onApplicationStart() {
 	}
 	local.upgradeTo = $checkMinimumVersion(engine=application.$wheels.serverName, version=application.$wheels.serverVersion);
 	if (Len(local.upgradeTo) && !StructKeyExists(this, "disableEngineCheck") && !StructKeyExists(url, "disableEngineCheck")) {
+		local.type = "Wheels.EngineNotSupported";
+		local.message = "#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.";
 		if (IsBoolean(local.upgradeTo)) {
-			Throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please use Lucee or Adobe ColdFusion instead.");
+			Throw(
+				type=local.type,
+				message=local.message,
+				extendedInfo="Please use Lucee or Adobe ColdFusion instead."
+			);
 		} else {
-			Throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.", extendedInfo="Please upgrade to version #local.upgradeTo# or higher.");
+			Throw(
+				type=local.type,
+				message=local.message,
+				extendedInfo="Please upgrade to version #local.upgradeTo# or higher."
+			);
 		}
 	}
 
-	// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
+	// Copy over the CGI variables we need to the request scope.
+	// Since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example.
 	request.cgi = $cgiScope();
 
-	// set up containers for routes, caches, settings etc
+	// Set up containers for routes, caches, settings etc.
 	application.$wheels.version = "2.0";
 	try {
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
@@ -64,20 +75,20 @@ public void function onApplicationStart() {
 	application.$wheels.cache.query = {};
 	application.$wheels.cacheLastCulledAt = Now();
 
-	// set up paths to various folders in the framework
+	// Set up paths to various folders in the framework.
 	application.$wheels.webPath = Replace(request.cgi.script_name, Reverse(spanExcluding(Reverse(request.cgi.script_name), "/")), "");
 	application.$wheels.rootPath = "/" & ListChangeDelims(application.$wheels.webPath, "/", "/");
 	application.$wheels.rootcomponentPath = ListChangeDelims(application.$wheels.webPath, ".", "/");
 	application.$wheels.wheelsComponentPath = ListAppend(application.$wheels.rootcomponentPath, "wheels", ".");
 
-	// set environment either from the url or the developer's environment.cfm file
+	// Set environment either from the url or the developer's environment.cfm file.
 	if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application.$wheels, "reloadPassword") && (!Len(application.$wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.$wheels.reloadPassword))) {
 		application.$wheels.environment = URL.reload;
 	} else {
 		$include(template="config/environment.cfm");
 	}
 
-	// rewrite settings based on web server rewrite capabilites
+	// Rewrite settings based on web server rewrite capabilites.
 	application.$wheels.rewriteFile = "rewrite.cfm";
 	if (Right(request.cgi.script_name, 12) == "/" & application.$wheels.rewriteFile) {
 		application.$wheels.URLRewriting = "On";
@@ -87,17 +98,18 @@ public void function onApplicationStart() {
 		application.$wheels.URLRewriting = "Off";
 	}
 
-	// set datasource name to same as the folder the app resides in unless the developer has set it with the global setting already
+	// Set datasource name to same as the folder the app resides in unless the developer has set it with the global setting already.
 	if (StructKeyExists(this, "dataSource")) {
 		application.$wheels.dataSourceName = this.dataSource;
 	} else {
 		application.$wheels.dataSourceName = LCase(ListLast(GetDirectoryFromPath(GetBaseTemplatePath()), Right(GetDirectoryFromPath(GetBaseTemplatePath()), 1)));
 	}
+
 	application.$wheels.dataSourceUserName = "";
 	application.$wheels.dataSourcePassword = "";
 	application.$wheels.transactionMode = "commit";
 
-	// dbmigrate
+	// Create migrations object and set default settings.
 	application.$wheels.dbmigrate = $createObjectFromRoot(path="wheels", fileName="dbmigrate", method="init");
 	application.$wheels.dbmigrateTableName = "schemainfo";
 	application.$wheels.dbmigrateWriteSQLFiles = false;
@@ -125,7 +137,17 @@ public void function onApplicationStart() {
 		application.$wheels.cacheQueries = true;
 	}
 
-	// csrf protection settings
+	// Other caching settings.
+	application.$wheels.maximumItemsToCache = 5000;
+	application.$wheels.cacheCullPercentage = 10;
+	application.$wheels.cacheCullInterval = 5;
+	application.$wheels.cacheDatePart = "n";
+	application.$wheels.defaultCacheTime = 60;
+	application.$wheels.clearQueryCacheOnReload = true;
+	application.$wheels.clearTemplateCacheOnReload = true;
+	application.$wheels.cacheQueriesDuringRequest = true;
+
+	// CSRF protection settings.
 	application.$wheels.csrfStore = "session";
 	application.$wheels.csrfCookieEncryptionAlgorithm = "AES";
 	application.$wheels.csrfCookieEncryptionSecretKey = "";
@@ -138,7 +160,7 @@ public void function onApplicationStart() {
 	application.$wheels.csrfCookiePreserveCase = "";
 	application.$wheels.csrfCookieSecure = "";
 
-	// debugging and error settings
+	// Debugging and error settings.
 	application.$wheels.showDebugInformation = true;
 	application.$wheels.showErrorInformation = true;
 	application.$wheels.sendEmailOnError = false;
@@ -159,16 +181,16 @@ public void function onApplicationStart() {
 		application.$wheels.showDebugInformation = false;
 	}
 
-	// asset path settings
-	// assetPaths can be struct with two keys,  http and https, if no https struct key, http is used for secure and non-secure
-	// ex. {http="asset0.domain1.com,asset2.domain1.com,asset3.domain1.com", https="secure.domain1.com"}
+	// Asset path settings.
+	// assetPaths can be struct with two keys, http and https, if no https struct key, http is used for secure and non-secure.
+	// Example: {http="asset0.domain1.com,asset2.domain1.com,asset3.domain1.com", https="secure.domain1.com"}
 	application.$wheels.assetQueryString = false;
 	application.$wheels.assetPaths = false;
 	if (application.$wheels.environment != "development") {
 		application.$wheels.assetQueryString = true;
 	}
 
-	// configurable paths
+	// Configurable paths.
 	application.$wheels.eventPath = "events";
 	application.$wheels.filePath = "files";
 	application.$wheels.imagePath = "images";
@@ -181,7 +203,7 @@ public void function onApplicationStart() {
 	application.$wheels.viewPath = "views";
 	application.$wheels.controllerPath = "controllers";
 
-	// miscellaneous settings
+	// Miscellaneous settings.
 	application.$wheels.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water,feedback";
 	application.$wheels.irregulars = {child="children", foot="feet", man="men", move="moves", person="people", sex="sexes", tooth="teeth", woman="women"};
 	application.$wheels.tableNamePrefix = "";
@@ -206,7 +228,7 @@ public void function onApplicationStart() {
 		application.$wheels.redirectAfterReload = true;
 	}
 
-	// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
+	// If session management is enabled in the application we default to storing Flash data in the session scope, if not we use a cookie.
 	if (StructKeyExists(this, "sessionManagement") && this.sessionManagement) {
 		application.$wheels.sessionManagement = true;
 		application.$wheels.flashStorage = "session";
@@ -215,17 +237,7 @@ public void function onApplicationStart() {
 		application.$wheels.flashStorage = "cookie";
 	}
 
-	// caching settings
-	application.$wheels.maximumItemsToCache = 5000;
-	application.$wheels.cacheCullPercentage = 10;
-	application.$wheels.cacheCullInterval = 5;
-	application.$wheels.cacheDatePart = "n";
-	application.$wheels.defaultCacheTime = 60;
-	application.$wheels.clearQueryCacheOnReload = true;
-	application.$wheels.clearTemplateCacheOnReload = true;
-	application.$wheels.cacheQueriesDuringRequest = true;
-
-	// possible formats for provides
+	// Possible formats for provides functionality.
 	application.$wheels.formats = {};
 	application.$wheels.formats.html = "text/html";
 	application.$wheels.formats.xml = "text/xml";
@@ -234,7 +246,7 @@ public void function onApplicationStart() {
 	application.$wheels.formats.pdf = "application/pdf";
 	application.$wheels.formats.xls = "application/vnd.ms-excel";
 
-	// function defaults
+	// Function defaults.
 	application.$wheels.functions = {};
 	application.$wheels.functions.autoLink = {link="all"};
 	application.$wheels.functions.average = {distinct=false, parameterize=true, ifNull=""};
@@ -334,25 +346,25 @@ public void function onApplicationStart() {
 	application.$wheels.functions.wordTruncate = {length=5, truncateString="..."};
 	application.$wheels.functions.yearSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, startYear=Year(Now())-5, endYear=Year(Now())+5};
 
-	// mime types
+	// Mime types.
 	application.$wheels.mimetypes = {txt="text/plain", gif="image/gif", jpg="image/jpg", jpeg="image/jpg", pjpeg="image/jpg", png="image/png", wav="audio/wav", mp3="audio/mpeg3", pdf="application/pdf", zip="application/zip", ppt="application/powerpoint", pptx="application/powerpoint", doc="application/word", docx="application/word", xls="application/excel", xlsx="application/excel"};
 
-	// set a flag to indicate that all wheels settings have been loaded
+	// Set a flag to indicate that all settings have been loaded.
 	application.$wheels.initialized = true;
 
-	// load general developer settings first, then override with environment specific ones
+	// Load general developer settings first, then override with environment specific ones.
 	$include(template="config/settings.cfm");
 	$include(template="config/#application.$wheels.environment#/settings.cfm");
 
-	// clear query (cfquery) and page (cfcache) caches
-	if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cachekey")) {
-		application.$wheels.cachekey = Hash(CreateUUID());
+	// Clear query (cfquery) and page (cfcache) caches.
+	if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cacheKey")) {
+		application.$wheels.cacheKey = Hash(CreateUUID());
 	}
 	if (application.$wheels.clearTemplateCacheOnReload) {
 		$cache(action="flush");
 	}
 
-	// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
+	// Add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url.
 	local.allowedGlobalMethods = "get,set,drawRoutes";
 	local.protectedControllerMethods = StructKeyList($createObjectFromRoot(path="wheels", fileName="Controller", method="$initControllerClass"));
 	application.$wheels.protectedControllerMethods = "";
@@ -364,57 +376,54 @@ public void function onApplicationStart() {
 		}
 	}
 
-	// reload the plugins each time we reload the application
+	// Reload the plugins each time we reload the application.
 	$loadPlugins();
 
-	// allow developers to inject plugins into the application variables scope
+	// Allow developers to inject plugins into the application variables scope.
 	if (!StructIsEmpty(application.$wheels.mixins)) {
 		$include(template="wheels/plugins/standalone/injection.cfm");
 	}
 
-	// create the mapper that will handle creating routes before $loadRoutes
-	// and after $loadPlugins
+	// Create the mapper that will handle creating routes.
+	// Needs to be before $loadRoutes and after $loadPlugins.
 	application.$wheels.mapper = $createObjectFromRoot(path="wheels", fileName="Mapper", method="$init");
 
-	// load developer routes and adds the default wheels routes (unless the developer has specified not to)
+	// Load developer routes and adds the default CFWheels routes (unless the developer has specified not to).
 	$loadRoutes();
 
-	// create the dispatcher that will handle all incoming requests
+	// Create the dispatcher that will handle all incoming requests.
 	application.$wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
 
-	// assign it all to the application scope in one atomic call
+	// Assign it all to the application scope in one atomic call.
 	application.wheels = application.$wheels;
 	StructDelete(application, "$wheels");
 
-	// run the developer's on application start code
+	// Run the developer's on application start code.
 	$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
 
 	// Redirect away from reloads on GET requests.
-	if (application.wheels.redirectAfterReload && StructKeyExists(url, "reload") && cgi.REQUEST_METHOD == 'get') {
-		if (StructKeyExists(cgi, "PATH_INFO") && Len(cgi.PATH_INFO)) {
-			local.url = cgi.PATH_INFO;
-		} else if (StructKeyExists(cgi, "PATH_INFO")) {
+	if (application.wheels.redirectAfterReload && StructKeyExists(url, "reload") && cgi.request_method == "get") {
+		if (StructKeyExists(cgi, "path_info") && Len(cgi.path_info)) {
+			local.url = cgi.path_info;
+		} else if (StructKeyExists(cgi, "path_info")) {
 			local.url = "/";
 		} else {
-			local.url = cgi.SCRIPT_NAME;
+			local.url = cgi.script_name;
 		}
-
-		local.oldQueryString = ListToArray(cgi.QUERY_STRING, "&");
-		local.newQueryString = ArrayNew(1);
-
-		for (local.i = 1; local.i <= ArrayLen(local.oldQueryString); local.i++) {
+		local.oldQueryString = ListToArray(cgi.query_string, "&");
+		local.newQueryString = [];
+		local.iEnd = ArrayLen(local.oldQueryString);
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.keyValue = local.oldQueryString[local.i];
 			local.key = ListFirst(local.keyValue, "=");
 			if (!ListFindNoCase("reload,password", local.key)) {
 				ArrayAppend(local.newQueryString, local.keyValue);
 			}
 		}
-
 		if (ArrayLen(local.newQueryString)) {
-			local.queryString = ArrayToList(local.newQueryString, '&');
+			local.queryString = ArrayToList(local.newQueryString, "&");
 			local.url = "#local.url#?#local.queryString#";
 		}
-
 		$location(url=local.url, addToken=false);
 	}
 }
