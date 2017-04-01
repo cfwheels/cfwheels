@@ -103,19 +103,23 @@ public void function onApplicationStart() {
 	application.$wheels.dbmigrateWriteSQLFiles = false;
 	application.$wheels.dbmigrateObjectCase = "lower";
 
-	// Cache settings.
-	application.$wheels.cacheDatabaseSchema = true;
-	application.$wheels.cacheFileChecking = true;
-	application.$wheels.cacheImages = true;
-	application.$wheels.cacheModelInitialization = true;
+	// Cache settings that are always turned on regardless of mode setting.
 	application.$wheels.cacheControllerInitialization = true;
+	application.$wheels.cacheDatabaseSchema = true;
+	application.$wheels.cacheModelInitialization = true;
+	application.$wheels.cachePlugins = true;
+
+	// Cache settings that are turned off in development mode only.
 	application.$wheels.cacheActions = false;
+	application.$wheels.cacheFileChecking = false;
+	application.$wheels.cacheImages = false;
 	application.$wheels.cachePages = false;
 	application.$wheels.cachePartials = false;
 	application.$wheels.cacheQueries = false;
-	application.$wheels.cachePlugins = true;
 	if (application.$wheels.environment != "development") {
 		application.$wheels.cacheActions = true;
+		application.$wheels.cacheFileChecking = true;
+		application.$wheels.cacheImages = true;
 		application.$wheels.cachePages = true;
 		application.$wheels.cachePartials = true;
 		application.$wheels.cacheQueries = true;
