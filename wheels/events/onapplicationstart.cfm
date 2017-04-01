@@ -104,26 +104,18 @@ public void function onApplicationStart() {
 	application.$wheels.dbmigrateObjectCase = "lower";
 
 	// cache settings
-	application.$wheels.cacheDatabaseSchema = false;
-	application.$wheels.cacheFileChecking = false;
-	application.$wheels.cacheImages = false;
-	application.$wheels.cacheModelInitialization = false;
-	application.$wheels.cacheControllerInitialization = false;
-	application.$wheels.cacheRoutes = false;
+	application.$wheels.cacheDatabaseSchema = true;
+	application.$wheels.cacheFileChecking = true;
+	application.$wheels.cacheImages = true;
+	application.$wheels.cacheModelInitialization = true;
+	application.$wheels.cacheControllerInitialization = true;
+	application.$wheels.cacheRoutes = true;
 	application.$wheels.cacheActions = false;
 	application.$wheels.cachePages = false;
 	application.$wheels.cachePartials = false;
 	application.$wheels.cacheQueries = false;
 	application.$wheels.cachePlugins = true;
-	if (application.$wheels.environment != "design") {
-		application.$wheels.cacheDatabaseSchema = true;
-		application.$wheels.cacheFileChecking = true;
-		application.$wheels.cacheImages = true;
-		application.$wheels.cacheModelInitialization = true;
-		application.$wheels.cacheControllerInitialization = true;
-		application.$wheels.cacheRoutes = true;
-	}
-	if (application.$wheels.environment != "design" && application.$wheels.environment != "development") {
+	if (application.$wheels.environment != "development") {
 		application.$wheels.cacheActions = true;
 		application.$wheels.cachePages = true;
 		application.$wheels.cachePartials = true;
@@ -160,7 +152,7 @@ public void function onApplicationStart() {
 		application.$wheels.showErrorInformation = false;
 		application.$wheels.sendEmailOnError = true;
 	}
-	if (application.$wheels.environment != "design" && application.$wheels.environment != "development") {
+	if (application.$wheels.environment != "development") {
 		application.$wheels.showDebugInformation = false;
 	}
 
@@ -169,7 +161,7 @@ public void function onApplicationStart() {
 	// ex. {http="asset0.domain1.com,asset2.domain1.com,asset3.domain1.com", https="secure.domain1.com"}
 	application.$wheels.assetQueryString = false;
 	application.$wheels.assetPaths = false;
-	if (application.$wheels.environment != "design" && application.$wheels.environment != "development") {
+	if (application.$wheels.environment != "development") {
 		application.$wheels.assetQueryString = true;
 	}
 
