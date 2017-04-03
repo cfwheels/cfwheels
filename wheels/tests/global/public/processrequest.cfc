@@ -20,4 +20,24 @@ component extends="wheels.tests.Test" {
 		assert("Compare(expected, result) eq 0");
 	}
 
+	function test_process_request_as_get() {
+		local.params = {
+			action = "actionGet",
+			controller = "verifies"
+		};
+		result = processRequest(method="get", params=local.params);
+		expected = "actionGet";
+		assert("Find(expected, result)");
+	}
+
+	function test_process_request_as_post() {
+		local.params = {
+			action = "actionPost",
+			controller = "verifies"
+		};
+		result = processRequest(method="post", params=local.params);
+		expected = "actionPost";
+		assert("Find(expected, result)");
+	}
+
 }
