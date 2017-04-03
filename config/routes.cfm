@@ -2,7 +2,7 @@
 
 	// Use this file to add routes to your application and point the root route to a controller action.
 	// Don't forget to issue a reload request (e.g. reload=true) after making changes.
-	// See http://docs.cfwheels.org/docs/using-routes for more info.
+	// See http://docs.cfwheels.org/docs/routing for more info.
 
 	drawRoutes()
 		// The "wildcard" call below enables automatic mapping of "controller/action" type routes.
