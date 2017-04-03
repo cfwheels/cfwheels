@@ -5,7 +5,7 @@
  *
  * [section: Configuration]
  * [category: Routing]
- * 
+ *
  * @name Camel-case name of route (e.g., `blogPost`).
  * @pattern Overrides the URL pattern that will match the route. The default value is a dasherized version of `name` (e.g., a `name` of `blogPost` generates a pattern of `blog-post`).
  * @to Set `controller##action` combination to map the route to. You may use either this argument or a combination of `controller` and `action`.
@@ -21,7 +21,7 @@ public struct function get(
 	string controller,
 	string action,
 	string module,
-	string on,
+	string on
 ) {
 	return $match(method="get", argumentCollection=arguments);
 }
