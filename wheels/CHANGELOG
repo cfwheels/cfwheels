@@ -59,6 +59,7 @@ Miscellaneous
 * Removed design mode - [Per Djurner]
 * Removed "cacheRoutes" setting - [Per Djurner]
 * The "cacheFileChecking" and "cacheImages" settings are now turned off in development mode - [Per Djurner]
+* Added "includeErrorInEmailSubject" setting - [Per Djurner]
 
 Breaking Changes
 ================

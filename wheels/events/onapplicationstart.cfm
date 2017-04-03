@@ -168,6 +168,7 @@ public void function onApplicationStart() {
 	application.$wheels.excludeFromErrorEmail = "";
 	application.$wheels.errorEmailToAddress = "";
 	application.$wheels.errorEmailFromAddress = "";
+	application.$wheels.includeErrorInEmailSubject = true;
 	if (Find(".", request.cgi.server_name)) {
 		application.$wheels.errorEmailAddress = "webmaster@" & Reverse(ListGetAt(Reverse(request.cgi.server_name), 2,".")) & "." & Reverse(ListGetAt(Reverse(request.cgi.server_name), 1, "."));
 	} else {
