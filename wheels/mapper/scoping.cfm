@@ -82,6 +82,19 @@ public struct function namespace(
 }
 
 /**
+ * Scopes any the controllers for any routes configured within this block to a subfolder (package) without adding the package name to the URL.
+ *
+ * [section: Configuration]
+ * [category: Routing]
+ *
+ * @name Name to prepend to route name.
+ * @package Subfolder to reference for controllers. This defaults to the value provided for `name`.
+ */
+public struct function package(required string name, string package=arguments.name) {
+	return scope(name=arguments.name, package=arguments.package, $call="package");
+}
+
+/**
  * [section: Configuration]
  * [category: Routing]
  */
