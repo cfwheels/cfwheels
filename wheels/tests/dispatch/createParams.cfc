@@ -12,7 +12,7 @@ component extends="wheels.tests.Test" {
 			regex="^\/?$",
 			variables="",
 			on="",
-			module="",
+			package="",
 			methods="get",
 			name="root"
 		};

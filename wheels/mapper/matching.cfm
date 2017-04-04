@@ -11,7 +11,7 @@
  * @to Set `controller##action` combination to map the route to. You may use either this argument or a combination of `controller` and `action`.
  * @controller Map the route to a given controller. This must be passed along with the `action` argument.
  * @action Map the route to a given action within the `controller`. This must be passed along with the `controller` argument.
- * @module Indicates a subfolder that the controller will be referenced from (but not added to the URL pattern). For example, if you set this to `admin`, the controller will be located at `admin/YourController.cfc`, but the URL path will not contain `admin/`.
+ * @package Indicates a subfolder that the controller will be referenced from (but not added to the URL pattern). For example, if you set this to `admin`, the controller will be located at `admin/YourController.cfc`, but the URL path will not contain `admin/`.
  * @on If this route is within a nested resource, you can set this argument to `member` or `collection`. A `member` route contains a reference to the resource's `key`, while a `collection` route does not.
  */
 public struct function get(
@@ -20,7 +20,7 @@ public struct function get(
 	string to,
 	string controller,
 	string action,
-	string module,
+	string package,
 	string on
 ) {
 	return $match(method="get", argumentCollection=arguments);
@@ -127,7 +127,7 @@ public struct function wildcard(string method="get", string action="index") {
  * @pattern Pattern to match for route.
  * @to Set controller##action for route.
  * @methods HTTP verbs that match route.
- * @module Namespace to append to controller.
+ * @package Namespace to append to controller.
  * @on Created resource route under "member" or "collection".
  */
 public struct function $match(
@@ -135,7 +135,7 @@ public struct function $match(
 	string pattern,
 	string to,
 	string methods,
-	string module,
+	string package,
 	string on,
 	struct constraints={}
 ) {
@@ -155,12 +155,12 @@ public struct function $match(
 		arguments.controller = variables.scopeStack[1].controller;
 	}
 
-	// Use scoped module if found.
-	if (StructKeyExists(variables.scopeStack[1], "module")) {
-		if (StructKeyExists(arguments, "module")) {
-			arguments.module &= "." & variables.scopeStack[1].module;
+	// Use scoped package if found.
+	if (StructKeyExists(variables.scopeStack[1], "package")) {
+		if (StructKeyExists(arguments, "package")) {
+			arguments.package &= "." & variables.scopeStack[1].package;
 		} else {
-			arguments.module = variables.scopeStack[1].module;
+			arguments.package = variables.scopeStack[1].package;
 		}
 	}
 
@@ -224,10 +224,10 @@ public struct function $match(
 		arguments.pattern = variables.scopeStack[1].path & "/" & arguments.pattern;
 	}
 
-	// If both module and controller are set, combine them.
-	if (StructKeyExists(arguments, "module") && StructKeyExists(arguments, "controller")) {
-		arguments.controller = arguments.module & "." & arguments.controller;
-		StructDelete(arguments, "module");
+	// If both package and controller are set, combine them.
+	if (StructKeyExists(arguments, "package") && StructKeyExists(arguments, "controller")) {
+		arguments.controller = arguments.package & "." & arguments.controller;
+		StructDelete(arguments, "package");
 	}
 
 	// Build named routes in correct order according to rails conventions.

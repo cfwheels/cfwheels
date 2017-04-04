@@ -85,7 +85,7 @@ component extends="wheels.tests.Test" {
     assert('route.controller eq "sessions" and route.action eq "new"');
   }
 
-  function test_match_with_basic_arguments_and_module_scoped() {
+  function test_match_with_basic_arguments_and_package_scoped() {
     $clearRoutes();
     mapper = $mapper();
     mapper.$draw().namespace("admin").$match(name="signIn", method="get", action="new", controller="sessions").end().end();
@@ -95,7 +95,7 @@ component extends="wheels.tests.Test" {
     assert('route.controller eq "admin.Sessions" and route.action eq "new"');
   }
 
-  function test_match_with_module_scope_and_controller_scope() {
+  function test_match_with_package_scope_and_controller_scope() {
     $clearRoutes();
     mapper = $mapper();
     mapper.$draw().namespace("admin").controller("sessions").$match(name="signIn", method="get", action="new").end().end().end();

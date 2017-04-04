@@ -6,7 +6,7 @@ component extends="wheels.tests.Test" {
 
 
     drawRoutes()
-      .namespace(module="admin")
+      .namespace(package="admin")
         .resources(name="users")
         .root(to="dashboard##index")
       .end()

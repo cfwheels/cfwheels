@@ -5,7 +5,7 @@ drawRoutes()
         .resources("products")
     .end() // Ends the `namespace` block.
 
-    .scope(module="public")
+    .scope(package="public")
         .resources(name="products", nested=true)
           .resources("variations")
         .end() // Ends the nested `resources` block.

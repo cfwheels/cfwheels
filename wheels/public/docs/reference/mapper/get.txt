@@ -23,7 +23,7 @@ drawRoutes()
     // Example URL: /cart
     // Controller:  commerce.Carts
     // Action:      show
-    .get(name="cart", to="carts##show", module="commerce")
+    .get(name="cart", to="carts##show", package="commerce")
 
     // Route name:  extranetEditProfile
     // Example URL: /profile/edit
@@ -33,7 +33,7 @@ drawRoutes()
         name="editProfile",
         pattern="profile/edit",
         to="profiles##edit",
-        module="extranet"
+        package="extranet"
     )
 
     .resources(name="users", nested=true)
