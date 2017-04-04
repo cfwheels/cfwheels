@@ -23,13 +23,7 @@
 	struct function $parseMetaData(required struct meta, required string doctype, required string functionName){
 		local.m=arguments.meta;
 		local.rv["name"]=structKeyExists(local.m, "name")?local.m.name:"";
-		local.rv["isPlugin"]=false;
 		local.rv["availableIn"]=[doctype];
-		// Pluginrunner override: see #735
-		if(left(local.rv.name, 1) == "$"){
-			local.rv["name"]=lcase(functionName);
-			local.rv["isPlugin"]=true;
-		}
 		local.rv["slug"]=$createFunctionSlug(doctype, local.rv.name);
 		local.rv["parameters"]=structKeyExists(local.m, "parameters")?local.m.parameters:[];
 		local.rv["returntype"]=structKeyExists(local.m, "returntype")?local.m.returntype:"";
