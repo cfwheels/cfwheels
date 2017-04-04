@@ -24,7 +24,7 @@ component extends="wheels.tests.Test" {
     .end();
 
     assert("application.wheels.routes[1].pattern is '/.[format]'");
-    assert("application.wheels.routes[2].pattern is '/'")
+    assert("application.wheels.routes[2].pattern is '/'");
   }
 
   function test_scopes_controller_to_subfolder() {
@@ -35,7 +35,7 @@ component extends="wheels.tests.Test" {
     .end();
 
     assert("application.wheels.routes[1].controller is 'public.pages'");
-    assert("application.wheels.routes[2].controller is 'public.pages'")
+    assert("application.wheels.routes[2].controller is 'public.pages'");
   }
 
   private function $clearRoutes() {
