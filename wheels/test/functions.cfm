@@ -147,10 +147,12 @@ public void function assert(required string expression) {
 								local.tokenValue = "'#local.tokenValue#'";
 							}
 						} else {
-							if (isArray(local.tokenValue)) {
-								local.tokenValue = "array of #arrayLen(local.tokenValue)# items";
-							} else if (isStruct(local.tokenValue)) {
-								local.tokenValue = "struct with #structCount(local.tokenValue)# members";
+							if (IsArray(local.tokenValue)) {
+								local.tokenValue = "Array containing #ArrayLen(local.tokenValue)# items";
+							} else if (IsStruct(local.tokenValue)) {
+								local.tokenValue = "Struct with #StructCount(local.tokenValue)# members";
+							} else if (IsQuery(local.tokenValue)) {
+								local.tokenValue = "Query with #local.tokenValue.RecordCount# rows";
 							} else if (IsCustomFunction(local.tokenValue)) {
 								local.tokenValue = "UDF";
 							}
