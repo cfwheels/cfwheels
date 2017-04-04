@@ -1,7 +1,7 @@
 <cfscript>
 
 /**
- * Match a URL with a `GET` HTTP method.
+ * Create a route that matches a URL requiring an HTTML `GET` method. We recommend only using this matcher to expose actions that display data. See `post`, `patch`, `delete`, and `put` for matchers that are appropriate for actions that change data in your database.
  *
  * [section: Configuration]
  * [category: Routing]
@@ -23,17 +23,33 @@ public struct function get(
 	string package,
 	string on
 ) {
-	return $match(method="get", argumentCollection=arguments);
+	return $match(argumentCollection=arguments, method="get");
 }
 
 /**
- * Match a POST url.
+ * Create a route that matches a URL requiring an HTTP `POST` method. It is recommended to use this matcher to expose actions that create database records.
  *
  * [section: Configuration]
  * [category: Routing]
+ *
+ * @name Camel-case name of route (e.g., `blogPosts`).
+ * @pattern Overrides the URL pattern that will match the route. The default value is a dasherized version of `name` (e.g., a `name` of `blogPosts` generates a pattern of `blog-posts`).
+ * @to Set `controller##action` combination to map the route to. You may use either this argument or a combination of `controller` and `action`.
+ * @controller Map the route to a given controller. This must be passed along with the `action` argument.
+ * @action Map the route to a given action within the `controller`. This must be passed along with the `controller` argument.
+ * @package Indicates a subfolder that the controller will be referenced from (but not added to the URL pattern). For example, if you set this to `admin`, the controller will be located at `admin/YourController.cfc`, but the URL path will not contain `admin/`.
+ * @on If this route is within a nested resource, you can set this argument to `member` or `collection`. A `member` route contains a reference to the resource's `key`, while a `collection` route does not.
  */
-public struct function post(string name) {
-	return $match(method="post", argumentCollection=arguments);
+public struct function post(
+	string name,
+	string pattern,
+	string to,
+	string controller,
+	string action,
+	string package,
+	string on
+) {
+	return $match(argumentCollection=arguments, method="post");
 }
 
 /**
