@@ -14,7 +14,7 @@ component extends="Model" {
 		validate("validateCalled");
 		validateOnCreate("validateOnCreateCalled");
 		validateOnUpdate("validateOnUpdateCalled");
-		property(name="salesTotal", sql="SUM(birthDayMonth)", select=false);
+		property(name="salesTotal", sql="SUM(birthDayMonth)", select=false, dataType="int")
 	}
 
 	function validateCalled() {

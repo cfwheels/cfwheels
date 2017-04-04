@@ -38,17 +38,37 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_in_operator_with_spaces() {
-		authors = model("author").findAll(where="id != 0 AND id IN (1, 2, 3) AND firstName IN('Per', 'Tony') AND lastName IN ('Djurner', 'Petruzzi')");
-		assert("authors.recordCount IS 2");
+		authors = model("author").findAll(
+			where=ArrayToList([
+				"id != 0",
+				"id IN (1, 2, 3)",
+				"firstName IN ('Per', 'Tony')",
+				"lastName IN ('Djurner', 'Petruzzi')"
+			], " AND ")
+		);
+
+		assert("authors.recordCount eq 2");
 	}
 
 	function test_moving_aggregate_functions_in_where_to_having() {
-		results1 = model("user").findAll(select="id, state, salesTotal", group="state", where="salesTotal > 10", order="id");
-		assert("results1.recordCount IS 2 AND results1['salesTotal'][2] IS 20");
-		results2 = model("user").findAll(select="id, state, salesTotal", group="state", where="id >= 1 AND salesTotal > 10", order="salesTotal DESC");
-		assert("results2.recordCount IS 2 AND results2['salesTotal'][1] IS 20");
-		results3 = model("user").findAll(select="id, state, salesTotal", group="state", where="salesTotal > 15");
-		assert("results3.recordCount IS 1 AND results3['salesTotal'][1] IS 20");
+		results1 = model("user").findAll(
+			select="state, salesTotal",
+			group="state",
+			where="salesTotal > 10",
+			order="salesTotal DESC"
+		);
+		assert("results1.RecordCount eq 2 AND results1['salesTotal'][1] eq 20");
+
+		results2 = model("user").findAll(
+			select="state, salesTotal",
+			group="state",
+			where="username <> 'perd' AND salesTotal > 10",
+			order="salesTotal DESC"
+		);
+		assert("results2.RecordCount eq 2 AND results2['salesTotal'][1] eq 11");
+
+		results3 = model("user").findAll(select="state, salesTotal", group="state", where="salesTotal < 10");
+		assert("results3.recordCount eq 1 AND results3['salesTotal'][1] eq 6");
 	}
 
 }
