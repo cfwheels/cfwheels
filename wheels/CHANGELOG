@@ -73,7 +73,7 @@ Breaking Changes
 * The "init" function of controllers and models should now be named "config" instead.
 * The global setting "modelRequireInit" has been renamed to "modelRequireConfig".
 * The global setting "cacheControllerInitialization" has been renamed to "cacheControllerConfig".
-* The global setting "cacheModelInitialization" has been renamed to "cacheModelInitialization".
+* The global setting "cacheModelInitialization" has been renamed to "cacheModelConfig".
 * The global setting "clearServerCache" has been renamed to "clearTemplateCache".
 * The updateProperties() method has been removed, use update() instead.
 * Form labels automatically generated based on foreign key properties will drop the "Id" from the end (e.g., the label for the "userId" property will be "User", not "User Id").
