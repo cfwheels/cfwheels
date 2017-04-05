@@ -50,11 +50,11 @@ public any function $initModelClass(required string name, required string path) 
 	// run developer's config method if it exists
 	if (StructKeyExists(variables, "config")) {
 		config();
-	} else if ($get("modelRequireInit")) {
+	} else if ($get("modelRequireConfig")) {
 		Throw(
-			type="Wheels.ModelInitMissing",
-			message="An init function is required for Model: #variables.wheels.class.modelName#",
-			extendedInfo="Create an init function in /models/#variables.wheels.class.modelName#"
+			type="Wheels.ModelConfigMissing",
+			message="A ´config´ function is required for ´#variables.wheels.class.modelName#´ model.",
+			extendedInfo="Create a ´config´ function in ´/models/#variables.wheels.class.modelName#´."
 		);
 	}
 
