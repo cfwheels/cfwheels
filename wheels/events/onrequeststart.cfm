@@ -87,11 +87,11 @@ public void function $runOnRequestStart(required targetPage) {
 		StructDelete(this, "onRequest");
 		StructDelete(variables, "onRequest");
 	}
-	if (!application.wheels.cacheModelInitialization) {
+	if (!application.wheels.cacheModelConfig) {
 		local.lockName = "modelLock" & application.applicationName;
 		$simpleLock(name=local.lockName, execute="$clearModelInitializationCache", type="exclusive");
 	}
-	if (!application.wheels.cacheControllerInitialization) {
+	if (!application.wheels.cacheControllerConfig) {
 		local.lockName = "controllerLock" & application.applicationName;
 		$simpleLock(name=local.lockName, execute="$clearControllerInitializationCache", type="exclusive");
 	}

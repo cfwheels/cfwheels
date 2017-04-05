@@ -116,9 +116,9 @@ public void function onApplicationStart() {
 	application.$wheels.dbmigrateObjectCase = "lower";
 
 	// Cache settings that are always turned on regardless of mode setting.
-	application.$wheels.cacheControllerInitialization = true;
+	application.$wheels.cacheControllerConfig = true;
 	application.$wheels.cacheDatabaseSchema = true;
-	application.$wheels.cacheModelInitialization = true;
+	application.$wheels.cacheModelConfig = true;
 	application.$wheels.cachePlugins = true;
 
 	// Cache settings that are turned off in development mode only.
