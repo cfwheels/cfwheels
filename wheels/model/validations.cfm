@@ -2,7 +2,7 @@
 /**
 * Whether or not to enable default validations for this model.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Validation Functions ]
 *
 * @value Set to true or false.
@@ -14,7 +14,7 @@ public void function automaticValidations(required boolean value) {
 /**
 * Registers method(s) that should be called to validate objects before they are saved.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Validation Functions ]
 *
 * @methods Method name or list of method names to call. (Can also be called with the method argument.)
@@ -29,7 +29,7 @@ public void function validate(string methods="", string condition="", string unl
 /**
 * Registers method(s) that should be called to validate new objects before they are inserted.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Validation Functions ]
 *
 * @methods See documentation for [doc:validate].
@@ -44,7 +44,7 @@ public void function validateOnCreate(string methods="", string condition="", st
 /**
 * Registers method(s) that should be called to validate existing objects before they are updated.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Validation Functions ]
 *
 * @methods See documentation for [doc:validate].
@@ -58,7 +58,7 @@ public void function validateOnUpdate(string methods="", string condition="", st
 /**
 * Validates that the value of the specified property also has an identical confirmation value. (This is common when having a user type in their email address a second time to confirm, confirming a password by typing it a second time, etc.) The confirmation value only exists temporarily and never gets saved to the database. By convention, the confirmation property has to be named the same as the property with "Confirmation" appended at the end. Using the password example, to confirm our password property, we would create a property called passwordConfirmation.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Validation Functions]
 *
 * @properties Name of property or list of property names to validate against (can also be called with the property argument).
@@ -81,7 +81,7 @@ public void function validatesConfirmationOf(
 /**
 * Validates that the value of the specified property does not exist in the supplied list.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Validation Functions ]
 *
 * @properties See documentation for [doc:validatesConfirmationOf].
@@ -109,7 +109,7 @@ public void function validatesExclusionOf(
 /**
 * Validates that the value of the specified property is formatted correctly by matching it against a regular expression using the regEx argument and/or against a built-in CFML validation type using the type argument (creditcard, date, email, etc.).
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Validation Functions ]
 *
 * @properties Name of property or list of property names to validate against (can also be called with the property argument).
@@ -147,7 +147,7 @@ public void function validatesFormatOf(
 /**
 * Validates that the value of the specified property exists in the supplied list.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Validation Functions ]
 *
 * @properties Name of property or list of property names to validate against (can also be called with the property argument).
@@ -175,7 +175,7 @@ public void function validatesInclusionOf(
 /**
 * Validates that the value of the specified property matches the length requirements supplied. Use the exactly, maximum, minimum and within arguments to specify the length requirements.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Validation Functions ]
 *
 * @properties Name of property or list of property names to validate against (can also be called with the property argument).
@@ -211,7 +211,7 @@ public void function validatesLengthOf(
 /**
 * Validates that the value of the specified property is numeric.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Validation Functions ]
 *
 * @properties See documentation for [doc:validatesConfirmationOf].
@@ -252,7 +252,7 @@ public void function validatesNumericalityOf(
 /**
 * Validates that the specified property exists and that its value is not blank.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Validation Functions ]
 *
 * @properties See documentation for [doc:validatesConfirmationOf].
@@ -275,7 +275,7 @@ public void function validatesPresenceOf(
 /**
 * Validates that the value of the specified property is unique in the database table. Useful for ensuring that two users can't sign up to a website with identical usernames for example. When a new record is created, a check is made to make sure that no record already exists in the database table with the given value for the specified property. When the record is updated, the same check is made but disregarding the record itself.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Validation Functions ]
 *
 * @properties Name of property or list of property names to validate against (can also be called with the property argument).

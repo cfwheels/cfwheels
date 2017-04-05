@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		belongsTo(name="user", modelName="user", foreignKey="userid");
 		hasMany(name="photos", modelName="photo", foreignKey="galleryid");
 		nestedProperties(associations="photos", allowDelete="true");

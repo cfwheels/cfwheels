@@ -47,9 +47,9 @@ public any function $initModelClass(required string name, required string path) 
 	variables.wheels.class.columnList = "";
 	variables.wheels.class.calculatedPropertyList = "";
 
-	// run developer's init method if it exists
-	if (StructKeyExists(variables, "init")) {
-		init();
+	// run developer's config method if it exists
+	if (StructKeyExists(variables, "config")) {
+		config();
 	} else if ($get("modelRequireInit")) {
 		Throw(
 			type="Wheels.ModelInitMissing",

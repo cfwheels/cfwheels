@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		table("photos");
 		property(name="DESCRIPTION1", column="description");
 		property(name="photoid", column="id");

@@ -4,7 +4,7 @@
  * Sets up a `belongsTo` association between this model and the specified one.
  * Use this association when this model contains a foreign key referencing another model.
  *
- * [section: Model Initialization]
+ * [section: Model Configuration]
  * [category: Association Functions]
  *
  * @name Gives the association a name that you refer to when working with the association (in the `include` argument to `findAll`, to name one example).
@@ -34,7 +34,7 @@ public void function belongsTo(
 /**
  * Sets up a `hasMany` association between this model and the specified one.
  *
- * [section: Model Initialization]
+ * [section: Model Configuration]
  * [category: Association Functions]
  *
  * @name See documentation for [doc:belongsTo].
@@ -81,7 +81,7 @@ public void function hasMany(
 /**
  * Sets up a `hasOne` association between this model and the specified one.
  *
- * [section: Model Initialization]
+ * [section: Model Configuration]
  * [category: Association Functions]
  *
  * @name See documentation for [doc:belongsTo].

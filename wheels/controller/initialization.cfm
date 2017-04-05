@@ -50,9 +50,9 @@ public any function $initControllerClass(string name="") {
 
 	$setFlashStorage($get("flashStorage"));
 
-	// Call the developer's "init" function if it exists.
-	if (StructKeyExists(variables, "init")) {
-		init();
+	// Call the developer's "config" function if it exists.
+	if (StructKeyExists(variables, "config")) {
+		config();
 	}
 
 	return this;

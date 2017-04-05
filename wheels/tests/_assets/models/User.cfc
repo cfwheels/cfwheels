@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		hasMany(name="galleries");
 		hasOne(name="combikey");
 		hasOne(name="author", foreignKey="firstName", joinKey="firstName");

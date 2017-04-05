@@ -1,10 +1,10 @@
 <cfscript>
 
 /**
-* Used within a controller's init() function to specify controller- or action-specific layouts.
+* Used within a controller's config() function to specify controller- or action-specific layouts.
 *
 * [section: Controller]
-* [category: Initialization Functions]
+* [category: Configuration Functions]
 *
 * @template string true Name of the layout template or function name you want to use.
 * @ajax string false Name of the layout template you want to use for AJAX requests.

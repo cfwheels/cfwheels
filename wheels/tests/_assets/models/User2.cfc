@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		settablenameprefix("tbl");
 		table("users");
 		local.db_info = $dbinfo(datasource=application.wheels.dataSourceName, type="version");

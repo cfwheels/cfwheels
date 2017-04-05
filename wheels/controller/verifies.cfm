@@ -4,7 +4,7 @@
  * Instructs CFWheels to verify that some specific criterias are met before running an action. Note that all undeclared arguments will be passed to redirectTo() call if a handler is not specified.
  *
  * [section: Controller]
- * [category: Initialization Functions]
+ * [category: Configuration Functions]
  *
  * @only List of action names to limit this verification to.
  * @except List of action names to exclude this verification from.
@@ -41,7 +41,7 @@ public void function verifies(
  * Returns an array of all the verifications set on this controller in the order in which they will be executed.
  *
  * [section: Controller]
- * [category: Initialization Functions]
+ * [category: Configuration Functions]
 */
 public array function verificationChain() {
 	return variables.$class.verifications;
@@ -51,7 +51,7 @@ public array function verificationChain() {
  * Use this function if you need a more low level way of setting the entire verification chain for a controller.
  *
  * [section: Controller]
- * [category: Initialization Functions]
+ * [category: Configuration Functions]
  *
  * @chain An array of structs, each of which represent an argumentCollection that get passed to the verifies function. This should represent the entire verification chain that you want to use for this controller.
  */

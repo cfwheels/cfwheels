@@ -1,6 +1,6 @@
 component extends="Controller" {
 
-	function init() {
+	function config() {
 		verifies(only="actionGet", get="true");
 		verifies(only="actionPost", post="true");
 		verifies(only="actionPostWithRedirect", post="true", action="index", controller="somewhere", error="invalid");

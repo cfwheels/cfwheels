@@ -37,7 +37,7 @@
 
 
 	// Array of functions to ignore
-	ignore = ["init"];
+	ignore = ["config"];
 
 	// Merge
 	for(doctype in temp){

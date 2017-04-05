@@ -1,5 +1,5 @@
 component extends="Controller" {
-  function init() {
+  function config() {
     protectsFromForgery(only="create");
   }
 

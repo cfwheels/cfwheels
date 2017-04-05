@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		table(false);
 		property(name="username");
 		property(name="password");

@@ -2,7 +2,7 @@
 /**
 * Use this method to override the data source connection information for this model.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Miscellaneous Functions]
 *
 * @datasource The data source name to connect to.
@@ -18,7 +18,7 @@ public void function dataSource(required string datasource, string username="", 
 /**
 * Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels convention of a singular object name mapping to a plural table name. To not use a table for your model at all, call table(false).
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Miscellaneous Functions]
 *
 * @name Name of the table to map this model to.
@@ -30,7 +30,7 @@ public void function table(required any name) {
 /**
 * Sets a prefix to prepend to the table name when this model runs SQL queries.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Miscellaneous Functions]
 *
 * @prefix A prefix to prepend to the table name.
@@ -42,7 +42,7 @@ public void function setTableNamePrefix(required string prefix) {
 /**
 * Allows you to pass in the name(s) of the property(s) that should be used as the primary key(s). Pass as a list if defining a composite primary key. Also aliased as setPrimaryKeys().
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Miscellaneous Functions]
 *
 * @property Property (or list of properties) to set as the primary key.
@@ -60,7 +60,7 @@ public void function setPrimaryKey(required string property) {
 /**
 * Alias for setPrimaryKey(). Use this for better readability when you're setting multiple properties as the primary key.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Miscellaneous Functions]
 *
 * @property Property (or list of properties) to set as the primary key.

@@ -6,7 +6,7 @@
 /**
 * Allows for nested objects, structs, and arrays to be set from params and other generated data.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Miscellaneous Functions]
 *
 * @association The association (or list of associations) you want to allow to be set through the params. This argument is also aliased as associations.

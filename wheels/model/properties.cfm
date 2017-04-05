@@ -2,7 +2,7 @@
 /**
 * Use this method to specify which properties can be set through mass assignment.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Miscellaneous Functions]
 *
 * @properties Property name (or list of property names) that are allowed to be altered through mass assignment.
@@ -25,7 +25,7 @@ public void function accessibleProperties(string properties="") {
 /**
 * Use this method to specify which properties cannot be set through mass assignment.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Miscellaneous Functions]
 *
 * @properties Property name (or list of property names) that are not allowed to be altered through mass assignment.
@@ -41,7 +41,7 @@ public void function protectedProperties(string properties="") {
 /**
 * Use this method to map an object property to either a table column with a different name than the property or to a SQL expression. You only need to use this method when you want to override the default object relational mapping that Wheels performs.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Miscellaneous Functions]
 *
 * @name The name that you want to use for the column or SQL function result in the CFML code.

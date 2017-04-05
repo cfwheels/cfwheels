@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		belongsTo("author");
 		hasMany("comments");
 		hasMany("classifications");

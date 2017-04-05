@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		table("users");
 		automaticValidations(true);
 	}
