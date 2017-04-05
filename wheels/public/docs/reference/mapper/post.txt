@@ -10,8 +10,8 @@ drawRoutes()
     // Route name:  wadgets
     // Example URL: /wadgets
     // Controller:  Wadgets
-    // Action:      crate
-    .get(name="wadgets", controller="wadgets", action="create")
+    // Action:      create
+    .post(name="wadgets", controller="wadgets", action="create")
 
     // Route name:  authenticate
     // Example URL: /oauth/token.json
@@ -44,7 +44,7 @@ drawRoutes()
         // Action:      create
         .post(name="leads", to="leads##create", on="collection")
 
-        // Route name:  customerCancellations
+        // Route name:  cancelCustomer
         // Example URL: /customers/3209/cancel
         // Controller:  Cancellations
         // Action:      create
