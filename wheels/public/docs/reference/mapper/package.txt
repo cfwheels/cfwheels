@@ -3,7 +3,7 @@
 drawRoutes()
     .package("public")
         // Example URL: /products/1234
-        // Controller: public.Products
+        // Controller:  public.Products
         .resources("products")
     .end()
 

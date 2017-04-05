@@ -1,0 +1,26 @@
+<cfscript>
+
+drawRoutes()
+    .namespace("admin")
+        // Route name:  adminProducts
+        // Example URL: /admin/products/1234
+        // Controller:  admin.Products
+        .resources("products")
+
+        .namespace("super")
+            // Route name:  adminSuperUsers
+            // Example URL: /admin/super/users
+            // Controller:  admin.super.Users
+            .get(name="users", to="users##index")
+        .end()
+    .end()
+
+    .namespace(name="foo", package="foos", path="foose")
+        // Route name:  fooBars
+        // Example URL: /foose/bars
+        // Controller:  foos.Bars
+        .post(name="bars", to="bars##create")
+    .end()
+.end();
+
+</cfscript>
