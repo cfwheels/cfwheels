@@ -1,5 +1,5 @@
-// Instruct CFWheels to call the `setTime` method after getting objects or records with one of the finder methods
-init(){
+// Instruct CFWheels to call the `setTime` method after getting objects or records with one of the finder methods.
+config() {
 	afterFind("setTime");
 }
 

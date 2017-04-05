@@ -1,4 +1,4 @@
-// In `models/User.cfc`, add a prefix to the default table name of `tbl`
-function init(){
+// In `models/User.cfc`, add a prefix to the default table name of `tbl`.
+function config(){
 	setTableNamePrefix("tbl");
 }

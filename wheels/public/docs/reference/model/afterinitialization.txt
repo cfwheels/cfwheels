@@ -1,2 +1,2 @@
-// Instruct CFWheels to call the `fixObj` method
+// Instruct CFWheels to call the `fixObj` method.
 afterInitialization("fixObj");
