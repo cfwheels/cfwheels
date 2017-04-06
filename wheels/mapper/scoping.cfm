@@ -70,15 +70,21 @@ public struct function scope(
 }
 
 /**
+ * Scopes any the controllers for any routes configured within this block to a subfolder (package) and also adds the package name to the URL.
+ *
  * [section: Configuration]
  * [category: Routing]
+ *
+ * @name Name to prepend to child route names.
+ * @package Subfolder (package) to reference for controllers. This defaults to the value provided for `name`.
+ * @path Subfolder path to add to the URL.
  */
 public struct function namespace(
-	required string package,
-	string name=arguments.package,
-	string path=hyphenize(arguments.package)
+	required string name,
+	string package=arguments.name,
+	string path=hyphenize(arguments.name)
 ) {
-	return scope(argumentCollection=arguments, $call="namespace");
+	return scope(name=arguments.name, package=arguments.package, path=arguments.path, $call="namespace");
 }
 
 /**
@@ -87,8 +93,8 @@ public struct function namespace(
  * [section: Configuration]
  * [category: Routing]
  *
- * @name Name to prepend to route name.
- * @package Subfolder to reference for controllers. This defaults to the value provided for `name`.
+ * @name Name to prepend to child route names.
+ * @package Subfolder (package) to reference for controllers. This defaults to the value provided for `name`.
  */
 public struct function package(required string name, string package=arguments.name) {
 	return scope(name=arguments.name, package=arguments.package, $call="package");

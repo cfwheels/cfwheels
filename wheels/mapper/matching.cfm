@@ -6,7 +6,7 @@
  * [section: Configuration]
  * [category: Routing]
  *
- * @name Camel-case name of route (e.g., `blogPost`).
+ * @name Camel-case name of route to reference when build links and form actions (e.g., `blogPost`).
  * @pattern Overrides the URL pattern that will match the route. The default value is a dasherized version of `name` (e.g., a `name` of `blogPost` generates a pattern of `blog-post`).
  * @to Set `controller##action` combination to map the route to. You may use either this argument or a combination of `controller` and `action`.
  * @controller Map the route to a given controller. This must be passed along with the `action` argument.
@@ -27,12 +27,12 @@ public struct function get(
 }
 
 /**
- * Create a route that matches a URL requiring an HTTP `POST` method. It is recommended to use this matcher to expose actions that create database records.
+ * Create a route that matches a URL requiring an HTTP `POST` method. We recommend using this matcher to expose actions that create database records.
  *
  * [section: Configuration]
  * [category: Routing]
  *
- * @name Camel-case name of route (e.g., `blogPosts`).
+ * @name Camel-case name of route to reference when build links and form actions (e.g., `blogPosts`).
  * @pattern Overrides the URL pattern that will match the route. The default value is a dasherized version of `name` (e.g., a `name` of `blogPosts` generates a pattern of `blog-posts`).
  * @to Set `controller##action` combination to map the route to. You may use either this argument or a combination of `controller` and `action`.
  * @controller Map the route to a given controller. This must be passed along with the `action` argument.
@@ -53,33 +53,81 @@ public struct function post(
 }
 
 /**
- * Match a PUT url.
+ * Create a route that matches a URL requiring an HTTP `PATCH` method. We recommend using this matcher to expose actions that update database records.
  *
  * [section: Configuration]
  * [category: Routing]
+ *
+ * @name Camel-case name of route to reference when build links and form actions (e.g., `blogPost`).
+ * @pattern Overrides the URL pattern that will match the route. The default value is a dasherized version of `name` (e.g., a `name` of `blogPost` generates a pattern of `blog-post`).
+ * @to Set `controller##action` combination to map the route to. You may use either this argument or a combination of `controller` and `action`.
+ * @controller Map the route to a given controller. This must be passed along with the `action` argument.
+ * @action Map the route to a given action within the `controller`. This must be passed along with the `controller` argument.
+ * @package Indicates a subfolder that the controller will be referenced from (but not added to the URL pattern). For example, if you set this to `admin`, the controller will be located at `admin/YourController.cfc`, but the URL path will not contain `admin/`.
+ * @on If this route is within a nested resource, you can set this argument to `member` or `collection`. A `member` route contains a reference to the resource's `key`, while a `collection` route does not.
  */
-public struct function put(string name) {
-	return $match(method="put", argumentCollection=arguments);
+public struct function patch(
+	string name,
+	string pattern,
+	string to,
+	string controller,
+	string action,
+	string package,
+	string on
+) {
+	return $match(argumentCollection=arguments, method="patch");
 }
 
 /**
- * Match a PATCH url.
+ * Create a route that matches a URL requiring an HTTP `PUT` method. We recommend using this matcher to expose actions that update database records. This method is provided as a convenience for when you really need to support the `PUT` verb; consider using the `patch` matcher instead of this one.
  *
  * [section: Configuration]
  * [category: Routing]
+ *
+ * @name Camel-case name of route to reference when build links and form actions (e.g., `blogPost`).
+ * @pattern Overrides the URL pattern that will match the route. The default value is a dasherized version of `name` (e.g., a `name` of `blogPost` generates a pattern of `blog-post`).
+ * @to Set `controller##action` combination to map the route to. You may use either this argument or a combination of `controller` and `action`.
+ * @controller Map the route to a given controller. This must be passed along with the `action` argument.
+ * @action Map the route to a given action within the `controller`. This must be passed along with the `controller` argument.
+ * @package Indicates a subfolder that the controller will be referenced from (but not added to the URL pattern). For example, if you set this to `admin`, the controller will be located at `admin/YourController.cfc`, but the URL path will not contain `admin/`.
+ * @on If this route is within a nested resource, you can set this argument to `member` or `collection`. A `member` route contains a reference to the resource's `key`, while a `collection` route does not.
  */
-public struct function patch(string name) {
-	return $match(method="patch", argumentCollection=arguments);
+public struct function put(
+	string name,
+	string pattern,
+	string to,
+	string controller,
+	string action,
+	string package,
+	string on
+) {
+	return $match(argumentCollection=arguments, method="put");
 }
 
 /**
- * Match a DELETE url.
+ * Create a route that matches a URL requiring an HTTP `DELETE` method. We recommend using this matcher to expose actions that delete database records.
  *
  * [section: Configuration]
  * [category: Routing]
+ *
+ * @name Camel-case name of route to reference when build links and form actions (e.g., `blogPost`).
+ * @pattern Overrides the URL pattern that will match the route. The default value is a dasherized version of `name` (e.g., a `name` of `blogPost` generates a pattern of `blog-post`).
+ * @to Set `controller##action` combination to map the route to. You may use either this argument or a combination of `controller` and `action`.
+ * @controller Map the route to a given controller. This must be passed along with the `action` argument.
+ * @action Map the route to a given action within the `controller`. This must be passed along with the `controller` argument.
+ * @package Indicates a subfolder that the controller will be referenced from (but not added to the URL pattern). For example, if you set this to `admin`, the controller will be located at `admin/YourController.cfc`, but the URL path will not contain `admin/`.
+ * @on If this route is within a nested resource, you can set this argument to `member` or `collection`. A `member` route contains a reference to the resource's `key`, while a `collection` route does not.
  */
-public struct function delete(string name) {
-	return $match(method="delete", argumentCollection=arguments);
+public struct function delete(
+	string name,
+	string pattern,
+	string to,
+	string controller,
+	string action,
+	string package,
+	string on
+) {
+	return $match(argumentCollection=arguments, method="delete");
 }
 
 /**
