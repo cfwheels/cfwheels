@@ -215,6 +215,8 @@ component output=false {
 				return "array";
 			case "CF_SQL_STRUCT":
 				return "struct";
+			case "CF_SQL_LONGVARCHAR": case "CF_SQL_LONGNVARCHAR":
+                return "text";
 			default:
 				return "string";
 		}
