@@ -238,8 +238,8 @@ public void function $updateCollectionObject(required string property, required 
 }
 
 /**
- * Internal function.
- */
+* Internal Function
+*/
 public any function $getAssociationObject(
 	required string property,
 	required struct value,
@@ -277,58 +277,55 @@ public any function $getAssociationObject(
 }
 
 /**
- * Internal function.
- */
+* Internal Function
+*/
 public string function $createPrimaryKeyList(required struct params, required string keys) {
-	local.rv = "";
-	local.iEnd = ListLen(arguments.keys);
-	for (local.i = 1; local.i <= local.iEnd; local.i++) {
-		local.key = ListGetAt(arguments.keys, local.i);
-		if (!StructKeyExists(arguments.params, local.key) || !Len(arguments.params[local.key])) {
+	local._rv = "";
+	local._iEnd = ListLen(arguments.keys);
+	for (local._i=1; local._i <= local._iEnd; local._i++) {
+		local._key = ListGetAt(arguments.keys, local._i);
+		if (!StructKeyExists(arguments.params, local._key) || !Len(arguments.params[local._key])) {
 			return "";
 		}
-		local.rv = ListAppend(local.rv, arguments.params[local.key]);
+		local._rv = ListAppend(local._rv, arguments.params[local._key]);
 	}
-	return local.rv;
+	return local._rv;
 }
 
 /**
- * Internal function.
- */
+* Internal Function
+*/
 public void function $resetToNew() {
 	if ($persistedOnInitialization()) {
 		return;
 	}
-
-	// Remove the persisted properties container.
+	// remove the persisted properties container
 	StructDelete(variables, "$persistedProperties");
 
-	// Remove any primary keys set by the save.
-	local.keys = primaryKeys();
-	local.iEnd = ListLen(local.keys);
-	for (local.i = 1; local.i <= local.iEnd; local.i++) {
-		local.item = ListGetAt(local.keys, local.i);
-		StructDelete(this, local.item);
+	// remove any primary keys set by the save
+	local._keys = primaryKeys();
+	local._iEnd = ListLen(local._keys);
+	for (local._i=1; local._i <= local._iEnd; local._i++) {
+		local._item = ListGetAt(local._keys, local._i);
+		StructDelete(this, local._item);
 	}
-
 }
 
 /**
- * Internal function.
- */
+* Internal Function
+*/
 public void function $resetAssociationsToNew() {
-	local.associations = variables.wheels.class.associations;
-	for (local.association in local.associations) {
-		local.nested = local.associations[local.association].nested;
-		if (local.nested.allow && local.nested.autoSave && StructKeyExists(this, local.association)) {
-			local.array = this[local.association];
-			if (IsObject(this[local.association])) {
-				local.array = [this[local.association]];
+	local._associations = variables.wheels.class.associations;
+	for (local._association in local._associations) {
+		if (local._associations[local._association].nested.allow && local._associations[local._association].nested.autoSave && StructKeyExists(this, local._association)) {
+			local._array = this[local._association];
+			if (IsObject(this[local._association])) {
+				local._array = [this[local._association]];
 			}
-			if (IsArray(local.array)) {
-				local.iEnd = ArrayLen(local.array);
-				for (local.i = 1; local.i <= local.iEnd; local.i++) {
-					local.array[local.i].$resetToNew();
+			if (IsArray(local._array)) {
+				local._iEnd = ArrayLen(local._array);
+				for (local._i=1; local._i <= local._iEnd; local._i++) {
+					local._array[local._i].$resetToNew();
 				}
 			}
 		}
@@ -336,10 +333,10 @@ public void function $resetAssociationsToNew() {
 }
 
 /**
- * Internal function.
- */
+* Internal Function
+*/
 public boolean function $persistedOnInitialization() {
-	if (StructKeyExists(variables.wheels.instance, "persistedOnInitialization") && variables.wheels.instance.persistedOnInitialization) {
+	if (StructKeyExists(variables.wheels.instance, "persistedOnInitialization") && variables.wheels.instance.persistedOnInitialization){
 		return true;
 	} else {
 		return false;
