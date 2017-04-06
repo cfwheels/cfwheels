@@ -238,94 +238,98 @@ public void function $updateCollectionObject(required string property, required 
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public any function $getAssociationObject(
 	required string property,
 	required struct value,
 	required struct association,
 	required boolean delete
 ) {
-	local._method = "";
-	local._object = false;
-	local._delete = false;
-	local._arguments = {};
-	local._model = model(arguments.association.modelName);
+	local.method = "";
+	local.object = false;
+	local.delete = false;
+	local.args = {};
+	local.model = model(arguments.association.modelName);
 
-	// check to see if the struct has all of the keys we need from rejectIfBlank
+	// Check to see if the struct has all of the keys we need from rejectIfBlank.
 	if ($structKeysExist(struct=arguments.value, properties=arguments.association.nested.rejectIfBlank)) {
-		// get our primary keys, if they don't exist, then we create a new object
-		local._arguments.key = $createPrimaryKeyList(params=arguments.value, keys=local._model.primaryKey());
 
+		// Get our primary keys, if they don't exist, then we create a new object.
+		local.args.key = $createPrimaryKeyList(params=arguments.value, keys=local.model.primaryKey());
 		if (IsObject(arguments.value)) {
-			local._object = arguments.value;
-		} else if (Len(local._arguments.key)) {
-			local._object = local._model.findByKey(argumentCollection=local._arguments);
+			local.object = arguments.value;
+		} else if (Len(local.args.key)) {
+			local.object = local.model.findByKey(argumentCollection=local.args);
 		}
+
 		if (StructKeyExists(arguments.value, "_delete") && IsBoolean(arguments.value["_delete"]) && arguments.value["_delete"]) {
-			local._delete = true;
+			local.delete = true;
 		}
-		if (!IsObject(local._object) && !local._delete) {
-			StructDelete(local._arguments, "key");
-			return $invoke(componentReference=local._model, method="new", invokeArgs=local._arguments);
-		} else if (Len(local._arguments.key) && local._delete && arguments.association.nested.delete && arguments.delete) {
-			$invoke(componentReference=local._model, method="deleteByKey", invokeArgs=local._arguments);
+		if (!IsObject(local.object) && !local.delete) {
+			StructDelete(local.args, "key");
+			return $invoke(componentReference=local.model, method="new", invokeArgs=local.args);
+		} else if (Len(local.args.key) && local.delete && arguments.association.nested.delete && arguments.delete) {
+			$invoke(componentReference=local.model, method="deleteByKey", invokeArgs=local.args);
 			return false;
 		}
 	}
-	return local._object;
+	return local.object;
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $createPrimaryKeyList(required struct params, required string keys) {
-	local._rv = "";
-	local._iEnd = ListLen(arguments.keys);
-	for (local._i=1; local._i <= local._iEnd; local._i++) {
-		local._key = ListGetAt(arguments.keys, local._i);
-		if (!StructKeyExists(arguments.params, local._key) || !Len(arguments.params[local._key])) {
+	local.rv = "";
+	local.iEnd = ListLen(arguments.keys);
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
+		local.key = ListGetAt(arguments.keys, local.i);
+		if (!StructKeyExists(arguments.params, local.key) || !Len(arguments.params[local.key])) {
 			return "";
 		}
-		local._rv = ListAppend(local._rv, arguments.params[local._key]);
+		local.rv = ListAppend(local.rv, arguments.params[local.key]);
 	}
-	return local._rv;
+	return local.rv;
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public void function $resetToNew() {
 	if ($persistedOnInitialization()) {
 		return;
 	}
-	// remove the persisted properties container
+
+	// Remove the persisted properties container.
 	StructDelete(variables, "$persistedProperties");
 
-	// remove any primary keys set by the save
-	local._keys = primaryKeys();
-	local._iEnd = ListLen(local._keys);
-	for (local._i=1; local._i <= local._iEnd; local._i++) {
-		local._item = ListGetAt(local._keys, local._i);
-		StructDelete(this, local._item);
+	// Remove any primary keys set by the save.
+	local.keys = primaryKeys();
+	local.iEnd = ListLen(local.keys);
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
+		local.item = ListGetAt(local.keys, local.i);
+		StructDelete(this, local.item);
 	}
+
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public void function $resetAssociationsToNew() {
-	local._associations = variables.wheels.class.associations;
-	for (local._association in local._associations) {
-		if (local._associations[local._association].nested.allow && local._associations[local._association].nested.autoSave && StructKeyExists(this, local._association)) {
-			local._array = this[local._association];
-			if (IsObject(this[local._association])) {
-				local._array = [this[local._association]];
+	local.associations = variables.wheels.class.associations;
+	for (local.association in local.associations) {
+		local.nested = local.associations[local.association].nested;
+		if (local.nested.allow && local.nested.autoSave && StructKeyExists(this, local.association)) {
+			local.array = this[local.association];
+			if (IsObject(this[local.association])) {
+				local.array = [this[local.association]];
 			}
-			if (IsArray(local._array)) {
-				local._iEnd = ArrayLen(local._array);
-				for (local._i=1; local._i <= local._iEnd; local._i++) {
-					local._array[local._i].$resetToNew();
+			if (IsArray(local.array)) {
+				local.iEnd = ArrayLen(local.array);
+				for (local.i = 1; local.i <= local.iEnd; local.i++) {
+					local.array[local.i].$resetToNew();
 				}
 			}
 		}
@@ -333,10 +337,10 @@ public void function $resetAssociationsToNew() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public boolean function $persistedOnInitialization() {
-	if (StructKeyExists(variables.wheels.instance, "persistedOnInitialization") && variables.wheels.instance.persistedOnInitialization){
+	if (StructKeyExists(variables.wheels.instance, "persistedOnInitialization") && variables.wheels.instance.persistedOnInitialization) {
 		return true;
 	} else {
 		return false;
