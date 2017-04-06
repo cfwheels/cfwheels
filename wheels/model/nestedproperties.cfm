@@ -246,35 +246,34 @@ public any function $getAssociationObject(
 	required struct association,
 	required boolean delete
 ) {
-	local.method = "";
-	local.object = false;
-	local.delete = false;
-	local.args = {};
-	local.model = model(arguments.association.modelName);
+	local._method = "";
+	local._object = false;
+	local._delete = false;
+	local._arguments = {};
+	local._model = model(arguments.association.modelName);
 
-	// Check to see if the struct has all of the keys we need from rejectIfBlank.
+	// check to see if the struct has all of the keys we need from rejectIfBlank
 	if ($structKeysExist(struct=arguments.value, properties=arguments.association.nested.rejectIfBlank)) {
+		// get our primary keys, if they don't exist, then we create a new object
+		local._arguments.key = $createPrimaryKeyList(params=arguments.value, keys=local._model.primaryKey());
 
-		// Get our primary keys, if they don't exist, then we create a new object.
-		local.args.key = $createPrimaryKeyList(params=arguments.value, keys=local.model.primaryKey());
 		if (IsObject(arguments.value)) {
-			local.object = arguments.value;
-		} else if (Len(local.args.key)) {
-			local.object = local.model.findByKey(argumentCollection=local.args);
+			local._object = arguments.value;
+		} else if (Len(local._arguments.key)) {
+			local._object = local._model.findByKey(argumentCollection=local._arguments);
 		}
-
 		if (StructKeyExists(arguments.value, "_delete") && IsBoolean(arguments.value["_delete"]) && arguments.value["_delete"]) {
-			local.delete = true;
+			local._delete = true;
 		}
-		if (!IsObject(local.object) && !local.delete) {
-			StructDelete(local.args, "key");
-			return $invoke(componentReference=local.model, method="new", invokeArgs=local.args);
-		} else if (Len(local.args.key) && local.delete && arguments.association.nested.delete && arguments.delete) {
-			$invoke(componentReference=local.model, method="deleteByKey", invokeArgs=local.args);
+		if (!IsObject(local._object) && !local._delete) {
+			StructDelete(local._arguments, "key");
+			return $invoke(componentReference=local._model, method="new", invokeArgs=local._arguments);
+		} else if (Len(local._arguments.key) && local._delete && arguments.association.nested.delete && arguments.delete) {
+			$invoke(componentReference=local._model, method="deleteByKey", invokeArgs=local._arguments);
 			return false;
 		}
 	}
-	return local.object;
+	return local._object;
 }
 
 /**
