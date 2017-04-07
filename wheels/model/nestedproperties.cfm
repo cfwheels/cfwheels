@@ -166,58 +166,62 @@ public void function $setCollectionAssociationProperty(
 		this[arguments.property] = [];
 	}
 	if (IsStruct(arguments.value)) {
-		for (local._item in arguments.value) {
-			// check to see if the id is a tickcount, if so the object is new
-			if (IsNumeric(local._item) && Ceiling(Right(GetTickCount(), 12) / 900000000) == Ceiling(local._item / 900000000)) {
-				ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[local._item], association=arguments.association, delete=arguments.delete));
-				$updateCollectionObject(property=arguments.property, value=arguments.value[local._item]);
+		for (local.item in arguments.value) {
+
+			// Check to see if the id is a tickcount, if so the object is new.
+			if (IsNumeric(local.item) && Ceiling(Right(GetTickCount(), 12) / 900000000) == Ceiling(local.item / 900000000)) {
+				ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[local.item], association=arguments.association, delete=arguments.delete));
+				$updateCollectionObject(property=arguments.property, value=arguments.value[local.item]);
 			} else {
-				// get our primary keys
-				local._keys = local.model.primaryKey();
-				local._itemArray = ListToArray(local._item, ",", true);
-				local._iEnd = ListLen(local._keys);
-				for (local._i=1; local._i <= local._iEnd; local._i++) {
-					arguments.value[local._item][ListGetAt(local._keys, local._i)] = local._itemArray[local._i];
+
+				// Get our primary keys.
+				local.keys = local.model.primaryKey();
+				local.itemArray = ListToArray(local.item, ",", true);
+				local.iEnd = ListLen(local.keys);
+				for (local.i=1; local.i <= local.iEnd; local.i++) {
+					arguments.value[local.item][ListGetAt(local.keys, local.i)] = local.itemArray[local.i];
 				}
-				ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[local._item], association=arguments.association, delete=arguments.delete));
-				$updateCollectionObject(property=arguments.property, value=arguments.value[local._item]);
+
+				ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[local.item], association=arguments.association, delete=arguments.delete));
+				$updateCollectionObject(property=arguments.property, value=arguments.value[local.item]);
 			}
 		}
 	} else if (IsArray(arguments.value)) {
-		for (local._i=1; local._i <= ArrayLen(arguments.value); local._i++) {
-			if (IsObject(arguments.value[local._i]) && ArrayLen(this[arguments.property]) >= local._i && IsObject(this[arguments.property][local._i]) && this[arguments.property][local._i].compareTo(arguments.value[local._i])) {
-				this[arguments.property][local._i] = $getAssociationObject(property=arguments.property, value=arguments.value[local._i], association=arguments.association, delete=arguments.delete);
-				if (!IsStruct(this[arguments.property][local._i]) && !this[arguments.property][local._i]) {
-					ArrayDeleteAt(this[arguments.property], local._i);
-					local._i--;
+		for (local.i=1; local.i <= ArrayLen(arguments.value); local.i++) {
+			if (IsObject(arguments.value[local.i]) && ArrayLen(this[arguments.property]) >= local.i && IsObject(this[arguments.property][local.i]) && this[arguments.property][local.i].compareTo(arguments.value[local.i])) {
+				this[arguments.property][local.i] = $getAssociationObject(property=arguments.property, value=arguments.value[local.i], association=arguments.association, delete=arguments.delete);
+				if (!IsStruct(this[arguments.property][local.i]) && !this[arguments.property][local.i]) {
+					ArrayDeleteAt(this[arguments.property], local.i);
+					local.i--;
 				} else {
-					$updateCollectionObject(property=arguments.property, value=arguments.value[local._i], position=local._i);
+					$updateCollectionObject(property=arguments.property, value=arguments.value[local.i], position=local.i);
 				}
-			} else if (IsStruct(arguments.value[local._i]) && ArrayLen(this[arguments.property]) >= local._i && IsObject(this[arguments.property][local._i])) {
-				this[arguments.property][local._i] = $getAssociationObject(property=arguments.property, value=arguments.value[local._i], association=arguments.association, delete=arguments.delete);
-				if (!IsStruct(this[arguments.property][local._i]) && !this[arguments.property][local._i]) {
-					ArrayDeleteAt(this[arguments.property], local._i);
-					local._i--;
+			} else if (IsStruct(arguments.value[local.i]) && ArrayLen(this[arguments.property]) >= local.i && IsObject(this[arguments.property][local.i])) {
+				this[arguments.property][local.i] = $getAssociationObject(property=arguments.property, value=arguments.value[local.i], association=arguments.association, delete=arguments.delete);
+				if (!IsStruct(this[arguments.property][local.i]) && !this[arguments.property][local.i]) {
+					ArrayDeleteAt(this[arguments.property], local.i);
+					local.i--;
 				} else {
-					$updateCollectionObject(property=arguments.property, value=arguments.value[local._i], position=local._i);
+					$updateCollectionObject(property=arguments.property, value=arguments.value[local.i], position=local.i);
 				}
 			} else {
-				ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[local._i], association=arguments.association, delete=arguments.delete));
-				$updateCollectionObject(property=arguments.property, value=arguments.value[local._i]);
+				ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[local.i], association=arguments.association, delete=arguments.delete));
+				$updateCollectionObject(property=arguments.property, value=arguments.value[local.i]);
 			}
 		}
 	}
-	// sort the order of the objects in the array if the property is set
+
+	// Sort the order of the objects in the array if the property is set.
 	if (Len(arguments.association.nested.sortProperty)) {
-		local._sortedArray = [];
-		local._iEnd = ArrayLen(this[arguments.property]);
-		for (local._i=1; local._i <= local._iEnd; local._i++) {
-			if (!IsNumeric(this[arguments.property][local._i][arguments.association.nested.sortProperty])) {
+		local.sortedArray = [];
+		local.iEnd = ArrayLen(this[arguments.property]);
+		for (local.i=1; local.i <= local.iEnd; local.i++) {
+			if (!IsNumeric(this[arguments.property][local.i][arguments.association.nested.sortProperty])) {
 				return;
 			}
-			local._sortedArray[this[arguments.property][local._i][arguments.association.nested.sortProperty]] = this[arguments.property][local._i];
+			local.sortedArray[this[arguments.property][local.i][arguments.association.nested.sortProperty]] = this[arguments.property][local.i];
 		}
-		this[arguments.property] = local._sortedArray;
+		this[arguments.property] = local.sortedArray;
 	}
 }
 
