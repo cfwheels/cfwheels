@@ -1,20 +1,17 @@
 <cfscript>
 
-// Note: lots of naming collisions here with the move from loc-> local due to scope search in CF10 (quelle surprise).
-// Have added underscores to all local variables to assure uniqueness for now, but really this needs revisiting.
-
 /**
-* Allows for nested objects, structs, and arrays to be set from params and other generated data.
-*
-* [section: Model Configuration]
-* [category: Miscellaneous Functions]
-*
-* @association The association (or list of associations) you want to allow to be set through the params. This argument is also aliased as associations.
-* @autoSave boolean false true Whether to save the association(s) when the parent object is saved.
-* @allowDelete false Set allowDelete to true to tell CFWheels to look for the property _delete in your model. If present and set to a value that evaluates to true, the model will be deleted when saving the parent.
-* @sortProperty Set sortProperty to a property on the object that you would like to sort by. The property should be numeric, should start with 1, and should be consecutive. Only valid with hasMany associations.
-* @rejectIfBlank A list of properties that should not be blank. If any of the properties are blank, any CRUD operations will be rejected.
-*/
+ * Allows for nested objects, structs, and arrays to be set from params and other generated data.
+ *
+ * [section: Model Configuration]
+ * [category: Miscellaneous Functions]
+ *
+ * @association The association (or list of associations) you want to allow to be set through the params. This argument is also aliased as associations.
+ * @autoSave boolean false true Whether to save the association(s) when the parent object is saved.
+ * @allowDelete false Set allowDelete to true to tell CFWheels to look for the property _delete in your model. If present and set to a value that evaluates to true, the model will be deleted when saving the parent.
+ * @sortProperty Set sortProperty to a property on the object that you would like to sort by. The property should be numeric, should start with 1, and should be consecutive. Only valid with hasMany associations.
+ * @rejectIfBlank A list of properties that should not be blank. If any of the properties are blank, any CRUD operations will be rejected.
+ */
 public void function nestedProperties(
 	string association="",
 	boolean autoSave,
@@ -50,19 +47,19 @@ public void function nestedProperties(
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public boolean function $validateAssociations(required boolean callbacks) {
-	local._associations = variables.wheels.class.associations;
-	for (local._association in local._associations) {
-		if (local._associations[local._association].nested.allow && local._associations[local._association].nested.autoSave && StructKeyExists(this, local._association)) {
-			local._array = this[local._association];
-			if (IsObject(this[local._association])) {
-				local._array = [this[local._association]];
+	local.associations = variables.wheels.class.associations;
+	for (local.association in local.associations) {
+		if (local.associations[local.association].nested.allow && local.associations[local.association].nested.autoSave && StructKeyExists(this, local.association)) {
+			local.array = this[local.association];
+			if (IsObject(this[local.association])) {
+				local.array = [this[local.association]];
 			}
-			if (IsArray(local._array)) {
-				for (local._i=1; local._i <= ArrayLen(local._array); local._i++) {
-					$invoke(componentReference=local._array[local._i], method="valid", invokeArgs=arguments);
+			if (IsArray(local.array)) {
+				for (local.i = 1; local.i <= ArrayLen(local.array); local.i++) {
+					$invoke(componentReference=local.array[local.i], method="valid", invokeArgs=arguments);
 				}
 			}
 		}
@@ -118,17 +115,17 @@ public boolean function $saveAssociations(
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public boolean function $setAssociations() {
-	local._associations = variables.wheels.class.associations;
-	for (local._item in local._associations) {
-		local._association = local._associations[local._item];
-		if (local._association.nested.allow && local._association.nested.autoSave && StructKeyExists(this, local._item)) {
-			if (ListFindNoCase("belongsTo,hasOne", local._association.type) && IsStruct(this[local._item])) {
-				$setOneToOneAssociationProperty(property=local._item, value=this[local._item], association=local._association, delete=true);
-			} else if (local._association.type == "hasMany" && IsArray(this[local._item]) && ArrayLen(this[local._item])) {
-				$setCollectionAssociationProperty(property=local._item, value=this[local._item], association=local._association, delete=true);
+	local.associations = variables.wheels.class.associations;
+	for (local.item in local.associations) {
+		local.association = local.associations[local.item];
+		if (local.association.nested.allow && local.association.nested.autoSave && StructKeyExists(this, local.item)) {
+			if (ListFindNoCase("belongsTo,hasOne", local.association.type) && IsStruct(this[local.item])) {
+				$setOneToOneAssociationProperty(property=local.item, value=this[local.item], association=local.association, delete=true);
+			} else if (local.association.type == "hasMany" && IsArray(this[local.item]) && ArrayLen(this[local.item])) {
+				$setCollectionAssociationProperty(property=local.item, value=this[local.item], association=local.association, delete=true);
 			}
 		}
 	}
@@ -136,8 +133,8 @@ public boolean function $setAssociations() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public void function $setOneToOneAssociationProperty(
 	required string property,
 	required struct value,
@@ -224,8 +221,8 @@ public void function $setCollectionAssociationProperty(
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public void function $updateCollectionObject(required string property, required struct value, numeric position=0) {
 	if (!arguments.position) {
 		arguments.position = ArrayLen(this[arguments.property]);
