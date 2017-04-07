@@ -6,10 +6,10 @@
  * [section: Model Configuration]
  * [category: Miscellaneous Functions]
  *
- * @association The association (or list of associations) you want to allow to be set through the params. This argument is also aliased as associations.
- * @autoSave boolean false true Whether to save the association(s) when the parent object is saved.
- * @allowDelete false Set allowDelete to true to tell CFWheels to look for the property _delete in your model. If present and set to a value that evaluates to true, the model will be deleted when saving the parent.
- * @sortProperty Set sortProperty to a property on the object that you would like to sort by. The property should be numeric, should start with 1, and should be consecutive. Only valid with hasMany associations.
+ * @association The association (or list of associations) you want to allow to be set through the params. This argument is also aliased as `associations`.
+ * @autoSave Whether to save the association(s) when the parent object is saved.
+ * @allowDelete Set this to `true` to tell CFWheels to look for the property `_delete` in your model. If present and set to a value that evaluates to true, the model will be deleted when saving the parent.
+ * @sortProperty Set this to a property on the object that you would like to sort by. The property should be numeric, should start with 1, and should be consecutive. Only valid with `hasMany` associations.
  * @rejectIfBlank A list of properties that should not be blank. If any of the properties are blank, any CRUD operations will be rejected.
  */
 public void function nestedProperties(
@@ -21,25 +21,25 @@ public void function nestedProperties(
 ) {
 	$args(args=arguments, name="nestedProperties", combine="association/associations");
 	arguments.association = $listClean(arguments.association);
-	local._iEnd = ListLen(arguments.association);
-	for (local._i=1; local._i <= local._iEnd; local._i++) {
-		local._association = ListGetAt(arguments.association, local._i);
-		if (StructKeyExists(variables.wheels.class.associations, local._association)) {
-			variables.wheels.class.associations[local._association].nested.allow = true;
-			variables.wheels.class.associations[local._association].nested.delete = arguments.allowDelete;
-			variables.wheels.class.associations[local._association].nested.autoSave = arguments.autoSave;
-			variables.wheels.class.associations[local._association].nested.sortProperty = arguments.sortProperty;
-			variables.wheels.class.associations[local._association].nested.rejectIfBlank = $listClean(arguments.rejectIfBlank);
+	local.iEnd = ListLen(arguments.association);
+	for (local.i=1; local.i <= local.iEnd; local.i++) {
+		local.association = ListGetAt(arguments.association, local.i);
+		if (StructKeyExists(variables.wheels.class.associations, local.association)) {
+			variables.wheels.class.associations[local.association].nested.allow = true;
+			variables.wheels.class.associations[local.association].nested.delete = arguments.allowDelete;
+			variables.wheels.class.associations[local.association].nested.autoSave = arguments.autoSave;
+			variables.wheels.class.associations[local.association].nested.sortProperty = arguments.sortProperty;
+			variables.wheels.class.associations[local.association].nested.rejectIfBlank = $listClean(arguments.rejectIfBlank);
 
 			// Add to the white list if it exists.
 			if (StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList")) {
-				variables.wheels.class.accessibleProperties.whiteList = ListAppend(variables.wheels.class.accessibleProperties.whiteList, local._association, ",");
+				variables.wheels.class.accessibleProperties.whiteList = ListAppend(variables.wheels.class.accessibleProperties.whiteList, local.association, ",");
 			}
 
 		} else if (application.wheels.showErrorInformation) {
 			Throw(
 				type="Wheels.AssociationNotFound",
-				message="The `#local._association#` assocation was not found on the #variables.wheels.class.modelName# model.",
+				message="The `#local.association#` assocation was not found on the `#variables.wheels.class.modelName#` model.",
 				extendedInfo="Make sure you have called `hasMany()`, `hasOne()`, or `belongsTo()` before calling the `nestedProperties()` method."
 			);
 		}
@@ -68,37 +68,38 @@ public boolean function $validateAssociations(required boolean callbacks) {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public boolean function $saveAssociations(
 	required any parameterize,
 	required boolean reload,
 	required boolean validate,
 	required boolean callbacks
 ) {
-	local._rv = true;
-	local._associations = variables.wheels.class.associations;
-	for (local._association in local._associations) {
-		if (local._associations[local._association].nested.allow && local._associations[local._association].nested.autoSave && StructKeyExists(this, local._association)) {
-			local._array = this[local._association];
-			if (IsObject(this[local._association])) {
-				local._array = [this[local._association]];
+	local.rv = true;
+	local.associations = variables.wheels.class.associations;
+	for (local.association in local.associations) {
+		if (local.associations[local.association].nested.allow && local.associations[local.association].nested.autoSave && StructKeyExists(this, local.association)) {
+			local.array = this[local.association];
+			if (IsObject(this[local.association])) {
+				local.array = [this[local.association]];
 			}
-			if (IsArray(local._array)) {
+			if (IsArray(local.array)) {
 
 				// Get our expanded information for this association.
-				local._info = $expandedAssociations(include=local._association);
-				local._info = local._info[1];
+				local.info = $expandedAssociations(include=local.association);
+				local.info = local.info[1];
 
-				for (local._i=1; local._i <= ArrayLen(local._array); local._i++) {
-					if (ListFindNoCase("hasMany,hasOne", local._associations[local._association].type)) {
-						$setForeignKeyValues(missingMethodArguments=local._array[local._i], keys=local._info.foreignKey);
+				loc.iEnd = ArrayLen(local.array);
+				for (local.i=1; local.i <= loc.iEnd; local.i++) {
+					if (ListFindNoCase("hasMany,hasOne", local.associations[local.association].type)) {
+						$setForeignKeyValues(missingMethodArguments=local.array[local.i], keys=local.info.foreignKey);
 					}
-					local._saveResult = $invoke(componentReference=local._array[local._i], method="save", invokeArgs=arguments);
-					if (local._rv) {
+					local.saveResult = $invoke(componentReference=local.array[local.i], method="save", invokeArgs=arguments);
+					if (local.rv) {
 
 						// Don't change the return value when we have already received a false.
-						local._rv = local._saveResult;
+						local.rv = local.saveResult;
 
 					}
 				}
@@ -107,11 +108,11 @@ public boolean function $saveAssociations(
 	}
 
 	// If the associations were not saved correctly, roll them back to their new state but keep the errors.
-	if (!local._rv) {
+	if (!local.rv) {
 		$resetAssociationsToNew();
 	}
 
-	return local._rv;
+	return local.rv;
 }
 
 /**
