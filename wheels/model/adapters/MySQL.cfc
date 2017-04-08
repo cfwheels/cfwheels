@@ -54,7 +54,7 @@ component extends="Base" output=false {
 				local.rv = "cf_sql_varchar";
 				break;
 			case "json": case "text": case "mediumtext": case "longtext": case "tinytext": 
-                loc.rv = "cf_sql_longvarchar";
+                local.rv = "cf_sql_longvarchar";
                 break;
 		}
 		return local.rv;
