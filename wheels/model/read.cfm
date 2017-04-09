@@ -143,13 +143,29 @@ public any function findAll(
 	}
 
 	if (StructKeyExists(local, "rv") && !Len(local.rv)) {
+
+		// No records were found using the pagination count query.
+		// We don't need to run any more queries and can just set the return value based on the "returnAs" argument.
 		if (arguments.returnAs == "query") {
-			local.rv = QueryNew("");
+
+			// We want to return an empty query but still include the column names.
+			// Get those using the usual function for it and then remove the table names from the string.
+			local.columns = $createSQLFieldList(
+				clause="select",
+				include=arguments.include,
+				includeSoftDeletes=arguments.includeSoftDeletes,
+				list=arguments.select,
+				returnAs=arguments.returnAs
+			);
+			local.columns = REReplace(local.columns, ".*?\.(.*?)(,|$)", "\1\2", "all");
+			local.rv = QueryNew(local.columns);
+
 		} else if (singularize(arguments.returnAs) == arguments.returnAs) {
 			local.rv = false;
 		} else {
 			local.rv = [];
 		}
+
 	} else if (!StructKeyExists(local, "rv")) {
 		// make the where clause generic for use in caching
 		local.originalWhere = arguments.where;

@@ -4,6 +4,11 @@ component extends="wheels.tests.Test" {
 		source = model("user").findAll(select="id,lastName", maxRows=3);
 	}
 
+	function test_paginated_finder_calls_with_no_records_include_column_names() {
+		q = model("user").findAll(select="id, firstName", where="id = -1", page=1, perPage=10);
+		assert("q.columnList eq 'FIRSTNAME,ID'");
+	}
+
 	function test_maxrows_change_should_break_cache() {
 		$cacheQueries = application.wheels.cacheQueries;
 		application.wheels.cacheQueries = true;

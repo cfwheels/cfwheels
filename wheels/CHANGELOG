@@ -37,6 +37,7 @@ Bug Fixes
 * Avoid double redirect error when doing delayed redirects from a verification handler function - [Per Djurner]
 * Fixes attempts to insert nulls for blank strings - #654 [Andy Bellenie, Per Djurner]
 * Fix for using validatePresenceOf() with default on update - [Andy Bellenie]
+* Fixes so paginated finder calls with no records include column names - #722 [Per Djurner]
 
 Miscellaneous
 =============
