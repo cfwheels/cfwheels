@@ -193,10 +193,15 @@ public any function findAll(
 		// add where clause parameters to the generic sql info
 		local.sql = $addWhereClauseParameters(sql=local.sql, where=local.originalWhere);
 
+		// Create a struct in the request scope to store cached queries.
+		if (!StructKeyExists(request.wheels, variables.wheels.class.modelName)) {
+			request.wheels[variables.wheels.class.modelName] = {};
+		}
+
 		// return existing query result if it has been run already in current request, otherwise pass off the sql array to the query
 		local.queryKey = $hashedKey(variables.wheels.class.modelName, arguments, local.originalWhere);
-		if (application.wheels.cacheQueriesDuringRequest && !arguments.reload && StructKeyExists(request.wheels, local.queryKey)) {
-			local.findAll = request.wheels[local.queryKey];
+		if (application.wheels.cacheQueriesDuringRequest && !arguments.reload && StructKeyExists(request.wheels[variables.wheels.class.modelName], local.queryKey)) {
+			local.findAll = request.wheels[variables.wheels.class.modelName][local.queryKey];
 		} else {
 			local.finderArgs = {};
 			local.finderArgs.sql = local.sql;
@@ -213,7 +218,7 @@ public any function findAll(
 				local.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
 			}
 			local.findAll = variables.wheels.class.adapter.$querySetup(argumentCollection=local.finderArgs);
-			request.wheels[local.queryKey] = local.findAll; // <- store in request cache so we never run the exact same query twice in the same request
+			request.wheels[variables.wheels.class.modelName][local.queryKey] = local.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 		}
 		request.wheels[$hashedKey(local.findAll.query)] = variables.wheels.class.modelName; // place an identifer in request scope so we can reference this query when passed in to view functions
 
