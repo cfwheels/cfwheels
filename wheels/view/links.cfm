@@ -95,14 +95,24 @@ public string function buttonTo(
 	string protocol,
 	numeric port
 ) {
-	$args(name="buttonTo", reserved="method", args=arguments);
+	local.method = "post";
+	$args(name="buttonTo", args=arguments);
+	local.content = "";
+	if (StructKeyExists(arguments, "method")) {
+		if (!ListFindNoCase("post,get", arguments.method)) {
+			local.content &= hiddenFieldTag(name="_method", value=arguments.method);
+		} else if (arguments.method == "get") {
+			local.method = "get";
+		}
+	}
+	arguments.method = local.method;
 	arguments.action = URLFor(argumentCollection=arguments);
 	arguments.action = toXHTML(arguments.action);
-	arguments.method = "post";
+
 	local.args = $innerArgs(name="input", args=arguments);
 	local.args.value = arguments.text;
 	local.args.image = arguments.image;
-	local.content = submitTag(argumentCollection=local.args);
+	local.content &= submitTag(argumentCollection=local.args);
 	local.skip = "image,text,route,controller,key,params,anchor,onlyPath,host,protocol,port";
 	if (Len(arguments.route)) {
 		// variables passed in as route arguments should not be added to the html element

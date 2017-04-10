@@ -244,7 +244,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.autoLink = {link="all"};
 	application.$wheels.functions.average = {distinct=false, parameterize=true, ifNull=""};
 	application.$wheels.functions.belongsTo = {joinType="inner"};
-	application.$wheels.functions.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", confirm="", image=""};
+	application.$wheels.functions.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", image=""};
 	application.$wheels.functions.buttonTag = {type="submit", value="save", content="Save changes", image="", prepend="", append=""};
 	application.$wheels.functions.caches = {time=60, static=false};
 	application.$wheels.functions.checkBox = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", checkedValue=1, unCheckedValue=0};
