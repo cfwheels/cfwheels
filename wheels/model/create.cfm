@@ -238,14 +238,15 @@ public boolean function $create(required any parameterize, required boolean relo
 	}
 
 	// Run the insert sql statement and set the primary key value on the object (if one was returned from the database).
-	local.ins = variables.wheels.class.adapter.$querySetup(
+	local.inserted = variables.wheels.class.adapter.$querySetup(
 		parameterize=arguments.parameterize,
 		sql=local.sql,
 		$primaryKey=local.pks
 	);
+	clearRequestCache();
 	local.generatedKey = variables.wheels.class.adapter.$generatedKey();
-	if (StructKeyExists(local.ins.result, local.generatedKey)) {
-		this[primaryKeys(1)] = local.ins.result[local.generatedKey];
+	if (StructKeyExists(local.inserted.result, local.generatedKey)) {
+		this[primaryKeys(1)] = local.inserted.result[local.generatedKey];
 	}
 
 	if (arguments.reload) {

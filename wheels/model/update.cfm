@@ -203,26 +203,27 @@ public boolean function updateProperty(
 }
 
 /**
-* Internal Function
-**/
+ * Internal function.
+ **/
 public numeric function $updateAll() {
-	local.query = variables.wheels.class.adapter.$querySetup(parameterize=arguments.parameterize, sql=arguments.sql);
-	return local.query.result.recordCount;
+	local.updated = variables.wheels.class.adapter.$querySetup(parameterize=arguments.parameterize, sql=arguments.sql);
+	clearRequestCache();
+	return local.updated.result.recordCount;
 }
 
 /**
-* Internal Function
-**/
+ * Internal function.
+ **/
 public boolean function $update(required any parameterize, required boolean reload) {
+	// Perform update if changes have been made.
 	if (hasChanged()) {
-		// perform update since changes have been made
 		if (variables.wheels.class.timeStampingOnUpdate) {
 			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 		}
 		local.sql = [];
 		ArrayAppend(local.sql, "UPDATE #tableName()# SET ");
+		// Include all changed non-key values in the update.
 		for (local.key in variables.wheels.class.properties) {
-			// include all changed non-key values in the update
 			if (StructKeyExists(this, local.key) && !ListFindNoCase(primaryKeys(), local.key) && hasChanged(local.key)) {
 				ArrayAppend(local.sql, "#variables.wheels.class.properties[local.key].column# = ");
 				local.param = $buildQueryParamValues(local.key);
@@ -230,12 +231,12 @@ public boolean function $update(required any parameterize, required boolean relo
 				ArrayAppend(local.sql, ",");
 			}
 		}
-
-		// only submit the update if we generated an sql set statement
+		// Submit the update if we generated an SQL SET statement.
 		if (ArrayLen(local.sql) > 1) {
 			ArrayDeleteAt(local.sql, ArrayLen(local.sql));
 			local.sql = $addKeyWhereClause(sql=local.sql);
-			local.upd = variables.wheels.class.adapter.$querySetup(sql=local.sql, parameterize=arguments.parameterize);
+			variables.wheels.class.adapter.$querySetup(sql=local.sql, parameterize=arguments.parameterize);
+			clearRequestCache();
 			if (arguments.reload) {
 				this.reload();
 			}

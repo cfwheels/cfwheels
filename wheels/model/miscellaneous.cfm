@@ -1,4 +1,15 @@
 <cfscript>
+
+/**
+ * Deletes all queries stored during the request for this model.
+ *
+ * [section: Model Class]
+ * [category: Miscellaneous Functions]
+ */
+public void function clearRequestCache() {
+	request.wheels[variables.wheels.class.modelName] = {};
+}
+
 /**
 * Use this method to override the data source connection information for this model.
 *

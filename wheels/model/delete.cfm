@@ -171,17 +171,16 @@ public boolean function delete(
 }
 
 /**
- * Internal function.
  * Deletes all records and return how many was deleted.
  * The only reason this is in its own method is so we can wrap it in an "invokeWithTransaction" call.
  */
 public numeric function $deleteAll() {
 	local.deleted = variables.wheels.class.adapter.$querySetup(sql=arguments.sql, parameterize=arguments.parameterize);
+	clearRequestCache();
 	return local.deleted.result.recordCount;
 }
 
 /**
- * Internal function.
  * Run delete callbacks, delete dependent child records and delete the record itself.
  * Return true if delete was successful (one record was deleted) and neither of the callbacks returned false.
  * The only reason this is in its own method is so we can wrap it in an "invokeWithTransaction" call.
@@ -189,12 +188,12 @@ public numeric function $deleteAll() {
 public boolean function $delete() {
 	local.rv = false;
 	if ($callback("beforeDelete", arguments.callbacks)) {
-
 		// Delete dependent record(s).
 		// Done before the main record is deleted to make sure eventual foreign key constraints does not prevent deletion.
 		$deleteDependents();
 
 		local.deleted = variables.wheels.class.adapter.$querySetup(sql=arguments.sql, parameterize=arguments.parameterize);
+		clearRequestCache();
 		if (local.deleted.result.recordCount == 1 && $callback("afterDelete", arguments.callbacks)) {
 			local.rv = true;
 		}

@@ -5,6 +5,19 @@ component extends="wheels.tests.Test" {
 		postModel = model("post");
 	}
 
+	function test_request_query_cache_should_be_cleared_after_change() {
+		local.oldCacheQueriesDuringRequest = application.wheels.cacheQueriesDuringRequest;
+		application.wheels.cacheQueriesDuringRequest = true;
+		transaction action="begin" {
+			authorBefore = model("author").findByKey(1);
+			authorBefore.update(lastName="D");
+			authorAfter = model("author").findByKey(1);
+			transaction action="rollback";
+		}
+		assert("authorAfter.lastName IS 'D'");
+		application.wheels.cacheQueriesDuringRequest = local.oldCacheQueriesDuringRequest;
+	}
+
 	function test_self_join() {
 		tag = tagModel.findOne(where="name = 'pear'", include="parent", order="id, id");
 		assert("IsObject(tag) and IsObject(tag.parent)");
