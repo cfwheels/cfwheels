@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		hasMany("posts");
 		hasOne("profile");
 		/* crazy join to test the joinKey argument */

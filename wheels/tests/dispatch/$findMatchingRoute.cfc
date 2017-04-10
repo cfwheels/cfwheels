@@ -6,12 +6,12 @@ component extends="wheels.tests.Test" {
 
 
     drawRoutes()
-      .namespace(module="admin")
-        .resources(name="users")
+      .namespace("admin")
+        .resources("users")
         .root(to="dashboard##index")
       .end()
-      .resources(name="users")
-      .resource(name="profile")
+      .resources("users")
+      .resource("profile")
       .root(to="dashboard##index")
     .end();
 

@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		table("users");
 		property(name="birthDay", column="birthday");
 		automaticValidations(true);

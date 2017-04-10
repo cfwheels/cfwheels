@@ -10,12 +10,12 @@ hasMany(name="comments", dependent="deleteAll");
 // When not following CFWheels naming conventions for associations, it can get complex to define how a `shortcut` works.
 // In this example, we are naming our `shortcut` differently than the actual model's name.
 
-// In the models/Customer.cfc `init()` method.
+// In the models/Customer.cfc `config()` method.
 hasMany(name="subscriptions", shortcut="magazines", through="publication,subscriptions");
 
-// In the models/Subscription.cfc `init()` method.
+// In the models/Subscription.cfc `config()` method.
 belongsTo("customer");
 belongsTo("publication");
 
-// In the models/Publication `init()` method.
+// In the models/Publication `config()` method.
 hasMany("subscriptions");

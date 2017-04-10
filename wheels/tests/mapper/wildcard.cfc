@@ -22,10 +22,6 @@ component extends="wheels.tests.Test" {
     return $createObjectFromRoot(argumentCollection=local.args);
   }
 
-  public struct function $inspect() {
-    return variables;
-  }
-
   public void function $clearRoutes() {
     application[$appKey()].routes = [];
   }

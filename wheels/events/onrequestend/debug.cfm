@@ -12,7 +12,7 @@
 	<cfset local.baseReloadURL &= "?" & cgi.query_string>
 </cfif>
 <cfset local.baseReloadURL = ReplaceNoCase(local.baseReloadURL, "/" & application.wheels.rewriteFile, "")>
-<cfloop list="design,development,testing,maintenance,production,true" index="local.i">
+<cfloop list="development,testing,maintenance,production,true" index="local.i">
 	<cfset local.baseReloadURL = ReplaceNoCase(ReplaceNoCase(local.baseReloadURL, "?reload=" & local.i, ""), "&reload=" & local.i, "")>
 </cfloop>
 <cfif local.baseReloadURL Contains "?">
@@ -114,7 +114,7 @@
 		</tr>
 		<tr>
 			<td><strong>Active Environment:</strong></td>
-			<td>#capitalize($get("environment"))#<cfif NOT Len($get("reloadPassword"))><cfset local.environments = "design,development,testing,maintenance,production"> [<cfset local.pos = 0><cfloop list="#local.environments#" index="local.i"><cfset local.pos = local.pos + 1><cfif $get("environment") IS NOT local.i><a href="#local.baseReloadURL##local.i#">#capitalize(local.i)#</a><cfif ListLen(local.environments) GT local.pos>, </cfif></cfif></cfloop>]</cfif></td>
+			<td>#capitalize($get("environment"))#<cfif NOT Len($get("reloadPassword"))><cfset local.environments = "development,testing,maintenance,production"> [<cfset local.pos = 0><cfloop list="#local.environments#" index="local.i"><cfset local.pos = local.pos + 1><cfif $get("environment") IS NOT local.i><a href="#local.baseReloadURL##local.i#">#capitalize(local.i)#</a><cfif ListLen(local.environments) GT local.pos>, </cfif></cfif></cfloop>]</cfif></td>
 		</tr>
 		<cfif StructKeyExists(application.wheels, "hostName")>
 			<tr>

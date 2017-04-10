@@ -62,7 +62,7 @@ component extends="wheels.tests.Test" {
 
     dr = drawRoutes()
       .root(to="dashboard##index")
-      .namespace(module="admin");
+      .namespace("admin");
         for (local.item in nounPlurals) {
           dr.resources(name=local.item, nested=true)
             .resources(name="comments", shallow=true)
@@ -77,7 +77,7 @@ component extends="wheels.tests.Test" {
           .resources(name="likes", shallow=true)
         .end();
       }
-      dr.resource(name="profile")
+      dr.resource("profile")
 
     .end();
 

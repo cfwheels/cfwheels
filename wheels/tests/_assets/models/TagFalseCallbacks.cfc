@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		table("tags");
 		afterSave("callbackThatReturnsFalse");
 		afterDelete("callbackThatReturnsFalse");

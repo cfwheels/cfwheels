@@ -2,7 +2,7 @@
 /**
 * Registers method(s) that should be called after a new object is created.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -13,7 +13,7 @@ public void function afterCreate(string methods="") {
 /**
 * Registers method(s) that should be called after an object is deleted.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -24,7 +24,7 @@ public void function afterDelete(string methods="") {
 /**
 * Registers method(s) that should be called after an existing object has been initialized (which is usually done with the findByKey or findOne method).
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -35,7 +35,7 @@ public void function afterFind(string methods="") {
 /**
 * Registers method(s) that should be called after an object has been initialized.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -46,7 +46,7 @@ public void function afterInitialization(string methods="") {
 /**
 * Registers method(s) that should be called after a new object has been initialized (which is usually done with the new method).
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods Method name or list of method names that should be called when this callback event occurs in an object's life cycle (can also be called with the method argument).
@@ -57,7 +57,7 @@ public void function afterNew(string methods="") {
 /**
 * Registers method(s) that should be called after an object is saved.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -68,7 +68,7 @@ public void function afterSave(string methods="") {
 /**
 * Registers method(s) that should be called after an existing object is updated.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -79,7 +79,7 @@ public void function afterUpdate(string methods="") {
 /**
 * Registers method(s) that should be called after an object is validated.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -90,7 +90,7 @@ public void function afterValidation(string methods="") {
 /**
 * Registers method(s) that should be called after a new object is validated.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -101,7 +101,7 @@ public void function afterValidationOnCreate(string methods="") {
 /**
 * Registers method(s) that should be called after an existing object is validated.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -112,7 +112,7 @@ public void function afterValidationOnUpdate(string methods="") {
 /**
 * Registers method(s) that should be called before a new object is created.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -123,7 +123,7 @@ public void function beforeCreate(string methods="") {
 /**
 * Registers method(s) that should be called before an object is deleted.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -134,7 +134,7 @@ public void function beforeDelete(string methods="") {
 /**
 *  Registers method(s) that should be called before an object is saved.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -145,7 +145,7 @@ public void function beforeSave(string methods="") {
 /**
 * Registers method(s) that should be called before an existing object is updated.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -156,7 +156,7 @@ public void function beforeUpdate(string methods="") {
 /**
 * Registers method(s) that should be called before an object is validated.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -167,7 +167,7 @@ public void function beforeValidation(string methods="") {
 /**
 * Registers method(s) that should be called before a new object is validated.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].
@@ -178,7 +178,7 @@ public void function beforeValidationOnCreate(string methods="") {
 /**
 * Registers method(s) that should be called before an existing object is validated.
 *
-* [section: Model Initialization]
+* [section: Model Configuration]
 * [category: Callback Functions]
 *
 * @methods See documentation for [doc:afterNew].

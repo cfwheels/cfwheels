@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		belongsTo("post");
 		belongsTo("tag");
 	}

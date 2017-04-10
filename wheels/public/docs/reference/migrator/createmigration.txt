@@ -1,0 +1,5 @@
+// Create an empty migration file
+result=application.wheels.dbmigrate.createMigration("MyMigrationFile");
+
+// Or Create a migration file from the create-table template
+result=application.wheels.dbmigrate.createMigration("MyMigrationFile","create-table");

@@ -118,7 +118,7 @@ public string function $orderByClause(required string order, required string inc
 						Throw(
 							type="Wheels.ColumnNotFound",
 							message="Wheels looked for the column mapped to the `#local.property#` property but couldn't find it in the database table.",
-							extendedInfo="Verify the `order` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct."
+							extendedInfo="Verify the `order` argument and/or your property to column mappings done with the `property` method inside the model's `config` method to make sure everything is correct."
 						);
 					}
 				}
@@ -421,7 +421,7 @@ public array function $whereClause(
 					Throw(
 						type="Wheels.ColumnNotFound",
 						message="Wheels looked for the column mapped to the `#local.param.property#` property but couldn't find it in the database table.",
-						extendedInfo="Verify the `where` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct."
+						extendedInfo="Verify the `where` argument and/or your property to column mappings done with the `property` method inside the model's `config` method to make sure everything is correct."
 					);
 				}
 				local.temp = REFind("^[a-zA-Z0-9-_\.]* ?#variables.wheels.class.RESQLOperators#", local.elementDataPart, 1, true);
@@ -573,7 +573,7 @@ public array function $expandedAssociations(required string include, boolean inc
 			Throw(
 				type="Wheels.AssociationNotFound",
 				message="An association named `#local.name#` could not be found on the `#ListLast(local.levels)#` model.",
-				extendedInfo="Setup an association in the `init` method of the `models/#capitalize(ListLast(local.levels))#.cfc` file and name it `#local.name#`. You can use the `belongsTo`, `hasOne` or `hasMany` method to set it up."
+				extendedInfo="Setup an association in the `config` method of the `models/#capitalize(ListLast(local.levels))#.cfc` file and name it `#local.name#`. You can use the `belongsTo`, `hasOne` or `hasMany` method to set it up."
 			);
 		}
 

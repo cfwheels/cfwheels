@@ -3,7 +3,7 @@
 * Defines formats that the controller will respond with upon request. The format can be requested through a URL variable called format, by appending the format name to the end of a URL as an extension (when URL rewriting is enabled), or in the request header.
 *
 * [section: Controller]
-* [category: Initialization Functions]
+* [category: Configuration Functions]
 *
 * @formats Formats to instruct the controller to provide. Valid values are html (the default), xml, json, csv, pdf, and xls.
 */
@@ -25,7 +25,7 @@ public void function provides(string formats="") {
 	variables.$class.formats.default = ListAppend(variables.$class.formats.default, arguments.formats);
 }
 /**
-* Use this in an individual controller action to define which formats the action will respond with. This can be used to define provides behavior in individual actions or to override a global setting set with provides in the controller's init().
+* Use this in an individual controller action to define which formats the action will respond with. This can be used to define provides behavior in individual actions or to override a global setting set with provides in the controller's config().
 *
 * [section: Controller]
 * [category: Provides Functions]

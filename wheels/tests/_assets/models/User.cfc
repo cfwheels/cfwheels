@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		hasMany(name="galleries");
 		hasOne(name="combikey");
 		hasOne(name="author", foreignKey="firstName", joinKey="firstName");
@@ -14,7 +14,7 @@ component extends="Model" {
 		validate("validateCalled");
 		validateOnCreate("validateOnCreateCalled");
 		validateOnUpdate("validateOnUpdateCalled");
-		property(name="salesTotal", sql="SUM(birthDayMonth)", select=false);
+		property(name="salesTotal", sql="SUM(birthDayMonth)", select=false, dataType="int");
 	}
 
 	function validateCalled() {

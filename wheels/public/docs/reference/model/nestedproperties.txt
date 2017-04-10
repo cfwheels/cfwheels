@@ -1,5 +1,5 @@
-// In `models/User.cfc`, allow for `groupEntitlements` to be saved and deleted through the `user` object
-function init(){
+// In `models/User.cfc`, allow for `groupEntitlements` to be saved and deleted through the `user` object.
+function config(){
 	hasMany("groupEntitlements");
 	nestedProperties(association="groupEntitlements", allowDelete=true);
 }

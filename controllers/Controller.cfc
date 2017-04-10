@@ -4,24 +4,24 @@
  *
  * Do not delete this file.
  *
- * NOTE: When extending this controller and implementing `init()` in the child controller, don't
- * forget to call this base controller's `init()` via `super.init()`, or else the call to
+ * NOTE: When extending this controller and implementing `config()` in the child controller, don't
+ * forget to call this base controller's `config()` via `super.config()`, or else the call to
  * `protectsFromForgery` below will be skipped.
  *
  * Example controller extending this one:
  *
  * component extends="Controller" {
- *   function init() {
- *     // Call parent constructor
- *     super.init();
+ *   function config() {
+ *     // Call parent config method
+ *     super.config();
  *
- *     // Your own init logic here.
+ *     // Your own config code here.
  *     // ...
  *   }
  * }
  */
 component extends="wheels.Controller" {
-	function init() {
+	function config() {
 		protectsFromForgery();
 	}
 }

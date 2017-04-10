@@ -1,6 +1,6 @@
 component extends="Model" {
 
-  function init() {
+  function config() {
     table("authors");
     property(name="selectArgDefault", sql="id");
     property(name="selectArgTrue", sql="id", select=true);

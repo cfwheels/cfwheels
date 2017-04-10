@@ -50,9 +50,9 @@ public any function $initControllerClass(string name="") {
 
 	$setFlashStorage($get("flashStorage"));
 
-	// Call the developer's "init" function if it exists.
-	if (StructKeyExists(variables, "init")) {
-		init();
+	// Call the developer's "config" function if it exists.
+	if (StructKeyExists(variables, "config")) {
+		config();
 	}
 
 	return this;
@@ -67,12 +67,6 @@ public any function $initControllerObject(required string name, required struct 
 	// Create a struct for storing request specific data.
 	variables.$instance = {};
 	variables.$instance.contentFor = {};
-
-	// Setup direct helper methods for named routes.
-	for (local.namedRoute in application.wheels.namedRoutePositions) {
-		variables[local.namedRoute & "path"] = $namedRoute;
-		variables[local.namedRoute & "url"] = $namedRoute;
-	}
 
 	// Set file name to look for (e.g. "views/folder/helpers.cfm").
 	// Name could be dot notation so we need to change delimiters.

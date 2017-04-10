@@ -4,7 +4,7 @@
  * Tells CFWheels to cache one or more actions.
  *
  * [section: Controller]
- * [category: Initialization Functions]
+ * [category: Configuration Functions]
  *
  * @action Action(s) to cache. This argument is also aliased as actions.
  * @time Minutes to cache the action(s) for.

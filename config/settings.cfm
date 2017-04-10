@@ -1,18 +1,13 @@
 <cfscript>
-	/*
-		If you leave these settings commented out, CFWheels will set the data source name to the same name as the folder the application resides in.
-	*/
 
+	// Use this file to configure your application.
+	// You can also use the environment specific files (e.g. /config/production/settings.cfm) to override settings set here.
+	// Don't forget to issue a reload request (e.g. reload=true) after making changes.
+	// See http://docs.cfwheels.org/docs/configuration-and-defaults for more info.
+
+	// If you leave the settings below commented out, CFWheels will set the data source name to the same name as the folder the application resides in.
 	// set(dataSourceName="");
 	// set(dataSourceUserName="");
 	// set(dataSourcePassword="");
 
-	/*
-		If you leave this setting commented out, CFWheels will try to determine the URL rewrite capabilities automatically.
-		The "URLRewriting" setting can bet set to "On", "Partial" or "Off".
-		To run with "Partial" rewriting, the "cgi.path_info" variable needs to be supported by the web server.
-		To run with rewriting set to "On", you need to apply the necessary rewrite rules on the web server first.
-	*/
-
-	// set(URLRewriting="Partial");
 </cfscript>

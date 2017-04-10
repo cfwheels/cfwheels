@@ -9,40 +9,66 @@
 		"functions"=[]
 	};
 
-	temp["mapper"]["scope"]	 			= application.wheels.mapper;
-	temp["mapper"]["functions"]	 		= listSort(StructKeyList(temp.mapper.scope), "textnocase");
-	temp["migrator"]["scope"]	 		= application.wheels.dbmigrate;
-	temp["migrator"]["functions"]	 	= listSort(StructKeyList(temp.migrator.scope), "textnocase");
-	temp["controller"]["scope"]	 		= createObject("component", "app.controllers.Controller");
-	temp["controller"]["functions"]	 	= listSort(StructKeyList(temp.controller.scope), "textnocase");
-	temp["model"]["scope"]	 			= createObject("component", "app.models.Model");
-	temp["model"]["functions"]	 		= listSort(StructKeyList(temp.model.scope), "textnocase");
+	temp=[];
+
+	// Plugins First, as they can potentially hijack an internal function
+	for(local.plugin in application.wheels.plugins){
+		arrayAppend(temp, {
+			"name": local.plugin,
+			"scope":  application.wheels.plugins[local.plugin]
+		});
+	}
+	arrayAppend(temp, {
+			"name": "controller",
+			"scope": createObject("component", "app.controllers.Controller")
+	});
+	arrayAppend(temp, {
+			"name": "model",
+			"scope": createObject("component", "app.models.Model")
+	});
+	arrayAppend(temp, {
+			"name": "mapper",
+			"scope": application.wheels.mapper
+	});
+	arrayAppend(temp, {
+			"name": "migrator",
+			"scope": application.wheels.dbmigrate
+	});
+
 
 	// Array of functions to ignore
-	ignore = ["init"];
+	ignore = ["config"];
 
 	// Merge
 	for(doctype in temp){
+		doctype["functions"]=listSort(StructKeyList(doctype.scope), "textnocase");
 		// Populate A-Z function List
-		for(functionName in listToArray(temp[doctype]['functions']) ){
+		for(local.functionName in listToArray(doctype.functions) ){
+
+			local.meta={};
+			local.hint="";
 			// Check this is actually a function: dbmigrate stores a struct for instance
 			// Don't display internal functions, duplicates or anything in the ignore list
-			if(left(functionName, 1) != "$"
-				&& !ArrayFindNoCase(ignore, functionName)
-				&& !isStruct(temp[doctype]["scope"][functionName])
+			if(left(local.functionName, 1) != "$"
+				&& !ArrayFindNoCase(ignore, local.functionName)
+				&& isCustomFunction(doctype.scope[local.functionName])
 			){
 				// Get metadata
-				meta=$parseMetaData(GetMetaData(temp[doctype]["scope"][functionName]), doctype, functionName);
-				// Look for identically named functions
-				match=ArrayFind(docs.functions, function(struct){
-					return struct.name == functionName;
-				});
-				// If the duplicate function has an indentical hint, assume it's the same and record the additonal
-				// scope it's available to: otherwise assume it's a different function, albeit with the same name
-				if(match > 0 && docs.functions[match]["hint"] == meta.hint){
-					arrayAppend(docs.functions[match]["availableIn"], doctype);
-				} else {
-					arrayAppend(docs.functions, meta);
+				local.meta=$parseMetaData(GetMetaData(doctype.scope[local.functionName]), doctype.name, local.functionName);
+				local.hint=local.meta.hint;
+
+				if(local.meta.name != "$pluginRunner"){
+
+					// Look for identically named functions: just looking for name isn't enough, we need to compare the hint too
+					local.match=arrayFind(docs.functions, function(struct){
+						return (struct.name == functionName && struct.hint == hint);
+					});
+
+					if(local.match){
+						arrayAppend(docs.functions[local.match]["availableIn"], doctype.name);
+					} else {
+						arrayAppend(docs.functions, local.meta);
+					}
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		hasMany(name="shops", foreignKey="citycode");
 		property(name="id", column="countyid");
 	}

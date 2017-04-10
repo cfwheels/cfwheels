@@ -63,7 +63,7 @@ component extends="wheels.tests.Test" {
 		assert("obj.orderTest IS 'first'");
 	}
 
-	function test_setting_in_init_and_clearing() {
+	function test_setting_in_config_and_clearing() {
 		callbacks = model("author").$callbacks();
 		assert("callbacks.beforeSave[1] IS 'callbackThatReturnsTrue'");
 		model("author").$clearCallbacks(type="beforeSave");

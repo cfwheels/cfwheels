@@ -1,6 +1,6 @@
 component extends="Controller" {
 
-	function init() {
+	function config() {
 		aStr.testArg1 = 1;
 		aStr.testArg2 = 2;
 		filters(through="dir", testArg=1, except="doNotRun");

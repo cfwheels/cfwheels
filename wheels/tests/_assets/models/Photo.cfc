@@ -1,6 +1,6 @@
 component extends="Model" {
 
-	function init() {
+	function config() {
 		property(name="DESCRIPTION1", column="description");
 		belongsTo(name="gallery", modelName="gallery", foreignKey="id");
 		beforeValidation("beforeValidationCallbackThatSetsProperty,beforeValidationCallbackThatIncreasesVariable");

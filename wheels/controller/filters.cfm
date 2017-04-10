@@ -4,7 +4,7 @@
  * Tells CFWheels to run a function before an action is run or after an action has been run.
  *
  * [section: Controller]
- * [category: Initialization Functions]
+ * [category: Configuration Functions]
  *
  * @through Function(s) to execute before or after the action(s).
  * @type Whether to run the function(s) before or after the action(s).
@@ -54,7 +54,7 @@ public void function filters(
  * Use this function if you need a more low level way of setting the entire filter chain for a controller.
  *
  * [section: Controller]
- * [category: Initialization Functions]
+ * [category: Configuration Functions]
  *
  * @chain An array of structs, each of which represent an argumentCollection that get passed to the filters function. This should represent the entire filter chain that you want to use for this controller.
  */
@@ -73,7 +73,7 @@ public void function setFilterChain(required array chain) {
  * Returns an array of all the filters set on current controller in the order in which they will be executed.
  *
  * [section: Controller]
- * [category: Initialization Functions]
+ * [category: Configuration Functions]
  *
  * @type Use this argument to return only before or after filters.
  */

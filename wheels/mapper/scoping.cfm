@@ -8,7 +8,7 @@
  *
  * @name Named route prefix.
  * @path Path prefix.
- * @module Namespace to append to controllers.
+ * @package Package namespace to append to controllers.
  * @controller Controller to use in routes.
  * @shallow Turn on shallow resources.
  * @shallowPath Shallow path prefix.
@@ -18,7 +18,7 @@
 public struct function scope(
 	string name,
 	string path,
-	string module,
+	string package,
 	string controller,
 	boolean shallow,
 	string shallowPath,
@@ -42,9 +42,9 @@ public struct function scope(
 		arguments.path = $normalizePattern(variables.scopeStack[1].path & "/" & arguments.path);
 	}
 
-	// Combine module with scope module.
-	if (StructKeyExists(variables.scopeStack[1], "module") && StructKeyExists(arguments, "module")) {
-		arguments.module = variables.scopeStack[1].module & "." & arguments.module;
+	// Combine package with scope package.
+	if (StructKeyExists(variables.scopeStack[1], "package") && StructKeyExists(arguments, "package")) {
+		arguments.package = variables.scopeStack[1].package & "." & arguments.package;
 	}
 
 	// Combine name with scope name.
@@ -70,15 +70,34 @@ public struct function scope(
 }
 
 /**
+ * Scopes any the controllers for any routes configured within this block to a subfolder (package) and also adds the package name to the URL.
+ *
  * [section: Configuration]
  * [category: Routing]
+ *
+ * @name Name to prepend to child route names.
+ * @package Subfolder (package) to reference for controllers. This defaults to the value provided for `name`.
+ * @path Subfolder path to add to the URL.
  */
 public struct function namespace(
-	required string module,
-	string name=arguments.module,
-	string path=hyphenize(arguments.module)
+	required string name,
+	string package=arguments.name,
+	string path=hyphenize(arguments.name)
 ) {
-	return scope(argumentCollection=arguments, $call="namespace");
+	return scope(name=arguments.name, package=arguments.package, path=arguments.path, $call="namespace");
+}
+
+/**
+ * Scopes any the controllers for any routes configured within this block to a subfolder (package) without adding the package name to the URL.
+ *
+ * [section: Configuration]
+ * [category: Routing]
+ *
+ * @name Name to prepend to child route names.
+ * @package Subfolder (package) to reference for controllers. This defaults to the value provided for `name`.
+ */
+public struct function package(required string name, string package=arguments.name) {
+	return scope(name=arguments.name, package=arguments.package, $call="package");
 }
 
 /**

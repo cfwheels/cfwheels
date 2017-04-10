@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		dispatch = createobject("component", "wheels.Dispatch");
+		dispatch = CreateObject("component", "wheels.Dispatch");
 		args = {};
 		args.path = "home";
 		args.format = "" ;
@@ -12,7 +12,7 @@ component extends="wheels.tests.Test" {
 			regex="^\/?$",
 			variables="",
 			on="",
-			module="",
+			package="",
 			methods="get",
 			name="root"
 		};

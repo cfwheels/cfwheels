@@ -1,9 +1,9 @@
 <cfscript>
 /**
- * Tells CFWheels to protect `POST`ed requests from CSRF vulnerabilities. Instructs the controller to verify that `params.authenticityToken` or `X-CSRF-Token` HTTP header is provided along with the request containing a valid authenticity token. Call this method within a controller's `init` method, preferably the base `Controller.cfc`	 file, to protect the entire application.
+ * Tells CFWheels to protect `POST`ed requests from CSRF vulnerabilities. Instructs the controller to verify that `params.authenticityToken` or `X-CSRF-Token` HTTP header is provided along with the request containing a valid authenticity token. Call this method within a controller's `config` method, preferably the base `Controller.cfc`	 file, to protect the entire application.
  *
  * [section: Controller]
- * [category: Initialization Functions]
+ * [category: Configuration Functions]
  *
  * @with How to handle invalid authenticity token checks. Valid values are error (throws a Wheels.InvalidAuthenticityToken error) and abort (aborts the request silently and sends a blank response to the client).
  * @only List of actions that this check should only run on. Leave blank for all.
