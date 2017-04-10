@@ -69,7 +69,6 @@ public string function linkTo(
 *
 * @text The text content of the button.
 * @image If you want to use an image for the button pass in the link to it here (relative from the images folder).
-* @disable Pass in true if you want the button to be disabled when clicked (can help prevent multiple clicks), or pass in a string if you want the button disabled and the text on the button updated (to "please wait...", for example).
 * @route See documentation for [doc:URLFor].
 * @controller See documentation for [doc:URLFor].
 * @action See documentation for [doc:URLFor].
