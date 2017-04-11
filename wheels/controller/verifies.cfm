@@ -1,23 +1,23 @@
 <cfscript>
 
 /**
- * Instructs CFWheels to verify that some specific criterias are met before running an action. Note that all undeclared arguments will be passed to redirectTo() call if a handler is not specified.
+ * Instructs CFWheels to verify that some specific criterias are met before running an action. Note that all undeclared arguments will be passed to `redirectTo()` call if a `handler` is not specified.
  *
  * [section: Controller]
  * [category: Configuration Functions]
  *
  * @only List of action names to limit this verification to.
  * @except List of action names to exclude this verification from.
- * @post Set to true to verify that this is a POST request.
- * @get Set to true to verify that this is a GET request.
- * @ajax Set to true to verify that this is an AJAX request.
+ * @post Set to true to verify that this is a `POST` request.
+ * @get Set to true to verify that this is a `GET` request.
+ * @ajax Set to true to verify that this is an `AJAX` request.
  * @cookie Verify that the passed in variable name exists in the cookie scope.
  * @session Verify that the passed in variable name exists in the session scope.
  * @params Verify that the passed in variable name exists in the params struct.
  * @handler Pass in the name of a function that should handle failed verifications. The default is to just abort the request when a verification fails.
- * @cookieTypes List of types to check each listed cookie value against (will be passed through to your CFML engine's IsValid function).
- * @sessionTypes List of types to check each list session value against (will be passed through to your CFML engine's IsValid function).
- * @paramsTypes List of types to check each params value against (will be passed through to your CFML engine's IsValid function).
+ * @cookieTypes List of types to check each listed cookie value against (will be passed through to your CFML engine's `IsValid` function).
+ * @sessionTypes List of types to check each list session value against (will be passed through to your CFML engine's `IsValid` function).
+ * @paramsTypes List of types to check each params value against (will be passed through to your CFML engine's `IsValid` function).
  */
 public void function verifies(
 	string only="",
@@ -53,7 +53,7 @@ public array function verificationChain() {
  * [section: Controller]
  * [category: Configuration Functions]
  *
- * @chain An array of structs, each of which represent an argumentCollection that get passed to the verifies function. This should represent the entire verification chain that you want to use for this controller.
+ * @chain An array of structs, each of which represent an `argumentCollection` that get passed to the `verifies` function. This should represent the entire verification chain that you want to use for this controller.
  */
 public void function setVerificationChain(required array chain) {
 

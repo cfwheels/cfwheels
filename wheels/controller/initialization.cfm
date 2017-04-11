@@ -1,7 +1,6 @@
 <cfscript>
 
 /**
- * Internal function.
  * If the controller file exists we instantiate it, otherwise we instantiate the parent controller.
  * This is done so that an action's view page can be rendered without having an actual controller file for it.
  */
@@ -21,7 +20,6 @@ public any function $createControllerObject(required struct params) {
 }
 
 /**
- * Internal function.
  * Return the controller data that is on the class level.
  */
 public struct function $getControllerClassData() {
@@ -29,7 +27,6 @@ public struct function $getControllerClassData() {
 }
 
 /**
- * Internal function.
  * Initialize the controller class level object and return it.
  */
 public any function $initControllerClass(string name="") {
@@ -59,7 +56,6 @@ public any function $initControllerClass(string name="") {
 }
 
 /**
- * Internal function.
  * Initialize the controller instance level object and return it.
  */
 public any function $initControllerObject(required string name, required struct params) {
@@ -102,7 +98,6 @@ public any function $initControllerObject(required string name, required struct 
 }
 
 /**
- * Internal function.
  * Get the class level data from the controller object in the application scope and set it to this controller.
  * By class level we mean that it's stored in the controller object in the application scope.
  */

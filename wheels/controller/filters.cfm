@@ -10,7 +10,7 @@
  * @type Whether to run the function(s) before or after the action(s).
  * @only Pass in a list of action names (or one action name) to tell CFWheels that the filter function(s) should only be run on these actions.
  * @except Pass in a list of action names (or one action name) to tell CFWheels that the filter function(s) should be run on all actions except the specified ones.
- * @placement Pass in prepend to prepend the function(s) to the filter chain instead of appending.
+ * @placement Pass in `prepend` to prepend the function(s) to the filter chain instead of appending.
  */
 public void function filters(
 	required string through,
@@ -56,7 +56,7 @@ public void function filters(
  * [section: Controller]
  * [category: Configuration Functions]
  *
- * @chain An array of structs, each of which represent an argumentCollection that get passed to the filters function. This should represent the entire filter chain that you want to use for this controller.
+ * @chain An array of structs, each of which represent an `argumentCollection` that get passed to the `filters` function. This should represent the entire filter chain that you want to use for this controller.
  */
 public void function setFilterChain(required array chain) {
 
@@ -105,7 +105,6 @@ public array function filterChain(string type="all") {
 }
 
 /**
- * Internal function.
  * Called twice when processing a request, first for "before" filters and then for "after" filters.
  */
 public void function $runFilters(required string type, required string action) {

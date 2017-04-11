@@ -1,11 +1,12 @@
 <cfscript>
+
 /**
- * Tells CFWheels to protect `POST`ed requests from CSRF vulnerabilities. Instructs the controller to verify that `params.authenticityToken` or `X-CSRF-Token` HTTP header is provided along with the request containing a valid authenticity token. Call this method within a controller's `config` method, preferably the base `Controller.cfc`	 file, to protect the entire application.
+ * Tells CFWheels to protect `POST`ed requests from CSRF vulnerabilities. Instructs the controller to verify that `params.authenticityToken` or `X-CSRF-Token` HTTP header is provided along with the request containing a valid authenticity token. Call this method within a controller's `config` method, preferably the base `Controller.cfc`	file, to protect the entire application.
  *
  * [section: Controller]
  * [category: Configuration Functions]
  *
- * @with How to handle invalid authenticity token checks. Valid values are error (throws a Wheels.InvalidAuthenticityToken error) and abort (aborts the request silently and sends a blank response to the client).
+ * @with How to handle invalid authenticity token checks. Valid values are `error` (throws a `Wheels.InvalidAuthenticityToken` error) and `abort` (aborts the request silently and sends a blank response to the client).
  * @only List of actions that this check should only run on. Leave blank for all.
  * @except List of actions that this check should be omitted from running on. Leave blank for no exceptions.
  */
@@ -32,12 +33,14 @@ public function $runCsrfProtection(string action) {
 		}
 	}
 }
+
 /**
  * Internal function.
  */
 public function $flagRequestAsProtected() {
 	request.$wheels.protectedFromForgery = true;
 }
+
 /**
  * Internal function.
  */
@@ -54,18 +57,21 @@ public function $verifyAuthenticityToken() {
 		}
 	}
 }
+
 /**
  * Internal function.
  */
 public boolean function $isVerifiedRequest() {
 	return isGet() || isHead() || isOptions() || $isAnyAuthenticityTokenValid();
 }
+
 /**
  * Internal function.
  */
 public boolean function $isRequestProtectedFromForgery() {
 	return StructKeyExists(request.$wheels, "protectedFromForgery") && IsBoolean(request.$wheels.protectedFromForgery) && request.$wheels.protectedFromForgery;
 }
+
 /**
  * Internal function.
  */
@@ -76,12 +82,14 @@ public function $setAuthenticityToken() {
 		}
 	}
 }
+
 /**
  * Internal function.
  */
 public function $storeAuthenticityToken() {
 	$generateAuthenticityToken();
 }
+
 /**
  * Internal function.
  */
@@ -97,6 +105,7 @@ public boolean function $isAnyAuthenticityTokenValid() {
 	}
 	return local.isValid;
 }
+
 /**
  * Internal function.
  */
@@ -107,6 +116,7 @@ public string function $generateAuthenticityToken() {
 		return $generateCookieAuthenticityToken();
 	}
 }
+
 /**
  * Internal function.
  */
@@ -114,6 +124,7 @@ public boolean function $isCookieAuthenticityTokenValid() {
 	local.authenticityToken = $generateCookieAuthenticityToken();
 	return Len(local.authenticityToken) && local.authenticityToken == params.authenticityToken;
 }
+
 /**
  * Internal function.
  */
@@ -147,6 +158,7 @@ public string function $generateCookieAuthenticityToken() {
 
 	return local.authenticityToken;
 }
+
 /**
  * Internal function.
  */
@@ -176,12 +188,12 @@ public string function $readAuthenticityTokenFromCookie() {
 	}
 
 	// If we don't have cookie attr from above for some strange reason, fail.
-	if (!structKeyExists(local, "cookieAttrs")) {
+	if (!StructKeyExists(local, "cookieAttrs")) {
 		return "";
 	}
 
 	// If we don't have JSON in cookie attrs, fail.
-	if (!isSimpleValue(local.cookieAttrs) || !isJson(local.cookieAttrs)) {
+	if (!IsSimpleValue(local.cookieAttrs) || !IsJson(local.cookieAttrs)) {
 		return "";
 	}
 
@@ -189,12 +201,13 @@ public string function $readAuthenticityTokenFromCookie() {
 	local.cookieAttrs = DeserializeJson(local.cookieAttrs);
 
 	// Check to make sure the JSON we decoded has the authenticity token in it.
-	if (!structKeyExists(local.cookieAttrs, "authenticityToken")) {
+	if (!StructKeyExists(local.cookieAttrs, "authenticityToken")) {
 		return "";
 	}
 
 	return local.cookieAttrs.authenticityToken;
 }
+
 /**
  * Internal function.
  */

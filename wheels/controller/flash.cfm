@@ -46,7 +46,7 @@ public numeric function flashCount() {
 }
 
 /**
- * Deletes a specific key from the Flash. Returns true if the key exists.
+ * Deletes a specific key from the Flash. Returns `true` if the key exists.
  *
  * [section: Controller]
  * [category: Flash Functions]
@@ -94,7 +94,7 @@ public boolean function flashIsEmpty() {
  * [section: Controller]
  * [category: Flash Functions]
  */
-public void function flashKeep(string key = "") {
+public void function flashKeep(string key="") {
 	$args(args=arguments, name="flashKeep", combine="key/keys");
 	request.wheels.flashKeep = arguments.key;
 }
@@ -105,7 +105,7 @@ public void function flashKeep(string key = "") {
  * [section: Controller]
  * [category: Flash Functions]
  *
- * @key The key to check
+ * @key The key to check.
  */
 public boolean function flashKeyExists(required string key) {
 	local.flash = $readFlash();

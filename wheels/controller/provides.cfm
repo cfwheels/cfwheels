@@ -1,12 +1,13 @@
 <cfscript>
+
 /**
-* Defines formats that the controller will respond with upon request. The format can be requested through a URL variable called format, by appending the format name to the end of a URL as an extension (when URL rewriting is enabled), or in the request header.
-*
-* [section: Controller]
-* [category: Configuration Functions]
-*
-* @formats Formats to instruct the controller to provide. Valid values are html (the default), xml, json, csv, pdf, and xls.
-*/
+ * Defines formats that the controller will respond with upon request. The format can be requested through a URL variable called `format`, by appending the `format` name to the end of a URL as an extension (when URL rewriting is enabled), or in the request header.
+ *
+ * [section: Controller]
+ * [category: Configuration Functions]
+ *
+ * @formats Formats to instruct the controller to provide. Valid values are `html` (the default), `xml`, `json`, `csv`, `pdf`, and `xls`.
+ */
 public void function provides(string formats="") {
 	$combineArguments(args=arguments, combine="formats,format", required=true);
 	arguments.formats = $listClean(arguments.formats);
@@ -24,15 +25,16 @@ public void function provides(string formats="") {
 	}
 	variables.$class.formats.default = ListAppend(variables.$class.formats.default, arguments.formats);
 }
+
 /**
-* Use this in an individual controller action to define which formats the action will respond with. This can be used to define provides behavior in individual actions or to override a global setting set with provides in the controller's config().
-*
-* [section: Controller]
-* [category: Provides Functions]
-*
-* @formats See documentation for [doc:provides].
-* @action Name of action, defaults to current.
-*/
+ * Use this in an individual controller action to define which formats the action will respond with. This can be used to define provides behavior in individual actions or to override a global setting set with `provides` in the controller's `config()`.
+ *
+ * [section: Controller]
+ * [category: Provides Functions]
+ *
+ * @formats See documentation for [doc:provides].
+ * @action Name of action, defaults to current.
+ */
 public void function onlyProvides(string formats="", string action=variables.params.action) {
 	$combineArguments(args=arguments, combine="formats,format", required=true);
 	arguments.formats = $listClean(arguments.formats);
@@ -49,22 +51,23 @@ public void function onlyProvides(string formats="", string action=variables.par
 	}
 	variables.$class.formats.actions[arguments.action] = arguments.formats;
 }
+
 /**
-* Instructs the controller to render the data passed in to the format that is requested. If the format requested is json or xml, CFWheels will transform the data into that format automatically. For other formats (or to override the automatic formatting), you can also create a view template in this format: nameofaction.xml.cfm, nameofaction.json.cfm, nameofaction.pdf.cfm, etc.
-*
-* [section: Controller]
-* [category: Provides Functions]
-*
-* @data Data to format and render.
-* @controller See documentation for [doc:renderPage].
-* @action See documentation for [doc:renderPage].
-* @template See documentation for [doc:renderPage].
-* @layout See documentation for [doc:renderPage].
-* @cache See documentation for [doc:renderPage].
-* @returnAs See documentation for [doc:renderPage].
-* @hideDebugInformation See documentation for [doc:renderPage].
-* @status force request to return with specific HTTP status code
-*/
+ * Instructs the controller to render the data passed in to the format that is requested. If the format requested is `json` or `xml`, CFWheels will transform the data into that format automatically. For other formats (or to override the automatic formatting), you can also create a view template in this format: `nameofaction.xml.cfm`, `nameofaction.json.cfm`, `nameofaction.pdf.cfm`, etc.
+ *
+ * [section: Controller]
+ * [category: Provides Functions]
+ *
+ * @data Data to format and render.
+ * @controller See documentation for [doc:renderPage].
+ * @action See documentation for [doc:renderPage].
+ * @template See documentation for [doc:renderPage].
+ * @layout See documentation for [doc:renderPage].
+ * @cache See documentation for [doc:renderPage].
+ * @returnAs See documentation for [doc:renderPage].
+ * @hideDebugInformation See documentation for [doc:renderPage].
+ * @status Force request to return with specific HTTP status code.
+ */
 public any function renderWith(
 	required any data,
 	string controller=variables.params.controller,
@@ -80,15 +83,17 @@ public any function renderWith(
 	local.contentType = $requestContentType();
 	local.acceptableFormats = $acceptableFormats(action=arguments.action);
 
-	// default to html if the content type found is not acceptable
+	// Default to html if the content type found is not acceptable.
 	if (!ListFindNoCase(local.acceptableFormats, local.contentType)) {
 		local.contentType = "html";
 	}
 
-	// call render page if we are just rendering html
 	if (local.contentType == "html") {
+
+		// Call render page when we are just rendering html.
 		StructDelete(arguments, "data");
 		local.rv = renderPage(argumentCollection=arguments);
+
 	} else {
 		local.templateName = $generateRenderWithTemplatePath(argumentCollection=arguments, contentType=local.contentType);
 		local.templatePathExists = $formatTemplatePathExists($name=local.templateName);
@@ -96,7 +101,7 @@ public any function renderWith(
 			local.content = renderPage(argumentCollection=arguments, template=local.templateName, returnAs="string", layout=false, hideDebugInformation=true);
 		}
 
-		// throw an error if we rendered a pdf template and we got here, the cfdocument call should have stopped processing
+		// Throw an error if we rendered a pdf template and we got here, the cfdocument call should have stopped processing.
 		if (local.contentType == "pdf" && $get("showErrorInformation") && local.templatePathExists) {
 			Throw(
 				type="Wheels.PdfRenderingError",
@@ -104,7 +109,7 @@ public any function renderWith(
 			);
 		}
 
-		// throw an error if we do not have a template to render the content type that we do not have defaults for
+		// Throw an error if we do not have a template to render the content type that we do not have defaults for.
 		if (!ListFindNoCase("json,xml", local.contentType) && !StructKeyExists(local, "content") && $get("showErrorInformation")) {
 			Throw(
 				type="Wheels.RenderingError",
@@ -118,7 +123,7 @@ public any function renderWith(
 		$header(name="content-type", value=local.value, charset="utf-8");
 
 		// If custom statuscode passed in, then set appropriate header.
-		// Status may be a numeric value such as 404, or a text value such as 'Forbidden'.
+		// Status may be a numeric value such as 404, or a text value such as "Forbidden".
 		if (StructKeyExists(arguments, "status")) {
 			local.status=arguments.status;
 			if (IsNumeric(local.status)) {
@@ -132,7 +137,7 @@ public any function renderWith(
 			$header(statusCode=local.statusCode, statusText=local.statusText);
 		}
 
-		// if we do not have the local.content variable and we are not rendering html then try to create it
+		// If we do not have the local.content variable and we are not rendering html then try to create it.
 		if (!StructKeyExists(local, "content")) {
 			switch (local.contentType) {
 				case "json":
@@ -185,8 +190,8 @@ public any function renderWith(
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $acceptableFormats() {
 	local.rv = variables.$class.formats.default;
 	if (StructKeyExists(variables.$class.formats, arguments.action)) {
@@ -196,8 +201,8 @@ public string function $acceptableFormats() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $generateRenderWithTemplatePath(
 	required string controller,
 	required string action,
@@ -217,8 +222,8 @@ public string function $generateRenderWithTemplatePath(
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public boolean function $formatTemplatePathExists(required string $name) {
 	local.templatePath = $generateIncludeTemplatePath($type="page", $name=arguments.$name, $template=arguments.$name);
 	local.rv = false;
@@ -241,8 +246,8 @@ public boolean function $formatTemplatePathExists(required string $name) {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $requestContentType(struct params=variables.params, string httpAccept=request.cgi.http_accept) {
 	local.rv = "html";
 	if (StructKeyExists(arguments.params, "format")) {
@@ -260,9 +265,8 @@ public string function $requestContentType(struct params=variables.params, strin
 }
 
 /**
-* Internal Function
-* Returns a response text for any status code
-*/
+ * Returns a response text for any status code.
+ */
 public string function $returnStatusText(numeric status=200) {
 	local.status = arguments.status;
 	local.statusCodes = $getStatusCodes();
@@ -279,9 +283,8 @@ public string function $returnStatusText(numeric status=200) {
 }
 
 /**
-* Internal Function
-* Returns a response code from the status code list
-*/
+ * Returns a response code from the status code list.
+ */
 public string function $returnStatusCode(any status=200) {
 	local.status = arguments.status;
 	local.statusCodes = $getStatusCodes();
@@ -299,9 +302,8 @@ public string function $returnStatusCode(any status=200) {
 }
 
 /**
-* Internal Function
-* Returns a list of HTTP Status Codes and their response names
-*/
+ * Returns a list of HTTP status codes and their response names
+ */
 public struct function $getStatusCodes() {
 	local.rv = {
 		100 = 'Continue',

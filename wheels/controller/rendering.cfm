@@ -1,18 +1,19 @@
 <cfscript>
+
 /**
-* Instructs the controller which view template and layout to render when it's finished processing the action. Note that when passing values for controller and/or action, this function does not execute the actual action but rather just loads the corresponding view template.
-*
-* [section: Controller]
-* [category: Rendering Functions]
-*
-* @controller Controller to include the view page for.
-* @action Action to include the view page for.
-* @template A specific template to render. Prefix with a leading slash / if you need to build a path from the root views folder.
-* @layout The layout to wrap the content in. Prefix with a leading slash / if you need to build a path from the root views folder. Pass false to not load a layout at all.
-* @cache Number of minutes to cache the content for.
-* @returnAs Set to string to return the result instead of automatically sending it to the client.
-* @hideDebugInformation Set to true to hide the debug information at the end of the output. This is useful when you're testing XML output in an environment where the global setting for showDebugInformation is true.
-*/
+ * Instructs the controller which view template and layout to render when it's finished processing the action. Note that when passing values for controller and/or action, this function does not execute the actual action but rather just loads the corresponding view template.
+ *
+ * [section: Controller]
+ * [category: Rendering Functions]
+ *
+ * @controller Controller to include the view page for.
+ * @action Action to include the view page for.
+ * @template A specific template to render. Prefix with a leading slash (`/`) if you need to build a path from the root `views` folder.
+ * @layout The layout to wrap the content in. Prefix with a leading slash (`/`) if you need to build a path from the root `views` folder. Pass `false` to not load a layout at all.
+ * @cache Number of minutes to cache the content for.
+ * @returnAs Set to `string` to return the result instead of automatically sending it to the client.
+ * @hideDebugInformation Set to `true` to hide the debug information at the end of the output. This is useful, for example, when you're testing XML output in an environment where the global setting for `showDebugInformation` is `true`.
+ */
 public any function renderPage(
 	string controller=variables.params.controller,
 	string action=variables.params.action,
@@ -28,17 +29,17 @@ public any function renderPage(
 		$debugPoint("view");
 	}
 
-	// if no layout specific arguments were passed in use the this instance's layout
+	// If no layout specific arguments were passed in use the this instance's layout.
 	if (!Len(arguments.$layout)) {
 		arguments.$layout = $useLayout(arguments.$action);
 	}
 
-	// never show debugging out in ajax requests
+	// Never show debugging out in AJAX requests.
 	if (isAjax()) {
 		arguments.$hideDebugInformation = true;
 	}
 
-	// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
+	// If renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request.
 	if (!arguments.$hideDebugInformation) {
 		request.wheels.showDebugInformation = true;
 	}
@@ -75,39 +76,41 @@ public any function renderPage(
 		return local.rv;
 	}
 }
+
 /**
-* Instructs the controller to render an empty string when it's finished processing the action. This is very similar to calling cfabort with the advantage that any after filters you have set on the action will still be run.
-*
-* [section: Controller]
-* [category: Rendering Functions]
-*
-*/
+ * Instructs the controller to render an empty string when it's finished processing the action. This is very similar to calling `cfabort` with the advantage that any after filters you have set on the action will still be run.
+ *
+ * [section: Controller]
+ * [category: Rendering Functions]
+ */
 public void function renderNothing() {
 	variables.$instance.response = "";
 }
+
 /**
-* Instructs the controller to render specified text when it's finished processing the action.
-*
-* [section: Controller]
-* [category: Rendering Functions]
-*
-* @text The Text to Render
-*/
+ * Instructs the controller to render specified text when it's finished processing the action.
+ *
+ * [section: Controller]
+ * [category: Rendering Functions]
+ *
+ * @text The text to render.
+ */
 public void function renderText(required any text) {
 	variables.$instance.response = arguments.text;
 }
+
 /**
-* Instructs the controller to render a partial when it's finished processing the action.
-*
-* [section: Controller]
-* [category: Rendering Functions]
-*
-* @partial The name of the partial file to be used. Prefix with a leading slash / if you need to build a path from the root views folder. Do not include the partial filename's underscore and file extension.
-* @cacheSee documentation for [doc:renderPage].
-* @layout See documentation for [doc:renderPage].
-* @returnAs See documentation for [doc:renderPage].
-* @dataFunctiontrue Name of a controller function to load data from.
-*/
+ * Instructs the controller to render a partial when it's finished processing the action.
+ *
+ * [section: Controller]
+ * [category: Rendering Functions]
+ *
+ * @partial The name of the partial file to be used. Prefix with a leading slash (`/`) if you need to build a path from the root `views` folder. Do not include the partial filename's underscore and file extension.
+ * @cacheSee documentation for [doc:renderPage].
+ * @layout See documentation for [doc:renderPage].
+ * @returnAs See documentation for [doc:renderPage].
+ * @dataFunction Name of a controller function to load data from.
+ */
 public any function renderPartial(
 	required string partial,
 	any cache="",
@@ -126,13 +129,13 @@ public any function renderPartial(
 		return local.rv;
 	}
 }
+
 /**
-* Returns content that CFWheels will send to the client in response to the request.
-*
-* [section: Controller]
-* [category: Rendering Functions]
-*
-*/
+ * Returns content that CFWheels will send to the client in response to the request.
+ *
+ * [section: Controller]
+ * [category: Rendering Functions]
+ */
 public string function response() {
 	if ($performedRender()) {
 		return Trim(variables.$instance.response);
@@ -140,24 +143,26 @@ public string function response() {
 		return "";
 	}
 }
+
 /**
-* Sets content that CFWheels will send to the client in response to the request.
-*
-* [section: Controller]
-* [category: Rendering Functions]
-*
-* @content The content to send to the Client
-*/
+ * Sets content that CFWheels will send to the client in response to the request.
+ *
+ * [section: Controller]
+ * [category: Rendering Functions]
+ *
+ * @content The content to send to the client.
+ */
 public void function setResponse(required string content) {
 	variables.$instance.response = arguments.content;
 }
+
 /**
-* Mainly used for testing to establish whether the current request has performed a redirect
-* Primarily used for testing
-*
-* [section: Controller]
-* [category: Miscellaneous Functions]
-*/
+ * Mainly used for testing to establish whether the current request has performed a redirect.
+ * Primarily used for testing.
+ *
+ * [section: Controller]
+ * [category: Miscellaneous Functions]
+ */
 public struct function getRedirect() {
 	if ($performedRedirect()) {
 		return variables.$instance.redirect;
@@ -167,8 +172,8 @@ public struct function getRedirect() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $renderPageAndAddToCache() {
 	local.rv = $renderPage(argumentCollection=arguments);
 	if (!IsNumeric(arguments.$cache)) {
@@ -179,8 +184,8 @@ public string function $renderPageAndAddToCache() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $renderPage() {
 	if (!Len(arguments.$template)) {
 		arguments.$template = "/" & ListChangeDelims(arguments.$controller, '/', '.') & "/" & arguments.$action;
@@ -193,8 +198,8 @@ public string function $renderPage() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $renderPartialAndAddToCache() {
 	local.rv = $renderPartial(argumentCollection=arguments);
 	if (!IsNumeric(arguments.$cache)) {
@@ -205,8 +210,8 @@ public string function $renderPartialAndAddToCache() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public struct function $argumentsForPartial() {
 	local.rv = {};
 	if (StructKeyExists(arguments, "$dataFunction") && arguments.$dataFunction != false) {
@@ -226,8 +231,8 @@ public struct function $argumentsForPartial() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $renderPartial() {
 	local.rv = "";
 	if (IsQuery(arguments.$partial) && arguments.$partial.recordCount) {
@@ -253,8 +258,8 @@ public string function $renderPartial() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $includeOrRenderPartial() {
 	if ($get("cachePartials") && (isNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache))) {
 		local.category = "partial";
@@ -280,8 +285,8 @@ public string function $includeOrRenderPartial() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $generateIncludeTemplatePath(
 	required any $name,
 	required any $type,
@@ -291,33 +296,41 @@ public string function $generateIncludeTemplatePath(
 ) {
 	local.rv = arguments.$baseTemplatePath;
 
-	// handle dot notation in the controller name
+	// Handle dot notation in the controller name.
 	arguments.$controllerName = ListChangeDelims(arguments.$controllerName, '/', '.');
 
-	// extracts the file part of the path and replace ending ".cfm"
+	// Extracts the file part of the path and replace ending ".cfm".
 	local.fileName = ReplaceNoCase(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".cfm", "", "all") & ".cfm";
 
+	// Replace leading "_" when the file is a partial.
 	if (arguments.$type == "partial" && arguments.$prependWithUnderscore) {
-		// replace leading "_" when the file is a partial
 		local.fileName = Replace("_" & local.fileName, "__", "_", "one");
 	}
+
 	local.folderName = Reverse(ListRest(Reverse(arguments.$name), "/"));
+
 	if (Left(arguments.$name, 1) == "/") {
-		// include a file in a sub folder to views
+
+		// Include a file in a sub folder to views.
 		local.rv &= local.folderName & "/" & local.fileName;
+
 	} else if (Find("/", arguments.$name)) {
-		// include a file in a sub folder of the current controller
+
+		// Include a file in a sub folder of the current controller.
 		local.rv &= "/" & arguments.$controllerName & "/" & local.folderName & "/" & local.fileName;
+
 	} else {
-		// include a file in the current controller's view folder
+
+		// Include a file in the current controller's view folder.
 		local.rv &= "/" & arguments.$controllerName & "/" & local.fileName;
+
 	}
 	return LCase(local.rv);
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $includeFile(required any $name, required any $template, required any $type) {
 	if (arguments.$type == "partial") {
 		if (StructKeyExists(arguments, "query") && IsQuery(arguments.query)) {
@@ -326,7 +339,8 @@ public string function $includeFile(required any $name, required any $template, 
 			local.rv = "";
 			local.iEnd = local.query.recordCount;
 			if (Len(arguments.$group)) {
-				// we want to group based on a column so loop through the rows until we find, this will break if the query is not ordered by the grouped column
+
+				// We want to group based on a column so loop through the rows until we find, this will break if the query is not ordered by the grouped column.
 				local.tempSpacer = "}|{";
 				local.groupValue = "";
 				local.groupQueryCount = 1;
@@ -342,7 +356,8 @@ public string function $includeFile(required any $name, required any $template, 
 					if (local.i == 1) {
 						local.groupValue = local.query[arguments.$group][local.i];
 					} else if (local.groupValue != local.query[arguments.$group][local.i]) {
-						// we have a different group for this row so output what we have
+
+						// We have a different group for this row so output what we have.
 						local.rv &= $includeAndReturnOutput(argumentCollection=arguments);
 						if (StructKeyExists(arguments, "$spacer")) {
 							local.rv &= local.tempSpacer;
@@ -350,6 +365,7 @@ public string function $includeFile(required any $name, required any $template, 
 						local.groupValue = local.query[arguments.$group][local.i];
 						arguments.group = QueryNew(local.query.columnList);
 						local.groupQueryCount = 1;
+
 					}
 					QueryAddRow(arguments.group);
 					local.jEnd = ListLen(local.query.columnList);
@@ -362,7 +378,7 @@ public string function $includeFile(required any $name, required any $template, 
 					local.groupQueryCount++;
 				}
 
-				// if we have anything left at the end we need to render it too
+				// If we have anything left at the end we need to render it too.
 				if (arguments.group.recordCount) {
 					local.rv &= $includeAndReturnOutput(argumentCollection=arguments);
 					if (StructKeyExists(arguments, "$spacer") && local.i < local.iEnd) {
@@ -370,11 +386,12 @@ public string function $includeFile(required any $name, required any $template, 
 					}
 				}
 
-				// now remove the last temp spacer and replace the tempSpacer with $spacer
+				// Now remove the last temp spacer and replace the tempSpacer with $spacer.
 				if (Right(local.rv, 3) == local.tempSpacer) {
 					local.rv = Left(local.rv, Len(local.rv) - 3);
 				}
 				local.rv = Replace(local.rv, local.tempSpacer, arguments.$spacer, "all");
+
 			} else {
 				for (local.i = 1; local.i <= local.iEnd; local.i++) {
 					arguments.current = local.i;
@@ -428,8 +445,8 @@ public string function $includeFile(required any $name, required any $template, 
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public boolean function $performedRenderOrRedirect() {
 	if ($performedRender() || $performedRedirect())	{
 		return true;
@@ -439,29 +456,29 @@ public boolean function $performedRenderOrRedirect() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public boolean function $performedRender() {
 	return StructKeyExists(variables.$instance, "response");
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public boolean function $performedRedirect() {
 	return StructKeyExists(variables.$instance, "redirect");
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public boolean function $abortIssued() {
 	return StructKeyExists(variables.$instance, "abort");
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public boolean function $reCacheRequired() {
 	return StructKeyExists(variables.$instance, "reCache") && variables.$instance.reCache;
 }

@@ -6,9 +6,9 @@
  * [section: Controller]
  * [category: Configuration Functions]
  *
- * @action Action(s) to cache. This argument is also aliased as actions.
+ * @action Action(s) to cache. This argument is also aliased as `actions`.
  * @time Minutes to cache the action(s) for.
- * @static Set to true to tell CFWheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions). Please note that the onSessionStart and onRequestStart events still execute though.
+ * @static Set to `true` to tell CFWheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions). Please note that the `onSessionStart` and `onRequestStart` events still execute though.
  * @appendToKey List of variables to be evaluated at runtime and included in the cache key so that content can be cached separately.
  */
 public void function caches(string action="", numeric time, boolean static, string appendToKey="") {
@@ -34,7 +34,6 @@ public void function caches(string action="", numeric time, boolean static, stri
 }
 
 /**
- * Internal function.
  * Called from the caches function.
  */
 public void function $addCachableAction(required struct action) {
@@ -42,7 +41,6 @@ public void function $addCachableAction(required struct action) {
 }
 
 /**
- * Internal function.
  * Called when processing a request, and from other functions in this file, to get all cachable actions.
  */
 public array function $cachableActions() {
@@ -50,7 +48,6 @@ public array function $cachableActions() {
 }
 
 /**
- * Internal function.
  * Get cache info, only called from the test suite
  */
 public any function $cacheSettingsForAction(required string action) {
@@ -68,7 +65,6 @@ public any function $cacheSettingsForAction(required string action) {
 }
 
 /**
- * Internal function.
  * Delete all cache info, only called from the test suite.
  */
 public void function $clearCachableActions() {
@@ -76,7 +72,6 @@ public void function $clearCachableActions() {
 }
 
 /**
- * Internal function.
  * Called when processing a request to see if any actions are cachable.
  */
 public boolean function $hasCachableActions() {
@@ -88,7 +83,6 @@ public boolean function $hasCachableActions() {
 }
 
 /**
- * Internal function
  * Set cache info, only called from the test suite.
  */
 public void function $setCachableActions(required array actions) {
