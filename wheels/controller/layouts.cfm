@@ -1,16 +1,16 @@
 <cfscript>
 
 /**
-* Used within a controller's config() function to specify controller- or action-specific layouts.
-*
-* [section: Controller]
-* [category: Configuration Functions]
-*
-* @template string true Name of the layout template or function name you want to use.
-* @ajax string false Name of the layout template you want to use for AJAX requests.
-* @except string false List of actions that should not get the layout.
-* @only string false List of actions that should only get the layout.
-* @useDefault boolean false true When specifying conditions or a function, pass true to use the default layout.cfm if none of the conditions are met.
+ * Used within a controller's config() function to specify controller- or action-specific layouts.
+ *
+ * [section: Controller]
+ * [category: Configuration Functions]
+ *
+ * @template Name of the layout template or function name you want to use.
+ * @ajax Name of the layout template you want to use for AJAX requests.
+ * @except List of actions that should not get the layout.
+ * @only List of actions that should only get the layout.
+ * @useDefault When specifying conditions or a function, pass in `true` to use the default `layout.cfm` if none of the conditions are met.
  */
 public void function usesLayout(
 	required string template,
@@ -19,11 +19,13 @@ public void function usesLayout(
 	string only,
 	boolean useDefault=true
 ) {
+
+	// If the layout is a function, the function itself should handle all the logic.
 	if ((StructKeyExists(this, arguments.template) && IsCustomFunction(this[arguments.template])) || IsCustomFunction(arguments.template)) {
-		// when the layout is a function, the function itself should handle all the logic
 		StructDelete(arguments, "except");
 		StructDelete(arguments, "only");
 	}
+
 	if (StructKeyExists(arguments, "except")) {
 		arguments.except = $listClean(arguments.except);
 	}
@@ -45,13 +47,15 @@ public any function $useLayout(required string $action) {
 	if (!StructIsEmpty(variables.$class.layout)) {
 		local.rv = variables.$class.layout.useDefault;
 		if ((StructKeyExists(this, variables.$class.layout[local.layoutType]) && IsCustomFunction(this[variables.$class.layout[local.layoutType]])) || IsCustomFunction(variables.$class.layout[local.layoutType])) {
-			// if the developer doesn't return anything from the function or if they return a blank string it should use the default layout still
 			local.invokeArgs = {};
 			local.invokeArgs.action = arguments.$action;
 			local.result = $invoke(method=variables.$class.layout[local.layoutType], invokeArgs=local.invokeArgs);
+
+			// If the developer doesn't return anything from the function or if they return a blank string it should use the default layout still.
 			if (StructKeyExists(local, "result")) {
 				local.rv = local.result;
 			}
+
 		} else if ((!StructKeyExists(variables.$class.layout, "except") || !ListFindNoCase(variables.$class.layout.except, arguments.$action)) && (!StructKeyExists(variables.$class.layout, "only") || ListFindNoCase(variables.$class.layout.only, arguments.$action))) {
 			local.rv = variables.$class.layout[local.layoutType];
 		}
@@ -64,9 +68,11 @@ public any function $useLayout(required string $action) {
  */
 public string function $renderLayout(required string $content, required $layout) {
 	if ((IsBoolean(arguments.$layout) && arguments.$layout) || (!IsBoolean(arguments.$layout) && Len(arguments.$layout))) {
-		// store the content in a variable in the request scope so it can be accessed by the includeContent function that the developer uses in layout files
-		// this is done so we avoid passing data to/from it since it would complicate things for the developer
+
+		// Store the content in a variable in the request scope so it can be accessed by the includeContent function that the developer uses in layout files.
+		// This is done so we avoid passing data to/from it since it would complicate things for the developer.
 		contentFor(body=arguments.$content, overwrite=true);
+
 		local.viewPath = $get("viewPath");
 		local.include = local.viewPath;
 		if (IsBoolean(arguments.$layout)) {

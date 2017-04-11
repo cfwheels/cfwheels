@@ -1,19 +1,16 @@
 <cfscript>
+
 /**
-* Process the specified action of the controller; this is exposed in the API primarily for testing purposes; you would
-* not usually call it directly unless in the test suite
-*
-* [section: Controller]
-* [category: Miscellaneous Functions]
-*/
+ * Process the specified action of the controller; this is exposed in the API primarily for testing purposes; you would not usually call it directly unless in the test suite.
+ *
+ * [section: Controller]
+ * [category: Miscellaneous Functions]
+ */
 public boolean function processAction() {
-	// CSRF protection.
 	$runCsrfProtection(action=params.action);
 
-	// Check if action should be cached, and if so, cache statically or set the time to use later when caching just
-	// the action.
+	// Check if action should be cached, and if so, cache statically or set the time to use later when caching just the action.
 	local.cache = 0;
-
 	if ($get("cacheActions") && $hasCachableActions() && flashIsEmpty() && StructIsEmpty(form)) {
 		local.cachableActions = $cachableActions();
 		for (local.action in local.cachableActions) {
@@ -42,6 +39,7 @@ public boolean function processAction() {
 
 	// Continue unless an abort is issued from a verification.
 	if (!$abortIssued()) {
+
 		// Run before filters if they exist on the controller.
 		$runFilters(type="before", action=params.action);
 
@@ -51,10 +49,9 @@ public boolean function processAction() {
 
 		// Only proceed to call the action if the before filter has not already rendered content.
 		if (!$performedRenderOrRedirect()) {
+
+			// Get content from the cache if it exists there and set it to the request scope. If not, the $callActionAndAddToCache function will run, calling the controller action (which in turn sets the content to the request scope).
 			if (local.cache) {
-				// Get content from the cache if it exists there and set it to the request scope. If not, the
-				// $callActionAndAddToCache function will run, calling the controller action (which in turn sets the
-				// content to the request scope).
 				local.category = "action";
 
 				// Create the key for the cache.
@@ -88,14 +85,14 @@ public boolean function processAction() {
 				);
 			}
 
+			// If we didn't render anything from a cached action, we call the action here.
 			if (!$performedRender()) {
-				// If we didn't render anything from a cached action, we call the action here.
 				$callAction(action=params.action);
 			}
+
 		}
 
-		// Run after filters with surrounding debug points. (Don't run the filters if a delayed redirect will occur
-		// though.)
+		// Run after filters with surrounding debug points. (Don't run the filters if a delayed redirect will occur though.)
 		if ($get("showDebugInformation")) {
 			$debugPoint("action,afterFilters");
 		}
@@ -113,8 +110,8 @@ public boolean function processAction() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public void function $callAction(required string action) {
 	if (Left(arguments.action, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action)) {
 		Throw(
@@ -157,8 +154,8 @@ public void function $callAction(required string action) {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $callActionAndAddToCache(
 	required string action,
 	required numeric time,
