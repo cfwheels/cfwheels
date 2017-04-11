@@ -149,7 +149,11 @@ public struct function root(string to) {
  * @method List of HTTP methods (verbs) to generate the wildcard routes for. We strongly recommend leaving the default value of `get` and using other routing mappers if you need to `POST` to a URL endpoint. For better readability, you can also pass this argument as `methods`.
  * @action Default action to specify if the value for the `[action]` placeholder is not provided.
  */
-public struct function wildcard(string method="get", string action="index") {
+public struct function wildcard(
+		string method="get",
+		string action="index",
+		boolean mapKey=false
+	) {
   if (StructKeyExists(arguments, "methods") && Len(arguments.methods)) {
     local.methods = arguments.methods;
   } else if (Len(arguments.method)) {
@@ -160,11 +164,22 @@ public struct function wildcard(string method="get", string action="index") {
 
 	if (StructKeyExists(variables.scopeStack[1], "controller")) {
     for (local.method in local.methods) {
-		  $match(method=local.method, name="wildcard", pattern="[action](.[format])", action=arguments.action);
+			if (arguments.mapKey) {
+				$match(method=local.method, name="wildcard", pattern="[action]/[key](.[format])", action=arguments.action);
+			}
+			$match(method=local.method, name="wildcard", pattern="[action](.[format])", action=arguments.action);
       $match(method=local.method, name="wildcard", pattern="(.[format])", action=arguments.action);
     }
 	} else {
     for (local.method in local.methods) {
+			if (arguments.mapKey) {
+				$match(
+					method=local.method,
+					name="wildcard",
+					pattern="[controller]/[action]/[key](.[format])",
+					action=arguments.action
+				);
+			}
 		  $match(
         method=local.method,
         name="wildcard",
