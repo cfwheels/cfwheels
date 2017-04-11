@@ -14,7 +14,7 @@ public struct function $draw(boolean restful=true, boolean methods=arguments.res
 }
 
 /**
- * Call this to end a nested routing block or the entire route configuration. This method is chained on a sequence of routing mapper method calls started by `drawRoutes()`.
+ * Call this to end a nested routing block or the entire route configuration. This method is chained on a sequence of routing mapper method calls started by `mapper()`.
  *
  * [section: Configuration]
  * [category: Routing]

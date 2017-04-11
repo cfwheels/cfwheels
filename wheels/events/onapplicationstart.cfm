@@ -366,7 +366,7 @@ public void function onApplicationStart() {
 	}
 
 	// Add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url.
-	local.allowedGlobalMethods = "get,set,drawRoutes";
+	local.allowedGlobalMethods = "get,set,mapper";
 	local.protectedControllerMethods = StructKeyList($createObjectFromRoot(path="wheels", fileName="Controller", method="$initControllerClass"));
 	application.$wheels.protectedControllerMethods = "";
 	local.iEnd = ListLen(local.protectedControllerMethods);

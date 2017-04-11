@@ -1,6 +1,6 @@
 <cfscript>
 
-drawRoutes()
+mapper()
     // Route name:  widgets
     // Example URL: /sites/918/widgets
     // Controller:  Widgets

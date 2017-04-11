@@ -1,6 +1,6 @@
 <cfscript>
 
-drawRoutes()
+mapper()
     .package("public")
         // Example URL: /products/1234
         // Controller:  public.Products

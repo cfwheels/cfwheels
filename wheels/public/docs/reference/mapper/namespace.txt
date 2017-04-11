@@ -1,6 +1,6 @@
 <cfscript>
 
-drawRoutes()
+mapper()
     .namespace("admin")
         // Route name:  adminProducts
         // Example URL: /admin/products/1234

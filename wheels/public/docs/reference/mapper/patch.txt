@@ -1,6 +1,6 @@
 <cfscript>
 
-drawRoutes()
+mapper()
     // Route name:  ghostStory
     // Example URL: /ghosts/666/stories/616
     // Controller:  Stories

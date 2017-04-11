@@ -1,6 +1,6 @@
 <cfscript>
 
-drawRoutes()
+mapper()
     .namespace("admin")
         .resources("products")
     .end() // Ends the `namespace` block.
@@ -10,6 +10,6 @@ drawRoutes()
           .resources("variations")
         .end() // Ends the nested `resources` block.
     .end() // Ends the `scope` block.
-.end(); // Ends the `drawRoutes` block.
+.end(); // Ends the `mapper` block.
 
 </cfscript>

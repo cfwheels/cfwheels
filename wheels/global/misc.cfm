@@ -38,12 +38,12 @@ public void function addFormat(required string extension, required string mimeTy
 }
 
 /**
- * Use to configure your application's routes.
+ * Returns the mapper object used to configure your application's routes. Usually you will use this method in `config/routes.cfm` to start chaining route mapping methods like `resources`, `namespace`, etc.
  *
  * [section: Configuration]
  * [category: Routing]
  */
-public struct function drawRoutes(boolean restful=true, boolean methods=arguments.restful) {
+public struct function mapper(boolean restful=true, boolean methods=arguments.restful) {
 	return application[$appKey()].mapper.$draw(argumentCollection=arguments);
 }
 

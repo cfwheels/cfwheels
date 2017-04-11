@@ -11,7 +11,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_empty_route() {
-		drawRoutes()
+		mapper()
 			.root(to="pages##index")
 		.end();
 		r = dispatch.$findMatchingRoute(path="", format="");
@@ -20,7 +20,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_controller_only() {
-		drawRoutes()
+		mapper()
 			.$match(pattern="pages", to="pages##index")
 		.end();
 		r = dispatch.$findMatchingRoute(path="pages", format="");
@@ -29,7 +29,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_controller_and_action_required() {
-		drawRoutes()
+		mapper()
 			.$match(pattern="pages/blah", to="pages##index")
 		.end();
  		r = raised('dispatch.$findMatchingRoute(path="/pages", format="")');
@@ -40,7 +40,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_extra_variables_passed() {
-		drawRoutes()
+		mapper()
 			.$match(pattern="pages/blah/[firstname]/[lastname]", to="pages##index")
 		.end();
 		r = dispatch.$findMatchingRoute(path="pages/blah/tony/petruzzi", format="");
@@ -50,7 +50,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_wildcard_route() {
-		drawRoutes()
+		mapper()
 			.$match(pattern="*", to="pages##index")
 		.end();
 		r = dispatch.$findMatchingRoute(path="thisismyroute/therearemanylikeit/butthisoneismine", format="");
