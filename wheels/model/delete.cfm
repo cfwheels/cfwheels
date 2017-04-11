@@ -176,7 +176,7 @@ public boolean function delete(
  */
 public numeric function $deleteAll() {
 	local.deleted = variables.wheels.class.adapter.$querySetup(sql=arguments.sql, parameterize=arguments.parameterize);
-	clearRequestCache();
+	$clearRequestCache();
 	return local.deleted.result.recordCount;
 }
 
@@ -193,7 +193,7 @@ public boolean function $delete() {
 		$deleteDependents();
 
 		local.deleted = variables.wheels.class.adapter.$querySetup(sql=arguments.sql, parameterize=arguments.parameterize);
-		clearRequestCache();
+		$clearRequestCache();
 		if (local.deleted.result.recordCount == 1 && $callback("afterDelete", arguments.callbacks)) {
 			local.rv = true;
 		}

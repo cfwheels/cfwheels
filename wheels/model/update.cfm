@@ -207,7 +207,7 @@ public boolean function updateProperty(
  **/
 public numeric function $updateAll() {
 	local.updated = variables.wheels.class.adapter.$querySetup(parameterize=arguments.parameterize, sql=arguments.sql);
-	clearRequestCache();
+	$clearRequestCache();
 	return local.updated.result.recordCount;
 }
 
@@ -236,7 +236,7 @@ public boolean function $update(required any parameterize, required boolean relo
 			ArrayDeleteAt(local.sql, ArrayLen(local.sql));
 			local.sql = $addKeyWhereClause(sql=local.sql);
 			variables.wheels.class.adapter.$querySetup(sql=local.sql, parameterize=arguments.parameterize);
-			clearRequestCache();
+			$clearRequestCache();
 			if (arguments.reload) {
 				this.reload();
 			}

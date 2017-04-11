@@ -2,11 +2,8 @@
 
 /**
  * Deletes all queries stored during the request for this model.
- *
- * [section: Model Class]
- * [category: Miscellaneous Functions]
  */
-public void function clearRequestCache() {
+public void function $clearRequestCache() {
 	request.wheels[variables.wheels.class.modelName] = {};
 }
 

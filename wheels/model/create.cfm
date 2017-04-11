@@ -243,7 +243,7 @@ public boolean function $create(required any parameterize, required boolean relo
 		sql=local.sql,
 		$primaryKey=local.pks
 	);
-	clearRequestCache();
+	$clearRequestCache();
 	local.generatedKey = variables.wheels.class.adapter.$generatedKey();
 	if (StructKeyExists(local.inserted.result, local.generatedKey)) {
 		this[primaryKeys(1)] = local.inserted.result[local.generatedKey];
