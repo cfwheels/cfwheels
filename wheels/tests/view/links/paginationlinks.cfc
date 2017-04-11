@@ -6,7 +6,7 @@ component extends="wheels.tests.Test" {
     _originalRoutes = application[$appKey()].routes;
     _originalRewrite = application.wheels.URLRewriting;
     $clearRoutes();
-    drawRoutes()
+    mapper()
     	.$match(name="pagination", pattern="pag/ina/tion/[special]", to="pagi##nation")
     .end();
     $setNamedRoutePositions();
@@ -60,7 +60,7 @@ component extends="wheels.tests.Test" {
 
  	function test_page_as_route_param_with_route_containing_page_parameter_in_variables(){
     $clearRoutes();
-    drawRoutes()
+    mapper()
     	.$match(name="pagination", pattern="pag/ina/tion/[special]/[page]", to="pagi##nation")
     .end();
     $setNamedRoutePositions();

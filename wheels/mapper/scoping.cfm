@@ -1,16 +1,16 @@
 <cfscript>
 
 /**
- * Set certain parameters for future calls.
+ * Set any number of parameters to be inherited by mappers called within this matcher's block. For example, set a URL path to be used by all child routes.
  *
  * [section: Configuration]
  * [category: Routing]
  *
- * @name Named route prefix.
- * @path Path prefix.
+ * @name Name to prepend to child route names for use when building links, forms, and other URLs.
+ * @path Path to prefix to all child routes.
  * @package Package namespace to append to controllers.
  * @controller Controller to use in routes.
- * @shallow Turn on shallow resources.
+ * @shallow Turn on shallow resources to eliminate routing added before this one.
  * @shallowPath Shallow path prefix.
  * @shallowName Shallow name prefix.
  * @constraints Variable patterns to use for matching.
@@ -32,6 +32,7 @@ public struct function scope(
 		if (!StructKeyExists(arguments, "shallowPath") && StructKeyExists(arguments, "path")) {
 			arguments.shallowPath = arguments.path;
 		}
+
 		if (!StructKeyExists(arguments, "shallowName") && StructKeyExists(arguments, "name")) {
 			arguments.shallowName = arguments.name;
 		}

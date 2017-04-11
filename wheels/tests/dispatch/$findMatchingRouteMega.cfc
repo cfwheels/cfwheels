@@ -60,7 +60,7 @@ component extends="wheels.tests.Test" {
     $clearRoutes();
 
 
-    dr = drawRoutes()
+    dr = mapper()
       .root(to="dashboard##index")
       .namespace("admin");
         for (local.item in nounPlurals) {

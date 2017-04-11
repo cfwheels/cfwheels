@@ -5,7 +5,7 @@ component extends="wheels.tests.Test" {
     $clearRoutes();
 
 
-    drawRoutes()
+    mapper()
       .namespace("admin")
         .resources("users")
         .root(to="dashboard##index")

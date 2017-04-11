@@ -1,6 +1,6 @@
 <cfscript>
 
-drawRoutes()
+mapper()
     // Route name:  articleReview
     // Example URL: /articles/987/reviews/12542
     // Controller:  Reviews

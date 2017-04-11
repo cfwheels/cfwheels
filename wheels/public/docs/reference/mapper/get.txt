@@ -1,6 +1,6 @@
 <cfscript>
 
-drawRoutes()
+mapper()
     // Route name:  post
     // Example URL: /posts/my-post-title
     // Controller:  Posts

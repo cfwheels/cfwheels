@@ -12,7 +12,7 @@ component extends="wheels.tests.Test" {
   }
 
  	function test_route_with_format() {
-		drawRoutes()
+		mapper()
 			.$match(pattern="users/[username].[format]", controller="test", action="test")
 		.end();
 		args = {};
@@ -26,7 +26,7 @@ component extends="wheels.tests.Test" {
 	}
 
  	function test_route_with_format_only() {
-		drawRoutes()
+		mapper()
 			.$match(pattern="contact/export.[format]", controller="test", action="test")
 		.end();
 		args = {};
@@ -39,7 +39,7 @@ component extends="wheels.tests.Test" {
 	}
 
  	function test_route_without_format_should_ignore_fullstops() {
-		drawRoutes()
+		mapper()
 			.$match(pattern="users/[username]", controller="test", action="test", constraints={ "username" = "[^/]+"})
 		.end();
 		args = {};
@@ -50,7 +50,7 @@ component extends="wheels.tests.Test" {
 	}
 
  	function test_route_with_format_and_format_not_specified() {
-		drawRoutes()
+		mapper()
 			.$match(pattern="users/[username](.[format])", controller="test", action="test")
 		.end();
 		args = {};

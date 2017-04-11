@@ -43,7 +43,7 @@ public void function addFormat(required string extension, required string mimeTy
  * [section: Configuration]
  * [category: Routing]
  */
-public struct function drawRoutes(boolean restful=true, boolean methods=arguments.restful) {
+public struct function mapper(boolean restful=true, boolean methods=arguments.restful) {
 	return application[$appKey()].mapper.$draw(argumentCollection=arguments);
 }
 
