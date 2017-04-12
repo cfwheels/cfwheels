@@ -1,12 +1,12 @@
 component extends="wheels.tests.Test" {
 
 	function setup(){
-		params.controller = "Blog";
+		params.controller = "blog";
 		params.action = "edit";
 		params.key = "1";
 		_controller = controller(params.controller, params);
 		args = {};
-		args.controller = "Blog";
+		args.controller = "blog";
 		args.action = "edit";
 		args.key = "1";
 		args.params = "param1=foo&param2=bar";
@@ -36,28 +36,7 @@ component extends="wheels.tests.Test" {
 	function test_missing_action_with_url_rewriting(){
 		request.cgi.script_name = "/rewrite.cfm";
 		StructDelete(args, "action");
-		e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";
-		r = _controller.urlFor(argumentcollection=args);
-		assert("e eq r");
-	}
-
-	function test_missing_controller_action_key_and_params_and_url_rewriting(){
-		request.cgi.script_name = "/rewrite.cfm";
-		StructDelete(args, "controller");
-		StructDelete(args, "action");
-		StructDelete(args, "key");
-		StructDelete(args, "params");
-		e = "#application.wheels.webpath#blog/edit";
-		r = _controller.urlFor(argumentcollection=args);
-		assert("e eq r");
-	}
-
-	function test_missing_controller_action_and_key_with_params_and_url_rewriting(){
-		request.cgi.script_name = "/rewrite.cfm";
-		StructDelete(args, "controller");
-		StructDelete(args, "action");
-		StructDelete(args, "key");
-		e = "#application.wheels.webpath#blog/edit?param1=foo&param2=bar";
+		e = "#application.wheels.webpath#blog/index/1?param1=foo&param2=bar";
 		r = _controller.urlFor(argumentcollection=args);
 		assert("e eq r");
 	}
@@ -67,6 +46,27 @@ component extends="wheels.tests.Test" {
 		StructDelete(args, "controller");
 		StructDelete(args, "action");
 		e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";
+		r = _controller.urlFor(argumentcollection=args);
+		assert("e eq r");
+	}
+
+	function test_missing_controller_action_and_key_with_url_rewriting(){
+		request.cgi.script_name = "/rewrite.cfm";
+		StructDelete(args, "controller");
+		StructDelete(args, "action");
+		StructDelete(args, "key");
+		e = "#application.wheels.webpath#blog/edit?param1=foo&param2=bar";
+		r = _controller.urlFor(argumentcollection=args);
+		assert("e eq r");
+	}
+
+	function test_missing_controller_action_key_and_params_with_url_rewriting(){
+		request.cgi.script_name = "/rewrite.cfm";
+		StructDelete(args, "controller");
+		StructDelete(args, "action");
+		StructDelete(args, "key");
+		StructDelete(args, "params");
+		e = "#application.wheels.webpath#blog/edit";
 		r = _controller.urlFor(argumentcollection=args);
 		assert("e eq r");
 	}
@@ -95,7 +95,7 @@ component extends="wheels.tests.Test" {
 		args.$URLRewriting = "Off";
 		StructDelete(args, "action");
 		webRoot = Replace("#application.wheels.webpath##ListLast(request.cgi.script_name, '/')#", "//", "/");
-		e = "#webRoot#?controller=blog&action=edit&key=1&param1=foo&param2=bar";
+		e = "#webRoot#?controller=blog&action=index&key=1&param1=foo&param2=bar";
 		r = _controller.urlFor(argumentcollection=args);
 		assert("e eq r");
 	}

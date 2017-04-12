@@ -407,8 +407,12 @@ public string function URLFor(
 		local.variables = local.coreVariables;
 		local.rv &= "?controller=[controller]&action=[action]&key=[key]&format=[format]";
 		if (StructKeyExists(local, "params")) {
-			if (!Len(arguments.action) && StructKeyExists(local.params, "action") && (Len(arguments.controller) || Len(arguments.key) || StructKeyExists(arguments, "params") || StructKeyExists(arguments, "format"))) {
-				arguments.action = local.params.action;
+			if (!Len(arguments.action)) {
+				if (Len(arguments.controller)) {
+					arguments.action = "index";
+				} else if (StructKeyExists(local.params, "action")) {
+					arguments.action = local.params.action;
+				}
 			}
 			if (!Len(arguments.controller) && StructKeyExists(local.params, "controller")) {
 				arguments.controller = local.params.controller;
