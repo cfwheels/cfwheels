@@ -1,16 +1,18 @@
 <cfscript>
 
 mapper()
-    .namespace("admin")
-        // Route name:  adminProducts
-        // Example URL: /admin/products/1234
-        // Controller:  admin.Products
-        .resources("products")
+    .namespace("api")
+        .namespace("v2")
+            // Route name:  apiV2Products
+            // Example URL: /api/v2/products/1234
+            // Controller:  api.v2.Products
+            .resources("products")
+        .end()
 
-        .namespace("super")
-            // Route name:  adminSuperUsers
-            // Example URL: /admin/super/users
-            // Controller:  admin.super.Users
+        .namespace("v1")
+            // Route name:  apiV1Users
+            // Example URL: /api/v1/users
+            // Controller:  api.v1.Users
             .get(name="users", to="users##index")
         .end()
     .end()
