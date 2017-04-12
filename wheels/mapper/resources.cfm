@@ -1,19 +1,19 @@
 <cfscript>
 
 /**
- * Set up a singular REST resource.
+ * Create a group of routes that matches a singular resource. Usually this resource represents an entity tied to the session, application, or another resource (perhaps nested within).
  *
  * [section: Configuration]
  * [category: Routing]
  *
- * @name Name of resource.
- * @nested Whether or not additional calls will be nested.
- * @path Path for resource.
- * @controller Override controller used by resource.
+ * @name Camel-case name of resource to reference when build links and form actions. This is typically a singular word (e.g., `profile`).
+ * @nested Whether or not additional calls will be nested within this resource.
+ * @path Override URL path representing this resource. Default is a dasherized version of `name` (e.g., `blogPost` generates a path of `blog-post`).
+ * @controller Override name of the controller used by resource. This defaults to a pluralized version of `name`.
  * @singular Override singularize() result in plural resources.
  * @plural Override pluralize() result in singular resource.
- * @only List of REST routes to generate.
- * @except List of REST routes not to generate, takes priority over only.
+ * @only Limits the list of RESTful routes to generate. Can include `show`, `new`, `create`, `edit`, `update`, and `delete`.
+ * @except Excludes RESTful routes to generate, taking priority over the `only` argument. Can include `show`, `new`, `create`, `edit,` `update`, and `delete`.
  * @shallow Turn on shallow resources.
  * @shallowPath Shallow path prefix.
  * @shallowName Shallow name prefix.
