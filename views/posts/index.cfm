@@ -1,5 +1,0 @@
-<cfoutput>
-
-#this.blogsPath()#
-
-</cfoutput>
