@@ -50,12 +50,12 @@ component extends="Base" output=false {
 			case "varbinary":
 				local.rv = "cf_sql_varbinary";
 				break;
-			case "varchar": case "enum": case "set":
+			case "varchar": case "enum": case "set": case "tinytext":
 				local.rv = "cf_sql_varchar";
 				break;
-			case "json": case "text": case "mediumtext": case "longtext": case "tinytext": 
-                local.rv = "cf_sql_longvarchar";
-                break;
+			case "json": case "text": case "mediumtext": case "longtext":
+				local.rv = "cf_sql_longvarchar";
+				break;
 		}
 		return local.rv;
 	}
