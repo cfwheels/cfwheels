@@ -1,7 +1,7 @@
 <cfscript>
 
 /**
- * Create a group of routes that matches a singular resource. Usually this resource represents an entity tied to the session, application, or another resource (perhaps nested within).
+ * Create a group of routes that exposes actions for manipulating a singular resource. A singular resource exposes URL patterns for the entire CRUD lifecycle of a single entity (`show`, `new`, `create`, `edit`, `update`, and `delete`) without exposing a primary key in the URL. Usually this type of resource represents a singleton entity tied to the session, application, or another resource (perhaps nested within another resource). If you need to generate routes for manipulating a collection of resources with a primary key in the URL, see the `resources` mapper method.
  *
  * [section: Configuration]
  * [category: Routing]
@@ -170,26 +170,39 @@ public struct function resource(
 }
 
 /**
- * Set up a plural REST resource.
+ * Create a group of routes that exposes actions for manipulating a collection of resources. A plural resource exposes URL patterns for the entire CRUD lifecycle (`index`, `show`, `new`, `create`, `edit`, `update`, `delete`), exposing a primary key in the URL for showing, editing, updating, and deleting records. If you need to generate routes for manipulating a singular resource without a primary key, see the `resource` mapper method.
  *
  * [section: Configuration]
  * [category: Routing]
  *
- * @name See documentation for [doc:resource].
- * @nested See documentation for [doc:resource].
- * @path See documentation for [doc:resource].
- * @controller See documentation for [doc:resource].
- * @singular See documentation for [doc:resource].
- * @plural See documentation for [doc:resource].
- * @only See documentation for [doc:resource].
- * @except See documentation for [doc:resource].
- * @shallow See documentation for [doc:resource].
- * @shallowPath See documentation for [doc:resource].
- * @shallowName See documentation for [doc:resource].
- * @constraints See documentation for [doc:resource].
+ * @name Camel-case name of resource to reference when build links and form actions. This is typically a plural word (e.g., `posts`).
+ * @nested Whether or not additional calls will be nested within this resource.
+ * @path Override URL path representing this resource. Default is a dasherized version of `name` (e.g., `blogPosts` generates a path of `blog-posts`).
+ * @controller Override name of the controller used by resource. This defaults to the value provided for `name`.
+ * @singular Override singularize() result in plural resources.
+ * @plural Override pluralize() result in singular resource.
+ * @only Limits the list of RESTful routes to generate. Can include `index`, `show`, `new`, `create`, `edit`, `update`, and `delete`.
+ * @except Excludes RESTful routes to generate, taking priority over the `only` argument. Can include `index`, `show`, `new`, `create`, `edit`, `update`, and `delete`.
+ * @shallow Turn on shallow resources.
+ * @shallowPath Shallow path prefix.
+ * @shallowName Shallow name prefix.
+ * @constraints Variable patterns to use for matching.
  */
-public struct function resources(required string name, boolean nested=false) {
-	return resource($plural=true, $call="resources", argumentCollection=arguments);
+public struct function resources(
+	required string name,
+	boolean nested=false,
+	string path=hyphenize(arguments.name),
+	string controller,
+	string singular,
+	string plural,
+	string only,
+	string except,
+	boolean shallow,
+	string shallowPath,
+	string shallowName,
+	struct constraints
+) {
+	return resource(argumentCollection=arguments, $plural=true, $call="resources");
 }
 
 /**
