@@ -131,13 +131,17 @@ public struct function delete(
 }
 
 /**
- * Match a root directory.
+ * Create a route that matches the root of its current context. This mapper can be used for the application's web root (or home page), or it can generate a route for the root of a namespace or other path scoping mapper.
  *
  * [section: Configuration]
  * [category: Routing]
+ * 
+ * @to Set `controller##action` combination to map the route to. You may use either this argument or a combination of `controller` and `action`.
+ * @controller Map the route to a given controller. This must be passed along with the `action` argument.
+ * @action Map the route to a given action within the `controller`. This must be passed along with the `controller` argument.
  */
-public struct function root(string to) {
-	return $match(name="root", pattern="/(.[format])", argumentCollection=arguments);
+public struct function root(string to, string controller, string action) {
+	return $match(argumentCollection=arguments, name="root", pattern="/(.[format])");
 }
 
 /**

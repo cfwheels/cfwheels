@@ -5,6 +5,11 @@
 	// See http://docs.cfwheels.org/docs/routing for more info.
 
 	mapper()
+		.resources(name: "customers", nested=true)
+			.put(name="launch", to="subscribers##update", on="collection")
+			.post(name="cancellations", to: "cancellations##create", on: "member")
+		.end()
+
 		// The "wildcard" call below enables automatic mapping of "controller/action" type routes.
 		// This way you don't need to explicitly add a route every time you create a new action in a controller.
 		.wildcard()

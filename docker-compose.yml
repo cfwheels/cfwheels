@@ -1,0 +1,47 @@
+version: '2'
+
+services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - .:/app
+    links:
+      - db
+    environment:
+      PORT: 80
+      CFENGINE: adobe@11
+
+      WHEELS_ENV: development
+      WHEELS_RELOAD_PW: 
+
+      DB_TYPE: PostgreSQL
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: wheelstestdb
+      DB_USERNAME: postgres
+      DB_PASSWORD: 
+
+      SMTP_SERVER: 
+      SMTP_PORT: 
+      SMTP_USESSL: 
+      SMTP_USETLS: 
+      SMTP_SIGN: 
+      SMTP_USERNAME: 
+      SMTP_PASSWORD: 
+      SMTP_BCC: 
+      SMTP_CHARSET: 
+      SMTP_TIMEOUT: 
+      SMTP_FAILTO: 
+      SMTP_KEYSTORE: 
+      SMTP_KEYSTOREPASSWORD: 
+      SMTP_KEYALIAS: 
+      SMTP_KEYPASSWORD: 
+
+  db:
+    image: postgres:9.5.6
+    ports:
+      - "5432:5432"
+    volumes:
+      - ~/postgres/cfwheels-core:/var/lib/postgresql/data

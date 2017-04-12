@@ -15,3 +15,6 @@ server.json
 cfwheels.*.zip
 settings.json
 .vscode
+
+/null/
+jmimemagic.log
