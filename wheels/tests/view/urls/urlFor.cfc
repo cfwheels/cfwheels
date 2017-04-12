@@ -41,6 +41,27 @@ component extends="wheels.tests.Test" {
 		assert("e eq r");
 	}
 
+	function test_missing_controller_action_key_and_params_and_url_rewriting(){
+		request.cgi.script_name = "/rewrite.cfm";
+		StructDelete(args, "controller");
+		StructDelete(args, "action");
+		StructDelete(args, "key");
+		StructDelete(args, "params");
+		e = "#application.wheels.webpath#blog/edit";
+		r = _controller.urlFor(argumentcollection=args);
+		assert("e eq r");
+	}
+
+	function test_missing_controller_action_and_key_with_params_and_url_rewriting(){
+		request.cgi.script_name = "/rewrite.cfm";
+		StructDelete(args, "controller");
+		StructDelete(args, "action");
+		StructDelete(args, "key");
+		e = "#application.wheels.webpath#blog/edit?param1=foo&param2=bar";
+		r = _controller.urlFor(argumentcollection=args);
+		assert("e eq r");
+	}
+
 	function test_missing_controller_and_action_with_url_rewriting(){
 		request.cgi.script_name = "/rewrite.cfm";
 		StructDelete(args, "controller");
