@@ -77,13 +77,7 @@
 									<td class='code'>#_param.name#</td>
 									<td class='code'>#_param.type#</td>
 									<td class='code'>#YesNoFormat(_param.required)#</td>
-									<td class='code'>
-									<cfif
-										structKeyExists(application.wheels.functions, func)
-										AND structKeyExists(application.wheels.functions[func], _param.name)>
-										#application.wheels.functions[func][_param.name]#
-									</cfif>
-									<cfif structkeyExists(_param, "default")>#_param.default#</cfif></td>
+									<td class='code'><cfif structkeyExists(_param, "default")>#_param.default#</cfif></td>
 									<td><cfif structkeyExists(_param, "hint")>#$backTickReplace(_param.hint)#</cfif></td>
 								</tr>
 							</cfif>
