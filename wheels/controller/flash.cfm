@@ -46,7 +46,8 @@ public numeric function flashCount() {
 }
 
 /**
- * Deletes a specific key from the Flash. Returns `true` if the key exists.
+ * Deletes a specific key from the Flash.
+ * Returns `true` if the key exists.
  *
  * [section: Controller]
  * [category: Flash Functions]

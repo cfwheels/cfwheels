@@ -1,7 +1,7 @@
 <cfscript>
 
 /**
- * Used within a controller's config() function to specify controller- or action-specific layouts.
+ * Used within a controller's `config()` function to specify controller- or action-specific layouts.
  *
  * [section: Controller]
  * [category: Configuration Functions]

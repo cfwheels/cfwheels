@@ -1,7 +1,8 @@
 <cfscript>
 
 /**
- * Instructs CFWheels to verify that some specific criterias are met before running an action. Note that all undeclared arguments will be passed to `redirectTo()` call if a `handler` is not specified.
+ * Instructs CFWheels to verify that some specific criterias are met before running an action.
+ * Note that all undeclared arguments will be passed to `redirectTo()` call if a `handler` is not specified.
  *
  * [section: Controller]
  * [category: Configuration Functions]
