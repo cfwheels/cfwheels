@@ -139,9 +139,24 @@ public struct function delete(
  * @to Set `controller##action` combination to map the route to. You may use either this argument or a combination of `controller` and `action`.
  * @controller Map the route to a given controller. This must be passed along with the `action` argument.
  * @action Map the route to a given action within the `controller`. This must be passed along with the `controller` argument.
+ * @mapFormat Set to `true` to include the format (e.g. `.json`) in the route.
  */
-public struct function root(string to) {
-	return $match(name="root", pattern="/(.[format])", argumentCollection=arguments);
+public struct function root(string to, boolean mapFormat) {
+	// If mapFormat is not passed in we default it to true on all calls except the web root.
+	if (!StructKeyExists(arguments, "mapFormat")) {
+		if (ArrayLen(variables.scopeStack) > 1) {
+			arguments.mapFormat = true;
+		} else {
+			arguments.mapFormat = false;
+		}
+	}
+
+	if (arguments.mapFormat) {
+		local.pattern = "/(.[format])";
+	} else {
+		local.pattern = "/";
+	}
+	return $match(name="root", pattern=local.pattern, argumentCollection=arguments);
 }
 
 /**
