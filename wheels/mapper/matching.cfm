@@ -160,20 +160,22 @@ public struct function root(string to, boolean mapFormat) {
 }
 
 /**
- * Special wildcard matching generates routes with `[controller]/[action]` and `[controller]` patterns.
+ * Special wildcard matching generates routes with `[controller]/[action]` and `[controller]` patterns. The `mapKey` argument also enables a `[controller]/[action]/[key]` pattern as well.
  *
  * [section: Configuration]
  * [category: Routing]
  *
- * @method List of HTTP methods (verbs) to generate the wildcard routes for. We strongly recommend leaving the default value of `get` and using other routing mappers if you need to `POST` to a URL endpoint. For better readability, you can also pass this argument as `methods`.
+ * @method List of HTTP methods (verbs) to generate the wildcard routes for. We strongly recommend leaving the default value of `get` and using other routing mappers if you need to `POST` to a URL endpoint. For better readability, you can also pass this argument as `methods` if you're listing multiple methods.
  * @action Default action to specify if the value for the `[action]` placeholder is not provided.
+ * @mapKey Whether or not to enable a `[key]` matcher, enabling a `[controller]/[action]/[key]` pattern.
+ * @mapFormat Whether or not to add an optional `.[format]` pattern to the end of the generated routes. This is useful for providing formats via URL like `json`, `xml`, `pdf`, etc.
  */
 public struct function wildcard(
 		string method="get",
 		string action="index",
 		boolean mapKey=false,
 		boolean mapFormat=false
-	) {
+) {
   if (StructKeyExists(arguments, "methods") && Len(arguments.methods)) {
     local.methods = arguments.methods;
   } else if (Len(arguments.method)) {
