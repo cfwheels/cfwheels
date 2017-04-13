@@ -157,7 +157,8 @@ public any function findAll(
 				list=arguments.select,
 				returnAs=arguments.returnAs
 			);
-			local.columns = REReplace(local.columns, ".*?\.(.*?)(,|$)", "\1\2", "all");
+			local.columns = REReplace(local.columns, "\w*?\.([\w\s]*?)(,|$)", "\1\2", "all");
+			local.columns = REReplace(local.columns, "\w*?\sAS\s([\w\s]*?)(,|$)", "\1\2", "all");
 			local.rv = QueryNew(local.columns);
 
 		} else if (singularize(arguments.returnAs) == arguments.returnAs) {
