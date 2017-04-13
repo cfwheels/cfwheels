@@ -38,7 +38,7 @@ public function $runCsrfProtection(string action) {
  * Internal function.
  */
 public function $flagRequestAsProtected() {
-	request.$wheels.protectedFromForgery = true;
+	request.$wheelsProtectedFromForgery = true;
 }
 
 /**
@@ -69,7 +69,7 @@ public boolean function $isVerifiedRequest() {
  * Internal function.
  */
 public boolean function $isRequestProtectedFromForgery() {
-	return StructKeyExists(request.$wheels, "protectedFromForgery") && IsBoolean(request.$wheels.protectedFromForgery) && request.$wheels.protectedFromForgery;
+	return StructKeyExists(request, "$wheelsProtectedFromForgery") && IsBoolean(request.$wheelsProtectedFromForgery) && request.$wheelsProtectedFromForgery;
 }
 
 /**

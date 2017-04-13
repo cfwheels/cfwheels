@@ -11,6 +11,21 @@ component extends="wheels.tests.Test" {
 		args.controller = "testcontroller";
 	}
 
+	function test_no_csrf_when_not_enabled() {
+		if (StructKeyExists(request, "$wheelsProtectedFromForgery")) {
+			local.$wheelsProtectedFromForgery = request.$wheelsProtectedFromForgery;
+			StructDelete(request, "$wheelsProtectedFromForgery");
+		}
+		StructDelete(args, "controller");
+		argsction = _controller.urlfor(argumentCollection=args);
+		e = '<form action="#argsction#" method="post">';
+		r = _controller.startFormTag(argumentcollection=args);
+		assert('e eq r');
+		if (StructKeyExists(local, "$wheelsProtectedFromForgery")) {
+			request.$wheelsProtectedFromForgery = local.$wheelsProtectedFromForgery;
+		}
+	}
+
 	function test_no_controller_or_action_or_route_should_point_to_current_page() {
 		StructDelete(args, "controller");
 		argsction = _controller.urlfor(argumentCollection=args);
