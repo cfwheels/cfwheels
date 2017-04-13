@@ -32,7 +32,7 @@ component extends="wheels.tests.Test" {
     .end();
 
     routesLen = ArrayLen(application.wheels.routes);
-    assert("routesLen eq 4");
+    assert("routesLen eq 2");
   }
 
   function test_default_wildcard_only_allows_get_requests() {
@@ -50,10 +50,8 @@ component extends="wheels.tests.Test" {
       .wildcard()
     .end();
 
-    assert("application.wheels.routes[1].pattern is '/[controller]/[action].[format]'");
-    assert("application.wheels.routes[2].pattern is '/[controller]/[action]'");
-    assert("application.wheels.routes[3].pattern is '/[controller].[format]'");
-    assert("application.wheels.routes[4].pattern is '/[controller]'");
+    assert("application.wheels.routes[1].pattern is '/[controller]/[action]'");
+    assert("application.wheels.routes[2].pattern is '/[controller]'");
   }
 
   function test_wildcard_with_methods_produces_routes() {
@@ -62,7 +60,7 @@ component extends="wheels.tests.Test" {
     .end();
 
     routesLen = ArrayLen(application.wheels.routes);
-    assert("routesLen eq 8");
+    assert("routesLen eq 4");
   }
 
   function test_wildcard_only_allows_specified_methods() {
@@ -80,14 +78,10 @@ component extends="wheels.tests.Test" {
       .wildcard(methods="get,post")
     .end();
 
-    assert("application.wheels.routes[1].pattern is '/[controller]/[action].[format]'");
-    assert("application.wheels.routes[2].pattern is '/[controller]/[action]'");
-    assert("application.wheels.routes[3].pattern is '/[controller].[format]'");
+    assert("application.wheels.routes[1].pattern is '/[controller]/[action]'");
+    assert("application.wheels.routes[2].pattern is '/[controller]'");
+    assert("application.wheels.routes[3].pattern is '/[controller]/[action]'");
     assert("application.wheels.routes[4].pattern is '/[controller]'");
-    assert("application.wheels.routes[5].pattern is '/[controller]/[action].[format]'");
-    assert("application.wheels.routes[6].pattern is '/[controller]/[action]'");
-    assert("application.wheels.routes[7].pattern is '/[controller].[format]'");
-    assert("application.wheels.routes[8].pattern is '/[controller]'");
   }
 
   function test_controller_scoped_wildcard_produces_routes() {
@@ -98,7 +92,7 @@ component extends="wheels.tests.Test" {
     .end();
 
     routesLen = ArrayLen(application.wheels.routes);
-    assert("routesLen eq 4");
+    assert("routesLen eq 2");
   }
 
   function test_controller_scoped_wildcard_only_allows_get_requests() {
@@ -120,9 +114,22 @@ component extends="wheels.tests.Test" {
       .end()
     .end();
 
+    assert("application.wheels.routes[1].pattern is '/cats/[action]'");
+    assert("application.wheels.routes[2].pattern is '/cats'");
+  }
+
+  function test_wildcard_with_map_format() {
+    $mapper().$draw()
+      .controller("cats")
+        .wildcard(mapFormat=true)
+      .end()
+    .end();
+
     assert("application.wheels.routes[1].pattern is '/cats/[action].[format]'");
     assert("application.wheels.routes[2].pattern is '/cats/[action]'");
     assert("application.wheels.routes[3].pattern is '/cats.[format]'");
     assert("application.wheels.routes[4].pattern is '/cats'");
+    routesLen = ArrayLen(application.wheels.routes);
+    assert("routesLen eq 4");
   }
 }

@@ -171,7 +171,8 @@ public struct function root(string to, boolean mapFormat) {
 public struct function wildcard(
 		string method="get",
 		string action="index",
-		boolean mapKey=false
+		boolean mapKey=false,
+		boolean mapFormat=false
 	) {
   if (StructKeyExists(arguments, "methods") && Len(arguments.methods)) {
     local.methods = arguments.methods;
@@ -181,13 +182,18 @@ public struct function wildcard(
     local.methods = ["get", "post", "put", "patch", "delete"];
   }
 
+	local.formatPattern = "";
+	if (arguments.mapFormat) {
+		local.formatPattern = "(.[format])";
+	}
+
 	if (StructKeyExists(variables.scopeStack[1], "controller")) {
     for (local.method in local.methods) {
 			if (arguments.mapKey) {
-				$match(method=local.method, name="wildcard", pattern="[action]/[key](.[format])", action=arguments.action);
+				$match(method=local.method, name="wildcard", pattern="[action]/[key]#local.formatPattern#", action=arguments.action);
 			}
-			$match(method=local.method, name="wildcard", pattern="[action](.[format])", action=arguments.action);
-      $match(method=local.method, name="wildcard", pattern="(.[format])", action=arguments.action);
+			$match(method=local.method, name="wildcard", pattern="[action]#local.formatPattern#", action=arguments.action);
+      $match(method=local.method, name="wildcard", pattern=local.formatPattern, action=arguments.action);
     }
 	} else {
     for (local.method in local.methods) {
@@ -195,21 +201,21 @@ public struct function wildcard(
 				$match(
 					method=local.method,
 					name="wildcard",
-					pattern="[controller]/[action]/[key](.[format])",
+					pattern="[controller]/[action]/[key]#local.formatPattern#",
 					action=arguments.action
 				);
 			}
 		  $match(
         method=local.method,
         name="wildcard",
-        pattern="[controller]/[action](.[format])",
+        pattern="[controller]/[action]#local.formatPattern#",
         action=arguments.action
       );
 
       $match(
         method=local.method,
         name="wildcard",
-        pattern="[controller](.[format]))",
+        pattern="[controller]#local.formatPattern#",
         action=arguments.action
       );
     }
