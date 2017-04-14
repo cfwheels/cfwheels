@@ -1,7 +1,8 @@
 <cfscript>
 
 /**
- * Defines formats that the controller will respond with upon request. The format can be requested through a URL variable called `format`, by appending the `format` name to the end of a URL as an extension (when URL rewriting is enabled), or in the request header.
+ * Defines formats that the controller will respond with upon request.
+ * The format can be requested through a URL variable called `format`, by appending the `format` name to the end of a URL as an extension (when URL rewriting is enabled), or in the request header.
  *
  * [section: Controller]
  * [category: Configuration Functions]
@@ -27,7 +28,8 @@ public void function provides(string formats="") {
 }
 
 /**
- * Use this in an individual controller action to define which formats the action will respond with. This can be used to define provides behavior in individual actions or to override a global setting set with `provides` in the controller's `config()`.
+ * Use this in an individual controller action to define which formats the action will respond with.
+ * This can be used to define provides behavior in individual actions or to override a global setting set with `provides` in the controller's `config()`.
  *
  * [section: Controller]
  * [category: Provides Functions]
@@ -53,7 +55,9 @@ public void function onlyProvides(string formats="", string action=variables.par
 }
 
 /**
- * Instructs the controller to render the data passed in to the format that is requested. If the format requested is `json` or `xml`, CFWheels will transform the data into that format automatically. For other formats (or to override the automatic formatting), you can also create a view template in this format: `nameofaction.xml.cfm`, `nameofaction.json.cfm`, `nameofaction.pdf.cfm`, etc.
+ * Instructs the controller to render the data passed in to the format that is requested.
+ * If the format requested is `json` or `xml`, CFWheels will transform the data into that format automatically.
+ * For other formats (or to override the automatic formatting), you can also create a view template in this format: `nameofaction.xml.cfm`, `nameofaction.json.cfm`, `nameofaction.pdf.cfm`, etc.
  *
  * [section: Controller]
  * [category: Provides Functions]

@@ -1,7 +1,9 @@
 <cfscript>
 
 /**
- * Calculates the average value for a given property. Uses the SQL function `AVG`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.
+ * Calculates the average value for a given property.
+ * Uses the SQL function `AVG`.
+ * If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.
  *
  * [section: Model Class]
  * [category: Statistics Functions]
@@ -62,7 +64,9 @@ public any function average(
 }
 
 /**
- * Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function `COUNT`. If no records can be found to perform the calculation on, `0` is returned.
+ * Returns the number of rows that match the arguments (or all rows if no arguments are passed in).
+ * Uses the SQL function `COUNT`.
+ * If no records can be found to perform the calculation on, `0` is returned.
  *
  * [section: Model Class]
  * [category: Statistics Functions]
@@ -97,7 +101,9 @@ public any function count(
 }
 
 /**
- * Calculates the maximum value for a given property. Uses the SQL function `MAX`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.
+ * Calculates the maximum value for a given property.
+ * Uses the SQL function `MAX`.
+ * If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.
  *
  * [section: Model Class]
  * [category: Statistics Functions]
@@ -125,7 +131,9 @@ public any function maximum(
 }
 
 /**
- * Calculates the minimum value for a given property. Uses the SQL function `MIN`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.
+ * Calculates the minimum value for a given property.
+ * Uses the SQL function `MIN`.
+ * If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.
  *
  * [section: Model Class]
  * [category: Statistics Functions]
@@ -153,7 +161,9 @@ public any function minimum(
 }
 
 /**
- * Calculates the sum of values for a given property. Uses the SQL function `SUM`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.
+ * Calculates the sum of values for a given property.
+ * Uses the SQL function `SUM`.
+ * If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.
  *
  * [section: Model Class]
  * [category: Statistics Functions]
