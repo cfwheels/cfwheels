@@ -258,10 +258,18 @@ private string function $getVersionsPreviouslyMigrated() {
 			return ValueList(local.migratedVersions.version);
 		}
 	} catch (any e) {
-		$query(
-			datasource=application.wheels.dataSourceName,
-			sql="CREATE TABLE #application.wheels.dbmigrateTableName# (version VARCHAR(25))"
-		);
+		// This is usually the first Database call made, so if the above has failed, the DB is probably not setup.
+		if(e.type == "database" && !structKeyExists(e.additional, "SQL")){
+			Throw(
+   				type="Wheels.DBMigrateDatasource",
+   				message="A Valid Datasource needs to be configured to use the migration system. Please ensure the datasource `#e.datasource#` is available."
+   			);
+		} else {
+			$query(
+				datasource=application.wheels.dataSourceName,
+				sql="CREATE TABLE #application.wheels.dbmigrateTableName# (version VARCHAR(25))"
+			);
+		}
 		return 0;
 	}
 }
