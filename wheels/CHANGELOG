@@ -16,6 +16,7 @@ Model Enhancements
 * Support added for HAVING when using aggregate functions in the "where" argument - #483 [Per Djurner]
 * Added support for the JSON data type in the MySQL adapter - #759 [Joel Stobart]
 * Corrected mapping for text types in the MySQL adapter - #759 [Joel Stobart]
+* Added global setting, "lowerCaseTableNames", to always lower case table names in SQL statements - [Per Djurner]
 
 View Enhancements
 =================
