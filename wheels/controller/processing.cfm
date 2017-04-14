@@ -1,7 +1,8 @@
 <cfscript>
 
 /**
- * Process the specified action of the controller; this is exposed in the API primarily for testing purposes; you would not usually call it directly unless in the test suite.
+ * Process the specified action of the controller.
+ * This is exposed in the API primarily for testing purposes; you would not usually call it directly unless in the test suite.
  *
  * [section: Controller]
  * [category: Miscellaneous Functions]

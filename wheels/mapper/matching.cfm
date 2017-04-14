@@ -139,25 +139,43 @@ public struct function delete(
  * @to Set `controller##action` combination to map the route to. You may use either this argument or a combination of `controller` and `action`.
  * @controller Map the route to a given controller. This must be passed along with the `action` argument.
  * @action Map the route to a given action within the `controller`. This must be passed along with the `controller` argument.
+ * @mapFormat Set to `true` to include the format (e.g. `.json`) in the route.
  */
-public struct function root(string to) {
-	return $match(name="root", pattern="/(.[format])", argumentCollection=arguments);
+public struct function root(string to, boolean mapFormat) {
+	// If mapFormat is not passed in we default it to true on all calls except the web root.
+	if (!StructKeyExists(arguments, "mapFormat")) {
+		if (ArrayLen(variables.scopeStack) > 1) {
+			arguments.mapFormat = true;
+		} else {
+			arguments.mapFormat = false;
+		}
+	}
+
+	if (arguments.mapFormat) {
+		local.pattern = "/(.[format])";
+	} else {
+		local.pattern = "/";
+	}
+	return $match(name="root", pattern=local.pattern, argumentCollection=arguments);
 }
 
 /**
- * Special wildcard matching generates routes with `[controller]/[action]` and `[controller]` patterns.
+ * Special wildcard matching generates routes with `[controller]/[action]` and `[controller]` patterns. The `mapKey` argument also enables a `[controller]/[action]/[key]` pattern as well.
  *
  * [section: Configuration]
  * [category: Routing]
  *
- * @method List of HTTP methods (verbs) to generate the wildcard routes for. We strongly recommend leaving the default value of `get` and using other routing mappers if you need to `POST` to a URL endpoint. For better readability, you can also pass this argument as `methods`.
+ * @method List of HTTP methods (verbs) to generate the wildcard routes for. We strongly recommend leaving the default value of `get` and using other routing mappers if you need to `POST` to a URL endpoint. For better readability, you can also pass this argument as `methods` if you're listing multiple methods.
  * @action Default action to specify if the value for the `[action]` placeholder is not provided.
+ * @mapKey Whether or not to enable a `[key]` matcher, enabling a `[controller]/[action]/[key]` pattern.
+ * @mapFormat Whether or not to add an optional `.[format]` pattern to the end of the generated routes. This is useful for providing formats via URL like `json`, `xml`, `pdf`, etc.
  */
 public struct function wildcard(
 		string method="get",
 		string action="index",
-		boolean mapKey=false
-	) {
+		boolean mapKey=false,
+		boolean mapFormat=false
+) {
   if (StructKeyExists(arguments, "methods") && Len(arguments.methods)) {
     local.methods = arguments.methods;
   } else if (Len(arguments.method)) {
@@ -166,13 +184,18 @@ public struct function wildcard(
     local.methods = ["get", "post", "put", "patch", "delete"];
   }
 
+	local.formatPattern = "";
+	if (arguments.mapFormat) {
+		local.formatPattern = "(.[format])";
+	}
+
 	if (StructKeyExists(variables.scopeStack[1], "controller")) {
     for (local.method in local.methods) {
 			if (arguments.mapKey) {
-				$match(method=local.method, name="wildcard", pattern="[action]/[key](.[format])", action=arguments.action);
+				$match(method=local.method, name="wildcard", pattern="[action]/[key]#local.formatPattern#", action=arguments.action);
 			}
-			$match(method=local.method, name="wildcard", pattern="[action](.[format])", action=arguments.action);
-      $match(method=local.method, name="wildcard", pattern="(.[format])", action=arguments.action);
+			$match(method=local.method, name="wildcard", pattern="[action]#local.formatPattern#", action=arguments.action);
+      $match(method=local.method, name="wildcard", pattern=local.formatPattern, action=arguments.action);
     }
 	} else {
     for (local.method in local.methods) {
@@ -180,21 +203,21 @@ public struct function wildcard(
 				$match(
 					method=local.method,
 					name="wildcard",
-					pattern="[controller]/[action]/[key](.[format])",
+					pattern="[controller]/[action]/[key]#local.formatPattern#",
 					action=arguments.action
 				);
 			}
 		  $match(
         method=local.method,
         name="wildcard",
-        pattern="[controller]/[action](.[format])",
+        pattern="[controller]/[action]#local.formatPattern#",
         action=arguments.action
       );
 
       $match(
         method=local.method,
         name="wildcard",
-        pattern="[controller](.[format]))",
+        pattern="[controller]#local.formatPattern#",
         action=arguments.action
       );
     }

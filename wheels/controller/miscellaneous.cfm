@@ -1,7 +1,8 @@
 <cfscript>
 
 /**
- * Sends an email using a template and an optional layout to wrap it in. Besides the CFWheels-specific arguments documented here, you can also pass in any argument that is accepted by the `cfmail` tag as well as your own arguments to be used by the view.
+ * Sends an email using a template and an optional layout to wrap it in.
+ * Besides the CFWheels-specific arguments documented here, you can also pass in any argument that is accepted by the `cfmail` tag as well as your own arguments to be used by the view.
  *
  * [section: Controller]
  * [category: Miscellaneous Functions]
@@ -140,7 +141,7 @@ public any function sendEmail(
 }
 
 /**
- * Sends a file to the user (from the files folder or a path relative to it by default).
+ * Sends a file to the user (from the `files` folder or a path relative to it by default).
  *
  * [section: Controller]
  * [category: Miscellaneous Functions]

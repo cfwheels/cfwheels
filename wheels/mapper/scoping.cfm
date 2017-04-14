@@ -1,7 +1,7 @@
 <cfscript>
 
 /**
- * Set any number of parameters to be inherited by mappers called within this matcher's block. For example, set a URL path to be used by all child routes.
+ * Set any number of parameters to be inherited by mappers called within this matcher's block. For example, set a package or URL path to be used by all child routes.
  *
  * [section: Configuration]
  * [category: Routing]
@@ -9,7 +9,7 @@
  * @name Name to prepend to child route names for use when building links, forms, and other URLs.
  * @path Path to prefix to all child routes.
  * @package Package namespace to append to controllers.
- * @controller Controller to use in routes.
+ * @controller Controller to use for routes.
  * @shallow Turn on shallow resources to eliminate routing added before this one.
  * @shallowPath Shallow path prefix.
  * @shallowName Shallow name prefix.

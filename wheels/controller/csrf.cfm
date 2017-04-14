@@ -1,7 +1,9 @@
 <cfscript>
 
 /**
- * Tells CFWheels to protect `POST`ed requests from CSRF vulnerabilities. Instructs the controller to verify that `params.authenticityToken` or `X-CSRF-Token` HTTP header is provided along with the request containing a valid authenticity token. Call this method within a controller's `config` method, preferably the base `Controller.cfc`	file, to protect the entire application.
+ * Tells CFWheels to protect `POST`ed requests from CSRF vulnerabilities.
+ * Instructs the controller to verify that `params.authenticityToken` or `X-CSRF-Token` HTTP header is provided along with the request containing a valid authenticity token.
+ * Call this method within a controller's `config` method, preferably the base `Controller.cfc` file, to protect the entire application.
  *
  * [section: Controller]
  * [category: Configuration Functions]
@@ -38,7 +40,7 @@ public function $runCsrfProtection(string action) {
  * Internal function.
  */
 public function $flagRequestAsProtected() {
-	request.$wheels.protectedFromForgery = true;
+	request.$wheelsProtectedFromForgery = true;
 }
 
 /**
@@ -69,7 +71,7 @@ public boolean function $isVerifiedRequest() {
  * Internal function.
  */
 public boolean function $isRequestProtectedFromForgery() {
-	return StructKeyExists(request.$wheels, "protectedFromForgery") && IsBoolean(request.$wheels.protectedFromForgery) && request.$wheels.protectedFromForgery;
+	return StructKeyExists(request, "$wheelsProtectedFromForgery") && IsBoolean(request.$wheelsProtectedFromForgery) && request.$wheelsProtectedFromForgery;
 }
 
 /**

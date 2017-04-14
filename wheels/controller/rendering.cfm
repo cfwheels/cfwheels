@@ -1,7 +1,8 @@
 <cfscript>
 
 /**
- * Instructs the controller which view template and layout to render when it's finished processing the action. Note that when passing values for controller and/or action, this function does not execute the actual action but rather just loads the corresponding view template.
+ * Instructs the controller which view template and layout to render when it's finished processing the action.
+ * Note that when passing values for controller and / or action, this function does not execute the actual action but rather just loads the corresponding view template.
  *
  * [section: Controller]
  * [category: Rendering Functions]
@@ -78,7 +79,8 @@ public any function renderPage(
 }
 
 /**
- * Instructs the controller to render an empty string when it's finished processing the action. This is very similar to calling `cfabort` with the advantage that any after filters you have set on the action will still be run.
+ * Instructs the controller to render an empty string when it's finished processing the action.
+ * This is very similar to calling `cfabort` with the advantage that any after filters you have set on the action will still be run.
  *
  * [section: Controller]
  * [category: Rendering Functions]
@@ -157,8 +159,7 @@ public void function setResponse(required string content) {
 }
 
 /**
- * Mainly used for testing to establish whether the current request has performed a redirect.
- * Primarily used for testing.
+ * Primarily used for testing to establish whether the current request has performed a redirect.
  *
  * [section: Controller]
  * [category: Miscellaneous Functions]
