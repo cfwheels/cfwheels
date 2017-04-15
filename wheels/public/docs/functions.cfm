@@ -62,8 +62,9 @@
 		local.rv=[];
 		for(local.doc in arguments.docFunctions){
 			if(structKeyExists(local.doc.tags, "section") && len(local.doc.tags.section)){
-				if( !ArrayFind(local.rv, function(struct){
-					   return struct.name == doc.tags.section;
+				var section=local.doc.tags.section;
+				if( !ArrayFind(local.rv, function(struct, section){
+					   return struct.name == section;
 				})){
 					arrayAppend(local.rv, {
 						"name": local.doc.tags.section,
