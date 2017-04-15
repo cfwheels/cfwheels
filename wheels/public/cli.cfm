@@ -1,5 +1,5 @@
 <!---
-	CLI Uses this file to talk to wheels via JSON when in design/development mode
+	CLI & GUI Uses this file to talk to wheels via JSON when in design/development mode
 --->
 <cfinclude template="../dbmigrate/basefunctions.cfm">
 <cfscript>
@@ -13,6 +13,7 @@
 		data["databaseType"]   	= $getDBType();
 		data["migrations"]    	= dbmigrate.getAvailableMigrations();
 		data["lastVersion"]    	= 0;
+		data["message"]			= "";
 		data["messages"]		= "";
 		data["command"]         = "";
 
@@ -23,10 +24,22 @@
 		if(structKeyExists(params, "command")){
 			data.command=params.command;
 			switch(params.command){
+				case "createMigration":
+					if(structKeyExists(params, "migrationPrefix") && len(params.migrationPrefix)){
+						data.message=dbmigrate.createMigration(
+							params.migrationName,
+							params.templateName,
+							params.migrationPrefix);
+					} else {
+						data.message=dbmigrate.createMigration(
+							params.migrationName,
+							params.templateName);
+					}
+				break;
 				case "migrateTo":
-				if(structKeyExists(params,"version")){
-					data.message=dbmigrate.migrateTo(params.version);
-				}
+					if(structKeyExists(params,"version")){
+						data.message=dbmigrate.migrateTo(params.version);
+					}
 				break;
 				case "info":
 					data.message="Returning what I know..";

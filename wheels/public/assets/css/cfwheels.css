@@ -41,8 +41,9 @@ td {
     ;
 }
 #content a {
-    //color: #B00701;
+    color: #B00701;
 }
+pre {border-left-color: #B00701;}
 h1 {
     font-size: 4rem;
 }
@@ -68,6 +69,11 @@ input[type='button'].button-outline,
 input[type='reset'].button-outline,
 input[type='submit'].button-outline {
 	color: #B00701;
+}
+.button-small {
+    margin-bottom: 5px;
+    height: 2.4rem;
+    line-height: 1rem;
 }
 #content .testing a {
     text-decoration: none;
@@ -129,4 +135,90 @@ input[type='submit'].button-outline {
 .failure-message-item {
     color: red;
     font-weight: 700;
+}
+
+/*----- DBMigrate GUI -----*/
+#dbmigrate {}
+section#dbinfo,
+section#prefix,
+section#dbmigrate-templates,
+section#migrations {
+    margin-bottom:10px;
+}
+#dbmigrate #dbmigrate-templates input[type='radio'] {margin-bottom: 3px;}
+#dbmigrate #dbmigrate-templates label.label-inline {font-size: 13px;}
+#dbmigrate .help {font-style: italic; color: #999; font-size: 13px;}
+#dbmigrate .alert { padding:5px;
+        border: 2px solid #4286f4;
+        border-radius:2px;
+        background-color:#ccdfff;
+        margin-top:5px; margin-bottom:5px;
+        font-weight: 700;
+}
+#dbmigrate .alert-success {
+        border: 2px solid #2d7f38;
+        background-color:#e8ffeb;}
+#dbmigrate #messages pre { height: 250px; overflow-y: auto; padding-left:15px; font-size:13px;}
+
+#dbmigrate .domigrate {}
+#dbmigrate .migrated  {background-color: #3071db; border-color: #3071db}
+#dbmigrate .currentVersion {font-weight: 700; background-color: #f4f4f4; border-bottom: 1px solid #999;}
+#dbmigrate .currentVersion .button {background-color: #999; border-color: #999}
+#dbmigrate .resetMigration {background-color: #db5730; border-color: #db5730}
+/*----- Tabs -----*/
+.tabs {
+    width:100%;
+    display:inline-block;
+}
+
+/*----- Tab Links -----*/
+/* Clearfix */
+.tab-links {margin-bottom: 0;}
+.tab-links:after {
+    display:block;
+    clear:both;
+    content:'';
+}
+
+.tab-links li {
+    margin:7px 5px;
+    float:left;
+    list-style:none;
+}
+
+    .tab-links a {
+        padding:9px 15px;
+        background:#f4f4f4;
+        font-size:16px;
+        font-weight:600;
+        color:#4c4c4c;
+        transition:all linear 0.15s;
+    }
+
+    .tab-links a:hover {
+        background:#a7cce5;
+        text-decoration:none;
+    }
+
+.tab-links li.active a, .tab-links li.active a:hover {
+    background:#fff;
+    border-top: 1px solid #999;
+    border-left: 1px solid #999;
+    border-right: 1px solid #999;
+    border-bottom: 1px solid #fff;
+}
+
+/*----- Content of Tabs -----*/
+.tab-content {
+    padding:15px;
+    border:1px solid #999;
+    background:#fff;
+}
+
+.tab {
+    display:none;
+}
+
+.tab.active {
+    display:block;
 }

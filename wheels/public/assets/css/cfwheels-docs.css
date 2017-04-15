@@ -22,6 +22,10 @@ html, body {
     clear:both;
 }
 
+  a {
+    color: #B00701;
+}
+pre {border-left-color: #B00701;}
 
 #sections {
     position: fixed;
@@ -64,10 +68,10 @@ html, body {
 
 #sections a:hover,
 #left a:hover{
-    background: #e9d8f3;
+    background: #f2e1e1;
 }
 #left a.active {
-    background: #9b4dca;
+    background: #B00701;
     color: white;
 }
 
