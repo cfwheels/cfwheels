@@ -78,17 +78,17 @@ public void function setPrimaryKeys(required string property) {
 }
 
 /**
-* Checks if a record exists in the table. You can pass in either a primary key value to the key argument or a string to the where argument. If you don't pass in either of those, it will simply check if any record exists in the table.
-*
-* [section: Model Class]
-* [category: Miscellaneous Functions]
-*
-* @key Primary key value(s) of the record. Separate with comma if passing in multiple primary key values. Accepts a string, list, or a numeric value.
-* @where This argument maps to the WHERE clause of the query. The following operators are supported: =, !=, <>, <, <=, >, >=, LIKE, NOT LIKE, IN, NOT IN, IS NULL, IS NOT NULL, AND, and OR (note that the key words need to be written in upper case). You can also use parentheses to group statements. You do not need to specify the table name(s); CFWheels will do that for you. Instead of using the where argument, you can create cleaner code by making use of a concept called Dynamic Finders.
-* @reload Set to true to force CFWheels to query the database even though an identical query may have been run in the same request. (The default in CFWheels is to get the second query from the request-level cache.)
-* @parameterize Set to true to use cfqueryparam on all columns, or pass in a list of property names to use cfqueryparam on those only.
-* @includeSoftDeletes You can set this argument to true to include soft-deleted records in the results.
-*/
+ * Checks if a record exists in the table. You can pass in either a primary key value to the key argument or a string to the where argument. If you don't pass in either of those, it will simply check if any record exists in the table.
+ *
+ * [section: Model Class]
+ * [category: Miscellaneous Functions]
+ *
+ * @key Primary key value(s) of the record. Separate with comma if passing in multiple primary key values. Accepts a string, list, or a numeric value.
+ * @where See documentation for [doc:findAll].
+ * @reload See documentation for [doc:findAll].
+ * @parameterize See documentation for [doc:findAll].
+ * @includeSoftDeletes See documentation for [doc:findAll].
+ */
 public boolean function exists(any key, string where, boolean reload, any parameterize, boolean includeSoftDeletes) {
 	$args(name="exists", args=arguments);
 	if ($get("showErrorInformation") && StructKeyExists(arguments, "key") && StructKeyExists(arguments, "where")) {

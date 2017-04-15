@@ -1,22 +1,26 @@
 <cfscript>
 
 /**
-* Updates all properties for the records that match the where argument. Property names and values can be passed in either using named arguments or as a struct to the properties argument. By default, objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in instantiate=true. This method returns the number of records that were updated.
-*
-* [section: Model Class]
-* [category: Update Functions]
-*
-* @where This argument maps to the WHERE clause of the query. The following operators are supported: =, !=, <>, <, <=, >, >=, LIKE, NOT LIKE, IN, NOT IN, IS NULL, IS NOT NULL, AND, and OR. (Note that the key words need to be written in upper case.) You can also use parentheses to group statements. You do not need to specify the table name(s); Wheels will do that for you.
-* @include Associations that should be included in the query using INNER or LEFT OUTER joins (which join type that is used depends on how the association has been set up in your model). If all included associations are set on the current model, you can specify them in a list (e.g. department,addresses,emails). You can build more complex include strings by using parentheses when the association is set on an included model, like album(artist(genre)), for example. These complex include strings only work when returnAs is set to query though.
-* @properties The properties you want to set on the object (can also be passed in as named arguments).
-* @reload false Set to true to force Wheels to query the database even though an identical query may have been run in the same request. (The default in Wheels is to get the second query from the request-level cache.)
-* @parameterize Set to true to use cfqueryparam on all columns, or pass in a list of property names to use cfqueryparam on those only.
-* @instantiate Whether or not to instantiate the object(s) first. When objects are not instantiated, any callbacks and validations set on them will be skipped.
-* @validate Set to false to skip validations for this operation.
-* @transaction Set this to commit to update the database when the save has completed, rollback to run all the database queries but not commit them, or none to skip transaction handling altogether.
-* @callbacks Set to false to disable callbacks for this operation.
-* @includeSoftDeletes You can set this argument to true to include soft-deleted records in the results.
-*/
+ * Updates all properties for the records that match the `where` argument.
+ * Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.
+ * By default, objects will not be instantiated and therefore callbacks and validations are not invoked.
+ * You can change this behavior by passing in `instantiate=true`.
+ * This method returns the number of records that were updated.
+ *
+ * [section: Model Class]
+ * [category: Update Functions]
+ *
+ * @where See documentation for [doc:findAll].
+ * @include See documentation for [doc:findAll].
+ * @properties The properties you want to set on the object (can also be passed in as named arguments).
+ * @reload See documentation for [doc:findAll].
+ * @parameterize See documentation for [doc:findAll].
+ * @instantiate Whether or not to instantiate the object(s) first. When objects are not instantiated, any callbacks and validations set on them will be skipped.
+ * @validate See documentation for [doc:save].
+ * @transaction See documentation for [doc:save].
+ * @callbacks See documentation for [doc:findAll].
+ * @includeSoftDeletes See documentation for [doc:findAll].
+ */
 public numeric function updateAll(
 	string where="",
 	string include="",
@@ -34,8 +38,9 @@ public numeric function updateAll(
 	arguments.where = $cleanInList(arguments.where);
 	arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,reload,parameterize,instantiate,validate,transaction,callbacks,includeSoftDeletes", setOnModel=false);
 
-	// find and instantiate each object and call its update function
 	if (arguments.instantiate) {
+
+		// Find and instantiate each object and call its update function.
 		local.rv = 0;
 		local.objects = findAll(where=arguments.where, include=arguments.include, reload=arguments.reload, parameterize=arguments.parameterize, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes, returnIncluded=false, returnAs="objects");
 		local.iEnd = ArrayLen(local.objects);
@@ -44,6 +49,7 @@ public numeric function updateAll(
 				local.rv++;
 			}
 		}
+
 	} else {
 		arguments.sql = [];
 		ArrayAppend(arguments.sql, "UPDATE #tableName()# SET");
@@ -65,19 +71,21 @@ public numeric function updateAll(
 }
 
 /**
-* Finds the object with the supplied key and saves it (if validation permits it) with the supplied properties and/or named arguments. Property names and values can be passed in either using named arguments or as a struct to the properties argument. Returns true if the object was found and updated successfully, false otherwise.
-*
-* [section: Model Class]
-* [category: Update Functions]
-*
-* @key Primary key value(s) of the record to fetch. Separate with comma if passing in multiple primary key values. Accepts a string, list, or a numeric value.
-* @properties The properties you want to set on the object (can also be passed in as named arguments).
-* @reload Set to true to force Wheels to query the database even though an identical query may have been run in the same request. (The default in Wheels is to get the second query from the request-level cache.)
-* @validate Set to false to skip validations for this operation.
-* @transaction Set this to commit to update the database when the save has completed, rollback to run all the database queries but not commit them, or none to skip transaction handling altogether.
-* @callbacks Set to false to disable callbacks for this operation.
-* @includeSoftDeletes You can set this argument to true to include soft-deleted records in the results.
-*/
+ * Finds the object with the supplied `key` and saves it (if validation permits it) with the supplied `properties` and / or named arguments.
+ * Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.
+ * Returns `true` if the object was found and updated successfully, `false` otherwise.
+ *
+ * [section: Model Class]
+ * [category: Update Functions]
+ *
+ * @key Primary key value(s) of the record to fetch. Separate with comma if passing in multiple primary key values. Accepts a string, list, or a numeric value.
+ * @properties The properties you want to set on the object (can also be passed in as named arguments).
+ * @reload See documentation for [doc:findAll].
+ * @validate See documentation for [doc:save].
+ * @transaction See documentation for [doc:save].
+ * @callbacks See documentation for [doc:findAll].
+ * @includeSoftDeletes See documentation for [doc:findAll].
+ */
 public boolean function updateByKey(
 	required any key,
 	struct properties={},
@@ -96,20 +104,21 @@ public boolean function updateByKey(
 
 
 /**
-* Gets an object based on the arguments used and updates it with the supplied properties. Returns true if an object was found and updated successfully, false otherwise.
-*
-* [section: Model Class]
-* [category: Update Functions]
-*
-* @where This argument maps to the WHERE clause of the query. The following operators are supported: =, !=, <>, <, <=, >, >=, LIKE, NOT LIKE, IN, NOT IN, IS NULL, IS NOT NULL, AND, and `OR. (Note that the key words need to be written in upper case.) You can also use parentheses to group statements. You do not need to specify the table name(s); Wheels will do that for you.
-* @order Maps to the ORDER BY clause of the query. You do not need to specify the table name(s); Wheels will do that for you.
-* @properties The properties you want to set on the object (can also be passed in as named arguments).
-* @reload Set to true to force Wheels to query the database even though an identical query may have been run in the same request. (The default in Wheels is to get the second query from the request-level cache.)
-* @validate Set to false to skip validations for this operation.
-* @transaction Set this to commit to update the database when the save has completed, rollback to run all the database queries but not commit them, or none to skip transaction handling altogether.
-* @callbacks Set to false to disable callbacks for this operation.
-* @includeSoftDeletesYou can set this argument to true to include soft-deleted records in the results.
-*/
+ * Gets an object based on the arguments used and updates it with the supplied `properties`.
+ * Returns `true` if an object was found and updated successfully, `false` otherwise.
+ *
+ * [section: Model Class]
+ * [category: Update Functions]
+ *
+ * @where See documentation for [doc:findAll].
+ * @order See documentation for [doc:findAll].
+ * @properties The properties you want to set on the object (can also be passed in as named arguments).
+ * @reload See documentation for [doc:findAll].
+ * @validate See documentation for [doc:save].
+ * @transaction See documentation for [doc:save].
+ * @callbacks See documentation for [doc:findAll].
+ * @includeSoftDeletesYou can set this argument to true to include soft-deleted records in the results.
+ */
 public boolean function updateOne(
 	string where="",
 	string order="",
@@ -136,20 +145,20 @@ public boolean function updateOne(
 	}
 }
 
-
 /**
-* Updates the object with the supplied properties and saves it to the database. Returns true if the object was saved successfully to the database and false otherwise.
-*
-* [section: Model Object]
-* [category: CRUD Functions]
-*
-* @properties The properties you want to set on the object (can also be passed in as named arguments).
-* @parameterize Set to true to use cfqueryparam on all columns, or pass in a list of property names to use cfqueryparam on those only.
-* @reload Set to true to force Wheels to query the database even though an identical query may have been run in the same request. (The default in Wheels is to get the second query from the request-level cache.)
-* @validate Set to false to skip validations for this operation.
-* @transcation Set this to commit to update the database when the save has completed, rollback to run all the database queries but not commit them, or none to skip transaction handling altogether.
-* @callbacks Set to false to disable callbacks for this operation.
-*/
+ * Updates the object with the supplied `properties` and saves it to the database.
+ * Returns `true` if the object was saved successfully to the database and `false` otherwise.
+ *
+ * [section: Model Object]
+ * [category: CRUD Functions]
+ *
+ * @properties The properties you want to set on the object (can also be passed in as named arguments).
+ * @parameterize See documentation for [doc:findAll].
+ * @reload See documentation for [doc:findAll].
+ * @validate See documentation for [doc:save].
+ * @transaction See documentation for [doc:save].
+ * @callbacks See documentation for [doc:findAll].
+ */
 public boolean function update(
 	struct properties={},
 	any parameterize,
@@ -171,18 +180,20 @@ public boolean function update(
 		validate=arguments.validate
 	);
 }
+
 /**
-* Updates a single property and saves the record without going through the normal validation procedure. This is especially useful for boolean flags on existing records.
-*
-* [section: Model Object]
-* [category: CRUD Functions]
-*
-* @property Name of the property to update the value for globally.
-* @value Value to set on the given property globally.
-* @parameterize Set to true to use cfqueryparam on all columns, or pass in a list of property names to use cfqueryparam on those only.
-* @transaction Set this to commit to update the database when the save has completed, rollback to run all the database queries but not commit them, or none to skip transaction handling altogether.
-* @callbacks Set to false to disable callbacks for this operation.
-*/
+ * Updates a single `property` and saves the record without going through the normal validation procedure.
+ * This is especially useful for boolean flags on existing records.
+ *
+ * [section: Model Object]
+ * [category: CRUD Functions]
+ *
+ * @property Name of the property to update the value for globally.
+ * @value Value to set on the given property globally.
+ * @parameterize See documentation for [doc:findAll].
+ * @transaction See documentation for [doc:save].
+ * @callbacks See documentation for [doc:findAll].
+ */
 public boolean function updateProperty(
 	string property,
 	any value,
@@ -215,6 +226,7 @@ public numeric function $updateAll() {
  * Internal function.
  **/
 public boolean function $update(required any parameterize, required boolean reload) {
+
 	// Perform update if changes have been made.
 	if (hasChanged()) {
 		if (variables.wheels.class.timeStampingOnUpdate) {
@@ -222,6 +234,7 @@ public boolean function $update(required any parameterize, required boolean relo
 		}
 		local.sql = [];
 		ArrayAppend(local.sql, "UPDATE #tableName()# SET ");
+
 		// Include all changed non-key values in the update.
 		for (local.key in variables.wheels.class.properties) {
 			if (StructKeyExists(this, local.key) && !ListFindNoCase(primaryKeys(), local.key) && hasChanged(local.key)) {
@@ -231,6 +244,7 @@ public boolean function $update(required any parameterize, required boolean relo
 				ArrayAppend(local.sql, ",");
 			}
 		}
+
 		// Submit the update if we generated an SQL SET statement.
 		if (ArrayLen(local.sql) > 1) {
 			ArrayDeleteAt(local.sql, ArrayLen(local.sql));
@@ -241,7 +255,9 @@ public boolean function $update(required any parameterize, required boolean relo
 				this.reload();
 			}
 		}
+
 	}
+
 	return true;
 }
 

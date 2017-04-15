@@ -1,20 +1,20 @@
 <cfscript>
+
 /**
-* Creates a new object, saves it to the database (if the validation permits it), and returns it.
-* If the validation fails, the unsaved object (with errors added to it) is still returned.
-* Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.
-*
-* [section: Model Class]
-* [category: Create Functions]
-*
-* @properties See documentation for [doc:new].
-* @parameterize See documentation for [doc:findAll].
-* @reload See documentation for [doc:save].
-* @validate See documentation for [doc:save].
-* @transaction See documentation for [doc:save].
-* @callbacks See documentation for [doc:save].
-*
-*/
+ * Creates a new object, saves it to the database (if the validation permits it), and returns it.
+ * If the validation fails, the unsaved object (with errors added to it) is still returned.
+ * Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.
+ *
+ * [section: Model Class]
+ * [category: Create Functions]
+ *
+ * @properties See documentation for [doc:new].
+ * @parameterize See documentation for [doc:findAll].
+ * @reload See documentation for [doc:findAll].
+ * @validate See documentation for [doc:save].
+ * @transaction See documentation for [doc:save].
+ * @callbacks See documentation for [doc:findAll].
+ */
 public any function create(
 	struct properties={},
 	any parameterize,
@@ -40,17 +40,16 @@ public any function create(
 }
 
 /**
-* Creates a new object based on supplied properties and returns it.
-* The object is not saved to the database, it only exists in memory.
-* Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.
-*
-* [section: Model Class]
-* [category: Create Functions]
-*
-* @properties The properties you want to set on the object (can also be passed in as named arguments).
-* @callbacks See documentation for [doc:save].
-*
-*/
+ * Creates a new object based on supplied `properties` and returns it.
+ * The object is not saved to the database, it only exists in memory.
+ * Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.
+ *
+ * [section: Model Class]
+ * [category: Create Functions]
+ *
+ * @properties The properties you want to set on the object (can also be passed in as named arguments).
+ * @callbacks See documentation for [doc:findAll].
+ */
 public any function new(struct properties={}, boolean callbacks=true) {
 	arguments.properties = $setProperties(
 		argumentCollection=arguments,
@@ -63,19 +62,18 @@ public any function new(struct properties={}, boolean callbacks=true) {
 }
 
 /**
-* Saves the object if it passes validation and callbacks.
-* Returns `true` if the object was saved successfully to the database, `false` if not.
-*
-* [section: Model Class]
-* [category: CRUD Functions]
-*
-* @parameterize See documentation for [doc:findAll].
-* @reload Set to `true` to reload the object from the database once an insert / update has completed.
-* @validate Set to `false` to skip validations for this operation.
-* @transaction Set this to `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.
-* @callbacks Set to `false` to disable callbacks for this operation.
-*
-*/
+ * Saves the object if it passes validation and callbacks.
+ * Returns `true` if the object was saved successfully to the database, `false` if not.
+ *
+ * [section: Model Class]
+ * [category: CRUD Functions]
+ *
+ * @parameterize See documentation for [doc:findAll].
+ * @reload See documentation for [doc:findAll].
+ * @validate Set to `false` to skip validations for this operation.
+ * @transaction Set this to `commit` to update the database, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.
+ * @callbacks See documentation for [doc:findAll].
+ */
 public boolean function save(
 	any parameterize,
 	boolean reload,
@@ -89,7 +87,6 @@ public boolean function save(
 }
 
 /**
- * Internal function.
  * Creates a new object instance.
  * Called from the new function above.
  * Also called from findByKey, findOne and findAll when returnAs is object(s).
@@ -130,7 +127,6 @@ public any function $createInstance(
 }
 
 /**
- * Internal function.
  * Creates a new record in the database or update it if it already exists.
  * Also set associations and run all related callbacks.
  * Called from the save function above (inside a transaction).
@@ -181,7 +177,6 @@ public boolean function $save(
 }
 
 /**
- * Internal function.
  * Create an INSERT statement and run to create the record.
  */
 public boolean function $create(required any parameterize, required boolean reload) {

@@ -285,7 +285,7 @@ public void function validatesPresenceOf(
 * @scope One or more properties by which to limit the scope of the uniqueness constraint.
 * @condition String expression to be evaluated that decides if validation will be run (if the expression returns true, validation will run).
 * @unless String expression to be evaluated that decides if validation will be run (if the expression returns false, validation will run).
-* @includeSoftDeletes Whether to take records deleted using "Soft Delete" into account when performing the uniqueness check.
+* @includeSoftDeletes See documentation for [doc:findAll].
 */
 public void function validatesUniquenessOf(
 	string properties="",
@@ -303,13 +303,14 @@ public void function validatesUniquenessOf(
 }
 
 /**
-* Runs the validation on the object and returns true if it passes it. Wheels will run the validation process automatically whenever an object is saved to the database, but sometimes it's useful to be able to run this method to see if the object is valid without saving it to the database.
-*
-* [section: Model Object]
-* [category: Error Functions ]
-*
-* @callbacks Set to false to disable callbacks for this operation.
-*/
+ * Runs the validation on the object and returns `true` if it passes it.
+ * CFWheels will run the validation process automatically whenever an object is saved to the database, but sometimes it's useful to be able to run this method to see if the object is valid without saving it to the database.
+ *
+ * [section: Model Object]
+ * [category: Error Functions ]
+ *
+ * @callbacks See documentation for [doc:findAll].
+ */
 public boolean function valid(boolean callbacks="true") {
 	local.rv = false;
 	clearErrors();

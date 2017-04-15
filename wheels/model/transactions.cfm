@@ -7,7 +7,7 @@
  * [category: Miscellaneous Functions]
  *
  * @method Model method to run.
- * @transaction Set this to commit to update the database when the save has completed, rollback to run all the database queries but not commit them, or none to skip transaction handling altogether.
+ * @transaction See documentation for [doc:save].
  * @isolation Isolation level to be passed through to the cftransaction tag. See your CFML engine's documentation for more details about cftransaction's isolation attribute.
  */
 public any function invokeWithTransaction(

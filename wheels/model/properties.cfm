@@ -273,15 +273,15 @@ public boolean function toggle(required string property, boolean save) {
 }
 
 /**
-* Returns a structure of all the properties with their names as keys and the values of the property as values.
-*
-* [section: Model Object]
-* [category: Miscellaneous Functions]
-*
-* @returnIncludedAs Return included Nested Properties as Objects or Structs
-* @returnIncluded Whether to return Nested Properties or not
-*/
-public struct function properties(string returnIncludedAs = "struct", boolean returnIncluded = true) {
+ * Returns a structure of all the properties with their names as keys and the values of the property as values.
+ *
+ * [section: Model Object]
+ * [category: Miscellaneous Functions]
+ *
+ * @returnIncludedAs Return included nested properties as objects or structs.
+ * @returnIncluded Whether to return nested properties or not.
+ */
+public struct function properties(string returnIncludedAs="struct", boolean returnIncluded=true) {
 	local.rv = {};
 	local.returnIncludedAs = singularize(arguments.returnIncludedAs);
 	// loop through all properties and functions in the this scope

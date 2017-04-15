@@ -6,7 +6,7 @@
  * [section: Model Class]
  * [category: Read Functions]
  *
- * @where This argument maps to the `WHERE` clause of the query. The following operators are supported: `=`, `!=`, `<>`, `<`, `<=`, `>`, `>=`, `LIKE`, `NOT LIKE`, `IN`, `NOT IN`, `IS NULL`, `IS NOT NULL`, `AND`, and `OR` (note that the key words need to be written in upper case). You can also use parentheses to group statements. You do not need to specify the table name(s); CFWheels will do that for you. Instead of using the `where` argument, you can create cleaner code by making use of a concept called Dynamic Finders.
+ * @where Maps to the `WHERE` clause of the query. The following operators are supported: `=`, `!=`, `<>`, `<`, `<=`, `>`, `>=`, `LIKE`, `NOT LIKE`, `IN`, `NOT IN`, `IS NULL`, `IS NOT NULL`, `AND`, and `OR` (note that the key words need to be written in upper case). You can also use parentheses to group statements. You do not need to specify the table name(s); CFWheels will do that for you.
  * @order Maps to the `ORDER` BY clause of the query. You do not need to specify the table name(s); CFWheels will do that for you.
  * @group Maps to the `GROUP BY` clause of the query. You do not need to specify the table name(s); CFWheels will do that for you.
  * @select Determines how the `SELECT` clause for the query used to return data will look. You can pass in a list of the properties (which map to columns) that you want returned from your table(s). If you don't set this argument at all, CFWheels will select all properties from your table(s). If you specify a table name (e.g. `users.email`) or alias a column (e.g. `fn AS firstName`) in the list, then the entire list will be passed through unchanged and used in the `SELECT` clause of the query. By default, all column names in tables joined via the `include` argument will be prepended with the singular version of the included table name.
@@ -22,8 +22,8 @@
  * @parameterize Set to `true` to use `cfqueryparam` on all columns, or pass in a list of property names to use `cfqueryparam` on those only.
  * @returnAs Set to `objects` to return an array of objects, set to `structs` to return an array of structs, or set to `query` to return a query result set.
  * @returnIncluded When `returnAs` is set to `objects`, you can set this argument to `false` to prevent returning objects fetched from associations specified in the `include` argument. This is useful when you only need to include associations for use in the `WHERE` clause only and want to avoid the performance hit that comes with object creation.
- * @callbacks You can set this argument to `false` to prevent running the execution of callbacks for a method call.
- * @includeSoftDeletes You can set this argument to `true` to include soft-deleted records in the results.
+ * @callbacks Set to `false` to disable callbacks for this method.
+ * @includeSoftDeletes Set to `true` to include soft-deleted records in the queries that this method runs.
  */
 public any function findAll(
 	string where="",
