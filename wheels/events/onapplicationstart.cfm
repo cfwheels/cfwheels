@@ -222,6 +222,7 @@ public void function onApplicationStart() {
 	application.$wheels.automaticValidations = true;
 	application.$wheels.setUpdatedAtOnCreate = true;
 	application.$wheels.useExpandedColumnAliases = false;
+	application.$wheels.lowerCaseTableNames = false;
 	application.$wheels.modelRequireConfig = false;
 	application.$wheels.showIncompatiblePlugins = true;
 	application.$wheels.booleanAttributes = "allowfullscreen,async,autofocus,autoplay,checked,compact,controls,declare,default,defaultchecked,defaultmuted,defaultselected,defer,disabled,draggable,enabled,formnovalidate,hidden,indeterminate,inert,ismap,itemscope,loop,multiple,muted,nohref,noresize,noshade,novalidate,nowrap,open,pauseonexit,readonly,required,reversed,scoped,seamless,selected,sortable,spellcheck,translate,truespeed,typemustmatch,visible";

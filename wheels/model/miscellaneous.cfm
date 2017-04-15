@@ -150,7 +150,11 @@ public string function primaryKeys(numeric position=0) {
 * [category: Miscellaneous Functions]
 */
 public string function tableName() {
-	return variables.wheels.class.tableName;
+	if ($get("lowerCaseTableNames")) {
+		return LCase(variables.wheels.class.tableName);
+	} else {
+		return variables.wheels.class.tableName;
+	}
 }
 
 /**
