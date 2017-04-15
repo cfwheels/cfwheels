@@ -1,7 +1,8 @@
 <cfscript>
 
 /**
- * Returns records from the database table mapped to this model according to the arguments passed in (use the `where` argument to decide which records to get, use the `order` argument to set the order in which those records should be returned, and so on). The records will be returned as either a `cfquery` result set, an array of objects, or an array of structs (depending on what the `returnAs` argument is set to).
+ * Returns records from the database table mapped to this model according to the arguments passed in (use the `where` argument to decide which records to get, use the `order` argument to set the order in which those records should be returned, and so on).
+ * The records will be returned as either a `cfquery` result set, an array of objects, or an array of structs (depending on what the `returnAs` argument is set to).
  *
  * [section: Model Class]
  * [category: Read Functions]
@@ -252,7 +253,9 @@ public any function findAll(
 }
 
 /**
- * Fetches the requested record by primary key and returns it as an object. Returns `false` if no record is found. You can override this behavior to return a `cfquery` result set instead, similar to what's described in the documentation for `findOne()`.
+ * Fetches the requested record by primary key and returns it as an object.
+ * Returns `false` if no record is found.
+ * You can override this behavior to return a `cfquery` result set instead, similar to what's described in the documentation for `findOne()`.
  *
  * [section: Model Class]
  * [category: Read Functions]
@@ -295,7 +298,9 @@ public any function findByKey(
 }
 
 /**
- * Fetches the first record found based on the `WHERE` and `ORDER BY` clauses. With the default settings (i.e. the `returnAs` argument set to `object`), a model object will be returned if the record is found and the boolean value `false` if not. Instead of using the `where` argument, you can create cleaner code by making use of a concept called Dynamic Finders.
+ * Fetches the first record found based on the `WHERE` and `ORDER BY` clauses.
+ * With the default settings (i.e. the `returnAs` argument set to `object`), a model object will be returned if the record is found and the boolean value `false` if not.
+ * Instead of using the `where` argument, you can create cleaner code by making use of a concept called Dynamic Finders.
  *
  * [section: Model Class]
  * [category: Read Functions]
@@ -350,7 +355,9 @@ public any function findOne(
 }
 
 /**
- * Fetches the first record ordered by primary key value. Use the `property` argument to order by something else. Returns a model object.
+ * Fetches the first record ordered by primary key value.
+ * Use the `property` argument to order by something else.
+ * Returns a model object.
  *
  * [section: Model Class]
  * [category: Read Functions]
@@ -371,7 +378,9 @@ public any function findFirst(string property="#primaryKey()#", string $sort="AS
 }
 
 /**
- * Fetches the last record ordered by primary key value. Use the `property` argument to order by something else. Returns a model object.
+ * Fetches the last record ordered by primary key value.
+ * Use the `property` argument to order by something else.
+ * Returns a model object.
  *
  * [section: Model Class]
  * [category: Read Functions]
@@ -384,7 +393,8 @@ public any function findLast(string property) {
 }
 
 /**
- * Returns all primary key values in a list. In addition to `quoted` and `delimiter` you can pass in any argument that `findAll()` accepts.
+ * Returns all primary key values in a list.
+ * In addition to `quoted` and `delimiter` you can pass in any argument that `findAll()` accepts.
  *
  * [section: Model Class]
  * [category: Read Functions]
@@ -431,7 +441,6 @@ public void function reload() {
 }
 
 /**
- * Internal function.
  * Set what variable name to use for the query (shows in debugging output for example).
  */
 public void function $setDebugName(required struct args) {

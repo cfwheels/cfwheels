@@ -92,7 +92,7 @@ public any function invokeWithTransaction(
 }
 
 /**
- * Internal Function
+ * Internal function.
  */
 public string function $hashedConnectionArgs() {
 	return Hash(variables.wheels.class.dataSource & variables.wheels.class.username & variables.wheels.class.password);

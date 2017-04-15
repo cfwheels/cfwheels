@@ -1,10 +1,11 @@
 <cfscript>
+
 /**
-* This function is not designed to be called directly from your code, but provides functionality for dyanmic finders such as `findOneByEmail()`
-*
-* [section: Model Class]
-* [category: Miscellaneous Functions]
-*/
+ * This method is not designed to be called directly from your code, but provides functionality for dyanmic finders such as `findOneByEmail()`
+ *
+ * [section: Model Class]
+ * [category: Miscellaneous Functions]
+ */
 public any function onMissingMethod(required string missingMethodName, required struct missingMethodArguments) {
 	if (Right(arguments.missingMethodName, 10) == "hasChanged" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "hasChanged", ""))) {
 		local.rv = hasChanged(property=ReplaceNoCase(arguments.missingMethodName, "hasChanged", ""));
@@ -108,8 +109,8 @@ public any function onMissingMethod(required string missingMethodName, required 
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public any function $findOrCreateBy() {
 	// default save to true but set to passed in value if it exists and then delete from arguments
 	local.save = true;
@@ -153,8 +154,8 @@ public any function $findOrCreateBy() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $dynamicFinderOperator(required string property) {
 	if (StructKeyExists(variables.wheels.class.properties, arguments.property) && variables.wheels.class.properties[arguments.property].dataType == "text") {
 		return "LIKE";
@@ -164,8 +165,8 @@ public string function $dynamicFinderOperator(required string property) {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public any function $associationMethod() {
 	for (local.key in variables.wheels.class.associations) {
 		local.method = "";
@@ -404,8 +405,8 @@ public any function $associationMethod() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $propertyValue(required string name) {
 	local.rv = "";
 	local.iEnd = ListLen(arguments.name);
@@ -417,8 +418,8 @@ public string function $propertyValue(required string name) {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public void function $setForeignKeyValues(
 	required struct missingMethodArguments,
 	required string keys,

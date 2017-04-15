@@ -1,7 +1,8 @@
 <cfscript>
+
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public any function $initModelClass(required string name, required string path) {
 	variables.wheels = {};
 	variables.wheels.errors = [];
@@ -10,7 +11,7 @@ public any function $initModelClass(required string name, required string path) 
 	variables.wheels.class.modelId = Hash(GetMetaData(this).name);
 	variables.wheels.class.path = arguments.path;
 
-	// if our name has pathing in it, remove it and add it to the end of of the $class.path variable
+	// If our name has pathing in it, remove it and add it to the end of of the $class.path variable.
 	if (Find("/", arguments.name)) {
 		variables.wheels.class.modelName = ListLast(arguments.name, "/");
 		variables.wheels.class.path = ListAppend(arguments.path, ListDeleteAt(arguments.name, ListLen(arguments.name, "/"), "/"), "/");
@@ -47,7 +48,7 @@ public any function $initModelClass(required string name, required string path) 
 	variables.wheels.class.columnList = "";
 	variables.wheels.class.calculatedPropertyList = "";
 
-	// run developer's config method if it exists
+	// Run developer's config method if it exists.
 	if (StructKeyExists(variables, "config")) {
 		config();
 	} else if ($get("modelRequireConfig")) {
@@ -58,7 +59,7 @@ public any function $initModelClass(required string name, required string path) 
 		);
 	}
 
-	// make sure that the tablename has the respected prefix
+	// Make sure that the tablename has the respected prefix.
 	table(getTableNamePrefix() & tableName());
 
 	if (!IsBoolean(variables.wheels.class.tableName) || variables.wheels.class.tableName) {
@@ -211,8 +212,8 @@ public any function $initModelClass(required string name, required string path) 
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public any function $assignAdapter() {
 	if ($get("showErrorInformation")) {
 		try {
@@ -263,8 +264,8 @@ public any function $assignAdapter() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public any function $initModelObject(
 	required string name,
 	required any properties,
@@ -308,22 +309,22 @@ public any function $initModelObject(
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public struct function $classData() {
 	return variables.wheels.class;
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public boolean function $softDeletion() {
 	return variables.wheels.class.softDeletion;
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $softDeleteColumn() {
 	return variables.wheels.class.softDeleteColumn;
 }

@@ -20,8 +20,8 @@ public void function addError(required string property, required string message,
  * [section: Model Object]
  * [category: Error Functions]
  *
- * @message The error message (such as "Please enter a correct name in the form field" for example).
- * @name A name to identify the error by (useful when you need to distinguish one error from another one set on the same object and you don't want to use the error message itself for that).
+ * @message See documentation for [doc:addError].
+ * @name See documentation for [doc:addError].
  */
 public void function addErrorToBase(required string message, string name="") {
 	arguments.property = "";
@@ -86,7 +86,7 @@ public numeric function errorCount(string property="", string name="") {
  * [category: Error Functions]
  *
  * @property Specify the property name to return errors for here.
- * @name If you want to return only errors on the above property set with a specific error name you can specify it here.
+ * @name If you want to return only errors on the property set with a specific error name you can specify it here.
  */
 public array function errorsOn(required string property, string name="") {
 	local.rv = [];
@@ -106,7 +106,7 @@ public array function errorsOn(required string property, string name="") {
  * [section: Model Object]
  * [category: Error Functions]
  *
- * @name Specify an error name here to only return errors for that error name.*
+ * @name Specify an error name here to only return errors for that error name.
  */
 public array function errorsOnBase(string name="") {
 	arguments.property = "";

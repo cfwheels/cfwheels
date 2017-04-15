@@ -1,72 +1,76 @@
 <cfscript>
+
 /**
-* Whether or not to enable default validations for this model.
-*
-* [section: Model Configuration]
-* [category: Validation Functions ]
-*
-* @value Set to true or false.
-*/
+ * Whether or not to enable default validations for this model.
+ *
+ * [section: Model Configuration]
+ * [category: Validation Functions ]
+ *
+ * @value Set to `true` or `false`.
+ */
 public void function automaticValidations(required boolean value) {
 	variables.wheels.class.automaticValidations = arguments.value;
 }
 
 /**
-* Registers method(s) that should be called to validate objects before they are saved.
-*
-* [section: Model Configuration]
-* [category: Validation Functions ]
-*
-* @methods Method name or list of method names to call. (Can also be called with the method argument.)
-* @condition See documentation for [doc:validatesConfirmationOf].
-* @unless See documentation for [doc:validatesConfirmationOf].
-* @when See documentation for [doc:validatesConfirmationOf].
-*/
+ * Registers method(s) that should be called to validate objects before they are saved.
+ *
+ * [section: Model Configuration]
+ * [category: Validation Functions ]
+ *
+ * @methods Method name or list of method names to call. Can also be called with the `method` argument.
+ * @condition See documentation for [doc:validatesConfirmationOf].
+ * @unless See documentation for [doc:validatesConfirmationOf].
+ * @when See documentation for [doc:validatesConfirmationOf].
+ */
 public void function validate(string methods="", string condition="", string unless="", string when="onSave") {
 	$registerValidation(argumentCollection=arguments);
 }
 
 /**
-* Registers method(s) that should be called to validate new objects before they are inserted.
-*
-* [section: Model Configuration]
-* [category: Validation Functions ]
-*
-* @methods See documentation for [doc:validate].
-* @condition See documentation for [doc:validatesConfirmationOf].
-* @unless See documentation for [doc:validatesConfirmationOf].
-*
-*/
+ * Registers method(s) that should be called to validate new objects before they are inserted.
+ *
+ * [section: Model Configuration]
+ * [category: Validation Functions ]
+ *
+ * @methods See documentation for [doc:validate].
+ * @condition See documentation for [doc:validatesConfirmationOf].
+ * @unless See documentation for [doc:validatesConfirmationOf].
+ */
 public void function validateOnCreate(string methods="", string condition="", string unless="") {
 	$registerValidation(when="onCreate", argumentCollection=arguments);
 }
 
 /**
-* Registers method(s) that should be called to validate existing objects before they are updated.
-*
-* [section: Model Configuration]
-* [category: Validation Functions ]
-*
-* @methods See documentation for [doc:validate].
-* @condition See documentation for [doc:validatesConfirmationOf].
-* @unless See documentation for [doc:validatesConfirmationOf].
-*/
+ * Registers method(s) that should be called to validate existing objects before they are updated.
+ *
+ * [section: Model Configuration]
+ * [category: Validation Functions ]
+ *
+ * @methods See documentation for [doc:validate].
+ * @condition See documentation for [doc:validatesConfirmationOf].
+ * @unless See documentation for [doc:validatesConfirmationOf].
+ */
 public void function validateOnUpdate(string methods="", string condition="", string unless="") {
 	$registerValidation(when="onUpdate", argumentCollection=arguments);
 }
 
 /**
-* Validates that the value of the specified property also has an identical confirmation value. (This is common when having a user type in their email address a second time to confirm, confirming a password by typing it a second time, etc.) The confirmation value only exists temporarily and never gets saved to the database. By convention, the confirmation property has to be named the same as the property with "Confirmation" appended at the end. Using the password example, to confirm our password property, we would create a property called passwordConfirmation.
-*
-* [section: Model Configuration]
-* [category: Validation Functions]
-*
-* @properties Name of property or list of property names to validate against (can also be called with the property argument).
-* @message should match confirmation Supply a custom error message here to override the built-in one.
-* @when Pass in onCreate or onUpdate to limit when this validation occurs (by default validation will occur on both create and update, i.e. onSave).
-* @condition String expression to be evaluated that decides if validation will be run (if the expression returns true validation will run).
-* @unless String expression to be evaluated that decides if validation will be run (if the expression returns false validation will run).
-*/
+ * Validates that the value of the specified property also has an identical confirmation value.
+ * This is common when having a user type in their email address a second time to confirm, confirming a password by typing it a second time, etc.
+ * The confirmation value only exists temporarily and never gets saved to the database.
+ * By convention, the confirmation property has to be named the same as the property with "Confirmation" appended at the end.
+ * Using the password example, to confirm our password property, we would create a property called `passwordConfirmation`.
+ *
+ * [section: Model Configuration]
+ * [category: Validation Functions]
+ *
+ * @properties Name of property or list of property names to validate against (can also be called with the `property` argument).
+ * @message Supply a custom error message here to override the built-in one.
+ * @when Pass in `onCreate` or `onUpdate` to limit when this validation occurs (by default validation will occur on both create and update, i.e. `onSave`).
+ * @condition String expression to be evaluated that decides if validation will be run (if the expression returns `true` validation will run).
+ * @unless String expression to be evaluated that decides if validation will be run (if the expression returns `false` validation will run).
+ */
 public void function validatesConfirmationOf(
 	string properties="",
 	string message,
@@ -79,19 +83,19 @@ public void function validatesConfirmationOf(
 }
 
 /**
-* Validates that the value of the specified property does not exist in the supplied list.
-*
-* [section: Model Configuration]
-* [category: Validation Functions ]
-*
-* @properties See documentation for [doc:validatesConfirmationOf].
-* @list Single value or list of values that should not be allowed.
-* @message is reserved See documentation for [doc:validatesConfirmationOf].
-* @when See documentation for [doc:validatesConfirmationOf].
-* @allowBlank If set to true, validation will be skipped if the property value is an empty string or doesn't exist at all. This is useful if you only want to run this validation after it passes the validatesPresenceOf test, thus avoiding duplicate error messages if it doesn't.
-* @condition See documentation for [doc:validatesConfirmationOf].
-* @unless See documentation for [doc:validatesConfirmationOf].
-*/
+ * Validates that the value of the specified property does not exist in the supplied list.
+ *
+ * [section: Model Configuration]
+ * [category: Validation Functions ]
+ *
+ * @properties See documentation for [doc:validatesConfirmationOf].
+ * @list Single value or list of values that should not be allowed.
+ * @message See documentation for [doc:validatesConfirmationOf].
+ * @when See documentation for [doc:validatesConfirmationOf].
+ * @allowBlank If set to `true`, validation will be skipped if the property value is an empty string or doesn't exist at all. This is useful if you only want to run this validation after it passes the `validatesPresenceOf` test, thus avoiding duplicate error messages if it doesn't.
+ * @condition See documentation for [doc:validatesConfirmationOf].
+ * @unless See documentation for [doc:validatesConfirmationOf].
+ */
 public void function validatesExclusionOf(
 	string properties="",
 	required string list,
@@ -107,20 +111,20 @@ public void function validatesExclusionOf(
 }
 
 /**
-* Validates that the value of the specified property is formatted correctly by matching it against a regular expression using the regEx argument and/or against a built-in CFML validation type using the type argument (creditcard, date, email, etc.).
-*
-* [section: Model Configuration]
-* [category: Validation Functions ]
-*
-* @properties Name of property or list of property names to validate against (can also be called with the property argument).
-* @regEx Regular expression to verify against.
-* @type One of the following types to verify against: creditcard, date, email, eurodate, guid, social_security_number, ssn, telephone, time, URL, USdate, UUID, variableName, zipcode (will be passed through to your CFML engine's IsValid() function).
-* @message Supply a custom error message here to override the built-in one.
-* @when Pass in onCreate or onUpdate to limit when this validation occurs (by default validation will occur on both create and update, i.e. onSave).
-* @allowBlank If set to true, validation will be skipped if the property value is an empty string or doesn't exist at all. This is useful if you only want to run this validation after it passes the validatesPresenceOf test, thus avoiding duplicate error messages if it doesn't.
-* @condition String expression to be evaluated that decides if validation will be run. (If the expression returns true, validation will run.)
-* @unless String expression to be evaluated that decides if validation will be run. (If the expression returns false, validation will run.)
-*/
+ * Validates that the value of the specified property is formatted correctly by matching it against a regular expression using the regEx argument and / or against a built-in CFML validation type using the type argument (creditcard, date, email, etc.).
+ *
+ * [section: Model Configuration]
+ * [category: Validation Functions ]
+ *
+ * @properties See documentation for [doc:validatesConfirmationOf].
+ * @regEx Regular expression to verify against.
+ * @type One of the following types to verify against: creditcard, date, email, eurodate, guid, social_security_number, ssn, telephone, time, URL, USdate, UUID, variableName, zipcode (will be passed through to your CFML engine's IsValid() function).
+ * @message See documentation for [doc:validatesConfirmationOf].
+ * @when See documentation for [doc:validatesConfirmationOf].
+ * @allowBlank See documentation for [doc:validatesExclusionOf].
+ * @condition See documentation for [doc:validatesConfirmationOf].
+ * @unless See documentation for [doc:validatesConfirmationOf].
+ */
 public void function validatesFormatOf(
 	string properties="",
 	string regEx="",
@@ -145,19 +149,19 @@ public void function validatesFormatOf(
 }
 
 /**
-* Validates that the value of the specified property exists in the supplied list.
-*
-* [section: Model Configuration]
-* [category: Validation Functions ]
-*
-* @properties Name of property or list of property names to validate against (can also be called with the property argument).
-* @list List of allowed values.
-* @message Supply a custom error message here to override the built-in one.
-* @when Pass in onCreate or onUpdate to limit when this validation occurs (by default validation will occur on both create and update, i.e. onSave).
-* @allowBlankIf set to true, validation will be skipped if the property value is an empty string or doesn't exist at all. This is useful if you only want to run this validation after it passes the validatesPresenceOf test, thus avoiding duplicate error messages if it doesn't.
-* @condition String expression to be evaluated that decides if validation will be run (if the expression returns true validation will run).
-* @unless String expression to be evaluated that decides if validation will be run (if the expression returns false validation will run).
-*/
+ * Validates that the value of the specified property exists in the supplied list.
+ *
+ * [section: Model Configuration]
+ * [category: Validation Functions ]
+ *
+ * @properties See documentation for [doc:validatesConfirmationOf].
+ * @list List of allowed values.
+ * @message See documentation for [doc:validatesConfirmationOf].
+ * @when See documentation for [doc:validatesConfirmationOf].
+ * @allowBlank See documentation for [doc:validatesExclusionOf].
+ * @condition See documentation for [doc:validatesConfirmationOf].
+ * @unless See documentation for [doc:validatesConfirmationOf].
+ */
 public void function validatesInclusionOf(
 	string properties="",
 	required string list,
@@ -173,22 +177,23 @@ public void function validatesInclusionOf(
 }
 
 /**
-* Validates that the value of the specified property matches the length requirements supplied. Use the exactly, maximum, minimum and within arguments to specify the length requirements.
-*
-* [section: Model Configuration]
-* [category: Validation Functions ]
-*
-* @properties Name of property or list of property names to validate against (can also be called with the property argument).
-* @message Supply a custom error message here to override the built-in one.
-* @when Pass in onCreate or onUpdate to limit when this validation occurs (by default validation will occur on both create and update, i.e. onSave).
-* @allowBlank If set to true, validation will be skipped if the property value is an empty string or doesn't exist at all. This is useful if you only want to run this validation after it passes the validatesPresenceOf test, thus avoiding duplicate error messages if it doesn't.
-* @exactly The exact length that the property value must be.
-* @maximum The maximum length that the property value can be.
-* @minimum The minimum length that the property value can be.
-* @within A list of two values (minimum and maximum) that the length of the property value must fall within.
-* @condition String expression to be evaluated that decides if validation will be run (if the expression returns true validation will run).
-* @unless String expression to be evaluated that decides if validation will be run (if the expression returns false validation will run).
-*/
+ * Validates that the value of the specified property matches the length requirements supplied.
+ * Use the `exactly`, `maximum`, `minimum` and `within` arguments to specify the length requirements.
+ *
+ * [section: Model Configuration]
+ * [category: Validation Functions ]
+ *
+ * @properties See documentation for [doc:validatesConfirmationOf].
+ * @message See documentation for [doc:validatesConfirmationOf].
+ * @when See documentation for [doc:validatesConfirmationOf].
+ * @allowBlank See documentation for [doc:validatesExclusionOf].
+ * @exactly The exact length that the property value must be.
+ * @maximum The maximum length that the property value can be.
+ * @minimum The minimum length that the property value can be.
+ * @within A list of two values (minimum and maximum) that the length of the property value must fall within.
+ * @condition See documentation for [doc:validatesConfirmationOf].
+ * @unless See documentation for [doc:validatesConfirmationOf].
+ */
 public void function validatesLengthOf(
 	string properties="",
 	string message,
@@ -209,26 +214,26 @@ public void function validatesLengthOf(
 }
 
 /**
-* Validates that the value of the specified property is numeric.
-*
-* [section: Model Configuration]
-* [category: Validation Functions ]
-*
-* @properties See documentation for [doc:validatesConfirmationOf].
-* @message See documentation for [doc:validatesConfirmationOf].
-* @when See documentation for [doc:validatesConfirmationOf].
-* @allowBlank See documentation for [doc:validatesExclusionOf].
-* @onlyInteger Specifies whether the property value must be an integer.
-* @condition See documentation for [doc:validatesConfirmationOf].
-* @unless See documentation for [doc:validatesConfirmationOf].
-* @oddSpecifies whether or not the value must be an odd number.
-* @evenSpecifies whether or not the value must be an even number.
-* @greaterThan Specifies whether or not the value must be greater than the supplied value.
-* @greaterThanOrEqualTo Specifies whether or not the value must be greater than or equal the supplied value.
-* @equalTo Specifies whether or not the value must be equal to the supplied value.
-* @lessThan Specifies whether or not the value must be less than the supplied value.
-* @lessThanOrEqualTo Specifies whether or not the value must be less than or equal the supplied value.
-*/
+ * Validates that the value of the specified property is numeric.
+ *
+ * [section: Model Configuration]
+ * [category: Validation Functions ]
+ *
+ * @properties See documentation for [doc:validatesConfirmationOf].
+ * @message See documentation for [doc:validatesConfirmationOf].
+ * @when See documentation for [doc:validatesConfirmationOf].
+ * @allowBlank See documentation for [doc:validatesExclusionOf].
+ * @onlyInteger Specifies whether the property value must be an integer.
+ * @condition See documentation for [doc:validatesConfirmationOf].
+ * @unless See documentation for [doc:validatesConfirmationOf].
+ * @oddSpecifies whether or not the value must be an odd number.
+ * @evenSpecifies whether or not the value must be an even number.
+ * @greaterThan Specifies whether or not the value must be greater than the supplied value.
+ * @greaterThanOrEqualTo Specifies whether or not the value must be greater than or equal the supplied value.
+ * @equalTo Specifies whether or not the value must be equal to the supplied value.
+ * @lessThan Specifies whether or not the value must be less than the supplied value.
+ * @lessThanOrEqualTo Specifies whether or not the value must be less than or equal the supplied value.
+ */
 public void function validatesNumericalityOf(
 	string properties="",
 	string message,
@@ -250,17 +255,17 @@ public void function validatesNumericalityOf(
 }
 
 /**
-* Validates that the specified property exists and that its value is not blank.
-*
-* [section: Model Configuration]
-* [category: Validation Functions ]
-*
-* @properties See documentation for [doc:validatesConfirmationOf].
-* @message See documentation for [doc:validatesConfirmationOf].
-* @when See documentation for [doc:validatesConfirmationOf].
-* @condition See documentation for [doc:validatesConfirmationOf].
-* @unless See documentation for [doc:validatesConfirmationOf].
-*/
+ * Validates that the specified property exists and that its value is not blank.
+ *
+ * [section: Model Configuration]
+ * [category: Validation Functions ]
+ *
+ * @properties See documentation for [doc:validatesConfirmationOf].
+ * @message See documentation for [doc:validatesConfirmationOf].
+ * @when See documentation for [doc:validatesConfirmationOf].
+ * @condition See documentation for [doc:validatesConfirmationOf].
+ * @unless See documentation for [doc:validatesConfirmationOf].
+ */
 public void function validatesPresenceOf(
 	string properties="",
 	string message,
@@ -273,20 +278,23 @@ public void function validatesPresenceOf(
 }
 
 /**
-* Validates that the value of the specified property is unique in the database table. Useful for ensuring that two users can't sign up to a website with identical usernames for example. When a new record is created, a check is made to make sure that no record already exists in the database table with the given value for the specified property. When the record is updated, the same check is made but disregarding the record itself.
-*
-* [section: Model Configuration]
-* [category: Validation Functions ]
-*
-* @properties Name of property or list of property names to validate against (can also be called with the property argument).
-* @message Supply a custom error message here to override the built-in one.
-* @when Pass in onCreate or onUpdate to limit when this validation occurs (by default, validation will occur on both create and update, i.e. onSave).
-* @allowBlank If set to true, validation will be skipped if the property value is an empty string or doesn't exist at all. This is useful if you only want to run this validation after it passes the validatesPresenceOf test, thus avoiding duplicate error messages if it doesn't.
-* @scope One or more properties by which to limit the scope of the uniqueness constraint.
-* @condition String expression to be evaluated that decides if validation will be run (if the expression returns true, validation will run).
-* @unless String expression to be evaluated that decides if validation will be run (if the expression returns false, validation will run).
-* @includeSoftDeletes See documentation for [doc:findAll].
-*/
+ * Validates that the value of the specified property is unique in the database table.
+ * Useful for ensuring that two users can't sign up to a website with identical usernames for example.
+ * When a new record is created, a check is made to make sure that no record already exists in the database table with the given value for the specified property.
+ * When the record is updated, the same check is made but disregarding the record itself.
+ *
+ * [section: Model Configuration]
+ * [category: Validation Functions ]
+ *
+ * @properties See documentation for [doc:validatesConfirmationOf].
+ * @message See documentation for [doc:validatesConfirmationOf].
+ * @when See documentation for [doc:validatesConfirmationOf].
+ * @allowBlank See documentation for [doc:validatesExclusionOf].
+ * @scope One or more properties by which to limit the scope of the uniqueness constraint.
+ * @condition See documentation for [doc:validatesConfirmationOf].
+ * @unless See documentation for [doc:validatesConfirmationOf].
+ * @includeSoftDeletes See documentation for [doc:findAll].
+ */
 public void function validatesUniquenessOf(
 	string properties="",
 	string message,
@@ -328,7 +336,6 @@ public boolean function valid(boolean callbacks="true") {
 	$validateAssociations(callbacks=arguments.callbacks);
 	return local.rv;
 }
-
 
 /**
  * Called from the high level validation helpers to register the validation in the class struct of the model.
@@ -377,8 +384,8 @@ public void function $registerValidation(required string when) {
 }
 
 /**
-* Internal Function
-**/
+ * Internal function.
+ **/
 public string function $validationErrorMessage(required string property, required string message) {
 	local.rv = arguments.message;
 	// evaluate the error message if it contains pound signs
@@ -406,7 +413,8 @@ public string function $validationErrorMessage(required string property, require
 }
 
 /**
- * Runs all the validation methods setup on the object and adds errors as it finds them. Returns `true` if no errors were added, `false` otherwise.
+ * Runs all the validation methods setup on the object and adds errors as it finds them.
+ * Returns true if no errors were added, false otherwise.
  */
 public boolean function $validate(required string type, boolean execute="true") {
 	// don't run any validations when we want to skip
@@ -481,7 +489,7 @@ public boolean function $evaluateCondition() {
 }
 
 /**
- * Adds an error if the object property fail to pass the validation setup in the @validatesConfirmationOf method.
+ * Adds an error if the object property fail to pass the validation setup in the validatesConfirmationOf method.
  */
 public void function $validatesConfirmationOf() {
 	local.virtualConfirmProperty = arguments.property & "Confirmation";
@@ -491,7 +499,7 @@ public void function $validatesConfirmationOf() {
 }
 
 /**
- * Adds an error if the object property fail to pass the validation setup in the @validatesExclusionOf method.
+ * Adds an error if the object property fail to pass the validation setup in the validatesExclusionOf method.
  */
 public void function $validatesExclusionOf() {
 	if (ListFindNoCase(arguments.list, this[arguments.property])) {
@@ -500,7 +508,7 @@ public void function $validatesExclusionOf() {
 }
 
 /**
- * Adds an error if the object property fail to pass the validation setup in the @validatesFormatOf method.
+ * Adds an error if the object property fail to pass the validation setup in the validatesFormatOf method.
  */
 public void function $validatesFormatOf() {
 	if ((Len(arguments.regEx) && !REFindNoCase(arguments.regEx, this[arguments.property])) || (Len(arguments.type) && !IsValid(arguments.type, this[arguments.property]))) {
@@ -509,7 +517,7 @@ public void function $validatesFormatOf() {
 }
 
 /**
- * Adds an error if the object property fail to pass the validation setup in the @validatesInclusionOf method.
+ * Adds an error if the object property fail to pass the validation setup in the validatesInclusionOf method.
  */
 public void function $validatesInclusionOf() {
 	if (!ListFindNoCase(arguments.list, this[arguments.property])) {
@@ -518,7 +526,7 @@ public void function $validatesInclusionOf() {
 }
 
 /**
- * Adds an error if the object property fail to pass the validation setup in the @validatesPresenceOf method.
+ * Adds an error if the object property fail to pass the validation setup in the validatesPresenceOf method.
  */
 public void function $validatesPresenceOf(
 	required string property,
@@ -532,7 +540,7 @@ public void function $validatesPresenceOf(
 }
 
 /**
- * Adds an error if the object property fail to pass the validation setup in the @validatesLengthOf method.
+ * Adds an error if the object property fail to pass the validation setup in the validatesLengthOf method.
  */
 public void function $validatesLengthOf(
 	required string property,
@@ -557,7 +565,7 @@ public void function $validatesLengthOf(
 }
 
 /**
- * Adds an error if the object property fail to pass the validation setup in the @validatesNumericalityOf method.
+ * Adds an error if the object property fail to pass the validation setup in the validatesNumericalityOf method.
  */
 public void function $validatesNumericalityOf() {
 	if (!IsNumeric(this[arguments.property]) || (arguments.onlyInteger && Round(this[arguments.property]) != this[arguments.property]) || (IsNumeric(arguments.greaterThan) && this[arguments.property] <= arguments.greaterThan) || (IsNumeric(arguments.greaterThanOrEqualTo) && this[arguments.property] < arguments.greaterThanOrEqualTo) || (IsNumeric(arguments.equalTo) && this[arguments.property] != arguments.equalTo) || (IsNumeric(arguments.lessThan) && this[arguments.property] >= arguments.lessThan) || (IsNumeric(arguments.lessThanOrEqualTo) && this[arguments.property] > arguments.lessThanOrEqualTo) || (IsBoolean(arguments.odd) && arguments.odd && !BitAnd(this[arguments.property], 1)) || (IsBoolean(arguments.even) && arguments.even && BitAnd(this[arguments.property], 1))) {
@@ -566,7 +574,7 @@ public void function $validatesNumericalityOf() {
 }
 
 /**
- * Adds an error if the object property fail to pass the validation setup in the @validatesUniquenessOf method.
+ * Adds an error if the object property fail to pass the validation setup in the validatesUniquenessOf method.
  */
 public void function $validatesUniquenessOf(
 	required string property,
@@ -613,8 +621,8 @@ public void function $validatesUniquenessOf(
 }
 
 /**
-* Internal Function
-**/
+ * Internal function.
+ **/
 public boolean function $validationExists(required string property, required string validation) {
 	// checks to see if a validation has been created for a property
 	local.rv = false;
