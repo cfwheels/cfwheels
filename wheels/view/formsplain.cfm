@@ -1,6 +1,8 @@
 <cfscript>
+
 /**
- * Builds and returns a string containing a text field form control based on the supplied name. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
+ * Builds and returns a string containing a text field form control based on the supplied name.
+ * Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
  *
  * [section: View Helpers]
  * [category: Form Tag Functions]
@@ -36,7 +38,8 @@ public string function textFieldTag(
 }
 
 /**
- * Builds and returns a string containing a password field form control based on the supplied name. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
+ * Builds and returns a string containing a password field form control based on the supplied name.
+ * Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
  *
  * [section: View Helpers]
  * [category: Form Tag Functions]
@@ -49,7 +52,6 @@ public string function textFieldTag(
  * @append See documentation for [doc:textField].
  * @prependToLabel See documentation for [doc:textField].
  * @appendToLabel See documentation for [doc:textField].
- *
  */
 public string function passwordFieldTag(
 	required string name,
@@ -71,7 +73,8 @@ public string function passwordFieldTag(
 }
 
 /**
- * Builds and returns a string containing a hidden field form control based on the supplied name. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
+ * Builds and returns a string containing a hidden field form control based on the supplied name.
+ * Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
  *
  * [section: View Helpers]
  * [category: Form Tag Functions]
@@ -92,7 +95,8 @@ public string function hiddenFieldTag(
 }
 
 /**
- * Builds and returns a string containing a file form control based on the supplied name. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
+ * Builds and returns a string containing a file form control based on the supplied name.
+ * Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
  *
  * [section: View Helpers]
  * [category: Form Tag Functions]
@@ -123,7 +127,8 @@ public string function fileFieldTag(
 }
 
 /**
- * Builds and returns a string containing a text area form control based on the supplied name. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
+ * Builds and returns a string containing a text area form control based on the supplied name.
+ * Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
  *
  * [section: View Helpers]
  * [category: Form Tag Functions]
@@ -157,7 +162,8 @@ public string function textAreaTag(
 }
 
 /**
- * Builds and returns a string containing a radio button form control based on the supplied name. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
+ * Builds and returns a string containing a radio button form control based on the supplied name.
+ * Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
  *
  * [section: View Helpers]
  * [category: Form Tag Functions]
@@ -202,7 +208,8 @@ public string function radioButtonTag(
 }
 
 /**
- * Builds and returns a string containing a check box form control based on the supplied name. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
+ * Builds and returns a string containing a check box form control based on the supplied name.
+ * Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
  *
  * [section: View Helpers]
  * [category: Form Tag Functions]
@@ -256,7 +263,8 @@ public string function checkBoxTag(
 }
 
 /**
- * Builds and returns a string containing a select form control based on the supplied name and options. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
+ * Builds and returns a string containing a select form control based on the supplied name and options.
+ * Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
  *
  * [section: View Helpers]
  * [category: Form Tag Functions]

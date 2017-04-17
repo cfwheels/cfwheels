@@ -1,14 +1,15 @@
 <cfscript>
+
 /**
- * Builds and returns a list (ul tag with a default class of errorMessages) containing all the error messages for all the properties of the object (if any). Returns an empty string otherwise.
+ * Builds and returns a list (`ul` tag with a default `class` of `errorMessages`) containing all the error messages for all the properties of the object.
+ * Returns an empty string if no errors exist.
  *
  * [section: View Helpers]
  * [category: Error Functions]
  *
  * @objectName The variable name of the object to display error messages for.
- * @class CSS class to set on the ul element.
+ * @class CSS `class` to set on the `ul` element.
  * @showDuplicates Whether or not to show duplicate error messages.
- *
  */
 public string function errorMessagesFor(required string objectName, string class, boolean showDuplicates) {
 	$args(name="errorMessagesFor", args=arguments);
@@ -37,8 +38,10 @@ public string function errorMessagesFor(required string objectName, string class
 	}
 	return local.rv;
 }
+
 /**
- * Returns the error message, if one exists, on the object's property. If multiple error messages exist, the first one is returned.
+ * Returns the error message, if one exists, on the object's property.
+ * If multiple error messages exist, the first one is returned.
  *
  * [section: View Helpers]
  * [category: Error Functions]
@@ -48,8 +51,7 @@ public string function errorMessagesFor(required string objectName, string class
  * @prependText String to prepend to the error message.
  * @appendText String to append to the error message.
  * @wrapperElement HTML element to wrap the error message in.
- * @class CSS class to set on the wrapper element.
- *
+ * @class CSS `class` to set on the wrapper element.
  */
 public string function errorMessageOn(
 	required string objectName,

@@ -1,17 +1,16 @@
 <cfscript>
 
 /**
- * Returns a link tag for a stylesheet (or several) based on the supplied arguments.
+ * Returns a `link` tag for a stylesheet (or several) based on the supplied arguments.
  *
  * [section: View Helpers]
  * [category: Asset Functions]
  *
- * @sources The name of one or many CSS files in the stylesheets folder, minus the .css extension (can also be called with the source argument). Pass a full URL to generate a tag for an external style sheet.
- * @type The type attribute for the link tag.
- * @media The media attribute for the link tag.
- * @head Set to `true` to place the output in the head area of the HTML page instead of the default behavior (which is to place the output where the function is called from).
- * @delim The delimiter to use for the list of stylesheets.
- *
+ * @sources The name of one or many CSS files in the stylesheets folder, minus the `.css` extension. Pass a full URL to generate a tag for an external style sheet. Can also be called with the `source` argument.
+ * @type The `type` attribute for the `link` tag.
+ * @media The `media` attribute for the `link` tag.
+ * @head Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior (which is to place the output where the function is called from).
+ * @delim The delimiter to use for the list of CSS files.
  */
 public string function styleSheetLinkTag(string sources="", string type, string media, string head, string delim=",") {
 	$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
@@ -50,16 +49,15 @@ public string function styleSheetLinkTag(string sources="", string type, string 
 }
 
 /**
- * Returns a script tag for a JavaScript file (or several) based on the supplied arguments.
+ * Returns a `script` tag for a JavaScript file (or several) based on the supplied arguments.
  *
  * [section: View Helpers]
  * [category: Asset Functions]
  *
- * @sources The name of one or many JavaScript files in the javascripts folder, minus the .js extension (can also be called with the source argument). Pass a full URL to access an external JavaScript file.
- * @type The type attribute for the script tag.
- * @head Set to true to place the output in the head area of the HTML page instead of the default behavior, which is to place the output where the function is called from.
- * @delim The delimiter to use for the list of javascripts.
- *
+ * @sources The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. Pass a full URL to access an external JavaScript file. Can also be called with the `source` argument.
+ * @type The `type` attribute for the `script` tag.
+ * @head Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior (which is to place the output where the function is called from).
+ * @delim The delimiter to use for the list of JavaScript files.
  */
 public string function javaScriptIncludeTag(string sources="", string type, string head, string delim=",") {
 	$args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
@@ -95,14 +93,13 @@ public string function javaScriptIncludeTag(string sources="", string type, stri
 
 /**
  * Returns an `img` tag.
- * If the image is stored in the local images folder, the tag will also set the `width`, `height`, and `alt` attributes for you.
+ * If the image is stored in the local `images` folder, the tag will also set the `width`, `height`, and `alt` attributes for you.
  * You can pass any additional arguments (e.g. `class`, `rel`, `id`), and the generated tag will also include those values as HTML attributes.
  *
  * [section: View Helpers]
  * [category: Asset Functions]
  *
  * @source The file name of the image if it's available in the local file system (i.e. ColdFusion will be able to access it). Provide the full URL if the image is on a remote server.
- *
  */
 public string function imageTag(required string source, boolean onlyPath, string host, string protocol, numeric port) {
 	$args(name="imageTag", reserved="src", args=arguments);
@@ -143,7 +140,6 @@ public string function imageTag(required string source, boolean onlyPath, string
 }
 
 /**
- * Internal function.
  * Calls $imageTag and adds the result to the cache.
  * Called from the imageTag function above if images are set to be cached and the image is not already in the cache.
  */
@@ -154,7 +150,6 @@ public string function $addImageTagToCache() {
 }
 
 /**
- * Internal function.
  * Called from the imageTag function above to do all of the work (create the tag, get width / height using cfimage etc).
  */
 public string function $imageTag() {
@@ -220,7 +215,6 @@ public string function $imageTag() {
 }
 
 /**
- * Internal function.
  * Appends a query string to the asset (a new query string is created on each app reload).
  * Used to force local browser caches to refresh when there is an update to assets (CSS, JavaScript etc).
  */

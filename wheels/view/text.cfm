@@ -1,14 +1,14 @@
 <cfscript>
 
 /**
- * Turns all URLs and email addresses into hyperlinks.
+ * Turns all URLs and email addresses into links.
  *
  * [section: View Helpers]
  * [category: Text Functions]
  *
  * @text The text to create links in.
- * @link Whether to link URLs, email addresses or both. Possible values are: all (default), URLs and emailAddresses.
- * @relative Should we autolink relative urls.
+ * @link Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`.
+ * @relative Should we auto-link relative urls.
  *
  */
 public string function autoLink(required string text, string link, boolean relative=true) {
@@ -36,7 +36,6 @@ public string function autoLink(required string text, string link, boolean relat
 }
 
 /**
- * Internal function.
  * Called from the autoLink function.
  */
 public string function $autoLinkLoop(required string text, required string regex, string protocol="") {
@@ -76,8 +75,7 @@ public string function $autoLinkLoop(required string text, required string regex
  * @text The text to extract an excerpt from.
  * @phrase The phrase to extract.
  * @radius Number of characters to extract surrounding the phrase.
- * @excerptString String to replace first and/or last characters with.
- *
+ * @excerptString String to replace first and / or last characters with.
  */
 public string function excerpt(required string text, required string phrase, numeric radius, string excerptString) {
 	$args(name="excerpt", args=arguments);
@@ -113,7 +111,7 @@ public string function excerpt(required string text, required string phrase, num
 }
 
 /**
- * Highlights the phrase(s) everywhere in the text if found by wrapping it in a span tag.
+ * Highlights the phrase(s) everywhere in the text if found by wrapping it in a `span` tag.
  *
  * [section: View Helpers]
  * [category: Text Functions]
@@ -123,7 +121,6 @@ public string function excerpt(required string text, required string phrase, num
  * @delimiter Delimiter to use in phrases argument.
  * @tag HTML tag to use to wrap the highlighted phrase(s).
  * @class Class to use in the tags wrapping highlighted phrase(s).
- *
  */
 public string function highlight(
 	required string text,
@@ -175,8 +172,7 @@ public string function highlight(
  * [category: Text Functions]
  *
  * @text The text to format.
- * @wrap Set to true to wrap the result in a paragraph.
- *
+ * @wrap Set to `true` to wrap the result in a paragraph.
  */
 public string function simpleFormat(required string text, boolean wrap) {
 	$args(name="simpleFormat", args=arguments);
@@ -202,7 +198,6 @@ public string function simpleFormat(required string text, boolean wrap) {
  * [category: Text Functions]
  *
  * @word The text to turn into a title.
- *
  */
 public string function titleize(required string word) {
 	local.rv = "";
@@ -222,7 +217,6 @@ public string function titleize(required string word) {
  * @text The text to truncate.
  * @length Length to truncate the text to.
  * @truncateString String to replace the last characters with.
- *
  */
 public string function truncate(required string text, numeric length, string truncateString) {
 	$args(name="truncate", args=arguments);
@@ -243,7 +237,6 @@ public string function truncate(required string text, numeric length, string tru
  * @text The text to truncate.
  * @length Number of words to truncate the text to.
  * @truncateString String to replace the last characters with.
- *
  */
 public string function wordTruncate(required string text, numeric length, string truncateString) {
 	$args(name="wordTruncate", args=arguments);
