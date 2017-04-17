@@ -150,7 +150,8 @@ public any function findAll(
 		if (arguments.returnAs == "query") {
 
 			// We want to return an empty query but still include the column names.
-			// Get those using the usual function for it and then remove table names and calculated property SQL.
+			// Get those using the usual function for it and then remove table names, aliases and calculated property SQL.
+			// E.g. users.name -> name, createdAt AS userCreatedAt -> userCreatedAt, (MAX(table.col)) AS x -> x.
 			local.columns = $createSQLFieldList(
 				clause="select",
 				include=arguments.include,
@@ -159,6 +160,7 @@ public any function findAll(
 				returnAs=arguments.returnAs
 			);
 			local.columns = REReplace(local.columns, "\w*?\.([\w\s]*?)(,|$)", "\1\2", "all");
+			local.columns = REReplace(local.columns, "\w*?\sAS\s([\w\s]*?)(,|$)", "\1\2", "all");
 			local.columns = REReplace(local.columns, "\(.*?\)\sAS\s([\w\s]*?)(,|$)", "\1\2", "all");
 			local.rv = QueryNew(local.columns);
 
