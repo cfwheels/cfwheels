@@ -6,8 +6,7 @@ public void function onMissingTemplate(required targetpage) {
 }
 
 public void function $runOnMissingTemplate(required targetpage) {
-	if (!application.wheels.showErrorInformation)
-	{
+	if (!application.wheels.showErrorInformation) {
 		$header(statusCode=404, statustext="Not Found");
 	}
 	$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
