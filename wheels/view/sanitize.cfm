@@ -7,7 +7,6 @@
  * [category: Sanitization Functions]
  *
  * @html The HTML to remove links from.
- *
  */
 public string function stripLinks(required string html) {
 	return REReplaceNoCase(arguments.html, "<a.*?>(.*?)</a>", "\1" , "all");
@@ -20,7 +19,6 @@ public string function stripLinks(required string html) {
  * [category: Sanitization Functions]
  *
  * @html The HTML to remove tag markup from.
- *
  */
 public string function stripTags(required string html) {
 	local.rv = REReplaceNoCase(arguments.html, "<\ *[a-z].*?>", "", "all");

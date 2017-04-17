@@ -1,13 +1,13 @@
 <cfscript>
+
 /**
- * Builds and returns a string containing the closing form tag.
+ * Builds and returns a string containing the closing `form` tag.
  *
  * [section: View Helpers]
  * [category: General Form Functions]
  *
  * @prepend See documentation for [doc:textField]
  * @append See documentation for [doc:textField]
- *
  */
 public string function endFormTag(string prepend, string append) {
 	$args(name="endFormTag", args=arguments);
@@ -16,15 +16,18 @@ public string function endFormTag(string prepend, string append) {
 	}
 	return arguments.prepend & "</form>" & arguments.append;
 }
+
 /**
- * Builds and returns a string containing the opening form tag. The form's action will be built according to the same rules as URLFor. Note: Pass any additional arguments like class, rel, and id, and the generated tag will also include those values as HTML attributes.
+ * Builds and returns a string containing the opening `form` tag.
+ * The form's action will be built according to the same rules as `URLFor`.
+ * Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
  *
  * [section: View Helpers]
  * [category: General Form Functions]
  *
- * @method The type of method to use in the form tag. get and post are the options.
- * @multipart Set to true if the form should be able to upload files.
- * @route Name of a route that you have configured in config/routes.cfm.
+ * @method The type of `method` to use in the `form` tag (`get` and `post` are the options).
+ * @multipart Set to `true` if the form should be able to upload files.
+ * @route Name of a route that you have configured in `config/routes.cfm`.
  * @controller Name of the controller to include in the URL.
  * @action Name of the action to include in the URL.
  * @key Key(s) to include in the URL.
@@ -36,7 +39,6 @@ public string function endFormTag(string prepend, string append) {
  * @port Set this to override the current port number.
  * @prepend String to prepend to the form control. Useful to wrap the form control with HTML tags.
  * @append String to append to the form control. Useful to wrap the form control with HTML tags.
- *
  */
 public string function startFormTag(
 	string method,
@@ -126,16 +128,16 @@ public string function startFormTag(
 }
 
 /**
- * Builds and returns a string containing a submit button form control. Note: Pass any additional arguments like class, rel, and id, and the generated tag will also include those values as HTML attributes.
+ * Builds and returns a string containing a submit button form control.
+ * Note: Pass any additional arguments like class, rel, and id, and the generated tag will also include those values as HTML attributes.
  *
  * [section: View Helpers]
  * [category: General Form Functions]
  *
- * @value Save changes Message to display in the button form control.
+ * @value Message to display in the button form control.
  * @image File name of the image file to use in the button form control.
  * @prepend See documentation for [doc:textField]
  * @append See documentation for [doc:textField]
- *
  */
 public string function submitTag(
 	string value,
@@ -170,13 +172,12 @@ public string function submitTag(
  * [section: View Helpers]
  * [category: General Form Functions]
  *
- * @content Save changes Content to display inside the button.
- * @type The type for the button: button, reset, or submit.
+ * @content Content to display inside the button.
+ * @type The type for the button: `button`, `reset`, or `submit`.
  * @value The value of the button when submitted.
  * @image File name of the image file to use in the button form control.
  * @prepend See documentation for [doc:textField]
  * @append See documentation for [doc:textField]
- *
  */
 public string function buttonTag(
 	string content,

@@ -1,13 +1,14 @@
 <cfscript>
+
 /**
  * Displays a marked-up listing of messages that exist in the Flash.
  *
  * [section: View Helpers]
  * [category: Miscellaneous Functions]
  *
- * @keys The key (or list of keys) to show the value for. You can also use the key argument instead for better readability when accessing a single key.
- * @class HTML class to set on the div element that contains the messages.
- * @includeEmptyContainer Includes the div container even if the Flash is empty.
+ * @keys The key (or list of keys) to show the value for. You can also use the `key` argument instead for better readability when accessing a single key.
+ * @class HTML `class` to set on the `div` element that contains the messages.
+ * @includeEmptyContainer Includes the `div` container even if the Flash is empty.
  * @lowerCaseDynamicClassValues Outputs all class attribute values in lower case (except the main one).
  */
 public string function flashMessages(
@@ -54,20 +55,21 @@ public string function flashMessages(
 }
 
 /**
- * Used to store a section's output for rendering within a layout. This content store acts as a stack, so you can store multiple pieces of content for a given section.
+ * Used to store a section's output for rendering within a layout.
+ * This content store acts as a stack, so you can store multiple pieces of content for a given section.
  *
  * [section: View Helpers]
  * [category: Miscellaneous Functions]
  *
- * @position The position in the section's stack where you want the content placed. Valid values are first, last, or the numeric position.
- * @overwrite Whether or not to overwrite any of the content. Valid values are false, true, or all.
+ * @position The position in the section's stack where you want the content placed. Valid values are `first`, `last`, or the numeric position.
+ * @overwrite Whether or not to overwrite any of the content. Valid values are `false`, `true`, or `all`.
  */
 public void function contentFor(any position="last", any overwrite="false") {
 
 	// position in the array for the content
 	local.position = "last";
 
-	//should we overwrite or insert into the array
+	// should we overwrite or insert into the array
 	local.overwrite = "false";
 
 	// extract optional arguments
@@ -131,7 +133,8 @@ public void function contentFor(any position="last", any overwrite="false") {
 }
 
 /**
- * Includes the contents of another layout file. This is usually used to include a parent layout from within a child layout.
+ * Includes the contents of another layout file.
+ * This is usually used to include a parent layout from within a child layout.
  *
  * [section: View Helpers]
  * [category: Miscellaneous Functions]
@@ -146,15 +149,18 @@ public string function includeLayout(string name="layout") {
 }
 
 /**
- * Includes the specified partial file in the view. Similar to using cfinclude but with the ability to cache the result and use Wheels-specific file look-up. By default, CFWheels will look for the file in the current controller's view folder. To include a file relative from the base views folder, you can start the path supplied to name with a forward slash.
+ * Includes the specified partial file in the view.
+ * Similar to using `cfinclude` but with the ability to cache the result and use CFWheels-specific file look-up.
+ * By default, CFWheels will look for the file in the current controller's view folder.
+ * To include a file relative from the base `views` folder, you can start the path supplied to `partial` with a forward slash.
  *
  * [section: View Helpers]
  * [category: Miscellaneous Functions]
  *
- * @partial The name of the partial file to be used. Prefix with a leading slash / if you need to build a path from the root views folder. Do not include the partial filename's underscore and file extension. If you want to have CFWheels display the partial for a single model object, array of model objects, or a query, pass a variable containing that data into this argument.
+ * @partial The name of the partial file to be used. Prefix with a leading slash (`/`) if you need to build a path from the root `views` folder. Do not include the partial filename's underscore and file extension. If you want to have CFWheels display the partial for a single model object, array of model objects, or a query, pass a variable containing that data into this argument.
  * @group If passing a query result set for the partial argument, use this to specify the field to group the query by. A new query will be passed into the partial template for you to iterate over.
  * @cache Number of minutes to cache the content for.
- * @layout The layout to wrap the content in. Prefix with a leading slash / if you need to build a path from the root views folder. Pass false to not load a layout at all.
+ * @layout The layout to wrap the content in. Prefix with a leading slash (`/`) if you need to build a path from the root `views` folder. Pass `false` to not load a layout at all.
  * @spacer HTML or string to place between partials when called using a query.
  * @dataFunction Name of controller function to load data from.
  * @query If you want to have CFWheels display the partial for each record in a query record set but want to override the name of the file referenced, provide the template file name for partial and pass the query as a separate query argument.
@@ -179,7 +185,6 @@ public string function includePartial(
  *
  * [section: View Helpers]
  * [category: Miscellaneous Functions]
- *
  */
 public string function contentForLayout() {
 	return includeContent("body");
@@ -206,6 +211,7 @@ public string function includeContent(string name="body", string defaultValue=""
 	}
 	return local.rv;
 }
+
 /**
  * Cycles through list values every time it is called.
  *
@@ -246,8 +252,8 @@ public void function resetCycle(string name="default") {
 }
 
 /**
-* Internal Function
-**/
+ * Internal function.
+ */
 public string function $tag(
 	required string name,
 	struct attributes={},
@@ -289,8 +295,8 @@ public string function $tag(
 }
 
 /**
-* Internal Function
-**/
+ * Internal function.
+ */
 public string function $tagAttribute(required string name, required string value) {
 
 	// For custom data attributes we convert underscores and camel case to hyphens.
@@ -324,8 +330,8 @@ public string function $tagAttribute(required string name, required string value
 }
 
 /**
-* Internal Function
-**/
+ * Internal function.
+ */
 public string function $element(
 	required string name,
 	struct attributes={},
@@ -339,8 +345,8 @@ public string function $element(
 }
 
 /**
-* Internal Function
-**/
+ * Internal function.
+ */
 public any function $objectName(
 	required any objectName,
 	string association="",
@@ -381,8 +387,8 @@ public any function $objectName(
 }
 
 /**
-* Internal Function
-**/
+ * Internal function.
+ */
 public string function $tagId(
 	required any objectName,
 	required string property,
@@ -412,8 +418,8 @@ public string function $tagId(
 }
 
 /**
-* Internal Function
-**/
+ * Internal function.
+ */
 public string function $tagName(required any objectName, required string property) {
 	if (IsSimpleValue(arguments.objectName)) {
 		local.rv = ListLast(arguments.objectName, ".");
@@ -432,8 +438,8 @@ public string function $tagName(required any objectName, required string propert
 }
 
 /**
-* Internal Function
-**/
+ * Internal function.
+ */
 public string function $swapArrayPositionsForIds(required any objectName) {
 	local.rv = arguments.objectName;
 
@@ -457,8 +463,8 @@ public string function $swapArrayPositionsForIds(required any objectName) {
 }
 
 /**
-* Internal Function
-**/
+ * Internal function.
+ */
 public any function $getObject(required string objectname) {
 	try {
 		if (Find(".", arguments.objectName) || Find("[", arguments.objectName)) {
@@ -480,8 +486,8 @@ public any function $getObject(required string objectname) {
 }
 
 /**
-* Internal Function
-**/
+ * Internal function.
+ */
 public struct function $innerArgs(required string name, required struct args) {
 	local.rv = {};
 	local.element = arguments.name;

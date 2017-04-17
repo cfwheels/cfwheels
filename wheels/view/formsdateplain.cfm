@@ -1,29 +1,29 @@
 <cfscript>
 
 /**
-* Builds and returns a string containing three select form controls (month, day, and year) based on a name and value.
-*
-* [section: View Helpers]
-* [category: Form Tag Functions]
-*
-* @name See documentation for [doc:textFieldTag].
-* @selected See documentation for [doc:selectTag].
-* @order See documentation for [doc:dateSelect].
-* @separator See documentation for [doc:dateSelect].
-* @startYear See documentation for [doc:dateSelect].
-* @endYear See documentation for [doc:dateSelect].
-* @monthDisplay See documentation for [doc:dateSelect].
-* @monthNames See documentation for [doc:dateSelect].
-* @monthAbbreviations See documentation for [doc:dateSelect].
-* @includeBlank See documentation for [doc:select].
-* @label See documentation for [doc:dateSelect].
-* @labelPlacement See documentation for [doc:textField].
-* @prepend See documentation for [doc:textField].
-* @append See documentation for [doc:textField].
-* @prependToLabel See documentation for [doc:textField].
-* @appendToLabel See documentation for [doc:textField].
-* @combine See documentation for [doc:dateSelect].
-*/
+ * Builds and returns a string containing three `select` form controls (month, day, and year) based on a name and value.
+ *
+ * [section: View Helpers]
+ * [category: Form Tag Functions]
+ *
+ * @name See documentation for [doc:textFieldTag].
+ * @selected See documentation for [doc:selectTag].
+ * @order See documentation for [doc:dateSelect].
+ * @separator See documentation for [doc:dateSelect].
+ * @startYear See documentation for [doc:dateSelect].
+ * @endYear See documentation for [doc:dateSelect].
+ * @monthDisplay See documentation for [doc:dateSelect].
+ * @monthNames See documentation for [doc:dateSelect].
+ * @monthAbbreviations See documentation for [doc:dateSelect].
+ * @includeBlank See documentation for [doc:select].
+ * @label See documentation for [doc:dateSelect].
+ * @labelPlacement See documentation for [doc:textField].
+ * @prepend See documentation for [doc:textField].
+ * @append See documentation for [doc:textField].
+ * @prependToLabel See documentation for [doc:textField].
+ * @appendToLabel See documentation for [doc:textField].
+ * @combine See documentation for [doc:dateSelect].
+ */
 public string function dateSelectTags(
 	required string name,
 	string selected="",
@@ -55,27 +55,27 @@ public string function dateSelectTags(
 }
 
 /**
-* Builds and returns a string containing three select form controls for hour, minute, and second based on name.
-*
-* [section: View Helpers]
-* [category: Form Tag Functions]
-*
-* @name See documentation for [doc:textFieldTag].
-* @selected See documentation for [doc:selectTag].
-* @order See documentation for [doc:timeSelect].
-* @separator See documentation for [doc:timeSelect].
-* @minuteStep See documentation for [doc:timeSelect].
-* @secondStep See documentation for [doc:timeSelect].
-* @includeBlank See documentation for [doc:select].
-* @label See documentation for [doc:dateSelect].
-* @labelPlacement See documentation for [doc:textField].
-* @prepend See documentation for [doc:textField].
-* @append See documentation for [doc:textField].
-* @prependToLabel See documentation for [doc:textField].
-* @appendToLabel See documentation for [doc:textField].
-* @combine See documentation for [doc:dateSelect].
-* @twelveHour See documentation for [doc:timeSelect].
-*/
+ * Builds and returns a string containing three `select` form controls for hour, minute, and second based on name.
+ *
+ * [section: View Helpers]
+ * [category: Form Tag Functions]
+ *
+ * @name See documentation for [doc:textFieldTag].
+ * @selected See documentation for [doc:selectTag].
+ * @order See documentation for [doc:timeSelect].
+ * @separator See documentation for [doc:timeSelect].
+ * @minuteStep See documentation for [doc:timeSelect].
+ * @secondStep See documentation for [doc:timeSelect].
+ * @includeBlank See documentation for [doc:select].
+ * @label See documentation for [doc:dateSelect].
+ * @labelPlacement See documentation for [doc:textField].
+ * @prepend See documentation for [doc:textField].
+ * @append See documentation for [doc:textField].
+ * @prependToLabel See documentation for [doc:textField].
+ * @appendToLabel See documentation for [doc:textField].
+ * @combine See documentation for [doc:dateSelect].
+ * @twelveHour See documentation for [doc:timeSelect].
+ */
 public string function timeSelectTags(
 	required string name,
 	string selected="",
@@ -104,35 +104,35 @@ public string function timeSelectTags(
 }
 
 /**
-* Builds and returns a string containing six select form controls (three for date selection and the remaining three for time selection) based on a name.
-*
-* [section: View Helpers]
-* [category: Form Tag Functions]
-*
-* @name See documentation for [doc:textFieldTag].
-* @selected See documentation for [doc:selectTag].
-* @dateOrder See documentation for [doc:dateTimeSelect].
-* @dateSeparator See documentation for [doc:dateTimeSelect].
-* @startYear See documentation for [doc:dateSelect].
-* @endYear See documentation for [doc:dateSelect].
-* @monthDisplay See documentation for [doc:dateSelect].
-* @monthNames See documentation for [doc:dateSelect].
-* @monthAbbreviations See documentation for [doc:dateSelect].
-* @timeOrder See documentation for [doc:dateTimeSelect].
-* @timeSeparator See documentation for [doc:dateTimeSelect].
-* @minuteStep See documentation for [doc:timeSelect].
-* @secondStep See documentation for [doc:timeSelect].
-* @separator See documentation for [doc:dateTimeSelect].
-* @includeBlank See documentation for [doc:select].
-* @label See documentation for [doc:dateSelect].
-* @labelPlacement See documentation for [doc:textField].
-* @prepend See documentation for [doc:textField].
-* @append See documentation for [doc:textField].
-* @prependToLabel See documentation for [doc:textField].
-* @appendToLabel See documentation for [doc:textField].
-* @combine See documentation for [doc:dateSelect].
-* @twelveHour See documentation for [doc:timeSelect].
-*/
+ * Builds and returns a string containing six `select` form controls (three for date selection and the remaining three for time selection) based on a name.
+ *
+ * [section: View Helpers]
+ * [category: Form Tag Functions]
+ *
+ * @name See documentation for [doc:textFieldTag].
+ * @selected See documentation for [doc:selectTag].
+ * @dateOrder See documentation for [doc:dateTimeSelect].
+ * @dateSeparator See documentation for [doc:dateTimeSelect].
+ * @startYear See documentation for [doc:dateSelect].
+ * @endYear See documentation for [doc:dateSelect].
+ * @monthDisplay See documentation for [doc:dateSelect].
+ * @monthNames See documentation for [doc:dateSelect].
+ * @monthAbbreviations See documentation for [doc:dateSelect].
+ * @timeOrder See documentation for [doc:dateTimeSelect].
+ * @timeSeparator See documentation for [doc:dateTimeSelect].
+ * @minuteStep See documentation for [doc:timeSelect].
+ * @secondStep See documentation for [doc:timeSelect].
+ * @separator See documentation for [doc:dateTimeSelect].
+ * @includeBlank See documentation for [doc:select].
+ * @label See documentation for [doc:dateSelect].
+ * @labelPlacement See documentation for [doc:textField].
+ * @prepend See documentation for [doc:textField].
+ * @append See documentation for [doc:textField].
+ * @prependToLabel See documentation for [doc:textField].
+ * @appendToLabel See documentation for [doc:textField].
+ * @combine See documentation for [doc:dateSelect].
+ * @twelveHour See documentation for [doc:timeSelect].
+ */
 public string function dateTimeSelectTags(
 	required string name,
 	string selected="",
@@ -195,23 +195,23 @@ public string function dateTimeSelectTags(
 }
 
 /**
-* Builds and returns a string containing a select form control for a range of years based on the supplied name.
-*
-* [section: View Helpers]
-* [category: Form Tag Functions]
-*
-* @name See documentation for [doc:textFieldTag].
-* @selected The year that should be selected initially.
-* @startYear See documentation for [doc:dateSelect].
-* @endYear See documentation for [doc:dateSelect].
-* @includeBlank See documentation for [doc:select].
-* @label See documentation for [doc:textField].
-* @labelPlacement See documentation for [doc:textField].
-* @prepend See documentation for [doc:textField].
-* @append See documentation for [doc:textField].
-* @prependToLabel See documentation for [doc:textField].
-* @appendToLabel See documentation for [doc:textField].
-*/
+ * Builds and returns a string containing a `select` form control for a range of years based on the supplied name.
+ *
+ * [section: View Helpers]
+ * [category: Form Tag Functions]
+ *
+ * @name See documentation for [doc:textFieldTag].
+ * @selected The year that should be selected initially.
+ * @startYear See documentation for [doc:dateSelect].
+ * @endYear See documentation for [doc:dateSelect].
+ * @includeBlank See documentation for [doc:select].
+ * @label See documentation for [doc:textField].
+ * @labelPlacement See documentation for [doc:textField].
+ * @prepend See documentation for [doc:textField].
+ * @append See documentation for [doc:textField].
+ * @prependToLabel See documentation for [doc:textField].
+ * @appendToLabel See documentation for [doc:textField].
+ */
 public string function yearSelectTag(
 	required string name,
 	string selected="",
@@ -235,24 +235,24 @@ public string function yearSelectTag(
 }
 
 /**
-* Builds and returns a string containing a select form control for the months of the year based on the supplied name.
-*
-* [section: View Helpers]
-* [category: Form Tag Functions]
-*
-* @name See documentation for [doc:textFieldTag].
-* @selected The month that should be selected initially.
-* @monthDisplay See documentation for [doc:dateSelect].
-* @monthNames See documentation for [doc:dateSelect].
-* @monthAbbreviations See documentation for [doc:dateSelect].
-* @includeBlank See documentation for [doc:select].
-* @label See documentation for [doc:textField].
-* @labelPlacement around See documentation for [doc:textField].
-* @prepend See documentation for [doc:textField].
-* @append See documentation for [doc:textField].
-* @prependToLabel See documentation for [doc:textField].
-* @appendToLabel See documentation for [doc:textField].
-*/
+ * Builds and returns a string containing a `select` form control for the months of the year based on the supplied name.
+ *
+ * [section: View Helpers]
+ * [category: Form Tag Functions]
+ *
+ * @name See documentation for [doc:textFieldTag].
+ * @selected The month that should be selected initially.
+ * @monthDisplay See documentation for [doc:dateSelect].
+ * @monthNames See documentation for [doc:dateSelect].
+ * @monthAbbreviations See documentation for [doc:dateSelect].
+ * @includeBlank See documentation for [doc:select].
+ * @label See documentation for [doc:textField].
+ * @labelPlacement around See documentation for [doc:textField].
+ * @prepend See documentation for [doc:textField].
+ * @append See documentation for [doc:textField].
+ * @prependToLabel See documentation for [doc:textField].
+ * @appendToLabel See documentation for [doc:textField].
+ */
 public string function monthSelectTag(
 	required string name,
 	string selected="",
@@ -277,21 +277,21 @@ public string function monthSelectTag(
 }
 
 /**
-* Builds and returns a string containing a select form control for the days of the week based on the supplied name.
-*
-* [section: View Helpers]
-* [category: Form Tag Functions]
-*
-* @name See documentation for [doc:textFieldTag].
-* @selected The day that should be selected initially.
-* @includeBlank See documentation for [doc:select].
-* @label See documentation for [doc:textField].
-* @labelPlacement See documentation for [doc:textField].
-* @prepend See documentation for [doc:textField].
-* @append See documentation for [doc:textField].
-* @prependToLabel See documentation for [doc:textField].
-* @appendToLabel See documentation for [doc:textField].
-*/
+ * Builds and returns a string containing a `select` form control for the days of the week based on the supplied name.
+ *
+ * [section: View Helpers]
+ * [category: Form Tag Functions]
+ *
+ * @name See documentation for [doc:textFieldTag].
+ * @selected The day that should be selected initially.
+ * @includeBlank See documentation for [doc:select].
+ * @label See documentation for [doc:textField].
+ * @labelPlacement See documentation for [doc:textField].
+ * @prepend See documentation for [doc:textField].
+ * @append See documentation for [doc:textField].
+ * @prependToLabel See documentation for [doc:textField].
+ * @appendToLabel See documentation for [doc:textField].
+ */
 public string function daySelectTag(
 	required string name,
 	string selected="",
@@ -313,22 +313,22 @@ public string function daySelectTag(
 }
 
 /**
-* Builds and returns a string containing one select form control for the hours of the day based on the supplied name.
-*
-* [section: View Helpers]
-* [category: Form Tag Functions]
-*
-* @name See documentation for [doc:textFieldTag].
-* @selected The day that should be selected initially.
-* @includeBlank See documentation for [doc:select].
-* @label See documentation for [doc:textField].
-* @labelPlacement See documentation for [doc:textField].
-* @prepend See documentation for [doc:textField].
-* @append See documentation for [doc:textField].
-* @prependToLabel See documentation for [doc:textField].
-* @appendToLabel See documentation for [doc:textField].
-* @twelveHour See documentation for [doc:timeSelect].
-*/
+ * Builds and returns a string containing one `select` form control for the hours of the day based on the supplied name.
+ *
+ * [section: View Helpers]
+ * [category: Form Tag Functions]
+ *
+ * @name See documentation for [doc:textFieldTag].
+ * @selected The day that should be selected initially.
+ * @includeBlank See documentation for [doc:select].
+ * @label See documentation for [doc:textField].
+ * @labelPlacement See documentation for [doc:textField].
+ * @prepend See documentation for [doc:textField].
+ * @append See documentation for [doc:textField].
+ * @prependToLabel See documentation for [doc:textField].
+ * @appendToLabel See documentation for [doc:textField].
+ * @twelveHour See documentation for [doc:timeSelect].
+ */
 public string function hourSelectTag(
 	required string name,
 	string selected="",
@@ -351,22 +351,22 @@ public string function hourSelectTag(
 }
 
 /**
-* Builds and returns a string containing one select form control for the minutes of an hour based on the supplied name.
-*
-* [section: View Helpers]
-* [category: Form Tag Functions]
-*
-* @name See documentation for [doc:textFieldTag].
-* @selected The day that should be selected initially.
-* @minuteStep See documentation for [doc:timeSelect].
-* @includeBlank See documentation for [doc:select].
-* @label See documentation for [doc:textField].
-* @labelPlacement See documentation for [doc:textField].
-* @prepend See documentation for [doc:textField].
-* @append See documentation for [doc:textField].
-* @prependToLabel See documentation for [doc:textField].
-* @appendToLabel See documentation for [doc:textField].
-*/
+ * Builds and returns a string containing one `select` form control for the minutes of an hour based on the supplied name.
+ *
+ * [section: View Helpers]
+ * [category: Form Tag Functions]
+ *
+ * @name See documentation for [doc:textFieldTag].
+ * @selected The day that should be selected initially.
+ * @minuteStep See documentation for [doc:timeSelect].
+ * @includeBlank See documentation for [doc:select].
+ * @label See documentation for [doc:textField].
+ * @labelPlacement See documentation for [doc:textField].
+ * @prepend See documentation for [doc:textField].
+ * @append See documentation for [doc:textField].
+ * @prependToLabel See documentation for [doc:textField].
+ * @appendToLabel See documentation for [doc:textField].
+ */
 public string function minuteSelectTag(
 	required string name,
 	string selected="",
@@ -389,22 +389,22 @@ public string function minuteSelectTag(
 }
 
 /**
-* Builds and returns a string containing one select form control for the seconds of a minute based on the supplied name.
-*
-* [section: View Helpers]
-* [category: Form Tag Functions]
-*
-* @name See documentation for [doc:textFieldTag].
-* @selected The day that should be selected initially.
-* @secondStep See documentation for [doc:timeSelect].
-* @includeBlank See documentation for [doc:select].
-* @label See documentation for [doc:textField].
-* @labelPlacement See documentation for [doc:textField].
-* @prepend See documentation for [doc:textField].
-* @append See documentation for [doc:textField].
-* @prependToLabel See documentation for [doc:textField].
-* @appendToLabel See documentation for [doc:textField].
-*/
+ * Builds and returns a string containing one `select` form control for the seconds of a minute based on the supplied name.
+ *
+ * [section: View Helpers]
+ * [category: Form Tag Functions]
+ *
+ * @name See documentation for [doc:textFieldTag].
+ * @selected The day that should be selected initially.
+ * @secondStep See documentation for [doc:timeSelect].
+ * @includeBlank See documentation for [doc:select].
+ * @label See documentation for [doc:textField].
+ * @labelPlacement See documentation for [doc:textField].
+ * @prepend See documentation for [doc:textField].
+ * @append See documentation for [doc:textField].
+ * @prependToLabel See documentation for [doc:textField].
+ * @appendToLabel See documentation for [doc:textField].
+ */
 public string function secondSelectTag(
 	required string name,
 	string selected="",
@@ -427,8 +427,8 @@ public string function secondSelectTag(
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public date function $dateForSelectTags(
 	required string part,
 	required numeric value,

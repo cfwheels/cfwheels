@@ -1,7 +1,8 @@
 <cfscript>
+
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $yearSelectTag(required numeric startYear, required numeric endYear) {
 	if (Structkeyexists(arguments, "value") && Val(arguments.value)) {
 		if (arguments.value < arguments.startYear && arguments.endYear > arguments.startYear) {
@@ -20,8 +21,8 @@ public string function $yearSelectTag(required numeric startYear, required numer
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $monthSelectTag(
 	required string monthDisplay,
 	required string monthNames,
@@ -43,8 +44,8 @@ public string function $monthSelectTag(
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $daySelectTag() {
 	arguments.$loopFrom = 1;
 	arguments.$loopTo = 31;
@@ -54,8 +55,8 @@ public string function $daySelectTag() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $hourSelectTag() {
 	arguments.$loopFrom = 0;
 	arguments.$loopTo = 23;
@@ -69,8 +70,8 @@ public string function $hourSelectTag() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $minuteSelectTag(required numeric minuteStep) {
 	arguments.$loopFrom = 0;
 	arguments.$loopTo = 59;
@@ -81,8 +82,8 @@ public string function $minuteSelectTag(required numeric minuteStep) {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public any function $secondSelectTag(required numeric secondStep) {
 	arguments.$loopFrom = 0;
 	arguments.$loopTo = 59;
@@ -93,8 +94,8 @@ public any function $secondSelectTag(required numeric secondStep) {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $dateOrTimeSelect(
 	required any objectName,
 	required string property,
@@ -151,8 +152,8 @@ public string function $dateOrTimeSelect(
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $yearMonthHourMinuteSecondSelectTag(
 	required string name,
 	required string value,
@@ -232,8 +233,8 @@ public string function $yearMonthHourMinuteSecondSelectTag(
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $yearMonthHourMinuteSecondSelectTagContent() {
 	local.args = {};
 	local.args.value = arguments.counter;
@@ -252,8 +253,8 @@ public string function $yearMonthHourMinuteSecondSelectTagContent() {
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $ampmSelectTag(
 	required string name,
 	required string value,

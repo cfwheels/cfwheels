@@ -1,19 +1,20 @@
 <cfscript>
 
 /**
-* Used as a shortcut to output the proper form elements for an association. Note: Pass any additional arguments like class, rel, and id, and the generated tag will also include those values as HTML attributes.
-*
-* [section: View Helpers]
-* [category: Form Association Functions]
-*
-* @objectName Name of the variable containing the parent object to represent with this form field.
-* @association Name of the association set in the parent object to represent with this form field.
-* @property Name of the property in the child object to represent with this form field.
-* @keys Primary keys associated with this form field. Note that these keys should be listed in the order that they appear in the database table.
-* @tagValue The value of the radio button when selected.
-* @checkIfBlank Whether or not to check this form field as a default if there is a blank value set for the property.
-* @label The label text to use in the form control.
-*/
+ * Used as a shortcut to output the proper form elements for an association.
+ * Note: Pass any additional arguments like class, rel, and id, and the generated tag will also include those values as HTML attributes.
+ *
+ * [section: View Helpers]
+ * [category: Form Association Functions]
+ *
+ * @objectName Name of the variable containing the parent object to represent with this form field.
+ * @association Name of the association set in the parent object to represent with this form field.
+ * @property Name of the property in the child object to represent with this form field.
+ * @keys Primary keys associated with this form field. Note that these keys should be listed in the order that they appear in the database table.
+ * @tagValue The value of the radio button when selected.
+ * @checkIfBlank Whether or not to check this form field as a default if there is a blank value set for the property.
+ * @label The label text to use in the form control.
+ */
 public string function hasManyRadioButton(
 	required string objectName,
 	required string association,
@@ -42,23 +43,24 @@ public string function hasManyRadioButton(
 }
 
 /**
-* Used as a shortcut to output the proper form elements for an association. Note: Pass any additional arguments like class, rel, and id, and the generated tag will also include those values as HTML attributes.
-*
-* [section: View Helpers]
-* [category: Form Association Functions]
-*
-* @objectName Name of the variable containing the parent object to represent with this form field.
-* @association Name of the association set in the parent object to represent with this form field.
-* @keys Primary keys associated with this form field. Note that these keys should be listed in the order that they appear in the database table.
-* @label The label text to use in the form control.
-* @labelPlacement Whether to place the label before, after, or wrapped around the form control. Label text placement can be controlled using aroundLeft or aroundRight.
-* @prepend String to prepend to the form control. Useful to wrap the form control with HTML tags.
-* @append String to append to the form control. Useful to wrap the form control with HTML tags.
-* @prependToLabel String to prepend to the form control's label. Useful to wrap the form control with HTML tags.
-* @appendToLabel String to append to the form control's label. Useful to wrap the form control with HTML tags.
-* @errorElement HTML tag to wrap the form control with when the object contains errors.
-* @errorClass The class name of the HTML tag that wraps the form control when there are errors.
-*/
+ * Used as a shortcut to output the proper form elements for an association.
+ * Note: Pass any additional arguments like class, rel, and id, and the generated tag will also include those values as HTML attributes.
+ *
+ * [section: View Helpers]
+ * [category: Form Association Functions]
+ *
+ * @objectName Name of the variable containing the parent object to represent with this form field.
+ * @association Name of the association set in the parent object to represent with this form field.
+ * @keys Primary keys associated with this form field. Note that these keys should be listed in the order that they appear in the database table.
+ * @label The label text to use in the form control.
+ * @labelPlacement Whether to place the label before, after, or wrapped around the form control. Label text placement can be controlled using `aroundLeft` or `aroundRight`.
+ * @prepend String to prepend to the form control. Useful to wrap the form control with HTML tags.
+ * @append String to append to the form control. Useful to wrap the form control with HTML tags.
+ * @prependToLabel String to prepend to the form control's label. Useful to wrap the form control with HTML tags.
+ * @appendToLabel String to append to the form control's label. Useful to wrap the form control with HTML tags.
+ * @errorElement HTML tag to wrap the form control with when the object contains errors.
+ * @errorClass The `class` name of the HTML tag that wraps the form control when there are errors.
+ */
 public string function hasManyCheckBox(
 	required string objectName,
 	required string association,
@@ -91,15 +93,16 @@ public string function hasManyCheckBox(
 }
 
 /**
-* Used as a shortcut to check if the specified IDs are a part of the main form object. This method should only be used for hasMany associations.
-*
-* [section: View Helpers]
-* [category: Form Association Functions]
-*
-* @objectName Name of the variable containing the parent object to represent with this form field.
-* @association Name of the association set in the parent object to represent with this form field.
-* @keys Primary keys associated with this form field. Note that these keys should be listed in the order that they appear in the database table.
-*/
+ * Used as a shortcut to check if the specified IDs are a part of the main form object.
+ * This method should only be used for `hasMany` associations.
+ *
+ * [section: View Helpers]
+ * [category: Form Association Functions]
+ *
+ * @objectName Name of the variable containing the parent object to represent with this form field.
+ * @association Name of the association set in the parent object to represent with this form field.
+ * @keys Primary keys associated with this form field. Note that these keys should be listed in the order that they appear in the database table.
+ */
 public boolean function includedInObject(
 	required string objectName,
 	required string association,
@@ -129,8 +132,8 @@ public boolean function includedInObject(
 }
 
 /**
-* Internal Function
-*/
+ * Internal function.
+ */
 public string function $hasManyFormValue(
 	required string objectName,
 	required string association,
