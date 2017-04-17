@@ -10,7 +10,7 @@
  * @name Name to populate in tag's name attribute.
  * @value Value to populate in tag's value attribute.
  * @label [see:textField].
- * @labelPlacement around [see:textField].
+ * @labelPlacement [see:textField].
  * @prepend [see:textField].
  * @append [see:textField].
  * @prependToLabel [see:textField].
@@ -47,7 +47,7 @@ public string function textFieldTag(
  * @name [see:textFieldTag].
  * @value [see:textFieldTag].
  * @label [see:textField].
- * @labelPlacement around [see:textField].
+ * @labelPlacement [see:textField].
  * @prepend [see:textField].
  * @append [see:textField].
  * @prependToLabel [see:textField].
@@ -103,7 +103,7 @@ public string function hiddenFieldTag(
  *
  * @name [see:textFieldTag].
  * @label [see:textField].
- * @labelPlacement around [see:textField].
+ * @labelPlacement [see:textField].
  * @prepend [see:textField].
  * @append [see:textField].
  * @prependToLabel [see:textField].
@@ -136,7 +136,7 @@ public string function fileFieldTag(
  * @name [see:textFieldTag].
  * @content Content to display in textarea on page load.
  * @label [see:textField].
- * @labelPlacement around [see:textField].
+ * @labelPlacement [see:textField].
  * @prepend [see:textField].
  * @append [see:textField].
  * @prependToLabel [see:textField].
@@ -277,7 +277,7 @@ public string function checkBoxTag(
  * @valueField [see:select].
  * @textField [see:select].
  * @label [see:textField].
- * @labelPlacement around [see:textField].
+ * @labelPlacement [see:textField].
  * @prepend [see:textField].
  * @append [see:textField].
  * @prependToLabel [see:textField].

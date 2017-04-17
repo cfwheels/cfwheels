@@ -108,7 +108,7 @@ public void function renderText(required any text) {
  * [category: Rendering Functions]
  *
  * @partial The name of the partial file to be used. Prefix with a leading slash (`/`) if you need to build a path from the root `views` folder. Do not include the partial filename's underscore and file extension.
- * @cache[see:renderPage].
+ * @cache [see:renderPage].
  * @layout [see:renderPage].
  * @returnAs [see:renderPage].
  * @dataFunction Name of a controller function to load data from.

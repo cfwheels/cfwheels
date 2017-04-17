@@ -67,7 +67,7 @@ public string function textField(
  * @association [see:textField].
  * @position [see:textField].
  * @label [see:textField].
- * @labelPlacement around [see:textField].
+ * @labelPlacement [see:textField].
  * @prepend [see:textField].
  * @append [see:textField].
  * @prependToLabel [see:textField].
@@ -154,7 +154,7 @@ public string function hiddenField(
  * @association [see:textField].
  * @position [see:textField].
  * @label [see:textField].
- * @labelPlacement around [see:textField].
+ * @labelPlacement [see:textField].
  * @prepend [see:textField].
  * @append [see:textField].
  * @prependToLabel [see:textField].
@@ -200,7 +200,7 @@ public string function fileField(
  * @association [see:textField].
  * @position [see:textField].
  * @label [see:textField].
- * @labelPlacement around [see:textField].
+ * @labelPlacement [see:textField].
  * @prepend [see:textField].
  * @append [see:textField].
  * @prependToLabel [see:textField].
@@ -247,7 +247,7 @@ public string function textArea(
  * @position [see:textField].
  * @tagValue The value of the radio button when selected.
  * @label [see:textField].
- * @labelPlacement around [see:textField].
+ * @labelPlacement [see:textField].
  * @prepend [see:textField].
  * @append [see:textField].
  * @prependToLabel [see:textField].
@@ -304,7 +304,7 @@ public string function radioButton(
  * @value Value of check box in its checked state.
  * @uncheckedValue The value of the check box when it's on the unchecked state.
  * @label [see:textField].
- * @labelPlacement around [see:textField].
+ * @labelPlacement [see:textField].
  * @prepend [see:textField].
  * @append [see:textField].
  * @prependToLabel [see:textField].
@@ -371,7 +371,7 @@ public string function checkBox(
  * @valueField The column or property to use for the value of each list element. Used only when a query or array of objects has been supplied in the options argument.
  * @textField The column or property to use for the value of each list element that the end user will see. Used only when a query or array of objects has been supplied in the options argument.
  * @label [see:textField].
- * @labelPlacement around [see:textField].
+ * @labelPlacement [see:textField].
  * @prepend [see:textField].
  * @append [see:textField].
  * @prependToLabel [see:textField].
