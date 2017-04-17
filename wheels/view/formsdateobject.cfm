@@ -61,24 +61,24 @@ public string function dateSelect(
  * [section: View Helpers]
  * [category: Form Object Functions]
  *
- * @objectName See documentation for [doc:textField].
- * @property See documentation for [doc:textField].
- * @association See documentation for [doc:textField].
- * @position See documentation for [doc:textField].
+ * @objectName [see:textField].
+ * @property [see:textField].
+ * @association [see:textField].
+ * @position [see:textField].
  * @order Use to change the order of or exclude time select tags.
  * @separator Use to change the character that is displayed between the time select tags.
  * @minuteStep Pass in 10 to only show minute 10, 20, 30, etc.
  * @secondStep Pass in 10 to only show seconds 10, 20, 30, etc.
- * @includeBlank See documentation for [doc:select].
- * @label See documentation for [doc:dateSelect].
- * @labelPlacement See documentation for [doc:textField].
- * @prepend See documentation for [doc:textField].
- * @append See documentation for [doc:textField].
- * @prependToLabel See documentation for [doc:textField].
- * @appendToLabel See documentation for [doc:textField].
- * @errorElement See documentation for [doc:textField].
- * @errorClass See documentation for [doc:textField].
- * @combine See documentation for [doc:dateSelect].
+ * @includeBlank [see:select].
+ * @label [see:dateSelect].
+ * @labelPlacement [see:textField].
+ * @prepend [see:textField].
+ * @append [see:textField].
+ * @prependToLabel [see:textField].
+ * @appendToLabel [see:textField].
+ * @errorElement [see:textField].
+ * @errorClass [see:textField].
+ * @combine [see:dateSelect].
  * @twelveHour whether to display the hours in 24 or 12 hour format. 12 hour format has AM/PM drop downs
  */
 public string function timeSelect(

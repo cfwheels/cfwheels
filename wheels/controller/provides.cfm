@@ -34,7 +34,7 @@ public void function provides(string formats="") {
  * [section: Controller]
  * [category: Provides Functions]
  *
- * @formats See documentation for [doc:provides].
+ * @formats [see:provides].
  * @action Name of action, defaults to current.
  */
 public void function onlyProvides(string formats="", string action=variables.params.action) {
@@ -63,13 +63,13 @@ public void function onlyProvides(string formats="", string action=variables.par
  * [category: Provides Functions]
  *
  * @data Data to format and render.
- * @controller See documentation for [doc:renderPage].
- * @action See documentation for [doc:renderPage].
- * @template See documentation for [doc:renderPage].
- * @layout See documentation for [doc:renderPage].
- * @cache See documentation for [doc:renderPage].
- * @returnAs See documentation for [doc:renderPage].
- * @hideDebugInformation See documentation for [doc:renderPage].
+ * @controller [see:renderPage].
+ * @action [see:renderPage].
+ * @template [see:renderPage].
+ * @layout [see:renderPage].
+ * @cache [see:renderPage].
+ * @returnAs [see:renderPage].
+ * @hideDebugInformation [see:renderPage].
  * @status Force request to return with specific HTTP status code.
  */
 public any function renderWith(

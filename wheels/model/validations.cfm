@@ -19,9 +19,9 @@ public void function automaticValidations(required boolean value) {
  * [category: Validation Functions ]
  *
  * @methods Method name or list of method names to call. Can also be called with the `method` argument.
- * @condition See documentation for [doc:validatesConfirmationOf].
- * @unless See documentation for [doc:validatesConfirmationOf].
- * @when See documentation for [doc:validatesConfirmationOf].
+ * @condition [see:validatesConfirmationOf].
+ * @unless [see:validatesConfirmationOf].
+ * @when [see:validatesConfirmationOf].
  */
 public void function validate(string methods="", string condition="", string unless="", string when="onSave") {
 	$registerValidation(argumentCollection=arguments);
@@ -33,9 +33,9 @@ public void function validate(string methods="", string condition="", string unl
  * [section: Model Configuration]
  * [category: Validation Functions ]
  *
- * @methods See documentation for [doc:validate].
- * @condition See documentation for [doc:validatesConfirmationOf].
- * @unless See documentation for [doc:validatesConfirmationOf].
+ * @methods [see:validate].
+ * @condition [see:validatesConfirmationOf].
+ * @unless [see:validatesConfirmationOf].
  */
 public void function validateOnCreate(string methods="", string condition="", string unless="") {
 	$registerValidation(when="onCreate", argumentCollection=arguments);
@@ -47,9 +47,9 @@ public void function validateOnCreate(string methods="", string condition="", st
  * [section: Model Configuration]
  * [category: Validation Functions ]
  *
- * @methods See documentation for [doc:validate].
- * @condition See documentation for [doc:validatesConfirmationOf].
- * @unless See documentation for [doc:validatesConfirmationOf].
+ * @methods [see:validate].
+ * @condition [see:validatesConfirmationOf].
+ * @unless [see:validatesConfirmationOf].
  */
 public void function validateOnUpdate(string methods="", string condition="", string unless="") {
 	$registerValidation(when="onUpdate", argumentCollection=arguments);
@@ -88,13 +88,13 @@ public void function validatesConfirmationOf(
  * [section: Model Configuration]
  * [category: Validation Functions ]
  *
- * @properties See documentation for [doc:validatesConfirmationOf].
+ * @properties [see:validatesConfirmationOf].
  * @list Single value or list of values that should not be allowed.
- * @message See documentation for [doc:validatesConfirmationOf].
- * @when See documentation for [doc:validatesConfirmationOf].
+ * @message [see:validatesConfirmationOf].
+ * @when [see:validatesConfirmationOf].
  * @allowBlank If set to `true`, validation will be skipped if the property value is an empty string or doesn't exist at all. This is useful if you only want to run this validation after it passes the `validatesPresenceOf` test, thus avoiding duplicate error messages if it doesn't.
- * @condition See documentation for [doc:validatesConfirmationOf].
- * @unless See documentation for [doc:validatesConfirmationOf].
+ * @condition [see:validatesConfirmationOf].
+ * @unless [see:validatesConfirmationOf].
  */
 public void function validatesExclusionOf(
 	string properties="",
@@ -116,14 +116,14 @@ public void function validatesExclusionOf(
  * [section: Model Configuration]
  * [category: Validation Functions ]
  *
- * @properties See documentation for [doc:validatesConfirmationOf].
+ * @properties [see:validatesConfirmationOf].
  * @regEx Regular expression to verify against.
  * @type One of the following types to verify against: creditcard, date, email, eurodate, guid, social_security_number, ssn, telephone, time, URL, USdate, UUID, variableName, zipcode (will be passed through to your CFML engine's IsValid() function).
- * @message See documentation for [doc:validatesConfirmationOf].
- * @when See documentation for [doc:validatesConfirmationOf].
- * @allowBlank See documentation for [doc:validatesExclusionOf].
- * @condition See documentation for [doc:validatesConfirmationOf].
- * @unless See documentation for [doc:validatesConfirmationOf].
+ * @message [see:validatesConfirmationOf].
+ * @when [see:validatesConfirmationOf].
+ * @allowBlank [see:validatesExclusionOf].
+ * @condition [see:validatesConfirmationOf].
+ * @unless [see:validatesConfirmationOf].
  */
 public void function validatesFormatOf(
 	string properties="",
@@ -154,13 +154,13 @@ public void function validatesFormatOf(
  * [section: Model Configuration]
  * [category: Validation Functions ]
  *
- * @properties See documentation for [doc:validatesConfirmationOf].
+ * @properties [see:validatesConfirmationOf].
  * @list List of allowed values.
- * @message See documentation for [doc:validatesConfirmationOf].
- * @when See documentation for [doc:validatesConfirmationOf].
- * @allowBlank See documentation for [doc:validatesExclusionOf].
- * @condition See documentation for [doc:validatesConfirmationOf].
- * @unless See documentation for [doc:validatesConfirmationOf].
+ * @message [see:validatesConfirmationOf].
+ * @when [see:validatesConfirmationOf].
+ * @allowBlank [see:validatesExclusionOf].
+ * @condition [see:validatesConfirmationOf].
+ * @unless [see:validatesConfirmationOf].
  */
 public void function validatesInclusionOf(
 	string properties="",
@@ -183,16 +183,16 @@ public void function validatesInclusionOf(
  * [section: Model Configuration]
  * [category: Validation Functions ]
  *
- * @properties See documentation for [doc:validatesConfirmationOf].
- * @message See documentation for [doc:validatesConfirmationOf].
- * @when See documentation for [doc:validatesConfirmationOf].
- * @allowBlank See documentation for [doc:validatesExclusionOf].
+ * @properties [see:validatesConfirmationOf].
+ * @message [see:validatesConfirmationOf].
+ * @when [see:validatesConfirmationOf].
+ * @allowBlank [see:validatesExclusionOf].
  * @exactly The exact length that the property value must be.
  * @maximum The maximum length that the property value can be.
  * @minimum The minimum length that the property value can be.
  * @within A list of two values (minimum and maximum) that the length of the property value must fall within.
- * @condition See documentation for [doc:validatesConfirmationOf].
- * @unless See documentation for [doc:validatesConfirmationOf].
+ * @condition [see:validatesConfirmationOf].
+ * @unless [see:validatesConfirmationOf].
  */
 public void function validatesLengthOf(
 	string properties="",
@@ -219,13 +219,13 @@ public void function validatesLengthOf(
  * [section: Model Configuration]
  * [category: Validation Functions ]
  *
- * @properties See documentation for [doc:validatesConfirmationOf].
- * @message See documentation for [doc:validatesConfirmationOf].
- * @when See documentation for [doc:validatesConfirmationOf].
- * @allowBlank See documentation for [doc:validatesExclusionOf].
+ * @properties [see:validatesConfirmationOf].
+ * @message [see:validatesConfirmationOf].
+ * @when [see:validatesConfirmationOf].
+ * @allowBlank [see:validatesExclusionOf].
  * @onlyInteger Specifies whether the property value must be an integer.
- * @condition See documentation for [doc:validatesConfirmationOf].
- * @unless See documentation for [doc:validatesConfirmationOf].
+ * @condition [see:validatesConfirmationOf].
+ * @unless [see:validatesConfirmationOf].
  * @oddSpecifies whether or not the value must be an odd number.
  * @evenSpecifies whether or not the value must be an even number.
  * @greaterThan Specifies whether or not the value must be greater than the supplied value.
@@ -260,11 +260,11 @@ public void function validatesNumericalityOf(
  * [section: Model Configuration]
  * [category: Validation Functions ]
  *
- * @properties See documentation for [doc:validatesConfirmationOf].
- * @message See documentation for [doc:validatesConfirmationOf].
- * @when See documentation for [doc:validatesConfirmationOf].
- * @condition See documentation for [doc:validatesConfirmationOf].
- * @unless See documentation for [doc:validatesConfirmationOf].
+ * @properties [see:validatesConfirmationOf].
+ * @message [see:validatesConfirmationOf].
+ * @when [see:validatesConfirmationOf].
+ * @condition [see:validatesConfirmationOf].
+ * @unless [see:validatesConfirmationOf].
  */
 public void function validatesPresenceOf(
 	string properties="",
@@ -286,14 +286,14 @@ public void function validatesPresenceOf(
  * [section: Model Configuration]
  * [category: Validation Functions ]
  *
- * @properties See documentation for [doc:validatesConfirmationOf].
- * @message See documentation for [doc:validatesConfirmationOf].
- * @when See documentation for [doc:validatesConfirmationOf].
- * @allowBlank See documentation for [doc:validatesExclusionOf].
+ * @properties [see:validatesConfirmationOf].
+ * @message [see:validatesConfirmationOf].
+ * @when [see:validatesConfirmationOf].
+ * @allowBlank [see:validatesExclusionOf].
  * @scope One or more properties by which to limit the scope of the uniqueness constraint.
- * @condition See documentation for [doc:validatesConfirmationOf].
- * @unless See documentation for [doc:validatesConfirmationOf].
- * @includeSoftDeletes See documentation for [doc:findAll].
+ * @condition [see:validatesConfirmationOf].
+ * @unless [see:validatesConfirmationOf].
+ * @includeSoftDeletes [see:findAll].
  */
 public void function validatesUniquenessOf(
 	string properties="",
@@ -317,7 +317,7 @@ public void function validatesUniquenessOf(
  * [section: Model Object]
  * [category: Error Functions ]
  *
- * @callbacks See documentation for [doc:findAll].
+ * @callbacks [see:findAll].
  */
 public boolean function valid(boolean callbacks="true") {
 	local.rv = false;

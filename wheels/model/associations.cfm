@@ -37,11 +37,11 @@ public void function belongsTo(
  * [section: Model Configuration]
  * [category: Association Functions]
  *
- * @name See documentation for [doc:belongsTo].
- * @modelName See documentation for [doc:belongsTo].
- * @foreignKey See documentation for [doc:belongsTo].
- * @joinKey See documentation for [doc:belongsTo].
- * @joinType See documentation for [doc:belongsTo].
+ * @name [see:belongsTo].
+ * @modelName [see:belongsTo].
+ * @foreignKey [see:belongsTo].
+ * @joinKey [see:belongsTo].
+ * @joinType [see:belongsTo].
  * @dependent Defines how to handle dependent model objects when you delete an object from this model. `delete` / `deleteAll` deletes the record(s) (`deleteAll` bypasses object instantiation). `remove` / `removeAll` sets the forein key field(s) to `NULL` (`removeAll` bypasses object instantiation).
  * @shortcut Set this argument to create an additional dynamic method that gets the object(s) from the other side of a many-to-many association.
  * @through Set this argument if you need to override CFWheels conventions when using the `shortcut` argument. Accepts a list of two association names representing the chain from the opposite side of the many-to-many relationship to this model.
@@ -84,12 +84,12 @@ public void function hasMany(
  * [section: Model Configuration]
  * [category: Association Functions]
  *
- * @name See documentation for [doc:belongsTo].
- * @modelName See documentation for [doc:belongsTo].
- * @foreignKey See documentation for [doc:belongsTo].
- * @joinKey See documentation for [doc:belongsTo].
- * @joinType See documentation for [doc:belongsTo].
- * @dependent See documentation for [doc:hasMany].
+ * @name [see:belongsTo].
+ * @modelName [see:belongsTo].
+ * @foreignKey [see:belongsTo].
+ * @joinKey [see:belongsTo].
+ * @joinType [see:belongsTo].
+ * @dependent [see:hasMany].
  */
 public void function hasOne(
 	required string name,

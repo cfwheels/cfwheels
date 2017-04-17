@@ -20,8 +20,8 @@ public void function addError(required string property, required string message,
  * [section: Model Object]
  * [category: Error Functions]
  *
- * @message See documentation for [doc:addError].
- * @name See documentation for [doc:addError].
+ * @message [see:addError].
+ * @name [see:addError].
  */
 public void function addErrorToBase(required string message, string name="") {
 	arguments.property = "";

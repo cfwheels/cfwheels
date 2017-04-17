@@ -76,7 +76,7 @@ public void function setPrimaryKey(required string property) {
  * [section: Model Configuration]
  * [category: Miscellaneous Functions]
  *
- * @property See documentation for [doc:setPrimaryKey].
+ * @property [see:setPrimaryKey].
  */
 public void function setPrimaryKeys(required string property) {
 	setPrimaryKey(argumentCollection=arguments);
@@ -91,10 +91,10 @@ public void function setPrimaryKeys(required string property) {
  * [category: Miscellaneous Functions]
  *
  * @key Primary key value(s) of the record. Separate with comma if passing in multiple primary key values. Accepts a string, list, or a numeric value.
- * @where See documentation for [doc:findAll].
- * @reload See documentation for [doc:findAll].
- * @parameterize See documentation for [doc:findAll].
- * @includeSoftDeletes See documentation for [doc:findAll].
+ * @where [see:findAll].
+ * @reload [see:findAll].
+ * @parameterize [see:findAll].
+ * @includeSoftDeletes [see:findAll].
  */
 public boolean function exists(any key, string where, boolean reload, any parameterize, boolean includeSoftDeletes) {
 	$args(name="exists", args=arguments);
@@ -149,7 +149,7 @@ public string function primaryKey(numeric position=0) {
  * [section: Model Class]
  * [category: Miscellaneous Functions]
  *
- * @position See documentation for [doc:primaryKey].
+ * @position [see:primaryKey].
  */
 public string function primaryKeys(numeric position=0) {
 	return primaryKey(argumentCollection=arguments);

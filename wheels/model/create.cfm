@@ -8,12 +8,12 @@
  * [section: Model Class]
  * [category: Create Functions]
  *
- * @properties See documentation for [doc:new].
- * @parameterize See documentation for [doc:findAll].
- * @reload See documentation for [doc:findAll].
- * @validate See documentation for [doc:save].
- * @transaction See documentation for [doc:save].
- * @callbacks See documentation for [doc:findAll].
+ * @properties [see:new].
+ * @parameterize [see:findAll].
+ * @reload [see:findAll].
+ * @validate [see:save].
+ * @transaction [see:save].
+ * @callbacks [see:findAll].
  */
 public any function create(
 	struct properties={},
@@ -48,7 +48,7 @@ public any function create(
  * [category: Create Functions]
  *
  * @properties The properties you want to set on the object (can also be passed in as named arguments).
- * @callbacks See documentation for [doc:findAll].
+ * @callbacks [see:findAll].
  */
 public any function new(struct properties={}, boolean callbacks=true) {
 	arguments.properties = $setProperties(
@@ -68,11 +68,11 @@ public any function new(struct properties={}, boolean callbacks=true) {
  * [section: Model Class]
  * [category: CRUD Functions]
  *
- * @parameterize See documentation for [doc:findAll].
- * @reload See documentation for [doc:findAll].
+ * @parameterize [see:findAll].
+ * @reload [see:findAll].
  * @validate Set to `false` to skip validations for this operation.
  * @transaction Set this to `commit` to update the database, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.
- * @callbacks See documentation for [doc:findAll].
+ * @callbacks [see:findAll].
  */
 public boolean function save(
 	any parameterize,

@@ -5,6 +5,55 @@
 	struct function $returnInternalDocumentation(required array documentScope, required array ignore){
 		local.rv["functions"] = $populateDocFunctionMeta(documentScope,ignore);
 		local.rv["sections"]  = $populateDocSections(local.rv.functions);
+
+		// Look for [see:something] tags to pull in other function param hints
+		for (i=1;i LTE ArrayLen(local.rv["functions"]);i=i+1) {
+			if(structKeyExists(local.rv["functions"][i], "parameters")){
+				for (p=1;p LTE ArrayLen(local.rv["functions"][i]["parameters"]);p=p+1) {
+					if(structKeyExists(local.rv["functions"][i]["parameters"][p], "hint")){
+						local.rv["functions"][i]["parameters"][p]["hint"]=$replaceSeeTag(
+							local.rv["functions"][i]["parameters"][p]["hint"],
+							local.rv["functions"][i]["parameters"][p]["name"],
+							local.rv["functions"]
+						);
+					}
+				}
+			}
+		}
+		return local.rv;
+	}
+
+	/**
+	* Directly replace a see tag i.e [see:findAll] with it's param equivalent in the other function
+	* NB, this is actually a catch 22 as the params for other functions might not yet have been parsed
+	* So we do this as a seperate loop at the end.
+	*
+	* @string String containing [see:otherFunctionName]
+	* @name the param name to get from the other function
+	* @allfunctions the existing document struct
+	**/
+	string function $replaceSeeTag(required string string, required string name, required array allfunctions){
+		local.rv=arguments.string;
+		local.name=arguments.name;
+		local.tags=ReMatchNoCase('\[((see?):(.*?))\]', local.rv);
+		if(arrayLen(local.tags)){
+			for(local.tag in local.tags){
+				// Get the contents of see:"Foo"
+				var lookUpfunctionName=replace(listLast(local.tag, ":"), "]","","one");
+				// Look for that function in the main function struct
+				local.match=arrayFind(arguments.allfunctions, function(struct){
+					return (struct.name == lookUpfunctionName);
+				});
+				if(local.match){
+					local.matchedParam=arrayFind(arguments.allfunctions[local.match]["parameters"], function(struct){
+						return (struct.name == name);
+					});
+					if(local.matchedParam && structKeyExists(arguments.allfunctions[local.match]["parameters"][local.matchedParam], "hint")){
+						local.rv=arguments.allfunctions[local.match]["parameters"][local.matchedParam]["hint"];
+					}
+				}
+			}
+		}
 		return local.rv;
 	}
 
@@ -112,13 +161,16 @@
 			local.rv.hint=$backTickReplace(local.rv.hint);
 		}
 
-		// Check for param defaults within wheels settings
+		// Parse Params
 		for(param in local.rv["parameters"]){
+			// Check for param defaults within wheels settings
 			if(structKeyExists(application.wheels.functions, local.rv.name)
 				&& structKeyExists(application.wheels.functions[local.rv.name], param.name)){
 					param['default']=application.wheels.functions[local.rv.name][param.name];
 				}
+
 			if(structKeyExists(param, "hint")){
+				// Parse any other [doc:something tags]
 				param['hint']=$replaceDocLink(param.hint);
 			}
 		}
@@ -153,6 +205,7 @@
 		}
 		return local.rv;
 	}
+
 	/**
 	* Directly replace a doc tag i.e format [doc:functionName] to a hashLink
 	*

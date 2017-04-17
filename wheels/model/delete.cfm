@@ -9,14 +9,14 @@
  * [section: Model Class]
  * [category: Delete Functions]
  *
- * @where See documentation for [doc:findAll].
- * See documentation for [doc:findAll].
- * @reload See documentation for [doc:findAll].
- * @parameterize See documentation for [doc:findAll].
- * @instantiate See documentation for [doc:updateAll].
- * @transaction See documentation for [doc:save].
- * @callbacks See documentation for [doc:findAll].
- * @includeSoftDeletes See documentation for [doc:findAll].
+ * @where [see:findAll].
+ * [see:findAll].
+ * @reload [see:findAll].
+ * @parameterize [see:findAll].
+ * @instantiate [see:updateAll].
+ * @transaction [see:save].
+ * @callbacks [see:findAll].
+ * @includeSoftDeletes [see:findAll].
  * @softDelete Set to `false` to permanently delete a record, even if it has a soft delete column.
  */
 public numeric function deleteAll(
@@ -79,11 +79,11 @@ public numeric function deleteAll(
  * [category: Delete Functions]
  *
  * @key Primary key value(s) of the record to fetch. Separate with comma if passing in multiple primary key values. Accepts a string, list, or a numeric value.
- * @reload See documentation for [doc:findAll].
- * @transaction See documentation for [doc:save].
- * @callbacks See documentation for [doc:findAll].
- * @includeSoftDeletes See documentation for [doc:findAll].
- * @softDelete See documentation for [doc:deleteAll].
+ * @reload [see:findAll].
+ * @transaction [see:save].
+ * @callbacks [see:findAll].
+ * @includeSoftDeletes [see:findAll].
+ * @softDelete [see:deleteAll].
  */
 public boolean function deleteByKey(
 	required any key,
@@ -112,13 +112,13 @@ public boolean function deleteByKey(
  * [section: Model Class]
  * [category: Delete Functions]
  *
- * @where See documentation for [doc:findAll].
- * @order See documentation for [doc:findAll].
- * @reload See documentation for [doc:findAll].
- * @transaction See documentation for [doc:save].
- * @callbacks See documentation for [doc:findAll].
- * @includeSoftDeletes See documentation for [doc:findAll].
- * @softDelete See documentation for [doc:deleteAll].
+ * @where [see:findAll].
+ * @order [see:findAll].
+ * @reload [see:findAll].
+ * @transaction [see:save].
+ * @callbacks [see:findAll].
+ * @includeSoftDeletes [see:findAll].
+ * @softDelete [see:deleteAll].
  */
 public boolean function deleteOne(
 	string where = "",
@@ -155,11 +155,11 @@ public boolean function deleteOne(
  * [section: Model Object]
  * [category: CRUD Functions]
  *
- * @parameterize See documentation for [doc:findAll].
- * @transaction See documentation for [doc:save].
- * @callbacks See documentation for [doc:findAll].
- * @includeSoftDeletes See documentation for [doc:findAll].
- * @softDelete See documentation for [doc:deleteAll].
+ * @parameterize [see:findAll].
+ * @transaction [see:save].
+ * @callbacks [see:findAll].
+ * @includeSoftDeletes [see:findAll].
+ * @softDelete [see:deleteAll].
  */
 public boolean function delete(
 	any parameterize,

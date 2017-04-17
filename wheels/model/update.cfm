@@ -10,16 +10,16 @@
  * [section: Model Class]
  * [category: Update Functions]
  *
- * @where See documentation for [doc:findAll].
- * @include See documentation for [doc:findAll].
+ * @where [see:findAll].
+ * @include [see:findAll].
  * @properties The properties you want to set on the object (can also be passed in as named arguments).
- * @reload See documentation for [doc:findAll].
- * @parameterize See documentation for [doc:findAll].
+ * @reload [see:findAll].
+ * @parameterize [see:findAll].
  * @instantiate Whether or not to instantiate the object(s) first. When objects are not instantiated, any callbacks and validations set on them will be skipped.
- * @validate See documentation for [doc:save].
- * @transaction See documentation for [doc:save].
- * @callbacks See documentation for [doc:findAll].
- * @includeSoftDeletes See documentation for [doc:findAll].
+ * @validate [see:save].
+ * @transaction [see:save].
+ * @callbacks [see:findAll].
+ * @includeSoftDeletes [see:findAll].
  */
 public numeric function updateAll(
 	string where="",
@@ -80,11 +80,11 @@ public numeric function updateAll(
  *
  * @key Primary key value(s) of the record to fetch. Separate with comma if passing in multiple primary key values. Accepts a string, list, or a numeric value.
  * @properties The properties you want to set on the object (can also be passed in as named arguments).
- * @reload See documentation for [doc:findAll].
- * @validate See documentation for [doc:save].
- * @transaction See documentation for [doc:save].
- * @callbacks See documentation for [doc:findAll].
- * @includeSoftDeletes See documentation for [doc:findAll].
+ * @reload [see:findAll].
+ * @validate [see:save].
+ * @transaction [see:save].
+ * @callbacks [see:findAll].
+ * @includeSoftDeletes [see:findAll].
  */
 public boolean function updateByKey(
 	required any key,
@@ -110,13 +110,13 @@ public boolean function updateByKey(
  * [section: Model Class]
  * [category: Update Functions]
  *
- * @where See documentation for [doc:findAll].
- * @order See documentation for [doc:findAll].
+ * @where [see:findAll].
+ * @order [see:findAll].
  * @properties The properties you want to set on the object (can also be passed in as named arguments).
- * @reload See documentation for [doc:findAll].
- * @validate See documentation for [doc:save].
- * @transaction See documentation for [doc:save].
- * @callbacks See documentation for [doc:findAll].
+ * @reload [see:findAll].
+ * @validate [see:save].
+ * @transaction [see:save].
+ * @callbacks [see:findAll].
  * @includeSoftDeletesYou can set this argument to true to include soft-deleted records in the results.
  */
 public boolean function updateOne(
@@ -153,11 +153,11 @@ public boolean function updateOne(
  * [category: CRUD Functions]
  *
  * @properties The properties you want to set on the object (can also be passed in as named arguments).
- * @parameterize See documentation for [doc:findAll].
- * @reload See documentation for [doc:findAll].
- * @validate See documentation for [doc:save].
- * @transaction See documentation for [doc:save].
- * @callbacks See documentation for [doc:findAll].
+ * @parameterize [see:findAll].
+ * @reload [see:findAll].
+ * @validate [see:save].
+ * @transaction [see:save].
+ * @callbacks [see:findAll].
  */
 public boolean function update(
 	struct properties={},
@@ -190,9 +190,9 @@ public boolean function update(
  *
  * @property Name of the property to update the value for globally.
  * @value Value to set on the given property globally.
- * @parameterize See documentation for [doc:findAll].
- * @transaction See documentation for [doc:save].
- * @callbacks See documentation for [doc:findAll].
+ * @parameterize [see:findAll].
+ * @transaction [see:save].
+ * @callbacks [see:findAll].
  */
 public boolean function updateProperty(
 	string property,

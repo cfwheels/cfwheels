@@ -9,13 +9,13 @@
  * [category: Statistics Functions]
  *
  * @property Name of the property to calculate the average for.
- * @where See documentation for [doc:findAll].
- * @include See documentation for [doc:findAll].
+ * @where [see:findAll].
+ * @include [see:findAll].
  * @distinct When `true`, `AVG` will be performed only on each unique instance of a value, regardless of how many times the value occurs.
- * @parameterize See documentation for [doc:findAll].
+ * @parameterize [see:findAll].
  * @ifNull The value returned if no records are found. Common usage is to set this to `0` to make sure a numeric value is always returned instead of a blank string.
- * @includeSoftDeletes See documentation for [doc:findAll].
- * @group See documentation for [doc:findAll].
+ * @includeSoftDeletes [see:findAll].
+ * @group [see:findAll].
  */
 public any function average(
 	required string property,
@@ -71,12 +71,12 @@ public any function average(
  * [section: Model Class]
  * [category: Statistics Functions]
  *
- * @where See documentation for [doc:findAll].
- * @include See documentation for [doc:findAll].
- * @reload See documentation for [doc:findAll].
- * @parameterize See documentation for [doc:findAll].
- * @includeSoftDeletes See documentation for [doc:findAll].
- * @group See documentation for [doc:findAll].
+ * @where [see:findAll].
+ * @include [see:findAll].
+ * @reload [see:findAll].
+ * @parameterize [see:findAll].
+ * @includeSoftDeletes [see:findAll].
+ * @group [see:findAll].
 */
 public any function count(
 	string where="",
@@ -109,12 +109,12 @@ public any function count(
  * [category: Statistics Functions]
  *
  * @property Name of the property to get the highest value for (must be a property of a numeric data type).
- * @where See documentation for [doc:findAll].
- * @include See documentation for [doc:findAll].
- * @parameterizeSee documentation for [doc:findAll].
- * @ifNull See documentation for [doc:average].
- * @includeSoftDeletes See documentation for [doc:findAll].
- * @group See documentation for [doc:findAll].
+ * @where [see:findAll].
+ * @include [see:findAll].
+ * @parameterize[see:findAll].
+ * @ifNull [see:average].
+ * @includeSoftDeletes [see:findAll].
+ * @group [see:findAll].
  */
 public any function maximum(
 	required string property,
@@ -139,12 +139,12 @@ public any function maximum(
  * [category: Statistics Functions]
  *
  * @property Name of the property to get the lowest value for (must be a property of a numeric data type).
- * @where See documentation for [doc:findAll].
- * @include See documentation for [doc:findAll].
- * @parameterize See documentation for [doc:findAll].
- * @ifNull See documentation for [doc:average].
- * @includeSoftDeletes See documentation for [doc:findAll].
- * @group See documentation for [doc:findAll].
+ * @where [see:findAll].
+ * @include [see:findAll].
+ * @parameterize [see:findAll].
+ * @ifNull [see:average].
+ * @includeSoftDeletes [see:findAll].
+ * @group [see:findAll].
  */
 public any function minimum(
 	required string property,
@@ -169,13 +169,13 @@ public any function minimum(
  * [category: Statistics Functions]
  *
  * @property Name of the property to get the sum for (must be a property of a numeric data type).
- * @where See documentation for [doc:findAll].
- * @include See documentation for [doc:findAll].
+ * @where [see:findAll].
+ * @include [see:findAll].
  * @distinct When true, SUM returns the sum of unique values only.
- * @parameterize See documentation for [doc:findAll].
- * @ifNull See documentation for [doc:average].
- * @includeSoftDeletes See documentation for [doc:findAll].
- * @group See documentation for [doc:findAll].
+ * @parameterize [see:findAll].
+ * @ifNull [see:average].
+ * @includeSoftDeletes [see:findAll].
+ * @group [see:findAll].
  */
 public any function sum(
 	required string property,

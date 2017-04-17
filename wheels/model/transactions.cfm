@@ -7,7 +7,7 @@
  * [category: Miscellaneous Functions]
  *
  * @method Model method to run.
- * @transaction See documentation for [doc:save].
+ * @transaction [see:save].
  * @isolation Isolation level to be passed through to the cftransaction tag. See your CFML engine's documentation for more details about cftransaction's isolation attribute.
  */
 public any function invokeWithTransaction(

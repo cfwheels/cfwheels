@@ -261,15 +261,15 @@ public any function findAll(
  * [category: Read Functions]
  *
  * @key Primary key value(s) of the record. Separate with comma if passing in multiple primary key values. Accepts a string, list, or a numeric value.
- * @select See documentation for [doc:findAll].
- * @include See documentation for [doc:findAll].
+ * @select [see:findAll].
+ * @include [see:findAll].
  * @handle Handle to use for the query. This is used to set the name of the query in the debug output (which otherwise defaults to `userFindOneQuery` for example).
- * @cache See documentation for [doc:findAll].
- * @reload See documentation for [doc:findAll].
- * @parameterize See documentation for [doc:findAll].
- * @returnAs See documentation for [doc:findAll].
- * @callbacks See documentation for [doc:findAll].
- * @includeSoftDeletes See documentation for [doc:findAll].
+ * @cache [see:findAll].
+ * @reload [see:findAll].
+ * @parameterize [see:findAll].
+ * @returnAs [see:findAll].
+ * @callbacks [see:findAll].
+ * @includeSoftDeletes [see:findAll].
  */
 public any function findByKey(
 	required any key,
@@ -305,16 +305,16 @@ public any function findByKey(
  * [section: Model Class]
  * [category: Read Functions]
  *
- * @where See documentation for [doc:findAll].
- * @order See documentation for [doc:findAll].
- * @select See documentation for [doc:findAll].
- * @include See documentation for [doc:findAll].
- * @handle See documentation for [doc:findByKey].
- * @cache See documentation for [doc:findAll].
- * @reload See documentation for [doc:findAll].
- * @parameterize See documentation for [doc:findAll].
- * @returnAs See documentation for [doc:findAll].
- * @includeSoftDeletes See documentation for [doc:findAll].
+ * @where [see:findAll].
+ * @order [see:findAll].
+ * @select [see:findAll].
+ * @include [see:findAll].
+ * @handle [see:findByKey].
+ * @cache [see:findAll].
+ * @reload [see:findAll].
+ * @parameterize [see:findAll].
+ * @returnAs [see:findAll].
+ * @includeSoftDeletes [see:findAll].
  */
 public any function findOne(
 	string where="",
@@ -385,7 +385,7 @@ public any function findFirst(string property="#primaryKey()#", string $sort="AS
  * [section: Model Class]
  * [category: Read Functions]
  *
- * @property See documentation for [doc:findFirst].
+ * @property [see:findFirst].
  */
 public any function findLast(string property) {
 	arguments.$sort = "DESC";

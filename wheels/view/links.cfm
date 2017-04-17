@@ -73,16 +73,16 @@ public string function linkTo(
  *
  * @text The text content of the button.
  * @image If you want to use an image for the button pass in the link to it here (relative from the `images` folder).
- * @route See documentation for [doc:URLFor].
- * @controller See documentation for [doc:URLFor].
- * @action See documentation for [doc:URLFor].
- * @key See documentation for [doc:URLFor].
- * @params See documentation for [doc:URLFor].
- * @anchor See documentation for [doc:URLFor].
- * @onlyPath See documentation for [doc:URLFor].
- * @host See documentation for [doc:URLFor].
- * @protocol See documentation for [doc:URLFor].
- * @port See documentation for [doc:URLFor].
+ * @route [see:URLFor].
+ * @controller [see:URLFor].
+ * @action [see:URLFor].
+ * @key [see:URLFor].
+ * @params [see:URLFor].
+ * @anchor [see:URLFor].
+ * @onlyPath [see:URLFor].
+ * @host [see:URLFor].
+ * @protocol [see:URLFor].
+ * @port [see:URLFor].
  */
 public string function buttonTo(
 	string text,

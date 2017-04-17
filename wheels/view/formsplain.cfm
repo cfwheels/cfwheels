@@ -9,13 +9,13 @@
  *
  * @name Name to populate in tag's name attribute.
  * @value Value to populate in tag's value attribute.
- * @label See documentation for [doc:textField].
- * @labelPlacement around See documentation for [doc:textField].
- * @prepend See documentation for [doc:textField].
- * @append See documentation for [doc:textField].
- * @prependToLabel See documentation for [doc:textField].
- * @appendToLabel See documentation for [doc:textField].
- * @type See documentation for [doc:textField].
+ * @label [see:textField].
+ * @labelPlacement around [see:textField].
+ * @prepend [see:textField].
+ * @append [see:textField].
+ * @prependToLabel [see:textField].
+ * @appendToLabel [see:textField].
+ * @type [see:textField].
  */
 public string function textFieldTag(
 	required string name,
@@ -44,14 +44,14 @@ public string function textFieldTag(
  * [section: View Helpers]
  * [category: Form Tag Functions]
  *
- * @name See documentation for [doc:textFieldTag].
- * @value See documentation for [doc:textFieldTag].
- * @label See documentation for [doc:textField].
- * @labelPlacement around See documentation for [doc:textField].
- * @prepend See documentation for [doc:textField].
- * @append See documentation for [doc:textField].
- * @prependToLabel See documentation for [doc:textField].
- * @appendToLabel See documentation for [doc:textField].
+ * @name [see:textFieldTag].
+ * @value [see:textFieldTag].
+ * @label [see:textField].
+ * @labelPlacement around [see:textField].
+ * @prepend [see:textField].
+ * @append [see:textField].
+ * @prependToLabel [see:textField].
+ * @appendToLabel [see:textField].
  */
 public string function passwordFieldTag(
 	required string name,
@@ -79,8 +79,8 @@ public string function passwordFieldTag(
  * [section: View Helpers]
  * [category: Form Tag Functions]
  *
- * @name See documentation for [doc:textFieldTag].
- * @value See documentation for [doc:textFieldTag].
+ * @name [see:textFieldTag].
+ * @value [see:textFieldTag].
  */
 public string function hiddenFieldTag(
 	required string name,
@@ -101,13 +101,13 @@ public string function hiddenFieldTag(
  * [section: View Helpers]
  * [category: Form Tag Functions]
  *
- * @name See documentation for [doc:textFieldTag].
- * @label See documentation for [doc:textField].
- * @labelPlacement around See documentation for [doc:textField].
- * @prepend See documentation for [doc:textField].
- * @append See documentation for [doc:textField].
- * @prependToLabel See documentation for [doc:textField].
- * @appendToLabel See documentation for [doc:textField].
+ * @name [see:textFieldTag].
+ * @label [see:textField].
+ * @labelPlacement around [see:textField].
+ * @prepend [see:textField].
+ * @append [see:textField].
+ * @prependToLabel [see:textField].
+ * @appendToLabel [see:textField].
  */
 public string function fileFieldTag(
 	required string name,
@@ -133,14 +133,14 @@ public string function fileFieldTag(
  * [section: View Helpers]
  * [category: Form Tag Functions]
  *
- * @name See documentation for [doc:textFieldTag].
+ * @name [see:textFieldTag].
  * @content Content to display in textarea on page load.
- * @label See documentation for [doc:textField].
- * @labelPlacement around See documentation for [doc:textField].
- * @prepend See documentation for [doc:textField].
- * @append See documentation for [doc:textField].
- * @prependToLabel See documentation for [doc:textField].
- * @appendToLabel See documentation for [doc:textField].
+ * @label [see:textField].
+ * @labelPlacement around [see:textField].
+ * @prepend [see:textField].
+ * @append [see:textField].
+ * @prependToLabel [see:textField].
+ * @appendToLabel [see:textField].
  */
 public string function textAreaTag(
 	required string name,
@@ -168,15 +168,15 @@ public string function textAreaTag(
  * [section: View Helpers]
  * [category: Form Tag Functions]
  *
- * @name See documentation for [doc:textFieldTag].
- * @value See documentation for [doc:textFieldTag].
+ * @name [see:textFieldTag].
+ * @value [see:textFieldTag].
  * @checked Whether or not to check the radio button by default.
- * @label See documentation for [doc:textField].
- * @labelPlacement See documentation for [doc:textField].
- * @prepend See documentation for [doc:textField].
- * @append See documentation for [doc:textField].
- * @prependToLabel See documentation for [doc:textField].
- * @appendToLabel See documentation for [doc:textField].*
+ * @label [see:textField].
+ * @labelPlacement [see:textField].
+ * @prepend [see:textField].
+ * @append [see:textField].
+ * @prependToLabel [see:textField].
+ * @appendToLabel [see:textField].*
  */
 public string function radioButtonTag(
 	required string name,
@@ -214,16 +214,16 @@ public string function radioButtonTag(
  * [section: View Helpers]
  * [category: Form Tag Functions]
  *
- * @name See documentation for [doc:textFieldTag].
+ * @name [see:textFieldTag].
  * @checked Whether or not the check box should be checked by default.
  * @value Value of check box in its checked state.
  * @uncheckedValue The value of the check box when it's on the unchecked state.
- * @label See documentation for [doc:textField].
- * @labelPlacement See documentation for [doc:textField].
- * @prepend See documentation for [doc:textField].
- * @append See documentation for [doc:textField].
- * @prependToLabel See documentation for [doc:textField].
- * @appendToLabel See documentation for [doc:textField].
+ * @label [see:textField].
+ * @labelPlacement [see:textField].
+ * @prepend [see:textField].
+ * @append [see:textField].
+ * @prependToLabel [see:textField].
+ * @appendToLabel [see:textField].
  */
 public string function checkBoxTag(
 	required string name,
@@ -269,19 +269,19 @@ public string function checkBoxTag(
  * [section: View Helpers]
  * [category: Form Tag Functions]
  *
- * @name See documentation for [doc:textFieldTag].
- * @options See documentation for [doc:select].
+ * @name [see:textFieldTag].
+ * @options [see:select].
  * @selected Value of option that should be selected by default.
- * @includeBlank See documentation for [doc:select].
+ * @includeBlank [see:select].
  * @multiple Whether to allow multiple selection of options in the select form control.
- * @valueField See documentation for [doc:select].
- * @textField See documentation for [doc:select].
- * @label See documentation for [doc:textField].
- * @labelPlacement around See documentation for [doc:textField].
- * @prepend See documentation for [doc:textField].
- * @append See documentation for [doc:textField].
- * @prependToLabel See documentation for [doc:textField].
- * @appendToLabel See documentation for [doc:textField].
+ * @valueField [see:select].
+ * @textField [see:select].
+ * @label [see:textField].
+ * @labelPlacement around [see:textField].
+ * @prepend [see:textField].
+ * @append [see:textField].
+ * @prependToLabel [see:textField].
+ * @appendToLabel [see:textField].
  */
 public string function selectTag(
 	required string name,
