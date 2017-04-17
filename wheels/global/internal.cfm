@@ -1056,7 +1056,6 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 	];
 
 	// directories & files to be removed
-	// TOOD: also filter out crap like .DS_Store
 	local.exclude = [
 		"wheels/tests",
 		"wheels/public/build.cfm"
@@ -1065,6 +1064,8 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 	// filter out these bad boys
 	local.filter = "*.settings, *.classpath, *.project, *.DS_Store";
 
+	// the changelog is copied to the wheels dir only for the build
+	FileCopy(ExpandPath("CHANGELOG.md"),ExpandPath("wheels/CHANGELOG.md"));
 	for (local.i in local.include) {
 		if (FileExists(ExpandPath(local.i))) {
 			$zip(file=local.path, source=ExpandPath(local.i));
@@ -1078,10 +1079,15 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 			);
 		}
 	};
+
 	for (local.i in local.exclude) {
 		$zip(file=local.path, action="delete", entrypath=local.i);
 	};
 	$zip(file=local.path, action="delete", filter=local.filter, recurse=true);
+
+	// clean up
+	FileDelete(ExpandPath("wheels/CHANGELOG.md"));
+
 	return local.path;
 }
 
