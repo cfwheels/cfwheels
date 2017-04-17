@@ -75,6 +75,8 @@ input[type='submit'].button-outline {
     height: 2.4rem;
     line-height: 1rem;
 }
+
+/*----- Tests GUI -----*/
 #content .testing a {
     text-decoration: none;
 }
@@ -165,6 +167,7 @@ section#migrations {
 #dbmigrate .currentVersion {font-weight: 700; background-color: #f4f4f4; border-bottom: 1px solid #999;}
 #dbmigrate .currentVersion .button {background-color: #999; border-color: #999}
 #dbmigrate .resetMigration {background-color: #db5730; border-color: #db5730}
+
 /*----- Tabs -----*/
 .tabs {
     width:100%;
@@ -186,19 +189,19 @@ section#migrations {
     list-style:none;
 }
 
-    .tab-links a {
-        padding:9px 15px;
-        background:#f4f4f4;
-        font-size:16px;
-        font-weight:600;
-        color:#4c4c4c;
-        transition:all linear 0.15s;
-    }
+.tab-links a {
+    padding:9px 15px;
+    background:#f4f4f4;
+    font-size:16px;
+    font-weight:600;
+    color:#4c4c4c;
+    transition:all linear 0.15s;
+}
 
-    .tab-links a:hover {
-        background:#a7cce5;
-        text-decoration:none;
-    }
+.tab-links a:hover {
+    background:#a7cce5;
+    text-decoration:none;
+}
 
 .tab-links li.active a, .tab-links li.active a:hover {
     background:#fff;
@@ -222,3 +225,16 @@ section#migrations {
 .tab.active {
     display:block;
 }
+/*----- Routing GUI -----*/
+.label {color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 6px;
+    width: 60px;
+    display: block;
+    border-radius: 2px;
+    text-align: center;}
+.label-get {background-color: #01b058;}
+.label-post {background-color: #0181b0;}
+.label-put, .label-patch {background-color: #d16d02;}
+.label-delete {background-color: #b00121;}

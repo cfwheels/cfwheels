@@ -27,7 +27,7 @@
       </td>
       <td>
         <cfif StructKeyExists(route, "methods")>
-          #EncodeForHtml(UCase(route.methods))#
+          <span class='label label-#EncodeForHtml(lcase(route.methods))#'>#EncodeForHtml(UCase(route.methods))#</span>
         </cfif>
       </td>
       <td>
