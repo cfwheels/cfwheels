@@ -6,7 +6,7 @@ component extends="wheels.tests.Test" {
 
 	function test_paginated_finder_calls_with_no_records_include_column_names() {
 		q = model("user").findAll(select="id, firstName", where="id = -1", page=1, perPage=10);
-		assert("q.columnList eq 'FIRSTNAME,ID'");
+		assert("ListSort(q.columnList, 'text') eq 'FIRSTNAME,ID'");
 	}
 
 	function test_maxrows_change_should_break_cache() {
