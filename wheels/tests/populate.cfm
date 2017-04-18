@@ -62,7 +62,7 @@
 </cfloop>
 
 <!--- list of tables to delete --->
-<cfset local.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes">
+<cfset local.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes,CATEGORIES">
 <cfloop list="#local.tables#" index="local.i">
 	<cfif ListFindNoCase(local.tableList, local.i, chr(7))>
 		<cftry>
@@ -271,6 +271,16 @@ CREATE TABLE users
 	,birthtime #local.datetimeColumnType# DEFAULT #PreserveSingleQuotes(local.dateTimeDefault)# NOT NULL
 	,isactive #local.intColumnType# NULL
 	,PRIMARY KEY(id)
+) #local.storageEngine#
+</cfquery>
+
+<!--- specifically for testing uppercase table name containing OR substring --->
+<cfquery name="local.query" datasource="#application.wheels.dataSourceName#">
+CREATE TABLE CATEGORIES
+(
+	ID #local.identityColumnType#
+	,CATEGORY_NAME varchar(100) NOT NULL
+	,PRIMARY KEY(ID)
 ) #local.storageEngine#
 </cfquery>
 
@@ -501,3 +511,7 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 
 <!--- assign posts for multiple join test --->
 <cfset local.andy.update(favouritePostId=1, leastFavouritePostId=2)>
+
+<!--- uppercase table --->
+<cfset model("category").create(category_name="Quick Brown Foxes")>
+<cfset model("category").create(category_name="Lazy Dogs")>

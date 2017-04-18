@@ -76,4 +76,12 @@ component extends="wheels.tests.Test" {
 		assert("results3.recordCount eq 1 AND results3['salesTotal'][1] eq 6");
 	}
 
+	/*
+	// failing test for #765
+	function test_uppercase_table_name_containing_or_substring() {
+		actual = model("category").findAll(where="CATEGORIES.ID > 0");
+		assert("actual.recordCount gt 2");
+	}
+	*/
+
 }
