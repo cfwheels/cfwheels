@@ -8,14 +8,23 @@ public void function onApplicationStart() {
 	// Setup the CFWheels storage struct for the current request.
 	$initializeRequestScope();
 
-	// Set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x".
-	if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword")) {
-		local.oldReloadPassword = application.wheels.reloadPassword;
+	if (StructKeyExists(application, "wheels")) {
+		// Set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x".
+		if(StructKeyExists(application.wheels, "reloadPassword")){
+			local.oldReloadPassword = application.wheels.reloadPassword;
+		}
+		// Check old environment for environment switch
+		if(StructKeyExists(application.wheels, "allowEnvironmentSwitchViaUrl")){
+			local.allowEnvironmentSwitchViaUrl= application.wheels.allowEnvironmentSwitchViaUrl;
+			local.oldEnvironment= application.wheels.environment;
+		}
 	}
+
 	application.$wheels = {};
 	if (StructKeyExists(local, "oldReloadPassword")) {
 		application.$wheels.reloadPassword = local.oldReloadPassword;
 	}
+
 
 	// Check and store server engine name, throw error if using a version that we don't support.
 	if (StructKeyExists(server, "lucee")) {
@@ -81,11 +90,22 @@ public void function onApplicationStart() {
 	application.$wheels.rootcomponentPath = ListChangeDelims(application.$wheels.webPath, ".", "/");
 	application.$wheels.wheelsComponentPath = ListAppend(application.$wheels.rootcomponentPath, "wheels", ".");
 
+	// Check old environment to see whether we're allowed to switch configuration
+	application.$wheels.allowEnvironmentSwitchViaUrl = true;
+	if (StructKeyExists(local, "allowEnvironmentSwitchViaUrl") && !local.allowEnvironmentSwitchViaUrl) {
+		application.$wheels.allowEnvironmentSwitchViaUrl = false;
+	}
+
 	// Set environment either from the url or the developer's environment.cfm file.
 	if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application.$wheels, "reloadPassword") && (!Len(application.$wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.$wheels.reloadPassword))) {
 		application.$wheels.environment = URL.reload;
 	} else {
 		$include(template="config/environment.cfm");
+	}
+
+	// If we're not allowed to switch, override and replace with the old environment
+	if(!application.$wheels.allowEnvironmentSwitchViaUrl && structKeyExists(local, "oldEnvironment")){
+		application.$wheels.environment=local.oldEnvironment;
 	}
 
 	// Rewrite settings based on web server rewrite capabilites.
