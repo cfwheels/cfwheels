@@ -93,6 +93,23 @@ public string function migrateTo(string version="") {
 }
 
 /**
+ * Shortcut function to migrate to the latest version
+ *
+ * [section: Configuration]
+ * [category: Database Migrations]
+ */
+public function migrateToLatest(){
+	local.current=getCurrentMigrationVersion();
+	local.migrations=getAvailableMigrations();
+	if(arraylen(local.migrations)){
+		local.latest=local.migrations[ArrayLen(local.migrations)].version;
+	} else {
+		local.latest=0;
+	}
+	migrateTo(local.latest);
+}
+
+/**
  * Returns current database version. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
  * [section: Configuration]
