@@ -247,6 +247,7 @@
 			local.rv["docs"]="<pre>" & htmleditformat(fileread(local.rv.path)) & "</pre>";
 			local.rv["docs"]=trim(local.rv["docs"]);
 		}
+		structDelete(local.rv, "path");
 		return local.rv;
 	}
 
