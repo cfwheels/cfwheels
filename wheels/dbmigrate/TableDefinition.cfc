@@ -1,4 +1,4 @@
-component extends="Base"  {
+component extends="Base" {
 
 	public any function init(
 		required any adapter,
@@ -8,26 +8,25 @@ component extends="Base"  {
 		string primaryKey="id"
 	) {
 		local.args = "adapter,name,force";
-		this.primaryKeys = ArrayNew(1);
-		this.foreignKeys = ArrayNew(1);
-		this.columns = ArrayNew(1);
+		this.primaryKeys = [];
+		this.foreignKeys = [];
+		this.columns = [];
 		local.iEnd = ListLen(local.args);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			local.argumentName = ListGetAt(local.args,local.i);
-			if(StructKeyExists(arguments,local.argumentName)) {
+			local.argumentName = ListGetAt(local.args, local.i);
+			if (StructKeyExists(arguments, local.argumentName)) {
 				this[local.argumentName] = arguments[local.argumentName];
 			}
 		}
-
-		if(arguments.id && Len(arguments.primaryKey)) {
+		if (arguments.id && Len(arguments.primaryKey)) {
 			this.primaryKey(name=arguments.primaryKey, autoIncrement=true);
 		}
 		return this;
 	}
 
 	/**
-    * adds a primary key definition to the table. this method also allows for multiple primary keys.
-    */
+   * Adds a primary key definition to the table. this method also allows for multiple primary keys.
+   */
 	public any function primaryKey(
 		required string name,
 		string type="integer",
@@ -43,24 +42,32 @@ component extends="Base"  {
 		arguments.adapter = this.adapter;
 
 		// don't allow multiple autoIncrement primarykeys
-		if (ArrayLen(this.primaryKeys) && arguments.autoIncrement)
+		if (ArrayLen(this.primaryKeys) && arguments.autoIncrement) {
 			Throw(message="You cannot have multiple auto increment primary keys.");
+		}
 
 		local.column = CreateObject("component", "ColumnDefinition").init(argumentCollection=arguments);
 		ArrayAppend(this.primaryKeys, local.column);
 
-		if(StructKeyExists(arguments, "references"))
-		{
+		if (StructKeyExists(arguments, "references")) {
 			local.referenceTable = pluralize(arguments.references);
-			local.foreignKey = CreateObject("component","ForeignKeyDefinition").init(adapter=this.adapter,table=this.name,referenceTable=local.referenceTable,column=arguments.name,referenceColumn="id",onUpdate=arguments.onUpdate,onDelete=arguments.onDelete);
-			ArrayAppend(this.foreignKeys,local.foreignKey);
+			local.foreignKey = CreateObject("component", "ForeignKeyDefinition").init(
+				adapter=this.adapter,
+				table=this.name,
+				referenceTable=local.referenceTable,
+				column=arguments.name,
+				referenceColumn="id",
+				onUpdate=arguments.onUpdate,
+				onDelete=arguments.onDelete
+			);
+			ArrayAppend(this.foreignKeys, local.foreignKey);
 		}
 		return this;
 	}
 
 	/**
-    * adds a column to table definition
-    */
+   * Adds a column to table definition.
+   */
 	public any function column(
 		required string columnName,
 		required string columnType,
@@ -73,14 +80,14 @@ component extends="Base"  {
 		arguments.adapter = this.adapter;
 		arguments.name = arguments.columnName;
 		arguments.type = arguments.columnType;
-		local.column = CreateObject("component","ColumnDefinition").init(argumentCollection=arguments);
-		ArrayAppend(this.columns,local.column);
+		local.column = CreateObject("component", "ColumnDefinition").init(argumentCollection=arguments);
+		ArrayAppend(this.columns, local.column);
 		return this;
 	}
 
 	/**
-    * adds integer columns to table definition
-    */
+   * Adds integer columns to table definition.
+   */
 	public any function bigInteger(
 		required string columnNames,
 		numeric limit,
@@ -90,58 +97,46 @@ component extends="Base"  {
 		arguments.columnType = "biginteger";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = ListGetAt(arguments.columnNames, local.i);
 			column(argumentCollection=arguments);
 		}
 		return this;
 	}
 
 	/**
-    * adds binary columns to table definition
-    */
-	public any function binary(
-		required string columnNames,
-		string default,
-		boolean null
-	) {
+   * Adds binary columns to table definition.
+   */
+	public any function binary(required string columnNames, string default, boolean null) {
 		arguments.columnType = "binary";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = ListGetAt(arguments.columnNames, local.i);
 			column(argumentCollection=arguments);
 		}
 		return this;
 	}
 
 	/**
-    * adds boolean columns to table definition
-    */
-	public any function boolean(
-		required string columnNames,
-		string default,
-		boolean null
-	) {
+   * Adds boolean columns to table definition.
+   */
+	public any function boolean(required string columnNames, string default, boolean null) {
 		arguments.columnType = "boolean";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = ListGetAt(arguments.columnNames, local.i);
 			column(argumentCollection=arguments);
 		}
 		return this;
 	}
 
 	/**
-    * adds date columns to table definition
-    */
-	public any function date(
-		required string columnNames,
-		string default,
-		boolean null
-	) {
+   * Adds date columns to table definition.
+   */
+	public any function date(required string columnNames, string default, boolean null) {
 		arguments.columnType = "date";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = ListGetAt(arguments.columnNames, local.i);
 			column(argumentCollection=arguments);
 		}
 		return this;

@@ -1,7 +1,7 @@
 component extends="Base" {
 	/*
-	* @onUpdate.hint how you want the constraint to act on update. possible values include `none`, `null`, or `cascade` which can also be set to `true`.
-	*/
+	 * @onUpdate.hint how you want the constraint to act on update. possible values include `none`, `null`, or `cascade` which can also be set to `true`.
+	 */
 	public ForeignKeyDefinition function init(
 		required any adapter,
 		required string table,
@@ -10,12 +10,12 @@ component extends="Base" {
 		required string referenceColumn,
 		string onUpdate="",
 		string onDelete=""
-	){
+	) {
 		local.args = "adapter,table,referenceTable,column,referenceColumn,onUpdate,onDelete";
 		local.iEnd = ListLen(local.args);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			local.argumentName = ListGetAt(local.args,local.i);
-			if(StructKeyExists(arguments,local.argumentName)) {
+			local.argumentName = ListGetAt(local.args, local.i);
+			if (StructKeyExists(arguments, local.argumentName)) {
 				this[local.argumentName] = arguments[local.argumentName];
 			}
 		}
@@ -34,23 +34,23 @@ component extends="Base" {
 		return this.adapter.foreignKeySQL(argumentcollection=local.adapterArgs);
 	}
 
-	public string function toForeignKeySQL(){
+	public string function toForeignKeySQL() {
 		local.sql = "CONSTRAINT " & this.name;
 		local.sql = addForeignKeyOptions(local.sql);
 		return local.sql;
 	}
 
-	public string function addForeignKeyOptions(required string sql){
+	public string function addForeignKeyOptions(required string sql) {
 		local.options = {};
 		local.optionalArguments = "referenceTable,referenceColumn,column";
 		local.iEnd = ListLen(local.optionalArguments);
 		for (local.i=1; local.i <= local.iEnd; local.i++) {
-			local.argumentName = ListGetAt(local.optionalArguments,local.i);
-			if(StructKeyExists(this, local.argumentName)) {
+			local.argumentName = ListGetAt(local.optionalArguments, local.i);
+			if (StructKeyExists(this, local.argumentName)) {
 				local.options[local.argumentName] = this[local.argumentName];
 			}
 		}
-		arguments.sql = this.adapter.addForeignKeyOptions(sql=arguments.sql,options=local.options);
+		arguments.sql = this.adapter.addForeignKeyOptions(sql=arguments.sql, options=local.options);
 		return arguments.sql;
 	}
 }

@@ -5,8 +5,8 @@ component extends="Base" {
 		this.selectSql = "";
 		local.iEnd = ListLen(local.args);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			local.argumentName = ListGetAt(local.args,local.i);
-			if(StructKeyExists(arguments,local.argumentName)) {
+			local.argumentName = ListGetAt(local.args, local.i);
+			if (StructKeyExists(arguments, local.argumentName)) {
 				this[local.argumentName] = arguments[local.argumentName];
 			}
 		}
@@ -14,16 +14,16 @@ component extends="Base" {
 	}
 
 	/**
-    * select statement to build view
-    */
+   * Select statement to build view.
+   */
 	public any function selectStatement(required string sql) {
 		this.selectSql = arguments.sql;
 		return this;
 	}
 
 	/**
-    * creates the table in the database
-    */
+   * Creates the table in the database.
+   */
 	public void function create() {
 		$execute(this.adapter.createView(name=this.name, sql=this.selectSql));
 		announce("Created view #objectCase(this.name)#");
