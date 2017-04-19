@@ -11,6 +11,7 @@
 * Support for MariaDB - [#563](https://github.com/cfwheels/cfwheels/issues/563) [AlexeiCF, Adam Chapman]
 * Model instance `isPersisted()` and `propertyIsBlank()` methods - [#559](https://github.com/cfwheels/cfwheels/issues/559) [Chris Peters]
 * Database Migrations (dbmigrate) now available in the core - [#664](https://github.com/cfwheels/cfwheels/issues/664) [Adam Chapman, Tom King, Mike Grogan]
+* Databases can now be automatically migrated to the latest version on application start - [#766](https://github.com/cfwheels/cfwheels/issues/766) [Tom King]
 * New `timeStampMode` setting (`"utc"`, `"local"` or `"epoch"`) for the `createdAt` and `updatedAt` columns - [Andy Bellenie]
 * Allow nested transactions - [#732](https://github.com/cfwheels/cfwheels/issues/732) [Andy Bellenie]
 * The `handle` argument to finders now set the variable name for the query so it's easier to find in the debug output - [Per Djurner]
@@ -66,6 +67,7 @@
 * Removed `cacheRoutes` setting - [Per Djurner]
 * The `cacheFileChecking` and `cacheImages` settings are now turned off in development mode - [Per Djurner]
 * Added `includeErrorInEmailSubject` setting - [Per Djurner]
+* Environment switching via URL can now be turned off via `allowEnvironmentSwitchViaUrl` - [#766](https://github.com/cfwheels/cfwheels/issues/766) [Tom King]
 
 ### Breaking Changes
 
