@@ -128,6 +128,7 @@ public void function onApplicationStart() {
 	application.$wheels.dataSourceUserName = "";
 	application.$wheels.dataSourcePassword = "";
 	application.$wheels.transactionMode = "commit";
+	application.$wheels.autoMigrateDatabase = false;
 
 	// Create migrations object and set default settings.
 	application.$wheels.dbmigrate = $createObjectFromRoot(path="wheels", fileName="dbmigrate", method="init");
@@ -378,6 +379,10 @@ public void function onApplicationStart() {
 	$include(template="config/settings.cfm");
 	$include(template="config/#application.$wheels.environment#/settings.cfm");
 
+	// Auto Migrate Database if requested
+	if (application.$wheels.autoMigrateDatabase){
+		application.$wheels.dbmigrate.migrateToLatest();
+	}
 	// Clear query (cfquery) and page (cfcache) caches.
 	if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cacheKey")) {
 		application.$wheels.cacheKey = Hash(CreateUUID());
