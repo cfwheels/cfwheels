@@ -98,10 +98,9 @@ public string function migrateTo(string version="") {
  * [section: Configuration]
  * [category: Database Migrations]
  */
-public function migrateToLatest(){
-	local.current=getCurrentMigrationVersion();
+public void function migrateToLatest() {
 	local.migrations=getAvailableMigrations();
-	if(arraylen(local.migrations)){
+	if (ArrayLen(local.migrations)) {
 		local.latest=local.migrations[ArrayLen(local.migrations)].version;
 	} else {
 		local.latest=0;
