@@ -59,12 +59,19 @@ public struct function mapper(boolean restful=true, boolean methods=arguments.re
  * @params The params struct with controller and action set.
  * @returnAs Return format
  */
-public any function processRequest(required struct params, string returnAs, string method) {
+public any function processRequest(required struct params, string method, string returnAs, string rollback) {
 	$args(name="processRequest", args=arguments);
+
+	// Set the global transaction mode to rollback when specified.
+	// Also save the current state so we can set it back after the tests have run.
+	if (arguments.rollback) {
+		local.transactionMode = $get("transactionMode");
+		$set(transactionMode="rollback");
+	}
 
 	// Before proceeding we set the request method to our internal CGI scope if passed in.
 	// This way it's possible to mock a POST request so that an isPost() call in the action works as expected for example.
-	if (StructKeyExists(arguments, "method")) {
+	if (arguments.method != "get") {
 		request.cgi.request_method = arguments.method;
 	}
 
@@ -89,12 +96,18 @@ public any function processRequest(required struct params, string returnAs, stri
 	if (arguments.returnAs == "struct") {
 		local.rv = {
 			body = local.body,
+			flash = local.controller.flash(),
 			redirect = local.redirect,
 			status = local.status,
 			type = $contentType()
 		};
 	} else {
 		local.rv = local.body;
+	}
+
+	// Set back the global transaction mode to the previous value if it has been changed.
+	if (arguments.rollback) {
+		$set(transactionMode=local.transactionMode);
 	}
 
 	// Set back the request method to GET (this is fine since the test suite is always run using GET).
