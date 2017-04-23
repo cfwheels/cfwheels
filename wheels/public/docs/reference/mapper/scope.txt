@@ -14,8 +14,8 @@ mapper()
 
     // All routes inside will be prepended with a URL path of `phones/`.
     .scope(path="phones")
-        .get(name="newest", to="phones#newest")
-        .get(name="sortOfNew", to="phones#sortOfNew")
+        .get(name="newest", to="phones##newest")
+        .get(name="sortOfNew", to="phones##sortOfNew")
     .end()
 .end();
 

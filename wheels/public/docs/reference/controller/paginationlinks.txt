@@ -48,8 +48,8 @@ authors = model("author").findAll(handle="authQuery", page=5, order="id");
 
 // Route setup in config/routes.cfm
 mapper()
-    .get(name="paginatedCommentListing", pattern="blog/[year]/[month]/[day]/[page]", to="blogs#stats")
-    .get(name="commentListing", pattern="blog/[year]/[month]/[day]", to="blogs#stats")
+    .get(name="paginatedCommentListing", pattern="blog/[year]/[month]/[day]/[page]", to="blogs##stats")
+    .get(name="commentListing", pattern="blog/[year]/[month]/[day]", to="blogs##stats")
 .end();
 
 // Controller code

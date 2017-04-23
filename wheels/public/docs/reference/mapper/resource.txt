@@ -15,8 +15,8 @@ mapper()
 
     // Nested resource
     .resource(name="preferences", only="index", nested=true)
-      .get(name="editPassword", to="passwords#edit")
-      .patch(name="password", to="passwords#update")
+      .get(name="editPassword", to="passwords##edit")
+      .patch(name="password", to="passwords##update")
 
       .resources("foods")
     .end()
