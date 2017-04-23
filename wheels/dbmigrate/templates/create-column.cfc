@@ -19,16 +19,16 @@
 component extends="[extends]" hint="[description]" {
 
 	function up() {
-		hasError = false;
+		local.hasError = false;
 		transaction {
 			try {
 				addColumn(table='tableName', columnType='', columnName='columnName', default='', null=true);
-			} catch (any ex) {
-				hasError = true;
-				catchObject = ex;
+			} catch (any e) {
+				local.hasError = true;
+				catchObject = e;
 			}
 
-			if (!hasError) {
+			if (!local.hasError) {
 				transaction action="commit";
 			} else {
 				transaction action="rollback";
@@ -38,16 +38,16 @@ component extends="[extends]" hint="[description]" {
 	}
 
 	function down() {
-	  hasError = false;
+	  local.hasError = false;
 		transaction {
 		  try {
 				removeColumn(table='tableName', columnName='columnName');
-			} catch (any ex) {
-				hasError = true;
-				catchObject = ex;
+			} catch (any e) {
+				local.hasError = true;
+				catchObject = e;
 			}
 
-			if (!hasError) {
+			if (!local.hasError) {
 				transaction action="commit";
 			} else {
 				transaction action="rollback";

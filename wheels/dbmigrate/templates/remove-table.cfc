@@ -11,16 +11,16 @@
 component extends="[extends]" hint="[description]" {
 
 	function up() {
-	  hasError = false;
+	  local.hasError = false;
 		transaction {
 			try {
 				dropTable(name='tableName');
-			} catch (any ex) {
-				hasError = true;
-				catchObject = ex;
+			} catch (any e) {
+				local.hasError = true;
+				catchObject = e;
 			}
 
-			if (!hasError) {
+			if (!local.hasError) {
 				transaction action="commit";
 			} else {
 				transaction action="rollback";
@@ -30,18 +30,18 @@ component extends="[extends]" hint="[description]" {
 	}
 
 	function down() {
-		hasError = false;
+		local.hasError = false;
 		transaction {
 			try {
 				t = createTable(name='tableName');
 			    t.timestamps();
 			    t.create();
-			} catch (any ex) {
-				hasError = true;
-				catchObject = ex;
+			} catch (any e) {
+				local.hasError = true;
+				catchObject = e;
 			}
 
-			if (!hasError) {
+			if (!local.hasError) {
 				transaction action="commit";
 			} else {
 				transaction action="rollback";

@@ -12,17 +12,17 @@
 component extends="[extends]" hint="[description]" {
 
 	function up() {
-	  hasError = false;
+	  local.hasError = false;
 		transaction {
 			try {
 				removeIndex(table='tableName', indexName='');
 			}
-			catch (any ex) {
-				hasError = true;
-				catchObject = ex;
+			catch (any e) {
+				local.hasError = true;
+				catchObject = e;
 			}
 
-			if (!hasError) {
+			if (!local.hasError) {
 				transaction action="commit";
 			} else {
 				transaction action="rollback";
@@ -32,17 +32,17 @@ component extends="[extends]" hint="[description]" {
 	}
 
 	function down() {
-	  hasError = false;
+	  local.hasError = false;
 		transaction {
 			try {
 				addIndex(table='tableName', columnNames='columnName', unique=true);
 			}
-			catch (any ex) {
-				hasError = true;
-				catchObject = ex;
+			catch (any e) {
+				local.hasError = true;
+				catchObject = e;
 			}
 
-			if (!hasError) {
+			if (!local.hasError) {
 				transaction action="commit";
 			} else {
 				transaction action="rollback";
