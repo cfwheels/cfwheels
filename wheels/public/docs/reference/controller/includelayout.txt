@@ -2,7 +2,7 @@
 <cfsavecontent variable="categoriesSidebar">
 	<cfoutput>
 		<ul>
-			##includePartial(categories)##
+			#includePartial(categories)#
 		</ul>
 	</cfoutput>
 </cfsavecontent>

@@ -5,7 +5,7 @@ mapper()
     // Example URL: /ghosts/666/stories/616
     // Controller:  Stories
     // Action:      update
-    .put(name="ghostStory", pattern="ghosts/[ghostKey]/stories/[key]", to="stories##update")
+    .put(name="ghostStory", pattern="ghosts/[ghostKey]/stories/[key]", to="stories#update")
 
     // Route name:  goblins
     // Example URL: /goblins
@@ -17,13 +17,13 @@ mapper()
     // Example URL: /heartbeat
     // Controller:  Sessions
     // Action:      update
-    .put(name="heartbeat", to="sessions##update")
+    .put(name="heartbeat", to="sessions#update")
 
     // Route name:  usersPreferences
     // Example URL: /preferences
     // Controller:  users.Preferences
     // Action:      update
-    .put(name="preferences", to="preferences##update", package="users")
+    .put(name="preferences", to="preferences#update", package="users")
 
     // Route name:  orderShipment
     // Example URL: /shipments/5432
@@ -32,7 +32,7 @@ mapper()
     .put(
         name="shipment",
         pattern="shipments/[key]",
-        to="shipments##update",
+        to="shipments#update",
         package="orders"
     )
 
@@ -42,13 +42,13 @@ mapper()
         // Example URL: /subscribers/3209/launch
         // Controller:  Subscribers
         // Action:      launch
-        .put(name="launch", to="subscribers##update", on="collection")
+        .put(name="launch", to="subscribers#update", on="collection")
 
         // Route name:  discontinueSubscriber
         // Example URL: /subscribers/2251/discontinue
         // Controller:  Subscribers
         // Action:      discontinue
-        .put(name="discontinue", to="subscribers##discontinue", on="member")
+        .put(name="discontinue", to="subscribers#discontinue", on="member")
     .end()
 .end();
 

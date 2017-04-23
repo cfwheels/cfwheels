@@ -13,7 +13,7 @@ mapper()
             // Route name:  apiV1Users
             // Example URL: /api/v1/users
             // Controller:  api.v1.Users
-            .get(name="users", to="users##index")
+            .get(name="users", to="users#index")
         .end()
     .end()
 
@@ -21,7 +21,7 @@ mapper()
         // Route name:  fooBars
         // Example URL: /foose/bars
         // Controller:  foos.Bars
-        .post(name="bars", to="bars##create")
+        .post(name="bars", to="bars#create")
     .end()
 .end();
 

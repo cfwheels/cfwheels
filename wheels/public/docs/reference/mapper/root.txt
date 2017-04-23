@@ -9,7 +9,7 @@ mapper()
 
     // Map the root of the application to the `show` action of the `dashboards`
     // controller.
-    .root(to="dashboards##show")
+    .root(to="dashboards#show")
 .end();
 
 </cfscript>

@@ -5,7 +5,7 @@ mapper()
     // Example URL: /articles/987/reviews/12542
     // Controller:  Reviews
     // Action:      delete
-    .delete(name="articleReview", pattern="articles/[articleKey]/reviews/[key]", to="reviews##delete")
+    .delete(name="articleReview", pattern="articles/[articleKey]/reviews/[key]", to="reviews#delete")
 
     // Route name:  cookedBooks
     // Example URL: /cooked-books
@@ -17,13 +17,13 @@ mapper()
     // Example URL: /logout
     // Controller:  Sessions
     // Action:      delete
-    .delete(name="logout", to="sessions##delete")
+    .delete(name="logout", to="sessions#delete")
 
     // Route name:  clientsStatus
     // Example URL: /statuses/4918
     // Controller:  clients.Statuses
     // Action:      delete
-    .delete(name="statuses", to="statuses##delete", package="clients")
+    .delete(name="statuses", to="statuses#delete", package="clients")
 
     // Route name:  blogComment
     // Example URL: /comments/5432
@@ -32,7 +32,7 @@ mapper()
     .delete(
         name="comment",
         pattern="comments/[key]",
-        to="comments##delete",
+        to="comments#delete",
         package="blog"
     )
 .end();

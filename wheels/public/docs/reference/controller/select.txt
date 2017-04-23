@@ -3,14 +3,14 @@
 authors = model("author").findAll();
 
 <!--- View code--->
-#select(objectName="book", property="authorId", options=authors)# 
+#select(objectName="book", property="authorId", options=authors)#
 
 // Example 2: Shows `select` fields for selecting order statuses for all shipments provided by the `orders` association and nested properties
 // Controller code
-shipment = model("shipment").findByKey(key=params.key, where="shipments.statusId=##application.NEW_STATUS_ID##", include="order");
+shipment = model("shipment").findByKey(key=params.key, where="shipments.statusId=#application.NEW_STATUS_ID#", include="order");
 statuses = model("status").findAll(order="name");
 
 <!--- View code--->
-<cfloop from="1" to="##ArrayLen(shipments.orders)##" index="i">
+<cfloop from="1" to="#ArrayLen(shipments.orders)#" index="i">
 	#select(label="Order #shipments.orders[i].orderNum#", objectName="shipment", association="orders", position=i, property="statusId", options=statuses)#
-</cfloop> 
+</cfloop>

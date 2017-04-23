@@ -1,16 +1,16 @@
-// Get all the errors for the `user` object
+// Get all the errors for the `user` object.
 errorInfo = user.allErrors();
 
-// Sample Return of Function
+// Sample return of method.
 [
 	{
-  	message:'Username must not be blank',
-    name:'usernameError',
-    property:'username'
+  	message: 'Username must not be blank.',
+    name: 'usernameError',
+    property: 'username'
   },
   {
-  	message:'Password must not be blank',
-    name:'passwordError',
-    property:'password'
+  	message: 'Password must not be blank.',
+    name: 'passwordError',
+    property: 'password'
   }
 ]

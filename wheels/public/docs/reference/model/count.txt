@@ -8,6 +8,6 @@ authorOnACount = model("author").count(where="lastName LIKE 'A%'");
 authorWithBooksOnACount = model("author").count(include="books", where="booktitle LIKE 'A%'");
 
 // Count the number of comments on a specific post (a `hasMany` association from `post` to `comment` is required)
-// The `commentCount` method will call `model("comment").count(where="postId=##post.id##")` internally
+// The `commentCount` method will call `model("comment").count(where="postId=#post.id#")` internally
 aPost = model("post").findByKey(params.postId);
 amount = aPost.commentCount();

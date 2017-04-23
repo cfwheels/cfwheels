@@ -6,6 +6,6 @@
 	<legend>Screenshots</legend>
 	<cfloop from="1" to="#ArrayLen(site.screenshots)#" index="i">
 		#fileField(label="File #i#", objectName="site", association="screenshots", position=i, property="file")#
-		#textArea(label="Caption ####i##", objectName="site", association="screenshots", position=i, property="caption")#
+		#textArea(label="Caption ##i#", objectName="site", association="screenshots", position=i, property="caption")#
 	</cfloop>
 </fieldset>

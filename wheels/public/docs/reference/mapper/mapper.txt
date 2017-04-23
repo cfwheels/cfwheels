@@ -7,9 +7,9 @@ mapper()
 
     .resource("profile")
 
-    .get(name="login", to="sessions##new")
-    .post(name="auth", to="sessions##create")
-    .delete(name="logout", to="sessions##delete")
+    .get(name="login", to="sessions#new")
+    .post(name="auth", to="sessions#create")
+    .delete(name="logout", to="sessions#delete")
 .end();
 
 </cfscript>

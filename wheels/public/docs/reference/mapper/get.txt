@@ -5,7 +5,7 @@ mapper()
     // Example URL: /posts/my-post-title
     // Controller:  Posts
     // Action:      show
-    .get(name="post", pattern="posts/[slug]", to="posts##show")
+    .get(name="post", pattern="posts/[slug]", to="posts#show")
 
     // Route name:  posts
     // Example URL: /posts
@@ -17,13 +17,13 @@ mapper()
     // Example URL: /the-scribes
     // Controller:  Authors
     // Action:      index
-    .get(name="authors", pattern="the-scribes", to="authors##index")
+    .get(name="authors", pattern="the-scribes", to="authors#index")
 
     // Route name:  commerceCart
     // Example URL: /cart
     // Controller:  commerce.Carts
     // Action:      show
-    .get(name="cart", to="carts##show", package="commerce")
+    .get(name="cart", to="carts#show", package="commerce")
 
     // Route name:  extranetEditProfile
     // Example URL: /profile/edit
@@ -32,7 +32,7 @@ mapper()
     .get(
         name="editProfile",
         pattern="profile/edit",
-        to="profiles##edit",
+        to="profiles#edit",
         package="extranet"
     )
 
@@ -42,13 +42,13 @@ mapper()
         // Example URL: /users/activated
         // Controller:  Users
         // Action:      activated
-        .get(name="activated", to="users##activated", on="collection")
+        .get(name="activated", to="users#activated", on="collection")
 
         // Route name:  preferencesUsers
         // Example URL: /users/391/preferences
         // Controller:  Preferences
         // Action:      index
-        .get(name="preferences", to="preferences##index", on="member")
+        .get(name="preferences", to="preferences#index", on="member")
     .end()
 .end();
 
