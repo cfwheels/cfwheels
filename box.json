@@ -1,0 +1,33 @@
+{
+    "name":"CFWheels",
+    "version":"2.0.0-beta",
+    "author":"CFWheels Core Team and Community",
+    "directory":"",
+    "createPackageDirectory":false,
+    "packageDirectory":"",
+    "homepage":"https://cfwheels.org/",
+    "documentation":"https://docs.cfwheels.org/",
+    "repository":{
+        "type":"git",
+        "URL":"https://github.com/cfwheels/cfwheels"
+    },
+    "bugs":"https://github.com/cfwheels/cfwheels/issues",
+    "slug":"cfwheels",
+    "shortDescription":"CFWheels MVC Framework",
+    "changelog":"https://github.com/cfwheels/cfwheels/blob/master/CHANGELOG.md",
+    "type":"mvc",
+    "keywords":[
+        "mvc","rails","wheels","cfwheels"
+    ],
+    "engines" : [
+        { "type" : "lucee", "version" : ">=4.5.5.006" },
+        { "type" : "adobe", "version" : ">=11.0.11" }
+    ],
+    "private":false,
+    "license":[
+        {
+            "type":"Apache License 2.0",
+            "URL":"https://github.com/cfwheels/cfwheels/blob/master/LICENSE"
+        }
+    ]
+}
