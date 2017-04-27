@@ -25,7 +25,7 @@ public struct function init(
  */
 public string function migrateTo(string version="") {
 	local.rv = "";
-	local.currentVersion = ListLast($getVersionsPreviouslyMigrated());
+	local.currentVersion = getCurrentMigrationVersion();
 	if (local.currentVersion == arguments.version) {
 		local.rv = "Database is currently at version #arguments.version#. No migration required.#chr(13)#";
 	} else {
@@ -91,6 +91,8 @@ public string function migrateTo(string version="") {
 	}
 	return local.rv;
 }
+
+
 
 /**
  * Shortcut function to migrate to the latest version
@@ -176,6 +178,46 @@ public array function getAvailableMigrations(string path=this.paths.migrate) {
 			ArrayAppend(local.rv, local.migration);
 		}
 	};
+	return local.rv;
+}
+
+/**
+ * Reruns the specified migration version. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
+ *
+ * [section: Configuration]
+ * [category: Database Migrations]
+ *
+ * @version The Database schema version to rerun
+ */
+public string function redoMigration(string version="") {
+	var currentVersion = Len(arguments.version) ? arguments.version : getCurrentMigrationVersion();
+	local.migrationArray = ArrayFilter(getAvailableMigrations(), function(i) {
+		return i.version == currentVersion;
+	});
+	if (!ArrayLen(local.migrationArray)) {
+		return "Error re-running #arguments.version#.#Chr(13)#This version was not found#Chr(13)#";
+	}
+
+	local.migration = local.migrationArray[1];
+	local.rv = "";
+	transaction action="begin" {
+		try {
+			local.rv = local.rv & "#Chr(13)#------- " & local.migration.cfcfile & " #RepeatString("-", Max(5, 50-Len(local.migration.cfcfile)))##Chr(13)#";
+			request.$wheelsMigrationOutput = "";
+			request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_redo.sql";
+			if (application.wheels.dbmigrateWriteSQLFiles) {
+				FileWrite(request.$wheelsMigrationSQLFile, "");
+			}
+			local.migration.cfc.down();
+			local.migration.cfc.up();
+			local.rv = local.rv & request.$wheelsMigrationOutput;
+		} catch (any e) {
+			local.rv = local.rv & "Error re-running #local.migration.version#.#Chr(13)##e.message##Chr(13)##e.detail##Chr(13)#";
+			transaction action="rollback";
+			break;
+		}
+		transaction action="commit";
+	}
 	return local.rv;
 }
 

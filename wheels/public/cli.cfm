@@ -3,6 +3,7 @@
 --->
 <cfinclude template="../dbmigrate/basefunctions.cfm">
 <cfscript>
+	setting showDebugOutput="no";
 	dbmigrate = application.wheels.dbmigrate;
 	try {
 		"data"={};
@@ -41,6 +42,14 @@
 						data.message=dbmigrate.migrateTo(params.version);
 					}
 				break;
+				case "redoMigration":
+					if(structKeyExists(params,"version")){
+						local.redoVersion = params.version;
+					} else {
+						local.redoVersion = data.lastVersion;
+					}
+					data.message=dbmigrate.redoMigration(local.redoVersion);
+				break;
 				case "info":
 					data.message="Returning what I know..";
 				break;
@@ -50,7 +59,5 @@
 		 data.success = false;
 		 data.messages = e.message & ': ' & e.detail;
 	}
-
-
 </cfscript>
 <cfcontent reset="true" type="application/json"><cfoutput>#serializeJSON(data)#</cfoutput><cfabort>

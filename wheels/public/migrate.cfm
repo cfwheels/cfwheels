@@ -244,6 +244,13 @@ $(document).ready(function() {
 			});
 			e.preventDefault();
 		});
+		$(".redo").on("click", function(e){
+			remoteSend({
+				"command": "redoMigration",
+				"version": $(this).closest(".migration").find(".version").html()
+			});
+			e.preventDefault();
+		});
 	}
 
 	function remoteSend(data){
