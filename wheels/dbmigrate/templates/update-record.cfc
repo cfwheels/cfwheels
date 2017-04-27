@@ -13,39 +13,35 @@
 component extends="[extends]" hint="[description]" {
 
 	function up() {
-	  local.hasError = false;
 		transaction {
 			try {
 				updateRecord(table='tableName', where='');
 			} catch (any e) {
-				local.hasError = true;
-				catchObject = e;
+				local.exception = e;
 			}
 
-			if (!local.hasError) {
-				transaction action="commit";
-			} else {
+			if (StructKeyExists(local, "exception")) {
 				transaction action="rollback";
-				throw(errorCode="1", detail=catchObject.detail, message=catchObject.message, type="any");
+				throw(errorCode="1", detail=local.exception.detail, message=local.exception.message, type="any");
+			} else {
+				transaction action="commit";
 			}
 		}
 	}
 
 	function down() {
-		local.hasError = false;
 		transaction {
 		  try {
 				updateRecord(table='tableName', where='');
 			} catch (any e) {
-				local.hasError = true;
-				catchObject = e;
+				local.exception = e;
 			}
 
-			if (!local.hasError) {
-				transaction action="commit";
-			} else {
+			if (StructKeyExists(local, "exception")) {
 				transaction action="rollback";
-				throw(errorCode="1", detail=catchObject.detail, message=catchObject.message, type="any");
+				throw(errorCode="1", detail=local.exception.detail, message=local.exception.message, type="any");
+			} else {
+				transaction action="commit";
 			}
 		}
 	}
