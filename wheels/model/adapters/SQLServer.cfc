@@ -3,7 +3,7 @@ component extends="Base" output=false {
 	/**
 	 * Map database types to the ones used in CFML.
 	 */
-	public string function $getType(required string type) {
+	public string function $getType(required string type, string scale, string details) {
 		switch (arguments.type) {
 			case "bigint":
 				local.rv = "cf_sql_bigint";

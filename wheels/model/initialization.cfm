@@ -83,12 +83,24 @@ public any function $initModelClass(required string name, required string path) 
 						break;
 					}
 				}
-				local.type = SpanExcluding(local.columns["type_name"][local.i], "( ");
+
+				// Extract type and details, like if it's signed or not, from the "type_name"" information we got from cfdbinfo.
+				// It can be "int" or "int unsigned" for example (in which case we set type to "int" and details to "unsigned").
+				// Done below by treating the value as a space delimited list.
+				// We also ignore anything inside parentheses.
+				local.typeName = Trim(SpanExcluding(local.columns["type_name"][local.i], "("));
+ 				if (ListLen(local.typeName, " ") == 2) {
+					local.type = ListFirst(local.type, " ");
+ 					local.details = ListLast(local.type, " ");
+				} else {
+					local.type = local.typeName;
+ 					local.details = "";
+ 				}
 
 				// set the info we need for each property
 				variables.wheels.class.properties[local.property] = {};
 				variables.wheels.class.properties[local.property].dataType = local.type;
-				variables.wheels.class.properties[local.property].type = variables.wheels.class.adapter.$getType(local.type, local.columns["decimal_digits"][local.i]);
+				variables.wheels.class.properties[local.property].type = variables.wheels.class.adapter.$getType(local.type, local.columns["decimal_digits"][local.i], local.details);
 				variables.wheels.class.properties[local.property].column = local.columns["column_name"][local.i];
 				variables.wheels.class.properties[local.property].scale = local.columns["decimal_digits"][local.i];
 				variables.wheels.class.properties[local.property].columndefault = local.columns["column_default_value"][local.i];

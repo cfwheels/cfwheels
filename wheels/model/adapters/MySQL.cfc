@@ -3,7 +3,19 @@ component extends="Base" output=false {
 	/**
 	 * Map database types to the ones used in CFML.
 	 */
-	public string function $getType(required string type) {
+	public string function $getType(required string type, string scale, string details) {
+
+		// Special handling for unsigned (stores only positive or 0 numbers) data types.
+		// When using unsigned data types we can store a higher value than usual so we need to map to different CF types.
+		// E.g. unsigned int stores up to 4,294,967,295 instead of 2,147,483,647 so we map to cf_sql_bigint to support that.
+		if (StructKeyExists(arguments, "details") && arguments.details == "unsigned") {
+			if (arguments.type == "int") {
+				return "cf_sql_bigint";
+			} else if (arguments.type == "bigint") {
+				return "cf_sql_decimal";
+			}
+		}
+
 		switch (arguments.type) {
 			case "bigint":
 				local.rv = "cf_sql_bigint";

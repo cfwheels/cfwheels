@@ -5,7 +5,7 @@ component extends="Base" output=false {
 	 * Using oid cols should probably be avoided, included here for completeness.
 	 * PostgreSQL has deprecated the money type, included here for completeness.
 	 */
-	public string function $getType(required string type) {
+	public string function $getType(required string type, string scale, string details) {
 		switch (arguments.type) {
 			case "bigint": case "int8": case "bigserial": case "serial8":
 				local.rv = "cf_sql_bigint";

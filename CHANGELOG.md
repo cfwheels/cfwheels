@@ -44,6 +44,7 @@
 * Fixes attempts to insert nulls for blank strings - [#654](https://github.com/cfwheels/cfwheels/issues/654) [Andy Bellenie, Per Djurner]
 * Fix for using `validatePresenceOf()` with default on update - [Andy Bellenie]
 * Fixes so paginated finder calls with no records include column names - [#722](https://github.com/cfwheels/cfwheels/issues/722) [Per Djurner]
+* Fixes "invalid data" error when using unsigned integers in MySQL - [#768](https://github.com/cfwheels/cfwheels/issues/768) [Per Djurner]
 
 ### Miscellaneous
 

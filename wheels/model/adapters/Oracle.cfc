@@ -3,7 +3,7 @@ component extends="Base" output="false" {
 	/**
 	 * Map database types to the ones used in CFML.
 	 */
-	public string function $getType(required string type, string scale) {
+	public string function $getType(required string type, string scale, string details) {
 		switch (LCase(arguments.type)) {
 			case "blob": case "bfile":
 				local.rv = "cf_sql_blob";
