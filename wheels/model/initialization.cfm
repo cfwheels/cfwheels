@@ -90,8 +90,8 @@ public any function $initModelClass(required string name, required string path) 
 				// We also ignore anything inside parentheses.
 				local.typeName = Trim(SpanExcluding(local.columns["type_name"][local.i], "("));
  				if (ListLen(local.typeName, " ") == 2) {
-					local.type = ListFirst(local.type, " ");
- 					local.details = ListLast(local.type, " ");
+					local.type = ListFirst(local.typeName, " ");
+ 					local.details = ListLast(local.typeName, " ");
 				} else {
 					local.type = local.typeName;
  					local.details = "";
