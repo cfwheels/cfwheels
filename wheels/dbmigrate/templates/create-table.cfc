@@ -9,13 +9,22 @@
   |----------------------------------------------------------------------------------------------|
 
     EXAMPLE:
-      t = createTable(name='employees',force=false,id=true,primaryKey='empId');
-      t.string(columnNames='name', default='', null=true, limit='255');
-      t.text(columnNames='bio', default='', null=true);
+      t = createTable(name='employees', force=false, id=true, primaryKey='empId');
+			t.string(columnNames='name', default='', null=true, limit='255');
+			t.text(columnNames='bio', default='', null=true);
+			t.binary(columnNames='credentials');
+			t.biginteger(columnNames='sinsCommitted', default='', null=true, limit='1');
+			t.char(columnNames='code', default='', null=true, limit='8');
+			t.decimal(columnNames='hourlyWage', default='', null=true, precision='1', scale='2');
+			t.date(columnNames='dateOfBirth', default='', null=true);
+			t.datetime(columnNames='employmentStarted', default='', null=true);
+			t.float(columnNames='height', default='', null=true);
+			t.integer(columnNames='age', default='', null=true, limit='1');
       t.time(columnNames='lunchStarts', default='', null=true);
-      t.datetime(columnNames='employmentStarted', default='', null=true);
-      t.integer(columnNames='age', default='', null=true, limit='1');
-      t.decimal(columnNames='hourlyWage', default='', null=true, precision='1', scale='2');
+			t.uniqueidentifier(columnNames='uid', default='newid()', null=false);
+			t.references("vacation");
+			t.timestamps();
+			t.create();
 */
 component extends="[extends]" hint="[description]" {
 
