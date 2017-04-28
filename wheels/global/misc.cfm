@@ -105,6 +105,9 @@ public any function processRequest(required struct params, string method, string
 		local.rv = local.body;
 	}
 
+	// Clear the Flash so we can run several processAction calls without the Flash sticking around.
+	local.controller.$flashClear();
+
 	// Set back the global transaction mode to the previous value if it has been changed.
 	if (arguments.rollback) {
 		$set(transactionMode=local.transactionMode);
