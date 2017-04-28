@@ -6,3 +6,6 @@ sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", name="Tutorial.pdf");
 
 // Send a file that is located outside of the web root
 sendFile(file="../../tutorials/wheels_tutorial_20081028_J657D6HX.pdf");
+
+// Send a file that is located in ram://
+sendFile(file="ram://wheels_tutorial_20081028_J657D6HX.pdf");
