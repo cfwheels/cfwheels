@@ -1,8 +1,8 @@
 <!---
-	CLI & GUI Uses this file to talk to wheels via JSON when in design/development mode
+	CLI & GUI Uses this file to talk to wheels via JSON when in maintenance/testing/development mode
 --->
-<cfinclude template="../dbmigrate/basefunctions.cfm">
 <cfscript>
+	include "../dbmigrate/basefunctions.cfm";
 	setting showDebugOutput="no";
 	dbmigrate = application.wheels.dbmigrate;
 	try {
