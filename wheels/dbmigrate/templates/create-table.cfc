@@ -10,7 +10,7 @@
 
     EXAMPLE:
       t = createTable(name='employees', force=false, id=true, primaryKey='empId');
-			t.string(columnNames='name', default='', null=true, limit='255');
+			t.string(columnNames='firstName,lastName', default='', null=true, limit='255');
 			t.text(columnNames='bio', default='', null=true);
 			t.binary(columnNames='credentials');
 			t.biginteger(columnNames='sinsCommitted', default='', null=true, limit='1');
