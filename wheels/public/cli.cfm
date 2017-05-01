@@ -42,6 +42,9 @@
 						data.message=dbmigrate.migrateTo(params.version);
 					}
 				break;
+				case "migrateToLatest":
+					data.message=dbmigrate.migrateToLatest();
+				break;
 				case "redoMigration":
 					if(structKeyExists(params,"version")){
 						local.redoVersion = params.version;
