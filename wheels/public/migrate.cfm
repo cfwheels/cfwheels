@@ -173,11 +173,11 @@ $(document).ready(function() {
 						+ "<div class='name column'>" + migration.NAME + "</div>"
 						+ "<div class='actions column'>";
 						if(migration.STATUS.length == 0){
-							s+="<button class='migrate domigrate button-small button'><i class='fa fa-refresh'></i> Migrate To</button>";
+							s+="<button class='migrate domigrate button-small button'>Migrate To <i class='fa fa-arrow-right'></i></button>";
 						} else {
 							s+="<button class='redo button-small button'><i class='fa fa-refresh'></i> Redo</button>";
 							if(isCurrentMigration(migration.VERSION, data.currentVersion)	){
-								s+="<button class='currentVersion button-small button'><i class='fa fa-refresh'></i> Current</button>";
+								s+="<button class='currentVersion button-small button'><i class='fa fa-check'></i> Current</button>";
 							} else {
 								s+="<button class='migrate migrated button-small button'><i class='fa fa-arrow-up'></i> Roll Back</button>";
 							}
