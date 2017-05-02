@@ -893,6 +893,7 @@ public void function $loadPlugins() {
 	local.pluginPath = application[local.appKey].webPath & application[local.appKey].pluginPath;
 	application[local.appKey].PluginObj = $createObjectFromRoot(path="wheels", fileName="Plugins", method="init", pluginPath=local.pluginPath, deletePluginDirectories=application[local.appKey].deletePluginDirectories, overwritePlugins=application[local.appKey].overwritePlugins, loadIncompatiblePlugins=application[local.appKey].loadIncompatiblePlugins, wheelsEnvironment=application[local.appKey].environment, wheelsVersion=application[local.appKey].version);
 	application[local.appKey].plugins = application[local.appKey].PluginObj.getPlugins();
+	application[local.appKey].pluginMeta = application[local.appKey].PluginObj.getPluginMeta();
 	application[local.appKey].incompatiblePlugins = application[local.appKey].PluginObj.getIncompatiblePlugins();
 	application[local.appKey].dependantPlugins = application[local.appKey].PluginObj.getDependantPlugins();
 	application[local.appKey].mixins = application[local.appKey].PluginObj.getMixins();

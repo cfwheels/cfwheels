@@ -10,6 +10,7 @@ public any function init(
 ) {
 	variables.$class = {};
 	variables.$class.plugins = {};
+	variables.$class.pluginMeta = {};
 	variables.$class.mixins = {};
 	variables.$class.mixableComponents = "application,dispatch,controller,mapper,model,base,sqlserver,mysql,mariadb,oracle,postgresql,h2,test";
 	variables.$class.incompatiblePlugins = "";
@@ -27,6 +28,8 @@ public any function init(
 	}
 	/* process plugins */
 	$pluginsProcess();
+	/* get versions */
+	$pluginMetaData();
 	/* process mixins */
 	$processMixins();
 	/* dependancies */
@@ -117,6 +120,27 @@ public void function $pluginsProcess() {
 			}
 		}
 	};
+}
+
+/**
+ * Attempt to extract version numbers from box.json and/or corresponding .zip files
+ * Storing box.json data too as this may be useful later
+ */
+public void function $pluginMetaData() {
+	for(local.plugin in variables.$class.plugins){
+		variables.$class.pluginMeta[local.plugin]={
+			"version": "",
+			"boxjson": {}
+		};
+		local.boxJsonLocation=$fullPathToPlugin(local.plugin & "/" & 'box.json');
+		if(fileExists(local.boxJsonLocation)){
+			local.boxJson=deserializeJSON(fileRead(local.boxJsonLocation));
+			variables.$class.pluginMeta[local.plugin]["boxjson"]=local.boxJson;
+			if(structKeyExists(local.boxJson, "version")){
+				variables.$class.pluginMeta[local.plugin]["version"]=local.boxJson.version;
+			}
+		}
+	}
 }
 
 public void function $determineDependancy() {
@@ -220,6 +244,10 @@ public void function $processMixins() {
 
 public any function getPlugins() {
 	return variables.$class.plugins;
+}
+
+public any function getPluginMeta() {
+	return variables.$class.pluginMeta;
 }
 
 public any function getIncompatiblePlugins() {
