@@ -202,7 +202,8 @@ public struct function $parseJsonBody(required struct params) {
 	local.headers = request.wheels.httpRequestData.headers;
 	local.content = request.wheels.httpRequestData.content;
 	if (StructKeyExists(local.headers, "Content-Type")) {
-		local.type = local.headers["Content-Type"];
+		// Content-Type may also include charset so we need only check the first item in the list
+		local.type = spanExcluding(local.headers["Content-Type"],";");
 
 		// Only proceed if the content type is JSON.
 		// Allow multiple JSON content types by checking the start and end of the string.
