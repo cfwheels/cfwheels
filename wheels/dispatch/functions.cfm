@@ -205,9 +205,7 @@ public struct function $parseJsonBody(required struct params) {
 		local.type = local.headers["Content-Type"];
 
 		// Only proceed if the content type is JSON.
-		// Allow multiple JSON content types by checking the start and end of the string.
-		// This way we allow both "application/json" and "application/vnd.api+json" (JSON API) for example.
-		if (Left(local.type, 12) == "application/" && Right(local.type, 4) == "json") {
+		if (findNoCase("json",local.type)) {
 
 			// On ACF we need to convert from binary to a string before we can work with it.
 			if (IsBinary(local.content)) {
