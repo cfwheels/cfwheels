@@ -123,8 +123,9 @@ public any function sendEmail(
 		StructDelete(arguments, local.item);
 	}
 
-	// Also return the args passed to cfmail.
+	// Also return the args passed to cfmail but delete "tagContent" since we already have that as either "text" or "html".
 	StructAppend(local.rv, arguments);
+	StructDelete(local.rv, "tagContent");
 
 	// Write the email body to file.
 	if (Len(local.writeToFile)) {
