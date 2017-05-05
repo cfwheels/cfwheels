@@ -29,7 +29,7 @@ public any function sendEmail(
 	local.deliver = Duplicate(arguments.deliver);
 	local.writeToFile = Duplicate(arguments.writeToFile);
 	$args(args=arguments, name="sendEmail", combine="template/templates/!,layout/layouts,file/files", required="template,from,to,subject");
-	local.nonPassThruArgs = "writetofile,template,templates,layout,layouts,file,files,detectMultipart,deliver,tagContent";
+	local.nonPassThruArgs = "writetofile,template,templates,layout,layouts,file,files,detectMultipart,deliver";
 	local.mailTagArgs = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,mailparams,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext,remove";
 
 	// If two templates but only one layout was passed in we set the same layout to be used on both.
