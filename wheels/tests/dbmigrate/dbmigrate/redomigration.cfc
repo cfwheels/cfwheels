@@ -45,7 +45,7 @@ component extends="wheels.tests.Test" {
 				datasource=application.wheels.dataSourceName,
 				type="columns",
 				table=tableName
-			)
+			);
 
 			FileDelete(local.path);
 			FileWrite(local.path, local.originalContent);
