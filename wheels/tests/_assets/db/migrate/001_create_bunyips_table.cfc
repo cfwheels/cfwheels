@@ -1,11 +1,11 @@
-<cfcomponent extends="wheels.dbmigrate.Migration" hint="create kangaroos table">
+<cfcomponent extends="wheels.dbmigrate.Migration" hint="create bunyips table">
   <cffunction name="up">
   	<cfset hasError = false />
   	<cftransaction>
 	    <cfscript>
 	    	try{
 				t = createTable(name="bunyips");
-        t.string(columnNames="name,hobbies", default="", null=true, limit=255);
+        t.string(columnNames="name", default="", null=true, limit=255);
 				t.timestamps();
 				t.create();
 	    	}

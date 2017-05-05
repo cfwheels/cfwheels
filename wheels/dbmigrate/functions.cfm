@@ -92,8 +92,6 @@ public string function migrateTo(string version="") {
 	return local.rv;
 }
 
-
-
 /**
  * Shortcut function to migrate to the latest version
  *
@@ -190,7 +188,7 @@ public array function getAvailableMigrations(string path=this.paths.migrate) {
  * @version The Database schema version to rerun
  */
 public string function redoMigration(string version="") {
-	var currentVersion = Len(arguments.version) ? arguments.version : getCurrentMigrationVersion();
+	var currentVersion = Len(arguments.version) ? arguments.version : this.getCurrentMigrationVersion();
 	local.migrationArray = ArrayFilter(getAvailableMigrations(), function(i) {
 		return i.version == currentVersion;
 	});
@@ -200,23 +198,18 @@ public string function redoMigration(string version="") {
 
 	local.migration = local.migrationArray[1];
 	local.rv = "";
-	transaction action="begin" {
-		try {
-			local.rv = local.rv & "#Chr(13)#------- " & local.migration.cfcfile & " #RepeatString("-", Max(5, 50-Len(local.migration.cfcfile)))##Chr(13)#";
-			request.$wheelsMigrationOutput = "";
-			request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_redo.sql";
-			if (application.wheels.dbmigrateWriteSQLFiles) {
-				FileWrite(request.$wheelsMigrationSQLFile, "");
-			}
-			local.migration.cfc.down();
-			local.migration.cfc.up();
-			local.rv = local.rv & request.$wheelsMigrationOutput;
-		} catch (any e) {
-			local.rv = local.rv & "Error re-running #local.migration.version#.#Chr(13)##e.message##Chr(13)##e.detail##Chr(13)#";
-			transaction action="rollback";
-			break;
+	try {
+		local.rv = local.rv & "#Chr(13)#------- " & local.migration.cfcfile & " #RepeatString("-", Max(5, 50-Len(local.migration.cfcfile)))##Chr(13)#";
+		request.$wheelsMigrationOutput = "";
+		request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_redo.sql";
+		if (application.wheels.dbmigrateWriteSQLFiles) {
+			FileWrite(request.$wheelsMigrationSQLFile, "");
 		}
-		transaction action="commit";
+		local.migration.cfc.down();
+		local.migration.cfc.up();
+		local.rv = local.rv & request.$wheelsMigrationOutput;
+	} catch (any e) {
+		local.rv = local.rv & "Error re-running #local.migration.version#.#Chr(13)##e.message##Chr(13)##e.detail##Chr(13)#";
 	}
 	return local.rv;
 }
