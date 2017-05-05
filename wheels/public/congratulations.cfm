@@ -1,5 +1,4 @@
-<cfset thisVersion = ListGetAt(get("version"), 1, ".") & "." & ListGetAt(get("version"), 2, ".")>
-
+<cfset thisVersion = SpanExcluding(ListGetAt(get("version"), 1, ".") & "." & ListGetAt(get("version"), 2, "."), " ")>
 <cfoutput>
 
 <h1>Congratulations!</h1>
@@ -11,14 +10,14 @@ Welcome to the wonderful world of CFWheels. We hope you will enjoy it!</p>
 
 <div class="row">
 	<div class="column">
-		<a class="" href="http://docs.cfwheels.org/v#thisVersion#/docs/beginner-tutorial-hello-world">View and code along with our
+		<a class="" href="https://guides.cfwheels.org/v#thisVersion#/docs/beginner-tutorial-hello-world" target="_blank">View and code along with our
 		&quot;Hello World&quot; tutorial.</a>
 	</div>
 	<div class="column">
-		<a class="" href="http://docs.cfwheels.org/v#thisVersion#/docs">Have a look at the rest of our documentation.</a>
+		<a class="" href="https://guides.cfwheels.org/v#thisVersion#/docs" target="_blank">Have a look at the rest of our documentation.</a>
 	</div>
 	<div class="column">
-		<a class="" href="http://groups.google.com/group/cfwheels">Say &quot;Hello!&quot; to everyone in the Google Group.</a>
+		<a class="" href="http://groups.google.com/group/cfwheels" target="_blank">Say &quot;Hello!&quot; to everyone in the Google Group.</a>
 	</div>
 	<div class="column">Build the next killer website on the World Wide Web...</div>
 </div>

@@ -102,18 +102,11 @@
 		</tr>
 		<tr>
 			<td><strong>Framework:</strong></td>
-			<td>CFWheels #$get("version")#
-				<cfif local.hasFrameworkTests or local.hasFrameworkBuildFile>
-					<cfsavecontent variable="coreLinks">
-						<cfif local.hasFrameworkTests><a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=core">Run Tests</a>, <a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=core">View Tests</a>,</cfif> <a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=docs&type=core">View Docs</a>,
-						<cfif local.hasFrameworkBuildFile><a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=build">Build</a></cfif>
-					</cfsavecontent>
-					[#Trim(coreLinks)#]
-				</cfif>
+			<td><a href="https://cfwheels.org/" target="_blank">CFWheels</a> #$get("version")# [<a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=docs&type=core">View Docs</a><cfif local.hasFrameworkTests>, <a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=core">Run Tests</a>, <a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=core">View Tests</a></cfif><cfif local.hasFrameworkBuildFile>, <a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=build">Build Release</a></cfif>]
 			</td>
 		</tr>
 		<tr>
-			<td><strong>Active Environment:</strong></td>
+			<td><strong>Environment:</strong></td>
 			<td>#capitalize($get("environment"))#<cfif NOT Len($get("reloadPassword"))><cfset local.environments = "development,testing,maintenance,production"> [<cfset local.pos = 0><cfloop list="#local.environments#" index="local.i"><cfset local.pos = local.pos + 1><cfif $get("environment") IS NOT local.i><a href="#local.baseReloadURL##local.i#">#capitalize(local.i)#</a><cfif ListLen(local.environments) GT local.pos>, </cfif></cfif></cfloop>]</cfif></td>
 		</tr>
 		<cfif StructKeyExists(application.wheels, "hostName")>
@@ -127,7 +120,7 @@
 			<td>#$get("serverName")# #$get("serverVersion")#</td>
 		</tr>
 		<tr>
-			<td><strong>Default Data Source:</strong></td>
+			<td><strong>Data Source:</strong></td>
 			<td>#capitalize($get("dataSourceName"))# [<a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=migrate">Migrations</a>]</td>
 		</tr>
 		<cfif StructKeyExists(application.wheels, "adapterName")>
@@ -138,7 +131,7 @@
 		</cfif>
 		<tr>
 			<td><strong>URL Rewriting:</strong></td>
-			<td>#$get("URLRewriting")#</td>
+			<td>#capitalize($get("URLRewriting"))#</td>
 		</tr>
 		<tr>
 			<td><strong>URL Obfuscation:</strong></td>
@@ -192,10 +185,6 @@
 		<tr>
 			<td><strong>Execution Time:</strong></td>
 			<td>#request.wheels.execution.total#ms<cfif request.wheels.execution.total GT 0> (<cfset local.keys = StructSort(request.wheels.execution, "numeric", "desc")><cfset local.firstDone = false><cfloop from="1" to="#arrayLen(local.keys)#" index="local.i"><cfset local.key = local.keys[local.i]><cfif local.key IS NOT "total" AND request.wheels.execution[local.key] GT 0><cfif local.firstDone>, </cfif>#LCase(local.key)# ~#request.wheels.execution[local.key]#ms<cfset local.firstDone = true></cfif></cfloop>)</cfif></td>
-		</tr>
-		<tr>
-			<td><strong>Help Links:</strong></td>
-			<td><a href="http://docs.cfwheels.org/docs" target="_blank">Documentation</a>, <a href="http://groups.google.com/group/cfwheels" target="_blank">Mailing List</a>, <a href="https://github.com/cfwheels/cfwheels/issues" target="_blank">Issue Tracker</a></td>
 		</tr>
 	</table>
 </div>
