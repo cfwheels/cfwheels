@@ -188,7 +188,7 @@ public array function getAvailableMigrations(string path=this.paths.migrate) {
  * @version The Database schema version to rerun
  */
 public string function redoMigration(string version="") {
-	var currentVersion = Len(arguments.version) ? arguments.version : this.getCurrentMigrationVersion();
+	var currentVersion = Len(arguments.version) ? arguments.version : getCurrentMigrationVersion();
 	local.migrationArray = ArrayFilter(getAvailableMigrations(), function(i) {
 		return i.version == currentVersion;
 	});
