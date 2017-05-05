@@ -167,6 +167,8 @@ section#migrations {
 #dbmigrate .currentVersion {font-weight: 700; background-color: #f4f4f4; border-bottom: 1px solid #999;}
 #dbmigrate .currentVersion .button {background-color: #999; border-color: #999}
 #dbmigrate .resetMigration {background-color: #db5730; border-color: #db5730}
+#dbmigrate .button-small.redo {    border-top-right-radius: 0;  border-bottom-right-radius: 0;}
+#dbmigrate .button-small.migrated {    border-top-left-radius: 0;  border-bottom-left-radius: 0;}
 
 /*----- Tabs -----*/
 .tabs {

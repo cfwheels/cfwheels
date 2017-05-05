@@ -98,14 +98,14 @@ public string function migrateTo(string version="") {
  * [section: Configuration]
  * [category: Database Migrations]
  */
-public void function migrateToLatest() {
+public string function migrateToLatest() {
 	local.migrations=getAvailableMigrations();
 	if (ArrayLen(local.migrations)) {
 		local.latest=local.migrations[ArrayLen(local.migrations)].version;
 	} else {
 		local.latest=0;
 	}
-	migrateTo(local.latest);
+	return migrateTo(local.latest);
 }
 
 /**

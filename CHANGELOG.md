@@ -46,10 +46,17 @@
 * Fixes so paginated finder calls with no records include column names - [#722](https://github.com/cfwheels/cfwheels/issues/722) [Per Djurner]
 * Fixes "invalid data" error when using unsigned integers in MySQL - [#768](https://github.com/cfwheels/cfwheels/issues/768) [Per Djurner]
 
-### Miscellaneous
+### Plugins
 
+* Plugins now distributed via forgebox.io [Tom King]
 * Update to the plugin system to allow overriding of the same framework method multiple times - [#681](https://github.com/cfwheels/cfwheels/issues/681) [James Gibson, Tom King]
 * Added ability to turn off incompatible plugin warnings from showing - [Danny Beard]
+* Plugins now have any java lib/class files automatically mapped onApplicationStart [731](https://github.com/cfwheels/cfwheels/issues/731) [Andy Bellenie, Tom King]
+* Plugins now read version number off their `box.json` files and are displayed in debug area [#68](https://github.com/cfwheels/cfwheels/issues/68) [Tom King]
+* Plugin meta data as set in `box.json` now available in `application.wheels.pluginMeta` scope [#68](https://github.com/cfwheels/cfwheels/issues/68) [Tom King]
+
+### Miscellaneous
+
 * Redirect away after a reload request - [Chris Peters]
 * Support checking IP in `http_x_forwarded_for` when doing maintenance mode exclusions - [Per Djurner]
 * Support checking user agent string when doing maintenance mode exclusions - [Per Djurner]
@@ -88,7 +95,7 @@
 * Form labels automatically generated based on foreign key properties will drop the "Id" from the end (e.g., the label for the "userId" property will be "User", not "User Id").
 * Routes need to be updated to use the new routing system by calling `mapper()`.
 * JavaScript arguments like `confirm` and `disable` have been removed from the link and form helper functions (use the [ConfirmerDisabler](https://github.com/chapmandu/confirmerdisabler) plugin to reinstate the old behaviour).
-* Timestamping (`createdAt`, `updatedAt`) is now in UTC by default (set the global `timeStampMode` setting to `local` to reinstate the old behaviour).
+* Timestamping (`createdAt`, `updatedAt`) is now in UTC by default (set the global `timeStampMode` setting to `local` to reinstate the old behaviour). 
 
 
 

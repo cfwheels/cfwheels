@@ -100,20 +100,12 @@
 
 	<div id="tabmigrate" class="tab">
 		<section id="migrations" style="display: none;">
-			<div class="row">
-				<div class="column column-20">
-					<h5>Migrate:</h5>
-				</div>
-				<div class="column">
-					<div id="dangerous-actions">
-
+			<h5>Migrate:</h5>
+				<div id="dangerous-actions">
 					<button class="resetMigration button button-small"><i class="fa fa-exclamation-triangle"></i> Reset Database</button>
 					<button class="migrateLatest button button-small"><i class="fa fa-exclamation-triangle"></i> Migrate to Latest</button>
-					</div>
-					<div id="migrationlist"></div>
-
 				</div>
-			</div>
+				<div id="migrationlist"></div>
 		</section>
    </div>
 
@@ -179,9 +171,18 @@ $(document).ready(function() {
 					var s="<div class='migration row " + isCurrentMigration(migration.VERSION, data.currentVersion)
 						+ "'><div class='version column'>" + migration.VERSION + "</div>"
 						+ "<div class='name column'>" + migration.NAME + "</div>"
-						+ "<div class='actions column'><button class='" + assignStatusClass(migration.STATUS) + " migrate button-small button'>"
-						+ assignStatus(migration.STATUS,  migration.VERSION, data.currentVersion) + "</button></div>"
-						+ "</div>";
+						+ "<div class='actions column'>";
+						if(migration.STATUS.length == 0){
+							s+="<button class='migrate domigrate button-small button'>Migrate To <i class='fa fa-arrow-right'></i></button>";
+						} else {
+							s+="<button class='redo button-small button'><i class='fa fa-refresh'></i> Redo</button>";
+							if(isCurrentMigration(migration.VERSION, data.currentVersion)	){
+								s+="<button class='currentVersion button-small button'><i class='fa fa-check'></i> Current</button>";
+							} else {
+								s+="<button class='migrate migrated button-small button'><i class='fa fa-arrow-up'></i> Roll Back</button>";
+							}
+						}
+						s+="</div></div>";
 						ml=ml + s;
 				}
 				$("#migrationlist").html(ml);
@@ -199,8 +200,11 @@ $(document).ready(function() {
 	function isCurrentMigration(version, latest){
 		if(version == latest){
 			return "currentVersion";
+		} else {
+			return "";
 		}
 	}
+	/*
 	function assignStatusClass(status, version, latest){
 		if(status.length == 0){
 			return "domigrate";
@@ -219,7 +223,7 @@ $(document).ready(function() {
 				return "Roll Back";
 			}
 		}
-	}
+	}*/
 
 	function assignClickHandlers(){
 		$(".migrate").on("click", function(e){
@@ -237,10 +241,8 @@ $(document).ready(function() {
 			e.preventDefault();
 		});
 		$(".migrateLatest").on("click", function(e){
-			var version=$("#migrations").find(".migration").last().find(".version").html();
 			remoteSend({
-				"command": "migrateTo",
-				"version": version
+				"command": "migrateToLatest"
 			});
 			e.preventDefault();
 		});

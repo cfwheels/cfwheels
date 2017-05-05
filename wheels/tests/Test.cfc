@@ -2,11 +2,12 @@ component extends="wheels.Test" {
 
 	/*
 	 * Executes once before the test suite runs.
-	 * Populates the test database on reload or if there are no tables in the database.
+	 * Populates the test database on reload or if the authors table does not exist.
 	 */
 	function beforeAll() {
 		local.tables = $dbinfo(datasource=application.wheels.dataSourceName, type="tables");
-		if ((StructKeyExists(url, "reload") && url.reload == true) || !local.tables.recordCount) {
+		local.tableList = ValueList(local.tables.table_name);
+		if ((StructKeyExists(url, "reload") && url.reload == true) || !FindNoCase("authors", local.tableList)) {
 			include "populate.cfm";
 		}
 	}
