@@ -4,6 +4,19 @@ component extends="wheels.tests.Test" {
 		source = model("user").findAll(select="id,lastName", maxRows=3);
 	}
 
+	function test_blank_string_first_in_where() {
+		local.convertBlankStringToNull = application.wheels.convertBlankStringToNull;
+		application.wheels.convertBlankStringToNull = false;
+		q = model("author").findAll(where="firstName = '' OR firstName = 'Per'");
+		application.wheels.convertBlankStringToNull = local.convertBlankStringToNull;
+		assert("q.recordCount IS 1");
+	}
+
+	function test_convert_blank_string_to_null() {
+		q = model("author").findAll(where="firstName != ''");
+		assert("q.recordCount IS 7");
+	}
+
 	function test_paginated_finder_calls_with_no_records_include_column_names() {
 		q = model("user").findAll(select="id, firstName", where="id = -1", page=1, perPage=10);
 		assert("ListSort(q.columnList, 'text') eq 'FIRSTNAME,ID'");
