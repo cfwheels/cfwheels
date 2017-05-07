@@ -95,7 +95,8 @@
 * Form labels automatically generated based on foreign key properties will drop the "Id" from the end (e.g., the label for the "userId" property will be "User", not "User Id").
 * Routes need to be updated to use the new routing system by calling `mapper()`.
 * JavaScript arguments like `confirm` and `disable` have been removed from the link and form helper functions (use the [ConfirmerDisabler](https://github.com/chapmandu/confirmerdisabler) plugin to reinstate the old behaviour).
-* Timestamping (`createdAt`, `updatedAt`) is now in UTC by default (set the global `timeStampMode` setting to `local` to reinstate the old behaviour). 
+* Timestamping (`createdAt`, `updatedAt`) is now in UTC by default (set the global `timeStampMode` setting to `local` to reinstate the old behaviour).
+* Blank strings in SQL are now converted to null checks (e.g. `where="x=''"` becomes `where="x IS NULL"`), control with `convertBlankStringToNull` setting.
 
 
 
