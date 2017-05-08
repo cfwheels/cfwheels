@@ -7,8 +7,8 @@
  * [category: Miscellaneous Functions]
  */
 string function csrfMetaTags() {
-  local.metaTags  = $tag(name="meta", attributes={ name="csrf-param", content="authenticityToken" }, close=true);
-  local.metaTags &= $tag(name="meta", attributes={ name="csrf-token", content=$generateAuthenticityToken() }, close=true);
+  local.metaTags  = $tag(name="meta", attributes={ name="csrf-param", content="authenticityToken" });
+  local.metaTags &= $tag(name="meta", attributes={ name="csrf-token", content=$generateAuthenticityToken() });
 
   return local.metaTags;
 }

@@ -97,6 +97,7 @@
 * JavaScript arguments like `confirm` and `disable` have been removed from the link and form helper functions (use the [ConfirmerDisabler](https://github.com/chapmandu/confirmerdisabler) plugin to reinstate the old behaviour).
 * Timestamping (`createdAt`, `updatedAt`) is now in UTC by default (set the global `timeStampMode` setting to `local` to reinstate the old behaviour).
 * Blank strings in SQL are now converted to null checks (e.g. `where="x=''"` becomes `where="x IS NULL"`).
+* Tags are now closed in HTML5 style (e.g. `<img src="x">` instead of `<img src="x" />`).
 
 
 

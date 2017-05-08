@@ -52,7 +52,7 @@ public string function textField(
 	if (!StructKeyExists(arguments, "value") || !Len(arguments.value)) {
 		arguments.value = $formValue(argumentCollection=arguments);
 	}
-	return local.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
+	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
 }
 
 /**
@@ -105,7 +105,7 @@ public string function passwordField(
 	if (!StructKeyExists(arguments, "value") || !Len(arguments.value)) {
 		arguments.value = $formValue(argumentCollection=arguments);
 	}
-	return local.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
+	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
 }
 
 /**
@@ -139,7 +139,7 @@ public string function hiddenField(
 	if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get") {
 		arguments.value = obfuscateParam(arguments.value);
 	}
-	return $tag(name="input", close=true, skip="objectName,property,association,position", attributes=arguments);
+	return $tag(name="input", skip="objectName,property,association,position", attributes=arguments);
 }
 
 /**
@@ -185,7 +185,7 @@ public string function fileField(
 	local.after = $formAfterElement(argumentCollection=arguments);
 	arguments.type = "file";
 	arguments.name = $tagName(arguments.objectName, arguments.property);
-	return local.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
+	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
 }
 
 /**
@@ -287,7 +287,7 @@ public string function radioButton(
 	if (arguments.tagValue == $formValue(argumentCollection=arguments)) {
 		arguments.checked = "checked";
 	}
-	return local.before & $tag(name="input", close=true, skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
+	return local.before & $tag(name="input", skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
 }
 
 /**
@@ -342,14 +342,14 @@ public string function checkBox(
 	if (local.value == arguments.value || IsNumeric(local.value) && local.value == 1 || !IsNumeric(local.value) && IsBoolean(local.value) && local.value) {
 		arguments.checked = "checked";
 	}
-	local.rv = local.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments);
+	local.rv = local.before & $tag(name="input", skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments);
 	if (Len(arguments.uncheckedValue)) {
 		local.hiddenAttributes = {};
 		local.hiddenAttributes.type = "hidden";
 		local.hiddenAttributes.id = arguments.id & "-checkbox";
 		local.hiddenAttributes.name = arguments.name & "($checkbox)";
 		local.hiddenAttributes.value = arguments.uncheckedValue;
-		local.rv &= $tag(name="input", close=true, attributes=local.hiddenAttributes);
+		local.rv &= $tag(name="input", attributes=local.hiddenAttributes);
 	}
 	local.rv &= local.after;
 	return local.rv;
