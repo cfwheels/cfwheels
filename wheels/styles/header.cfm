@@ -19,7 +19,7 @@ wheelsInternalAssetPath=get("webpath") & "wheels/public/assets";
 	<header>
 		<div id="logo">
 			<a href="#get("webpath")#">
-				<img src='#wheelsInternalAssetPath#/img/logo.png' alt="CFWheels Logo" />
+				<img src='#wheelsInternalAssetPath#/img/logo.png' alt="CFWheels Logo">
 			</a>
 		</div>
 	</header>
