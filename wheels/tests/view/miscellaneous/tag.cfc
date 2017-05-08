@@ -26,4 +26,10 @@ component extends="wheels.tests.Test" {
 		assert("e eq r");
 	}
 
+	function test_passing_through_class() {
+		request.wheels.testPaginationLinksQuery = {currentPage=2, totalPages=3};
+		r = controller("dummy").paginationLinks(classForCurrent="active", handle="testPaginationLinksQuery");
+		assert(Find("<span class=""active"">2</span>", r));
+	}
+
 }

@@ -264,7 +264,7 @@ public string function $tag(
 	local.rv = "<" & arguments.name;
 
 	// if named arguments are passed in we add these to the attributes argument instead so we can handle them all in the same code below
-	if (StructCount(arguments) > 5) {
+	if (StructCount(arguments) > 4) {
 		for (local.key in arguments) {
 			if (!ListFindNoCase("name,attributes,skip,skipStartingWith", local.key)) {
 				arguments.attributes[local.key] = arguments[local.key];
