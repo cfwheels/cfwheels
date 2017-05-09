@@ -87,10 +87,10 @@
 				<td>
 					<span style="color:red;">
 						<cfif $get("showIncompatiblePlugins") AND Len(application.wheels.incompatiblePlugins)>
-							<cfloop list="#application.wheels.incompatiblePlugins#" index="local.i">The #local.i# plugin may be incompatible with this version of Wheels, please look for a compatible version of the plugin<br /></cfloop>
+							<cfloop list="#application.wheels.incompatiblePlugins#" index="local.i">The #local.i# plugin may be incompatible with this version of Wheels, please look for a compatible version of the plugin<br></cfloop>
 						</cfif>
 						<cfif Len(application.wheels.dependantPlugins)>
-							<cfloop list="#application.wheels.dependantPlugins#" index="local.i"><cfset needs = ListLast(local.i, "|")>The #ListFirst(local.i, "|")# plugin needs the following plugin<cfif ListLen(needs) GT 1>s</cfif> to work properly: #needs#<br /></cfloop>
+							<cfloop list="#application.wheels.dependantPlugins#" index="local.i"><cfset needs = ListLast(local.i, "|")>The #ListFirst(local.i, "|")# plugin needs the following plugin<cfif ListLen(needs) GT 1>s</cfif> to work properly: #needs#<br></cfloop>
 						</cfif>
 					</span>
 				</td>
@@ -169,11 +169,11 @@
 				<cfif local.i IS NOT "fieldnames" AND local.i IS NOT "route" AND local.i IS NOT "controller" AND local.i IS NOT "action" AND local.i IS NOT "key">
 					<cfset local.additionalParamsExists = true>
 					<cfif isStruct(request.wheels.params[local.i])>
-						#lCase(local.i)# = #SerializeJSON(request.wheels.params[local.i])#<br />
+						#lCase(local.i)# = #SerializeJSON(request.wheels.params[local.i])#<br>
 					<cfelseif IsArray(request.wheels.params[local.i])>
-						#lCase(local.i)# = #SerializeJSON(request.wheels.params[local.i])#<br />
+						#lCase(local.i)# = #SerializeJSON(request.wheels.params[local.i])#<br>
 					<cfelseif IsSimpleValue(request.wheels.params[local.i])>
-						#lCase(local.i)# = #request.wheels.params[local.i]#<br />
+						#lCase(local.i)# = #request.wheels.params[local.i]#<br>
 					</cfif>
 				</cfif>
 			</cfloop>

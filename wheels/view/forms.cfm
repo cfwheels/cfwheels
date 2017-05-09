@@ -160,7 +160,7 @@ public string function submitTag(
 		local.rv = Replace(local.rv, "<img", "<input");
 	} else {
 		arguments.type = "submit";
-		local.rv &= $tag(name="input", close=true, skip="image,append,prepend", attributes=arguments);
+		local.rv &= $tag(name="input", skip="image,append,prepend", attributes=arguments);
 	}
 	local.rv &= local.append;
 	return local.rv;

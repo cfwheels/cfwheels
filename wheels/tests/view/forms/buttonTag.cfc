@@ -13,7 +13,7 @@ component extends="wheels.tests.Test" {
 
 	function test_with_image() {
 		r = _controller.buttonTag(image="http://www.cfwheels.com/logo.jpg");
-		e = '<button type="submit" value="save"><img alt="Logo" src="http://www.cfwheels.com/logo.jpg" type="image" /></button>';
+		e = '<button type="submit" value="save"><img alt="Logo" src="http://www.cfwheels.com/logo.jpg" type="image"></button>';
 		assert('e eq r');
 	}
 

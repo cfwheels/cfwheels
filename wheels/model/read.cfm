@@ -173,10 +173,8 @@ public any function findAll(
 	} else if (!StructKeyExists(local, "rv")) {
 
 		// Convert empty strings to null checks (e.g. x='' to x IS NULL) since we don't support getting empty strings.
-		if ($get("convertBlankStringToNull")) {
-			arguments.where = REReplace(arguments.where, "(.*?)\s?(<>|!=)\s?''", "\1 IS NOT NULL" , "all");
-			arguments.where = REReplace(arguments.where, "(.*?)\s?=\s?''", "\1 IS NULL" , "all");
-		}
+		arguments.where = REReplace(arguments.where, "(.*?)\s?(<>|!=)\s?''", "\1 IS NOT NULL" , "all");
+		arguments.where = REReplace(arguments.where, "(.*?)\s?=\s?''", "\1 IS NULL" , "all");
 
 		// make the where clause generic for use in caching
 		local.originalWhere = arguments.where;

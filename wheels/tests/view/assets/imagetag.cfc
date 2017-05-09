@@ -14,7 +14,7 @@ component extends="wheels.tests.Test" {
 		structdelete(args, "alt");
 		structdelete(args, "class");
 		structdelete(args, "id");
-		r = '<img alt="Cfwheels logo" height="121" src="#imagePath#/#args.source#" width="93" />';
+		r = '<img alt="Cfwheels logo" height="121" src="#imagePath#/#args.source#" width="93">';
 		e = _controller.imageTag(argumentcollection=args);
 		assert("e eq r");
 	}
@@ -22,7 +22,7 @@ component extends="wheels.tests.Test" {
 	function test_supplying_an_alt() {
 		structdelete(args, "class");
 		structdelete(args, "id");
-		r = '<img alt="#args.alt#" height="121" src="#imagePath#/#args.source#" width="93" />';
+		r = '<img alt="#args.alt#" height="121" src="#imagePath#/#args.source#" width="93">';
 		e = _controller.imageTag(argumentcollection=args);
 		assert("e eq r");
 	}
@@ -32,14 +32,14 @@ component extends="wheels.tests.Test" {
 		application.wheels.cacheImages = true;
 		StructDelete(args, "alt");
 		StructDelete(args, "class");
-		r = '<img alt="Cfwheels logo" height="121" src="#imagePath#/#args.source#" id="#args.id#" width="93" />';
+		r = '<img alt="Cfwheels logo" height="121" src="#imagePath#/#args.source#" id="#args.id#" width="93">';
 		e = _controller.imageTag(argumentCollection=args);
 		assert("e eq r");
 		application.wheels.cacheImages = cacheImages;
 	}
 
 	function test_supplying_class_and_id() {
-		r = '<img alt="#args.alt#" class="#args.class#" height="121" src="#imagePath#/#args.source#" id="#args.id#" width="93" />';
+		r = '<img alt="#args.alt#" class="#args.class#" height="121" src="#imagePath#/#args.source#" id="#args.id#" width="93">';
 		e = _controller.imageTag(argumentcollection=args);
 		assert("e eq r");
 	}
@@ -49,7 +49,7 @@ component extends="wheels.tests.Test" {
 		structdelete(args, "class");
 		structdelete(args, "id");
 		args.source = "http://www.cfwheels.org/images/cfwheels-logo.png";
-		r = '<img alt="Cfwheels logo" src="#args.source#" />';
+		r = '<img alt="Cfwheels logo" src="#args.source#">';
 		e = _controller.imageTag(argumentcollection=args);
 		assert("e eq r");
 	}
@@ -59,7 +59,7 @@ component extends="wheels.tests.Test" {
 		structdelete(args, "class");
 		structdelete(args, "id");
 		args.source = "https://www.cfwheels.org/images/cfwheels-logo.png";
-		r = '<img alt="Cfwheels logo" src="#args.source#" />';
+		r = '<img alt="Cfwheels logo" src="#args.source#">';
 		e = _controller.imageTag(argumentcollection=args);
 		assert("e eq r");
 	}
@@ -70,7 +70,7 @@ component extends="wheels.tests.Test" {
 		structdelete(args, "id");
 		args.height = 25;
 		args.width = 25;
-		r = '<img alt="Cfwheels logo" height="25" src="#imagePath#/#args.source#" width="25" />';
+		r = '<img alt="Cfwheels logo" height="25" src="#imagePath#/#args.source#" width="25">';
 		e = _controller.imageTag(argumentcollection=args);
 		assert("e eq r");
 	}
@@ -80,7 +80,7 @@ component extends="wheels.tests.Test" {
 		structdelete(args, "class");
 		structdelete(args, "id");
 		args.height = 25;
-		r = '<img alt="Cfwheels logo" height="25" src="#imagePath#/#args.source#" width="93" />';
+		r = '<img alt="Cfwheels logo" height="25" src="#imagePath#/#args.source#" width="93">';
 		e = _controller.imageTag(argumentcollection=args);
 		assert("e eq r");
 	}
@@ -90,7 +90,7 @@ component extends="wheels.tests.Test" {
 		structdelete(args, "class");
 		structdelete(args, "id");
 		args.width = 25;
-		r = '<img alt="Cfwheels logo" height="121" src="#imagePath#/#args.source#" width="25" />';
+		r = '<img alt="Cfwheels logo" height="121" src="#imagePath#/#args.source#" width="25">';
 		e = _controller.imageTag(argumentcollection=args);
 		assert("e eq r");
 	}
@@ -101,7 +101,7 @@ component extends="wheels.tests.Test" {
 		structdelete(args, "id");
 		args.height = false;
 		args.width = false;
-		r = '<img alt="Cfwheels logo" src="#imagePath#/#args.source#" />';
+		r = '<img alt="Cfwheels logo" src="#imagePath#/#args.source#">';
 		e = _controller.imageTag(argumentcollection=args);
 		assert("e eq r");
 	}

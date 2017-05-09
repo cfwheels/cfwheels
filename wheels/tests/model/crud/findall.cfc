@@ -5,10 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_blank_string_first_in_where() {
-		local.convertBlankStringToNull = application.wheels.convertBlankStringToNull;
-		application.wheels.convertBlankStringToNull = false;
 		q = model("author").findAll(where="firstName = '' OR firstName = 'Per'");
-		application.wheels.convertBlankStringToNull = local.convertBlankStringToNull;
 		assert("q.recordCount IS 1");
 	}
 

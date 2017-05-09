@@ -16,13 +16,13 @@ component extends="wheels.tests.Test" {
 
 	function test_data_attribute_underscore_conversion() {
 		result = _controller.textFieldTag(name="num", type="range", min=5, max=10, data_dom_cache="cache", data_role="button");
-		correct = '<input data-dom-cache="cache" data-role="button" id="num" max="10" min="5" name="num" type="range" value="" />';
+		correct = '<input data-dom-cache="cache" data-role="button" id="num" max="10" min="5" name="num" type="range" value="">';
 		assert('result IS correct');
 	}
 
 	function test_data_attribute_camelcase_conversion_when_not_in_quotes() {
 		result = _controller.textFieldTag(name="num", type="range", min=5, max=10, dataDomCache="cache", dataRole="button");
-		correct = '<input data-dom-cache="cache" data-role="button" id="num" max="10" min="5" name="num" type="range" value="" />';
+		correct = '<input data-dom-cache="cache" data-role="button" id="num" max="10" min="5" name="num" type="range" value="">';
 		assert('result IS correct');
 	}
 
@@ -31,7 +31,7 @@ component extends="wheels.tests.Test" {
 		args["dataDomCache"] = "cache";
 		args["dataRole"] = "button";
 		result = _controller.textFieldTag(name="num", type="range", min=5, max=10, argumentCollection=args);
-		correct = '<input data-dom-cache="cache" data-role="button" id="num" max="10" min="5" name="num" type="range" value="" />';
+		correct = '<input data-dom-cache="cache" data-role="button" id="num" max="10" min="5" name="num" type="range" value="">';
 		assert('result IS correct');
 	}
 
@@ -39,7 +39,7 @@ component extends="wheels.tests.Test" {
 		args = {};
 		args["data-dom-cache"] = "true";
 		result = _controller.textFieldTag(name="num", argumentCollection=args);
-		correct = '<input data-dom-cache="true" id="num" name="num" type="text" value="" />';
+		correct = '<input data-dom-cache="true" id="num" name="num" type="text" value="">';
 		assert('result IS correct');
 	}
 

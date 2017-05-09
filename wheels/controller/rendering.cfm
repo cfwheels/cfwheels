@@ -173,6 +173,20 @@ public struct function getRedirect() {
 }
 
 /**
+ * Primarily used for testing to get information about emails sent during the request.
+ *
+ * [section: Controller]
+ * [category: Miscellaneous Functions]
+ */
+public array function getEmails() {
+	if ($sentEmails()) {
+		return variables.$instance.emails;
+	} else {
+		return [];
+	}
+}
+
+/**
  * Internal function.
  */
 public string function $renderPageAndAddToCache() {
@@ -468,6 +482,13 @@ public boolean function $performedRender() {
  */
 public boolean function $performedRedirect() {
 	return StructKeyExists(variables.$instance, "redirect");
+}
+
+/**
+ * Internal function.
+ */
+public boolean function $sentEmails() {
+	return StructKeyExists(variables.$instance, "emails");
 }
 
 /**

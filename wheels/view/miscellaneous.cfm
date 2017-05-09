@@ -257,7 +257,6 @@ public void function resetCycle(string name="default") {
 public string function $tag(
 	required string name,
 	struct attributes={},
-	boolean close=false,
 	string skip="",
 	string skipStartingWith=""
 ) {
@@ -265,9 +264,9 @@ public string function $tag(
 	local.rv = "<" & arguments.name;
 
 	// if named arguments are passed in we add these to the attributes argument instead so we can handle them all in the same code below
-	if (StructCount(arguments) > 5) {
+	if (StructCount(arguments) > 4) {
 		for (local.key in arguments) {
-			if (!ListFindNoCase("name,attributes,close,skip,skipStartingWith", local.key)) {
+			if (!ListFindNoCase("name,attributes,skip,skipStartingWith", local.key)) {
 				arguments.attributes[local.key] = arguments[local.key];
 			}
 		}
@@ -285,13 +284,10 @@ public string function $tag(
 		}
 	}
 
-	// close the tag (usually done on self-closing tags like "img" for example) or just end it (for tags like "div" for example)
-	if (arguments.close) {
-		local.rv &= " />";
-	} else {
-		local.rv &= ">";
-	}
+	// End the tag and return it.
+	local.rv &= ">";
 	return local.rv;
+
 }
 
 /**

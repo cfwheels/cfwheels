@@ -6,20 +6,20 @@ component extends="wheels.tests.Test" {
 
 	function test_defaults() {
 		actual = _controller.submitTag();
-		expected = '<input type="submit" value="Save changes" />';
+		expected = '<input type="submit" value="Save changes">';
 		debug('e', false);
 		assert('actual eq expected');
 	}
 
 	function test_submittag_arguments() {
 		actual = _controller.submitTag(disable="disable-value");
-		expected = '<input disable="disable-value" type="submit" value="Save changes" />';
+		expected = '<input disable="disable-value" type="submit" value="Save changes">';
 		assert('actual eq expected');
 	}
 
 	function test_append_prepend() {
 		actual = _controller.submitTag(append="a", prepend="p");
-		expected = 'p<input type="submit" value="Save changes" />a';
+		expected = 'p<input type="submit" value="Save changes">a';
 		assert('actual eq expected');
 	}
 

@@ -230,7 +230,6 @@ public void function onApplicationStart() {
 	application.$wheels.controllerPath = "controllers";
 
 	// Miscellaneous settings.
-	application.$wheels.convertBlankStringToNull = true;
 	application.$wheels.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water,feedback";
 	application.$wheels.irregulars = {child="children", foot="feet", man="men", move="moves", person="people", sex="sexes", tooth="teeth", woman="women"};
 	application.$wheels.tableNamePrefix = "";
@@ -339,7 +338,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.secondSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, secondStep=1};
 	application.$wheels.functions.select = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, valueField="", textField=""};
 	application.$wheels.functions.selectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, multiple=false, valueField="", textField=""};
-	application.$wheels.functions.sendEmail = {layout=false, detectMultipart=true, from="", to="", subject=""};
+	application.$wheels.functions.sendEmail = {layout=false, detectMultipart=true, from="", to="", subject="", deliver=true};
 	application.$wheels.functions.sendFile = {disposition="attachment"};
 	application.$wheels.functions.simpleFormat = {wrap=true};
 	application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, prepend="", append=""};

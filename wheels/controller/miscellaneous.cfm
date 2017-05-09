@@ -23,12 +23,12 @@ public any function sendEmail(
 	any layout,
 	string file="",
 	boolean detectMultipart,
-	boolean deliver=true,
+	boolean deliver,
 	string writeToFile=""
 ) {
-	local.deliver = Duplicate(arguments.deliver);
 	local.writeToFile = Duplicate(arguments.writeToFile);
 	$args(args=arguments, name="sendEmail", combine="template/templates/!,layout/layouts,file/files", required="template,from,to,subject");
+	local.deliver = Duplicate(arguments.deliver);
 	local.nonPassThruArgs = "writetofile,template,templates,layout,layouts,file,files,detectMultipart,deliver";
 	local.mailTagArgs = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,mailparams,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext,remove";
 
@@ -136,6 +136,11 @@ public any function sendEmail(
 	// Send the email using the cfmail tag.
 	if (local.deliver) {
 		$mail(argumentCollection=arguments);
+	} else {
+		if (!$sentEmails()) {
+			variables.$instance.emails = [];
+		}
+		ArrayAppend(variables.$instance.emails, local.rv);
 	}
 
 	return local.rv;

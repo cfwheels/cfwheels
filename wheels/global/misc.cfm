@@ -75,6 +75,10 @@ public any function processRequest(required struct params, string method, string
 		request.cgi.request_method = arguments.method;
 	}
 
+	// Never deliver email during test.
+	local.deliver = $get(functionName="sendEmail", name="deliver");
+	$set(functionName="sendEmail", deliver=false);
+
 	local.controller = controller(name=arguments.params.controller, params=arguments.params);
 	local.controller.processAction();
 	local.response = local.controller.response();
@@ -96,6 +100,7 @@ public any function processRequest(required struct params, string method, string
 	if (arguments.returnAs == "struct") {
 		local.rv = {
 			body = local.body,
+			emails = local.controller.getEmails(),
 			flash = local.controller.flash(),
 			redirect = local.redirect,
 			status = local.status,
@@ -115,6 +120,9 @@ public any function processRequest(required struct params, string method, string
 
 	// Set back the request method to GET (this is fine since the test suite is always run using GET).
 	request.cgi.request_method = "get";
+
+	// Set back email delivery setting to previous value.
+	$set(functionName="sendEmail", deliver=local.deliver);
 
 	// Set back the status code to 200 so the test suite does not use the same code that the action that was tested did.
 	// If the test suite fails it will set the status code to 500 later.
