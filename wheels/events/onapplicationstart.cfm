@@ -135,6 +135,10 @@ public void function onApplicationStart() {
 	application.$wheels.dbmigrateTableName = "schemainfo";
 	application.$wheels.dbmigrateWriteSQLFiles = false;
 	application.$wheels.dbmigrateObjectCase = "lower";
+	application.$wheels.dbmigrateAllowMigrationDown = false;
+	if (application.$wheels.environment == "development") {
+		application.$wheels.dbmigrateAllowMigrationDown = true;
+	}
 
 	// Cache settings that are always turned on regardless of mode setting.
 	application.$wheels.cacheControllerConfig = true;

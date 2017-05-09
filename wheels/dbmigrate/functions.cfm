@@ -40,7 +40,7 @@ public string function migrateTo(string version="") {
 				if (local.migration.version <= arguments.version) {
 					break;
 				}
-				if (local.migration.status == "migrated") {
+				if (local.migration.status == "migrated" && application.wheels.dbmigrateAllowMigrationDown) {
 					transaction action="begin" {
 						try {
 							local.rv = local.rv & "#Chr(13)#------- " & local.migration.cfcfile & " #RepeatString("-",Max(5,50-Len(local.migration.cfcfile)))##Chr(13)#";
@@ -208,7 +208,9 @@ public string function redoMigration(string version="") {
 		if (application.wheels.dbmigrateWriteSQLFiles) {
 			FileWrite(request.$wheelsMigrationSQLFile, "");
 		}
-		local.migration.cfc.down();
+		if (application.wheels.dbmigrateAllowMigrationDown) {
+			local.migration.cfc.down();
+		}
 		local.migration.cfc.up();
 		local.rv = local.rv & request.$wheelsMigrationOutput;
 	} catch (any e) {
