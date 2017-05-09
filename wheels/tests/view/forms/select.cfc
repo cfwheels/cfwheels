@@ -77,8 +77,8 @@ component extends="wheels.tests.Test" {
 	function test_htmlsafe() {
 		badValue = "<invalidTag;alert('hello');</script>";
 		badName = "<invalidTag;alert('tony');</script>";
-		goodValue = XMLFormat(badValue);
-		goodName = XMLFormat(badName);
+		goodValue = EncodeForHtmlAttribute(badValue);
+		goodName = EncodeForHtml(badName);
 		options = [];
 		options[1] = {value="#badValue#", name="#badName#"};
     r = _controller.select(objectName="user", property="firstname", options=options, valueField="value", textField="name", label=false);

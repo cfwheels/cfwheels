@@ -556,13 +556,10 @@ public string function $optionsForSelect(required any options, required string v
 public string function $option(
 	required string objectValue,
 	required string optionValue,
-	required string optionText,
-	boolean applyHtmlEditFormat=true
+	required string optionText
 ) {
-	if (arguments.applyHtmlEditFormat) {
-		arguments.optionValue = XMLFormat(arguments.optionValue);
-		arguments.optionText = XMLFormat(arguments.optionText);
-	}
+	arguments.optionValue = EncodeForHtmlAttribute(arguments.optionValue);
+	arguments.optionText = EncodeForHtml(arguments.optionText);
 	local.optionAttributes = {value=arguments.optionValue};
 	if (arguments.optionValue == arguments.objectValue || ListFindNoCase(arguments.objectValue, arguments.optionValue)) {
 		local.optionAttributes.selected = "selected";
