@@ -26,15 +26,15 @@ public string function errorMessagesFor(required string objectName, string class
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.msg = local.errors[local.i].message;
 			if (arguments.showDuplicates) {
-				local.listItems &= $element(name="li", content=local.msg);
+				local.listItems &= $element(name="li", content=local.msg, encode=false);
 			} else {
 				if (!ListFind(local.used, local.msg, Chr(7))) {
-					local.listItems &= $element(name="li", content=local.msg);
+					local.listItems &= $element(name="li", content=local.msg, encode=false);
 					local.used = ListAppend(local.used, local.msg, Chr(7));
 				}
 			}
 		}
-		local.rv = $element(name="ul", skip="objectName,showDuplicates", content=local.listItems, attributes=arguments);
+		local.rv = $element(name="ul", skip="objectName,showDuplicates", content=local.listItems, attributes=arguments, encode=false);
 	}
 	return local.rv;
 }
@@ -74,7 +74,8 @@ public string function errorMessageOn(
 			attributes=arguments,
 			content=local.content,
 			name=arguments.wrapperElement,
-			skip="objectName,property,prependText,appendText,wrapperElement"
+			skip="objectName,property,prependText,appendText,wrapperElement",
+			encode=false
 		);
 	}
 	return local.rv;

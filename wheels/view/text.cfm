@@ -56,7 +56,7 @@ public string function $autoLinkLoop(required string text, required string regex
 			}
 
 			arguments.href = arguments.protocol & local.str;
-			local.element = $element("a", arguments, local.str, "text,regex,link,protocol,relative") & local.punctuation;
+			local.element = $element(name="a", content=local.str, attributes=arguments, skip="text,regex,link,protocol,relative", encode=false) & local.punctuation;
 			arguments.text = Insert(local.element, arguments.text, local.match.pos[1]-1);
 			local.startPosition = local.match.pos[1] + Len(local.element);
 		}

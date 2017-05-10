@@ -43,13 +43,13 @@ public string function flashMessages(
 		if (!StructKeyExists(arguments, "key") || arguments.key == local.item) {
 			local.content = local.flash[local.item];
 			if (IsSimpleValue(local.content)) {
-				local.listItems &= $element(name="p", content=local.content, attributes=local.attributes);
+				local.listItems &= $element(name="p", content=local.content, attributes=local.attributes, encode=false);
 			}
 		}
 	}
 
 	if (Len(local.listItems) || arguments.includeEmptyContainer) {
-		local.rv = $element(name="div", skip="key,keys,includeEmptyContainer,lowerCaseDynamicClassValues", content=local.listItems, attributes=arguments);
+		local.rv = $element(name="div", skip="key,keys,includeEmptyContainer,lowerCaseDynamicClassValues", content=local.listItems, attributes=arguments, encode=false);
 	}
 	return local.rv;
 }
@@ -258,15 +258,16 @@ public string function $tag(
 	required string name,
 	struct attributes={},
 	string skip="",
-	string skipStartingWith=""
+	string skipStartingWith="",
+	boolean encode=false
 ) {
 	// start the HTML tag and give it its name
 	local.rv = "<" & arguments.name;
 
 	// if named arguments are passed in we add these to the attributes argument instead so we can handle them all in the same code below
-	if (StructCount(arguments) > 4) {
+	if (StructCount(arguments) > 5) {
 		for (local.key in arguments) {
-			if (!ListFindNoCase("name,attributes,skip,skipStartingWith", local.key)) {
+			if (!ListFindNoCase("name,attributes,skip,skipStartingWith,encode", local.key)) {
 				arguments.attributes[local.key] = arguments[local.key];
 			}
 		}
@@ -280,7 +281,7 @@ public string function $tag(
 		local.key = ListGetAt(local.sortedKeys, local.i);
 		// place the attribute name and value in the string unless it should be skipped according to the arguments or if it's an internal argument (starting with a "$" sign)
 		if (!ListFindNoCase(arguments.skip, local.key) && (!Len(arguments.skipStartingWith) || Left(local.key, Len(arguments.skipStartingWith)) != arguments.skipStartingWith) && Left(local.key, 1) != "$") {
-			local.rv &= $tagAttribute(local.key, arguments.attributes[local.key]);
+			local.rv &= $tagAttribute(name=local.key, value=arguments.attributes[local.key], encode=arguments.encode);
 		}
 	}
 
@@ -293,7 +294,7 @@ public string function $tag(
 /**
  * Internal function.
  */
-public string function $tagAttribute(required string name, required string value) {
+public string function $tagAttribute(required string name, required string value, required boolean encode) {
 
 	// For custom data attributes we convert underscores and camel case to hyphens.
 	// E.g. "dataDomCache" and "data_dom_cache" becomes "data-dom-cache".
@@ -307,7 +308,9 @@ public string function $tagAttribute(required string name, required string value
 	arguments.name = LCase(arguments.name);
 
 	// set standard attribute name / value to use as the default to return (e.g. name / value part of <input name="value">)
-	local.rv = " " & arguments.name & "=""" & arguments.value & """";
+	local.rv = " " & arguments.name & "=""";
+	local.rv &= arguments.encode && $get("encodeHtmlAttributes") ? EncodeForHtmlAttribute(arguments.value) : arguments.value;
+	local.rv &= """";
 
 	// when attribute can be boolean we handle it accordingly and override the above return value
 	if ((!IsBoolean(application.wheels.booleanAttributes) && ListFindNoCase(application.wheels.booleanAttributes, arguments.name)) || (IsBoolean(application.wheels.booleanAttributes) && application.wheels.booleanAttributes)) {
@@ -333,9 +336,13 @@ public string function $element(
 	struct attributes={},
 	string content="",
 	string skip="",
-	string skipStartingWith=""
+	string skipStartingWith="",
+	any encode=false
 ) {
-	local.rv = arguments.content;
+	local.rv = IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags") ? EncodeForHtml(arguments.content) : arguments.content;
+	if (arguments.encode == "attributes") {
+		arguments.encode = true;
+	}
 	StructDelete(arguments, "content");
 	return $tag(argumentCollection=arguments) & local.rv & "</" & arguments.name & ">";
 }

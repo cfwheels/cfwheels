@@ -52,7 +52,7 @@ public string function textField(
 	if (!StructKeyExists(arguments, "value") || !Len(arguments.value)) {
 		arguments.value = $formValue(argumentCollection=arguments);
 	}
-	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
+	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments, encode=false) & local.after;
 }
 
 /**
@@ -105,7 +105,7 @@ public string function passwordField(
 	if (!StructKeyExists(arguments, "value") || !Len(arguments.value)) {
 		arguments.value = $formValue(argumentCollection=arguments);
 	}
-	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
+	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments, encode=false) & local.after;
 }
 
 /**
@@ -139,7 +139,7 @@ public string function hiddenField(
 	if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get") {
 		arguments.value = obfuscateParam(arguments.value);
 	}
-	return $tag(name="input", skip="objectName,property,association,position", attributes=arguments);
+	return $tag(name="input", skip="objectName,property,association,position", attributes=arguments, encode=false);
 }
 
 /**
@@ -185,7 +185,7 @@ public string function fileField(
 	local.after = $formAfterElement(argumentCollection=arguments);
 	arguments.type = "file";
 	arguments.name = $tagName(arguments.objectName, arguments.property);
-	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
+	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments, encode=false) & local.after;
 }
 
 /**
@@ -231,7 +231,7 @@ public string function textArea(
 	local.after = $formAfterElement(argumentCollection=arguments);
 	arguments.name = $tagName(arguments.objectName, arguments.property);
 	local.content = $formValue(argumentCollection=arguments);
-	return local.before & $element(name="textarea", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", content=local.content, attributes=arguments) & local.after;
+	return local.before & $element(name="textarea", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", content=local.content, attributes=arguments, encode=false) & local.after;
 }
 
 /**
@@ -287,7 +287,7 @@ public string function radioButton(
 	if (arguments.tagValue == $formValue(argumentCollection=arguments)) {
 		arguments.checked = "checked";
 	}
-	return local.before & $tag(name="input", skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments) & local.after;
+	return local.before & $tag(name="input", skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments, encode=false) & local.after;
 }
 
 /**
@@ -342,14 +342,14 @@ public string function checkBox(
 	if (local.value == arguments.value || IsNumeric(local.value) && local.value == 1 || !IsNumeric(local.value) && IsBoolean(local.value) && local.value) {
 		arguments.checked = "checked";
 	}
-	local.rv = local.before & $tag(name="input", skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments);
+	local.rv = local.before & $tag(name="input", skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments, encode=false);
 	if (Len(arguments.uncheckedValue)) {
 		local.hiddenAttributes = {};
 		local.hiddenAttributes.type = "hidden";
 		local.hiddenAttributes.id = arguments.id & "-checkbox";
 		local.hiddenAttributes.name = arguments.name & "($checkbox)";
 		local.hiddenAttributes.value = arguments.uncheckedValue;
-		local.rv &= $tag(name="input", attributes=local.hiddenAttributes);
+		local.rv &= $tag(name="input", attributes=local.hiddenAttributes, encode=false);
 	}
 	local.rv &= local.after;
 	return local.rv;
@@ -420,9 +420,9 @@ public string function select(
 			local.blankOptionText = "";
 		}
 		local.blankOptionAttributes = {value=""};
-		local.content = $element(name="option", content=local.blankOptionText, attributes=local.blankOptionAttributes) & local.content;
+		local.content = $element(name="option", content=local.blankOptionText, attributes=local.blankOptionAttributes, encode=false) & local.content;
 	}
-	return local.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", content=local.content, attributes=arguments) & local.after;
+	return local.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", content=local.content, attributes=arguments, encode=false) & local.after;
 }
 
 /**
@@ -558,8 +558,6 @@ public string function $option(
 	required string optionValue,
 	required string optionText
 ) {
-	arguments.optionValue = EncodeForHtmlAttribute(arguments.optionValue);
-	arguments.optionText = EncodeForHtml(arguments.optionText);
 	local.optionAttributes = {value=arguments.optionValue};
 	if (arguments.optionValue == arguments.objectValue || ListFindNoCase(arguments.objectValue, arguments.optionValue)) {
 		local.optionAttributes.selected = "selected";
@@ -567,7 +565,7 @@ public string function $option(
 	if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get") {
 		local.optionAttributes.value = obfuscateParam(local.optionAttributes.value);
 	}
-	return $element(name="option", content=arguments.optionText, attributes=local.optionAttributes);
+	return $element(name="option", content=arguments.optionText, attributes=local.optionAttributes, encode=false);
 }
 
 </cfscript>

@@ -61,7 +61,7 @@ public string function linkTo(
 		// variables passed in as route arguments should not be added to the html element
 		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
 	}
-	return $element(name="a", skip=local.skip, content=arguments.text, attributes=arguments);
+	return $element(name="a", skip=local.skip, content=arguments.text, attributes=arguments, encode=false);
 }
 
 /**
@@ -121,7 +121,7 @@ public string function buttonTo(
 		// variables passed in as route arguments should not be added to the html element
 		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
 	}
-	return $element(name="form", skip=local.skip, content=local.content, attributes=arguments);
+	return $element(name="form", skip=local.skip, content=local.content, attributes=arguments, encode=false);
 }
 
 /**
@@ -146,7 +146,7 @@ public string function mailTo(
 	} else {
 		local.content = arguments.emailAddress;
 	}
-	local.rv = $element(name="a", skip="emailAddress,name,encode", content=local.content, attributes=arguments);
+	local.rv = $element(name="a", skip="emailAddress,name,encode", content=local.content, attributes=arguments, encode=false);
 	if (arguments.encode) {
 		local.js = "document.write('#Trim(local.rv)#');";
 		local.encoded = "";
@@ -155,7 +155,7 @@ public string function mailTo(
 			local.encoded &= "%" & Right("0" & FormatBaseN(Asc(Mid(local.js,local.i,1)),16),2);
 		}
 		local.content = "eval(unescape('#local.encoded#'))";
-		local.rv = $element(name="script", content=local.content, type="text/javascript");
+		local.rv = $element(name="script", content=local.content, type="text/javascript", encode=false);
 	}
 	return local.rv;
 }
@@ -282,7 +282,7 @@ public string function paginationLinks(
 					local.middle &= linkTo(argumentCollection=local.linkToArguments);
 				} else {
 					if (Len(arguments.classForCurrent)) {
-						local.middle &= $element(name="span", content=NumberFormat(local.i), class=arguments.classForCurrent);
+						local.middle &= $element(name="span", content=NumberFormat(local.i), class=arguments.classForCurrent, encode=false);
 					} else {
 						local.middle &= NumberFormat(local.i);
 					}

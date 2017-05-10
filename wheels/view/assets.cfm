@@ -39,7 +39,7 @@ public string function styleSheetLinkTag(string sources="", string type, string 
 			}
 			arguments.href = $assetDomain(arguments.href) & $appendQueryString();
 		}
-		local.rv &= $tag(name="link", skip="sources,head,delim", attributes=arguments) & Chr(10);
+		local.rv &= $tag(name="link", skip="sources,head,delim", attributes=arguments, encode=false) & Chr(10);
 	}
 	if (arguments.head) {
 		$htmlhead(text=local.rv);
@@ -82,7 +82,7 @@ public string function javaScriptIncludeTag(string sources="", string type, stri
 			}
 			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
 		}
-		local.rv &= $element(name="script", skip="sources,head,delim", attributes=arguments) & Chr(10);
+		local.rv &= $element(name="script", skip="sources,head,delim", attributes=arguments, encode=false) & Chr(10);
 	}
 	if (arguments.head) {
 		$htmlhead(text=local.rv);
@@ -211,7 +211,7 @@ public string function $imageTag() {
 	if (!StructKeyExists(arguments, "alt")) {
 		arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
 	}
-	return $tag(name="img", skip="source,key,category,onlyPath,host,protocol,port", attributes=arguments);
+	return $tag(name="img", skip="source,key,category,onlyPath,host,protocol,port", attributes=arguments, encode=false);
 }
 
 /**

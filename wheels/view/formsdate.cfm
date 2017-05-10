@@ -212,7 +212,7 @@ public string function $yearMonthHourMinuteSecondSelectTag(
 		if (!IsBoolean(arguments.includeBlank)) {
 			local.optionContent = arguments.includeBlank;
 		}
-		local.content &= $element(name="option", content=local.optionContent, attributes=local.args);
+		local.content &= $element(name="option", content=local.optionContent, attributes=local.args, encode=false);
 	}
 	if (arguments.$loopFrom < arguments.$loopTo) {
 		for (local.i=arguments.$loopFrom; local.i <= arguments.$loopTo; local.i=local.i+arguments.$step) {
@@ -229,7 +229,7 @@ public string function $yearMonthHourMinuteSecondSelectTag(
 			local.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=local.args);
 		}
 	}
-	return local.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=local.content, attributes=arguments) & local.after;
+	return local.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=local.content, attributes=arguments, encode=false) & local.after;
 }
 
 /**
@@ -249,7 +249,7 @@ public string function $yearMonthHourMinuteSecondSelectTagContent() {
 	if (arguments.$type == "minute" || arguments.$type == "second") {
 		arguments.optionContent = NumberFormat(arguments.optionContent, "09");
 	}
-	return $element(name="option", content=arguments.optionContent, attributes=local.args);
+	return $element(name="option", content=arguments.optionContent, attributes=local.args, encode=false);
 }
 
 /**
@@ -278,9 +278,9 @@ public string function $ampmSelectTag(
 		if (arguments.value == local.option) {
 			local.args.selected = "selected";
 		}
-		local.content &= $element(name="option", content=local.option, attributes=local.args);
+		local.content &= $element(name="option", content=local.option, attributes=local.args, encode=false);
 	}
-	return $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=local.content, attributes=arguments);
+	return $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour", skipStartingWith="label", content=local.content, attributes=arguments, encode=false);
 }
 
 </cfscript>

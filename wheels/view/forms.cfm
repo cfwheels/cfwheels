@@ -117,7 +117,7 @@ public string function startFormTag(
 		local.skip = ListDeleteAt(local.skip, ListFind(local.skip, "action"));
 	}
 
-	local.rv = arguments.prepend & $tag(name="form", skip=local.skip, attributes=arguments) & arguments.append;
+	local.rv = arguments.prepend & $tag(name="form", skip=local.skip, attributes=arguments, encode=false) & arguments.append;
 	if ($isRequestProtectedFromForgery() && ListFindNoCase("post,put,patch,delete", arguments.method)) {
 		local.rv &= authenticityTokenField();
 	}
@@ -160,7 +160,7 @@ public string function submitTag(
 		local.rv = Replace(local.rv, "<img", "<input");
 	} else {
 		arguments.type = "submit";
-		local.rv &= $tag(name="input", skip="image,append,prepend", attributes=arguments);
+		local.rv &= $tag(name="input", skip="image,append,prepend", attributes=arguments, encode=false);
 	}
 	local.rv &= local.append;
 	return local.rv;
@@ -207,13 +207,13 @@ public string function buttonTag(
 	StructDelete(arguments, "append");
 
 	// create the button
-	return local.prepend & $element(name="button", content=local.content, attributes=arguments) & local.append;
+	return local.prepend & $element(name="button", content=local.content, attributes=arguments, encode=false) & local.append;
 }
 
 /**
  * Internal function.
  */
-public string function $formValue(required any objectName, required string property, boolean applyHtmlEditFormat=true) {
+public string function $formValue(required any objectName, required string property) {
 	if (IsStruct(arguments.objectName)) {
 		local.rv = arguments.objectName[arguments.property];
 	} else {
@@ -226,9 +226,6 @@ public string function $formValue(required any objectName, required string prope
 		} else {
 			local.rv = "";
 		}
-	}
-	if (arguments.applyHtmlEditFormat) {
-		local.rv = HTMLEditFormat(local.rv);
 	}
 	return local.rv;
 }
@@ -289,7 +286,7 @@ public string function $createLabel(
 	if (StructKeyExists(arguments, "id")) {
 		local.attributes.for = arguments.id;
 	}
-	local.rv &= $tag(name="label", attributes=local.attributes);
+	local.rv &= $tag(name="label", attributes=local.attributes, encode=false);
 	local.rv &= arguments.label;
 	local.rv &= "</label>";
 	return local.rv;
@@ -314,7 +311,7 @@ public string function $formBeforeElement(
 	arguments.label = $getFieldLabel(argumentCollection=arguments);
 	if ($formHasError(argumentCollection=arguments) && Len(arguments.errorElement)) {
 		// the input has an error and should be wrapped in a tag so we need to start that wrapper tag
-		local.rv &= $tag(name=arguments.errorElement, class=arguments.errorClass);
+		local.rv &= $tag(name=arguments.errorElement, class=arguments.errorClass, encode=false);
 	}
 	if (Len(arguments.label) && arguments.labelPlacement != "after") {
 		local.rv &= $createLabel(argumentCollection=arguments);
