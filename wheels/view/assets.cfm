@@ -12,7 +12,7 @@
  * @head Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior (which is to place the output where the function is called from).
  * @delim The delimiter to use for the list of CSS files.
  */
-public string function styleSheetLinkTag(string sources="", string type, string media, string head, string delim=",") {
+public string function styleSheetLinkTag(string sources="", string type, string media, boolean head, string delim=",") {
 	$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
 	if (!Len(arguments.type)) {
 		StructDelete(arguments, "type");
@@ -59,7 +59,7 @@ public string function styleSheetLinkTag(string sources="", string type, string 
  * @head Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior (which is to place the output where the function is called from).
  * @delim The delimiter to use for the list of JavaScript files.
  */
-public string function javaScriptIncludeTag(string sources="", string type, string head, string delim=",") {
+public string function javaScriptIncludeTag(string sources="", string type, boolean head, string delim=",") {
 	$args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
 	if (!Len(arguments.type)) {
 		StructDelete(arguments, "type");
