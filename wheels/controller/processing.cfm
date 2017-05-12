@@ -137,18 +137,11 @@ public void function $callAction(required string action) {
 			if (FileExists(ExpandPath(local.file))) {
 				Throw(object=e);
 			} else {
-				if ($get("showErrorInformation")) {
-					Throw(
-						type="Wheels.ViewNotFound",
-						message="Could not find the view page for the `#arguments.action#` action in the `#variables.$class.name#` controller.",
-						extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(ListChangeDelims(variables.$class.name, '/', '.'))#` directory (create the directory as well if it doesn't already exist)."
-					);
-				} else {
-					$header(statusCode=404, statustext="Not Found");
-					local.template = $get("eventPath") & "/onmissingtemplate.cfm";
-					$includeAndOutput(template=local.template);
-					abort;
-				}
+				$throwErrorOrShow404Page(
+					type="Wheels.ViewNotFound",
+					message="Could not find the view page for the `#arguments.action#` action in the `#variables.$class.name#` controller.",
+					extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(ListChangeDelims(variables.$class.name, '/', '.'))#` directory (create the directory as well if it doesn't already exist)."
+				);
 			}
 		}
 	}

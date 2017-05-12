@@ -65,12 +65,12 @@ public string function startFormTag(
 	// if we have a route and method, tap
 	if (Len(arguments.route) && StructKeyExists(arguments, "method")) {
 
-		// throw a nice wheels error if the developer passes in a route that was not generated
-		if (application.wheels.showErrorInformation && !StructKeyExists(application.wheels.namedRoutePositions, arguments.route)) {
-			Throw(
+		// Throw error if no route was found.
+		if (!StructKeyExists(application.wheels.namedRoutePositions, arguments.route)) {
+			$throwErrorOrShow404Page(
 				type="Wheels.RouteNotFound",
-				message="Route Not Found",
-				extendedInfo="The route specified `#arguments.route#` does not exist!"
+				message="Could not find the `#arguments.route#` route.",
+				extendedInfo="Make sure there is a route configured in your `config/routes.cfm` file named `#arguments.route#`."
 			);
 		}
 

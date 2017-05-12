@@ -105,10 +105,10 @@ public struct function $findMatchingRoute(required string path, string requestMe
 
 	// Throw error if no route was found.
 	if (!StructKeyExists(local, "rv")) {
-		Throw(
+		$throwErrorOrShow404Page(
 			type="Wheels.RouteNotFound",
-			message="Wheels couldn't find a route that matched this request.",
-			extendedInfo="Make sure there is a route setup in your `config/routes.cfm` file that matches the `#arguments.path#` request."
+			message="Could not find a route that matched this request.",
+			extendedInfo="Make sure there is a route configured in your `config/routes.cfm` file that matches the `#arguments.path#` request."
 		);
 	}
 

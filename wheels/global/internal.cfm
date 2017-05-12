@@ -386,9 +386,13 @@ public string function $routeVariables() {
  */
 public struct function $findRoute() {
 
-	// throw an error if a route with this name has not been set by developer in the config/routes.cfm file
-	if (application.wheels.showErrorInformation && !StructKeyExists(application.wheels.namedRoutePositions, arguments.route)) {
-		Throw(type="Wheels.RouteNotFound", message="Could not find the `#arguments.route#` route.", extendedInfo="Create a new route in `config/routes.cfm` with the name `#arguments.route#`.");
+	// Throw error if no route was found.
+	if (!StructKeyExists(application.wheels.namedRoutePositions, arguments.route)) {
+		$throwErrorOrShow404Page(
+			type="Wheels.RouteNotFound",
+			message="Could not find the `#arguments.route#` route.",
+			extendedInfo="Make sure there is a route configured in your `config/routes.cfm` file named `#arguments.route#`."
+		);
 	}
 
 	local.routePos = application.wheels.namedRoutePositions[arguments.route];
@@ -1090,6 +1094,21 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 	FileDelete(ExpandPath("wheels/CHANGELOG.md"));
 
 	return local.path;
+}
+
+/**
+ * Throw a developer friendly CFWheels error if set (typically in development mode).
+ * Otherwise show the 404 page for end users (typically in production mode).
+ */
+public void function $throwErrorOrShow404Page(required string type, required string message, string extendedInfo="") {
+	if ($get("showErrorInformation")) {
+		Throw(type=arguments.type, message=arguments.message, extendedInfo=arguments.extendedInfo);
+	} else {
+		$header(statusCode=404, statustext="Not Found");
+		local.template = $get("eventPath") & "/onmissingtemplate.cfm";
+		$includeAndOutput(template=local.template);
+		abort;
+	}
 }
 
 </cfscript>
