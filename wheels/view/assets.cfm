@@ -39,7 +39,7 @@ public string function styleSheetLinkTag(string sources="", string type, string 
 			}
 			arguments.href = $assetDomain(arguments.href) & $appendQueryString();
 		}
-		local.rv &= $tag(name="link", skip="sources,head,delim", attributes=arguments, encode=false) & Chr(10);
+		local.rv &= $tag(name="link", skip="sources,head,delim", attributes=arguments, encode=true) & Chr(10);
 	}
 	if (arguments.head) {
 		$htmlhead(text=local.rv);
