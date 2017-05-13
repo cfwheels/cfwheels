@@ -22,4 +22,11 @@
 		<cfset assert('loc.columnList eq "authors.firstname,authors.id,authors.lastname,posts.authorid,posts.averagerating,posts.body,posts.createdat,posts.deletedat,posts.id AS postid,posts.title,posts.updatedat,posts.views"')>
 	</cffunction>
 
+	<!--- failing test for issue 568 --->
+	<!--- <cffunction name="test_select_ambiguous_column_name_using_alias">
+		<cfset loc.query = model("Post").findAll(select="createdat,commentcreatedat", include="Comments")>
+		<cfset loc.columnList = ListSort(loc.query.columnList, "text")>
+		<cfset assert('loc.columnList eq "commentcreatedat,createdat"')>
+	</cffunction> --->
+
 </cfcomponent>
