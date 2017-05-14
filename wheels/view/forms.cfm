@@ -138,12 +138,14 @@ public string function startFormTag(
  * @image File name of the image file to use in the button form control.
  * @prepend [see:textField]
  * @append [see:textField]
+ * @encode [see:styleSheetLinkTag].
  */
 public string function submitTag(
 	string value,
 	string image,
 	string prepend,
-	string append
+	string append,
+	boolean encode
 ) {
 	$args(name="submitTag", reserved="type,src", args=arguments);
 	local.rv = arguments.prepend;
@@ -160,7 +162,7 @@ public string function submitTag(
 		local.rv = Replace(local.rv, "<img", "<input");
 	} else {
 		arguments.type = "submit";
-		local.rv &= $tag(name="input", skip="image,append,prepend", attributes=arguments, encode=false);
+		local.rv &= $tag(name="input", skip="image,append,prepend,encode", attributes=arguments, encode=arguments.encode);
 	}
 	local.rv &= local.append;
 	return local.rv;
@@ -178,6 +180,7 @@ public string function submitTag(
  * @image File name of the image file to use in the button form control.
  * @prepend [see:textField]
  * @append [see:textField]
+ * @encode [see:styleSheetLinkTag].
  */
 public string function buttonTag(
 	string content,
@@ -185,7 +188,8 @@ public string function buttonTag(
 	string value,
 	string image,
 	string prepend,
-	string append
+	string append,
+	boolean encode
 ) {
 	$args(name="buttonTag", args=arguments);
 
@@ -195,19 +199,22 @@ public string function buttonTag(
 		local.args.type = "image";
 		local.args.source = arguments.image;
 		arguments.content = imageTag(argumentCollection=local.args);
+		arguments.encode = arguments.encode ? "attributes" : false;
 	}
 
 	// save necessary info from arguments and delete afterwards
 	local.content = arguments.content;
 	local.prepend = arguments.prepend;
 	local.append = arguments.append;
+	local.encode = arguments.encode;
 	StructDelete(arguments, "content");
 	StructDelete(arguments, "image");
 	StructDelete(arguments, "prepend");
 	StructDelete(arguments, "append");
+	StructDelete(arguments, "encode");
 
 	// create the button
-	return local.prepend & $element(name="button", content=local.content, attributes=arguments, encode=false) & local.append;
+	return local.prepend & $element(name="button", content=local.content, attributes=arguments, encode=local.encode) & local.append;
 }
 
 /**
@@ -274,7 +281,8 @@ public string function $createLabel(
 	required any objectName,
 	required string property,
 	required string label,
-	required string prependToLabel
+	required string prependToLabel,
+	boolean encode=false
 ) {
 	local.rv = arguments.prependToLabel;
 	local.attributes = {};
@@ -286,9 +294,7 @@ public string function $createLabel(
 	if (StructKeyExists(arguments, "id")) {
 		local.attributes.for = arguments.id;
 	}
-	local.rv &= $tag(name="label", attributes=local.attributes, encode=false);
-	local.rv &= arguments.label;
-	local.rv &= "</label>";
+	local.rv &= $element(name="label", content=arguments.label, attributes=local.attributes, encode=arguments.encode);
 	return local.rv;
 }
 
@@ -305,13 +311,14 @@ public string function $formBeforeElement(
 	required string prependToLabel,
 	required string appendToLabel,
 	required string errorElement,
-	required string errorClass
+	required string errorClass,
+	boolean encode=false
 ) {
 	local.rv = "";
 	arguments.label = $getFieldLabel(argumentCollection=arguments);
 	if ($formHasError(argumentCollection=arguments) && Len(arguments.errorElement)) {
 		// the input has an error and should be wrapped in a tag so we need to start that wrapper tag
-		local.rv &= $tag(name=arguments.errorElement, class=arguments.errorClass, encode=false);
+		local.rv &= $tag(name=arguments.errorElement, class=arguments.errorClass, encode=arguments.encode);
 	}
 	if (Len(arguments.label) && arguments.labelPlacement != "after") {
 		local.rv &= $createLabel(argumentCollection=arguments);

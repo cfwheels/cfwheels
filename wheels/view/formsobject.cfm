@@ -21,6 +21,7 @@
  * @errorClass The class name of the HTML tag that wraps the form control when there are errors.
  * @type Input type attribute. Common examples in HTML5 and later are text (default), email, tel, and url.
  * @labelClass String added to the label's class.
+ * @encode [see:styleSheetLinkTag].
  */
 public string function textField(
 	required any objectName,
@@ -35,7 +36,8 @@ public string function textField(
 	string appendToLabel,
 	string errorElement,
 	string errorClass,
-	string type="text"
+	string type="text",
+	boolean encode
 ) {
 	$args(name="textField", reserved="name", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
@@ -52,7 +54,7 @@ public string function textField(
 	if (!StructKeyExists(arguments, "value") || !Len(arguments.value)) {
 		arguments.value = $formValue(argumentCollection=arguments);
 	}
-	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments, encode=false) & local.after;
+	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=arguments.encode) & local.after;
 }
 
 /**

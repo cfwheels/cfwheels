@@ -281,7 +281,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.average = {distinct=false, parameterize=true, ifNull=""};
 	application.$wheels.functions.belongsTo = {joinType="inner"};
 	application.$wheels.functions.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", image=""};
-	application.$wheels.functions.buttonTag = {type="submit", value="save", content="Save changes", image="", prepend="", append=""};
+	application.$wheels.functions.buttonTag = {type="submit", value="save", content="Save changes", image="", prepend="", append="", encode=false};
 	application.$wheels.functions.caches = {time=60, static=false};
 	application.$wheels.functions.checkBox = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", checkedValue=1, unCheckedValue=0};
 	application.$wheels.functions.checkBoxTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", value=1};
@@ -345,12 +345,12 @@ public void function onApplicationStart() {
 	application.$wheels.functions.simpleFormat = {wrap=true};
 	application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, prepend="", append=""};
 	application.$wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false, encode=false};
-	application.$wheels.functions.submitTag = {value="Save changes", image="", prepend="", append=""};
+	application.$wheels.functions.submitTag = {value="Save changes", image="", prepend="", append="", encode=false};
 	application.$wheels.functions.sum = {distinct=false, parameterize=true, ifNull=""};
 	application.$wheels.functions.textArea = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
 	application.$wheels.functions.textAreaTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
-	application.$wheels.functions.textField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
-	application.$wheels.functions.textFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+	application.$wheels.functions.textField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", encode=false};
+	application.$wheels.functions.textFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", encode=false};
 	application.$wheels.functions.timeAgoInWords = {includeSeconds=false};
 	application.$wheels.functions.timeSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1, secondStep=1, twelveHour=false};
 	application.$wheels.functions.timeSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1, secondStep=1, twelveHour=false};

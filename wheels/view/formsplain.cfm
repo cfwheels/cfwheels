@@ -16,6 +16,7 @@
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
  * @type [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function textFieldTag(
 	required string name,
@@ -26,7 +27,8 @@ public string function textFieldTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	string type="text"
+	string type="text",
+	boolean encode
 ) {
 	$args(name="textFieldTag", args=arguments);
 	arguments.property = arguments.name;
