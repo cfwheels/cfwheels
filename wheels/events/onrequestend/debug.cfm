@@ -32,6 +32,51 @@
 		<cfset local.hasAppTests = false>
 	</cfif>
 </cfif>
+<cfsavecontent variable="local.css">
+	<style>
+		#wheels-debug-area
+		{
+			background: #ececec;
+			border-bottom: 3px solid #999;
+			border-top: 3px solid #999;
+			clear: both;
+			margin: 50px 0;
+			padding: 10px;
+			text-align: left;
+		}
+		#wheels-debug-area table
+		{
+			border-collapse: collapse;
+			border-spacing: 0;
+		}
+		#wheels-debug-area td
+		{
+			color: #333;
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 12px;
+			line-height: 1.5em;
+			padding: 0 10px 0 0;
+			vertical-align: top;
+			border-bottom: none;
+		}
+		#wheels-debug-area th {
+			border-bottom: none;
+		}
+		#wheels-debug-area a
+		{
+			color: #333;
+			padding: 0 1px;
+			text-decoration: underline;
+		}
+		#wheels-debug-area a:hover
+		{
+			background: #333;
+			color: #fff;
+			text-decoration: none;
+		}
+	</style>
+</cfsavecontent>
+<cfset $htmlhead(text=local.css)>
 <cfoutput>
 
 <div id="wheels-debug-area">
