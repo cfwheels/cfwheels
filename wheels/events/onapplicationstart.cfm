@@ -314,9 +314,9 @@ public void function onApplicationStart() {
 	application.$wheels.functions.hiddenField = {};
 	application.$wheels.functions.highlight = {delimiter=",", tag="span", class="highlight"};
 	application.$wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, twelveHour=false};
-	application.$wheels.functions.imageTag = {onlyPath=true, host="", protocol="", port=0};
+	application.$wheels.functions.imageTag = {onlyPath=true, host="", protocol="", port=0, encode=false};
 	application.$wheels.functions.includePartial = {layout="", spacer="", dataFunction=true};
-	application.$wheels.functions.javaScriptIncludeTag = {type="text/javascript", head=false};
+	application.$wheels.functions.javaScriptIncludeTag = {type="text/javascript", head=false, encode=false};
 	application.$wheels.functions.linkTo = {onlyPath=true, host="", protocol="", port=0};
 	application.$wheels.functions.mailTo = {encode=false};
 	application.$wheels.functions.maximum = {parameterize=true, ifNull=""};
@@ -344,7 +344,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.sendFile = {disposition="attachment"};
 	application.$wheels.functions.simpleFormat = {wrap=true};
 	application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, prepend="", append=""};
-	application.$wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false};
+	application.$wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false, encode=false};
 	application.$wheels.functions.submitTag = {value="Save changes", image="", prepend="", append=""};
 	application.$wheels.functions.sum = {distinct=false, parameterize=true, ifNull=""};
 	application.$wheels.functions.textArea = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};

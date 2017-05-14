@@ -11,8 +11,16 @@
  * @media The `media` attribute for the `link` tag.
  * @head Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior (which is to place the output where the function is called from).
  * @delim The delimiter to use for the list of CSS files.
+ * @encode When set to `true`, encodes HTML attribute values and tag content so that Cross Site Scripting (XSS) attacks can be prevented.
  */
-public string function styleSheetLinkTag(string sources="", string type, string media, boolean head, string delim=",") {
+public string function styleSheetLinkTag(
+	string sources="",
+	string type,
+	string media,
+	boolean head,
+	string delim=",",
+	boolean encode
+) {
 	$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
 	if (!Len(arguments.type)) {
 		StructDelete(arguments, "type");
@@ -39,7 +47,7 @@ public string function styleSheetLinkTag(string sources="", string type, string 
 			}
 			arguments.href = $assetDomain(arguments.href) & $appendQueryString();
 		}
-		local.rv &= $tag(name="link", skip="sources,head,delim", attributes=arguments, encode=true) & Chr(10);
+		local.rv &= $tag(name="link", skip="sources,head,delim,encode", attributes=arguments, encode=arguments.encode) & Chr(10);
 	}
 	if (arguments.head) {
 		$htmlhead(text=local.rv);
@@ -58,8 +66,15 @@ public string function styleSheetLinkTag(string sources="", string type, string 
  * @type The `type` attribute for the `script` tag.
  * @head Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior (which is to place the output where the function is called from).
  * @delim The delimiter to use for the list of JavaScript files.
+ * @encode [see:styleSheetLinkTag].
  */
-public string function javaScriptIncludeTag(string sources="", string type, boolean head, string delim=",") {
+public string function javaScriptIncludeTag(
+	string sources="",
+	string type,
+	boolean head,
+	string delim=",",
+	boolean encode
+) {
 	$args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
 	if (!Len(arguments.type)) {
 		StructDelete(arguments, "type");
@@ -82,7 +97,7 @@ public string function javaScriptIncludeTag(string sources="", string type, bool
 			}
 			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
 		}
-		local.rv &= $element(name="script", skip="sources,head,delim", attributes=arguments, encode=false) & Chr(10);
+		local.rv &= $element(name="script", skip="sources,head,delim,encode", attributes=arguments, encode=arguments.encode) & Chr(10);
 	}
 	if (arguments.head) {
 		$htmlhead(text=local.rv);
@@ -100,8 +115,16 @@ public string function javaScriptIncludeTag(string sources="", string type, bool
  * [category: Asset Functions]
  *
  * @source The file name of the image if it's available in the local file system (i.e. ColdFusion will be able to access it). Provide the full URL if the image is on a remote server.
+ * @encode [see:styleSheetLinkTag].
  */
-public string function imageTag(required string source, boolean onlyPath, string host, string protocol, numeric port) {
+public string function imageTag(
+	required string source,
+	boolean onlyPath,
+	string host,
+	string protocol,
+	numeric port,
+	boolean encode
+) {
 	$args(name="imageTag", reserved="src", args=arguments);
 
 	// Ugly fix due to the fact that id can't be passed along to cfinvoke.
@@ -211,7 +234,7 @@ public string function $imageTag() {
 	if (!StructKeyExists(arguments, "alt")) {
 		arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
 	}
-	return $tag(name="img", skip="source,key,category,onlyPath,host,protocol,port", attributes=arguments, encode=false);
+	return $tag(name="img", skip="source,key,category,onlyPath,host,protocol,port,encode", attributes=arguments, encode=arguments.encode);
 }
 
 /**
