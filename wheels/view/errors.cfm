@@ -10,8 +10,14 @@
  * @objectName The variable name of the object to display error messages for.
  * @class CSS `class` to set on the `ul` element.
  * @showDuplicates Whether or not to show duplicate error messages.
+ * @encode [see:styleSheetLinkTag].
  */
-public string function errorMessagesFor(required string objectName, string class, boolean showDuplicates) {
+public string function errorMessagesFor(
+	required string objectName,
+	string class,
+	boolean showDuplicates,
+	boolean encode
+) {
 	$args(name="errorMessagesFor", args=arguments);
 	local.object = $getObject(arguments.objectName);
 	if ($get("showErrorInformation") && !IsObject(local.object)) {
@@ -26,15 +32,16 @@ public string function errorMessagesFor(required string objectName, string class
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.msg = local.errors[local.i].message;
 			if (arguments.showDuplicates) {
-				local.listItems &= $element(name="li", content=local.msg, encode=false);
+				local.listItems &= $element(name="li", content=local.msg, encode=arguments.encode);
 			} else {
 				if (!ListFind(local.used, local.msg, Chr(7))) {
-					local.listItems &= $element(name="li", content=local.msg, encode=false);
+					local.listItems &= $element(name="li", content=local.msg, encode=arguments.encode);
 					local.used = ListAppend(local.used, local.msg, Chr(7));
 				}
 			}
 		}
-		local.rv = $element(name="ul", skip="objectName,showDuplicates", content=local.listItems, attributes=arguments, encode=false);
+		local.encode = arguments.encode ? "attributes" : false;
+		local.rv = $element(name="ul", skip="objectName,showDuplicates,encode", content=local.listItems, attributes=arguments, encode=local.encode);
 	}
 	return local.rv;
 }
@@ -52,6 +59,7 @@ public string function errorMessagesFor(required string objectName, string class
  * @appendText String to append to the error message.
  * @wrapperElement HTML element to wrap the error message in.
  * @class CSS `class` to set on the wrapper element.
+ * @encode [see:styleSheetLinkTag].
  */
 public string function errorMessageOn(
 	required string objectName,
@@ -59,7 +67,8 @@ public string function errorMessageOn(
 	string prependText,
 	string appendText,
 	string wrapperElement,
-	string class
+	string class,
+	boolean encode
 ) {
 	$args(name="errorMessageOn", args=arguments);
 	local.object = $getObject(arguments.objectName);
@@ -74,8 +83,8 @@ public string function errorMessageOn(
 			attributes=arguments,
 			content=local.content,
 			name=arguments.wrapperElement,
-			skip="objectName,property,prependText,appendText,wrapperElement",
-			encode=false
+			skip="objectName,property,prependText,appendText,wrapperElement,encode",
+			encode=arguments.encode
 		);
 	}
 	return local.rv;

@@ -298,8 +298,8 @@ public void function onApplicationStart() {
 	application.$wheels.functions.deleteOne = {reload=false};
 	application.$wheels.functions.distanceOfTimeInWords = {includeSeconds=false};
 	application.$wheels.functions.endFormTag = {prepend="", append=""};
-	application.$wheels.functions.errorMessageOn = {prependText="", appendText="", wrapperElement="span", class="errorMessage"};
-	application.$wheels.functions.errorMessagesFor = {class="errorMessages", showDuplicates=true};
+	application.$wheels.functions.errorMessageOn = {prependText="", appendText="", wrapperElement="span", class="errorMessage", encode=false};
+	application.$wheels.functions.errorMessagesFor = {class="errorMessages", showDuplicates=true, encode=false};
 	application.$wheels.functions.excerpt = {radius=100, excerptString="..."};
 	application.$wheels.functions.exists = {reload=false, parameterize=true};
 	application.$wheels.functions.fileField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
