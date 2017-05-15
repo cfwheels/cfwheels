@@ -287,11 +287,11 @@ public void function onApplicationStart() {
 	application.$wheels.functions.checkBoxTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", value=1, encode=false};
 	application.$wheels.functions.count = {parameterize=true};
 	application.$wheels.functions.create = {parameterize=true, reload=false};
-	application.$wheels.functions.dateSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"};
-	application.$wheels.functions.dateSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"};
-	application.$wheels.functions.dateTimeSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, secondStep=1, separator=" - ", twelveHour=false};
-	application.$wheels.functions.dateTimeSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, secondStep=1,separator=" - ", twelveHour=false};
-	application.$wheels.functions.daySelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
+	application.$wheels.functions.dateSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec", encode=false};
+	application.$wheels.functions.dateSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec", encode=false};
+	application.$wheels.functions.dateTimeSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, secondStep=1, separator=" - ", twelveHour=false, encode=false};
+	application.$wheels.functions.dateTimeSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, secondStep=1,separator=" - ", twelveHour=false, encode=false};
+	application.$wheels.functions.daySelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, encode=false};
 	application.$wheels.functions.delete = {parameterize=true};
 	application.$wheels.functions.deleteAll = {reload=false, parameterize=true, instantiate=false};
 	application.$wheels.functions.deleteByKey = {reload=false};
@@ -314,7 +314,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.hiddenField = {encode=false};
 	application.$wheels.functions.hiddenFieldTag = {encode=false};
 	application.$wheels.functions.highlight = {delimiter=",", tag="span", class="highlight", encode=false};
-	application.$wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, twelveHour=false};
+	application.$wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, twelveHour=false, encode=false};
 	application.$wheels.functions.imageTag = {onlyPath=true, host="", protocol="", port=0, encode=false};
 	application.$wheels.functions.includePartial = {layout="", spacer="", dataFunction=true};
 	application.$wheels.functions.javaScriptIncludeTag = {type="text/javascript", head=false, encode=false};
@@ -322,8 +322,8 @@ public void function onApplicationStart() {
 	application.$wheels.functions.mailTo = {encode=false};
 	application.$wheels.functions.maximum = {parameterize=true, ifNull=""};
 	application.$wheels.functions.minimum = {parameterize=true, ifNull=""};
-	application.$wheels.functions.minuteSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, minuteStep=1};
-	application.$wheels.functions.monthSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"};
+	application.$wheels.functions.minuteSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, minuteStep=1, encode=false};
+	application.$wheels.functions.monthSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec", encode=false};
 	application.$wheels.functions.nestedProperties = {autoSave=true, allowDelete=false, sortProperty="", rejectIfBlank=""};
 	application.$wheels.functions.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prepend="", append="", prependToPage="", prependOnFirst=true, prependOnAnchor=true, appendToPage="", appendOnLast=true, appendOnAnchor=true, classForCurrent="", name="page", showSinglePage=false, pageNumberAsParam=true};
 	application.$wheels.functions.passwordField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", encode=false};
@@ -338,7 +338,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.renderPageToString = {layout=true};
 	application.$wheels.functions.renderPartial = {layout="", dataFunction=true};
 	application.$wheels.functions.save = {parameterize=true, reload=false};
-	application.$wheels.functions.secondSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, secondStep=1};
+	application.$wheels.functions.secondSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, secondStep=1, encode=false};
 	application.$wheels.functions.select = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, valueField="", textField="", encode=false};
 	application.$wheels.functions.selectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, multiple=false, valueField="", textField="", encode=false};
 	application.$wheels.functions.sendEmail = {layout=false, detectMultipart=true, from="", to="", subject="", deliver=true};
@@ -353,8 +353,8 @@ public void function onApplicationStart() {
 	application.$wheels.functions.textField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", encode=false};
 	application.$wheels.functions.textFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", encode=false};
 	application.$wheels.functions.timeAgoInWords = {includeSeconds=false};
-	application.$wheels.functions.timeSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1, secondStep=1, twelveHour=false};
-	application.$wheels.functions.timeSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1, secondStep=1, twelveHour=false};
+	application.$wheels.functions.timeSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1, secondStep=1, twelveHour=false, encode=false};
+	application.$wheels.functions.timeSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1, secondStep=1, twelveHour=false, encode=false};
 	application.$wheels.functions.timeUntilInWords = {includeSeconds=false};
 	application.$wheels.functions.toggle = {save=true};
 	application.$wheels.functions.truncate = {length=30, truncateString="..."};
@@ -374,7 +374,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.validatesUniquenessOf = {message="[property] has already been taken", allowBlank=false};
 	application.$wheels.functions.verifies = {handler=""};
 	application.$wheels.functions.wordTruncate = {length=5, truncateString="..."};
-	application.$wheels.functions.yearSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, startYear=Year(Now())-5, endYear=Year(Now())+5};
+	application.$wheels.functions.yearSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, startYear=Year(Now())-5, endYear=Year(Now())+5, encode=false};
 
 	// Mime types.
 	application.$wheels.mimetypes = {txt="text/plain", gif="image/gif", jpg="image/jpg", jpeg="image/jpg", pjpeg="image/jpg", png="image/png", wav="audio/wav", mp3="audio/mpeg3", pdf="application/pdf", zip="application/zip", ppt="application/powerpoint", pptx="application/powerpoint", doc="application/word", docx="application/word", xls="application/excel", xlsx="application/excel"};

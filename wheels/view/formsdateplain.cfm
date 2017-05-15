@@ -22,7 +22,8 @@
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
- * @combine [see:dateSelect].
+ * @combine [see:dateTimeSelect].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function dateSelectTags(
 	required string name,
@@ -42,6 +43,7 @@ public string function dateSelectTags(
 	string prependToLabel,
 	string appendToLabel,
 	boolean combine,
+	boolean encode,
 	date $now=Now()
 ) {
 	$args(name="dateSelectTags", args=arguments);
@@ -73,8 +75,9 @@ public string function dateSelectTags(
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
- * @combine [see:dateSelect].
+ * @combine [see:dateTimeSelect].
  * @twelveHour [see:timeSelect].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function timeSelectTags(
 	required string name,
@@ -91,7 +94,8 @@ public string function timeSelectTags(
 	string prependToLabel,
 	string appendToLabel,
 	boolean combine,
-	boolean twelveHour
+	boolean twelveHour,
+	boolean encode
 ) {
 	$args(name="timeSelectTags", args=arguments);
 	arguments.property = arguments.name;
@@ -130,8 +134,9 @@ public string function timeSelectTags(
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
- * @combine [see:dateSelect].
+ * @combine [see:dateTimeSelect].
  * @twelveHour [see:timeSelect].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function dateTimeSelectTags(
 	required string name,
@@ -156,7 +161,8 @@ public string function dateTimeSelectTags(
 	string prependToLabel,
 	string appendToLabel,
 	boolean combine,
-	boolean twelveHour
+	boolean twelveHour,
+	boolean encode
 ) {
 	$args(name="dateTimeSelectTags", args=arguments);
 	local.rv = "";
@@ -211,6 +217,7 @@ public string function dateTimeSelectTags(
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function yearSelectTag(
 	required string name,
@@ -224,7 +231,8 @@ public string function yearSelectTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	date $now=now()
+	boolean encode,
+	date $now=Now()
 ) {
 	$args(name="yearSelectTag", args=arguments);
 	if (IsNumeric(arguments.selected)) {
@@ -252,6 +260,7 @@ public string function yearSelectTag(
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function monthSelectTag(
 	required string name,
@@ -266,7 +275,8 @@ public string function monthSelectTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	date $now=now()
+	boolean encode,
+	date $now=Now()
 ) {
 	$args(name="monthSelectTag", args=arguments);
 	if (IsNumeric(arguments.selected) && IsValid("range", arguments.selected, 0, 12)) {
@@ -291,6 +301,7 @@ public string function monthSelectTag(
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function daySelectTag(
 	required string name,
@@ -302,7 +313,8 @@ public string function daySelectTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	date $now=now()
+	boolean encode,
+	date $now=Now()
 ) {
 	$args(name="daySelectTag", args=arguments);
 	if (IsNumeric(arguments.selected) && IsValid("range", arguments.selected, 0, 31)) {
@@ -328,6 +340,7 @@ public string function daySelectTag(
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
  * @twelveHour [see:timeSelect].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function hourSelectTag(
 	required string name,
@@ -340,11 +353,12 @@ public string function hourSelectTag(
 	string prependToLabel,
 	string appendToLabel,
 	boolean twelveHour,
-	date $now=now()
+	boolean encode,
+	date $now=Now()
 ) {
 	$args(name="hourSelectTag", args=arguments);
 	if (IsNumeric(arguments.selected) && arguments.selected >= 0 && arguments.selected < 60) {
-		arguments.selected = createTime(arguments.selected, Minute(arguments.$now), Second(arguments.$now));
+		arguments.selected = CreateTime(arguments.selected, Minute(arguments.$now), Second(arguments.$now));
 	}
 	arguments.order = "hour";
 	return timeSelectTags(argumentCollection=arguments);
@@ -366,6 +380,7 @@ public string function hourSelectTag(
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function minuteSelectTag(
 	required string name,
@@ -378,11 +393,12 @@ public string function minuteSelectTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	date $now=now()
+	boolean encode,
+	date $now=Now()
 ) {
 	$args(name="minuteSelectTag", args=arguments);
 	if (IsNumeric(arguments.selected) && arguments.selected >= 0 && arguments.selected < 60) {
-		arguments.selected = createTime(Hour(arguments.$now), arguments.selected, Second(arguments.$now));
+		arguments.selected = CreateTime(Hour(arguments.$now), arguments.selected, Second(arguments.$now));
 	}
 	arguments.order = "minute";
 	return timeSelectTags(argumentCollection=arguments);
@@ -404,6 +420,7 @@ public string function minuteSelectTag(
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function secondSelectTag(
 	required string name,
@@ -416,11 +433,12 @@ public string function secondSelectTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	date $now=now()
+	boolean encode,
+	date $now=Now()
 ) {
 	$args(name="secondSelectTag", args=arguments);
 	if (IsNumeric(arguments.selected) && arguments.selected >= 0 && arguments.selected < 60) {
-		arguments.selected = createTime(Hour(arguments.$now), Minute(arguments.$now), arguments.selected);
+		arguments.selected = CreateTime(Hour(arguments.$now), Minute(arguments.$now), arguments.selected);
 	}
 	arguments.order = "second";
 	return timeSelectTags(argumentCollection=arguments);

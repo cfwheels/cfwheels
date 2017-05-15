@@ -24,7 +24,8 @@
  * @appendToLabel String to append to the form control's label. Useful to wrap the form control with HTML tags.
  * @errorElement HTML tag to wrap the form control with when the object contains errors.
  * @errorClass The `class` name of the HTML tag that wraps the form control when there are errors.
- * @combine
+ * @combine [see:dateTimeSelect].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function dateSelect(
 	any objectName="",
@@ -47,7 +48,8 @@ public string function dateSelect(
 	string appendToLabel,
 	string errorElement,
 	string errorClass,
-	boolean combine
+	boolean combine,
+	boolean encode
 ) {
 	$args(name="dateSelect", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
@@ -78,8 +80,9 @@ public string function dateSelect(
  * @appendToLabel [see:textField].
  * @errorElement [see:textField].
  * @errorClass [see:textField].
- * @combine [see:dateSelect].
+ * @combine [see:dateTimeSelect].
  * @twelveHour whether to display the hours in 24 or 12 hour format. 12 hour format has AM/PM drop downs
+ * @encode [see:styleSheetLinkTag].
  */
 public string function timeSelect(
 	any objectName="",
@@ -100,14 +103,14 @@ public string function timeSelect(
 	string errorElement,
 	string errorClass,
 	boolean combine,
-	boolean twelveHour
+	boolean twelveHour,
+	boolean encode
 ) {
 	$args(name="timeSelect", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
 	arguments.$functionName = "timeSelect";
 	return $dateOrTimeSelect(argumentCollection=arguments);
 }
-
 
 /**
  * Builds and returns a string containing six `select` form controls (three for date selection and the remaining three for time selection) based on the supplied objectName and property.
@@ -140,6 +143,7 @@ public string function timeSelect(
  * @errorClass The class name of the HTML tag that wraps the form control when there are errors.
  * @combine Set to false to not combine the select parts into a single DateTime object.
  * @twelveHour Whether to display the hours in 24 or 12 hour format. 12 hour format has AM/PM drop downs
+ * @encode [see:styleSheetLinkTag].
  */
 public string function dateTimeSelect(
 	required string objectName,
@@ -168,7 +172,8 @@ public string function dateTimeSelect(
 	string errorElement,
 	string errorClass,
 	boolean combine,
-	boolean twelveHour
+	boolean twelveHour,
+	boolean encode
 ) {
 	$args(name="dateTimeSelect", reserved="name", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
