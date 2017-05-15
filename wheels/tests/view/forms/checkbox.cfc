@@ -5,6 +5,11 @@ component extends="wheels.tests.Test" {
 		args= {};
 		args.objectName = "user";
 		args.label = false;
+		set(functionName="checkBox", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="checkBox", encode=true);
 	}
 
 	function test_checked_when_property_value_equals_checkedValue() {

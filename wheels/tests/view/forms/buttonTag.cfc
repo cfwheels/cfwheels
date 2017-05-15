@@ -3,6 +3,11 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		_controller = controller(name="dummy");
 		imagePath = application.wheels.webPath & application.wheels.imagePath;
+		set(functionName="buttonTag", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="buttonTag", encode=true);
 	}
 
 	function test_defaults() {

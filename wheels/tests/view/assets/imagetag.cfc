@@ -8,6 +8,11 @@ component extends="wheels.tests.Test" {
 		args.class = "wheelstestlogoclass";
 		args.id = "wheelstestlogoid";
 		imagePath = application.wheels.webPath & application.wheels.imagePath;
+		set(functionName="imageTag", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="imageTag", encode=true);
 	}
 
 	function test_just_source() {

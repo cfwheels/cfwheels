@@ -2,6 +2,11 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		_controller = controller(name="ControllerWithModel");
+		set(functionName="submitTag", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="submitTag", encode=true);
 	}
 
 	function test_defaults() {

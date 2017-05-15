@@ -2,6 +2,11 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		_controller = controller(name="dummy");
+		set(functionName="autoLink", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="autoLink", encode=true);
 	}
 
 	function test_link_urls() {

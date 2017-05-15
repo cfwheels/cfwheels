@@ -198,6 +198,7 @@ public string function buttonTag(
 		local.args = {};
 		local.args.type = "image";
 		local.args.source = arguments.image;
+		local.args.encode = arguments.encode;
 		arguments.content = imageTag(argumentCollection=local.args);
 		arguments.encode = arguments.encode ? "attributes" : false;
 	}

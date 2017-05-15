@@ -5,6 +5,11 @@ component extends="wheels.tests.Test" {
 		args = {};
 		args.objectName = "user";
 		args.label = false;
+		set(functionName="dateSelect", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="dateSelect", encode=true);
 	}
 
 	function test_dateselect_parsing_and_passed_month() {

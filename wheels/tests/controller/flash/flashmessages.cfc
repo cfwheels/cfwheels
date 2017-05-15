@@ -2,10 +2,12 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		include "setup.cfm";
+		set(functionName="flashMessages", encode=false);
 	}
 
 	function teardown() {
 		include "teardown.cfm";
+		set(functionName="flashMessages", encode=true);
 	}
 
 	function test_normal_output() {

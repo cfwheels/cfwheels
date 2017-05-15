@@ -3,6 +3,11 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		_controller = controller(name="ControllerWithModel");
 		user = model("user");
+		set(functionName="select", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="select", encode=true);
 	}
 
 	function test_with_list_as_options() {
@@ -75,14 +80,15 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_htmlsafe() {
-		// badValue = "<invalidTag;alert('hello');</script>";
-		// badName = "<invalidTag;alert('tony');</script>";
-		// goodValue = EncodeForHtmlAttribute(badValue);
-		// goodName = EncodeForHtml(badName);
-		// options = [];
-		// options[1] = {value="#badValue#", name="#badName#"};
-    // r = _controller.select(objectName="user", property="firstname", options=options, valueField="value", textField="name", label=false);
-    // assert('r CONTAINS goodValue AND r CONTAINS goodName');
+		badValue = "<invalidTag;alert('hello');</script>";
+		badName = "<invalidTag;alert('tony');</script>";
+		goodValue = EncodeForHtmlAttribute(badValue);
+		goodName = EncodeForHtml(badName);
+		options = [];
+		options[1] = {value="#badValue#", name="#badName#"};
+		set(functionName="select", encode=true);
+    r = _controller.select(objectName="user", property="firstname", options=options, valueField="value", textField="name", label=false);
+    assert('r CONTAINS goodValue AND r CONTAINS goodName');
 	}
 
 }

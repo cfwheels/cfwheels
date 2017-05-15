@@ -3,6 +3,11 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		_controller = controller(name="dummy");
 		args = {};
+		set(functionName="javaScriptIncludeTag", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="javaScriptIncludeTag", encode=true);
 	}
 
 	function test_should_handle_extensions_nonextensions_and_multiple_extensions() {

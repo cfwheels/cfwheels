@@ -2,6 +2,11 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		_controller = controller(name="dummy");
+		set(functionName="hourSelectTag", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="hourSelectTag", encode=true);
 	}
 
 	function test_hourSelect_twelve_hour_format() {

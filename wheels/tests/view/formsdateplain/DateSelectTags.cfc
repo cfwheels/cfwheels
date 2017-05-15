@@ -4,6 +4,11 @@ component extends="wheels.tests.Test" {
 		_controller = controller(name="dummy");
 		args = {};
 		args.label = false;
+		set(functionName="dateSelectTags", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="dateSelectTags", encode=true);
 	}
 
 	function test_multiple_labels() {

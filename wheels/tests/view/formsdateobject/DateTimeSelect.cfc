@@ -5,11 +5,15 @@ component extends="wheels.tests.Test" {
 		args= {};
 		args.objectName = "user";
 		args.label = false;
-
 		selected = {};
 		selected.month = '<option selected="selected" value="11">November</option>';
 		selected.day = '<option selected="selected" value="1">1</option>';
 		selected.year = '<option selected="selected" value="1975">1975</option>';
+		set(functionName="dateTimeSelect", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="dateTimeSelect", encode=true);
 	}
 
 	function testSplittingLabels() {

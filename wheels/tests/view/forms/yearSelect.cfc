@@ -9,6 +9,11 @@ component extends="wheels.tests.Test" {
 		args.order = "year";
 		args.label = false;
 		_controller.changeBirthday = changeBirthday;
+		set(functionName="dateSelect", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="dateSelect", encode=true);
 	}
 
 	function test_startyear_lt_endyear_value_lt_startyear() {

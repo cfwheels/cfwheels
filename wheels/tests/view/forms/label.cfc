@@ -2,6 +2,18 @@ component extends="wheels.tests.Test" {
 
 	include "/wheels/view/functions.cfm";
 
+	function setup() {
+		set(functionName="checkBoxTag", encode=false);
+		set(functionName="textField", encode=false);
+		set(functionName="textFieldTag", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="checkBoxTag", encode=true);
+		set(functionName="textField", encode=true);
+		set(functionName="textFieldTag", encode=true);
+	}
+
 	/* plain helpers */
 
 	function test_label_to_the_left() {
