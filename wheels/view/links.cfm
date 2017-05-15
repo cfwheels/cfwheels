@@ -132,7 +132,7 @@ public string function buttonTo(
  *
  * @emailAddress The email address to link to.
  * @name A string to use as the link text ("Joe" or "Support Department", for example).
- * @encode Pass `true` here to encode the email address, making it harder for bots to harvest it for example.
+ * @encode [see:styleSheetLinkTag].
  */
 public string function mailTo(
 	required string emailAddress,
@@ -141,23 +141,14 @@ public string function mailTo(
 ) {
 	$args(name="mailTo", reserved="href", args=arguments);
 	arguments.href = "mailto:" & arguments.emailAddress;
-	if (Len(arguments.name)) {
-		local.content = arguments.name;
-	} else {
-		local.content = arguments.emailAddress;
-	}
-	local.rv = $element(name="a", skip="emailAddress,name,encode", content=local.content, attributes=arguments, encode=false);
-	if (arguments.encode) {
-		local.js = "document.write('#Trim(local.rv)#');";
-		local.encoded = "";
-		local.iEnd = Len(local.js);
-		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			local.encoded &= "%" & Right("0" & FormatBaseN(Asc(Mid(local.js,local.i,1)),16),2);
-		}
-		local.content = "eval(unescape('#local.encoded#'))";
-		local.rv = $element(name="script", content=local.content, type="text/javascript", encode=false);
-	}
-	return local.rv;
+	local.content = Len(arguments.name) ? arguments.name : arguments.emailAddress;
+	return $element(
+		name="a",
+		skip="emailAddress,name,encode",
+		content=local.content,
+		attributes=arguments,
+		encode=arguments.encode
+	);
 }
 
 /**
