@@ -10,12 +10,14 @@
  * @class HTML `class` to set on the `div` element that contains the messages.
  * @includeEmptyContainer Includes the `div` container even if the Flash is empty.
  * @lowerCaseDynamicClassValues Outputs all class attribute values in lower case (except the main one).
+ * @encode [see:styleSheetLinkTag].
  */
 public string function flashMessages(
 	string keys,
 	string class,
 	boolean includeEmptyContainer,
-	boolean lowerCaseDynamicClassValues
+	boolean lowerCaseDynamicClassValues,
+	boolean encode
 ) {
 	$args(name="flashMessages", args=arguments, combine="keys/key");
 	local.flash = $readFlash();
@@ -43,13 +45,14 @@ public string function flashMessages(
 		if (!StructKeyExists(arguments, "key") || arguments.key == local.item) {
 			local.content = local.flash[local.item];
 			if (IsSimpleValue(local.content)) {
-				local.listItems &= $element(name="p", content=local.content, attributes=local.attributes, encode=false);
+				local.listItems &= $element(name="p", content=local.content, attributes=local.attributes, encode=arguments.encode);
 			}
 		}
 	}
 
 	if (Len(local.listItems) || arguments.includeEmptyContainer) {
-		local.rv = $element(name="div", skip="key,keys,includeEmptyContainer,lowerCaseDynamicClassValues", content=local.listItems, attributes=arguments, encode=false);
+		local.encode = arguments.encode ? "attributes" : false;
+		local.rv = $element(name="div", skip="key,keys,includeEmptyContainer,lowerCaseDynamicClassValues,encode", content=local.listItems, attributes=arguments, encode=local.encode);
 	}
 	return local.rv;
 }

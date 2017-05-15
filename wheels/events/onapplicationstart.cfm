@@ -308,7 +308,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.findByKey = {reload=false, parameterize=true, returnAs="object"};
 	application.$wheels.functions.findOne = {reload=false, parameterize=true, returnAs="object"};
 	application.$wheels.functions.flashKeep = {};
-	application.$wheels.functions.flashMessages = {class="flashMessages", includeEmptyContainer="false", lowerCaseDynamicClassValues=false};
+	application.$wheels.functions.flashMessages = {class="flashMessages", includeEmptyContainer="false", lowerCaseDynamicClassValues=false, encode=false};
 	application.$wheels.functions.hasMany = {joinType="outer", dependent=false};
 	application.$wheels.functions.hasOne = {joinType="outer", dependent=false};
 	application.$wheels.functions.hiddenField = {encode=false};
