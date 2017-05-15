@@ -117,32 +117,32 @@ public string function excerpt(required string text, required string phrase, num
  * [category: Text Functions]
  *
  * @text Text to search.
- * @phrases List of phrases to highlight.
- * @delimiter Delimiter to use in phrases argument.
+ * @phrase Phrase (or list of phrases) to highlight. This argument is also aliased as `phrases`.
+ * @delimiter Delimiter to use in phrase argument.
  * @tag HTML tag to use to wrap the highlighted phrase(s).
  * @class Class to use in the tags wrapping highlighted phrase(s).
  * @encode [see:styleSheetLinkTag].
  */
 public string function highlight(
 	required string text,
-	required string phrases,
+	string phrase,
 	string delimiter,
 	string tag,
 	string class,
 	boolean encode
 ) {
-	$args(name="highlight", args=arguments);
+	$args(name="highlight", args=arguments, combine="phrase/phrases", required="phrase");
 
 	// Return the passed in text unchanged if it's blank or the passed in phrase is blank.
-	if (!Len(arguments.text) || !Len(arguments.phrases)) {
+	if (!Len(arguments.text) || !Len(arguments.phrase)) {
 		return arguments.text;
 	}
 
 	local.originalText = arguments.text;
-	local.iEnd = ListLen(arguments.phrases, arguments.delimiter);
+	local.iEnd = ListLen(arguments.phrase, arguments.delimiter);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.newText = "";
-		local.phrase = Trim(ListGetAt(arguments.phrases, local.i, arguments.delimiter));
+		local.phrase = Trim(ListGetAt(arguments.phrase, local.i, arguments.delimiter));
 		local.pos = 1;
 		while (FindNoCase(local.phrase, local.originalText, local.pos)) {
 			local.foundAt = FindNoCase(local.phrase, local.originalText, local.pos);
