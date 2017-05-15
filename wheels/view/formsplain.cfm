@@ -54,6 +54,7 @@ public string function textFieldTag(
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function passwordFieldTag(
 	required string name,
@@ -63,7 +64,8 @@ public string function passwordFieldTag(
 	string prepend,
 	string append,
 	string prependToLabel,
-	string appendToLabel
+	string appendToLabel,
+	boolean encode
 ) {
 	$args(name="passwordFieldTag", args=arguments);
 	arguments.property = arguments.name;
@@ -83,10 +85,12 @@ public string function passwordFieldTag(
  *
  * @name [see:textFieldTag].
  * @value [see:textFieldTag].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function hiddenFieldTag(
 	required string name,
-	string value=""
+	string value="",
+	boolean encode
 ) {
 	arguments.property = arguments.name;
 	arguments.objectName = {};
@@ -110,6 +114,7 @@ public string function hiddenFieldTag(
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function fileFieldTag(
 	required string name,
@@ -118,7 +123,8 @@ public string function fileFieldTag(
 	string prepend,
 	string append,
 	string prependToLabel,
-	string appendToLabel
+	string appendToLabel,
+	boolean encode
 ) {
 	$args(name="fileFieldTag", args=arguments);
 	arguments.property = arguments.name;

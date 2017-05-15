@@ -302,8 +302,8 @@ public void function onApplicationStart() {
 	application.$wheels.functions.errorMessagesFor = {class="errorMessages", showDuplicates=true, encode=false};
 	application.$wheels.functions.excerpt = {radius=100, excerptString="..."};
 	application.$wheels.functions.exists = {reload=false, parameterize=true};
-	application.$wheels.functions.fileField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
-	application.$wheels.functions.fileFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+	application.$wheels.functions.fileField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", encode=false};
+	application.$wheels.functions.fileFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", encode=false};
 	application.$wheels.functions.findAll = {reload=false, parameterize=true, perPage=10, order="", group="", returnAs="query", returnIncluded=true};
 	application.$wheels.functions.findByKey = {reload=false, parameterize=true, returnAs="object"};
 	application.$wheels.functions.findOne = {reload=false, parameterize=true, returnAs="object"};
@@ -311,7 +311,8 @@ public void function onApplicationStart() {
 	application.$wheels.functions.flashMessages = {class="flashMessages", includeEmptyContainer="false", lowerCaseDynamicClassValues=false};
 	application.$wheels.functions.hasMany = {joinType="outer", dependent=false};
 	application.$wheels.functions.hasOne = {joinType="outer", dependent=false};
-	application.$wheels.functions.hiddenField = {};
+	application.$wheels.functions.hiddenField = {encode=false};
+	application.$wheels.functions.hiddenFieldTag = {encode=false};
 	application.$wheels.functions.highlight = {delimiter=",", tag="span", class="highlight"};
 	application.$wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, twelveHour=false};
 	application.$wheels.functions.imageTag = {onlyPath=true, host="", protocol="", port=0, encode=false};
@@ -325,8 +326,8 @@ public void function onApplicationStart() {
 	application.$wheels.functions.monthSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"};
 	application.$wheels.functions.nestedProperties = {autoSave=true, allowDelete=false, sortProperty="", rejectIfBlank=""};
 	application.$wheels.functions.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prepend="", append="", prependToPage="", prependOnFirst=true, prependOnAnchor=true, appendToPage="", appendOnLast=true, appendOnAnchor=true, classForCurrent="", name="page", showSinglePage=false, pageNumberAsParam=true};
-	application.$wheels.functions.passwordField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
-	application.$wheels.functions.passwordFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+	application.$wheels.functions.passwordField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", encode=false};
+	application.$wheels.functions.passwordFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", encode=false};
 	application.$wheels.functions.processRequest = {method="get", returnAs="", rollback=false};
 	application.$wheels.functions.protectsFromForgery = {with="exception", only="", except=""};
 	application.$wheels.functions.radioButton = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};

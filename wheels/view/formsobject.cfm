@@ -76,6 +76,7 @@ public string function textField(
  * @appendToLabel [see:textField].
  * @errorElement [see:textField].
  * @errorClass [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function passwordField(
 	required any objectName,
@@ -89,7 +90,8 @@ public string function passwordField(
 	string prependToLabel,
 	string appendToLabel,
 	string errorElement,
-	string errorClass
+	string errorClass,
+	boolean encode
 ) {
 	$args(name="passwordField", reserved="type,name", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
@@ -107,7 +109,7 @@ public string function passwordField(
 	if (!StructKeyExists(arguments, "value") || !Len(arguments.value)) {
 		arguments.value = $formValue(argumentCollection=arguments);
 	}
-	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments, encode=false) & local.after;
+	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=arguments.encode) & local.after;
 }
 
 /**
@@ -121,12 +123,14 @@ public string function passwordField(
  * @property [see:textField].
  * @association [see:textField].
  * @position [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function hiddenField(
 	required any objectName,
 	required string property,
 	string association,
-	string position
+	string position,
+	boolean encode
 ) {
 	$args(name="hiddenField", reserved="type,name", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
@@ -141,7 +145,7 @@ public string function hiddenField(
 	if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get") {
 		arguments.value = obfuscateParam(arguments.value);
 	}
-	return $tag(name="input", skip="objectName,property,association,position", attributes=arguments, encode=false);
+	return $tag(name="input", skip="objectName,property,association,position,encode", attributes=arguments, encode=arguments.encode);
 }
 
 /**
@@ -163,6 +167,7 @@ public string function hiddenField(
  * @appendToLabel [see:textField].
  * @errorElement [see:textField].
  * @errorClass [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function fileField(
 	required any objectName,
@@ -176,7 +181,8 @@ public string function fileField(
 	string prependToLabel,
 	string appendToLabel,
 	string errorElement,
-	string errorClass
+	string errorClass,
+	boolean encode
 ) {
 	$args(name="fileField", reserved="type,name", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
@@ -187,7 +193,7 @@ public string function fileField(
 	local.after = $formAfterElement(argumentCollection=arguments);
 	arguments.type = "file";
 	arguments.name = $tagName(arguments.objectName, arguments.property);
-	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", attributes=arguments, encode=false) & local.after;
+	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=arguments.encode) & local.after;
 }
 
 /**
