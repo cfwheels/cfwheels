@@ -149,6 +149,7 @@ public string function fileFieldTag(
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function textAreaTag(
 	required string name,
@@ -158,7 +159,8 @@ public string function textAreaTag(
 	string prepend,
 	string append,
 	string prependToLabel,
-	string appendToLabel
+	string appendToLabel,
+	boolean encode
 ) {
 	$args(name="textAreaTag", args=arguments);
 	arguments.property = arguments.name;
@@ -185,6 +187,7 @@ public string function textAreaTag(
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].*
+ * @encode [see:styleSheetLinkTag].
  */
 public string function radioButtonTag(
 	required string name,
@@ -195,7 +198,8 @@ public string function radioButtonTag(
 	string prepend,
 	string append,
 	string prependToLabel,
-	string appendToLabel
+	string appendToLabel,
+	boolean encode
 ) {
 	$args(name="radioButtonTag", args=arguments);
 	arguments.property = arguments.name;
@@ -232,6 +236,7 @@ public string function radioButtonTag(
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function checkBoxTag(
 	required string name,
@@ -243,7 +248,8 @@ public string function checkBoxTag(
 	string prepend,
 	string append,
 	string prependToLabel,
-	string appendToLabel
+	string appendToLabel,
+	boolean encode
 ) {
 	$args(name="checkBoxTag", args=arguments);
 	arguments.checkedValue = arguments.value;
@@ -290,6 +296,7 @@ public string function checkBoxTag(
  * @append [see:textField].
  * @prependToLabel [see:textField].
  * @appendToLabel [see:textField].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function selectTag(
 	required string name,
@@ -304,7 +311,8 @@ public string function selectTag(
 	string prepend,
 	string append,
 	string prependToLabel,
-	string appendToLabel
+	string appendToLabel,
+	boolean encode
 ) {
 	$args(name="selectTag", args=arguments);
 	arguments.property = arguments.name;

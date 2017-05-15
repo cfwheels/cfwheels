@@ -283,8 +283,8 @@ public void function onApplicationStart() {
 	application.$wheels.functions.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", image=""};
 	application.$wheels.functions.buttonTag = {type="submit", value="save", content="Save changes", image="", prepend="", append="", encode=false};
 	application.$wheels.functions.caches = {time=60, static=false};
-	application.$wheels.functions.checkBox = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", checkedValue=1, unCheckedValue=0};
-	application.$wheels.functions.checkBoxTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", value=1};
+	application.$wheels.functions.checkBox = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", checkedValue=1, unCheckedValue=0, encode=false};
+	application.$wheels.functions.checkBoxTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", value=1, encode=false};
 	application.$wheels.functions.count = {parameterize=true};
 	application.$wheels.functions.create = {parameterize=true, reload=false};
 	application.$wheels.functions.dateSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"};
@@ -330,8 +330,8 @@ public void function onApplicationStart() {
 	application.$wheels.functions.passwordFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", encode=false};
 	application.$wheels.functions.processRequest = {method="get", returnAs="", rollback=false};
 	application.$wheels.functions.protectsFromForgery = {with="exception", only="", except=""};
-	application.$wheels.functions.radioButton = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
-	application.$wheels.functions.radioButtonTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+	application.$wheels.functions.radioButton = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", encode=false};
+	application.$wheels.functions.radioButtonTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", encode=false};
 	application.$wheels.functions.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302, delay=false};
 	application.$wheels.functions.renderPage = {layout=""};
 	application.$wheels.functions.renderWith = {layout=""};
@@ -339,8 +339,8 @@ public void function onApplicationStart() {
 	application.$wheels.functions.renderPartial = {layout="", dataFunction=true};
 	application.$wheels.functions.save = {parameterize=true, reload=false};
 	application.$wheels.functions.secondSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, secondStep=1};
-	application.$wheels.functions.select = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, valueField="", textField=""};
-	application.$wheels.functions.selectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, multiple=false, valueField="", textField=""};
+	application.$wheels.functions.select = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, valueField="", textField="", encode=false};
+	application.$wheels.functions.selectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, multiple=false, valueField="", textField="", encode=false};
 	application.$wheels.functions.sendEmail = {layout=false, detectMultipart=true, from="", to="", subject="", deliver=true};
 	application.$wheels.functions.sendFile = {disposition="attachment"};
 	application.$wheels.functions.simpleFormat = {wrap=true};
@@ -348,8 +348,8 @@ public void function onApplicationStart() {
 	application.$wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false, encode=false};
 	application.$wheels.functions.submitTag = {value="Save changes", image="", prepend="", append="", encode=false};
 	application.$wheels.functions.sum = {distinct=false, parameterize=true, ifNull=""};
-	application.$wheels.functions.textArea = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
-	application.$wheels.functions.textAreaTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+	application.$wheels.functions.textArea = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", encode=false};
+	application.$wheels.functions.textAreaTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", encode=false};
 	application.$wheels.functions.textField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", encode=false};
 	application.$wheels.functions.textFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", encode=false};
 	application.$wheels.functions.timeAgoInWords = {includeSeconds=false};
