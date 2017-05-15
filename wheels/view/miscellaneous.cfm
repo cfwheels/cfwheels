@@ -332,7 +332,7 @@ public string function $tagAttribute(required string name, required string value
 }
 
 /**
- * Internal function.
+ * Creates an HTML element.
  */
 public string function $element(
 	required string name,
@@ -342,10 +342,16 @@ public string function $element(
 	string skipStartingWith="",
 	any encode=false
 ) {
-	local.rv = IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags") ? EncodeForHtml(arguments.content) : arguments.content;
+
+	// Set a variable with the content of the tag.
+	// Encoded if global encode setting is true and true is also passed in to the function.
+	local.rv = $get("encodeHtmlTags") && IsBoolean(arguments.encode) && arguments.encode ? EncodeForHtml(arguments.content) : arguments.content;
+
+	// When only wanting to encode HTML attribute values (and not tag content) we set the encode argument to true before passing on to $tag().
 	if (arguments.encode == "attributes") {
 		arguments.encode = true;
 	}
+
 	StructDelete(arguments, "content");
 	return $tag(argumentCollection=arguments) & local.rv & "</" & arguments.name & ">";
 }
