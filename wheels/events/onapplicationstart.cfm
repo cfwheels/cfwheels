@@ -277,7 +277,7 @@ public void function onApplicationStart() {
 
 	// Function defaults.
 	application.$wheels.functions = {};
-	application.$wheels.functions.autoLink = {link="all"};
+	application.$wheels.functions.autoLink = {link="all", encode=false};
 	application.$wheels.functions.average = {distinct=false, parameterize=true, ifNull=""};
 	application.$wheels.functions.belongsTo = {joinType="inner"};
 	application.$wheels.functions.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", image=""};
@@ -313,7 +313,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.hasOne = {joinType="outer", dependent=false};
 	application.$wheels.functions.hiddenField = {encode=false};
 	application.$wheels.functions.hiddenFieldTag = {encode=false};
-	application.$wheels.functions.highlight = {delimiter=",", tag="span", class="highlight"};
+	application.$wheels.functions.highlight = {delimiter=",", tag="span", class="highlight", encode=false};
 	application.$wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, twelveHour=false};
 	application.$wheels.functions.imageTag = {onlyPath=true, host="", protocol="", port=0, encode=false};
 	application.$wheels.functions.includePartial = {layout="", spacer="", dataFunction=true};

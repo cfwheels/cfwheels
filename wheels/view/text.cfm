@@ -9,9 +9,9 @@
  * @text The text to create links in.
  * @link Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`.
  * @relative Should we auto-link relative urls.
- *
+ * @encode [see:styleSheetLinkTag].
  */
-public string function autoLink(required string text, string link, boolean relative=true) {
+public string function autoLink(required string text, string link, boolean relative=true, boolean encode) {
 	$args(name="autoLink", args=arguments);
 	local.rv = arguments.text;
 
@@ -56,7 +56,7 @@ public string function $autoLinkLoop(required string text, required string regex
 			}
 
 			arguments.href = arguments.protocol & local.str;
-			local.element = $element(name="a", content=local.str, attributes=arguments, skip="text,regex,link,protocol,relative", encode=false) & local.punctuation;
+			local.element = $element(name="a", content=local.str, attributes=arguments, skip="text,regex,link,protocol,relative,encode", encode=arguments.encode) & local.punctuation;
 			arguments.text = Insert(local.element, arguments.text, local.match.pos[1]-1);
 			local.startPosition = local.match.pos[1] + Len(local.element);
 		}
@@ -121,13 +121,15 @@ public string function excerpt(required string text, required string phrase, num
  * @delimiter Delimiter to use in phrases argument.
  * @tag HTML tag to use to wrap the highlighted phrase(s).
  * @class Class to use in the tags wrapping highlighted phrase(s).
+ * @encode [see:styleSheetLinkTag].
  */
 public string function highlight(
 	required string text,
 	required string phrases,
 	string delimiter,
 	string tag,
-	string class
+	string class,
+	boolean encode
 ) {
 	$args(name="highlight", args=arguments);
 
@@ -150,9 +152,8 @@ public string function highlight(
 			local.startBracket = Find("<", local.originalText, local.foundAt);
 			local.endBracket = Find(">", local.originalText, local.foundAt);
 			if (local.startBracket < local.endBracket || !local.endBracket) {
-				local.newText &= "<" & arguments.tag & " class=""" & arguments.class & """>";
-				local.newText &= local.mid;
-				local.newText &= "</" & arguments.tag & ">";
+				local.attributes = {class = arguments.class};
+				local.newText &= $element(name=arguments.tag, content=local.mid, attributes=local.attributes, encode=arguments.encode);
 			} else {
 				local.newText &= local.mid;
 			}
