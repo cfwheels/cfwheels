@@ -19,6 +19,12 @@ component extends="wheels.tests.Test" {
 		assert('e eq r');
 	}
 
+	function test_do_not_encode_dash() {
+		e = '<a href="#application.wheels.webpath#x/x?cats=ca-ts">x</a>';
+		r = _controller.linkTo(text="x", controller="x", action="x", params="cats=ca-ts");
+		assert('e eq r');
+	}
+
 	function test_controller_action_only() {
 		e = '<a href="#application.wheels.webpath#account/logout">Log Out</a>';
 		r = _controller.linkTo(text="Log Out", controller="account", action="logout");
