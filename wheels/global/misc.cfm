@@ -357,6 +357,7 @@ public string function pluginNames() {
  * @host Set this to override the current host.
  * @protocol Set this to override the current protocol.
  * @port Set this to override the current port number.
+ * @encode Encode URL parameters using `EncodeForURL()`. Please note that this does not make the string safe for placement in HTML attributes, for that you need to wrap the result in `EncodeForHtmlAttribute()` or use `linkTo()`, `startFormTag()` etc instead.
  */
 public string function URLFor(
 	string route="",
@@ -369,6 +370,7 @@ public string function URLFor(
 	string host,
 	string protocol,
 	numeric port,
+	boolean encode,
 	string $URLRewriting=application.wheels.URLRewriting
 ) {
 	$args(name="URLFor", args=arguments);
@@ -470,7 +472,9 @@ public string function URLFor(
 		}
 
 		// Any value we find from above, URL encode it here.
-		local.value = $URLEncode(local.value);
+		if (arguments.encode && $get("encodeURLs")) {
+			local.value = EncodeForURL(local.value);
+		}
 
 		// If property is not in pattern, store it in the params argument.
 		if (!REFind(local.reg, local.rv)) {
@@ -509,7 +513,7 @@ public string function URLFor(
 
 	// Add params to the URL when supplied.
 	if (Len(arguments.params)) {
-		local.rv &= $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
+		local.rv &= $constructParams(params=arguments.params, encode=arguments.encode, $URLRewriting=arguments.$URLRewriting);
 	}
 
 	// Add an anchor to the the URL when supplied.

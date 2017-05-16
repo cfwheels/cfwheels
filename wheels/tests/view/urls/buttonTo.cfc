@@ -6,11 +6,13 @@ component extends="wheels.tests.Test" {
 		application.wheels.URLRewriting = "On";
 		oldScriptName = request.cgi.script_name;
 		request.cgi.script_name = "/rewrite.cfm";
+		set(functionName="buttonTo", encode=false);
 	}
 
 	function teardown() {
 		application.wheels.URLRewriting = oldURLRewriting;
 		request.cgi.script_name = oldScriptName;
+		set(functionName="buttonTo", encode=true);
 	}
 
 	function test_buttonto_attributes() {

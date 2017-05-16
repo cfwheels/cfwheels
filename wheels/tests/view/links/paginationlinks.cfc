@@ -11,11 +11,15 @@ component extends="wheels.tests.Test" {
     .end();
     $setNamedRoutePositions();
 		application.wheels.URLRewriting = "On";
+		set(functionName="linkTo", encode=false);
+		set(functionName="paginationLinks", encode=false);
 	}
 
   public void function teardown() {
     application[$appKey()].routes = _originalRoutes;
     application.wheels.URLRewriting = _originalRewrite;
+		set(functionName="linkTo", encode=true);
+		set(functionName="paginationLinks", encode=true);
   }
 
   public void function $clearRoutes() {

@@ -11,7 +11,7 @@
  * @media The `media` attribute for the `link` tag.
  * @head Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior (which is to place the output where the function is called from).
  * @delim The delimiter to use for the list of CSS files.
- * @encode When set to `true`, encodes HTML attribute values and tag content so that Cross Site Scripting (XSS) attacks can be prevented.
+ * @encode When set to `true`, encodes tag content, attribute values, and URLs so that Cross Site Scripting (XSS) attacks can be prevented.
  */
 public string function styleSheetLinkTag(
 	string sources="",

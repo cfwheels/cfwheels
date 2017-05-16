@@ -39,6 +39,7 @@ public string function endFormTag(string prepend, string append) {
  * @port Set this to override the current port number.
  * @prepend String to prepend to the form control. Useful to wrap the form control with HTML tags.
  * @append String to append to the form control. Useful to wrap the form control with HTML tags.
+ * @encode [see:styleSheetLinkTag].
  */
 public string function startFormTag(
 	string method,
@@ -54,7 +55,8 @@ public string function startFormTag(
 	string protocol,
 	numeric port,
 	string prepend,
-	string append
+	string append,
+	boolean encode
 ) {
 	$args(name="startFormTag", args=arguments);
 	local.routeAndMethodMatch = false;
@@ -97,15 +99,12 @@ public string function startFormTag(
 		arguments.action = URLFor(argumentCollection=arguments);
 	}
 
-	// make sure we return XHMTL compliant code
-	arguments.action = toXHTML(arguments.action);
-
 	// set the form to be able to handle file uploads
 	if (!StructKeyExists(arguments, "enctype") && arguments.multipart) {
 		arguments.enctype = "multipart/form-data";
 	}
 
-	local.skip = "multipart,route,controller,key,params,anchor,onlyPath,host,protocol,port,prepend,append";
+	local.skip = "multipart,route,controller,key,params,anchor,onlyPath,host,protocol,port,prepend,append,encode";
 
 	// variables passed in as route arguments should not be added to the html element
 	if (Len(arguments.route)) {
@@ -117,7 +116,7 @@ public string function startFormTag(
 		local.skip = ListDeleteAt(local.skip, ListFind(local.skip, "action"));
 	}
 
-	local.rv = arguments.prepend & $tag(name="form", skip=local.skip, attributes=arguments, encode=false) & arguments.append;
+	local.rv = arguments.prepend & $tag(name="form", skip=local.skip, attributes=arguments, encode=arguments.encode) & arguments.append;
 	if ($isRequestProtectedFromForgery() && ListFindNoCase("post,put,patch,delete", arguments.method)) {
 		local.rv &= authenticityTokenField();
 	}

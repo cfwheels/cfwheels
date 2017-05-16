@@ -22,6 +22,7 @@
  * @port Set this to override the current port number.
  * @url Redirect to an external URL.
  * @delay Set to `true` to delay the redirection until after the rest of your action code has executed.
+ * @encode [see:URLFor].
  */
 public void function redirectTo(
 	boolean back=false,
@@ -39,7 +40,8 @@ public void function redirectTo(
 	string protocol,
 	numeric port,
 	string url="",
-	boolean delay
+	boolean delay,
+	boolean encode
 ) {
 	$args(name="redirectTo", args=arguments);
 
@@ -83,7 +85,7 @@ public void function redirectTo(
 			if (Len(arguments.params)) {
 
 				// Append params to the referrer url.
-				local.params = $constructParams(arguments.params);
+				local.params = $constructParams(params=arguments.params, encode=arguments.encode);
 				if (Find("?", request.cgi.http_referer)) {
 					local.params = Replace(local.params, "?", "&");
 				} else if (left(local.params, 1) == "&" && !Find(request.cgi.http_referer, "?")) {

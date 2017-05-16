@@ -115,17 +115,6 @@ public string function singularize(required string word) {
 }
 
 /**
- * Returns an XHTML-compliant string.
- *
- * [section: Global Helpers]
- * [category: String Functions]
- *
- * @string String to make XHTML-compliant.
- */
-public string function toXHTML(required string text) {
-	return Replace(arguments.text, "&", "&amp;", "all");
-}
-/**
  * Returns an associated MIME type based on a file extension.
  *
  * [section: Global Helpers]

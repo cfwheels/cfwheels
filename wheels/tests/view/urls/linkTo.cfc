@@ -6,22 +6,34 @@ component extends="wheels.tests.Test" {
 		application.wheels.URLRewriting = "On";
 		oldScriptName = request.cgi.script_name;
 		request.cgi.script_name = "/rewrite.cfm";
+		set(functionName="linkTo", encode=false);
 	}
 
 	function teardown() {
 		application.wheels.URLRewriting = oldURLRewriting;
 		request.cgi.script_name = oldScriptName;
+		set(functionName="linkTo", encode=true);
 	}
 
 	function test_ampersand_and_equals_sign_encoding() {
-		e = '<a href="#application.wheels.webpath#x/x?a=cats%26dogs%3Dtrouble&amp;b=1">x</a>';
+		e = '<a href="#application.wheels.webpath#x/x?a=cats%26dogs%3Dtrouble&b=1">x</a>';
 		r = _controller.linkTo(text="x", controller="x", action="x", params="a=cats%26dogs%3Dtrouble&b=1");
 		assert('e eq r');
 	}
 
+	function test_encode_ampersand() {
+		e = '<a href="&##x2f;x&##x2f;x&##x3f;x&##x3d;1&amp;y&##x3d;2">x</a>';
+		set(functionName="linkTo", encode=true);
+		r = _controller.linkTo(text="x", controller="x", action="x", params="x=1&y=2");
+		set(functionName="linkTo", encode=false);
+		assert('e eq r');
+	}
+
 	function test_do_not_encode_dash() {
-		e = '<a href="#application.wheels.webpath#x/x?cats=ca-ts">x</a>';
-		r = _controller.linkTo(text="x", controller="x", action="x", params="cats=ca-ts");
+		e = 'ca-ts">x</a>';
+		set(functionName="linkTo", encode=true);
+		r = Right(_controller.linkTo(text="x", controller="x", action="x", params="cats=ca-ts"), 12);
+		set(functionName="linkTo", encode=false);
 		assert('e eq r');
 	}
 

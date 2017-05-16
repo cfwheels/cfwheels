@@ -230,6 +230,7 @@ public void function onApplicationStart() {
 	application.$wheels.controllerPath = "controllers";
 
 	// Miscellaneous settings.
+	application.$wheels.encodeURLs = true;
 	application.$wheels.encodeHtmlTags = true;
 	application.$wheels.encodeHtmlAttributes = true;
 	application.$wheels.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water,feedback";
@@ -280,7 +281,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.autoLink = {link="all", encode=true};
 	application.$wheels.functions.average = {distinct=false, parameterize=true, ifNull=""};
 	application.$wheels.functions.belongsTo = {joinType="inner"};
-	application.$wheels.functions.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", image=""};
+	application.$wheels.functions.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", image="", encode=true};
 	application.$wheels.functions.buttonTag = {type="submit", value="save", content="Save changes", image="", prepend="", append="", encode=true};
 	application.$wheels.functions.caches = {time=60, static=false};
 	application.$wheels.functions.checkBox = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="field-with-errors", checkedValue=1, unCheckedValue=0, encode=true};
@@ -319,21 +320,21 @@ public void function onApplicationStart() {
 	application.$wheels.functions.imageTag = {onlyPath=true, host="", protocol="", port=0, encode=true};
 	application.$wheels.functions.includePartial = {layout="", spacer="", dataFunction=true};
 	application.$wheels.functions.javaScriptIncludeTag = {type="text/javascript", head=false, encode=true};
-	application.$wheels.functions.linkTo = {onlyPath=true, host="", protocol="", port=0};
+	application.$wheels.functions.linkTo = {onlyPath=true, host="", protocol="", port=0, encode=true};
 	application.$wheels.functions.mailTo = {encode=true};
 	application.$wheels.functions.maximum = {parameterize=true, ifNull=""};
 	application.$wheels.functions.minimum = {parameterize=true, ifNull=""};
 	application.$wheels.functions.minuteSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, minuteStep=1, encode=true};
 	application.$wheels.functions.monthSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, monthDisplay="names", monthNames="January,February,March,April,May,June,July,August,September,October,November,December", monthAbbreviations="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec", encode=true};
 	application.$wheels.functions.nestedProperties = {autoSave=true, allowDelete=false, sortProperty="", rejectIfBlank=""};
-	application.$wheels.functions.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prepend="", append="", prependToPage="", prependOnFirst=true, prependOnAnchor=true, appendToPage="", appendOnLast=true, appendOnAnchor=true, classForCurrent="", name="page", showSinglePage=false, pageNumberAsParam=true};
+	application.$wheels.functions.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prepend="", append="", prependToPage="", prependOnFirst=true, prependOnAnchor=true, appendToPage="", appendOnLast=true, appendOnAnchor=true, classForCurrent="", name="page", showSinglePage=false, pageNumberAsParam=true, encode=true};
 	application.$wheels.functions.passwordField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="field-with-errors", encode=true};
 	application.$wheels.functions.passwordFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", encode=true};
 	application.$wheels.functions.processRequest = {method="get", returnAs="", rollback=false};
 	application.$wheels.functions.protectsFromForgery = {with="exception", only="", except=""};
 	application.$wheels.functions.radioButton = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="field-with-errors", encode=true};
 	application.$wheels.functions.radioButtonTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", encode=true};
-	application.$wheels.functions.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302, delay=false};
+	application.$wheels.functions.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302, delay=false, encode=true};
 	application.$wheels.functions.renderPage = {layout=""};
 	application.$wheels.functions.renderWith = {layout=""};
 	application.$wheels.functions.renderPageToString = {layout=true};
@@ -345,7 +346,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.sendEmail = {layout=false, detectMultipart=true, from="", to="", subject="", deliver=true};
 	application.$wheels.functions.sendFile = {disposition="attachment"};
 	application.$wheels.functions.simpleFormat = {wrap=true};
-	application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, prepend="", append=""};
+	application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, prepend="", append="", encode=true};
 	application.$wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false, encode=true};
 	application.$wheels.functions.submitTag = {value="Save changes", image="", prepend="", append="", encode=true};
 	application.$wheels.functions.sum = {distinct=false, parameterize=true, ifNull=""};
@@ -364,7 +365,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.updateByKey = {reload=false};
 	application.$wheels.functions.updateOne = {reload=false};
 	application.$wheels.functions.updateProperty = {parameterize=true};
-	application.$wheels.functions.URLFor = {onlyPath=true, host="", protocol="", port=0};
+	application.$wheels.functions.URLFor = {onlyPath=true, host="", protocol="", port=0, encode=true};
 	application.$wheels.functions.validatesConfirmationOf = {message="[property] should match confirmation"};
 	application.$wheels.functions.validatesExclusionOf = {message="[property] is reserved", allowBlank=false};
 	application.$wheels.functions.validatesFormatOf = {message="[property] is invalid", allowBlank=false};

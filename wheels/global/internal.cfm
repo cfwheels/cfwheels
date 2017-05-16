@@ -365,18 +365,6 @@ public void function $abortInvalidRequest() {
 /**
  * Internal function.
  */
-public string function $URLEncode(string param="") {
-	local.rv = URLEncodedFormat(arguments.param);
-
-	// These characters are safe so set them back to their original values.
-	local.rv = ReplaceList(local.rv, "%24,%2D,%5F,%2E,%2B,%21,%2A,%27,%28,%29", "$,-,_,.,+,!,*,',(,)");
-
-	return local.rv;
-}
-
-/**
- * Internal function.
- */
 public string function $routeVariables() {
 	return $findRoute(argumentCollection=arguments).variables;
 }
@@ -433,11 +421,9 @@ public any function $cachedModelClassExists(required string name) {
 /**
  * Internal function.
  */
-public string function $constructParams(required string params, string $URLRewriting=application.wheels.URLRewriting) {
-	// change to using ampersand so we can use it as a list delim below and so we don't "double replace" it
-	arguments.params = Replace(arguments.params, "&amp;", "&", "all");
+public string function $constructParams(required string params, boolean encode=true, string $URLRewriting=application.wheels.URLRewriting) {
 
-	// when rewriting is off we will already have "?controller=" etc in the url so we have to continue with an ampersand
+	// When rewriting is off we will already have "?controller=" etc in the url so we have to continue with an ampersand.
 	if (arguments.$URLRewriting == "Off") {
 		local.delim = "&";
 	} else {
@@ -451,16 +437,17 @@ public string function $constructParams(required string params, string $URLRewri
 		local.rv &= local.delim & local.temp[1] & "=";
 		local.delim = "&";
 		if (ArrayLen(local.temp) == 2) {
-			local.param = $URLEncode(local.temp[2]);
+			local.param = local.temp[2];
+			if (arguments.encode && $get("encodeURLs")) {
+				local.param = EncodeForURL(local.param);
+			}
 
-			// correct double encoding of & and = since we parse the param string using & and = the developer has to url encode them on the input
-			local.param = Replace(local.param, "%2526", "%26", "all");
-			local.param = Replace(local.param, "%253D", "%3D", "all");
-
+			// Obfuscate the param if set globally and we're not processing cfid or cftoken (can't touch those).
+			// Wrap in double quotes because in Lucee we have to pass it in as a string otherwise leading zeros are stripped.
 			if (application.wheels.obfuscateUrls && !ListFindNoCase("cfid,cftoken", local.temp[1])) {
-				// wrap in double quotes because in lucee we have to pass it in as a string otherwise leading zeros are stripped
 				local.param = obfuscateParam("#local.param#");
 			}
+
 			local.rv &= local.param;
 		}
 	}

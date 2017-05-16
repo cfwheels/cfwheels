@@ -1,4 +1,5 @@
 component extends="wheels.tests.Test" {
+
 	function setup() {
 		_controller = controller(name="dummy");
 		args = {};
@@ -9,6 +10,11 @@ component extends="wheels.tests.Test" {
 		args.port = 0;
 		args.protocol = "";
 		args.controller = "testcontroller";
+		set(functionName="startFormTag", encode=false);
+	}
+
+	function teardown() {
+		set(functionName="startFormTag", encode=true);
 	}
 
 	function test_no_csrf_when_not_enabled() {
@@ -89,7 +95,7 @@ component extends="wheels.tests.Test" {
 
 	function test_with_root_route() {
 		args.route = "root";
-		argsction = _controller.toXHTML(_controller.urlfor(argumentCollection=args));
+		argsction = _controller.urlfor(argumentCollection=args);
 		e = '<form action="#argsction#" method="post">' & _controller.authenticityTokenField();
 		r = _controller.startFormTag(argumentcollection=args);
 		assert("e eq r");
@@ -97,7 +103,7 @@ component extends="wheels.tests.Test" {
 
 	function test_external_link() {
 		args.multipart = true;
-		argsction = _controller.toXHTML(_controller.urlfor(argumentCollection=args));
+		argsction = _controller.urlfor(argumentCollection=args);
 		e = '<form action="#argsction#" enctype="multipart/form-data" method="post">' & _controller.authenticityTokenField();
 		r = _controller.startFormTag(argumentcollection=args);
 		assert("e eq r");

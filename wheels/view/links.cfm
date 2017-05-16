@@ -20,6 +20,7 @@
  * @protocol Set this to override the current protocol.
  * @port Set this to override the current port number.
  * @href Pass a link to an external site here if you want to bypass the CFWheels routing system altogether and link to an external URL.
+ * @encode [see:styleSheetLinkTag].
  */
 public string function linkTo(
 	string text,
@@ -33,7 +34,8 @@ public string function linkTo(
 	string host,
 	string protocol,
 	numeric port,
-	string href
+	string href,
+	boolean encode
 ) {
 	$args(name="linkTo", args=arguments);
 
@@ -52,16 +54,15 @@ public string function linkTo(
 	if (!StructKeyExists(arguments, "href")) {
 		arguments.href = URLFor(argumentCollection=arguments);
 	}
-	arguments.href = toXHTML(arguments.href);
 	if (!StructKeyExists(arguments, "text")) {
 		arguments.text = arguments.href;
 	}
-	local.skip = "text,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
+	local.skip = "text,route,controller,action,key,params,anchor,onlyPath,host,protocol,port,encode";
 	if (Len(arguments.route)) {
 		// variables passed in as route arguments should not be added to the html element
 		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
 	}
-	return $element(name="a", skip=local.skip, content=arguments.text, attributes=arguments, encode=false);
+	return $element(name="a", skip=local.skip, content=arguments.text, attributes=arguments, encode=arguments.encode);
 }
 
 /**
@@ -83,6 +84,7 @@ public string function linkTo(
  * @host [see:URLFor].
  * @protocol [see:URLFor].
  * @port [see:URLFor].
+ * @encode [see:styleSheetLinkTag].
  */
 public string function buttonTo(
 	string text,
@@ -96,7 +98,8 @@ public string function buttonTo(
 	boolean onlyPath,
 	string host,
 	string protocol,
-	numeric port
+	numeric port,
+	boolean encode
 ) {
 	local.method = "post";
 	$args(name="buttonTo", args=arguments);
@@ -110,18 +113,17 @@ public string function buttonTo(
 	}
 	arguments.method = local.method;
 	arguments.action = URLFor(argumentCollection=arguments);
-	arguments.action = toXHTML(arguments.action);
 
 	local.args = $innerArgs(name="input", args=arguments);
 	local.args.value = arguments.text;
 	local.args.image = arguments.image;
 	local.content &= submitTag(argumentCollection=local.args);
-	local.skip = "image,text,route,controller,key,params,anchor,onlyPath,host,protocol,port";
+	local.skip = "image,text,route,controller,key,params,anchor,onlyPath,host,protocol,port,encode";
 	if (Len(arguments.route)) {
 		// variables passed in as route arguments should not be added to the html element
 		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
 	}
-	return $element(name="form", skip=local.skip, content=local.content, attributes=arguments, encode=false);
+	return $element(name="form", skip=local.skip, content=local.content, attributes=arguments, encode=arguments.encode);
 }
 
 /**
@@ -177,6 +179,7 @@ public string function mailTo(
  * @name The name of the param that holds the current page number.
  * @showSinglePage Will show a single page when set to true. (The default behavior is to return an empty string when there is only one page in the pagination).
  * @pageNumberAsParam Decides whether to link the page number as a param or as part of a route. (The default behavior is true).
+ * @encode [see:styleSheetLinkTag].
  */
 public string function paginationLinks(
 	numeric windowSize,
@@ -195,7 +198,8 @@ public string function paginationLinks(
 	string handle="query",
 	string name,
 	boolean showSinglePage,
-	boolean pageNumberAsParam
+	boolean pageNumberAsParam,
+	boolean encode
 ) {
 	$args(name="paginationLinks", args=arguments);
 	local.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,prependOnAnchor,appendToPage,appendOnLast,appendOnAnchor,classForCurrent,handle,name,showSinglePage,pageNumberAsParam";
