@@ -421,7 +421,7 @@ public any function $cachedModelClassExists(required string name) {
 /**
  * Internal function.
  */
-public string function $constructParams(required string params, boolean encode=true, string $URLRewriting=application.wheels.URLRewriting) {
+public string function $constructParams(required string params, boolean encode=true, boolean $encodeForHtmlAttribute=false, string $URLRewriting=application.wheels.URLRewriting) {
 
 	// When rewriting is off we will already have "?controller=" etc in the url so we have to continue with an ampersand.
 	if (arguments.$URLRewriting == "Off") {
@@ -437,6 +437,9 @@ public string function $constructParams(required string params, boolean encode=t
 		local.name = local.params[1];
 		if (arguments.encode && $get("encodeURLs")) {
 			local.name = EncodeForURL(canonicalize(local.name, false, false));
+			if (arguments.$encodeForHtmlAttribute) {
+				local.name = EncodeForHtmlAttribute(local.name);
+			}
 		}
 		local.rv &= local.delim & local.name & "=";
 		local.delim = "&";
@@ -444,6 +447,9 @@ public string function $constructParams(required string params, boolean encode=t
 			local.value = local.params[2];
 			if (arguments.encode && $get("encodeURLs")) {
 				local.value = EncodeForURL(canonicalize(local.value, false, false));
+				if (arguments.$encodeForHtmlAttribute) {
+					local.value = EncodeForHtmlAttribute(local.value);
+				}
 			}
 
 			// Obfuscate the param if set globally and we're not processing cfid or cftoken (can't touch those).

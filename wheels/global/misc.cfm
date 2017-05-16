@@ -371,6 +371,7 @@ public string function URLFor(
 	string protocol,
 	numeric port,
 	boolean encode,
+	boolean $encodeForHtmlAttribute=false,
 	string $URLRewriting=application.wheels.URLRewriting
 ) {
 	$args(name="URLFor", args=arguments);
@@ -474,6 +475,9 @@ public string function URLFor(
 		// Any value we find from above, URL encode it here.
 		if (arguments.encode && $get("encodeURLs")) {
 			local.value = EncodeForURL(canonicalize(local.value, false, false));
+			if (arguments.$encodeForHtmlAttribute) {
+				local.value = EncodeForHtmlAttribute(local.value);
+			}
 		}
 
 		// If property is not in pattern, store it in the params argument.
@@ -513,7 +517,12 @@ public string function URLFor(
 
 	// Add params to the URL when supplied.
 	if (Len(arguments.params)) {
-		local.rv &= $constructParams(params=arguments.params, encode=arguments.encode, $URLRewriting=arguments.$URLRewriting);
+		local.rv &= $constructParams(
+			params=arguments.params,
+			encode=arguments.encode,
+			$encodeForHtmlAttribute=arguments.$encodeForHtmlAttribute,
+			$URLRewriting=arguments.$URLRewriting
+		);
 	}
 
 	// Add an anchor to the the URL when supplied.
