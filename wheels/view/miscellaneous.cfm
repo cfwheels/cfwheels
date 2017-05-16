@@ -257,15 +257,16 @@ public string function $tag(
 	struct attributes={},
 	string skip="",
 	string skipStartingWith="",
-	boolean encode=false
+	boolean encode=false,
+	string encodeExcept=""
 ) {
 	// start the HTML tag and give it its name
 	local.rv = "<" & arguments.name;
 
 	// if named arguments are passed in we add these to the attributes argument instead so we can handle them all in the same code below
-	if (StructCount(arguments) > 5) {
+	if (StructCount(arguments) > 6) {
 		for (local.key in arguments) {
-			if (!ListFindNoCase("name,attributes,skip,skipStartingWith,encode", local.key)) {
+			if (!ListFindNoCase("name,attributes,skip,skipStartingWith,encode,encodeExcept", local.key)) {
 				arguments.attributes[local.key] = arguments[local.key];
 			}
 		}
@@ -279,7 +280,7 @@ public string function $tag(
 		local.key = ListGetAt(local.sortedKeys, local.i);
 		// place the attribute name and value in the string unless it should be skipped according to the arguments or if it's an internal argument (starting with a "$" sign)
 		if (!ListFindNoCase(arguments.skip, local.key) && (!Len(arguments.skipStartingWith) || Left(local.key, Len(arguments.skipStartingWith)) != arguments.skipStartingWith) && Left(local.key, 1) != "$") {
-			local.rv &= $tagAttribute(name=local.key, value=arguments.attributes[local.key], encode=arguments.encode);
+			local.rv &= $tagAttribute(name=local.key, value=arguments.attributes[local.key], encode=arguments.encode, encodeExcept=arguments.encodeExcept);
 		}
 	}
 
@@ -292,7 +293,7 @@ public string function $tag(
 /**
  * Internal function.
  */
-public string function $tagAttribute(required string name, required string value, required boolean encode) {
+public string function $tagAttribute(required string name, required string value, required boolean encode, required string encodeExcept) {
 
 	// For custom data attributes we convert underscores and camel case to hyphens.
 	// E.g. "dataDomCache" and "data_dom_cache" becomes "data-dom-cache".
@@ -307,7 +308,7 @@ public string function $tagAttribute(required string name, required string value
 
 	// set standard attribute name / value to use as the default to return (e.g. name / value part of <input name="value">)
 	local.rv = " " & arguments.name & "=""";
-	local.rv &= arguments.encode && $get("encodeHtmlAttributes") ? EncodeForHtmlAttribute(canonicalize(arguments.value, false, false)) : arguments.value;
+	local.rv &= arguments.encode && !ListFind(arguments.encodeExcept, arguments.name) && $get("encodeHtmlAttributes") ? EncodeForHtmlAttribute(canonicalize(arguments.value, false, false)) : arguments.value;
 	local.rv &= """";
 
 	// when attribute can be boolean we handle it accordingly and override the above return value
@@ -335,12 +336,13 @@ public string function $element(
 	string content="",
 	string skip="",
 	string skipStartingWith="",
-	any encode=false
+	any encode=false,
+	string encodeExcept=""
 ) {
 
 	// Set a variable with the content of the tag.
 	// Encoded if global encode setting is true and true is also passed in to the function.
-	local.rv = $get("encodeHtmlTags") && IsBoolean(arguments.encode) && arguments.encode ? EncodeForHtml(canonicalize(arguments.content, false, false)) : arguments.content;
+	local.rv = IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags") ? EncodeForHtml(canonicalize(arguments.content, false, false)) : arguments.content;
 
 	// When only wanting to encode HTML attribute values (and not tag content) we set the encode argument to true before passing on to $tag().
 	if (arguments.encode == "attributes") {

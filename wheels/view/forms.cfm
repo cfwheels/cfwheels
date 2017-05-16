@@ -95,8 +95,11 @@ public string function startFormTag(
 	}
 
 	// set the form's action attribute to the URL that we want to send to
+	local.encodeExcept = "";
 	if (!ReFindNoCase("^https?:\/\/", arguments.action)) {
+		arguments.$encodeForHtmlAttribute = true;
 		arguments.action = URLFor(argumentCollection=arguments);
+		local.encodeExcept = "action";
 	}
 
 	// set the form to be able to handle file uploads
@@ -116,7 +119,7 @@ public string function startFormTag(
 		local.skip = ListDeleteAt(local.skip, ListFind(local.skip, "action"));
 	}
 
-	local.rv = arguments.prepend & $tag(name="form", skip=local.skip, attributes=arguments, encode=arguments.encode) & arguments.append;
+	local.rv = arguments.prepend & $tag(name="form", skip=local.skip, attributes=arguments, encode=arguments.encode, encodeExcept=local.encodeExcept) & arguments.append;
 	if ($isRequestProtectedFromForgery() && ListFindNoCase("post,put,patch,delete", arguments.method)) {
 		local.rv &= authenticityTokenField();
 	}

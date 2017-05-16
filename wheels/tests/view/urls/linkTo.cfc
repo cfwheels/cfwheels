@@ -21,10 +21,10 @@ component extends="wheels.tests.Test" {
 		assert('e eq r');
 	}
 
-	function test_encode_ampersand() {
-		e = '<a href="&##x2f;x&##x2f;x&##x3f;x&##x3d;1&amp;y&##x3d;2">x</a>';
+	function test_do_not_attribute_encode_href() {
+		e = '<a class="we&##x27;re" href="/we&##x25;27re/x?x=1&y=2&##x2b;3">x</a>';
 		set(functionName="linkTo", encode=true);
-		r = _controller.linkTo(text="x", controller="x", action="x", params="x=1&y=2");
+		r = _controller.linkTo(class="we're", text="x", controller="we're", action="x", params="x=1&y=2 3");
 		set(functionName="linkTo", encode=false);
 		assert('e eq r');
 	}

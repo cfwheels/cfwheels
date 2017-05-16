@@ -51,8 +51,11 @@ public string function linkTo(
 		}
 	}
 
+	local.encodeExcept = "";
 	if (!StructKeyExists(arguments, "href")) {
+		arguments.$encodeForHtmlAttribute = true;
 		arguments.href = URLFor(argumentCollection=arguments);
+		local.encodeExcept = "href";
 	}
 	if (!StructKeyExists(arguments, "text")) {
 		arguments.text = arguments.href;
@@ -62,7 +65,14 @@ public string function linkTo(
 		// variables passed in as route arguments should not be added to the html element
 		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
 	}
-	return $element(name="a", skip=local.skip, content=arguments.text, attributes=arguments, encode=arguments.encode);
+	return $element(
+		name="a",
+		skip=local.skip,
+		content=arguments.text,
+		attributes=arguments,
+		encode=arguments.encode,
+		encodeExcept=local.encodeExcept
+	);
 }
 
 /**
@@ -112,7 +122,9 @@ public string function buttonTo(
 		}
 	}
 	arguments.method = local.method;
+	arguments.$encodeForHtmlAttribute = true;
 	arguments.action = URLFor(argumentCollection=arguments);
+	local.encodeExcept = "action";
 
 	local.args = $innerArgs(name="input", args=arguments);
 	local.args.value = arguments.text;
@@ -123,7 +135,7 @@ public string function buttonTo(
 		// variables passed in as route arguments should not be added to the html element
 		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
 	}
-	return $element(name="form", skip=local.skip, content=local.content, attributes=arguments, encode=arguments.encode);
+	return $element(name="form", skip=local.skip, content=local.content, attributes=arguments, encode=arguments.encode, encodeExcept=local.encodeExcept);
 }
 
 /**
