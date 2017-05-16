@@ -1,7 +1,7 @@
 <cfscript>
 
 /**
- * Builds and returns a list (`ul` tag with a default `class` of `errorMessages`) containing all the error messages for all the properties of the object.
+ * Builds and returns a list (`ul` tag with a default `class` of `error-messages`) containing all the error messages for all the properties of the object.
  * Returns an empty string if no errors exist.
  *
  * [section: View Helpers]

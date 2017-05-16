@@ -9,14 +9,12 @@
  * @keys The key (or list of keys) to show the value for. You can also use the `key` argument instead for better readability when accessing a single key.
  * @class HTML `class` to set on the `div` element that contains the messages.
  * @includeEmptyContainer Includes the `div` container even if the Flash is empty.
- * @lowerCaseDynamicClassValues Outputs all class attribute values in lower case (except the main one).
  * @encode [see:styleSheetLinkTag].
  */
 public string function flashMessages(
 	string keys,
 	string class,
 	boolean includeEmptyContainer,
-	boolean lowerCaseDynamicClassValues,
 	boolean encode
 ) {
 	$args(name="flashMessages", args=arguments, combine="keys/key");
@@ -37,10 +35,7 @@ public string function flashMessages(
 	local.iEnd = ListLen(local.flashKeys);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.item = ListGetAt(local.flashKeys, local.i);
-		local.class = local.item & "Message";
-		if (arguments.lowerCaseDynamicClassValues) {
-			local.class = LCase(local.class);
-		}
+		local.class = LCase(local.item) & "-message";
 		local.attributes = {class=local.class};
 		if (!StructKeyExists(arguments, "key") || arguments.key == local.item) {
 			local.content = local.flash[local.item];
@@ -52,7 +47,7 @@ public string function flashMessages(
 
 	if (Len(local.listItems) || arguments.includeEmptyContainer) {
 		local.encode = arguments.encode ? "attributes" : false;
-		local.rv = $element(name="div", skip="key,keys,includeEmptyContainer,lowerCaseDynamicClassValues,encode", content=local.listItems, attributes=arguments, encode=local.encode);
+		local.rv = $element(name="div", skip="key,keys,includeEmptyContainer,encode", content=local.listItems, attributes=arguments, encode=local.encode);
 	}
 	return local.rv;
 }
