@@ -473,7 +473,7 @@ public string function URLFor(
 
 		// Any value we find from above, URL encode it here.
 		if (arguments.encode && $get("encodeURLs")) {
-			local.value = EncodeForURL(local.value);
+			local.value = EncodeForURL(canonicalize(local.value, false, false));
 		}
 
 		// If property is not in pattern, store it in the params argument.

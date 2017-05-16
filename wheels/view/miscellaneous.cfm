@@ -307,7 +307,7 @@ public string function $tagAttribute(required string name, required string value
 
 	// set standard attribute name / value to use as the default to return (e.g. name / value part of <input name="value">)
 	local.rv = " " & arguments.name & "=""";
-	local.rv &= arguments.encode && $get("encodeHtmlAttributes") ? EncodeForHtmlAttribute(arguments.value) : arguments.value;
+	local.rv &= arguments.encode && $get("encodeHtmlAttributes") ? EncodeForHtmlAttribute(canonicalize(arguments.value, false, false)) : arguments.value;
 	local.rv &= """";
 
 	// when attribute can be boolean we handle it accordingly and override the above return value
@@ -340,7 +340,7 @@ public string function $element(
 
 	// Set a variable with the content of the tag.
 	// Encoded if global encode setting is true and true is also passed in to the function.
-	local.rv = $get("encodeHtmlTags") && IsBoolean(arguments.encode) && arguments.encode ? EncodeForHtml(arguments.content) : arguments.content;
+	local.rv = $get("encodeHtmlTags") && IsBoolean(arguments.encode) && arguments.encode ? EncodeForHtml(canonicalize(arguments.content, false, false)) : arguments.content;
 
 	// When only wanting to encode HTML attribute values (and not tag content) we set the encode argument to true before passing on to $tag().
 	if (arguments.encode == "attributes") {

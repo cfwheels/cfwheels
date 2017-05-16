@@ -18,6 +18,12 @@ component extends="wheels.tests.Test" {
 		request.cgi.script_name = oldScriptName;
 	}
 
+	function test_ampersand_in_params() {
+		e = '#application.wheels.webpath#x/x?a=c+ats%26dogs&b=a+c';
+		r = _controller.URLFor(controller="x", action="x", params="a=c ats%26dogs&b=a c", encode=true);
+		assert('e eq r');
+	}
+
 	function test_all_arguments_with_url_rewriting(){
 		request.cgi.script_name = "/rewrite.cfm";
 		e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";

@@ -436,20 +436,14 @@ public string function $constructParams(required string params, boolean encode=t
 		local.params = listToArray(ListGetAt(arguments.params, local.i, "&"), "=");
 		local.name = local.params[1];
 		if (arguments.encode && $get("encodeURLs")) {
-			local.name = EncodeForURL(local.name);
+			local.name = EncodeForURL(canonicalize(local.name, false, false));
 		}
 		local.rv &= local.delim & local.name & "=";
 		local.delim = "&";
 		if (ArrayLen(local.params) == 2) {
 			local.value = local.params[2];
 			if (arguments.encode && $get("encodeURLs")) {
-				local.value = EncodeForURL(local.value);
-
-				// Correct double encoding of "&" and "=".
-				// Since we parse the param string using "&" and "=" the developer has to encode them on the input.
-				local.value = Replace(local.value, "%2526", "%26", "all");
-				local.value = Replace(local.value, "%253D", "%3D", "all");
-
+				local.value = EncodeForURL(canonicalize(local.value, false, false));
 			}
 
 			// Obfuscate the param if set globally and we're not processing cfid or cftoken (can't touch those).
