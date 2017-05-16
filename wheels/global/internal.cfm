@@ -433,22 +433,32 @@ public string function $constructParams(required string params, boolean encode=t
 	local.rv = "";
 	local.iEnd = ListLen(arguments.params, "&");
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
-		local.temp = listToArray(ListGetAt(arguments.params, local.i, "&"), "=");
-		local.rv &= local.delim & local.temp[1] & "=";
+		local.params = listToArray(ListGetAt(arguments.params, local.i, "&"), "=");
+		local.name = local.params[1];
+		if (arguments.encode && $get("encodeURLs")) {
+			local.name = EncodeForURL(local.name);
+		}
+		local.rv &= local.delim & local.name & "=";
 		local.delim = "&";
-		if (ArrayLen(local.temp) == 2) {
-			local.param = local.temp[2];
+		if (ArrayLen(local.params) == 2) {
+			local.value = local.params[2];
 			if (arguments.encode && $get("encodeURLs")) {
-				local.param = EncodeForURL(local.param);
+				local.value = EncodeForURL(local.value);
+
+				// Correct double encoding of "&" and "=".
+				// Since we parse the param string using "&" and "=" the developer has to encode them on the input.
+				local.value = Replace(local.value, "%2526", "%26", "all");
+				local.value = Replace(local.value, "%253D", "%3D", "all");
+
 			}
 
 			// Obfuscate the param if set globally and we're not processing cfid or cftoken (can't touch those).
 			// Wrap in double quotes because in Lucee we have to pass it in as a string otherwise leading zeros are stripped.
-			if (application.wheels.obfuscateUrls && !ListFindNoCase("cfid,cftoken", local.temp[1])) {
-				local.param = obfuscateParam("#local.param#");
+			if (application.wheels.obfuscateUrls && !ListFindNoCase("cfid,cftoken", local.name)) {
+				local.value = obfuscateParam("#local.value#");
 			}
 
-			local.rv &= local.param;
+			local.rv &= local.value;
 		}
 	}
 	return local.rv;
