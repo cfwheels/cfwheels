@@ -231,7 +231,6 @@ public void function onApplicationStart() {
 
 	// Miscellaneous settings.
 	application.$wheels.encodeURLs = true;
-	application.$wheels.encodeHtml = true;
 	application.$wheels.encodeHtmlTags = true;
 	application.$wheels.encodeHtmlAttributes = true;
 	application.$wheels.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water,feedback";
@@ -346,7 +345,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.selectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, multiple=false, valueField="", textField="", encode=true};
 	application.$wheels.functions.sendEmail = {layout=false, detectMultipart=true, from="", to="", subject="", deliver=true};
 	application.$wheels.functions.sendFile = {disposition="attachment"};
-	application.$wheels.functions.simpleFormat = {wrap=true};
+	application.$wheels.functions.simpleFormat = {wrap=true, encode=true};
 	application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, prepend="", append="", encode=true};
 	application.$wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false, encode=true};
 	application.$wheels.functions.submitTag = {value="Save changes", image="", prepend="", append="", encode=true};

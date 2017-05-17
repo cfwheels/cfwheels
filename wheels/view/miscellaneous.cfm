@@ -1,14 +1,14 @@
 <cfscript>
 
 /**
- * Highlights the phrase(s) everywhere in the text if found by wrapping it in a `span` tag.
+ * Highlights the phrase(s) everywhere in the text if found by wrapping them in `span` tags.
  *
  * [section: View Helpers]
  * [category: Miscellaneous Functions]
  *
- * @text Text to search.
+ * @text Text to search in.
  * @phrase Phrase (or list of phrases) to highlight. This argument is also aliased as `phrases`.
- * @delimiter Delimiter to use in phrase argument.
+ * @delimiter Delimiter to use when passing in multiple phrases.
  * @tag HTML tag to use to wrap the highlighted phrase(s).
  * @class Class to use in the tags wrapping highlighted phrase(s).
  * @encode [see:styleSheetLinkTag].
@@ -22,7 +22,7 @@ public string function highlight(
 	boolean encode
 ) {
 	$args(name="highlight", args=arguments, combine="phrase/phrases", required="phrase");
-	local.text = arguments.encode && $get("encodeHtml") ? EncodeForHtml(canonicalize(arguments.text, false, false)) : arguments.text;
+	local.text = arguments.encode && $get("encodeHtmlTags") ? EncodeForHtml(canonicalize(arguments.text, false, false)) : arguments.text;
 
 	// Return the passed in text unchanged (but encoded) if it's blank or the passed in phrase is blank.
 	if (!Len(local.text) || !Len(arguments.phrase)) {
@@ -57,24 +57,34 @@ public string function highlight(
 }
 
 /**
- * Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards).
+ * Returns formatted text using HTML break tags (`<br>`) and HTML paragraph elements (`<p></p>`) based on the newline characters and carriage returns in the `text` that is passed in.
  *
  * [section: View Helpers]
  * [category: Miscellaneous Functions]
  *
  * @text The text to format.
- * @wrap Set to `true` to wrap the result in a paragraph.
+ * @wrap Set to `true` to wrap the result in a paragraph HTML element.
+ * @encode [see:styleSheetLinkTag].
  */
-public string function simpleFormat(required string text, boolean wrap) {
+public string function simpleFormat(required string text, boolean wrap, boolean encode) {
 	$args(name="simpleFormat", args=arguments);
 	local.rv = Trim(arguments.text);
-	local.rv = Replace(local.rv, "#Chr(13)#", "", "all");
-	local.rv = Replace(local.rv, "#Chr(10)##Chr(10)#", "</p><p>", "all");
-	local.rv = Replace(local.rv, "#Chr(10)#", "<br>", "all");
 
-	// Put the new line characters back in (good for editing in textareas with the original formatting for example).
-	local.rv = Replace(local.rv, "</p><p>", "</p>#Chr(10)##Chr(10)#<p>", "all");
-	local.rv = Replace(local.rv, "<br>", "<br>#Chr(10)#", "all");
+	// Encode for html if specified, but revert the encoding of newline characters and carriage returns.
+	// We can safely revert that part of the encoding since we'll replace them with html tags anyway.
+	if (arguments.encode && $get("encodeHtmlTags")) {
+		local.rv = EncodeForHtml(canonicalize(local.rv, false, false));
+		local.rv = Replace(local.rv, "&##xa;", Chr(10), "all");
+		local.rv = Replace(local.rv, "&##xd;", Chr(13), "all");
+	}
+
+	local.rv = Replace(local.rv, Chr(13), "", "all");
+	local.rv = Replace(local.rv, Chr(10) & Chr(10), "</p><p>", "all");
+	local.rv = Replace(local.rv, Chr(10), "<br>", "all");
+
+	// Put the newline characters back in (good for editing in textareas with the original formatting for example).
+	local.rv = Replace(local.rv, "</p><p>", "</p>" & Chr(10) & Chr(10) & "<p>", "all");
+	local.rv = Replace(local.rv, "<br>", "<br>" & Chr(10), "all");
 
 	if (arguments.wrap) {
 		local.rv = "<p>" & local.rv & "</p>";
