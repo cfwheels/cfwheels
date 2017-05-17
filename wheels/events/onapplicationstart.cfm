@@ -312,6 +312,8 @@ public void function onApplicationStart() {
 	application.$wheels.functions.flashKeep = {};
 	application.$wheels.functions.flashMessages = {class="flash-messages", includeEmptyContainer="false", encode=true};
 	application.$wheels.functions.hasMany = {joinType="outer", dependent=false};
+	application.$wheels.functions.hasManyCheckBox = {encode=true};
+	application.$wheels.functions.hasManyRadioButton = {encode=true};
 	application.$wheels.functions.hasOne = {joinType="outer", dependent=false};
 	application.$wheels.functions.hiddenField = {encode=true};
 	application.$wheels.functions.hiddenFieldTag = {encode=true};

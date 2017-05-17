@@ -14,6 +14,7 @@
  * @tagValue The value of the radio button when selected.
  * @checkIfBlank Whether or not to check this form field as a default if there is a blank value set for the property.
  * @label The label text to use in the form control.
+ * @encode [see:styleSheetLinkTag].
  */
 public string function hasManyRadioButton(
 	required string objectName,
@@ -22,7 +23,8 @@ public string function hasManyRadioButton(
 	required string keys,
 	required string tagValue,
 	boolean checkIfBlank=false,
-	string label
+	string label,
+	boolean encode
 ) {
 	$args(name="hasManyRadioButton", args=arguments);
 	arguments.keys = Replace(arguments.keys, ", ", ",", "all");
@@ -39,7 +41,7 @@ public string function hasManyRadioButton(
 	arguments.objectName = ListLast(arguments.objectName, ".");
 	local.tagId = "#arguments.objectName#-#arguments.association#-#Replace(arguments.keys, ",", "-", "all")#-#arguments.property#-#arguments.tagValue#";
 	local.tagName = "#arguments.objectName#[#arguments.association#][#arguments.keys#][#arguments.property#]";
-	return radioButtonTag(name=local.tagName, id=local.tagId, value=arguments.tagValue, checked=local.checked, label=arguments.label);
+	return radioButtonTag(name=local.tagName, id=local.tagId, value=arguments.tagValue, checked=local.checked, label=arguments.label, encode=arguments.encode);
 }
 
 /**
@@ -60,6 +62,7 @@ public string function hasManyRadioButton(
  * @appendToLabel String to append to the form control's label. Useful to wrap the form control with HTML tags.
  * @errorElement HTML tag to wrap the form control with when the object contains errors.
  * @errorClass The `class` name of the HTML tag that wraps the form control when there are errors.
+ * @encode [see:styleSheetLinkTag].
  */
 public string function hasManyCheckBox(
 	required string objectName,
@@ -72,7 +75,8 @@ public string function hasManyCheckBox(
 	string prependToLabel,
 	string appendToLabel,
 	string errorElement,
-	string errorClass
+	string errorClass,
+	boolean encode
 ) {
 	$args(name="hasManyCheckBox", args=arguments);
 	arguments.keys = Replace(arguments.keys, ", ", ",", "all");
