@@ -1,7 +1,6 @@
 <cfscript>
 include "assets.cfm";
 include "csrf.cfm";
-include "dates.cfm";
 include "errors.cfm";
 include "forms.cfm";
 include "formsassociation.cfm";

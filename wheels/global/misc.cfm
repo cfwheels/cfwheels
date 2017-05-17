@@ -1,6 +1,209 @@
 <cfscript>
 
 /**
+ * Returns an associated MIME type based on a file extension.
+ *
+ * [section: Global Helpers]
+ * [category: Miscellaneous Functions]
+ *
+ * @extension The extension to get the MIME type for.
+ * @fallback The fallback MIME type to return.
+ */
+public string function mimeTypes(required string extension, string fallback="application/octet-stream") {
+	local.rv = arguments.fallback;
+	if (StructKeyExists(application.wheels.mimetypes, arguments.extension)) {
+		local.rv = application.wheels.mimetypes[arguments.extension];
+	}
+	return local.rv;
+}
+
+/**
+ * Truncates text to the specified length and replaces the last characters with the specified truncate string (which defaults to "...").
+ *
+ * [section: Global Helpers]
+ * [category: String Functions]
+ *
+ * @text The text to truncate.
+ * @length Length to truncate the text to.
+ * @truncateString String to replace the last characters with.
+ */
+public string function truncate(required string text, numeric length, string truncateString) {
+	$args(name="truncate", args=arguments);
+	if (Len(arguments.text) > arguments.length) {
+		local.rv = Left(arguments.text, arguments.length - Len(arguments.truncateString)) & arguments.truncateString;
+	} else {
+		local.rv = arguments.text;
+	}
+	return local.rv;
+}
+
+/**
+ * Truncates text to the specified length of words and replaces the remaining characters with the specified truncate string (which defaults to "...").
+ *
+ * [section: Global Helpers]
+ * [category: String Functions]
+ *
+ * @text The text to truncate.
+ * @length Number of words to truncate the text to.
+ * @truncateString String to replace the last characters with.
+ */
+public string function wordTruncate(required string text, numeric length, string truncateString) {
+	$args(name="wordTruncate", args=arguments);
+	local.words = ListToArray(arguments.text, " ", false);
+
+	// When there are fewer (or same) words in the string than the number to be truncated we can just return it unchanged.
+	if (ArrayLen(local.words) <= arguments.length) {
+		return arguments.text;
+	}
+
+	local.rv = "";
+	local.iEnd = arguments.length;
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
+		local.rv = ListAppend(local.rv, local.words[local.i], " ");
+	}
+	local.rv &= arguments.truncateString;
+	return local.rv;
+}
+
+/**
+ * Extracts an excerpt from text that matches the first instance of a given phrase.
+ *
+ * [section: Global Helpers]
+ * [category: String Functions]
+ *
+ * @text The text to extract an excerpt from.
+ * @phrase The phrase to extract.
+ * @radius Number of characters to extract surrounding the phrase.
+ * @excerptString String to replace first and / or last characters with.
+ */
+public string function excerpt(required string text, required string phrase, numeric radius, string excerptString) {
+	$args(name="excerpt", args=arguments);
+	local.pos = FindNoCase(arguments.phrase, arguments.text, 1);
+
+	// Return an empty value if the text wasn't found at all.
+	if (!local.pos) {
+		return "";
+	}
+
+	// Set start info based on whether the excerpt text found, including its radius, comes before the start of the string.
+	if ((local.pos - arguments.radius) <= 1) {
+		local.startPos = 1;
+		local.truncateStart = "";
+	} else {
+		local.startPos = local.pos - arguments.radius;
+		local.truncateStart = arguments.excerptString;
+	}
+
+	// Set end info based on whether the excerpt text found, including its radius, comes after the end of the string.
+	if ((local.pos + Len(arguments.phrase) + arguments.radius) > Len(arguments.text)) {
+		local.endPos = Len(arguments.text);
+		local.truncateEnd = "";
+	} else {
+		local.endPos = local.pos + arguments.radius;
+		local.truncateEnd = arguments.excerptString;
+	}
+
+	local.len = (local.endPos + Len(arguments.phrase)) - local.startPos;
+	local.mid = Mid(arguments.text, local.startPos, local.len);
+	local.rv = local.truncateStart & local.mid & local.truncateEnd;
+	return local.rv;
+}
+
+/**
+ * Pass in two dates to this method, and it will return a string describing the difference between them.
+ *
+ * [section: Global Helpers]
+ * [category: Date Functions]
+ *
+ * @fromTime Date to compare from.
+ * @toTime Date to compare to.
+ * @includeSeconds Whether or not to include the number of seconds in the returned string.
+ */
+public string function distanceOfTimeInWords(required date fromTime, required date toTime, boolean includeSeconds) {
+	$args(name="distanceOfTimeInWords", args=arguments);
+	local.minuteDiff = DateDiff("n", arguments.fromTime, arguments.toTime);
+	local.secondDiff = DateDiff("s", arguments.fromTime, arguments.toTime);
+	local.hours = 0;
+	local.days = 0;
+	local.rv = "";
+	if (local.minuteDiff <= 1) {
+		if (local.secondDiff < 60) {
+			local.rv = "less than a minute";
+		} else {
+			local.rv = "1 minute";
+		}
+		if (arguments.includeSeconds) {
+			if (local.secondDiff < 5) {
+				local.rv = "less than 5 seconds";
+			} else if (local.secondDiff < 10) {
+				local.rv = "less than 10 seconds";
+			} else if (local.secondDiff < 20) {
+				local.rv = "less than 20 seconds";
+			} else if (local.secondDiff < 40) {
+				local.rv = "half a minute";
+			}
+		}
+	} else if (local.minuteDiff < 45) {
+		local.rv = local.minuteDiff & " minutes";
+	} else if (local.minuteDiff < 90) {
+		local.rv = "about 1 hour";
+	} else if (local.minuteDiff < 1440) {
+		local.hours = Ceiling(local.minuteDiff / 60);
+		local.rv = "about " & local.hours & " hours";
+	} else if (local.minuteDiff < 2880) {
+		local.rv = "1 day";
+	} else if (local.minuteDiff < 43200) {
+		local.days = Int(local.minuteDiff/1440);
+		local.rv = local.days & " days";
+	} else if (local.minuteDiff < 86400) {
+		local.rv = "about 1 month";
+	} else if (local.minuteDiff < 525600) {
+		local.months = Int(local.minuteDiff / 43200);
+		local.rv = local.months & " months";
+	} else if (local.minuteDiff < 657000) {
+		local.rv = "about 1 year";
+	} else if (local.minuteDiff < 919800) {
+		local.rv = "over 1 year";
+	} else if (local.minuteDiff < 1051200) {
+		local.rv = "almost 2 years";
+	} else if (local.minuteDiff >= 1051200) {
+		local.years = Int(local.minuteDiff / 525600);
+		local.rv = "over " & local.years & " years";
+	}
+	return local.rv;
+}
+
+/**
+ * Returns a string describing the approximate time difference between the date passed in and the current date.
+ *
+ * [section: Global Helpers]
+ * [category: Date Functions]
+ *
+ * @fromTime Date to compare from.
+ * @includeSeconds Whether or not to include the number of seconds in the returned string.
+ * @toTime Date to compare to.
+ */
+public any function timeAgoInWords(required date fromTime, boolean includeSeconds, date toTime=Now()) {
+	$args(name="timeAgoInWords", args=arguments);
+	return distanceOfTimeInWords(argumentCollection=arguments);
+}
+
+/**
+ * Returns a string describing the approximate time difference between the current date and the date passed in.
+ *
+ * [section: Global Helpers]
+ * [category: Date Functions]
+ *
+ * @toTime Date to compare to.
+ * @includeSeconds Whether or not to include the number of seconds in the returned string.
+ * @fromTime Date to compare from.
+ */
+public string function timeUntilInWords(required date toTime, boolean includeSeconds, date fromTime=Now()) {
+	$args(name="timeUntilInWords", args=arguments);
+	return distanceOfTimeInWords(argumentCollection=arguments);
+}
+
+/**
  * Returns the current setting for the supplied CFWheels setting or the current default for the supplied CFWheels function argument.
  *
  * [section: Configuration]
