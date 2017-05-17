@@ -22,25 +22,25 @@ public string function highlight(
 	boolean encode
 ) {
 	$args(name="highlight", args=arguments, combine="phrase/phrases", required="phrase");
+	local.text = arguments.encode && $get("encodeHtml") ? EncodeForHtml(canonicalize(arguments.text, false, false)) : arguments.text;
 
-	// Return the passed in text unchanged if it's blank or the passed in phrase is blank.
-	if (!Len(arguments.text) || !Len(arguments.phrase)) {
-		return arguments.text;
+	// Return the passed in text unchanged (but encoded) if it's blank or the passed in phrase is blank.
+	if (!Len(local.text) || !Len(arguments.phrase)) {
+		return local.text;
 	}
 
-	local.originalText = arguments.text;
 	local.iEnd = ListLen(arguments.phrase, arguments.delimiter);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.newText = "";
 		local.phrase = Trim(ListGetAt(arguments.phrase, local.i, arguments.delimiter));
 		local.pos = 1;
-		while (FindNoCase(local.phrase, local.originalText, local.pos)) {
-			local.foundAt = FindNoCase(local.phrase, local.originalText, local.pos);
-			local.previousText = Mid(local.originalText, local.pos, local.foundAt - local.pos);
+		while (FindNoCase(local.phrase, local.text, local.pos)) {
+			local.foundAt = FindNoCase(local.phrase, local.text, local.pos);
+			local.previousText = Mid(local.text, local.pos, local.foundAt - local.pos);
 			local.newText &= local.previousText;
-			local.mid = Mid(local.originalText, local.foundAt, Len(local.phrase));
-			local.startBracket = Find("<", local.originalText, local.foundAt);
-			local.endBracket = Find(">", local.originalText, local.foundAt);
+			local.mid = Mid(local.text, local.foundAt, Len(local.phrase));
+			local.startBracket = Find("<", local.text, local.foundAt);
+			local.endBracket = Find(">", local.text, local.foundAt);
 			if (local.startBracket < local.endBracket || !local.endBracket) {
 				local.attributes = {class = arguments.class};
 				local.newText &= $element(name=arguments.tag, content=local.mid, attributes=local.attributes, encode=arguments.encode);
@@ -49,8 +49,8 @@ public string function highlight(
 			}
 			local.pos = local.foundAt + Len(local.phrase);
 		}
-		local.newText &= Mid(local.originalText, local.pos, Len(local.originalText) - local.pos + 1);
-		local.originalText = local.newText;
+		local.newText &= Mid(local.text, local.pos, Len(local.text) - local.pos + 1);
+		local.text = local.newText;
 	}
 	local.rv = local.newText;
 	return local.rv;

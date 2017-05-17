@@ -231,6 +231,7 @@ public void function onApplicationStart() {
 
 	// Miscellaneous settings.
 	application.$wheels.encodeURLs = true;
+	application.$wheels.encodeHtml = true;
 	application.$wheels.encodeHtmlTags = true;
 	application.$wheels.encodeHtmlAttributes = true;
 	application.$wheels.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water,feedback";
