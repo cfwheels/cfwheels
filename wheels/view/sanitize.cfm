@@ -7,9 +7,15 @@
  * [category: Sanitization Functions]
  *
  * @html The HTML to remove links from.
+ * @encode [see:styleSheetLinkTag].
  */
-public string function stripLinks(required string html) {
-	return REReplaceNoCase(arguments.html, "<a.*?>(.*?)</a>", "\1" , "all");
+public string function stripLinks(required string html, boolean encode) {
+	$args(name="stripLinks", args=arguments);
+	local.rv = REReplaceNoCase(arguments.html, "<a.*?>(.*?)</a>", "\1" , "all");
+	if (arguments.encode && $get("encodeHtmlTags")) {
+		local.rv = EncodeForHtml(canonicalize(local.rv, false, false));
+	}
+	return local.rv;
 }
 
 /**
@@ -19,10 +25,15 @@ public string function stripLinks(required string html) {
  * [category: Sanitization Functions]
  *
  * @html The HTML to remove tag markup from.
+ * @encode [see:styleSheetLinkTag].
  */
-public string function stripTags(required string html) {
+public string function stripTags(required string html, boolean encode) {
+	$args(name="stripTags", args=arguments);
 	local.rv = REReplaceNoCase(arguments.html, "<\ *[a-z].*?>", "", "all");
 	local.rv = REReplaceNoCase(local.rv, "<\ */\ *[a-z].*?>", "", "all");
+	if (arguments.encode && $get("encodeHtmlTags")) {
+		local.rv = EncodeForHtml(canonicalize(local.rv, false, false));
+	}
 	return local.rv;
 }
 

@@ -349,6 +349,8 @@ public void function onApplicationStart() {
 	application.$wheels.functions.sendFile = {disposition="attachment"};
 	application.$wheels.functions.simpleFormat = {wrap=true, encode=true};
 	application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, prepend="", append="", encode=true};
+	application.$wheels.functions.stripLinks = {encode=true};
+	application.$wheels.functions.stripTags = {encode=true};
 	application.$wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false, encode=true};
 	application.$wheels.functions.submitTag = {value="Save changes", image="", prepend="", append="", encode=true};
 	application.$wheels.functions.sum = {distinct=false, parameterize=true, ifNull=""};
