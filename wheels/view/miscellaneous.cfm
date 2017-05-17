@@ -1,6 +1,88 @@
 <cfscript>
 
 /**
+ * Highlights the phrase(s) everywhere in the text if found by wrapping it in a `span` tag.
+ *
+ * [section: View Helpers]
+ * [category: Miscellaneous Functions]
+ *
+ * @text Text to search.
+ * @phrase Phrase (or list of phrases) to highlight. This argument is also aliased as `phrases`.
+ * @delimiter Delimiter to use in phrase argument.
+ * @tag HTML tag to use to wrap the highlighted phrase(s).
+ * @class Class to use in the tags wrapping highlighted phrase(s).
+ * @encode [see:styleSheetLinkTag].
+ */
+public string function highlight(
+	required string text,
+	string phrase,
+	string delimiter,
+	string tag,
+	string class,
+	boolean encode
+) {
+	$args(name="highlight", args=arguments, combine="phrase/phrases", required="phrase");
+
+	// Return the passed in text unchanged if it's blank or the passed in phrase is blank.
+	if (!Len(arguments.text) || !Len(arguments.phrase)) {
+		return arguments.text;
+	}
+
+	local.originalText = arguments.text;
+	local.iEnd = ListLen(arguments.phrase, arguments.delimiter);
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
+		local.newText = "";
+		local.phrase = Trim(ListGetAt(arguments.phrase, local.i, arguments.delimiter));
+		local.pos = 1;
+		while (FindNoCase(local.phrase, local.originalText, local.pos)) {
+			local.foundAt = FindNoCase(local.phrase, local.originalText, local.pos);
+			local.previousText = Mid(local.originalText, local.pos, local.foundAt - local.pos);
+			local.newText &= local.previousText;
+			local.mid = Mid(local.originalText, local.foundAt, Len(local.phrase));
+			local.startBracket = Find("<", local.originalText, local.foundAt);
+			local.endBracket = Find(">", local.originalText, local.foundAt);
+			if (local.startBracket < local.endBracket || !local.endBracket) {
+				local.attributes = {class = arguments.class};
+				local.newText &= $element(name=arguments.tag, content=local.mid, attributes=local.attributes, encode=arguments.encode);
+			} else {
+				local.newText &= local.mid;
+			}
+			local.pos = local.foundAt + Len(local.phrase);
+		}
+		local.newText &= Mid(local.originalText, local.pos, Len(local.originalText) - local.pos + 1);
+		local.originalText = local.newText;
+	}
+	local.rv = local.newText;
+	return local.rv;
+}
+
+/**
+ * Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards).
+ *
+ * [section: View Helpers]
+ * [category: Miscellaneous Functions]
+ *
+ * @text The text to format.
+ * @wrap Set to `true` to wrap the result in a paragraph.
+ */
+public string function simpleFormat(required string text, boolean wrap) {
+	$args(name="simpleFormat", args=arguments);
+	local.rv = Trim(arguments.text);
+	local.rv = Replace(local.rv, "#Chr(13)#", "", "all");
+	local.rv = Replace(local.rv, "#Chr(10)##Chr(10)#", "</p><p>", "all");
+	local.rv = Replace(local.rv, "#Chr(10)#", "<br>", "all");
+
+	// Put the new line characters back in (good for editing in textareas with the original formatting for example).
+	local.rv = Replace(local.rv, "</p><p>", "</p>#Chr(10)##Chr(10)#<p>", "all");
+	local.rv = Replace(local.rv, "<br>", "<br>#Chr(10)#", "all");
+
+	if (arguments.wrap) {
+		local.rv = "<p>" & local.rv & "</p>";
+	}
+	return local.rv;
+}
+
+/**
  * Displays a marked-up listing of messages that exist in the Flash.
  *
  * [section: View Helpers]

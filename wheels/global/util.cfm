@@ -147,4 +147,113 @@ public string function hyphenize(required string string) {
 	return local.rv;
 }
 
+/**
+ * Capitalizes all words in the text to create a nicer looking title.
+ *
+ * [section: Global Helpers]
+ * [category: String Functions]
+ *
+ * @word The text to turn into a title.
+ */
+public string function titleize(required string word) {
+	local.rv = "";
+	local.iEnd = ListLen(arguments.word, " ");
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
+		local.rv = ListAppend(local.rv, capitalize(ListGetAt(arguments.word, local.i, " ")), " ");
+	}
+	return local.rv;
+}
+
+/**
+ * Truncates text to the specified length and replaces the last characters with the specified truncate string (which defaults to "...").
+ *
+ * [section: Global Helpers]
+ * [category: String Functions]
+ *
+ * @text The text to truncate.
+ * @length Length to truncate the text to.
+ * @truncateString String to replace the last characters with.
+ */
+public string function truncate(required string text, numeric length, string truncateString) {
+	$args(name="truncate", args=arguments);
+	if (Len(arguments.text) > arguments.length) {
+		local.rv = Left(arguments.text, arguments.length - Len(arguments.truncateString)) & arguments.truncateString;
+	} else {
+		local.rv = arguments.text;
+	}
+	return local.rv;
+}
+
+/**
+ * Truncates text to the specified length of words and replaces the remaining characters with the specified truncate string (which defaults to "...").
+ *
+ * [section: Global Helpers]
+ * [category: String Functions]
+ *
+ * @text The text to truncate.
+ * @length Number of words to truncate the text to.
+ * @truncateString String to replace the last characters with.
+ */
+public string function wordTruncate(required string text, numeric length, string truncateString) {
+	$args(name="wordTruncate", args=arguments);
+	local.words = ListToArray(arguments.text, " ", false);
+
+	// When there are fewer (or same) words in the string than the number to be truncated we can just return it unchanged.
+	if (ArrayLen(local.words) <= arguments.length) {
+		return arguments.text;
+	}
+
+	local.rv = "";
+	local.iEnd = arguments.length;
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
+		local.rv = ListAppend(local.rv, local.words[local.i], " ");
+	}
+	local.rv &= arguments.truncateString;
+	return local.rv;
+}
+
+/**
+ * Extracts an excerpt from text that matches the first instance of a given phrase.
+ *
+ * [section: Global Helpers]
+ * [category: String Functions]
+ *
+ * @text The text to extract an excerpt from.
+ * @phrase The phrase to extract.
+ * @radius Number of characters to extract surrounding the phrase.
+ * @excerptString String to replace first and / or last characters with.
+ */
+public string function excerpt(required string text, required string phrase, numeric radius, string excerptString) {
+	$args(name="excerpt", args=arguments);
+	local.pos = FindNoCase(arguments.phrase, arguments.text, 1);
+
+	// Return an empty value if the text wasn't found at all.
+	if (!local.pos) {
+		return "";
+	}
+
+	// Set start info based on whether the excerpt text found, including its radius, comes before the start of the string.
+	if ((local.pos - arguments.radius) <= 1) {
+		local.startPos = 1;
+		local.truncateStart = "";
+	} else {
+		local.startPos = local.pos - arguments.radius;
+		local.truncateStart = arguments.excerptString;
+	}
+
+	// Set end info based on whether the excerpt text found, including its radius, comes after the end of the string.
+	if ((local.pos + Len(arguments.phrase) + arguments.radius) > Len(arguments.text)) {
+		local.endPos = Len(arguments.text);
+		local.truncateEnd = "";
+	} else {
+		local.endPos = local.pos + arguments.radius;
+		local.truncateEnd = arguments.excerptString;
+	}
+
+	local.len = (local.endPos + Len(arguments.phrase)) - local.startPos;
+	local.mid = Mid(arguments.text, local.startPos, local.len);
+	local.rv = local.truncateStart & local.mid & local.truncateEnd;
+	return local.rv;
+}
+
 </cfscript>

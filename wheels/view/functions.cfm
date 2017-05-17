@@ -13,5 +13,4 @@ include "formsplain.cfm";
 include "links.cfm";
 include "miscellaneous.cfm";
 include "sanitize.cfm";
-include "text.cfm";
 </cfscript>

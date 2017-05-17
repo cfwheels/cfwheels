@@ -335,4 +335,70 @@ public string function paginationLinks(
 	return local.start & local.middle & local.end;
 }
 
+/**
+ * Turns all URLs and email addresses into links.
+ *
+ * [section: View Helpers]
+ * [category: Link Functions]
+ *
+ * @text The text to create links in.
+ * @link Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`.
+ * @relative Should we auto-link relative urls.
+ * @encode [see:styleSheetLinkTag].
+ */
+public string function autoLink(required string text, string link, boolean relative=true, boolean encode) {
+	$args(name="autoLink", args=arguments);
+	local.rv = arguments.text;
+
+	// Create anchor elements with an href attribute for all URLs found in the text.
+	if (arguments.link != "emailAddresses") {
+		if (arguments.relative) {
+			arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.|\/)[^\s\b]+)";
+		} else {
+			arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.)[^\s\b]+)";
+		}
+		local.rv = $autoLinkLoop(text=local.rv, argumentCollection=arguments);
+	}
+
+	// Create anchor elements with a "mailto:" link in an href attribute for all email addresses found in the text.
+	if (arguments.link != "urls") {
+		arguments.regex = "(?:(?:<a\s[^>]+)?(?:[^@\s]+)@(?:(?:[-a-z0-9]+\.)+[a-z]{2,}))";
+		arguments.protocol = "mailto:";
+		local.rv = $autoLinkLoop(text=local.rv, argumentCollection=arguments);
+	}
+
+	return local.rv;
+}
+
+/**
+ * Called from the autoLink function.
+ */
+public string function $autoLinkLoop(required string text, required string regex, string protocol="") {
+	local.punctuationRegEx = "([^\w\/-]+)$";
+	local.startPosition = 1;
+	local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
+	while (local.match.pos[1] > 0) {
+		local.startPosition = local.match.pos[1] + local.match.len[1];
+		local.str = Mid(arguments.text, local.match.pos[1], local.match.len[1]);
+		if (Left(local.str, 2) != "<a") {
+			arguments.text = RemoveChars(arguments.text, local.match.pos[1], local.match.len[1]);
+			local.punctuation = ArrayToList(ReMatchNoCase(local.punctuationRegEx, local.str));
+			local.str = REReplaceNoCase(local.str, local.punctuationRegEx, "", "all");
+
+			// Make sure that links beginning with "www." have a protocol.
+			if (Left(local.str, 4) == "www." && !Len(arguments.protocol)) {
+				arguments.protocol = "http://";
+			}
+
+			arguments.href = arguments.protocol & local.str;
+			local.element = $element(name="a", content=local.str, attributes=arguments, skip="text,regex,link,protocol,relative,encode", encode=arguments.encode) & local.punctuation;
+			arguments.text = Insert(local.element, arguments.text, local.match.pos[1]-1);
+			local.startPosition = local.match.pos[1] + Len(local.element);
+		}
+		local.startPosition++;
+		local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
+	}
+	return arguments.text;
+}
+
 </cfscript>
