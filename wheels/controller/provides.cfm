@@ -63,13 +63,13 @@ public void function onlyProvides(string formats="", string action=variables.par
  * [category: Provides Functions]
  *
  * @data Data to format and render.
- * @controller [see:renderPage].
- * @action [see:renderPage].
- * @template [see:renderPage].
- * @layout [see:renderPage].
- * @cache [see:renderPage].
- * @returnAs [see:renderPage].
- * @hideDebugInformation [see:renderPage].
+ * @controller [see:renderView].
+ * @action [see:renderView].
+ * @template [see:renderView].
+ * @layout [see:renderView].
+ * @cache [see:renderView].
+ * @returnAs [see:renderView].
+ * @hideDebugInformation [see:renderView].
  * @status Force request to return with specific HTTP status code.
  */
 public any function renderWith(
@@ -96,13 +96,13 @@ public any function renderWith(
 
 		// Call render page when we are just rendering html.
 		StructDelete(arguments, "data");
-		local.rv = renderPage(argumentCollection=arguments);
+		local.rv = renderView(argumentCollection=arguments);
 
 	} else {
 		local.templateName = $generateRenderWithTemplatePath(argumentCollection=arguments, contentType=local.contentType);
 		local.templatePathExists = $formatTemplatePathExists($name=local.templateName);
 		if (local.templatePathExists) {
-			local.content = renderPage(argumentCollection=arguments, template=local.templateName, returnAs="string", layout=false, hideDebugInformation=true);
+			local.content = renderView(argumentCollection=arguments, template=local.templateName, returnAs="string", layout=false, hideDebugInformation=true);
 		}
 
 		// Throw an error if we rendered a pdf template and we got here, the cfdocument call should have stopped processing.

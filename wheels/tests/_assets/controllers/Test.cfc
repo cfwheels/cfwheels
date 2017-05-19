@@ -12,7 +12,7 @@ component extends="Controller" {
 	function testRedirect() {
 		redirectTo(action="dummy");
 		request.setInActionAfterRedirect = true;
-		renderPage(action="test");
+		renderView(action="test");
 	}
 
 	private struct function $dataForPartial() {

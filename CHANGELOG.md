@@ -100,6 +100,7 @@
 * Tags are now closed in HTML5 style (e.g. `<img src="x">` instead of `<img src="x" />`).
 * The `encode` argument to `mailTo` now encodes tag content and attributes instead of outputting JavaScript.
 * Class output is now dasherized (e.g. `field-with-errors` instead of `fieldWithErrors`).
+* The `renderPage` function has been renamed to `renderView`.
 
 
 

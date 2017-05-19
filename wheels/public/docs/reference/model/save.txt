@@ -7,5 +7,5 @@ if(user.save(parameterize=false)){
 	redirectTo(action="edit");
 } else {
 	flashInsert(alert="Error, please correct!");
-	renderPage(action="edit");	
+	renderView(action="edit");
 }

@@ -12,12 +12,12 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_inclusion_of_global_helper_file() {
-		_controller.renderPage();
+		_controller.renderView();
 		assert("StructKeyExists(request.test, 'globalHelperFunctionWasCalled')");
 	}
 
 	function test_inclusion_of_controller_helper_file() {
-		_controller.renderPage();
+		_controller.renderView();
 		assert("StructKeyExists(request.test, 'controllerHelperFunctionWasCalled')");
 	}
 

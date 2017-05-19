@@ -131,7 +131,7 @@ public void function $callAction(required string action) {
 	}
 	if (!$performedRenderOrRedirect()) {
 		try {
-			renderPage();
+			renderView();
 		} catch (any e) {
 			local.file = $get("viewPath") & "/" & LCase(ListChangeDelims(variables.$class.name, '/', '.')) & "/" & LCase(arguments.action) & ".cfm";
 			if (FileExists(ExpandPath(local.file))) {

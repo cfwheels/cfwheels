@@ -52,7 +52,7 @@ public any function sendEmail(
 
 		// Include the email template and return it,
 		local.item = ListGetAt(arguments.template, local.i);
-		local.content = $renderPage($template=local.item, $layout=ListGetAt(arguments.layout, local.i));
+		local.content = $renderView($template=local.item, $layout=ListGetAt(arguments.layout, local.i));
 
 		local.mailpart = {};
 		local.mailpart.tagContent = local.content;

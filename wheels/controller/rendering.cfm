@@ -15,7 +15,7 @@
  * @returnAs Set to `string` to return the result instead of automatically sending it to the client.
  * @hideDebugInformation Set to `true` to hide the debug information at the end of the output. This is useful, for example, when you're testing XML output in an environment where the global setting for `showDebugInformation` is `true`.
  */
-public any function renderPage(
+public any function renderView(
 	string controller=variables.params.controller,
 	string action=variables.params.action,
 	string template="",
@@ -24,7 +24,7 @@ public any function renderPage(
 	string returnAs="",
 	boolean hideDebugInformation=false
 ) {
-	$args(name="renderPage", args=arguments);
+	$args(name="renderView", args=arguments);
 	$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
 	if ($get("showDebugInformation")) {
 		$debugPoint("view");
@@ -40,7 +40,7 @@ public any function renderPage(
 		arguments.$hideDebugInformation = true;
 	}
 
-	// If renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request.
+	// If renderView was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request.
 	if (!arguments.$hideDebugInformation) {
 		request.wheels.showDebugInformation = true;
 	}
@@ -58,12 +58,12 @@ public any function renderPage(
 		local.page = $doubleCheckedLock(
 			condition="$getFromCache",
 			conditionArgs=local.conditionArgs,
-			execute="$renderPageAndAddToCache",
+			execute="$renderViewAndAddToCache",
 			executeArgs=local.executeArgs,
 			name=local.lockName
 		);
 	} else {
-		local.page = $renderPage(argumentCollection=arguments);
+		local.page = $renderView(argumentCollection=arguments);
 	}
 	if (arguments.$returnAs == "string") {
 		local.rv = local.page;
@@ -108,9 +108,9 @@ public void function renderText(required any text) {
  * [category: Rendering Functions]
  *
  * @partial The name of the partial file to be used. Prefix with a leading slash (`/`) if you need to build a path from the root `views` folder. Do not include the partial filename's underscore and file extension.
- * @cache [see:renderPage].
- * @layout [see:renderPage].
- * @returnAs [see:renderPage].
+ * @cache [see:renderView].
+ * @layout [see:renderView].
+ * @returnAs [see:renderView].
  * @dataFunction Name of a controller function to load data from.
  */
 public any function renderPartial(
@@ -189,8 +189,8 @@ public array function getEmails() {
 /**
  * Internal function.
  */
-public string function $renderPageAndAddToCache() {
-	local.rv = $renderPage(argumentCollection=arguments);
+public string function $renderViewAndAddToCache() {
+	local.rv = $renderView(argumentCollection=arguments);
 	if (!IsNumeric(arguments.$cache)) {
 		arguments.$cache = $get("defaultCacheTime");
 	}
@@ -201,7 +201,7 @@ public string function $renderPageAndAddToCache() {
 /**
  * Internal function.
  */
-public string function $renderPage() {
+public string function $renderView() {
 	if (!Len(arguments.$template)) {
 		arguments.$template = "/" & ListChangeDelims(arguments.$controller, '/', '.') & "/" & arguments.$action;
 	}

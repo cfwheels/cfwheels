@@ -11,7 +11,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_rendering_without_layout() {
-		_controller.renderPage(layout=false);
+		_controller.renderView(layout=false);
 		assert("_controller.response() IS 'view template content'");
 	}
 
@@ -19,7 +19,7 @@ component extends="wheels.tests.Test" {
 		tempFile = expandPath("/wheels/tests/_assets/views/test/layout.cfm");
 		fileWrite(tempFile, "<cfoutput>start:controllerlayout##includeContent()##end:controllerlayout</cfoutput>");
 		application.wheels.existingLayoutFiles = "test";
-		_controller.renderPage();
+		_controller.renderView();
 		r = _controller.response();
 		assert("r Contains 'view template content' AND r Contains 'start:controllerlayout' AND r Contains 'end:controllerlayout'");
 		application.wheels.existingLayoutFiles = "";
@@ -27,44 +27,44 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_rendering_with_default_layout_in_root() {
-		_controller.renderPage();
+		_controller.renderView();
 		r = _controller.response();
 		assert("r Contains 'view template content' AND r Contains 'start:defaultlayout' AND r Contains 'end:defaultlayout'");
 	}
 
 	function test_rendering_with_specific_layout() {
-		_controller.renderPage(layout="specificLayout");
+		_controller.renderView(layout="specificLayout");
 		r = _controller.response();
 		assert("r Contains 'view template content' AND r Contains 'start:specificlayout' AND r Contains 'end:specificlayout'");
 	}
 
 	function test_removing_cfm_file_extension_when_supplied() {
-		_controller.renderPage(layout="specificLayout.cfm");
+		_controller.renderView(layout="specificLayout.cfm");
 		r = _controller.response();
 		assert("r Contains 'view template content' AND r Contains 'start:specificlayout' AND r Contains 'end:specificlayout'");
 	}
 
 	function test_rendering_with_specific_layout_in_root() {
-		_controller.renderPage(layout="/rootLayout");
+		_controller.renderView(layout="/rootLayout");
 		r = _controller.response();
 		assert("r Contains 'view template content' AND r Contains 'start:rootlayout' AND r Contains 'end:rootlayout'");
 	}
 
 	function test_rendering_with_specific_layout_in_sub_folder() {
-		_controller.renderPage(layout="sub/layout");
+		_controller.renderView(layout="sub/layout");
 		r = _controller.response();
 		assert("r Contains 'view template content' AND r Contains 'start:sublayout' AND r Contains 'end:sublayout'");
 	}
 
 	function test_rendering_with_specific_layout_from_folder_path() {
-		_controller.renderPage(layout="/shared/layout");
+		_controller.renderView(layout="/shared/layout");
 		r = _controller.response();
 		assert("r Contains 'view template content' AND r Contains 'start:sharedlayout' AND r Contains 'end:sharedlayout'");
 	}
 
 	function test_view_variable_should_be_available_in_layout_file() {
 		_controller.$callAction(action="test");
-		_controller.renderPage();
+		_controller.renderView();
 		r = _controller.response();
 		assert("r Contains 'view template content' AND r Contains 'variableForLayoutContent' AND r Contains 'start:defaultlayout' AND r Contains 'end:defaultlayout'");
 	}

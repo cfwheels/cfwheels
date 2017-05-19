@@ -337,9 +337,8 @@ public void function onApplicationStart() {
 	application.$wheels.functions.radioButton = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="field-with-errors", encode=true};
 	application.$wheels.functions.radioButtonTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", encode=true};
 	application.$wheels.functions.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302, delay=false, encode=true};
-	application.$wheels.functions.renderPage = {layout=""};
+	application.$wheels.functions.renderView = {layout=""};
 	application.$wheels.functions.renderWith = {layout=""};
-	application.$wheels.functions.renderPageToString = {layout=true};
 	application.$wheels.functions.renderPartial = {layout="", dataFunction=true};
 	application.$wheels.functions.save = {parameterize=true, reload=false};
 	application.$wheels.functions.secondSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, secondStep=1, encode=true};
