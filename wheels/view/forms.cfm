@@ -191,7 +191,7 @@ public string function buttonTag(
 	string image,
 	string prepend,
 	string append,
-	boolean encode
+	any encode
 ) {
 	$args(name="buttonTag", args=arguments);
 
@@ -285,7 +285,7 @@ public string function $createLabel(
 	required string property,
 	required string label,
 	required string prependToLabel,
-	boolean encode=false
+	any encode=false
 ) {
 	local.rv = arguments.prependToLabel;
 	local.attributes = {};
@@ -315,7 +315,7 @@ public string function $formBeforeElement(
 	required string appendToLabel,
 	required string errorElement,
 	required string errorClass,
-	boolean encode=false
+	any encode=false
 ) {
 	local.rv = "";
 	arguments.label = $getFieldLabel(argumentCollection=arguments);

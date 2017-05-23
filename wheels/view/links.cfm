@@ -35,7 +35,7 @@ public string function linkTo(
 	string protocol,
 	numeric port,
 	string href,
-	boolean encode
+	any encode
 ) {
 	$args(name="linkTo", args=arguments);
 
@@ -53,8 +53,12 @@ public string function linkTo(
 
 	local.encodeExcept = "";
 	if (!StructKeyExists(arguments, "href")) {
-		arguments.$encodeForHtmlAttribute = true;
-		arguments.href = URLFor(argumentCollection=arguments);
+		local.args = Duplicate(arguments);
+		local.args.$encodeForHtmlAttribute = true;
+		if (local.args.encode == "attributes") {
+			local.args.encode = true;
+		}
+		arguments.href = URLFor(argumentCollection=local.args);
 		local.encodeExcept = "href";
 	}
 	if (!StructKeyExists(arguments, "text")) {
@@ -109,7 +113,7 @@ public string function buttonTo(
 	string host,
 	string protocol,
 	numeric port,
-	boolean encode
+	any encode
 ) {
 	local.method = "post";
 	$args(name="buttonTo", args=arguments);
@@ -122,10 +126,13 @@ public string function buttonTo(
 		}
 	}
 	arguments.method = local.method;
-	arguments.$encodeForHtmlAttribute = true;
-	arguments.action = URLFor(argumentCollection=arguments);
+	local.args = Duplicate(arguments);
+	local.args.$encodeForHtmlAttribute = true;
+	if (local.args.encode == "attributes") {
+		local.args.encode = true;
+	}
+	arguments.action = URLFor(argumentCollection=local.args);
 	local.encodeExcept = "action";
-
 	local.args = $innerArgs(name="input", args=arguments);
 	local.args.value = arguments.text;
 	local.args.image = arguments.image;
@@ -151,7 +158,7 @@ public string function buttonTo(
 public string function mailTo(
 	required string emailAddress,
 	string name="",
-	boolean encode
+	any encode
 ) {
 	$args(name="mailTo", reserved="href", args=arguments);
 	arguments.href = "mailto:" & arguments.emailAddress;

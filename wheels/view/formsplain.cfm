@@ -160,7 +160,7 @@ public string function textAreaTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	boolean encode
+	any encode
 ) {
 	$args(name="textAreaTag", args=arguments);
 	arguments.property = arguments.name;

@@ -230,7 +230,7 @@ public string function textArea(
 	string appendToLabel,
 	string errorElement,
 	string errorClass,
-	boolean encode
+	any encode
 ) {
 	$args(name="textArea", reserved="name", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
