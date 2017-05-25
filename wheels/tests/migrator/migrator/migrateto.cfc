@@ -141,7 +141,7 @@ component extends="wheels.tests.Test" {
 		);
 		expected = "version";
 
-		assert("actual.column_name == expected");
+		assert("actual.column_name eq expected");
 	}
 	}
 
