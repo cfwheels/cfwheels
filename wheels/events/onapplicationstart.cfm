@@ -131,13 +131,13 @@ public void function onApplicationStart() {
 	application.$wheels.autoMigrateDatabase = false;
 
 	// Create migrations object and set default settings.
-	application.$wheels.dbmigrate = $createObjectFromRoot(path="wheels", fileName="dbmigrate", method="init");
-	application.$wheels.dbmigrateTableName = "schemainfo";
-	application.$wheels.dbmigrateWriteSQLFiles = false;
-	application.$wheels.dbmigrateObjectCase = "lower";
-	application.$wheels.dbmigrateAllowMigrationDown = false;
+	application.$wheels.migrator = $createObjectFromRoot(path="wheels", fileName="migrator", method="init");
+	application.$wheels.migratorTableName = "migrations";
+	application.$wheels.writeMigratorSQLFiles = false;
+	application.$wheels.migratorObjectCase = "lower";
+	application.$wheels.allowMigrationDown = false;
 	if (application.$wheels.environment == "development") {
-		application.$wheels.dbmigrateAllowMigrationDown = true;
+		application.$wheels.allowMigrationDown = true;
 	}
 
 	// Cache settings that are always turned on regardless of mode setting.
@@ -393,7 +393,7 @@ public void function onApplicationStart() {
 
 	// Auto Migrate Database if requested
 	if (application.$wheels.autoMigrateDatabase){
-		application.$wheels.dbmigrate.migrateToLatest();
+		application.$wheels.migrator.migrateToLatest();
 	}
 	// Clear query (cfquery) and page (cfcache) caches.
 	if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cacheKey")) {

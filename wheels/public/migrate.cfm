@@ -1,6 +1,6 @@
 <cfoutput>
 
-<div id="dbmigrate">
+<div id="migrator">
 
 <h1>Database Migrations</h1>
 <p>Database Migrations are an easy way to build and alter your database structure using cfscript.</p>
@@ -53,7 +53,7 @@
 
 			<!--- Create --->
 			<h5>Create a Template</h5>
-			<div  id="dbmigrate-templates" class="row">
+			<div  id="migrator-templates" class="row">
 				<div class="column">
 					<p class="help"><i class="fa fa-info-circle"></i> Create a blank migration file or use a pre-existing template:</p>
 					<input type="radio" name="templateName" value="blank" checked> Create a blank migration file<br><br>
@@ -111,7 +111,7 @@
 
 </div><!--/tabcontent-->
 </div><!--/tabs-->
-</div><!--/dbmigrate-->
+</div><!--/migrator-->
 
 </cfoutput>
 
@@ -151,12 +151,12 @@ $(document).ready(function() {
 			if(data.command != "info"){
 				if(typeof data.message != undefined){
 					$("#messages").html("<pre>" + data.message + "</pre>");
-					scrollToElement($('#dbmigrate'));
+					scrollToElement($('#migrator'));
 				}
 			}
 			if(data.messages.length){
 				$("#messages").addClass("alert").html(data.messages);
-				scrollToElement($('#dbmigrate'));
+				scrollToElement($('#migrator'));
 			}
 			// If there are no migrations yet, we need to know the prefix
 			if(!data.migrations.length){

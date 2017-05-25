@@ -1,5 +1,5 @@
 // Get array of available migrations
-migrations = application.wheels.dbmigrate.getAvailableMigrations();
+migrations = application.wheels.migrator.getAvailableMigrations();
 
 if(ArrayLen(migrations)){
 	 latestVersion = migrations[ArrayLen(migrations)].version;

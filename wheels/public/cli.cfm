@@ -2,17 +2,17 @@
 	CLI & GUI Uses this file to talk to wheels via JSON when in maintenance/testing/development mode
 --->
 <cfscript>
-	include "../dbmigrate/basefunctions.cfm";
+	include "../migrator/basefunctions.cfm";
 	setting showDebugOutput="no";
-	dbmigrate = application.wheels.dbmigrate;
+	migrator = application.wheels.migrator;
 	try {
 		"data"={};
 		data["success"]			= true;
 		data["datasource"]    	= application.wheels.dataSourceName;
 		data["wheelsVersion"]   = application.wheels.version;
-		data["currentVersion"] 	= dbmigrate.getCurrentMigrationVersion();
+		data["currentVersion"] 	= migrator.getCurrentMigrationVersion();
 		data["databaseType"]   	= $getDBType();
-		data["migrations"]    	= dbmigrate.getAvailableMigrations();
+		data["migrations"]    	= migrator.getAvailableMigrations();
 		data["lastVersion"]    	= 0;
 		data["message"]			= "";
 		data["messages"]		= "";
@@ -27,23 +27,23 @@
 			switch(params.command){
 				case "createMigration":
 					if(structKeyExists(params, "migrationPrefix") && len(params.migrationPrefix)){
-						data.message=dbmigrate.createMigration(
+						data.message=migrator.createMigration(
 							params.migrationName,
 							params.templateName,
 							params.migrationPrefix);
 					} else {
-						data.message=dbmigrate.createMigration(
+						data.message=migrator.createMigration(
 							params.migrationName,
 							params.templateName);
 					}
 				break;
 				case "migrateTo":
 					if(structKeyExists(params,"version")){
-						data.message=dbmigrate.migrateTo(params.version);
+						data.message=migrator.migrateTo(params.version);
 					}
 				break;
 				case "migrateToLatest":
-					data.message=dbmigrate.migrateToLatest();
+					data.message=migrator.migrateToLatest();
 				break;
 				case "redoMigration":
 					if(structKeyExists(params,"version")){
@@ -51,7 +51,7 @@
 					} else {
 						local.redoVersion = data.lastVersion;
 					}
-					data.message=dbmigrate.redoMigration(local.redoVersion);
+					data.message=migrator.redoMigration(local.redoVersion);
 				break;
 				case "info":
 					data.message="Returning what I know..";

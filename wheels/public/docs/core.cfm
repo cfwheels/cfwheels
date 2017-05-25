@@ -27,7 +27,7 @@
 	});
 	arrayAppend(documentScope, {
 			"name": "migrator",
-			"scope": application.wheels.dbmigrate
+			"scope": application.wheels.migrator
 	});
 
 	// Array of functions to ignore

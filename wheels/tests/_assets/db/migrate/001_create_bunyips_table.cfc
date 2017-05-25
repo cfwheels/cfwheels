@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.dbmigrate.Migration" hint="create bunyips table">
+<cfcomponent extends="wheels.migrator.Migration" hint="create bunyips table">
   <cffunction name="up">
   	<cfset hasError = false />
   	<cftransaction>

@@ -139,36 +139,36 @@ input[type='submit'].button-outline {
     font-weight: 700;
 }
 
-/*----- DBMigrate GUI -----*/
-#dbmigrate {}
+/*----- migrator GUI -----*/
+#migrator {}
 section#dbinfo,
 section#prefix,
-section#dbmigrate-templates,
+section#migrator-templates,
 section#migrations {
     margin-bottom:10px;
 }
-#dbmigrate #dbmigrate-templates input[type='radio'] {margin-bottom: 3px;}
-#dbmigrate #dbmigrate-templates label.label-inline {font-size: 13px;}
-#dbmigrate .help {font-style: italic; color: #999; font-size: 13px;}
-#dbmigrate .alert { padding:5px;
+#migrator #migrator-templates input[type='radio'] {margin-bottom: 3px;}
+#migrator #migrator-templates label.label-inline {font-size: 13px;}
+#migrator .help {font-style: italic; color: #999; font-size: 13px;}
+#migrator .alert { padding:5px;
         border: 2px solid #4286f4;
         border-radius:2px;
         background-color:#ccdfff;
         margin-top:5px; margin-bottom:5px;
         font-weight: 700;
 }
-#dbmigrate .alert-success {
+#migrator .alert-success {
         border: 2px solid #2d7f38;
         background-color:#e8ffeb;}
-#dbmigrate #messages pre { height: 250px; overflow-y: auto; padding-left:15px; font-size:13px;}
+#migrator #messages pre { height: 250px; overflow-y: auto; padding-left:15px; font-size:13px;}
 
-#dbmigrate .domigrate {}
-#dbmigrate .migrated  {background-color: #3071db; border-color: #3071db}
-#dbmigrate .currentVersion {font-weight: 700; background-color: #f4f4f4; border-bottom: 1px solid #999;}
-#dbmigrate .currentVersion .button {background-color: #999; border-color: #999}
-#dbmigrate .resetMigration {background-color: #db5730; border-color: #db5730}
-#dbmigrate .button-small.redo {    border-top-right-radius: 0;  border-bottom-right-radius: 0;}
-#dbmigrate .button-small.migrated {    border-top-left-radius: 0;  border-bottom-left-radius: 0;}
+#migrator .domigrate {}
+#migrator .migrated  {background-color: #3071db; border-color: #3071db}
+#migrator .currentVersion {font-weight: 700; background-color: #f4f4f4; border-bottom: 1px solid #999;}
+#migrator .currentVersion .button {background-color: #999; border-color: #999}
+#migrator .resetMigration {background-color: #db5730; border-color: #db5730}
+#migrator .button-small.redo {    border-top-right-radius: 0;  border-bottom-right-radius: 0;}
+#migrator .button-small.migrated {    border-top-left-radius: 0;  border-bottom-left-radius: 0;}
 
 /*----- Tabs -----*/
 .tabs {

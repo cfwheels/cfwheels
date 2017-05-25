@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.dbmigrate.Migration" hint="create kangaroos table">
+<cfcomponent extends="wheels.migrator.Migration" hint="create kangaroos table">
   <cffunction name="up">
   	<cfset hasError = false />
   	<cftransaction>

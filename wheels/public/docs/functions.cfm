@@ -72,7 +72,7 @@
 			for(local.functionName in listToArray(local.doctype.functions) ){
 				local.meta={};
 				local.hint="";
-				// Check this is actually a function: dbmigrate stores a struct for instance
+				// Check this is actually a function: migrator stores a struct for instance
 				// Don't display internal functions, duplicates or anything in the ignore list
 				if(left(local.functionName, 1) != "$"
 					&& !ArrayFindNoCase(arguments.ignore, local.functionName)
