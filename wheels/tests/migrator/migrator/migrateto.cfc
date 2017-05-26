@@ -5,8 +5,8 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		migration = CreateObject("component", "wheels.migrator.Migration").init();
 		migrator = CreateObject("component", "wheels.migrator").init(
-			migratePath="wheels/tests/_assets/db/migrate/",
-			sqlPath="wheels/tests/_assets/db/sql/"
+			migratePath="wheels/tests/_assets/migrator/migrations/",
+			sqlPath="wheels/tests/_assets/migrator/sql/"
 		);
 		for (local.table in ["bunyips","dropbears","hoopsnakes","migrations","migratorversions"]) {
 			migration.dropTable(local.table);

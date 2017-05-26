@@ -142,7 +142,7 @@ public string function createMigration(
  * [section: Configuration]
  * [category: Database Migrations]
  *
- * @path Path to Migration Files: defaults to /db/migrate/
+ * @path Path to Migration Files: defaults to /migrator/migrations/
  */
 public array function getAvailableMigrations(string path=this.paths.migrate) {
 	local.rv = [];

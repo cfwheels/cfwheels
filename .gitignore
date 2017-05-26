@@ -10,7 +10,7 @@ WEB-INF
 /manual/
 /subfolder/
 /bin/
-/db/sql/
+/migrator/sql/
 server.json
 cfwheels.*.zip
 settings.json
