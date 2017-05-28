@@ -18,7 +18,8 @@ component extends="wheels.tests.Test" {
 		request.cgi.script_name = oldScriptName;
 	}
 
-	function test_ampersand_in_params() {
+	function test_ampersand_in_params_with_url_rewriting() {
+		request.cgi.script_name = "/rewrite.cfm";
 		e = '#application.wheels.webpath#x/x?a=c+ats%26dogs&b=a+c';
 		r = _controller.URLFor(controller="x", action="x", params="a=c ats%26dogs&b=a c", encode=true);
 		assert('e eq r');
@@ -83,6 +84,14 @@ component extends="wheels.tests.Test" {
 		webRoot = Replace("#application.wheels.webpath##ListLast(request.cgi.script_name, '/')#", "//", "/");
 		e = "#webRoot#?controller=blog&action=edit&key=1&param1=foo&param2=bar";
 		r = _controller.urlFor(argumentcollection=args);
+		assert("e eq r");
+	}
+
+	function test_ampersand_in_params_without_url_rewriting() {
+		request.cgi.script_name = "/index.cfm";
+		webRoot = Replace("#application.wheels.webpath##ListLast(request.cgi.script_name, '/')#", "//", "/");
+		e = "#webRoot#?controller=x&action=x&a=c+ats%26dogs&b=a+c";
+		r = _controller.urlFor(controller="x", action="x", params="a=c ats%26dogs&b=a c", encode=true, $URLRewriting = "Off");
 		assert("e eq r");
 	}
 
