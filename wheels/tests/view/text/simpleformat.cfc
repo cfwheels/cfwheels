@@ -33,7 +33,7 @@ luptatum valetudo ne, venio vero regula letalis valde vicis.</p>
 <p>Utrum blandit bene refero ut eum eligo cogo duis bene aptent distineo duis quis.<br>
 Hendrerit nostrud abigo vicis<br>
 augue validus cui lucidus.</p>";
-		r = Replace(r, "#Chr(13)#", "", "all");
+		r = Replace(r, Chr(13), "", "all");
 		assert("htmleditformat(e) eq htmleditformat(r)");
 	}
 
