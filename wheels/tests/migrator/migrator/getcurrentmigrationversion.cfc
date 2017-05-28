@@ -8,7 +8,7 @@ component extends="wheels.tests.Test" {
 			migratePath="wheels/tests/_assets/migrator/migrations/",
 			sqlPath="wheels/tests/_assets/migrator/sql/"
 		);
-		for (local.table in ["bunyips","dropbears","hoopsnakes","schemainfo","schemainfo"]) {
+		for (local.table in ["bunyips","dropbears","hoopsnakes","migratorversions"]) {
 			migration.dropTable(local.table);
 		};
 	}
