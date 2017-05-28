@@ -52,7 +52,7 @@ luptatum valetudo ne, venio vero regula letalis valde vicis.</p>
 <p>Utrum blandit bene refero ut eum eligo cogo duis bene aptent distineo duis quis.<br>
 Hendrerit nostrud abigo vicis<br>
 augue validus cui lucidus.</p>";
-		assert("htmleditformat(result) eq htmleditformat(expected)");
+		assert("result eq expected");
 	}
 
 }
