@@ -62,7 +62,7 @@
 </cfloop>
 
 <!--- list of tables to delete --->
-<cfset local.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes,CATEGORIES">
+<cfset local.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes,CATEGORIES,schemainfo,migratorversions">
 <cfloop list="#local.tables#" index="local.i">
 	<cfif ListFindNoCase(local.tableList, local.i, chr(7))>
 		<cftry>
