@@ -5,8 +5,8 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		migration = CreateObject("component", "wheels.migrator.Migration").init();
 		migrator = CreateObject("component", "wheels.migrator").init(
-			migratePath="wheels/tests/_assets/db/migrate/",
-			sqlPath="wheels/tests/_assets/db/sql/"
+			migratePath="wheels/tests/_assets/migrator/migrations/",
+			sqlPath="wheels/tests/_assets/migrator/sql/"
 		);
 		tableName = "bunyips";
 
@@ -31,7 +31,7 @@ component extends="wheels.tests.Test" {
 	function _test_redomigration_001() {
 		if(!application.testenv.isOracle){
 
-			local.path = Expandpath("/wheels/tests/_assets/db/migrate/001_create_bunyips_table.cfc");
+			local.path = Expandpath("/wheels/tests/_assets/migrator/migrations/001_create_bunyips_table.cfc");
 			local.originalColumnNames = 'columnNames="name"';
 			local.newColumnNames = 'columnNames="name,hobbies"';
 			local.originalContent = FileRead(local.path);

@@ -2,7 +2,7 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		migrator = CreateObject("component", "wheels.migrator").init(
-			migratePath="wheels/tests/_assets/db/migrate/"
+			migratePath="wheels/tests/_assets/migrator/migrations/"
 		);
 	}
 
