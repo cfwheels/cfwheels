@@ -436,6 +436,10 @@ public string function $element(
 	// Encoded if global encode setting is true and true is also passed in to the function.
 	local.rv = IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags") ? EncodeForHtml(canonicalize(arguments.content, false, false)) : arguments.content;
 
+	// Lucee5 seems to return null from the above, so set to empty string if that's the case.
+	if(isNull(local.rv)){
+		local.rv="";
+	}
 	// When only wanting to encode HTML attribute values (and not tag content) we set the encode argument to true before passing on to $tag().
 	if (arguments.encode == "attributes") {
 		arguments.encode = true;
