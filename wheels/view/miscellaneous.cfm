@@ -22,7 +22,7 @@ public string function highlight(
 	boolean encode
 ) {
 	$args(name="highlight", args=arguments, combine="phrase/phrases", required="phrase");
-	local.text = arguments.encode && $get("encodeHtmlTags") ? EncodeForHtml(canonicalize(arguments.text, false, false)) : arguments.text;
+	local.text = arguments.encode && $get("encodeHtmlTags") ? EncodeForHtml($canonicalize(arguments.text)) : arguments.text;
 
 	// Return the passed in text unchanged (but encoded) if it's blank or the passed in phrase is blank.
 	if (!Len(local.text) || !Len(arguments.phrase)) {
@@ -73,7 +73,7 @@ public string function simpleFormat(required string text, boolean wrap, boolean 
 	// Encode for html if specified, but revert the encoding of newline characters and carriage returns.
 	// We can safely revert that part of the encoding since we'll replace them with html tags anyway.
 	if (arguments.encode && $get("encodeHtmlTags")) {
-		local.rv = EncodeForHtml(canonicalize(local.rv, false, false));
+		local.rv = EncodeForHtml($canonicalize(local.rv));
 		local.rv = Replace(local.rv, "&##xa;", Chr(10), "all");
 		local.rv = Replace(local.rv, "&##xd;", Chr(13), "all");
 	}
@@ -400,7 +400,7 @@ public string function $tagAttribute(required string name, required string value
 
 	// set standard attribute name / value to use as the default to return (e.g. name / value part of <input name="value">)
 	local.rv = " " & arguments.name & "=""";
-	local.rv &= arguments.encode && !ListFind(arguments.encodeExcept, arguments.name) && $get("encodeHtmlAttributes") ? EncodeForHtmlAttribute(canonicalize(arguments.value, false, false)) : arguments.value;
+	local.rv &= arguments.encode && !ListFind(arguments.encodeExcept, arguments.name) && $get("encodeHtmlAttributes") ? EncodeForHtmlAttribute($canonicalize(arguments.value)) : arguments.value;
 	local.rv &= """";
 
 	// when attribute can be boolean we handle it accordingly and override the above return value
@@ -434,12 +434,8 @@ public string function $element(
 
 	// Set a variable with the content of the tag.
 	// Encoded if global encode setting is true and true is also passed in to the function.
-	local.rv = IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags") ? EncodeForHtml(canonicalize(arguments.content, false, false)) : arguments.content;
+	local.rv = IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags") ? EncodeForHtml($canonicalize(arguments.content)) : arguments.content;
 
-	// Lucee5 seems to return null from the above, so set to empty string if that's the case.
-	if(isNull(local.rv)){
-		local.rv="";
-	}
 	// When only wanting to encode HTML attribute values (and not tag content) we set the encode argument to true before passing on to $tag().
 	if (arguments.encode == "attributes") {
 		arguments.encode = true;

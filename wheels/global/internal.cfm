@@ -1,6 +1,17 @@
 <cfscript>
 
 /**
+ * Call CFML's canonicalize() function but set to blank string if the result is null (happens on Lucee 5).
+ */
+public string function $canonicalize(required string input) {
+	local.rv = canonicalize(arguments.input, false, false);
+	if (IsNull(local.rv)) {
+		local.rv = "";
+	}
+	return local.rv;
+}
+
+/**
  * Get the status code (e.g. 200, 404 etc) of the response we're about to send.
  */
 public string function $statusCode() {
@@ -436,7 +447,7 @@ public string function $constructParams(required string params, boolean encode=t
 		local.params = listToArray(ListGetAt(arguments.params, local.i, "&"), "=");
 		local.name = local.params[1];
 		if (arguments.encode && $get("encodeURLs")) {
-			local.name = EncodeForURL(canonicalize(local.name, false, false));
+			local.name = EncodeForURL($canonicalize(local.name));
 			if (arguments.$encodeForHtmlAttribute) {
 				local.name = EncodeForHtmlAttribute(local.name);
 			}
@@ -446,7 +457,7 @@ public string function $constructParams(required string params, boolean encode=t
 		if (ArrayLen(local.params) == 2) {
 			local.value = local.params[2];
 			if (arguments.encode && $get("encodeURLs")) {
-				local.value = EncodeForURL(canonicalize(local.value, false, false));
+				local.value = EncodeForURL($canonicalize(local.value));
 				if (arguments.$encodeForHtmlAttribute) {
 					local.value = EncodeForHtmlAttribute(local.value);
 				}

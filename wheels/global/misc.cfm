@@ -677,7 +677,7 @@ public string function URLFor(
 
 		// Any value we find from above, URL encode it here.
 		if (arguments.encode && $get("encodeURLs")) {
-			local.value = EncodeForURL(canonicalize(local.value, false, false));
+			local.value = EncodeForURL($canonicalize(local.value));
 			if (arguments.$encodeForHtmlAttribute) {
 				local.value = EncodeForHtmlAttribute(local.value);
 			}
