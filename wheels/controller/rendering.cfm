@@ -187,6 +187,20 @@ public array function getEmails() {
 }
 
 /**
+ * Primarily used for testing to get information about files sent during the request.
+ *
+ * [section: Controller]
+ * [category: Miscellaneous Functions]
+ */
+public array function getFiles() {
+	if ($sentFiles()) {
+		return variables.$instance.files;
+	} else {
+		return [];
+	}
+}
+
+/**
  * Internal function.
  */
 public string function $renderViewAndAddToCache() {
@@ -489,6 +503,13 @@ public boolean function $performedRedirect() {
  */
 public boolean function $sentEmails() {
 	return StructKeyExists(variables.$instance, "emails");
+}
+
+/**
+ * Internal function.
+ */
+public boolean function $sentFiles() {
+	return StructKeyExists(variables.$instance, "files");
 }
 
 /**

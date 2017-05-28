@@ -166,7 +166,7 @@ public any function sendFile(
 	string disposition,
 	string directory="",
 	boolean deleteFile=false,
-	boolean $testingMode=false
+	boolean deliver
 ) {
 	$args(name="sendFile", args=arguments);
 
@@ -238,17 +238,23 @@ public any function sendFile(
 	}
 
 	// If testing, return the variables, else prompt the user to download the file.
-	if (arguments.$testingMode) {
-		StructAppend(local, arguments, false);
-		local.rv = local;
-	} else {
-		$header(name="content-disposition", value="#arguments.disposition#; filename=""#local.name#""");
+	if (arguments.deliver) {
+		$header(name="Content-Disposition", value="#arguments.disposition#; filename=""#local.name#""");
 		$content(type=local.mime, file=local.fullPath, deleteFile=arguments.deleteFile);
-	}
-
-	if (StructKeyExists(local,"rv")) {
+	} else {
+		local.rv = {
+			disposition = arguments.disposition,
+			file = local.fullPath,
+			mime = local.mime,
+			name = local.name
+		};
+		if (!$sentFiles()) {
+			variables.$instance.files = [];
+		}
+		ArrayAppend(variables.$instance.files, local.rv);
 		return local.rv;
 	}
+
 }
 
 /**
