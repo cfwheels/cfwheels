@@ -51,6 +51,8 @@ public function $verifyAuthenticityToken() {
 		switch (variables.$class.csrf.type) {
 			case "abort":
 				abort;
+			case "ignore":
+				return;
 			default:
 				Throw(
 					type="Wheels.InvalidAuthenticityToken",

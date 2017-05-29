@@ -285,6 +285,10 @@ public any function processRequest(required struct params, string method, string
 	$set(functionName="sendFile", deliver=false);
 
 	local.controller = controller(name=arguments.params.controller, params=arguments.params);
+
+	// Set to ignore CSRF errors during testing.
+	local.controller.protectsFromForgery(with="ignore");
+
 	local.controller.processAction();
 	local.response = local.controller.response();
 
