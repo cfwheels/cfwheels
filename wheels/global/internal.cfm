@@ -1041,7 +1041,11 @@ public string function $prependUrl(required string path) {
  * NB: url rewriting files need to be removed from here.
  */
 public string function $buildReleaseZip(string version=application.wheels.version, string directory=Expandpath("/")) {
-	local.path = arguments.directory & "cfwheels.#arguments.version#.zip";
+	local.name = "cfwheels-" & LCase(Replace(arguments.version, " ", "-", "all"));
+	local.name = Replace(local.name, "alpha-", "alpha.");
+	local.name = Replace(local.name, "beta-", "beta.");
+	local.name = Replace(local.name, "rc-", "rc.");
+	local.path = arguments.directory & local.name & ".zip";
 
 	// directories & files to add to the zip
 	local.include = [
