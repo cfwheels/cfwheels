@@ -874,7 +874,7 @@ private string function $checkMinimumVersion(required string engine, required st
 	} else if (arguments.engine == "Adobe ColdFusion") {
 		local.minimumMajor = "10";
 		local.minimumMinor = "0";
-		local.minimumPatch = "16";
+		local.minimumPatch = "23";
 		local.minimumBuild = "";
 		local.11 = {minimumMinor=0, minimumPatch=5};
 	} else {
