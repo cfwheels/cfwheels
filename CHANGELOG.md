@@ -1,5 +1,5 @@
-<a name="2.0"></a>
-# 2.0.0 Beta 1 (TBD)
+<a name="2.0.0-beta.1"></a>
+# [2.0.0 Beta 1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-beta.1) (5/31/2017)
 
 ### Model Enhancements
 
