@@ -1066,7 +1066,6 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 		"Application.cfc",
 		"index.cfm",
 		"LICENSE",
-		"README.md",
 		"rewrite.cfm",
 		"root.cfm",
 		"urlrewrite.xml"
