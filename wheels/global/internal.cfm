@@ -869,8 +869,8 @@ private string function $checkMinimumVersion(required string engine, required st
 	if (arguments.engine == "Lucee") {
 		local.minimumMajor = "4";
 		local.minimumMinor = "5";
-		local.minimumPatch = "1";
-		local.minimumBuild = "022";
+		local.minimumPatch = "5";
+		local.minimumBuild = "006";
 	} else if (arguments.engine == "Adobe ColdFusion") {
 		local.minimumMajor = "10";
 		local.minimumMinor = "0";
