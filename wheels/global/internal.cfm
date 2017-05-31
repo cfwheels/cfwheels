@@ -1066,7 +1066,6 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 		"Application.cfc",
 		"box.json",
 		"index.cfm",
-		"LICENSE",
 		"rewrite.cfm",
 		"root.cfm"
 	];
@@ -1080,8 +1079,10 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 	// filter out these bad boys
 	local.filter = "*.settings, *.classpath, *.project, *.DS_Store";
 
-	// the changelog is copied to the wheels dir only for the build
-	FileCopy(ExpandPath("CHANGELOG.md"),ExpandPath("wheels/CHANGELOG.md"));
+	// The change log and license are copied to the wheels directory only for the build.
+	FileCopy(ExpandPath("CHANGELOG.md"), ExpandPath("wheels/CHANGELOG.md"));
+	FileCopy(ExpandPath("LICENSE"), ExpandPath("wheels/LICENSE"));
+
 	for (local.i in local.include) {
 		if (FileExists(ExpandPath(local.i))) {
 			$zip(file=local.path, source=ExpandPath(local.i));
@@ -1101,8 +1102,9 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 	};
 	$zip(file=local.path, action="delete", filter=local.filter, recurse=true);
 
-	// clean up
+	// Clean up.
 	FileDelete(ExpandPath("wheels/CHANGELOG.md"));
+	FileDelete(ExpandPath("wheels/LICENSE"));
 
 	return local.path;
 }
