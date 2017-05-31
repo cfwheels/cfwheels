@@ -1064,11 +1064,11 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 		"views",
 		"wheels",
 		"Application.cfc",
+		"box.json",
 		"index.cfm",
 		"LICENSE",
 		"rewrite.cfm",
-		"root.cfm",
-		"urlrewrite.xml"
+		"root.cfm"
 	];
 
 	// directories & files to be removed
