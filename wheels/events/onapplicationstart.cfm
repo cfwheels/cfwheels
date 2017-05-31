@@ -131,7 +131,7 @@ public void function onApplicationStart() {
 	application.$wheels.autoMigrateDatabase = false;
 
 	// Create migrations object and set default settings.
-	application.$wheels.migrator = $createObjectFromRoot(path="wheels", fileName="migrator", method="init");
+	application.$wheels.migrator = $createObjectFromRoot(path="wheels", fileName="Migrator", method="init");
 	application.$wheels.migratorTableName = "migratorversions";
 	application.$wheels.writeMigratorSQLFiles = false;
 	application.$wheels.migratorObjectCase = "lower";
