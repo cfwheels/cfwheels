@@ -258,7 +258,7 @@
 	*/
 	string function $hintOutput(str){
 		local.rv=$backTickReplace(arguments.str);
-		return simpleFormat(trim(local.rv));
+		return simpleFormat(text=trim(local.rv), encode=false);
 	}
 
 	/**
