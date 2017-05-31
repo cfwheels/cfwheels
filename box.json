@@ -19,10 +19,6 @@
     "keywords":[
         "mvc","rails","wheels","cfwheels"
     ],
-    "engines" : [
-        { "type" : "lucee", "version" : ">=4.5.5.006" },
-        { "type" : "adobe", "version" : ">=11.0.11" }
-    ],
     "private":false,
     "license":[
         {
