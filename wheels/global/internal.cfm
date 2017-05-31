@@ -876,7 +876,7 @@ private string function $checkMinimumVersion(required string engine, required st
 		local.minimumMinor = "0";
 		local.minimumPatch = "23";
 		local.minimumBuild = "";
-		local.11 = {minimumMinor=0, minimumPatch=5};
+		local.11 = {minimumMinor=0, minimumPatch=12};
 	} else {
 		local.rv = false;
 	}
