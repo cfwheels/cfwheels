@@ -62,7 +62,6 @@
 * Support checking user agent string when doing maintenance mode exclusions - [Per Djurner]
 * Added JUnit and JSON format test results - [Adam Chapman]
 * Added empty application test directories - [Chris Peters, Adam Chapman]
-* Added default `urlrewrite.xml` to support Tuckey URL rewriting with Commandbox #649 - [Tom King]
 * Added `beforeAll()`, `afterAll()`, `packageSetup()`, `packageTeardown()` methods to test framework #651 - [Adam Chapman]
 * Added `errorEmailFromAddress` and `errorEmailToAddress` config settings - [#95](https://github.com/cfwheels/cfwheels/issues/95) [Andy Bellenie, Tony Petruzzi, Per Djurner]
 * Support for passing in any "truthy" value to `assert()` in tests - [Per Djurner]
