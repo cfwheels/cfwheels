@@ -79,8 +79,8 @@
 
 ### Breaking Changes
 
-* Minimum Lucee version is now 4.5.1.022.
-* Minimum ACF version is now 10.0.16 / 11.0.5.
+* Minimum Lucee version is now 4.5.5.006.
+* Minimum ACF version is now 10.0.23 / 11.0.12.
 * Support for Railo has been dropped.
 * Rewrite and config files for IIS and Apache have been removed and has to be added manually instead.
 * The `events/functions.cfm` file has been moved to `global/functions.cfm`.
