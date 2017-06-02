@@ -368,7 +368,9 @@ public struct function $ensureControllerAndAction(required struct params, requir
 	local.cName = ListLast(local.rv.controller, ".");
 	local.cName = REReplace(local.cName, "(^|-)([a-z])", "\u\2", "all");
 	local.cLen = ListLen(local.rv.controller, ".");
-	local.rv.controller = ListSetAt(local.rv.controller, local.cLen, local.cName, ".");
+	if (local.cLen) {
+		local.rv.controller = ListSetAt(local.rv.controller, local.cLen, local.cName, ".");
+	}
 
 	// Action to normal camelCase.
 	local.rv.action = REReplace(local.rv.action, "-([a-z])", "\u\1", "all");
