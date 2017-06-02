@@ -10,7 +10,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_lucee_valid() {
-		assert('!Len($checkMinimumVersion(version="4.5.1.022", engine="Lucee"))');
+		assert('!Len($checkMinimumVersion(version="4.5.5.006", engine="Lucee"))');
 	}
 
 	function test_lucee_invalid() {
@@ -20,8 +20,8 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_adobe_valid() {
-		assert('!Len($checkMinimumVersion(version="10,0,16,251028", engine="Adobe ColdFusion"))');
-		assert('!Len($checkMinimumVersion(version="11,0,5,251028", engine="Adobe ColdFusion"))');
+		assert('!Len($checkMinimumVersion(version="10,0,23,302580", engine="Adobe ColdFusion"))');
+		assert('!Len($checkMinimumVersion(version="11,0,12,302575", engine="Adobe ColdFusion"))');
 	}
 
 	function test_adobe_invalid() {
