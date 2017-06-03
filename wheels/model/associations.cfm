@@ -144,6 +144,20 @@ public void function $registerAssociation() {
 	// Set pluralized association name, to be used when aliasing the table.
 	arguments.pluralizedName = pluralize(local.associationName);
 
+	// Set a friendly label for the foreign key on belongsTo associations (e.g. 'userid' becomes 'User');
+	if (arguments.type == "belongsTo") {
+		// Get the property name using the specified foreign key or the wheels convention of modelName + id;
+		if (Len(arguments.foreignKey)) {
+			local.propertyName = arguments.foreignKey // custom foreign key column
+		} else {
+			local.propertyName = "#arguments.modelName#id"; // wheels convention
+		}
+		// Set the label (if it hasn't already been specified)
+		if (!StructKeyExists(variables.wheels.class.mapping, local.propertyName) || !StructKeyExists(variables.wheels.class.mapping[local.propertyName], "label")) {
+			property(name=local.propertyName, label=humanize(arguments.name));
+		}
+	}
+
 	// Store all the settings for the association in the class data.
 	// One struct per association with the name of the association as the key.
 	// We delete the name from the arguments because we use it as the key and don't need to store it elsewhere.

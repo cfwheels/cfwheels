@@ -117,9 +117,6 @@ public any function $initModelClass(required string name, required string path) 
 				// If property is id, then make it all-caps "ID."
 				if (local.property == "id") {
 					variables.wheels.class.properties[local.property].label = "ID";
-				// If property ends with id, then drop it off. (For example, "userid" becomes "User.")
-				} else if (Right(local.property, 2) == "id") {
-					variables.wheels.class.properties[local.property].label = humanize(Left(local.property, Len(local.property) - 2));
 				// Otherwise, humanize it.
 				} else {
 					variables.wheels.class.properties[local.property].label = humanize(local.property);
