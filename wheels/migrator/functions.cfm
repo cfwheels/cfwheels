@@ -303,10 +303,11 @@ private string function $copyTemplateMigrationAndRename(
  * Returns previously migrated versions as a list.
  */
 private string function $getVersionsPreviouslyMigrated() {
+	local.appKey = $appKey();
 	try {
 		local.migratedVersions = $query(
-			datasource=application.wheels.dataSourceName,
-			sql="SELECT version FROM #application.wheels.migratorTableName# ORDER BY version ASC"
+			datasource=application[local.appKey].dataSourceName,
+			sql="SELECT version FROM #application[local.appKey].migratorTableName# ORDER BY version ASC"
 		);
 		if (!local.migratedVersions.recordcount) {
 			return 0;
@@ -315,8 +316,8 @@ private string function $getVersionsPreviouslyMigrated() {
 		}
 	} catch (any e) {
 		$query(
-			datasource=application.wheels.dataSourceName,
-			sql="CREATE TABLE #application.wheels.migratorTableName# (version VARCHAR(25))"
+			datasource=application[local.appKey].dataSourceName,
+			sql="CREATE TABLE #application[local.appKey].migratorTableName# (version VARCHAR(25))"
 		);
 		return 0;
 	}
