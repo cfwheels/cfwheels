@@ -148,7 +148,7 @@ public void function $registerAssociation() {
 	if (arguments.type == "belongsTo") {
 		// Get the property name using the specified foreign key or the wheels convention of modelName + id;
 		if (Len(arguments.foreignKey)) {
-			local.propertyName = arguments.foreignKey // custom foreign key column
+			local.propertyName = arguments.foreignKey; // custom foreign key column
 		} else {
 			local.propertyName = "#arguments.modelName#id"; // wheels convention
 		}
