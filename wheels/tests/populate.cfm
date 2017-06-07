@@ -287,7 +287,7 @@ CREATE TABLE CATEGORIES
 <!--- create oracle sequences --->
 <cfif local.db eq "oracle">
 	<cfloop list="#local.tables#" index="local.i">
-		<cfif !ListFindNoCase("cities,shops,combikeys", local.i)>
+		<cfif !ListFindNoCase("cities,shops,combikeys,migratorversions", local.i)>
 			<cfset local.seq = "#local.i#_seq">
 			<cftry>
 			<cfquery name="local.query" datasource="#application.wheels.dataSourceName#">
