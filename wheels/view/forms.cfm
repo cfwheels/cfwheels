@@ -326,8 +326,12 @@ public string function $formBeforeElement(
 	if (Len(arguments.label) && arguments.labelPlacement != "after") {
 		local.rv &= $createLabel(argumentCollection=arguments);
 		if (arguments.labelPlacement == "aroundRight") {
-			// strip out both the label text and closing label tag since it will be placed after the form input
+
+			// Strip out both the label text and closing label tag since it will be placed after the form input.
+			// Needs to be done for both encoded and normal content.
+			local.rv = Replace(local.rv, EncodeForHtml($canonicalize(arguments.label)) & "</label>", "");
 			local.rv = Replace(local.rv, arguments.label & "</label>", "");
+
 		} else if (arguments.labelPlacement == "before") {
 			// since the entire label is created we can append to it
 			local.rv &= arguments.appendToLabel;
