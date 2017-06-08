@@ -75,10 +75,10 @@
 							<cfif !left(_param.name, 1) EQ "$">
 								<tr>
 									<td class='code'>#_param.name#</td>
-									<td class='code'>#_param.type#</td>
-									<td class='code'>#YesNoFormat(_param.required)#</td>
-									<td class='code'><cfif structkeyExists(_param, "default")>#_param.default#</cfif></td>
-									<td><cfif structkeyExists(_param, "hint")>#$backTickReplace(_param.hint)#</cfif></td>
+									<td class='code'><cfif StructkeyExists(_param, "type")>#_param.type#</cfif></td>
+									<td class='code'><cfif StructkeyExists(_param, "required")>#YesNoFormat(_param.required)#</cfif></td>
+									<td class='code'><cfif StructkeyExists(_param, "default")>#_param.default#</cfif></td>
+									<td><cfif StructkeyExists(_param, "hint")>#$backTickReplace(_param.hint)#</cfif></td>
 								</tr>
 							</cfif>
 						</cfloop>
