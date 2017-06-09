@@ -315,10 +315,12 @@ private string function $getVersionsPreviouslyMigrated() {
 			return ValueList(local.migratedVersions.version);
 		}
 	} catch (any e) {
-		$query(
-			datasource=application[local.appKey].dataSourceName,
-			sql="CREATE TABLE #application[local.appKey].migratorTableName# (version VARCHAR(25))"
-		);
+		if (application[local.appKey].createMigratorTable) {
+			$query(
+				datasource=application[local.appKey].dataSourceName,
+				sql="CREATE TABLE #application[local.appKey].migratorTableName# (version VARCHAR(25))"
+			);
+		}
 		return 0;
 	}
 }
