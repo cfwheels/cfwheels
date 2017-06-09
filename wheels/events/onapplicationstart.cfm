@@ -128,10 +128,10 @@ public void function onApplicationStart() {
 	application.$wheels.dataSourceUserName = "";
 	application.$wheels.dataSourcePassword = "";
 	application.$wheels.transactionMode = "commit";
-	application.$wheels.autoMigrateDatabase = false;
 
 	// Create migrations object and set default settings.
 	application.$wheels.migrator = $createObjectFromRoot(path="wheels", fileName="Migrator", method="init");
+	application.$wheels.autoMigrateDatabase = false;
 	application.$wheels.migratorTableName = "migratorversions";
 	application.$wheels.createMigratorTable = true;
 	application.$wheels.writeMigratorSQLFiles = false;
