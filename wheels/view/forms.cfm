@@ -25,7 +25,7 @@ public string function endFormTag(string prepend, string append) {
  * [section: View Helpers]
  * [category: General Form Functions]
  *
- * @method The type of `method` to use in the `form` tag (`get` and `post` are the options).
+ * @method The type of `method` to use in the `form` tag (`delete`, `get`, `patch`, `post`, and `put` are the options).
  * @multipart Set to `true` if the form should be able to upload files.
  * @route Name of a route that you have configured in `config/routes.cfm`.
  * @controller Name of the controller to include in the URL.
