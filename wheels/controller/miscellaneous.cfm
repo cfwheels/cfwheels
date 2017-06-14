@@ -14,6 +14,8 @@
  * @layout Layout(s) to wrap the email template in. This argument is also aliased as `layouts`.
  * @file A list of the names of the files to attach to the email. This will reference files stored in the `files` folder (or a path relative to it). This argument is also aliased as `files`.
  * @detectMultipart When set to `true` and multiple values are provided for the `template` argument, CFWheels will detect which of the templates is text and which one is HTML (by counting the `<` characters).
+ * @deliver When set to `false`, the email will not be sent.
+ * @writeToFile The file to which the email contents will be written
  */
 public any function sendEmail(
 	string template="",
