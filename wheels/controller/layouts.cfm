@@ -20,6 +20,11 @@ public void function usesLayout(
 	boolean useDefault=true
 ) {
 
+	// Exit the function if we're on an internal CFWheels page (we don't want to allow overriding the layout there).
+	if (variables.$class.name == "Wheels") {
+		return;
+	}
+
 	// If the layout is a function, the function itself should handle all the logic.
 	if ((StructKeyExists(this, arguments.template) && IsCustomFunction(this[arguments.template])) || IsCustomFunction(arguments.template)) {
 		StructDelete(arguments, "except");
