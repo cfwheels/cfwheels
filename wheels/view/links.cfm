@@ -136,13 +136,15 @@ public string function buttonTo(
 	local.args = $innerArgs(name="input", args=arguments);
 	local.args.value = arguments.text;
 	local.args.image = arguments.image;
+	local.args.encode = arguments.encode;
 	local.content &= submitTag(argumentCollection=local.args);
 	local.skip = "image,text,route,controller,key,params,anchor,onlyPath,host,protocol,port,encode";
 	if (Len(arguments.route)) {
 		// variables passed in as route arguments should not be added to the html element
 		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
 	}
-	return $element(name="form", skip=local.skip, content=local.content, attributes=arguments, encode=arguments.encode, encodeExcept=local.encodeExcept);
+	local.encode = arguments.encode ? "attributes" : false;
+	return $element(name="form", skip=local.skip, content=local.content, attributes=arguments, encode=local.encode, encodeExcept=local.encodeExcept);
 }
 
 /**

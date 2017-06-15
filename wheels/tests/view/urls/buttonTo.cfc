@@ -15,6 +15,12 @@ component extends="wheels.tests.Test" {
 		set(functionName="buttonTo", encode=true);
 	}
 
+	function test_buttonto_inner_encoding() {
+		actual = _controller.buttonTo(text="<Click>", class="form-class", inputClass="input class", confirm="confirm-value", disable="disable-value", encode=true);
+		expected = '<form action="#application.wheels.webpath#" class="form-class" confirm="confirm-value" disable="disable-value" method="post"><input class="input&##x20;class" type="submit" value="&lt;Click&gt;"></form>';
+		assert('actual eq expected');
+	}
+
 	function test_buttonto_attributes() {
 		actual = _controller.buttonTo(class="form-class", inputClass="input-class", confirm="confirm-value", disable="disable-value");
 		expected = '<form action="#application.wheels.webpath#" class="form-class" confirm="confirm-value" disable="disable-value" method="post"><input class="input-class" type="submit" value=""></form>';
