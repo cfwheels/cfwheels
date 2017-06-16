@@ -138,4 +138,15 @@ component extends="wheels.tests.Test" {
 		assert('actual eq expected');
 	}
 
+	function test_afterfind_callback_returns_included_model_as_struct() {
+		mypost = model("postWithAfterFindCallback").findOne(include="author");
+		assert("!IsObject(mypost.author)");
+	}
+
+	// failing test for #801
+	function _test_afterfind_callback_returns_included_model_as_object() {
+		mypost = model("postWithAfterFindCallback").findOne(include="author", returnIncludedAs="object");
+		assert("IsObject(mypost.author)");
+	}
+
 }
