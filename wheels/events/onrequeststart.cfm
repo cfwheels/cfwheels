@@ -102,6 +102,20 @@ public void function $runOnRequestStart(required targetPage) {
 	if (application.wheels.showDebugInformation) {
 		$debugPoint("requestStart");
 	}
+
+	// For CORS compliance, we must set these 3 headers in every request 
+	if($get("allowCorsRequests")){
+
+		$header(name="Access-Control-Allow-Origin", value="*");
+		$header(name="Access-Control-Allow-Methods", value="GET, POST, PATCH, PUT, DELETE, OPTIONS");
+		$header(name="Access-Control-Allow-Headers", value="Origin, Content-Type, X-Auth-Token, X-Requested-By, X-Requested-With");
+
+		// Also for CORS compliance, an OPTIONS request must return 200 and the above headers. No data is required.
+		// This will be remove when OPTIONS is implemented in the mapper (issue #623)
+		if(structKeyExists(request,"CGI") && structKeyExists(request.CGI,"request_method") && request.CGI.request_method eq "OPTIONS" ){
+			abort;
+		}
+	}
 }
 
 </cfscript>
