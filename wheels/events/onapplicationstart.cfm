@@ -186,6 +186,9 @@ public void function onApplicationStart() {
 	application.$wheels.csrfCookiePreserveCase = "";
 	application.$wheels.csrfCookieSecure = "";
 
+	// CORS (Cross-Origin Resource Sharing) settings.
+	application.$wheels.allowCorsRequests = false;
+	
 	// Debugging and error settings.
 	application.$wheels.showDebugInformation = true;
 	application.$wheels.showErrorInformation = true;
