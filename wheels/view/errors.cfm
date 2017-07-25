@@ -78,6 +78,17 @@ public string function errorMessageOn(
 	local.error = local.object.errorsOn(arguments.property);
 	local.rv = "";
 	if (!ArrayIsEmpty(local.error)) {
+
+		// Encode all prepend / append type arguments if specified.
+		if (arguments.encode && $get("encodeHtmlTags")) {
+			if (Len(arguments.prependText)) {
+				arguments.prependText = EncodeForHtml($canonicalize(arguments.prependText));
+			}
+			if (Len(arguments.appendText)) {
+				arguments.appendText = EncodeForHtml($canonicalize(arguments.appendText));
+			}
+		}
+
 		local.content = arguments.prependText & local.error[1].message & arguments.appendText;
 		local.rv = $element(
 			attributes=arguments,

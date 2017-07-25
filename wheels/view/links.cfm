@@ -244,8 +244,8 @@ public string function paginationLinks(
 		}
 	}
 
-	// Encode all prepend / append arguments if specified.
-	if (Len(arguments.prepend) && arguments.encode && $get("encodeHtmlTags")) {
+	// Encode all prepend / append type arguments if specified.
+	if (arguments.encode && $get("encodeHtmlTags")) {
 		if (Len(arguments.prepend)) {
 			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
 		}
