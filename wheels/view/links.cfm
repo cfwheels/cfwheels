@@ -243,6 +243,23 @@ public string function paginationLinks(
 			arguments.pageNumberAsParam = false;
 		}
 	}
+
+	// Encode all prepend / append arguments if specified.
+	if (Len(arguments.prepend) && arguments.encode && $get("encodeHtmlTags")) {
+		if (Len(arguments.prepend)) {
+			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
+		}
+		if (Len(arguments.prependToPage)) {
+			arguments.prependToPage = EncodeForHtml($canonicalize(arguments.prependToPage));
+		}
+		if (Len(arguments.append)) {
+			arguments.append = EncodeForHtml($canonicalize(arguments.append));
+		}
+		if (Len(arguments.appendToPage)) {
+			arguments.appendToPage = EncodeForHtml($canonicalize(arguments.appendToPage));
+		}
+	}
+
 	if (arguments.showSinglePage || local.totalPages > 1) {
 		if (Len(arguments.prepend)) {
 			local.start &= arguments.prepend;
