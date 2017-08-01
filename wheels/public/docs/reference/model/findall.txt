@@ -17,3 +17,6 @@ books = model("book").findAllByReleaseYearAndType( "#params.year#,#params.type#"
 // If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `comments` method below will call `model("comment").findAll(where="postId=#post.id#")` internally)
 post = model("post").findByKey(params.postId);
 comments = post.comments();
+
+// If you have an `Order` model with properties for `productId`, `amount` and a calculated property named `totalAmount` (set up as `property(name="totalAmount", sql="SUM(amount)")`), then you can do the following to get the ids for all products with over $1,000 in sales (the SQL will be created using `HAVING` instead of `WHERE` in this case since you're getting an aggregate value for a calculated property)
+ids = model("order").findAll(group="productId", where="totalAmount > 1000");
