@@ -7,10 +7,22 @@
  * [category: General Form Functions]
  *
  * @prepend [see:textField]
- * @append [see:textField]
+ * @append [see:textField],
+ * @encode [see:styleSheetLinkTag].
  */
-public string function endFormTag(string prepend, string append) {
+public string function endFormTag(string prepend, string append, boolean encode) {
 	$args(name="endFormTag", args=arguments);
+
+	// Encode all prepend / append type arguments if specified.
+	if (arguments.encode && $get("encodeHtmlTags")) {
+		if (Len(arguments.prepend)) {
+			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
+		}
+		if (Len(arguments.append)) {
+			arguments.append = EncodeForHtml($canonicalize(arguments.append));
+		}
+	}
+
 	if (StructKeyExists(request.wheels, "currentFormMethod")) {
 		StructDelete(request.wheels, "currentFormMethod");
 	}
@@ -60,6 +72,16 @@ public string function startFormTag(
 ) {
 	$args(name="startFormTag", args=arguments);
 	local.routeAndMethodMatch = false;
+
+	// Encode all prepend / append type arguments if specified.
+	if (arguments.encode && $get("encodeHtmlTags")) {
+		if (Len(arguments.prepend)) {
+			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
+		}
+		if (Len(arguments.append)) {
+			arguments.append = EncodeForHtml($canonicalize(arguments.append));
+		}
+	}
 
 	// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
 	request.wheels.currentFormMethod = arguments.method;

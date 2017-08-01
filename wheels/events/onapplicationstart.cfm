@@ -188,7 +188,7 @@ public void function onApplicationStart() {
 
 	// CORS (Cross-Origin Resource Sharing) settings.
 	application.$wheels.allowCorsRequests = false;
-	
+
 	// Debugging and error settings.
 	application.$wheels.showDebugInformation = true;
 	application.$wheels.showErrorInformation = true;
@@ -303,7 +303,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.deleteByKey = {reload=false};
 	application.$wheels.functions.deleteOne = {reload=false};
 	application.$wheels.functions.distanceOfTimeInWords = {includeSeconds=false};
-	application.$wheels.functions.endFormTag = {prepend="", append=""};
+	application.$wheels.functions.endFormTag = {prepend="", append="", encode=true};
 	application.$wheels.functions.errorMessageOn = {prependText="", appendText="", wrapperElement="span", class="error-message", encode=true};
 	application.$wheels.functions.errorMessagesFor = {class="error-messages", showDuplicates=true, encode=true};
 	application.$wheels.functions.excerpt = {radius=100, excerptString="..."};
