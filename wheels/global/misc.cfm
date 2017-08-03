@@ -253,14 +253,16 @@ public struct function mapper(boolean restful=true, boolean methods=arguments.re
 /**
  * Creates a controller and calls an action on it.
  * Which controller and action that's called is determined by the params passed in.
- * Returns the result of the request either as a string or in a struct with `body`, `status` and `type`.
+ * Returns the result of the request either as a string or in a struct with `body`, `emails`, `files`, `flash`, `redirect`, `status`, and `type`.
  * Primarily used for testing purposes.
  *
  * [section: Controller]
  * [category: Miscellaneous Functions]
  *
- * @params The params struct with controller and action set.
- * @returnAs Return format
+ * @params The params struct to use in the request (make sure that at least `controller` and `action` are set).
+ * @method The HTTP method to use in the request (`get`, `post` etc).
+ * @returnAs Pass in `struct` to return all information about the request instead of just the final output (`body`).
+ * @rollback Pass in `true` to roll back all database transactions made during the request.
  */
 public any function processRequest(required struct params, string method, string returnAs, string rollback) {
 	$args(name="processRequest", args=arguments);
