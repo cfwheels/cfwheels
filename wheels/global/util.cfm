@@ -84,7 +84,7 @@ public string function humanize(required string text, string except="") {
 }
 
 /**
- * Returns the plural form of the passed in word. Can also pluralize a word based on a value passed to the count argument.
+ * Returns the plural form of the passed in word. Can also pluralize a word based on a value passed to the `count` argument. CFWheels stores a list of words that are the same in both singular and plural form (e.g. "equipment", "information") and words that don't follow the regular pluralization rules (e.g. "child" / "children", "foot" / "feet"). Use `get("uncountables")` / `set("uncountables", newList)` and `get("irregulars")` / `set("irregulars", newList)` to modify them to suit your needs.
  *
  * [section: Global Helpers]
  * [category: String Functions]
