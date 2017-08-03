@@ -1,3 +1,27 @@
+<a name="2.0.0-beta.2"></a>
+# [2.0.0 Beta 2](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-beta.2) (??/??/2017)
+
+### Model Enhancements
+
+* Added global setting (`createMigratorTable`) for creating migrations table - [#796](https://github.com/cfwheels/cfwheels/issues/796) [Adam Chapman, Per Djurner]
+
+### View Enhancements
+
+* Use association to create automatic property labels on `belongsTo()` - [#618](https://github.com/cfwheels/cfwheels/issues/618) [Andy Bellenie, Chris Peters]
+
+### Controller Enhancements
+
+* Added global setting (`allowCorsRequests`) for allowing CORS requests to go through - [#623](https://github.com/cfwheels/cfwheels/issues/623) [Chris Peters, David Belanger, Per Djurner, Tom King]
+
+### Bug Fixes
+
+* Fix encoding on `buttonTo()` - [#798](https://github.com/cfwheels/cfwheels/issues/798) [Per Djurner]
+* Fix error when creating default table for migrations - [#791](https://github.com/cfwheels/cfwheels/issues/791) [Adam Chapman, Per Djurner]
+* Fix so calling `usesLayout()` in `Controller.cfc` does not affect layout of internal CFWheels pages - [#793](https://github.com/cfwheels/cfwheels/issues/793) [Adam Chapman, Per Djurner]
+
+
+
+
 <a name="2.0.0-beta.1"></a>
 # [2.0.0 Beta 1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-beta.1) (5/31/2017)
 
