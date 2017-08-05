@@ -1,5 +1,5 @@
-<a name="2.0.0-beta.2"></a>
-# [2.0.0 Beta 2](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-beta.2) (??/??/2017)
+<a name="2.0.0-rc.1"></a>
+# [2.0.0 RC 1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-rc.1) (??/??/2017)
 
 ### Model Enhancements
 
@@ -15,9 +15,15 @@
 
 ### Bug Fixes
 
+* Support CSRF in `buttonTo()` - [#808](https://github.com/cfwheels/cfwheels/issues/808) [Per Djurner, Tom King]
 * Fix encoding on `buttonTo()` - [#798](https://github.com/cfwheels/cfwheels/issues/798) [Per Djurner]
 * Fix error when creating default table for migrations - [#791](https://github.com/cfwheels/cfwheels/issues/791) [Adam Chapman, Per Djurner]
 * Fix so calling `usesLayout()` in `Controller.cfc` does not affect layout of internal CFWheels pages - [#793](https://github.com/cfwheels/cfwheels/issues/793) [Adam Chapman, Per Djurner]
+
+### Breaking Changes
+
+* Minimum version when running Lucee 5 is now 5.2.1.9 (can be disabled with the `disableEngineCheck` setting).
+* Minimum version when running ACF 2016 is now 2016,0,04,302561 (can be disabled with the `disableEngineCheck` setting).
 
 
 
