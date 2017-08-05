@@ -144,6 +144,9 @@ public string function buttonTo(
 		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
 	}
 	local.encode = arguments.encode ? "attributes" : false;
+	if ($isRequestProtectedFromForgery() && ListFindNoCase("post,put,patch,delete", arguments.method)) {
+		local.content &= authenticityTokenField();
+	}
 	return $element(name="form", skip=local.skip, content=local.content, attributes=arguments, encode=local.encode, encodeExcept=local.encodeExcept);
 }
 
