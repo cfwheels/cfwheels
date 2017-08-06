@@ -284,12 +284,10 @@ public boolean function toggle(required string property, boolean save) {
  * [section: Model Object]
  * [category: Miscellaneous Functions]
  *
- * @returnIncludedAs Return included nested properties as objects or structs.
  * @returnIncluded Whether to return nested properties or not.
  */
-public struct function properties(string returnIncludedAs="struct", boolean returnIncluded=true) {
+public struct function properties(boolean returnIncluded=true) {
 	local.rv = {};
-	local.returnIncludedAs = singularize(arguments.returnIncludedAs);
 	// loop through all properties and functions in the this scope
 	for (local.key in this) {
 		// don't return nested properties if returnIncluded is false
@@ -302,19 +300,8 @@ public struct function properties(string returnIncludedAs="struct", boolean retu
 			if (ListFindNoCase(propertyNames(), local.key)) {
 				local.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), local.key));
 			}
-			// if it's a nested property, apply this function recursively
-			if (IsObject(this[local.key]) && local.returnIncludedAs != "object") {
-				local.rv[local.key] = this[local.key].properties(argumentCollection=arguments);
-			} else if (IsArray(this[local.key]) && local.returnIncludedAs != "object") {
-				// apply this function to each array item
-				local.rv[local.key] = [];
-				for (local.i = 1; local.i <= ArrayLen(this[local.key]); local.i++) {
-					local.rv[local.key][local.i] = this[local.key][local.i].properties(argumentCollection=arguments);
-				}
-			} else {
-				// set property from the this scope in the struct that we will return
-				local.rv[local.key] = this[local.key];
-			}
+			// set property from the this scope in the struct that we will return
+			local.rv[local.key] = this[local.key];
 		}
 	}
 	return local.rv;

@@ -35,7 +35,7 @@
 
 * Support for passing in `select=false` to `property()` to not include a calculated property by default in SELECT clauses - [#122](https://github.com/cfwheels/cfwheels/issues/122) [Adam Chapman, Per Djurner]
 * Support for setting calculated properties to a specific data type - [Per Djurner]
-* Support for `returnIncludedAs` and `returnIncluded` arguments to `properties()` for returning nested properties - [Adam Chapman]
+* Support for boolean `returnIncluded` argument in `properties()` for returning nested properties - [Adam Chapman]
 * Support for calling `updateProperty()` with dynamic argument, e.g. `updateProperty(firstName="Per")` - [Per Djurner]
 * Support for using boolean transaction argument, e.g. `update(transaction=false)` - [#654](https://github.com/cfwheels/cfwheels/issues/654) [Adam Chapman]
 * Support for MariaDB - [#563](https://github.com/cfwheels/cfwheels/issues/563) [AlexeiCF, Adam Chapman]

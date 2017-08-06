@@ -84,24 +84,11 @@ component extends="wheels.tests.Test" {
 		assert("author.lastName eq 'Bar'");
 	}
 
-	function test_nested_property_returns_as_struct_by_default() {
+	function test_nested_property_returns_an_object() {
 		author = model("author").new(firstName="Foo", lastName="Bar");
 		author.post = model("post").new(title="Brown Fox");
-
 		_properties = author.properties();
-		actual = IsObject(_properties.post);
-		expected = false;
 
-		debug("author.properties()", _debug);
-
-		assert('actual eq expected');
-	}
-
-	function test_nested_property_returns_object_when_returnincludedas_is_object() {
-		author = model("author").new(firstName="Foo", lastName="Bar");
-		author.post = model("post").new(title="Brown Fox");
-
-		_properties = author.properties(returnIncludedAs="object");
 		actual = IsObject(_properties.post);
 		expected = true;
 
@@ -110,7 +97,7 @@ component extends="wheels.tests.Test" {
 		assert('actual eq expected');
 	}
 
-	function test_nested_properties_returns_array_of_structs_by_default() {
+	function test_nested_properties_returns_array_of_objects() {
 		author = model("author").new(firstName="Foo", lastName="Bar");
 		author.posts = [
 			model("post").new(title="Brown Fox"),
@@ -121,8 +108,7 @@ component extends="wheels.tests.Test" {
 
 		debug("actual", _debug);
 
-		assert('!IsObject(actual)');
-		assert('IsStruct(actual)');
+		assert('IsObject(actual)');
 	}
 
 	function test_nested_property_is_not_returned_when_returnincluded_is_false() {
@@ -138,14 +124,8 @@ component extends="wheels.tests.Test" {
 		assert('actual eq expected');
 	}
 
-	function test_afterfind_callback_returns_included_model_as_struct() {
+	function test_afterfind_callback_returns_included_model_as_object() {
 		mypost = model("postWithAfterFindCallback").findOne(include="author");
-		assert("!IsObject(mypost.author)");
-	}
-
-	// failing test for #801
-	function _test_afterfind_callback_returns_included_model_as_object() {
-		mypost = model("postWithAfterFindCallback").findOne(include="author", returnIncludedAs="object");
 		assert("IsObject(mypost.author)");
 	}
 
