@@ -40,7 +40,7 @@
 * Support for using boolean transaction argument, e.g. `update(transaction=false)` - [#654](https://github.com/cfwheels/cfwheels/issues/654) [Adam Chapman]
 * Support for MariaDB - [#563](https://github.com/cfwheels/cfwheels/issues/563) [AlexeiCF, Adam Chapman]
 * Model instance `isPersisted()` and `propertyIsBlank()` methods - [#559](https://github.com/cfwheels/cfwheels/issues/559) [Chris Peters]
-* Database Migrations (dbmigrate) now available in the core - [#664](https://github.com/cfwheels/cfwheels/issues/664) [Adam Chapman, Tom King, Mike Grogan]
+* Database Migrations (dbmigrate) now available in the core (See Breaking Changes) - [#664](https://github.com/cfwheels/cfwheels/issues/664) [Adam Chapman, Tom King, Mike Grogan]
 * Databases can now be automatically migrated to the latest version on application start - [#766](https://github.com/cfwheels/cfwheels/issues/766) [Tom King]
 * New `timeStampMode` setting (`"utc"`, `"local"` or `"epoch"`) for the `createdAt` and `updatedAt` columns - [Andy Bellenie]
 * Allow nested transactions - [#732](https://github.com/cfwheels/cfwheels/issues/732) [Andy Bellenie]
@@ -130,8 +130,10 @@
 * The `encode` argument to `mailTo` now encodes tag content and attributes instead of outputting JavaScript.
 * Class output is now dasherized (e.g. `field-with-errors` instead of `fieldWithErrors`).
 * The `renderPage` function has been renamed to `renderView`.
-
-
+* `dbmigrate` is now named `Migrator`
+* Migrator is disabled by default. Use `autoMigrateDatabase` setting to enable.
+* Migrator does not write .sql files by default. Use `writeMigratorSQLFiles` to enable
+* Migrator does not allow 'down' migrations outside of the 'development' environment by default. Use `allowMigrationDown` to enable.
 
 
 <a name="1.4.5"></a>
