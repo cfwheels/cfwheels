@@ -36,11 +36,5 @@ cookie[application.wheels.csrfCookieName] = Encrypt(
   application.wheels.csrfCookieEncryptionEncoding
 );
 
-// Is this ACF10?
-application.testenv.isACF10=false;
-if(application.wheels.serverName == 'Adobe ColdFusion' && listFirst(application.wheels.serverVersion) == '10'){
-	application.testenv.isACF10=false;
-}
-
 application.testenv.db=$dbinfo(datasource=application.wheels.dataSourceName, type="version");
 </cfscript>
