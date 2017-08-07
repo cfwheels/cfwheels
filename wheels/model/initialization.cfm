@@ -251,8 +251,6 @@ public any function $assignAdapter() {
 		local.adapterName = "SQLServer";
 	} else if (FindNoCase("MySQL", local.info.driver_name) || FindNoCase("MariaDB", local.info.driver_name)) {
 		local.adapterName = "MySQL";
-	} else if (FindNoCase("Oracle", local.info.driver_name)) {
-		local.adapterName = "Oracle";
 	} else if (FindNoCase("PostgreSQL", local.info.driver_name)) {
 		local.adapterName = "PostgreSQL";
 	} else if (FindNoCase("H2", local.info.driver_name)) {
@@ -261,7 +259,7 @@ public any function $assignAdapter() {
 		Throw(
 			type="Wheels.DatabaseNotSupported",
 			message="#local.info.database_productname# is not supported by CFWheels.",
-			extendedInfo="Use SQL Server, MySQL, MariaDB, Oracle, PostgreSQL or H2."
+			extendedInfo="Use SQL Server, MySQL, MariaDB, PostgreSQL or H2."
 		);
 	}
 	$set(adapterName=local.adapterName);

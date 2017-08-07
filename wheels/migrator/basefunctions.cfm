@@ -20,8 +20,6 @@ public string function $getDBType() {
 		local.adapterName = "MicrosoftSQLServer";
 	} else if (local.info.driver_name Contains "MySQL") {
 		local.adapterName = "MySQL";
-	} else if (local.info.driver_name Contains "Oracle") {
-		local.adapterName = "Oracle";
 	} else if (local.info.driver_name Contains "PostgreSQL") {
 		local.adapterName = "PostgreSQL";
 	// NB: using mySQL adapter for H2 as the cli defaults to this for development
@@ -38,8 +36,6 @@ public string function $getDBType() {
 		local.adapterName = "MicrosoftSQLServer";
 	} else if (local.connectionString Contains "mode=MySQL") {
 		local.adapterName = "MySQL";
-	} else if (local.connectionString Contains "mode=Oracle") {
-		local.adapterName = "Oracle";
 	} else if (local.connectionString Contains "mode=PostgreSQL") {
 		local.adapterName = "PostgreSQL";
 	} else {
@@ -62,8 +58,6 @@ private string function $getForeignKeys(required string table) {
 }
 
 private void function $execute(required string sql) {
-	// trim and remove trailing semicolon (appears to cause problems for Oracle thin client JDBC driver)
-	arguments.sql = REReplace(trim(arguments.sql),";$","","ONE");
 	if (StructKeyExists(request, "$wheelsMigrationSQLFile") && application.wheels.writeMigratorSQLFiles) {
 		$file(action="append", file=request.$wheelsMigrationSQLFile, output="#arguments.sql#;", addNewLine="yes", fixNewLine="yes");
 	}
@@ -71,24 +65,13 @@ private void function $execute(required string sql) {
 }
 
 public string function $getColumns(required string tableName) {
-	if ($getDBType() eq "Oracle") {
-		// oracle thin client jdbc throws error when usgin cfdbinfo to access column data
-		// because of this error wheels can't load models anyway so maybe we don't need to support this driver
-		local.columns = $query(
-			datasource=application.wheels.dataSourceName,
-			username=application.wheels.dataSourceUserName,
-			password=application.wheels.dataSourcePassword,
-			sql="SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = '#ucase(this.name)#'"
-		);
-	} else {
-		local.columns = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			username=application.wheels.dataSourceUserName,
-			password=application.wheels.dataSourcePassword,
-			type="columns",
-			table=arguments.tableName
-		);
-	}
+	local.columns = $dbinfo(
+		datasource=application.wheels.dataSourceName,
+		username=application.wheels.dataSourceUserName,
+		password=application.wheels.dataSourcePassword,
+		type="columns",
+		table=arguments.tableName
+	);
 	return ValueList(local.columns.COLUMN_NAME);
 }
 
