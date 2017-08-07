@@ -5,7 +5,6 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_createTable_generates_table() {
-		if(!application.testenv.isOracle){
 		tableName = "dbm_droptable_tests";
 
 		t = migration.createTable(name=tableName, force=true);
@@ -23,7 +22,6 @@ component extends="wheels.tests.Test" {
 		} catch (any e) {
 			raised("database");
 		}
-	}
 	}
 
 }

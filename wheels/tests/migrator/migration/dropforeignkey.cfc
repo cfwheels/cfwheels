@@ -5,7 +5,6 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_dropForeignKey_drops_a_foreign_key_constraint() {
-		if(!application.testenv.isOracle){
 		tableName = "dbm_dfk_foos";
 		referenceTableName = "dbm_dfk_bars";
 
@@ -31,11 +30,7 @@ component extends="wheels.tests.Test" {
 		);
 
 
-		if(application.testenv.isACF10 && application.testenv.isOracle){
-			sql="SELECT * FROM query WHERE fktable_name = '#ucase(tableName)#' AND fkcolumn_name = 'BARID' AND pkcolumn_name = 'ID'";
-		} else {
-			sql="SELECT * FROM query WHERE fktable_name = '#tableName#' AND fkcolumn_name = 'barid' AND pkcolumn_name = 'id'";
-		}
+		sql="SELECT * FROM query WHERE fktable_name = '#tableName#' AND fkcolumn_name = 'barid' AND pkcolumn_name = 'id'";
 
 		created = $query(
 			query=info,
@@ -59,7 +54,6 @@ component extends="wheels.tests.Test" {
 		migration.dropTable(referenceTableName);
 	    assert("created.recordCount eq 1");
 		assert("dropped.recordCount eq 0");
-	}
 	}
 
 }

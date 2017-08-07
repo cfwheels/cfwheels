@@ -5,7 +5,6 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_dropView_drops_view() {
-		if(!application.testenv.isOracle){
 		viewName = "dbm_dropview";
 		// only supported with these adapters
 		if (ListFindNoCase("MicrosoftSQLServer", migration.adapter.adapterName())) {
@@ -23,6 +22,5 @@ component extends="wheels.tests.Test" {
 			assert("created.recordCount eq 1");
 			assert("dropped.recordCount eq 0");
 		}
-	}
 	}
 }

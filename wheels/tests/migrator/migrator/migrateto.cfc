@@ -24,7 +24,6 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_migrateto_migrate_up_from_0_to_001() {
-		if(!application.testenv.isOracle){
 		migrator.migrateTo(001);
 		info = $dbinfo(
 			datasource=application.wheels.dataSourceName,
@@ -36,11 +35,9 @@ component extends="wheels.tests.Test" {
 		expected = "bunyips";
 		assert("ListFindNoCase(actual, expected)", "expected", "actual");
 	}
-	}
 
 	// Adding pattern for speed
 	function test_migrateto_migrate_up_from_0_to_003() {
-		if(!application.testenv.isOracle){
 		migrator.migrateTo(003);
 		info1 = $dbinfo(
 			datasource=application.wheels.dataSourceName,
@@ -65,10 +62,8 @@ component extends="wheels.tests.Test" {
 		assert("ListFindNoCase(actual2, 'dropbears')");
 		assert("ListFindNoCase(actual3, 'hoopsnakes')");
 	}
-	}
 
 	function test_migrateto_migrate_down_from_003_to_001() {
-		if(!application.testenv.isOracle){
 		migrator.migrateTo(003);
 		migrator.migrateTo(001);
 		info1 = $dbinfo(
@@ -95,10 +90,8 @@ component extends="wheels.tests.Test" {
 		assert("!ListFindNoCase(actual2, 'dropbears')");
 		assert("!ListFindNoCase(actual3, 'hoopsnakes')");
 	}
-	}
 
 	function test_migrateto_generates_sql_files() {
-		if(!application.testenv.isOracle){
 		application.wheels.writeMigratorSQLFiles = true;
 
 		migrator.migrateTo(002);
@@ -107,28 +100,20 @@ component extends="wheels.tests.Test" {
 		for (i in ["001_create_bunyips_table_up.sql","002_create_dropbears_table_up.sql","002_create_dropbears_table_down.sql"]) {
 			actual = FileRead(migrator.paths.sql & i);
 			if (i contains "_up.sql") {
-				if(application.testenv.isOracle){
-					expected = "CREATE SEQUENCE";
-				} else {
-					expected = "CREATE TABLE";
-				}
+				expected = "CREATE TABLE";
 			} else {
 				expected = "DROP TABLE";
 			}
 			assert("actual contains expected");
 		};
 	}
-	}
 
 	function test_migrateto_migrate_up_does_not_generate_sql_file() {
-		if(!application.testenv.isOracle){
 		migrator.migrateTo(001);
 	  assert("!DirectoryExists(migrator.paths.sql)");
 	}
-	}
 
 	function test_migrateto_uses_specified_versions_table_name() {
-		if(!application.testenv.isOracle){
 		tableName = "migratorversions";
 		application.wheels.migratorTableName = tableName;
 
@@ -142,7 +127,6 @@ component extends="wheels.tests.Test" {
 		expected = "version";
 
 		assert("actual.column_name eq expected");
-	}
 	}
 
 

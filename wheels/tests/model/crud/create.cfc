@@ -39,14 +39,8 @@ component extends="wheels.tests.Test" {
    	function test_columns_that_are_not_null_should_allow_for_blank_string_during_create() {
 		info = $dbinfo(datasource=application.wheels.dataSourceName, type="version");
 		db = LCase(Replace(info.database_productname, " ", "", "all"));
-		if (db IS "oracle") {
-			/* oracle treates empty strings as null */
-			author = model("author").create(firstName="Test", lastName=" ", transaction="rollback");
-			assert("IsObject(author) AND !len(trim(author.lastName))");
-		} else {
-			author = model("author").create(firstName="Test", lastName="", transaction="rollback");
-			assert("IsObject(author) AND !len(author.lastName)");
-		}
+		author = model("author").create(firstName="Test", lastName="", transaction="rollback");
+		assert("IsObject(author) AND !len(author.lastName)");
 	}
 
 	function test_saving_a_new_model_without_properties_should_not_throw_errors() {

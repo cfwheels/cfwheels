@@ -33,14 +33,6 @@
 	<cfset local.binaryColumnType = "bytea">
 	<cfset local.bitColumnType = "boolean">
 	<cfset local.bitColumnDefault = "false">
-<cfelseif local.db IS "oracle">
-	<cfset local.identityColumnType = "number(38,0) NOT NULL">
-	<cfset local.dateTimeColumnType = "timestamp">
-	<cfset local.textColumnType = "varchar2(4000)">
-	<cfset local.intColumnType = "number(38,0)">
-	<cfset local.floatColumnType = "number(38,2)">
-	<cfset local.dateTimeDefault = "to_timestamp(#local.dateTimeDefault#,'yyyy-dd-mm hh24:mi:ss.FF')">
-	<cfset local.bitColumnType = "number(1)">
 </cfif>
 
 <!--- get a listing of all the tables and view in the database --->
@@ -283,28 +275,6 @@ CREATE TABLE CATEGORIES
 	,PRIMARY KEY(ID)
 ) #local.storageEngine#
 </cfquery>
-
-<!--- create oracle sequences --->
-<cfif local.db eq "oracle">
-	<cfloop list="#local.tables#" index="local.i">
-		<cfif !ListFindNoCase("cities,shops,combikeys,migratorversions", local.i)>
-			<cfset local.seq = "#local.i#_seq">
-			<cftry>
-			<cfquery name="local.query" datasource="#application.wheels.dataSourceName#">
-			DROP SEQUENCE #local.seq#
-			</cfquery>
-			<cfcatch></cfcatch>
-			</cftry>
-			<cfquery name="local.query" datasource="#application.wheels.dataSourceName#">
-			CREATE SEQUENCE #local.seq# START WITH 1 INCREMENT BY 1
-			</cfquery>
-			<cfquery name="local.query" datasource="#application.wheels.dataSourceName#">
-			CREATE TRIGGER bi_#local.i# BEFORE INSERT ON #local.i# FOR EACH ROW BEGIN SELECT #local.seq#.nextval INTO :NEW.<cfif local.i IS "photogalleries">photogalleryid<cfelseif local.i IS "photogalleryphotos">photogalleryphotoid<cfelse>id</cfif> FROM dual; END;
-			</cfquery>
-		</cfif>
-	</cfloop>
-</cfif>
-
 
 <!---
 create views

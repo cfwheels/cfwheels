@@ -11,7 +11,6 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_renameTable_renames_table() {
-		if(!application.testenv.isOracle){
 		t = migration.createTable(name=oldTableName, force=true);
 		t.string(columnNames="stringcolumn");
 		t.create();
@@ -22,7 +21,6 @@ component extends="wheels.tests.Test" {
 			assert("true");
 		} catch (any e) {
 			assert("false");
-		}
 		}
 	}
 

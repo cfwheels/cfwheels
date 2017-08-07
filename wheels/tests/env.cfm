@@ -42,10 +42,5 @@ if(application.wheels.serverName == 'Adobe ColdFusion' && listFirst(application.
 	application.testenv.isACF10=false;
 }
 
-// Is this Oracle? Is this just fantasy?
-application.testenv.isOracle=false;
 application.testenv.db=$dbinfo(datasource=application.wheels.dataSourceName, type="version");
-if(application.testenv.db.database_productname == "Oracle"){
-	application.testenv.isOracle=true;
-}
 </cfscript>

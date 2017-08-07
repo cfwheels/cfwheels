@@ -93,24 +93,13 @@ component extends="wheels.tests.Test" {
     info = $dbinfo(datasource=application.wheels.dataSourceName, type="version");
 		db = LCase(Replace(info.database_productname, " ", "", "all"));
 		transaction action="begin" {
-      if (db IS "oracle") {
-        author = model("author").findOne(where="firstName='Tony'");
-				author.lastName = " ";
-				author.save();
-				author = model("author").findOne(where="firstName='Tony'");
-      } else {
-        author = model("author").findOne(where="firstName='Tony'");
-				author.lastName = "";
-				author.save();
-				author = model("author").findOne(where="firstName='Tony'");
-      }
+			author = model("author").findOne(where="firstName='Tony'");
+			author.lastName = "";
+			author.save();
+			author = model("author").findOne(where="firstName='Tony'");
 			transaction action="rollback";
 		}
-    if (db IS "oracle") {
-      assert("IsObject(author) AND !len(trim(author.lastName))");
-    } else {
-      assert("IsObject(author) AND !len(author.lastName)");
-    }
+    assert("IsObject(author) AND !len(author.lastName)");
 	}
 
 }

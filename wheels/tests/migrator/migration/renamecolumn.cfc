@@ -5,7 +5,6 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_renameColumn_renames_column() {
-		if(!application.testenv.isOracle){
 		tableName = "dbm_renamecolumn_tests";
 		oldColumnName = "oldcolumn";
 		newColumnName = "newcolumn";
@@ -20,7 +19,6 @@ component extends="wheels.tests.Test" {
 
 		expected = newColumnName;
 		assert("ListFindNoCase(actual, expected)");
-	}
 	}
 
 }

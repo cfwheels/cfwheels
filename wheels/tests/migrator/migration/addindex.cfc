@@ -5,7 +5,6 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_addIndex_creates_an_index() {
-		if(!application.testenv.isOracle){
 		tableName = "dbm_addindex_tests";
 		indexName = "idx_to_add";
 		t = migration.createTable(name=tableName, force=true);
@@ -21,19 +20,12 @@ component extends="wheels.tests.Test" {
 
 		migration.dropTable(tableName);
 
-		// ACF10 doesn't like the UCASE which oracle needs
-		if(application.testenv.isACF10 && application.testenv.isOracle){
-			sql="SELECT * FROM query WHERE index_name = '#ucase(indexName)#'";
-		} else {
-			sql="SELECT * FROM query WHERE index_name = '#indexName#'";
-		}
+		sql="SELECT * FROM query WHERE index_name = '#indexName#'";
 
 		actual = $query(query=info, dbtype="query", sql=sql);
-
-	    assert("actual.recordCount eq 1");
+    assert("actual.recordCount eq 1");
 		assert("actual.non_unique");
 	}
-}
 	// todo: multi column index
 
 	// todo: unique index

@@ -16,11 +16,7 @@ component extends="Model" {
 		validateOnUpdate("validateOnUpdateCalled");
 		local.db_info = $dbinfo(datasource=application.wheels.dataSourceName, type="version");
 		local.db = LCase(Replace(local.db_info.database_productname, " ", "", "all"));
-		if (local.db IS "oracle") {
-			property(name="salesTotal", sql="SUM(birthDayMonth)", select=false, dataType="number");
-		} else {
-			property(name="salesTotal", sql="SUM(birthDayMonth)", select=false, dataType="int");
-		}
+		property(name="salesTotal", sql="SUM(birthDayMonth)", select=false, dataType="int");
 	}
 
 	function validateCalled() {

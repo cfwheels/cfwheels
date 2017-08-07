@@ -5,7 +5,6 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_updateRecord_updates_a_table_row() {
-		if(!application.testenv.isOracle){
 		tableName = "dbm_updaterecord_tests";
 		oldValue = "All you need is love";
 		newValue = "Love is all you need";
@@ -30,7 +29,6 @@ component extends="wheels.tests.Test" {
 
 		migration.dropTable(tableName);
 		assert("actual.lyric eq expected");
-	}
 	}
 
 }
