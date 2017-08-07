@@ -24,8 +24,6 @@ public string function $getDBType() {
 		local.adapterName = "Oracle";
 	} else if (local.info.driver_name Contains "PostgreSQL") {
 		local.adapterName = "PostgreSQL";
-	} else if (local.info.driver_name Contains "SQLite") {
-		local.adapterName = "SQLite";
 	// NB: using mySQL adapter for H2 as the cli defaults to this for development
 	} else if (local.info.driver_name Contains "H2") {
 	// determine the emulation mode
