@@ -7,7 +7,7 @@ env:
   global: #ftp credential for remote test server, encrypted with repo specific key
     - secure: "QZdX3M+wYTejkwHLseV/LwhPOCvkbONJcElHjdsrwb4xiuzZSdHiRYmTc+9hzyIOTb1hrylKZ8udMzIuZZTUCa0Ze30sQmcC83vGIteM+uzQr0RV9asf/4hL83cBye50f1OWIJlyq5FLvD0KMkhP+BnTA7jTI5UD8a4FX+F2UUU="
   matrix: #parallel test combination: Windows+ACF11/SQLServer+ACF10/Oracle, Lucee/H2, Lucee/MySQL, Lucee/PostgreSQL, Lucee/OracleEmulation
-    - PROFILE=mssql,acf10oracle PARAM=onlysecure
+    - PROFILE=mssql PARAM=onlysecure
     - PROFILE=jetty,lucee,subfolder PARAM=testParallelStart=true
     - PROFILE=jetty,lucee,mysql PARAM=none
     - PROFILE=jetty,lucee,postgresql PARAM=none
