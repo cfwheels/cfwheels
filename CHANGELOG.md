@@ -131,7 +131,7 @@
 * Class output is now dasherized (e.g. `field-with-errors` instead of `fieldWithErrors`).
 * The `renderPage` function has been renamed to `renderView`.
 * `dbmigrate` is now named `Migrator`
-* Migrator is disabled by default. Use `autoMigrateDatabase` setting to enable.
+* Automatic database migrations are disabled by default. Use `autoMigrateDatabase` setting to enable.
 * Migrator does not write .sql files by default. Use `writeMigratorSQLFiles` to enable
 * Migrator does not allow 'down' migrations outside of the 'development' environment by default. Use `allowMigrationDown` to enable.
 
