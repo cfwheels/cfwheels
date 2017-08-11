@@ -264,9 +264,12 @@ public struct function $argumentsForPartial() {
  */
 public string function $renderPartial() {
 	local.rv = "";
-	if (IsQuery(arguments.$partial) && arguments.$partial.recordCount) {
-		arguments.$name = request.wheels[$hashedKey(arguments.$partial)];
-		arguments.query = arguments.$partial;
+	if (IsQuery(arguments.$partial)) {
+		Throw(
+			type="Wheels.InvalidPartialArguments",
+			message="To use a query with a partial, you must specify both `partial` and `query` arguments",
+			extendedInfo="E.g. ##includePartial(partial=""user"", query=""users"")##"
+		);
 	} else if (IsObject(arguments.$partial)) {
 		arguments.$name = arguments.$partial.$classData().modelName;
 		arguments.object = arguments.$partial;
