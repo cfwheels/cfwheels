@@ -53,7 +53,7 @@ component extends="wheels.tests.Test" {
 		request.partialTests.currentTotal = 0;
 		request.partialTests.thirdUserName = "";
 		savecontent variable="result" {
-			WriteOutput(_controller.includePartial(usersQuery));
+			WriteOutput(_controller.includePartial(query=usersQuery, partial="user"));
 		}
 		assert("request.partialTests.currentTotal IS 15 AND request.partialTests.thirdUserName IS 'Per'");
 	}

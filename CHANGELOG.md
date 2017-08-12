@@ -19,12 +19,13 @@
 * Fix encoding on `buttonTo()` - [#798](https://github.com/cfwheels/cfwheels/issues/798) [Per Djurner]
 * Fix error when creating default table for migrations - [#791](https://github.com/cfwheels/cfwheels/issues/791) [Adam Chapman, Per Djurner]
 * Fix so calling `usesLayout()` in `Controller.cfc` does not affect layout of internal CFWheels pages - [#793](https://github.com/cfwheels/cfwheels/issues/793) [Adam Chapman, Per Djurner]
+* Fix slow performance of findAll - [#806](https://github.com/cfwheels/cfwheels/issues/806) [Andy Bellenie]
 
 ### Breaking Changes
 
 * Minimum version when running Lucee 5 is now 5.2.1.9 (can be disabled with the `disableEngineCheck` setting).
 * Minimum version when running ACF 2016 is now 2016,0,04,302561 (can be disabled with the `disableEngineCheck` setting).
-
+* includePartial() now requires the `partial` and `query` arguments to be set (if using a query)
 
 
 
