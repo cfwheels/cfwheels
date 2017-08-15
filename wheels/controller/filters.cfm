@@ -126,7 +126,7 @@ public void function $runFilters(required string type, required string action) {
 			local.result = $invoke(method=local.filter.through, invokeArgs=local.filter.arguments);
 
 			// If the filter returned false, rendered content or made a delayed redirect we skip the remaining filters.
-			if ((StructKeyExists(local, "result") && !local.result) || $performedRenderOrRedirect()) {
+			if ((StructKeyExists(local, "result") && !isNull(local.result) && !local.result) || $performedRenderOrRedirect()) {
 				break;
 			}
 
