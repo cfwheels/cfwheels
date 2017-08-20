@@ -339,6 +339,19 @@ public string function $formBeforeElement(
 	required string errorClass,
 	any encode=false
 ) {
+
+	// Encode all prepend type arguments if specified.
+	if (StructKeyExists(arguments, "encode") && IsBoolean(arguments.encode)) {
+		if (arguments.encode && $get("encodeHtmlTags")) {
+			if (Len(arguments.prepend)) {
+				arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
+			}
+			if (Len(arguments.prependToLabel)) {
+				arguments.prependToLabel = EncodeForHtml($canonicalize(arguments.prependToLabel));
+			}
+		}
+	}
+
 	local.rv = "";
 	arguments.label = $getFieldLabel(argumentCollection=arguments);
 	if ($formHasError(argumentCollection=arguments) && Len(arguments.errorElement)) {
@@ -378,8 +391,22 @@ public string function $formAfterElement(
 	required string append,
 	required string prependToLabel,
 	required string appendToLabel,
-	required string errorElement
+	required string errorElement,
+	any encode=false
 ) {
+
+	// Encode all append type arguments if specified.
+	if (StructKeyExists(arguments, "encode") && IsBoolean(arguments.encode)) {
+		if (arguments.encode && $get("encodeHtmlTags")) {
+			if (Len(arguments.append)) {
+				arguments.append = EncodeForHtml($canonicalize(arguments.append));
+			}
+			if (Len(arguments.appendToLabel)) {
+				arguments.appendToLabel = EncodeForHtml($canonicalize(arguments.appendToLabel));
+			}
+		}
+	}
+
 	local.rv = arguments.append;
 	arguments.label = $getFieldLabel(argumentCollection=arguments);
 	if (Len(arguments.label) && arguments.labelPlacement != "before") {

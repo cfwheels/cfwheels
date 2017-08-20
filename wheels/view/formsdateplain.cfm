@@ -43,7 +43,7 @@ public string function dateSelectTags(
 	string prependToLabel,
 	string appendToLabel,
 	boolean combine,
-	boolean encode,
+	any encode,
 	date $now=Now()
 ) {
 	$args(name="dateSelectTags", args=arguments);
@@ -95,7 +95,7 @@ public string function timeSelectTags(
 	string appendToLabel,
 	boolean combine,
 	boolean twelveHour,
-	boolean encode
+	any encode
 ) {
 	$args(name="timeSelectTags", args=arguments);
 	arguments.property = arguments.name;
@@ -162,7 +162,7 @@ public string function dateTimeSelectTags(
 	string appendToLabel,
 	boolean combine,
 	boolean twelveHour,
-	boolean encode
+	any encode
 ) {
 	$args(name="dateTimeSelectTags", args=arguments);
 	local.rv = "";
@@ -231,7 +231,7 @@ public string function yearSelectTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	boolean encode,
+	any encode,
 	date $now=Now()
 ) {
 	$args(name="yearSelectTag", args=arguments);
@@ -275,7 +275,7 @@ public string function monthSelectTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	boolean encode,
+	any encode,
 	date $now=Now()
 ) {
 	$args(name="monthSelectTag", args=arguments);
@@ -313,7 +313,7 @@ public string function daySelectTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	boolean encode,
+	any encode,
 	date $now=Now()
 ) {
 	$args(name="daySelectTag", args=arguments);
@@ -353,7 +353,7 @@ public string function hourSelectTag(
 	string prependToLabel,
 	string appendToLabel,
 	boolean twelveHour,
-	boolean encode,
+	any encode,
 	date $now=Now()
 ) {
 	$args(name="hourSelectTag", args=arguments);
@@ -393,7 +393,7 @@ public string function minuteSelectTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	boolean encode,
+	any encode,
 	date $now=Now()
 ) {
 	$args(name="minuteSelectTag", args=arguments);
@@ -433,7 +433,7 @@ public string function secondSelectTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	boolean encode,
+	any encode,
 	date $now=Now()
 ) {
 	$args(name="secondSelectTag", args=arguments);

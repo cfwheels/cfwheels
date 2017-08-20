@@ -24,7 +24,7 @@ public string function hasManyRadioButton(
 	required string tagValue,
 	boolean checkIfBlank=false,
 	string label,
-	boolean encode
+	any encode
 ) {
 	$args(name="hasManyRadioButton", args=arguments);
 	arguments.keys = Replace(arguments.keys, ", ", ",", "all");
@@ -76,7 +76,7 @@ public string function hasManyCheckBox(
 	string appendToLabel,
 	string errorElement,
 	string errorClass,
-	boolean encode
+	any encode
 ) {
 	$args(name="hasManyCheckBox", args=arguments);
 	arguments.keys = Replace(arguments.keys, ", ", ",", "all");

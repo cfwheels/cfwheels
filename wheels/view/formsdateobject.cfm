@@ -49,7 +49,7 @@ public string function dateSelect(
 	string errorElement,
 	string errorClass,
 	boolean combine,
-	boolean encode
+	any encode
 ) {
 	$args(name="dateSelect", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
@@ -104,7 +104,7 @@ public string function timeSelect(
 	string errorClass,
 	boolean combine,
 	boolean twelveHour,
-	boolean encode
+	any encode
 ) {
 	$args(name="timeSelect", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
@@ -173,7 +173,7 @@ public string function dateTimeSelect(
 	string errorClass,
 	boolean combine,
 	boolean twelveHour,
-	boolean encode
+	any encode
 ) {
 	$args(name="dateTimeSelect", reserved="name", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
