@@ -37,7 +37,7 @@ public string function textField(
 	string errorElement,
 	string errorClass,
 	string type="text",
-	boolean encode
+	any encode
 ) {
 	$args(name="textField", reserved="name", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
@@ -54,7 +54,8 @@ public string function textField(
 	if (!StructKeyExists(arguments, "value") || !Len(arguments.value)) {
 		arguments.value = $formValue(argumentCollection=arguments);
 	}
-	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=arguments.encode) & local.after;
+	local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
+	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=local.encode) & local.after;
 }
 
 /**
@@ -91,7 +92,7 @@ public string function passwordField(
 	string appendToLabel,
 	string errorElement,
 	string errorClass,
-	boolean encode
+	any encode
 ) {
 	$args(name="passwordField", reserved="type,name", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
@@ -109,7 +110,8 @@ public string function passwordField(
 	if (!StructKeyExists(arguments, "value") || !Len(arguments.value)) {
 		arguments.value = $formValue(argumentCollection=arguments);
 	}
-	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=arguments.encode) & local.after;
+	local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
+	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=local.encode) & local.after;
 }
 
 /**
@@ -182,7 +184,7 @@ public string function fileField(
 	string appendToLabel,
 	string errorElement,
 	string errorClass,
-	boolean encode
+	any encode
 ) {
 	$args(name="fileField", reserved="type,name", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
@@ -193,7 +195,8 @@ public string function fileField(
 	local.after = $formAfterElement(argumentCollection=arguments);
 	arguments.type = "file";
 	arguments.name = $tagName(arguments.objectName, arguments.property);
-	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=arguments.encode) & local.after;
+	local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
+	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=local.encode) & local.after;
 }
 
 /**
@@ -280,7 +283,7 @@ public string function radioButton(
 	string appendToLabel,
 	string errorElement,
 	string errorClass,
-	boolean encode
+	any encode
 ) {
 	$args(name="radioButton", reserved="type,name,value,checked", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
@@ -299,7 +302,8 @@ public string function radioButton(
 	if (arguments.tagValue == $formValue(argumentCollection=arguments)) {
 		arguments.checked = "checked";
 	}
-	return local.before & $tag(name="input", skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=arguments.encode) & local.after;
+	local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
+	return local.before & $tag(name="input", skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=local.encode) & local.after;
 }
 
 /**
@@ -340,7 +344,7 @@ public string function checkBox(
 	string appendToLabel,
 	string errorElement,
 	string errorClass,
-	boolean encode
+	any encode
 ) {
 	$args(name="checkBox", reserved="type,name,value,checked", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
@@ -356,7 +360,8 @@ public string function checkBox(
 	if (local.value == arguments.value || IsNumeric(local.value) && local.value == 1 || !IsNumeric(local.value) && IsBoolean(local.value) && local.value) {
 		arguments.checked = "checked";
 	}
-	local.rv = local.before & $tag(name="input", skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=arguments.encode);
+	local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
+	local.rv = local.before & $tag(name="input", skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=local.encode);
 	if (Len(arguments.uncheckedValue)) {
 		local.hiddenAttributes = {};
 		local.hiddenAttributes.type = "hidden";
@@ -411,7 +416,7 @@ public string function select(
 	string appendToLabel,
 	string errorElement,
 	string errorClass,
-	boolean encode
+	any encode
 ) {
 	$args(name="select", reserved="name", args=arguments);
 	arguments.objectName = $objectName(argumentCollection=arguments);
@@ -438,7 +443,7 @@ public string function select(
 		local.blankOptionAttributes = {value=""};
 		local.content = $element(name="option", content=local.blankOptionText, attributes=local.blankOptionAttributes, encode=arguments.encode) & local.content;
 	}
-	local.encode = arguments.encode ? "attributes" : false;
+	local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : "attributes";
 	return local.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", content=local.content, attributes=arguments, encode=local.encode) & local.after;
 }
 
@@ -449,7 +454,7 @@ public string function $optionsForSelect(
 	required any options,
 	required string valueField,
 	required string textField,
-	required boolean encode
+	required any encode
 ) {
 	local.value = $formValue(argumentCollection=arguments);
 	local.rv = "";
@@ -594,7 +599,7 @@ public string function $option(
 	required string objectValue,
 	required string optionValue,
 	required string optionText,
-	required boolean encode
+	required any encode
 ) {
 	local.optionAttributes = {value=arguments.optionValue};
 	if (arguments.optionValue == arguments.objectValue || ListFindNoCase(arguments.objectValue, arguments.optionValue)) {

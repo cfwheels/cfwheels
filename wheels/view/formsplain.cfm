@@ -28,7 +28,7 @@ public string function textFieldTag(
 	string prependToLabel,
 	string appendToLabel,
 	string type="text",
-	boolean encode
+	any encode
 ) {
 	$args(name="textFieldTag", args=arguments);
 	arguments.property = arguments.name;
@@ -65,7 +65,7 @@ public string function passwordFieldTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	boolean encode
+	any encode
 ) {
 	$args(name="passwordFieldTag", args=arguments);
 	arguments.property = arguments.name;
@@ -124,7 +124,7 @@ public string function fileFieldTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	boolean encode
+	any encode
 ) {
 	$args(name="fileFieldTag", args=arguments);
 	arguments.property = arguments.name;
@@ -199,7 +199,7 @@ public string function radioButtonTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	boolean encode
+	any encode
 ) {
 	$args(name="radioButtonTag", args=arguments);
 	arguments.property = arguments.name;
@@ -249,7 +249,7 @@ public string function checkBoxTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	boolean encode
+	any encode
 ) {
 	$args(name="checkBoxTag", args=arguments);
 	arguments.checkedValue = arguments.value;
@@ -312,7 +312,7 @@ public string function selectTag(
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	boolean encode
+	any encode
 ) {
 	$args(name="selectTag", args=arguments);
 	arguments.property = arguments.name;
