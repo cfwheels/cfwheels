@@ -32,8 +32,7 @@ component extends="[extends]" hint="[description]" {
 		transaction {
 			try {
 				addRecord(table='tableName', field='');
-			}
-			} catch (any e) {
+			}  catch (any e) {
 				local.exception = e;
 			}
 
