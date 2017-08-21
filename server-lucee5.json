@@ -10,9 +10,9 @@
             "enable":true,
             "config":"urlrewrite.xml"
         }
-    }, 
+    },
     "app":{
-        "cfengine":"lucee@5"
+        "cfengine":"lucee@5.2.1+009"
     },
     "name":"lucee5"
 }

@@ -12,7 +12,7 @@
         }
     },
     "app":{
-        "cfengine":"lucee@4"
+        "cfengine":"lucee@4.5.5+006"
     },
     "name":"lucee4"
 }

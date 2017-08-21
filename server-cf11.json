@@ -10,9 +10,9 @@
             "enable":true,
             "config":"urlrewrite.xml"
         }
-    }, 
+    },
     "app":{
-        "cfengine":"adobe@11"
+        "cfengine":"adobe@11.0.12+302575"
     },
     "name":"cf11"
 }

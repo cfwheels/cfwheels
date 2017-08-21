@@ -12,7 +12,7 @@
         }
     },
     "app":{
-        "cfengine":"adobe@10"
+        "cfengine":"adobe@10.0.23+302580"
     },
     "name":"cf10"
 }

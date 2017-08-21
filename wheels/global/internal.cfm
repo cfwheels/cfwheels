@@ -853,32 +853,32 @@ public void function $clearControllerInitializationCache() {
 private string function $checkMinimumVersion(required string engine, required string version) {
 	local.rv = "";
 	local.version = Replace(arguments.version, ".", ",", "all");
-	local.major = ListGetAt(local.version, 1);
+	local.major = Val(ListGetAt(local.version, 1));
 	local.minor = 0;
 	local.patch = 0;
 	local.build = 0;
 	if (ListLen(local.version) > 1) {
-		local.minor = ListGetAt(local.version, 2);
+		local.minor = Val(ListGetAt(local.version, 2));
 	}
 	if (ListLen(local.version) > 2) {
-		local.patch = ListGetAt(local.version, 3);
+		local.patch = Val(ListGetAt(local.version, 3));
 	}
 	if (ListLen(local.version) > 3) {
-		local.build = ListGetAt(local.version, 4);
+		local.build = Val(ListGetAt(local.version, 4));
 	}
 	if (arguments.engine == "Lucee") {
 		local.minimumMajor = "4";
 		local.minimumMinor = "5";
 		local.minimumPatch = "5";
-		local.minimumBuild = "006";
-		local.5 = {minimumMinor=0, minimumPatch=2};
+		local.minimumBuild = "6";
+		local.5 = {minimumMinor=2, minimumPatch=1, minimumBuild=9};
 	} else if (arguments.engine == "Adobe ColdFusion") {
 		local.minimumMajor = "10";
 		local.minimumMinor = "0";
 		local.minimumPatch = "23";
-		local.minimumBuild = "";
-		local.11 = {minimumMinor=0, minimumPatch=12};
-		local.2016 = {minimumMinor=0, minimumPatch=4};
+		local.minimumBuild = "302580";
+		local.11 = {minimumMinor=0, minimumPatch=12, minimumBuild=302575};
+		local.2016 = {minimumMinor=0, minimumPatch=4, minimumBuild=302561};
 	} else {
 		local.rv = false;
 	}
