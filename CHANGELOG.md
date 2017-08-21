@@ -1,5 +1,5 @@
 <a name="2.0.0-rc.1"></a>
-# [2.0.0 RC 1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-rc.1) (??/??/2017)
+# [2.0.0 RC 1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-rc.1) (08/21/2017)
 
 ### Model Enhancements
 
