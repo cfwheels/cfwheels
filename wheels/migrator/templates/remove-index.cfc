@@ -16,7 +16,7 @@ component extends="[extends]" hint="[description]" {
 			try {
 				removeIndex(table='tableName', indexName='');
 			}
-			} catch (any e) {
+			catch (any e) {
 				local.exception = e;
 			}
 
@@ -34,7 +34,7 @@ component extends="[extends]" hint="[description]" {
 			try {
 				addIndex(table='tableName', columnNames='columnName', unique=true);
 			}
-			} catch (any e) {
+			 catch (any e) {
 				local.exception = e;
 			}
 
