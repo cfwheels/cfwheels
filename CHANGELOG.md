@@ -8,6 +8,7 @@
 ### View Enhancements
 
 * Use association to create automatic property labels on `belongsTo()` - [#618](https://github.com/cfwheels/cfwheels/issues/618) [Andy Bellenie, Chris Peters]
+* The output of all view helpers is now encoded by default - [#777](https://github.com/cfwheels/cfwheels/issues/777) [Per Djurner]
 
 ### Controller Enhancements
 

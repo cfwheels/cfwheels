@@ -223,7 +223,7 @@ public string function paginationLinks(
 	string name,
 	boolean showSinglePage,
 	boolean pageNumberAsParam,
-	boolean encode
+	any encode
 ) {
 	$args(name="paginationLinks", args=arguments);
 	local.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,prependOnAnchor,appendToPage,appendOnLast,appendOnAnchor,classForCurrent,handle,name,showSinglePage,pageNumberAsParam";
@@ -248,7 +248,7 @@ public string function paginationLinks(
 	}
 
 	// Encode all prepend / append type arguments if specified.
-	if (arguments.encode && $get("encodeHtmlTags")) {
+	if (IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags")) {
 		if (Len(arguments.prepend)) {
 			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
 		}
@@ -318,7 +318,7 @@ public string function paginationLinks(
 					local.middle &= linkTo(argumentCollection=local.linkToArguments);
 				} else {
 					if (Len(arguments.classForCurrent)) {
-						local.middle &= $element(name="span", content=NumberFormat(local.i), class=arguments.classForCurrent, encode=false);
+						local.middle &= $element(name="span", content=NumberFormat(local.i), class=arguments.classForCurrent, encode=arguments.encode);
 					} else {
 						local.middle &= NumberFormat(local.i);
 					}
