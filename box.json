@@ -1,7 +1,8 @@
 {
     "name":"CFWheels",
-    "version":"2.0.0-beta.1",
+    "version":"2.0.0-rc.1",
     "author":"CFWheels Core Team and Community",
+    "location": "https://github.com/cfwheels/cfwheels/releases/download/v2.0.0-rc.1/cfwheels-2.0.0-rc.1.zip",
     "directory":"",
     "createPackageDirectory":false,
     "packageDirectory":"",
