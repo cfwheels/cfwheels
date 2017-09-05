@@ -169,9 +169,22 @@ public string function submitTag(
 	string image,
 	string prepend,
 	string append,
-	boolean encode
+	any encode
 ) {
 	$args(name="submitTag", reserved="type,src", args=arguments);
+
+	// Encode all prepend / append type arguments if specified.
+	if (IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags")) {
+		if (Len(arguments.prepend)) {
+			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
+		}
+		if (Len(arguments.append)) {
+			arguments.append = EncodeForHtml($canonicalize(arguments.append));
+		}
+	}
+
+	arguments.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
+
 	local.rv = arguments.prepend;
 	local.append = arguments.append;
 	if (Len(arguments.image)) {
@@ -217,12 +230,22 @@ public string function buttonTag(
 ) {
 	$args(name="buttonTag", args=arguments);
 
+	// Encode all prepend / append type arguments if specified.
+	if (IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags")) {
+		if (Len(arguments.prepend)) {
+			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
+		}
+		if (Len(arguments.append)) {
+			arguments.append = EncodeForHtml($canonicalize(arguments.append));
+		}
+	}
+
 	// if image is specified then use that as the content
 	if (Len(arguments.image)) {
 		local.args = {};
 		local.args.type = "image";
 		local.args.source = arguments.image;
-		local.args.encode = arguments.encode;
+		local.args.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
 		arguments.content = imageTag(argumentCollection=local.args);
 		arguments.encode = arguments.encode ? "attributes" : false;
 	}
