@@ -368,7 +368,7 @@ public string function checkBox(
 		local.hiddenAttributes.id = arguments.id & "-checkbox";
 		local.hiddenAttributes.name = arguments.name & "($checkbox)";
 		local.hiddenAttributes.value = arguments.uncheckedValue;
-		local.rv &= $tag(name="input", attributes=local.hiddenAttributes, encode=arguments.encode);
+		local.rv &= $tag(name="input", attributes=local.hiddenAttributes, encode=local.encode);
 	}
 	local.rv &= local.after;
 	return local.rv;

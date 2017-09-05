@@ -1,3 +1,12 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0) (??/??/2017)
+
+### Bug Fixes
+
+* Support passing in `encode="attributes"` to `paginationLinks()`, `checkBoxTag()`, and `checkBox()` - [#816](https://github.com/cfwheels/cfwheels/issues/816) [Per Djurner, Tom King]
+
+
+
 <a name="2.0.0-rc.1"></a>
 # [2.0.0 RC 1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-rc.1) (08/21/2017)
 

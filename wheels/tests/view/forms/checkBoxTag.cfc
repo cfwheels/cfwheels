@@ -22,4 +22,10 @@ component extends="wheels.tests.Test" {
 		assert('e eq r');
 	}
 
+	function test_encoding_attributes() {
+		e = _controller.checkBoxTag(name="gender", value="", checked=false, uncheckedvalue=1, encode="attributes");
+		r = '<input id="gender" name="gender" type="checkbox" value=""><input id="gender-checkbox" name="gender&##x28;&##x24;checkbox&##x29;" type="hidden" value="1">';
+		assert('e eq r');
+	}
+
 }
