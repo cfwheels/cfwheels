@@ -10,11 +10,11 @@
  * @append [see:textField],
  * @encode [see:styleSheetLinkTag].
  */
-public string function endFormTag(string prepend, string append, boolean encode) {
+public string function endFormTag(string prepend, string append, any encode) {
 	$args(name="endFormTag", args=arguments);
 
 	// Encode all prepend / append type arguments if specified.
-	if (arguments.encode && $get("encodeHtmlTags")) {
+	if (IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags")) {
 		if (Len(arguments.prepend)) {
 			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
 		}
@@ -22,6 +22,7 @@ public string function endFormTag(string prepend, string append, boolean encode)
 			arguments.append = EncodeForHtml($canonicalize(arguments.append));
 		}
 	}
+	arguments.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
 
 	if (StructKeyExists(request.wheels, "currentFormMethod")) {
 		StructDelete(request.wheels, "currentFormMethod");
@@ -68,13 +69,13 @@ public string function startFormTag(
 	numeric port,
 	string prepend,
 	string append,
-	boolean encode
+	any encode
 ) {
 	$args(name="startFormTag", args=arguments);
 	local.routeAndMethodMatch = false;
 
 	// Encode all prepend / append type arguments if specified.
-	if (arguments.encode && $get("encodeHtmlTags")) {
+	if (IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags")) {
 		if (Len(arguments.prepend)) {
 			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
 		}
@@ -82,6 +83,7 @@ public string function startFormTag(
 			arguments.append = EncodeForHtml($canonicalize(arguments.append));
 		}
 	}
+	arguments.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
 
 	// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
 	request.wheels.currentFormMethod = arguments.method;
@@ -182,7 +184,6 @@ public string function submitTag(
 			arguments.append = EncodeForHtml($canonicalize(arguments.append));
 		}
 	}
-
 	arguments.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
 
 	local.rv = arguments.prepend;
