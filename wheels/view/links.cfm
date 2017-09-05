@@ -143,7 +143,7 @@ public string function buttonTo(
 		// variables passed in as route arguments should not be added to the html element
 		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
 	}
-	local.encode = arguments.encode ? "attributes" : false;
+	local.encode = IsBoolean(arguments.encode) && arguments.encode ? "attributes" : false;
 	if ($isRequestProtectedFromForgery() && ListFindNoCase("post,put,patch,delete", arguments.method)) {
 		local.content &= authenticityTokenField();
 	}
