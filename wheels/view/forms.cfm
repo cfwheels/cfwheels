@@ -380,7 +380,8 @@ public string function $formBeforeElement(
 	arguments.label = $getFieldLabel(argumentCollection=arguments);
 	if ($formHasError(argumentCollection=arguments) && Len(arguments.errorElement)) {
 		// the input has an error and should be wrapped in a tag so we need to start that wrapper tag
-		local.rv &= $tag(name=arguments.errorElement, class=arguments.errorClass, encode=arguments.encode);
+		local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
+		local.rv &= $tag(name=arguments.errorElement, class=arguments.errorClass, encode=local.encode);
 	}
 	if (Len(arguments.label) && arguments.labelPlacement != "after") {
 		local.rv &= $createLabel(argumentCollection=arguments);
