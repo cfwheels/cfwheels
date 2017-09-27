@@ -174,7 +174,7 @@ public string function $yearMonthHourMinuteSecondSelectTag(
 	string $optionNames="",
 	boolean twelveHour=false,
 	date $now=Now(),
-	boolean encode=false
+	any encode=false
 ) {
 	local.optionContent = "";
 
@@ -230,7 +230,7 @@ public string function $yearMonthHourMinuteSecondSelectTag(
 			local.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=local.args);
 		}
 	}
-	local.encode = arguments.encode ? "attributes" : false;
+	local.encode = IsBoolean(arguments.encode) && arguments.encode ? "attributes" : false;
 	return local.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour,encode", skipStartingWith="label", content=local.content, attributes=arguments, encode=local.encode) & local.after;
 }
 
