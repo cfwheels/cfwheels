@@ -1,10 +1,10 @@
 <a name="2.0.0"></a>
-# [2.0.0](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0) (??/??/2017)
+# [2.0.0](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0) (09/30/2017)
 
 ### Bug Fixes
 
 * Support passing in `encode="attributes"` to `submitTag()`, `buttonTag()`, `paginationLinks()`, `checkBoxTag()`, and `checkBox()` - [#816](https://github.com/cfwheels/cfwheels/issues/816) [Per Djurner, Tom King]
-
+* Support passing in `encode="attributes"` to date helpers - [#818](https://github.com/cfwheels/cfwheels/issues/818) [Per Djurner]
 
 
 <a name="2.0.0-rc.1"></a>
