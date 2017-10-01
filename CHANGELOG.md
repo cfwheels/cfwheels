@@ -7,6 +7,8 @@
 * Support passing in `encode="attributes"` to date helpers - [#818](https://github.com/cfwheels/cfwheels/issues/818) [Per Djurner]
 
 
+
+
 <a name="2.0.0-rc.1"></a>
 # [2.0.0 RC 1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-rc.1) (08/21/2017)
 
@@ -39,6 +41,7 @@
 
 
 
+
 <a name="2.0.0-beta.1"></a>
 # [2.0.0 Beta 1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-beta.1) (5/31/2017)
 
@@ -49,7 +52,6 @@
 * Support for boolean `returnIncluded` argument in `properties()` for returning nested properties - [Adam Chapman]
 * Support for calling `updateProperty()` with dynamic argument, e.g. `updateProperty(firstName="Per")` - [Per Djurner]
 * Support for using boolean transaction argument, e.g. `update(transaction=false)` - [#654](https://github.com/cfwheels/cfwheels/issues/654) [Adam Chapman]
-* Support for MariaDB - [#563](https://github.com/cfwheels/cfwheels/issues/563) [AlexeiCF, Adam Chapman]
 * Model instance `isPersisted()` and `propertyIsBlank()` methods - [#559](https://github.com/cfwheels/cfwheels/issues/559) [Chris Peters]
 * Database Migrations (dbmigrate) now available in the core (See Breaking Changes) - [#664](https://github.com/cfwheels/cfwheels/issues/664) [Adam Chapman, Tom King, Mike Grogan]
 * Databases can now be automatically migrated to the latest version on application start - [#766](https://github.com/cfwheels/cfwheels/issues/766) [Tom King]
@@ -79,8 +81,6 @@
 ### Bug Fixes
 
 * Fixes skipped model instantiation due to Linux file case sensitivity - [#643](https://github.com/cfwheels/cfwheels/issues/643) [Adam Chapman, Tom King]
-* Added spatial datatypes for MySQL - [#660](https://github.com/cfwheels/cfwheels/issues/660) [Normal Cesar]
-* Made `humanize()` keep spaces in input - [#663](https://github.com/cfwheels/cfwheels/issues/663) [Per Djurner, Chris Peters]
 * Avoid double redirect error when doing delayed redirects from a verification handler function - [Per Djurner]
 * Fixes attempts to insert nulls for blank strings - [#654](https://github.com/cfwheels/cfwheels/issues/654) [Andy Bellenie, Per Djurner]
 * Fix for using `validatePresenceOf()` with default on update - [Andy Bellenie]
@@ -145,6 +145,22 @@
 * Automatic database migrations are disabled by default. Use `autoMigrateDatabase` setting to enable.
 * Migrator does not write .sql files by default. Use `writeMigratorSQLFiles` to enable
 * Migrator does not allow 'down' migrations outside of the 'development' environment by default. Use `allowMigrationDown` to enable.
+
+
+
+
+<a name="1.4.6"></a>
+## [1.4.6](https://github.com/cfwheels/cfwheels/releases/tag/v1.4.6) (10/1/2017)
+
+### Bug Fixes
+
+* Made humanize() keep spaces in input - #663 [Per Djurner, Chris Peters]
+* Added spatial datatypes for MySQL - #660 [Norman Cesar]
+* Scope variable to avoid object being returned as NULL - #783 [Adam Larsen, Dmitry Yakhnov]
+* Include "MariaDB" in database check connection string - #563 [Adam Chapman]
+* Fixes MySQL attempts to insert nulls for blank strings - #680 [Andy Bellenie]
+
+
 
 
 <a name="1.4.5"></a>
