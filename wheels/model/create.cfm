@@ -154,7 +154,8 @@
 		loc.sql2 = [];
 		for (loc.key in variables.wheels.class.properties)
 		{
-			if (StructKeyExists(this, loc.key))
+			// only include this property if it has a value, or the column is not nullable and has no default set
+			if (StructKeyExists(this, loc.key) && (Len(this[loc.key]) or (!variables.wheels.class.properties[loc.key].nullable && !Len(variables.wheels.class.properties[loc.key].columndefault))))
 			{
 				ArrayAppend(loc.sql, variables.wheels.class.properties[loc.key].column);
 				ArrayAppend(loc.sql, ",");

@@ -1,3 +1,14 @@
+1.4.6 (10/1/2017)
+
+Bug Fixes
+=========
+
+* Made humanize() keep spaces in input - #663 [Per Djurner, Chris Peters]
+* Added spatial datatypes for MySQL - #660 [Norman Cesar]
+* Scope variable to avoid object being returned as NULL - #783 [Adam Larsen, Dmitry Yakhnov]
+* Include "MariaDB" in database check connection string - #563 [Adam Chapman]
+* Fixes MySQL attempts to insert nulls for blank strings - #680 [Andy Bellenie]
+
 1.4.5 (3/30/2016)
 
 Bug Fixes

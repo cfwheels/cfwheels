@@ -491,6 +491,9 @@
 			}
 		}
 
+		// support multiple word input by stripping out all double spaces created
+		loc.rv = Replace(loc.rv, "  ", " ", "all");
+
 		// capitalize the first letter and trim final result (which removes the leading space that happens if the string starts with an upper case character)
 		loc.rv = Trim(capitalize(loc.rv));
 	</cfscript>
