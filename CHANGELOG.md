@@ -6,6 +6,10 @@
 * Support passing in `encode="attributes"` to `submitTag()`, `buttonTag()`, `paginationLinks()`, `checkBoxTag()`, and `checkBox()` - [#816](https://github.com/cfwheels/cfwheels/issues/816) [Per Djurner, Tom King]
 * Support passing in `encode="attributes"` to date helpers - [#818](https://github.com/cfwheels/cfwheels/issues/818) [Per Djurner]
 
+### Breaking Changes
+
+* Support for Oracle has been dropped.
+
 
 
 
