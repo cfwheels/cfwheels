@@ -18,8 +18,8 @@
 
       <div class="column">
         <p class="float-right">
-          <a class="button button-outline" href="#URLFor(action="wheels", controller="wheels", params="view=tests&type=#params.type#")#">Run All Tests</a>
-          <a class="button button-outline" href="#URLFor(action="wheels", controller="wheels", params="view=tests&type=#params.type#&reload=true")#">Reload Test Data</a>
+          <a class="button button-outline" href="#linkParams#">Run All Tests</a>
+          <a class="button button-outline" href="#linkParams#&reload=true">Reload Test Data</a>
         <p>
       </div>
 
