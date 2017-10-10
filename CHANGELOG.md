@@ -1,3 +1,12 @@
+<a name="2.0.1"></a>
+# 2.0.1 (TBA)
+
+### Bug Fixes
+
+* Fixes reload links on application test suite page - [#820](https://github.com/cfwheels/cfwheels/issues/820) [Michael Diederich]
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0) (09/30/2017)
 
