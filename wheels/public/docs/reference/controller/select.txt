@@ -5,6 +5,12 @@ authors = model("author").findAll();
 <!--- View code--->
 #select(objectName="book", property="authorId", options=authors)#
 
+<!---
+	Do this when CFWheels isn't grabbing the correct values for the `option`s' values and display texts
+	Note that `valueField` and `textField` are both required when using this option
+--->
+#select(objectName="book", property="authorId", options=authors, valueField="id", textField="authorfullname")#
+
 // Example 2: Shows `select` fields for selecting order statuses for all shipments provided by the `orders` association and nested properties
 // Controller code
 shipment = model("shipment").findByKey(key=params.key, where="shipments.statusId=#application.NEW_STATUS_ID#", include="order");
