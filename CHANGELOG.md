@@ -4,7 +4,8 @@
 ### Bug Fixes
 
 * Fixes reload links on application test suite page - [#820](https://github.com/cfwheels/cfwheels/issues/820) [Michael Diederich]
-* Set `dbname` in `cfdbinfo` calls when using custom database connection string - [#822](https://github.com/cfwheels/cfwheels/issues/820) [Per Djurner]
+* Set `dbname` in `cfdbinfo` calls when using custom database connection string - [#822](https://github.com/cfwheels/cfwheels/issues/822) [Per Djurner]
+* Fixes `humanize()` function - [#663](https://github.com/cfwheels/cfwheels/issues/663) [Chris Peters, Per Djurner, kmd1970]
 
 
 

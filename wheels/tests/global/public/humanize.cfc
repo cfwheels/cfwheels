@@ -5,6 +5,17 @@ component extends="wheels.tests.Test" {
 		assert("NOT Compare(result, 'Wheels Is A Framework')");
 	}
 
+	function test_unchanged() {
+		result = humanize("Website (SP Referral)");
+		assert("NOT Compare(result, 'Website (SP Referral)')");
+		result = humanize("Moto-Type");
+		assert("NOT Compare(result, 'Moto-Type')");
+		result = humanize("All AIMS users");
+		assert("NOT Compare(result, 'All AIMS users')");
+		result = humanize("FTRI staff");
+		assert("NOT Compare(result, 'FTRI staff')");
+	}
+
 	function test_variable_starting_with_uppercase() {
 		result = humanize("WheelsIsAFramework");
 		assert("NOT Compare(result, 'Wheels Is A Framework')");

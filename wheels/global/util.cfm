@@ -64,8 +64,12 @@ public string function humanize(required string text, string except="") {
 	// add a space before every capitalized word
 	local.rv = REReplace(arguments.text, "([[:upper:]])", " \1", "all");
 
+	// remove space after punctuation chars
+	local.rv = REReplace(local.rv, "([[:punct:]])([[:space:]])", "\1", "all");
+
 	// fix abbreviations so they form a word again (example: aURLVariable)
 	local.rv = REReplace(local.rv, "([[:upper:]]) ([[:upper:]])(?:\s|\b)", "\1\2", "all");
+	local.rv = REReplace(local.rv, "([[:upper:]])([[:upper:]])([[:lower:]])", "\1\2 \3", "all");
 
 	if (Len(arguments.except)) {
 		local.iEnd = ListLen(arguments.except, " ");
