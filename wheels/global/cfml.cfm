@@ -184,25 +184,29 @@
 	</cfif>
 	
 	<!---
-		Get database name to use (sometimes it's unknown because it's specified inside a connection string).
-		When that happens CF will just get any of the database that the data source has access to (which can incorrectly be "information_schema" for example).
+		If the cfdbinfo call fails we try it again, this time setting "dbname" explicitly.
+		Sometimes the call fails when using a custom database connection string.
+		In that case the database name is not known by the CF server and it will just use any of the databases that the data source has access to.
+		That can incorrectly be "information_schema" for example.
 	--->
-	<cfif arguments.type IS NOT "version">
-		<cfset local.type = arguments.type>
-		<cfset arguments.type = "dbnames">
+	<cftry>
 		<cfdbinfo attributeCollection="#arguments#">
-		<cfif local.rv.recordCount GT 1>
-			<cfloop query="local.rv">
-				<cfif database_name IS NOT "information_schema">
-					<cfset arguments.dbname = database_name>
-				</cfif>
-			</cfloop>
-		</cfif>
-		<cfset arguments.type = local.type>
-	</cfif>
+		<cfcatch>
+			<cfset local.type = arguments.type>
+			<cfset arguments.type = "dbnames">
+			<cfdbinfo attributeCollection="#arguments#">
+			<cfif local.rv.recordCount GT 1>
+				<cfloop query="local.rv">
+					<cfif database_name IS NOT "information_schema">
+						<cfset arguments.dbname = database_name>
+					</cfif>
+				</cfloop>
+			</cfif>
+			<cfset arguments.type = local.type>
+			<cfdbinfo attributeCollection="#arguments#">
+		</cfcatch>
+	</cftry>
 	
-	<cfdbinfo attributeCollection="#arguments#">
-
 	<!--- Override name of database adapter when running internal tests --->
 	<cfif arguments.type IS "version" AND StructKeyExists(url, "controller") AND StructKeyExists(url, "action") AND StructKeyExists(url, "view") AND StructKeyExists(url, "type") AND StructKeyExists(url, "adapter")>
 		<cfif url.controller IS "wheels" AND url.action IS "wheels" AND url.view IS "tests" AND url.type IS "core">
