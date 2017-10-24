@@ -182,6 +182,25 @@
 	<cfif StructKeyExists(arguments, "password") && !Len(arguments.password)>
 		<cfset StructDelete(arguments, "password")>
 	</cfif>
+	
+	<!---
+		Get database name to use (sometimes it's unknown because it's specified inside a connection string).
+		When that happens CF will just get any of the database that the data source has access to (which can incorrectly be "information_schema" for example).
+	--->
+	<cfif arguments.type IS NOT "version">
+		<cfset local.type = arguments.type>
+		<cfset arguments.type = "dbnames">
+		<cfdbinfo attributeCollection="#arguments#">
+		<cfif local.rv.recordCount GT 1>
+			<cfloop query="local.rv">
+				<cfif database_name IS NOT "information_schema">
+					<cfset arguments.dbname = database_name>
+				</cfif>
+			</cfloop>
+		</cfif>
+		<cfset arguments.type = local.type>
+	</cfif>
+	
 	<cfdbinfo attributeCollection="#arguments#">
 
 	<!--- Override name of database adapter when running internal tests --->
