@@ -147,8 +147,8 @@ public string function startFormTag(
 	if ($isRequestProtectedFromForgery() && ListFindNoCase("post,put,patch,delete", arguments.method)) {
 		local.rv &= authenticityTokenField();
 	}
-	if (structKeyExists(local, "method") && local.method != "get") {
-		local.rv &= hiddenFieldTag(name="_method", value=local.method);
+	if (structKeyExists(arguments, "method") && arguments.method != "get") {
+		local.rv &= hiddenFieldTag(name="_method", value=arguments.method);
 	}
 	return local.rv;
 }
