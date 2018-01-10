@@ -9,6 +9,7 @@
  * @sources The name of one or many CSS files in the stylesheets folder, minus the `.css` extension. Pass a full URL to generate a tag for an external style sheet. Can also be called with the `source` argument.
  * @type The `type` attribute for the `link` tag.
  * @media The `media` attribute for the `link` tag.
+ * @rel  The `rel` attribute for the relation between the tag and href.
  * @head Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior (which is to place the output where the function is called from).
  * @delim The delimiter to use for the list of CSS files.
  * @encode When set to `true`, encodes tag content, attribute values, and URLs so that Cross Site Scripting (XSS) attacks can be prevented. Set to `attributes` to only encode attribute values and not tag content.
@@ -17,18 +18,22 @@ public string function styleSheetLinkTag(
 	string sources="",
 	string type,
 	string media,
+	string rel,
 	boolean head,
 	string delim=",",
 	boolean encode
 ) {
-	$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
+	$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href");
 	if (!Len(arguments.type)) {
 		StructDelete(arguments, "type");
 	}
 	if (!Len(arguments.media)) {
 		StructDelete(arguments, "media");
 	}
-	arguments.rel = "stylesheet";
+	if (!structKeyExists(arguments, "rel") || !Len(arguments.rel)) {
+		arguments.rel = "stylesheet";
+	}
+
 	local.rv = "";
 	arguments.sources = $listClean(list=arguments.sources, returnAs="array", delim=arguments.delim);
 	local.iEnd = ArrayLen(arguments.sources);
