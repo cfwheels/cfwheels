@@ -6,8 +6,8 @@
 * Fixes reload links on application test suite page - [#820](https://github.com/cfwheels/cfwheels/issues/820) [Michael Diederich]
 * Set `dbname` in `cfdbinfo` calls when using custom database connection string - [#822](https://github.com/cfwheels/cfwheels/issues/822) [Per Djurner]
 * Fixes `humanize()` function - [#663](https://github.com/cfwheels/cfwheels/issues/663) [Chris Peters, Per Djurner, kmd1970]
-* Enables the `rel` attribute for `stylesheetlinkTag()` [PR#834](https://github.com/cfwheels/cfwheels/pull/834) [Michael Diederich]
-* Returning a `NULL` value from a query with NULL support enabled no longer throws an error [PR#834](https://github.com/cfwheels/cfwheels/pull/834) [Michael Diederich]
+* Enables the `rel` attribute for `stylesheetlinkTag()` - [#834](https://github.com/cfwheels/cfwheels/pull/834) [Michael Diederich]
+* Returning a `NULL` value from a query with NULL support enabled no longer throws an error - [#834](https://github.com/cfwheels/cfwheels/pull/834) [Michael Diederich]
 
 
 
