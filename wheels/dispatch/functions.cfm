@@ -105,11 +105,39 @@ public struct function $findMatchingRoute(required string path, string requestMe
 
 	// Throw error if no route was found.
 	if (!StructKeyExists(local, "rv")) {
-		$throwErrorOrShow404Page(
-			type="Wheels.RouteNotFound",
-			message="Could not find a route that matched this request.",
-			extendedInfo="Make sure there is a route configured in your `config/routes.cfm` file that matches the `#arguments.path#` request."
-		);
+
+		local.alternativeMatchingMethodsForURL="";
+
+		// Try and provide some more information for why the route hasn't matched:
+		// For example, the developer is accidentally GETing to a route which only allows POST
+		for (local.route in application.wheels.routes) {
+
+			// Make sure route has been converted to regular expression.
+			if (!StructKeyExists(local.route, "regex")) {
+				local.route.regex = application.wheels.mapper.$patternToRegex(local.route.pattern);
+			}
+
+			// If route matches regular expression, append to alternatives to display
+			if (REFindNoCase(local.route.regex, arguments.path) || (!Len(arguments.path) && local.route.pattern == "/")) {
+				local.alternativeMatchingMethodsForURL=ListAppend(local.alternativeMatchingMethodsForURL, local.route.methods)
+			}
+		}
+
+		// If we have any routes which match the regex, but not the method, add this information to the error message.
+		if ( len(local.alternativeMatchingMethodsForURL) ) {
+			$throwErrorOrShow404Page(
+				type="Wheels.RouteNotFound",
+				message="Incorrect HTTP Verb for route",
+				extendedInfo="The `#arguments.path#` path does not allow `#arguments.requestMethod#` requests, only `#UCASE(local.alternativeMatchingMethodsForURL)#` requests. Ensure you are using the correct HTTP Verb and that your `config/routes.cfm` file is configured correctly."
+			);
+		} else {
+			$throwErrorOrShow404Page(
+				type="Wheels.RouteNotFound",
+				message="Could not find a route that matched this request.",
+				extendedInfo="Make sure there is a route configured in your `config/routes.cfm` file that matches the `#arguments.path#` request."
+			);
+
+		}
 	}
 
 	return local.rv;

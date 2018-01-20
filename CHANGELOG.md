@@ -8,6 +8,7 @@
 * Fixes `humanize()` function - [#663](https://github.com/cfwheels/cfwheels/issues/663) [Chris Peters, Per Djurner, kmd1970]
 * Enables the `rel` attribute for `stylesheetlinkTag()` - [#834](https://github.com/cfwheels/cfwheels/pull/834) [Michael Diederich]
 * Returning a `NULL` value from a query with NULL support enabled no longer throws an error - [#834](https://github.com/cfwheels/cfwheels/pull/834) [Michael Diederich]
+* Accessing a route with incorrect verb now provides a more useful error message - [#800](https://github.com/cfwheels/cfwheels/issues/800) [Tom King]
 
 
 
