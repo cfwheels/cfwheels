@@ -119,7 +119,7 @@ public struct function $findMatchingRoute(required string path, string requestMe
 
 			// If route matches regular expression, append to alternatives to display
 			if (REFindNoCase(local.route.regex, arguments.path) || (!Len(arguments.path) && local.route.pattern == "/")) {
-				local.alternativeMatchingMethodsForURL=ListAppend(local.alternativeMatchingMethodsForURL, local.route.methods)
+				local.alternativeMatchingMethodsForURL=ListAppend(local.alternativeMatchingMethodsForURL, local.route.methods);
 			}
 		}
 
