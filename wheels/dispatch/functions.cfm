@@ -55,17 +55,19 @@ public struct function $createNestedParamStruct(required struct params) {
 			local.struct = local.rv[local.name];
 			local.iEnd = ArrayLen(local.nested);
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
-				local.item = local.nested[local.i];
-				if (!StructKeyExists(local.struct, local.item)) {
-					local.struct[local.item] = {};
-				}
-				if (local.i != local.iEnd) {
+				if (IsStruct(local.struct)) {
+					local.item = local.nested[local.i];
+					if (!StructKeyExists(local.struct, local.item)) {
+						local.struct[local.item] = {};
+					}
+					if (local.i != local.iEnd) {
 
-					// Pass the new reference (structs pass a reference instead of a copy) to the next iteration.
-					local.struct = local.struct[local.item];
+						// Pass the new reference (structs pass a reference instead of a copy) to the next iteration.
+						local.struct = local.struct[local.item];
 
-				} else {
-					local.struct[local.item] = local.rv[local.key];
+					} else {
+						local.struct[local.item] = local.rv[local.key];
+					}
 				}
 			}
 
