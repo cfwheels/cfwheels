@@ -141,16 +141,6 @@ component extends="wheels.tests.Test" {
 		assert("$statusCode() EQ 200");
 	}
 
-	function test_custom_status_codes_204() {
-		params.format = "json";
-		params.action = "test2";
-		_controller = controller("test", params);
-		_controller.provides("json");
-		user = model("user").findOne(where="username = 'tonyp'");
-		_controller.renderWith(data=user, layout=false, returnAs="string", status=204);
-		assert("$statusCode() EQ 204");
-	}
-
 	function test_custom_status_codes_403() {
 		params.format = "json";
 		params.action = "test2";
