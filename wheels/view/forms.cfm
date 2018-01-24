@@ -88,6 +88,15 @@ public string function startFormTag(
 	// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
 	request.wheels.currentFormMethod = arguments.method;
 
+	// Check to see if a route exists if not specified
+	if(len(arguments.controller) && len(arguments.action) && !len(arguments.route)){
+		for (local.position in application.wheels.routes){
+			if (local.position.controller eq arguments.controller && local.position.action eq arguments.action){
+				arguments.route = local.position.name;
+			}
+		}
+	}
+	
 	// if we have a route and method, tap
 	if (Len(arguments.route) && StructKeyExists(arguments, "method")) {
 
