@@ -88,6 +88,17 @@ public string function startFormTag(
 	// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
 	request.wheels.currentFormMethod = arguments.method;
 
+	// Check to see if a route exists if not specified
+	if(!Len(arguments.route) && Len(arguments.controller) && Len(arguments.action) && Len(arguments.method)){
+		for (local.route in application.wheels.routes){
+			if (local.route.controller == arguments.controller && local.route.action == arguments.action && ListFindNoCase(local.route.methods,arguments.method)){
+				arguments.route = local.route.name;
+				local.routeAndMethodMatch = true;
+				break;
+			}
+		}
+	}
+	
 	// if we have a route and method, tap
 	if (Len(arguments.route) && StructKeyExists(arguments, "method")) {
 
@@ -101,9 +112,11 @@ public string function startFormTag(
 		}
 
 		// check to see if the route specified has a method to match the one passed in
-		for (local.position in ListToArray(application.wheels.namedRoutePositions[arguments.route])) {
-			if (StructKeyExists(application.wheels.routes[local.position], "methods") && ListFindNoCase(application.wheels.routes[local.position].methods, arguments.method)) {
-				local.routeAndMethodMatch = true;
+		if (!local.routeAndMethodMatch){
+			for (local.position in ListToArray(application.wheels.namedRoutePositions[arguments.route])) {
+				if (StructKeyExists(application.wheels.routes[local.position], "methods") && ListFindNoCase(application.wheels.routes[local.position].methods, arguments.method)) {
+					local.routeAndMethodMatch = true;
+				}
 			}
 		}
 
