@@ -89,10 +89,12 @@ public string function startFormTag(
 	request.wheels.currentFormMethod = arguments.method;
 
 	// Check to see if a route exists if not specified
-	if(len(arguments.controller) && len(arguments.action) && !len(arguments.route)){
+	if(!Len(arguments.route) && Len(arguments.controller) && Len(arguments.action) && Len(arguments.method)){
 		for (local.position in application.wheels.routes){
-			if (local.position.controller eq arguments.controller && local.position.action eq arguments.action){
+			if (local.position.controller == arguments.controller && local.position.action == arguments.action && ListFindNoCase(local.position.methods,arguments.method)){
 				arguments.route = local.position.name;
+				local.routeAndMethodMatch = true;
+				break;
 			}
 		}
 	}
@@ -110,9 +112,11 @@ public string function startFormTag(
 		}
 
 		// check to see if the route specified has a method to match the one passed in
-		for (local.position in ListToArray(application.wheels.namedRoutePositions[arguments.route])) {
-			if (StructKeyExists(application.wheels.routes[local.position], "methods") && ListFindNoCase(application.wheels.routes[local.position].methods, arguments.method)) {
-				local.routeAndMethodMatch = true;
+		if (!local.routeAndMethodMatch){
+			for (local.position in ListToArray(application.wheels.namedRoutePositions[arguments.route])) {
+				if (StructKeyExists(application.wheels.routes[local.position], "methods") && ListFindNoCase(application.wheels.routes[local.position].methods, arguments.method)) {
+					local.routeAndMethodMatch = true;
+				}
 			}
 		}
 
