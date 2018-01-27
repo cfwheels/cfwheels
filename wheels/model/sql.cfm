@@ -87,7 +87,7 @@ public string function $orderByClause(required string order, required string inc
 			local.iEnd = ListLen(arguments.order);
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.iItem = Trim(ListGetAt(arguments.order, local.i));
-				if (!Find(" ASC", local.iItem) && !Find(" DESC", local.iItem)) {
+				if (!FindNoCase(" ASC", local.iItem) && !FindNoCase(" DESC", local.iItem)) {
 					local.iItem &= " ASC";
 				}
 				if (Find(".", local.iItem)) {
