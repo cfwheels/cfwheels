@@ -357,7 +357,7 @@ public string function checkBox(
 	arguments.name = $tagName(arguments.objectName, arguments.property);
 	arguments.value = arguments.checkedValue;
 	local.value = $formValue(argumentCollection=arguments);
-	if (local.value == arguments.value || IsNumeric(local.value) && local.value == 1 || !IsNumeric(local.value) && IsBoolean(local.value) && local.value) {
+	if (local.value == arguments.value || IsNumeric(local.value) && local.value == 1 || !IsNumeric(local.value) && IsBoolean(local.value) && local.value || ListFindNoCase(loc.value, arguments.value)) {
 		arguments.checked = "checked";
 	}
 	local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
