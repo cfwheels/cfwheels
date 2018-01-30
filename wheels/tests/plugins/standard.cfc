@@ -21,14 +21,14 @@ component extends="wheels.tests.Test" {
 		assert('StructKeyExists(plugins, "TestAssignMixins")');
 	}
 
-	function test_notify_incompatable_version() {
+	function test_notify_incompatible_version() {
 		config.wheelsVersion = "99.9.9";
 		PluginObj = $pluginObj(config);
 		iplugins = PluginObj.getIncompatiblePlugins();
 		assert('iplugins eq "TestIncompatableVersion"');
 	}
 
-	function test_no_loading_of_incompatable_plugins() {
+	function test_no_loading_of_incompatible_plugins() {
 		config.loadIncompatiblePlugins = false;
 		config.wheelsVersion = "99.9.9";
 		PluginObj = $pluginObj(config);
