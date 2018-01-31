@@ -12,6 +12,7 @@
 * Accessing a route with incorrect verb now provides a more useful error message - [#800](https://github.com/cfwheels/cfwheels/issues/800) [Tom King]
 * Fixed bug with arrays in URLs - [#836](https://github.com/cfwheels/cfwheels/issues/836) [Michael Diederich, Per Djurner]
 * startFormTag now properly applies the method attribute - [#837](https://github.com/cfwheels/cfwheels/issues/837) [David Paul Belanger]
+* Incompatible plugin notice now ignores patch releases unless specified - [#840](https://github.com/cfwheels/cfwheels/issues/840)  [Risto, Tom King]
 
 <a name="2.0.0"></a>
 
