@@ -1,29 +1,29 @@
 {
-  "name": "CFWheels",
-  "version": "2.0.0",
-  "author": "CFWheels Core Team and Community",
-  "location":
-    "https://github.com/cfwheels/cfwheels/releases/download/v2.0.0/cfwheels-2.0.0.zip",
-  "directory": "",
-  "createPackageDirectory": false,
-  "packageDirectory": "",
-  "homepage": "https://cfwheels.org/",
-  "documentation": "https://docs.cfwheels.org/",
-  "repository": {
-    "type": "git",
-    "URL": "https://github.com/cfwheels/cfwheels"
-  },
-  "bugs": "https://github.com/cfwheels/cfwheels/issues",
-  "slug": "cfwheels",
-  "shortDescription": "CFWheels MVC Framework",
-  "changelog": "https://github.com/cfwheels/cfwheels/blob/master/CHANGELOG.md",
-  "type": "mvc",
-  "keywords": ["mvc", "rails", "wheels", "cfwheels"],
-  "private": false,
-  "license": [
-    {
-      "type": "Apache License 2.0",
-      "URL": "https://github.com/cfwheels/cfwheels/blob/master/LICENSE"
-    }
-  ]
+	"name": "CFWheels",
+	"version": "2.0.1",
+	"author": "CFWheels Core Team and Community",
+	"location":
+		"https://github.com/cfwheels/cfwheels/releases/download/v2.0.1/cfwheels-2.0.1.zip",
+	"directory": "",
+	"createPackageDirectory": false,
+	"packageDirectory": "",
+	"homepage": "https://cfwheels.org/",
+	"documentation": "https://docs.cfwheels.org/",
+	"repository": {
+		"type": "git",
+		"URL": "https://github.com/cfwheels/cfwheels"
+	},
+	"bugs": "https://github.com/cfwheels/cfwheels/issues",
+	"slug": "cfwheels",
+	"shortDescription": "CFWheels MVC Framework",
+	"changelog": "https://github.com/cfwheels/cfwheels/blob/master/CHANGELOG.md",
+	"type": "mvc",
+	"keywords": ["mvc", "rails", "wheels", "cfwheels"],
+	"private": false,
+	"license": [
+		{
+			"type": "Apache License 2.0",
+			"URL": "https://github.com/cfwheels/cfwheels/blob/master/LICENSE"
+		}
+	]
 }
