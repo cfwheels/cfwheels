@@ -1,7 +1,7 @@
 <cfscript>
 
 /**
- * Create a route that matches a URL requiring an HTTML `GET` method. We recommend only using this matcher to expose actions that display data. See `post`, `patch`, `delete`, and `put` for matchers that are appropriate for actions that change data in your database.
+ * Create a route that matches a URL requiring an HTTP `GET` method. We recommend only using this matcher to expose actions that display data. See `post`, `patch`, `delete`, and `put` for matchers that are appropriate for actions that change data in your database.
  *
  * [section: Configuration]
  * [category: Routing]

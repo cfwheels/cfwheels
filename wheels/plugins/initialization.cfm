@@ -115,8 +115,15 @@ public void function $pluginsProcess() {
 		local.plugin = CreateObject("component", $componentPathToPlugin(local.pluginKey, local.pluginValue.name)).init();
 		if (!StructKeyExists(local.plugin, "version") || ListFind(local.plugin.version, local.wheelsVersion) || variables.$class.loadIncompatiblePlugins) {
 			variables.$class.plugins[local.pluginKey] = local.plugin;
-			if (StructKeyExists(local.plugin, "version") && !ListFind(local.plugin.version, local.wheelsVersion)) {
-				variables.$class.incompatiblePlugins = ListAppend(variables.$class.incompatiblePlugins, local.pluginKey);
+
+			// If plugin author has specified compatibility version as 2.0, only check against that major version
+			// If they've specified 2.0.1, then be more specific
+			if (StructKeyExists(local.plugin, "version")) {
+				if( ( listLen(local.plugin.version, ".") > 2 && !ListFind(local.plugin.version, local.wheelsVersion) )
+					|| ( listLen(local.plugin.version, ".") == 2 && !ListFind(local.plugin.version, listDeleteAt(local.wheelsVersion, 3, ".")) )
+				){
+					variables.$class.incompatiblePlugins = ListAppend(variables.$class.incompatiblePlugins, local.pluginKey);
+				 }
 			}
 		}
 	};
