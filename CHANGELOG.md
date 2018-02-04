@@ -1,6 +1,4 @@
-<a name="2.1.0"></a>
-
-# [2.1.0](https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0) (TDB)
+# 2.1.0 (TDB)
 
 ### Miscellaneous
 
