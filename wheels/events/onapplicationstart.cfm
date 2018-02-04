@@ -459,7 +459,7 @@ public void function onApplicationStart() {
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.keyValue = local.oldQueryString[local.i];
 			local.key = ListFirst(local.keyValue, "=");
-			if (!ListFindNoCase("reload,password", local.key)) {
+			if (!ListFindNoCase("reload,password,lock", local.key)) {
 				ArrayAppend(local.newQueryString, local.keyValue);
 			}
 		}
