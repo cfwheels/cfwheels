@@ -12,7 +12,7 @@
  * @rel  The `rel` attribute for the relation between the tag and href.
  * @head Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior (which is to place the output where the function is called from).
  * @delim The delimiter to use for the list of CSS files.
- * @encode When set to `true`, encodes tag content, attribute values, and URLs so that Cross Site Scripting (XSS) attacks can be prevented. Set to `attributes` to only encode attribute values and not tag content.
+ * @encode Use this argument to decide whether the output of the function should be encoded in order to prevent Cross Site Scripting (XSS) attacks. Set it to `true` to encode all relevant output for the specific HTML element in question (e.g. tag content, attribute values, and URLs). For HTML elements that have both tag content and attribute values you can set this argument to `attributes` to only encode attribute values and not tag content.
  */
 public string function styleSheetLinkTag(
 	string sources="",
