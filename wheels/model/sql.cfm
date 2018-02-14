@@ -373,10 +373,12 @@ public array function $whereClause(
 		ArrayAppend(local.rv, "WHERE");
 		local.wherePos = ArrayLen(local.rv) + 1;
 		local.params = [];
-		local.where = ReplaceList(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "AND,OR", "#Chr(7)#AND,#Chr(7)#OR");
+		// local.where = ReplaceList(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "AND,OR", "#Chr(7)#AND,#Chr(7)#OR");
+		local.where = REReplace(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "([^a-zA-Z0-9])(AND|OR)([^a-zA-Z0-9])", "\1#Chr(7)#\2\3", "all");
 		for (local.i = 1; local.i <= ListLen(local.where, Chr(7)); local.i++) {
 			local.param = {};
-			local.element = Replace(ListGetAt(local.where, local.i, Chr(7)), Chr(7), "", "one");
+			// local.element = Replace(ListGetAt(local.where, local.i, Chr(7)), Chr(7), "", "one");
+			local.element = ListGetAt(local.where, local.i, Chr(7));
 			if (Find("(", local.element) && Find(")", local.element)) {
 				local.elementDataPart = SpanExcluding(Reverse(SpanExcluding(Reverse(local.element), "(")), ")");
 			} else if (Find("(", local.element)) {
@@ -386,7 +388,8 @@ public array function $whereClause(
 			} else {
 				local.elementDataPart = local.element;
 			}
-			local.elementDataPart = Trim(ReplaceList(local.elementDataPart, "AND,OR", ""));
+			// local.elementDataPart = Trim(ReplaceList(local.elementDataPart, "AND,OR", ""));
+			local.elementDataPart = Trim(REReplace(local.elementDataPart, "^(AND|OR)", ""));
 			local.temp = REFind("^([a-zA-Z0-9-_\.]*) ?#variables.wheels.class.RESQLOperators#", local.elementDataPart, 1, true);
 			if (ArrayLen(local.temp.len) > 1) {
 				local.where = Replace(local.where, local.element, Replace(local.element, local.elementDataPart, "?", "one"));

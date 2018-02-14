@@ -1,5 +1,8 @@
 # 2.1.0 (TDB)
 
+### Bug Fixes
+* Allow uppercase table names containing reserved substrings like `OR` `AND` - [#765](https://github.com/cfwheels/cfwheels/issues/765) [Dmitry Yakhnov, Adam Chapman]
+
 ### Miscellaneous
 
 * Added the ability to pass `&lock=false` in the URL for when reload requests won't work due to locking - [Per Djurner]
