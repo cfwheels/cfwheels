@@ -2,6 +2,7 @@
 
 ### Bug Fixes
 * Allow uppercase table names containing reserved substrings like `OR` `AND` - [#765](https://github.com/cfwheels/cfwheels/issues/765) [Dmitry Yakhnov, Adam Chapman]
+* Calculated properties can now override an existing property [#764](https://github.com/cfwheels/cfwheels/issues/764) [Adam Chapman, Andy Bellenie]
 
 ### Miscellaneous
 
