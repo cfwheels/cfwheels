@@ -321,7 +321,12 @@ component extends="Base" {
     * adds CFWheels convention automatic timestamp and soft delete columns to table definition
     */
 	public any function timestamps() {
-		timestamp(columnNames="createdat,updatedat,deletedat",null=true);
+		local.columnNames = ArrayToList([
+			application.wheels.timeStampOnCreateProperty,
+			application.wheels.timeStampOnUpdateProperty,
+			application.wheels.softDeleteProperty
+		]);
+		timestamp(columnNames=local.columnNames,null=true);
 		return this;
 	}
 
