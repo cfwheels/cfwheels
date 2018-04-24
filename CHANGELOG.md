@@ -4,6 +4,10 @@
 * Allow uppercase table names containing reserved substrings like `OR` `AND` - [#765](https://github.com/cfwheels/cfwheels/issues/765) [Dmitry Yakhnov, Adam Chapman]
 * Calculated properties can now override an existing property [#764](https://github.com/cfwheels/cfwheels/issues/764) [Adam Chapman, Andy Bellenie]
 
+### Migrator Enhancements
+* Migrator now automatically manages the timestamp columns on `addRecord()` and `updateRecord()` calls. [#852](https://github.com/cfwheels/cfwheels/pull/852) [Charley Contreras]
+* Migrator correctly honors CFWheels Timestamp configuration settings (`setUpdatedAtOnCreate, softDeleteProperty, timeStampMode, timeStampOnCreateProperty, timeStampOnUpdateProperty`).  [#852](https://github.com/cfwheels/cfwheels/pull/852) [Charley Contreras]
+
 ### Miscellaneous
 
 * Added the ability to pass `&lock=false` in the URL for when reload requests won't work due to locking - [Per Djurner]
