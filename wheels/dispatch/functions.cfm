@@ -105,6 +105,11 @@ public struct function $findMatchingRoute(required string path, string requestMe
 
 	}
 
+	// If returned route contains a redirect, execute that asap
+	if(structKeyExists(local, "rv") && structKeyExists(local.rv, "redirect")){
+		$location(url=local.rv.redirect, addToken=false);
+	}
+
 	// Throw error if no route was found.
 	if (!StructKeyExists(local, "rv")) {
 
