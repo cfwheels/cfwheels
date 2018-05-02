@@ -11,6 +11,7 @@
 ### Miscellaneous
 
 * Added the ability to pass `&lock=false` in the URL for when reload requests won't work due to locking - [Per Djurner]
+* Basic 302 redirects now available in mapper via `redirect` argument for `GET/PUT/PATCH/POST/DELETE` [#847](https://github.com/cfwheels/cfwheels/issues/847) - [Tom King]
 
 <a name="2.0.1"></a>
 
