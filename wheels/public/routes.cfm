@@ -33,6 +33,11 @@
       <td>
         <code>#EncodeForHtml(route.pattern)#</td>
       </code>
+      <cfif StructKeyExists(route, "redirect")>
+      <td colspan="2"> 
+          <i class="fa fa-chevron-right"></i> <code>#truncate(EncodeForHtml(route.redirect), 70)#</code>
+      </td>
+      <cfelse>
       <td>
         <cfif StructKeyExists(route, "controller")>
           <code>#EncodeForHtml(route.controller)#</code>
@@ -43,6 +48,7 @@
           <code>#EncodeForHtml(route.action)#</code>
         </cfif>
       </td>
+    </cfif>
     </tr>
   </cfloop>
   </tbody>
