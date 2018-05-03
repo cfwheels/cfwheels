@@ -69,8 +69,26 @@ public any function flashDelete(required string key) {
  */
 public void function flashInsert() {
 	local.flash = $readFlash();
+
 	for (local.key in arguments) {
-		StructInsert(local.flash, local.key, arguments[local.key], true);
+
+		// Does the user want us to append new messages or just replace?
+		if($getFlashAppend() && structKeyExists(local.flash, local.key)){
+
+			// Are we dealing with just an existing string or an array?
+			if(isArray(local.flash[local.key])){
+				arrayAppend(local.flash[local.key], arguments[local.key]);
+			} else {
+				// Capture previous value, make it an array and append new value
+				local.tempArr=[];
+				arrayAppend(local.tempArr, local.flash[local.key]);
+				arrayAppend(local.tempArr, arguments[local.key]);
+				StructInsert(local.flash, local.key, local.tempArr, true);
+			}
+
+		} else {
+			StructInsert(local.flash, local.key, arguments[local.key], true);
+		}
 	}
 	$writeFlash(local.flash);
 }
@@ -191,6 +209,20 @@ public void function $setFlashStorage(required string storage) {
  */
 public string function $getFlashStorage() {
 	return variables.$class.flashStorage;
+}
+
+/**
+ * Internal function.
+ */
+public void function $setFlashAppend(required boolean append) {
+	variables.$class.flashAppend = arguments.append;
+}
+
+/**
+ * Internal function.
+ */
+public string function $getFlashAppend() {
+	return variables.$class.flashAppend;
 }
 
 </cfscript>

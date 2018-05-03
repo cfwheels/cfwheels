@@ -131,7 +131,12 @@ public string function flashMessages(
 		local.attributes = {class=local.class};
 		if (!StructKeyExists(arguments, "key") || arguments.key == local.item) {
 			local.content = local.flash[local.item];
-			if (IsSimpleValue(local.content)) {
+			// Do we have an array of values or a simple value?
+			if (isArray(local.content)) {
+				for(local.contentItem in local.content){
+					local.listItems &= $element(name="p", content=local.contentItem, attributes=local.attributes, encode=arguments.encode);
+				}
+			} else if(IsSimpleValue(local.content)){
 				local.listItems &= $element(name="p", content=local.content, attributes=local.attributes, encode=arguments.encode);
 			}
 		}
