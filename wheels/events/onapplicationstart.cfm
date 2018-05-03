@@ -271,6 +271,9 @@ public void function onApplicationStart() {
 		application.$wheels.flashStorage = "cookie";
 	}
 
+	// Additional configurable flash options
+	application.$wheels.flashAppend = false;
+
 	// Possible formats for provides functionality.
 	application.$wheels.formats = {};
 	application.$wheels.formats.html = "text/html";

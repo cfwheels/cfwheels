@@ -40,10 +40,16 @@ component extends="wheels.tests.Test" {
 		run_empty_flash_includeEmptyContainer();
 	}
 
-	function test_skipping_complex_values() {
-		run_skipping_complex_values();
+	function test_allow_complex_values() {
+		run_allow_complex_values();
 		_controller.$setFlashStorage("cookie");
-		run_skipping_complex_values();
+		run_allow_complex_values();
+	}
+
+	function test_appends_if_allowed(){
+		run_appends_if_allowed();
+		_controller.$setFlashStorage("cookie");
+		run_appends_if_allowed();
 	}
 
 	function test_control_order_via_keys_argument() {
@@ -110,13 +116,22 @@ component extends="wheels.tests.Test" {
 		assert("actual IS '<div class=""flash-messages""></div>'");
 	}
 
-	function run_skipping_complex_values() {
+	function run_appends_if_allowed() {
+		_controller.$setFlashAppend(true);
 		_controller.flashInsert(success="Congrats!");
-		arr = [];
-		arr[1] = "test";
-		_controller.flashInsert(alert=arr);
+		_controller.flashInsert(success="Congrats Again!");
 		actual = _controller.flashMessages();
-		assert("actual IS '<div class=""flash-messages""><p class=""success-message"">Congrats!</p></div>'");
+		assert("actual IS '<div class=""flash-messages""><p class=""success-message"">Congrats!</p><p class=""success-message"">Congrats Again!</p></div>'");
+		_controller.$setFlashAppend(false);
+	}
+
+	function run_allow_complex_values() {
+		arr = [];
+		arr[1] = "Congrats!";
+		arr[2] = "Congrats Again!";
+		_controller.flashInsert(success=arr);
+		actual = _controller.flashMessages();
+		assert("actual IS '<div class=""flash-messages""><p class=""success-message"">Congrats!</p><p class=""success-message"">Congrats Again!</p></div>'");
 	}
 
 	function run_control_order_via_keys_argument() {
