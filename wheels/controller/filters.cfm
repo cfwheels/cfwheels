@@ -124,12 +124,14 @@ public void function $runFilters(required string type, required string action) {
 				);
 			}
 			local.result = $invoke(method=local.filter.through, invokeArgs=local.filter.arguments);
-
-			// If the filter returned false, rendered content or made a delayed redirect we skip the remaining filters.
-			if ((StructKeyExists(local, "result") && !isNull(local.result) && !local.result) || $performedRenderOrRedirect()) {
+			// If the filter returned false, we skip the remaining filters.
+			if ((StructKeyExists(local, "result") && !isNull(local.result) && !local.result)) {
+				break;
+			} else if (arguments.type == "before" && $performedRenderOrRedirect()) {
+				break;
+			} else if (arguments.type == "after" && $performedRedirect()) {
 				break;
 			}
-
 		}
 	}
 }
