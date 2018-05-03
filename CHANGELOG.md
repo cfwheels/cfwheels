@@ -8,11 +8,15 @@
 * Migrator now automatically manages the timestamp columns on `addRecord()` and `updateRecord()` calls. [#852](https://github.com/cfwheels/cfwheels/pull/852) [Charley Contreras]
 * Migrator correctly honors CFWheels Timestamp configuration settings (`setUpdatedAtOnCreate, softDeleteProperty, timeStampMode, timeStampOnCreateProperty, timeStampOnUpdateProperty`).  [#852](https://github.com/cfwheels/cfwheels/pull/852) [Charley Contreras]
 
+### Flash Enhancements
+* New `set(flashAppend=true)` option allows for appending of a flash key instead of replacing [#855](https://github.com/cfwheels/cfwheels/pull/855) - [Tom King]
+* `flashMessages()` now checks for an array of strings or just a string and outputs appropriately. [#855](https://github.com/cfwheels/cfwheels/pull/855) - [Tom King]
+* `flashInsert()` can be now accept a one dimensional array [#855](https://github.com/cfwheels/cfwheels/pull/855) - [Tom King]
+
 ### Miscellaneous
 
 * Added the ability to pass `&lock=false` in the URL for when reload requests won't work due to locking - [Per Djurner]
 * Basic 302 redirects now available in mapper via `redirect` argument for `GET/PUT/PATCH/POST/DELETE` [#847](https://github.com/cfwheels/cfwheels/issues/847) - [Tom King]
-
 <a name="2.0.1"></a>
 
 # [2.0.1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.1) (01/31/2018)
