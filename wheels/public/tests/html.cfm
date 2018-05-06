@@ -92,11 +92,12 @@
   			<cfif result.status neq "Success">
   				<tr class="errRow"><td colspan="4" class="failed">#replace(result.message, chr(10), "<br/>", "ALL")#</td></tr>
   			</cfif>
-  			<cfif StructKeyExists(request, "TESTING_FRAMEWORK_DEBUGGING") && StructKeyExists(request["TESTING_FRAMEWORK_DEBUGGING"], result.testName)>
-  				<cfloop array="#request['TESTING_FRAMEWORK_DEBUGGING'][result.testName]#" index="i">
-  				<tr class="<cfif result.status neq 'Success'>errRow<cfelse>sRow</cfif>"><td colspan="4">#i#</tr>
-  				</cfloop>
-  			</cfif>
+  			<cfset distinctKey= replace(replace(result.packageName, ".", "_", "all"), "tests_", "", "one") & '_' & result.testName>
+        <cfif StructKeyExists(request, "TESTING_FRAMEWORK_DEBUGGING") && StructKeyExists(request["TESTING_FRAMEWORK_DEBUGGING"], distinctKey)>
+          <cfloop array="#request['TESTING_FRAMEWORK_DEBUGGING'][distinctKey]#" index="i">
+          <tr class="<cfif result.status neq 'Success'>errRow<cfelse>sRow</cfif>"><td colspan="4">#i#</tr>
+          </cfloop>
+        </cfif>
   		</cfloop>
   	</table>
   </cfif>
