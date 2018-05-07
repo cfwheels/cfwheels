@@ -4,6 +4,7 @@
 * Allow uppercase table names containing reserved substrings like `OR` `AND` - [#765](https://github.com/cfwheels/cfwheels/issues/765) [Dmitry Yakhnov, Adam Chapman]
 * Calculated properties can now override an existing property [#764](https://github.com/cfwheels/cfwheels/issues/764) [Adam Chapman, Andy Bellenie]
 * Only one after filter can be called [#853](https://github.com/cfwheels/cfwheels/issues/853) [Brandon Shea, Tom King, Adam Chapman]
+* Minor fix for duplicate debug output in Test Suite (#176)[https://github.com/cfwheels/cfwheels/issues/176] [Adam Chapman, Tom King]
 
 ### Migrator Enhancements
 * Migrator now automatically manages the timestamp columns on `addRecord()` and `updateRecord()` calls. [#852](https://github.com/cfwheels/cfwheels/pull/852) [Charley Contreras]
