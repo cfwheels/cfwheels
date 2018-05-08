@@ -207,6 +207,8 @@ public struct function resources(
 
 /**
  * Scope routes within a nested resource which require use of the primary key as part of the URL pattern;
+ * A member route will require an ID, because it acts on a member.
+ * photos/1/preview is an example of a member route, because it acts on (and displays) a single object.
  *
  * [section: Configuration]
  * [category: Routing]
@@ -216,6 +218,9 @@ public struct function member() {
 }
 
 /**
+ * A collection route doesn't require an id because it acts on a collection of objects.
+ * photos/search is an example of a collection route, because it acts on (and displays) a collection of objects.
+ *
  * [section: Configuration]
  * [category: Routing]
  */
