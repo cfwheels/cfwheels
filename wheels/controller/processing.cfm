@@ -6,8 +6,10 @@
  *
  * [section: Controller]
  * [category: Miscellaneous Functions]
+ *
+ * @includeFilters Set to `before` to only execute "before" filters, `after` to only execute "after" filters or `false` to skip all filters. This argument is generally inherited from the `processRequest` function during unit test execution.
  */
-public boolean function processAction() {
+public boolean function processAction(string includeFilters = true) {
 	$runCsrfProtection(action=params.action);
 
 	// Check if action should be cached, and if so, cache statically or set the time to use later when caching just the action.
@@ -42,7 +44,9 @@ public boolean function processAction() {
 	if (!$abortIssued()) {
 
 		// Run before filters if they exist on the controller.
-		$runFilters(type="before", action=params.action);
+		if (ListFindNoCase("true,before", arguments.includeFilters)) {
+			$runFilters(type="before", action=params.action);
+		}
 
 		if ($get("showDebugInformation")) {
 			$debugPoint("beforeFilters,action");
@@ -98,8 +102,8 @@ public boolean function processAction() {
 			$debugPoint("action,afterFilters");
 		}
 
-		if (!$performedRedirect()) {
-			$runFilters(type="after", action=params.action);
+		if (!$performedRedirect() && ListFindNoCase("true,after", arguments.includeFilters)) {
+				$runFilters(type="after", action=params.action);
 		}
 
 		if ($get("showDebugInformation")) {
