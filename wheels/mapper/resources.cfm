@@ -206,6 +206,8 @@ public struct function resources(
 }
 
 /**
+ * Scope routes within a nested resource which require use of the primary key as part of the URL pattern;
+ *
  * [section: Configuration]
  * [category: Routing]
  */
