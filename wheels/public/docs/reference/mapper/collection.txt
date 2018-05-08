@@ -1,0 +1,13 @@
+
+<cfscript>
+
+mapper()
+    // Create a route like `photos/search`
+    .resources(name="photos", nested=true)
+        .collection()
+            .get("search")
+        .end()
+    .end()
+.end();
+
+</cfscript>
