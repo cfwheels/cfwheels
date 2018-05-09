@@ -278,7 +278,7 @@ public boolean function $runTest(string resultKey="test", string testname="") {
 	for (key in listToArray(keyList)) {
 
 		/* Include test name and make distinct so debugging doesn't duplicate output */
-		var distinctKey= replace(replace(testCase, ".", "_", "all"), "tests_", "", "one") & '_' & key;
+		var distinctKey= replace(replace(replace(testCase, ".", "_", "all"), "tests_", "", "one"), "wheels_", "", "one") & '_' & key;
 		/* keep track of the test name so we can display debug information */
 		TESTING_FRAMEWORK_VARS.RUNNING_TEST = distinctkey;
 
