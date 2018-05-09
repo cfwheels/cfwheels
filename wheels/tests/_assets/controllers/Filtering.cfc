@@ -7,6 +7,19 @@ component extends="Controller" {
 		filters(through="str", strArguments=Duplicate(aStr));
 		filters(through="both", bothArguments=Duplicate(aStr), testArg=1);
 		filters(through="pub,priv", only="index,actOne,actTwo");
+		filters(through="typeBefore", only="noView", type="before");
+		filters(through="typeAfter", only="noView", type="after");
+	}
+
+	function typeBefore() {
+		request.filterTestTypes = ["before"];
+	}
+
+	function typeAfter() {
+		if (NOT IsDefined("request.filterTestTypes")) {
+			request.filterTestTypes = [];
+		}
+		ArrayAppend(request.filterTestTypes, "after");
 	}
 
 	function dir() {
@@ -40,6 +53,10 @@ component extends="Controller" {
 			request.filterTests.test = "";
 		}
 		request.filterTests.test = request.filterTests.test & "priv";
+	}
+
+	function noView() {
+		renderText(text="#params.controller####params.action#");
 	}
 
 }

@@ -263,8 +263,15 @@ public struct function mapper(boolean restful=true, boolean methods=arguments.re
  * @method The HTTP method to use in the request (`get`, `post` etc).
  * @returnAs Pass in `struct` to return all information about the request instead of just the final output (`body`).
  * @rollback Pass in `true` to roll back all database transactions made during the request.
+ * @includeFilters Set to `before` to only execute "before" filters, `after` to only execute "after" filters or `false` to skip all filters.
  */
-public any function processRequest(required struct params, string method, string returnAs, string rollback) {
+public any function processRequest(
+	required struct params,
+	string method,
+	string returnAs,
+	string rollback,
+	string includeFilters = true
+) {;
 	$args(name="processRequest", args=arguments);
 
 	// Set the global transaction mode to rollback when specified.
@@ -291,7 +298,7 @@ public any function processRequest(required struct params, string method, string
 	// Set to ignore CSRF errors during testing.
 	local.controller.protectsFromForgery(with="ignore");
 
-	local.controller.processAction();
+	local.controller.processAction(includeFilters=arguments.includeFilters);
 	local.response = local.controller.response();
 
 	// Get redirect info.
