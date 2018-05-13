@@ -456,6 +456,7 @@ public void function $setDebugName(required struct args) {
 		} else {
 			args.$debugName = args.handle;
 		}
+		args.$debugName = Replace(Replace(args.$debugName, " ", "", "all"), ".", "", "all");
 	}
 }
 
