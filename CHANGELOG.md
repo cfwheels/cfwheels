@@ -18,6 +18,7 @@
 * Filters are now correctly called if there is more than one after filter - [#853](https://github.com/cfwheels/cfwheels/issues/853) [Brandon Shea, Tom King, Adam Chapman]
 * Minor fix for duplicate debug output in the test suite - [#176](https://github.com/cfwheels/cfwheels/issues/176) [Adam Chapman, Tom King]
 * Convert `handle` to a valid variable name so it doesn't break when using dot notation - [#846](https://github.com/cfwheels/cfwheels/issues/846) [Per Djurner]
+* The `validatesUniquenessOf()` check now handles cases when duplicates already exist - [#480](https://github.com/cfwheels/cfwheels/issues/480) [Randall Meeker, Per Djurner]
 
 ### Miscellaneous
 

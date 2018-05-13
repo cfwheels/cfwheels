@@ -610,12 +610,24 @@ public void function $validatesUniquenessOf(
 			ArrayAppend(local.where, local.part);
 		}
 
-		// try to fetch existing object from the database
-		local.existingObject = findOne(select=primaryKey(), where=ArrayToList(local.where, " AND "), reload=true, includeSoftDeletes=arguments.includeSoftDeletes, callbacks=false);
-
-		// we add an error if an object was found in the database and the current object is either not saved yet or not the same as the one in the database
-		if (IsObject(local.existingObject) && (isNew() || local.existingObject.key() != key($persisted=true))) {
-			addError(property=arguments.property, message=$validationErrorMessage(argumentCollection=arguments));
+		// try to fetch duplicate objects from the database
+		// we add an error if duplicate objects were found and the current object is either not saved yet or not the same as any of the found duplicates
+		local.existingObjects = findAll(select=primaryKey(), where=ArrayToList(local.where, " AND "), returnAs="objects", reload=true, includeSoftDeletes=arguments.includeSoftDeletes, callbacks=false);
+		if (ArrayLen(local.existingObjects)) {
+			local.duplicate = false;
+			if (isNew()) {
+				local.duplicate = true;
+			} else {
+				local.iEnd = ArrayLen(local.existingObjects);
+				for (local.i = 1; local.i <= local.iEnd; local.i++) {
+					if (local.existingObjects[local.i].key() != key($persisted=true)) {
+						local.duplicate = true;
+					}
+				}
+			}
+			if (local.duplicate) {
+				addError(property=arguments.property, message=$validationErrorMessage(argumentCollection=arguments));
+			}
 		}
 	}
 }
