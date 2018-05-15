@@ -84,6 +84,12 @@ public struct function $createNestedParamStruct(required struct params) {
  */
 public struct function $findMatchingRoute(required string path, string requestMethod=$getRequestMethod()) {
 
+	// If this is a HEAD request, look for the corresponding GET route
+	if (arguments.requestMethod == 'HEAD'){
+		arguments.requestMethod = 'GET';
+		local.isHeadRequest = true;
+	}
+
 	// Loop over Wheels routes.
 	for (local.route in application.wheels.routes) {
 
