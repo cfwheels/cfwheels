@@ -24,6 +24,7 @@
 
 * Added the ability to pass `&lock=false` in the URL for when reload requests won't work due to locking - [Per Djurner]
 * Basic 302 redirects now available in mapper via `redirect` argument for `GET/PUT/PATCH/POST/DELETE` - [#847](https://github.com/cfwheels/cfwheels/issues/847) - [Tom King]
+* `HEAD` requests are now aliased to `GET` requests [#860](https://github.com/cfwheels/cfwheels/issues/860) - [Tom King]
 * Added the `includeFilters` argument to the `processRequest` function for skipping execution of filters during controller unit tests - [Adam Chapman]
 
 <a name="2.0.1"></a>
