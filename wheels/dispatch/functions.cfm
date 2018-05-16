@@ -86,8 +86,7 @@ public struct function $findMatchingRoute(required string path, string requestMe
 
 	// If this is a HEAD request, look for the corresponding GET route
 	if (arguments.requestMethod == 'HEAD'){
-		arguments.requestMethod = 'GET';
-		local.isHeadRequest = true;
+		arguments.requestMethod = 'GET'; 
 	}
 
 	// Loop over Wheels routes.
