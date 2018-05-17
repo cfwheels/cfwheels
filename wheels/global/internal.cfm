@@ -230,6 +230,26 @@ public any function $timeSpanForCache(
 /**
  * Internal function.
  */
+public string function $timestamp(string timeStampMode=application.wheels.timeStampMode) {
+	switch (arguments.timeStampMode) {
+		case "utc":
+			local.rv = DateConvert("local2Utc", Now());
+			break;
+		case "local":
+			local.rv = Now();
+			break;
+		case "epoch":
+			local.rv = Now().getTime();
+			break;
+		default:
+			Throw(type="Wheels.InvalidTimeStampMode", message="Timestamp mode #arguments.timeStampMode# is invalid");
+	}
+	return local.rv;
+}
+
+/**
+ * Internal function.
+ */
 public void function $combineArguments(
 	required struct args,
 	required string combine,

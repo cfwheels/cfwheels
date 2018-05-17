@@ -8,7 +8,7 @@ public void function onRequestStart(required targetPage) {
 
 	// Fix for shared application name issue 359.
 	if (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "eventPath")) {
-		$simpleLock(name=local.lockName, execute="onApplicationStart", type="exclusive", timeout=180);
+		this.onApplicationStart();
 	}
 
 	// Need to setup the wheels struct up here since it's used to store debugging info below if this is a reload request.
@@ -17,7 +17,11 @@ public void function onRequestStart(required targetPage) {
 	// Reload application by calling onApplicationStart if requested.
 	if (StructKeyExists(url, "reload") && (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(application.wheels.reloadPassword) || (StructKeyExists(url, "password") && url.password == application.wheels.reloadPassword))) {
 		$debugPoint("total,reload");
-		$simpleLock(name=local.lockName, execute="onApplicationStart", type="exclusive", timeout=180);
+		if (StructKeyExists(url, "lock") && !url.lock) {
+			this.onApplicationStart();
+		} else {
+			$simpleLock(name=local.lockName, execute="onApplicationStart", type="exclusive", timeout=180);
+		}
 	}
 
 	// Run the rest of the request start code.

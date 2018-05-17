@@ -102,6 +102,8 @@ public struct function package(required string name, string package=arguments.na
 }
 
 /**
+ * Considered deprecated as this doesn't conform to RESTful routing principles; Try not to use this.
+ *
  * [section: Configuration]
  * [category: Routing]
  */

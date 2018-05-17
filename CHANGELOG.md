@@ -1,3 +1,32 @@
+# 2.1.0 (TBD)
+
+### Model Enhancements
+
+* Migrator now automatically manages the timestamp columns on `addRecord()` and `updateRecord()` calls - [#852](https://github.com/cfwheels/cfwheels/pull/852) [Charley Contreras]
+* Migrator correctly honors CFWheels Timestamp configuration settings (`setUpdatedAtOnCreate, softDeleteProperty, timeStampMode, timeStampOnCreateProperty, timeStampOnUpdateProperty`) - [#852](https://github.com/cfwheels/cfwheels/pull/852) [Charley Contreras]
+
+### Controller Enhancements
+
+* New `set(flashAppend=true)` option allows for appending of a Flash key instead of replacing - [#855](https://github.com/cfwheels/cfwheels/pull/855) - [Tom King]
+* `flashMessages()` now checks for an array of strings or just a string and outputs appropriately - [#855](https://github.com/cfwheels/cfwheels/pull/855) - [Tom King]
+* `flashInsert()` can now accept a one dimensional array - [#855](https://github.com/cfwheels/cfwheels/pull/855) - [Tom King]
+
+### Bug Fixes
+
+* Allow uppercase table names containing reserved substrings like `OR` and `AND` - [#765](https://github.com/cfwheels/cfwheels/issues/765) [Dmitry Yakhnov, Adam Chapman]
+* Calculated properties can now override an existing property - [#764](https://github.com/cfwheels/cfwheels/issues/764) [Adam Chapman, Andy Bellenie]
+* Filters are now correctly called if there is more than one after filter - [#853](https://github.com/cfwheels/cfwheels/issues/853) [Brandon Shea, Tom King, Adam Chapman]
+* Minor fix for duplicate debug output in the test suite - [#176](https://github.com/cfwheels/cfwheels/issues/176) [Adam Chapman, Tom King]
+* Convert `handle` to a valid variable name so it doesn't break when using dot notation - [#846](https://github.com/cfwheels/cfwheels/issues/846) [Per Djurner]
+* The `validatesUniquenessOf()` check now handles cases when duplicates already exist - [#480](https://github.com/cfwheels/cfwheels/issues/480) [Randall Meeker, Per Djurner]
+
+### Miscellaneous
+
+* Added the ability to pass `&lock=false` in the URL for when reload requests won't work due to locking - [Per Djurner]
+* Basic 302 redirects now available in mapper via `redirect` argument for `GET/PUT/PATCH/POST/DELETE` - [#847](https://github.com/cfwheels/cfwheels/issues/847) - [Tom King]
+* `HEAD` requests are now aliased to `GET` requests [#860](https://github.com/cfwheels/cfwheels/issues/860) - [Tom King]
+* Added the `includeFilters` argument to the `processRequest` function for skipping execution of filters during controller unit tests - [Adam Chapman]
+
 <a name="2.0.1"></a>
 
 # [2.0.1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.1) (01/31/2018)
@@ -12,7 +41,7 @@
 * Accessing a route with incorrect verb now provides a more useful error message - [#800](https://github.com/cfwheels/cfwheels/issues/800) [Tom King]
 * Fixed bug with arrays in URLs - [#836](https://github.com/cfwheels/cfwheels/issues/836) [Michael Diederich, Per Djurner]
 * startFormTag now properly applies the method attribute - [#837](https://github.com/cfwheels/cfwheels/issues/837) [David Paul Belanger]
-* Incompatible plugin notice now ignores patch releases unless specified - [#840](https://github.com/cfwheels/cfwheels/issues/840)  [Risto, Tom King]
+* Incompatible plugin notice now ignores patch releases unless specified - [#840](https://github.com/cfwheels/cfwheels/issues/840) [Risto, Tom King]
 
 <a name="2.0.0"></a>
 

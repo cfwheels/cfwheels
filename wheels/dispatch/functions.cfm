@@ -84,6 +84,11 @@ public struct function $createNestedParamStruct(required struct params) {
  */
 public struct function $findMatchingRoute(required string path, string requestMethod=$getRequestMethod()) {
 
+	// If this is a HEAD request, look for the corresponding GET route
+	if (arguments.requestMethod == 'HEAD'){
+		arguments.requestMethod = 'GET'; 
+	}
+
 	// Loop over Wheels routes.
 	for (local.route in application.wheels.routes) {
 
@@ -103,6 +108,11 @@ public struct function $findMatchingRoute(required string path, string requestMe
 			break;
 		}
 
+	}
+
+	// If returned route contains a redirect, execute that asap
+	if(structKeyExists(local, "rv") && structKeyExists(local.rv, "redirect")){
+		$location(url=local.rv.redirect, addToken=false);
 	}
 
 	// Throw error if no route was found.

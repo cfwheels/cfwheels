@@ -1,5 +1,9 @@
 component extends="wheels.tests.Test" {
 
+	function setup() {
+		StructDelete(request, "filterTestTypes");
+	}
+
 	function test_process_request() {
 		local.params = {
 			action = "show",
@@ -38,6 +42,52 @@ component extends="wheels.tests.Test" {
 		result = processRequest(method="post", params=local.params);
 		expected = "actionPost";
 		assert("Find(expected, result)");
+	}
+
+	function test_processRequest_executes_filters() {
+		local.params = {
+			controller = "Filtering",
+			action = "noView"
+		};
+		response = processRequest(params=local.params);
+		actual = ArrayLen(request.filterTestTypes);
+		expected = 2;
+		assert("actual IS expected");
+	}
+
+	function test_processRequest_skips_all_filters() {
+		local.params = {
+			controller = "Filtering",
+			action = "noView"
+		};
+		response = processRequest(params=local.params, includeFilters=false);
+		actual = StructKeyExists(request, "filterTestTypes");
+		expected = false;
+		assert("actual IS expected", "request.filterTestTypes");
+	}
+
+	function test_processRequest_only_runs_before_filters() {
+		local.params = {
+			controller = "Filtering",
+			action = "noView"
+		};
+		response = processRequest(params=local.params, includeFilters="before");
+		actual = request.filterTestTypes;
+		expected = "before";
+		assert("ArrayLen(actual) IS 1");
+		assert("actual[1] IS expected", "request.filterTestTypes");
+	}
+
+	function test_processRequest_only_runs_after_filters() {
+		local.params = {
+			controller = "Filtering",
+			action = "noView"
+		};
+		response = processRequest(params=local.params, includeFilters="after");
+		actual = request.filterTestTypes;
+		expected = "after";
+		assert("ArrayLen(actual) IS 1");
+		assert("actual[1] IS expected", "request.filterTestTypes");
 	}
 
 }

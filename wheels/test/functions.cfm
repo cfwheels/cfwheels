@@ -277,8 +277,10 @@ public boolean function $runTest(string resultKey="test", string testname="") {
 
 	for (key in listToArray(keyList)) {
 
+		/* Include test name and make distinct so debugging doesn't duplicate output */
+		var distinctKey= replace(replace(replace(testCase, ".", "_", "all"), "tests_", "", "one"), "wheels_", "", "one") & '_' & key;
 		/* keep track of the test name so we can display debug information */
-		TESTING_FRAMEWORK_VARS.RUNNING_TEST = key;
+		TESTING_FRAMEWORK_VARS.RUNNING_TEST = distinctkey;
 
 		if ((left(key, 4) eq "test" and isCustomFunction(this[key])) and (!len(arguments.testname) or (len(arguments.testname) and arguments.testname eq key))) {
 

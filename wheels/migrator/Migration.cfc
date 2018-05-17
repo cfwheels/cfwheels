@@ -227,6 +227,14 @@ component extends="Base" {
 	public void function addRecord(required string table) {
 		local.columnNames = "";
 		local.columnValues = "";
+		if(!StructKeyExists(arguments, application.wheels.timeStampOnCreateProperty) && ListFindNoCase($getColumns(arguments.table), application.wheels.timeStampOnCreateProperty)) {
+			arguments[application.wheels.timeStampOnCreateProperty] = $timestamp();
+		}
+		if(application.wheels.setUpdatedAtOnCreate && !StructKeyExists(arguments, application.wheels.timeStampOnUpdateProperty) && ListFindNoCase($getColumns(arguments.table), application.wheels.timeStampOnUpdateProperty)) {
+			announce(application.wheels.setUpdatedAtOnCreate);
+			arguments[application.wheels.timeStampOnUpdateProperty] = $timestamp();
+		}
+
 		for (local.key in arguments) {
 			if(local.key neq "table") {
 				local.columnNames = ListAppend(local.columnNames,this.adapter.quoteColumnName(local.key));
@@ -258,6 +266,9 @@ component extends="Base" {
     */
 	public void function updateRecord(required string table, string where="") {
 		local.columnUpdates = "";
+		if (!StructKeyExists(arguments, application.wheels.timeStampOnUpdateProperty) && ListFindNoCase($getColumns(arguments.table), application.wheels.timeStampOnUpdateProperty)) {
+			arguments[application.wheels.timeStampOnUpdateProperty] = $timestamp();
+		}
 		for (local.key in arguments) {
 			if(local.key neq "table" && local.key neq "where") {
 				local.update = "#this.adapter.quoteColumnName(local.key)# = ";

@@ -129,4 +129,9 @@ component extends="wheels.tests.Test" {
 		assert("IsObject(mypost.author)");
 	}
 
+	function test_calculated_property_override() {
+		user = model("User3").findOne();
+		assert("IsObject(user) and user.firstName eq 'Calculated Property Column Override'");
+	}
+
 }

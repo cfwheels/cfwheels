@@ -59,6 +59,17 @@ public any function $initModelClass(required string name, required string path) 
 		);
 	}
 
+	// set calculated properties
+	for (local.key in variables.wheels.class.mapping) {
+		if (StructKeyExists(variables.wheels.class.mapping[local.key], "type") && variables.wheels.class.mapping[local.key].type != "column") {
+			variables.wheels.class.calculatedPropertyList = ListAppend(variables.wheels.class.calculatedPropertyList, local.key);
+			variables.wheels.class.calculatedProperties[local.key] = {};
+			variables.wheels.class.calculatedProperties[local.key][variables.wheels.class.mapping[local.key].type] = variables.wheels.class.mapping[local.key].value;
+			variables.wheels.class.calculatedProperties[local.key].select = variables.wheels.class.mapping[local.key].select;
+			variables.wheels.class.calculatedProperties[local.key].dataType = variables.wheels.class.mapping[local.key].dataType;
+		}
+	}
+
 	// Make sure that the tablename has the respected prefix.
 	table(getTableNamePrefix() & tableName());
 
@@ -69,11 +80,13 @@ public any function $initModelClass(required string name, required string path) 
 		// get columns for the table
 		local.columns = variables.wheels.class.adapter.$getColumns(tableName());
 
-		local.processedColumns = "";
+		// do not process columns already assigned to a calculated property 
+		local.processedColumns = variables.wheels.class.calculatedPropertyList;
+		
 		local.iEnd = local.columns.recordCount;
 		for (local.i=1; local.i <= local.iEnd; local.i++) {
 			// set up properties and column mapping
-			if (!ListFind(local.processedColumns, local.columns["column_name"][local.i])) {
+			if (!ListFindNoCase(local.processedColumns, local.columns["column_name"][local.i])) {
 				// default the column to map to a property with the same name
 				local.property = local.columns["column_name"][local.i];
 				for (local.key in variables.wheels.class.mapping) {
@@ -184,17 +197,6 @@ public any function $initModelClass(required string name, required string path) 
 			);
 		}
 
-	}
-
-	// add calculated properties
-	for (local.key in variables.wheels.class.mapping) {
-		if (StructKeyExists(variables.wheels.class.mapping[local.key], "type") && variables.wheels.class.mapping[local.key].type != "column") {
-			variables.wheels.class.calculatedPropertyList = ListAppend(variables.wheels.class.calculatedPropertyList, local.key);
-			variables.wheels.class.calculatedProperties[local.key] = {};
-			variables.wheels.class.calculatedProperties[local.key][variables.wheels.class.mapping[local.key].type] = variables.wheels.class.mapping[local.key].value;
-			variables.wheels.class.calculatedProperties[local.key].select = variables.wheels.class.mapping[local.key].select;
-			variables.wheels.class.calculatedProperties[local.key].dataType = variables.wheels.class.mapping[local.key].dataType;
-		}
 	}
 
 	// set up soft deletion and time stamping if the necessary columns in the table exist

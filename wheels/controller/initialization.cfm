@@ -46,6 +46,7 @@ public any function $initControllerClass(string name="") {
 	variables.$class.formats.nonExistingTemplates = "";
 
 	$setFlashStorage($get("flashStorage"));
+	$setFlashAppend($get("flashAppend"));
 
 	// Call the developer's "config" function if it exists.
 	if (StructKeyExists(variables, "config")) {
