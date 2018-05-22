@@ -67,7 +67,7 @@ component extends="wheels.tests.Test" {
 			adapterName="MySQL"
 		);
 
-		expected = "FROM authors USE INDEX(idx_authors_123) LEFT OUTER JOIN posts USE INDEX(idx_posts_123) ON authors.id = posts.authorid AND posts.deletedat IS NULL"
+		expected = "FROM authors USE INDEX(idx_authors_123) LEFT OUTER JOIN posts USE INDEX(idx_posts_123) ON authors.id = posts.authorid AND posts.deletedat IS NULL";
 		assert("actual == expected");
 	}
 
