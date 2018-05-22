@@ -52,7 +52,7 @@ component extends="wheels.tests.Test" {
 		response = processRequest(params=local.params);
 		actual = ArrayLen(request.filterTestTypes);
 		expected = 2;
-		assert("actual == expected");
+		assert("actual IS expected");
 	}
 
 	function test_processRequest_skips_all_filters() {
@@ -63,7 +63,7 @@ component extends="wheels.tests.Test" {
 		response = processRequest(params=local.params, includeFilters=false);
 		actual = StructKeyExists(request, "filterTestTypes");
 		expected = false;
-		assert("actual == expected", "request.filterTestTypes");
+		assert("actual IS expected", "request.filterTestTypes");
 	}
 
 	function test_processRequest_only_runs_before_filters() {
@@ -74,8 +74,8 @@ component extends="wheels.tests.Test" {
 		response = processRequest(params=local.params, includeFilters="before");
 		actual = request.filterTestTypes;
 		expected = "before";
-		assert("ArrayLen(actual) == 1");
-		assert("actual[1] == expected", "request.filterTestTypes");
+		assert("ArrayLen(actual) IS 1");
+		assert("actual[1] IS expected", "request.filterTestTypes");
 	}
 
 	function test_processRequest_only_runs_after_filters() {
@@ -86,8 +86,8 @@ component extends="wheels.tests.Test" {
 		response = processRequest(params=local.params, includeFilters="after");
 		actual = request.filterTestTypes;
 		expected = "after";
-		assert("ArrayLen(actual) == 1");
-		assert("actual[1] == expected", "request.filterTestTypes");
+		assert("ArrayLen(actual) IS 1");
+		assert("actual[1] IS expected", "request.filterTestTypes");
 	}
 
 }

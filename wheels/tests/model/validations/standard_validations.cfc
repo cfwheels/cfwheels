@@ -388,9 +388,18 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_validatesUniquenessOf_valids_when_updating_existing_record() {
-		user = model("users").findOne(where="firstname = 'Tony'");
-		user.validatesUniquenessOf(property="firstname");
+		user = model("user").findOne(where="firstName = 'Tony'");
+		user.validatesUniquenessOf(property="firstName");
 		assert('user.valid()');
+		// Special case for testing when we already have duplicates in the database:
+		// https://github.com/cfwheels/cfwheels/issues/480
+		transaction action="begin" {
+			user.create(firstName="Tony", username="xxxx", password="xxxx", lastname="xxxx", validate=false);
+			firstUser = model("user").findOne(where="firstName = 'Tony'", order="id ASC");
+			lastUser = model("user").findOne(where="firstName = 'Tony'", order="id DESC");
+			assert('!firstUser.valid() && !lastUser.valid()');
+			transaction action="rollback";
+		}
 	}
 
 	function test_validatesUniquenessOf_takes_softdeletes_into_account() {

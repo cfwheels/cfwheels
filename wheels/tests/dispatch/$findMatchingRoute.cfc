@@ -224,5 +224,12 @@ component extends="wheels.tests.Test" {
     route = d.$findMatchingRoute(path="admin/users/1");
     assert('route.name eq "adminUser" and route.methods eq "delete"');
   }
+ 
+  function test_head_request_aliases_get() {
+    request.cgi["request_method"] = "HEAD";
+    route = d.$findMatchingRoute(path="users"); 
+    assert('route.name eq "Users" and route.methods eq "GET"');
+  }
+
 
 }
