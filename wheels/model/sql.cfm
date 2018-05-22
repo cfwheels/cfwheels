@@ -14,13 +14,45 @@ public array function $addDeleteClause(required array sql, required boolean soft
 	return arguments.sql;
 }
 
+public string function $indexHint(
+	required struct useIndex,
+	required string modelName,
+	required string adapterName
+ ) {
+	local.rv = "";
+	if (StructKeyExists(arguments.useIndex, arguments.modelName)) {
+		local.indexName = arguments.useIndex[arguments.modelName];
+		if (arguments.adapterName == "MySQL") {
+			local.rv = "USE INDEX(#local.indexName#)";
+		} else if (arguments.adapterName == "SQLServer") {
+			local.rv = "WITH (INDEX(#local.indexName#))";
+		}
+	}
+	return local.rv;
+}
+
 /**
  * Internal function.
  */
-public string function $fromClause(required string include, boolean includeSoftDeletes="false") {
+public string function $fromClause(
+	required string include,
+	boolean includeSoftDeletes = "false",
+	struct useIndex = {},
+	string adapterName = get("adapterName")
+) {
 
 	// start the from statement with the SQL keyword and the table name for the current model
 	local.rv = "FROM " & tableName();
+
+	// add the index hint
+	local.indexHint = this.$indexHint(
+		useIndex=arguments.useIndex,
+		modelName=variables.wheels.class.modelName,
+		adapterName=arguments.adapterName
+	);
+	if (Len(local.indexHint)) {
+		local.rv = ListAppend(local.rv, local.indexHint, " ");
+	}
 
 	// add join statements if associations have been specified through the include argument
 	if (Len(arguments.include)) {
@@ -30,7 +62,18 @@ public string function $fromClause(required string include, boolean includeSoftD
 		// add join statement for each include separated by space
 		local.iEnd = ArrayLen(local.associations);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			local.rv = ListAppend(local.rv, local.associations[local.i].join, " ");
+			local.indexHint = this.$indexHint(
+				useIndex=arguments.useIndex,
+				modelName=local.associations[local.i].modelName,
+				adapterName=arguments.adapterName
+			);
+			local.join = local.associations[local.i].join;
+			if (Len(local.indexHint)) {
+				// replace the table name with the table name & index hint
+				// TODO: factor in table aliases.. the index hint is placed after the table alias
+				local.join = Replace(local.join, " #local.associations[local.i].tableName# ", " #local.associations[local.i].tableName# #local.indexHint# ", "one");
+			}
+			local.rv = ListAppend(local.rv, local.join, " ");
 		}
 	}
 	return local.rv;

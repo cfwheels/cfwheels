@@ -45,6 +45,7 @@ public any function findAll(
 	boolean returnIncluded,
 	boolean callbacks="true",
 	boolean includeSoftDeletes="false",
+	struct useIndex={},
 	numeric $limit="0",
 	numeric $offset="0"
 ) {
@@ -186,7 +187,7 @@ public any function findAll(
 		if (!IsArray(local.sql)) {
 			local.sql = [];
 			ArrayAppend(local.sql, $selectClause(select=arguments.select, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, returnAs=arguments.returnAs));
-			ArrayAppend(local.sql, $fromClause(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes));
+			ArrayAppend(local.sql, $fromClause(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, useIndex=arguments.useIndex));
 			local.sql = $addWhereClause(sql=local.sql, where=local.originalWhere, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			local.groupBy = $groupByClause(select=arguments.select, group=arguments.group, include=arguments.include, distinct=arguments.distinct, returnAs=arguments.returnAs);
 			if (Len(local.groupBy)) {
@@ -332,7 +333,8 @@ public any function findOne(
 	boolean reload,
 	any parameterize,
 	string returnAs,
-	boolean includeSoftDeletes="false"
+	boolean includeSoftDeletes="false",
+	struct useIndex={}
 ) {
 	$args(name="findOne", args=arguments);
 	$setDebugName(name="findOne", args=arguments);
