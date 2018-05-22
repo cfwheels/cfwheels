@@ -20,3 +20,10 @@ comments = post.comments();
 
 // If you have an `Order` model with properties for `productId`, `amount` and a calculated property named `totalAmount` (set up as `property(name="totalAmount", sql="SUM(amount)")`), then you can do the following to get the ids for all products with over $1,000 in sales (the SQL will be created using `HAVING` instead of `WHERE` in this case since you're getting an aggregate value for a calculated property)
 ids = model("order").findAll(group="productId", where="totalAmount > 1000");
+
+// Using index hints
+indexes = {
+	author="idx_authors_123",
+	post="idx_posts_123"
+}
+posts = model("author").findAll(where="firstname LIKE '#params.q#%' OR subject LIKE '#params.q#%'", include="posts", useIndex=indexes);
