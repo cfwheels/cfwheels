@@ -26,10 +26,11 @@ public struct function init(
 public string function migrateTo(string version="") {
 	local.rv = "";
 	local.currentVersion = getCurrentMigrationVersion();
+	local.settings = $getMigratorSettingsScope();
 	if (local.currentVersion == arguments.version) {
 		local.rv = "Database is currently at version #arguments.version#. No migration required.#chr(13)#";
 	} else {
-		if (!DirectoryExists(this.paths.sql) && application.wheels.writeMigratorSQLFiles) {
+		if (!DirectoryExists(this.paths.sql) && local.settings.writeMigratorSQLFiles) {
 			DirectoryCreate(this.paths.sql);
 		}
 		local.migrations = getAvailableMigrations();
@@ -40,13 +41,13 @@ public string function migrateTo(string version="") {
 				if (local.migration.version <= arguments.version) {
 					break;
 				}
-				if (local.migration.status == "migrated" && application.wheels.allowMigrationDown) {
+				if (local.migration.status == "migrated" && local.settings.allowMigrationDown) {
 					transaction action="begin" {
 						try {
 							local.rv = local.rv & "#Chr(13)#------- " & local.migration.cfcfile & " #RepeatString("-",Max(5,50-Len(local.migration.cfcfile)))##Chr(13)#";
 							request.$wheelsMigrationOutput = "";
 							request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_down.sql";
-							if (application.wheels.writeMigratorSQLFiles) {
+							if (local.settings.writeMigratorSQLFiles) {
 								FileWrite(request.$wheelsMigrationSQLFile, "");
 							}
 							local.migration.cfc.down();
@@ -70,7 +71,7 @@ public string function migrateTo(string version="") {
 							local.rv = local.rv & "#Chr(13)#-------- " & local.migration.cfcfile & " #RepeatString("-",Max(5,50-Len(local.migration.cfcfile)))##Chr(13)#";
 							request.$wheelsMigrationOutput = "";
 							request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_up.sql";
-							if (application.wheels.writeMigratorSQLFiles) {
+							if (local.settings.writeMigratorSQLFiles) {
 								FileWrite(request.$wheelsMigrationSQLFile, "");
 							}
 							local.migration.cfc.up();
@@ -189,6 +190,7 @@ public array function getAvailableMigrations(string path=this.paths.migrate) {
  */
 public string function redoMigration(string version="") {
 	var currentVersion = getCurrentMigrationVersion();
+	local.settings = $getMigratorSettingsScope();
 	if (Len(arguments.version)) {
 		currentVersion = arguments.version;
 	}
@@ -205,10 +207,10 @@ public string function redoMigration(string version="") {
 		local.rv = local.rv & "#Chr(13)#------- " & local.migration.cfcfile & " #RepeatString("-", Max(5, 50-Len(local.migration.cfcfile)))##Chr(13)#";
 		request.$wheelsMigrationOutput = "";
 		request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_redo.sql";
-		if (application.wheels.writeMigratorSQLFiles) {
+		if (local.settings.writeMigratorSQLFiles) {
 			FileWrite(request.$wheelsMigrationSQLFile, "");
 		}
-		if (application.wheels.allowMigrationDown) {
+		if (local.settings.allowMigrationDown) {
 			local.migration.cfc.down();
 		}
 		local.migration.cfc.up();
@@ -223,9 +225,10 @@ public string function redoMigration(string version="") {
  * Inserts a record to flag a version as migrated.
  */
 private void function $setVersionAsMigrated(required string version) {
+	local.settings = $getMigratorSettingsScope();
 	$query(
-		datasource=application.wheels.dataSourceName,
-		sql="INSERT INTO #application.wheels.migratorTableName# (version) VALUES ('#$sanitiseVersion(arguments.version)#')"
+		datasource=local.settings.dataSourceName,
+		sql="INSERT INTO #local.settings.migratorTableName# (version) VALUES ('#$sanitiseVersion(arguments.version)#')"
 	);
 }
 
@@ -233,9 +236,10 @@ private void function $setVersionAsMigrated(required string version) {
  * Deletes a record to flag a version as not migrated.
  */
 private void function $removeVersionAsMigrated(required string version) {
+	local.settings = $getMigratorSettingsScope();
 	$query(
-		datasource=application.wheels.dataSourceName,
-		sql="DELETE FROM #application.wheels.migratorTableName# WHERE version = '#$sanitiseVersion(arguments.version)#'"
+		datasource=local.settings.dataSourceName,
+		sql="DELETE FROM #local.settings.migratorTableName# WHERE version = '#$sanitiseVersion(arguments.version)#'"
 	);
 }
 
@@ -330,6 +334,13 @@ private string function $getVersionsPreviouslyMigrated() {
  */
 private string function $sanitiseVersion(required string version) {
 	return REReplaceNoCase(arguments.version, "[^0-9]", "" ,"all");
+}
+
+/**
+ * As migrator functions can be run within onApplicationStart, we need to check the scope
+ */
+private struct function $getMigratorSettingsScope(){
+	return structKeyExists(application, "wheels") ? application.wheels : application.$wheels;
 }
 
 </cfscript>
