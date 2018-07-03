@@ -49,7 +49,8 @@ public any function $initControllerClass(string name="") {
 	$setFlashAppend($get("flashAppend"));
 
 	// Call the developer's "config" function if it exists.
-	if (StructKeyExists(variables, "config")) {
+	// Don't run this for internal wheels pages
+	if (variables.$class.path NEQ "wheels" && StructKeyExists(variables, "config")) {
 		config();
 	}
 
