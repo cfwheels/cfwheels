@@ -2,13 +2,13 @@
 
 // We use $wheels here since these variables get placed in the variables scope of all objects.
 // This way we sure they don't clash with other Wheels variables or any variables the developer may set.
-if (StructKeyExists(application, "$wheels")) {
+if (isDefined("application") && StructKeyExists(application, "$wheels")) {
 	$wheels.appKey = "$wheels";
 } else {
 	$wheels.appKey = "wheels";
 }
 
-if (!StructIsEmpty(application[$wheels.appKey].mixins)) {
+if (isDefined("application") && !StructIsEmpty(application[$wheels.appKey].mixins)) {
 	$wheels.metaData = GetMetaData(this);
 	if (StructKeyExists($wheels.metaData, "displayName")) {
 		$wheels.className = $wheels.metaData.displayName;
