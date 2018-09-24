@@ -20,14 +20,15 @@ component extends="wheels.tests.Test" {
   function test_get() {
     request.cgi["request_method"] = "GET";
     method = d.$getRequestMethod();
-    assert('method eq "get"');
+    assert('method eq "GET"');
   }
-
-  function test_get_override() {
+  
+  // https://github.com/cfwheels/cfwheels/issues/886
+  function test_get_disallow_override() {
     request.cgi["request_method"] = "GET";
     url._method = "delete";
     method = d.$getRequestMethod();
-    assert('method eq "delete"');
+    assert('method eq "GET"');
   }
 
   function test_get_form_should_not_override() {
@@ -40,7 +41,7 @@ component extends="wheels.tests.Test" {
   function test_post() {
     request.cgi["request_method"] = "POST";
     method = d.$getRequestMethod();
-    assert('method eq "post"');
+    assert('method eq "POST"');
   }
 
   function test_post_override() {

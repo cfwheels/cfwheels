@@ -449,12 +449,7 @@ public string function $getRequestMethod() {
 	if (request.cgi.request_method == "post" && StructKeyExists(form, "_method")) {
 		return form["_method"];
 	}
-
-	// If request is a get, check for alternate verb.
-	if (request.cgi.request_method == "get" && StructKeyExists(url, "_method")) {
-		return url["_method"];
-	}
-
+  
 	return request.cgi.request_method;
 }
 
