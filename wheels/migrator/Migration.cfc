@@ -264,7 +264,7 @@ component extends="Base" {
 	* [category: Migration Reference]
 	*
 	* @table The table name to perform the operation on
-	* @referenceTable The reference table name to perform the operation on
+	* @referenceName The reference table name to perform the operation on
 	*/
 	public void function addReference(required string table, required string referenceName) {
 		addForeignKey(table=arguments.table, referenceTable=pluralize(arguments.referenceName), column="#arguments.referenceName#id", referenceColumn="id");
@@ -332,6 +332,8 @@ component extends="Base" {
 	* [category: Migration Reference]
 	*
 	* @table The table name to perform the index operation on
+	* @columnNames Names of the columns to add the index to
+	* @unique ???
 	* @indexName the name of the index to add
     */
 	public void function addIndex(

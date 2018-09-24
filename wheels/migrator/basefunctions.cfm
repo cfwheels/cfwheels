@@ -3,6 +3,13 @@ if(!StructKeyExists(variables, "$wddx")){
 	include "../global/functions.cfm";
 }
 
+/**
+* Used internally by Migrator to provide feedback to the GUI and CLI about completed DB operations
+* Only available in a migration CFC
+*
+* [section: Configuration]
+* [category: Migration Reference]
+*/
 public function announce(required string message) {
 	param name="request.$wheelsMigrationOutput" default="";
 	request.$wheelsMigrationOutput = request.$wheelsMigrationOutput & arguments.message & chr(13);
