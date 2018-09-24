@@ -29,6 +29,10 @@
 			"name": "migrator",
 			"scope": application.wheels.migrator
 	});
+	arrayAppend(documentScope, {
+			"name": "migration",
+			"scope": createObject("component", "app.wheels.migrator.Migration")
+	});
 
 	// Array of functions to ignore
 	ignore = ["config","init"];
