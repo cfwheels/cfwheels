@@ -11,7 +11,9 @@ component extends="Base" {
 	}
 
 	/**
-	* Migrates up
+	* Migrates up: will be executed when migrating your schema forward
+	* Along with down(), these are the two main functions in any migration file
+	* Only available in a migration CFC
 	*
 	* [section: Configuration]
 	* [category: Migration Reference]
@@ -22,7 +24,8 @@ component extends="Base" {
 	}
 
 	/**
-	* Migrates down
+	* Migrates down: will be executed when migrating your schema backward
+	* Along with up(), these are the two main functions in any migration file
 	* Only available in a migration CFC
 	*
 	* [section: Configuration]
@@ -34,12 +37,16 @@ component extends="Base" {
 	}
 
 	/**
-    * creates a table definition object to store table properties
+    * Creates a table definition object to store table properties
 	* Only available in a migration CFC
 	*
 	* [section: Configuration]
 	* [category: Migration Reference]
 	*
+	* @name The name of the table to create
+	* @force whether to drop the table before creating it
+	* @id Whether to create a default primarykey or not
+	* @primaryKey Name of the primary key field to create
     */
 	public TableDefinition function createTable(
 		required string name,
@@ -52,12 +59,13 @@ component extends="Base" {
 	}
 
 	/**
-    * creates a view definition object to store view properties
+    * Creates a view definition object to store view properties
 	* Only available in a migration CFC
 	*
 	* [section: Configuration]
 	* [category: Migration Reference]
 	*
+	* @name Name of the view to change properties on
     */
 	public ViewDefinition function createView(required string name) {
 		arguments.adapter = this.adapter;
@@ -65,23 +73,27 @@ component extends="Base" {
 	}
 
 	/**
-    * creates a table definition object to store modifications to table properties
+    * Creates a table definition object to store modifications to table properties
 	* Only available in a migration CFC
 	*
 	* [section: Configuration]
 	* [category: Migration Reference]
 	*
+	* @name Name of the table to set change properties on 
     */
 	public TableDefinition function changeTable(required string name) {
 		return CreateObject("component","TableDefinition").init(adapter=this.adapter,name=arguments.name);
 	}
+
 	/**
-    * renames a table
+    * Renames a table
 	* Only available in a migration CFC
 	*
 	* [section: Configuration]
 	* [category: Migration Reference]
 	*
+	* @oldName Name the old table
+	* @newName New name for the table
     */
 	public void function renameTable(required string oldName, required string newName) {
 		$execute(this.adapter.renameTable(argumentCollection=arguments));
@@ -89,12 +101,13 @@ component extends="Base" {
 	}
 
 	/**
-    * drops a table from the database
+    * Drops a table from the database
 	* Only available in a migration CFC
 	*
 	* [section: Configuration]
 	* [category: Migration Reference]
 	*
+	* @name Name of the table to drop
     */
 	public void function dropTable(required string name) {
 	  	if (application.wheels.serverName != "lucee") {
@@ -116,6 +129,7 @@ component extends="Base" {
 	* [section: Configuration]
 	* [category: Migration Reference]
 	*
+	* @name Name of the view to drop
 	*/
 	public void function dropView(required string name) {
 	    $execute(this.adapter.dropView(name=arguments.name));
@@ -129,6 +143,16 @@ component extends="Base" {
 	* [section: Configuration]
 	* [category: Migration Reference]
 	*
+	* @table The Name of the table to add the column to
+	* @columnType The type of the new column
+	* @afterColumn The name of the column which this column should be inserted after
+	* @columnName THe name of the new column
+	* @referenceName The reference name of the new column
+	* @default Default value for this column
+	* @null Whether to allow NULL values
+	* @limit ????
+	* @precision (For decimal type) the maximum number of digits allow 
+	* @scale (For decimal type) the number of digits to the right of the decimal point
     */
 	public void function addColumn(
 		required string table,
@@ -153,6 +177,17 @@ component extends="Base" {
 	* [section: Configuration]
 	* [category: Migration Reference]
 	*
+	* @table The Name of the table where the column is
+	* @columnName THe name of the column
+	* @columnType The type of the column
+	* @afterColumn The name of the column which this column should be inserted after
+	* @referenceName The reference name of the new column
+	* @default Default value for this column
+	* @null Whether to allow NULL values
+	* @limit ????
+	* @precision (For decimal type) the maximum number of digits allow 
+	* @scale (For decimal type) the number of digits to the right of the decimal point
+	* @addColumns Used by addColumn() to flag whether the column should be created or not
     */
 	public void function changeColumn(
 		required string table,
