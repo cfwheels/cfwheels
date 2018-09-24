@@ -29,7 +29,7 @@
 * `HEAD` requests are now aliased to `GET` requests [#860](https://github.com/cfwheels/cfwheels/issues/860) - [Tom King]
 * Added the `includeFilters` argument to the `processRequest` function for skipping execution of filters during controller unit tests - [Adam Chapman]
 * Added the `useIndex` argument to finders for adding table index hints [#864](https://github.com/cfwheels/cfwheels/issues/864) - [Adam Chapman]
-
+* HTTP Verb/Method switching is now no longer allowed via `GET` requests and must be performed via `POST` [#886](https://github.com/cfwheels/cfwheels/issues/886) - [Tom King]
 <a name="2.0.1"></a>
 
 # [2.0.1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.1) (01/31/2018)
