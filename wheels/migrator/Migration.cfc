@@ -15,8 +15,8 @@ component extends="Base" {
 	* Along with down(), these are the two main functions in any migration file
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	*/
 	public void function up() {
@@ -28,8 +28,8 @@ component extends="Base" {
 	* Along with up(), these are the two main functions in any migration file
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	*/ 
 	public void function down() {
@@ -40,8 +40,8 @@ component extends="Base" {
     * Creates a table definition object to store table properties
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @name The name of the table to create
 	* @force whether to drop the table before creating it
@@ -62,8 +62,8 @@ component extends="Base" {
     * Creates a view definition object to store view properties
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @name Name of the view to change properties on
     */
@@ -76,8 +76,8 @@ component extends="Base" {
     * Creates a table definition object to store modifications to table properties
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @name Name of the table to set change properties on 
     */
@@ -89,8 +89,8 @@ component extends="Base" {
     * Renames a table
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @oldName Name the old table
 	* @newName New name for the table
@@ -104,8 +104,8 @@ component extends="Base" {
     * Drops a table from the database
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @name Name of the table to drop
     */
@@ -126,8 +126,8 @@ component extends="Base" {
 	* drops a view from the database
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @name Name of the view to drop
 	*/
@@ -140,8 +140,8 @@ component extends="Base" {
     * adds a column to existing table
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @table The Name of the table to add the column to
 	* @columnType The type of the new column
@@ -174,8 +174,8 @@ component extends="Base" {
     * changes a column definition
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @table The Name of the table where the column is
 	* @columnName THe name of the column
@@ -217,8 +217,8 @@ component extends="Base" {
     * Renames a table column
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @table The table containing the column to rename
 	* @columnName The column name to rename
@@ -237,8 +237,8 @@ component extends="Base" {
     * Removes a column from a database table
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @table The table containing the column to remove
 	* @columnName The column name to remove
@@ -260,8 +260,8 @@ component extends="Base" {
     * Add a foreign key constraint to the database, using the reference name that was used to create it
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @table The table name to perform the operation on
 	* @referenceName The reference table name to perform the operation on
@@ -274,8 +274,8 @@ component extends="Base" {
     * Add a foreign key constraint to the database, using the reference name that was used to create it
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @table The table name to perform the operation on
 	* @referenceTable The reference table name to perform the operation on
@@ -297,8 +297,8 @@ component extends="Base" {
     * Drop a foreign key constraint from the database, using the reference name that was used to create it
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @table The table name to perform the operation on
 	* @referenceName the name of the reference to drop
@@ -312,8 +312,8 @@ component extends="Base" {
     * Drops a foreign key constraint from the database
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @table The table name to perform the operation on
 	* @keyName the name of the key to drop
@@ -328,8 +328,8 @@ component extends="Base" {
     * Add database index on a table column
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @table The table name to perform the index operation on
 	* @columnNames Names of the columns to add the index to
@@ -350,8 +350,8 @@ component extends="Base" {
     * Remove a database index
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @table The table name to perform the index operation on
 	* @indexName the name of the index to remove
@@ -365,8 +365,8 @@ component extends="Base" {
     * Executes a raw sql query
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @sql Arbitary SQL String
 	*/
@@ -379,8 +379,8 @@ component extends="Base" {
     * Adds a record to a table
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @table The table name to add the record to
 	*/
@@ -425,8 +425,8 @@ component extends="Base" {
     * Updates an existing record in a table
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @table The table name where the record is
 	* @where The where clause, i.e admin = 1
@@ -468,8 +468,8 @@ component extends="Base" {
     * Removes existing records from a table
 	* Only available in a migration CFC
 	*
-	* [section: Configuration]
-	* [category: Migration Reference]
+	* [section: Migrator]
+	* [category: Migration Functions]
 	*
 	* @table The table name to remove the record from
 	* @where The where clause, i.e id = 123

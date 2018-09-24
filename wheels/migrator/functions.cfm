@@ -18,8 +18,8 @@ public struct function init(
 /**
  * Migrates database to a specified version. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
- * [section: Configuration]
- * [category: Database Migrations]
+ * [section: Migrator]
+ * [category: General Functions]
  *
  * @version The Database schema version to migrate to
  */
@@ -96,8 +96,8 @@ public string function migrateTo(string version="") {
 /**
  * Shortcut function to migrate to the latest version
  *
- * [section: Configuration]
- * [category: Database Migrations]
+ * [section: Migrator]
+ * [category: General Functions]
  */
 public string function migrateToLatest() {
 	local.migrations=getAvailableMigrations();
@@ -112,8 +112,8 @@ public string function migrateToLatest() {
 /**
  * Returns current database version. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
- * [section: Configuration]
- * [category: Database Migrations]
+ * [section: Migrator]
+ * [category: General Functions]
  */
 public string function getCurrentMigrationVersion() {
 	return ListLast($getVersionsPreviouslyMigrated());
@@ -122,8 +122,8 @@ public string function getCurrentMigrationVersion() {
 /**
  * Creates a migration file. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
- * [section: Configuration]
- * [category: Database Migrations]
+ * [section: Migrator]
+ * [category: General Functions]
  */
 public string function createMigration(
 	required string migrationName,
@@ -140,8 +140,8 @@ public string function createMigration(
 /**
  * Searches db/migrate folder for migrations. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
- * [section: Configuration]
- * [category: Database Migrations]
+ * [section: Migrator]
+ * [category: General Functions]
  *
  * @path Path to Migration Files: defaults to /migrator/migrations/
  */
@@ -183,8 +183,8 @@ public array function getAvailableMigrations(string path=this.paths.migrate) {
 /**
  * Reruns the specified migration version. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
- * [section: Configuration]
- * [category: Database Migrations]
+ * [section: Migrator]
+ * [category: General Functions]
  *
  * @version The Database schema version to rerun
  */

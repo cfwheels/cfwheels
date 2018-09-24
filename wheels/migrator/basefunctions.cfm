@@ -7,8 +7,8 @@ if(!StructKeyExists(variables, "$wddx")){
 * Used internally by Migrator to provide feedback to the GUI and CLI about completed DB operations
 * Only available in a migration CFC
 *
-* [section: Configuration]
-* [category: Migration Reference]
+* [section: Migrator]
+* [category: Migration Functions]
 */
 public function announce(required string message) {
 	param name="request.$wheelsMigrationOutput" default="";

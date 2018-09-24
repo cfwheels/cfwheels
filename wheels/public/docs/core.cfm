@@ -33,6 +33,10 @@
 			"name": "migration",
 			"scope": createObject("component", "app.wheels.migrator.Migration")
 	});
+	arrayAppend(documentScope, {
+			"name": "tabledefinition",
+			"scope": createObject("component", "app.wheels.migrator.TableDefinition")
+	});
 
 	// Array of functions to ignore
 	ignore = ["config","init"];

@@ -25,8 +25,11 @@ component extends="Base" {
 	}
 
 	/**
-   * Adds a primary key definition to the table. this method also allows for multiple primary keys.
-   */
+	* Adds a primary key definition to the table. this method also allows for multiple primary keys.
+	*
+	* [section: Migrator]
+	* [category: Table Definition Functions]
+	*/
 	public any function primaryKey(
 		required string name,
 		string type="integer",
@@ -66,8 +69,11 @@ component extends="Base" {
 	}
 
 	/**
-   * Adds a column to table definition.
-   */
+	* Adds a column to table definition.
+	*
+	* [section: Migrator]
+	* [category: Table Definition Functions]
+	*/
 	public any function column(
 		required string columnName,
 		required string columnType,
@@ -86,8 +92,11 @@ component extends="Base" {
 	}
 
 	/**
-   * Adds integer columns to table definition.
-   */
+	* Adds integer columns to table definition.
+	*
+	* [section: Migrator]
+	* [category: Table Definition Functions]
+	*/
 	public any function bigInteger(
 		required string columnNames,
 		numeric limit,
@@ -104,8 +113,11 @@ component extends="Base" {
 	}
 
 	/**
-   * Adds binary columns to table definition.
-   */
+	* Adds binary columns to table definition.
+	*
+	* [section: Migrator]
+	* [category: Table Definition Functions]
+	*/
 	public any function binary(required string columnNames, string default, boolean null) {
 		arguments.columnType = "binary";
 		local.iEnd = ListLen(arguments.columnNames);
@@ -117,8 +129,11 @@ component extends="Base" {
 	}
 
 	/**
-   * Adds boolean columns to table definition.
-   */
+	* Adds boolean columns to table definition.
+	*
+	* [section: Migrator]
+	* [category: Table Definition Functions]
+	*/
 	public any function boolean(required string columnNames, string default, boolean null) {
 		arguments.columnType = "boolean";
 		local.iEnd = ListLen(arguments.columnNames);
@@ -130,8 +145,11 @@ component extends="Base" {
 	}
 
 	/**
-   * Adds date columns to table definition.
-   */
+	* Adds date columns to table definition.
+	*
+	* [section: Migrator]
+	* [category: Table Definition Functions]
+	*/
 	public any function date(required string columnNames, string default, boolean null) {
 		arguments.columnType = "date";
 		local.iEnd = ListLen(arguments.columnNames);
@@ -143,8 +161,11 @@ component extends="Base" {
 	}
 
 	/**
-    * adds datetime columns to table definition
-    */
+ 	* adds datetime columns to table definition
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public any function datetime(
 		required string columnNames,
 		string default,
@@ -160,8 +181,11 @@ component extends="Base" {
 	}
 
 	/**
-    * adds decimal columns to table definition
-    */
+ 	* adds decimal columns to table definition
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public any function decimal(
 		required string columnNames,
 		string default,
@@ -179,8 +203,11 @@ component extends="Base" {
 	}
 
 	/**
-    * adds float columns to table definition
-    */
+ 	* adds float columns to table definition
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public any function float(
 		required string columnNames,
 		string default="",
@@ -196,8 +223,11 @@ component extends="Base" {
 	}
 
 	/**
-    * adds integer columns to table definition
-    */
+ 	* adds integer columns to table definition
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public any function integer(
 		required string columnNames,
 		numeric limit,
@@ -214,8 +244,11 @@ component extends="Base" {
 	}
 
 	/**
-    * adds string columns to table definition
-    */
+ 	* adds string columns to table definition
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public any function string(
 		required string columnNames,
 		any limit,
@@ -232,8 +265,11 @@ component extends="Base" {
 	}
 
 	/**
-    * adds char columns to table definition
-    */
+ 	* adds char columns to table definition
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public any function char(
 		required string columnNames,
 		any limit,
@@ -250,8 +286,11 @@ component extends="Base" {
 	}
 
 	/**
-    * adds text columns to table definition
-    */
+ 	* adds text columns to table definition
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public any function text(
 		required string columnNames,
 		string default,
@@ -267,8 +306,11 @@ component extends="Base" {
 	}
 
 	/**
-    * adds UUID columns to table definition
-    */
+ 	* adds UUID columns to table definition
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public any function uniqueidentifier(
 		required string columnNames,
 		string default="newid()",
@@ -284,8 +326,11 @@ component extends="Base" {
 	}
 
 	/**
-    * adds time columns to table definition
-    */
+ 	* adds time columns to table definition
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public any function time(
 		required string columnNames,
 		string default,
@@ -301,8 +346,11 @@ component extends="Base" {
 	}
 
 	/**
-    * adds timestamp columns to table definition
-    */
+ 	* adds timestamp columns to table definition
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public any function timestamp(
 		required string columnNames,
 		string default,
@@ -318,8 +366,11 @@ component extends="Base" {
 	}
 
 	/**
-    * adds CFWheels convention automatic timestamp and soft delete columns to table definition
-    */
+ 	* adds CFWheels convention automatic timestamp and soft delete columns to table definition
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public any function timestamps() {
 		local.columnNames = ArrayToList([
 			application.wheels.timeStampOnCreateProperty,
@@ -331,8 +382,11 @@ component extends="Base" {
 	}
 
 	/**
-    * adds integer reference columns to table definition and creates foreign key constraints
-    */
+ 	* adds integer reference columns to table definition and creates foreign key constraints
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public any function references(
 		required string referenceNames,
 		string default,
@@ -371,8 +425,11 @@ component extends="Base" {
 	}
 
 	/**
-    * creates the table in the database
-    */
+ 	* creates the table in the database
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public void function create() {
 		if(this.force) {
 			$execute(this.adapter.dropTable(this.name));
@@ -387,8 +444,11 @@ component extends="Base" {
 	}
 
 	/**
-    * alters existing table in the database
-    */
+ 	* alters existing table in the database
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
 	public void function change(boolean addColumns="false") {
 		local.existingColumns = $getColumns(this.name);
 		local.iEnd = ArrayLen(this.columns);
