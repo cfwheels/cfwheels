@@ -37,7 +37,7 @@ public void function usesLayout(
 	if (StructKeyExists(arguments, "only")) {
 		arguments.only = $listClean(arguments.only);
 	}
-	variables.$class.layout = arguments;
+	variables.$class.layouts.append(arguments);
 }
 
 /**
@@ -46,24 +46,30 @@ public void function usesLayout(
 public any function $useLayout(required string $action) {
 	local.rv = true;
 	local.layoutType = "template";
-	if (isAjax() && StructKeyExists(variables.$class.layout, "ajax") && Len(variables.$class.layout.ajax)) {
-		local.layoutType = "ajax";
-	}
-	if (!StructIsEmpty(variables.$class.layout)) {
-		local.rv = variables.$class.layout.useDefault;
-		if ((StructKeyExists(this, variables.$class.layout[local.layoutType]) && IsCustomFunction(this[variables.$class.layout[local.layoutType]])) || IsCustomFunction(variables.$class.layout[local.layoutType])) {
-			local.invokeArgs = {};
-			local.invokeArgs.action = arguments.$action;
-			local.result = $invoke(method=variables.$class.layout[local.layoutType], invokeArgs=local.invokeArgs);
+ 
+	for (local.layout in variables.$class.layouts){
 
-			// If the developer doesn't return anything from the function or if they return a blank string it should use the default layout still.
-			if (StructKeyExists(local, "result")) {
-				local.rv = local.result;
+		if ((!StructKeyExists(local.layout, "except") || !ListFindNoCase(local.layout.except, arguments.$action)) && (!StructKeyExists(local.layout, "only") || ListFindNoCase(local.layout.only, arguments.$action))) {
+
+			local.rv = local.layout.useDefault;
+
+			if (isAjax() && StructKeyExists(local.layout, "ajax") && Len(local.layout.ajax)) {
+				local.layoutType = "ajax";
 			}
 
-		} else if ((!StructKeyExists(variables.$class.layout, "except") || !ListFindNoCase(variables.$class.layout.except, arguments.$action)) && (!StructKeyExists(variables.$class.layout, "only") || ListFindNoCase(variables.$class.layout.only, arguments.$action))) {
-			local.rv = variables.$class.layout[local.layoutType];
-		}
+			if ((StructKeyExists(this, local.layout[local.layoutType]) && IsCustomFunction(this[local.layout[local.layoutType]])) || IsCustomFunction(local.layout[local.layoutType])) {
+				local.invokeArgs = {};
+				local.invokeArgs.action = arguments.$action;
+				local.result = $invoke(method=local.layout[local.layoutType], invokeArgs=local.invokeArgs);
+	
+				// If the developer doesn't return anything from the function or if they return a blank string it should use the default layout still.
+				if (StructKeyExists(local, "result")) {
+					local.rv = local.result;
+				}
+			} else 
+				local.rv = local.layout[local.layoutType];
+			}
+		
 	}
 	return local.rv;
 }
