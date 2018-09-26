@@ -49,9 +49,9 @@ public any function $useLayout(required string $action) {
  
 	for (local.layout in variables.$class.layouts){
 
+		local.rv = local.layout.useDefault;
+		
 		if ((!StructKeyExists(local.layout, "except") || !ListFindNoCase(local.layout.except, arguments.$action)) && (!StructKeyExists(local.layout, "only") || ListFindNoCase(local.layout.only, arguments.$action))) {
-
-			local.rv = local.layout.useDefault;
 
 			if (isAjax() && StructKeyExists(local.layout, "ajax") && Len(local.layout.ajax)) {
 				local.layoutType = "ajax";
