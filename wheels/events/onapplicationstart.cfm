@@ -188,7 +188,12 @@ public void function onApplicationStart() {
 
 	// CORS (Cross-Origin Resource Sharing) settings.
 	application.$wheels.allowCorsRequests = false;
-
+	application.$wheels.accessControlAllowOrigin="*";
+	application.$wheels.accessControlAllowMethods="GET, POST, PATCH, PUT, DELETE, OPTIONS";
+	application.$wheels.accessControlAllowMethodsByRoute=false;
+	application.$wheels.accessControlAllowCredentials = false;
+	application.$wheels.accessControlAllowHeaders="Origin, Content-Type, X-Auth-Token, X-Requested-By, X-Requested-With";
+	
 	// Debugging and error settings.
 	application.$wheels.showDebugInformation = true;
 	application.$wheels.showErrorInformation = true;
