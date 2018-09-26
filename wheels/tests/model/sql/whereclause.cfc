@@ -48,4 +48,10 @@ component extends="wheels.tests.Test" {
 		assert('isstruct(result[4])');
 		assert('result[4].datatype eq "float" OR result[4].datatype eq "float8" OR result[4].datatype eq "double" OR result[4].datatype eq "number"');
 	}
+
+	function test_respects_calculated_property_datatype() {
+		actual = model("post").$whereClause(where="createdAtAlias > '#CreateDate(2000, 1, 1)#'");
+		assert("actual[4].datatype eq 'datetime'");
+	}
+
 }
