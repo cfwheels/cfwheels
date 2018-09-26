@@ -147,12 +147,12 @@ component extends="Base" {
 	* @columnType The type of the new column
 	* @afterColumn The name of the column which this column should be inserted after
 	* @columnName THe name of the new column
-	* @referenceName The reference name of the new column
+	* @referenceName Name for new reference column, see documentation for references function, required if columnType is 'reference'
 	* @default Default value for this column
 	* @null Whether to allow NULL values
-	* @limit ????
-	* @precision (For decimal type) the maximum number of digits allow 
-	* @scale (For decimal type) the number of digits to the right of the decimal point
+	* @limit Character or integer size limit for column
+	* @precision precision value for decimal columns, i.e. number of digits the column can hold 
+	* @scale scale value for decimal columns, i.e. number of digits that can be placed to the right of the decimal point (must be less than or equal to precision)
     */
 	public void function addColumn(
 		required string table,
@@ -181,13 +181,13 @@ component extends="Base" {
 	* @columnName THe name of the column
 	* @columnType The type of the column
 	* @afterColumn The name of the column which this column should be inserted after
-	* @referenceName The reference name of the new column
+	* @referenceName Name for reference column, see documentation for references function, required if columnType is 'reference'
 	* @default Default value for this column
 	* @null Whether to allow NULL values
-	* @limit ????
+	* @limit Character or integer size limit for column
 	* @precision (For decimal type) the maximum number of digits allow 
 	* @scale (For decimal type) the number of digits to the right of the decimal point
-	* @addColumns Used by addColumn() to flag whether the column should be created or not
+	* @addColumns if true, attempts to add columns and database will likely throw an error if column already exists
     */
 	public void function changeColumn(
 		required string table,
@@ -332,9 +332,9 @@ component extends="Base" {
 	* [category: Migration Functions]
 	*
 	* @table The table name to perform the index operation on
-	* @columnNames Names of the columns to add the index to
-	* @unique ???
-	* @indexName the name of the index to add
+	* @columnNames One or more column names to index, comma separated  
+	* @unique If true will create a unique index constraint  
+	* @indexName The name of the index to add: Defaults to table name + underscore + first column name
     */
 	public void function addIndex(
 		required string table,

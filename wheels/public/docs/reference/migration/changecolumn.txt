@@ -1,0 +1,1 @@
+changeColumn(table='members', columnType='string', columnName='status', limit=50);
