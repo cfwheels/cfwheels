@@ -476,7 +476,7 @@ public void function $setCORSHeaders(
 	} else if ( isArray(arguments.allowOrigin) ) {
 
 		// Is this origin in the allowed Array?
-		if(arrayFind(arguments.allowOrigin, local.incomingOrigin)){
+		if(arrayFindNoCase(arguments.allowOrigin, local.incomingOrigin)){
 			$header(name="Access-Control-Allow-Origin", value=local.incomingOrigin);
 			$header(name="Vary", value="Origin");
 		}
