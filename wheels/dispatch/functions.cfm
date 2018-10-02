@@ -457,7 +457,7 @@ public string function $getRequestMethod() {
  * Set CORS Headers: only triggered if application.wheels.allowCorsRequests = true
  */
 public void function $setCORSHeaders(
-	any allowOrigin = "*",
+	string allowOrigin = "*",
 	string allowCredentials = false,
 	string allowHeaders = "Origin, Content-Type, X-Auth-Token, X-Requested-By, X-Requested-With",
 	string allowMethods = "GET, POST, PATCH, PUT, DELETE, OPTIONS",
@@ -467,26 +467,21 @@ public void function $setCORSHeaders(
 
 	local.incomingOrigin = structKeyExists(request.wheels.httprequestdata.headers, "origin")? request.wheels.httprequestdata.headers.origin : false;
 
-	if(!isArray(arguments.allowOrigin) && arguments.allowOrigin == "*"){
+	// Either a wildcard, or if a specific domain is set, we need to ensure the incoming request matches it
+	if(arguments.allowOrigin == "*"){
 
-		// We're using a wildcard, so skip over domain specific origins
 		$header(name="Access-Control-Allow-Origin", value=arguments.allowOrigin);
 
-	// A specific domain is set, so we need to ensure the incoming request matches it
-	} else if ( isArray(arguments.allowOrigin) ) {
+ 	} else {
+		
+		// Passed value may be a list or just a single entry
+		local.originArr = listToArray(arguments.allowOrigin);
 
 		// Is this origin in the allowed Array?
-		if(arrayFindNoCase(arguments.allowOrigin, local.incomingOrigin)){
+		if(arrayFindNoCase(local.originArr, local.incomingOrigin)){
 			$header(name="Access-Control-Allow-Origin", value=local.incomingOrigin);
 			$header(name="Vary", value="Origin");
-		}
-
-	} else {
-		// Does this origin match the allowed origin>
-		if(local.incomingOrigin == arguments.allowOrigin){
-			$header(name="Access-Control-Allow-Origin", value=arguments.allowOrigin);
-			$header(name="Vary", value="Origin");
-		}
+		} 
 	}
 
 	// Set Origin, Content-Type, X-Auth-Token, X-Requested-By, X-Requested-With Allow Headers

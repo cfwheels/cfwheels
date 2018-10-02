@@ -4,6 +4,7 @@ component extends="wheels.tests.Test" {
 	* Note, when testing headers, the result from getPageContext().getResponse().getHeader
 	* Can't be assigned to a variable, as it will return Java Null:isEmpty
 	* So you need to directly test it
+	* Quote from ACF : Don't JavaCast("null","") to a ColdFusion variable. Unexpected results will occur.
 	**/
 
 	function setup() {
@@ -53,18 +54,18 @@ component extends="wheels.tests.Test" {
 	function test_$setCORS_Headers_ignores_Origin_as_simple_string(){
 		request.wheels.httprequestdata.headers['origin'] = "http://www.baddomain.com";
 		 d.$setCORSHeaders(allowOrigin = "http://www.mydomain.com");
-		 assert("$getHeader('Access-Control-Allow-Origin') IS NullValue()");
+		 assert("$getHeader('Access-Control-Allow-Origin') IS JavaCast('null', '')");
 	}
 	function test_$setCORS_Headers_sets_Origin_as_Array(){
 		request.wheels.httprequestdata.headers['origin'] = "https://domain.com";
-		 d.$setCORSHeaders(allowOrigin = ["http://www.mydomain.com", "https://domain.com"]);
+		 d.$setCORSHeaders(allowOrigin = "http://www.mydomain.com,https://domain.com");
 		 origin = $getHeader('Access-Control-Allow-Origin');
 		 assert("origin EQ 'https://domain.com'");
 	}
 	function test_$setCORS_Headers_ignores_Origin_as_Array(){
 		request.wheels.httprequestdata.headers['origin'] = "https://BADdomain.com";
-		 d.$setCORSHeaders(allowOrigin = ["http://www.mydomain.com", "https://domain.com"]);
-		 assert("$getHeader('Access-Control-Allow-Origin') IS NullValue()");
+		 d.$setCORSHeaders(allowOrigin = "http://www.mydomain.com,https://domain.com");
+		 assert("$getHeader('Access-Control-Allow-Origin') IS JavaCast('null', '')");
 	}
 	function test_$setCORS_Headers_sets_Credentials(){
  		d.$setCORSHeaders(allowCredentials = true);
@@ -105,17 +106,22 @@ component extends="wheels.tests.Test" {
 * Helpers:
 **/
 	private function $getHeader(string name){
-		return getPageContext().getResponse().getHeader(arguments.name);
+		if (StructKeyExists(server, "lucee")) {
+			return getPageContext().getResponse().getHeader(arguments.name);
+		} else {  
+			// ACF: getHeader() doesn't exist in getResponse().. need alternative:::
+			return getPageContext().getResponse().getHeader(arguments.name);
+		}
 	}
-	private function $setHeader(name, value){
-		return getPageContext().getResponse().setHeader(arguments.name, arguments.value);
-	}
+
 	private function $resetHeaders(){
-		$setHeader('Access-Control-Allow-Origin', nullValue());
- 		$setHeader('Access-Control-Allow-Headers', nullValue());
-		$setHeader('Access-Control-Allow-Methods', nullValue());
-		$setHeader('Access-Control-Allow-Credentials', nullValue());
+		local.pc = getPageContext().getResponse(); 
+		local.pc.setHeader('Access-Control-Allow-Origin', JavaCast("null", ""));
+ 		local.pc.setHeader('Access-Control-Allow-Headers', JavaCast("null", ""));
+		local.pc.setHeader('Access-Control-Allow-Methods', JavaCast("null", ""));
+		local.pc.setHeader('Access-Control-Allow-Credentials', JavaCast("null", "")); 
 	}
+
 	private struct function $mapper() {
 		local.args = Duplicate(config);
 		StructAppend(local.args, arguments, true);
