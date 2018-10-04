@@ -1146,6 +1146,7 @@ public void function $throwErrorOrShow404Page(required string type, required str
 	}
 }
 
+
 /**
  * Set CORS Headers: only triggered if application.wheels.allowCorsRequests = true
  */
@@ -1155,7 +1156,8 @@ public void function $setCORSHeaders(
 	string allowHeaders = "Origin, Content-Type, X-Auth-Token, X-Requested-By, X-Requested-With",
 	string allowMethods = "GET, POST, PATCH, PUT, DELETE, OPTIONS",
 	boolean allowMethodsByRoute = false,
-	string $pattern = request.cgi.PATH_INFO
+	string pathInfo = request.cgi.PATH_INFO,
+	string scriptName = request.cgi.script_name
 ) {
 
 	local.incomingOrigin = structKeyExists(request.wheels.httprequestdata.headers, "origin")? request.wheels.httprequestdata.headers.origin : false;
@@ -1185,12 +1187,27 @@ public void function $setCORSHeaders(
 
 		local.permittedMethods = [];
 
+		// NB this is basically duplicate logic: needs refactoring
+		if (arguments.pathInfo == arguments.scriptName || arguments.pathInfo == "/" || !Len(arguments.pathInfo)) {
+			local.path = "";
+		} else {
+			local.path = Right(arguments.pathInfo, Len(arguments.pathInfo) - 1);
+		}
+
 		// Attempt to match the requested route and only display the allowed methods for that route
 		// Does this info already exist in scope? It seems silly to have to look it up again
 		for(local.route in application.wheels.routes){
-	      if(local.route.pattern == arguments.$pattern){
-	        arrayAppend(local.permittedMethods, local.route.methods);
-	      }
+
+			// Make sure route has been converted to regular expression.
+			if (!StructKeyExists(local.route, "regex")) {
+				local.route.regex = application.wheels.mapper.$patternToRegex(local.route.pattern);
+			}
+
+			// If route matches regular expression, get the methods
+			if (REFindNoCase(local.route.regex, local.path)) {
+        		arrayAppend(local.permittedMethods, local.route.methods);
+			}
+
 	    }
 	    if(arrayLen(local.permittedMethods)){
 			$header(name="Access-Control-Allow-Methods", value=UCASE( arrayToList(local.permittedMethods, ', ') ) );
