@@ -10,7 +10,7 @@ component extends="Abstract" {
 	variables.sqlTypes['float'] = {name='FLOAT'};
 	variables.sqlTypes['integer'] = {name='INT'};
 	variables.sqlTypes['string'] = {name='VARCHAR',limit=255};
-	variables.sqlTypes['text'] = {name='TEXT'};
+	variables.sqlTypes['text'] = {name='NVARCHAR',limit="max"};
 	variables.sqlTypes['time'] = {name='DATETIME'};
 	variables.sqlTypes['timestamp'] = {name='DATETIME'};
 	variables.sqlTypes['uniqueidentifier'] = {name='UNIQUEIDENTIFIER'} ;
