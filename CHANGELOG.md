@@ -4,6 +4,7 @@
 
 * Migrator now automatically manages the timestamp columns on `addRecord()` and `updateRecord()` calls - [#852](https://github.com/cfwheels/cfwheels/pull/852) [Charley Contreras]
 * Migrator correctly honors CFWheels Timestamp configuration settings (`setUpdatedAtOnCreate, softDeleteProperty, timeStampMode, timeStampOnCreateProperty, timeStampOnUpdateProperty`) - [#852](https://github.com/cfwheels/cfwheels/pull/852) [Charley Contreras]
+* `MSSQL` now uses `NVARCHAR(max)` instead of `TEXT` [#896](https://github.com/cfwheels/cfwheels/pull/896) [Reuben Brown]
 
 ### Controller Enhancements
 
