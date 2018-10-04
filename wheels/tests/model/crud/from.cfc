@@ -24,7 +24,7 @@ component extends="wheels.tests.Test" {
 			adapterName="MySQL"
 		);
 		expected = "USE INDEX(idx_authors_123)";
-		assert("actual == expected");
+		assert("actual EQ expected");
 	}
 
 	function test_mysql_from_clause_with_index_hint() {
@@ -34,7 +34,7 @@ component extends="wheels.tests.Test" {
 			adapterName="MySQL"
 		);
 		expected = "FROM authors USE INDEX(idx_authors_123)";
-		assert("actual == expected");
+		assert("actual EQ expected");
 	}
 
 	function test_sqlserver_from_clause_with_index_hint() {
@@ -44,7 +44,7 @@ component extends="wheels.tests.Test" {
 			adapterName="SQLServer"
 		);
 		expected = "FROM authors WITH (INDEX(idx_authors_123))";
-		assert("actual == expected");
+		assert("actual EQ expected");
 	}
 
 	function test_from_clause_with_index_hint_on_unsupportive_db() {
@@ -54,7 +54,7 @@ component extends="wheels.tests.Test" {
 			adapterName="PostgreSQL"
 		);
 		expected = "FROM authors";
-		assert("actual == expected");
+		assert("actual EQ expected");
 	}
 
 	function test_from_clause_with_include_and_index_hints() {
@@ -68,7 +68,7 @@ component extends="wheels.tests.Test" {
 		);
 
 		expected = "FROM authors USE INDEX(idx_authors_123) LEFT OUTER JOIN posts USE INDEX(idx_posts_123) ON authors.id = posts.authorid AND posts.deletedat IS NULL";
-		assert("actual == expected");
+		assert("actual EQ expected");
 	}
 
 	// TODO: test_from_clause_with_include_and_index_hints_and_table_aliases
