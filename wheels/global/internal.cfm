@@ -1146,4 +1146,64 @@ public void function $throwErrorOrShow404Page(required string type, required str
 	}
 }
 
+/**
+ * Set CORS Headers: only triggered if application.wheels.allowCorsRequests = true
+ */
+public void function $setCORSHeaders(
+	string allowOrigin = "*",
+	string allowCredentials = false,
+	string allowHeaders = "Origin, Content-Type, X-Auth-Token, X-Requested-By, X-Requested-With",
+	string allowMethods = "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+	boolean allowMethodsByRoute = false,
+	string $pattern = request.cgi.PATH_INFO
+) {
+
+	local.incomingOrigin = structKeyExists(request.wheels.httprequestdata.headers, "origin")? request.wheels.httprequestdata.headers.origin : false;
+
+	// Either a wildcard, or if a specific domain is set, we need to ensure the incoming request matches it
+	if(arguments.allowOrigin == "*"){
+
+		$header(name="Access-Control-Allow-Origin", value=arguments.allowOrigin);
+
+ 	} else {
+
+		// Passed value may be a list or just a single entry
+		local.originArr = listToArray(arguments.allowOrigin);
+
+		// Is this origin in the allowed Array?
+		if(arrayFindNoCase(local.originArr, local.incomingOrigin)){
+			$header(name="Access-Control-Allow-Origin", value=local.incomingOrigin);
+			$header(name="Vary", value="Origin");
+		}
+	}
+
+	// Set Origin, Content-Type, X-Auth-Token, X-Requested-By, X-Requested-With Allow Headers
+	$header(name="Access-Control-Allow-Headers", value=arguments.allowHeaders);
+
+	// Either Look up Route specific allowed methods, or just use default
+	if(arguments.allowMethodsByRoute){
+
+		local.permittedMethods = [];
+
+		// Attempt to match the requested route and only display the allowed methods for that route
+		// Does this info already exist in scope? It seems silly to have to look it up again
+		for(local.route in application.wheels.routes){
+	      if(local.route.pattern == arguments.$pattern){
+	        arrayAppend(local.permittedMethods, local.route.methods);
+	      }
+	    }
+	    if(arrayLen(local.permittedMethods)){
+			$header(name="Access-Control-Allow-Methods", value=UCASE( arrayToList(local.permittedMethods, ', ') ) );
+	     }
+
+	} else {
+		$header(name="Access-Control-Allow-Methods", value=arguments.allowMethods);
+	}
+
+	// Only add this header if requested (false is an invalid value)
+	if(arguments.allowCredentials){
+		$header(name="Access-Control-Allow-Credentials", value=true);
+	}
+
+}
 </cfscript>
