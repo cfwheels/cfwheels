@@ -35,7 +35,7 @@ public any function $initControllerClass(string name="") {
 	variables.$class.verifications = [];
 	variables.$class.filters = [];
 	variables.$class.cachableActions = [];
-	variables.$class.layout = {};
+	variables.$class.layouts = [];
 
 	// Setup format info for providing content.
 	// Default the controller to only respond to HTML.
