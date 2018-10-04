@@ -37,7 +37,33 @@ public void function usesLayout(
 	if (StructKeyExists(arguments, "only")) {
 		arguments.only = $listClean(arguments.only);
 	}
+
+	// Check to see if the layout struct is already present in the array
+	local.layoutInArray = false;
+	if (arrayLen(variables.$class.layouts)){
+		for (i=1; i<=arrayLen(variables.$class.layouts); i++){
+			local.layout = variables.$class.layouts[i];
+			if (structCount(local.layout) eq structCount(arguments)){
+				local.oneKeyIsDifferent = false;
+				for (local.key in arguments){
+					if (local.layout[local.key] neq arguments[key]){
+						local.oneKeyIsDifferent = true;
+					}
+				}
+				if (!local.oneKeyIsDifferent){
+					local.layoutInArray = true;
+					local.layoutPostionInArray = i;
+				}
+			}
+		}
+	}
+
 	variables.$class.layouts.append(arguments);
+
+	// If this layout was is in the array, we need to delete it to respect the order of declaration
+	if (local.layoutInArray){
+		arrayDeleteAt(variables.$class.layouts, local.layoutPostionInArray);
+	}	
 }
 
 /**
