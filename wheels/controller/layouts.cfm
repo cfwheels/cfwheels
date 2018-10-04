@@ -41,8 +41,8 @@ public void function usesLayout(
 	// Check to see if the layout struct is already present in the array
 	local.layoutInArray = false;
 	if (arrayLen(variables.$class.layouts)){
-		for (i=1; i<=arrayLen(variables.$class.layouts); i++){
-			local.layout = variables.$class.layouts[i];
+		for (local.i=1; local.i<=arrayLen(variables.$class.layouts); local.i++){
+			local.layout = variables.$class.layouts[local.i];
 			if (structCount(local.layout) eq structCount(arguments)){
 				local.oneKeyIsDifferent = false;
 				for (local.key in arguments){
@@ -52,7 +52,7 @@ public void function usesLayout(
 				}
 				if (!local.oneKeyIsDifferent){
 					local.layoutInArray = true;
-					local.layoutPostionInArray = i;
+					local.layoutPostionInArray = local.i;
 				}
 			}
 		}
