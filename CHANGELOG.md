@@ -22,6 +22,7 @@
 * The `validatesUniquenessOf()` check now handles cases when duplicates already exist - [#480](https://github.com/cfwheels/cfwheels/issues/480) [Randall Meeker, Per Djurner]
 * `sendFile()` no longer expands an already expanded directory on ACF2016 - [#873](https://github.com/cfwheels/cfwheels/issues/873) [David Paul Belanger, Tom King, strubenstein]
 * Automatic database migrations onApplicationStart now correctly reference appropriate Application scope - [#870](https://github.com/cfwheels/cfwheels/issues/870) [Tom King] 
+* `usesLayout()` now can be called more than once and properly respects the order called - [#891](https://github.com/cfwheels/cfwheels/issues/891) [David Paul Belanger]
 
 ### Miscellaneous
 
