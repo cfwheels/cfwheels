@@ -14,6 +14,7 @@ wheelsInternalAssetPath=get("webpath") & "wheels/public/assets";
 	<link rel="stylesheet" href="#wheelsInternalAssetPath#/css/cfwheels.css">
 	<script src="#wheelsInternalAssetPath#/js/jquery-2.2.4.min.js"></script>
 	<script src="#wheelsInternalAssetPath#/js/qjax.min.js"></script>
+	<script src="#application.wheels.ckeditorURl#"></script>
 </head>
 <body>
 	<header>
