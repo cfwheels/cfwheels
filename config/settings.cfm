@@ -10,4 +10,7 @@
 	// set(dataSourceUserName="");
 	// set(dataSourcePassword="");
 
+	// set CKEditor URL for the CDN to Use
+	set(ckeditorURl="https://cdn.ckeditor.com/ckeditor5/11.1.1/classic/ckeditor.js");
+
 </cfscript>
