@@ -67,7 +67,12 @@ public string function $runOnError(required exception, required eventName) {
 				);
 				local.rv &= $includeAndReturnOutput($template="wheels/styles/footer.cfm");
 			} else {
-				Throw(object=arguments.exception);
+				if ( StructKeyExists(server, "coldfusion") AND ListFirst(server.coldfusion.productVersion) GTE 2018 ) {
+					WriteDump(arguments.exception);
+					abort;
+				} else {
+					Throw(object=arguments.exception);
+				}
 			}
 		} else {
 			$header(statusCode=500, statusText="Internal Server Error");
@@ -78,7 +83,12 @@ public string function $runOnError(required exception, required eventName) {
 			);
 		}
 	} else {
-		Throw(object=arguments.exception);
+		if ( StructKeyExists(server, "coldfusion") AND ListFirst(server.coldfusion.productVersion) GTE 2018 ) {
+			WriteDump(arguments.exception);
+			abort;
+		} else {
+			Throw(object=arguments.exception);
+		}
 	}
 	return local.rv;
 }
