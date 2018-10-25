@@ -233,6 +233,7 @@ public string function textArea(
 	string appendToLabel,
 	string errorElement,
 	string errorClass,
+	boolean richText = false,
 	any encode
 ) {
 	$args(name="textArea", reserved="name", args=arguments);
@@ -242,6 +243,16 @@ public string function textArea(
 	}
 	local.before = $formBeforeElement(argumentCollection=arguments);
 	local.after = $formAfterElement(argumentCollection=arguments);
+	if ( arguments.richText AND StructKeyExists(arguments, "id") ) {
+		local.after = local.after & "
+		<script>
+			ClassicEditor
+				.create( document.querySelector( '###arguments.id#' ) )
+				.catch( error => {
+						console.error( error );
+				} );
+		</script>";
+	}
 	arguments.name = $tagName(arguments.objectName, arguments.property);
 	local.content = $formValue(argumentCollection=arguments);
 	return local.before & $element(name="textarea", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", content=local.content, attributes=arguments, encode=arguments.encode) & local.after;
