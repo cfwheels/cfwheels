@@ -18,6 +18,7 @@
  * @shallowPath Shallow path prefix.
  * @shallowName Shallow name prefix.
  * @constraints Variable patterns to use for matching.
+ * @mapFormat Whether or not to add an optional `.[format]` pattern to the end of the generated routes. This is useful for providing formats via URL like `json`, `xml`, `pdf`, etc.
  */
 public struct function resource(
 	required string name,
@@ -33,7 +34,8 @@ public struct function resource(
 	string shallowName,
 	struct constraints,
 	string $call="resource",
-	boolean $plural=false
+	boolean $plural=false,
+	boolean mapFormat=true
 ) {
 	local.args = {};
 
@@ -157,6 +159,11 @@ public struct function resource(
 		local.args.constraints = arguments.constraints;
 	}
 
+	// Pass along mapFormat preference
+	if (StructKeyExists(arguments, "mapFormat")) {
+		local.args.mapFormat = arguments.mapFormat;
+	}
+
 	// Scope the resource.
 	scope($call=arguments.$call, argumentCollection=local.args);
 
@@ -187,6 +194,7 @@ public struct function resource(
  * @shallowPath Shallow path prefix.
  * @shallowName Shallow name prefix.
  * @constraints Variable patterns to use for matching.
+ * @mapFormat Whether or not to add an optional `.[format]` pattern to the end of the generated routes. This is useful for providing formats via URL like `json`, `xml`, `pdf`, etc.
  */
 public struct function resources(
 	required string name,
@@ -200,7 +208,8 @@ public struct function resources(
 	boolean shallow,
 	string shallowPath,
 	string shallowName,
-	struct constraints
+	struct constraints,
+	boolean mapFormat=true
 ) {
 	return resource(argumentCollection=arguments, $plural=true, $call="resources");
 }

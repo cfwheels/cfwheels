@@ -63,12 +63,28 @@ component extends="wheels.tests.Test" {
     assert("routesLen eq 16");
   }
 
+  function test_resources_produces_routes_without_format() {
+    $clearROutes();
+    mapper = $mapper();
+    mapper.$draw().resources(name="pigeons", mapFormat=false).end();
+    routesLen = arrayLen(application.wheels.routes);
+    assert("routesLen eq 8");
+  }
+
   function test_resources_produces_routes_with_list() {
     $clearROutes();
     mapper = $mapper();
     mapper.$draw().resources(name="pigeons,birds").end();
     routesLen = arrayLen(application.wheels.routes);
     assert("routesLen eq 32");
+  }
+
+  function test_resources_produces_routes_with_list_without_format() {
+    $clearROutes();
+    mapper = $mapper();
+    mapper.$draw().resources(name="pigeons,birds", mapFormat=false).end();
+    routesLen = arrayLen(application.wheels.routes);
+    assert("routesLen eq 16");
   }
 
   function test_resources_raises_error_with_list_and_nesting() {
