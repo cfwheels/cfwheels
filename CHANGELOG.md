@@ -5,6 +5,7 @@
 * Migrator now automatically manages the timestamp columns on `addRecord()` and `updateRecord()` calls - [#852](https://github.com/cfwheels/cfwheels/pull/852) [Charley Contreras]
 * Migrator correctly honors CFWheels Timestamp configuration settings (`setUpdatedAtOnCreate, softDeleteProperty, timeStampMode, timeStampOnCreateProperty, timeStampOnUpdateProperty`) - [#852](https://github.com/cfwheels/cfwheels/pull/852) [Charley Contreras]
 * `MSSQL` now uses `NVARCHAR(max)` instead of `TEXT` [#896](https://github.com/cfwheels/cfwheels/pull/896) [Reuben Brown]
+* Allow createdAt and updatedAt to be explicitly assigned using the `allowExplicitTimestamps=true` argument - [#887](https://github.com/cfwheels/cfwheels/issues/887) - [Adam Chapman]
 
 ### Controller Enhancements
 
@@ -21,7 +22,7 @@
 * Convert `handle` to a valid variable name so it doesn't break when using dot notation - [#846](https://github.com/cfwheels/cfwheels/issues/846) [Per Djurner]
 * The `validatesUniquenessOf()` check now handles cases when duplicates already exist - [#480](https://github.com/cfwheels/cfwheels/issues/480) [Randall Meeker, Per Djurner]
 * `sendFile()` no longer expands an already expanded directory on ACF2016 - [#873](https://github.com/cfwheels/cfwheels/issues/873) [David Paul Belanger, Tom King, strubenstein]
-* Automatic database migrations onApplicationStart now correctly reference appropriate Application scope - [#870](https://github.com/cfwheels/cfwheels/issues/870) [Tom King] 
+* Automatic database migrations onApplicationStart now correctly reference appropriate Application scope - [#870](https://github.com/cfwheels/cfwheels/issues/870) [Tom King]
 * `usesLayout()` now can be called more than once and properly respects the order called - [#891](https://github.com/cfwheels/cfwheels/issues/891) [David Paul Belanger]
 * Migrator MSSQL adapter now respects `Time` and `Timestamp` Column Types [#906](https://github.com/cfwheels/cfwheels/issues/906) [Reuben Brown]
 
