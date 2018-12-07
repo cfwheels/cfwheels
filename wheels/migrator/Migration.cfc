@@ -31,7 +31,7 @@ component extends="Base" {
 	* [section: Migrator]
 	* [category: Migration Functions]
 	*
-	*/ 
+	*/
 	public void function down() {
 		announce("DOWN MIGRATION NOT IMPLEMENTED");
 	}
@@ -79,7 +79,7 @@ component extends="Base" {
 	* [section: Migrator]
 	* [category: Migration Functions]
 	*
-	* @name Name of the table to set change properties on 
+	* @name Name of the table to set change properties on
     */
 	public TableDefinition function changeTable(required string name) {
 		return CreateObject("component","TableDefinition").init(adapter=this.adapter,name=arguments.name);
@@ -110,7 +110,8 @@ component extends="Base" {
 	* @name Name of the table to drop
     */
 	public void function dropTable(required string name) {
-	  	if (application.wheels.serverName != "lucee") {
+		local.appKey = $appKey();
+	  	if (application[local.appKey].serverName != "lucee") {
 				local.foreignKeys = $getForeignKeys(arguments.name);
 				local.iEnd = ListLen(local.foreignKeys);
 	  		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -151,7 +152,7 @@ component extends="Base" {
 	* @default Default value for this column
 	* @null Whether to allow NULL values
 	* @limit Character or integer size limit for column
-	* @precision precision value for decimal columns, i.e. number of digits the column can hold 
+	* @precision precision value for decimal columns, i.e. number of digits the column can hold
 	* @scale scale value for decimal columns, i.e. number of digits that can be placed to the right of the decimal point (must be less than or equal to precision)
     */
 	public void function addColumn(
@@ -185,7 +186,7 @@ component extends="Base" {
 	* @default Default value for this column
 	* @null Whether to allow NULL values
 	* @limit Character or integer size limit for column
-	* @precision (For decimal type) the maximum number of digits allow 
+	* @precision (For decimal type) the maximum number of digits allow
 	* @scale (For decimal type) the number of digits to the right of the decimal point
 	* @addColumns if true, attempts to add columns and database will likely throw an error if column already exists
     */
@@ -332,8 +333,8 @@ component extends="Base" {
 	* [category: Migration Functions]
 	*
 	* @table The table name to perform the index operation on
-	* @columnNames One or more column names to index, comma separated  
-	* @unique If true will create a unique index constraint  
+	* @columnNames One or more column names to index, comma separated
+	* @unique If true will create a unique index constraint
 	* @indexName The name of the index to add: Defaults to table name + underscore + first column name
     */
 	public void function addIndex(
@@ -385,14 +386,15 @@ component extends="Base" {
 	* @table The table name to add the record to
 	*/
 	public void function addRecord(required string table) {
+		local.appKey = $appKey();
 		local.columnNames = "";
 		local.columnValues = "";
-		if(!StructKeyExists(arguments, application.wheels.timeStampOnCreateProperty) && ListFindNoCase($getColumns(arguments.table), application.wheels.timeStampOnCreateProperty)) {
-			arguments[application.wheels.timeStampOnCreateProperty] = $timestamp();
+		if(!StructKeyExists(arguments, application[local.appKey].timeStampOnCreateProperty) && ListFindNoCase($getColumns(arguments.table), application[local.appKey].timeStampOnCreateProperty)) {
+			arguments[application[local.appKey].timeStampOnCreateProperty] = $timestamp();
 		}
-		if(application.wheels.setUpdatedAtOnCreate && !StructKeyExists(arguments, application.wheels.timeStampOnUpdateProperty) && ListFindNoCase($getColumns(arguments.table), application.wheels.timeStampOnUpdateProperty)) {
-			announce(application.wheels.setUpdatedAtOnCreate);
-			arguments[application.wheels.timeStampOnUpdateProperty] = $timestamp();
+		if(application[local.appKey].setUpdatedAtOnCreate && !StructKeyExists(arguments, application[local.appKey].timeStampOnUpdateProperty) && ListFindNoCase($getColumns(arguments.table), application[local.appKey].timeStampOnUpdateProperty)) {
+			announce(application[local.appKey].setUpdatedAtOnCreate);
+			arguments[application[local.appKey].timeStampOnUpdateProperty] = $timestamp();
 		}
 
 		for (local.key in arguments) {
@@ -432,9 +434,10 @@ component extends="Base" {
 	* @where The where clause, i.e admin = 1
     */
 	public void function updateRecord(required string table, string where="") {
+		local.appKey = $appKey();
 		local.columnUpdates = "";
-		if (!StructKeyExists(arguments, application.wheels.timeStampOnUpdateProperty) && ListFindNoCase($getColumns(arguments.table), application.wheels.timeStampOnUpdateProperty)) {
-			arguments[application.wheels.timeStampOnUpdateProperty] = $timestamp();
+		if (!StructKeyExists(arguments, application[local.appKey].timeStampOnUpdateProperty) && ListFindNoCase($getColumns(arguments.table), application[local.appKey].timeStampOnUpdateProperty)) {
+			arguments[application[local.appKey].timeStampOnUpdateProperty] = $timestamp();
 		}
 		for (local.key in arguments) {
 			if(local.key neq "table" && local.key neq "where") {

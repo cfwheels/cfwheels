@@ -189,7 +189,7 @@ public array function getAvailableMigrations(string path=this.paths.migrate) {
  * @version The Database schema version to rerun
  */
 public string function redoMigration(string version="") {
-	var currentVersion = getCurrentMigrationVersion();
+	local.currentVersion = getCurrentMigrationVersion();
 	local.appKey = $appKey();
 	if (Len(arguments.version)) {
 		currentVersion = arguments.version;
@@ -287,9 +287,10 @@ private string function $copyTemplateMigrationAndRename(
 		DirectoryCreate(this.paths.migrate);
 	}
 	try {
+		local.appKey = $appKey();
 		local.templateContent = FileRead(local.templateFile);
-		if (Len(Trim(application.wheels.rootcomponentpath))) {
-			local.extendsPath = application.wheels.rootcomponentpath & ".wheels.migrator.Migration";
+		if (Len(Trim(application[local.appKey].rootcomponentpath))) {
+			local.extendsPath = application[local.appKey].rootcomponentpath & ".wheels.migrator.Migration";
 		}
 		local.templateContent = Replace(local.templateContent, "[extends]", local.extendsPath);
 		local.templateContent = Replace(local.templateContent, "[description]", Replace(arguments.migrationName, """", "&quot;", "all"));

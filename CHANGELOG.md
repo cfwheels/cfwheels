@@ -24,7 +24,8 @@
 * `sendFile()` no longer expands an already expanded directory on ACF2016 - [#873](https://github.com/cfwheels/cfwheels/issues/873) [David Paul Belanger, Tom King, strubenstein]
 * Automatic database migrations onApplicationStart now correctly reference appropriate Application scope - [#870](https://github.com/cfwheels/cfwheels/issues/870) [Tom King]
 * `usesLayout()` now can be called more than once and properly respects the order called - [#891](https://github.com/cfwheels/cfwheels/issues/891) [David Paul Belanger]
-* Migrator MSSQL adapter now respects `Time` and `Timestamp` Column Types [#906](https://github.com/cfwheels/cfwheels/issues/906) [Reuben Brown]
+* Migrator MSSQL adapter now respects `Time` and `Timestamp` Column Types - [#906](https://github.com/cfwheels/cfwheels/issues/906) [Reuben Brown]
+* Automatic migrations fail on application start - [#913](https://github.com/cfwheels/cfwheels/issues/913) [Adam Chapman]
 
 ### Miscellaneous
 
