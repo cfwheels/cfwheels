@@ -146,17 +146,16 @@ public void function onApplicationStart() {
 	application.$wheels.cacheDatabaseSchema = true;
 	application.$wheels.cacheModelConfig = true;
 	application.$wheels.cachePlugins = true;
+	application.$wheels.cacheFileChecking = true;
 
 	// Cache settings that are turned off in development mode only.
 	application.$wheels.cacheActions = false;
-	application.$wheels.cacheFileChecking = false;
 	application.$wheels.cacheImages = false;
 	application.$wheels.cachePages = false;
 	application.$wheels.cachePartials = false;
 	application.$wheels.cacheQueries = false;
 	if (application.$wheels.environment != "development") {
 		application.$wheels.cacheActions = true;
-		application.$wheels.cacheFileChecking = true;
 		application.$wheels.cacheImages = true;
 		application.$wheels.cachePages = true;
 		application.$wheels.cachePartials = true;
@@ -193,7 +192,7 @@ public void function onApplicationStart() {
 	application.$wheels.accessControlAllowMethodsByRoute=false;
 	application.$wheels.accessControlAllowCredentials = false;
 	application.$wheels.accessControlAllowHeaders="Origin, Content-Type, X-Auth-Token, X-Requested-By, X-Requested-With";
-	
+
 	// Debugging and error settings.
 	application.$wheels.showDebugInformation = true;
 	application.$wheels.showErrorInformation = true;

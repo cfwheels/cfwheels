@@ -56,6 +56,7 @@
 * Fixed bug with arrays in URLs - [#836](https://github.com/cfwheels/cfwheels/issues/836) [Michael Diederich, Per Djurner]
 * startFormTag now properly applies the method attribute - [#837](https://github.com/cfwheels/cfwheels/issues/837) [David Paul Belanger]
 * Incompatible plugin notice now ignores patch releases unless specified - [#840](https://github.com/cfwheels/cfwheels/issues/840) [Risto, Tom King]
+* Default `cacheFileChecking` to `true` in development mode - [Adam Chapman, Steve Harvey]
 
 <a name="2.0.0"></a>
 
