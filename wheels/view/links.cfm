@@ -94,6 +94,7 @@ public string function linkTo(
  * @key [see:URLFor].
  * @params [see:URLFor].
  * @anchor [see:URLFor].
+ * @method [see:startFormTag].
  * @onlyPath [see:URLFor].
  * @host [see:URLFor].
  * @protocol [see:URLFor].
@@ -109,6 +110,7 @@ public string function buttonTo(
 	any key="",
 	string params="",
 	string anchor="",
+	string method,
 	boolean onlyPath,
 	string host,
 	string protocol,
