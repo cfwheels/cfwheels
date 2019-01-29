@@ -43,6 +43,7 @@
 * CORS Header `Access-Control-Allow-Credentials` can now be turned on via `accessControlAllowCredentials(true)`;  [#888](https://github.com/cfwheels/cfwheels/issues/888) [Tom King]
 * `accessControlAllowMethodsByRoute()` now allows for automatic matching of available methods for a route and sets CORS Header `Access-Control-Allow-Methods` appropriately [#888](https://github.com/cfwheels/cfwheels/issues/888) [Tom King]
 * CORS Header can now be set via `accessControlAllowHeaders(value)` [#888](https://github.com/cfwheels/cfwheels/issues/888) [Tom King]
+* Performance Improvement: Scanning of Models and Controllers [#917](https://github.com/cfwheels/cfwheels/issues/917) [Adam Chapman]
 
 # [2.0.1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.1) (01/31/2018)
 
