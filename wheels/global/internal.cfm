@@ -597,17 +597,19 @@ public any function $cachedControllerClassExists(required string name) {
  * Internal function.
  */
 public any function $fileExistsNoCase(required string absolutePath) {
+	local.appKey = $appKey();
 	// return false by default when the file does not exist in the directory
 	local.rv = false;
-
 	// break up the full path string in the path name only and the file name only
 	local.path = GetDirectoryFromPath(arguments.absolutePath);
 	local.file = Replace(arguments.absolutePath, local.path, "");
-
-	// get all existing files in the directory and place them in a list
-	local.dirInfo = $directory(directory=local.path);
-	local.fileList = ValueList(local.dirInfo.name);
-
+	// get all existing files in the directory and place them in a list in application scope
+	local.pathHash = Hash(local.path);
+	if (!StructKeyExists(application[local.appKey].directoryFiles, local.pathHash)) {
+		local.dirInfo = $directory(directory=local.path);
+		application[local.appKey].directoryFiles[local.pathHash] = ValueList(local.dirInfo.name);
+	}
+	local.fileList = application[local.appKey].directoryFiles[local.pathHash];
 	// loop through the file list and return the file name if exists regardless of case (the == operator is case insensitive)
 	local.iEnd = ListLen(local.fileList);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {

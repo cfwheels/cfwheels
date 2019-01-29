@@ -70,6 +70,7 @@ public void function onApplicationStart() {
 	application.$wheels.nonExistingHelperFiles = "";
 	application.$wheels.nonExistingLayoutFiles = "";
 	application.$wheels.nonExistingObjectFiles = "";
+	application.$wheels.directoryFiles = {};
 	application.$wheels.routes = [];
 	application.$wheels.resourceControllerNaming = "plural";
 	application.$wheels.namedRoutePositions = {};
