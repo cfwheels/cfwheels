@@ -27,6 +27,7 @@
 * Migrator MSSQL adapter now respects `Time` and `Timestamp` Column Types - [#906](https://github.com/cfwheels/cfwheels/issues/906) [Reuben Brown]
 * Automatic migrations fail on application start - [#913](https://github.com/cfwheels/cfwheels/issues/913) [Adam Chapman]
 * Default `cacheFileChecking` to `true` in development mode - [Adam Chapman, Steve Harvey]
+* Migrator columnNames list values are now trimmed - [##919](https://github.com/cfwheels/cfwheels/issues/#919) [Adam Chapman]
 
 ### Miscellaneous
 
