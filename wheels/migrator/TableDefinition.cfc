@@ -106,7 +106,7 @@ component extends="Base" {
 		arguments.columnType = "biginteger";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames, local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
@@ -122,7 +122,7 @@ component extends="Base" {
 		arguments.columnType = "binary";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames, local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
@@ -138,7 +138,7 @@ component extends="Base" {
 		arguments.columnType = "boolean";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames, local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
@@ -154,7 +154,7 @@ component extends="Base" {
 		arguments.columnType = "date";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames, local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
@@ -174,7 +174,7 @@ component extends="Base" {
 		arguments.columnType = "datetime";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
@@ -196,7 +196,7 @@ component extends="Base" {
 		arguments.columnType = "decimal";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
@@ -216,7 +216,7 @@ component extends="Base" {
 		arguments.columnType = "float";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
@@ -237,7 +237,7 @@ component extends="Base" {
 		arguments.columnType = "integer";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
@@ -258,7 +258,7 @@ component extends="Base" {
 		arguments.columnType = "string";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
@@ -279,7 +279,7 @@ component extends="Base" {
 		arguments.columnType = "char";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
@@ -299,7 +299,7 @@ component extends="Base" {
 		arguments.columnType = "text";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
@@ -319,7 +319,7 @@ component extends="Base" {
 		arguments.columnType = "uniqueidentifier";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
@@ -339,7 +339,7 @@ component extends="Base" {
 		arguments.columnType = "time";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
@@ -359,7 +359,7 @@ component extends="Base" {
 	) {
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			arguments.columnName = ListGetAt(arguments.columnNames,local.i);
+			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
 		return this;
