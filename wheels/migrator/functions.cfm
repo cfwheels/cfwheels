@@ -18,18 +18,19 @@ public struct function init(
 /**
  * Migrates database to a specified version. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
- * [section: Configuration]
- * [category: Database Migrations]
+ * [section: Migrator]
+ * [category: General Functions]
  *
  * @version The Database schema version to migrate to
  */
 public string function migrateTo(string version="") {
 	local.rv = "";
 	local.currentVersion = getCurrentMigrationVersion();
+	local.appKey = $appKey();
 	if (local.currentVersion == arguments.version) {
 		local.rv = "Database is currently at version #arguments.version#. No migration required.#chr(13)#";
 	} else {
-		if (!DirectoryExists(this.paths.sql) && application.wheels.writeMigratorSQLFiles) {
+		if (!DirectoryExists(this.paths.sql) && application[local.appKey].writeMigratorSQLFiles) {
 			DirectoryCreate(this.paths.sql);
 		}
 		local.migrations = getAvailableMigrations();
@@ -40,13 +41,13 @@ public string function migrateTo(string version="") {
 				if (local.migration.version <= arguments.version) {
 					break;
 				}
-				if (local.migration.status == "migrated" && application.wheels.allowMigrationDown) {
+				if (local.migration.status == "migrated" && application[local.appKey].allowMigrationDown) {
 					transaction action="begin" {
 						try {
 							local.rv = local.rv & "#Chr(13)#------- " & local.migration.cfcfile & " #RepeatString("-",Max(5,50-Len(local.migration.cfcfile)))##Chr(13)#";
 							request.$wheelsMigrationOutput = "";
 							request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_down.sql";
-							if (application.wheels.writeMigratorSQLFiles) {
+							if (application[local.appKey].writeMigratorSQLFiles) {
 								FileWrite(request.$wheelsMigrationSQLFile, "");
 							}
 							local.migration.cfc.down();
@@ -70,7 +71,7 @@ public string function migrateTo(string version="") {
 							local.rv = local.rv & "#Chr(13)#-------- " & local.migration.cfcfile & " #RepeatString("-",Max(5,50-Len(local.migration.cfcfile)))##Chr(13)#";
 							request.$wheelsMigrationOutput = "";
 							request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_up.sql";
-							if (application.wheels.writeMigratorSQLFiles) {
+							if (application[local.appKey].writeMigratorSQLFiles) {
 								FileWrite(request.$wheelsMigrationSQLFile, "");
 							}
 							local.migration.cfc.up();
@@ -95,8 +96,8 @@ public string function migrateTo(string version="") {
 /**
  * Shortcut function to migrate to the latest version
  *
- * [section: Configuration]
- * [category: Database Migrations]
+ * [section: Migrator]
+ * [category: General Functions]
  */
 public string function migrateToLatest() {
 	local.migrations=getAvailableMigrations();
@@ -111,8 +112,8 @@ public string function migrateToLatest() {
 /**
  * Returns current database version. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
- * [section: Configuration]
- * [category: Database Migrations]
+ * [section: Migrator]
+ * [category: General Functions]
  */
 public string function getCurrentMigrationVersion() {
 	return ListLast($getVersionsPreviouslyMigrated());
@@ -121,8 +122,8 @@ public string function getCurrentMigrationVersion() {
 /**
  * Creates a migration file. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
- * [section: Configuration]
- * [category: Database Migrations]
+ * [section: Migrator]
+ * [category: General Functions]
  */
 public string function createMigration(
 	required string migrationName,
@@ -139,8 +140,8 @@ public string function createMigration(
 /**
  * Searches db/migrate folder for migrations. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
- * [section: Configuration]
- * [category: Database Migrations]
+ * [section: Migrator]
+ * [category: General Functions]
  *
  * @path Path to Migration Files: defaults to /migrator/migrations/
  */
@@ -182,13 +183,14 @@ public array function getAvailableMigrations(string path=this.paths.migrate) {
 /**
  * Reruns the specified migration version. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
  *
- * [section: Configuration]
- * [category: Database Migrations]
+ * [section: Migrator]
+ * [category: General Functions]
  *
  * @version The Database schema version to rerun
  */
 public string function redoMigration(string version="") {
-	var currentVersion = getCurrentMigrationVersion();
+	local.currentVersion = getCurrentMigrationVersion();
+	local.appKey = $appKey();
 	if (Len(arguments.version)) {
 		currentVersion = arguments.version;
 	}
@@ -205,10 +207,10 @@ public string function redoMigration(string version="") {
 		local.rv = local.rv & "#Chr(13)#------- " & local.migration.cfcfile & " #RepeatString("-", Max(5, 50-Len(local.migration.cfcfile)))##Chr(13)#";
 		request.$wheelsMigrationOutput = "";
 		request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_redo.sql";
-		if (application.wheels.writeMigratorSQLFiles) {
+		if (application[local.appKey].writeMigratorSQLFiles) {
 			FileWrite(request.$wheelsMigrationSQLFile, "");
 		}
-		if (application.wheels.allowMigrationDown) {
+		if (application[local.appKey].allowMigrationDown) {
 			local.migration.cfc.down();
 		}
 		local.migration.cfc.up();
@@ -223,9 +225,10 @@ public string function redoMigration(string version="") {
  * Inserts a record to flag a version as migrated.
  */
 private void function $setVersionAsMigrated(required string version) {
+	local.appKey = $appKey();
 	$query(
-		datasource=application.wheels.dataSourceName,
-		sql="INSERT INTO #application.wheels.migratorTableName# (version) VALUES ('#$sanitiseVersion(arguments.version)#')"
+		datasource=application[local.appKey].dataSourceName,
+		sql="INSERT INTO #application[local.appKey].migratorTableName# (version) VALUES ('#$sanitiseVersion(arguments.version)#')"
 	);
 }
 
@@ -233,9 +236,10 @@ private void function $setVersionAsMigrated(required string version) {
  * Deletes a record to flag a version as not migrated.
  */
 private void function $removeVersionAsMigrated(required string version) {
+	local.appKey = $appKey();
 	$query(
-		datasource=application.wheels.dataSourceName,
-		sql="DELETE FROM #application.wheels.migratorTableName# WHERE version = '#$sanitiseVersion(arguments.version)#'"
+		datasource=application[local.appKey].dataSourceName,
+		sql="DELETE FROM #application[local.appKey].migratorTableName# WHERE version = '#$sanitiseVersion(arguments.version)#'"
 	);
 }
 
@@ -283,9 +287,10 @@ private string function $copyTemplateMigrationAndRename(
 		DirectoryCreate(this.paths.migrate);
 	}
 	try {
+		local.appKey = $appKey();
 		local.templateContent = FileRead(local.templateFile);
-		if (Len(Trim(application.wheels.rootcomponentpath))) {
-			local.extendsPath = application.wheels.rootcomponentpath & ".wheels.migrator.Migration";
+		if (Len(Trim(application[local.appKey].rootcomponentpath))) {
+			local.extendsPath = application[local.appKey].rootcomponentpath & ".wheels.migrator.Migration";
 		}
 		local.templateContent = Replace(local.templateContent, "[extends]", local.extendsPath);
 		local.templateContent = Replace(local.templateContent, "[description]", Replace(arguments.migrationName, """", "&quot;", "all"));

@@ -1,0 +1,1 @@
+removeIndex(table='members',indexName='members_username');

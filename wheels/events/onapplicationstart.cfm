@@ -70,6 +70,7 @@ public void function onApplicationStart() {
 	application.$wheels.nonExistingHelperFiles = "";
 	application.$wheels.nonExistingLayoutFiles = "";
 	application.$wheels.nonExistingObjectFiles = "";
+	application.$wheels.directoryFiles = {};
 	application.$wheels.routes = [];
 	application.$wheels.resourceControllerNaming = "plural";
 	application.$wheels.namedRoutePositions = {};
@@ -146,17 +147,16 @@ public void function onApplicationStart() {
 	application.$wheels.cacheDatabaseSchema = true;
 	application.$wheels.cacheModelConfig = true;
 	application.$wheels.cachePlugins = true;
+	application.$wheels.cacheFileChecking = true;
 
 	// Cache settings that are turned off in development mode only.
 	application.$wheels.cacheActions = false;
-	application.$wheels.cacheFileChecking = false;
 	application.$wheels.cacheImages = false;
 	application.$wheels.cachePages = false;
 	application.$wheels.cachePartials = false;
 	application.$wheels.cacheQueries = false;
 	if (application.$wheels.environment != "development") {
 		application.$wheels.cacheActions = true;
-		application.$wheels.cacheFileChecking = true;
 		application.$wheels.cacheImages = true;
 		application.$wheels.cachePages = true;
 		application.$wheels.cachePartials = true;
@@ -188,6 +188,11 @@ public void function onApplicationStart() {
 
 	// CORS (Cross-Origin Resource Sharing) settings.
 	application.$wheels.allowCorsRequests = false;
+	application.$wheels.accessControlAllowOrigin="*";
+	application.$wheels.accessControlAllowMethods="GET, POST, PATCH, PUT, DELETE, OPTIONS";
+	application.$wheels.accessControlAllowMethodsByRoute=false;
+	application.$wheels.accessControlAllowCredentials = false;
+	application.$wheels.accessControlAllowHeaders="Origin, Content-Type, X-Auth-Token, X-Requested-By, X-Requested-With";
 
 	// Debugging and error settings.
 	application.$wheels.showDebugInformation = true;

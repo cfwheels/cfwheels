@@ -70,13 +70,15 @@ public void function validateOnUpdate(string methods="", string condition="", st
  * @when Pass in `onCreate` or `onUpdate` to limit when this validation occurs (by default validation will occur on both create and update, i.e. `onSave`).
  * @condition String expression to be evaluated that decides if validation will be run (if the expression returns `true` validation will run).
  * @unless String expression to be evaluated that decides if validation will be run (if the expression returns `false` validation will run).
+ * @caseSensitive Ensure the confirmed property comparison is case sensitive
  */
 public void function validatesConfirmationOf(
 	string properties="",
 	string message,
 	string when="onSave",
 	string condition="",
-	string unless=""
+	string unless="",
+	boolean caseSensitive = false
 ) {
 	$args(name="validatesConfirmationOf", args=arguments);
 	$registerValidation(methods="$validatesConfirmationOf", argumentCollection=arguments);
@@ -494,6 +496,9 @@ public boolean function $evaluateCondition() {
 public void function $validatesConfirmationOf() {
 	local.virtualConfirmProperty = arguments.property & "Confirmation";
 	if (StructKeyExists(this, local.virtualConfirmProperty) && this[arguments.property] != this[local.virtualConfirmProperty]) {
+		addError(property=local.virtualConfirmProperty, message=$validationErrorMessage(argumentCollection=arguments));
+	}
+	if (arguments.caseSensitive && ( compare(this[arguments.property], this[local.virtualConfirmProperty] ) != 0 ) ){
 		addError(property=local.virtualConfirmProperty, message=$validationErrorMessage(argumentCollection=arguments));
 	}
 }

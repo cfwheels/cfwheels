@@ -14,6 +14,7 @@
  * @validate [see:save].
  * @transaction [see:save].
  * @callbacks [see:findAll].
+ * @allowExplicitTimestamps Set this to `true` to allow explicit assignment of `createdAt` or `updatedAt` properties
  */
 public any function create(
 	struct properties={},
@@ -21,7 +22,8 @@ public any function create(
 	boolean reload,
 	boolean validate=true,
 	string transaction=$get("transactionMode"),
-	boolean callbacks=true
+	boolean callbacks=true,
+	boolean allowExplicitTimestamps=false
 ) {
 	$args(name="create", args=arguments);
 	local.parameterize = arguments.parameterize;
@@ -34,7 +36,8 @@ public any function create(
 		parameterize=local.parameterize,
 		reload=arguments.reload,
 		transaction=arguments.transaction,
-		validate=local.validate
+		validate=local.validate,
+		allowExplicitTimestamps=arguments.allowExplicitTimestamps
 	);
 	return local.rv;
 }
@@ -73,13 +76,15 @@ public any function new(struct properties={}, boolean callbacks=true) {
  * @validate Set to `false` to skip validations for this operation.
  * @transaction Set this to `commit` to update the database, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.
  * @callbacks [see:findAll].
+ * @allowExplicitTimestamps Set this to `true` to allow explicit assignment of `createdAt` or `updatedAt` properties
  */
 public boolean function save(
 	any parameterize,
 	boolean reload,
 	boolean validate=true,
 	string transaction=$get("transactionMode"),
-	boolean callbacks=true
+	boolean callbacks=true,
+	boolean allowExplicitTimestamps=false
 ) {
 	$args(name="save", args=arguments);
 	clearErrors();
@@ -180,10 +185,16 @@ public boolean function $save(
  * Create an INSERT statement and run to create the record.
  */
 public boolean function $create(required any parameterize, required boolean reload) {
-	if (variables.wheels.class.timeStampingOnCreate) {
+	// Allow explicit assignment of the createdAt/updatedAt properties if allowExplicitTimestamps is true
+	local.allowExplicitTimestamps = StructKeyExists(this, "allowExplicitTimestamps") && this.allowExplicitTimestamps;
+	if (local.allowExplicitTimestamps && StructKeyExists(this, $get("timeStampOnCreateProperty")) && Len(this[$get("timeStampOnCreateProperty")])) {
+		// leave createdat unmolested
+	} else if (variables.wheels.class.timeStampingOnCreate) {
 		$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
 	}
-	if ($get("setUpdatedAtOnCreate") && variables.wheels.class.timeStampingOnUpdate) {
+	if (local.allowExplicitTimestamps && StructKeyExists(this, $get("timeStampOnUpdateProperty")) && Len(this[$get("timeStampOnUpdateProperty")])) {
+		// leave updatedat unmolested
+	} else if ($get("setUpdatedAtOnCreate") && variables.wheels.class.timeStampingOnUpdate) {
 		$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 	}
 

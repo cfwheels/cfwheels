@@ -3,17 +3,25 @@ if(!StructKeyExists(variables, "$wddx")){
 	include "../global/functions.cfm";
 }
 
+/**
+* Used internally by Migrator to provide feedback to the GUI and CLI about completed DB operations
+* Only available in a migration CFC
+*
+* [section: Migrator]
+* [category: Migration Functions]
+*/
 public function announce(required string message) {
 	param name="request.$wheelsMigrationOutput" default="";
 	request.$wheelsMigrationOutput = request.$wheelsMigrationOutput & arguments.message & chr(13);
 }
 
 public string function $getDBType() {
+	local.appKey = $appKey();
 	local.info = $dbinfo(
 		type="version",
-		datasource=application.wheels.dataSourceName,
-		username=application.wheels.dataSourceUserName,
-		password=application.wheels.dataSourcePassword
+		datasource=application[local.appKey].dataSourceName,
+		username=application[local.appKey].dataSourceUserName,
+		password=application[local.appKey].dataSourcePassword
 	);
 	local.adapterName="";
 	if (local.info.driver_name Contains "SQLServer" || local.info.driver_name Contains "Microsoft SQL Server" || local.info.driver_name Contains "MS SQL Server" || local.info.database_productname Contains "Microsoft SQL Server") {
@@ -27,7 +35,7 @@ public string function $getDBType() {
 	// determine the emulation mode
 	/*
 	if (StructKeyExists(server, "lucee")) {
-		local.connectionString = GetApplicationMetaData().datasources[application.wheels.dataSourceName].connectionString;
+		local.connectionString = GetApplicationMetaData().datasources[application[local.appKey].dataSourceName].connectionString;
 	} else {
 		// TODO: use the coldfusion class to dig out dsn info
 		local.connectionString = "";
@@ -48,27 +56,30 @@ public string function $getDBType() {
 }
 
 private string function $getForeignKeys(required string table) {
+	local.appKey = $appKey();
 	local.foreignKeyList = "";
-	local.tables = $dbinfo(type="tables", datasource=application.wheels.dataSourceName,username=application.wheels.dataSourceUserName,password=application.wheels.dataSourcePassword);
+	local.tables = $dbinfo(type="tables", datasource=application[local.appKey].dataSourceName,username=application[local.appKey].dataSourceUserName,password=application[local.appKey].dataSourcePassword);
 	if (ListFindNoCase(ValueList(local.tables.table_name), arguments.table)) {
-		local.foreignKeys = $dbinfo(type="foreignkeys",table=arguments.table,datasource=application.wheels.dataSourceName,username=application.wheels.dataSourceUserName,password=application.wheels.dataSourcePassword);
+		local.foreignKeys = $dbinfo(type="foreignkeys",table=arguments.table,datasource=application[local.appKey].dataSourceName,username=application[local.appKey].dataSourceUserName,password=application[local.appKey].dataSourcePassword);
 		local.foreignKeyList = ValueList(local.foreignKeys.FKCOLUMN_NAME);
 	}
 	return local.foreignKeyList;
 }
 
 private void function $execute(required string sql) {
-	if (StructKeyExists(request, "$wheelsMigrationSQLFile") && application.wheels.writeMigratorSQLFiles) {
+	local.appKey = $appKey();
+	if (StructKeyExists(request, "$wheelsMigrationSQLFile") && application[local.appKey].writeMigratorSQLFiles) {
 		$file(action="append", file=request.$wheelsMigrationSQLFile, output="#arguments.sql#;", addNewLine="yes", fixNewLine="yes");
 	}
-	$query(datasource=application.wheels.dataSourceName, sql=arguments.sql);
+	$query(datasource=application[local.appKey].dataSourceName, sql=arguments.sql);
 }
 
 public string function $getColumns(required string tableName) {
+	local.appKey = $appKey();
 	local.columns = $dbinfo(
-		datasource=application.wheels.dataSourceName,
-		username=application.wheels.dataSourceUserName,
-		password=application.wheels.dataSourcePassword,
+		datasource=application[local.appKey].dataSourceName,
+		username=application[local.appKey].dataSourceUserName,
+		password=application[local.appKey].dataSourcePassword,
 		type="columns",
 		table=arguments.tableName
 	);
@@ -76,10 +87,11 @@ public string function $getColumns(required string tableName) {
 }
 
 private string function $getColumnDefinition(required string tableName, required string columnName) {
+	local.appKey = $appKey();
 	local.columns = $dbinfo(
-		datasource=application.wheels.dataSourceName,
-		username=application.wheels.dataSourceUserName,
-		password=application.wheels.dataSourcePassword,
+		datasource=application[local.appKey].dataSourceName,
+		username=application[local.appKey].dataSourceUserName,
+		password=application[local.appKey].dataSourcePassword,
 		type="columns",
 		table=arguments.tableName
 	);
@@ -117,9 +129,10 @@ private string function $getColumnDefinition(required string tableName, required
 * Note: some db engines use only lower case, TODO: perhaps add certain adapters to these conditions?
 */
 private string function objectCase(required string name) {
-	if (application.wheels.migratorObjectCase eq "lower") {
+	local.appKey = $appKey();
+	if (application[local.appKey].migratorObjectCase eq "lower") {
 		return LCase(arguments.name);
-	} else if (application.wheels.migratorObjectCase eq "upper") {
+	} else if (application[local.appKey].migratorObjectCase eq "upper") {
 		return UCase(arguments.name);
 	} else {
 		// use the object name unmolested

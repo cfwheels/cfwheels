@@ -25,6 +25,7 @@
  * @returnIncluded When `returnAs` is set to `objects`, you can set this argument to `false` to prevent returning objects fetched from associations specified in the `include` argument. This is useful when you only need to include associations for use in the `WHERE` clause only and want to avoid the performance hit that comes with object creation.
  * @callbacks Set to `false` to disable callbacks for this method.
  * @includeSoftDeletes Set to `true` to include soft-deleted records in the queries that this method runs.
+ * @useIndex If you want to specify table index hints, pass in a structure of index names using your model names as the structure keys. Eg: `{user="idx_users", post="idx_posts"}`. This feature is only supported by MySQL and SQL Server.
  */
 public any function findAll(
 	string where="",
@@ -45,6 +46,7 @@ public any function findAll(
 	boolean returnIncluded,
 	boolean callbacks="true",
 	boolean includeSoftDeletes="false",
+	struct useIndex={},
 	numeric $limit="0",
 	numeric $offset="0"
 ) {
@@ -186,7 +188,7 @@ public any function findAll(
 		if (!IsArray(local.sql)) {
 			local.sql = [];
 			ArrayAppend(local.sql, $selectClause(select=arguments.select, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, returnAs=arguments.returnAs));
-			ArrayAppend(local.sql, $fromClause(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes));
+			ArrayAppend(local.sql, $fromClause(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, useIndex=arguments.useIndex));
 			local.sql = $addWhereClause(sql=local.sql, where=local.originalWhere, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			local.groupBy = $groupByClause(select=arguments.select, group=arguments.group, include=arguments.include, distinct=arguments.distinct, returnAs=arguments.returnAs);
 			if (Len(local.groupBy)) {
@@ -321,6 +323,7 @@ public any function findByKey(
  * @parameterize [see:findAll].
  * @returnAs [see:findAll].
  * @includeSoftDeletes [see:findAll].
+ * @useIndex [see:findAll].
  */
 public any function findOne(
 	string where="",
@@ -332,7 +335,8 @@ public any function findOne(
 	boolean reload,
 	any parameterize,
 	string returnAs,
-	boolean includeSoftDeletes="false"
+	boolean includeSoftDeletes="false",
+	struct useIndex={}
 ) {
 	$args(name="findOne", args=arguments);
 	$setDebugName(name="findOne", args=arguments);

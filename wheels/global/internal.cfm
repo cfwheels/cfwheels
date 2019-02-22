@@ -597,17 +597,19 @@ public any function $cachedControllerClassExists(required string name) {
  * Internal function.
  */
 public any function $fileExistsNoCase(required string absolutePath) {
+	local.appKey = $appKey();
 	// return false by default when the file does not exist in the directory
 	local.rv = false;
-
 	// break up the full path string in the path name only and the file name only
 	local.path = GetDirectoryFromPath(arguments.absolutePath);
 	local.file = Replace(arguments.absolutePath, local.path, "");
-
-	// get all existing files in the directory and place them in a list
-	local.dirInfo = $directory(directory=local.path);
-	local.fileList = ValueList(local.dirInfo.name);
-
+	// get all existing files in the directory and place them in a list in application scope
+	local.pathHash = Hash(local.path);
+	if (!StructKeyExists(application[local.appKey].directoryFiles, local.pathHash)) {
+		local.dirInfo = $directory(directory=local.path);
+		application[local.appKey].directoryFiles[local.pathHash] = ValueList(local.dirInfo.name);
+	}
+	local.fileList = application[local.appKey].directoryFiles[local.pathHash];
 	// loop through the file list and return the file name if exists regardless of case (the == operator is case insensitive)
 	local.iEnd = ListLen(local.fileList);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -1146,4 +1148,81 @@ public void function $throwErrorOrShow404Page(required string type, required str
 	}
 }
 
+
+/**
+ * Set CORS Headers: only triggered if application.wheels.allowCorsRequests = true
+ */
+public void function $setCORSHeaders(
+	string allowOrigin = "*",
+	string allowCredentials = false,
+	string allowHeaders = "Origin, Content-Type, X-Auth-Token, X-Requested-By, X-Requested-With",
+	string allowMethods = "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+	boolean allowMethodsByRoute = false,
+	string pathInfo = request.cgi.PATH_INFO,
+	string scriptName = request.cgi.script_name
+) {
+
+	local.incomingOrigin = structKeyExists(request.wheels.httprequestdata.headers, "origin")? request.wheels.httprequestdata.headers.origin : false;
+
+	// Either a wildcard, or if a specific domain is set, we need to ensure the incoming request matches it
+	if(arguments.allowOrigin == "*"){
+
+		$header(name="Access-Control-Allow-Origin", value=arguments.allowOrigin);
+
+ 	} else {
+
+		// Passed value may be a list or just a single entry
+		local.originArr = listToArray(arguments.allowOrigin);
+
+		// Is this origin in the allowed Array?
+		if(arrayFindNoCase(local.originArr, local.incomingOrigin)){
+			$header(name="Access-Control-Allow-Origin", value=local.incomingOrigin);
+			$header(name="Vary", value="Origin");
+		}
+	}
+
+	// Set Origin, Content-Type, X-Auth-Token, X-Requested-By, X-Requested-With Allow Headers
+	$header(name="Access-Control-Allow-Headers", value=arguments.allowHeaders);
+
+	// Either Look up Route specific allowed methods, or just use default
+	if(arguments.allowMethodsByRoute){
+
+		local.permittedMethods = [];
+
+		// NB this is basically duplicate logic: needs refactoring
+		if (arguments.pathInfo == arguments.scriptName || arguments.pathInfo == "/" || !Len(arguments.pathInfo)) {
+			local.path = "";
+		} else {
+			local.path = Right(arguments.pathInfo, Len(arguments.pathInfo) - 1);
+		}
+
+		// Attempt to match the requested route and only display the allowed methods for that route
+		// Does this info already exist in scope? It seems silly to have to look it up again
+		for(local.route in application.wheels.routes){
+
+			// Make sure route has been converted to regular expression.
+			if (!StructKeyExists(local.route, "regex")) {
+				local.route.regex = application.wheels.mapper.$patternToRegex(local.route.pattern);
+			}
+
+			// If route matches regular expression, get the methods
+			if (REFindNoCase(local.route.regex, local.path)) {
+        		arrayAppend(local.permittedMethods, local.route.methods);
+			}
+
+	    }
+	    if(arrayLen(local.permittedMethods)){
+			$header(name="Access-Control-Allow-Methods", value=UCASE( arrayToList(local.permittedMethods, ', ') ) );
+	     }
+
+	} else {
+		$header(name="Access-Control-Allow-Methods", value=arguments.allowMethods);
+	}
+
+	// Only add this header if requested (false is an invalid value)
+	if(arguments.allowCredentials){
+		$header(name="Access-Control-Allow-Credentials", value=true);
+	}
+
+}
 </cfscript>

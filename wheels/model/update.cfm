@@ -158,14 +158,16 @@ public boolean function updateOne(
  * @validate [see:save].
  * @transaction [see:save].
  * @callbacks [see:findAll].
+ * @allowExplicitTimestamps Set this to `true` to allow explicit assignment of `createdAt` or `updatedAt` properties
  */
 public boolean function update(
 	struct properties={},
 	any parameterize,
 	boolean reload,
-	boolean validate="true",
+	boolean validate=true,
 	string transaction="#application.wheels.transactionMode#",
-	boolean callbacks="true"
+	boolean callbacks=true,
+	boolean allowExplicitTimestamps=false
 ){
 	$args(name="update", args=arguments);
 	$setProperties(
@@ -177,7 +179,8 @@ public boolean function update(
 		parameterize=arguments.parameterize,
 		reload=arguments.reload,
 		transaction=arguments.transaction,
-		validate=arguments.validate
+		validate=arguments.validate,
+		allowExplicitTimestamps=arguments.allowExplicitTimestamps
 	);
 }
 
@@ -229,7 +232,16 @@ public boolean function $update(required any parameterize, required boolean relo
 
 	// Perform update if changes have been made.
 	if (hasChanged()) {
-		if (variables.wheels.class.timeStampingOnUpdate) {
+		// Allow explicit assignment of the createdAt/updatedAt properties if allowExplicitTimestamps is true
+		local.allowExplicitTimestamps = StructKeyExists(this, "allowExplicitTimestamps") && this.allowExplicitTimestamps;
+		if (local.allowExplicitTimestamps && StructKeyExists(this, $get("timeStampOnCreateProperty")) && Len(this[$get("timeStampOnCreateProperty")])) {
+			// leave createdat unmolested
+		} else if (variables.wheels.class.timeStampingOnCreate) {
+			$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
+		}
+		if (local.allowExplicitTimestamps && StructKeyExists(this, $get("timeStampOnUpdateProperty")) && Len(this[$get("timeStampOnUpdateProperty")])) {
+			// leave updatedat unmolested
+		} else if ($get("setUpdatedAtOnCreate") && variables.wheels.class.timeStampingOnUpdate) {
 			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 		}
 		local.sql = [];

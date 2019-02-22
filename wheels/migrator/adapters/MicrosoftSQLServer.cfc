@@ -4,15 +4,15 @@ component extends="Abstract" {
 	variables.sqlTypes['primaryKey'] = "int NOT NULL IDENTITY (1, 1)";
 	variables.sqlTypes['binary'] = {name='IMAGE'};
 	variables.sqlTypes['boolean'] = {name='BIT'};
-	variables.sqlTypes['date'] = {name='DATETIME'};
+	variables.sqlTypes['date'] = {name='date'};
 	variables.sqlTypes['datetime'] = {name='DATETIME'};
 	variables.sqlTypes['decimal'] = {name='DECIMAL'};
 	variables.sqlTypes['float'] = {name='FLOAT'};
 	variables.sqlTypes['integer'] = {name='INT'};
 	variables.sqlTypes['string'] = {name='VARCHAR',limit=255};
-	variables.sqlTypes['text'] = {name='TEXT'};
-	variables.sqlTypes['time'] = {name='DATETIME'};
-	variables.sqlTypes['timestamp'] = {name='DATETIME'};
+	variables.sqlTypes['text'] = {name='NVARCHAR',limit="max"};
+	variables.sqlTypes['time'] = {name='time'};
+	variables.sqlTypes['timestamp'] = {name='timestamp'};
 	variables.sqlTypes['uniqueidentifier'] = {name='UNIQUEIDENTIFIER'} ;
 	variables.sqlTypes['char'] = {name='CHAR',limit=10};
 

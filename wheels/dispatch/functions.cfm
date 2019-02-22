@@ -86,7 +86,7 @@ public struct function $findMatchingRoute(required string path, string requestMe
 
 	// If this is a HEAD request, look for the corresponding GET route
 	if (arguments.requestMethod == 'HEAD'){
-		arguments.requestMethod = 'GET'; 
+		arguments.requestMethod = 'GET';
 	}
 
 	// Loop over Wheels routes.
@@ -448,11 +448,6 @@ public string function $getRequestMethod() {
 	// If request is a post, check for alternate verb.
 	if (request.cgi.request_method == "post" && StructKeyExists(form, "_method")) {
 		return form["_method"];
-	}
-
-	// If request is a get, check for alternate verb.
-	if (request.cgi.request_method == "get" && StructKeyExists(url, "_method")) {
-		return url["_method"];
 	}
 
 	return request.cgi.request_method;

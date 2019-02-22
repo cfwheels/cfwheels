@@ -2,7 +2,8 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		StructDelete(application.wheels.models, "users", false);
-        user = model("users").new();
+		StructDelete(application.wheels.models, "tag", false);
+		user = model("users").new();
 	}
 
 	/* validatesConfirmationOf */
@@ -32,6 +33,20 @@ component extends="wheels.tests.Test" {
 		assert('user.valid()');
 	}
 
+	function test_validatesConfirmationOf_valid_case() {
+		user.password = "HamsterJelly";
+		user.passwordConfirmation = "HamsterJelly";
+		user.validatesConfirmationOf(property="password", caseSensitive=true);
+		assert('user.valid()');
+	}
+
+	function test_validatesConfirmationOf_invalid_case() {
+		user = model("users").new();
+		user.password = "HamsterJelly";
+		user.passwordConfirmation = "hamsterjelly";
+		user.validatesConfirmationOf(property="password", caseSensitive=true);
+		assert('!user.valid()');
+	}
 
 	/* validatesExclusionOf */
 	function test_validatesExclusionOf_valid() {
@@ -420,10 +435,24 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_validatesUniquenessOf_with_blank_property_value() {
-		user.firstname = "";
-		user.validatesUniquenessOf(property="firstname");
-		assert('user.valid()');
+		tag = model("tag").new(
+			name = "angel",
+			description = "of death",
+			parentid = ""
+		);
+		tag.validatesUniquenessOf(property="parentid");
+		assert('!tag.valid()');
 	}
+	/*
+	function test_validatesUniquenessOf_with_blank_property_value_with_allowBlank() {
+		tag = model("tag").new(
+			name = "angel",
+			description = "of death",
+			parentid = ""
+		);
+		tag.validatesUniquenessOf(property="parentid", allowBlank="true");
+		assert('tag.valid()');
+	}*/
 
 	/* validate */
 	function test_validate_registering_methods() {

@@ -7,7 +7,7 @@ component extends="wheels.tests.Test" {
 	function test_createTable_generates_table() {
 		tableName = "dbm_createtable_tests";
 		t = migration.createTable(name=tableName, force=true);
-		t.string(columnNames='stringcolumn', limit=255);
+		t.string(columnNames='stringcolumn, secondstringcolumn ', limit=255); // notice the untrimmed column name
 		t.text(columnNames='textcolumn');
 		t.boolean(columnNames='booleancolumn', default=false, null=false);
 		t.integer(columnNames='integercolumn', default=0);
@@ -23,7 +23,7 @@ component extends="wheels.tests.Test" {
 		t.create();
 
 		actual = ListSort(model(tableName).findAll().columnList, "text");
-		expected = ListSort("id,stringcolumn,textcolumn,booleancolumn,integercolumn,binarycolumn,datecolumn,datetimecolumn,timecolumn,decimalcolumn,floatcolumn,createdat,updatedat,deletedat", "text");
+		expected = ListSort("id,stringcolumn,secondstringcolumn,textcolumn,booleancolumn,integercolumn,binarycolumn,datecolumn,datetimecolumn,timecolumn,decimalcolumn,floatcolumn,createdat,updatedat,deletedat", "text");
 
 		migration.dropTable(tableName);
 		assert("actual eq expected");

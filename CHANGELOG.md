@@ -4,6 +4,8 @@
 
 * Migrator now automatically manages the timestamp columns on `addRecord()` and `updateRecord()` calls - [#852](https://github.com/cfwheels/cfwheels/pull/852) [Charley Contreras]
 * Migrator correctly honors CFWheels Timestamp configuration settings (`setUpdatedAtOnCreate, softDeleteProperty, timeStampMode, timeStampOnCreateProperty, timeStampOnUpdateProperty`) - [#852](https://github.com/cfwheels/cfwheels/pull/852) [Charley Contreras]
+* `MSSQL` now uses `NVARCHAR(max)` instead of `TEXT` [#896](https://github.com/cfwheels/cfwheels/pull/896) [Reuben Brown]
+* Allow createdAt and updatedAt to be explicitly assigned using the `allowExplicitTimestamps=true` argument - [#887](https://github.com/cfwheels/cfwheels/issues/887) - [Adam Chapman]
 
 ### Controller Enhancements
 
@@ -19,15 +21,31 @@
 * Minor fix for duplicate debug output in the test suite - [#176](https://github.com/cfwheels/cfwheels/issues/176) [Adam Chapman, Tom King]
 * Convert `handle` to a valid variable name so it doesn't break when using dot notation - [#846](https://github.com/cfwheels/cfwheels/issues/846) [Per Djurner]
 * The `validatesUniquenessOf()` check now handles cases when duplicates already exist - [#480](https://github.com/cfwheels/cfwheels/issues/480) [Randall Meeker, Per Djurner]
+* `validatesConfirmationOf()` now has a `caseSensitive` argument to optionally perform a case sensitive comparison - [#918](https://github.com/cfwheels/cfwheels/issues/918) [Tom King]
+* `sendFile()` no longer expands an already expanded directory on ACF2016 - [#873](https://github.com/cfwheels/cfwheels/issues/873) [David Paul Belanger, Tom King, strubenstein]
+* Automatic database migrations onApplicationStart now correctly reference appropriate Application scope - [#870](https://github.com/cfwheels/cfwheels/issues/870) [Tom King]
+* `usesLayout()` now can be called more than once and properly respects the order called - [#891](https://github.com/cfwheels/cfwheels/issues/891) [David Paul Belanger]
+* Migrator MSSQL adapter now respects `Time` and `Timestamp` Column Types - [#906](https://github.com/cfwheels/cfwheels/issues/906) [Reuben Brown]
+* Automatic migrations fail on application start - [#913](https://github.com/cfwheels/cfwheels/issues/913) [Adam Chapman]
+* Default `cacheFileChecking` to `true` in development mode - [Adam Chapman, Steve Harvey]
+* Migrator columnNames list values are now trimmed - [##919](https://github.com/cfwheels/cfwheels/issues/#919) [Adam Chapman]
 
 ### Miscellaneous
 
 * Added the ability to pass `&lock=false` in the URL for when reload requests won't work due to locking - [Per Djurner]
 * Basic 302 redirects now available in mapper via `redirect` argument for `GET/PUT/PATCH/POST/DELETE` - [#847](https://github.com/cfwheels/cfwheels/issues/847) - [Tom King]
+* `.[format]` based routes can now be turned off in `resources()` and `resource()` via `mapFormat=false` - [#899](https://github.com/cfwheels/cfwheels/issues/899) - [Tom King]
 * `HEAD` requests are now aliased to `GET` requests [#860](https://github.com/cfwheels/cfwheels/issues/860) - [Tom King]
 * Added the `includeFilters` argument to the `processRequest` function for skipping execution of filters during controller unit tests - [Adam Chapman]
-
+* Added the `useIndex` argument to finders for adding table index hints [#864](https://github.com/cfwheels/cfwheels/issues/864) - [Adam Chapman]
+* HTTP Verb/Method switching is now no longer allowed via `GET` requests and must be performed via `POST` [#886](https://github.com/cfwheels/cfwheels/issues/886) - [Tom King]
 <a name="2.0.1"></a>
+* CORS Header `Access-Control-Allow-Origin` can now be set either via a simple value or list in `accessControlAllowOrigin()` [#888](https://github.com/cfwheels/cfwheels/issues/888) [Tom King]
+* CORS Header `Access-Control-Allow-Methods` can now be set via `accessControlAllowMethods(value)` [#888](https://github.com/cfwheels/cfwheels/issues/888) [Tom King]
+* CORS Header `Access-Control-Allow-Credentials` can now be turned on via `accessControlAllowCredentials(true)`;  [#888](https://github.com/cfwheels/cfwheels/issues/888) [Tom King]
+* `accessControlAllowMethodsByRoute()` now allows for automatic matching of available methods for a route and sets CORS Header `Access-Control-Allow-Methods` appropriately [#888](https://github.com/cfwheels/cfwheels/issues/888) [Tom King]
+* CORS Header can now be set via `accessControlAllowHeaders(value)` [#888](https://github.com/cfwheels/cfwheels/issues/888) [Tom King]
+* Performance Improvement: Scanning of Models and Controllers [#917](https://github.com/cfwheels/cfwheels/issues/917) [Adam Chapman]
 
 # [2.0.1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.1) (01/31/2018)
 
