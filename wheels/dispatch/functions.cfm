@@ -258,7 +258,10 @@ public struct function $parseJsonBody(required struct params) {
 			// If what we have now is valid JSON, deserialize it to a struct and append to params.
 			// Call with "false" so existing form and URL values take precedence.
 			if (IsJSON(local.content)) {
-				StructAppend(arguments.params, DeserializeJSON(local.content), false);
+				local.deserializedContent = DeserializeJSON(local.content);
+				if (IsStruct(local.deserializedContent)) {
+					StructAppend(arguments.params, local.deserializedContent, false);
+				}
 			}
 
 		}
