@@ -245,8 +245,16 @@ public void function addFormat(required string extension, required string mimeTy
  *
  * [section: Configuration]
  * [category: Routing]
+ *
+ * @restful Whether to turn on RESTful routing or not. Not recommended to set. Will probably be removed in a future version of wheels, as RESTful routes are the default.
+ * @methods If not RESTful, then specify allowed routes. Not recommended to set. Will probably be removed in a future version of wheels, as RESTful routes are the default.
+ * @mapFormat This is useful for providing formats via URL like `json`, `xml`, `pdf`, etc. Set to false to disable automatic .[format] generation for resource based routes
  */
-public struct function mapper(boolean restful=true, boolean methods=arguments.restful) {
+public struct function mapper(
+	boolean restful=true,
+	boolean methods=arguments.restful,
+	boolean mapFormat=true
+) {
 	return application[$appKey()].mapper.$draw(argumentCollection=arguments);
 }
 

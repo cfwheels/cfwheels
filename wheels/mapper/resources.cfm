@@ -35,7 +35,7 @@ public struct function resource(
 	struct constraints,
 	string $call="resource",
 	boolean $plural=false,
-	boolean mapFormat=true
+	boolean mapFormat=variables.mapFormat
 ) {
 	local.args = {};
 
@@ -209,7 +209,7 @@ public struct function resources(
 	string shallowPath,
 	string shallowName,
 	struct constraints,
-	boolean mapFormat=true
+	boolean mapFormat=variables.mapFormat
 ) {
 	return resource(argumentCollection=arguments, $plural=true, $call="resources");
 }

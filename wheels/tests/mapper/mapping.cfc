@@ -51,6 +51,13 @@ component extends="wheels.tests.Test" {
     assert('mapperVarScope.restful eq false AND mapperVarScope.methods eq true');
   }
 
+  function test_draw_mapFormat_false() {
+    mapper = $mapper(mapFormat=false).$draw();
+    mapper.inspect = $inspect;
+    mapperVarScope = mapper.inspect();
+    assert('mapperVarScope.mapFormat eq false');
+  }
+
   function test_draw_resets_the_stack() {
     mapper = $mapper().$draw();
     mapper.inspect = $inspect;
