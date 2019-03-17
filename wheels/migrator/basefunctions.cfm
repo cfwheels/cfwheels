@@ -68,10 +68,14 @@ private string function $getForeignKeys(required string table) {
 
 private void function $execute(required string sql) {
 	local.appKey = $appKey();
-	if (StructKeyExists(request, "$wheelsMigrationSQLFile") && application[local.appKey].writeMigratorSQLFiles) {
-		$file(action="append", file=request.$wheelsMigrationSQLFile, output="#arguments.sql#;", addNewLine="yes", fixNewLine="yes");
+	local.sql = Trim(arguments.sql);
+	if (Right(local.sql, 1) neq ";") {
+		local.sql = local.sql &= ";";
 	}
-	$query(datasource=application[local.appKey].dataSourceName, sql=arguments.sql);
+	if (StructKeyExists(request, "$wheelsMigrationSQLFile") && application[local.appKey].writeMigratorSQLFiles) {
+		$file(action="append", file=request.$wheelsMigrationSQLFile, output="#local.sql#", addNewLine="yes", fixNewLine="yes");
+	}
+	$query(datasource=application[local.appKey].dataSourceName, sql=local.sql);
 }
 
 public string function $getColumns(required string tableName) {
