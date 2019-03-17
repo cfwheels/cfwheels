@@ -29,7 +29,8 @@
 * Automatic migrations fail on application start - [#913](https://github.com/cfwheels/cfwheels/issues/913) [Adam Chapman]
 * Default `cacheFileChecking` to `true` in development mode - [Adam Chapman, Steve Harvey]
 * Migrator columnNames list values are now trimmed - [##919](https://github.com/cfwheels/cfwheels/issues/#919) [Adam Chapman]
-* Fixes bug when httpRequestData content is a JSON array - [##919](https://github.com/cfwheels/cfwheels/issues/#926) [Adam Chapman]
+* Fixes bug when httpRequestData content is a JSON array - [##926](https://github.com/cfwheels/cfwheels/issues/#926) [Adam Chapman]
+* Fixes bug where Migrator $execute() always appends semi-colon - [##924](https://github.com/cfwheels/cfwheels/issues/#924) [Adam Chapman]
 
 ### Miscellaneous
 
