@@ -22,6 +22,17 @@ public function protectsFromForgery(string with="exception", string only="", str
 }
 
 /**
+ * Returns the raw CSRF authenticity token
+ *
+ * [section: Controller]
+ * [category: Miscellaneous Functions]
+ *
+ */
+public string function authenticityToken() {
+	return $generateAuthenticityToken();
+}
+
+/**
  * Internal function.
  */
 public function $runCsrfProtection(string action) {
