@@ -189,19 +189,29 @@ public string function $request(
 		$debugPoint("setup");
 	}
 
-	// Create the requested controller and call the action on it.
-	local.controller = controller(name=local.params.controller, params=local.params);
-	local.controller.processAction();
+	// Hi-jack any wheels controller requests
+	if(listFirst(local.params.controller, '.') EQ "wheels"){
+		// TODO : abort if not in development mode
+		// TODO: this needs locking?
+		local.rv = $createObjectFromRoot(path="wheels", fileName="gui", method="$initControllerClass", name="wheels");
+		local.rv = local.rv[params.action]();
+		return local.rv;
 
-	// If there is a delayed redirect pending we execute it here thus halting the rest of the request.
-	if (local.controller.$performedRedirect()) {
-		$location(argumentCollection=local.controller.getRedirect());
+	} else {
+		// Create the requested controller and call the action on it.
+		local.controller = controller(name=local.params.controller, params=local.params);
+		local.controller.processAction();
+
+		// If there is a delayed redirect pending we execute it here thus halting the rest of the request.
+		if (local.controller.$performedRedirect()) {
+			$location(argumentCollection=local.controller.getRedirect());
+		}
+
+		// Clear out the flash (note that this is not done for redirects since the processing does not get here).
+		local.controller.$flashClear();
+
+		return local.controller.response();
 	}
-
-	// Clear out the flash (note that this is not done for redirects since the processing does not get here).
-	local.controller.$flashClear();
-
-	return local.controller.response();
 }
 
 /**

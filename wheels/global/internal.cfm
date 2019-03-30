@@ -834,7 +834,10 @@ public void function $lockedLoadRoutes() {
 	ArrayClear(application[local.appKey].routes);
 	StructClear(application[local.appKey].namedRoutePositions);
 
-	// load developer routes first
+	// load wheels internal gui routes
+	// TODO skip this if mode != development|testing?
+	$include(template="wheels/gui/routes.cfm");
+	// load developer routes next
 	$include(template="config/routes.cfm");
 
 	// set lookup info for the named routes

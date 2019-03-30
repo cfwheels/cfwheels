@@ -22,6 +22,16 @@ wheelsInternalAssetPath=get("webpath") & "wheels/public/assets";
 				<img src='#wheelsInternalAssetPath#/img/logo.png' alt="CFWheels Logo">
 			</a>
 		</div>
+	<nav class="container">
+		<div class="row">
+			<div class="column">#linkTo(route="wheelsInfo", text="Info")#</div>
+			<div class="column">#linkTo(route="wheelsRoutes", text="Routes")#</div>
+			<div class="column">#linkTo(route="wheelsDocs", text="Docs")#</div>
+			<div class="column">#linkTo(route="wheelsPackages", text="Core Tests")#</div>
+			<div class="column">#linkTo(route="wheelsMigrate", text="Migrator")#</div>
+		</div>
+	</nav>
+	<hr>
 	</header>
 	<div id="content" class="container">
 </cfoutput>
