@@ -2,52 +2,48 @@
 /*
 This is just a proof of concept
 */
-	function wheels(){
-		include "../styles/header.cfm";
-		include "../public/congratulations.cfm";
-		include "../styles/footer.cfm";
+	function wheels(){ 
+		include "views/congratulations.cfm"; 
 		return "";
 	}
-	function index(){
-		include "../styles/header.cfm";
-		include "../public/congratulations.cfm";
-		include "../styles/footer.cfm";
+	function index(){ 
+		include "views/congratulations.cfm"; 
 		return "";
 	}
-	function info(){
-		include "../styles/header.cfm";
-		include "gui/views/info.cfm";
-		include "../styles/footer.cfm";
+	function temp(){  
+		include "views/temp.cfm"; 
+		return "";
+	}
+	function info(){ 
+		include "views/info.cfm"; 
 		return "";
 	}
 	function routes(){
-		include "../styles/header.cfm";
-		include "../public/routes.cfm";
-		include "../styles/footer.cfm";
+		include "views/routes.cfm"; 
 		return "";
 	}
-	function docs(){
-		include "../styles/docs.cfm";
-		include "../public/docs.cfm";
-		include "../styles/docs_footer.cfm";
+	function docs(){ 
+		include "views/docs.cfm"; 
 		return "";
 	}
 	function packages(){
-		include "../styles/header.cfm";
-		include "../public/packages.cfm";
-		include "../styles/footer.cfm";
+		include "views/packages.cfm";
 		return "";
 	}
 	function tests(){
-		include "../styles/header.cfm";
-		include "../public/tests.cfm";
-		include "../styles/footer.cfm";
+		include "views/tests.cfm";
 		return "";
 	}
 	function migrate(){
-		include "../styles/header.cfm";
-		include "../public/migrate.cfm";
-		include "../styles/footer.cfm";
+		include "views/migrator.cfm";
+		return "";
+	}
+	function cli(){
+		include "views/cli.cfm";
+		return "";
+	}
+	function plugins(){
+		include "views/plugins.cfm";
 		return "";
 	}
 </cfscript>
