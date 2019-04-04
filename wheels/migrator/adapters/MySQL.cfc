@@ -22,6 +22,18 @@ component extends="Abstract" {
 		return "MySQL";
 	}
 
+	public string function addForeignKeyOptions(required string sql, struct options = {}) {
+		arguments.sql = arguments.sql & " FOREIGN KEY (" & arguments.options.column & ")";
+		if (StructKeyExists(arguments.options, "referenceTable")){
+			if (StructKeyExists(arguments.options, "referenceColumn")){
+				arguments.sql = arguments.sql & " REFERENCES ";
+				arguments.sql = arguments.sql & arguments.options.referenceTable;
+				arguments.sql = arguments.sql & " (" & arguments.options.referenceColumn & ")";
+			}
+		}
+		return arguments.sql;
+	}
+
 	/**
 	* generates sql for primary key options
 	*/
