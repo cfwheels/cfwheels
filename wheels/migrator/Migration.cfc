@@ -387,8 +387,8 @@ component extends="Base" {
 	*/
 	public void function addRecord(required string table) {
 		local.appKey = $appKey();
-		local.columnNames = "";
-		local.columnValues = "";
+		local.columnNames = "createdat";
+		local.columnValues = "#now()#";
 		if(!StructKeyExists(arguments, application[local.appKey].timeStampOnCreateProperty) && ListFindNoCase($getColumns(arguments.table), application[local.appKey].timeStampOnCreateProperty)) {
 			arguments[application[local.appKey].timeStampOnCreateProperty] = $timestamp();
 		}
@@ -435,7 +435,7 @@ component extends="Base" {
     */
 	public void function updateRecord(required string table, string where="") {
 		local.appKey = $appKey();
-		local.columnUpdates = "";
+		local.columnUpdates = "updatedat=#now()#";
 		if (!StructKeyExists(arguments, application[local.appKey].timeStampOnUpdateProperty) && ListFindNoCase($getColumns(arguments.table), application[local.appKey].timeStampOnUpdateProperty)) {
 			arguments[application[local.appKey].timeStampOnUpdateProperty] = $timestamp();
 		}
