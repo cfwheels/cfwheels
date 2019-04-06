@@ -244,7 +244,7 @@
 		local.rv["hasExtended"]=fileExists(local.rv.path)?true:false;
 		local.rv["docs"]="";
 		if(local.rv.hasExtended){
-			local.rv["docs"]="<pre>" & htmleditformat(fileread(local.rv.path)) & "</pre>";
+			local.rv["docs"]="<pre><code class='javascript'>" & htmleditformat(fileread(local.rv.path)) & "</code></pre>";
 			local.rv["docs"]=trim(local.rv["docs"]);
 		}
 		structDelete(local.rv, "path");

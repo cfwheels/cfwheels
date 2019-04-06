@@ -836,7 +836,7 @@ public void function $lockedLoadRoutes() {
 
 	// load wheels internal gui routes
 	// TODO skip this if mode != development|testing?
-	$include(template="wheels/gui/routes.cfm");
+	$include(template="wheels/public/routes.cfm");
 	// load developer routes next
 	$include(template="config/routes.cfm");
 

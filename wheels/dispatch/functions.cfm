@@ -192,10 +192,15 @@ public string function $request(
 	// Hi-jack any wheels controller requests
 	if(listFirst(local.params.controller, '.') EQ "wheels"){
 		// TODO : abort if not in development mode
-		// TODO: this needs locking?
-		local.rv = $createObjectFromRoot(path="wheels", fileName="gui", method="$initControllerClass", name="wheels");
-		local.rv = local.rv[params.action]();
-		return local.rv;
+		local.arg = {path="wheels", fileName="public", method="$initControllerClass", name="wheels"}
+		local.rv = $doubleCheckedLock(
+			condition="$cachedControllerClassExists",
+			executeArgs = local.arg,
+			conditionArgs = local.arg,
+			execute="$createObjectFromRoot",
+			name="controllerLock#application.applicationName#"
+		);
+		local.rv[params.action]();
 
 	} else {
 		// Create the requested controller and call the action on it.
