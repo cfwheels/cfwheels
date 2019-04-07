@@ -37,14 +37,17 @@ request.navigation = [
 		title="Migrator",
 		isFluid = false,
 		text="<i class='server icon'></i> Migrator"
-	},
-	{
+	}
+];
+
+if(application.wheels.enablePluginsComponent){
+	arrayAppend(request.navigation, {
 		route="wheelsPlugins",
 		title="Plugins",
 		isFluid = false,
 		text="<i class='plug icon'></i> Plugins"
-	}
-];
+	});
+}
 
 // Get Active Route Info
 request.currentRoute = getActiveRoute(request.wheels.params.route, request.navigation);

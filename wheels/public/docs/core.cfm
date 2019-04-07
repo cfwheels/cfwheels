@@ -7,12 +7,14 @@
 	documentScope=[];
 
 	// Plugins First, as they can potentially hijack an internal function
+	if(application.wheels.enablePluginsComponent){
 	for(local.plugin in application.wheels.plugins){
 		arrayAppend(documentScope, {
 			"name": local.plugin,
 			"scope":  application.wheels.plugins[local.plugin]
 		});
-	}
+	}}
+
 	arrayAppend(documentScope, {
 			"name": "controller",
 			"scope": createObject("component", "app.controllers.Controller")

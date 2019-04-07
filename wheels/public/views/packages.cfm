@@ -10,8 +10,10 @@ subnavigation = [
 		route="wheelsPackages", type="core", text="<i class='tasks icon'></i> Core"
 	},
 ];
-
+pluginList = "";
+if(application.wheels.enablePluginsComponent){
 pluginList = structKeyList(application.wheels.plugins);
+}
 
 // Get Plugins
 for(var p in pluginList){

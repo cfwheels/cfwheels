@@ -16,6 +16,10 @@ paths = [
 	,'assetQueryString'
 	,'assetPaths'
 ];
+
+components = [
+	'enablePluginsComponent'
+];
 environment = [
 	'hostName'
 	,'environment'
@@ -181,6 +185,9 @@ settings =  [
 
 	#startTable("Paths")#
 		#outputSetting(paths)#
+	#endTable()#
+	#startTable("Components")#
+		#outputSetting(components)#
 	#endTable()#
 #endTab()#
 

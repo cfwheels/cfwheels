@@ -81,6 +81,7 @@
 
 <div id="wheels-debug-area">
 	<table>
+		<cfif $get("enablePluginsComponent")>
 		<cfif ($get("showIncompatiblePlugins") AND Len(application.wheels.incompatiblePlugins)) OR Len(application.wheels.dependantPlugins)>
 			<tr>
 				<td><strong><span style="color:red;">Warnings:</span></strong></td>
@@ -95,6 +96,7 @@
 					</span>
 				</td>
 			</tr>
+		</cfif>
 		</cfif>
 		<tr>
 			<td><strong>Application:</strong></td>
@@ -137,10 +139,12 @@
 			<td><strong>URL Obfuscation:</strong></td>
 			<td><cfif $get("obfuscateUrls")>On<cfelse>Off</cfif></td>
 		</tr>
-		<tr>
-			<td><strong>Plugins:</strong></td>
-			<td><cfif StructCount($get("plugins")) IS NOT 0><cfset local.count = 0><cfloop collection="#$get('plugins')#" item="local.i"><cfset local.count = local.count + 1><a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#local.i#">#local.i#<cfif StructCount($get("pluginMeta")) IS NOT 0 && structKeyExists($get("pluginMeta"), local.i)> #$get("pluginMeta")[local.i]['version']#</cfif></a><cfif DirectoryExists("#GetDirectoryFromPath(GetBaseTemplatePath())#plugins/#LCase(local.i)#/tests")> [<a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=#LCase(local.i)#">Run Tests</a>, <a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=#LCase(local.i)#">View Tests</a>]</cfif><cfif StructCount($get("plugins")) GT local.count><br/></cfif></cfloop><cfelse>None</cfif></td>
-		</tr>
+		<cfif $get("enablePluginsComponent")>
+			<tr>
+				<td><strong>Plugins:</strong></td>
+				<td><cfif StructCount($get("plugins")) IS NOT 0><cfset local.count = 0><cfloop collection="#$get('plugins')#" item="local.i"><cfset local.count = local.count + 1><a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#local.i#">#local.i#<cfif StructCount($get("pluginMeta")) IS NOT 0 && structKeyExists($get("pluginMeta"), local.i)> #$get("pluginMeta")[local.i]['version']#</cfif></a><cfif DirectoryExists("#GetDirectoryFromPath(GetBaseTemplatePath())#plugins/#LCase(local.i)#/tests")> [<a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=#LCase(local.i)#">Run Tests</a>, <a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=#LCase(local.i)#">View Tests</a>]</cfif><cfif StructCount($get("plugins")) GT local.count><br/></cfif></cfloop><cfelse>None</cfif></td>
+			</tr>
+		</cfif>
 		<cfif StructKeyExists(request.wheels.params, "route")>
 			<tr>
 				<td><strong>Route:</strong></td>

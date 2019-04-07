@@ -238,6 +238,9 @@ public void function onApplicationStart() {
 	application.$wheels.viewPath = "views";
 	application.$wheels.controllerPath = "controllers";
 
+	// Enable or disable major components
+	application.$wheels.enablePluginsComponent = true;
+
 	// Miscellaneous settings.
 	application.$wheels.encodeURLs = true;
 	application.$wheels.encodeHtmlTags = true;
@@ -428,7 +431,9 @@ public void function onApplicationStart() {
 	}
 
 	// Reload the plugins each time we reload the application.
-	$loadPlugins();
+	if (application.$wheels.enablePluginsComponent){
+		$loadPlugins();
+	}
 
 	// Allow developers to inject plugins into the application variables scope.
 	if (!StructIsEmpty(application.$wheels.mixins)) {
