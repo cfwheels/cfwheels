@@ -65,12 +65,9 @@ request.internalPageTitle = structKeyExists(request.currentRoute, 'title') ? req
 	<title>#request.internalPageTitle#</title>
 	<meta charset="utf-8">
 	<meta name="robots" content="noindex,nofollow">
-	<link rel="stylesheet" href="#request.wheelsInternalAssetPath#/semantic/dist/semantic.min.css">
-	<script
-  src="https://code.jquery.com/jquery-3.1.1.min.js"
-  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-  crossorigin="anonymous"></script>
-	<script src="#request.wheelsInternalAssetPath#/semantic/dist/semantic.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
 	<script src="https://semantic-ui.com/javascript/library/highlight.min.js"></script>
 	<style>
