@@ -17,23 +17,22 @@ if (isDefined("application") && !StructIsEmpty(application[$wheels.appKey].mixin
 	}
 	if (StructKeyExists(application[$wheels.appKey].mixins, $wheels.className)) {
 
-		// We need to first get our mixins.
-		variables.$wheels.mixins = duplicate(application[$wheels.appKey].mixins[$wheels.className]);
-
-		// Then loop through the $stacks to set our original functions at the end of the stack.
-		if (StructKeyExists(variables.$wheels.mixins, "$stacks")) {
-			for (variables.$wheels.method in variables.$wheels.mixins.$stacks) {
-				if (StructKeyExists(variables, variables.$wheels.method) && IsCustomFunction(variables[variables.$wheels.method])) {
-					ArrayAppend(variables.$wheels.mixins.$stacks[variables.$wheels.method], variables[variables.$wheels.method]);
+			if (!StructKeyExists(variables, "core"))
+			{
+				if (application[$wheels.appKey].serverName == "Railo")
+				{
+					// this is to work around a railo bug (https://jira.jboss.org/browse/RAILO-936)
+					// NB, fixed in Railo 3.2.0, so assume this is fixed in all lucee versions
+					variables.core = Duplicate(variables);
+				}
+				else
+				{
+					variables.core = {};
+					StructAppend(variables.core, variables);
+					StructDelete(variables.core, "$wheels");
 				}
 			}
-		}
-
-		// Finally append our entire mixin to the variables scope.
-		// Core methods were added when mixin was created so we don't need every method from variables in variables.core.
-		// This means less bloat in the core struct.
-		StructAppend(variables, variables.$wheels.mixins, true);
-
+			StructAppend(variables, application[$wheels.appKey].mixins[$wheels.className], true);
 	}
 
 	// Get rid of any extra data created in the variables scope.
