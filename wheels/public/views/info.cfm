@@ -18,7 +18,8 @@ paths = [
 ];
 
 components = [
-	'enablePluginsComponent'
+	'enablePluginsComponent',
+	'enableMigratorComponent'
 ];
 environment = [
 	'hostName'

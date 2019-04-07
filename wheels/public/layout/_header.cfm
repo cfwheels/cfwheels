@@ -31,15 +31,16 @@ request.navigation = [
 		title="Test Packages",
 		isFluid = false,
 		text="<i class='tasks icon'></i> Tests"
-	},
-	{
+	}
+];
+if(application.wheels.enableMigratorComponent){
+	arrayAppend(request.navigation, {
 		route="wheelsMigrator",
 		title="Migrator",
 		isFluid = false,
 		text="<i class='server icon'></i> Migrator"
-	}
-];
-
+	});
+}
 if(application.wheels.enablePluginsComponent){
 	arrayAppend(request.navigation, {
 		route="wheelsPlugins",

@@ -130,8 +130,11 @@ public void function onApplicationStart() {
 	application.$wheels.dataSourcePassword = "";
 	application.$wheels.transactionMode = "commit";
 
+	// Enable or disable major components
+	application.$wheels.enablePluginsComponent = true;
+	application.$wheels.enableMigratorComponent = true;
+
 	// Create migrations object and set default settings.
-	application.$wheels.migrator = $createObjectFromRoot(path="wheels", fileName="Migrator", method="init");
 	application.$wheels.autoMigrateDatabase = false;
 	application.$wheels.migratorTableName = "migratorversions";
 	application.$wheels.createMigratorTable = true;
@@ -237,9 +240,6 @@ public void function onApplicationStart() {
 	application.$wheels.stylesheetPath = "stylesheets";
 	application.$wheels.viewPath = "views";
 	application.$wheels.controllerPath = "controllers";
-
-	// Enable or disable major components
-	application.$wheels.enablePluginsComponent = true;
 
 	// Miscellaneous settings.
 	application.$wheels.encodeURLs = true;
@@ -407,8 +407,11 @@ public void function onApplicationStart() {
 	$include(template="config/#application.$wheels.environment#/settings.cfm");
 
 	// Auto Migrate Database if requested
-	if (application.$wheels.autoMigrateDatabase){
-		application.$wheels.migrator.migrateToLatest();
+	if(application.$wheels.enableMigratorComponent){
+		application.$wheels.migrator = $createObjectFromRoot(path="wheels", fileName="Migrator", method="init");
+		if (application.$wheels.autoMigrateDatabase){
+			application.$wheels.migrator.migrateToLatest();
+		}
 	}
 	// Clear query (cfquery) and page (cfcache) caches.
 	if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cacheKey")) {

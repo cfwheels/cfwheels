@@ -123,7 +123,8 @@
 		</tr>
 		<tr>
 			<td><strong>Data Source:</strong></td>
-			<td>#capitalize($get("dataSourceName"))# [<a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=migrate">Migrations</a>]</td>
+			<td>#capitalize($get("dataSourceName"))#
+		<cfif $get("enableMigratorComponent")>[<a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=migrate">Migrations</a>]</cfif></td>
 		</tr>
 		<cfif StructKeyExists(application.wheels, "adapterName")>
 			<tr>
