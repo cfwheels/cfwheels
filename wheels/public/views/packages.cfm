@@ -1,31 +1,9 @@
 <cfinclude template="../layout/_header.cfm">
+
 <cfscript>
-type = request.wheels.params.type;
-
-subnavigation = [
-	{
-		route="wheelsPackages", type="app", text="<i class='tasks icon'></i> App"
-	},
-	{
-		route="wheelsPackages", type="core", text="<i class='tasks icon'></i> Core"
-	},
-];
-pluginList = "";
-if(application.wheels.enablePluginsComponent){
-pluginList = structKeyList(application.wheels.plugins);
-}
-
-// Get Plugins
-for(var p in pluginList){
-	arrayAppend(subnavigation, {
-		"route"="wheelsPackages", "type"=p, "text"="<i class='plug icon'></i> #p#"
-	});
-}
-
+param name="request.wheels.params.type" default="app";
 
 packages = $createObjectFromRoot(path=application.wheels.wheelsComponentPath, fileName="Test", method="$listTestPackages", options=request.wheels.params);
-// Change this
-linkParams = "?controller=wheels&action=wheels&view=tests&type=#type#";
 
 // ignore packages before the "tests directory"
 if (packages.recordCount) {
@@ -44,27 +22,11 @@ if (packages.recordCount) {
 
 
 <div class="ui container">
-	#pageHeader(capitalize(type) & " Test Suite", "Core &amp; App test suites")#
 
-<!---div class="ui pointing stackable menu">
+	#pageHeader("Test Suites", "Core &amp; App test suites")#
 
+	<cfinclude template="../tests/_navigation.cfm">
 
-	<cfloop from="1" to="#arrayLen(subnavigation)#" index="i">
-		<cfscript>
-		navArgs = {
-			"class"=isActiveClass(subnavigation[i]['type'], type),
-			"encode"="attributes",
-			"route"=subnavigation[i]['route'],
-			"text"=subnavigation[i]['text']
-		};
-		if(structKeyExists(subnavigation[i], "type"))
-			navArgs['type'] = subnavigation[i]['type'];
-		</cfscript>
-		#linkTo(argumentCollection = navArgs)#
-	</cfloop>
-
-<!--- Plugins --->
-</div--->
 
 
 <div class="ui segment">
@@ -80,6 +42,7 @@ if (packages.recordCount) {
 					<cfset packagesLen = arrayLen(testablePackages)>
 					<cfloop from="1" to="#packagesLen#" index="i">
 						#linkTo(route="wheelsTests",
+								type = type,
 								params="package=#ArrayToList(testablePackages.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#&format=html",
 								text=testablePackages[i] )#<cfif i neq packagesLen> .</cfif>
 					</cfloop>

@@ -77,14 +77,17 @@
 		filterByFunctionName(location.hash.slice(1));
 	});
 
-	// #function-category-list
+	// L: #function-navigation
+	// Center: #function-output
+	// R #function-category-list
 
-	$(".section").on("click", function(e){
+
+	$("#function-category-list .section, #function-output .section").on("click", function(e){
 		filterBySection($(this).data("section"));
 		updateFunctionCount();
 		e.preventDefault();
 	});
-	$(".category").on("click", function(e){
+	$("#function-category-list .category, #function-output .category").on("click", function(e){
 		filterByCategory($(this).data("section"), $(this).data("category"));
 		updateFunctionCount();
 		e.preventDefault();
@@ -95,7 +98,7 @@
 		e.preventDefault();
 	});
 
-	$(".functionlink").on("click", function(e){
+	$("#function-navigation .functionlink,  #function-output .functionlink").on("click", function(e){
 		filterByFunctionName($(this).data("function"));
 		$(".functionlink").removeClass("active");
 		$(this).addClass("active");
@@ -103,13 +106,13 @@
 		e.preventDefault();
 	});
 
-	$(".filtersection").on("click", function(e){
+	$("#function-output .filtersection").on("click", function(e){
 		filterBySection($(this).closest(".functiondefinition").data("section"));
 		updateFunctionCount();
 		e.preventDefault();
 	});
 
-	$(".filtercategory").on("click", function(e){
+	$("#function-output .filtercategory").on("click", function(e){
 		var parent=$(this).closest(".functiondefinition");
 		filterByCategory(parent.data("section"),parent.data("category"));
 		updateFunctionCount();
