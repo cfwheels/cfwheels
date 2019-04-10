@@ -155,9 +155,10 @@ settings =  [
 <div class="ui top attached tabular menu stackable">
 		<a class="item active" data-tab="system">System</a>
 		<a class="item" data-tab="security">Security</a>
-	<cfloop array="#settings#" item="s" index="i">
-		<a class="item" data-tab="tab-#i#">#s.name#</a>
+	<cfloop array="#settings#" index="s">
+		<a class="item" data-tab="tab-#s#">#s.name#</a>
 	</cfloop>
+		<a class="item" data-tab="utils">Utils</a>
 </div>
 #startTab(tab='system', active=true)#
 
@@ -170,14 +171,60 @@ settings =  [
 			<td>CFWheels Version</td><td>#get("version")#</td>
 		</tr>
 		<tr>
-			<td>Datasource Name</td><td>#get("dataSourceName")#</td>
-		</tr>
-		<tr>
 			<td>Java Runtime</td><td>#system.getProperty("java.runtime.name")#</td>
 		</tr>
 		<tr>
 			<td>Java Version</td><td>#system.getProperty("java.version")#</td>
 		</tr>
+	#endTable()#
+
+	#startTable("Database")#
+
+	<cfscript>
+		try {
+			db = $$getAllDatabaseInformation();
+		} catch(any e){
+			dbError = e;
+		}
+	</cfscript>
+
+	<tr>
+		<td class='four wide'>Datasource Name</td>
+		<td class='eight wide'>#get("dataSourceName")#</td>
+	</tr>
+
+	<cfif isDefined("dbError")>
+	<tr>
+		<td colspan="2">
+			<div class="ui error message">
+			  <div class="header">
+			    #dbError.message#
+			  </div>
+			  	#dbError.detail#
+			</div>
+		</td>
+	</tr>
+	<cfelse>
+		<tr>
+			<td>Migrator Adapter Name</td><td>#db.adapterName#</td>
+		</tr>
+		<tr>
+			<td>Product Name</td><td>#db.info.database_productName#</td>
+		</tr>
+		<tr>
+			<td>Version</td><td>#db.info.database_version#</td>
+		</tr>
+		<tr>
+			<td>Driver Name</td><td>#db.info.driver_name#</td>
+		</tr>
+		<tr>
+			<td>Driver Version</td><td>#db.info.driver_version#</td>
+		</tr>
+		<tr>
+			<td>JDBC Version</td><td>#db.info.jdbc_major_version#.#db.info.jdbc_minor_version#</td>
+		</tr>
+
+	</cfif>
 	#endTable()#
 
 	#startTable("Environment")#
@@ -187,9 +234,11 @@ settings =  [
 	#startTable("Paths")#
 		#outputSetting(paths)#
 	#endTable()#
+
 	#startTable("Components")#
 		#outputSetting(components)#
 	#endTable()#
+
 #endTab()#
 
 #startTab(tab='security')#
@@ -204,14 +253,42 @@ settings =  [
 
 #endTab()#
 
-<cfloop array="#settings#" item="s" index="i">
-	#startTab(tab='tab-#i#')#
+<cfloop array="#settings#" index="s">
+	#startTab(tab='tab-#s#')#
 		#startTable(s.name)#
 			#outputSetting(s.values)#
 		#endTable()#
 	#endTab()#
 </cfloop>
+
+#startTab(tab='utils')#
+<div class="ui three column grid">
+	<div class="column">
+		<div class="ui card fluid">
+			<div class="content">
+				<div class="header">Documentation</div>
+				<div class="description">
+					<p>Download generated documentation as JSON</p>
+					#linkTo(route="wheelsDocs", params="format=json", encode="attributes", target="_blank", text="<i class='icon download'></i> Export Docs as JSON")#
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="column">
+		<div class="ui card fluid">
+			<div class="content">
+				<div class="header">Build Release</div>
+				<div class="description">
+					<p>Build a zip for production distribution</p>
+					#linkTo(route="wheelsBuild",  encode="attributes", text="<i class='icon zip'></i> Create Zip")#
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+#endTab()#
+
+</div><!--/container-->
 
 <cfinclude template="../layout/_footer.cfm">
 </cfoutput>
