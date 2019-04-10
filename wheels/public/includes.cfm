@@ -2,10 +2,6 @@
 /*
 This is just a proof of concept
 */
-	function wheels(){
-		checkLegacy();
-		return "";
-	}
 	function index(){
 		include "views/congratulations.cfm";
 		return "";
@@ -75,7 +71,7 @@ This is just a proof of concept
 		view=tests&type=app
 		view=tests&type=[PLUGIN]
 	*/
-	private function checkLegacy(){
+	function wheels(){
 		local.action = structKeyExists(request.wheels.params, "action") ? request.wheels.params.action : "";
 		local.view   = structKeyExists(request.wheels.params, "view") ? request.wheels.params.view : "";
 		local.type   = structKeyExists(request.wheels.params, "type") ? request.wheels.params.type : "";
@@ -93,5 +89,6 @@ This is just a proof of concept
 				include "views/congratulations.cfm";
 			break;
 		}
+		return "";
 	}
 </cfscript>

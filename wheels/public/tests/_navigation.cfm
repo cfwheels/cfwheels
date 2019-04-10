@@ -8,7 +8,7 @@ subnavigation = [
 	},
 	{
 		route="wheelsPackages", type="core", text="<i class='tasks icon'></i> Core"
-	},
+	}
 ];
 pluginList = "";
 if(application.wheels.enablePluginsComponent){
@@ -17,7 +17,7 @@ if(application.wheels.enablePluginsComponent){
 
 
 // Get Plugins
-for(var p in pluginList){
+for(p in pluginList){
 	arrayAppend(subnavigation, {
 		"route"="wheelsPackages", "type"=p, "text"="<i class='plug icon'></i> #p#"
 	});
@@ -31,22 +31,20 @@ for(var p in pluginList){
 	<cfloop from="1" to="#arrayLen(subnavigation)#" index="i">
 		<cfscript>
 		navArgs = {
-			"class"="item",
-			"encode"="attributes",
 			"route"=subnavigation[i]['route'],
 			"text"=subnavigation[i]['text']
 		};
 		if(structKeyExists(subnavigation[i], "type"))
 			navArgs['type'] = subnavigation[i]['type'];
 		</cfscript>
-		#linkTo(argumentCollection = navArgs)#
+		<a href="#urlFor(argumentCollection = navArgs)#" class="item">#navArgs['text']#</a>
 	</cfloop>
 
 <!--- Plugins --->
 </div>
 
 <div class="ui segment">
-	#linkTo(route="wheelsTests", class="ui button blue", encode="attributes", type = type, text="Run All #UCASE(type)# Tests <i class='right arrow icon'></i> ")#
-	#linkTo(route="wheelsTests", class="ui button teal", encode="attributes", type = type, params="reload=true", text="Run All #UCASE(type)# Tests with Reload <i class='right refresh icon'></i> ")# 
+	<a href="#urlFor(route="wheelsTests", type=type)#" class="ui button blue">Run All #UCASE(type)# Tests <i class='right arrow icon'></i></a>
+	<a href="#urlFor(route="wheelsTests", params="reload=true",  type=type)#" class="ui button teal">Run All #UCASE(type)# Tests with Reload <i class='right refresh icon'></i> </a>
 </div>
 </cfoutput>

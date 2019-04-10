@@ -16,7 +16,6 @@
 	* @paramName Hint for Param. Backticks replaced with code; [doc: AFunctionName] replaced with link
 	*/
 
-	include "../docs/functions.cfm";
 	include "../docs/#params.type#.cfm";
 </cfscript>
 

@@ -3,37 +3,38 @@
 <div class="ui container">
 
 	#pageHeader(title="Test Results")#
- 
+
 	<cfinclude template="_navigation.cfm">
- 
+
 	<cfif NOT isStruct(testResults)>
 
 		<p style="margin-bottom: 50px;">Sorry, no tests were found.</p>
 
 	<cfelse>
- 
+
 		<h4>Package: #testResults.path#</h4>
 
 		<div class="ui breadcrumb">
 			<cfif type EQ "app" OR type EQ "core">
-			#linkTo(route="wheelsPackages", class="section", type=type, text="#type#")# 
+				<a class="section" href="#urlFor(route="wheelsPackages",  type=type)#">#type#</a>
 			<cfelse>
-			<div class="section">Plugins</div>			
+			<div class="section">Plugins</div>
 			</cfif>
 
 			<cfset prevPath ="">
-			<cfloop list="#testResults.path#" delimiters="." index="i"> 
+			<cfloop list="#testResults.path#" delimiters="." index="i">
 			<cfif !listFind("wheels,tests,plugins", i)>
 				<cfset prevPath= listAppend(prevPath, i, '.')>
 				<i class="right angle icon divider"></i>
 					<cfif !listLast(testResults.path, '.') EQ i>
-						#linkTo(route="wheelsPackages", class="section", type=type, params="package=#prevPath#", text="#listLast(prevPath, '.')#")#  
-					<cfelse> 
-						#linkTo(route="wheelsPackages", class="section active", type=type, params="package=#prevPath#", text="#listLast(prevPath, '.')#")#   
+				<a class="section"
+				href="#urlFor(route="wheelsPackages", params="package=#prevPath#", type=type)#">#listLast(prevPath, '.')#</a>
+					<cfelse>
+				<a class="section active" href="#urlFor(route="wheelsPackages", params="package=#prevPath#", type=type)#">#listLast(prevPath, '.')#</a>
 					</cfif>
 			</cfif>
 			</cfloop>
-			 	
+
 		</div>
 
 		#startTable(title="Test Results", colspan=6)#
@@ -45,31 +46,31 @@
 			<td><strong>Failures</strong><br />#testResults.numFailures#</td>
 			<td><strong>Errors</strong><br />#testResults.numErrors#</td>
 		</tr>
-		#endTable()# 
+		#endTable()#
 
- 
+
 			<cfscript>
 				failures = [];
 				passes = [];
-				for(result in testResults.results){ 
+				for(result in testResults.results){
 					if(result.status NEQ "Success"){
 						arrayAppend(failures, result);
 					} else {
-						arrayAppend(passes, result); 
+						arrayAppend(passes, result);
 					}
-				} 
+				}
 			</cfscript>
 
 			<div class="ui top attached tabular menu stackable">
 				<cfif testResults.ok>
-					<a class="item active" data-tab="passed">Passed (#arraylen(passes)#)</a> 
+					<a class="item active" data-tab="passed">Passed (#arraylen(passes)#)</a>
 					<a class="item" data-tab="failures">Failures (#arraylen(failures)#)</a>
 				<cfelse>
 					<a class="item active" data-tab="failures">Failures (#arraylen(failures)#)</a>
-					<a class="item" data-tab="passed">Passed (#arraylen(passes)#)</a>  
+					<a class="item" data-tab="passed">Passed (#arraylen(passes)#)</a>
 				</cfif>
 			</div>
-			
+
 			#startTab(tab="failures", active=!testResults.ok)#
 				<table class="ui celled table">
 					<thead>
@@ -80,7 +81,7 @@
 						<th>Status</th>
 					</tr>
 				</thead>
-				<tbody> 
+				<tbody>
 					<cfloop from="1" to="#arrayLen(failures)#" index="testIndex">
 						<cfset result = failures[testIndex]>
 						<cfif result.status neq 'Success'>
@@ -89,8 +90,8 @@
 								<td><a href="?&package=#result.packageName#&test=#result.testName#">#result.cleanTestName#</a></td>
 								<td class="n">#result.time#</td>
 								<td class="<cfif result.status eq 'Success'>success<cfelse>failed</cfif>">#result.status#</td>
-							</tr> 
-							<tr class="error"><td colspan="4" class="failed">#replace(result.message, chr(10), "<br/>", "ALL")#</td></tr>				 
+							</tr>
+							<tr class="error"><td colspan="4" class="failed">#replace(result.message, chr(10), "<br/>", "ALL")#</td></tr>
 							<cfset distinctKey= replace(replace(replace(result.packageName, ".", "_", "all"), "tests_", "", "one"),  "wheels_", "", "one") & '_' & result.testName>
 							<cfif StructKeyExists(request, "TESTING_FRAMEWORK_DEBUGGING") && StructKeyExists(request["TESTING_FRAMEWORK_DEBUGGING"], distinctKey)>
 								<cfloop array="#request['TESTING_FRAMEWORK_DEBUGGING'][distinctKey]#" index="i">
@@ -98,7 +99,7 @@
 								</cfloop>
 							</cfif>
 						</cfif>
-					</cfloop> 
+					</cfloop>
 					</tbody>
 				</table>
 			#endTab()#
@@ -123,14 +124,14 @@
 								<td><a href="?&package=#result.packageName#&test=#result.testName#">#result.cleanTestName#</a></td>
 								<td class="n">#result.time#</td>
 								<td class="success">#result.status#</td>
-							</tr>  
+							</tr>
 						</cfif>
-					</cfloop> 
+					</cfloop>
 					</tbody>
 				</table>
-			#endTab()#  
+			#endTab()#
 
-	</cfif> 
+	</cfif>
 </div>
 
 <cfinclude template="../layout/_footer.cfm">

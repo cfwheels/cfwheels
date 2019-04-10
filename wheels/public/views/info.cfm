@@ -19,7 +19,8 @@ paths = [
 
 components = [
 	'enablePluginsComponent',
-	'enableMigratorComponent'
+	'enableMigratorComponent',
+	'enablePublicComponent'
 ];
 environment = [
 	'hostName'
@@ -182,7 +183,7 @@ settings =  [
 
 	<cfscript>
 		try {
-			db = $getAllDatabaseInformation();
+			db = $$getAllDatabaseInformation();
 		} catch(any e){
 			dbError = e;
 		}
@@ -269,7 +270,7 @@ settings =  [
 				<div class="header">Documentation</div>
 				<div class="description">
 					<p>Download generated documentation as JSON</p>
-					#linkTo(route="wheelsDocs", params="format=json", encode="attributes", target="_blank", text="<i class='icon download'></i> Export Docs as JSON")#
+					<a href="#urlFor(route="wheelsDocs", params="format=json")#" target="_blank",><i class='icon download'></i> Export Docs as JSON</a>
 				</div>
 			</div>
 		</div>
@@ -280,7 +281,7 @@ settings =  [
 				<div class="header">Build Release</div>
 				<div class="description">
 					<p>Build a zip for production distribution</p>
-					#linkTo(route="wheelsBuild",  encode="attributes", text="<i class='icon zip'></i> Create Zip")#
+					<a href="#urlFor(route="wheelsBuild")#" target="_blank"><i class='icon zip'></i> Create Zip</a>
 				</div>
 			</div>
 		</div>

@@ -189,18 +189,15 @@ public string function $request(
 		$debugPoint("setup");
 	}
 
-	// Hi-jack any wheels controller requests
+	// Hi-jack any wheels controller requests for GUI
 	if(listFirst(local.params.controller, '.') EQ "wheels"){
-		// TODO : abort if not in development mode
-		local.arg = {path="wheels", fileName="public", method="$initControllerClass", name="wheels"}
-		local.rv = $doubleCheckedLock(
-			condition="$cachedControllerClassExists",
-			executeArgs = local.arg,
-			conditionArgs = local.arg,
-			execute="$createObjectFromRoot",
-			name="controllerLock#application.applicationName#"
-		);
-		local.rv[params.action]();
+		if(!application.wheels.enablePublicComponent){
+			// Hard abort if GUI turned off
+			abort;
+		} else {
+			local.action = application.wheels.public[params.action];
+			local.action();
+		}
 
 	} else {
 		// Create the requested controller and call the action on it.

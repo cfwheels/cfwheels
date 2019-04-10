@@ -3,7 +3,7 @@
 /**
  * Internal function.
  */
-public struct function $initControllerClass() {
+public struct function $init() {
 	return this;
 }
 </cfscript>

@@ -1,6 +1,8 @@
 <cfscript>
-
-include template="../helpers.cfm";
+// NB ACF10/11 throw duplicate routines if aleady defined here
+if(!isDefined("pageHeader")){
+include "../helpers.cfm";
+}
 
 // Css Path
 request.wheelsInternalAssetPath=application.wheels.webpath & "wheels/public/assets";

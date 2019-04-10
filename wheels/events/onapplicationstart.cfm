@@ -133,6 +133,10 @@ public void function onApplicationStart() {
 	// Enable or disable major components
 	application.$wheels.enablePluginsComponent = true;
 	application.$wheels.enableMigratorComponent = true;
+	application.$wheels.enablePublicComponent = false;
+	if (application.$wheels.environment == "development") {
+		application.$wheels.enablePublicComponent = true;
+	}
 
 	// Create migrations object and set default settings.
 	application.$wheels.autoMigrateDatabase = false;
@@ -431,6 +435,11 @@ public void function onApplicationStart() {
 		if (Left(local.method, 1) != "$" && !ListFindNoCase(local.allowedGlobalMethods, local.method)) {
 			application.$wheels.protectedControllerMethods = ListAppend(application.$wheels.protectedControllerMethods, local.method);
 		}
+	}
+
+	// Enable the main GUI Component
+	if (application.$wheels.enablePublicComponent){
+		application.$wheels.public = $createObjectFromRoot(path="wheels", fileName="Public", method="$init");
 	}
 
 	// Reload the plugins each time we reload the application.

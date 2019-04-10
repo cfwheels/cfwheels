@@ -41,10 +41,9 @@ if (packages.recordCount) {
 					<cfset testablePackages = ListToArray(ReplaceNoCase(package, "#preTest#.", "", "one"), ".")>
 					<cfset packagesLen = arrayLen(testablePackages)>
 					<cfloop from="1" to="#packagesLen#" index="i">
-						#linkTo(route="wheelsTests",
-								type = type,
-								params="package=#ArrayToList(testablePackages.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#&format=html",
-								text=testablePackages[i] )#<cfif i neq packagesLen> .</cfif>
+						<a href="#urlFor(route="wheelsTests",
+						type = type,
+						params="package=#ArrayToList(testablePackages.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#&format=html")#">#testablePackages[i]#<cfif i neq packagesLen> .</cfif></a>
 					</cfloop>
 				</td></tr>
 			</cfloop>

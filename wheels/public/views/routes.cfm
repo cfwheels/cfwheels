@@ -6,7 +6,7 @@
 	"appRoutes" = []
 };
 
-for(var r in application.wheels.routes){
+for(r in application.wheels.routes){
 	if(structKeyExists(r, "controller") && r.controller  EQ "wheels.public"){
 		arrayAppend(routes.internalRoutes, r);
 	} else {
@@ -22,7 +22,7 @@ for(var r in application.wheels.routes){
 
 <div class="ui container">
 
-	#pageHeader("Routes", "What's going where..")#
+#pageHeader("Routes", "What's going where..")#
 <!---h1 class="ui dividing header">Routes
   <div class="sub header">What's going where
   small class="muted">(#NumberFormat(ArrayLen(application.wheels.routes))# routes)</small></div>
@@ -34,7 +34,7 @@ for(var r in application.wheels.routes){
 </div>
 
 <cfloop collection="#routes#" item="type">
-#startTab(tab=type, active=type == 'appRoutes' ? true:false)#
+#startTab(tab=type, active=type EQ 'appRoutes' ? true:false)#
 
 <cfif type EQ "internalRoutes">
 
