@@ -60,12 +60,12 @@ public string function $runOnError(required exception, required eventName) {
 				local.wheelsError = arguments.exception.cause.rootCause;
 			}
 			if (StructKeyExists(local, "wheelsError")) {
-				local.rv = $includeAndReturnOutput($template="wheels/public/layout/_header_simple.cfm");
-				local.rv &= $includeAndReturnOutput(
+				//local.rv = $includeAndReturnOutput($template="wheels/public/layout/_header_simple.cfm");
+				local.rv = $includeAndReturnOutput(
 					$template="wheels/events/onerror/wheelserror.cfm",
 					wheelsError=local.wheelsError
 				);
-				local.rv &= $includeAndReturnOutput($template="wheels/public/layout/_footer_simple.cfm");
+				//local.rv &= $includeAndReturnOutput($template="wheels/public/layout/_footer_simple.cfm");
 			} else {
 				Throw(object=arguments.exception);
 			}

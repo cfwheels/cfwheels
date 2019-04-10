@@ -1,4 +1,5 @@
 <cfoutput>
+<div class="ui container">
 	<h1>Summary</h1>
 	<p>
 		<strong>Error:</strong><br>
@@ -72,4 +73,5 @@
 			</cftry>
 		</cfif>
 	</cfloop>
+</div>
 </cfoutput>

@@ -1,4 +1,5 @@
 <cfoutput>
+<div class="ui container">
 <h1>#arguments.wheelsError.type#</h1>
 <p><strong>#REReplace(arguments.wheelsError.message, "`([^`]*)`", "<tt>\1</tt>", "all")#</strong></p>
 <cfif StructKeyExists(arguments.wheelsError, "extendedInfo") AND Len(arguments.wheelsError.extendedInfo)>
@@ -40,4 +41,5 @@
 	</cfloop>
 	</p>
 </cfif>
+</div>
 </cfoutput>
