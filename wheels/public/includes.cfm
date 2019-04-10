@@ -50,6 +50,10 @@ This is just a proof of concept
 		include "views/plugins.cfm";
 		return "";
 	}
+	function build(){
+		//include "views/plugins.cfm";
+		return "";
+	}
 
 	/*
 	Check for legacy urls and params

@@ -155,8 +155,8 @@ settings =  [
 <div class="ui top attached tabular menu stackable">
 		<a class="item active" data-tab="system">System</a>
 		<a class="item" data-tab="security">Security</a>
-	<cfloop array="#settings#" index="s">
-		<a class="item" data-tab="tab-#s#">#s.name#</a>
+	<cfloop from="1" to="#arrayLen(settings)#" index="s">
+		<a class="item" data-tab="tab-#s#">#settings[s]['name']#</a>
 	</cfloop>
 		<a class="item" data-tab="utils">Utils</a>
 </div>
@@ -182,7 +182,7 @@ settings =  [
 
 	<cfscript>
 		try {
-			db = $$getAllDatabaseInformation();
+			db = $getAllDatabaseInformation();
 		} catch(any e){
 			dbError = e;
 		}
@@ -253,10 +253,10 @@ settings =  [
 
 #endTab()#
 
-<cfloop array="#settings#" index="s">
+<cfloop from="1" to="#arrayLen(settings)#" index="s">
 	#startTab(tab='tab-#s#')#
-		#startTable(s.name)#
-			#outputSetting(s.values)#
+		#startTable(settings[s]['name'])#
+			#outputSetting(settings[s]['values'])#
 		#endTable()#
 	#endTab()#
 </cfloop>

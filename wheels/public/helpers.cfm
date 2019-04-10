@@ -236,4 +236,45 @@ public struct function $findMatchingRoutes(
 	local.rv["errors"] = local.errors;
 	return local.rv;
 }
+
+function $getAllDatabaseInformation(){
+
+
+	local.info = $dbinfo(
+		type="version",
+		datasource=application.wheels.dataSourceName,
+		username=application.wheels.dataSourceUserName,
+		password=application.wheels.dataSourcePassword
+	);
+	local.adapterName="";
+	if (local.info.driver_name Contains "SQLServer" || local.info.driver_name Contains "Microsoft SQL Server" || local.info.driver_name Contains "MS SQL Server" || local.info.database_productname Contains "Microsoft SQL Server") {
+		local.adapterName = "MicrosoftSQLServer";
+	} else if (local.info.driver_name Contains "MySQL") {
+		local.adapterName = "MySQL";
+	} else if (local.info.driver_name Contains "PostgreSQL") {
+		local.adapterName = "PostgreSQL";
+	// NB: using mySQL adapter for H2 as the cli defaults to this for development
+	} else if (local.info.driver_name Contains "H2") {
+	// determine the emulation mode
+	/*
+	if (StructKeyExists(server, "lucee")) {
+		local.connectionString = GetApplicationMetaData().datasources[application[local.appKey].dataSourceName].connectionString;
+	} else {
+		// TODO: use the coldfusion class to dig out dsn info
+		local.connectionString = "";
+	}
+	if (local.connectionString Contains "mode=SQLServer" || local.connectionString Contains "mode=Microsoft SQL Server" || local.connectionString Contains "mode=MS SQL Server" || local.connectionString Contains "mode=Microsoft SQL Server") {
+		local.adapterName = "MicrosoftSQLServer";
+	} else if (local.connectionString Contains "mode=MySQL") {
+		local.adapterName = "MySQL";
+	} else if (local.connectionString Contains "mode=PostgreSQL") {
+		local.adapterName = "PostgreSQL";
+	} else {
+		local.adapterName = "MySQL";
+	}
+	*/
+		local.adapterName = "H2";
+	}
+	return local;
+}
 </cfscript>
