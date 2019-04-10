@@ -58,6 +58,8 @@ request.currentRoute = getActiveRoute(request.wheels.params.route, request.navig
 // Page Title
 request.internalPageTitle = structKeyExists(request.currentRoute, 'title') ? request.currentRoute.title & ' | ' & "CFWheels" : "CFWheels";
 
+request.wheels.internalHeaderLoaded = true;
+
 </cfscript>
 <cfparam name="request.isFluid" default="false">
 <cfoutput>
