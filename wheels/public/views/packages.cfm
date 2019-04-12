@@ -33,9 +33,9 @@ if (packages.recordCount) {
 
 	<p>Below is listing of all the #type# test packages. Click the part of the package to run it individually.</p>
 
-	#startTable("Tests")#
 
 		<cfif packages.recordcount>
+		#startTable("Test Packages")#
 			<cfloop query="packages">
 				<tr><td>
 					<cfset testablePackages = ListToArray(ReplaceNoCase(package, "#preTest#.", "", "one"), ".")>
@@ -47,11 +47,16 @@ if (packages.recordCount) {
 					</cfloop>
 				</td></tr>
 			</cfloop>
+		#endTable()#
 		<cfelse>
-			<span class="failure-message-item">No Test Packages Found</span>
+			<div class="ui placeholder segment">
+	  <div class="ui icon header">
+	    <i class="tasks icon"></i>
+	    No tests found!
+	  </div>
+	</div>
 		</cfif>
 
-	#endTable()#
 
 </div>
 </div>

@@ -1,7 +1,7 @@
 <cfscript>
 	param name="request.wheels.params.path" default="/";
 	param name="request.wheels.params.verb" default="GET";
-	result=$findMatchingRoutes(path = request.wheels.params.path, requestMethod= request.wheels.params.verb);
+	result=$$findMatchingRoutes(path = request.wheels.params.path, requestMethod= request.wheels.params.verb);
 </cfscript>
 
 <cfoutput>
