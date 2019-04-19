@@ -56,13 +56,13 @@ loadedPlugins = application.wheels.plugins;
 		</tbody>
 	</table>
 <cfelse>
-<div class="ui placeholder segment">
-  <div class="ui icon header">
-    <i class="plug icon"></i>
-    No plugins found!
-  </div>
-  <a href="https://forgebox.io/type/cfwheels-plugins" target="_blank" ref="noopener" class="ui primary button">Browse plugins on Forgebox.io</a>
-</div>
+	<div class="ui placeholder segment">
+	  <div class="ui icon header">
+	    <i class="plug icon"></i>
+	    No plugins found!
+	  </div>
+	  <a href="https://forgebox.io/type/cfwheels-plugins" target="_blank" ref="noopener" class="ui primary button">Browse plugins on Forgebox.io</a>
+	</div>
 </cfif>
 
 </div>
