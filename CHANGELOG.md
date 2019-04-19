@@ -30,6 +30,7 @@
 - Default `cacheFileChecking` to `true` in development mode - [Adam Chapman, Steve Harvey]
 - Migrator columnNames list values are now trimmed - [##919](https://github.com/cfwheels/cfwheels/issues/#919) [Adam Chapman]
 - Fixes bug when httpRequestData content is a JSON array - [##926](https://github.com/cfwheels/cfwheels/issues/#926) [Adam Chapman]
+- When httpRequestData content is a JSON array, contents are now automatically added to `params._json` - [##939](https://github.com/cfwheels/cfwheels/issues/#939) [Tom King]
 - Fixes bug where Migrator \$execute() always appends semi-colon - [##924](https://github.com/cfwheels/cfwheels/issues/#924) [Adam Chapman]
 - Fixes bug where model createdAt property is changed upon update - [##927](https://github.com/cfwheels/cfwheels/issues/#927) [Brandon Shea, Adam Chapman]
 
