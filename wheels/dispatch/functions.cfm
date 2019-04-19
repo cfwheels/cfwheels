@@ -262,6 +262,12 @@ public struct function $parseJsonBody(required struct params) {
 				if (IsStruct(local.deserializedContent)) {
 					StructAppend(arguments.params, local.deserializedContent, false);
 				}
+				// If the incoming root element is an array, add it to params in the _json key
+				// This appears to follow Rails conventions
+				if (isArray(local.deserializedContent)) {
+					arguments.params['_json'] = local.deserializedContent;
+				}
+
 			}
 
 		}
