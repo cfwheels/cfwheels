@@ -22,7 +22,9 @@ component extends="wheels.tests.Test" {
 		request.wheels.httpRequestData.content = '[{"foo":"bar"}]';
 		result = local.dispatch.$parseJsonBody(argumentcollection=local.args);
 		request.wheels.httpRequestData = Duplicate(local.httpRequestData);
-		assert("StructKeyList(result) eq 'whatever'");
+		keylist = StructKeyList(result);
+		assert("listFindNoCase(keylist, 'whatever')");
+		assert("listFindNoCase(keylist, '_json')");
 	}
 
 }
