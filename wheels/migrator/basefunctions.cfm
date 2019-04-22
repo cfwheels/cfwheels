@@ -75,7 +75,11 @@ private void function $execute(required string sql) {
 	if (StructKeyExists(request, "$wheelsMigrationSQLFile") && application[local.appKey].writeMigratorSQLFiles) {
 		$file(action="append", file=request.$wheelsMigrationSQLFile, output="#local.sql#", addNewLine="yes", fixNewLine="yes");
 	}
-	$query(datasource=application[local.appKey].dataSourceName, sql=local.sql);
+	if (StructKeyExists(request, "$wheelsDebugSQL")){
+		request.$wheelsDebugSQL = local.sql;
+	} else {
+		$query(datasource=application[local.appKey].dataSourceName, sql=local.sql);
+	}
 }
 
 public string function $getColumns(required string tableName) {
