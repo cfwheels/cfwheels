@@ -1,11 +1,17 @@
 <cfinclude template="../layout/_header.cfm">
 <cfscript>
-availableMigrations = application.wheels.migrator.getAvailableMigrations();
-prefix = "timestamp";
-if(arrayLen(availableMigrations)){
- if(len(availableMigrations[1]["version"] NEQ 10 )){
- 	prefix = "numeric";
- }
+datasourceAvailable=false;
+try {
+	availableMigrations = application.wheels.migrator.getAvailableMigrations();
+	prefix = "timestamp";
+	if(arrayLen(availableMigrations)){
+	 if(len(availableMigrations[1]["version"] NEQ 10 )){
+	 	prefix = "numeric";
+	 }
+	}
+} catch (database err){
+	datasourceAvailable = false;
+	message = err.message;
 }
 </cfscript>
 <cfoutput>
@@ -13,6 +19,8 @@ if(arrayLen(availableMigrations)){
 	#pageHeader("Migrator", "Migration Templates")#
 
 	<cfinclude template="../migrator/_navigation.cfm">
+
+	<cfif datasourceAvailable>
 
 	<!--- Create --->
 	<h5>Create a Template</h5>
@@ -105,6 +113,16 @@ if(arrayLen(availableMigrations)){
 
 	  </div><!--/ui form -->
 	</div><!-- ui segment -->
+
+<cfelse>
+	<div class="ui placeholder segment">
+	  <div class="ui icon header">
+	    <i class="database icon"></i>
+	    Database Error<br><small>
+		#message#</small>
+	  </div>
+	</div>
+</cfif>
  </div><!--/container -->
 
 </cfoutput>

@@ -1,18 +1,25 @@
 <cfinclude template="../layout/_header.cfm">
 <cfscript>
+datasourceAvailable = true;
+try {
+	availableMigrations = application.wheels.migrator.getAvailableMigrations();
+	createObject("java", "java.util.Collections").reverse(availableMigrations);
+	currentVersion = application.wheels.migrator.getCurrentMigrationVersion();
+	if(arrayLen(availableMigrations))
+		latestVersion = availableMigrations[1]["version"];
+} catch (database err){
 
-availableMigrations = application.wheels.migrator.getAvailableMigrations();
-createObject("java", "java.util.Collections").reverse(availableMigrations);
-currentVersion = application.wheels.migrator.getCurrentMigrationVersion();
-if(arrayLen(availableMigrations))
-	latestVersion = availableMigrations[1]["version"];
+	datasourceAvailable = false;
+	message = err.message;
+}
+
 </cfscript>
 <cfoutput>
 <div class="ui container">
 	#pageHeader("Migrator", "Database Migrations")#
 
 	<cfinclude template="../migrator/_navigation.cfm">
-
+	<cfif datasourceAvailable>
 	<cfif arrayLen(availableMigrations)>
 
 		<div class="ui segment">
@@ -93,6 +100,16 @@ if(arrayLen(availableMigrations))
 	  </div>
 	</div>
 	</cfif>
+<cfelse>
+
+	<div class="ui placeholder segment">
+	  <div class="ui icon header">
+	    <i class="database icon"></i>
+	    Database Error<br><small>
+		#message#</small>
+	  </div>
+	</div>
+</cfif>
 
 </div><!--/container-->
 
