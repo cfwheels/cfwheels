@@ -96,7 +96,7 @@ This is just a proof of concept
 		local.view   = structKeyExists(request.wheels.params, "view") ? request.wheels.params.view : "";
 		local.type   = structKeyExists(request.wheels.params, "type") ? request.wheels.params.type : "";
 		switch(local.view){
-			case "routes":  case "docs": case "cli":
+			case "routes":  case "docs": case "cli": case "tests":
 				include "views/#local.view#.cfm";
 			break;
 			case "packages":

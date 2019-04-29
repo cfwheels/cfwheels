@@ -2,7 +2,6 @@
 /**
 * Internal GUI Routes
 * TODO: formalise how the cli interacts
-* TODO: fix migrator loop/js
 **/
 mapper()
  	.namespace(name="wheels")
