@@ -40,7 +40,7 @@ if(application.wheels.enableMigratorComponent){
 		route="wheelsMigrator",
 		title="Migrator",
 		isFluid = false,
-		text="<i class='server icon'></i> Migrator"
+		text="<i class='database icon'></i> Migrator"
 	});
 }
 if(application.wheels.enablePluginsComponent){

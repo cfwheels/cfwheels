@@ -38,12 +38,32 @@ This is just a proof of concept
 		include "views/migrator.cfm";
 		return "";
 	}
+	function migratortemplates(){
+		include "views/templating.cfm";
+		return "";
+	}
+	function migratortemplatescreate(){
+		include "migrator/templating.cfm";
+		return "";
+	}
+	function migratorcommand(){
+		include "migrator/command.cfm";
+		return "";
+	}
+	function migratorsql(){
+		include "migrator/sql.cfm";
+		return "";
+	}
 	function cli(){
 		include "views/cli.cfm";
 		return "";
 	}
 	function plugins(){
 		include "views/plugins.cfm";
+		return "";
+	}
+	function pluginentry(){
+		include "views/pluginentry.cfm";
 		return "";
 	}
 	function build(){
@@ -76,7 +96,7 @@ This is just a proof of concept
 		local.view   = structKeyExists(request.wheels.params, "view") ? request.wheels.params.view : "";
 		local.type   = structKeyExists(request.wheels.params, "type") ? request.wheels.params.type : "";
 		switch(local.view){
-			case "routes":  case "docs":
+			case "routes":  case "docs": case "cli":
 				include "views/#local.view#.cfm";
 			break;
 			case "packages":

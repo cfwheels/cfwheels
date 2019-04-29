@@ -193,7 +193,9 @@ $('.ui.sticky')
     context: '#top'
   })
 ;
-
+$('.ui.radio.checkbox')
+  .checkbox()
+;
 
 </script>
 

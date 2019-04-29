@@ -31,7 +31,7 @@ loadedPlugins = application.wheels.plugins;
 			<tr>
 				<th>Name</th>
 				<th>Version</th>
-				<th>Tests</th>
+				<th colspan="2">Info</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -41,16 +41,19 @@ loadedPlugins = application.wheels.plugins;
 						<a href="#urlFor(route="wheelsPluginEntry", name=local.i)#">#local.i#</a>
 					</td>
 					<td>
-						<cfif StructCount($get("pluginMeta")) IS NOT 0 && structKeyExists($get("pluginMeta"), local.i)> #$get("pluginMeta")[local.i]['version']#
+						<cfif StructCount($get("pluginMeta")) IS NOT 0 && structKeyExists($get("pluginMeta"), local.i) AND len($get("pluginMeta")[local.i]['version'])>
+							#$get("pluginMeta")[local.i]['version']#
+						<cfelse>
+							<em>Unknown</em>
 						</cfif>
 					</td>
+					<td>
+						<a class="ui button tiny teal" href="#urlFor(route="wheelsPluginEntry", name=local.i)#"><i class="icon info"></i> More information</a>
 					<cfif DirectoryExists("#GetDirectoryFromPath(GetBaseTemplatePath())#plugins/#LCase(local.i)#/tests")>
-						<td>
-							<a class="ui button" href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=#LCase(local.i)#">View Tests</a>
-						</td>
-					<cfelse>
-						<td><em>None</em></td></td>
-					</cfif>
+
+							<a class="ui button tiny" href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=#LCase(local.i)#">View Tests</a>
+						</cfif>
+					</td>
 				</tr>
 			</cfloop>
 		</tbody>
