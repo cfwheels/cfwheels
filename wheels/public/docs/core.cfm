@@ -1,8 +1,8 @@
 <cfscript>
 // Core API embedded documentation
 
-	param name="params.type" default="core";
-	param name="params.format" default="html";
+	param name="request.wheels.params.type" default="core";
+	param name="request.wheels.params.format" default="html";
 
 	documentScope=[];
 
@@ -47,5 +47,5 @@
 	// Populate the main documentation
 	docs=$returnInternalDocumentation(documentScope,ignore);
 
-	include "layouts/#params.format#.cfm";
+	include "layouts/#request.wheels.params.format#.cfm";
 </cfscript>

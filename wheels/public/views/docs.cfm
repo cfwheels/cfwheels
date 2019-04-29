@@ -1,9 +1,7 @@
-<cfset request.isFluid = true>
-<cfinclude template="../layout/_header.cfm">
-
-<cfscript>
-	param name="params.type" default="core";
-	param name="params.format" default="html";
+ <cfscript>
+	request.isFluid = true;
+	param name="request.wheels.params.type" default="core";
+	param name="request.wheels.params.format" default="html";
 
 	// Example Expected comment
 	/**
@@ -15,10 +13,11 @@
 	*
 	* @paramName Hint for Param. Backticks replaced with code; [doc: AFunctionName] replaced with link
 	*/
-
-	include "../docs/#params.type#.cfm";
+	if(request.wheels.params.format EQ "html"){
+		include "../layout/_header.cfm";
+		include "../docs/#request.wheels.params.type#.cfm";
+		include "../layout/_footer.cfm";
+	} else {
+		include "../docs/#request.wheels.params.type#.cfm";
+	}
 </cfscript>
-
-
-<cfinclude template="../layout/_footer.cfm">
-
