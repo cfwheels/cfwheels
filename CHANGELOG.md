@@ -1,4 +1,10 @@
-# 2.1.0 (TBD)
+# 2.1.0-Beta (TBD)
+
+### Potentially breaking changes
+
+- The new CFWheels internal GUI is more isolated and runs in it's own component: previously this was extending the developers main `Controller.cfc` which caused multiple issues. The migrator, test runner and routing GUIs have therefore all been re-written.
+- The plugins system behaviour no longer chains multiple functions of the same name as this was a major performance hit. It's recommended that plugin authors check their plugins to run on 2.1
+- HTTP Verb/Method switching is now no longer allowed via GET requests and must be performed via POST (i.e via `_method`)
 
 ### Model Enhancements
 
@@ -28,11 +34,11 @@
 - Migrator MSSQL adapter now respects `Time` and `Timestamp` Column Types - [#906](https://github.com/cfwheels/cfwheels/issues/906) [Reuben Brown]
 - Automatic migrations fail on application start - [#913](https://github.com/cfwheels/cfwheels/issues/913) [Adam Chapman]
 - Default `cacheFileChecking` to `true` in development mode - [Adam Chapman, Steve Harvey]
-- Migrator columnNames list values are now trimmed - [##919](https://github.com/cfwheels/cfwheels/issues/#919) [Adam Chapman]
-- Fixes bug when httpRequestData content is a JSON array - [##926](https://github.com/cfwheels/cfwheels/issues/#926) [Adam Chapman]
-- When httpRequestData content is a JSON array, contents are now automatically added to `params._json` - [##939](https://github.com/cfwheels/cfwheels/issues/#939) [Tom King]
-- Fixes bug where Migrator \$execute() always appends semi-colon - [##924](https://github.com/cfwheels/cfwheels/issues/#924) [Adam Chapman]
-- Fixes bug where model createdAt property is changed upon update - [##927](https://github.com/cfwheels/cfwheels/issues/#927) [Brandon Shea, Adam Chapman]
+- Migrator columnNames list values are now trimmed - [#919](https://github.com/cfwheels/cfwheels/issues/#919) [Adam Chapman]
+- Fixes bug when httpRequestData content is a JSON array - [#926](https://github.com/cfwheels/cfwheels/issues/#926) [Adam Chapman]
+- When httpRequestData content is a JSON array, contents are now automatically added to `params._json` - [#939](https://github.com/cfwheels/cfwheels/issues/#939) [Tom King]
+- Fixes bug where Migrator \$execute() always appends semi-colon - [#924](https://github.com/cfwheels/cfwheels/issues/#924) [Adam Chapman]
+- Fixes bug where model createdAt property is changed upon update - [#927](https://github.com/cfwheels/cfwheels/issues/#927) [Brandon Shea, Adam Chapman]
 
 ### Miscellaneous
 
@@ -51,6 +57,9 @@
 - CORS Header can now be set via `accessControlAllowHeaders(value)` [#888](https://github.com/cfwheels/cfwheels/issues/888) [Tom King]
 - Performance Improvement: Scanning of Models and Controllers [#917](https://github.com/cfwheels/cfwheels/issues/917) [Adam Chapman]
 - Added the `authenticityToken()` function for returning the raw CSRF authenticity token [#925](https://github.com/cfwheels/cfwheels/issues/925) [Adam Chapman]
+- Adds `enablePublicComponent`, `enableMigratorComponent`,`enablePluginsComponent` enviroment settings to completely disable those features [#926](https://github.com/cfwheels/cfwheels/issues/936) [Tom King]
+- New CFWheels Internal GUI [#931](https://github.com/cfwheels/cfwheels/issues/931) [Tom King]
+- `pluginRunner()` now removed in favour of 1.x plugin behaviour for performance purposes [#916](https://github.com/cfwheels/cfwheels/issues/916) [Core Team]
 
 <a name="2.0.1"></a>
 
