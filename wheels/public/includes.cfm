@@ -67,7 +67,10 @@ This is just a proof of concept
 		return "";
 	}
 	function build(){
-		//include "views/plugins.cfm";
+		setting requestTimeout=10000 showDebugOutput=false;
+		zipPath = $buildReleaseZip();
+		$header(name="Content-disposition", value="inline; filename=#GetFileFromPath(zipPath)#");
+		$content(file=zipPath, type="application/zip", deletefile=true);
 		return "";
 	}
 
