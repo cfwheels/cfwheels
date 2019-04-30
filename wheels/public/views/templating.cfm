@@ -1,6 +1,7 @@
 <cfinclude template="../layout/_header.cfm">
 <cfscript>
-datasourceAvailable=false;
+datasourceAvailable=true;
+message = "";
 try {
 	availableMigrations = application.wheels.migrator.getAvailableMigrations();
 	prefix = "timestamp";
