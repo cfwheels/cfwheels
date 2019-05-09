@@ -125,6 +125,12 @@
 								<td class="n">#result.time#</td>
 								<td class="success">#result.status#</td>
 							</tr>
+							<cfset distinctKey= replace(replace(replace(result.packageName, ".", "_", "all"), "tests_", "", "one"),  "wheels_", "", "one") & '_' & result.testName>
+							<cfif StructKeyExists(request, "TESTING_FRAMEWORK_DEBUGGING") && StructKeyExists(request["TESTING_FRAMEWORK_DEBUGGING"], distinctKey)>
+								<cfloop array="#request['TESTING_FRAMEWORK_DEBUGGING'][distinctKey]#" index="i">
+								<tr class="positive"><td colspan="4">#i#</tr>
+								</cfloop>
+							</cfif>
 						</cfif>
 					</cfloop>
 					</tbody>
