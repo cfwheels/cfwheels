@@ -19,6 +19,7 @@
  * @shallowName Shallow name prefix.
  * @constraints Variable patterns to use for matching.
  * @mapFormat Whether or not to add an optional `.[format]` pattern to the end of the generated routes. This is useful for providing formats via URL like `json`, `xml`, `pdf`, etc.
+ * @keyName Default='key'. Override the default [key] with another name such as [slug]
  */
 public struct function resource(
 	required string name,
@@ -35,7 +36,8 @@ public struct function resource(
 	struct constraints,
 	string $call="resource",
 	boolean $plural=false,
-	boolean mapFormat=variables.mapFormat
+	boolean mapFormat=variables.mapFormat,
+	string keyName="key"
 ) {
 	local.args = {};
 
@@ -70,7 +72,7 @@ public struct function resource(
 		// Set collection and scoped paths.
 		local.args.collection = arguments.plural;
 		local.args.nestedPath = "#arguments.path#/[#arguments.singular#Key]";
-		local.args.memberPath = "#arguments.path#/[key]";
+		local.args.memberPath = "#arguments.path#/[#arguments.keyName#]";
 
 		// For uncountable plurals, append "Index".
 		if (arguments.singular == arguments.plural) {
@@ -195,6 +197,7 @@ public struct function resource(
  * @shallowName Shallow name prefix.
  * @constraints Variable patterns to use for matching.
  * @mapFormat Whether or not to add an optional `.[format]` pattern to the end of the generated routes. This is useful for providing formats via URL like `json`, `xml`, `pdf`, etc.
+ * @keyName Default='key'. Override the default [key] with another name such as [slug]
  */
 public struct function resources(
 	required string name,
@@ -209,7 +212,8 @@ public struct function resources(
 	string shallowPath,
 	string shallowName,
 	struct constraints,
-	boolean mapFormat=variables.mapFormat
+	boolean mapFormat=variables.mapFormat,
+	string keyName="key"
 ) {
 	return resource(argumentCollection=arguments, $plural=true, $call="resources");
 }
