@@ -93,15 +93,15 @@
 	<cfif $get("enablePublicComponent")>
 	<table>
 		<tr>
-			<td><a href="#urlFor(route="wheelsInfo")#" class="btn">Info</a></td>
-			<td><a href="#urlFor(route="wheelsRoutes")#" class="btn">Routes</a></td>
-			<td><a href="#urlFor(route="wheelsDocs")#" class="btn">Docs</a></td>
-			<td><a href="#urlFor(route="wheelsPackages", type="app")#" class="btn">Tests</a></td>
+			<td><a href="#urlFor(route="wheelsInfo")#" class="btn" target="_blank">Info</a></td>
+			<td><a href="#urlFor(route="wheelsRoutes")#" class="btn" target="_blank">Routes</a></td>
+			<td><a href="#urlFor(route="wheelsDocs")#" class="btn" target="_blank">Docs</a></td>
+			<td><a href="#urlFor(route="wheelsPackages", type="app")#" class="btn" target="_blank">Tests</a></td>
 			<cfif $get("enableMigratorComponent")>
-				<td><a href="#urlFor(route="wheelsMigrator")#" class="btn">Migrator</a></td>
+				<td><a href="#urlFor(route="wheelsMigrator")#" class="btn" target="_blank">Migrator</a></td>
 			</cfif>
 			<cfif $get("enablePluginsComponent")>
-				<td><a href="#urlFor(route="wheelsPlugins")#" class="btn">Plugins</a></td>
+				<td><a href="#urlFor(route="wheelsPlugins")#" class="btn" target="_blank">Plugins</a></td>
 			</cfif>
 		</tr>
 	</table>
