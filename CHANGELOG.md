@@ -60,6 +60,7 @@
 - Adds `enablePublicComponent`, `enableMigratorComponent`,`enablePluginsComponent` enviroment settings to completely disable those features [#926](https://github.com/cfwheels/cfwheels/issues/936) [Tom King]
 - New CFWheels Internal GUI [#931](https://github.com/cfwheels/cfwheels/issues/931) [Tom King]
 - `pluginRunner()` now removed in favour of 1.x plugin behaviour for performance purposes [#916](https://github.com/cfwheels/cfwheels/issues/916) [Core Team]
+- Adds `validateTestPackageMetaData` environment setting for skipping test package validation on large test suites [#950](https://github.com/cfwheels/cfwheels/issues/950) [Adam Chapman]
 
 <a name="2.0.1"></a>
 

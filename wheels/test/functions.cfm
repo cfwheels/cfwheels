@@ -497,7 +497,7 @@ public boolean function $isValidTest(
 ) {
 	local.name = ListLast(arguments.component, ".");
 
-	if (Len(arguments.shouldExtend)) {
+	if (application.wheels.validateTestPackageMetaData && Len(arguments.shouldExtend)) {
 		local.metadata = GetComponentMetaData(arguments.component);
 		if (!StructKeyExists(local.metadata, "extends") or ListLast(local.metadata.extends.fullname, ".") neq arguments.shouldExtend) {
 			return false;
