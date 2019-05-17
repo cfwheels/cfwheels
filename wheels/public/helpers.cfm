@@ -186,6 +186,11 @@ public struct function $$findMatchingRoutes(
 	if (arguments.requestMethod == 'HEAD'){
 		arguments.requestMethod = 'GET';
 	}
+
+	// Remove any query params
+	if(arguments.path CONTAINS "?")
+		arguments.path = listFirst(arguments.path, "?");
+
 	// Remove leading / if not '/'
 	if(left(arguments.path, 1) EQ "/" && arguments.path != "/")
 		arguments.path=right(arguments.path, (len(arguments.path) - 1));
