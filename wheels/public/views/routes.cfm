@@ -23,10 +23,6 @@ for(r in application.wheels.routes){
 <div class="ui container">
 
 #pageHeader("Routes", "What's going where..")#
-<!---h1 class="ui dividing header">Routes
-  <div class="sub header">What's going where
-  small class="muted">(#NumberFormat(ArrayLen(application.wheels.routes))# routes)</small></div>
-</h1--->
 
 <div class="ui top attached tabular menu stackable">
 	<a class="item active" data-tab="appRoutes">App&nbsp;<span class="route-count">(#NumberFormat(ArrayLen(routes.appRoutes))#)</span></a>
@@ -52,10 +48,10 @@ for(r in application.wheels.routes){
 	    <div class="left floated column">
 			<!--- Route Filter --->
 			<div class="ui action input">
-				<input type="text" name="route-search" id="route-search" placeholder="Quick find...">
-			  	<button class="ui icon button matched-route-count">
+				<input type="text" name="route-search" id="route-search" class="table-searcher" placeholder="Quick find...">
+			  	<button class="ui icon button matched-count">
 			    <i class="search icon"></i>
-					<span class="matched-route-count-value"></span>
+					<span class="matched-count-value"></span>
 			  </button>
 			</div>
 	    </div>
@@ -85,7 +81,7 @@ for(r in application.wheels.routes){
  Routes
 </div>
 
-	<table class="ui celled striped table route-dump">
+	<table class="ui celled striped table searchable">
 			<thead>
 			  <tr>
 			    <th class="right">Name</th>

@@ -7,26 +7,25 @@
 //= 	Javascript for CFWheels GUI
 //=====================================================================
  $(document).ready(function() {
-
 //=====================================================================
-//= 	Routes
+//= 	Routes / Package table filter
 //=====================================================================
 
 	// Write on keyup event of keyword input element
-	$("#route-search").keyup(function() {
+	$(".table-searcher").keyup(function() {
 		// When value of the input is not blank
 		if( $(this).val() != "") {
 			// Show only matching TR, hide rest of them
-			$(".route-dump tbody>tr").hide();
-			$(".route-dump td:contains-ci('" + $(this).val() + "')").parent("tr").show();
-			var c = $('.route-dump tbody>tr:visible').length;
-			$(".matched-route-count > .icon").hide();
-			$(".matched-route-count-value").html(c + ' matches');
+			$(".searchable tbody>tr").hide();
+			$(".searchable td:contains-ci('" + $(this).val() + "')").parent("tr").show();
+			var c = $('.searchable tbody>tr:visible').length;
+			$(".matched-count > .icon").hide();
+			$(".matched-count-value").html(c + ' matches');
 		} else {
 			// When there is no input or clean again, show everything back
-			$(".matched-route-count-value").html("");
-			$(".matched-route-count > .icon").show();
-			$(".route-dump tbody>tr").show();
+			$(".matched-count-value").html("");
+			$(".matched-count > .icon").show();
+			$(".searchable tbody>tr").show();
 		}
 	});
 

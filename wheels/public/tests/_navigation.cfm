@@ -44,7 +44,23 @@ for(p in pluginList){
 </div>
 
 <div class="ui segment">
-	<a href="#urlFor(route="wheelsTests", type=type)#" class="ui button blue">Run All #UCASE(type)# Tests <i class='right arrow icon'></i></a>
-	<a href="#urlFor(route="wheelsTests", params="reload=true",  type=type)#" class="ui button teal">Run All #UCASE(type)# Tests with Reload <i class='right refresh icon'></i> </a>
+	<div class="ui grid">
+	  <div class="two column row">
+	    <div class="left floated column">
+			<!--- Route Filter --->
+			<div class="ui action input">
+				<input type="text" class="table-searcher" name="package-search" id="package-search" placeholder="Quick find...">
+			  	<button class="ui icon button matched-count">
+			    <i class="search icon"></i>
+					<span class="matched-count-value"></span>
+			  </button>
+			</div>
+	    </div>
+	    <div class="right floated column">
+			<a href="#urlFor(route="wheelsTests", type=type)#" class="ui button blue">Run All #UCASE(type)# Tests <i class='right arrow icon'></i></a>
+			<a href="#urlFor(route="wheelsTests", params="reload=true",  type=type)#" class="ui button teal">Run All #UCASE(type)# Tests with Reload <i class='right refresh icon'></i> </a>
+	    </div>
+	  </div>
+	</div>
 </div>
 </cfoutput>

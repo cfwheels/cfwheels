@@ -29,7 +29,12 @@ if (packages.recordCount) {
 	<div class="ui segment">
 		<p>Below is listing of all the #type# test packages. Click the part of the package to run it individually.</p>
 			<cfif packages.recordcount>
-			#startTable("Test Packages")#
+			<table class="ui celled striped table searchable">
+				<thead>
+					<tr>
+						<th>Test Packages</th>
+					</tr>
+				</thead>
 				<cfloop query="packages">
 					<tr><td>
 						<cfset testablePackages = ListToArray(ReplaceNoCase(package, "#preTest#.", "", "one"), ".")>
@@ -41,7 +46,7 @@ if (packages.recordCount) {
 						</cfloop>
 					</td></tr>
 				</cfloop>
-			#endTable()#
+			</table>
 			<cfelse>
 				<div class="ui placeholder segment">
 				  <div class="ui icon header">

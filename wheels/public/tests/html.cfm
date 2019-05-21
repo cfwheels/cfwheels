@@ -72,7 +72,7 @@
 			</div>
 
 			#startTab(tab="failures", active=!testResults.ok)#
-				<table class="ui celled table">
+				<table class="ui celled table searchable">
 					<thead>
 					<tr>
 						<th>Package</th>
@@ -105,7 +105,7 @@
 			#endTab()#
 
 			#startTab(tab="passed", active=testResults.ok)#
-				<table class="ui celled table">
+				<table class="ui celled table searchable">
 					<thead>
 					<tr>
 						<th>Package</th>
