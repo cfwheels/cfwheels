@@ -507,12 +507,13 @@ public any function model(required string name) {
  */
 public string function obfuscateParam(required any param) {
 	local.rv = arguments.param;
-	if (IsValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param > 0 && Left(arguments.param, 1) != 0) {
-		local.iEnd = Len(arguments.param);
-		local.a = (10^local.iEnd) + Reverse(arguments.param);
+	local.param = ArrayToList(REMatch("[0-9]+",arguments.param),"");
+	if (Len(local.param) && local.param > 0 && Left(local.param, 1) != 0) {
+		local.iEnd = Len(local.param);
+		local.a = (10^local.iEnd) + Reverse(local.param);
 		local.b = 0;
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			local.b += Left(Right(arguments.param, local.i), 1);
+			local.b += Left(Right(local.param, local.i), 1);
 		}
 		if (IsValid("integer", local.a)) {
 			local.rv = FormatBaseN(local.b+154, 16) & FormatBaseN(BitXor(local.a, 461), 16);
