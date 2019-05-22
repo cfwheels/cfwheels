@@ -158,8 +158,8 @@ component extends="Base" {
 	public void function addColumn(
 		required string table,
 		required string columnType,
+		required string columnName="",
 		string afterColumn="",
-		string columnName="",
 		string referenceName="",
 		string default,
 		boolean null,
