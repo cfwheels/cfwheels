@@ -459,6 +459,9 @@ public any function $wheelsRunner(struct options={}) {
 	local.paths = $resolvePaths(arguments.options);
 	local.packages = $listTestPackages(arguments.options, local.paths.test_filter);
 
+	if (StructKeyExists(arguments.options, "seed") && arguments.options.seed) {
+		this.$seedDatabase(local.paths);
+	}
 	// run tests
 	local.i = 0;
 	for (local.row in local.packages) {
@@ -652,11 +655,19 @@ public void function $initialiseTestEnvironment(required struct paths, required 
 }
 
 /*
+ * Seeds the test database.
+ */
+public void function $seedDatabase(required struct paths) {
+	if (FileExists(arguments.paths.full_root_test_path & "/seed.cfm")) {
+		include "#arguments.paths.relative_root_test_path#/seed.cfm";
+	}
+}
+
+/*
  * Returns true if a file path is a wheels core file.
  */
 public any function $isCoreFile(required string path) {
 	local.path = Replace(arguments.path, ExpandPath("/"), "", "one");
 	return (Left(local.path, 7) == "wheels/" || ListFindNoCase("index.cfm,rewrite.cfm,root.cfm", local.path));
 }
-
 </cfscript>
