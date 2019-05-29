@@ -199,6 +199,7 @@ public any function debug(required string expression, boolean display=true) {
 	}
 
 	attributeArgs["var"] = evaluate(arguments.expression);
+	attributeArgs["label"] = arguments.expression;
 
 	structDelete(arguments, "expression");
 	structDelete(arguments, "display");
