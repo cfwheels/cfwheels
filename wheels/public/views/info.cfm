@@ -59,8 +59,8 @@ cors = [
 settings =  [
 
 	{
-	  name: 'Error Handling',
-	  values = [
+		name: 'Error Handling',
+		values = [
 		//'errorEmailServer' // Check this
 		'errorEmailAddress'
 		,'errorEmailSubject'
@@ -70,76 +70,77 @@ settings =  [
 		]
 	},
 	{
-	  name: 'Caching',
-	  values = [
+		name: 'Caching',
+		values = [
 		//'cacheRoutes' // Check this
 		'cacheActions'
 		,'cacheControllerConfig'
 		,'cacheCullInterval'
 		,'cacheCullPercentage'
 		,'cacheDatabaseSchema'
+		,'cacheDatePart'
 		,'cacheFileChecking'
 		,'cacheImages'
 		,'cacheModelConfig'
 		,'cachePages'
 		,'cachePartials'
 		,'cacheQueries'
+		,'cacheQueriesDuringRequest'
 		,'clearQueryCacheOnReload'
 		,'defaultCacheTime'
 		,'maximumItemsToCache'
 		]
 	},
 	{
-	  name: 'Migrator',
-	  values = [
-	'autoMigrateDatabase'
-	,'migratorTableName'
-	,'createMigratorTable'
-	,'writeMigratorSQLFiles'
-	,'migratorObjectCase'
-	,'allowMigrationDown'
+		name: 'Migrator',
+		values = [
+		'autoMigrateDatabase'
+		,'migratorTableName'
+		,'createMigratorTable'
+		,'writeMigratorSQLFiles'
+		,'migratorObjectCase'
+		,'allowMigrationDown'
 		]
 	},
 	{
-	  name: 'Plugins',
-	  values = [
-	'deletePluginDirectories'
-	,'loadIncompatiblePlugins'
-	,'overwritePlugins'
-	,'showIncompatiblePlugins'
+		name: 'Plugins',
+		values = [
+		'deletePluginDirectories'
+		,'loadIncompatiblePlugins'
+		,'overwritePlugins'
+		,'showIncompatiblePlugins'
 		]
 	},
 	{
-	  name: 'Models',
-	  values = [
-
-	//'afterFindCallbackLegacySupport' // Check
-	'automaticValidations'
-	,'setUpdatedAtOnCreate'
-	,'softDeleteProperty'
-	,'tableNamePrefix'
-	,'timeStampOnCreateProperty'
-	,'timeStampOnUpdateProperty'
-	,'transactionMode'
-	,'useExpandedColumnAliases'
-	,'modelRequireConfig'
+		name: 'Models',
+		values = [
+		//'afterFindCallbackLegacySupport' // Check
+		'automaticValidations'
+		,'setUpdatedAtOnCreate'
+		,'softDeleteProperty'
+		,'tableNamePrefix'
+		,'timeStampOnCreateProperty'
+		,'timeStampOnUpdateProperty'
+		,'transactionMode'
+		,'useExpandedColumnAliases'
+		,'modelRequireConfig'
 		]
 	},
 	{
-	  name: 'Other',
-	  values = [
-	//'loadDefaultRoutes' Check
-	'obfuscateUrls'
-	,'booleanAttributes'
-	//,'disableEngineCheck'
-	,'encodeURLs'
-	,'encodeHtmlTags'
-	,'encodeHtmlAttributes'
-	,'uncountables'
-	,'irregulars'
-	,'flashAppend'
-	,'formats'
-	,'mimetypes'
+		name: 'Other',
+		values = [
+		//'loadDefaultRoutes' Check
+		'obfuscateUrls'
+		,'booleanAttributes'
+		//,'disableEngineCheck'
+		,'encodeURLs'
+		,'encodeHtmlTags'
+		,'encodeHtmlAttributes'
+		,'uncountables'
+		,'irregulars'
+		,'flashAppend'
+		,'formats'
+		,'mimetypes'
 		]
 	}
 ];
@@ -198,10 +199,10 @@ settings =  [
 	<tr>
 		<td colspan="2">
 			<div class="ui error message">
-			  <div class="header">
-			    #dbError.message#
-			  </div>
-			  	#dbError.detail#
+				<div class="header">
+					#dbError.message#
+				</div>
+					#dbError.detail#
 			</div>
 		</td>
 	</tr>
