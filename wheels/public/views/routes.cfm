@@ -7,7 +7,7 @@
 };
 
 for(r in application.wheels.routes){
-	if(structKeyExists(r, "controller") && r.controller  EQ "wheels.public"){
+	if(structKeyExists(r, "controller") && r.controller	EQ "wheels.public"){
 		arrayAppend(routes.internalRoutes, r);
 	} else {
 		arrayAppend(routes.appRoutes, r);
@@ -35,27 +35,27 @@ for(r in application.wheels.routes){
 <cfif type EQ "internalRoutes">
 
 	<div class="ui info message">
-	  <div class="header">
-	    Note
-	  </div>
-	     These are here for reference only. They aren't loaded in production, and only used to render the CFWheels internal interface
+		<div class="header">
+			Note
+		</div>
+		These are here for reference only. They aren't loaded in production, and only used to render the CFWheels internal interface
 	</div>
 
 <cfelse>
 
 	<div class="ui grid">
-	  <div class="two column row">
-	    <div class="left floated column">
+		<div class="two column row">
+			<div class="left floated column">
 			<!--- Route Filter --->
 			<div class="ui action input">
 				<input type="text" name="route-search" id="route-search" class="table-searcher" placeholder="Quick find...">
-			  	<button class="ui icon button matched-count">
-			    <i class="search icon"></i>
+					<button class="ui icon button matched-count">
+					<i class="search icon"></i>
 					<span class="matched-count-value"></span>
-			  </button>
+				</button>
 			</div>
-	    </div>
-	    <div class="right floated column">
+			</div>
+			<div class="right floated column">
 			<!--- Route Tester --->
 			<div class="ui action input">
 				<input type="text" id="route-tester-path" placeholder="/example/path" />
@@ -70,33 +70,34 @@ for(r in application.wheels.routes){
 				</select>
 				<button class="ui button route-test teal" data-test-url="#urlFor(route='wheelsRouteTester')#" >Test</button>
 			</div>
-	    </div>
-	  </div>
+			</div>
+		</div>
 	</div>
 
 	<div id="router-tester-results"></div>
 
 </cfif>
 <div class="ui horizontal section divider">
- Routes
+	Routes
 </div>
-
+<div style="overflow-x: scroll;">
 	<table class="ui celled striped table searchable">
 			<thead>
-			  <tr>
-			    <th class="right">Name</th>
-			    <th>Method</th>
-			    <th>Pattern</th>
-			    <th>Controller</th>
-			    <th>Action</th>
-			  </tr>
+				<tr>
+					<th class="right">Name</th>
+					<th>Method</th>
+					<th>Pattern</th>
+					<th>Controller</th>
+					<th>Action</th>
+				</tr>
 			</thead>
 			<tbody>
-		  <cfloop array="#routes[type]#" index="route">
+			<cfloop array="#routes[type]#" index="route">
 				#outputRouteRow(route)#
 			</cfloop>
 		</tbody>
 	</table>
+</div>
 
 #endTab()#
 </cfloop>
@@ -106,5 +107,3 @@ for(r in application.wheels.routes){
 </cfoutput>
 
 <cfinclude template="../layout/_footer.cfm">
-
-
