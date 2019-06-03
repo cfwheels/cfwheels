@@ -54,6 +54,23 @@ component extends="wheels.tests.Test" {
 		assert("result Contains '#link#' AND result Contains '?page='");
  	}
 
+ 	function test_no_route(){
+
+	    $clearRoutes();
+	    mapper()
+			.namespace("admin")
+				.namespace("v1")
+					.get(name="pagination", controller="pagination", action="index")
+				.end()
+			.end()
+	    .end();
+	    $setNamedRoutePositions();
+		authors = model("author").findAll(page=2, perPage=3, order="lastName");
+		link = _controller.linkTo(route="adminV1Pagination", text="3", params="page=3");
+		result = _controller.paginationLinks(controller="admin.v1.pagination", action="index");
+		assert("result Contains '#link#' AND result Contains '?page='");
+ 	}
+
  	function test_page_as_route_param_with_route_not_containing_page_parameter_in_variables(){
 		authors = model("author").findAll(page=2, perPage=3, order="lastName");
 		result = _controller.paginationLinks(route="pagination", special=99);
