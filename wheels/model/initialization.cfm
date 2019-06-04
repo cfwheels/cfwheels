@@ -257,6 +257,8 @@ public any function $assignAdapter() {
 		local.adapterName = "PostgreSQL";
 	} else if (FindNoCase("H2", local.info.driver_name)) {
 		local.adapterName = "H2";
+	} else if (FindNoCase("Oracle", local.info.driver_name)) {
+		local.adapterName = "Oracle";
 	} else {
 		Throw(
 			type="Wheels.DatabaseNotSupported",
