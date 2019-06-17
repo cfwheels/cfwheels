@@ -4,7 +4,7 @@
 * TODO: formalise how the cli interacts
 **/
 mapper()
- 	.namespace(name="wheels")
+	.namespace(name="wheels")
 		.get(name="info", pattern="info", to="public##info")
 		.get(name="routes", pattern="routes", to="public##routes")
 			.post(name="routeTester", to="public##routetester")
@@ -18,11 +18,12 @@ mapper()
 		.get(name="docs", pattern="docs", to="public##docs")
 		.get(name="cli", pattern="cli", to="public##cli")
 		.get(name="pluginEntry", pattern="plugins/[name]", to="public##pluginentry")
+		.post(name="pluginPost", pattern="plugins/[name]", to="public##pluginentry")
 		.get(name="plugins", pattern="plugins", to="public##plugins")
 		.get(name="build", pattern="build", to="public##build")
 		.get(name="legacy", pattern="wheels/[view]", to="public##legacy")
 		.root(method="get", to="public##index", mapFormat=false)
- 	.end()
+	.end()
 .end();
 
 </cfscript>
