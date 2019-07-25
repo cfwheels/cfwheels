@@ -82,7 +82,7 @@ public void function $runVerifications(
 	// Default to the Wheels setting but get it on a per request basis if possible (from Application.cfc).
 	local.sessionManagement = $get("sessionManagement");
 	try {
-		local.sessionManagement = application.getApplicationSettings().sessionManagement;
+		local.sessionManagement = getApplicationMetaData().sessionManagement;
 	} catch (any e) {}
 	if (StructIsEmpty(arguments.sessionScope) && local.sessionManagement) {
 		arguments.sessionScope = session;
