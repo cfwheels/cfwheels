@@ -39,6 +39,7 @@
 - When httpRequestData content is a JSON array, contents are now automatically added to `params._json` - [#939](https://github.com/cfwheels/cfwheels/issues/#939) [Tom King]
 - Fixes bug where Migrator \$execute() always appends semi-colon - [#924](https://github.com/cfwheels/cfwheels/issues/#924) [Adam Chapman]
 - Fixes bug where model createdAt property is changed upon update - [#927](https://github.com/cfwheels/cfwheels/issues/#927) [Brandon Shea, Adam Chapman]
+- Fixed silent application.wheels scope exception hampering autoMigrateDatabase - [#957](https://github.com/cfwheels/cfwheels/issues/#957) [Adam Chapman, Tom King]
 
 ### Miscellaneous
 

@@ -373,9 +373,9 @@ component extends="Base" {
  	*/
 	public any function timestamps() {
 		local.columnNames = ArrayToList([
-			application.wheels.timeStampOnCreateProperty,
-			application.wheels.timeStampOnUpdateProperty,
-			application.wheels.softDeleteProperty
+			$get("timeStampOnCreateProperty"),
+			$get("timeStampOnUpdateProperty"),
+			$get("softDeleteProperty")
 		]);
 		timestamp(columnNames=local.columnNames,null=true);
 		return this;
