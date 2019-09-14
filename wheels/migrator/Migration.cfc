@@ -326,6 +326,27 @@ component extends="Base" {
 	}
 
 	/**
+    * Alias for `addIndex()`
+    * Use this for better readability when you're indexing multiple columns
+	*
+	* [section: Migrator]
+	* [category: Migration Functions]
+	*
+	* @table The table name to perform the index operation on
+	* @columnName One or more column name to index, comma separated
+	* @unique If true will create a unique index constraint
+	* @indexName The name of the index to add: Defaults to table name + underscore + first column name
+    */
+	public void function addIndex(
+		required string table,
+		required string columnName,
+		boolean unique = "false",
+		string indexName = objectCase("#arguments.table#_#ListFirst(arguments.columnNames)#")
+	) {
+		addIndex(table=table,columnNames=columnName,unique=unique,indexName=indexName);
+	}
+
+	/**
     * Add database index on a table column
 	* Only available in a migration CFC
 	*

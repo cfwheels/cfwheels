@@ -92,6 +92,23 @@ component extends="Base" {
 	}
 
 	/**
+	* Alias for `bigInteger()`
+	* Use this for better readability when you're adding a single column
+	*
+	* [section: Migrator]
+	* [category: Table Definition Functions]
+	*/
+	public any function bigInteger(
+		required string columnName,
+		numeric limit,
+		string default,
+		boolean null
+	) {
+		bigInteger(columnNames=columnName,limit=limit,default=default,null=null);
+		return this;
+	}
+
+	/**
 	* Adds integer columns to table definition.
 	*
 	* [section: Migrator]
@@ -113,12 +130,32 @@ component extends="Base" {
 	}
 
 	/**
+	* Alias for `binary()`
+	* Use this for better readability when you're adding a single column
+	*
+	* [section: Migrator]
+	* [category: Table Definition Functions]
+	*/
+	public any function binary(
+		required string columnName, 
+		string default, 
+		boolean null
+	) {
+		binary(columnNames=columnName,default=default,null=null);
+		return this;
+	}
+
+	/**
 	* Adds binary columns to table definition.
 	*
 	* [section: Migrator]
 	* [category: Table Definition Functions]
 	*/
-	public any function binary(required string columnNames, string default, boolean null) {
+	public any function binary(
+		required string columnNames, 
+		string default, 
+		boolean null
+	) {
 		arguments.columnType = "binary";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -129,12 +166,32 @@ component extends="Base" {
 	}
 
 	/**
+	* Alias for `boolean()`
+	* Use this for better readability when you're adding a single column
+	*
+	* [section: Migrator]
+	* [category: Table Definition Functions]
+	*/
+	public any function boolean(
+		required string columnName, 
+		string default, 
+		boolean null
+	) {
+		boolean(columnNames=columnName,default=default,null=null);
+		return this;
+	}
+
+	/**
 	* Adds boolean columns to table definition.
 	*
 	* [section: Migrator]
 	* [category: Table Definition Functions]
 	*/
-	public any function boolean(required string columnNames, string default, boolean null) {
+	public any function boolean(
+		required string columnNames, 
+		string default, 
+		boolean null
+	) {
 		arguments.columnType = "boolean";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -145,18 +202,54 @@ component extends="Base" {
 	}
 
 	/**
+	* Alias for `date()`
+	* Use this for better readability when you're adding a single column
+	*
+	* [section: Migrator]
+	* [category: Table Definition Functions]
+	*/
+	public any function date(
+		required string columnName, 
+		string default, 
+		boolean null
+	) {
+		date(columnNames=columnName,default=default,null=null);
+		return this;
+	}
+
+	/**
 	* Adds date columns to table definition.
 	*
 	* [section: Migrator]
 	* [category: Table Definition Functions]
 	*/
-	public any function date(required string columnNames, string default, boolean null) {
+	public any function date(
+		required string columnNames, 
+		string default, 
+		boolean null
+	) {
 		arguments.columnType = "date";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
+		return this;
+	}
+
+	/**
+ 	* Alias for `datetime()`
+ 	* Use this for better readability when you're adding a single column
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
+	public any function datetime(
+		required string columnName,
+		string default,
+		boolean null
+	) {
+		datetime(columnNames=columnName,default=default,null=null);
 		return this;
 	}
 
@@ -177,6 +270,24 @@ component extends="Base" {
 			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
+		return this;
+	}
+
+	/**
+ 	* Alias for `decimal()`
+ 	* Use this for better readability when you're adding a single column
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
+	public any function decimal(
+		required string columnName,
+		string default,
+		boolean null,
+		numeric precision,
+		numeric scale
+	) {
+		decimal(columnNames=columnName,default=default,null=null,precision=precision,scale=scale);
 		return this;
 	}
 
@@ -203,6 +314,22 @@ component extends="Base" {
 	}
 
 	/**
+ 	* Alias for `float()`
+ 	* Use this for better readability when you're adding a single column
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
+	public any function float(
+		required string columnName,
+		string default="",
+		boolean null="true"
+	) {
+		float(columnNames=columnName,default=default,null=null);
+		return this;
+	}
+
+	/**
  	* adds float columns to table definition
  	*
  	* [section: Migrator]
@@ -219,6 +346,23 @@ component extends="Base" {
 			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
+		return this;
+	}
+
+	/**
+ 	* Alias for `integer()`
+ 	* Use this for better readability when you're adding a single column
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
+	public any function integer(
+		required string columnName,
+		numeric limit,
+		string default,
+		boolean null
+	) {
+		integer(columnNames=columnName,limit=limit,default=default,null=null);
 		return this;
 	}
 
@@ -244,6 +388,23 @@ component extends="Base" {
 	}
 
 	/**
+ 	* Alias for `string()`
+ 	* Use this for better readability when you're adding a single column
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
+	public any function string(
+		required string columnName,
+		any limit,
+		string default,
+		boolean null
+	) {
+		string(columnNames=columnName,limit=limit,default=default,null=null);
+		return this;
+	}
+
+	/**
  	* adds string columns to table definition
  	*
  	* [section: Migrator]
@@ -261,6 +422,23 @@ component extends="Base" {
 			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
+		return this;
+	}
+
+	/**
+ 	* Alias for `char()`
+ 	* Use this for better readability when you're adding a single column
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
+	public any function char(
+		required string columnName,
+		any limit,
+		string default,
+		boolean null
+	) {
+		char(columnNames=columnName,limit=limit,default=default,null=null);
 		return this;
 	}
 
@@ -286,6 +464,22 @@ component extends="Base" {
 	}
 
 	/**
+ 	* Alias for `text()`
+ 	* Use this for better readability when you're adding a single column
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
+	public any function text(
+		required string columnName,
+		string default,
+		boolean null
+	) {
+		text(columnNames=columnName,default=default,null=null);
+		return this;
+	}
+
+	/**
  	* adds text columns to table definition
  	*
  	* [section: Migrator]
@@ -306,6 +500,22 @@ component extends="Base" {
 	}
 
 	/**
+ 	* Alias for `uniqueidentifier()`
+ 	* Use this for better readability when you're adding a single column
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
+	public any function uniqueidentifier(
+		required string columnName,
+		string default="newid()",
+		boolean null
+	) {
+		uniqueidentifier(columnNames=columnName,default=default,null=null);
+		return this;
+	}
+
+	/**
  	* adds UUID columns to table definition
  	*
  	* [section: Migrator]
@@ -322,6 +532,22 @@ component extends="Base" {
 			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
 			column(argumentCollection=arguments);
 		}
+		return this;
+	}
+
+	/**
+ 	* Alias for `time()`
+ 	* Use this for better readability when you're adding a single column
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
+	public any function time(
+		required string columnName,
+		string default,
+		boolean null
+	) {
+		time(columnNames=columnName,default=default,null=null);
 		return this;
 	}
 
@@ -347,6 +573,25 @@ component extends="Base" {
 
 	/**
  	* adds timestamp columns to table definition
+ 	* Use this for better readability when you're adding a single column
+ 	*
+ 	* [section: Migrator]
+ 	* [category: Table Definition Functions]
+ 	*/
+	public any function timestamp(
+		required string columnName,
+		string default,
+		boolean null,
+		string columnType="datetime"
+	) {
+		
+		timestamp(columnNames=columnName,default=default,null=null,columnType=columnType);
+		return this;
+	}
+
+	/**
+ 	* Alias for `timestamp()`
+ 	* Use this for better readability when you're adding multiple columns
  	*
  	* [section: Migrator]
  	* [category: Table Definition Functions]
