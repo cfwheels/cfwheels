@@ -28,7 +28,7 @@ script: "
 #see pom.xml for the explanation of the mvn commands above
 
 jdk:
-  - openjdk7
+  - openjdk8
 
 services:
   - mysql
