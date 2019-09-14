@@ -327,7 +327,7 @@ component extends="Base" {
 
 	/**
     * Alias for `addIndex()`
-    * Use this for better readability when you're indexing multiple columns
+    * Use this for better readability when you're indexing a single column
 	*
 	* [section: Migrator]
 	* [category: Migration Functions]
