@@ -1,6 +1,6 @@
 sudo: false #upgrade to faster docker-based CI
 language: java #all CFML engine runs on JVM
-
+dist: trusty
 cache: bundler #works only for private repo http://docs.travis-ci.com/user/caching/
 
 env:
