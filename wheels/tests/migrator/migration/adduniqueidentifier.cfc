@@ -1,6 +1,6 @@
 component extends="wheels.tests.Test" {
 
-	private boolean function dbCompatible() {
+	private boolean function isDbCompatible() {
 		switch (migration.adapter.adapterName()) {
 			case "MicrosoftSQLServer":
 				return true;
@@ -28,7 +28,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_add_a_uniqueidentifier_column() {
-		if (!dbCompatible()) {
+		if (!isDbCompatible()) {
 			return;
 		}
 
@@ -52,7 +52,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_add_multiple_uniqueidentifier_columns() {
-		if (!dbCompatible()) {
+		if (!isDbCompatible()) {
 			return;
 		}
 

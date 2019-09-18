@@ -1,6 +1,6 @@
 component extends="wheels.tests.Test" {
 
-	private boolean function dbCompatible() {
+	private boolean function isDbCompatible() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
 			case "MySQL":
@@ -30,7 +30,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_add_a_big_integer_column() {
-		if (!dbCompatible()) {
+		if (!isDbCompatible()) {
 			return;
 		}
 
@@ -54,7 +54,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_add_multiple_big_integer_columns() {
-		if (!dbCompatible()) {
+		if (!isDbCompatible()) {
 			return;
 		}
 

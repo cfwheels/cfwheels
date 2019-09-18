@@ -1,6 +1,6 @@
 component extends="wheels.tests.Test" {
 
-	private boolean function dbCompatible() {
+	private boolean function isDbCompatible() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
 			case "MicrosoftSQLServer":
@@ -18,7 +18,7 @@ component extends="wheels.tests.Test" {
 				return "time";
 			case "MySQL":
 			case "H2":
-			case "PostgreeSQL":
+			case "PostgreSQL":
 				return "TIME";
 			default:
 				return "`addtime()` not supported for " & migration.adapter.adapterName();
@@ -35,7 +35,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_add_a_time_column() {
-		if (!dbCompatible()) {
+		if (!isDbCompatible()) {
 			return;
 		}
 
@@ -59,7 +59,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_add_multiple_time_columns() {
-		if (!dbCompatible()) {
+		if (!isDbCompatible()) {
 			return;
 		}
 

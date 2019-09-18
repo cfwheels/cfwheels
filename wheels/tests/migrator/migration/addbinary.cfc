@@ -1,6 +1,6 @@
 component extends="wheels.tests.Test" {
 
-	private boolean function dbCompatible() {
+	private boolean function isDbCompatible() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
 			case "MicrosoftSQLServer":
@@ -15,12 +15,11 @@ component extends="wheels.tests.Test" {
 	private string function getBinaryType() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
+			case "MySQL":
 				return "BLOB";
 			case "MicrosoftSQLServer":
 				return "IMAGE";
-			case "MySQL":
-				return "BLOB";
-			case "PostgreeSQL":
+			case "PostgreSQL":
 				return "BYTEA";
 			default:
 				return "`addbinary()` not supported for " & migration.adapter.adapterName();
@@ -37,7 +36,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_add_a_binary_column() {
-		if (!dbCompatible()) {
+		if (!isDbCompatible()) {
 			return;
 		}
 
@@ -61,7 +60,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_add_multiple_binary_columns() {
-		if (!dbCompatible()) {
+		if (!isDbCompatible()) {
 			return;
 		}
 

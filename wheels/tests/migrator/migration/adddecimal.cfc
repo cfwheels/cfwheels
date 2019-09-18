@@ -1,6 +1,6 @@
 component extends="wheels.tests.Test" {
 
-	private boolean function dbCompatible() {
+	private boolean function isDbCompatible() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
 			case "MicrosoftSQLServer":
@@ -17,7 +17,7 @@ component extends="wheels.tests.Test" {
 			case "H2":
 			case "MicrosoftSQLServer":
 			case "MySQL":
-			case "PostgreeSQL":
+			case "PostgreSQL":
 				return "DECIMAL";
 			default:
 				return "`adddecimal()` not supported for " & migration.adapter.adapterName();
@@ -34,7 +34,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_add_a_decimal_column() {
-		if (!dbCompatible()) {
+		if (!isDbCompatible()) {
 			return;
 		}
 
@@ -58,7 +58,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_add_multiple_decimal_columns() {
-		if (!dbCompatible()) {
+		if (!isDbCompatible()) {
 			return;
 		}
 

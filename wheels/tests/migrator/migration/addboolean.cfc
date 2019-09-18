@@ -1,6 +1,6 @@
 component extends="wheels.tests.Test" {
 
-	private boolean function dbCompatible() {
+	private boolean function isDbCompatible() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
 			case "MicrosoftSQLServer":
@@ -20,7 +20,7 @@ component extends="wheels.tests.Test" {
 				return "BIT";
 			case "MySQL":
 				return "BIT";
-			case "PostgreeSQL":
+			case "PostgreSQL":
 				return "BOOLEAN";
 			default:
 				return "`addboolean()` not supported for " & migration.adapter.adapterName();
@@ -37,7 +37,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_add_a_boolean_column() {
-		if (!dbCompatible()) {
+		if (!isDbCompatible()) {
 			return;
 		}
 
@@ -61,7 +61,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_add_multiple_boolean_columns() {
-		if (!dbCompatible()) {
+		if (!isDbCompatible()) {
 			return;
 		}
 
