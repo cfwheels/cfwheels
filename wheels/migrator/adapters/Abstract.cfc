@@ -272,27 +272,15 @@ component {
 	}
 
 	/**
-  	* Alias for `addIndex()`
-  	* Use this for better readability when you're indexing one column
-  	*/
-	public string function addIndex(
-	  required string table,
-	  required string columnName,
-	  boolean unique = false,
-	  string indexName = "#objectCase(arguments.table)#_#ListFirst(arguments.columnNames)#"
-	) {
-		return addIndex(table=table,columnNames=columnName,unique=unique,indexName=indexName);
-	}
-
-	/**
   	* generates sql to add database index on a table column
   	*/
 	public string function addIndex(
 	  required string table,
-	  required string columnNames,
+	  string columnNames,
 	  boolean unique = false,
 	  string indexName = "#objectCase(arguments.table)#_#ListFirst(arguments.columnNames)#"
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName",required=true);
 		var sql = "CREATE ";
 		if(arguments.unique) {
 			sql = sql & "UNIQUE ";

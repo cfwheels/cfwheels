@@ -326,27 +326,6 @@ component extends="Base" {
 	}
 
 	/**
-    * Alias for `addIndex()`
-    * Use this for better readability when you're indexing a single column
-	*
-	* [section: Migrator]
-	* [category: Migration Functions]
-	*
-	* @table The table name to perform the index operation on
-	* @columnName One or more column name to index, comma separated
-	* @unique If true will create a unique index constraint
-	* @indexName The name of the index to add: Defaults to table name + underscore + first column name
-    */
-	public void function addIndex(
-		required string table,
-		required string columnName,
-		boolean unique = "false",
-		string indexName = objectCase("#arguments.table#_#ListFirst(arguments.columnNames)#")
-	) {
-		addIndex(table=table,columnNames=columnName,unique=unique,indexName=indexName);
-	}
-
-	/**
     * Add database index on a table column
 	* Only available in a migration CFC
 	*
@@ -360,10 +339,11 @@ component extends="Base" {
     */
 	public void function addIndex(
 		required string table,
-		required string columnNames,
+		string columnNames,
 		boolean unique = "false",
 		string indexName = objectCase("#arguments.table#_#ListFirst(arguments.columnNames)#")
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName",required=true);
 		$execute(this.adapter.addIndex(argumentCollection=arguments));
 		announce("Added index to column(s) #arguments.columnNames# in table #arguments.table#");
 	}
