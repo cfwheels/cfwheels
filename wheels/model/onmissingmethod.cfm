@@ -1,7 +1,7 @@
 <cfscript>
 
 /**
- * This method is not designed to be called directly from your code, but provides functionality for dyanmic finders such as `findOneByEmail()`
+ * This method is not designed to be called directly from your code, but provides functionality for dynamic finders such as `findOneByEmail()`
  *
  * [section: Model Class]
  * [category: Miscellaneous Functions]

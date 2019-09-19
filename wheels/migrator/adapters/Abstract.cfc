@@ -102,8 +102,8 @@ component {
 	}
 
 	/**
-  * quote value if required
-  */
+  	* quote value if required
+  	*/
 	public string function quote(required string value, struct options = {}) {
 		if (ListFindNoCase("CURRENT_TIMESTAMP", arguments.value)) {
 			return arguments.value;
@@ -132,8 +132,8 @@ component {
 	}
 
 	/**
-  * generates sql to create a table
-  */
+  	* generates sql to create a table
+  	*/
 	public string function createTable(
 	  required string name,
 	  required array columns,
@@ -241,8 +241,8 @@ component {
 	}
 
 	/**
-  * generates sql for foreign key constraint
-  */
+  	* generates sql for foreign key constraint
+  	*/
 	public string function foreignKeySQL(
 	  required string name,
 	  required string table,
@@ -272,14 +272,15 @@ component {
 	}
 
 	/**
-  * generates sql to add database index on a table column
-  */
+  	* generates sql to add database index on a table column
+  	*/
 	public string function addIndex(
 	  required string table,
-	  required string columnNames,
+	  string columnNames,
 	  boolean unique = false,
 	  string indexName = "#objectCase(arguments.table)#_#ListFirst(arguments.columnNames)#"
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		var sql = "CREATE ";
 		if(arguments.unique) {
 			sql = sql & "UNIQUE ";
@@ -305,8 +306,8 @@ component {
 	}
 
 	/**
-  * generates sql to create a view
-  */
+  	* generates sql to create a view
+  	*/
 	public string function createView(required string name, required string sql) {
 		return "CREATE VIEW #quoteTableName(arguments.name)# AS " & arguments.sql;
 	}

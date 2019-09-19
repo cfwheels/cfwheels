@@ -98,11 +98,12 @@ component extends="Base" {
 	* [category: Table Definition Functions]
 	*/
 	public any function bigInteger(
-		required string columnNames,
+		string columnNames,
 		numeric limit,
 		string default,
 		boolean null
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		arguments.columnType = "biginteger";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -118,7 +119,12 @@ component extends="Base" {
 	* [section: Migrator]
 	* [category: Table Definition Functions]
 	*/
-	public any function binary(required string columnNames, string default, boolean null) {
+	public any function binary(
+		string columnNames, 
+		string default, 
+		boolean null
+	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		arguments.columnType = "binary";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -134,7 +140,12 @@ component extends="Base" {
 	* [section: Migrator]
 	* [category: Table Definition Functions]
 	*/
-	public any function boolean(required string columnNames, string default, boolean null) {
+	public any function boolean(
+		string columnNames, 
+		string default, 
+		boolean null
+	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		arguments.columnType = "boolean";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -150,7 +161,12 @@ component extends="Base" {
 	* [section: Migrator]
 	* [category: Table Definition Functions]
 	*/
-	public any function date(required string columnNames, string default, boolean null) {
+	public any function date(
+		string columnNames, 
+		string default, 
+		boolean null
+	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		arguments.columnType = "date";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -167,10 +183,11 @@ component extends="Base" {
  	* [category: Table Definition Functions]
  	*/
 	public any function datetime(
-		required string columnNames,
+		string columnNames,
 		string default,
 		boolean null
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		arguments.columnType = "datetime";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -187,12 +204,13 @@ component extends="Base" {
  	* [category: Table Definition Functions]
  	*/
 	public any function decimal(
-		required string columnNames,
+		string columnNames,
 		string default,
 		boolean null,
 		numeric precision,
 		numeric scale
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		arguments.columnType = "decimal";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -209,10 +227,11 @@ component extends="Base" {
  	* [category: Table Definition Functions]
  	*/
 	public any function float(
-		required string columnNames,
+		string columnNames,
 		string default="",
 		boolean null="true"
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		arguments.columnType = "float";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -229,11 +248,12 @@ component extends="Base" {
  	* [category: Table Definition Functions]
  	*/
 	public any function integer(
-		required string columnNames,
+		string columnNames,
 		numeric limit,
 		string default,
 		boolean null
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		arguments.columnType = "integer";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -250,11 +270,12 @@ component extends="Base" {
  	* [category: Table Definition Functions]
  	*/
 	public any function string(
-		required string columnNames,
+		string columnNames,
 		any limit,
 		string default,
 		boolean null
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		arguments.columnType = "string";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -276,6 +297,7 @@ component extends="Base" {
 		string default,
 		boolean null
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		arguments.columnType = "char";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -292,10 +314,11 @@ component extends="Base" {
  	* [category: Table Definition Functions]
  	*/
 	public any function text(
-		required string columnNames,
+		string columnNames,
 		string default,
 		boolean null
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		arguments.columnType = "text";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -312,10 +335,11 @@ component extends="Base" {
  	* [category: Table Definition Functions]
  	*/
 	public any function uniqueidentifier(
-		required string columnNames,
+		string columnNames,
 		string default="newid()",
 		boolean null
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		arguments.columnType = "uniqueidentifier";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -332,10 +356,11 @@ component extends="Base" {
  	* [category: Table Definition Functions]
  	*/
 	public any function time(
-		required string columnNames,
+		string columnNames,
 		string default,
 		boolean null
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		arguments.columnType = "time";
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -352,11 +377,12 @@ component extends="Base" {
  	* [category: Table Definition Functions]
  	*/
 	public any function timestamp(
-		required string columnNames,
+		string columnNames,
 		string default,
 		boolean null,
 		string columnType="datetime"
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			arguments.columnName = Trim(ListGetAt(arguments.columnNames, local.i));
