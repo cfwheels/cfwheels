@@ -280,7 +280,7 @@ component {
 	  boolean unique = false,
 	  string indexName = "#objectCase(arguments.table)#_#ListFirst(arguments.columnNames)#"
 	) {
-		$combineArguments(args=arguments, combine="columnNames,columnName",required=true);
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		var sql = "CREATE ";
 		if(arguments.unique) {
 			sql = sql & "UNIQUE ";

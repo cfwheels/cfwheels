@@ -343,7 +343,7 @@ component extends="Base" {
 		boolean unique = "false",
 		string indexName = objectCase("#arguments.table#_#ListFirst(arguments.columnNames)#")
 	) {
-		$combineArguments(args=arguments, combine="columnNames,columnName",required=true);
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		$execute(this.adapter.addIndex(argumentCollection=arguments));
 		announce("Added index to column(s) #arguments.columnNames# in table #arguments.table#");
 	}
