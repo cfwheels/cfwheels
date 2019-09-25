@@ -6,7 +6,7 @@ try {
 	availableMigrations = application.wheels.migrator.getAvailableMigrations();
 	prefix = "timestamp";
 	if(arrayLen(availableMigrations)){
-	 if(len(availableMigrations[1]["version"] NEQ 10 )){
+	 if(len(availableMigrations[1]["version"]) NEQ 14 ){
 	 	prefix = "numeric";
 	 }
 	}
