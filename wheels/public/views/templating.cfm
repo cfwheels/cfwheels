@@ -32,7 +32,7 @@ try {
 	<!--- Migration Prefix --->
 	<div id="prefix">
 		<h5>Migration Prefix</h5>
-		<p>As you have no migration files yet, we need to define how you would like them prefixed</p>
+		<cfif !arrayLen(availableMigrations)><p>As you have no migration files yet, we need to define how you would like them prefixed</p></cfif>
 
 		<div class="field">
 		 <div class="ui radio checkbox">
