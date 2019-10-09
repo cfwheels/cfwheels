@@ -294,15 +294,17 @@ public struct function properties(boolean returnIncluded=true) {
 		if (!arguments.returnIncluded && !IsSimpleValue(this[local.key])) {
 			continue;
 		}
-		// we return anything that is not a function
-		if (!IsCustomFunction(this[local.key])) {
-			// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
-			if (ListFindNoCase(propertyNames(), local.key)) {
-				local.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), local.key));
-			}
-			// set property from the this scope in the struct that we will return
-			local.rv[local.key] = this[local.key];
+		// don't return functions
+		if (IsCustomFunction(this[local.key])) {
+			continue;
 		}
+		// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
+		local.listPosition = ListFindNoCase(propertyNames(), local.key);
+		if (local.listPosition) {
+			local.key = ListGetAt(propertyNames(), local.listPosition);
+		}
+		// set property from the this scope in the struct that we will return
+		local.rv[local.key] = this[local.key];
 	}
 	return local.rv;
 }
