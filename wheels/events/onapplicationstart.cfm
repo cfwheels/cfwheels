@@ -274,6 +274,7 @@ public void function onApplicationStart() {
 		application.$wheels.redirectAfterReload = true;
 	}
 	application.$wheels.validateTestPackageMetaData = true;
+	application.$wheels.resetPropertiesStructKeyCase = true;
 
 	// If session management is enabled in the application we default to storing Flash data in the session scope, if not we use a cookie.
 	if (StructKeyExists(this, "sessionManagement") && this.sessionManagement) {
