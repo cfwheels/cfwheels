@@ -1,3 +1,15 @@
+<a name="2.0.2"></a>
+
+# [2.0.2](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.2) (10/16/2019)
+
+### Security Release
+
+* Upgrade to this release from 2.0.0, 2.0.1 to patch a potential SQL injection exploit. Note, this only affects the 2.x branch and not 1.x
+
+### Breaking Changes
+
+* Blank strings in SQL are no longer converted to null
+
 <a name="2.0.1"></a>
 
 # [2.0.1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.1) (01/31/2018)
