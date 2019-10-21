@@ -66,7 +66,9 @@
 							<cfset local.hide = ListAppend(local.hide, ListRest(local.j, "."))>
 						</cfif>
 					</cfloop>
-					<cfdump var="#local.scope#" format="text" showUDFs="false" hide="#local.hide#">
+					<pre>
+						<cfdump var="#local.scope#" format="text" showUDFs="false" hide="#local.hide#">
+					</pre>
 					</p>
 				</cfif>
 				<cfcatch type="any"><!--- just keep going, we need to send out error emails ---></cfcatch>
