@@ -1056,7 +1056,7 @@ public string function $prependUrl(required string path) {
 	}
 	if (Len(arguments.protocol)) {
 		local.rv = arguments.protocol & "://" & local.rv;
-	} else if (request.cgi.server_port_secure) {
+	} else if (isSecure()) {
 		local.rv = "https://" & local.rv;
 	} else {
 		local.rv = "http://" & local.rv;
