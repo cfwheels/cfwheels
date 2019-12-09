@@ -134,9 +134,14 @@ public any function findAll(
 
 					// this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
 					if (Len(arguments.where) && Len(arguments.include)) {
-						arguments.where = "(#arguments.where#) AND (#local.paginationWhere#)";
+						if (IsNumeric(arguments.parameterize)) {
+							arguments.parameterize += local.values.recordCount;
+						}
 					} else {
 						arguments.where = local.paginationWhere;
+						if (IsNumeric(arguments.parameterize)) {
+							arguments.parameterize = local.values.recordCount;
+						}
 					}
 				}
 			}
@@ -198,7 +203,7 @@ public any function findAll(
 		}
 
 		// add where clause parameters to the generic sql info
-		local.sql = $addWhereClauseParameters(sql=local.sql, where=local.originalWhere);
+		local.sql = $addWhereClauseParameters(sql=local.sql, where=local.originalWhere, parameterize=arguments.parameterize);
 
 		// Create a struct in the request scope to store cached queries.
 		if (!StructKeyExists(request.wheels, variables.wheels.class.modelName)) {
