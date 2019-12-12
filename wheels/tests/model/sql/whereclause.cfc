@@ -72,4 +72,22 @@ component extends="wheels.tests.Test" {
 		
 	}	
 
+	function test_SQLInjectionProtectionWithParameterizeAndPagination() {
+		   badparams = {
+	    	username = "tonyp",
+	    	password = "tonyp123' OR password!='tonyp123"
+			};
+
+	    errorMessage = '';
+	    
+	    try {
+	    	inject = model("user").findall(where="username = '#badparams.username#' AND password = '#badparams.password#'", parameterize=2, perPage=2, page=1);
+	    } catch (any e) {
+	    	errorMessage = e.message;
+	    } 
+
+    	assert( errorMessage is "Wheels found 3 parameters in the query string but was instructed to parameterize 2.");
+		
+	}	
+
 }
