@@ -385,8 +385,8 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 <cfset local.raul = model("author").create(firstName="Raul", lastName="Riera")>
 <cfset local.andy = model("author").create(firstName="Andy", lastName="Bellenie")>
 <cfset local.adam = model("author").create(firstName="Adam", lastName="Chapman, Duke of Surrey")>
-<cfset local.adam = model("author").create(firstName="Tom", lastName="King")>
-<cfset local.adam = model("author").create(firstName="David", lastName="Belanger")>
+<cfset local.tom = model("author").create(firstName="Tom", lastName="King")>
+<cfset local.david = model("author").create(firstName="David", lastName="Belanger")>
 
 <cfset local.users = model("user").findAll(order="id")>
 
