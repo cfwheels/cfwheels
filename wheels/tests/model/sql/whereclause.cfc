@@ -60,15 +60,10 @@ component extends="wheels.tests.Test" {
 	    	password = "tonyp123' OR password!='tonyp123"
 			};
 
-	    errorMessage = '';
-	    
-	    try {
-	    	inject = model("user").findall(where="username = '#badparams.username#' AND password = '#badparams.password#'", parameterize=2);
-	    } catch (any e) {
-	    	errorMessage = e.message;
-	    } 
-
-    	assert( errorMessage is "Wheels found 3 parameters in the query string but was instructed to parameterize 2.");
+	    actual = raised("model(""user"").findall(where=""username = '#badparams.username#' AND password = '#badparams.password#'"", parameterize=2)");
+		// There error message would be "Wheels found 3 parameters in the query string but was instructed to parameterize 2."
+		expected = "Wheels.ParameterMismatch";
+		assert("actual eq expected");
 		
 	}	
 
@@ -78,16 +73,11 @@ component extends="wheels.tests.Test" {
 	    	password = "tonyp123' OR password!='tonyp123"
 			};
 
-	    errorMessage = '';
+	    actual = raised("model(""user"").findall(where=""username = '#badparams.username#' AND password = '#badparams.password#'"", parameterize=2, perPage=2, page=1)");
+		// There error message would be "Wheels found 3 parameters in the query string but was instructed to parameterize 2."
+		expected = "Wheels.ParameterMismatch";
+		assert("actual eq expected");
 	    
-	    try {
-	    	inject = model("user").findall(where="username = '#badparams.username#' AND password = '#badparams.password#'", parameterize=2, perPage=2, page=1);
-	    } catch (any e) {
-	    	errorMessage = e.message;
-	    } 
-
-    	assert( errorMessage is "Wheels found 3 parameters in the query string but was instructed to parameterize 2.");
-		
 	}	
 
 }
