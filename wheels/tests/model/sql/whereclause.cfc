@@ -53,5 +53,31 @@ component extends="wheels.tests.Test" {
 		actual = model("post").$whereClause(where="createdAtAlias > '#CreateDate(2000, 1, 1)#'");
 		assert("actual[4].datatype eq 'datetime'");
 	}
+	
+	function test_SQLInjectionProtectionWithParameterize() {
+		   badparams = {
+	    	username = "tonyp",
+	    	password = "tonyp123' OR password!='tonyp123"
+			};
+
+	    actual = raised("model(""user"").findall(where=""username = '#badparams.username#' AND password = '#badparams.password#'"", parameterize=2)");
+		// There error message would be "Wheels found 3 parameters in the query string but was instructed to parameterize 2."
+		expected = "Wheels.ParameterMismatch";
+		assert("actual eq expected");
+		
+	}	
+
+	function test_SQLInjectionProtectionWithParameterizeAndPagination() {
+		   badparams = {
+	    	username = "tonyp",
+	    	password = "tonyp123' OR password!='tonyp123"
+			};
+
+	    actual = raised("model(""user"").findall(where=""username = '#badparams.username#' AND password = '#badparams.password#'"", parameterize=2, perPage=2, page=1)");
+		// There error message would be "Wheels found 3 parameters in the query string but was instructed to parameterize 2."
+		expected = "Wheels.ParameterMismatch";
+		assert("actual eq expected");
+	    
+	}	
 
 }

@@ -97,7 +97,7 @@ component extends="wheels.tests.Test" {
 
 	function test_convert_handle_to_allowed_variable() {
 		actual = model("author").findAll(handle="dot.notation test");
-		assert("actual.recordCount eq 8");
+		assert("actual.recordCount eq 10");
 	}
 
 }
