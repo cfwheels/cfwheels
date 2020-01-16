@@ -134,6 +134,7 @@ public any function findAll(
 
 					// this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
 					if (Len(arguments.where) && Len(arguments.include)) {
+						arguments.where = "(#arguments.where#) AND (#local.paginationWhere#)";
 						if (IsNumeric(arguments.parameterize)) {
 							arguments.parameterize += local.values.recordCount;
 						}
