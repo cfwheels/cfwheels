@@ -412,13 +412,6 @@ public void function onApplicationStart() {
 	$include(template="config/settings.cfm");
 	$include(template="config/#application.$wheels.environment#/settings.cfm");
 
-	// Auto Migrate Database if requested
-	if(application.$wheels.enableMigratorComponent){
-		application.$wheels.migrator = $createObjectFromRoot(path="wheels", fileName="Migrator", method="init");
-		if (application.$wheels.autoMigrateDatabase){
-			application.$wheels.migrator.migrateToLatest();
-		}
-	}
 	// Clear query (cfquery) and page (cfcache) caches.
 	if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cacheKey")) {
 		application.$wheels.cacheKey = Hash(CreateUUID());
@@ -467,6 +460,14 @@ public void function onApplicationStart() {
 	// Assign it all to the application scope in one atomic call.
 	application.wheels = application.$wheels;
 	StructDelete(application, "$wheels");
+
+	// Auto Migrate Database if requested
+	if(application.wheels.enableMigratorComponent){
+		application.wheels.migrator = $createObjectFromRoot(path="wheels", fileName="Migrator", method="init");
+		if (application.wheels.autoMigrateDatabase){
+			application.wheels.migrator.migrateToLatest();
+		}
+	}
 
 	// Run the developer's on application start code.
 	$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
