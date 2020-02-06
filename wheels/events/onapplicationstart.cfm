@@ -410,7 +410,9 @@ public void function onApplicationStart() {
 
 	// Load general developer settings first, then override with environment specific ones.
 	$include(template="config/settings.cfm");
-	$include(template="config/#application.$wheels.environment#/settings.cfm");
+	if (FileExists(ExpandPath("/app/config/#application.$wheels.environment#/settings.cfm"))) {
+		$include(template="config/#application.$wheels.environment#/settings.cfm");
+	}
 
 	// Clear query (cfquery) and page (cfcache) caches.
 	if (application.$wheels.clearQueryCacheOnReload or !StructKeyExists(application.$wheels, "cacheKey")) {
