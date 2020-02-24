@@ -1,6 +1,6 @@
 <a name="2.0.1-beta"></a>
 
-# 2.1.0-Beta (https://github.com/cfwheels/cfwheels/releases/tag/v2.0.1-beta) (01/24/2020)
+# 2.1.0-Beta (https://github.com/cfwheels/cfwheels/releases/tag/v2.0.1-beta) (02/24/2020)
 
 ### Potentially breaking changes
 
