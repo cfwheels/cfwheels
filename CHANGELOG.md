@@ -1,6 +1,12 @@
-<a name="2.0.1-beta"></a>
+<a name="2.1"></a>
 
-# 2.1.0-Beta (https://github.com/cfwheels/cfwheels/releases/tag/v2.0.1-beta) (02/24/2020)
+### Bug Fixes
+
+- Fixed pagination order ambiguous column name exception - [#980](https://github.com/cfwheels/cfwheels/issues/#980) [Adam Chapman, Mike Lange]
+
+<a name="2.1.0-beta"></a>
+
+# 2.1.0-Beta (https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0-beta) (02/24/2020)
 
 ### Potentially breaking changes
 
@@ -42,7 +48,6 @@
 - Fixes bug where Migrator \$execute() always appends semi-colon - [#924](https://github.com/cfwheels/cfwheels/issues/#924) [Adam Chapman]
 - Fixes bug where model createdAt property is changed upon update - [#927](https://github.com/cfwheels/cfwheels/issues/#927) [Brandon Shea, Adam Chapman]
 - Fixed silent application.wheels scope exception hampering autoMigrateDatabase - [#957](https://github.com/cfwheels/cfwheels/issues/#957) [Adam Chapman, Tom King]
-- Fixed pagination order ambiguous column name exception - [#980](https://github.com/cfwheels/cfwheels/issues/#980) [Adam Chapman, Mike Lange]
 
 ### Miscellaneous
 
