@@ -42,6 +42,7 @@
 - Fixes bug where Migrator \$execute() always appends semi-colon - [#924](https://github.com/cfwheels/cfwheels/issues/#924) [Adam Chapman]
 - Fixes bug where model createdAt property is changed upon update - [#927](https://github.com/cfwheels/cfwheels/issues/#927) [Brandon Shea, Adam Chapman]
 - Fixed silent application.wheels scope exception hampering autoMigrateDatabase - [#957](https://github.com/cfwheels/cfwheels/issues/#957) [Adam Chapman, Tom King]
+- Fixed pagination order ambiguous column name exception - [#957](https://github.com/cfwheels/cfwheels/issues/#980) [Adam Chapman, Mike Lange]
 
 ### Miscellaneous
 
