@@ -79,7 +79,7 @@ public any function findAll(
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.item = primaryKeys(local.i);
 				if (!ListFindNoCase(local.compareList, local.item) && !ListFindNoCase(local.compareList, tableName() & "." & local.item)) {
-					arguments.order = ListAppend(arguments.order, local.item);
+					arguments.order = ListAppend(arguments.order, "#tableName()#.#loc.item#");
 				}
 			}
 		} else {
