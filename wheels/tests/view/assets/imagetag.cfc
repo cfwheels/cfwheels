@@ -111,4 +111,25 @@ component extends="wheels.tests.Test" {
 		assert("e eq r");
 	}
 
+	function test_raises_exception_on_missing_image() {
+		path = "missing.jpg";
+		actual = raised("_controller.imageTag(source=path)");
+		expected = "Wheels.ImageFileNotFound";
+		assert("actual == expected");
+	}
+
+	function test_raises_exception_on_unsupported_image() {
+		path = "../wheels/tests/_assets/files/cfwheels-logo.txt";
+		actual = raised("_controller.imageTag(source=path)");
+		expected = "Wheels.ImageFormatNotSupported";
+		assert("actual == expected");
+	}
+
+	function test_accepts_missing_image() {
+		path = "missing.jpg"
+		actual = _controller.imageTag(source=path, required=false, alt="This may be broken");
+		expected = '<img alt="This may be broken" src="#imagePath#/#path#">';
+		assert("actual == expected");
+	}
+
 }
