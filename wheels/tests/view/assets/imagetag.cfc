@@ -126,7 +126,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_accepts_missing_image() {
-		path = "missing.jpg"
+		path = "missing.jpg";
 		actual = _controller.imageTag(source=path, required=false, alt="This may be broken");
 		expected = '<img alt="This may be broken" src="#imagePath#/#path#">';
 		assert("actual == expected");
