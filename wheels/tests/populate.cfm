@@ -54,7 +54,7 @@
 </cfloop>
 
 <!--- list of tables to delete --->
-<cfset local.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes,CATEGORIES,migratorversions">
+<cfset local.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,trucks,tags,users,collisiontests,combikeys,tblusers,sqltypes,CATEGORIES,migratorversions">
 <cfloop list="#local.tables#" index="local.i">
 	<cfif ListFindNoCase(local.tableList, local.i, chr(7))>
 		<cftry>
@@ -190,6 +190,17 @@ CREATE TABLE shops
 	,citycode #local.intColumnType# NULL
 	,name varchar(80) NOT NULL
 	,PRIMARY KEY(shopid)
+) #local.storageEngine#
+</cfquery>
+
+<!--- this table is for testing ambiguous column names (shopid) --->
+<cfquery name="local.query" datasource="#application.wheels.dataSourceName#">
+CREATE TABLE trucks
+(
+	id #local.identityColumnType#
+	,shopid char(9) NOT NULL
+	,registration varchar(80) NULL
+	,PRIMARY KEY(id)
 ) #local.storageEngine#
 </cfquery>
 
@@ -442,6 +453,10 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 		,citycode="#local.i#"
 		,name="shop #local.i#"
 	)>
+</cfloop>
+<!--- shop 1 has 5 trucks --->
+<cfloop from="1" to="5" index="local.i">
+	<cfset model("truck").create(shopid="shop1", registration="TRUCK-#local.i#")>
 </cfloop>
 
 <cfset model("shop").create(shopid=" shop6", citycode=0, name="x")>
