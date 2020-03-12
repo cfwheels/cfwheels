@@ -1,3 +1,9 @@
+<a name="2.2"></a>
+
+### View Enhancements
+
+- Added the `required` argument to `imageTag` to suppress exceptions if using non-existent files [#979](https://github.com/cfwheels/cfwheels/issues/979) - [Adam Chapman, Michael Diederich]
+
 <a name="2.1"></a>
 
 ### Bug Fixes
@@ -8,7 +14,7 @@
 
 # 2.1.0-Beta (https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0-beta) (02/24/2020)
 
-### Potentially breaking changes
+### Potentially Breaking Changes
 
 - The new CFWheels internal GUI is more isolated and runs in it's own component: previously this was extending the developers main `Controller.cfc` which caused multiple issues. The migrator, test runner and routing GUIs have therefore all been re-written.
 - The plugins system behaviour no longer chains multiple functions of the same name as this was a major performance hit. It's recommended that plugin authors check their plugins to run on 2.1
