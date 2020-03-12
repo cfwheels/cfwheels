@@ -454,7 +454,7 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 		,name="shop #local.i#"
 	)>
 </cfloop>
-<!--- shop 1 has 5 trucks! --->
+<!--- shop 1 has 5 trucks --->
 <cfloop from="1" to="5" index="local.i">
 	<cfset model("truck").create(shopid="shop1", registration="TRUCK-#local.i#")>
 </cfloop>
