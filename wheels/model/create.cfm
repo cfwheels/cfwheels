@@ -30,6 +30,8 @@ public any function create(
 	StructDelete(arguments, "parameterize");
 	local.validate = arguments.validate;
 	StructDelete(arguments, "validate");
+	local.allowExplicitTimestamps = arguments.allowExplicitTimestamps;
+	StructDelete(arguments, "allowExplicitTimestamps");
 	local.rv = new(argumentCollection=arguments);
 	local.rv.save(
 		callbacks=arguments.callbacks,
@@ -37,7 +39,7 @@ public any function create(
 		reload=arguments.reload,
 		transaction=arguments.transaction,
 		validate=local.validate,
-		allowExplicitTimestamps=arguments.allowExplicitTimestamps
+		allowExplicitTimestamps=local.allowExplicitTimestamps
 	);
 	return local.rv;
 }
