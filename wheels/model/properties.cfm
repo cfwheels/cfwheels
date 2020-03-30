@@ -49,6 +49,8 @@ public void function protectedProperties(string properties="") {
  * @sql An SQL expression to use to calculate the property value.
  * @label A custom label for this property to be referenced in the interface and error messages.
  * @defaultValue A default value for this property.
+ * @select Whether to include this property by default in SELECT statements
+ * @dataType Specify the column dataType for this property
  */
 public void function property(
 	required string name,
