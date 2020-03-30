@@ -1,10 +1,18 @@
 <a name="2.2"></a>
 
+# 2.2
+
 ### View Enhancements
 
 - Added the `required` argument to `imageTag` to suppress exceptions if using non-existent files [#979](https://github.com/cfwheels/cfwheels/issues/979) - [Adam Chapman, Michael Diederich]
 
+### Miscellaneous
+
+- Added the `refresh` url parameter for auto refreshing test framework html - [#986](https://github.com/cfwheels/cfwheels/issues/986) - [Adam Chapman]
+
 <a name="2.1"></a>
+
+# 2.1
 
 ### Bug Fixes
 
