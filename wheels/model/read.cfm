@@ -392,14 +392,14 @@ public any function findFirst(string property="#primaryKey()#", string $sort="AS
 /**
  * Fetches the last record ordered by primary key value.
  * Use the `property` argument to order by something else.
- * Returns a model object.
+ * Returns a model object. Formerly known as findLast.
  *
  * [section: Model Class]
  * [category: Read Functions]
  *
  * @property [see:findFirst].
  */
-public any function findLast(string property) {
+public any function findLastOne(string property) {
 	arguments.$sort = "DESC";
 	return findFirst(argumentCollection=arguments);
 }
