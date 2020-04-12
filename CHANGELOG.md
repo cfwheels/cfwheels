@@ -1,6 +1,6 @@
 <a name="2.2"></a>
 
-# 2.2
+# [2.2](TBC)
 
 ### View Enhancements
 
@@ -13,7 +13,7 @@
 
 <a name="2.1"></a>
 
-# 2.1 (https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0) (04/12/2020)
+# [2.1](https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0) (04/12/2020)
 
 ### Bug Fixes
 
@@ -22,7 +22,7 @@
 
 <a name="2.1.0-beta"></a>
 
-# 2.1.0-Beta (https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0-beta) (02/24/2020)
+# [2.1.0-Beta](https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0-beta) (02/24/2020)
 
 ### Potentially Breaking Changes
 
