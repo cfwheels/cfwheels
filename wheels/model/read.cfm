@@ -399,7 +399,7 @@ public any function findFirst(string property="#primaryKey()#", string $sort="AS
  *
  * @property [see:findFirst].
  */
-public any function findLast(string property) {
+public any function findLastOne(string property) {
 	arguments.$sort = "DESC";
 	return findFirst(argumentCollection=arguments);
 }
