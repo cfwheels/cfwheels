@@ -1,6 +1,15 @@
+<a name="2.1"></a>
+
+# 2.1
+
+### Bug Fixes
+
+- Fixed pagination order ambiguous column name exception - [#980](https://github.com/cfwheels/cfwheels/issues/#980) [Adam Chapman, Mike Lange]
+- Renames findLast() to findLastOne() for lucee@5.3.5+92 upwards compatibility [#988](https://github.com/cfwheels/cfwheels/issues/#988)
+
 <a name="2.1.0-beta"></a>
 
-# 2.1.0-Beta (https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0-beta) (02/24/2020)
+# [2.1.0-Beta](https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0-beta) (02/24/2020)
 
 ### Potentially breaking changes
 
