@@ -128,8 +128,7 @@ public string function imageTag(
 	string host,
 	string protocol,
 	numeric port,
-	boolean encode,
-	boolean required = true
+	boolean encode
 ) {
 	$args(name="imageTag", reserved="src", args=arguments);
 
@@ -192,7 +191,7 @@ public string function $imageTag() {
 		arguments.src = $get("webPath") & $get("imagePath") & "/" & arguments.source;
 		local.file = GetDirectoryFromPath(GetBaseTemplatePath());
 		local.file &= $get("imagePath") & "/" & SpanExcluding(arguments.source, "?");
-		if ($get("showErrorInformation") && arguments.required) {
+		if ($get("showErrorInformation")) {
 			if (local.localFile && !FileExists(local.file)) {
 				Throw(
 					type="Wheels.ImageFileNotFound",
@@ -209,15 +208,13 @@ public string function $imageTag() {
 		}
 		if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height")) {
 
-			if (arguments.required) {
-				// Height and / or width arguments are missing so use cfimage to get them.
-				local.image = $image(action="info", source=local.file);
-				if (!StructKeyExists(arguments, "width") && local.image.width > 0) {
-					arguments.width = local.image.width;
-				}
-				if (!StructKeyExists(arguments, "height") && local.image.height > 0) {
-					arguments.height = local.image.height;
-				}
+			// Height and / or width arguments are missing so use cfimage to get them.
+			local.image = $image(action="info", source=local.file);
+			if (!StructKeyExists(arguments, "width") && local.image.width > 0) {
+				arguments.width = local.image.width;
+			}
+			if (!StructKeyExists(arguments, "height") && local.image.height > 0) {
+				arguments.height = local.image.height;
 			}
 
 		} else {
@@ -242,7 +239,7 @@ public string function $imageTag() {
 	if (!StructKeyExists(arguments, "alt")) {
 		arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
 	}
-	return $tag(name="img", skip="source,key,category,onlyPath,host,protocol,port,encode,required", attributes=arguments, encode=arguments.encode);
+	return $tag(name="img", skip="source,key,category,onlyPath,host,protocol,port,encode", attributes=arguments, encode=arguments.encode);
 }
 
 /**
