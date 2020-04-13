@@ -9,7 +9,7 @@ component extends="wheels.tests.Test" {
 		}
 	}
 
-	private char function getCharType() {
+	private string function getCharType() {
 		switch (migration.adapter.adapterName()) {
 			case "MicrosoftSQLServer":
 				return "CHAR";
