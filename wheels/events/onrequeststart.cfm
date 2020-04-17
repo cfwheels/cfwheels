@@ -73,8 +73,8 @@ public void function $runOnRequestStart(required targetPage) {
 				}
 			} else {
 				local.ipAddress = cgi.remote_addr;
-				if (StructKeyExists(cgi, "http_x_forwarded_for") && Len(cgi.http_x_forwarded_for)) {
-					local.ipAddress = cgi.http_x_forwarded_for;
+				if (Len(request.cgi.http_x_forwarded_for)) {
+					local.ipAddress = request.cgi.http_x_forwarded_for;
 				}
 				if (ListFind(application.wheels.ipExceptions, local.ipAddress)) {
 					local.makeException = true;

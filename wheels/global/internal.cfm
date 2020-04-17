@@ -289,7 +289,7 @@ public boolean function $structKeysExist(required struct struct, string keys="")
  * This copies all the variables CFWheels needs from the CGI scope to the request scope.
  */
 public struct function $cgiScope(
-	string keys="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type,http_x_rewrite_url,http_x_original_url,request_uri,redirect_url",
+	string keys="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type,http_x_rewrite_url,http_x_original_url,request_uri,redirect_url,http_x_forwarded_for,http_x_forwarded_proto",
 	struct scope=cgi
 ) {
 	local.rv = {};
