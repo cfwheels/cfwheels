@@ -176,6 +176,12 @@ public string function $request(
 	struct formScope=form,
 	struct urlScope=url
 ) {
+	// If something has been set to the request.$wheelsAbortContent variable we just return it directly so it gets rendered.
+	// This is used for maintenance mode content.
+	if (StructKeyExists(request, "$wheelsAbortContent")) {
+    	return request.$wheelsAbortContent;
+	}
+
 	if ($get("showDebugInformation")) {
 		$debugPoint("setup");
 	}
