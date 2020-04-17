@@ -226,10 +226,11 @@ public string function redoMigration(string version="") {
  */
 private void function $setVersionAsMigrated(required string version) {
 	local.appKey = $appKey();
-	$query(
-		datasource=application[local.appKey].dataSourceName,
-		sql="INSERT INTO #application[local.appKey].migratorTableName# (version) VALUES ('#$sanitiseVersion(arguments.version)#')"
-	);
+	if(!structKeyExists(request, "$wheelsDebugSQL"))
+		$query(
+			datasource=application[local.appKey].dataSourceName,
+			sql="INSERT INTO #application[local.appKey].migratorTableName# (version) VALUES ('#$sanitiseVersion(arguments.version)#')"
+		);
 }
 
 /**
@@ -237,10 +238,11 @@ private void function $setVersionAsMigrated(required string version) {
  */
 private void function $removeVersionAsMigrated(required string version) {
 	local.appKey = $appKey();
-	$query(
-		datasource=application[local.appKey].dataSourceName,
-		sql="DELETE FROM #application[local.appKey].migratorTableName# WHERE version = '#$sanitiseVersion(arguments.version)#'"
-	);
+	if(!structKeyExists(request, "$wheelsDebugSQL"))
+		$query(
+			datasource=application[local.appKey].dataSourceName,
+			sql="DELETE FROM #application[local.appKey].migratorTableName# WHERE version = '#$sanitiseVersion(arguments.version)#'"
+		);
 }
 
 /**
@@ -279,6 +281,11 @@ private string function $copyTemplateMigrationAndRename(
 	string migrationPrefix=""
 ) {
 	local.templateFile = this.paths.templates & "/" & arguments.templateName & ".cfc";
+	local.lastDirectory = ListLast(this.paths.migrate, "/");
+	local.customTemplateFile = ReplaceNoCase(this.paths.migrate, "/#local.lastDirectory#/", "/templates/") & arguments.templateName & ".cfc";
+	if (FileExists(local.customTemplateFile)) {
+		local.templateFile = local.customTemplateFile;
+	}
 	local.extendsPath = "wheels.migrator.Migration";
 	if (!FileExists(local.templateFile)) {
 		return "Template #arguments.templateName# could not be found";

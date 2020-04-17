@@ -19,7 +19,7 @@ public any function $initModelClass(required string name, required string path) 
 
 	variables.wheels.class.RESQLAs = "[[:space:]]AS[[:space:]][A-Za-z1-9]+";
 	variables.wheels.class.RESQLOperators = "((?:\s+(?:NOT\s+)?LIKE)|(?:\s+(?:NOT\s+)?IN)|(?:\s+IS(?:\s+NOT)?)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
-	variables.wheels.class.RESQLWhere = "\s*(#variables.wheels.class.RESQLOperators#)\s*(\('.*?'\)|\(((?:\+|-)?[0-9\.],?)+\)|'.*?'()|''|((?:\+|-)?[0-9\.]+)()|NULL)((\s*$|\)|\s+(AND|OR)))";
+	variables.wheels.class.RESQLWhere = "\s*(#variables.wheels.class.RESQLOperators#)\s*(\('.+?'\)|\(((?:\+|-)?[0-9\.],?)+\)|'.+?'()|''|((?:\+|-)?[0-9\.]+)()|NULL)((\s*$|\)|\s+(AND|OR)))";
 	variables.wheels.class.mapping = {};
 	variables.wheels.class.properties = {};
 	variables.wheels.class.accessibleProperties = {};
@@ -80,9 +80,9 @@ public any function $initModelClass(required string name, required string path) 
 		// get columns for the table
 		local.columns = variables.wheels.class.adapter.$getColumns(tableName());
 
-		// do not process columns already assigned to a calculated property 
+		// do not process columns already assigned to a calculated property
 		local.processedColumns = variables.wheels.class.calculatedPropertyList;
-		
+
 		local.iEnd = local.columns.recordCount;
 		for (local.i=1; local.i <= local.iEnd; local.i++) {
 			// set up properties and column mapping

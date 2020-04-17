@@ -130,7 +130,7 @@ public string function $orderByClause(required string order, required string inc
 			local.iEnd = ListLen(arguments.order);
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.iItem = Trim(ListGetAt(arguments.order, local.i));
-				if (!FindNoCase(" ASC", local.iItem) && !FindNoCase(" DESC", local.iItem)) {
+				if (!Find(" ASC", local.iItem) && !Find(" DESC", local.iItem)) {
 					local.iItem &= " ASC";
 				}
 				if (Find(".", local.iItem)) {
@@ -529,6 +529,13 @@ public array function $addWhereClauseParameters(required array sql, required str
 				local.start = local.temp.pos[4] + local.temp.len[4];
 				ArrayAppend(local.originalValues, ReplaceList(Chr(7) & Mid(arguments.where, local.temp.pos[4], local.temp.len[4]) & Chr(7), "#Chr(7)#(,)#Chr(7)#,#Chr(7)#','#Chr(7)#,#Chr(7)#"",""#Chr(7)#,#Chr(7)#", ",,,,,,"));
 			}
+		}
+		if (StructKeyExists(arguments, "parameterize") && IsNumeric(arguments.parameterize) && arguments.parameterize != ArrayLen(local.originalValues)) {
+			Throw(
+				type="Wheels.ParameterMismatch",
+				message="Wheels found #ArrayLen(local.originalValues)# parameters in the query string but was instructed to parameterize #arguments.parameterize#.",
+				extendedInfo="Verify that the number of parameters specified in the `where` argument mathes the number in the parameterize argument."
+			);
 		}
 		local.pos = ArrayLen(local.originalValues);
 		local.iEnd = ArrayLen(arguments.sql);

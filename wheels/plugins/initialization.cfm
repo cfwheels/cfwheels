@@ -215,27 +215,7 @@ public void function $processMixins() {
 					if (local.methodMixins != "none") {
 						for (local.iMixableComponent in variables.$class.mixableComponents) {
 							if (local.methodMixins == "global" || ListFindNoCase(local.methodMixins, local.iMixableComponent)) {
-
-								// new secret magic sauce here is to get the mixable method to our framework method
-								// $pluginRunner. When called, we'll be able to see what the function name called
-								// was and will be able to run our stack of methods easily
-								variables.$class.mixins[local.iMixableComponent][local.iPluginMethods] = $pluginRunner;
-
-								// other secret sauce for complete backwards compatibility is to set the core scope
-								// here so that we don't create it when plugin injection runs. Here we set the method to
-								// $$pluginContinue and it passes back a data struct that $pluginRunner
-								// can recognize as a specific call to contine running the stack
-								variables.$class.mixins[local.iMixableComponent]["core"][local.iPluginMethods] = $pluginRunner;
-
-								// now we create a new struct $stacks that is a struct of method names with each
-								// method name being an array of plugin override methods. This will be put into
-								// variables.$stacks in any object that we mix plugins into and will allow
-								// $pluginRunner to have access to the functions :D
-								if (!StructKeyExists(variables.$class.mixins[local.iMixableComponent], "$stacks") || !StructKeyExists(variables.$class.mixins[local.iMixableComponent]["$stacks"], local.iPluginMethods)) {
-									variables.$class.mixins[local.iMixableComponent]["$stacks"][local.iPluginMethods] = [];
-								}
-
-								ArrayPrepend(variables.$class.mixins[local.iMixableComponent]["$stacks"][local.iPluginMethods], local.plugin[local.iPluginMethods]);
+								variables.$class.mixins[local.iMixableComponent][local.iPluginMethods] = local.plugin[local.iPluginMethods];
 							}
 						}
 					}

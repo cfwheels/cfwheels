@@ -3,12 +3,17 @@
 /**
  * Internal function.
  */
-public struct function $init(boolean restful=true, boolean methods=arguments.restful) {
+public struct function $init(
+	boolean restful=true,
+	boolean methods=arguments.restful,
+	boolean mapFormat=true
+) {
 
 	// Set up control variables.
 	variables.scopeStack = [];
 	variables.restful = arguments.restful;
 	variables.methods = arguments.restful || arguments.methods;
+	variables.mapFormat = arguments.mapFormat;
 
 	// Set up default variable constraints.
 	variables.constraints = {};

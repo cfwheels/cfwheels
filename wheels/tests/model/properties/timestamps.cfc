@@ -49,6 +49,18 @@ component extends="wheels.tests.Test" {
 		}
 	}
 
+	function test_createdAt_does_not_change_on_update() {
+		transaction {
+			post = model("Post").findOne();
+			orgCreatedAt = post.properties().createdAt;
+			post.update(body="here is some updated text");
+			post.reload();
+			newCreatedAt = post.properties().createdAt;
+			assert('orgCreatedAt eq newCreatedAt');
+			transaction action="rollback";
+		}
+	}
+
 	function test_explicit_timestamps_are_respected_on_create() {
 		transaction {
 			author = model("Author").findOne();
@@ -94,6 +106,11 @@ component extends="wheels.tests.Test" {
 			assert('DateDiff("s", utctime, post.updatedAt) lte 2');
 			transaction action="rollback";
 		}
+	}
+
+	function test_allowexplicittimestamps_is_not_an_object_property() {
+		author = model("Author").new();
+		assert("author.propertyIsBlank('allowExplicitTimestamps')");
 	}
 
 	function teardown() {

@@ -189,19 +189,31 @@ public string function $request(
 		$debugPoint("setup");
 	}
 
-	// Create the requested controller and call the action on it.
-	local.controller = controller(name=local.params.controller, params=local.params);
-	local.controller.processAction();
+	// Hi-jack any wheels controller requests for GUI
+	if(listFirst(local.params.controller, '.') EQ "wheels"){
+		if(!application.wheels.enablePublicComponent){
+			// Hard abort if GUI turned off
+			abort;
+		} else {
+			local.action = application.wheels.public[params.action];
+			local.action();
+		}
 
-	// If there is a delayed redirect pending we execute it here thus halting the rest of the request.
-	if (local.controller.$performedRedirect()) {
-		$location(argumentCollection=local.controller.getRedirect());
+	} else {
+		// Create the requested controller and call the action on it.
+		local.controller = controller(name=local.params.controller, params=local.params);
+		local.controller.processAction();
+
+		// If there is a delayed redirect pending we execute it here thus halting the rest of the request.
+		if (local.controller.$performedRedirect()) {
+			$location(argumentCollection=local.controller.getRedirect());
+		}
+
+		// Clear out the flash (note that this is not done for redirects since the processing does not get here).
+		local.controller.$flashClear();
+
+		return local.controller.response();
 	}
-
-	// Clear out the flash (note that this is not done for redirects since the processing does not get here).
-	local.controller.$flashClear();
-
-	return local.controller.response();
 }
 
 /**
@@ -258,7 +270,16 @@ public struct function $parseJsonBody(required struct params) {
 			// If what we have now is valid JSON, deserialize it to a struct and append to params.
 			// Call with "false" so existing form and URL values take precedence.
 			if (IsJSON(local.content)) {
-				StructAppend(arguments.params, DeserializeJSON(local.content), false);
+				local.deserializedContent = DeserializeJSON(local.content);
+				if (IsStruct(local.deserializedContent)) {
+					StructAppend(arguments.params, local.deserializedContent, false);
+				}
+				// If the incoming root element is an array, add it to params in the _json key
+				// This appears to follow Rails conventions
+				if (isArray(local.deserializedContent)) {
+					arguments.params['_json'] = local.deserializedContent;
+				}
+
 			}
 
 		}

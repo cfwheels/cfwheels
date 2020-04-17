@@ -46,6 +46,7 @@ if (StructKeyExists(server, "lucee")) {
 	include "events/onapplicationend.cfm";
 	include "events/onapplicationstart.cfm";
 	include "events/onerror.cfm";
+	include "events/onabort.cfm";
 	include "events/onmissingtemplate.cfm";
 	include "events/onsessionend.cfm";
 	include "events/onsessionstart.cfm";
@@ -59,6 +60,7 @@ if (StructKeyExists(server, "lucee")) {
 	include "wheels/events/onapplicationend.cfm";
 	include "wheels/events/onapplicationstart.cfm";
 	include "wheels/events/onerror.cfm";
+	include "wheels/events/onabort.cfm";
 	include "wheels/events/onmissingtemplate.cfm";
 	include "wheels/events/onsessionend.cfm";
 	include "wheels/events/onsessionstart.cfm";

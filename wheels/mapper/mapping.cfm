@@ -3,9 +3,14 @@
 /**
  * Internal function.
  */
-public struct function $draw(boolean restful=true, boolean methods=arguments.restful) {
+public struct function $draw(
+	boolean restful=true,
+	boolean methods=arguments.restful,
+	boolean mapFormat=variables.mapFormat
+) {
 	variables.restful = arguments.restful;
 	variables.methods = arguments.restful || arguments.methods;
+	variables.mapFormat = arguments.mapFormat;
 
 	// Start with clean scope stack that is locked for race conditions.
 	$simpleLock(name="mapper.reset", timeout=5, type="exclusive", execute="$resetScopeStack");

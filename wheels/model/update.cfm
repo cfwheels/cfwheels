@@ -172,7 +172,7 @@ public boolean function update(
 	$args(name="update", args=arguments);
 	$setProperties(
 		argumentCollection=arguments,
-		filterList="properties,parameterize,reload,validate,transaction,callbacks"
+		filterList="properties,parameterize,reload,validate,transaction,callbacks,allowExplicitTimestamps"
 	);
 	return save(
 		callbacks=arguments.callbacks,
@@ -234,11 +234,6 @@ public boolean function $update(required any parameterize, required boolean relo
 	if (hasChanged()) {
 		// Allow explicit assignment of the createdAt/updatedAt properties if allowExplicitTimestamps is true
 		local.allowExplicitTimestamps = StructKeyExists(this, "allowExplicitTimestamps") && this.allowExplicitTimestamps;
-		if (local.allowExplicitTimestamps && StructKeyExists(this, $get("timeStampOnCreateProperty")) && Len(this[$get("timeStampOnCreateProperty")])) {
-			// leave createdat unmolested
-		} else if (variables.wheels.class.timeStampingOnCreate) {
-			$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
-		}
 		if (local.allowExplicitTimestamps && StructKeyExists(this, $get("timeStampOnUpdateProperty")) && Len(this[$get("timeStampOnUpdateProperty")])) {
 			// leave updatedat unmolested
 		} else if ($get("setUpdatedAtOnCreate") && variables.wheels.class.timeStampingOnUpdate) {

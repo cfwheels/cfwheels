@@ -245,8 +245,16 @@ public void function addFormat(required string extension, required string mimeTy
  *
  * [section: Configuration]
  * [category: Routing]
+ *
+ * @restful Whether to turn on RESTful routing or not. Not recommended to set. Will probably be removed in a future version of wheels, as RESTful routes are the default.
+ * @methods If not RESTful, then specify allowed routes. Not recommended to set. Will probably be removed in a future version of wheels, as RESTful routes are the default.
+ * @mapFormat This is useful for providing formats via URL like `json`, `xml`, `pdf`, etc. Set to false to disable automatic .[format] generation for resource based routes
  */
-public struct function mapper(boolean restful=true, boolean methods=arguments.restful) {
+public struct function mapper(
+	boolean restful=true,
+	boolean methods=arguments.restful,
+	boolean mapFormat=true
+) {
 	return application[$appKey()].mapper.$draw(argumentCollection=arguments);
 }
 
@@ -499,12 +507,13 @@ public any function model(required string name) {
  */
 public string function obfuscateParam(required any param) {
 	local.rv = arguments.param;
-	if (IsValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param > 0 && Left(arguments.param, 1) != 0) {
-		local.iEnd = Len(arguments.param);
-		local.a = (10^local.iEnd) + Reverse(arguments.param);
+	local.param = ArrayToList(REMatch("[0-9]+",arguments.param),"");
+	if (Len(local.param) && local.param > 0 && Left(local.param, 1) != 0) {
+		local.iEnd = Len(local.param);
+		local.a = (10^local.iEnd) + Reverse(local.param);
 		local.b = 0;
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			local.b += Left(Right(arguments.param, local.i), 1);
+			local.b += Left(Right(local.param, local.i), 1);
 		}
 		if (IsValid("integer", local.a)) {
 			local.rv = FormatBaseN(local.b+154, 16) & FormatBaseN(BitXor(local.a, 461), 16);
@@ -647,6 +656,10 @@ public string function URLFor(
 	// For the Wheels default we set the controller and action arguments to what's in the params struct.
 	if (Len(arguments.route)) {
 		local.route = $findRoute(argumentCollection=arguments);
+		local.variables = local.route.variables;
+		local.rv &= local.route.pattern;
+	} else if (structKeyExists(local.params,"route") && len (local.params.route)) {
+		local.route = $findRoute(route=local.params.route);
 		local.variables = local.route.variables;
 		local.rv &= local.route.pattern;
 	} else {

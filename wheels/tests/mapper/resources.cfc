@@ -31,7 +31,7 @@ component extends="wheels.tests.Test" {
   // resource
 
   function test_resource_produces_routes() {
-    $clearROutes();
+    $clearRoutes();
     mapper = $mapper();
     mapper.$draw().resource(name="pigeon").end();
     routesLen = arrayLen(application.wheels.routes);
@@ -39,7 +39,7 @@ component extends="wheels.tests.Test" {
   }
 
   function test_resource_produces_routes_with_list() {
-    $clearROutes();
+    $clearRoutes();
     mapper = $mapper();
     mapper.$draw().resource(name="pigeon,pudding").end();
     routesLen = arrayLen(application.wheels.routes);
@@ -47,7 +47,7 @@ component extends="wheels.tests.Test" {
   }
 
   function test_resource_raises_error_with_list_and_nesting() {
-    $clearROutes();
+    $clearRoutes();
     mapper = $mapper().$draw();
     e = raised('mapper.resource(name="pigeon,pudding", nested=true).end()');
     assert('e eq "Wheels.InvalidResource"');
@@ -56,7 +56,7 @@ component extends="wheels.tests.Test" {
   // resources
 
   function test_resources_produces_routes() {
-    $clearROutes();
+    $clearRoutes();
     mapper = $mapper();
     mapper.$draw().resources(name="pigeons").end();
     routesLen = arrayLen(application.wheels.routes);
@@ -64,15 +64,31 @@ component extends="wheels.tests.Test" {
   }
 
   function test_resources_produces_routes_without_format() {
-    $clearROutes();
+    $clearRoutes();
     mapper = $mapper();
     mapper.$draw().resources(name="pigeons", mapFormat=false).end();
     routesLen = arrayLen(application.wheels.routes);
     assert("routesLen eq 8");
   }
 
+  function test_resources_produces_routes_without_format_set_by_mapper() {
+    $clearRoutes();
+    mapper = $mapper(mapFormat=false);
+    mapper.$draw().resources(name="pigeons").end();
+    routesLen = arrayLen(application.wheels.routes);
+    assert("routesLen eq 8");
+  }
+
+  function test_resources_produces_routes_without_format_set_by_mapper_override() {
+    $clearRoutes();
+    mapper = $mapper(mapFormat=false);
+    mapper.$draw().resources(name="pigeons", mapFormat=true).end();
+    routesLen = arrayLen(application.wheels.routes);
+    assert("routesLen eq 16");
+  }
+
   function test_resources_produces_routes_with_list() {
-    $clearROutes();
+    $clearRoutes();
     mapper = $mapper();
     mapper.$draw().resources(name="pigeons,birds").end();
     routesLen = arrayLen(application.wheels.routes);
@@ -80,7 +96,7 @@ component extends="wheels.tests.Test" {
   }
 
   function test_resources_produces_routes_with_list_without_format() {
-    $clearROutes();
+    $clearRoutes();
     mapper = $mapper();
     mapper.$draw().resources(name="pigeons,birds", mapFormat=false).end();
     routesLen = arrayLen(application.wheels.routes);
@@ -88,7 +104,7 @@ component extends="wheels.tests.Test" {
   }
 
   function test_resources_raises_error_with_list_and_nesting() {
-    $clearROutes();
+    $clearRoutes();
     mapper = $mapper().$draw();
     e = raised('mapper.resources(name="pigeon,birds", nested=true).end()');
     assert('e eq "Wheels.InvalidResource"');

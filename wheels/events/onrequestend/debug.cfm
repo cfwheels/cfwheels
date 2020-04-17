@@ -68,11 +68,21 @@
 			padding: 0 1px;
 			text-decoration: underline;
 		}
+		#wheels-debug-area a.btn {
+			background-color: #f5f5f5;
+			padding:5px 10px;
+			margin-right:5px;
+		}
 		#wheels-debug-area a:hover
 		{
 			background: #333;
 			color: #fff;
 			text-decoration: none;
+		}
+		#wheels-debug-area a.btn:hover {
+			background-color: #999;
+			padding:5px 10px;
+			margin-right:5px;
 		}
 	</style>
 </cfsavecontent>
@@ -80,7 +90,25 @@
 <cfoutput>
 
 <div id="wheels-debug-area">
+	<cfif $get("enablePublicComponent")>
 	<table>
+		<tr>
+			<td><a href="#urlFor(route="wheelsInfo")#" class="btn" target="_blank">Info</a></td>
+			<td><a href="#urlFor(route="wheelsRoutes")#" class="btn" target="_blank">Routes</a></td>
+			<td><a href="#urlFor(route="wheelsDocs")#" class="btn" target="_blank">Docs</a></td>
+			<td><a href="#urlFor(route="wheelsPackages", type="app")#" class="btn" target="_blank">Tests</a></td>
+			<cfif $get("enableMigratorComponent")>
+				<td><a href="#urlFor(route="wheelsMigrator")#" class="btn" target="_blank">Migrator</a></td>
+			</cfif>
+			<cfif $get("enablePluginsComponent")>
+				<td><a href="#urlFor(route="wheelsPlugins")#" class="btn" target="_blank">Plugins</a></td>
+			</cfif>
+		</tr>
+	</table>
+	<hr>
+	</cfif>
+	<table>
+		<cfif $get("enablePluginsComponent")>
 		<cfif ($get("showIncompatiblePlugins") AND Len(application.wheels.incompatiblePlugins)) OR Len(application.wheels.dependantPlugins)>
 			<tr>
 				<td><strong><span style="color:red;">Warnings:</span></strong></td>
@@ -96,14 +124,14 @@
 				</td>
 			</tr>
 		</cfif>
+		</cfif>
 		<tr>
 			<td><strong>Application:</strong></td>
-			<td>#application.applicationName# [<cfif NOT Len($get("reloadPassword"))><a href="#local.baseReloadURL#true">Reload</a></cfif><cfif NOT Len($get("reloadPassword"))>,</cfif><a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=routes&type=app">View Routes</a><cfif local.hasAppTests>,</cfif><cfif local.hasAppTests><a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=app">Run Tests</a>, <a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=app">View Tests</a></cfif>]</td>
+			<td>#application.applicationName#<cfif NOT Len($get("reloadPassword"))>[<a href="#local.baseReloadURL#true">Reload</a></cfif><cfif NOT Len($get("reloadPassword"))>]</cfif></td>
 		</tr>
 		<tr>
 			<td><strong>Framework:</strong></td>
-			<td><a href="https://cfwheels.org/" target="_blank">CFWheels</a> #$get("version")# [<a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=docs&type=core">View Docs</a><cfif local.hasFrameworkTests>, <a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=core">Run Tests</a>, <a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=core">View Tests</a></cfif><cfif local.hasFrameworkBuildFile>, <a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=build">Build Release</a></cfif>]
-			</td>
+			<td><a href="https://cfwheels.org/" target="_blank">CFWheels</a> #$get("version")#</td>
 		</tr>
 		<tr>
 			<td><strong>Environment:</strong></td>
@@ -121,7 +149,7 @@
 		</tr>
 		<tr>
 			<td><strong>Data Source:</strong></td>
-			<td>#capitalize($get("dataSourceName"))# [<a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=migrate">Migrations</a>]</td>
+			<td>#capitalize($get("dataSourceName"))#</td>
 		</tr>
 		<cfif StructKeyExists(application.wheels, "adapterName")>
 			<tr>
@@ -137,10 +165,12 @@
 			<td><strong>URL Obfuscation:</strong></td>
 			<td><cfif $get("obfuscateUrls")>On<cfelse>Off</cfif></td>
 		</tr>
-		<tr>
-			<td><strong>Plugins:</strong></td>
-			<td><cfif StructCount($get("plugins")) IS NOT 0><cfset local.count = 0><cfloop collection="#$get('plugins')#" item="local.i"><cfset local.count = local.count + 1><a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#local.i#">#local.i#<cfif StructCount($get("pluginMeta")) IS NOT 0 && structKeyExists($get("pluginMeta"), local.i)> #$get("pluginMeta")[local.i]['version']#</cfif></a><cfif DirectoryExists("#GetDirectoryFromPath(GetBaseTemplatePath())#plugins/#LCase(local.i)#/tests")> [<a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=#LCase(local.i)#">Run Tests</a>, <a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=#LCase(local.i)#">View Tests</a>]</cfif><cfif StructCount($get("plugins")) GT local.count><br/></cfif></cfloop><cfelse>None</cfif></td>
-		</tr>
+		<cfif $get("enablePluginsComponent")>
+			<tr>
+				<td><strong>Plugins:</strong></td>
+				<td><cfif StructCount($get("plugins")) IS NOT 0><cfset local.count = 0><cfloop collection="#$get('plugins')#" item="local.i"><cfset local.count = local.count + 1><a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#local.i#">#local.i#<cfif StructCount($get("pluginMeta")) IS NOT 0 && structKeyExists($get("pluginMeta"), local.i)> #$get("pluginMeta")[local.i]['version']#</cfif></a><cfif DirectoryExists("#GetDirectoryFromPath(GetBaseTemplatePath())#plugins/#LCase(local.i)#/tests")> [<a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=#LCase(local.i)#">Run Tests</a>, <a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=#LCase(local.i)#">View Tests</a>]</cfif><cfif StructCount($get("plugins")) GT local.count><br/></cfif></cfloop><cfelse>None</cfif></td>
+			</tr>
+		</cfif>
 		<cfif StructKeyExists(request.wheels.params, "route")>
 			<tr>
 				<td><strong>Route:</strong></td>

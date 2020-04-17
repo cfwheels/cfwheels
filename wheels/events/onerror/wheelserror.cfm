@@ -1,4 +1,5 @@
 <cfoutput>
+<div class="ui container">
 <h1>#arguments.wheelsError.type#</h1>
 <p><strong>#REReplace(arguments.wheelsError.message, "`([^`]*)`", "<tt>\1</tt>", "all")#</strong></p>
 <cfif StructKeyExists(arguments.wheelsError, "extendedInfo") AND Len(arguments.wheelsError.extendedInfo)>
@@ -18,7 +19,7 @@
 	<cfif local.i.template Does Not Contain local.path & "wheels" AND local.i.template IS NOT local.path & "root.cfm" AND local.i.template IS NOT local.path & "index.cfm" AND IsDefined("application.wheels.rewriteFile") AND local.i.template IS NOT local.path & application.wheels.rewriteFile AND local.i.template IS NOT local.path & "Application.cfc" AND local.i.template Does Not Contain local.path & "plugins">
 		<cfset local.lookupWorked = true>
 		<cftry>
-			<cfsavecontent variable="local.fileContents"><cfset local.pos = 0><pre><code><cfloop file="#arguments.wheelsError.tagContext[local.errorPos].template#" index="local.i"><cfset local.pos = local.pos + 1><cfif local.pos GTE (arguments.wheelsError.tagContext[local.errorPos].line-2) AND local.pos LTE (arguments.wheelsError.tagContext[local.errorPos].line+2)><cfif local.pos IS arguments.wheelsError.tagContext[local.errorPos].line><span style="color: red;">#local.pos#: #HTMLEditFormat(local.i)#</span><cfelse>#local.pos#: #HTMLEditFormat(local.i)#</cfif>#Chr(13)##Chr(10)#</cfif></cfloop></code></pre></cfsavecontent>
+			<cfsavecontent variable="local.fileContents"><cfset local.pos = 0><pre style="overflow-x: scroll; padding-bottom:10px;"><code><cfloop file="#arguments.wheelsError.tagContext[local.errorPos].template#" index="local.i"><cfset local.pos = local.pos + 1><cfif local.pos GTE (arguments.wheelsError.tagContext[local.errorPos].line-2) AND local.pos LTE (arguments.wheelsError.tagContext[local.errorPos].line+2)><cfif local.pos IS arguments.wheelsError.tagContext[local.errorPos].line><span style="color: red;">#local.pos#: #HTMLEditFormat(local.i)#</span><cfelse>#local.pos#: #HTMLEditFormat(local.i)#</cfif>#Chr(13)##Chr(10)#</cfif></cfloop></code></pre></cfsavecontent>
 		<cfcatch>
 			<cfset local.lookupWorked = false>
 		</cfcatch>
@@ -40,4 +41,5 @@
 	</cfloop>
 	</p>
 </cfif>
+</div>
 </cfoutput>

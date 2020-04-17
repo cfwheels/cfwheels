@@ -71,7 +71,12 @@ component extends="wheels.tests.Test" {
     result = c.pluralize("book");
     assert('result eq "books"');
   }
+  function test_override_a_framework_method() {
+    result = c.singularize(word="hahahah");
+    assert('result eq "$$completelyOverridden"');
+  }
 
+  /*
   function test_chain_return_values_from_multiple_plugin_overrides() {
     result = c.URLFor(controller="wheels", action="wheels");
     valid = findNoCase("urlfor01&urlfor02", result);
@@ -82,11 +87,6 @@ component extends="wheels.tests.Test" {
     result = d.URLFor(controller="wheels", action="wheels");
     valid = findNoCase("urlfor01&urlfor02", result);
     assert('valid neq 0');
-  }
-
-  function test_override_a_framework_method() {
-    result = c.singularize(word="hahahah");
-    assert('result eq "$$completelyOverridden"');
   }
 
   // our $pluginRunner will error out due to core.onMissingMethod() being called
@@ -104,6 +104,7 @@ component extends="wheels.tests.Test" {
     r = raised("m.onMissingMethod(argumentCollection=args)");
     assert('r eq "Wheels.MethodNotFound"');
   }
+*/
 
   function test_running_plugin_only_method() {
     result = c.$$pluginOnlyMethod();

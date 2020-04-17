@@ -158,8 +158,8 @@ component extends="Base" {
 	public void function addColumn(
 		required string table,
 		required string columnType,
+		required string columnName="",
 		string afterColumn="",
-		string columnName="",
 		string referenceName="",
 		string default,
 		boolean null,
@@ -339,10 +339,11 @@ component extends="Base" {
     */
 	public void function addIndex(
 		required string table,
-		required string columnNames,
+		string columnNames,
 		boolean unique = "false",
 		string indexName = objectCase("#arguments.table#_#ListFirst(arguments.columnNames)#")
 	) {
+		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
 		$execute(this.adapter.addIndex(argumentCollection=arguments));
 		announce("Added index to column(s) #arguments.columnNames# in table #arguments.table#");
 	}
