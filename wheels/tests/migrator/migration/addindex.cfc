@@ -46,7 +46,10 @@ component extends="wheels.tests.Test" {
 		sql="SELECT * FROM query WHERE index_name = '#indexName#'";
 
 		actual = $query(query=info, dbtype="query", sql=sql);
-    	assert("actual.recordCount eq 2");
+
+		// Added the ListLen check here for CF2018 because its cfdbinfo behaves a little differently.
+		// It returns the index for multiple columns in one record where as Lucee returns multiple.
+		assert("actual.recordCount eq 2 OR ListLen(actual['column_name'][1]) IS 2");
 		assert("actual.non_unique");
 	}
 
