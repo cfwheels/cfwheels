@@ -10,6 +10,7 @@
 
 - Added the `refresh` url parameter for auto refreshing test framework html - [#986](https://github.com/cfwheels/cfwheels/issues/986) - [Adam Chapman]
 - Allow custom migrator templates by scanning the `/migrator/templates` directory - [Adam Chapman]
+- Minimum Lucee 5 version is now 5.3.2.77
 
 <a name="2.1"></a>
 
