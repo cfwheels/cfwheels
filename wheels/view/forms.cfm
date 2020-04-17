@@ -91,7 +91,7 @@ public string function startFormTag(
 	// Check to see if a route exists if not specified
 	if(!Len(arguments.route) && Len(arguments.controller) && Len(arguments.action) && Len(arguments.method)){
 		for (local.route in application.wheels.routes){
-			if (local.route.controller == arguments.controller && local.route.action == arguments.action && ListFindNoCase(local.route.methods,arguments.method)){
+			if (StructKeyExists(local.route, "controller") && local.route.controller == arguments.controller && StructKeyExists(local.route, "action") && local.route.action == arguments.action && ListFindNoCase(local.route.methods,arguments.method)){
 				arguments.route = local.route.name;
 				local.routeAndMethodMatch = true;
 				break;
