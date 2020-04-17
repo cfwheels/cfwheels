@@ -108,4 +108,11 @@ component extends="wheels.tests.Test" {
 		r = _controller.startFormTag(argumentcollection=args);
 		assert("e eq r");
 	}
+
+	function test_with_controller_and_action() {
+		argsction = _controller.urlfor(argumentCollection=args, action="test");
+		e = '<form action="#argsction#" method="post">' & _controller.authenticityTokenField();
+		r = _controller.startFormTag(argumentcollection=args, action="test");
+		assert("e eq r");
+	}
 }

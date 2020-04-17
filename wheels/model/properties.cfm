@@ -49,6 +49,9 @@ public void function protectedProperties(string properties="") {
  * @sql An SQL expression to use to calculate the property value.
  * @label A custom label for this property to be referenced in the interface and error messages.
  * @defaultValue A default value for this property.
+ * @select Whether to include this property by default in SELECT statements
+ * @dataType Specify the column dataType for this property
+ * @automaticValidations Enable / disable automatic validations for this property.
  */
 public void function property(
 	required string name,
@@ -57,7 +60,8 @@ public void function property(
 	string label="",
 	string defaultValue,
 	boolean select="true",
-	string dataType="char"
+	string dataType="char",
+	boolean automaticValidations
 ) {
 	// validate setup
 	if (Len(arguments.column) && Len(arguments.sql)) {
@@ -95,6 +99,9 @@ public void function property(
 	}
 	if (StructKeyExists(arguments, "defaultValue")) {
 		variables.wheels.class.mapping[arguments.name].defaultValue = arguments.defaultValue;
+	}
+	if (StructKeyExists(arguments, "automaticValidations")) {
+		variables.wheels.class.mapping[arguments.name].automaticValidations = arguments.automaticValidations;
 	}
 }
 
@@ -298,10 +305,12 @@ public struct function properties(boolean returnIncluded=true) {
 		if (IsCustomFunction(this[local.key])) {
 			continue;
 		}
-		// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
-		local.listPosition = ListFindNoCase(propertyNames(), local.key);
-		if (local.listPosition) {
-			local.key = ListGetAt(propertyNames(), local.listPosition);
+		if ($get("resetPropertiesStructKeyCase")) {
+			// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
+			local.listPosition = ListFindNoCase(propertyNames(), local.key);
+			if (local.listPosition) {
+				local.key = ListGetAt(propertyNames(), local.listPosition);
+			}
 		}
 		// set property from the this scope in the struct that we will return
 		local.rv[local.key] = this[local.key];

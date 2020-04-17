@@ -83,8 +83,11 @@ public void function $runOnRequestStart(required targetPage) {
 		}
 		if (!local.makeException) {
 			$header(statusCode=503, statustext="Service Unavailable");
-			$includeAndOutput(template="#application.wheels.eventPath#/onmaintenance.cfm");
-			abort;
+
+			// Set the content to be displayed in maintenance mode to a request variable and exit the function.
+			// This variable is then checked in the Wheels $request function (which is what sets what to render).
+			request.$wheelsAbortContent = $includeAndReturnOutput($template="#application.wheels.eventPath#/onmaintenance.cfm");
+      		return;
 		}
 	}
 	if (Right(arguments.targetPage, 4) == ".cfc") {

@@ -281,6 +281,11 @@ private string function $copyTemplateMigrationAndRename(
 	string migrationPrefix=""
 ) {
 	local.templateFile = this.paths.templates & "/" & arguments.templateName & ".cfc";
+	local.lastDirectory = ListLast(this.paths.migrate, "/");
+	local.customTemplateFile = ReplaceNoCase(this.paths.migrate, "/#local.lastDirectory#/", "/templates/") & arguments.templateName & ".cfc";
+	if (FileExists(local.customTemplateFile)) {
+		local.templateFile = local.customTemplateFile;
+	}
 	local.extendsPath = "wheels.migrator.Migration";
 	if (!FileExists(local.templateFile)) {
 		return "Template #arguments.templateName# could not be found";

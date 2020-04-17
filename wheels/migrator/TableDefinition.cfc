@@ -120,8 +120,8 @@ component extends="Base" {
 	* [category: Table Definition Functions]
 	*/
 	public any function binary(
-		string columnNames, 
-		string default, 
+		string columnNames,
+		string default,
 		boolean null
 	) {
 		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
@@ -141,8 +141,8 @@ component extends="Base" {
 	* [category: Table Definition Functions]
 	*/
 	public any function boolean(
-		string columnNames, 
-		string default, 
+		string columnNames,
+		string default,
 		boolean null
 	) {
 		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
@@ -162,8 +162,8 @@ component extends="Base" {
 	* [category: Table Definition Functions]
 	*/
 	public any function date(
-		string columnNames, 
-		string default, 
+		string columnNames,
+		string default,
 		boolean null
 	) {
 		$combineArguments(args=arguments, combine="columnNames,columnName", required=true);
@@ -292,7 +292,7 @@ component extends="Base" {
  	* [category: Table Definition Functions]
  	*/
 	public any function char(
-		required string columnNames,
+		string columnNames,
 		any limit,
 		string default,
 		boolean null

@@ -172,7 +172,7 @@ public boolean function update(
 	$args(name="update", args=arguments);
 	$setProperties(
 		argumentCollection=arguments,
-		filterList="properties,parameterize,reload,validate,transaction,callbacks"
+		filterList="properties,parameterize,reload,validate,transaction,callbacks,allowExplicitTimestamps"
 	);
 	return save(
 		callbacks=arguments.callbacks,

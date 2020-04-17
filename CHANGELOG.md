@@ -1,6 +1,31 @@
-# 2.1.0-Beta (TBD)
+<a name="2.2"></a>
 
-### Potentially breaking changes
+# [2.2](TBC)
+
+### View Enhancements
+
+- Added the `required` argument to `imageTag` to suppress exceptions if using non-existent files [#979](https://github.com/cfwheels/cfwheels/issues/979) - [Adam Chapman, Michael Diederich]
+
+### Miscellaneous
+
+- Added the `refresh` url parameter for auto refreshing test framework html - [#986](https://github.com/cfwheels/cfwheels/issues/986) - [Adam Chapman]
+- Allow custom migrator templates by scanning the `/migrator/templates` directory - [Adam Chapman]
+- Minimum Lucee 5 version is now 5.3.2.77
+
+<a name="2.1"></a>
+
+# [2.1](https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0) (04/12/2020)
+
+### Bug Fixes
+
+- Fixed pagination order ambiguous column name exception - [#980](https://github.com/cfwheels/cfwheels/issues/#980) [Adam Chapman, Mike Lange]
+- Renames findLast() to findLastOne() for lucee@5.3.5+92 upwards compatibility [#988](https://github.com/cfwheels/cfwheels/issues/#988)
+
+<a name="2.1.0-beta"></a>
+
+# [2.1.0-Beta](https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0-beta) (02/24/2020)
+
+### Potentially Breaking Changes
 
 - The new CFWheels internal GUI is more isolated and runs in it's own component: previously this was extending the developers main `Controller.cfc` which caused multiple issues. The migrator, test runner and routing GUIs have therefore all been re-written.
 - The plugins system behaviour no longer chains multiple functions of the same name as this was a major performance hit. It's recommended that plugin authors check their plugins to run on 2.1

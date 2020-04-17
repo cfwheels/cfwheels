@@ -79,7 +79,7 @@ public any function findAll(
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.item = primaryKeys(local.i);
 				if (!ListFindNoCase(local.compareList, local.item) && !ListFindNoCase(local.compareList, tableName() & "." & local.item)) {
-					arguments.order = ListAppend(arguments.order, local.item);
+					arguments.order = ListAppend(arguments.order, "#tableName()#.#local.item#");
 				}
 			}
 		} else {
@@ -135,8 +135,14 @@ public any function findAll(
 					// this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
 					if (Len(arguments.where) && Len(arguments.include)) {
 						arguments.where = "(#arguments.where#) AND (#local.paginationWhere#)";
+						if (IsNumeric(arguments.parameterize)) {
+							arguments.parameterize += local.values.recordCount;
+						}
 					} else {
 						arguments.where = local.paginationWhere;
+						if (IsNumeric(arguments.parameterize)) {
+							arguments.parameterize = local.values.recordCount;
+						}
 					}
 				}
 			}
@@ -198,7 +204,7 @@ public any function findAll(
 		}
 
 		// add where clause parameters to the generic sql info
-		local.sql = $addWhereClauseParameters(sql=local.sql, where=local.originalWhere);
+		local.sql = $addWhereClauseParameters(sql=local.sql, where=local.originalWhere, parameterize=arguments.parameterize);
 
 		// Create a struct in the request scope to store cached queries.
 		if (!StructKeyExists(request.wheels, variables.wheels.class.modelName)) {
@@ -386,14 +392,14 @@ public any function findFirst(string property="#primaryKey()#", string $sort="AS
 /**
  * Fetches the last record ordered by primary key value.
  * Use the `property` argument to order by something else.
- * Returns a model object.
+ * Returns a model object. Formerly known as findLast.
  *
  * [section: Model Class]
  * [category: Read Functions]
  *
  * @property [see:findFirst].
  */
-public any function findLast(string property) {
+public any function findLastOne(string property) {
 	arguments.$sort = "DESC";
 	return findFirst(argumentCollection=arguments);
 }
