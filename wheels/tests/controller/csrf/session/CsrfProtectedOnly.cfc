@@ -35,7 +35,7 @@ component extends="wheels.tests.Test" {
 
   function test_csrf_protection_with_invalid_authenticityToken_on_post_request() {
     request.cgi.request_method = "POST";
-    params = { controller="csrfProtectedOnly", action="create", authenticityToken="#CSRFGenerateToken()#1" };
+    params = { controller="csrfProtectedOnly", action="create", authenticityToken="1#CSRFGenerateToken()#" };
     _controller = controller("csrfProtectedOnly", params);
 
     try {
@@ -76,10 +76,10 @@ component extends="wheels.tests.Test" {
   }
 
   function test_csrf_protection_with_invalid_x_csrf_token_header_on_ajax_post_request() {
-    request.$wheelsHeaders["X-CSRF-TOKEN"] = "#CSRFGenerateToken()#1";
+    request.$wheelsHeaders["X-CSRF-TOKEN"] = "1#CSRFGenerateToken()#";
     request.cgi.request_method = "POST";
     request.cgi.http_x_requested_with = "XMLHTTPRequest";
-    params = { controller="csrfProtectedOnly", action="create", authenticityToken="#CSRFGenerateToken()#1" };
+    params = { controller="csrfProtectedOnly", action="create", authenticityToken="1#CSRFGenerateToken()#" };
     _controller = controller("csrfProtectedOnly", params);
 
     try {
@@ -112,7 +112,7 @@ component extends="wheels.tests.Test" {
 
   function test_skipped_csrf_protection_on_post_request_with_invalid_authenticityToken() {
     request.cgi.request_method = "POST";
-    params = { controller="csrfProtectedOnly", action="index", authenticityToken="#CSRFGenerateToken()#1" };
+    params = { controller="csrfProtectedOnly", action="index", authenticityToken="1#CSRFGenerateToken()#" };
     _controller = controller("csrfProtectedOnly", params);
 
     _controller.processAction("create", params);
@@ -141,10 +141,10 @@ component extends="wheels.tests.Test" {
   }
 
   function test_skipped_csrf_protection_on_ajax_post_request_with_invalid_x_csrf_token_header() {
-    request.$wheelsHeaders["X-CSRF-TOKEN"] = "#CSRFGenerateToken()#1";
+    request.$wheelsHeaders["X-CSRF-TOKEN"] = "1#CSRFGenerateToken()#";
     request.cgi.request_method = "POST";
     request.cgi.http_x_requested_with = "XMLHTTPRequest";
-    params = { controller="csrfProtectedOnly", action="index", authenticityToken="#CSRFGenerateToken()#1" };
+    params = { controller="csrfProtectedOnly", action="index", authenticityToken="1#CSRFGenerateToken()#" };
     _controller = controller("csrfProtectedOnly", params);
 
     _controller.processAction("create", params);

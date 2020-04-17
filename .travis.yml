@@ -11,7 +11,7 @@ env:
     - PROFILE=jetty,lucee,subfolder PARAM=testParallelStart=true
     - PROFILE=jetty,lucee,mysql PARAM=none
     - PROFILE=jetty,lucee,postgresql PARAM=none
-    - PROFILE=jetty,lucee PARAM=luceeVersion=http://release.lucee.org/rest/update/provider/express/5.2.1.9
+    - PROFILE=jetty,lucee PARAM=luceeVersion=http://release.lucee.org/rest/update/provider/express/5.3.2.77
 
 before_script: #prepare MySQL and PostgresSQL databases
   - mysql -e 'create database test;'

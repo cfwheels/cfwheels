@@ -207,12 +207,12 @@ component extends="wheels.tests.Test" {
 
 	function test_calculated_property_without_distinct() {
 		authors = model("author").findAll(select="id, firstName, lastName, numberofitems");
-		assert('authors.recordCount IS 8');
+		assert('authors.recordCount IS 10');
 	}
 
 	function test_select_aggregate_calculated_property_with_distinct() {
 		authors = model("author").findAll(select="id, firstName, lastName, numberofitems", distinct=true);
-		assert('authors.recordCount IS 8');
+		assert('authors.recordCount IS 10');
 	}
 
 	function test_aggregate_calculated_property_with_distinct() {
@@ -227,7 +227,7 @@ component extends="wheels.tests.Test" {
 
 	function test_calculated_properties_with_included_model_with_distinct() {
 		authors = model("author").findAll(select="id, firstName, lastName, numberofitems, titlealias", include="posts", distinct=true);
-		assert('authors.recordCount IS 11');
+		assert('authors.recordCount IS 13');
 	}
 
 }

@@ -26,17 +26,17 @@ public any function create(
 	boolean allowExplicitTimestamps=false
 ) {
 	$args(name="create", args=arguments);
-	local.parameterize = arguments.parameterize;
-	StructDelete(arguments, "parameterize");
-	local.validate = arguments.validate;
-	StructDelete(arguments, "validate");
+	$setProperties(
+		argumentCollection=arguments,
+		filterList="properties,parameterize,reload,validate,transaction,callbacks,allowExplicitTimestamps"
+	);
 	local.rv = new(argumentCollection=arguments);
 	local.rv.save(
 		callbacks=arguments.callbacks,
-		parameterize=local.parameterize,
+		parameterize=arguments.parameterize,
 		reload=arguments.reload,
 		transaction=arguments.transaction,
-		validate=local.validate,
+		validate=arguments.validate,
 		allowExplicitTimestamps=arguments.allowExplicitTimestamps
 	);
 	return local.rv;

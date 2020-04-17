@@ -90,7 +90,7 @@ component extends="wheels.tests.Test" {
 
   function test_csrf_protection_with_invalid_authenticityToken_on_post_request() {
     request.cgi.request_method = "POST";
-    params = { controller="csrfProtectedWithException", action="create", authenticityToken="#CSRFGenerateToken()#1" };
+    params = { controller="csrfProtectedWithException", action="create", authenticityToken="1#CSRFGenerateToken()#" };
     _controller = controller("csrfProtectedWithException", params);
 
     try {
@@ -129,7 +129,7 @@ component extends="wheels.tests.Test" {
 
   function test_csrf_protection_with_invalid_authenticityToken_on_patch_request() {
     request.cgi.request_method = "PATCH";
-    params = { controller="csrfProtectedWithException", action="update", authenticityToken="#CSRFGenerateToken()#1" };
+    params = { controller="csrfProtectedWithException", action="update", authenticityToken="1#CSRFGenerateToken()#" };
     _controller = controller("csrfProtectedWithException", params);
 
     try {
@@ -168,7 +168,7 @@ component extends="wheels.tests.Test" {
 
   function test_csrf_protection_with_invalid_authenticityToken_on_delete_request() {
     request.cgi.request_method = "DELETE";
-    params = { controller="csrfProtectedWithException", action="delete", authenticityToken="#CSRFGenerateToken()#1" };
+    params = { controller="csrfProtectedWithException", action="delete", authenticityToken="1#CSRFGenerateToken()#" };
     _controller = controller("csrfProtectedWithException", params);
 
     try {
@@ -209,7 +209,7 @@ component extends="wheels.tests.Test" {
   }
 
   function test_csrf_protection_with_invalid_x_csrf_token_header_on_ajax_post_request() {
-    request.$wheelsHeaders["X-CSRF-TOKEN"] = "#CSRFGenerateToken()#1";
+    request.$wheelsHeaders["X-CSRF-TOKEN"] = "1#CSRFGenerateToken()#";
     request.cgi.request_method = "POST";
     request.cgi.http_x_requested_with = "XMLHTTPRequest";
     params = { controller="csrfProtectedWithException", action="create" };
@@ -253,7 +253,7 @@ component extends="wheels.tests.Test" {
   }
 
   function test_csrf_protection_with_invalid_x_csrf_token_header_on_ajax_patch_request() {
-    request.$wheelsHeaders["X-CSRF-TOKEN"] = "#CSRFGenerateToken()#1";
+    request.$wheelsHeaders["X-CSRF-TOKEN"] = "1#CSRFGenerateToken()#";
     request.cgi.request_method = "PATCH";
     request.cgi.http_x_requested_with = "XMLHTTPRequest";
     params = { controller="csrfProtectedWithException", action="update" };
@@ -297,7 +297,7 @@ component extends="wheels.tests.Test" {
   }
 
   function test_csrf_protection_with_invalid_x_csrf_token_header_on_ajax_delete_request() {
-    request.$wheelsHeaders["X-CSRF-TOKEN"] = "#CSRFGenerateToken()#1";
+    request.$wheelsHeaders["X-CSRF-TOKEN"] = "1#CSRFGenerateToken()#";
     request.cgi.request_method = "DELETE";
     request.cgi.http_x_requested_with = "XMLHTTPRequest";
     params = { controller="csrfProtectedWithException", action="delete" };

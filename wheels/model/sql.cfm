@@ -530,6 +530,13 @@ public array function $addWhereClauseParameters(required array sql, required str
 				ArrayAppend(local.originalValues, ReplaceList(Chr(7) & Mid(arguments.where, local.temp.pos[4], local.temp.len[4]) & Chr(7), "#Chr(7)#(,)#Chr(7)#,#Chr(7)#','#Chr(7)#,#Chr(7)#"",""#Chr(7)#,#Chr(7)#", ",,,,,,"));
 			}
 		}
+		if (StructKeyExists(arguments, "parameterize") && IsNumeric(arguments.parameterize) && arguments.parameterize != ArrayLen(local.originalValues)) {
+			Throw(
+				type="Wheels.ParameterMismatch",
+				message="Wheels found #ArrayLen(local.originalValues)# parameters in the query string but was instructed to parameterize #arguments.parameterize#.",
+				extendedInfo="Verify that the number of parameters specified in the `where` argument mathes the number in the parameterize argument."
+			);
+		}
 		local.pos = ArrayLen(local.originalValues);
 		local.iEnd = ArrayLen(arguments.sql);
 		for (local.i=local.iEnd; local.i > 0; local.i--) {

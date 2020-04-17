@@ -26,8 +26,14 @@ string function authenticityTokenField() {
   // Store a new authenticity token.
   local.authenticityToken = $generateAuthenticityToken();
 
-  // Return hidden field containing new authenticity token.
-  return hiddenFieldTag(name="authenticityToken", value=local.authenticityToken);
+  // Create hidden field containing the authenticity token.
+  local.rv = hiddenFieldTag(name="authenticityToken", value=local.authenticityToken);
+
+  // Delete the id="authenticityToken" part of the string.
+  // There could be multiple forms on a page and duplicate "id" attributes are not allowed in HTML.
+  local.rv = Replace(local.rv, ' id="authenticityToken" ', " ");
+
+  return local.rv;
 }
 
 </cfscript>
