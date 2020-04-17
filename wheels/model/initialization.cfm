@@ -148,38 +148,47 @@ public any function $initModelClass(required string name, required string path) 
 					setPrimaryKey(local.property);
 				}
 				if (variables.wheels.class.automaticValidations && !ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", local.property)) {
-					local.defaultValidationsAllowBlank = variables.wheels.class.properties[local.property].nullable;
 
-					// primary keys should be allowed to be blank
-					if (ListFindNoCase(primaryKeys(), local.property)) {
-						local.defaultValidationsAllowBlank = true;
+					// check if automatic validations have been turned off specifically for this property before proceeding
+					local.propertyAllowsAutomaticValidations = true;
+					if (StructKeyExists(variables.wheels.class.mapping, local.property) && StructKeyExists(variables.wheels.class.mapping[local.property], "automaticValidations") && !variables.wheels.class.mapping[local.property].automaticValidations) {
+						local.propertyAllowsAutomaticValidations = false;
 					}
-					if (!ListFindNoCase(primaryKeys(), local.property) && !variables.wheels.class.properties[local.property].nullable && !$validationExists(property=local.property, validation="validatesPresenceOf")) {
-						if (Len(local.columns["column_default_value"][local.i])) {
-							validatesPresenceOf(properties=local.property, when="onUpdate");
-						} else {
-							validatesPresenceOf(properties=local.property);
+
+			        if (local.propertyAllowsAutomaticValidations) {
+						local.defaultValidationsAllowBlank = variables.wheels.class.properties[local.property].nullable;
+
+						// primary keys should be allowed to be blank
+						if (ListFindNoCase(primaryKeys(), local.property)) {
+							local.defaultValidationsAllowBlank = true;
 						}
-					}
+						if (!ListFindNoCase(primaryKeys(), local.property) && !variables.wheels.class.properties[local.property].nullable && !$validationExists(property=local.property, validation="validatesPresenceOf")) {
+							if (Len(local.columns["column_default_value"][local.i])) {
+								validatesPresenceOf(properties=local.property, when="onUpdate");
+							} else {
+								validatesPresenceOf(properties=local.property);
+							}
+						}
 
-					// always allow blank if a database default or validatesPresenceOf() has been set
-					if (Len(local.columns["column_default_value"][local.i]) || $validationExists(property=local.property, validation="validatesPresenceOf")) {
-						local.defaultValidationsAllowBlank = true;
-					}
+						// always allow blank if a database default or validatesPresenceOf() has been set
+						if (Len(local.columns["column_default_value"][local.i]) || $validationExists(property=local.property, validation="validatesPresenceOf")) {
+							local.defaultValidationsAllowBlank = true;
+						}
 
-					// set length validations if the developer has not
-					if (variables.wheels.class.properties[local.property].validationtype == "string" && !$validationExists(property=local.property, validation="validatesLengthOf")) {
-						validatesLengthOf(properties=local.property, allowBlank=local.defaultValidationsAllowBlank, maximum=variables.wheels.class.properties[local.property].size);
-					}
+						// set length validations if the developer has not
+						if (variables.wheels.class.properties[local.property].validationtype == "string" && !$validationExists(property=local.property, validation="validatesLengthOf")) {
+							validatesLengthOf(properties=local.property, allowBlank=local.defaultValidationsAllowBlank, maximum=variables.wheels.class.properties[local.property].size);
+						}
 
-					// set numericality validations if the developer has not
-					if (ListFindNoCase("integer,float", variables.wheels.class.properties[local.property].validationtype) && !$validationExists(property=local.property, validation="validatesNumericalityOf")) {
-						validatesNumericalityOf(properties=local.property, allowBlank=local.defaultValidationsAllowBlank, onlyInteger=(variables.wheels.class.properties[local.property].validationtype == "integer"));
-					}
+						// set numericality validations if the developer has not
+						if (ListFindNoCase("integer,float", variables.wheels.class.properties[local.property].validationtype) && !$validationExists(property=local.property, validation="validatesNumericalityOf")) {
+							validatesNumericalityOf(properties=local.property, allowBlank=local.defaultValidationsAllowBlank, onlyInteger=(variables.wheels.class.properties[local.property].validationtype == "integer"));
+						}
 
-					// set date validations if the developer has not (checks both dates or times as per the IsDate() function)
-					if (variables.wheels.class.properties[local.property].validationtype == "datetime" && !$validationExists(property=local.property, validation="validatesFormatOf")) {
-						validatesFormatOf(properties=local.property, allowBlank=local.defaultValidationsAllowBlank, type="date");
+						// set date validations if the developer has not (checks both dates or times as per the IsDate() function)
+						if (variables.wheels.class.properties[local.property].validationtype == "datetime" && !$validationExists(property=local.property, validation="validatesFormatOf")) {
+							validatesFormatOf(properties=local.property, allowBlank=local.defaultValidationsAllowBlank, type="date");
+						}
 					}
 				}
 				variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, local.property);

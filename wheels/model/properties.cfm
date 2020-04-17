@@ -51,6 +51,7 @@ public void function protectedProperties(string properties="") {
  * @defaultValue A default value for this property.
  * @select Whether to include this property by default in SELECT statements
  * @dataType Specify the column dataType for this property
+ * @automaticValidations Enable / disable automatic validations for this property.
  */
 public void function property(
 	required string name,
@@ -59,7 +60,8 @@ public void function property(
 	string label="",
 	string defaultValue,
 	boolean select="true",
-	string dataType="char"
+	string dataType="char",
+	boolean automaticValidations
 ) {
 	// validate setup
 	if (Len(arguments.column) && Len(arguments.sql)) {
@@ -97,6 +99,9 @@ public void function property(
 	}
 	if (StructKeyExists(arguments, "defaultValue")) {
 		variables.wheels.class.mapping[arguments.name].defaultValue = arguments.defaultValue;
+	}
+	if (StructKeyExists(arguments, "automaticValidations")) {
+		variables.wheels.class.mapping[arguments.name].automaticValidations = arguments.automaticValidations;
 	}
 }
 
