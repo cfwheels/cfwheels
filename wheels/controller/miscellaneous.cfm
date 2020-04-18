@@ -268,7 +268,11 @@ public any function sendFile(
  * [category: Miscellaneous Functions]
  */
 public boolean function isSecure() {
-	return request.cgi.server_port_secure == "true";
+	if (request.cgi.http_x_forwarded_proto == "https"){
+		return true;
+	} else {
+		return request.cgi.server_port_secure == "true";
+	}	
 }
 
 /**
