@@ -6,3 +6,6 @@ end_of_line = lf
 indent_style = tab
 insert_final_newline = true
 trim_trailing_whitespace = true
+
+[docker-compose.yml]
+indent_style = space
