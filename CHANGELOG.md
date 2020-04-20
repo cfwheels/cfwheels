@@ -2,6 +2,10 @@
 
 # [2.2](TBC)
 
+### Model Enhancements
+
+- Experimental adapter for Oracle database - [Andrei B]
+
 ### View Enhancements
 
 - Added the `required` argument to `imageTag` to suppress exceptions if using non-existent files [#979](https://github.com/cfwheels/cfwheels/issues/979) - [Adam Chapman, Michael Diederich]
