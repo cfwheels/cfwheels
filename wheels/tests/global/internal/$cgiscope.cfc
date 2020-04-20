@@ -20,6 +20,8 @@ component extends="wheels.tests.Test" {
 		cgi_scope.http_x_original_url = "/users/list/http_x_original_url/index.cfm?controller=wheels&action=wheels&view=test";
 		cgi_scope.request_uri = "/users/list/request_uri/index.cfm?controller=wheels&action=wheels&view=test";
 		cgi_scope.redirect_url = "/users/list/redirect_url/index.cfm?controller=wheels&action=wheels&view=test";
+		cgi_scope.http_x_forwarded_for = "";
+		cgi_scope.http_x_forwarded_proto = "";
 	}
 
 	function test_path_info_blank() {
