@@ -85,6 +85,14 @@ component extends="wheels.tests.Test" {
 		assert('q.recordcount eq 2');
 		q = user.findAllByZipcode(value="11111", order="id");
 		assert('q.recordcount eq 1');
+		q = user.findAllByZipcode(zipCode="11111");
+		assert('q.recordcount eq 1');
+		q = user.findAllByZipcode("11111");
+		assert('q.recordcount eq 1');
+		q = user.findAllByZipcodeAndBirthDayMonth(values="22222,11");
+		assert('q.recordcount eq 1');
+		q = user.findAllByZipcodeAndBirthDayMonth(zipCode="22222", birthDayMonth="11");
+		assert('q.recordcount eq 1');
 	}
 
 	function test_findByKey_norecords_returns_correct_type() {
