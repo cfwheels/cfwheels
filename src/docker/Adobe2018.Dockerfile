@@ -1,4 +1,4 @@
-FROM ortussolutions/commandbox
+FROM ortussolutions/commandbox:adobe2018
 
 LABEL maintainer "CFWheels Core Team"
 

@@ -1,4 +1,4 @@
-FROM ortussolutions/commandbox
+FROM ortussolutions/commandbox:lucee5
 
 LABEL maintainer "CFWheels Core Team"
 
