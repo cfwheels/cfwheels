@@ -67,6 +67,6 @@
             "port":"1433",
             "username":"sa",
             "validate":"false"
-        },
+        }
 	}
 }
