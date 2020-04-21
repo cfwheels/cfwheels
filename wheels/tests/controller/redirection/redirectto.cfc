@@ -94,7 +94,7 @@ component extends="wheels.tests.Test" {
 		actual = _controller.getRedirect().url;
 		expected = "http://www.google.com?foo=bar";
 
-		assert("actual == expected");
+		assert("actual EQ expected");
 	}
 
 	function test_redirect_to_url_with_query_string_and_with_params() {
@@ -103,7 +103,7 @@ component extends="wheels.tests.Test" {
 		actual = _controller.getRedirect().url;
 		expected = "http://www.google.com?foo=bar&baz=qux";
 
-		assert("actual == expected");
+		assert("actual EQ expected");
 	}
 
 }
