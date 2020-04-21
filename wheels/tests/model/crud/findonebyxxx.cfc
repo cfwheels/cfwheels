@@ -24,6 +24,11 @@ component extends="wheels.tests.Test" {
 		assert("IsObject(results.user) AND results.user.lastName IS 'Djurner'");
 	}
 
+	function test_two_values_with_named_arguments() {
+		results.user = model("user").findOneByFirstNameAndLastName(firstName="Per", lastName="Djurner");
+		assert("IsObject(results.user) AND results.user.lastName IS 'Djurner'");
+	}
+
 	function test_two_values_with_space() {
 		results.user = model("user").findOneByFirstNameAndLastName("Per, Djurner");
 		assert("IsObject(results.user) AND results.user.lastName IS 'Djurner'");

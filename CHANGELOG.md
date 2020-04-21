@@ -6,6 +6,8 @@
 
 - Experimental adapter for Oracle database - [Andrei B]
 - Added `automaticValidations` argument to the `property` method - [Per Djurner]
+- Support named second argument in `findOneBy[Property]And[Property]` and `findAllBy[Property]And[Property]` - [Per Djurner]
+- Support `value` argument in `findOrCreateBy[Property]` - [Per Djurner]
 
 ### View Enhancements
 

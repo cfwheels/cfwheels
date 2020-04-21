@@ -75,7 +75,11 @@ public any function onMissingMethod(required string missingMethodName, required 
 		local.iEnd = ArrayLen(local.finderProperties);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.property = local.finderProperties[local.i];
-			local.value = local.values[local.i];
+			if (ArrayLen(local.values) >= local.i) {
+				local.value = local.values[local.i];
+			} else if (StructKeyExists(arguments.missingMethodArguments, local.property)) {
+				local.value = arguments.missingMethodArguments[local.property];
+			}
 			ArrayAppend(local.addToWhere, "#local.property# #$dynamicFinderOperator(local.property)# #variables.wheels.class.adapter.$quoteValue(str=local.value, type=validationTypeForProperty(local.property))#");
 		}
 
@@ -122,10 +126,16 @@ public any function $findOrCreateBy() {
 	// get the property name from the last part of the function name
 	local.property = ReplaceNoCase(arguments.missingMethodName, "findOrCreateBy", "");
 
-	// get the value from the parameter that matches the property name or the first one if named arguments were not used
+	// get the value from the parameter that matches the property name or the first one if named arguments were not used or just one argument was passed in
 	if (StructKeyExists(arguments.missingMethodArguments, "1")) {
 		arguments.missingMethodArguments[local.property] = arguments.missingMethodArguments[1];
 		StructDelete(arguments.missingMethodArguments, "1");
+	} else if (StructCount(arguments.missingMethodArguments) == 1) {
+		local.key = ListGetAt(StructKeyList(arguments.missingMethodArguments), 1);
+		if (local.key != local.property) {
+			arguments.missingMethodArguments[local.property] = arguments.missingMethodArguments[local.key];
+			StructDelete(arguments.missingMethodArguments, local.key);
+		}
 	}
 	local.value = arguments.missingMethodArguments[local.property];
 
