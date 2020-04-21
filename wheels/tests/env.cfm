@@ -10,6 +10,9 @@ if(structKeyExists(url, "db") && listFind("mysql,sqlserver,postgres", url.db)){
 	application.wheels.dataSourceName = "wheelstestdb";
 }
 
+/* For JS Test Runner */
+$header(name="Access-Control-Allow-Origin", value="*");
+
 /* turn off default validations for testing */
 application.wheels.automaticValidations = false;
 application.wheels.assetQueryString = false;
