@@ -2,6 +2,9 @@ FROM mcr.microsoft.com/mssql/server:2017-latest
 
 LABEL maintainer "CFWheels Core Team"
 
+ENV SA_PASSWORD "x!bsT8t60yo0cTVTPq"
+ENV ACCEPT_EULA "Y"
+
 # Create work directory
 RUN mkdir -p /usr/work
 WORKDIR /usr/work
