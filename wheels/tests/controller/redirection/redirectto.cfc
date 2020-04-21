@@ -88,4 +88,22 @@ component extends="wheels.tests.Test" {
 		assert("_controller.$performedRedirect() IS true AND IsDefined('r.url')");
 	}
 
+	function test_redirect_to_url_with_params() {
+		_controller.redirectTo(url="http://www.google.com", params="foo=bar");
+
+		actual = _controller.getRedirect().url;
+		expected = "http://www.google.com?foo=bar";
+
+		assert("actual == expected");
+	}
+
+	function test_redirect_to_url_with_query_string_and_with_params() {
+		_controller.redirectTo(url="http://www.google.com?foo=bar", params="baz=qux");
+
+		actual = _controller.getRedirect().url;
+		expected = "http://www.google.com?foo=bar&baz=qux";
+
+		assert("actual == expected");
+	}
+
 }
