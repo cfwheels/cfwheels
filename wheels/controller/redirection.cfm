@@ -106,6 +106,13 @@ public void function redirectTo(
 		}
 	} else if (Len(arguments.url)) {
 		local.url = arguments.url;
+		if (Len(arguments.params)) {
+			if (Find("?", arguments.url)) {
+				local.url = "#local.url#&#arguments.params#";
+			} else {
+				local.url = "#local.url#?#arguments.params#";
+			}
+		}
 	} else {
 		local.url = URLFor(argumentCollection=arguments);
 	}
