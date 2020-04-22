@@ -4,7 +4,7 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		migration = CreateObject("component", "wheels.migrator.Migration").init();
-		migrator = CreateObject("component", "wheels.migrator").init(
+		migrator = CreateObject("component", "wheels.Migrator").init(
 			migratePath="wheels/tests/_assets/migrator/migrations/",
 			sqlPath="wheels/tests/_assets/migrator/sql/"
 		);
