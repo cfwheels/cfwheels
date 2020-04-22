@@ -67,8 +67,8 @@
             "database":"wheelstestdb",
             "dbdriver":"MSSQL",
             "dsn":"jdbc:sqlserver://{host}:{port}",
-            "host":"localhost",
-            "password":"x!bsT8t60yo$0cTVTPq",
+            "host":"sqlserver",
+            "password":"x!bsT8t60yo0cTVTPq",
             "port":"1433",
             "username":"sa",
             "validate":"false"
