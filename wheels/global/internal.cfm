@@ -138,7 +138,7 @@ public string function $convertToString(required any value, string type="") {
  */
 public any function $cleanInlist(required string where) {
 	local.rv = arguments.where;
-	local.regex = "IN\s?\(.*?,\s.*?\)";
+	local.regex = "IN\s?\(.*?,?\s?.*?\)";
 	local.in = REFind(local.regex, local.rv, 1, true);
 	while (local.in.len[1]) {
 		local.str = Mid(local.rv, local.in.pos[1], local.in.len[1]);
