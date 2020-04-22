@@ -55,9 +55,6 @@ component extends="wheels.tests.Test" {
 		assert("authors.recordCount eq 2");
 	}
 
-	/*
-	Failing test for: https://github.com/cfwheels/cfwheels/issues/944
-
 	function test_in_operator_with_spaces_and_equals_comma_value_combo_with_brackets() {
 		authors = model("author").findAll(
 			where=ArrayToList([
@@ -67,7 +64,6 @@ component extends="wheels.tests.Test" {
 		);
 		assert("authors.recordCount eq 1");
 	}
-	*/
 
 	function test_moving_aggregate_functions_in_where_to_having() {
 		results1 = model("user").findAll(
