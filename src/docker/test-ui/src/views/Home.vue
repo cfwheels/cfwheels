@@ -30,6 +30,8 @@
 							<b-icon icon="stop-fill" /> Stop Queue</b-btn>
 						<b-btn variant="danger" size="sm" v-if="queue.length" :disabled="queueIsRunning" @click="clearQueue">
 							<b-icon icon="trash-fill" /> Clear Queue</b-btn>
+						<b-btn variant="danger" size="sm"  @click="clearAll">
+							<b-icon icon="trash-fill" /> Clear All</b-btn>
 					</b-btn-group>
 				</div>
 			</b-card-header>
@@ -75,10 +77,10 @@
 						no-body
 						v-for="(j, index) in jobs" :key="index"
 						class="m-3"
-						:border-variant="j.data.STATUSOK === 'OK'? 'success' : 'danger'"
+						:border-variant="j.data.OK === true? 'success' : 'danger'"
 					>
 						<b-card-header
-						:header-bg-variant="j.data.STATUSOK === 'OK'? 'success' : 'danger'"
+						:header-bg-variant="j.data.OK === true? 'success' : 'danger'"
 						header-text-variant="white">
 							<div class="d-flex flex-row">
 								<h6>{{j.displayname}}</h6>
@@ -183,11 +185,16 @@ export default {
 				v.status = "stopped"
 			})
 		},
+		clearAll(){
+			this.clearStatus()
+			this.clearJobs()
+			this.clearQueue()
+		},
 		clearStatus(){
-			this.status = [];
+			this.status = []
 		},
 		clearJobs(){
-			this.jobs = [];
+			this.jobs = []
 		},
 		clearQueue(){
 			this.queueIsRunning = false
@@ -231,12 +238,12 @@ export default {
 					// always executed
 					this.runItem(this.nextItem)
 					this.queueIsRunning = false
-					this.currentJobName = ""
 				});
 		},
 		async runItem(item){
 			if(typeof item !== 'undefined'){
 				item.status = "running"
+				this.currentJobName = item.displayname
 				await this.runTestSuite(item)
 			} else {
 				this.queueIsRunning = false
@@ -267,10 +274,9 @@ Ended: ${j.data.BEGIN}
 this.filterResults(j.data.RESULTS).map((t)=>{
 pt +=
 `
---------
-${t.STATUS}: ${t.CLEANTESTNAME} -> ${t.PACKAGENAME}
+- ${t.STATUS}: ${t.CLEANTESTNAME} -> ${t.PACKAGENAME}
 ${t.MESSAGE.replace(/(<([li|ul|>]+)>)/ig,"").replace(/(<([li|ul|/>]+)>)/ig,"\n")}
---------
+
 `
 });
 			this.$clipboard(pt)
