@@ -1,6 +1,12 @@
 version: '3.0'
 
 services:
+ testui:
+  build:
+   context: ./src/docker/test-ui
+  image: cfwheels-testui:v1
+  ports:
+   - "3000:8080"
 
  lucee5:
   build:
