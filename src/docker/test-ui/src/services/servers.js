@@ -5,11 +5,11 @@ const servers =
 		server: 'http://localhost:60005'
 	},
 	{
-		servername: 'Adobe ColdFusion 2016',
+		servername: 'Adobe 2016',
 		server: 'http://localhost:62016'
 	},
 	{
-		servername: 'Adobe ColdFusion 2018',
+		servername: 'Adobe 2018',
 		server: 'http://localhost:62018'
 	}
 ]

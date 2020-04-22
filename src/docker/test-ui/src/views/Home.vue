@@ -1,33 +1,40 @@
 <template>
 <div class="home">
 	<div class="container-fluid mt-5">
-
 	<b-row>
 		<b-col lg="4">
-			<b-card flush header="Run Tests:" :no-body='true'>
+			<b-card flush header="Run Tests:" border-variant="secondary" :no-body='true'>
 				<b-list-group>
-					<b-list-group-item v-for="t in testsuites" :key="t.id" button @click="addToQueue(t)">
-						{{t.displayname}}
+					<b-list-group-item v-for="t in testsuites" title="Add Test to Queue" :key="t.id" button @click="addToQueue(t)">
+						<b-icon icon="plus-circle" /> {{t.displayname}}
 					</b-list-group-item>
 				</b-list-group>
 				</b-card>
 				<b-card class="mt-3" flush header="Open Server" :no-body='true'>
 				<b-list-group>
-					<b-list-group-item v-for="s in servers" :href="s.server" target="_blank" :key="s.servername">
-						{{s.servername}} &gt;
+					<b-list-group-item v-for="s in servers" title="Open Server in New Window" :href="s.server" target="_blank" :key="s.servername">
+						{{s.servername}} <b-icon icon="box-arrow-up-right" />
 					</b-list-group-item>
 				</b-list-group>
 			</b-card>
 		</b-col>
 		<b-col lg="8">
-			<b-card>
-				<h3>Queue
-					<b-btn variant="link" v-if="queue.length" @click="startQueue">Start</b-btn>
-					<b-btn variant="link" v-if="queue.length" @click="stopQueue">Stop</b-btn>
-					<b-btn variant="link" v-if="queue.length" @click="clearQueue">Clear</b-btn>
-				</h3>
-				<p class="text-center" v-if="!queue.length">No Tests added yet</p>
-				<b-row v-for="(v, i) in queue" :key="i">
+			<b-card no-body>
+				<b-card-header>
+				<div class="d-flex flex-row">
+					<h6><b-icon icon="card-list" /> Queue</h6>
+					<b-btn-group class="ml-auto">
+						<b-btn variant="success" size="sm" v-if="queue.length && !queueIsRunning" @click="startQueue">
+							<b-icon icon="play-fill" /> Start Queue</b-btn>
+						<b-btn variant="warning" size="sm" v-if="queue.length && queueIsRunning" @click="stopQueue">
+							<b-icon icon="stop-fill" /> Stop Queue</b-btn>
+						<b-btn variant="danger" size="sm" v-if="queue.length" :disabled="queueIsRunning" @click="clearQueue">
+							<b-icon icon="trash-fill" /> Clear Queue</b-btn>
+					</b-btn-group>
+				</div>
+			</b-card-header>
+				<p class="text-center mt-3" v-if="!queue.length">No Tests added yet. <br><em>Click on a test on the left to add it to the queue.</em></p>
+				<b-row class="p-1" v-for="(v, i) in queue" :key="i">
 					<b-col md="1">
 						<b-badge v-if="v.status === 'done'" variant="success">{{v.status}}</b-badge>
 						<b-badge v-if="v.status === 'errored'" variant="danger">{{v.status}}</b-badge>
@@ -39,51 +46,71 @@
 					<b-col md="10">{{v.displayname}}</b-col>
 				</b-row>
 			</b-card>
-			<b-card  class="mt-3">
-				<h3>Console <b-btn size="sm" v-if="status.length" variant="link" @click="clearStatus">Clear</b-btn></h3>
-				<p class="text-center" v-if="!status.length">Nothing here yet</p>
+
+			<b-card no-body class="mt-3">
+				<b-card-header>
+					<div class="d-flex flex-row">
+						<h6>Console</h6>
+						<b-btn size="sm" class="ml-auto" v-if="status.length" variant="link" @click="clearStatus"><b-icon icon="trash-fill" /> Clear</b-btn>
+					</div>
+				</b-card-header>
+				<p class="text-center mt-3" v-if="!status.length">Nothing here yet</p>
 				<div v-if="status.length">
-					<b-row v-for="(s, index) in status" :key="index">
+					<b-row class="p-1" v-for="(s, index) in status" :key="index">
 						<b-col md="1"><b-badge :variant="s.type">{{formatTime(s.when)}}</b-badge></b-col>
 						<b-col md="11">{{s.message}}</b-col>
 					</b-row>
 				</div>
 			</b-card>
-			<b-card class="mt-3">
-				<h3>Results <b-btn size="sm" v-if="jobs.length" variant="link" @click="clearJobs">Clear</b-btn></h3>
-				<div class="text-center">
-					<p v-if="!jobs.length">No results returned yet</p>
-				</div>
+			<b-card class="mt-3" no-body>
+				<b-card-header>
+					<div class="d-flex flex-row">
+						<h6>Results</h6>
+						<b-btn size="sm" class="ml-auto" v-if="jobs.length" variant="link" @click="clearJobs"><b-icon icon="trash-fill" /> Clear</b-btn>
+					</div>
+				</b-card-header>
+				<p class="text-center mt-3" v-if="!jobs.length">No results returned yet</p>
 				<div v-if="jobs.length">
 					<b-card
-						:header="'Result Set'"
-						class="mb-3"
+						no-body
 						v-for="(j, index) in jobs" :key="index"
+						class="m-3"
+						:border-variant="j.data.STATUSOK === 'OK'? 'success' : 'danger'"
 					>
-						<b-card-text v-if="j.END">
+						<b-card-header
+						:header-bg-variant="j.data.STATUSOK === 'OK'? 'success' : 'danger'"
+						header-text-variant="white">
+							<div class="d-flex flex-row">
+								<h6>{{j.displayname}}</h6>
+								<b-btn size="sm" class="ml-auto"
+								v-if="j.data.NUMFAILURES > 0 || j.data.NUMERRORS > 0"
+								variant="light" @click="copyResults(j)"><b-icon icon="file-earmark-code" /> Copy to Clipboard</b-btn>
+							</div>
+						</b-card-header>
+						<b-card-text v-if="j.data.END" class="p-3">
 							<b-row>
 								<b-col lg="4">
-								Path: {{j.PATH}}<br>
-								Cases: {{j.NUMCASES}}<br>
-								Tests: {{j.NUMTESTS}}
+								Path: {{j.data.PATH}}<br>
+								Cases: {{j.data.NUMCASES}}<br>
+								Tests: {{j.data.NUMTESTS}}
 								</b-col>
-								<b-col lg="4">
-								Passes: {{j.NUMSUCCESSES}}<br>
-								Failures: {{j.NUMFAILURES}}<br>
-								Errors: {{j.NUMERRORS}}
+								<b-col lg="3">
+								Passes: <strong class="text-success" v-if="j.data.NUMSUCCESSES > 0">{{j.data.NUMSUCCESSES}}</strong><span v-if="j.data.NUMSUCCESSES === 0">-</span><br>
+								Failures: <strong class="text-danger" v-if="j.data.NUMFAILURES > 0">{{j.data.NUMFAILURES}}</strong><span v-if="j.data.NUMFAILURES  === 0">-</span><br>
+								Errors: <strong class="text-danger" v-if="j.data.NUMERRORS > 0">{{j.data.NUMERRORS}}</strong><span v-if="j.data.NUMERRORS === 0">-</span>
 								</b-col>
-								<b-col lg="4">
-								Started: {{j.BEGIN}}<br>
-								Ended: {{j.BEGIN}}<br>
+								<b-col lg="5">
+								Started: {{j.data.BEGIN}}<br>
+								Ended: {{j.data.BEGIN}}<br>
 								</b-col>
 							</b-row>
 
-							<b-alert show class="mt-2" variant="danger" v-for="(t, rindex) in filterResults(j.RESULTS)" :key="rindex">
-								{{t.CLEANTESTNAME}}<br>{{t.PACKAGENAME}}<br>{{t.STATUS}}
-								<div v-html="t.MESSAGE"></div>
+							<b-alert show class="mt-2" variant="danger" v-for="(t, rindex) in filterResults(j.data.RESULTS)" :key="rindex">
+								<b-badge variant="danger">{{t.STATUS}}</b-badge> <strong>{{t.CLEANTESTNAME}} <b-icon icon="arrow-right" /> {{t.PACKAGENAME}}</strong><br>
+								<pre v-html="t.MESSAGE"></pre>
 							</b-alert>
 						</b-card-text>
-						<b-card-text v-else v-html="j"></b-card-text>
+						<b-card-text v-else v-html="j.data"  class="p-3"></b-card-text>
 					</b-card>
 				</div>
 			</b-card>
@@ -113,7 +140,9 @@ export default {
 			sleep,
 			queue: [],
 			status: [],
-			jobs: []
+			jobs: [],
+			queueIsRunning: false,
+			currentJobName: ""
 		}
 	},
 	computed:{
@@ -126,8 +155,8 @@ export default {
 	},
 	methods: {
 		formatTime(time){
-			var rv = time.getUTCHours()
-				+ ':' +  time.getUTCMinutes()
+			var rv = ("0" + time.getUTCHours()).slice(-2)
+				+ ':' +  ("0" + time.getUTCMinutes()).slice(-2)
 			return rv
 		},
 		getItem(id){
@@ -149,6 +178,7 @@ export default {
 			this.runItem(this.nextItem)
 		},
 		stopQueue(){
+			this.queueIsRunning = false
 			this.queue.map((v) => {
 				v.status = "stopped"
 			})
@@ -160,6 +190,7 @@ export default {
 			this.jobs = [];
 		},
 		clearQueue(){
+			this.queueIsRunning = false
 			this.queue = []
 		},
 		addStatus(status){
@@ -173,12 +204,15 @@ export default {
 			return rv
 		},
 		runTestSuite(item){
+			this.queueIsRunning = true
 			this.addStatus({ type: 'info', message: "Test Started - " + item.displayname})
+			this.currentJobName = item.displayname
 			this.api.get(this.getTestURL(item))
 				.then((response) => {
 					// handle success
-					this.jobs.unshift(response.data)
-					var message = response.data.OK ? 'Tests Passed': 'Tests Failed'
+					response.displayname = this.currentJobName
+					this.jobs.unshift(response)
+					var message = response.data.OK ? 'Tests Passed: ' + this.currentJobName : 'Tests Failed: ' + this.currentJobName
 					var type = response.data.OK ? 'success': 'danger'
 					console.log(response)
 					this.addStatus({ type: type, message: message})
@@ -189,12 +223,15 @@ export default {
 					this.addStatus({ type: 'danger', message: error.message })
 					this.addStatus({ type: 'danger', message: "Test Request Failed"})
 					//console.log(error.response)
-					this.jobs.unshift(error.response.data)
+					error.response.displayname = this.currentJobName
+					this.jobs.unshift(error.response)
 					item.status = "errored"
 				})
 				.then(() => {
 					// always executed
 					this.runItem(this.nextItem)
+					this.queueIsRunning = false
+					this.currentJobName = ""
 				});
 		},
 		async runItem(item){
@@ -202,6 +239,7 @@ export default {
 				item.status = "running"
 				await this.runTestSuite(item)
 			} else {
+				this.queueIsRunning = false
 				console.log("queue empty?")
 			}
 		},
@@ -210,6 +248,32 @@ export default {
 			var rv = res.filter((r) => r.STATUS !== 'Success') || []
 			console.log(rv)
 			return rv
+		},
+		copyResults(j){
+			console.log(j)
+			var pt = `
+---------------------------------
+${j.displayname}
+---------------------------------
+Path: ${j.data.PATH}
+Cases: ${j.data.NUMCASES}
+Tests: ${j.data.NUMTESTS}
+Passes: ${j.data.NUMSUCCESSES}
+Failures: ${j.data.NUMFAILURES}
+Errors:  ${j.data.NUMERRORS}
+Started: ${j.data.BEGIN}
+Ended: ${j.data.BEGIN}
+`;
+this.filterResults(j.data.RESULTS).map((t)=>{
+pt +=
+`
+--------
+${t.STATUS}: ${t.CLEANTESTNAME} -> ${t.PACKAGENAME}
+${t.MESSAGE.replace(/(<([li|ul|>]+)>)/ig,"").replace(/(<([li|ul|/>]+)>)/ig,"\n")}
+--------
+`
+});
+			this.$clipboard(pt)
 		},
 		async fakeMethod(i){
 			console.log("fake", i)
