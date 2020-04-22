@@ -1,4 +1,9 @@
 {
+	"robustExceptionEnabled": true,
+	"adminPassword": "commandbox",
+	"adminPasswordDefault": "commandbox",
+	"adminLoginRequired": false,
+	"secureProfileEnabled": false,
 	"datasources":{
 		"wheelstestdb":{
 			"allowAlter":true,
