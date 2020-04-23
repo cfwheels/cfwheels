@@ -121,6 +121,15 @@ component extends="Base" output=false {
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.item = REReplace(REReplace(ListGetAt(local.thirdOrder, local.i), " ASC\b", ""), " DESC\b", "");
 				if (!ListFindNoCase(local.thirdSelect, local.item)) {
+
+					// The test "order_clause_with_paginated_include_and_ambiguous_columns" passes in a complex order (CASE WHEN registration IN ('foo') THEN 0 ELSE 1 END DESC).
+					// This gets moved up to the SELECT clause to support pagination.
+					// However, we need to add "AS" to it otherwise we get a "No column name was specified" error.
+					// We check if it's complex simply by looking for a space in the table / column name and that it's not a calculated property (the "AS" part).
+					if (Find(" ", local.item) && !Find(" AS ", local.item)) {
+						local.item &= " AS tmpSelect" & local.i;
+					}
+
 					local.thirdSelect = ListAppend(local.thirdSelect, local.item);
 				}
 				if (local.containsGroup) {
