@@ -228,7 +228,7 @@ export default {
 				.catch((error) => {
 					// handle error
 					this.addStatus({ type: 'danger', message: error.message })
-					this.addStatus({ type: 'danger', message: "Test Request Failed"})
+					this.addStatus({ type: 'danger', message: error.response.statusText})
 					//console.log(error.response)
 					error.response.displayname = this.currentJobName
 					this.jobs.unshift(error.response)
