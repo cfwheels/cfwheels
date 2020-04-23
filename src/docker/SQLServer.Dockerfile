@@ -10,7 +10,9 @@ RUN mkdir -p /usr/work
 WORKDIR /usr/work
 
 # Copy all scripts into working directory
-COPY sqlserver /usr/work/
+COPY ./src/docker/entrypoint.sh /usr/work/
+COPY ./src/docker/import-data.sh /usr/work/
+COPY ./src/docker/setup.sql /usr/work/
 
 # Grant permissions for the import-data script to be executable
 RUN chmod +x /usr/work/import-data.sh
