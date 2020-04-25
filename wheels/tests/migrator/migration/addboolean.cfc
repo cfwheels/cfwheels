@@ -19,7 +19,7 @@ component extends="wheels.tests.Test" {
 			case "MicrosoftSQLServer":
 				return "BIT";
 			case "MySQL":
-				return "BIT";
+				return "BIT,TINYINT";
 			case "PostgreSQL":
 				return "BOOLEAN";
 			default:
@@ -57,7 +57,7 @@ component extends="wheels.tests.Test" {
 
 		expected = getBooleanType();
 
-    	assert("actual eq expected");
+    	assert("listContainsNoCase(expected,actual)");
 	}
 
 	function test_add_multiple_boolean_columns() {
@@ -81,7 +81,7 @@ component extends="wheels.tests.Test" {
 
 		expected = getBooleanType();
 
-		assert("actual[2] eq expected");
-    	assert("actual[3] eq expected");
+		assert("listContainsNoCase(expected,actual[2])");
+    	assert("listContainsNoCase(expected,actual[3])");
 	}
 }
