@@ -4,8 +4,8 @@ component extends="wheels.tests.Test" {
 		authorModel = model("author");
 	}
 
- 	function test_setObject_valid() {
-		author = authorModel.findOne(where="firstName = 'James'");
+	function test_setObject_valid() {
+		author = authorModel.findOne(where = "firstName = 'James'");
 		profile = model("profile").findOne();
 		transaction action="begin" {
 			updated = author.setProfile(profile);

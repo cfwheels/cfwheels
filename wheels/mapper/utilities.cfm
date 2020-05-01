@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Internal function.
  */
@@ -14,8 +13,8 @@ public void function $compileRegex(rquired string regex) {
 			local.identifier = arguments.name;
 		}
 		Throw(
-			type="Wheels.InvalidRegex",
-			message="The route `#local.identifier#` has created invalid regex of `#arguments.regex#`."
+			type = "Wheels.InvalidRegex",
+			message = "The route `#local.identifier#` has created invalid regex of `#arguments.regex#`."
 		);
 	}
 }
@@ -25,47 +24,64 @@ public void function $compileRegex(rquired string regex) {
  * Force leading slashes, remove trailing and duplicate slashes.
  */
 public string function $normalizePattern(required string pattern) {
-
 	// First clear the ending slashes.
-	local.pattern = REReplace(arguments.pattern, "(^\/+|\/+$)", "", "all");
+	local.pattern = ReReplace(
+		arguments.pattern,
+		"(^\/+|\/+$)",
+		"",
+		"all"
+	);
 
 	// Reset middle slashes to singles if they are multiple.
-	local.pattern = REReplace(local.pattern, "\/+", "/", "all");
+	local.pattern = ReReplace(local.pattern, "\/+", "/", "all");
 
 	// Remove a slash next to a period.
-	local.pattern = REReplace(local.pattern, "\/+\.", ".", "all");
+	local.pattern = ReReplace(local.pattern, "\/+\.", ".", "all");
 
 	// Return with a prepended slash.
 	return "/" & Replace(local.pattern, "//", "/", "all");
-
 }
 
 /**
  * Internal function.
  * Transform route pattern into regular expression.
  */
-public string function $patternToRegex(required string pattern, struct constraints={}) {
-
+public string function $patternToRegex(required string pattern, struct constraints = {}) {
 	// Escape any dots in pattern.
 	local.rv = Replace(arguments.pattern, ".", "\.", "all");
 
 	// Further mask pattern variables.
 	// This keeps constraint patterns from being replaced twice.
-	local.rv = REReplace(local.rv, "\[(\*?\w+)\]", ":::\1:::", "all");
+	local.rv = ReReplace(
+		local.rv,
+		"\[(\*?\w+)\]",
+		":::\1:::",
+		"all"
+	);
 
 	// Replace known variable keys using constraints.
 	local.constraints = StructCopy(arguments.constraints);
 	StructAppend(local.constraints, variables.constraints, false);
 	for (local.key in local.constraints) {
-		local.rv = REReplaceNoCase(local.rv, ":::#local.key#:::", "(#local.constraints[local.key]#)", "all");
+		local.rv = ReReplaceNoCase(
+			local.rv,
+			":::#local.key#:::",
+			"(#local.constraints[local.key]#)",
+			"all"
+		);
 	}
 
 	// Replace remaining variables with default regex.
-	local.rv = REReplace(local.rv, ":::\w+:::", "([^\./]+)", "all");
-	local.rv = REReplace(local.rv, "^\/*(.*)\/*$", "^\1/?$");
+	local.rv = ReReplace(
+		local.rv,
+		":::\w+:::",
+		"([^\./]+)",
+		"all"
+	);
+	local.rv = ReReplace(local.rv, "^\/*(.*)\/*$", "^\1/?$");
 
 	// Escape any forward slashes.
-	local.rv = REReplace(local.rv, "(\/|\\\/)", "\/", "all");
+	local.rv = ReReplace(local.rv, "(\/|\\\/)", "\/", "all");
 
 	return local.rv;
 }
@@ -75,17 +91,20 @@ public string function $patternToRegex(required string pattern, struct constrain
  * Pull list of variables out of route pattern.
  */
 public string function $stripRouteVariables(required string pattern) {
-	local.matchArray = ArrayToList(REMatch("\[\*?(\w+)\]", arguments.pattern));
-	return REReplace(local.matchArray, "[\*\[\]]", "", "all");
+	local.matchArray = ArrayToList(ReMatch("\[\*?(\w+)\]", arguments.pattern));
+	return ReReplace(
+		local.matchArray,
+		"[\*\[\]]",
+		"",
+		"all"
+	);
 }
 
 /**
  * Private internal function.
  * Add route to Wheels, removing useless params.
  */
-private void function $addRoute(
-	required string pattern, required struct constraints) {
-
+private void function $addRoute(required string pattern, required struct constraints) {
 	// Remove controller and action if they are route variables.
 	if (Find("[controller]", arguments.pattern) && StructKeyExists(arguments, "controller")) {
 		StructDelete(arguments, "controller");
@@ -100,11 +119,10 @@ private void function $addRoute(
 	arguments.variables = $stripRouteVariables(arguments.pattern);
 
 	// compile our regex to make sure the developer is using proper regex
-	$compileRegex(argumentCollection=arguments);
+	$compileRegex(argumentCollection = arguments);
 
 	// add route to Wheels
 	ArrayAppend(application[$appKey()].routes, arguments);
-
 }
 
 /**
@@ -159,7 +177,12 @@ private string function $shallowPath() {
  * Private internal function.
  */
 private string function $shallowNameForCall() {
-	if (ListFindNoCase("collection,new", variables.scopeStack[1].$call) && StructKeyExists(variables.scopeStack[1], "parentResource")) {
+	if (
+		ListFindNoCase("collection,new", variables.scopeStack[1].$call) && StructKeyExists(
+			variables.scopeStack[1],
+			"parentResource"
+		)
+	) {
 		return ListAppend($shallowName(), variables.scopeStack[1].parentResource.member);
 	}
 	return $shallowName();
@@ -193,5 +216,4 @@ private void function $resetScopeStack() {
 	ArrayPrepend(variables.scopeStack, {});
 	variables.scopeStack[1].$call = "$draw";
 }
-
 </cfscript>

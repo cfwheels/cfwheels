@@ -30,11 +30,11 @@ dummyController = controller("dummy");
 csrfToken = dummyController.$generateCookieAuthenticityToken();
 
 cookie[application.wheels.csrfCookieName] = Encrypt(
-  SerializeJson({ authenticityToken=csrfToken }),
-  application.wheels.csrfCookieEncryptionSecretKey,
-  application.wheels.csrfCookieEncryptionAlgorithm,
-  application.wheels.csrfCookieEncryptionEncoding
+	SerializeJSON({authenticityToken = csrfToken}),
+	application.wheels.csrfCookieEncryptionSecretKey,
+	application.wheels.csrfCookieEncryptionAlgorithm,
+	application.wheels.csrfCookieEncryptionEncoding
 );
 
-application.testenv.db=$dbinfo(datasource=application.wheels.dataSourceName, type="version");
+application.testenv.db = $dbinfo(datasource = application.wheels.dataSourceName, type = "version");
 </cfscript>

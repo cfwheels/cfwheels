@@ -1,8 +1,8 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		request.wheels["myhandle"] = {test="true"};
-		params = {controller="dummy", action="dummy"};
+		request.wheels["myhandle"] = {test = "true"};
+		params = {controller = "dummy", action = "dummy"};
 		_controller = controller("dummy", params);
 	}
 

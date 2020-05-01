@@ -8,10 +8,10 @@ component extends="wheels.tests.Test" {
 		tableName = "dbm_renamecolumn_tests";
 		oldColumnName = "oldcolumn";
 		newColumnName = "newcolumn";
-		t = migration.createTable(name=tableName, force=true);
-		t.string(columnNames=oldColumnName);
+		t = migration.createTable(name = tableName, force = true);
+		t.string(columnNames = oldColumnName);
 		t.create();
-		migration.renameColumn(table=tableName, columnName=oldColumnName, newColumnName=newColumnName);
+		migration.renameColumn(table = tableName, columnName = oldColumnName, newColumnName = newColumnName);
 
 		actual = model(tableName).findAll().columnList;
 

@@ -11,10 +11,10 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_renameTable_renames_table() {
-		t = migration.createTable(name=oldTableName, force=true);
-		t.string(columnNames="stringcolumn");
+		t = migration.createTable(name = oldTableName, force = true);
+		t.string(columnNames = "stringcolumn");
 		t.create();
-		migration.renameTable(oldName=oldTableName, newName=newTableName);
+		migration.renameTable(oldName = oldTableName, newName = newTableName);
 		try {
 			model(newTableName).findAll();
 			migration.dropTable(newTableName);

@@ -15,7 +15,7 @@ component extends="wheels.tests.Test" {
 			local.post = model("post").findOne();
 			local.post.delete();
 			postsWithoutSoftDeletes = model("post").findAll();
-			postsWithSoftDeletes = model("post").findAll(includeSoftDeletes=true);
+			postsWithSoftDeletes = model("post").findAll(includeSoftDeletes = true);
 			transaction action="rollback";
 		}
 		assert("postsWithoutSoftDeletes.recordcount eq 4 AND postsWithSoftDeletes.recordcount eq 5");
@@ -24,9 +24,9 @@ component extends="wheels.tests.Test" {
 	function test_permanent_delete() {
 		transaction action="begin" {
 			local.post = model("post").findOne();
-			local.post.delete(softDelete=false);
+			local.post.delete(softDelete = false);
 			postsWithoutSoftDeletes = model("post").findAll();
-			postsWithSoftDeletes = model("post").findAll(includeSoftDeletes=true);
+			postsWithSoftDeletes = model("post").findAll(includeSoftDeletes = true);
 			transaction action="rollback";
 		}
 		assert("postsWithoutSoftDeletes.recordcount eq 4 AND postsWithSoftDeletes.recordcount eq 4");
@@ -36,10 +36,10 @@ component extends="wheels.tests.Test" {
 		transaction action="begin" {
 			local.post = model("post").findOne();
 			local.post.delete();
-			local.softDeletedPost = model("post").findByKey(key=local.post.id, includeSoftDeletes=true);
-			local.softDeletedPost.delete(includeSoftDeletes=true, softDelete=false);
+			local.softDeletedPost = model("post").findByKey(key = local.post.id, includeSoftDeletes = true);
+			local.softDeletedPost.delete(includeSoftDeletes = true, softDelete = false);
 			postsWithoutSoftDeletes = model("post").findAll();
-			postsWithSoftDeletes = model("post").findAll(includeSoftDeletes=true);
+			postsWithSoftDeletes = model("post").findAll(includeSoftDeletes = true);
 			transaction action="rollback";
 		}
 		assert("postsWithoutSoftDeletes.recordcount eq 4 AND postsWithSoftDeletes.recordcount eq 4");

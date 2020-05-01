@@ -27,12 +27,12 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_abbreviation_as_exception() {
-		result = humanize(text="ACfmlFramework", except="CFML");
+		result = humanize(text = "ACfmlFramework", except = "CFML");
 		assert("NOT Compare(result, 'A CFML Framework')");
 	}
 
 	function test_exception_within_string() {
-		result = humanize(text="ACfmlFramecfmlwork", except="CFML");
+		result = humanize(text = "ACfmlFramecfmlwork", except = "CFML");
 		assert("NOT Compare(result, 'A CFML Framecfmlwork')");
 	}
 

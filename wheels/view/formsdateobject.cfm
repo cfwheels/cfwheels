@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Builds and returns a string containing three `select` form controls for month, day, and year based on the supplied `objectName` and `property`.
  *
@@ -28,8 +27,8 @@
  * @encode [see:styleSheetLinkTag].
  */
 public string function dateSelect(
-	any objectName="",
-	string property="",
+	any objectName = "",
+	string property = "",
 	string association,
 	string position,
 	string order,
@@ -51,10 +50,10 @@ public string function dateSelect(
 	boolean combine,
 	any encode
 ) {
-	$args(name="dateSelect", args=arguments);
-	arguments.objectName = $objectName(argumentCollection=arguments);
+	$args(name = "dateSelect", args = arguments);
+	arguments.objectName = $objectName(argumentCollection = arguments);
 	arguments.$functionName = "dateSelect";
-	return $dateOrTimeSelect(argumentCollection=arguments);
+	return $dateOrTimeSelect(argumentCollection = arguments);
 }
 
 /**
@@ -85,8 +84,8 @@ public string function dateSelect(
  * @encode [see:styleSheetLinkTag].
  */
 public string function timeSelect(
-	any objectName="",
-	string property="",
+	any objectName = "",
+	string property = "",
 	string association,
 	string position,
 	string order,
@@ -106,10 +105,10 @@ public string function timeSelect(
 	boolean twelveHour,
 	any encode
 ) {
-	$args(name="timeSelect", args=arguments);
-	arguments.objectName = $objectName(argumentCollection=arguments);
+	$args(name = "timeSelect", args = arguments);
+	arguments.objectName = $objectName(argumentCollection = arguments);
 	arguments.$functionName = "timeSelect";
-	return $dateOrTimeSelect(argumentCollection=arguments);
+	return $dateOrTimeSelect(argumentCollection = arguments);
 }
 
 /**
@@ -175,11 +174,10 @@ public string function dateTimeSelect(
 	boolean twelveHour,
 	any encode
 ) {
-	$args(name="dateTimeSelect", reserved="name", args=arguments);
-	arguments.objectName = $objectName(argumentCollection=arguments);
+	$args(name = "dateTimeSelect", reserved = "name", args = arguments);
+	arguments.objectName = $objectName(argumentCollection = arguments);
 	arguments.name = $tagName(arguments.objectName, arguments.property);
 	arguments.$functionName = "dateTimeSelect";
-	return dateTimeSelectTags(argumentCollection=arguments);
+	return dateTimeSelectTags(argumentCollection = arguments);
 }
-
 </cfscript>

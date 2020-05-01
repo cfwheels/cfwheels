@@ -1,12 +1,11 @@
 <cfscript>
-
 public any function init(
 	required string pluginPath,
-	boolean deletePluginDirectories=application.wheels.deletePluginDirectories,
-	boolean overwritePlugins=application.wheels.overwritePlugins,
-	boolean loadIncompatiblePlugins=application.wheels.loadIncompatiblePlugins,
-	string wheelsEnvironment=application.wheels.environment,
-	string wheelsVersion=application.wheels.version
+	boolean deletePluginDirectories = application.wheels.deletePluginDirectories,
+	boolean overwritePlugins = application.wheels.overwritePlugins,
+	boolean loadIncompatiblePlugins = application.wheels.loadIncompatiblePlugins,
+	string wheelsEnvironment = application.wheels.environment,
+	string wheelsVersion = application.wheels.version
 ) {
 	variables.$class = {};
 	variables.$class.plugins = {};
@@ -17,7 +16,12 @@ public any function init(
 	variables.$class.dependantPlugins = "";
 	StructAppend(variables.$class, arguments);
 	/* handle pathing for different operating systems */
-	variables.$class.pluginPathFull = ReplaceNoCase(ExpandPath(variables.$class.pluginPath), "\", "/", "all");
+	variables.$class.pluginPathFull = ReplaceNoCase(
+		ExpandPath(variables.$class.pluginPath),
+		"\",
+		"/",
+		"all"
+	);
 	/* sort direction */
 	variables.sort = "ASC";
 	/* extract out plugins */
@@ -44,9 +48,9 @@ public struct function $pluginFolders() {
 		// For *nix, we need a case-sensitive name for the plugin component, so we must reference its CFC file name.
 		local.subfolder = DirectoryList("#local.folder.directory#/#local.folder.name#", false, "query");
 		local.pluginCfc = $query(
-			dbtype="query",
-			query=local.subfolder,
-			sql="SELECT name FROM query WHERE LOWER(name) = '#LCase(local.folder.name)#.cfc'"
+			dbtype = "query",
+			query = local.subfolder,
+			sql = "SELECT name FROM query WHERE LOWER(name) = '#LCase(local.folder.name)#.cfc'"
 		);
 		local.temp = {};
 		local.temp.name = Replace(local.pluginCfc.name, ".cfc", "");
@@ -86,7 +90,12 @@ public void function $pluginsExtract() {
 					//
 				}
 			}
-			$zip(action="unzip", destination=local.plugin.folderPath, file=local.plugin.file, overwrite=true);
+			$zip(
+				action = "unzip",
+				destination = local.plugin.folderPath,
+				file = local.plugin.file,
+				overwrite = true
+			);
 		}
 	};
 }
@@ -113,17 +122,25 @@ public void function $pluginsProcess() {
 	for (local.pluginKey in local.pluginKeys) {
 		local.pluginValue = local.plugins[local.pluginKey];
 		local.plugin = CreateObject("component", $componentPathToPlugin(local.pluginKey, local.pluginValue.name)).init();
-		if (!StructKeyExists(local.plugin, "version") || ListFind(local.plugin.version, local.wheelsVersion) || variables.$class.loadIncompatiblePlugins) {
+		if (
+			!StructKeyExists(local.plugin, "version") || ListFind(local.plugin.version, local.wheelsVersion) || variables.$class.loadIncompatiblePlugins
+		) {
 			variables.$class.plugins[local.pluginKey] = local.plugin;
 
 			// If plugin author has specified compatibility version as 2.0, only check against that major version
 			// If they've specified 2.0.1, then be more specific
 			if (StructKeyExists(local.plugin, "version")) {
-				if( ( listLen(local.plugin.version, ".") > 2 && !ListFind(local.plugin.version, local.wheelsVersion) )
-					|| ( listLen(local.plugin.version, ".") == 2 && !ListFind(local.plugin.version, listDeleteAt(local.wheelsVersion, 3, ".")) )
-				){
+				if (
+					(ListLen(local.plugin.version, ".") > 2 && !ListFind(local.plugin.version, local.wheelsVersion))
+					|| (
+						ListLen(local.plugin.version, ".") == 2 && !ListFind(
+							local.plugin.version,
+							ListDeleteAt(local.wheelsVersion, 3, ".")
+						)
+					)
+				) {
 					variables.$class.incompatiblePlugins = ListAppend(variables.$class.incompatiblePlugins, local.pluginKey);
-				 }
+				}
 			}
 		}
 	};
@@ -134,17 +151,14 @@ public void function $pluginsProcess() {
  * Storing box.json data too as this may be useful later
  */
 public void function $pluginMetaData() {
-	for(local.plugin in variables.$class.plugins){
-		variables.$class.pluginMeta[local.plugin]={
-			"version": "",
-			"boxjson": {}
-		};
-		local.boxJsonLocation=$fullPathToPlugin(local.plugin & "/" & 'box.json');
-		if(fileExists(local.boxJsonLocation)){
-			local.boxJson=deserializeJSON(fileRead(local.boxJsonLocation));
-			variables.$class.pluginMeta[local.plugin]["boxjson"]=local.boxJson;
-			if(structKeyExists(local.boxJson, "version")){
-				variables.$class.pluginMeta[local.plugin]["version"]=local.boxJson.version;
+	for (local.plugin in variables.$class.plugins) {
+		variables.$class.pluginMeta[local.plugin] = {"version" = "", "boxjson" = {}};
+		local.boxJsonLocation = $fullPathToPlugin(local.plugin & "/" & 'box.json');
+		if (FileExists(local.boxJsonLocation)) {
+			local.boxJson = DeserializeJSON(FileRead(local.boxJsonLocation));
+			variables.$class.pluginMeta[local.plugin]["boxjson"] = local.boxJson;
+			if (StructKeyExists(local.boxJson, "version")) {
+				variables.$class.pluginMeta[local.plugin]["version"] = local.boxJson.version;
 			}
 		}
 	}
@@ -152,12 +166,15 @@ public void function $pluginMetaData() {
 
 public void function $determineDependancy() {
 	for (local.iPlugins in variables.$class.plugins) {
-		local.pluginMeta = GetMetaData(variables.$class.plugins[local.iPlugins]);
+		local.pluginMeta = GetMetadata(variables.$class.plugins[local.iPlugins]);
 		if (StructKeyExists(local.pluginMeta, "dependency")) {
 			for (local.iDependency in local.pluginMeta.dependency) {
-				local.iDependency = trim(local.iDependency);
+				local.iDependency = Trim(local.iDependency);
 				if (!StructKeyExists(variables.$class.plugins, local.iDependency)) {
-					variables.$class.dependantPlugins = ListAppend(variables.$class.dependantPlugins, Reverse(SpanExcluding(Reverse(local.pluginMeta.name), ".")) & "|" & local.iDependency);
+					variables.$class.dependantPlugins = ListAppend(
+						variables.$class.dependantPlugins,
+						Reverse(SpanExcluding(Reverse(local.pluginMeta.name), ".")) & "|" & local.iDependency
+					);
 				}
 			};
 		}
@@ -165,11 +182,10 @@ public void function $determineDependancy() {
 }
 
 /**
-* MIXINS
-*/
+ * MIXINS
+ */
 
 public void function $processMixins() {
-
 	// setup a container for each mixableComponents type
 	for (local.iMixableComponents in variables.$class.mixableComponents) {
 		variables.$class.mixins[local.iMixableComponents] = {};
@@ -177,18 +193,21 @@ public void function $processMixins() {
 
 	// get a sorted list of plugins so that we run through them the same on
 	// every platform
-	local.pluginKeys = ListToArray(ListSort(structKeyList(variables.$class.plugins), "textnocase", variables.sort));
+	local.pluginKeys = ListToArray(ListSort(StructKeyList(variables.$class.plugins), "textnocase", variables.sort));
 
 	for (local.iPlugin in local.pluginKeys) {
-
 		// reference the plugin
 		local.plugin = variables.$class.plugins[local.iPlugin];
 
 		// grab meta data of the plugin
-		local.pluginMeta = GetMetaData(local.plugin);
+		local.pluginMeta = GetMetadata(local.plugin);
 
-		if (!StructKeyExists(local.pluginMeta, "environment") || ListFindNoCase(local.pluginMeta.environment, variables.$class.wheelsEnvironment)) {
-
+		if (
+			!StructKeyExists(local.pluginMeta, "environment") || ListFindNoCase(
+				local.pluginMeta.environment,
+				variables.$class.wheelsEnvironment
+			)
+		) {
 			// by default and for backwards compatibility, we inject all methods
 			// into all objects
 			local.pluginMixins = "global";
@@ -205,7 +224,7 @@ public void function $processMixins() {
 
 			for (local.iPluginMethods in local.pluginMethods) {
 				if (IsCustomFunction(local.plugin[local.iPluginMethods]) && local.iPluginMethods neq "init") {
-					local.methodMeta = GetMetaData(local.plugin[local.iPluginMethods]);
+					local.methodMeta = GetMetadata(local.plugin[local.iPluginMethods]);
 					local.methodMixins = local.pluginMixins;
 					if (StructKeyExists(local.methodMeta, "mixin")) {
 						local.methodMixins = local.methodMeta["mixin"];
@@ -215,7 +234,9 @@ public void function $processMixins() {
 					if (local.methodMixins != "none") {
 						for (local.iMixableComponent in variables.$class.mixableComponents) {
 							if (local.methodMixins == "global" || ListFindNoCase(local.methodMixins, local.iMixableComponent)) {
-								variables.$class.mixins[local.iMixableComponent][local.iPluginMethods] = local.plugin[local.iPluginMethods];
+								variables.$class.mixins[local.iMixableComponent][local.iPluginMethods] = local.plugin[
+									local.iPluginMethods
+								];
 							}
 						}
 					}
@@ -226,8 +247,8 @@ public void function $processMixins() {
 }
 
 /**
-* GETTERS
-*/
+ * GETTERS
+ */
 
 public any function getPlugins() {
 	return variables.$class.plugins;
@@ -258,8 +279,8 @@ public any function inspect() {
 }
 
 /**
-* PRIVATE
-*/
+ * PRIVATE
+ */
 
 public string function $fullPathToPlugin(required string folder) {
 	return ListAppend(variables.$class.pluginPathFull, arguments.folder, "/");
@@ -271,13 +292,31 @@ public string function $componentPathToPlugin(required string folder, required s
 }
 
 public query function $folders() {
-	local.query = $directory(action="list", directory=variables.$class.pluginPathFull, type="dir", sort="name #variables.sort#");
-	return $query(dbtype="query", query=local.query, sql="select * from query where name not like '.%' ORDER BY name #variables.sort#");
+	local.query = $directory(
+		action = "list",
+		directory = variables.$class.pluginPathFull,
+		type = "dir",
+		sort = "name #variables.sort#"
+	);
+	return $query(
+		dbtype = "query",
+		query = local.query,
+		sql = "select * from query where name not like '.%' ORDER BY name #variables.sort#"
+	);
 }
 
 public query function $files() {
-	local.query = $directory(action="list", directory=variables.$class.pluginPathFull, filter="*.zip", type="file", sort="name #variables.sort#");
-	return $query(dbtype="query", query=local.query, sql="select * from query where name not like '.%' ORDER BY name #variables.sort#");
+	local.query = $directory(
+		action = "list",
+		directory = variables.$class.pluginPathFull,
+		filter = "*.zip",
+		type = "file",
+		sort = "name #variables.sort#"
+	);
+	return $query(
+		dbtype = "query",
+		query = local.query,
+		sql = "select * from query where name not like '.%' ORDER BY name #variables.sort#"
+	);
 }
-
 </cfscript>

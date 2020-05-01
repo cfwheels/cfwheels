@@ -2,11 +2,11 @@ component extends="Model" {
 
 	function config() {
 		table(false);
-		property(name="username");
-		property(name="password");
-		property(name="firstname");
-		property(name="lastname");
-		property(name="birthday");
+		property(name = "username");
+		property(name = "password");
+		property(name = "firstname");
+		property(name = "lastname");
+		property(name = "birthday");
 	}
 
 	function validateCalled() {

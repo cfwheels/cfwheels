@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		_controller = controller(name="dummy");
+		_controller = controller(name = "dummy");
 		args = {};
 		args.name = "input";
 		args.attributes = {};
@@ -21,14 +21,14 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_with_all_options() {
-		e = _controller.$tag(argumentCollection=args);
+		e = _controller.$tag(argumentCollection = args);
 		r = '<input class="wheelstest" id="inputtest" maxlength="50" name="inputtest" onmouseover="function(this){this.focus();}" size="30" type="text">';
 		assert("e eq r");
 	}
 
 	function test_passing_through_class() {
-		request.wheels.testPaginationLinksQuery = {currentPage=2, totalPages=3};
-		r = controller("dummy").paginationLinks(classForCurrent="active", handle="testPaginationLinksQuery");
+		request.wheels.testPaginationLinksQuery = {currentPage = 2, totalPages = 3};
+		r = controller("dummy").paginationLinks(classForCurrent = "active", handle = "testPaginationLinksQuery");
 		assert(Find("<span class=""active"">2</span>", r));
 	}
 

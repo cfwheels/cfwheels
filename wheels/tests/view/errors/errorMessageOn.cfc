@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		_controller = controller(name="ControllerWithModelErrors");
+		_controller = controller(name = "ControllerWithModelErrors");
 		args = {};
 		args.objectName = "user";
 		args.class = "errors-found";
@@ -12,7 +12,7 @@ component extends="wheels.tests.Test" {
 		args.prependText = "prepend ";
 		args.appendText = " append";
 		args.wrapperElement = "div";
-		e = _controller.errorMessageOn(argumentcollection=args);
+		e = _controller.errorMessageOn(argumentcollection = args);
 		r = '<div class="errors-found">prepend firstname error1 append</div>';
 		assert("e eq r");
 	}

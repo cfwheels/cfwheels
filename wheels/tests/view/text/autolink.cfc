@@ -1,12 +1,12 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		_controller = controller(name="dummy");
-		set(functionName="autoLink", encode=false);
+		_controller = controller(name = "dummy");
+		set(functionName = "autoLink", encode = false);
 	}
 
 	function teardown() {
-		set(functionName="autoLink", encode=true);
+		set(functionName = "autoLink", encode = true);
 	}
 
 	function test_link_urls() {
@@ -32,7 +32,12 @@ component extends="wheels.tests.Test" {
 
 	function test_overloaded_argument_become_link_attributes() {
 		str = 'Download CFWheels from http://cfwheels.org/download';
-		r = _controller.autoLink(text=str, link="URLs", target="_blank", class="wheels-href");
+		r = _controller.autoLink(
+			text = str,
+			link = "URLs",
+			target = "_blank",
+			class = "wheels-href"
+		);
 		e = 'Download CFWheels from <a class="wheels-href" href="http://cfwheels.org/download" target="_blank">http://cfwheels.org/download</a>';
 		assert('e eq r');
 	}
@@ -52,15 +57,15 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_issue_656_relative_paths_link() {
-		str ='Download CFWheels from /cfwheels.org/download blah blah';
+		str = 'Download CFWheels from /cfwheels.org/download blah blah';
 		r = _controller.autoLink(str);
 		e = 'Download CFWheels from <a href="/cfwheels.org/download">/cfwheels.org/download</a> blah blah';
 		assert('e eq r');
 	}
 
 	function test_turn_off_relative_url_linking() {
-		str ='155 cals/3.3miles';
-		r = _controller.autoLink(text="#str#", relative="false");
+		str = '155 cals/3.3miles';
+		r = _controller.autoLink(text = "#str#", relative = "false");
 		e = '155 cals/3.3miles';
 		assert('e eq r');
 	}

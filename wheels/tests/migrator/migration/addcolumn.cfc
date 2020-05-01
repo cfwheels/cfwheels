@@ -14,20 +14,22 @@ component extends="wheels.tests.Test" {
 		application.wheels.migratorObjectCase = ""; // keep the specified case
 		tableName = "dbm_addcolumn_tests";
 		columnName = "integerCOLUMN";
-		t = migration.createTable(name=tableName, force=true);
-		t.string(columnNames="stringcolumn");
+		t = migration.createTable(name = tableName, force = true);
+		t.string(columnNames = "stringcolumn");
 		t.create();
 
-		migration.addColumn(table=tableName, columnType='integer', columnName=columnName, null=true);
-		info = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			table=tableName,
-			type="columns"
+		migration.addColumn(
+			table = tableName,
+			columnType = 'integer',
+			columnName = columnName,
+			null = true
 		);
+		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "columns");
 		actual = ValueList(info.column_name);
 		expected = columnName;
 		migration.dropTable(tableName);
 
-	  assert("ListFindNoCase(actual, expected)", "expected", "actual");
+		assert("ListFindNoCase(actual, expected)", "expected", "actual");
 	}
+
 }

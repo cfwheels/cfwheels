@@ -1,3 +1,4 @@
 component extends="Model" {
 
+
 }

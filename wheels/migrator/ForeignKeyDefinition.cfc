@@ -1,4 +1,5 @@
 component extends="Base" {
+
 	/*
 	 * @onUpdate.hint how you want the constraint to act on update. possible values include `none`, `null`, or `cascade` which can also be set to `true`.
 	 */
@@ -8,8 +9,8 @@ component extends="Base" {
 		required string referenceTable,
 		required string column,
 		required string referenceColumn,
-		string onUpdate="",
-		string onDelete=""
+		string onUpdate = "",
+		string onDelete = ""
 	) {
 		local.args = "adapter,table,referenceTable,column,referenceColumn,onUpdate,onDelete";
 		local.iEnd = ListLen(local.args);
@@ -31,7 +32,7 @@ component extends="Base" {
 			local.argumentName = ListGetAt(local.args, local.i);
 			local.adapterArgs[local.argumentName] = this[local.argumentName];
 		}
-		return this.adapter.foreignKeySQL(argumentcollection=local.adapterArgs);
+		return this.adapter.foreignKeySQL(argumentcollection = local.adapterArgs);
 	}
 
 	public string function toForeignKeySQL() {
@@ -44,13 +45,14 @@ component extends="Base" {
 		local.options = {};
 		local.optionalArguments = "referenceTable,referenceColumn,column";
 		local.iEnd = ListLen(local.optionalArguments);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.argumentName = ListGetAt(local.optionalArguments, local.i);
 			if (StructKeyExists(this, local.argumentName)) {
 				local.options[local.argumentName] = this[local.argumentName];
 			}
 		}
-		arguments.sql = this.adapter.addForeignKeyOptions(sql=arguments.sql, options=local.options);
+		arguments.sql = this.adapter.addForeignKeyOptions(sql = arguments.sql, options = local.options);
 		return arguments.sql;
 	}
+
 }

@@ -7,7 +7,7 @@ component extends="wheels.tests.Test" {
 		local.httpRequestData = Duplicate(request.wheels.httpRequestData);
 		request.wheels.httpRequestData.headers = {"Content-Type" = "application/vnd.api+json"};
 		request.wheels.httpRequestData.content = '{"data":{"type":"users","id":"1","attributes":{"test":"Passed"}}}';
-		result = local.dispatch.$parseJsonBody(argumentcollection=local.args).data.attributes.test;
+		result = local.dispatch.$parseJsonBody(argumentcollection = local.args).data.attributes.test;
 		request.wheels.httpRequestData = Duplicate(local.httpRequestData);
 		expected = "Passed";
 		assert("result eq expected");
@@ -20,7 +20,7 @@ component extends="wheels.tests.Test" {
 		local.httpRequestData = Duplicate(request.wheels.httpRequestData);
 		request.wheels.httpRequestData.headers = {"Content-Type" = "application/vnd.api+json"};
 		request.wheels.httpRequestData.content = '[{"foo":"bar"}]';
-		result = local.dispatch.$parseJsonBody(argumentcollection=local.args);
+		result = local.dispatch.$parseJsonBody(argumentcollection = local.args);
 		request.wheels.httpRequestData = Duplicate(local.httpRequestData);
 		keylist = StructKeyList(result);
 		assert("listFindNoCase(keylist, 'whatever')");

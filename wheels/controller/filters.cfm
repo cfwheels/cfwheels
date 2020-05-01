@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Tells CFWheels to run a function before an action is run or after an action has been run.
  *
@@ -14,10 +13,10 @@
  */
 public void function filters(
 	required string through,
-	string type="before",
-	string only="",
-	string except="",
-	string placement="append"
+	string type = "before",
+	string only = "",
+	string except = "",
+	string placement = "append"
 ) {
 	arguments.through = $listClean(arguments.through);
 	arguments.only = $listClean(arguments.only);
@@ -59,14 +58,12 @@ public void function filters(
  * @chain An array of structs, each of which represent an `argumentCollection` that get passed to the `filters` function. This should represent the entire filter chain that you want to use for this controller.
  */
 public void function setFilterChain(required array chain) {
-
 	// Clear current filter chain and then re-add from the passed in chain.
 	variables.$class.filters = [];
 	local.iEnd = ArrayLen(arguments.chain);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
-		filters(argumentCollection=arguments.chain[local.i]);
+		filters(argumentCollection = arguments.chain[local.i]);
 	}
-
 }
 
 /**
@@ -77,14 +74,13 @@ public void function setFilterChain(required array chain) {
  *
  * @type Use this argument to return only before or after filters.
  */
-public array function filterChain(string type="all") {
-
+public array function filterChain(string type = "all") {
 	// Throw error if an invalid type was passed in.
 	if (!ListFindNoCase("before,after,all", arguments.type)) {
 		Throw(
-			type="Wheels.InvalidFilterType",
-			message="The filter type of `#arguments.type#` is invalid.",
-			extendedInfo="Please use either `before` or `after`."
+			type = "Wheels.InvalidFilterType",
+			message = "The filter type of `#arguments.type#` is invalid.",
+			extendedInfo = "Please use either `before` or `after`."
 		);
 	}
 
@@ -118,14 +114,14 @@ public void function $runFilters(required string type, required string action) {
 		if (local.listsNotSpecified || local.inOnlyList || local.notInExceptionList) {
 			if (!StructKeyExists(variables, local.filter.through)) {
 				Throw(
-					type="Wheels.FilterNotFound",
-					message="CFWheels tried to run the `#local.filter.through#` function as a #arguments.type# filter but could not find it.",
-					extendedInfo="Make sure there is a function named `#local.filter.through#` in the `#variables.$class.name#.cfc` file."
+					type = "Wheels.FilterNotFound",
+					message = "CFWheels tried to run the `#local.filter.through#` function as a #arguments.type# filter but could not find it.",
+					extendedInfo = "Make sure there is a function named `#local.filter.through#` in the `#variables.$class.name#.cfc` file."
 				);
 			}
-			local.result = $invoke(method=local.filter.through, invokeArgs=local.filter.arguments);
+			local.result = $invoke(method = local.filter.through, invokeArgs = local.filter.arguments);
 			// If the filter returned false, we skip the remaining filters.
-			if ((StructKeyExists(local, "result") && !isNull(local.result) && !local.result)) {
+			if ((StructKeyExists(local, "result") && !IsNull(local.result) && !local.result)) {
 				break;
 			} else if (arguments.type == "before" && $performedRenderOrRedirect()) {
 				break;
@@ -135,5 +131,4 @@ public void function $runFilters(required string type, required string action) {
 		}
 	}
 }
-
 </cfscript>

@@ -1,12 +1,17 @@
 component extends="Model" {
 
 	function config() {
-		belongsTo(name="parent", modelName="tag", foreignKey="parentid", joinType="outer");
-		hasMany(name="children", modelName="tag", foreignKey="parentid");
-		hasMany(name="classifications");
- 		beforeSave("callbackThatReturnsTrue");
-		property(name="name", label="Tag name");
-		property(name="virtual", label="Virtual property");
+		belongsTo(
+			name = "parent",
+			modelName = "tag",
+			foreignKey = "parentid",
+			joinType = "outer"
+		);
+		hasMany(name = "children", modelName = "tag", foreignKey = "parentid");
+		hasMany(name = "classifications");
+		beforeSave("callbackThatReturnsTrue");
+		property(name = "name", label = "Tag name");
+		property(name = "virtual", label = "Virtual property");
 	}
 
 	function callbackThatIncreasesVariable() {

@@ -1,21 +1,23 @@
 component extends="Controller" {
-  function config() {
-    protectsFromForgery();
-  }
 
-  function index() {
-    renderText("Index ran.");
-  }
+	function config() {
+		protectsFromForgery();
+	}
 
-  function create() {
-    renderText("Create ran.");
-  }
+	function index() {
+		renderText("Index ran.");
+	}
 
-  function update() {
-    renderText("Update ran.");
-  }
+	function create() {
+		renderText("Create ran.");
+	}
 
-  function delete() {
-    renderText("Delete ran.");
-  }
+	function update() {
+		renderText("Update ran.");
+	}
+
+	function delete() {
+		renderText("Delete ran.");
+	}
+
 }

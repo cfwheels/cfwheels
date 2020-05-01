@@ -1,8 +1,8 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		_controller = controller(name="dummy");
-		application.wheels.assetPaths = {http="asset0.localhost, asset2.localhost", https="secure.localhost"};
+		_controller = controller(name = "dummy");
+		application.wheels.assetPaths = {http = "asset0.localhost, asset2.localhost", https = "secure.localhost"};
 	}
 
 	function teardown() {
@@ -27,7 +27,7 @@ component extends="wheels.tests.Test" {
 		assetPath = "/javascripts/path/to/my/asset.js";
 		e = _controller.$assetDomain(assetPath);
 		iEnd = 100;
-		for (i=1; i lte iEnd; i++) {
+		for (i = 1; i lte iEnd; i++) {
 			assert('e eq _controller.$assetDomain(assetPath)');
 		};
 	}
@@ -37,7 +37,7 @@ component extends="wheels.tests.Test" {
 		assetPath = "/javascripts/path/to/my/asset.js";
 		e = _controller.$assetDomain(assetPath);
 		assert('e eq assetPath');
-		application.wheels.assetPaths = {http="asset0.localhost, asset2.localhost", https="secure.localhost"};
+		application.wheels.assetPaths = {http = "asset0.localhost, asset2.localhost", https = "secure.localhost"};
 	}
 
 }

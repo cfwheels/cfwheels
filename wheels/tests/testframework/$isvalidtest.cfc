@@ -15,4 +15,5 @@ component extends="wheels.tests.Test" {
 	function test_package_beginning_with_underscore_is_invalid() {
 		assert('!$isValidTest("wheels.tests._assets.testframework._UnderscoredPackage")');
 	}
+
 }

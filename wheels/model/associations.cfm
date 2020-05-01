@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Sets up a `belongsTo` association between this model and the specified one.
  * Use this association when this model contains a foreign key referencing another model.
@@ -12,15 +11,15 @@
  * @foreignKey Foreign key property name (usually not needed if you follow CFWheels conventions since the foreign key name will be deduced from the `name` argument).
  * @joinKey Column name to join to if not the primary key (usually not needed if you follow CFWheels conventions since the join key will be the table's primary key/keys).
  * @joinType Use to set the join type when joining associated tables. Possible values are `inner` (for `INNER JOIN`) and `outer` (for `LEFT OUTER JOIN`).
-*/
+ */
 public void function belongsTo(
 	required string name,
-	string modelName="",
-	string foreignKey="",
-	string joinKey="",
+	string modelName = "",
+	string foreignKey = "",
+	string joinKey = "",
 	string joinType
 ) {
-	$args(name="belongsTo", args=arguments);
+	$args(name = "belongsTo", args = arguments);
 	arguments.type = "belongsTo";
 
 	// The dynamic shortcut methods to add to this class (e.g. "post" , "hasPost").
@@ -28,7 +27,7 @@ public void function belongsTo(
 	arguments.methods = ListAppend(arguments.methods, arguments.name);
 	arguments.methods = ListAppend(arguments.methods, "has#capitalize(arguments.name)#");
 
-	$registerAssociation(argumentCollection=arguments);
+	$registerAssociation(argumentCollection = arguments);
 }
 
 /**
@@ -48,15 +47,15 @@ public void function belongsTo(
  */
 public void function hasMany(
 	required string name,
-	string modelName="",
-	string foreignKey="",
-	string joinKey="",
+	string modelName = "",
+	string foreignKey = "",
+	string joinKey = "",
 	string joinType,
 	string dependent,
-	string shortcut="",
-	string through="#singularize(arguments.shortcut)#,#arguments.name#"
+	string shortcut = "",
+	string through = "#singularize(arguments.shortcut)#,#arguments.name#"
 ) {
-	$args(name="hasMany", args=arguments);
+	$args(name = "hasMany", args = arguments);
 	local.singularizedName = capitalize(singularize(arguments.name));
 	local.capitalizedName = capitalize(arguments.name);
 	arguments.type = "hasMany";
@@ -75,7 +74,7 @@ public void function hasMany(
 	arguments.methods = ListAppend(arguments.methods, "remove#local.singularizedName#");
 	arguments.methods = ListAppend(arguments.methods, "removeAll#local.capitalizedName#");
 
-	$registerAssociation(argumentCollection=arguments);
+	$registerAssociation(argumentCollection = arguments);
 }
 
 /**
@@ -93,13 +92,13 @@ public void function hasMany(
  */
 public void function hasOne(
 	required string name,
-	string modelName="",
-	string foreignKey="",
-	string joinKey="",
+	string modelName = "",
+	string foreignKey = "",
+	string joinKey = "",
 	string joinType,
 	string dependent
 ) {
-	$args(name="hasOne", args=arguments);
+	$args(name = "hasOne", args = arguments);
 	local.capitalizedName = capitalize(arguments.name);
 	arguments.type = "hasOne";
 
@@ -113,14 +112,13 @@ public void function hasOne(
 	arguments.methods = ListAppend(arguments.methods, "remove#local.capitalizedName#");
 	arguments.methods = ListAppend(arguments.methods, "set#local.capitalizedName#");
 
-	$registerAssociation(argumentCollection=arguments);
+	$registerAssociation(argumentCollection = arguments);
 }
 
 /*
  * Registers the association info in the model object on the application scope.
  */
 public void function $registerAssociation() {
-
 	// Assign the name for the association.
 	local.associationName = arguments.name;
 
@@ -153,8 +151,13 @@ public void function $registerAssociation() {
 			local.propertyName = "#arguments.modelName#id"; // wheels convention
 		}
 		// Set the label (if it hasn't already been specified)
-		if (!StructKeyExists(variables.wheels.class.mapping, local.propertyName) || !StructKeyExists(variables.wheels.class.mapping[local.propertyName], "label")) {
-			property(name=local.propertyName, label=humanize(arguments.name));
+		if (
+			!StructKeyExists(variables.wheels.class.mapping, local.propertyName) || !StructKeyExists(
+				variables.wheels.class.mapping[local.propertyName],
+				"label"
+			)
+		) {
+			property(name = local.propertyName, label = humanize(arguments.name));
 		}
 	}
 
@@ -181,28 +184,27 @@ public void function $deleteDependents() {
 				case "delete":
 					local.invokeArgs = {};
 					local.invokeArgs.instantiate = true;
-					$invoke(componentReference=this, method="delete#local.all##local.key#", invokeArgs=local.invokeArgs);
+					$invoke(componentReference = this, method = "delete#local.all##local.key#", invokeArgs = local.invokeArgs);
 					break;
 				case "remove":
 					local.invokeArgs = {};
 					local.invokeArgs.instantiate = true;
-					$invoke(componentReference=this, method="remove#local.all##local.key#", invokeArgs=local.invokeArgs);
+					$invoke(componentReference = this, method = "remove#local.all##local.key#", invokeArgs = local.invokeArgs);
 					break;
 				case "deleteAll":
-					$invoke(componentReference=this, method="delete#local.all##local.key#");
+					$invoke(componentReference = this, method = "delete#local.all##local.key#");
 					break;
 				case "removeAll":
-					$invoke(componentReference=this, method="remove#local.all##local.key#");
+					$invoke(componentReference = this, method = "remove#local.all##local.key#");
 					break;
 				default:
 					Throw(
-						type="Wheels.InvalidArgument",
-						message="'#local.association.dependent#' is not a valid dependency.",
-						extendedInfo="Use `delete`, `deleteAll`, `remove`, `removeAll` or `false`."
+						type = "Wheels.InvalidArgument",
+						message = "'#local.association.dependent#' is not a valid dependency.",
+						extendedInfo = "Use `delete`, `deleteAll`, `remove`, `removeAll` or `false`."
 					);
 			}
 		}
 	}
 }
-
 </cfscript>

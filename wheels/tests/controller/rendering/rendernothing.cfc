@@ -2,7 +2,7 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		include "setup.cfm";
-		params = {controller="dummy", action="dummy"};
+		params = {controller = "dummy", action = "dummy"};
 		_controller = controller("dummy", params);
 	}
 
