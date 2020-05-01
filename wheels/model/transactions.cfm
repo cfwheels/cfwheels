@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Runs the specified method within a single database transaction.
  *
@@ -16,19 +15,19 @@ public any function invokeWithTransaction(
 	string isolation = "read_committed"
 ) {
 	local.methodArgs = $setProperties(
-		argumentCollection=arguments,
-		properties={},
-		filterList="method,transaction,isolation",
-		setOnModel=false,
-		$useFilterLists=false
+		argumentCollection = arguments,
+		properties = {},
+		filterList = "method,transaction,isolation",
+		setOnModel = false,
+		$useFilterLists = false
 	);
 	local.connectionArgs = this.$hashedConnectionArgs();
 	local.closeTransaction = true;
 	if (!StructKeyExists(variables, arguments.method)) {
 		Throw(
-			type="Wheels",
-			message="Model method not found",
-			extendedInfo="The method `#arguments.method#` does not exist in this model."
+			type = "Wheels",
+			message = "Model method not found",
+			extendedInfo = "The method `#arguments.method#` does not exist in this model."
 		);
 	}
 
@@ -46,12 +45,12 @@ public any function invokeWithTransaction(
 	}
 
 	// Run the method.
-	switch(arguments.transaction) {
+	switch (arguments.transaction) {
 		case "commit":
 		case "rollback":
 			transaction action="begin" isolation=arguments.isolation {
 				try {
-					local.rv = $invoke(method=arguments.method, componentReference=this, invokeArgs=local.methodArgs);
+					local.rv = $invoke(method = arguments.method, componentReference = this, invokeArgs = local.methodArgs);
 					if (!IsBoolean(local.rv) or !local.rv or arguments.transaction eq "rollback") {
 						transaction action="rollback";
 					}
@@ -65,13 +64,13 @@ public any function invokeWithTransaction(
 		case "false":
 		case "none":
 		case "alreadyopen":
-			local.rv = $invoke(method=arguments.method, componentReference=this, invokeArgs=local.methodArgs);
+			local.rv = $invoke(method = arguments.method, componentReference = this, invokeArgs = local.methodArgs);
 			break;
 		default:
 			Throw(
-				type="Wheels",
-				message="Invalid transaction type",
-				extendedInfo="The transaction type of `#arguments.transaction#` is invalid. Please use `commit`, `rollback` or `false`."
+				type = "Wheels",
+				message = "Invalid transaction type",
+				extendedInfo = "The transaction type of `#arguments.transaction#` is invalid. Please use `commit`, `rollback` or `false`."
 			);
 	}
 
@@ -80,11 +79,11 @@ public any function invokeWithTransaction(
 	}
 
 	// Check the return type.
-	if (!isBoolean(local.rv)) {
+	if (!IsBoolean(local.rv)) {
 		Throw(
-			type="Wheels",
-			message="Invalid return type",
-			extendedInfo="Methods invoked using `invokeWithTransaction` must return a boolean value."
+			type = "Wheels",
+			message = "Invalid return type",
+			extendedInfo = "Methods invoked using `invokeWithTransaction` must return a boolean value."
 		);
 	}
 
@@ -97,5 +96,4 @@ public any function invokeWithTransaction(
 public string function $hashedConnectionArgs() {
 	return Hash(variables.wheels.class.dataSource & variables.wheels.class.username & variables.wheels.class.password);
 }
-
 </cfscript>

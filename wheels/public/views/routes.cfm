@@ -1,16 +1,15 @@
 <cfscript>
-
 // Split out internal routes
 "routes" = {
 	"internalRoutes" = [],
 	"appRoutes" = []
 };
 
-for(r in application.wheels.routes){
-	if(structKeyExists(r, "controller") && r.controller	EQ "wheels.public"){
-		arrayAppend(routes.internalRoutes, r);
+for (r in application.wheels.routes){
+	if (StructKeyExists(r, "controller") && r.controller EQ "wheels.public") {
+		ArrayAppend(routes.internalRoutes, r);
 	} else {
-		arrayAppend(routes.appRoutes, r);
+		ArrayAppend(routes.appRoutes, r);
 	}
 }
 

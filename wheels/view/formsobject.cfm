@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Builds and returns a string containing a text field form control based on the supplied objectName and property.
  * Note: Pass any additional arguments like class, rel, and id, and the generated tag will also include those values as HTML attributes.
@@ -36,26 +35,32 @@ public string function textField(
 	string appendToLabel,
 	string errorElement,
 	string errorClass,
-	string type="text",
+	string type = "text",
 	any encode
 ) {
-	$args(name="textField", reserved="name", args=arguments);
-	arguments.objectName = $objectName(argumentCollection=arguments);
+	$args(name = "textField", reserved = "name", args = arguments);
+	arguments.objectName = $objectName(argumentCollection = arguments);
 	if (!StructKeyExists(arguments, "id")) {
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 	}
-	local.before = $formBeforeElement(argumentCollection=arguments);
-	local.after = $formAfterElement(argumentCollection=arguments);
+	local.before = $formBeforeElement(argumentCollection = arguments);
+	local.after = $formAfterElement(argumentCollection = arguments);
 	arguments.name = $tagName(arguments.objectName, arguments.property);
-	local.maxLength = $maxLength(argumentCollection=arguments);
+	local.maxLength = $maxLength(argumentCollection = arguments);
 	if (StructKeyExists(local, "maxLength")) {
 		arguments.maxLength = local.maxLength;
 	}
 	if (!StructKeyExists(arguments, "value") || !Len(arguments.value)) {
-		arguments.value = $formValue(argumentCollection=arguments);
+		arguments.value = $formValue(argumentCollection = arguments);
 	}
 	local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
-	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=local.encode) & local.after;
+	return local.before & $tag(
+		name = "input",
+		skip = "objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode",
+		skipStartingWith = "label",
+		attributes = arguments,
+		encode = local.encode
+	) & local.after;
 }
 
 /**
@@ -94,24 +99,30 @@ public string function passwordField(
 	string errorClass,
 	any encode
 ) {
-	$args(name="passwordField", reserved="type,name", args=arguments);
-	arguments.objectName = $objectName(argumentCollection=arguments);
+	$args(name = "passwordField", reserved = "type,name", args = arguments);
+	arguments.objectName = $objectName(argumentCollection = arguments);
 	if (!StructKeyExists(arguments, "id")) {
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 	}
-	local.before = $formBeforeElement(argumentCollection=arguments);
-	local.after = $formAfterElement(argumentCollection=arguments);
+	local.before = $formBeforeElement(argumentCollection = arguments);
+	local.after = $formAfterElement(argumentCollection = arguments);
 	arguments.type = "password";
 	arguments.name = $tagName(arguments.objectName, arguments.property);
-	local.maxlength = $maxLength(argumentCollection=arguments);
+	local.maxlength = $maxLength(argumentCollection = arguments);
 	if (StructKeyExists(local, "maxlength")) {
 		arguments.maxlength = local.maxlength;
 	}
 	if (!StructKeyExists(arguments, "value") || !Len(arguments.value)) {
-		arguments.value = $formValue(argumentCollection=arguments);
+		arguments.value = $formValue(argumentCollection = arguments);
 	}
 	local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
-	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=local.encode) & local.after;
+	return local.before & $tag(
+		name = "input",
+		skip = "objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode",
+		skipStartingWith = "label",
+		attributes = arguments,
+		encode = local.encode
+	) & local.after;
 }
 
 /**
@@ -134,20 +145,27 @@ public string function hiddenField(
 	string position,
 	boolean encode
 ) {
-	$args(name="hiddenField", reserved="type,name", args=arguments);
-	arguments.objectName = $objectName(argumentCollection=arguments);
+	$args(name = "hiddenField", reserved = "type,name", args = arguments);
+	arguments.objectName = $objectName(argumentCollection = arguments);
 	arguments.type = "hidden";
 	arguments.name = $tagName(arguments.objectName, arguments.property);
 	if (!StructKeyExists(arguments, "id")) {
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 	}
 	if (!StructKeyExists(arguments, "value") || !Len(arguments.value)) {
-		arguments.value = $formValue(argumentCollection=arguments);
+		arguments.value = $formValue(argumentCollection = arguments);
 	}
-	if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get") {
+	if (
+		application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get"
+	) {
 		arguments.value = obfuscateParam(arguments.value);
 	}
-	return $tag(name="input", skip="objectName,property,association,position,encode", attributes=arguments, encode=arguments.encode);
+	return $tag(
+		name = "input",
+		skip = "objectName,property,association,position,encode",
+		attributes = arguments,
+		encode = arguments.encode
+	);
 }
 
 /**
@@ -186,17 +204,23 @@ public string function fileField(
 	string errorClass,
 	any encode
 ) {
-	$args(name="fileField", reserved="type,name", args=arguments);
-	arguments.objectName = $objectName(argumentCollection=arguments);
+	$args(name = "fileField", reserved = "type,name", args = arguments);
+	arguments.objectName = $objectName(argumentCollection = arguments);
 	if (!StructKeyExists(arguments, "id")) {
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 	}
-	local.before = $formBeforeElement(argumentCollection=arguments);
-	local.after = $formAfterElement(argumentCollection=arguments);
+	local.before = $formBeforeElement(argumentCollection = arguments);
+	local.after = $formAfterElement(argumentCollection = arguments);
 	arguments.type = "file";
 	arguments.name = $tagName(arguments.objectName, arguments.property);
 	local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
-	return local.before & $tag(name="input", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=local.encode) & local.after;
+	return local.before & $tag(
+		name = "input",
+		skip = "objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode",
+		skipStartingWith = "label",
+		attributes = arguments,
+		encode = local.encode
+	) & local.after;
 }
 
 /**
@@ -235,16 +259,23 @@ public string function textArea(
 	string errorClass,
 	any encode
 ) {
-	$args(name="textArea", reserved="name", args=arguments);
-	arguments.objectName = $objectName(argumentCollection=arguments);
+	$args(name = "textArea", reserved = "name", args = arguments);
+	arguments.objectName = $objectName(argumentCollection = arguments);
 	if (!StructKeyExists(arguments, "id")) {
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 	}
-	local.before = $formBeforeElement(argumentCollection=arguments);
-	local.after = $formAfterElement(argumentCollection=arguments);
+	local.before = $formBeforeElement(argumentCollection = arguments);
+	local.after = $formAfterElement(argumentCollection = arguments);
 	arguments.name = $tagName(arguments.objectName, arguments.property);
-	local.content = $formValue(argumentCollection=arguments);
-	return local.before & $element(name="textarea", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", content=local.content, attributes=arguments, encode=arguments.encode) & local.after;
+	local.content = $formValue(argumentCollection = arguments);
+	return local.before & $element(
+		name = "textarea",
+		skip = "objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode",
+		skipStartingWith = "label",
+		content = local.content,
+		attributes = arguments,
+		encode = arguments.encode
+	) & local.after;
 }
 
 /**
@@ -285,25 +316,43 @@ public string function radioButton(
 	string errorClass,
 	any encode
 ) {
-	$args(name="radioButton", reserved="type,name,value,checked", args=arguments);
-	arguments.objectName = $objectName(argumentCollection=arguments);
-	local.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
+	$args(name = "radioButton", reserved = "type,name,value,checked", args = arguments);
+	arguments.objectName = $objectName(argumentCollection = arguments);
+	local.valueToAppend = LCase(
+		Replace(
+			ReReplaceNoCase(
+				arguments.tagValue,
+				"[^a-z0-9- ]",
+				"",
+				"all"
+			),
+			" ",
+			"-",
+			"all"
+		)
+	);
 	if (!StructKeyExists(arguments, "id")) {
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 		if (Len(local.valueToAppend)) {
 			arguments.id &= "-" & local.valueToAppend;
 		}
 	}
-	local.before = $formBeforeElement(argumentCollection=arguments);
-	local.after = $formAfterElement(argumentCollection=arguments);
+	local.before = $formBeforeElement(argumentCollection = arguments);
+	local.after = $formAfterElement(argumentCollection = arguments);
 	arguments.type = "radio";
 	arguments.name = $tagName(arguments.objectName, arguments.property);
 	arguments.value = arguments.tagValue;
-	if (arguments.tagValue == $formValue(argumentCollection=arguments)) {
+	if (arguments.tagValue == $formValue(argumentCollection = arguments)) {
 		arguments.checked = "checked";
 	}
 	local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
-	return local.before & $tag(name="input", skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=local.encode) & local.after;
+	return local.before & $tag(
+		name = "input",
+		skip = "objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode",
+		skipStartingWith = "label",
+		attributes = arguments,
+		encode = local.encode
+	) & local.after;
 }
 
 /**
@@ -346,29 +395,39 @@ public string function checkBox(
 	string errorClass,
 	any encode
 ) {
-	$args(name="checkBox", reserved="type,name,value,checked", args=arguments);
-	arguments.objectName = $objectName(argumentCollection=arguments);
+	$args(name = "checkBox", reserved = "type,name,value,checked", args = arguments);
+	arguments.objectName = $objectName(argumentCollection = arguments);
 	if (!StructKeyExists(arguments, "id")) {
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 	}
-	local.before = $formBeforeElement(argumentCollection=arguments);
-	local.after = $formAfterElement(argumentCollection=arguments);
+	local.before = $formBeforeElement(argumentCollection = arguments);
+	local.after = $formAfterElement(argumentCollection = arguments);
 	arguments.type = "checkbox";
 	arguments.name = $tagName(arguments.objectName, arguments.property);
 	arguments.value = arguments.checkedValue;
-	local.value = $formValue(argumentCollection=arguments);
-	if (local.value == arguments.value || IsNumeric(local.value) && local.value == 1 || !IsNumeric(local.value) && IsBoolean(local.value) && local.value) {
+	local.value = $formValue(argumentCollection = arguments);
+	if (
+		local.value == arguments.value || IsNumeric(local.value) && local.value == 1 || !IsNumeric(local.value) && IsBoolean(
+			local.value
+		) && local.value
+	) {
 		arguments.checked = "checked";
 	}
 	local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
-	local.rv = local.before & $tag(name="input", skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", attributes=arguments, encode=local.encode);
+	local.rv = local.before & $tag(
+		name = "input",
+		skip = "objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode",
+		skipStartingWith = "label",
+		attributes = arguments,
+		encode = local.encode
+	);
 	if (Len(arguments.uncheckedValue)) {
 		local.hiddenAttributes = {};
 		local.hiddenAttributes.type = "hidden";
 		local.hiddenAttributes.id = arguments.id & "-checkbox";
 		local.hiddenAttributes.name = arguments.name & "($checkbox)";
 		local.hiddenAttributes.value = arguments.uncheckedValue;
-		local.rv &= $tag(name="input", attributes=local.hiddenAttributes, encode=local.encode);
+		local.rv &= $tag(name = "input", attributes = local.hiddenAttributes, encode = local.encode);
 	}
 	local.rv &= local.after;
 	return local.rv;
@@ -418,13 +477,13 @@ public string function select(
 	string errorClass,
 	any encode
 ) {
-	$args(name="select", reserved="name", args=arguments);
-	arguments.objectName = $objectName(argumentCollection=arguments);
+	$args(name = "select", reserved = "name", args = arguments);
+	arguments.objectName = $objectName(argumentCollection = arguments);
 	if (!StructKeyExists(arguments, "id")) {
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 	}
-	local.before = $formBeforeElement(argumentCollection=arguments);
-	local.after = $formAfterElement(argumentCollection=arguments);
+	local.before = $formBeforeElement(argumentCollection = arguments);
+	local.after = $formAfterElement(argumentCollection = arguments);
 	arguments.name = $tagName(arguments.objectName, arguments.property);
 	if (StructKeyExists(arguments, "multiple") && IsBoolean(arguments.multiple)) {
 		if (arguments.multiple) {
@@ -433,18 +492,30 @@ public string function select(
 			StructDelete(arguments, "multiple");
 		}
 	}
-	local.content = $optionsForSelect(argumentCollection=arguments);
+	local.content = $optionsForSelect(argumentCollection = arguments);
 	if (!IsBoolean(arguments.includeBlank) || arguments.includeBlank) {
 		if (!IsBoolean(arguments.includeBlank)) {
 			local.blankOptionText = arguments.includeBlank;
 		} else {
 			local.blankOptionText = "";
 		}
-		local.blankOptionAttributes = {value=""};
-		local.content = $element(name="option", content=local.blankOptionText, attributes=local.blankOptionAttributes, encode=arguments.encode) & local.content;
+		local.blankOptionAttributes = {value = ""};
+		local.content = $element(
+			name = "option",
+			content = local.blankOptionText,
+			attributes = local.blankOptionAttributes,
+			encode = arguments.encode
+		) & local.content;
 	}
 	local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : "attributes";
-	return local.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode", skipStartingWith="label", content=local.content, attributes=arguments, encode=local.encode) & local.after;
+	return local.before & $element(
+		name = "select",
+		skip = "objectName,property,options,includeBlank,valueField,textField,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position,encode",
+		skipStartingWith = "label",
+		content = local.content,
+		attributes = arguments,
+		encode = local.encode
+	) & local.after;
 }
 
 /**
@@ -456,13 +527,13 @@ public string function $optionsForSelect(
 	required string textField,
 	required any encode
 ) {
-	local.value = $formValue(argumentCollection=arguments);
+	local.value = $formValue(argumentCollection = arguments);
 	local.rv = "";
 	if (IsQuery(arguments.options)) {
 		if (!Len(arguments.valueField) || !Len(arguments.textField)) {
 			// order the columns according to their ordinal position in the database table
 			local.columns = "";
-			local.info = GetMetaData(arguments.options);
+			local.info = GetMetadata(arguments.options);
 			local.iEnd = ArrayLen(local.info);
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.columns = ListAppend(local.columns, local.info[local.i].name);
@@ -497,14 +568,13 @@ public string function $optionsForSelect(
 		local.iEnd = arguments.options.RecordCount;
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.rv &= $option(
-				objectValue=local.value,
-				optionValue=arguments.options[arguments.valueField][local.i],
-				optionText=arguments.options[arguments.textField][local.i],
-				encode=arguments.encode
+				objectValue = local.value,
+				optionValue = arguments.options[arguments.valueField][local.i],
+				optionText = arguments.options[arguments.textField][local.i],
+				encode = arguments.encode
 			);
 		}
 	} else if (IsStruct(arguments.options)) {
-
 		// Sort struct keys alphabetically.
 		local.sortedKeys = ListSort(StructKeyList(arguments.options), "textnocase");
 
@@ -512,14 +582,13 @@ public string function $optionsForSelect(
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.key = ListGetAt(local.sortedKeys, local.i);
 			local.rv &= $option(
-				objectValue=local.value,
-				optionValue=LCase(local.key),
-				optionText=arguments.options[local.key],
-				encode=arguments.encode
+				objectValue = local.value,
+				optionValue = LCase(local.key),
+				optionText = arguments.options[local.key],
+				encode = arguments.encode
 			);
 		}
 	} else {
-
 		// Convert the options to an array so we don't duplicate logic.
 		if (IsSimpleValue(arguments.options)) {
 			arguments.options = ListToArray(arguments.options);
@@ -536,7 +605,12 @@ public string function $optionsForSelect(
 			} else if (IsArray(arguments.options[local.i]) && ArrayLen(arguments.options[local.i]) >= 2) {
 				local.optionValue = arguments.options[local.i][1];
 				local.optionText = arguments.options[local.i][2];
-			} else if (IsStruct(arguments.options[local.i]) && StructKeyExists(arguments.options[local.i], "value") && StructKeyExists(arguments.options[local.i], "text")) {
+			} else if (
+				IsStruct(arguments.options[local.i]) && StructKeyExists(arguments.options[local.i], "value") && StructKeyExists(
+					arguments.options[local.i],
+					"text"
+				)
+			) {
 				local.optionValue = arguments.options[local.i]["value"];
 				local.optionText = arguments.options[local.i]["text"];
 			} else if (IsObject(arguments.options[local.i])) {
@@ -566,12 +640,10 @@ public string function $optionsForSelect(
 			} else if (IsStruct(arguments.options[local.i])) {
 				local.object = arguments.options[local.i];
 				if (StructCount(local.object) == 1) {
-
 					// When the struct only has one element then use the key / value pair.
 					local.key = StructKeyList(local.object);
 					local.optionValue = LCase(local.key);
 					local.optionText = local.object[local.key];
-
 				} else {
 					if (StructKeyExists(local.object, arguments.valueField)) {
 						local.optionValue = local.object[arguments.valueField];
@@ -582,10 +654,10 @@ public string function $optionsForSelect(
 				}
 			}
 			local.rv &= $option(
-				objectValue=local.value,
-				optionValue=local.optionValue,
-				optionText=local.optionText,
-				encode=arguments.encode
+				objectValue = local.value,
+				optionValue = local.optionValue,
+				optionText = local.optionText,
+				encode = arguments.encode
 			);
 		}
 	}
@@ -601,14 +673,20 @@ public string function $option(
 	required string optionText,
 	required any encode
 ) {
-	local.optionAttributes = {value=arguments.optionValue};
+	local.optionAttributes = {value = arguments.optionValue};
 	if (arguments.optionValue == arguments.objectValue || ListFindNoCase(arguments.objectValue, arguments.optionValue)) {
 		local.optionAttributes.selected = "selected";
 	}
-	if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get") {
+	if (
+		application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get"
+	) {
 		local.optionAttributes.value = obfuscateParam(local.optionAttributes.value);
 	}
-	return $element(name="option", content=arguments.optionText, attributes=local.optionAttributes, encode=arguments.encode);
+	return $element(
+		name = "option",
+		content = arguments.optionText,
+		attributes = local.optionAttributes,
+		encode = arguments.encode
+	);
 }
-
 </cfscript>

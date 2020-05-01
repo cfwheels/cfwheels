@@ -31,7 +31,7 @@ component extends="[extends]" hint="[description]" {
 	function up() {
 		transaction {
 			try {
-				t = createTable(name='tableName');
+				t = createTable(name = 'tableName');
 				t.timestamps();
 				t.create();
 			} catch (any e) {
@@ -40,7 +40,12 @@ component extends="[extends]" hint="[description]" {
 
 			if (StructKeyExists(local, "exception")) {
 				transaction action="rollback";
-				throw(errorCode="1", detail=local.exception.detail, message=local.exception.message, type="any");
+				Throw(
+					errorCode = "1",
+					detail = local.exception.detail,
+					message = local.exception.message,
+					type = "any"
+				);
 			} else {
 				transaction action="commit";
 			}
@@ -57,7 +62,12 @@ component extends="[extends]" hint="[description]" {
 
 			if (StructKeyExists(local, "exception")) {
 				transaction action="rollback";
-				throw(errorCode="1", detail=local.exception.detail, message=local.exception.message, type="any");
+				Throw(
+					errorCode = "1",
+					detail = local.exception.detail,
+					message = local.exception.message,
+					type = "any"
+				);
 			} else {
 				transaction action="commit";
 			}

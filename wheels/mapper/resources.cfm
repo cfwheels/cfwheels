@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Create a group of routes that exposes actions for manipulating a singular resource. A singular resource exposes URL patterns for the entire CRUD lifecycle of a single entity (`show`, `new`, `create`, `edit`, `update`, and `delete`) without exposing a primary key in the URL. Usually this type of resource represents a singleton entity tied to the session, application, or another resource (perhaps nested within another resource). If you need to generate routes for manipulating a collection of resources with a primary key in the URL, see the `resources` mapper method.
  *
@@ -22,8 +21,8 @@
  */
 public struct function resource(
 	required string name,
-	boolean nested=false,
-	string path=hyphenize(arguments.name),
+	boolean nested = false,
+	string path = hyphenize(arguments.name),
 	string controller,
 	string singular,
 	string plural,
@@ -33,18 +32,17 @@ public struct function resource(
 	string shallowPath,
 	string shallowName,
 	struct constraints,
-	string $call="resource",
-	boolean $plural=false,
-	boolean mapFormat=variables.mapFormat
+	string $call = "resource",
+	boolean $plural = false,
+	boolean mapFormat = variables.mapFormat
 ) {
 	local.args = {};
 
 	// If name is a list, add each of the resources in the list.
 	if (Find(",", arguments.name)) {
-
 		// Error if the user asked for a nested resource.
 		if (arguments.nested) {
-			Throw(type="Wheels.InvalidResource", message="Multiple resources in same declaration cannot be nested.");
+			Throw(type = "Wheels.InvalidResource", message = "Multiple resources in same declaration cannot be nested.");
 		}
 
 		// Remove path so new resources do not break.
@@ -54,13 +52,12 @@ public struct function resource(
 		local.names = ListToArray(arguments.name);
 		local.iEnd = ArrayLen(local.names);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			resource(name=local.names[local.i], argumentCollection=arguments);
+			resource(name = local.names[local.i], argumentCollection = arguments);
 		}
 		return this;
 	}
 
 	if (arguments.$plural) {
-
 		// Setup singular and plural words.
 		if (!StructKeyExists(arguments, "singular")) {
 			arguments.singular = singularize(arguments.name);
@@ -79,7 +76,6 @@ public struct function resource(
 
 		local.args.actions = "index,new,create,show,edit,update,delete";
 	} else {
-
 		// Setup singular and plural words.
 		arguments.singular = arguments.name;
 		if (!StructKeyExists(arguments, "plural")) {
@@ -107,7 +103,7 @@ public struct function resource(
 		local.except = ListToArray(arguments.except);
 		local.iEnd = ArrayLen(local.except);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			local.args.actions = REReplace(local.args.actions, "\b#local.except[local.i]#\b(,?|$)", "");
+			local.args.actions = ReReplace(local.args.actions, "\b#local.except[local.i]#\b(,?|$)", "");
 		}
 	}
 
@@ -130,7 +126,6 @@ public struct function resource(
 
 	// If parent resource is found.
 	if (StructKeyExists(variables.scopeStack[1], "member")) {
-
 		// Use member and nested path.
 		local.args.name = variables.scopeStack[1].member;
 		local.args.path = variables.scopeStack[1].nestedPath;
@@ -140,7 +135,6 @@ public struct function resource(
 		if (StructKeyExists(local.args.parentResource, "parentResource")) {
 			StructDelete(local.args.parentResource, "parentResource");
 		}
-
 	}
 
 	// Pass along shallow route options.
@@ -165,7 +159,7 @@ public struct function resource(
 	}
 
 	// Scope the resource.
-	scope($call=arguments.$call, argumentCollection=local.args);
+	scope($call = arguments.$call, argumentCollection = local.args);
 
 	// Call end() automatically unless this is a nested call.
 	// See 'end()' source for the resource routes logic.
@@ -198,8 +192,8 @@ public struct function resource(
  */
 public struct function resources(
 	required string name,
-	boolean nested=false,
-	string path=hyphenize(arguments.name),
+	boolean nested = false,
+	string path = hyphenize(arguments.name),
 	string controller,
 	string singular,
 	string plural,
@@ -209,9 +203,9 @@ public struct function resources(
 	string shallowPath,
 	string shallowName,
 	struct constraints,
-	boolean mapFormat=variables.mapFormat
+	boolean mapFormat = variables.mapFormat
 ) {
-	return resource(argumentCollection=arguments, $plural=true, $call="resources");
+	return resource(argumentCollection = arguments, $plural = true, $call = "resources");
 }
 
 /**
@@ -223,7 +217,7 @@ public struct function resources(
  * [category: Routing]
  */
 public struct function member() {
-	return scope(path=variables.scopeStack[1].memberPath, $call="member");
+	return scope(path = variables.scopeStack[1].memberPath, $call = "member");
 }
 
 /**
@@ -234,7 +228,6 @@ public struct function member() {
  * [category: Routing]
  */
 public struct function collection() {
-	return scope(path=variables.scopeStack[1].collectionPath, $call="collection");
+	return scope(path = variables.scopeStack[1].collectionPath, $call = "collection");
 }
-
 </cfscript>

@@ -1,4 +1,5 @@
 component output=false {
+
 	include "../../global/functions.cfm";
 	include "cfquery.cfm";
 
@@ -28,19 +29,23 @@ component output=false {
 	 * We return void or a struct containing the key name / value.
 	 */
 	public any function $identitySelect(
-	  required struct queryAttributes,
-	  required struct result,
-	  required string primaryKey
+		required struct queryAttributes,
+		required struct result,
+		required string primaryKey
 	) {
 		var query = {};
 		local.sql = Trim(arguments.result.sql);
 		if (Left(local.sql, 11) == "INSERT INTO" && !StructKeyExists(arguments.result, $generatedKey())) {
 			local.startPar = Find("(", local.sql) + 1;
 			local.endPar = Find(")", local.sql);
-			local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
+			local.columnList = ReplaceList(
+				Mid(local.sql, local.startPar, (local.endPar - local.startPar)),
+				"#Chr(10)#,#Chr(13)#, ",
+				",,"
+			);
 			if (!ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
 				local.rv = {};
-				query = $query(sql="SELECT LAST_INSERT_ID() AS lastId", argumentCollection=arguments.queryAttributes);
+				query = $query(sql = "SELECT LAST_INSERT_ID() AS lastId", argumentCollection = arguments.queryAttributes);
 				local.rv[$generatedKey()] = query.lastId;
 				return local.rv;
 			}
@@ -102,7 +107,7 @@ component output=false {
 				local.sort = "";
 				if (Right(local.item, 4) == " ASC" || Right(local.item, 5) == " DESC") {
 					local.sort = " " & Reverse(SpanExcluding(Reverse(local.item), " "));
-					local.item = Mid(local.item, 1, Len(local.item)-Len(local.sort));
+					local.item = Mid(local.item, 1, Len(local.item) - Len(local.sort));
 				}
 				local.alias = Reverse(SpanExcluding(Reverse(local.item), " "));
 
@@ -125,10 +130,15 @@ component output=false {
 	 * The args argument is the original arguments passed in by reference so we just modify it without passing it back.
 	 */
 	public void function $removeColumnAliasesInOrderClause(required struct args) {
-		if (IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql)]) && Left(arguments.args.sql[ArrayLen(arguments.args.sql)], 9) == "ORDER BY ") {
+		if (
+			IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql)]) && Left(
+				arguments.args.sql[ArrayLen(arguments.args.sql)],
+				9
+			) == "ORDER BY "
+		) {
 			local.pos = ArrayLen(arguments.args.sql);
 			local.list = ReplaceNoCase(arguments.args.sql[local.pos], "ORDER BY ", "");
-			arguments.args.sql[local.pos] = "ORDER BY " & $columnAlias(list=local.list, action="remove");
+			arguments.args.sql[local.pos] = "ORDER BY " & $columnAlias(list = local.list, action = "remove");
 		}
 	}
 
@@ -136,9 +146,8 @@ component output=false {
 	 * Internal function.
 	 */
 	public boolean function $isAggregateFunction(required string sql) {
-
 		// Find "(FUNCTION(..." pattern inside the sql.
-		local.match = REFind("^\([A-Z]+\(", arguments.sql, 0, true);
+		local.match = ReFind("^\([A-Z]+\(", arguments.sql, 0, true);
 
 		// Guard against invalid match.
 		if (ArrayLen(local.match.pos) == 0) {
@@ -146,11 +155,9 @@ component output=false {
 		} else if (local.match.len[1] <= 2) {
 			local.rv = false;
 		} else {
-
 			// Extract and analyze the function name.
-			local.name = Mid(arguments.sql, local.match.pos[1]+1, local.match.len[1]-2);
+			local.name = Mid(arguments.sql, local.match.pos[1] + 1, local.match.len[1] - 2);
 			local.rv = ListContains("AVG,COUNT,MAX,MIN,SUM", local.name) ? true : false;
-
 		}
 		return local.rv;
 	}
@@ -159,12 +166,35 @@ component output=false {
 	 * The args argument is the original arguments passed in by reference so we just modify it without passing it back.
 	 */
 	public void function $addColumnsToSelectAndGroupBy(required struct args) {
-		if (IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql)]) && Left(arguments.args.sql[ArrayLen(arguments.args.sql)], 8) == "ORDER BY" && IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql)-1]) && Left(arguments.args.sql[ArrayLen(arguments.args.sql)-1], 8) == "GROUP BY") {
+		if (
+			IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql)]) && Left(
+				arguments.args.sql[ArrayLen(arguments.args.sql)],
+				8
+			) == "ORDER BY" && IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql) - 1]) && Left(
+				arguments.args.sql[ArrayLen(arguments.args.sql) - 1],
+				8
+			) == "GROUP BY"
+		) {
 			local.iEnd = ListLen(arguments.args.sql[ArrayLen(arguments.args.sql)]);
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
-				local.item = Trim(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(ListGetAt(arguments.args.sql[ArrayLen(arguments.args.sql)], local.i), "ORDER BY ", ""), " ASC", ""), " DESC", ""));
-				if (!ListFindNoCase(ReplaceNoCase(arguments.args.sql[ArrayLen(arguments.args.sql)-1], "GROUP BY ", ""), local.item) && !$isAggregateFunction(local.item)) {
-					local.key = ArrayLen(arguments.args.sql)-1;
+				local.item = Trim(
+					ReplaceNoCase(
+						ReplaceNoCase(
+							ReplaceNoCase(ListGetAt(arguments.args.sql[ArrayLen(arguments.args.sql)], local.i), "ORDER BY ", ""),
+							" ASC",
+							""
+						),
+						" DESC",
+						""
+					)
+				);
+				if (
+					!ListFindNoCase(
+						ReplaceNoCase(arguments.args.sql[ArrayLen(arguments.args.sql) - 1], "GROUP BY ", ""),
+						local.item
+					) && !$isAggregateFunction(local.item)
+				) {
+					local.key = ArrayLen(arguments.args.sql) - 1;
 					arguments.args.sql[local.key] = ListAppend(arguments.args.sql[local.key], local.item);
 				}
 			}
@@ -182,16 +212,16 @@ component output=false {
 		local.args.table = arguments.tableName;
 		if ($get("showErrorInformation")) {
 			try {
-				local.rv = $getColumnInfo(argumentCollection=local.args);
+				local.rv = $getColumnInfo(argumentCollection = local.args);
 			} catch (any e) {
 				Throw(
-					type="Wheels.TableNotFound",
-					message="The `#arguments.tableName#` table could not be found in the database.<br>`#e.message#`<br>`#e.detail#.`",
-					extendedInfo="Add a table named `#arguments.tableName#` to your database or tell CFWheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating a `config` method inside it and then calling `table(""tbl_users"")` from within it. You can also issue a reload request, if you have made changes to your files, to make CFWheels pick up on those changes."
+					type = "Wheels.TableNotFound",
+					message = "The `#arguments.tableName#` table could not be found in the database.<br>`#e.message#`<br>`#e.detail#.`",
+					extendedInfo = "Add a table named `#arguments.tableName#` to your database or tell CFWheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating a `config` method inside it and then calling `table(""tbl_users"")` from within it. You can also issue a reload request, if you have made changes to your files, to make CFWheels pick up on those changes."
 				);
 			}
 		} else {
-			local.rv = $getColumnInfo(argumentCollection=local.args);
+			local.rv = $getColumnInfo(argumentCollection = local.args);
 		}
 		return local.rv;
 	}
@@ -200,14 +230,29 @@ component output=false {
 	 * Internal function.
 	 */
 	public string function $getValidationType(required string type) {
-		switch(arguments.type) {
-			case "CF_SQL_DECIMAL": case "CF_SQL_DOUBLE": case "CF_SQL_FLOAT": case "CF_SQL_MONEY": case "CF_SQL_MONEY4": case "CF_SQL_NUMERIC": case "CF_SQL_REAL":
+		switch (arguments.type) {
+			case "CF_SQL_DECIMAL":
+			case "CF_SQL_DOUBLE":
+			case "CF_SQL_FLOAT":
+			case "CF_SQL_MONEY":
+			case "CF_SQL_MONEY4":
+			case "CF_SQL_NUMERIC":
+			case "CF_SQL_REAL":
 				return "float";
-			case "CF_SQL_INTEGER": case "CF_SQL_BIGINT": case "CF_SQL_SMALLINT": case "CF_SQL_TINYINT":
+			case "CF_SQL_INTEGER":
+			case "CF_SQL_BIGINT":
+			case "CF_SQL_SMALLINT":
+			case "CF_SQL_TINYINT":
 				return "integer";
-			case "CF_SQL_BINARY": case "CF_SQL_VARBINARY": case "CF_SQL_LONGVARBINARY": case "CF_SQL_BLOB": case "CF_SQL_CLOB":
+			case "CF_SQL_BINARY":
+			case "CF_SQL_VARBINARY":
+			case "CF_SQL_LONGVARBINARY":
+			case "CF_SQL_BLOB":
+			case "CF_SQL_CLOB":
 				return "binary";
-			case "CF_SQL_DATE": case "CF_SQL_TIME": case "CF_SQL_TIMESTAMP":
+			case "CF_SQL_DATE":
+			case "CF_SQL_TIME":
+			case "CF_SQL_TIMESTAMP":
 				return "datetime";
 			case "CF_SQL_BIT":
 				return "boolean";
@@ -215,7 +260,8 @@ component output=false {
 				return "array";
 			case "CF_SQL_STRUCT":
 				return "struct";
-			case "CF_SQL_LONGVARCHAR": case "CF_SQL_LONGNVARCHAR":
+			case "CF_SQL_LONGVARCHAR":
+			case "CF_SQL_LONGNVARCHAR":
 				return "text";
 			default:
 				return "string";
@@ -243,9 +289,9 @@ component output=false {
 	public struct function $queryParams(required struct settings) {
 		if (!StructKeyExists(arguments.settings, "value")) {
 			Throw(
-				type="Wheels.QueryParamValue",
-				message="The value for `cfqueryparam` cannot be determined",
-				extendedInfo="This is usually caused by a syntax error in the `WHERE` statement, such as forgetting to quote strings for example."
+				type = "Wheels.QueryParamValue",
+				message = "The value for `cfqueryparam` cannot be determined",
+				extendedInfo = "This is usually caused by a syntax error in the `WHERE` statement, such as forgetting to quote strings for example."
 			);
 		}
 		local.rv = {};
@@ -276,13 +322,13 @@ component output=false {
 		required string password
 	) {
 		arguments.type = "columns";
-		return $dbinfo(argumentCollection=arguments);
+		return $dbinfo(argumentCollection = arguments);
 	}
 
 	/**
 	 * Internal function.
 	 */
-	public string function $quoteValue(required string str, string sqlType="CF_SQL_VARCHAR", string type) {
+	public string function $quoteValue(required string str, string sqlType = "CF_SQL_VARCHAR", string type) {
 		if (!StructKeyExists(arguments, "type")) {
 			arguments.type = $getValidationType(arguments.sqlType);
 		}
@@ -322,7 +368,7 @@ component output=false {
 		local.hasGroupBy = false;
 		local.havingPos = 0;
 		local.iEnd = ArrayLen(arguments.args.sql);
-		for (local.i=1; local.i <= local.iEnd; local.i++) {
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			if (IsSimpleValue(arguments.args.sql[local.i]) && Left(arguments.args.sql[local.i], 8) == "GROUP BY") {
 				local.hasGroupBy = true;
 				local.havingPos = local.i + 1;
@@ -336,7 +382,7 @@ component output=false {
 			ArrayInsertAt(arguments.args.sql, local.havingPos, "HAVING");
 			local.sql = [];
 			local.iEnd = ArrayLen(arguments.args.sql);
-			for (local.i=1; local.i <= local.iEnd; local.i++) {
+			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				if (IsSimpleValue(arguments.args.sql[local.i])) {
 					if ($isAggregateFunction(arguments.args.sql[local.i])) {
 						ArrayDeleteAt(local.sql, ArrayLen(local.sql));
@@ -351,16 +397,16 @@ component output=false {
 			}
 			local.pos = local.havingPos;
 			local.iEnd = ArrayLen(arguments.args.sql);
-			for (local.i=1; local.i <= local.iEnd; local.i++) {
+			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				if (IsSimpleValue(arguments.args.sql[local.i]) && $isAggregateFunction(arguments.args.sql[local.i])) {
 					if (local.pos != local.havingPos) {
 						local.pos++;
-						ArrayInsertAt(local.sql, local.pos, arguments.args.sql[local.i-1]);
+						ArrayInsertAt(local.sql, local.pos, arguments.args.sql[local.i - 1]);
 					}
 					local.pos++;
 					ArrayInsertAt(local.sql, local.pos, arguments.args.sql[local.i]);
 					local.pos++;
-					ArrayInsertAt(local.sql, local.pos, arguments.args.sql[local.i+1]);
+					ArrayInsertAt(local.sql, local.pos, arguments.args.sql[local.i + 1]);
 				}
 			}
 			arguments.args.sql = local.sql;
@@ -371,12 +417,12 @@ component output=false {
 	 * Internal function.
 	 */
 	public struct function $performQuery(
-	  required array sql,
-	  required boolean parameterize,
-	  numeric limit=0,
-	  numeric offset=0,
-	  string $primaryKey="",
-	  string $debugName="query"
+		required array sql,
+		required boolean parameterize,
+		numeric limit = 0,
+		numeric offset = 0,
+		string $primaryKey = "",
+		string $debugName = "query"
 	) {
 		local.queryAttributes = {};
 		local.queryAttributes.dataSource = variables.dataSource;
@@ -412,16 +458,17 @@ component output=false {
 		StructDelete(local.orgArgs, "$primaryKey");
 		StructAppend(local.queryAttributes, local.orgArgs);
 		return $executeQuery(
-			queryAttributes=local.queryAttributes,
-			sql=arguments.sql,
-			parameterize=arguments.parameterize,
-			limit=arguments.limit,
-			offset=arguments.offset,
-			comment=local.comment,
-			debugName=arguments.$debugName,
-			primaryKey=arguments.$primaryKey
+			queryAttributes = local.queryAttributes,
+			sql = arguments.sql,
+			parameterize = arguments.parameterize,
+			limit = arguments.limit,
+			offset = arguments.offset,
+			comment = local.comment,
+			debugName = arguments.$debugName,
+			primaryKey = arguments.$primaryKey
 		);
 	}
 
 	include "../../plugins/standalone/injection.cfm";
+
 }

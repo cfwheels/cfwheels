@@ -15,15 +15,20 @@ component extends="[extends]" hint="[description]" {
 
 	function up() {
 		transaction {
-		  try {
-				addIndex(table='tableName', columnNames='columnName', unique=true);
+			try {
+				addIndex(table = 'tableName', columnNames = 'columnName', unique = true);
 			} catch (any e) {
 				local.exception = e;
 			}
 
 			if (StructKeyExists(local, "exception")) {
 				transaction action="rollback";
-				throw(errorCode="1", detail=local.exception.detail, message=local.exception.message, type="any");
+				Throw(
+					errorCode = "1",
+					detail = local.exception.detail,
+					message = local.exception.message,
+					type = "any"
+				);
 			} else {
 				transaction action="commit";
 			}
@@ -33,14 +38,19 @@ component extends="[extends]" hint="[description]" {
 	function down() {
 		transaction {
 			try {
-				removeIndex(table='tableName', indexName='');
-			}  catch (any e) {
+				removeIndex(table = 'tableName', indexName = '');
+			} catch (any e) {
 				local.exception = e;
 			}
 
 			if (StructKeyExists(local, "exception")) {
 				transaction action="rollback";
-				throw(errorCode="1", detail=local.exception.detail, message=local.exception.message, type="any");
+				Throw(
+					errorCode = "1",
+					detail = local.exception.detail,
+					message = local.exception.message,
+					type = "any"
+				);
 			} else {
 				transaction action="commit";
 			}

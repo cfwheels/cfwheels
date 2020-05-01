@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Sends an email using a template and an optional layout to wrap it in.
  * Besides the CFWheels-specific arguments documented here, you can also pass in any argument that is accepted by the `cfmail` tag as well as your own arguments to be used by the view.
@@ -18,18 +17,23 @@
  * @writeToFile The file to which the email contents will be written
  */
 public any function sendEmail(
-	string template="",
-	string from="",
-	string to="",
-	string subject="",
+	string template = "",
+	string from = "",
+	string to = "",
+	string subject = "",
 	any layout,
-	string file="",
+	string file = "",
 	boolean detectMultipart,
 	boolean deliver,
-	string writeToFile=""
+	string writeToFile = ""
 ) {
 	local.writeToFile = Duplicate(arguments.writeToFile);
-	$args(args=arguments, name="sendEmail", combine="template/templates/!,layout/layouts,file/files", required="template,from,to,subject");
+	$args(
+		args = arguments,
+		name = "sendEmail",
+		combine = "template/templates/!,layout/layouts,file/files",
+		required = "template,from,to,subject"
+	);
 	local.deliver = Duplicate(arguments.deliver);
 	local.nonPassThruArgs = "writetofile,template,templates,layout,layouts,file,files,detectMultipart,deliver";
 	local.mailTagArgs = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,mailparams,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext,remove";
@@ -51,17 +55,15 @@ public any function sendEmail(
 	arguments.mailparts = [];
 	local.iEnd = ListLen(arguments.template);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
-
 		// Include the email template and return it,
 		local.item = ListGetAt(arguments.template, local.i);
-		local.content = $renderView($template=local.item, $layout=ListGetAt(arguments.layout, local.i));
+		local.content = $renderView($template = local.item, $layout = ListGetAt(arguments.layout, local.i));
 
 		local.mailpart = {};
 		local.mailpart.tagContent = local.content;
 		if (ArrayIsEmpty(arguments.mailparts)) {
 			ArrayAppend(arguments.mailparts, local.mailpart);
 		} else {
-
 			// Make sure the text version is the first one in the array.
 			local.existingContentCount = ListLen(arguments.mailparts[1].tagContent, "<");
 			local.newContentCount = ListLen(local.content, "<");
@@ -72,7 +74,6 @@ public any function sendEmail(
 			}
 			arguments.mailparts[1].type = "text";
 			arguments.mailparts[2].type = "html";
-
 		}
 	}
 
@@ -94,13 +95,11 @@ public any function sendEmail(
 		}
 		local.rv[arguments.type] = arguments.tagContent;
 	} else {
-
 		// Return a struct containing mailparts using type the the key.
 		local.iEnd = ArrayLen(arguments.mailparts);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.rv[arguments.mailparts[local.i].type] = arguments.mailparts[local.i].tagContent;
 		}
-
 	}
 
 	// Attach files using the cfmailparam tag.
@@ -132,12 +131,12 @@ public any function sendEmail(
 	// Write the email body to file.
 	if (Len(local.writeToFile)) {
 		local.output = ListAppend(local.rv.text, local.rv.html, "#Chr(13)##Chr(10)##Chr(13)##Chr(10)#");
-		$file(action="write", file="#local.writeToFile#", output="#local.output#");
+		$file(action = "write", file = "#local.writeToFile#", output = "#local.output#");
 	}
 
 	// Send the email using the cfmail tag.
 	if (local.deliver) {
-		$mail(argumentCollection=arguments);
+		$mail(argumentCollection = arguments);
 	} else {
 		if (!$sentEmails()) {
 			variables.$instance.emails = [];
@@ -163,14 +162,14 @@ public any function sendEmail(
  */
 public any function sendFile(
 	required string file,
-	string name="",
-	string type="",
+	string name = "",
+	string type = "",
 	string disposition,
-	string directory="",
-	boolean deleteFile=false,
+	string directory = "",
+	boolean deleteFile = false,
 	boolean deliver
 ) {
-	$args(name="sendFile", args=arguments);
+	$args(name = "sendFile", args = arguments);
 
 	// Check whether the resource is a ram resource or physical file.
 	if (!ListFirst(arguments.file, "://") == "ram") {
@@ -189,7 +188,7 @@ public any function sendFile(
 		local.fullPath = Replace(local.folder, "\", "/", "all");
 		local.fullPath = ListAppend(local.fullPath, arguments.file, "/");
 		// https://github.com/cfwheels/cfwheels/issues/873 Don't expand path if already contains root
-		if(local.fullPath DOES NOT CONTAIN Replace(local.root, "\", "/", "all"))
+		if (local.fullPath DOES NOT CONTAIN Replace(local.root, "\", "/", "all"))
 			local.fullPath = ExpandPath(local.fullPath);
 		local.fullPath = Replace(local.fullPath, "\", "/", "all");
 		local.file = ListLast(local.fullPath, "/");
@@ -197,7 +196,7 @@ public any function sendFile(
 
 		// If the file is not found, try searching for it.
 		if (!FileExists(local.fullPath)) {
-			local.match = $directory(action="list", directory=local.directory, filter="#local.file#.*");
+			local.match = $directory(action = "list", directory = local.directory, filter = "#local.file#.*");
 
 			// Only extract the extension if we find a single match.
 			if (local.match.recordCount == 1) {
@@ -205,9 +204,9 @@ public any function sendFile(
 				local.fullPath = local.directory & "/" & local.file;
 			} else {
 				Throw(
-					type="Wheels.FileNotFound",
-					message="A file could not be found.",
-					extendedInfo="Make sure a file with the name `#local.file#` exists in the `#local.directory#` folder."
+					type = "Wheels.FileNotFound",
+					message = "A file could not be found.",
+					extendedInfo = "Make sure a file with the name `#local.file#` exists in the `#local.directory#` folder."
 				);
 			}
 		}
@@ -219,14 +218,14 @@ public any function sendFile(
 		// For ram:// resources, skip the physical file check but still check the thing exists.
 		if (!FileExists(local.fullPath)) {
 			Throw(
-				type="Wheels.FileNotFound",
-				message="ram:// resource could not be found.",
-				extendedInfo="Make sure a resource with the name `#local.file#` exists in memory"
+				type = "Wheels.FileNotFound",
+				message = "ram:// resource could not be found.",
+				extendedInfo = "Make sure a resource with the name `#local.file#` exists in memory"
 			);
 		}
 
 		// Make the default display name behaviour the same as physical files.
-		local.name = Replace(arguments.file, "ram://","","one");
+		local.name = Replace(arguments.file, "ram://", "", "one");
 	}
 
 	local.extension = ListLast(local.file, ".");
@@ -243,8 +242,8 @@ public any function sendFile(
 
 	// If testing, return the variables, else prompt the user to download the file.
 	if (arguments.deliver) {
-		$header(name="Content-Disposition", value="#arguments.disposition#; filename=""#local.name#""");
-		$content(type=local.mime, file=local.fullPath, deleteFile=arguments.deleteFile);
+		$header(name = "Content-Disposition", value = "#arguments.disposition#; filename=""#local.name#""");
+		$content(type = local.mime, file = local.fullPath, deleteFile = arguments.deleteFile);
 	} else {
 		local.rv = {
 			disposition = arguments.disposition,
@@ -258,7 +257,6 @@ public any function sendFile(
 		ArrayAppend(variables.$instance.files, local.rv);
 		return local.rv;
 	}
-
 }
 
 /**
@@ -350,5 +348,4 @@ public boolean function isHead() {
 public boolean function isOptions() {
 	return request.cgi.request_method == "options";
 }
-
 </cfscript>

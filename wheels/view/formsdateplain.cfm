@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Builds and returns a string containing three `select` form controls (month, day, and year) based on a name and value.
  *
@@ -27,7 +26,7 @@
  */
 public string function dateSelectTags(
 	required string name,
-	string selected="",
+	string selected = "",
 	string order,
 	string separator,
 	numeric startYear,
@@ -44,16 +43,16 @@ public string function dateSelectTags(
 	string appendToLabel,
 	boolean combine,
 	any encode,
-	date $now=Now()
+	date $now = Now()
 ) {
-	$args(name="dateSelectTags", args=arguments);
+	$args(name = "dateSelectTags", args = arguments);
 	arguments.property = arguments.name;
 	arguments.objectName = {};
 	arguments.objectName[arguments.name] = arguments.selected;
 	StructDelete(arguments, "name");
 	StructDelete(arguments, "selected");
 	arguments.$functionName = "dateSelectTag";
-	return $dateOrTimeSelect(argumentCollection=arguments);
+	return $dateOrTimeSelect(argumentCollection = arguments);
 }
 
 /**
@@ -81,7 +80,7 @@ public string function dateSelectTags(
  */
 public string function timeSelectTags(
 	required string name,
-	string selected="",
+	string selected = "",
 	string order,
 	string separator,
 	numeric minuteStep,
@@ -97,14 +96,14 @@ public string function timeSelectTags(
 	boolean twelveHour,
 	any encode
 ) {
-	$args(name="timeSelectTags", args=arguments);
+	$args(name = "timeSelectTags", args = arguments);
 	arguments.property = arguments.name;
 	arguments.objectName = {};
 	arguments.objectName[arguments.name] = arguments.selected;
 	StructDelete(arguments, "name");
 	StructDelete(arguments, "selected");
 	arguments.$functionName = "timeSelectTag";
-	return $dateOrTimeSelect(argumentCollection=arguments);
+	return $dateOrTimeSelect(argumentCollection = arguments);
 }
 
 /**
@@ -140,7 +139,7 @@ public string function timeSelectTags(
  */
 public string function dateTimeSelectTags(
 	required string name,
-	string selected="",
+	string selected = "",
 	string dateOrder,
 	string dateSeparator,
 	numeric startYear,
@@ -164,7 +163,7 @@ public string function dateTimeSelectTags(
 	boolean twelveHour,
 	any encode
 ) {
-	$args(name="dateTimeSelectTags", args=arguments);
+	$args(name = "dateTimeSelectTags", args = arguments);
 	local.rv = "";
 	local.separator = arguments.separator;
 	local.label = arguments.label;
@@ -177,9 +176,9 @@ public string function dateTimeSelectTags(
 		arguments.label = ListGetAt(local.label, 1) & "," & ListGetAt(local.label, 2) & "," & ListGetAt(local.label, 3);
 	}
 	if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect") {
-		local.rv &= dateSelect(argumentCollection=arguments);
+		local.rv &= dateSelect(argumentCollection = arguments);
 	} else {
-		local.rv &= dateSelectTags(argumentCollection=arguments);
+		local.rv &= dateSelectTags(argumentCollection = arguments);
 	}
 
 	// separate date and time with a string ("-" by default)
@@ -193,9 +192,9 @@ public string function dateTimeSelectTags(
 		arguments.label = ListGetAt(local.label, 4) & "," & ListGetAt(local.label, 5) & "," & ListGetAt(local.label, 6);
 	}
 	if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect") {
-		local.rv &= timeSelect(argumentCollection=arguments);
+		local.rv &= timeSelect(argumentCollection = arguments);
 	} else {
-		local.rv &= timeSelectTags(argumentCollection=arguments);
+		local.rv &= timeSelectTags(argumentCollection = arguments);
 	}
 	return local.rv;
 }
@@ -221,7 +220,7 @@ public string function dateTimeSelectTags(
  */
 public string function yearSelectTag(
 	required string name,
-	string selected="",
+	string selected = "",
 	numeric startYear,
 	numeric endYear,
 	any includeBlank,
@@ -232,14 +231,14 @@ public string function yearSelectTag(
 	string prependToLabel,
 	string appendToLabel,
 	any encode,
-	date $now=Now()
+	date $now = Now()
 ) {
-	$args(name="yearSelectTag", args=arguments);
+	$args(name = "yearSelectTag", args = arguments);
 	if (IsNumeric(arguments.selected)) {
 		arguments.selected = $dateForSelectTags("year", arguments.selected, arguments.$now);
 	}
 	arguments.order = "year";
-	return dateSelectTags(argumentCollection=arguments);
+	return dateSelectTags(argumentCollection = arguments);
 }
 
 /**
@@ -264,7 +263,7 @@ public string function yearSelectTag(
  */
 public string function monthSelectTag(
 	required string name,
-	string selected="",
+	string selected = "",
 	string monthDisplay,
 	string monthNames,
 	string monthAbbreviations,
@@ -276,14 +275,14 @@ public string function monthSelectTag(
 	string prependToLabel,
 	string appendToLabel,
 	any encode,
-	date $now=Now()
+	date $now = Now()
 ) {
-	$args(name="monthSelectTag", args=arguments);
+	$args(name = "monthSelectTag", args = arguments);
 	if (IsNumeric(arguments.selected) && IsValid("range", arguments.selected, 0, 12)) {
 		arguments.selected = $dateForSelectTags("month", arguments.selected, arguments.$now);
 	}
 	arguments.order = "month";
-	return dateSelectTags(argumentCollection=arguments);
+	return dateSelectTags(argumentCollection = arguments);
 }
 
 /**
@@ -305,7 +304,7 @@ public string function monthSelectTag(
  */
 public string function daySelectTag(
 	required string name,
-	string selected="",
+	string selected = "",
 	any includeBlank,
 	string label,
 	string labelPlacement,
@@ -314,14 +313,14 @@ public string function daySelectTag(
 	string prependToLabel,
 	string appendToLabel,
 	any encode,
-	date $now=Now()
+	date $now = Now()
 ) {
-	$args(name="daySelectTag", args=arguments);
+	$args(name = "daySelectTag", args = arguments);
 	if (IsNumeric(arguments.selected) && IsValid("range", arguments.selected, 0, 31)) {
 		arguments.selected = $dateForSelectTags("day", arguments.selected, arguments.$now);
 	}
 	arguments.order = "day";
-	return dateSelectTags(argumentCollection=arguments);
+	return dateSelectTags(argumentCollection = arguments);
 }
 
 /**
@@ -344,7 +343,7 @@ public string function daySelectTag(
  */
 public string function hourSelectTag(
 	required string name,
-	string selected="",
+	string selected = "",
 	any includeBlank,
 	string label,
 	string labelPlacement,
@@ -354,14 +353,14 @@ public string function hourSelectTag(
 	string appendToLabel,
 	boolean twelveHour,
 	any encode,
-	date $now=Now()
+	date $now = Now()
 ) {
-	$args(name="hourSelectTag", args=arguments);
+	$args(name = "hourSelectTag", args = arguments);
 	if (IsNumeric(arguments.selected) && arguments.selected >= 0 && arguments.selected < 60) {
 		arguments.selected = CreateTime(arguments.selected, Minute(arguments.$now), Second(arguments.$now));
 	}
 	arguments.order = "hour";
-	return timeSelectTags(argumentCollection=arguments);
+	return timeSelectTags(argumentCollection = arguments);
 }
 
 /**
@@ -384,7 +383,7 @@ public string function hourSelectTag(
  */
 public string function minuteSelectTag(
 	required string name,
-	string selected="",
+	string selected = "",
 	numeric minuteStep,
 	any includeBlank,
 	string label,
@@ -394,14 +393,14 @@ public string function minuteSelectTag(
 	string prependToLabel,
 	string appendToLabel,
 	any encode,
-	date $now=Now()
+	date $now = Now()
 ) {
-	$args(name="minuteSelectTag", args=arguments);
+	$args(name = "minuteSelectTag", args = arguments);
 	if (IsNumeric(arguments.selected) && arguments.selected >= 0 && arguments.selected < 60) {
 		arguments.selected = CreateTime(Hour(arguments.$now), arguments.selected, Second(arguments.$now));
 	}
 	arguments.order = "minute";
-	return timeSelectTags(argumentCollection=arguments);
+	return timeSelectTags(argumentCollection = arguments);
 }
 
 /**
@@ -424,7 +423,7 @@ public string function minuteSelectTag(
  */
 public string function secondSelectTag(
 	required string name,
-	string selected="",
+	string selected = "",
 	numeric secondStep,
 	any includeBlank,
 	string label,
@@ -434,24 +433,20 @@ public string function secondSelectTag(
 	string prependToLabel,
 	string appendToLabel,
 	any encode,
-	date $now=Now()
+	date $now = Now()
 ) {
-	$args(name="secondSelectTag", args=arguments);
+	$args(name = "secondSelectTag", args = arguments);
 	if (IsNumeric(arguments.selected) && arguments.selected >= 0 && arguments.selected < 60) {
 		arguments.selected = CreateTime(Hour(arguments.$now), Minute(arguments.$now), arguments.selected);
 	}
 	arguments.order = "second";
-	return timeSelectTags(argumentCollection=arguments);
+	return timeSelectTags(argumentCollection = arguments);
 }
 
 /**
  * Internal function.
  */
-public date function $dateForSelectTags(
-	required string part,
-	required numeric value,
-	required date $now
-) {
+public date function $dateForSelectTags(required string part, required numeric value, required date $now) {
 	local.year = Year(arguments.$now);
 	local.month = Month(arguments.$now);
 	local.day = Day(arguments.$now);
@@ -484,5 +479,4 @@ public date function $dateForSelectTags(
 	}
 	return local.rv;
 }
-
 </cfscript>

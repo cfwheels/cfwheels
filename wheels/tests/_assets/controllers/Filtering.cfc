@@ -3,12 +3,12 @@ component extends="Controller" {
 	function config() {
 		aStr.testArg1 = 1;
 		aStr.testArg2 = 2;
-		filters(through="dir", testArg=1, except="doNotRun");
-		filters(through="str", strArguments=Duplicate(aStr));
-		filters(through="both", bothArguments=Duplicate(aStr), testArg=1);
-		filters(through="pub,priv", only="index,actOne,actTwo");
-		filters(through="typeBefore", only="noView", type="before");
-		filters(through="typeAfter", only="noView", type="after");
+		filters(through = "dir", testArg = 1, except = "doNotRun");
+		filters(through = "str", strArguments = Duplicate(aStr));
+		filters(through = "both", bothArguments = Duplicate(aStr), testArg = 1);
+		filters(through = "pub,priv", only = "index,actOne,actTwo");
+		filters(through = "typeBefore", only = "noView", type = "before");
+		filters(through = "typeAfter", only = "noView", type = "after");
 	}
 
 	function typeBefore() {
@@ -56,7 +56,7 @@ component extends="Controller" {
 	}
 
 	function noView() {
-		renderText(text="#params.controller####params.action#");
+		renderText(text = "#params.controller####params.action#");
 	}
 
 }

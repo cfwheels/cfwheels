@@ -1,47 +1,47 @@
 <cfscript>
 /**
-* HELPERS
-*/
+ * HELPERS
+ */
 
 function $pluginObj(required struct config) {
-  return $createObjectFromRoot(argumentCollection=arguments.config);
+	return $createObjectFromRoot(argumentCollection = arguments.config);
 }
 
 function $writeTestFile() {
-  FileWrite($testFile(), "overwritten");
+	FileWrite($testFile(), "overwritten");
 }
 
 function $readTestFile() {
-  return FileRead($testFile());
+	return FileRead($testFile());
 }
 
 function $testFile() {
-  var theFile = "";
-  theFile = [config.pluginPath, "testglobalmixins", "index.cfm"];
-  theFile = ExpandPath(ArrayToList(theFile, "/"));
-  return theFile;
+	var theFile = "";
+	theFile = [config.pluginPath, "testglobalmixins", "index.cfm"];
+	theFile = ExpandPath(ArrayToList(theFile, "/"));
+	return theFile;
 }
 
 function $createDir() {
-  DirectoryCreate(badDir);
+	DirectoryCreate(badDir);
 }
 
 function $deleteDirs() {
-  if (DirectoryExists(badDir)) {
-    DirectoryDelete(badDir, true);
-  }
-  if (DirectoryExists(goodDir)) {
-    DirectoryDelete(goodDir, true);
-  }
+	if (DirectoryExists(badDir)) {
+		DirectoryDelete(badDir, true);
+	}
+	if (DirectoryExists(goodDir)) {
+		DirectoryDelete(goodDir, true);
+	}
 }
 
 function $deleteTestFolders() {
-  var q = DirectoryList(expandPath('/wheels/tests/_assets/plugins/unpacking'), false, "query");
-  for (row in q) {
-    dir = ListChangeDelims(ListAppend(row.directory, row.name, "/"), "/", "\");
-    if (DirectoryExists(dir)) {
-      DirectoryDelete(dir, true);
-    }
-  };
+	var q = DirectoryList(ExpandPath('/wheels/tests/_assets/plugins/unpacking'), false, "query");
+	for (row in q) {
+		dir = ListChangeDelims(ListAppend(row.directory, row.name, "/"), "/", "\");
+		if (DirectoryExists(dir)) {
+			DirectoryDelete(dir, true);
+		}
+	};
 }
 </cfscript>

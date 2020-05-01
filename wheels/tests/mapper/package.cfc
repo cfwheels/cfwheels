@@ -1,50 +1,50 @@
 component extends="wheels.tests.Test" {
-  function setup() {
-    config = {
-      path="wheels",
-      fileName="Mapper",
-      method="$init"
-    };
 
-    _params = { controller="test", action="index" };
-    _originalRoutes = application[$appKey()].routes;
+	function setup() {
+		config = {path = "wheels", fileName = "Mapper", method = "$init"};
 
-    $clearRoutes();
-  }
+		_params = {controller = "test", action = "index"};
+		_originalRoutes = application[$appKey()].routes;
 
-  function teardown() {
-    application[$appKey()].routes = _originalRoutes;
-  }
+		$clearRoutes();
+	}
 
-  function test_generates_url_pattern_without_name() {
-    $mapper().$draw()
-      .package("public")
-        .root(to="pages##home")
-      .end()
-    .end();
+	function teardown() {
+		application[$appKey()].routes = _originalRoutes;
+	}
 
-    assert("application.wheels.routes[1].pattern is '/.[format]'");
-    assert("application.wheels.routes[2].pattern is '/'");
-  }
+	function test_generates_url_pattern_without_name() {
+		$mapper()
+			.$draw()
+			.package("public")
+			.root(to = "pages##home")
+			.end()
+			.end();
 
-  function test_scopes_controller_to_subfolder() {
-    $mapper().$draw()
-      .package("public")
-        .root(to="pages##home")
-      .end()
-    .end();
+		assert("application.wheels.routes[1].pattern is '/.[format]'");
+		assert("application.wheels.routes[2].pattern is '/'");
+	}
 
-    assert("application.wheels.routes[1].controller is 'public.pages'");
-    assert("application.wheels.routes[2].controller is 'public.pages'");
-  }
+	function test_scopes_controller_to_subfolder() {
+		$mapper()
+			.$draw()
+			.package("public")
+			.root(to = "pages##home")
+			.end()
+			.end();
 
-  private function $clearRoutes() {
-    application[$appKey()].routes = [];
-  }
+		assert("application.wheels.routes[1].controller is 'public.pages'");
+		assert("application.wheels.routes[2].controller is 'public.pages'");
+	}
 
-  private struct function $mapper() {
-    local.args = Duplicate(config);
-    StructAppend(local.args, arguments, true);
-    return $createObjectFromRoot(argumentCollection=local.args);
-  }
+	private function $clearRoutes() {
+		application[$appKey()].routes = [];
+	}
+
+	private struct function $mapper() {
+		local.args = Duplicate(config);
+		StructAppend(local.args, arguments, true);
+		return $createObjectFromRoot(argumentCollection = local.args);
+	}
+
 }

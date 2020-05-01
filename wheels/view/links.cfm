@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Creates a link to another page in your application.
  * Pass in the name of a route to use your configured routes or a controller/action/key combination.
@@ -24,12 +23,12 @@
  */
 public string function linkTo(
 	string text,
-	string route="",
-	string controller="",
-	string action="",
-	any key="",
-	string params="",
-	string anchor="",
+	string route = "",
+	string controller = "",
+	string action = "",
+	any key = "",
+	string params = "",
+	string anchor = "",
 	boolean onlyPath,
 	string host,
 	string protocol,
@@ -37,11 +36,10 @@ public string function linkTo(
 	string href,
 	any encode
 ) {
-	$args(name="linkTo", args=arguments);
+	$args(name = "linkTo", args = arguments);
 
 	// look for passed in rest method
 	if (StructKeyExists(arguments, "method")) {
-
 		// if dealing with delete, keep robots from following link
 		if (arguments.method == "delete") {
 			if (!StructKeyExists(arguments, "rel")) {
@@ -58,7 +56,7 @@ public string function linkTo(
 		if (local.args.encode == "attributes") {
 			local.args.encode = true;
 		}
-		arguments.href = URLFor(argumentCollection=local.args);
+		arguments.href = uRLFor(argumentCollection = local.args);
 		local.encodeExcept = "href";
 	}
 	if (!StructKeyExists(arguments, "text")) {
@@ -67,15 +65,15 @@ public string function linkTo(
 	local.skip = "text,route,controller,action,key,params,anchor,onlyPath,host,protocol,port,encode";
 	if (Len(arguments.route)) {
 		// variables passed in as route arguments should not be added to the html element
-		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
+		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection = arguments));
 	}
 	return $element(
-		name="a",
-		skip=local.skip,
-		content=arguments.text,
-		attributes=arguments,
-		encode=arguments.encode,
-		encodeExcept=local.encodeExcept
+		name = "a",
+		skip = local.skip,
+		content = arguments.text,
+		attributes = arguments,
+		encode = arguments.encode,
+		encodeExcept = local.encodeExcept
 	);
 }
 
@@ -104,12 +102,12 @@ public string function linkTo(
 public string function buttonTo(
 	string text,
 	string image,
-	string route="",
-	string controller="",
-	string action="",
-	any key="",
-	string params="",
-	string anchor="",
+	string route = "",
+	string controller = "",
+	string action = "",
+	any key = "",
+	string params = "",
+	string anchor = "",
 	string method,
 	boolean onlyPath,
 	string host,
@@ -118,11 +116,11 @@ public string function buttonTo(
 	any encode
 ) {
 	local.method = "post";
-	$args(name="buttonTo", args=arguments);
+	$args(name = "buttonTo", args = arguments);
 	local.content = "";
 	if (StructKeyExists(arguments, "method")) {
 		if (!ListFindNoCase("post,get", arguments.method)) {
-			local.content &= hiddenFieldTag(name="_method", value=arguments.method);
+			local.content &= hiddenFieldTag(name = "_method", value = arguments.method);
 		} else if (arguments.method == "get") {
 			local.method = "get";
 		}
@@ -133,23 +131,30 @@ public string function buttonTo(
 	if (local.args.encode == "attributes") {
 		local.args.encode = true;
 	}
-	arguments.action = URLFor(argumentCollection=local.args);
+	arguments.action = uRLFor(argumentCollection = local.args);
 	local.encodeExcept = "action";
-	local.args = $innerArgs(name="input", args=arguments);
+	local.args = $innerArgs(name = "input", args = arguments);
 	local.args.value = arguments.text;
 	local.args.image = arguments.image;
 	local.args.encode = arguments.encode;
-	local.content &= submitTag(argumentCollection=local.args);
+	local.content &= submitTag(argumentCollection = local.args);
 	local.skip = "image,text,route,controller,key,params,anchor,onlyPath,host,protocol,port,encode";
 	if (Len(arguments.route)) {
 		// variables passed in as route arguments should not be added to the html element
-		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
+		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection = arguments));
 	}
 	local.encode = IsBoolean(arguments.encode) && arguments.encode ? "attributes" : false;
 	if ($isRequestProtectedFromForgery() && ListFindNoCase("post,put,patch,delete", arguments.method)) {
 		local.content &= authenticityTokenField();
 	}
-	return $element(name="form", skip=local.skip, content=local.content, attributes=arguments, encode=local.encode, encodeExcept=local.encodeExcept);
+	return $element(
+		name = "form",
+		skip = local.skip,
+		content = local.content,
+		attributes = arguments,
+		encode = local.encode,
+		encodeExcept = local.encodeExcept
+	);
 }
 
 /**
@@ -162,20 +167,16 @@ public string function buttonTo(
  * @name A string to use as the link text ("Joe" or "Support Department", for example).
  * @encode [see:styleSheetLinkTag].
  */
-public string function mailTo(
-	required string emailAddress,
-	string name="",
-	any encode
-) {
-	$args(name="mailTo", reserved="href", args=arguments);
+public string function mailTo(required string emailAddress, string name = "", any encode) {
+	$args(name = "mailTo", reserved = "href", args = arguments);
 	arguments.href = "mailto:" & arguments.emailAddress;
 	local.content = Len(arguments.name) ? arguments.name : arguments.emailAddress;
 	return $element(
-		name="a",
-		skip="emailAddress,name,encode",
-		content=local.content,
-		attributes=arguments,
-		encode=arguments.encode
+		name = "a",
+		skip = "emailAddress,name,encode",
+		content = local.content,
+		attributes = arguments,
+		encode = arguments.encode
 	);
 }
 
@@ -221,13 +222,13 @@ public string function paginationLinks(
 	boolean appendOnLast,
 	boolean appendOnAnchor,
 	string classForCurrent,
-	string handle="query",
+	string handle = "query",
 	string name,
 	boolean showSinglePage,
 	boolean pageNumberAsParam,
 	any encode
 ) {
-	$args(name="paginationLinks", args=arguments);
+	$args(name = "paginationLinks", args = arguments);
 	local.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,prependOnAnchor,appendToPage,appendOnLast,appendOnAnchor,classForCurrent,handle,name,showSinglePage,pageNumberAsParam";
 	local.linkToArguments = Duplicate(arguments);
 	local.iEnd = ListLen(local.skipArgs);
@@ -243,7 +244,7 @@ public string function paginationLinks(
 		// when a route name is specified and the name argument is part
 		// of the route variables specified, we need to force the
 		// arguments.pageNumberAsParam to be false
-		local.routeConfig = $findRoute(argumentCollection=arguments);
+		local.routeConfig = $findRoute(argumentCollection = arguments);
 		if (ListFindNoCase(local.routeConfig.variables, arguments.name)) {
 			arguments.pageNumberAsParam = false;
 		}
@@ -252,16 +253,16 @@ public string function paginationLinks(
 	// Encode all prepend / append type arguments if specified.
 	if (IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags")) {
 		if (Len(arguments.prepend)) {
-			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
+			arguments.prepend = EncodeForHTML($canonicalize(arguments.prepend));
 		}
 		if (Len(arguments.prependToPage)) {
-			arguments.prependToPage = EncodeForHtml($canonicalize(arguments.prependToPage));
+			arguments.prependToPage = EncodeForHTML($canonicalize(arguments.prependToPage));
 		}
 		if (Len(arguments.append)) {
-			arguments.append = EncodeForHtml($canonicalize(arguments.append));
+			arguments.append = EncodeForHTML($canonicalize(arguments.append));
 		}
 		if (Len(arguments.appendToPage)) {
-			arguments.appendToPage = EncodeForHtml($canonicalize(arguments.appendToPage));
+			arguments.appendToPage = EncodeForHTML($canonicalize(arguments.appendToPage));
 		}
 	}
 
@@ -284,7 +285,7 @@ public string function paginationLinks(
 				if (Len(arguments.prependToPage) && arguments.prependOnAnchor) {
 					local.start &= arguments.prependToPage;
 				}
-				local.start &= linkTo(argumentCollection=local.linkToArguments);
+				local.start &= linkTo(argumentCollection = local.linkToArguments);
 				if (Len(arguments.appendToPage) && arguments.appendOnAnchor) {
 					local.start &= arguments.appendToPage;
 				}
@@ -293,7 +294,11 @@ public string function paginationLinks(
 		}
 		local.middle = "";
 		for (local.i = 1; local.i <= local.totalPages; local.i++) {
-			if ((local.i >= (local.currentPage - arguments.windowSize) && local.i <= local.currentPage) || (local.i <= (local.currentPage + arguments.windowSize) && local.i >= local.currentPage)) {
+			if (
+				(local.i >= (local.currentPage - arguments.windowSize) && local.i <= local.currentPage) || (
+					local.i <= (local.currentPage + arguments.windowSize) && local.i >= local.currentPage
+				)
+			) {
 				if (!arguments.pageNumberAsParam) {
 					local.linkToArguments[arguments.name] = local.i;
 				} else {
@@ -317,10 +322,15 @@ public string function paginationLinks(
 					local.middle &= arguments.prependToPage;
 				}
 				if (local.currentPage != local.i || arguments.linkToCurrentPage) {
-					local.middle &= linkTo(argumentCollection=local.linkToArguments);
+					local.middle &= linkTo(argumentCollection = local.linkToArguments);
 				} else {
 					if (Len(arguments.classForCurrent)) {
-						local.middle &= $element(name="span", content=NumberFormat(local.i), class=arguments.classForCurrent, encode=arguments.encode);
+						local.middle &= $element(
+							name = "span",
+							content = NumberFormat(local.i),
+							class = arguments.classForCurrent,
+							encode = arguments.encode
+						);
 					} else {
 						local.middle &= NumberFormat(local.i);
 					}
@@ -345,7 +355,7 @@ public string function paginationLinks(
 				if (Len(arguments.prependToPage) && arguments.prependOnAnchor) {
 					local.end &= arguments.prependToPage;
 				}
-				local.end &= linkTo(argumentCollection=local.linkToArguments);
+				local.end &= linkTo(argumentCollection = local.linkToArguments);
 				if (Len(arguments.appendToPage) && arguments.appendOnAnchor) {
 					local.end &= arguments.appendToPage;
 				}
@@ -357,10 +367,14 @@ public string function paginationLinks(
 	}
 	if (Len(local.middle)) {
 		if (Len(arguments.prependToPage) && !arguments.prependOnFirst) {
-			local.middle = Mid(local.middle, Len(arguments.prependToPage)+1, Len(local.middle)-Len(arguments.prependToPage));
+			local.middle = Mid(
+				local.middle,
+				Len(arguments.prependToPage) + 1,
+				Len(local.middle) - Len(arguments.prependToPage)
+			);
 		}
 		if (Len(arguments.appendToPage) && !arguments.appendOnLast) {
-			local.middle = Mid(local.middle, 1, Len(local.middle)-Len(arguments.appendToPage));
+			local.middle = Mid(local.middle, 1, Len(local.middle) - Len(arguments.appendToPage));
 		}
 	}
 	return local.start & local.middle & local.end;
@@ -377,8 +391,13 @@ public string function paginationLinks(
  * @relative Should we auto-link relative urls.
  * @encode [see:styleSheetLinkTag].
  */
-public string function autoLink(required string text, string link, boolean relative=true, boolean encode) {
-	$args(name="autoLink", args=arguments);
+public string function autoLink(
+	required string text,
+	string link,
+	boolean relative = true,
+	boolean encode
+) {
+	$args(name = "autoLink", args = arguments);
 	local.rv = arguments.text;
 
 	// Create anchor elements with an href attribute for all URLs found in the text.
@@ -388,14 +407,14 @@ public string function autoLink(required string text, string link, boolean relat
 		} else {
 			arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.)[^\s\b]+)";
 		}
-		local.rv = $autoLinkLoop(text=local.rv, argumentCollection=arguments);
+		local.rv = $autoLinkLoop(text = local.rv, argumentCollection = arguments);
 	}
 
 	// Create anchor elements with a "mailto:" link in an href attribute for all email addresses found in the text.
 	if (arguments.link != "urls") {
 		arguments.regex = "(?:(?:<a\s[^>]+)?(?:[^@\s]+)@(?:(?:[-a-z0-9]+\.)+[a-z]{2,}))";
 		arguments.protocol = "mailto:";
-		local.rv = $autoLinkLoop(text=local.rv, argumentCollection=arguments);
+		local.rv = $autoLinkLoop(text = local.rv, argumentCollection = arguments);
 	}
 
 	return local.rv;
@@ -404,17 +423,27 @@ public string function autoLink(required string text, string link, boolean relat
 /**
  * Called from the autoLink function.
  */
-public string function $autoLinkLoop(required string text, required string regex, string protocol="") {
+public string function $autoLinkLoop(required string text, required string regex, string protocol = "") {
 	local.punctuationRegEx = "([^\w\/-]+)$";
 	local.startPosition = 1;
-	local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
+	local.match = ReFindNoCase(
+		arguments.regex,
+		arguments.text,
+		local.startPosition,
+		true
+	);
 	while (local.match.pos[1] > 0) {
 		local.startPosition = local.match.pos[1] + local.match.len[1];
 		local.str = Mid(arguments.text, local.match.pos[1], local.match.len[1]);
 		if (Left(local.str, 2) != "<a") {
 			arguments.text = RemoveChars(arguments.text, local.match.pos[1], local.match.len[1]);
 			local.punctuation = ArrayToList(ReMatchNoCase(local.punctuationRegEx, local.str));
-			local.str = REReplaceNoCase(local.str, local.punctuationRegEx, "", "all");
+			local.str = ReReplaceNoCase(
+				local.str,
+				local.punctuationRegEx,
+				"",
+				"all"
+			);
 
 			// Make sure that links beginning with "www." have a protocol.
 			if (Left(local.str, 4) == "www." && !Len(arguments.protocol)) {
@@ -422,14 +451,24 @@ public string function $autoLinkLoop(required string text, required string regex
 			}
 
 			arguments.href = arguments.protocol & local.str;
-			local.element = $element(name="a", content=local.str, attributes=arguments, skip="text,regex,link,protocol,relative,encode", encode=arguments.encode) & local.punctuation;
-			arguments.text = Insert(local.element, arguments.text, local.match.pos[1]-1);
+			local.element = $element(
+				name = "a",
+				content = local.str,
+				attributes = arguments,
+				skip = "text,regex,link,protocol,relative,encode",
+				encode = arguments.encode
+			) & local.punctuation;
+			arguments.text = Insert(local.element, arguments.text, local.match.pos[1] - 1);
 			local.startPosition = local.match.pos[1] + Len(local.element);
 		}
 		local.startPosition++;
-		local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
+		local.match = ReFindNoCase(
+			arguments.regex,
+			arguments.text,
+			local.startPosition,
+			true
+		);
 	}
 	return arguments.text;
 }
-
 </cfscript>

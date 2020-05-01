@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Instructs the controller which view template and layout to render when it's finished processing the action.
  * Note that when passing values for controller and / or action, this function does not execute the actual action but rather just loads the corresponding view template.
@@ -16,15 +15,15 @@
  * @hideDebugInformation Set to `true` to hide the debug information at the end of the output. This is useful, for example, when you're testing XML output in an environment where the global setting for `showDebugInformation` is `true`.
  */
 public any function renderView(
-	string controller=variables.params.controller,
-	string action=variables.params.action,
-	string template="",
+	string controller = variables.params.controller,
+	string action = variables.params.action,
+	string template = "",
 	any layout,
-	any cache="",
-	string returnAs="",
-	boolean hideDebugInformation=false
+	any cache = "",
+	string returnAs = "",
+	boolean hideDebugInformation = false
 ) {
-	$args(name="renderView", args=arguments);
+	$args(name = "renderView", args = arguments);
 	$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
 	if ($get("showDebugInformation")) {
 		$debugPoint("view");
@@ -56,14 +55,14 @@ public any function renderView(
 		local.executeArgs.category = local.category;
 		local.executeArgs.key = local.key;
 		local.page = $doubleCheckedLock(
-			condition="$getFromCache",
-			conditionArgs=local.conditionArgs,
-			execute="$renderViewAndAddToCache",
-			executeArgs=local.executeArgs,
-			name=local.lockName
+			condition = "$getFromCache",
+			conditionArgs = local.conditionArgs,
+			execute = "$renderViewAndAddToCache",
+			executeArgs = local.executeArgs,
+			name = local.lockName
 		);
 	} else {
-		local.page = $renderView(argumentCollection=arguments);
+		local.page = $renderView(argumentCollection = arguments);
 	}
 	if (arguments.$returnAs == "string") {
 		local.rv = local.page;
@@ -115,13 +114,15 @@ public void function renderText(required any text) {
  */
 public any function renderPartial(
 	required string partial,
-	any cache="",
+	any cache = "",
 	string layout,
-	string returnAs="",
+	string returnAs = "",
 	any dataFunction
 ) {
-	$args(name="renderPartial", args=arguments);
-	local.partial = $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,cache,layout,returnAs,dataFunction"));
+	$args(name = "renderPartial", args = arguments);
+	local.partial = $includeOrRenderPartial(
+		argumentCollection = $dollarify(arguments, "partial,cache,layout,returnAs,dataFunction")
+	);
 	if (arguments.$returnAs == "string") {
 		local.rv = local.partial;
 	} else {
@@ -204,11 +205,16 @@ public array function getFiles() {
  * Internal function.
  */
 public string function $renderViewAndAddToCache() {
-	local.rv = $renderView(argumentCollection=arguments);
+	local.rv = $renderView(argumentCollection = arguments);
 	if (!IsNumeric(arguments.$cache)) {
 		arguments.$cache = $get("defaultCacheTime");
 	}
-	$addToCache(key=arguments.key, value=local.rv, time=arguments.$cache, category=arguments.category);
+	$addToCache(
+		key = arguments.key,
+		value = local.rv,
+		time = arguments.$cache,
+		category = arguments.category
+	);
 	return local.rv;
 }
 
@@ -221,20 +227,25 @@ public string function $renderView() {
 	}
 	arguments.$type = "page";
 	arguments.$name = arguments.$template;
-	arguments.$template = $generateIncludeTemplatePath(argumentCollection=arguments);
-	local.content = $includeFile(argumentCollection=arguments);
-	return $renderLayout($content=local.content, $layout=arguments.$layout, $type=arguments.$type);
+	arguments.$template = $generateIncludeTemplatePath(argumentCollection = arguments);
+	local.content = $includeFile(argumentCollection = arguments);
+	return $renderLayout($content = local.content, $layout = arguments.$layout, $type = arguments.$type);
 }
 
 /**
  * Internal function.
  */
 public string function $renderPartialAndAddToCache() {
-	local.rv = $renderPartial(argumentCollection=arguments);
+	local.rv = $renderPartial(argumentCollection = arguments);
 	if (!IsNumeric(arguments.$cache)) {
 		arguments.$cache = $get("defaultCacheTime");
 	}
-	$addToCache(key=arguments.key, value=local.rv, time=arguments.$cache, category=arguments.category);
+	$addToCache(
+		key = arguments.key,
+		value = local.rv,
+		time = arguments.$cache,
+		category = arguments.category
+	);
 	return local.rv;
 }
 
@@ -247,13 +258,18 @@ public struct function $argumentsForPartial() {
 		if (IsBoolean(arguments.$dataFunction)) {
 			local.dataFunction = SpanExcluding(ListLast(arguments.$name, "/"), ".");
 			if (StructKeyExists(variables, local.dataFunction)) {
-				local.metaData = GetMetaData(variables[local.dataFunction]);
-				if (IsStruct(local.metaData) && StructKeyExists(local.metaData, "returnType") && local.metaData.returnType == "struct" && StructKeyExists(local.metaData, "access") && local.metaData.access == "private") {
-					local.rv = $invoke(method=local.dataFunction, invokeArgs=arguments);
+				local.metaData = GetMetadata(variables[local.dataFunction]);
+				if (
+					IsStruct(local.metaData) && StructKeyExists(local.metaData, "returnType") && local.metaData.returnType == "struct" && StructKeyExists(
+						local.metaData,
+						"access"
+					) && local.metaData.access == "private"
+				) {
+					local.rv = $invoke(method = local.dataFunction, invokeArgs = arguments);
 				}
 			}
 		} else {
-			local.rv = $invoke(method=arguments.$dataFunction, invokeArgs=arguments);
+			local.rv = $invoke(method = arguments.$dataFunction, invokeArgs = arguments);
 		}
 	}
 	return local.rv;
@@ -266,9 +282,9 @@ public string function $renderPartial() {
 	local.rv = "";
 	if (IsQuery(arguments.$partial)) {
 		Throw(
-			type="Wheels.InvalidPartialArguments",
-			message="To use a query with a partial, you must specify both `partial` and `query` arguments",
-			extendedInfo="E.g. ##includePartial(partial=""user"", query=""users"")##"
+			type = "Wheels.InvalidPartialArguments",
+			message = "To use a query with a partial, you must specify both `partial` and `query` arguments",
+			extendedInfo = "E.g. ##includePartial(partial=""user"", query=""users"")##"
 		);
 	} else if (IsObject(arguments.$partial)) {
 		arguments.$name = arguments.$partial.$classData().modelName;
@@ -281,10 +297,10 @@ public string function $renderPartial() {
 	}
 	if (StructKeyExists(arguments, "$name")) {
 		arguments.$type = "partial";
-		arguments.$template = $generateIncludeTemplatePath(argumentCollection=arguments);
-		StructAppend(arguments, $argumentsForPartial(argumentCollection=arguments), false);
-		local.content = $includeFile(argumentCollection=arguments);
-		local.rv = $renderLayout($content=local.content, $layout=arguments.$layout, $type=arguments.$type);
+		arguments.$template = $generateIncludeTemplatePath(argumentCollection = arguments);
+		StructAppend(arguments, $argumentsForPartial(argumentCollection = arguments), false);
+		local.content = $includeFile(argumentCollection = arguments);
+		local.rv = $renderLayout($content = local.content, $layout = arguments.$layout, $type = arguments.$type);
 	}
 	return local.rv;
 }
@@ -293,7 +309,7 @@ public string function $renderPartial() {
  * Internal function.
  */
 public string function $includeOrRenderPartial() {
-	if ($get("cachePartials") && (isNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache))) {
+	if ($get("cachePartials") && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache))) {
 		local.category = "partial";
 		local.key = $hashedKey(arguments);
 		local.lockName = local.category & local.key & application.applicationName;
@@ -304,14 +320,14 @@ public string function $includeOrRenderPartial() {
 		local.executeArgs.category = local.category;
 		local.executeArgs.key = local.key;
 		local.rv = $doubleCheckedLock(
-			condition="$getFromCache",
-			conditionArgs=local.conditionArgs,
-			execute="$renderPartialAndAddToCache",
-			executeArgs=local.executeArgs,
-			name=local.lockName
+			condition = "$getFromCache",
+			conditionArgs = local.conditionArgs,
+			execute = "$renderPartialAndAddToCache",
+			executeArgs = local.executeArgs,
+			name = local.lockName
 		);
 	} else {
-		local.rv = $renderPartial(argumentCollection=arguments);
+		local.rv = $renderPartial(argumentCollection = arguments);
 	}
 	return local.rv;
 }
@@ -322,9 +338,9 @@ public string function $includeOrRenderPartial() {
 public string function $generateIncludeTemplatePath(
 	required any $name,
 	required any $type,
-	string $controllerName=variables.params.controller,
-	string $baseTemplatePath=$get("viewPath"),
-	boolean $prependWithUnderscore=true
+	string $controllerName = variables.params.controller,
+	string $baseTemplatePath = $get("viewPath"),
+	boolean $prependWithUnderscore = true
 ) {
 	local.rv = arguments.$baseTemplatePath;
 
@@ -332,7 +348,12 @@ public string function $generateIncludeTemplatePath(
 	arguments.$controllerName = ListChangeDelims(arguments.$controllerName, '/', '.');
 
 	// Extracts the file part of the path and replace ending ".cfm".
-	local.fileName = ReplaceNoCase(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".cfm", "", "all") & ".cfm";
+	local.fileName = ReplaceNoCase(
+		Reverse(ListFirst(Reverse(arguments.$name), "/")),
+		".cfm",
+		"",
+		"all"
+	) & ".cfm";
 
 	// Replace leading "_" when the file is a partial.
 	if (arguments.$type == "partial" && arguments.$prependWithUnderscore) {
@@ -342,20 +363,14 @@ public string function $generateIncludeTemplatePath(
 	local.folderName = Reverse(ListRest(Reverse(arguments.$name), "/"));
 
 	if (Left(arguments.$name, 1) == "/") {
-
 		// Include a file in a sub folder to views.
 		local.rv &= local.folderName & "/" & local.fileName;
-
 	} else if (Find("/", arguments.$name)) {
-
 		// Include a file in a sub folder of the current controller.
 		local.rv &= "/" & arguments.$controllerName & "/" & local.folderName & "/" & local.fileName;
-
 	} else {
-
 		// Include a file in the current controller's view folder.
 		local.rv &= "/" & arguments.$controllerName & "/" & local.fileName;
-
 	}
 	return LCase(local.rv);
 }
@@ -371,7 +386,6 @@ public string function $includeFile(required any $name, required any $template, 
 			local.rv = "";
 			local.iEnd = local.query.recordCount;
 			if (Len(arguments.$group)) {
-
 				// We want to group based on a column so loop through the rows until we find, this will break if the query is not ordered by the grouped column.
 				local.tempSpacer = "}|{";
 				local.groupValue = "";
@@ -379,32 +393,35 @@ public string function $includeFile(required any $name, required any $template, 
 				arguments.group = QueryNew(local.query.columnList);
 				if ($get("showErrorInformation") && !ListFindNoCase(local.query.columnList, arguments.$group)) {
 					Throw(
-						type="Wheels.GroupColumnNotFound",
-						message="CFWheels couldn't find a query column with the name of `#arguments.$group#`.",
-						extendedInfo="Make sure your finder method has the column `#arguments.$group#` specified in the `select` argument. If the column does not exist, create it."
+						type = "Wheels.GroupColumnNotFound",
+						message = "CFWheels couldn't find a query column with the name of `#arguments.$group#`.",
+						extendedInfo = "Make sure your finder method has the column `#arguments.$group#` specified in the `select` argument. If the column does not exist, create it."
 					);
 				}
 				for (local.i = 1; local.i <= local.iEnd; local.i++) {
 					if (local.i == 1) {
 						local.groupValue = local.query[arguments.$group][local.i];
 					} else if (local.groupValue != local.query[arguments.$group][local.i]) {
-
 						// We have a different group for this row so output what we have.
-						local.rv &= $includeAndReturnOutput(argumentCollection=arguments);
+						local.rv &= $includeAndReturnOutput(argumentCollection = arguments);
 						if (StructKeyExists(arguments, "$spacer")) {
 							local.rv &= local.tempSpacer;
 						}
 						local.groupValue = local.query[arguments.$group][local.i];
 						arguments.group = QueryNew(local.query.columnList);
 						local.groupQueryCount = 1;
-
 					}
 					QueryAddRow(arguments.group);
 					local.jEnd = ListLen(local.query.columnList);
 					for (local.j = 1; local.j <= local.jEnd; local.j++) {
 						local.property = ListGetAt(local.query.columnList, local.j);
 						arguments[local.property] = local.query[local.property][local.i];
-						QuerySetCell(arguments.group, local.property, local.query[local.property][local.i], local.groupQueryCount);
+						QuerySetCell(
+							arguments.group,
+							local.property,
+							local.query[local.property][local.i],
+							local.groupQueryCount
+						);
 					}
 					arguments.current = local.i + 1 - arguments.group.recordCount;
 					local.groupQueryCount++;
@@ -412,7 +429,7 @@ public string function $includeFile(required any $name, required any $template, 
 
 				// If we have anything left at the end we need to render it too.
 				if (arguments.group.recordCount) {
-					local.rv &= $includeAndReturnOutput(argumentCollection=arguments);
+					local.rv &= $includeAndReturnOutput(argumentCollection = arguments);
 					if (StructKeyExists(arguments, "$spacer") && local.i < local.iEnd) {
 						local.rv &= local.tempSpacer;
 					}
@@ -422,8 +439,12 @@ public string function $includeFile(required any $name, required any $template, 
 				if (Right(local.rv, 3) == local.tempSpacer) {
 					local.rv = Left(local.rv, Len(local.rv) - 3);
 				}
-				local.rv = Replace(local.rv, local.tempSpacer, arguments.$spacer, "all");
-
+				local.rv = Replace(
+					local.rv,
+					local.tempSpacer,
+					arguments.$spacer,
+					"all"
+				);
 			} else {
 				for (local.i = 1; local.i <= local.iEnd; local.i++) {
 					arguments.current = local.i;
@@ -437,7 +458,7 @@ public string function $includeFile(required any $name, required any $template, 
 							arguments[local.property] = "";
 						}
 					}
-					local.rv &= $includeAndReturnOutput(argumentCollection=arguments);
+					local.rv &= $includeAndReturnOutput(argumentCollection = arguments);
 					if (StructKeyExists(arguments, "$spacer") && local.i < local.iEnd) {
 						local.rv &= arguments.$spacer;
 					}
@@ -463,7 +484,7 @@ public string function $includeFile(required any $name, required any $template, 
 				arguments[local.modelName] = local.array[local.i];
 				local.properties = local.array[local.i].properties();
 				StructAppend(arguments, local.properties, true);
-				local.rv &= $includeAndReturnOutput(argumentCollection=arguments);
+				local.rv &= $includeAndReturnOutput(argumentCollection = arguments);
 				if (StructKeyExists(arguments, "$spacer") && local.i < local.iEnd) {
 					local.rv &= arguments.$spacer;
 				}
@@ -471,7 +492,7 @@ public string function $includeFile(required any $name, required any $template, 
 		}
 	}
 	if (!StructKeyExists(local, "rv")) {
-		local.rv = $includeAndReturnOutput(argumentCollection=arguments);
+		local.rv = $includeAndReturnOutput(argumentCollection = arguments);
 	}
 	return local.rv;
 }
@@ -480,7 +501,7 @@ public string function $includeFile(required any $name, required any $template, 
  * Internal function.
  */
 public boolean function $performedRenderOrRedirect() {
-	if ($performedRender() || $performedRedirect())	{
+	if ($performedRender() || $performedRedirect()) {
 		return true;
 	} else {
 		return false;
@@ -528,5 +549,4 @@ public boolean function $abortIssued() {
 public boolean function $reCacheRequired() {
 	return StructKeyExists(variables.$instance, "reCache") && variables.$instance.reCache;
 }
-
 </cfscript>

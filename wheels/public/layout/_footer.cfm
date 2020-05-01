@@ -6,7 +6,7 @@
 //=====================================================================
 //= 	Javascript for CFWheels GUI
 //=====================================================================
- $(document).ready(function() {
+	$(document).ready(function() {
 //=====================================================================
 //= 	Routes / Package table filter
 //=====================================================================
@@ -46,9 +46,9 @@
 			data.path = '/' + data.path;
 
 			var resp = $.ajax({
-				 url: testUrl,
-				 method: 'post',
-				 data: data
+				url: testUrl,
+				method: 'post',
+				data: data
 			})
 			.done(function(data, status, req) {
 			var res = $("#router-tester-results");
@@ -124,21 +124,21 @@
 	}
 	function filterByFunctionName(name){
 		$("#function-output").find(".functiondefinition").hide().end()
-				   .find("[data-function='" + name + "']").show().end()
-				   .find("#" + name).show();
+			.find("[data-function='" + name + "']").show().end()
+			.find("#" + name).show();
 		window.location.hash="#" + name;
 	}
 	function filterByCategory(section, category){
 		$("#function-navigation").find(".functionlink").hide().end()
-				   .find('[data-section="' + section + '"][data-category="' + category + '"]').show();
+			.find('[data-section="' + section + '"][data-category="' + category + '"]').show();
 		$("#function-output").find(".functiondefinition").hide().end()
-				   .find('[data-section="' + section + '"][data-category="' + category + '"]').show();
+			.find('[data-section="' + section + '"][data-category="' + category + '"]').show();
 	}
 	function filterBySection(section){
 		$("#function-navigation").find(".functionlink").hide().end()
-				   .find('[data-section="' + section + '"]').show();
+			.find('[data-section="' + section + '"]').show();
 		$("#function-output").find(".functiondefinition").hide().end()
-				   .find('[data-section="' + section + '"]').show();
+			.find('[data-section="' + section + '"]').show();
 	}
 	function updateFunctionCount(){
 		$("#functionResults .resultCount").html($("#function-output .functiondefinition:visible").length);

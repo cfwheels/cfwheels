@@ -6,19 +6,19 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_object_valid() {
-		profile = profileModel.findByKey(key=1);
+		profile = profileModel.findByKey(key = 1);
 		author = profile.author();
 		assert("IsObject(author) eq true");
 	}
 
- 	function test_object_valid_with_combi_key() {
-		combikey = combiKeyModel.findByKey(key="1,1");
+	function test_object_valid_with_combi_key() {
+		combikey = combiKeyModel.findByKey(key = "1,1");
 		user = combikey.user();
 		assert('IsObject(user) eq true');
 	}
 
 	function test_object_returns_false() {
-		profile = profileModel.findByKey(key=2);
+		profile = profileModel.findByKey(key = 2);
 		author = profile.author();
 		assert("IsObject(author) eq false");
 	}

@@ -16,7 +16,7 @@ component extends="wheels.tests.Test" {
 
 	function run_flashDelete_invalid() {
 		_controller.flashClear();
-		result = _controller.flashDelete(key="success");
+		result = _controller.flashDelete(key = "success");
 		assert("result IS false");
 	}
 
@@ -27,13 +27,13 @@ component extends="wheels.tests.Test" {
 	}
 
 	/**
-	* HELPERS
-	*/
+	 * HELPERS
+	 */
 
 	function run_flashDelete_valid() {
 		_controller.flashClear();
-		_controller.flashInsert(success="Congrats!");
-		result = _controller.flashDelete(key="success");
+		_controller.flashInsert(success = "Congrats!");
+		result = _controller.flashDelete(key = "success");
 		assert("result IS true");
 	}
 

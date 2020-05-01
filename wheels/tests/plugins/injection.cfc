@@ -4,21 +4,21 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		config = {
-			path="wheels"
-			,fileName="Plugins"
-			,method="init"
-			,pluginPath="/wheels/tests/_assets/plugins/standard"
-			,deletePluginDirectories=false
-			,overwritePlugins=false
-			,loadIncompatiblePlugins=true
+			path = "wheels",
+			fileName = "Plugins",
+			method = "init",
+			pluginPath = "/wheels/tests/_assets/plugins/standard",
+			deletePluginDirectories = false,
+			overwritePlugins = false,
+			loadIncompatiblePlugins = true
 		};
 		PluginObj = $pluginObj(config);
 		application.wheels.mixins = PluginObj.getMixins();
 		m = model("authors").new();
-		_params = {controller="test", action="index"};
+		_params = {controller = "test", action = "index"};
 		c = controller("test", _params);
-		d = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
-		t = createObject("component","wheels.Test");
+		d = $createObjectFromRoot(path = "wheels", fileName = "Dispatch", method = "$init");
+		t = CreateObject("component", "wheels.Test");
 	}
 
 	function teardown() {

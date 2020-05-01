@@ -12,7 +12,13 @@ component extends="wheels.tests.Test" {
 
 	function test_database_defaults_load_after_create() {
 		transaction action="begin" {
-			user = model("UserBlank").create(username="The Dude", password="doodle", firstName="The", lastName="Dude", reload=true);
+			user = model("UserBlank").create(
+				username = "The Dude",
+				password = "doodle",
+				firstName = "The",
+				lastName = "Dude",
+				reload = true
+			);
 			transaction action="rollback";
 		}
 		assert('StructKeyExists(user, "birthTime") and TimeFormat(user.birthTime, "HH:mm:ss") eq "18:26:08"');
@@ -20,8 +26,13 @@ component extends="wheels.tests.Test" {
 
 	function test_database_defaults_load_after_save() {
 		transaction action="begin" {
-			user = model("UserBlank").new(username="The Dude", password="doodle", firstName="The", lastName="Dude");
-			user.save(reload=true);
+			user = model("UserBlank").new(
+				username = "The Dude",
+				password = "doodle",
+				firstName = "The",
+				lastName = "Dude"
+			);
+			user.save(reload = true);
 			transaction action="rollback";
 		}
 		assert('StructKeyExists(user, "birthTime") and TimeFormat(user.birthTime, "HH:mm:ss") eq "18:26:08"');

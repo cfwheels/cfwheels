@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Registers method(s) that should be called after a new object is created.
  *
@@ -8,8 +7,8 @@
  *
  * @methods [see:afterNew].
  */
-public void function afterCreate(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="afterCreate");
+public void function afterCreate(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "afterCreate");
 }
 
 /**
@@ -20,8 +19,8 @@ public void function afterCreate(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function afterDelete(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="afterDelete");
+public void function afterDelete(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "afterDelete");
 }
 
 /**
@@ -32,8 +31,8 @@ public void function afterDelete(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function afterFind(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="afterFind");
+public void function afterFind(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "afterFind");
 }
 
 /**
@@ -44,8 +43,8 @@ public void function afterFind(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function afterInitialization(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="afterInitialization");
+public void function afterInitialization(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "afterInitialization");
 }
 
 /**
@@ -56,8 +55,8 @@ public void function afterInitialization(string methods="") {
  *
  * @methods Method name or list of method names that should be called when this callback event occurs in an object's life cycle (can also be called with the `method` argument).
  */
-public void function afterNew(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="afterNew");
+public void function afterNew(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "afterNew");
 }
 
 /**
@@ -68,8 +67,8 @@ public void function afterNew(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function afterSave(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="afterSave");
+public void function afterSave(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "afterSave");
 }
 
 /**
@@ -80,8 +79,8 @@ public void function afterSave(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function afterUpdate(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="afterUpdate");
+public void function afterUpdate(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "afterUpdate");
 }
 
 /**
@@ -92,8 +91,8 @@ public void function afterUpdate(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function afterValidation(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="afterValidation");
+public void function afterValidation(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "afterValidation");
 }
 
 /**
@@ -104,8 +103,8 @@ public void function afterValidation(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function afterValidationOnCreate(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="afterValidationOnCreate");
+public void function afterValidationOnCreate(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "afterValidationOnCreate");
 }
 
 /**
@@ -116,8 +115,8 @@ public void function afterValidationOnCreate(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function afterValidationOnUpdate(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="afterValidationOnUpdate");
+public void function afterValidationOnUpdate(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "afterValidationOnUpdate");
 }
 
 /**
@@ -128,8 +127,8 @@ public void function afterValidationOnUpdate(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function beforeCreate(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="beforeCreate");
+public void function beforeCreate(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "beforeCreate");
 }
 
 /**
@@ -140,8 +139,8 @@ public void function beforeCreate(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function beforeDelete(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="beforeDelete");
+public void function beforeDelete(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "beforeDelete");
 }
 
 /**
@@ -152,8 +151,8 @@ public void function beforeDelete(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function beforeSave(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="beforeSave");
+public void function beforeSave(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "beforeSave");
 }
 
 /**
@@ -164,8 +163,8 @@ public void function beforeSave(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function beforeUpdate(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="beforeUpdate");
+public void function beforeUpdate(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "beforeUpdate");
 }
 
 /**
@@ -176,8 +175,8 @@ public void function beforeUpdate(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function beforeValidation(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="beforeValidation");
+public void function beforeValidation(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "beforeValidation");
 }
 
 /**
@@ -188,8 +187,8 @@ public void function beforeValidation(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function beforeValidationOnCreate(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="beforeValidationOnCreate");
+public void function beforeValidationOnCreate(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "beforeValidationOnCreate");
 }
 
 /**
@@ -200,17 +199,16 @@ public void function beforeValidationOnCreate(string methods="") {
  *
  * @methods [see:afterNew].
  */
-public void function beforeValidationOnUpdate(string methods="") {
-	$registerCallback(argumentCollection=arguments, type="beforeValidationOnUpdate");
+public void function beforeValidationOnUpdate(string methods = "") {
+	$registerCallback(argumentCollection = arguments, type = "beforeValidationOnUpdate");
 }
 
 /**
  * Internal function.
  */
 public void function $registerCallback(required string type, required string methods) {
-
 	// Create this type in the array if it doesn't already exist.
-	if (!StructKeyExists(variables.wheels.class.callbacks,arguments.type)) {
+	if (!StructKeyExists(variables.wheels.class.callbacks, arguments.type)) {
 		variables.wheels.class.callbacks[arguments.type] = [];
 	}
 
@@ -230,8 +228,8 @@ public void function $registerCallback(required string type, required string met
 /**
  * Internal function.
  */
-public void function $clearCallbacks(string type="") {
-	arguments.type = $listClean(list="#arguments.type#", returnAs="array");
+public void function $clearCallbacks(string type = "") {
+	arguments.type = $listClean(list = "#arguments.type#", returnAs = "array");
 
 	// No type(s) was passed in. get all the callback types registered.
 	if (ArrayIsEmpty(arguments.type)) {
@@ -248,7 +246,7 @@ public void function $clearCallbacks(string type="") {
 /**
  * Internal function.
  */
-public any function $callbacks(string type="") {
+public any function $callbacks(string type = "") {
 	if (Len(arguments.type)) {
 		if (StructKeyExists(variables.wheels.class.callbacks, arguments.type)) {
 			local.rv = variables.wheels.class.callbacks[arguments.type];
@@ -264,46 +262,35 @@ public any function $callbacks(string type="") {
 /**
  * Internal function.
  */
-public boolean function $callback(
-	required string type,
-	required boolean execute,
-	any collection=""
-) {
+public boolean function $callback(required string type, required boolean execute, any collection = "") {
 	if (arguments.execute) {
-
 		// Get all callbacks for the type and loop through them all until the end or one of them returns false.
 		local.callbacks = $callbacks(arguments.type);
 		local.iEnd = ArrayLen(local.callbacks);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.method = local.callbacks[local.i];
 			if (arguments.type == "afterFind") {
-
 				// Since this is an afterFind callback we need to handle it differently.
 				if (IsQuery(arguments.collection)) {
-					local.rv = $queryCallback(method=local.method, collection=arguments.collection);
+					local.rv = $queryCallback(method = local.method, collection = arguments.collection);
 				} else {
 					local.invokeArgs = properties();
-					local.rv = $invoke(method=local.method, invokeArgs=local.invokeArgs);
+					local.rv = $invoke(method = local.method, invokeArgs = local.invokeArgs);
 					if (StructKeyExists(local, "rv") && IsStruct(local.rv)) {
 						setProperties(local.rv);
 						StructDelete(local, "rv");
 					}
 				}
-
 			} else {
-
 				// This is a regular callback so just call the method.
-				local.rv = $invoke(method=local.method);
-
+				local.rv = $invoke(method = local.method);
 			}
 
 			// Break the loop if the callback returned false.
 			if (StructKeyExists(local, "rv") && IsBoolean(local.rv) && !local.rv) {
 				break;
 			}
-
 		}
-
 	}
 
 	// Return true by default (happens when no callbacks are set or none of the callbacks returned a result).
@@ -318,14 +305,12 @@ public boolean function $callback(
  * Internal function.
  */
 public boolean function $queryCallback(required string method, required query collection) {
-
 	// We return true by default, will be overridden only if the callback method returns false on one of the iterations.
 	local.rv = true;
 
 	// Loop over all query rows and execute the callback method for each.
 	local.iEnd = arguments.collection.recordCount;
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
-
 		// Get the values in the current query row so that we can pass them in as arguments to the callback method.
 		local.invokeArgs = {};
 		local.jEnd = ListLen(arguments.collection.columnList);
@@ -338,18 +323,15 @@ public boolean function $queryCallback(required string method, required query co
 			} catch (any e) {
 				local.invokeArgs[local.item] = "";
 			}
-
 		}
 
 		// Execute the callback method.
-		local.result = $invoke(method=arguments.method, invokeArgs=local.invokeArgs);
+		local.result = $invoke(method = arguments.method, invokeArgs = local.invokeArgs);
 
 		if (StructKeyExists(local, "result")) {
 			if (IsStruct(local.result)) {
-
 				// The arguments struct was returned so we need to add the changed values to the query row.
 				for (local.key in local.result) {
-
 					// Add a new column to the query if a value was passed back for a column that did not exist originally.
 					if (!ListFindNoCase(arguments.collection.columnList, local.key)) {
 						QueryAddColumn(arguments.collection, local.key, []);
@@ -358,11 +340,9 @@ public boolean function $queryCallback(required string method, required query co
 					arguments.collection[local.key][local.i] = local.result[local.key];
 				}
 			} else if (IsBoolean(local.result) && !local.result) {
-
 				// Break the loop and return false if the callback returned false.
 				local.rv = false;
 				break;
-
 			}
 		}
 	}
@@ -375,5 +355,4 @@ public boolean function $queryCallback(required string method, required query co
 
 	return local.rv;
 }
-
 </cfscript>

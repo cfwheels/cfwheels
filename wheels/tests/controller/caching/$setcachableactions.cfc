@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-	  _controller = controller(name="dummy");
+		_controller = controller(name = "dummy");
 	}
 
 	function test_setting_cachable_actions() {
@@ -18,4 +18,5 @@ component extends="wheels.tests.Test" {
 		r = _controller.$cachableActions();
 		assert("ArrayLen(r) IS 2 AND r[2].action IS 'dummy2'");
 	}
+
 }

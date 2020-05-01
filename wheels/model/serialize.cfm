@@ -1,17 +1,16 @@
 <cfscript>
-
 /**
  * Internal function.
  */
 public any function $serializeQueryToObjects(
 	required query query,
-	string include="",
-	string callbacks="true",
-	string returnIncluded="true"
+	string include = "",
+	string callbacks = "true",
+	string returnIncluded = "true"
 ) {
 	// grab our objects as structs first so we don't waste cpu creating objects we don't need
-	local.rv = $serializeQueryToStructs(argumentCollection=arguments);
-	local.rv = $serializeStructsToObjects(structs=local.rv, argumentCollection=arguments);
+	local.rv = $serializeQueryToStructs(argumentCollection = arguments);
+	local.rv = $serializeStructsToObjects(structs = local.rv, argumentCollection = arguments);
 	return local.rv;
 }
 
@@ -39,18 +38,30 @@ public any function $serializeStructsToObjects(
 				local._model = model(variables.wheels.class.associations[local.include].modelName);
 				if (variables.wheels.class.associations[local.include].type == "hasMany") {
 					local.kEnd = ArrayLen(local.rv[local.i][local.include]);
-					for (local.k=1; local.k <= local.kEnd; local.k++) {
-						local.rv[local.i][local.include][local.k] = local._model.$createInstance(properties=local.rv[local.i][local.include][local.k], persisted=true, base=false, callbacks=arguments.callbacks);
+					for (local.k = 1; local.k <= local.kEnd; local.k++) {
+						local.rv[local.i][local.include][local.k] = local._model.$createInstance(
+							properties = local.rv[local.i][local.include][local.k],
+							persisted = true,
+							base = false,
+							callbacks = arguments.callbacks
+						);
 					}
 				} else {
-
 					// We have a hasOne or belongsTo assocation, so just add the object to the root object.
-					local.rv[local.i][local.include] = local._model.$createInstance(properties=local.rv[local.i][local.include], persisted=true, base=false, callbacks=arguments.callbacks);
-
+					local.rv[local.i][local.include] = local._model.$createInstance(
+						properties = local.rv[local.i][local.include],
+						persisted = true,
+						base = false,
+						callbacks = arguments.callbacks
+					);
 				}
 			}
 		}
-		local.rv[local.i] = $createInstance(properties=local.rv[local.i], persisted=true, callbacks=arguments.callbacks);
+		local.rv[local.i] = $createInstance(
+			properties = local.rv[local.i],
+			persisted = true,
+			callbacks = arguments.callbacks
+		);
 	}
 	return local.rv;
 }
@@ -63,7 +74,7 @@ public any function $serializeQueryToStructs(
 	required string include,
 	required string callbacks,
 	required string returnIncluded
-){
+) {
 	local.rv = [];
 	local.doneStructs = "";
 
@@ -71,7 +82,7 @@ public any function $serializeQueryToStructs(
 	local.iEnd = arguments.query.recordCount;
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		// create a new struct
-		local.struct = $queryRowToStruct(properties=arguments.query, row=local.i);
+		local.struct = $queryRowToStruct(properties = arguments.query, row = local.i);
 		local.structHash = $hashedKey(local.struct);
 		if (!ListFind(local.doneStructs, local.structHash, Chr(7))) {
 			if (Len(arguments.include) && arguments.returnIncluded) {
@@ -88,29 +99,40 @@ public any function $serializeQueryToStructs(
 						local._model = model(variables.wheels.class.associations[local.include].modelName);
 
 						local.kEnd = arguments.query.recordCount;
-						for (local.k=1; local.k <= local.kEnd; local.k++) {
+						for (local.k = 1; local.k <= local.kEnd; local.k++) {
 							// is there anything we can do here to not instantiate an object if it is not going to be use or is already created
 							// this extra instantiation is really slowing things down
-							local.hasManyStruct = local._model.$queryRowToStruct(properties=arguments.query, row=local.k, base=false);
+							local.hasManyStruct = local._model.$queryRowToStruct(
+								properties = arguments.query,
+								row = local.k,
+								base = false
+							);
 							local.hasManyStructHash = $hashedKey(local.hasManyStruct);
 							if (!ListFind(local.hasManyDoneStructs, local.hasManyStructHash, Chr(7))) {
 								// create object instance from values in current query row if it belongs to the current object
 								local.primaryKeyColumnValues = "";
 								local.lEnd = ListLen(primaryKeys());
-								for (local.l=1; local.l <= local.lEnd; local.l++) {
-									local.primaryKeyColumnValues = ListAppend(local.primaryKeyColumnValues, arguments.query[primaryKeys(local.l)][local.k]);
+								for (local.l = 1; local.l <= local.lEnd; local.l++) {
+									local.primaryKeyColumnValues = ListAppend(
+										local.primaryKeyColumnValues,
+										arguments.query[primaryKeys(local.l)][local.k]
+									);
 								}
-								if (Len(local._model.$keyFromStruct(local.hasManyStruct)) && this.$keyFromStruct(local.struct) == local.primaryKeyColumnValues) {
+								if (
+									Len(local._model.$keyFromStruct(local.hasManyStruct)) && this.$keyFromStruct(local.struct) == local.primaryKeyColumnValues
+								) {
 									ArrayAppend(local.struct[local.include], local.hasManyStruct);
 								}
 								local.hasManyDoneStructs = ListAppend(local.hasManyDoneStructs, local.hasManyStructHash, Chr(7));
 							}
 						}
 					} else {
-
 						// We have a hasOne or belongsTo assocation, so just add the object to the root object.
-						local.struct[local.include] = model(variables.wheels.class.associations[local.include].modelName).$queryRowToStruct(properties=arguments.query, row=local.i, base=false);
-
+						local.struct[local.include] = model(variables.wheels.class.associations[local.include].modelName).$queryRowToStruct(
+							properties = arguments.query,
+							row = local.i,
+							base = false
+						);
 					}
 				}
 			}
@@ -126,15 +148,14 @@ public any function $serializeQueryToStructs(
  */
 public struct function $queryRowToStruct(
 	required any properties,
-	string name="#variables.wheels.class.modelName#",
-	numeric row="1",
-	boolean base="true"
+	string name = "#variables.wheels.class.modelName#",
+	numeric row = "1",
+	boolean base = "true"
 ) {
 	local.rv = {};
 	local.allProperties = ListAppend(variables.wheels.class.propertyList, variables.wheels.class.calculatedPropertyList);
 	local.iEnd = ListLen(local.allProperties);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
-
 		// Wrap in try/catch because coldfusion has a problem with empty strings in queries for bit types.
 		try {
 			local.item = ListGetAt(local.allProperties, local.i);
@@ -146,7 +167,6 @@ public struct function $queryRowToStruct(
 		} catch (any e) {
 			local.rv[local.item] = "";
 		}
-
 	}
 	return local.rv;
 }
@@ -165,5 +185,4 @@ public string function $keyFromStruct(required struct struct) {
 	}
 	return local.rv;
 }
-
 </cfscript>

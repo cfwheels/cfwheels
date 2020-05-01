@@ -1,5 +1,4 @@
 <cfscript>
-
 public void function onRequestStart(required targetPage) {
 	local.lockName = "reloadLock" & application.applicationName;
 
@@ -15,22 +14,37 @@ public void function onRequestStart(required targetPage) {
 	$initializeRequestScope();
 
 	// Reload application by calling onApplicationStart if requested.
-	if (StructKeyExists(url, "reload") && (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(application.wheels.reloadPassword) || (StructKeyExists(url, "password") && url.password == application.wheels.reloadPassword))) {
+	if (
+		StructKeyExists(url, "reload") && (
+			!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(
+				application.wheels.reloadPassword
+			) || (StructKeyExists(url, "password") && url.password == application.wheels.reloadPassword)
+		)
+	) {
 		$debugPoint("total,reload");
 		if (StructKeyExists(url, "lock") && !url.lock) {
 			this.onApplicationStart();
 		} else {
-			$simpleLock(name=local.lockName, execute="onApplicationStart", type="exclusive", timeout=180);
+			$simpleLock(
+				name = local.lockName,
+				execute = "onApplicationStart",
+				type = "exclusive",
+				timeout = 180
+			);
 		}
 	}
 
 	// Run the rest of the request start code.
-	$simpleLock(name=local.lockName, execute="$runOnRequestStart", executeArgs=arguments, type="readOnly", timeout=180);
-
+	$simpleLock(
+		name = local.lockName,
+		execute = "$runOnRequestStart",
+		executeArgs = arguments,
+		type = "readOnly",
+		timeout = 180
+	);
 }
 
 public void function $runOnRequestStart(required targetPage) {
-
 	// If the first debug point has not already been set in a reload request we set it here.
 	if (application.wheels.showDebugInformation) {
 		if (StructKeyExists(request.wheels, "execution")) {
@@ -48,7 +62,7 @@ public void function $runOnRequestStart(required targetPage) {
 
 	// Copy HTTP headers.
 	if (!StructKeyExists(request, "$wheelsHeader")) {
-		request.$wheelsHeaders = GetHttpRequestData().headers;
+		request.$wheelsHeaders = GetHTTPRequestData().headers;
 	}
 
 	// Reload the plugins on each request if cachePlugins is set to false.
@@ -58,7 +72,7 @@ public void function $runOnRequestStart(required targetPage) {
 
 	// Inject methods from plugins directly to Application.cfc.
 	if (!StructIsEmpty(application.wheels.mixins)) {
-		$include(template="wheels/plugins/standalone/injection.cfm");
+		$include(template = "wheels/plugins/standalone/injection.cfm");
 	}
 
 	if (application.wheels.environment == "maintenance") {
@@ -67,7 +81,7 @@ public void function $runOnRequestStart(required targetPage) {
 		}
 		local.makeException = false;
 		if (Len(application.wheels.ipExceptions)) {
-			if (REFindNoCase("[a-z]", application.wheels.ipExceptions)) {
+			if (ReFindNoCase("[a-z]", application.wheels.ipExceptions)) {
 				if (ListFindNoCase(application.wheels.ipExceptions, cgi.http_user_agent)) {
 					local.makeException = true;
 				}
@@ -82,12 +96,14 @@ public void function $runOnRequestStart(required targetPage) {
 			}
 		}
 		if (!local.makeException) {
-			$header(statusCode=503, statustext="Service Unavailable");
+			$header(statusCode = 503, statustext = "Service Unavailable");
 
 			// Set the content to be displayed in maintenance mode to a request variable and exit the function.
 			// This variable is then checked in the Wheels $request function (which is what sets what to render).
-			request.$wheelsAbortContent = $includeAndReturnOutput($template="#application.wheels.eventPath#/onmaintenance.cfm");
-      		return;
+			request.$wheelsAbortContent = $includeAndReturnOutput(
+				$template = "#application.wheels.eventPath#/onmaintenance.cfm"
+			);
+			return;
 		}
 	}
 	if (Right(arguments.targetPage, 4) == ".cfc") {
@@ -96,11 +112,11 @@ public void function $runOnRequestStart(required targetPage) {
 	}
 	if (!application.wheels.cacheModelConfig) {
 		local.lockName = "modelLock" & application.applicationName;
-		$simpleLock(name=local.lockName, execute="$clearModelInitializationCache", type="exclusive");
+		$simpleLock(name = local.lockName, execute = "$clearModelInitializationCache", type = "exclusive");
 	}
 	if (!application.wheels.cacheControllerConfig) {
 		local.lockName = "controllerLock" & application.applicationName;
-		$simpleLock(name=local.lockName, execute="$clearControllerInitializationCache", type="exclusive");
+		$simpleLock(name = local.lockName, execute = "$clearControllerInitializationCache", type = "exclusive");
 	}
 	if (!application.wheels.cacheDatabaseSchema) {
 		$clearCache("sql");
@@ -114,20 +130,20 @@ public void function $runOnRequestStart(required targetPage) {
 			allowMethodsByRoute = application.wheels.accessControlAllowMethodsByRoute
 		);
 	}
-	$include(template="#application.wheels.eventPath#/onrequeststart.cfm");
+	$include(template = "#application.wheels.eventPath#/onrequeststart.cfm");
 	if (application.wheels.showDebugInformation) {
 		$debugPoint("requestStart");
 	}
 
 	// Also for CORS compliance, an OPTIONS request must return 200 and the above headers. No data is required.
 	// This will be remove when OPTIONS is implemented in the mapper (issue #623)
-	if(application.wheels.allowCorsRequests
-		&& structKeyExists(request,"CGI")
-		&& structKeyExists(request.CGI,"request_method")
+	if (
+		application.wheels.allowCorsRequests
+		&& StructKeyExists(request, "CGI")
+		&& StructKeyExists(request.CGI, "request_method")
 		&& request.CGI.request_method eq "OPTIONS"
-	){
+	) {
 		abort;
 	}
 }
-
 </cfscript>

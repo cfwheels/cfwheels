@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Creates a new object, saves it to the database (if the validation permits it), and returns it.
  * If the validation fails, the unsaved object (with errors added to it) is still returned.
@@ -17,27 +16,27 @@
  * @allowExplicitTimestamps Set this to `true` to allow explicit assignment of `createdAt` or `updatedAt` properties
  */
 public any function create(
-	struct properties={},
+	struct properties = {},
 	any parameterize,
 	boolean reload,
-	boolean validate=true,
-	string transaction=$get("transactionMode"),
-	boolean callbacks=true,
-	boolean allowExplicitTimestamps=false
+	boolean validate = true,
+	string transaction = $get("transactionMode"),
+	boolean callbacks = true,
+	boolean allowExplicitTimestamps = false
 ) {
-	$args(name="create", args=arguments);
+	$args(name = "create", args = arguments);
 	$setProperties(
-		argumentCollection=arguments,
-		filterList="properties,parameterize,reload,validate,transaction,callbacks,allowExplicitTimestamps"
+		argumentCollection = arguments,
+		filterList = "properties,parameterize,reload,validate,transaction,callbacks,allowExplicitTimestamps"
 	);
-	local.rv = new(argumentCollection=arguments);
+	local.rv = new (argumentCollection = arguments);
 	local.rv.save(
-		callbacks=arguments.callbacks,
-		parameterize=arguments.parameterize,
-		reload=arguments.reload,
-		transaction=arguments.transaction,
-		validate=arguments.validate,
-		allowExplicitTimestamps=arguments.allowExplicitTimestamps
+		callbacks = arguments.callbacks,
+		parameterize = arguments.parameterize,
+		reload = arguments.reload,
+		transaction = arguments.transaction,
+		validate = arguments.validate,
+		allowExplicitTimestamps = arguments.allowExplicitTimestamps
 	);
 	return local.rv;
 }
@@ -53,13 +52,13 @@ public any function create(
  * @properties The properties you want to set on the object (can also be passed in as named arguments).
  * @callbacks [see:findAll].
  */
-public any function new(struct properties={}, boolean callbacks=true) {
+public any function new(struct properties = {}, boolean callbacks = true) {
 	arguments.properties = $setProperties(
-		argumentCollection=arguments,
-		filterList="properties,reload,transaction,callbacks",
-		setOnModel=false
+		argumentCollection = arguments,
+		filterList = "properties,reload,transaction,callbacks",
+		setOnModel = false
 	);
-	local.rv = $createInstance(callbacks=arguments.callbacks, persisted=false, properties=arguments.properties);
+	local.rv = $createInstance(callbacks = arguments.callbacks, persisted = false, properties = arguments.properties);
 	local.rv.$setDefaultValues();
 	return local.rv;
 }
@@ -81,14 +80,14 @@ public any function new(struct properties={}, boolean callbacks=true) {
 public boolean function save(
 	any parameterize,
 	boolean reload,
-	boolean validate=true,
-	string transaction=$get("transactionMode"),
-	boolean callbacks=true,
-	boolean allowExplicitTimestamps=false
+	boolean validate = true,
+	string transaction = $get("transactionMode"),
+	boolean callbacks = true,
+	boolean allowExplicitTimestamps = false
 ) {
-	$args(name="save", args=arguments);
+	$args(name = "save", args = arguments);
 	clearErrors();
-	return invokeWithTransaction(argumentCollection=arguments, method="$save");
+	return invokeWithTransaction(argumentCollection = arguments, method = "$save");
 }
 
 /**
@@ -99,25 +98,25 @@ public boolean function save(
 public any function $createInstance(
 	required struct properties,
 	required boolean persisted,
-	numeric row=1,
-	boolean base=true,
-	boolean callbacks=true
+	numeric row = 1,
+	boolean base = true,
+	boolean callbacks = true
 ) {
 	local.fileName = $objectFileName(
-		name=variables.wheels.class.modelName,
-		objectPath=variables.wheels.class.path,
-		type="model"
+		name = variables.wheels.class.modelName,
+		objectPath = variables.wheels.class.path,
+		type = "model"
 	);
 	local.rv = $createObjectFromRoot(
-		base=arguments.base,
-		fileName=local.fileName,
-		path=variables.wheels.class.path,
-		method="$initModelObject",
-		name=variables.wheels.class.modelName,
-		persisted=arguments.persisted,
-		properties=arguments.properties,
-		row=arguments.row,
-		useFilterLists=!arguments.persisted
+		base = arguments.base,
+		fileName = local.fileName,
+		path = variables.wheels.class.path,
+		method = "$initModelObject",
+		name = variables.wheels.class.modelName,
+		persisted = arguments.persisted,
+		properties = arguments.properties,
+		row = arguments.row,
+		useFilterLists = !arguments.persisted
 	);
 
 	// If the object should be persisted, run afterFind callback, otherwise run afterNew callback.
@@ -149,34 +148,60 @@ public boolean function $save(
 
 	if ($callback("beforeValidation", arguments.callbacks)) {
 		if (isNew()) {
-			if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks)) {
+			if (
+				$callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate", arguments.validate) && $callback(
+					"afterValidation",
+					arguments.callbacks
+				) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback(
+					"beforeCreate",
+					arguments.callbacks
+				)
+			) {
 				local.rollback = false;
 				if (!Len(key())) {
 					local.rollback = true;
 				}
-				$create(parameterize=arguments.parameterize, reload=arguments.reload);
-				if ($saveAssociations(argumentCollection=arguments) && $callback("afterCreate", arguments.callbacks) && $callback("afterSave", arguments.callbacks)) {
+				$create(parameterize = arguments.parameterize, reload = arguments.reload);
+				if (
+					$saveAssociations(argumentCollection = arguments) && $callback("afterCreate", arguments.callbacks) && $callback(
+						"afterSave",
+						arguments.callbacks
+					)
+				) {
 					$updatePersistedProperties();
 					local.rv = true;
 				} else if (local.rollback) {
 					$resetToNew();
 				}
 			} else {
-				$validateAssociations(callbacks=arguments.callbacks);
+				$validateAssociations(callbacks = arguments.callbacks);
 			}
 		} else {
-			if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave,onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks)) {
-				$update(parameterize=arguments.parameterize, reload=arguments.reload);
-				if ($saveAssociations(argumentCollection=arguments) && $callback("afterUpdate", arguments.callbacks) && $callback("afterSave", arguments.callbacks)) {
+			if (
+				$callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave,onUpdate", arguments.validate) && $callback(
+					"afterValidation",
+					arguments.callbacks
+				) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback(
+					"beforeUpdate",
+					arguments.callbacks
+				)
+			) {
+				$update(parameterize = arguments.parameterize, reload = arguments.reload);
+				if (
+					$saveAssociations(argumentCollection = arguments) && $callback("afterUpdate", arguments.callbacks) && $callback(
+						"afterSave",
+						arguments.callbacks
+					)
+				) {
 					$updatePersistedProperties();
 					local.rv = true;
 				}
 			} else {
-				$validateAssociations(callbacks=arguments.callbacks);
+				$validateAssociations(callbacks = arguments.callbacks);
 			}
 		}
 	} else {
-		$validateAssociations(callbacks=arguments.callbacks);
+		$validateAssociations(callbacks = arguments.callbacks);
 	}
 	return local.rv;
 }
@@ -187,34 +212,47 @@ public boolean function $save(
 public boolean function $create(required any parameterize, required boolean reload) {
 	// Allow explicit assignment of the createdAt/updatedAt properties if allowExplicitTimestamps is true
 	local.allowExplicitTimestamps = StructKeyExists(this, "allowExplicitTimestamps") && this.allowExplicitTimestamps;
-	if (local.allowExplicitTimestamps && StructKeyExists(this, $get("timeStampOnCreateProperty")) && Len(this[$get("timeStampOnCreateProperty")])) {
+	if (
+		local.allowExplicitTimestamps && StructKeyExists(this, $get("timeStampOnCreateProperty")) && Len(
+			this[$get("timeStampOnCreateProperty")]
+		)
+	) {
 		// leave createdat unmolested
 	} else if (variables.wheels.class.timeStampingOnCreate) {
-		$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
+		$timestampProperty(property = variables.wheels.class.timeStampOnCreateProperty);
 	}
-	if (local.allowExplicitTimestamps && StructKeyExists(this, $get("timeStampOnUpdateProperty")) && Len(this[$get("timeStampOnUpdateProperty")])) {
+	if (
+		local.allowExplicitTimestamps && StructKeyExists(this, $get("timeStampOnUpdateProperty")) && Len(
+			this[$get("timeStampOnUpdateProperty")]
+		)
+	) {
 		// leave updatedat unmolested
 	} else if ($get("setUpdatedAtOnCreate") && variables.wheels.class.timeStampingOnUpdate) {
-		$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
+		$timestampProperty(property = variables.wheels.class.timeStampOnUpdateProperty);
 	}
 
 	// Start by adding column names and values for the properties that exist on the object to two arrays.
 	local.sql = [];
 	local.sql2 = [];
 	for (local.key in variables.wheels.class.properties) {
-
 		// Only include this property if it has a value, or the column is not nullable and has no default set.
-		if (StructKeyExists(this, local.key) && (Len(this[local.key]) || (!variables.wheels.class.properties[local.key].nullable && !Len(variables.wheels.class.properties[local.key].columndefault)))) {
+		if (
+			StructKeyExists(this, local.key) && (
+				Len(this[local.key]) || (
+					!variables.wheels.class.properties[local.key].nullable && !Len(
+						variables.wheels.class.properties[local.key].columndefault
+					)
+				)
+			)
+		) {
 			ArrayAppend(local.sql, variables.wheels.class.properties[local.key].column);
 			ArrayAppend(local.sql, ",");
 			ArrayAppend(local.sql2, $buildQueryParamValues(local.key));
 			ArrayAppend(local.sql2, ",");
 		}
-
 	}
 
 	if (ArrayLen(local.sql)) {
-
 		// Create wrapping SQL code and merge the second array that holds the values with the first one.
 		ArrayPrepend(local.sql, "INSERT INTO #tableName()# (");
 		ArrayPrepend(local.sql2, " VALUES (");
@@ -234,20 +272,22 @@ public boolean function $create(required any parameterize, required boolean relo
 			local.pks[local.i] = variables.wheels.class.properties[local.pks[local.i]].column;
 		}
 		local.pks = ArrayToList(local.pks);
-
 	} else {
-
 		// No properties were set on the object so we insert a record with only default values to the database.
 		local.pks = primaryKey(0);
-		ArrayAppend(local.sql, "INSERT INTO #tableName()#" & variables.wheels.class.adapter.$defaultValues($primaryKey=local.pks));
-
+		ArrayAppend(
+			local.sql,
+			"INSERT INTO #tableName()#" & variables.wheels.class.adapter.$defaultValues(
+				$primaryKey = local.pks
+			)
+		);
 	}
 
 	// Run the insert sql statement and set the primary key value on the object (if one was returned from the database).
 	local.inserted = variables.wheels.class.adapter.$querySetup(
-		parameterize=arguments.parameterize,
-		sql=local.sql,
-		$primaryKey=local.pks
+		parameterize = arguments.parameterize,
+		sql = local.sql,
+		$primaryKey = local.pks
 	);
 	$clearRequestCache();
 	local.generatedKey = variables.wheels.class.adapter.$generatedKey();
@@ -260,5 +300,4 @@ public boolean function $create(required any parameterize, required boolean relo
 	}
 	return true;
 }
-
 </cfscript>

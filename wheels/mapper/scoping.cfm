@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Set any number of parameters to be inherited by mappers called within this matcher's block. For example, set a package or URL path to be used by all child routes.
  *
@@ -24,9 +23,8 @@ public struct function scope(
 	string shallowPath,
 	string shallowName,
 	struct constraints,
-	string $call="scope"
+	string $call = "scope"
 ) {
-
 	// Set shallow path and prefix if not in a resource.
 	if (!ListFindNoCase("resource,resources", variables.scopeStack[1].$call)) {
 		if (!StructKeyExists(arguments, "shallowPath") && StructKeyExists(arguments, "path")) {
@@ -82,10 +80,15 @@ public struct function scope(
  */
 public struct function namespace(
 	required string name,
-	string package=arguments.name,
-	string path=hyphenize(arguments.name)
+	string package = arguments.name,
+	string path = hyphenize(arguments.name)
 ) {
-	return scope(name=arguments.name, package=arguments.package, path=arguments.path, $call="namespace");
+	return scope(
+		name = arguments.name,
+		package = arguments.package,
+		path = arguments.path,
+		$call = "namespace"
+	);
 }
 
 /**
@@ -97,8 +100,8 @@ public struct function namespace(
  * @name Name to prepend to child route names.
  * @package Subfolder (package) to reference for controllers. This defaults to the value provided for `name`.
  */
-public struct function package(required string name, string package=arguments.name) {
-	return scope(name=arguments.name, package=arguments.package, $call="package");
+public struct function package(required string name, string package = arguments.name) {
+	return scope(name = arguments.name, package = arguments.package, $call = "package");
 }
 
 /**
@@ -109,10 +112,10 @@ public struct function package(required string name, string package=arguments.na
  */
 public struct function controller(
 	required string controller,
-	string name=arguments.controller,
-	string path=hyphenize(arguments.controller)
+	string name = arguments.controller,
+	string path = hyphenize(arguments.controller)
 ) {
-	return scope(argumentCollection=arguments, $call="controller");
+	return scope(argumentCollection = arguments, $call = "controller");
 }
 
 /**
@@ -122,7 +125,6 @@ public struct function controller(
  * [category: Routing]
  */
 public struct function constraints() {
-	return scope(constraints=arguments, $call="constraints");
+	return scope(constraints = arguments, $call = "constraints");
 }
-
 </cfscript>

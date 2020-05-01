@@ -15,7 +15,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function run_key_exists() {
-		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(success = "Congrats!");
 		result = _controller.flash("success");
 		assert("result IS 'Congrats!'");
 	}
@@ -27,7 +27,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function run_key_does_not_exist() {
-		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(success = "Congrats!");
 		result = _controller.flash("invalidkey");
 		assert("result IS ''");
 	}
@@ -39,7 +39,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function run_key_is_blank() {
-		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(success = "Congrats!");
 		result = _controller.flash("");
 		assert("result IS ''");
 	}
@@ -51,7 +51,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function run_key_provided_flash_empty() {
-		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(success = "Congrats!");
 		_controller.flashClear();
 		result = _controller.flash("invalidkey");
 		assert("result IS ''");
@@ -64,11 +64,11 @@ component extends="wheels.tests.Test" {
 	}
 
 	/**
-	* HELPERS
-	*/
+	 * HELPERS
+	 */
 
 	function run_no_key_provided_flash_not_empty() {
-		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(success = "Congrats!");
 		result = _controller.flash();
 		assert("IsStruct(result) AND StructKeyExists(result, 'success')");
 	}
@@ -80,7 +80,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function run_no_key_provided_flash_empty() {
-		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(success = "Congrats!");
 		_controller.flashClear();
 		result = _controller.flash();
 		assert("IsStruct(result) AND StructIsEmpty(result)");

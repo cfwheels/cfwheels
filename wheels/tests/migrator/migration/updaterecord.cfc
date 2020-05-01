@@ -9,22 +9,15 @@ component extends="wheels.tests.Test" {
 		oldValue = "All you need is love";
 		newValue = "Love is all you need";
 
-		t = migration.createTable(name=tableName, force=true);
-		t.string(columnNames="lyric");
-    t.timeStamps();
+		t = migration.createTable(name = tableName, force = true);
+		t.string(columnNames = "lyric");
+		t.timeStamps();
 		t.create();
 
-		migration.addRecord(table=tableName, lyric=oldValue);
-		migration.updateRecord(
-			table=tableName,
-			lyric=newValue,
-			where="lyric = '#oldValue#'"
-		);
+		migration.addRecord(table = tableName, lyric = oldValue);
+		migration.updateRecord(table = tableName, lyric = newValue, where = "lyric = '#oldValue#'");
 
-		actual = $query(
-			datasource=application.wheels.dataSourceName,
-			sql="SELECT lyric FROM #tableName#"
-		);
+		actual = $query(datasource = application.wheels.dataSourceName, sql = "SELECT lyric FROM #tableName#");
 		expected = newValue;
 
 		migration.dropTable(tableName);

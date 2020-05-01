@@ -3,5 +3,11 @@
 	This empty "Application.cfc" file makes sure that CFWheels does not interfere with the request.
 */
 component {
-	this.name = Hash(GetDirectoryFromPath(Left(GetBaseTemplatePath(),Len(GetBaseTemplatePath())-Len("wheels/tests/_assets/sharedappname/test.cfm"))));
+
+	this.name = Hash(
+		GetDirectoryFromPath(
+			Left(GetBaseTemplatePath(), Len(GetBaseTemplatePath()) - Len("wheels/tests/_assets/sharedappname/test.cfm"))
+		)
+	);
+
 }

@@ -2,37 +2,37 @@
 <cfoutput>
 
 	<!--- Function AZ --->
-    <div class="three wide column" id="function-navigation">
-    	<div class="ui vertical menu fluid">
-    		<div class="item">
-    			<div class="ui input">
-				  <input type="text" id="doc-search" placeholder="Search...">
+		<div class="three wide column" id="function-navigation">
+			<div class="ui vertical menu fluid">
+				<div class="item">
+					<div class="ui input">
+					<input type="text" id="doc-search" placeholder="Search...">
 				</div>
-    		</div>
-    		<div class="item">
-    			<div class="header"><div id="functionResults">
-    			<span class="resultCount">
-    			<div class="ui active inverted dimmer">
-    				<div class="ui mini loader">Loading</div>
-    			</div>
-    			</span> Functions</div></div>
-    			<div class="menu">
-    				<a href="" class="item">A-Z</a>
-    			</div>
+				</div>
+				<div class="item">
+					<div class="header"><div id="functionResults">
+					<span class="resultCount">
+					<div class="ui active inverted dimmer">
+						<div class="ui mini loader">Loading</div>
+					</div>
+					</span> Functions</div></div>
+					<div class="menu">
+						<a href="" class="item">A-Z</a>
+					</div>
 
-    			<div id="atoz" class="ui list link forcescroll sticky">
+					<div id="atoz" class="ui list link forcescroll sticky">
 					<cfloop from="1" to="#arraylen(docs.functions)#" index="func">
 					<cfset meta=docs.functions[func]>
 						<a href="" class="functionlink item"	data-section="#meta.tags.sectionClass#" data-category="#meta.tags.categoryClass#" data-function="#lcase(meta.slug)#">#meta.name#()</a>
 					</cfloop>
-		    	</div>
-    		</div>
+					</div>
+				</div>
 		</div><!--/menu-->
 	</div><!--/ col -->
 
 	<!--- Functions --->
-    <div class="nine wide column" id="function-output">
-		 <cfloop from="1" to="#arraylen(docs.functions)#" index="func">
+		<div class="nine wide column" id="function-output">
+			<cfloop from="1" to="#arraylen(docs.functions)#" index="func">
 			<cfset meta=docs.functions[func]>
 			<div id="#lcase(meta.name)#"
 				data-section="#meta.tags.sectionClass#"
@@ -56,8 +56,8 @@
 					<cfif structKeyExists(meta, "availableIn") && arrayLen(meta.availableIn)>
 						<cfloop from="1" to="#arrayLen(meta.availableIn)#" index="a">
 							<span class="ui label">
-							  <i class="map pin icon"></i>
-							   #meta.availableIn[a]#
+								<i class="map pin icon"></i>
+								#meta.availableIn[a]#
 							</span>
 						</cfloop>
 					</cfif>
@@ -101,9 +101,9 @@
 	</div><!--/ col -->
 
 	<!--- Categories --->
-    <div class="four wide  column" id="function-category-list">
-    	<div class="ui pointing vertical menu fluid  sticky">
-	    	<cfloop from="1" to="#arraylen(docs.sections)#" index="s">
+		<div class="four wide  column" id="function-category-list">
+			<div class="ui pointing vertical menu fluid  sticky">
+				<cfloop from="1" to="#arraylen(docs.sections)#" index="s">
 				<a href="" data-section="#$cssClassLink(docs.sections[s]['name'])#" class="section item">#docs.sections[s]['name']#</a>
 
 				<div class="menu">
@@ -113,10 +113,10 @@
 				</div>
 			</cfloop>
 			<div class="item">
-    			<div class="header">Misc</div>
-    			<div class="menu">
-				<a href=""	data-section=""	data-category="" class="section item">Uncategorized</a>
+				<div class="header">Misc</div>
+				<div class="menu">
+					<a href=""	data-section=""	data-category="" class="section item">Uncategorized</a>
+				</div>
 			</div>
-    	</div>
 	</div><!--/ col -->
 </cfoutput>

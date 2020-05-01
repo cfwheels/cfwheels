@@ -14,18 +14,18 @@ component extends="Base" {
 	}
 
 	/**
-   * Select statement to build view.
-   */
+	 * Select statement to build view.
+	 */
 	public any function selectStatement(required string sql) {
 		this.selectSql = arguments.sql;
 		return this;
 	}
 
 	/**
-   * Creates the table in the database.
-   */
+	 * Creates the table in the database.
+	 */
 	public void function create() {
-		$execute(this.adapter.createView(name=this.name, sql=this.selectSql));
+		$execute(this.adapter.createView(name = this.name, sql = this.selectSql));
 		announce("Created view #objectCase(this.name)#");
 	}
 

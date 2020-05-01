@@ -15,6 +15,7 @@ component extends="wheels.tests.Test" {
 		actual = request.$wheelsMigrationOutput;
 		expected = napalm & Chr(13) & truth & Chr(13);
 
-	  assert("actual eq expected");
+		assert("actual eq expected");
 	}
+
 }

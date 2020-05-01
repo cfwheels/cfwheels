@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Adds an error on a specific property.
  *
@@ -10,7 +9,7 @@
  * @message The error message (such as "Please enter a correct name in the form field" for example).
  * @name A name to identify the error by (useful when you need to distinguish one error from another one set on the same object and you don't want to use the error message itself for that).
  */
-public void function addError(required string property, required string message, string name="") {
+public void function addError(required string property, required string message, string name = "") {
 	ArrayAppend(variables.wheels.errors, arguments);
 }
 
@@ -23,9 +22,9 @@ public void function addError(required string property, required string message,
  * @message [see:addError].
  * @name [see:addError].
  */
-public void function addErrorToBase(required string message, string name="") {
+public void function addErrorToBase(required string message, string name = "") {
 	arguments.property = "";
-	addError(argumentCollection=arguments);
+	addError(argumentCollection = arguments);
 }
 
 /**
@@ -47,7 +46,7 @@ public array function allErrors() {
  * @property Specify a property name here if you want to clear all errors set on that property.
  * @name Specify an error name here if you want to clear all errors set with that error name.
  */
-public void function clearErrors(string property="", string name="") {
+public void function clearErrors(string property = "", string name = "") {
 	if (!Len(arguments.property) && !Len(arguments.name)) {
 		ArrayClear(variables.wheels.errors);
 	} else {
@@ -71,11 +70,11 @@ public void function clearErrors(string property="", string name="") {
  * @property Specify a property name here if you want to count only errors set on a specific property.
  * @name Specify an error name here if you want to count only errors set with a specific error name.
  */
-public numeric function errorCount(string property="", string name="") {
+public numeric function errorCount(string property = "", string name = "") {
 	if (!Len(arguments.property) && !Len(arguments.name)) {
 		return ArrayLen(variables.wheels.errors);
 	} else {
-		return ArrayLen(errorsOn(argumentCollection=arguments));
+		return ArrayLen(errorsOn(argumentCollection = arguments));
 	}
 }
 
@@ -88,7 +87,7 @@ public numeric function errorCount(string property="", string name="") {
  * @property Specify the property name to return errors for here.
  * @name If you want to return only errors on the property set with a specific error name you can specify it here.
  */
-public array function errorsOn(required string property, string name="") {
+public array function errorsOn(required string property, string name = "") {
 	local.rv = [];
 	local.iEnd = ArrayLen(variables.wheels.errors);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -108,9 +107,9 @@ public array function errorsOn(required string property, string name="") {
  *
  * @name Specify an error name here to only return errors for that error name.
  */
-public array function errorsOnBase(string name="") {
+public array function errorsOnBase(string name = "") {
 	arguments.property = "";
-	return errorsOn(argumentCollection=arguments);
+	return errorsOn(argumentCollection = arguments);
 }
 
 /**
@@ -123,12 +122,11 @@ public array function errorsOnBase(string name="") {
  * @property Name of the property to check if there are any errors set on.
  * @name Error name to check if there are any errors set with.
  */
-public boolean function hasErrors(string property="", string name="") {
-	if (errorCount(argumentCollection=arguments) > 0) {
+public boolean function hasErrors(string property = "", string name = "") {
+	if (errorCount(argumentCollection = arguments) > 0) {
 		return true;
 	} else {
 		return false;
 	}
 }
-
 </cfscript>

@@ -1,2 +1,4 @@
 component extends="wheels.Model" {
+
+
 }

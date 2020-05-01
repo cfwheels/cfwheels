@@ -6,92 +6,97 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_select_distinct_addresses() {
-		q = user.findAll(select="address", distinct="true", order="address");
+		q = user.findAll(select = "address", distinct = "true", order = "address");
 		assert('q.recordcount eq 4');
 		e = "123 Petruzzi St.|456 Peters Dr.|789 Djurner Ave.|987 Riera Blvd.";
-		r = valuelist(q.address, "|");
+		r = ValueList(q.address, "|");
 		assert('e eq r');
 	}
 
 	function test_select_users_groupby_address() {
-		q = user.findAll(select="address", group="address", order="address", result="result");
+		q = user.findAll(
+			select = "address",
+			group = "address",
+			order = "address",
+			result = "result"
+		);
 		assert('q.recordcount eq 4');
 		e = "123 Petruzzi St.|456 Peters Dr.|789 Djurner Ave.|987 Riera Blvd.";
-		r = valuelist(q.address, "|");
+		r = ValueList(q.address, "|");
 		assert('e eq r');
 	}
 
- 	function test_findByKey() {
-		e = user.findOne(where="lastname = 'Petruzzi'");
+	function test_findByKey() {
+		e = user.findOne(where = "lastname = 'Petruzzi'");
 		q = user.findByKey(e.id);
 		assert('q.id eq e.id');
 	}
 
- 	function test_findByKey_returns_object_when_key_has_leading_space() {
+	function test_findByKey_returns_object_when_key_has_leading_space() {
 		e = shop.findByKey(" shop6");
 		assert('isobject(e)');
 	}
 
- 	function test_findByKey_returns_false_when_record_not_found() {
+	function test_findByKey_returns_false_when_record_not_found() {
 		q = user.findByKey(999999999);
 		assert('q eq false');
 	}
 
- 	function test_findByKey_returns_false_when_passed_blank_string() {
+	function test_findByKey_returns_false_when_passed_blank_string() {
 		q = user.findByKey("");
 		assert('q eq false');
 	}
 
- 	function test_findByKey_returns_empty_query_when_record_not_found_with_return_as_equal_query() {
-		q = user.findByKey(key=999999999, returnAs="query");
+	function test_findByKey_returns_empty_query_when_record_not_found_with_return_as_equal_query() {
+		q = user.findByKey(key = 999999999, returnAs = "query");
 		assert('q.RecordCount eq false');
 	}
 
- 	function test_findOne() {
-		e = user.findOne(where="lastname = 'Petruzzi'");
+	function test_findOne() {
+		e = user.findOne(where = "lastname = 'Petruzzi'");
 		assert('isobject(e)');
 	}
 
- 	function test_findOne_returns_false_when_record_not_found() {
-		e = user.findOne(where="lastname = 'somenamenotfound'");
+	function test_findOne_returns_false_when_record_not_found() {
+		e = user.findOne(where = "lastname = 'somenamenotfound'");
 		assert('e eq false');
 	}
 
- 	function test_findOne_returns_empty_query_when_record_not_found_with_return_as_equal_query() {
-		e = user.findOne(where="lastname = 'somenamenotfound'", returnAs="query");
+	function test_findOne_returns_empty_query_when_record_not_found_with_return_as_equal_query() {
+		e = user.findOne(where = "lastname = 'somenamenotfound'", returnAs = "query");
 		assert('e.RecordCount eq false');
 	}
 
 	function test_findOne_returns_false_when_record_not_found_with_inner_join_include() {
-		e = user.findOne(where="lastname= = 'somenamenotfound'", include="galleries");
+		e = user.findOne(where = "lastname= = 'somenamenotfound'", include = "galleries");
 		assert('e eq false');
 	}
 
 	function test_findOne_returns_false_when_record_not_found_with_outer_join_include() {
-		e = user.findOne(where="lastname= = 'somenamenotfound'", include="outerjoinphotogalleries");
+		e = user.findOne(where = "lastname= = 'somenamenotfound'", include = "outerjoinphotogalleries");
 		assert('e eq false');
 	}
 
- 	function test_findAll() {
+	function test_findAll() {
 		q = user.findAll();
 		assert('q.recordcount eq 5');
-		q = user.findAll(where="lastname = 'Petruzzi' OR lastname = 'Peters'", order="lastname");
+		q = user.findAll(where = "lastname = 'Petruzzi' OR lastname = 'Peters'", order = "lastname");
 		assert('q.recordcount eq 2');
 		assert('valuelist(q.lastname) eq "peters,Petruzzi"');
 	}
 
 	function test_findAllByXXX() {
-		q = user.findAllByZipcode(value="22222", order="id");
+		q = user.findAllByZipcode(value = "22222", order = "id");
 		assert('q.recordcount eq 2');
-		q = user.findAllByZipcode(value="11111", order="id");
+		q = user.findAllByZipcode(value = "11111", order = "id");
 		assert('q.recordcount eq 1');
-		q = user.findAllByZipcode(zipCode="11111");
+		q = user.findAllByZipcode(zipCode = "11111");
 		assert('q.recordcount eq 1');
 		q = user.findAllByZipcode("11111");
 		assert('q.recordcount eq 1');
-		q = user.findAllByZipcodeAndBirthDayMonth(values="22222,11");
+		q = user.findAllByZipcodeAndBirthDayMonth(values = "22222,11");
 		assert('q.recordcount eq 1');
-		q = user.findAllByZipcodeAndBirthDayMonth(zipCode="22222", birthDayMonth="11");
+		q = user.findAllByZipcodeAndBirthDayMonth(zipCode = "22222", birthDayMonth = "11");
 		assert('q.recordcount eq 1');
 	}
 
@@ -100,11 +105,11 @@ component extends="wheels.tests.Test" {
 		debug('q', false);
 		assert('isboolean(q) and q eq false');
 
-		q = user.findByKey(key="0", returnas="query");
+		q = user.findByKey(key = "0", returnas = "query");
 		debug('q', false);
 		assert('isquery(q) and q.recordcount eq 0');
 
-		q = user.findByKey(key="0", returnas="object");
+		q = user.findByKey(key = "0", returnas = "object");
 		debug('q', false);
 		assert('isboolean(q) and q eq false');
 
@@ -116,15 +121,15 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_findOne_norecords_returns_correct_type() {
-		q = user.findOne(where="id = 0");
+		q = user.findOne(where = "id = 0");
 		debug('q', false);
 		assert('isboolean(q) and q eq false');
 
-		q = user.findOne(where="id = 0", returnas="query");
+		q = user.findOne(where = "id = 0", returnas = "query");
 		debug('q', false);
 		assert('isquery(q) and q.recordcount eq 0');
 
-		q = user.findOne(where="id = 0", returnas="object");
+		q = user.findOne(where = "id = 0", returnas = "object");
 		debug('q', false);
 		assert('isboolean(q) and q eq false');
 
@@ -136,19 +141,19 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_findAll_returnAs_query_noRecords_returns_correct_type() {
-		q = user.findAll(where="id = 0", returnas="query");
+		q = user.findAll(where = "id = 0", returnas = "query");
 		debug('q', false);
 		assert('isquery(q) and q.recordcount eq 0');
 	}
 
 	function test_findAll_returnAs_structs_noRecords_returns_correct_type() {
-		q = user.findAll(where="id = 0", returnAs="structs");
+		q = user.findAll(where = "id = 0", returnAs = "structs");
 		debug('q', false);
 		assert('isarray(q) and arrayisempty(q)');
 	}
 
 	function test_findAll_returnAs_objects_noRecords_returns_correct_type() {
-		q = user.findAll(where="id = 0", returnas="objects");
+		q = user.findAll(where = "id = 0", returnas = "objects");
 		debug('q', false);
 		assert('isarray(q) and arrayisempty(q)');
 	}
@@ -161,7 +166,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_exists_by_key_valid() {
-		e = user.findOne(where="lastname = 'Petruzzi'");
+		e = user.findOne(where = "lastname = 'Petruzzi'");
 		r = user.exists(e.id);
 		assert('r eq true');
 	}
@@ -172,17 +177,17 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_exists_by_where_one_record_valid() {
-		r = user.exists(where="lastname = 'Petruzzi'");
+		r = user.exists(where = "lastname = 'Petruzzi'");
 		assert('r eq true');
 	}
 
 	function test_exists_by_where_one_record_invalid() {
-		r = user.exists(where="lastname = 'someoneelse'");
+		r = user.exists(where = "lastname = 'someoneelse'");
 		assert('r eq false');
 	}
 
 	function test_exists_by_where_two_records_valid() {
-		r = user.exists(where="zipcode = '22222'");
+		r = user.exists(where = "zipcode = '22222'");
 		assert('r eq true');
 	}
 
@@ -201,15 +206,15 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_allow_negative_values_in_where_clause() {
-		r = user.exists(where="id = -1");
+		r = user.exists(where = "id = -1");
 		assert('r eq false');
 	}
 
 	function test_findByKey_with_include_soft_deletes() {
 		transaction action="begin" {
 			post1 = model("Post").findOne();
-			post1.delete(transaction="none");
-			post2 = model("Post").findByKey(key=post1.id, includeSoftDeletes=true);
+			post1.delete(transaction = "none");
+			post2 = model("Post").findByKey(key = post1.id, includeSoftDeletes = true);
 			transaction action="rollback";
 		}
 		assert('IsObject(post2) is true');
@@ -218,8 +223,8 @@ component extends="wheels.tests.Test" {
 	function test_findOne_with_include_soft_deletes() {
 		transaction action="begin" {
 			post1 = model("Post").findOne();
-			post1.delete(transaction="none");
-			post2 = model("Post").findOne(where="id=#post1.id#", includeSoftDeletes=true);
+			post1.delete(transaction = "none");
+			post2 = model("Post").findOne(where = "id=#post1.id#", includeSoftDeletes = true);
 			transaction action="rollback";
 		}
 		assert('IsObject(post2) is true');
@@ -228,21 +233,21 @@ component extends="wheels.tests.Test" {
 	function test_findAll_with_include_soft_deletes() {
 		transaction action="begin" {
 			model("Post").deleteAll();
-			allPosts = model("Post").findAll(includeSoftDeletes=true);
+			allPosts = model("Post").findAll(includeSoftDeletes = true);
 			transaction action="rollback";
 		}
 		assert('allPosts.recordcount eq 5');
 	}
 
 	function test_findOne_returns_empty_array_for_included_model_when_none_exist() {
-		e = model("author").findOne(where="lastname = 'Bellenie'", include="posts");
+		e = model("author").findOne(where = "lastname = 'Bellenie'", include = "posts");
 		assert('IsArray(e.posts) && ArrayIsEmpty(e.posts)');
 	}
 
 	function test_findAll_with_softdeleted_associated_rows() {
 		transaction action="begin" {
 			model("Post").deleteAll();
-			posts = model("Author").findByKey(key=1, include="Posts", returnAs="query");
+			posts = model("Author").findByKey(key = 1, include = "Posts", returnAs = "query");
 			transaction action="rollback";
 		}
 		assert('posts.recordcount eq 1');
