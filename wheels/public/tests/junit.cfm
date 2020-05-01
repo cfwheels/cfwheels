@@ -9,5 +9,4 @@
 <cfloop from="1" to="#arrayLen(testResults.results)#" index="local.i">	<testcase name="#testResults.results[local.i].testName#" time="#testResults.results[local.i].time#"><cfif testResults.results[local.i].status neq "Success"><failure message="#XmlFormat(HtmlCompressFormat(testResults.results[local.i].message))#">#XmlFormat(HtmlCompressFormat(testResults.results[local.i].message))#</failure></cfif></testcase>#Chr(13)#</cfloop>
 	<system-out><![CDATA[]]></system-out>
 	<system-err><![CDATA[]]></system-err>
-</testsuite>
-</cfoutput>
+</testsuite></cfoutput>
