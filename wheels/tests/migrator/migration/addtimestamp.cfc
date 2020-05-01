@@ -14,7 +14,7 @@ component extends="wheels.tests.Test" {
 
 	private string function getTimestampType() {
 		switch (migration.adapter.adapterName()) {
-			case "MicrosoftSQLServer":			
+			case "MicrosoftSQLServer":
 			case "H2":
 			case "MySQL":
 				return "DATETIME";
@@ -41,21 +41,17 @@ component extends="wheels.tests.Test" {
 
 		tableName = "dbm_add_timestamp_tests";
 		columnName = "timestampCOLUMN";
-		t = migration.createTable(name=tableName, force=true);
-		t.timestamp(columnName=columnName);
+		t = migration.createTable(name = tableName, force = true);
+		t.timestamp(columnName = columnName);
 		t.create();
 
-		info = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			table=tableName,
-			type="columns"
-		);
-		actual = listToArray(valueList(info.TYPE_NAME))[2];
+		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "columns");
+		actual = ListToArray(ValueList(info.TYPE_NAME))[2];
 		migration.dropTable(tableName);
 
 		expected = getTimestampType();
 
-    	assert("actual eq expected");
+		assert("actual eq expected");
 	}
 
 	function test_add_multiple_timestamp_columns() {
@@ -65,21 +61,18 @@ component extends="wheels.tests.Test" {
 
 		tableName = "dbm_add_timestamp_tests";
 		columnNames = "timestampA,timestampB";
-		t = migration.createTable(name=tableName, force=true);
-		t.timestamp(columnNames=columnNames);
+		t = migration.createTable(name = tableName, force = true);
+		t.timestamp(columnNames = columnNames);
 		t.create();
 
-		info = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			table=tableName,
-			type="columns"
-		);
-		actual = listToArray(valueList(info.TYPE_NAME));
+		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "columns");
+		actual = ListToArray(ValueList(info.TYPE_NAME));
 		migration.dropTable(tableName);
 
 		expected = getTimestampType();
 
 		assert("actual[2] eq expected");
-    	assert("actual[3] eq expected");
+		assert("actual[3] eq expected");
 	}
+
 }

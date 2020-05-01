@@ -1,10 +1,6 @@
 component extends="Base" {
 
-	public ColumnDefinition function init(
-		required any adapter,
-		required string name,
-		required string type
-	) {
+	public ColumnDefinition function init(required any adapter, required string name, required string type) {
 		local.args = "adapter,name,type,limit,precision,scale,default,null,autoIncrement,afterColumn";
 		local.iEnd = ListLen(local.args);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -43,7 +39,7 @@ component extends="Base" {
 				local.options[local.argumentName] = this[local.argumentName];
 			}
 		}
-		local.sql = this.adapter.typeToSQL(type=this.type, options=local.options);
+		local.sql = this.adapter.typeToSQL(type = this.type, options = local.options);
 		return local.sql;
 	}
 
@@ -57,7 +53,7 @@ component extends="Base" {
 				local.options[local.argumentName] = this[local.argumentName];
 			}
 		}
-		arguments.sql = this.adapter.addColumnOptions(sql=arguments.sql, options=local.options);
+		arguments.sql = this.adapter.addColumnOptions(sql = arguments.sql, options = local.options);
 		return arguments.sql;
 	}
 
@@ -71,7 +67,7 @@ component extends="Base" {
 				local.options[local.argumentName] = this[local.argumentName];
 			}
 		}
-		arguments.sql = this.adapter.addPrimaryKeyOptions(sql=arguments.sql, options=local.options);
+		arguments.sql = this.adapter.addPrimaryKeyOptions(sql = arguments.sql, options = local.options);
 		return arguments.sql;
 	}
 

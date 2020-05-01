@@ -29,20 +29,20 @@ component extends="wheels.tests.Test" {
 
 	function test_combined_arguments() {
 		expected = "";
-		actual = combined_arguments(template="tony", templates="per");
+		actual = combined_arguments(template = "tony", templates = "per");
 		assert('actual.template eq "per"');
 		assert('not StructKeyExists(actual, "templates")');
-		actual = combined_arguments(templates="per");
+		actual = combined_arguments(templates = "per");
 		assert('actual.template eq "per"');
 		assert('not StructKeyExists(actual, "templates")');
 	}
 
 	/**
-	* HELPERS
-	*/
+	 * HELPERS
+	 */
 
 	function combined_arguments() {
-		$args(args=arguments, name="sendEmail", combine="template/templates");
+		$args(args = arguments, name = "sendEmail", combine = "template/templates");
 		return arguments;
 	}
 

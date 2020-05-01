@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		_controller = controller(name="dummy");
+		_controller = controller(name = "dummy");
 		application.wheels.assetQueryString = true;
 	}
 
@@ -30,7 +30,7 @@ component extends="wheels.tests.Test" {
 		iEnd = 100;
 		application.wheels.assetQueryString = "MySpecificBuildNumber";
 		e = _controller.$appendQueryString();
-		for (i=1; i lte iEnd; i++) {
+		for (i = 1; i lte iEnd; i++) {
 			assert('_controller.$appendQueryString() eq e');
 		}
 		assert('e eq "?MySpecificBuildNumber"');

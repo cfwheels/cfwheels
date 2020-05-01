@@ -5,7 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function setup() {
-		params = {controller="dummy", action="dummy"};
+		params = {controller = "dummy", action = "dummy"};
 		_controller = controller("dummy", params);
 	}
 
@@ -20,7 +20,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_only_redirect_was_performed() {
-		_controller.redirectTo(controller="wheels", action="wheels");
+		_controller.redirectTo(controller = "wheels", action = "wheels");
 		expected = true;
 		actual = _controller.$performedRedirect();
 		assert('actual eq expected');

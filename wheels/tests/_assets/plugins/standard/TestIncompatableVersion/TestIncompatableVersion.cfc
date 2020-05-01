@@ -6,7 +6,6 @@ component {
 	}
 
 	public void function $IncompatableVersionMixinTest() {
-
 	}
 
 }

@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Returns a `link` tag for a stylesheet (or several) based on the supplied arguments.
  *
@@ -15,27 +14,32 @@
  * @encode Use this argument to decide whether the output of the function should be encoded in order to prevent Cross Site Scripting (XSS) attacks. Set it to `true` to encode all relevant output for the specific HTML element in question (e.g. tag content, attribute values, and URLs). For HTML elements that have both tag content and attribute values you can set this argument to `attributes` to only encode attribute values and not tag content.
  */
 public string function styleSheetLinkTag(
-	string sources="",
+	string sources = "",
 	string type,
 	string media,
 	string rel,
 	boolean head,
-	string delim=",",
+	string delim = ",",
 	boolean encode
 ) {
-	$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href");
+	$args(
+		name = "styleSheetLinkTag",
+		args = arguments,
+		combine = "sources/source/!",
+		reserved = "href"
+	);
 	if (!Len(arguments.type)) {
 		StructDelete(arguments, "type");
 	}
 	if (!Len(arguments.media)) {
 		StructDelete(arguments, "media");
 	}
-	if (!structKeyExists(arguments, "rel") || !Len(arguments.rel)) {
+	if (!StructKeyExists(arguments, "rel") || !Len(arguments.rel)) {
 		arguments.rel = "stylesheet";
 	}
 
 	local.rv = "";
-	arguments.sources = $listClean(list=arguments.sources, returnAs="array", delim=arguments.delim);
+	arguments.sources = $listClean(list = arguments.sources, returnAs = "array", delim = arguments.delim);
 	local.iEnd = ArrayLen(arguments.sources);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.item = arguments.sources[local.i];
@@ -43,7 +47,7 @@ public string function styleSheetLinkTag(
 			arguments.href = arguments.sources[local.i];
 		} else {
 			if (Left(local.item, 1) == "/") {
-				arguments.href = $get("webPath") & Right(local.item, Len(local.item)-1);
+				arguments.href = $get("webPath") & Right(local.item, Len(local.item) - 1);
 			} else {
 				arguments.href = $get("webPath") & $get("stylesheetPath") & "/" & local.item;
 			}
@@ -52,10 +56,15 @@ public string function styleSheetLinkTag(
 			}
 			arguments.href = $assetDomain(arguments.href) & $appendQueryString();
 		}
-		local.rv &= $tag(name="link", skip="sources,head,delim,encode", attributes=arguments, encode=arguments.encode) & Chr(10);
+		local.rv &= $tag(
+			name = "link",
+			skip = "sources,head,delim,encode",
+			attributes = arguments,
+			encode = arguments.encode
+		) & Chr(10);
 	}
 	if (arguments.head) {
-		$htmlhead(text=local.rv);
+		$htmlhead(text = local.rv);
 		local.rv = "";
 	}
 	return local.rv;
@@ -74,18 +83,23 @@ public string function styleSheetLinkTag(
  * @encode [see:styleSheetLinkTag].
  */
 public string function javaScriptIncludeTag(
-	string sources="",
+	string sources = "",
 	string type,
 	boolean head,
-	string delim=",",
+	string delim = ",",
 	boolean encode
 ) {
-	$args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
+	$args(
+		name = "javaScriptIncludeTag",
+		args = arguments,
+		combine = "sources/source/!",
+		reserved = "src"
+	);
 	if (!Len(arguments.type)) {
 		StructDelete(arguments, "type");
 	}
 	local.rv = "";
-	arguments.sources = $listClean(list=arguments.sources, returnAs="array", delim=arguments.delim);
+	arguments.sources = $listClean(list = arguments.sources, returnAs = "array", delim = arguments.delim);
 	local.iEnd = ArrayLen(arguments.sources);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.item = arguments.sources[local.i];
@@ -93,7 +107,7 @@ public string function javaScriptIncludeTag(
 			arguments.src = arguments.sources[local.i];
 		} else {
 			if (Left(local.item, 1) == "/") {
-				arguments.src = $get("webPath") & Right(local.item, Len(local.item)-1);
+				arguments.src = $get("webPath") & Right(local.item, Len(local.item) - 1);
 			} else {
 				arguments.src = $get("webPath") & $get("javascriptPath") & "/" & local.item;
 			}
@@ -102,10 +116,15 @@ public string function javaScriptIncludeTag(
 			}
 			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
 		}
-		local.rv &= $element(name="script", skip="sources,head,delim,encode", attributes=arguments, encode=arguments.encode) & Chr(10);
+		local.rv &= $element(
+			name = "script",
+			skip = "sources,head,delim,encode",
+			attributes = arguments,
+			encode = arguments.encode
+		) & Chr(10);
 	}
 	if (arguments.head) {
-		$htmlhead(text=local.rv);
+		$htmlhead(text = local.rv);
 		local.rv = "";
 	}
 	return local.rv;
@@ -131,7 +150,7 @@ public string function imageTag(
 	boolean encode,
 	boolean required = true
 ) {
-	$args(name="imageTag", reserved="src", args=arguments);
+	$args(name = "imageTag", reserved = "src", args = arguments);
 
 	// Ugly fix due to the fact that id can't be passed along to cfinvoke.
 	if (StructKeyExists(arguments, "id")) {
@@ -150,14 +169,14 @@ public string function imageTag(
 		local.executeArgs.category = local.category;
 		local.executeArgs.key = local.key;
 		local.rv = $doubleCheckedLock(
-			condition="$getFromCache",
-			conditionArgs=local.conditionArgs,
-			execute="$addImageTagToCache",
-			executeArgs=local.executeArgs,
-			name=local.lockName
+			condition = "$getFromCache",
+			conditionArgs = local.conditionArgs,
+			execute = "$addImageTagToCache",
+			executeArgs = local.executeArgs,
+			name = local.lockName
 		);
 	} else {
-		local.rv = $imageTag(argumentCollection=arguments);
+		local.rv = $imageTag(argumentCollection = arguments);
 	}
 
 	// Ugly fix continued.
@@ -173,8 +192,8 @@ public string function imageTag(
  * Called from the imageTag function above if images are set to be cached and the image is not already in the cache.
  */
 public string function $addImageTagToCache() {
-	local.rv = $imageTag(argumentCollection=arguments);
-	$addToCache(key=arguments.key, value=local.rv, category=arguments.category);
+	local.rv = $imageTag(argumentCollection = arguments);
+	$addToCache(key = arguments.key, value = local.rv, category = arguments.category);
 	return local.rv;
 }
 
@@ -195,23 +214,22 @@ public string function $imageTag() {
 		if ($get("showErrorInformation") && arguments.required) {
 			if (local.localFile && !FileExists(local.file)) {
 				Throw(
-					type="Wheels.ImageFileNotFound",
-					message="CFWheels could not find `#local.file#` on the local file system.",
-					extendedInfo="Pass in a correct relative path from the `images` folder to an image."
+					type = "Wheels.ImageFileNotFound",
+					message = "CFWheels could not find `#local.file#` on the local file system.",
+					extendedInfo = "Pass in a correct relative path from the `images` folder to an image."
 				);
 			} else if (!IsImageFile(local.file)) {
 				Throw(
-					type="Wheels.ImageFormatNotSupported",
-					message="CFWheels can't read image files with that format.",
-					extendedInfo="Use one of these image types instead: #GetReadableImageFormats()#."
+					type = "Wheels.ImageFormatNotSupported",
+					message = "CFWheels can't read image files with that format.",
+					extendedInfo = "Use one of these image types instead: #GetReadableImageFormats()#."
 				);
 			}
 		}
 		if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height")) {
-
 			if (arguments.required) {
 				// Height and / or width arguments are missing so use cfimage to get them.
-				local.image = $image(action="info", source=local.file);
+				local.image = $image(action = "info", source = local.file);
 				if (!StructKeyExists(arguments, "width") && local.image.width > 0) {
 					arguments.width = local.image.width;
 				}
@@ -219,9 +237,7 @@ public string function $imageTag() {
 					arguments.height = local.image.height;
 				}
 			}
-
 		} else {
-
 			// Remove height and width attributes if false.
 			if (!arguments.width) {
 				StructDelete(arguments, "width");
@@ -229,20 +245,26 @@ public string function $imageTag() {
 			if (!arguments.height) {
 				StructDelete(arguments, "height");
 			}
-
 		}
 
 		// Only append a query string if the file is local.
 		arguments.src = $assetDomain(arguments.src) & $appendQueryString();
 
 		if (!arguments.onlyPath) {
-			arguments.src = $prependUrl(path=arguments.src, argumentCollection=arguments);
+			arguments.src = $prependUrl(path = arguments.src, argumentCollection = arguments);
 		}
 	}
 	if (!StructKeyExists(arguments, "alt")) {
-		arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
+		arguments.alt = capitalize(
+			ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , ")
+		);
 	}
-	return $tag(name="img", skip="source,key,category,onlyPath,host,protocol,port,encode,required", attributes=arguments, encode=arguments.encode);
+	return $tag(
+		name = "img",
+		skip = "source,key,category,onlyPath,host,protocol,port,encode,required",
+		attributes = arguments,
+		encode = arguments.encode
+	);
 }
 
 /**
@@ -260,7 +282,7 @@ public string function $appendQueryString() {
 	}
 	if (!IsNumeric(local.assetQueryString) && IsBoolean(local.assetQueryString)) {
 		local.assetQueryString = Hash(DateFormat(Now(), "yyyymmdd") & TimeFormat(Now(), "HHmmss"));
-		$set(assetQueryString=local.assetQueryString);
+		$set(assetQueryString = local.assetQueryString);
 	}
 
 	local.rv &= "?" & local.assetQueryString;
@@ -277,10 +299,10 @@ public string function $assetDomain(required string pathToAsset) {
 	// Check for incorrect settings and throw errors.
 	if ($get("showErrorInformation")) {
 		if (!IsStruct(local.assetPaths) && !IsBoolean(local.assetPaths)) {
-			Throw(type="Wheels.IncorrectConfiguration", message="The setting `assetsPaths` must be `false` or a struct.");
+			Throw(type = "Wheels.IncorrectConfiguration", message = "The setting `assetsPaths` must be `false` or a struct.");
 		}
 		if (IsStruct(local.assetPaths) && !ListFindNoCase(StructKeyList(local.assetPaths), "http")) {
-			Throw(type="Wheels.IncorrectConfiguration", message="The `assetPaths` struct must contain the key `http`");
+			Throw(type = "Wheels.IncorrectConfiguration", message = "The `assetPaths` struct must contain the key `http`");
 		}
 	}
 
@@ -299,17 +321,22 @@ public string function $assetDomain(required string pathToAsset) {
 	}
 	local.domainLen = ListLen(local.domainList);
 	if (local.domainLen > 1) {
-
 		// Now comes the interesting part, lets take the pathToAsset argument, hash it and create a number from it so that we can do mod based off the length of the domain list.
 		// This is an easy way to apply the same sub-domain to each asset, so we do not create more work for the server.
 		// At the same time we are getting a very random hash value to rotate the domains over the assets evenly.
-		local.pathNumber = Right(REReplace(Hash(arguments.pathToAsset), "[A-Za-z]", "", "all"), 5);
+		local.pathNumber = Right(
+			ReReplace(
+				Hash(arguments.pathToAsset),
+				"[A-Za-z]",
+				"",
+				"all"
+			),
+			5
+		);
 		local.position = (local.pathNumber % local.domainLen) + 1;
-
 	} else {
 		local.position = local.domainLen;
 	}
 	return local.protocol & Trim(ListGetAt(local.domainList, local.position)) & arguments.pathToAsset;
 }
-
 </cfscript>

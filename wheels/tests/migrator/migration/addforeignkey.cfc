@@ -8,39 +8,31 @@ component extends="wheels.tests.Test" {
 		tableName = "dbm_afk_foos";
 		referenceTableName = "dbm_afk_bars";
 
-		t = migration.createTable(name=tableName, force=true);
-		t.integer(columnNames="barid");
+		t = migration.createTable(name = tableName, force = true);
+		t.integer(columnNames = "barid");
 		t.create();
 
-		t = migration.createTable(name=referenceTableName, force=true);
-		t.integer(columnNames="integercolumn");
+		t = migration.createTable(name = referenceTableName, force = true);
+		t.integer(columnNames = "integercolumn");
 		t.create();
 
 		migration.addForeignKey(
-			table=tableName,
-			referenceTable=referenceTableName,
-			column='barid',
-			referenceColumn="id"
+			table = tableName,
+			referenceTable = referenceTableName,
+			column = 'barid',
+			referenceColumn = "id"
 		);
 
-		info = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			table=referenceTableName,
-			type="foreignkeys"
-		);
+		info = $dbinfo(datasource = application.wheels.dataSourceName, table = referenceTableName, type = "foreignkeys");
 
 		migration.dropTable(tableName);
 		migration.dropTable(referenceTableName);
 
-		sql="SELECT * FROM query WHERE pkcolumn_name = 'id' AND fktable_name = '#tableName#' AND fkcolumn_name = 'barid'";
+		sql = "SELECT * FROM query WHERE pkcolumn_name = 'id' AND fktable_name = '#tableName#' AND fkcolumn_name = 'barid'";
 
-		actual = $query(
-			query=info,
-			dbtype="query",
-			sql=sql
-		);
+		actual = $query(query = info, dbtype = "query", sql = sql);
 
-	  assert("actual.recordCount eq 1");
+		assert("actual.recordCount eq 1");
 	}
 
 }

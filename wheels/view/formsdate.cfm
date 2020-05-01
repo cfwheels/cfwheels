@@ -1,10 +1,9 @@
 <cfscript>
-
 /**
  * Internal function.
  */
 public string function $yearSelectTag(required numeric startYear, required numeric endYear) {
-	if (Structkeyexists(arguments, "value") && Val(arguments.value)) {
+	if (StructKeyExists(arguments, "value") && Val(arguments.value)) {
 		if (arguments.value < arguments.startYear && arguments.endYear > arguments.startYear) {
 			arguments.startYear = arguments.value;
 		} else if (arguments.value < arguments.endYear && arguments.endYear < arguments.startYear) {
@@ -17,7 +16,7 @@ public string function $yearSelectTag(required numeric startYear, required numer
 	arguments.$step = 1;
 	StructDelete(arguments, "startYear");
 	StructDelete(arguments, "endYear");
-	return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	return $yearMonthHourMinuteSecondSelectTag(argumentCollection = arguments);
 }
 
 /**
@@ -40,7 +39,7 @@ public string function $monthSelectTag(
 	StructDelete(arguments, "monthDisplay");
 	StructDelete(arguments, "monthNames");
 	StructDelete(arguments, "monthAbbreviations");
-	return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	return $yearMonthHourMinuteSecondSelectTag(argumentCollection = arguments);
 }
 
 /**
@@ -51,7 +50,7 @@ public string function $daySelectTag() {
 	arguments.$loopTo = 31;
 	arguments.$type = "day";
 	arguments.$step = 1;
-	return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	return $yearMonthHourMinuteSecondSelectTag(argumentCollection = arguments);
 }
 
 /**
@@ -66,7 +65,7 @@ public string function $hourSelectTag() {
 		arguments.$loopFrom = 1;
 		arguments.$loopTo = 12;
 	}
-	return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	return $yearMonthHourMinuteSecondSelectTag(argumentCollection = arguments);
 }
 
 /**
@@ -78,7 +77,7 @@ public string function $minuteSelectTag(required numeric minuteStep) {
 	arguments.$type = "minute";
 	arguments.$step = arguments.minuteStep;
 	StructDelete(arguments, "minuteStep");
-	return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	return $yearMonthHourMinuteSecondSelectTag(argumentCollection = arguments);
 }
 
 /**
@@ -90,7 +89,7 @@ public any function $secondSelectTag(required numeric secondStep) {
 	arguments.$type = "second";
 	arguments.$step = arguments.secondStep;
 	StructDelete(arguments, "secondStep");
-	return $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments);
+	return $yearMonthHourMinuteSecondSelectTag(argumentCollection = arguments);
 }
 
 /**
@@ -100,8 +99,8 @@ public string function $dateOrTimeSelect(
 	required any objectName,
 	required string property,
 	required string $functionName,
-	boolean combine=true,
-	boolean twelveHour=false
+	boolean combine = true,
+	boolean twelveHour = false
 ) {
 	local.combine = arguments.combine;
 	StructDelete(arguments, "combine");
@@ -118,7 +117,7 @@ public string function $dateOrTimeSelect(
 		}
 	}
 
-	local.value = $formValue(argumentCollection=arguments);
+	local.value = $formValue(argumentCollection = arguments);
 	local.rv = "";
 	local.firstDone = false;
 	local.iEnd = ListLen(arguments.order);
@@ -164,17 +163,17 @@ public string function $yearMonthHourMinuteSecondSelectTag(
 	required string append,
 	required string prependToLabel,
 	required string appendToLabel,
-	string errorElement="",
-	string errorClass="",
+	string errorElement = "",
+	string errorClass = "",
 	required string $type,
 	required numeric $loopFrom,
 	required numeric $loopTo,
 	required string $id,
 	required numeric $step,
-	string $optionNames="",
-	boolean twelveHour=false,
-	date $now=Now(),
-	any encode=false
+	string $optionNames = "",
+	boolean twelveHour = false,
+	date $now = Now(),
+	any encode = false
 ) {
 	local.optionContent = "";
 
@@ -201,8 +200,8 @@ public string function $yearMonthHourMinuteSecondSelectTag(
 	if (!StructKeyExists(arguments, "id")) {
 		arguments.id = arguments.$id & "-" & arguments.$type;
 	}
-	local.before = $formBeforeElement(argumentCollection=arguments);
-	local.after = $formAfterElement(argumentCollection=arguments);
+	local.before = $formBeforeElement(argumentCollection = arguments);
+	local.after = $formAfterElement(argumentCollection = arguments);
 	local.content = "";
 	if (!IsBoolean(arguments.includeBlank) || arguments.includeBlank) {
 		local.args = {};
@@ -213,25 +212,37 @@ public string function $yearMonthHourMinuteSecondSelectTag(
 		if (!IsBoolean(arguments.includeBlank)) {
 			local.optionContent = arguments.includeBlank;
 		}
-		local.content &= $element(name="option", content=local.optionContent, attributes=local.args, encode=arguments.encode);
+		local.content &= $element(
+			name = "option",
+			content = local.optionContent,
+			attributes = local.args,
+			encode = arguments.encode
+		);
 	}
 	if (arguments.$loopFrom < arguments.$loopTo) {
-		for (local.i=arguments.$loopFrom; local.i <= arguments.$loopTo; local.i=local.i+arguments.$step) {
+		for (local.i = arguments.$loopFrom; local.i <= arguments.$loopTo; local.i = local.i + arguments.$step) {
 			local.args = Duplicate(arguments);
 			local.args.counter = local.i;
 			local.args.optionContent = local.optionContent;
-			local.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=local.args);
+			local.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection = local.args);
 		}
 	} else {
-		for (local.i=arguments.$loopFrom; local.i >= arguments.$loopTo; local.i=local.i-arguments.$step) {
+		for (local.i = arguments.$loopFrom; local.i >= arguments.$loopTo; local.i = local.i - arguments.$step) {
 			local.args = Duplicate(arguments);
 			local.args.counter = local.i;
 			local.args.optionContent = local.optionContent;
-			local.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=local.args);
+			local.content &= $yearMonthHourMinuteSecondSelectTagContent(argumentCollection = local.args);
 		}
 	}
 	local.encode = IsBoolean(arguments.encode) && arguments.encode ? "attributes" : false;
-	return local.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour,encode", skipStartingWith="label", content=local.content, attributes=arguments, encode=local.encode) & local.after;
+	return local.before & $element(
+		name = "select",
+		skip = "objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour,encode",
+		skipStartingWith = "label",
+		content = local.content,
+		attributes = arguments,
+		encode = local.encode
+	) & local.after;
 }
 
 /**
@@ -251,7 +262,12 @@ public string function $yearMonthHourMinuteSecondSelectTagContent() {
 	if (arguments.$type == "minute" || arguments.$type == "second") {
 		arguments.optionContent = NumberFormat(arguments.optionContent, "09");
 	}
-	return $element(name="option", content=arguments.optionContent, attributes=local.args, encode=false);
+	return $element(
+		name = "option",
+		content = arguments.optionContent,
+		attributes = local.args,
+		encode = false
+	);
 }
 
 /**
@@ -261,7 +277,7 @@ public string function $ampmSelectTag(
 	required string name,
 	required string value,
 	required string $id,
-	date $now=Now()
+	date $now = Now()
 ) {
 	local.options = "AM,PM";
 	local.optionContent = "";
@@ -280,10 +296,21 @@ public string function $ampmSelectTag(
 		if (arguments.value == local.option) {
 			local.args.selected = "selected";
 		}
-		local.content &= $element(name="option", content=local.option, attributes=local.args, encode=arguments.encode);
+		local.content &= $element(
+			name = "option",
+			content = local.option,
+			attributes = local.args,
+			encode = arguments.encode
+		);
 	}
 	local.encode = arguments.encode ? "attributes" : false;
-	return $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour,encode", skipStartingWith="label", content=local.content, attributes=arguments, encode=local.encode);
+	return $element(
+		name = "select",
+		skip = "objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,monthNames,monthAbbreviations,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,secondStep,association,position,twelveHour,encode",
+		skipStartingWith = "label",
+		content = local.content,
+		attributes = arguments,
+		encode = local.encode
+	);
 }
-
 </cfscript>

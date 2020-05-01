@@ -1,31 +1,31 @@
 component extends="Abstract" {
 
 	variables.sqlTypes = {};
-	variables.sqlTypes['biginteger'] = {name='BIGINT UNSIGNED'};
-	variables.sqlTypes['binary'] = {name='BLOB'};
-	variables.sqlTypes['boolean'] = {name='TINYINT',limit=1};
-	variables.sqlTypes['date'] = {name='DATE'};
-	variables.sqlTypes['datetime'] = {name='DATETIME'};
-	variables.sqlTypes['decimal'] = {name='DECIMAL'};
-	variables.sqlTypes['float'] = {name='FLOAT'};
-	variables.sqlTypes['integer'] = {name='INT'};
-	variables.sqlTypes['string'] = {name='VARCHAR',limit=255};
-	variables.sqlTypes['text'] = {name='TEXT'};
-	variables.sqlTypes['time'] = {name='TIME'};
-	variables.sqlTypes['timestamp'] = {name='TIMESTAMP'};
-	variables.sqlTypes['uuid'] = {name='VARBINARY', limit=16};
+	variables.sqlTypes['biginteger'] = {name = 'BIGINT UNSIGNED'};
+	variables.sqlTypes['binary'] = {name = 'BLOB'};
+	variables.sqlTypes['boolean'] = {name = 'TINYINT', limit = 1};
+	variables.sqlTypes['date'] = {name = 'DATE'};
+	variables.sqlTypes['datetime'] = {name = 'DATETIME'};
+	variables.sqlTypes['decimal'] = {name = 'DECIMAL'};
+	variables.sqlTypes['float'] = {name = 'FLOAT'};
+	variables.sqlTypes['integer'] = {name = 'INT'};
+	variables.sqlTypes['string'] = {name = 'VARCHAR', limit = 255};
+	variables.sqlTypes['text'] = {name = 'TEXT'};
+	variables.sqlTypes['time'] = {name = 'TIME'};
+	variables.sqlTypes['timestamp'] = {name = 'TIMESTAMP'};
+	variables.sqlTypes['uuid'] = {name = 'VARBINARY', limit = 16};
 
 	/**
-  * name of database adapter
-  */
+	 * name of database adapter
+	 */
 	public string function adapterName() {
 		return "MySQL";
 	}
 
 	public string function addForeignKeyOptions(required string sql, struct options = {}) {
 		arguments.sql = arguments.sql & " FOREIGN KEY (" & arguments.options.column & ")";
-		if (StructKeyExists(arguments.options, "referenceTable")){
-			if (StructKeyExists(arguments.options, "referenceColumn")){
+		if (StructKeyExists(arguments.options, "referenceTable")) {
+			if (StructKeyExists(arguments.options, "referenceColumn")) {
 				arguments.sql = arguments.sql & " REFERENCES ";
 				arguments.sql = arguments.sql & arguments.options.referenceTable;
 				arguments.sql = arguments.sql & " (" & arguments.options.referenceColumn & ")";
@@ -35,8 +35,8 @@ component extends="Abstract" {
 	}
 
 	/**
-	* generates sql for primary key options
-	*/
+	 * generates sql for primary key options
+	 */
 	public string function addPrimaryKeyOptions(required string sql, struct options = {}) {
 		if (StructKeyExists(arguments.options, "null") && arguments.options.null) {
 			arguments.sql = arguments.sql & " NULL";
@@ -51,27 +51,28 @@ component extends="Abstract" {
 	}
 
 	/**
-  * surrounds table or index names with backticks
-  */
+	 * surrounds table or index names with backticks
+	 */
 	public string function quoteTableName(required string name) {
-		return "`#Replace(objectCase(arguments.name),".","`.`","ALL")#`";
+		return "`#Replace(
+			objectCase(arguments.name),
+			".",
+			"`.`",
+			"ALL"
+		)#`";
 	}
 
 	/**
-  * surrounds column names with backticks
-  */
+	 * surrounds column names with backticks
+	 */
 	public string function quoteColumnName(required string name) {
 		return "`#objectCase(arguments.name)#`";
 	}
 
 	/**
-	* MySQL text fields can't have default
-	*/
-	public boolean function optionsIncludeDefault(
-	  string type,
-	  string default="",
-	  boolean null = true
-	) {
+	 * MySQL text fields can't have default
+	 */
+	public boolean function optionsIncludeDefault(string type, string default = "", boolean null = true) {
 		if (ListFindNoCase("text,float", arguments.type)) {
 			return false;
 		} else {
@@ -80,22 +81,23 @@ component extends="Abstract" {
 	}
 
 	/**
-  * generates sql to rename an existing column in a table
-	* MySQL can't use rename column, need to recreate column definition and use change instead
-  */
+	 * generates sql to rename an existing column in a table
+	 * MySQL can't use rename column, need to recreate column definition and use change instead
+	 */
 	public string function renameColumnInTable(
-	  required string name,
-	  required string columnName,
-	  required string newColumnName
+		required string name,
+		required string columnName,
+		required string newColumnName
 	) {
-		return "ALTER TABLE #quoteTableName(arguments.name)# CHANGE COLUMN #quoteColumnName(arguments.columnName)# #quoteColumnName(arguments.newColumnName)# #$getColumnDefinition(tableName=arguments.name, columnName=arguments.columnName)#";
+		return "ALTER TABLE #quoteTableName(arguments.name)# CHANGE COLUMN #quoteColumnName(arguments.columnName)# #quoteColumnName(arguments.newColumnName)# #$getColumnDefinition(tableName = arguments.name, columnName = arguments.columnName)#";
 	}
 
 	/**
-  * generates sql to remove a database index
-	* MySQL requires table name as well as index name
-  */
+	 * generates sql to remove a database index
+	 * MySQL requires table name as well as index name
+	 */
 	public string function removeIndex(required string table, string indexName = "") {
 		return "DROP INDEX #quoteTableName(arguments.indexName)# ON #quoteTableName(arguments.table)#";
 	}
+
 }

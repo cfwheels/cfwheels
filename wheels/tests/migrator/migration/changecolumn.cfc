@@ -11,20 +11,23 @@ component extends="wheels.tests.Test" {
 		tableName = "dbm_changecolumn_tests";
 		columnName = "stringcolumn";
 
-		t = migration.createTable(name=tableName, force=true);
-		t.string(columnNames=columnName, limit=10, null=true);
+		t = migration.createTable(name = tableName, force = true);
+		t.string(columnNames = columnName, limit = 10, null = true);
 		t.create();
 
-		migration.changeColumn(table=tableName, columnName=columnName, columnType='string', limit=50, null=false, default="foo");
-
-		info = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			table=tableName,
-			type="columns"
+		migration.changeColumn(
+			table = tableName,
+			columnName = columnName,
+			columnType = 'string',
+			limit = 50,
+			null = false,
+			default = "foo"
 		);
+
+		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "columns");
 		migration.dropTable(tableName);
-		sql="SELECT * FROM query WHERE column_name = '#columnName#'";
-		actual = $query(query=info, dbtype="query", sql=sql);
+		sql = "SELECT * FROM query WHERE column_name = '#columnName#'";
+		actual = $query(query = info, dbtype = "query", sql = sql);
 
 		assert("actual.column_size eq 50");
 		if (ListFindNoCase(actual.columnList, "is_nullable")) {

@@ -15,7 +15,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function run_flashInsert_valid() {
-		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(success = "Congrats!");
 		assert("_controller.flash('success') IS 'Congrats!'");
 	}
 
@@ -26,11 +26,11 @@ component extends="wheels.tests.Test" {
 	}
 
 	/**
-	* HELPERS
-	*/
+	 * HELPERS
+	 */
 
 	function run_flashInsert_mulitple() {
-		_controller.flashInsert(success="Hooray!!!", error="WTF!");
+		_controller.flashInsert(success = "Hooray!!!", error = "WTF!");
 		assert("_controller.flash('success') IS 'Hooray!!!'");
 		assert("_controller.flash('error') IS 'WTF!'");
 	}

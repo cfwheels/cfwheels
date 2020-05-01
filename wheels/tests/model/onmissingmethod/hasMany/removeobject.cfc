@@ -4,9 +4,9 @@ component extends="wheels.tests.Test" {
 		authorModel = model("author");
 	}
 
- 	function test_removeObject_valid() {
-		author = authorModel.findOne(where="firstName = 'Per'");
-		post = author.findOnePost(order="id");
+	function test_removeObject_valid() {
+		author = authorModel.findOne(where = "firstName = 'Per'");
+		post = author.findOnePost(order = "id");
 		transaction action="begin" {
 			updated = author.removePost(post);
 			post.reload();

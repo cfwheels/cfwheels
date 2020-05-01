@@ -16,14 +16,19 @@ component extends="[extends]" hint="[description]" {
 		transaction {
 			try {
 				t = changeTable('tableName');
-	   		t.change();
+				t.change();
 			} catch (any e) {
 				local.exception = e;
 			}
 
 			if (StructKeyExists(local, "exception")) {
 				transaction action="rollback";
-				throw(errorCode="1", detail=local.exception.detail, message=local.exception.message, type="any");
+				Throw(
+					errorCode = "1",
+					detail = local.exception.detail,
+					message = local.exception.message,
+					type = "any"
+				);
 			} else {
 				transaction action="commit";
 			}
@@ -32,15 +37,20 @@ component extends="[extends]" hint="[description]" {
 
 	function down() {
 		transaction {
-		  try {
-				removeColumn(table='tableName', columnName='columnName');
+			try {
+				removeColumn(table = 'tableName', columnName = 'columnName');
 			} catch (any e) {
 				local.exception = e;
 			}
 
 			if (StructKeyExists(local, "exception")) {
 				transaction action="rollback";
-				throw(errorCode="1", detail=local.exception.detail, message=local.exception.message, type="any");
+				Throw(
+					errorCode = "1",
+					detail = local.exception.detail,
+					message = local.exception.message,
+					type = "any"
+				);
 			} else {
 				transaction action="commit";
 			}

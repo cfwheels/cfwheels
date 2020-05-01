@@ -1,8 +1,6 @@
 <cfoutput>
-start:defaultlayout
+	start:defaultlayout
 #includeContent()#
-<cfif structKeyExists(variables, "variableForLayout")>
-	#variableForLayout#
-</cfif>
-end:defaultlayout
+	<cfif StructKeyExists(variables, "variableForLayout")>#variableForLayout#</cfif>
+	end:defaultlayout
 </cfoutput>

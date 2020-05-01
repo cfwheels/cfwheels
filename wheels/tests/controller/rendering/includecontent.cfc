@@ -1,16 +1,16 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		_params = {controller="dummy", action="dummy"};
+		_params = {controller = "dummy", action = "dummy"};
 		_controller = controller("dummy", _params);
 	}
 
 	function test_contentFor_and_includeContent_assigning_section() {
 		a = ["head1", "head2", "head3"];
 		for (i in a) {
-			_controller.contentFor(head=i);
+			_controller.contentFor(head = i);
 		};
-		expected = ArrayToList(a, chr(10));
+		expected = ArrayToList(a, Chr(10));
 		actual = _controller.includeContent("head");
 		assert('actual eq expected');
 	}
@@ -18,9 +18,9 @@ component extends="wheels.tests.Test" {
 	function test_contentFor_and_includeContent_default_section() {
 		a = ["layout1", "layout2", "layout3"];
 		for (i in a) {
-			_controller.contentFor(body=i);
+			_controller.contentFor(body = i);
 		};
-		expected = ArrayToList(a, chr(10));
+		expected = ArrayToList(a, Chr(10));
 		actual = _controller.includeContent();
 		assert('actual eq expected');
 	}

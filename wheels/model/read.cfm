@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Returns records from the database table mapped to this model according to the arguments passed in (use the `where` argument to decide which records to get, use the `order` argument to set the order in which those records should be returned, and so on).
  * The records will be returned as either a `cfquery` result set, an array of objects, or an array of structs (depending on what the `returnAs` argument is set to).
@@ -28,57 +27,75 @@
  * @useIndex If you want to specify table index hints, pass in a structure of index names using your model names as the structure keys. Eg: `{user="idx_users", post="idx_posts"}`. This feature is only supported by MySQL and SQL Server.
  */
 public any function findAll(
-	string where="",
+	string where = "",
 	string order,
 	string group,
-	string select="",
-	boolean distinct="false",
-	string include="",
-	numeric maxRows="-1",
-	numeric page="0",
+	string select = "",
+	boolean distinct = "false",
+	string include = "",
+	numeric maxRows = "-1",
+	numeric page = "0",
 	numeric perPage,
-	numeric count="0",
-	string handle="query",
-	any cache="",
+	numeric count = "0",
+	string handle = "query",
+	any cache = "",
 	boolean reload,
 	any parameterize,
 	string returnAs,
 	boolean returnIncluded,
-	boolean callbacks="true",
-	boolean includeSoftDeletes="false",
-	struct useIndex={},
-	numeric $limit="0",
-	numeric $offset="0"
+	boolean callbacks = "true",
+	boolean includeSoftDeletes = "false",
+	struct useIndex = {},
+	numeric $limit = "0",
+	numeric $offset = "0"
 ) {
-	$args(name="findAll", args=arguments);
-	$setDebugName(name="findAll", args=arguments);
+	$args(name = "findAll", args = arguments);
+	$setDebugName(name = "findAll", args = arguments);
 	arguments.include = $listClean(arguments.include);
 	arguments.where = $cleanInList(arguments.where);
 
 	// we only allow direct associations to be loaded when returning objects
-	if ($get("showErrorInformation") && Len(arguments.returnAs) && arguments.returnAs != "query" && Find("(", arguments.include) && arguments.returnIncluded) {
+	if (
+		$get("showErrorInformation") && Len(arguments.returnAs) && arguments.returnAs != "query" && Find(
+			"(",
+			arguments.include
+		) && arguments.returnIncluded
+	) {
 		Throw(
-			type="Wheels",
-			message="Incorrect Arguments",
-			extendedInfo="You may only include direct associations to this object when returning an array of objects."
+			type = "Wheels",
+			message = "Incorrect Arguments",
+			extendedInfo = "You may only include direct associations to this object when returning an array of objects."
 		);
 	}
 
 	// count records and get primary keys for pagination
 	if (arguments.page) {
 		if ($get("showErrorInformation") && arguments.perPage <= 0) {
-			Throw(type="Wheels",
-				message="Incorrect Argument",
-				extendedInfo="The `perPage` argument should be a positive numeric value."
+			Throw(
+				type = "Wheels",
+				message = "Incorrect Argument",
+				extendedInfo = "The `perPage` argument should be a positive numeric value."
 			);
 		}
 		if (Len(arguments.order)) {
 			// insert primary keys to order clause unless they are already there, this guarantees that the ordering is unique which is required to make pagination work properly
-			local.compareList = $listClean(ReplaceNoCase(ReplaceNoCase(arguments.order, " ASC", "", "all"), " DESC", "", "all"));
+			local.compareList = $listClean(
+				ReplaceNoCase(
+					ReplaceNoCase(arguments.order, " ASC", "", "all"),
+					" DESC",
+					"",
+					"all"
+				)
+			);
 			local.iEnd = ListLen(primaryKeys());
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.item = primaryKeys(local.i);
-				if (!ListFindNoCase(local.compareList, local.item) && !ListFindNoCase(local.compareList, tableName() & "." & local.item)) {
+				if (
+					!ListFindNoCase(local.compareList, local.item) && !ListFindNoCase(
+						local.compareList,
+						tableName() & "." & local.item
+					)
+				) {
 					arguments.order = ListAppend(arguments.order, "#tableName()#.#local.item#");
 				}
 			}
@@ -95,14 +112,23 @@ public any function findAll(
 			local.totalRecords = arguments.count;
 		} else {
 			arguments.$debugName &= "PaginationCount";
-			local.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=local.distinct, parameterize=arguments.parameterize, $debugName=arguments.$debugName, includeSoftDeletes=arguments.includeSoftDeletes);
+			local.totalRecords = this.count(
+				where = arguments.where,
+				include = arguments.include,
+				reload = arguments.reload,
+				cache = arguments.cache,
+				distinct = local.distinct,
+				parameterize = arguments.parameterize,
+				$debugName = arguments.$debugName,
+				includeSoftDeletes = arguments.includeSoftDeletes
+			);
 		}
 		local.currentPage = arguments.page;
 		if (local.totalRecords == 0) {
 			local.totalPages = 0;
 			local.rv = "";
 		} else {
-			local.totalPages = Ceiling(local.totalRecords/arguments.perPage);
+			local.totalPages = Ceiling(local.totalRecords / arguments.perPage);
 			local.limit = arguments.perPage;
 			local.offset = (arguments.perPage * arguments.page) - arguments.perPage;
 
@@ -117,7 +143,21 @@ public any function findAll(
 				local.rv = "";
 			} else {
 				arguments.$debugName = Replace(arguments.$debugName, "PaginationCount", "PaginationIds");
-				local.values = findAll($limit=local.limit, $offset=local.offset, select=primaryKeys(), where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=local.distinct, parameterize=arguments.parameterize, $debugName=arguments.$debugName, includeSoftDeletes=arguments.includeSoftDeletes, callbacks=false);
+				local.values = findAll(
+					$limit = local.limit,
+					$offset = local.offset,
+					select = primaryKeys(),
+					where = arguments.where,
+					order = arguments.order,
+					include = arguments.include,
+					reload = arguments.reload,
+					cache = arguments.cache,
+					distinct = local.distinct,
+					parameterize = arguments.parameterize,
+					$debugName = arguments.$debugName,
+					includeSoftDeletes = arguments.includeSoftDeletes,
+					callbacks = false
+				);
 				if (local.values.RecordCount) {
 					local.paginationWhere = "";
 					local.iEnd = local.values.recordCount;
@@ -126,11 +166,26 @@ public any function findAll(
 						local.jEnd = ListLen(primaryKeys());
 						for (local.j = 1; local.j <= local.jEnd; local.j++) {
 							local.property = primaryKeys(local.j);
-							ArrayAppend(local.keyComboValues, "#tableName()#.#local.property# = #variables.wheels.class.adapter.$quoteValue(str=local.values[local.property][local.i], type=validationTypeForProperty(local.property))#");
+							ArrayAppend(
+								local.keyComboValues,
+								"#tableName()#.#local.property# = #variables.wheels.class.adapter.$quoteValue(
+									str = local.values[local.property][local.i],
+									type = validationTypeForProperty(local.property)
+								)#"
+							);
 						}
-						local.paginationWhere = ListAppend(local.paginationWhere, "(" & ArrayToList(local.keyComboValues, " AND ") & ")", Chr(7));
+						local.paginationWhere = ListAppend(
+							local.paginationWhere,
+							"(" & ArrayToList(local.keyComboValues, " AND ") & ")",
+							Chr(7)
+						);
 					}
-					local.paginationWhere = Replace(local.paginationWhere, Chr(7), " OR ", "all");
+					local.paginationWhere = Replace(
+						local.paginationWhere,
+						Chr(7),
+						" OR ",
+						"all"
+					);
 
 					// this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
 					if (Len(arguments.where) && Len(arguments.include)) {
@@ -148,63 +203,113 @@ public any function findAll(
 			}
 		}
 		// store pagination info in the request scope so all pagination methods can access it
-		setPagination(local.totalRecords, local.currentPage, arguments.perPage, arguments.handle);
+		setPagination(
+			local.totalRecords,
+			local.currentPage,
+			arguments.perPage,
+			arguments.handle
+		);
 	}
 
 	if (StructKeyExists(local, "rv") && !Len(local.rv)) {
-
 		// No records were found using the pagination count query.
 		// We don't need to run any more queries and can just set the return value based on the "returnAs" argument.
 		if (arguments.returnAs == "query") {
-
 			// We want to return an empty query but still include the column names.
 			// Get those using the usual function for it and then remove table names, aliases and calculated property SQL.
 			// E.g. users.name -> name, createdAt AS userCreatedAt -> userCreatedAt, (MAX(table.col)) AS x -> x.
 			local.columns = $createSQLFieldList(
-				clause="select",
-				include=arguments.include,
-				includeSoftDeletes=arguments.includeSoftDeletes,
-				list=arguments.select,
-				returnAs=arguments.returnAs
+				clause = "select",
+				include = arguments.include,
+				includeSoftDeletes = arguments.includeSoftDeletes,
+				list = arguments.select,
+				returnAs = arguments.returnAs
 			);
-			local.columns = REReplace(local.columns, "\w*?\.([\w\s]*?)(,|$)", "\1\2", "all");
-			local.columns = REReplace(local.columns, "\(.*?\)\sAS\s([\w\s]*?)(,|$)", "\1\2", "all");
-			local.columns = REReplace(local.columns, "\w*?\sAS\s([\w\s]*?)(,|$)", "\1\2", "all");
+			local.columns = ReReplace(
+				local.columns,
+				"\w*?\.([\w\s]*?)(,|$)",
+				"\1\2",
+				"all"
+			);
+			local.columns = ReReplace(
+				local.columns,
+				"\(.*?\)\sAS\s([\w\s]*?)(,|$)",
+				"\1\2",
+				"all"
+			);
+			local.columns = ReReplace(
+				local.columns,
+				"\w*?\sAS\s([\w\s]*?)(,|$)",
+				"\1\2",
+				"all"
+			);
 			local.rv = QueryNew(local.columns);
-
 		} else if (singularize(arguments.returnAs) == arguments.returnAs) {
 			local.rv = false;
 		} else {
 			local.rv = [];
 		}
-
 	} else if (!StructKeyExists(local, "rv")) {
-
 		// make the where clause generic for use in caching
 		local.originalWhere = arguments.where;
-		arguments.where = REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all");
+		arguments.where = ReReplace(
+			arguments.where,
+			variables.wheels.class.RESQLWhere,
+			"\1?\8",
+			"all"
+		);
 
 		// get info from cache when available, otherwise create the generic select, from, where and order by clause
 		local.queryShellKey = $hashedKey(variables.wheels.class.modelName, arguments);
 		local.sql = $getFromCache(local.queryShellKey, "sql");
 		if (!IsArray(local.sql)) {
 			local.sql = [];
-			ArrayAppend(local.sql, $selectClause(select=arguments.select, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, returnAs=arguments.returnAs));
-			ArrayAppend(local.sql, $fromClause(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, useIndex=arguments.useIndex));
-			local.sql = $addWhereClause(sql=local.sql, where=local.originalWhere, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
-			local.groupBy = $groupByClause(select=arguments.select, group=arguments.group, include=arguments.include, distinct=arguments.distinct, returnAs=arguments.returnAs);
+			ArrayAppend(
+				local.sql,
+				$selectClause(
+					select = arguments.select,
+					include = arguments.include,
+					includeSoftDeletes = arguments.includeSoftDeletes,
+					returnAs = arguments.returnAs
+				)
+			);
+			ArrayAppend(
+				local.sql,
+				$fromClause(
+					include = arguments.include,
+					includeSoftDeletes = arguments.includeSoftDeletes,
+					useIndex = arguments.useIndex
+				)
+			);
+			local.sql = $addWhereClause(
+				sql = local.sql,
+				where = local.originalWhere,
+				include = arguments.include,
+				includeSoftDeletes = arguments.includeSoftDeletes
+			);
+			local.groupBy = $groupByClause(
+				select = arguments.select,
+				group = arguments.group,
+				include = arguments.include,
+				distinct = arguments.distinct,
+				returnAs = arguments.returnAs
+			);
 			if (Len(local.groupBy)) {
 				ArrayAppend(local.sql, local.groupBy);
 			}
-			local.orderBy = $orderByClause(order=arguments.order, include=arguments.include);
+			local.orderBy = $orderByClause(order = arguments.order, include = arguments.include);
 			if (Len(local.orderBy)) {
 				ArrayAppend(local.sql, local.orderBy);
 			}
-			$addToCache(key=local.queryShellKey, value=local.sql, category="sql");
+			$addToCache(key = local.queryShellKey, value = local.sql, category = "sql");
 		}
 
 		// add where clause parameters to the generic sql info
-		local.sql = $addWhereClauseParameters(sql=local.sql, where=local.originalWhere, parameterize=arguments.parameterize);
+		local.sql = $addWhereClauseParameters(
+			sql = local.sql,
+			where = local.originalWhere,
+			parameterize = arguments.parameterize
+		);
 
 		// Create a struct in the request scope to store cached queries.
 		if (!StructKeyExists(request.wheels, variables.wheels.class.modelName)) {
@@ -213,7 +318,12 @@ public any function findAll(
 
 		// return existing query result if it has been run already in current request, otherwise pass off the sql array to the query
 		local.queryKey = $hashedKey(variables.wheels.class.modelName, arguments, local.originalWhere);
-		if (application.wheels.cacheQueriesDuringRequest && !arguments.reload && StructKeyExists(request.wheels[variables.wheels.class.modelName], local.queryKey)) {
+		if (
+			application.wheels.cacheQueriesDuringRequest && !arguments.reload && StructKeyExists(
+				request.wheels[variables.wheels.class.modelName],
+				local.queryKey
+			)
+		) {
 			local.findAll = request.wheels[variables.wheels.class.modelName][local.queryKey];
 		} else {
 			local.finderArgs = {};
@@ -227,10 +337,14 @@ public any function findAll(
 			local.finderArgs.limit = arguments.$limit;
 			local.finderArgs.offset = arguments.$offset;
 			local.finderArgs.$primaryKey = primaryKeys();
-			if (application.wheels.cacheQueries && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache))) {
+			if (
+				application.wheels.cacheQueries && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache))
+			) {
 				local.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
 			}
-			local.findAll = variables.wheels.class.adapter.$querySetup(argumentCollection=local.finderArgs);
+			local.findAll = variables.wheels.class.adapter.$querySetup(
+				argumentCollection = local.finderArgs
+			);
 			request.wheels[variables.wheels.class.modelName][local.queryKey] = local.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 		}
 
@@ -243,18 +357,20 @@ public any function findAll(
 					$callback("afterFind", arguments.callbacks, local.rv);
 				}
 				break;
-			case "struct": case "structs":
-				local.rv = $serializeQueryToStructs(query=local.findAll.query, argumentCollection=arguments);
+			case "struct":
+			case "structs":
+				local.rv = $serializeQueryToStructs(query = local.findAll.query, argumentCollection = arguments);
 				break;
-			case "object": case "objects":
-				local.rv = $serializeQueryToObjects(query=local.findAll.query, argumentCollection=arguments);
+			case "object":
+			case "objects":
+				local.rv = $serializeQueryToObjects(query = local.findAll.query, argumentCollection = arguments);
 				break;
 			default:
 				if (application.wheels.showErrorInformation) {
 					Throw(
-						type="Wheels.IncorrectArgumentValue",
-						message="Incorrect Arguments",
-						extendedInfo="The `returnAs` may be either `query`, `struct(s)` or `object(s)`"
+						type = "Wheels.IncorrectArgumentValue",
+						message = "Incorrect Arguments",
+						extendedInfo = "The `returnAs` may be either `query`, `struct(s)` or `object(s)`"
 					);
 				}
 		}
@@ -283,28 +399,28 @@ public any function findAll(
  */
 public any function findByKey(
 	required any key,
-	string select="",
-	string include="",
-	string handle="query",
-	any cache="",
+	string select = "",
+	string include = "",
+	string handle = "query",
+	any cache = "",
 	boolean reload,
 	any parameterize,
 	string returnAs,
-	boolean callbacks="true",
-	boolean includeSoftDeletes="false"
+	boolean callbacks = "true",
+	boolean includeSoftDeletes = "false"
 ) {
-	$args(name="findByKey", args=arguments);
-	$setDebugName(name="FindByKey", args=arguments);
+	$args(name = "findByKey", args = arguments);
+	$setDebugName(name = "FindByKey", args = arguments);
 	arguments.include = $listClean(arguments.include);
 	if (Len(arguments.key)) {
 		$keyLengthCheck(arguments.key);
 	}
 
 	// Convert primary key column name(s) / value(s) to a WHERE clause.
-	arguments.where = $keyWhereString(values=arguments.key);
+	arguments.where = $keyWhereString(values = arguments.key);
 	StructDelete(arguments, "key");
 
-	return findOne(argumentCollection=arguments);
+	return findOne(argumentCollection = arguments);
 }
 
 /**
@@ -328,34 +444,38 @@ public any function findByKey(
  * @useIndex [see:findAll].
  */
 public any function findOne(
-	string where="",
-	string order="",
-	string select="",
-	string include="",
-	string handle="query",
-	any cache="",
+	string where = "",
+	string order = "",
+	string select = "",
+	string include = "",
+	string handle = "query",
+	any cache = "",
 	boolean reload,
 	any parameterize,
 	string returnAs,
-	boolean includeSoftDeletes="false",
-	struct useIndex={}
+	boolean includeSoftDeletes = "false",
+	struct useIndex = {}
 ) {
-	$args(name="findOne", args=arguments);
-	$setDebugName(name="findOne", args=arguments);
+	$args(name = "findOne", args = arguments);
+	$setDebugName(name = "findOne", args = arguments);
 	arguments.include = $listClean(arguments.include);
-	if (!Len(arguments.include) || (StructKeyExists(variables.wheels.class.associations, arguments.include) && variables.wheels.class.associations[arguments.include].type != "hasMany")) {
-
+	if (
+		!Len(arguments.include) || (
+			StructKeyExists(variables.wheels.class.associations, arguments.include) && variables.wheels.class.associations[
+				arguments.include
+			].type != "hasMany"
+		)
+	) {
 		// No joins will be done or the join will be done to a single record so we can safely get just one record from the database.
 		// Note that the check above can be improved to go through the entire include string and check if all associations are "single" (i.e. hasOne or belongsTo).
 		arguments.maxRows = 1;
-
 	} else {
 		// since we're joining with associated tables (and not to just one record) we could potentially get duplicate records for one object and we work around this by using the pagination code which has this functionality built in
 		arguments.page = 1;
 		arguments.perPage = 1;
 		arguments.count = 1;
 	}
-	local.rv = findAll(argumentCollection=arguments);
+	local.rv = findAll(argumentCollection = arguments);
 	if (IsArray(local.rv)) {
 		if (ArrayLen(local.rv)) {
 			local.rv = local.rv[1];
@@ -376,8 +496,8 @@ public any function findOne(
  *
  * @property Name of the property to order by. This argument is also aliased as `properties`.
  */
-public any function findFirst(string property="#primaryKey()#", string $sort="ASC") {
-	$args(args=arguments, name="findFirst", combine="property/properties");
+public any function findFirst(string property = "#primaryKey()#", string $sort = "ASC") {
+	$args(args = arguments, name = "findFirst", combine = "property/properties");
 	arguments.order = "";
 	local.iEnd = ListLen(arguments.property);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -386,7 +506,7 @@ public any function findFirst(string property="#primaryKey()#", string $sort="AS
 	}
 	StructDelete(arguments, "property");
 	StructDelete(arguments, "$sort");
-	return findOne(argumentCollection=arguments);
+	return findOne(argumentCollection = arguments);
 }
 
 /**
@@ -401,7 +521,7 @@ public any function findFirst(string property="#primaryKey()#", string $sort="AS
  */
 public any function findLastOne(string property) {
 	arguments.$sort = "DESC";
-	return findFirst(argumentCollection=arguments);
+	return findFirst(argumentCollection = arguments);
 }
 
 /**
@@ -414,14 +534,14 @@ public any function findLastOne(string property) {
  * @quoted Set to `true` to enclose each value in single-quotation marks.
  * @delimiter The delimiter character to separate the list items with.
  */
-public string function findAllKeys(boolean quoted="false", string delimiter=",") {
+public string function findAllKeys(boolean quoted = "false", string delimiter = ",") {
 	local.quoted = arguments.quoted;
 	StructDelete(arguments, "quoted");
 	local.delimiter = arguments.delimiter;
 	StructDelete(arguments, "delimiter");
 	arguments.select = primaryKey();
 	arguments.callbacks = false;
-	local.query = findAll(argumentCollection=arguments);
+	local.query = findAll(argumentCollection = arguments);
 	if (local.quoted) {
 		local.functionName = "QuotedValueList";
 	} else {
@@ -437,11 +557,10 @@ public string function findAllKeys(boolean quoted="false", string delimiter=",")
  * [category: Miscellaneous Functions]
  */
 public void function reload() {
-	local.query = findByKey(key=key(), reload=true, returnAs="query");
+	local.query = findByKey(key = key(), reload = true, returnAs = "query");
 	local.properties = propertyNames();
 	local.iEnd = ListLen(local.properties);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
-
 		// Wrap in try / catch since Coldfusion has a problem with blank boolean values in the query.
 		try {
 			local.property = ListGetAt(local.properties, local.i);
@@ -462,8 +581,12 @@ public void function $setDebugName(required struct args) {
 		} else {
 			args.$debugName = args.handle;
 		}
-		args.$debugName = Replace(Replace(args.$debugName, " ", "", "all"), ".", "", "all");
+		args.$debugName = Replace(
+			Replace(args.$debugName, " ", "", "all"),
+			".",
+			"",
+			"all"
+		);
 	}
 }
-
 </cfscript>

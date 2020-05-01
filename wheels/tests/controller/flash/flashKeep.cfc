@@ -15,11 +15,11 @@ component extends="wheels.tests.Test" {
 	}
 
 	/**
-	* HELPERS
-	*/
+	 * HELPERS
+	 */
 
 	function run_flashKeep_saves_flash_items() {
-		_controller.flashInsert(tony="Petruzzi", per="Djurner", james="Gibson");
+		_controller.flashInsert(tony = "Petruzzi", per = "Djurner", james = "Gibson");
 		_controller.flashKeep("per,james");
 		_controller.$flashClear();
 		assert('_controller.flashCount() eq 2');

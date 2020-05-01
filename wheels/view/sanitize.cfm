@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Removes all links from an HTML string, leaving just the link text.
  *
@@ -10,10 +9,15 @@
  * @encode [see:styleSheetLinkTag].
  */
 public string function stripLinks(required string html, boolean encode) {
-	$args(name="stripLinks", args=arguments);
-	local.rv = REReplaceNoCase(arguments.html, "<a.*?>(.*?)</a>", "\1" , "all");
+	$args(name = "stripLinks", args = arguments);
+	local.rv = ReReplaceNoCase(
+		arguments.html,
+		"<a.*?>(.*?)</a>",
+		"\1",
+		"all"
+	);
 	if (arguments.encode && $get("encodeHtmlTags")) {
-		local.rv = EncodeForHtml($canonicalize(local.rv));
+		local.rv = EncodeForHTML($canonicalize(local.rv));
 	}
 	return local.rv;
 }
@@ -28,13 +32,22 @@ public string function stripLinks(required string html, boolean encode) {
  * @encode [see:styleSheetLinkTag].
  */
 public string function stripTags(required string html, boolean encode) {
-	$args(name="stripTags", args=arguments);
-	local.rv = REReplaceNoCase(arguments.html, "<\ *[a-z].*?>", "", "all");
-	local.rv = REReplaceNoCase(local.rv, "<\ */\ *[a-z].*?>", "", "all");
+	$args(name = "stripTags", args = arguments);
+	local.rv = ReReplaceNoCase(
+		arguments.html,
+		"<\ *[a-z].*?>",
+		"",
+		"all"
+	);
+	local.rv = ReReplaceNoCase(
+		local.rv,
+		"<\ */\ *[a-z].*?>",
+		"",
+		"all"
+	);
 	if (arguments.encode && $get("encodeHtmlTags")) {
-		local.rv = EncodeForHtml($canonicalize(local.rv));
+		local.rv = EncodeForHTML($canonicalize(local.rv));
 	}
 	return local.rv;
 }
-
 </cfscript>

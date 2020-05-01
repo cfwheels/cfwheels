@@ -1,10 +1,9 @@
 <cfscript>
-
 /**
  * Internal function.
  * Called from get().
  */
-public any function $get(required string name, string functionName="") {
+public any function $get(required string name, string functionName = "") {
 	local.appKey = $appKey();
 	if (Len(arguments.functionName)) {
 		local.rv = application[local.appKey].functions[arguments.functionName][arguments.name];
@@ -25,7 +24,9 @@ public void function $set() {
 			if (local.key != "functionName") {
 				local.iEnd = ListLen(arguments.functionName);
 				for (local.i = 1; local.i <= local.iEnd; local.i++) {
-					application[local.appKey].functions[Trim(ListGetAt(arguments.functionName, local.i))][local.key] = arguments[local.key];
+					application[local.appKey].functions[Trim(ListGetAt(arguments.functionName, local.i))][local.key] = arguments[
+						local.key
+					];
 				}
 			}
 		}
@@ -45,7 +46,7 @@ public void function $set() {
 public string function capitalize(required string text) {
 	local.rv = arguments.text;
 	if (Len(local.rv)) {
-		local.rv = UCase(Left(local.rv, 1)) & Mid(local.rv, 2, Len(local.rv)-1);
+		local.rv = UCase(Left(local.rv, 1)) & Mid(local.rv, 2, Len(local.rv) - 1);
 	}
 	return local.rv;
 }
@@ -60,22 +61,47 @@ public string function capitalize(required string text) {
  * @except A list of strings (space separated) to replace within the output.
  *
  */
-public string function humanize(required string text, string except="") {
+public string function humanize(required string text, string except = "") {
 	// add a space before every capitalized word
-	local.rv = REReplace(arguments.text, "([[:upper:]])", " \1", "all");
+	local.rv = ReReplace(
+		arguments.text,
+		"([[:upper:]])",
+		" \1",
+		"all"
+	);
 
 	// remove space after punctuation chars
-	local.rv = REReplace(local.rv, "([[:punct:]])([[:space:]])", "\1", "all");
+	local.rv = ReReplace(
+		local.rv,
+		"([[:punct:]])([[:space:]])",
+		"\1",
+		"all"
+	);
 
 	// fix abbreviations so they form a word again (example: aURLVariable)
-	local.rv = REReplace(local.rv, "([[:upper:]]) ([[:upper:]])(?:\s|\b)", "\1\2", "all");
-	local.rv = REReplace(local.rv, "([[:upper:]])([[:upper:]])([[:lower:]])", "\1\2 \3", "all");
+	local.rv = ReReplace(
+		local.rv,
+		"([[:upper:]]) ([[:upper:]])(?:\s|\b)",
+		"\1\2",
+		"all"
+	);
+	local.rv = ReReplace(
+		local.rv,
+		"([[:upper:]])([[:upper:]])([[:lower:]])",
+		"\1\2 \3",
+		"all"
+	);
 
 	if (Len(arguments.except)) {
 		local.iEnd = ListLen(arguments.except, " ");
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.item = ListGetAt(arguments.except, local.i);
-			local.rv = ReReplaceNoCase(local.rv, "#local.item#(?:\b)", "#local.item#", "all");
+			local.rv = ReReplaceNoCase(
+				local.rv,
+				"#local.item#(?:\b)",
+				"#local.item#",
+				"all"
+			);
 		}
 	}
 
@@ -97,12 +123,12 @@ public string function humanize(required string text, string except="") {
  * @count Pluralization will occur when this value is not 1.
  * @returnCount Will return count prepended to the pluralization when true and count is not -1.
  */
-public string function pluralize(required string word, numeric count="-1", boolean returnCount="true") {
+public string function pluralize(required string word, numeric count = "-1", boolean returnCount = "true") {
 	return $singularizeOrPluralize(
-		count=arguments.count,
-		returnCount=arguments.returnCount,
-		text=arguments.word,
-		which="pluralize"
+		count = arguments.count,
+		returnCount = arguments.returnCount,
+		text = arguments.word,
+		which = "pluralize"
 	);
 }
 
@@ -115,7 +141,7 @@ public string function pluralize(required string word, numeric count="-1", boole
  * @string String to singularize.
  */
 public string function singularize(required string word) {
-		return $singularizeOrPluralize(text=arguments.word, which="singularize");
+	return $singularizeOrPluralize(text = arguments.word, which = "singularize");
 }
 
 /**
@@ -127,9 +153,19 @@ public string function singularize(required string word) {
  * @string The string to hyphenize.
  */
 public string function hyphenize(required string string) {
-	local.rv = REReplace(arguments.string, "([A-Z][a-z])", "-\l\1", "all");
-	local.rv = REReplace(local.rv, "([a-z])([A-Z])", "\1-\l\2", "all");
-	local.rv = REReplace(local.rv, "^-", "", "one");
+	local.rv = ReReplace(
+		arguments.string,
+		"([A-Z][a-z])",
+		"-\l\1",
+		"all"
+	);
+	local.rv = ReReplace(
+		local.rv,
+		"([a-z])([A-Z])",
+		"\1-\l\2",
+		"all"
+	);
+	local.rv = ReReplace(local.rv, "^-", "", "one");
 	local.rv = LCase(local.rv);
 	return local.rv;
 }
@@ -150,5 +186,4 @@ public string function titleize(required string word) {
 	}
 	return local.rv;
 }
-
 </cfscript>

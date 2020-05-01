@@ -13,10 +13,10 @@ loadedPlugins = application.wheels.plugins;
 
 		<cfif ($get("showIncompatiblePlugins") AND Len(application.wheels.incompatiblePlugins)) OR Len(application.wheels.dependantPlugins)>
 			<div class="ui error message">
-			  <div class="header">
-			    Warnings:
-			  </div>
-			  	<cfif $get("showIncompatiblePlugins") AND Len(application.wheels.incompatiblePlugins)>
+				<div class="header">
+					Warnings:
+				</div>
+					<cfif $get("showIncompatiblePlugins") AND Len(application.wheels.incompatiblePlugins)>
 							<cfloop list="#application.wheels.incompatiblePlugins#" index="local.i">The #local.i# plugin may be incompatible with this version of Wheels, please look for a compatible version of the plugin<br></cfloop>
 						</cfif>
 						<cfif Len(application.wheels.dependantPlugins)>
@@ -60,11 +60,11 @@ loadedPlugins = application.wheels.plugins;
 	</table>
 <cfelse>
 	<div class="ui placeholder segment">
-	  <div class="ui icon header">
-	    <i class="plug icon"></i>
-	    No plugins found!
-	  </div>
-	  <a href="https://forgebox.io/type/cfwheels-plugins" target="_blank" ref="noopener" class="ui primary button">Browse plugins on Forgebox.io</a>
+		<div class="ui icon header">
+			<i class="plug icon"></i>
+			No plugins found!
+		</div>
+		<a href="https://forgebox.io/type/cfwheels-plugins" target="_blank" ref="noopener" class="ui primary button">Browse plugins on Forgebox.io</a>
 	</div>
 </cfif>
 

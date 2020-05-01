@@ -1,3 +1,5 @@
 component extends="Controller" {
-  gallery = model("gallery").new();
+
+	gallery = model("gallery").new();
+
 }

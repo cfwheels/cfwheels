@@ -2,19 +2,19 @@ component extends="Abstract" {
 
 	variables.sqlTypes = {};
 	variables.sqlTypes['primaryKey'] = "int NOT NULL IDENTITY (1, 1)";
-	variables.sqlTypes['binary'] = {name='IMAGE'};
-	variables.sqlTypes['boolean'] = {name='BIT'};
-	variables.sqlTypes['date'] = {name='date'};
-	variables.sqlTypes['datetime'] = {name='DATETIME'};
-	variables.sqlTypes['decimal'] = {name='DECIMAL'};
-	variables.sqlTypes['float'] = {name='FLOAT'};
-	variables.sqlTypes['integer'] = {name='INT'};
-	variables.sqlTypes['string'] = {name='VARCHAR',limit=255};
-	variables.sqlTypes['text'] = {name='NVARCHAR',limit="max"};
-	variables.sqlTypes['time'] = {name='time'};
-	variables.sqlTypes['timestamp'] = {name='timestamp'};
-	variables.sqlTypes['uniqueidentifier'] = {name='UNIQUEIDENTIFIER'} ;
-	variables.sqlTypes['char'] = {name='CHAR',limit=10};
+	variables.sqlTypes['binary'] = {name = 'IMAGE'};
+	variables.sqlTypes['boolean'] = {name = 'BIT'};
+	variables.sqlTypes['date'] = {name = 'date'};
+	variables.sqlTypes['datetime'] = {name = 'DATETIME'};
+	variables.sqlTypes['decimal'] = {name = 'DECIMAL'};
+	variables.sqlTypes['float'] = {name = 'FLOAT'};
+	variables.sqlTypes['integer'] = {name = 'INT'};
+	variables.sqlTypes['string'] = {name = 'VARCHAR', limit = 255};
+	variables.sqlTypes['text'] = {name = 'NVARCHAR', limit = "max"};
+	variables.sqlTypes['time'] = {name = 'time'};
+	variables.sqlTypes['timestamp'] = {name = 'timestamp'};
+	variables.sqlTypes['uniqueidentifier'] = {name = 'UNIQUEIDENTIFIER'};
+	variables.sqlTypes['char'] = {name = 'CHAR', limit = 10};
 
 	public string function adapterName() {
 		return "MicrosoftSQLServer";
@@ -22,8 +22,8 @@ component extends="Abstract" {
 
 	public string function addForeignKeyOptions(required string sql, struct options = {}) {
 		arguments.sql = arguments.sql & " FOREIGN KEY (" & arguments.options.column & ")";
-		if (StructKeyExists(arguments.options, "referenceTable")){
-			if (StructKeyExists(arguments.options, "referenceColumn")){
+		if (StructKeyExists(arguments.options, "referenceTable")) {
+			if (StructKeyExists(arguments.options, "referenceColumn")) {
 				arguments.sql = arguments.sql & " REFERENCES ";
 				arguments.sql = arguments.sql & arguments.options.referenceTable;
 				arguments.sql = arguments.sql & " (" & arguments.options.referenceColumn & ")";
@@ -32,7 +32,7 @@ component extends="Abstract" {
 		return arguments.sql;
 	}
 
-	public string function addPrimaryKeyOptions(required string sql, struct options="#StructNew()#") {
+	public string function addPrimaryKeyOptions(required string sql, struct options = "#StructNew()#") {
 		if (StructKeyExists(arguments.options, "null") && arguments.options.null) {
 			arguments.sql = arguments.sql & " NULL";
 		} else {
@@ -58,58 +58,63 @@ component extends="Abstract" {
 	}
 
 	/**
-	* Surrounds table names with square brackets
-	*/
+	 * Surrounds table names with square brackets
+	 */
 	public string function quoteTableName(required string name) {
-		return "[#Replace(objectCase(arguments.name),".","`.`","ALL")#]";
+		return "[#Replace(
+			objectCase(arguments.name),
+			".",
+			"`.`",
+			"ALL"
+		)#]";
 	}
 
 	/**
-	* Surrounds column names with square brackets
-	*/
+	 * Surrounds column names with square brackets
+	 */
 	public string function quoteColumnName(required string name) {
 		return "[#objectCase(arguments.name)#]";
 	}
 
 	/**
-	* generates sql to rename a table
-	*/
+	 * generates sql to rename a table
+	 */
 	public string function renameTable(required string oldName, required string newName) {
 		return "EXEC sp_rename '#objectCase(arguments.oldName)#', '#objectCase(arguments.newName)#'";
 	}
 
 	/**
-	* generates sql to drop a table
-	*/
+	 * generates sql to drop a table
+	 */
 	public string function dropTable(required string name) {
 		return "IF EXISTS(SELECT name FROM sysobjects WHERE name = N'#objectCase(arguments.name)#' AND xtype='U') DROP TABLE #quoteTableName(arguments.name)#";
 	}
 
 	/**
-	* generates sql to drop a view
-	*/
+	 * generates sql to drop a view
+	 */
 	public string function dropView(required string name) {
 		return "IF EXISTS(SELECT name FROM sysobjects WHERE name = N'#objectCase(arguments.name)#' AND xtype='V') DROP VIEW #quoteTableName(arguments.name)#";
 	}
 
 	/**
-	* generates sql to add a new column to a table
-	*/
+	 * generates sql to add a new column to a table
+	 */
 	public string function addColumnToTable(required string name, required any column) {
-	  return "ALTER TABLE #quoteTableName(arguments.name)# ADD #arguments.column.toSQL()#";
+		return "ALTER TABLE #quoteTableName(arguments.name)# ADD #arguments.column.toSQL()#";
 	}
 
 	/**
-  * generates sql to change an existing column in a table
-  */
+	 * generates sql to change an existing column in a table
+	 */
 	public string function changeColumnInTable(required string name, required any column) {
 		local.sql = "";
-		for (local.i in ["default","null","afterColumn"]) {
+		for (local.i in ["default", "null", "afterColumn"]) {
 			if (StructKeyExists(arguments.column, local.i)) {
 				local.opts = {};
 				local.opts.type = arguments.column.type;
 				local.opts[local.i] = arguments.column[local.i];
-				local.columnSQL = addColumnOptions(sql="", options=local.opts, alter=true);
+				local.columnSQL = addColumnOptions(sql = "", options = local.opts, alter = true);
 				if (local.i == "null") {
 					local.sql = local.sql & "ALTER TABLE #quoteTableName(arguments.name)# ALTER COLUMN #objectCase(arguments.column.name)# #arguments.column.sqlType()# #local.columnSQL#;";
 				} else if (local.i == "default") {
@@ -122,8 +127,8 @@ component extends="Abstract" {
 	}
 
 	/**
-	* generates sql to rename an existing column in a table
-	*/
+	 * generates sql to rename an existing column in a table
+	 */
 	public string function renameColumnInTable(
 		required string name,
 		required string columnName,
@@ -133,8 +138,8 @@ component extends="Abstract" {
 	}
 
 	/**
-	* generates sql to drop a column from a table
-	*/
+	 * generates sql to drop a column from a table
+	 */
 	public string function dropColumnFromTable(required string name, required string columnName) {
 		$removeCheckConstraints(arguments.name, arguments.columnName);
 		$removeDefaultConstraint(arguments.name, arguments.columnName);
@@ -143,23 +148,23 @@ component extends="Abstract" {
 	}
 
 	/**
-  * generates sql to add a foreign key constraint to a table
-  */
+	 * generates sql to add a foreign key constraint to a table
+	 */
 	public string function dropForeignKeyFromTable(required string name, required any keyName) {
 		return "ALTER TABLE #quoteTableName(arguments.name)# DROP CONSTRAINT #objectCase(arguments.keyname)#";
 	}
 
 	/**
-  * generates sql to remove a database index
-  */
+	 * generates sql to remove a database index
+	 */
 	public string function removeIndex(required string table, string indexName = "") {
 		return "DROP INDEX #objectCase(arguments.table)#.#quoteColumnName(arguments.indexName)#";
 	}
 
 	private void function $removeCheckConstraints(required string name, required string columnName) {
-	  local.constraints = $query(
-			datasource=application.wheels.dataSourceName,
-			sql="
+		local.constraints = $query(
+			datasource = application.wheels.dataSourceName,
+			sql = "
 				SELECT 	constraint_name
 				FROM		information_schema.constraint_column_usage
 				WHERE		table_name = '#objectCase(arguments.name)#'
@@ -172,18 +177,18 @@ component extends="Abstract" {
 	}
 
 	/**
-	* Removes default constraints on a given column.
-	*/
+	 * Removes default constraints on a given column.
+	 */
 	private void function $removeDefaultConstraint(required string name, required string columnName) {
 		local.constraints = $query(
-			datasource=application.wheels.dataSourceName,
-			sql="EXEC sp_helpconstraint #quoteTableName(arguments.name)#, 'nomsg'"
+			datasource = application.wheels.dataSourceName,
+			sql = "EXEC sp_helpconstraint #quoteTableName(arguments.name)#, 'nomsg'"
 		);
 		if (StructKeyExists(local, "constraints") && Val(local.constraints.RecordCount)) {
 			local.defaults = $query(
-				dbtype="query",
-				query=local.constraints,
-				sql="
+				dbtype = "query",
+				query = local.constraints,
+				sql = "
 					SELECT	*
 					FROM	query
 					WHERE	constraint_type = 'DEFAULT on column #objectCase(arguments.columnName)#'
@@ -196,13 +201,13 @@ component extends="Abstract" {
 	}
 
 	/**
-	* Removes all indexes on a given column
-	*/
+	 * Removes all indexes on a given column
+	 */
 	private void function $removeIndexes(required string name, required string columnName) {
 		// Based on info presented in `http://stackoverflow.com/questions/765867/list-of-all-index-index-columns-in-sql-server-db`
 		local.indexes = $query(
-			datasource=application.wheels.dataSourceName,
-			sql="
+			datasource = application.wheels.dataSourceName,
+			sql = "
 			SELECT
 				t.name AS table_name,
 				col.name AS column_name,
@@ -229,32 +234,41 @@ component extends="Abstract" {
 
 	public string function typeToSQL(required string type, struct options = {}) {
 		var sql = '';
-		if(IsDefined("variables.sqlTypes") && StructKeyExists(variables.sqlTypes,arguments.type)) {
-			if(IsStruct(variables.sqlTypes[arguments.type])) {
+		if (IsDefined("variables.sqlTypes") && StructKeyExists(variables.sqlTypes, arguments.type)) {
+			if (IsStruct(variables.sqlTypes[arguments.type])) {
 				sql = variables.sqlTypes[arguments.type]['name'];
-				if(arguments.type == 'decimal') {
-					if(!StructKeyExists(arguments.options,'precision') && StructKeyExists(variables.sqlTypes[arguments.type],'precision')) {
+				if (arguments.type == 'decimal') {
+					if (
+						!StructKeyExists(arguments.options, 'precision') && StructKeyExists(
+							variables.sqlTypes[arguments.type],
+							'precision'
+						)
+					) {
 						arguments.options.precision = variables.sqlTypes[arguments.type]['precision'];
 					}
-					if(!StructKeyExists(arguments.options,'scale') && StructKeyExists(variables.sqlTypes[arguments.type],'scale')) {
+					if (
+						!StructKeyExists(arguments.options, 'scale') && StructKeyExists(variables.sqlTypes[arguments.type], 'scale')
+					) {
 						arguments.options.scale = variables.sqlTypes[arguments.type]['scale'];
 					}
-					if(StructKeyExists(arguments.options,'precision')) {
-						if(StructKeyExists(arguments.options,'scale')) {
+					if (StructKeyExists(arguments.options, 'precision')) {
+						if (StructKeyExists(arguments.options, 'scale')) {
 							sql = sql & '(#arguments.options.precision#,#arguments.options.scale#)';
 						} else {
 							sql = sql & '(#arguments.options.precision#)';
 						}
 					}
-				} else if(arguments.type == 'integer') {
-					if(StructKeyExists(arguments.options,'limit')) {
+				} else if (arguments.type == 'integer') {
+					if (StructKeyExists(arguments.options, 'limit')) {
 						sql = sql;
 					}
 				} else {
-					if(!StructKeyExists(arguments.options,'limit') && StructKeyExists(variables.sqlTypes[arguments.type],'limit')) {
+					if (
+						!StructKeyExists(arguments.options, 'limit') && StructKeyExists(variables.sqlTypes[arguments.type], 'limit')
+					) {
 						arguments.options.limit = variables.sqlTypes[arguments.type]['limit'];
 					}
-					if(StructKeyExists(arguments.options,'limit')) {
+					if (StructKeyExists(arguments.options, 'limit')) {
 						sql = sql & '(#arguments.options.limit#)';
 					}
 				}
@@ -266,15 +280,15 @@ component extends="Abstract" {
 	}
 
 	/**
-  * prepends sql server identity_insert on to allow inserting primary key values
-  */
+	 * prepends sql server identity_insert on to allow inserting primary key values
+	 */
 	public string function addRecordPrefix(required string table) {
 		return "SET IDENTITY_INSERT #quoteTableName(arguments.table)# ON";
 	}
 
 	/**
-  * appends sql server identity_insert on to disallow inserting primary key values
-  */
+	 * appends sql server identity_insert on to disallow inserting primary key values
+	 */
 	public string function addRecordSuffix(required string table) {
 		return "SET IDENTITY_INSERT #quoteTableName(arguments.table)# OFF";
 	}

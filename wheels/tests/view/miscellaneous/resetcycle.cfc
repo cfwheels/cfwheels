@@ -1,16 +1,16 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		_controller = controller(name="dummy");
+		_controller = controller(name = "dummy");
 		args = {};
 		args.values = "1,2,3,4,5,6";
 		args.name = "cycle_test_2";
-		container = listtoarray(args.values);
+		container = ListToArray(args.values);
 	}
 
 	function test_named() {
 		for (r in container) {
-			_controller.cycle(argumentcollection=args);
+			_controller.cycle(argumentcollection = args);
 		};
 		assert("request.wheels.cycle[args.name] eq 6");
 		_controller.resetcycle(args.name);
@@ -18,9 +18,9 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_not_named() {
-		structdelete(args, "name");
+		StructDelete(args, "name");
 		for (r in container) {
-			_controller.cycle(argumentcollection=args);
+			_controller.cycle(argumentcollection = args);
 		};
 		assert("request.wheels.cycle['default'] eq 6");
 		_controller.resetcycle();

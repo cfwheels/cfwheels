@@ -4,13 +4,13 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		config = {
-			path="wheels"
-			,fileName="Plugins"
-			,method="init"
-			,pluginPath="/wheels/tests/_assets/plugins/standard"
-			,deletePluginDirectories=false
-			,overwritePlugins=false
-			,loadIncompatiblePlugins=true
+			path = "wheels",
+			fileName = "Plugins",
+			method = "init",
+			pluginPath = "/wheels/tests/_assets/plugins/standard",
+			deletePluginDirectories = false,
+			overwritePlugins = false,
+			loadIncompatiblePlugins = true
 		};
 	}
 

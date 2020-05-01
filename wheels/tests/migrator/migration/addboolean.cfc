@@ -19,7 +19,7 @@ component extends="wheels.tests.Test" {
 			case "MicrosoftSQLServer":
 				return "BIT";
 			case "MySQL":
-				return "BIT";
+				return "BIT,TINYINT";
 			case "PostgreSQL":
 				return "BOOLEAN";
 			default:
@@ -43,21 +43,17 @@ component extends="wheels.tests.Test" {
 
 		tableName = "dbm_add_boolean_tests";
 		columnName = "booleanCOLUMN";
-		t = migration.createTable(name=tableName, force=true);
-		t.boolean(columnName=columnName);
+		t = migration.createTable(name = tableName, force = true);
+		t.boolean(columnName = columnName);
 		t.create();
 
-		info = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			table=tableName,
-			type="columns"
-		);
-		actual = listToArray(valueList(info.TYPE_NAME))[2];
+		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "columns");
+		actual = ListToArray(ValueList(info.TYPE_NAME))[2];
 		migration.dropTable(tableName);
 
 		expected = getBooleanType();
 
-    	assert("actual eq expected");
+		assert("listContainsNoCase(expected,actual)");
 	}
 
 	function test_add_multiple_boolean_columns() {
@@ -67,21 +63,18 @@ component extends="wheels.tests.Test" {
 
 		tableName = "dbm_add_boolean_tests";
 		columnNames = "booleanA,booleanB";
-		t = migration.createTable(name=tableName, force=true);
-		t.boolean(columnNames=columnNames);
+		t = migration.createTable(name = tableName, force = true);
+		t.boolean(columnNames = columnNames);
 		t.create();
 
-		info = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			table=tableName,
-			type="columns"
-		);
-		actual = listToArray(valueList(info.TYPE_NAME));
+		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "columns");
+		actual = ListToArray(ValueList(info.TYPE_NAME));
 		migration.dropTable(tableName);
 
 		expected = getBooleanType();
 
-		assert("actual[2] eq expected");
-    	assert("actual[3] eq expected");
+		assert("listContainsNoCase(expected,actual[2])");
+		assert("listContainsNoCase(expected,actual[3])");
 	}
+
 }

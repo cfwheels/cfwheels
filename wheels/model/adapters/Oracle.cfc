@@ -5,37 +5,52 @@ component extends="Base" output=false {
 	 */
 	public string function $getType(required string type, string scale, string details) {
 		switch (arguments.type) {
-			case "blob": case "bfile":
+			case "blob":
+			case "bfile":
 				local.rv = "cf_sql_binary";
 				break;
-			case "char": case "nchar":
+			case "char":
+			case "nchar":
 				local.rv = "cf_sql_char";
 				break;
-			case "date": case "timestamp":
+			case "date":
+			case "timestamp":
 				local.rv = "cf_sql_timestamp";
 				break;
-			case "decimal": case "dec":
+			case "decimal":
+			case "dec":
 				local.rv = "cf_sql_decimal";
 				break;
-			case "integer": case "int":
+			case "integer":
+			case "int":
 				local.rv = "cf_sql_integer";
 				break;
-			case "numeric": case "number":
+			case "numeric":
+			case "number":
 				local.rv = "cf_sql_numeric";
 				break;
-			case "real": case "binary_float": case "binary_double": case "double": case "precision": case "float":
+			case "real":
+			case "binary_float":
+			case "binary_double":
+			case "double":
+			case "precision":
+			case "float":
 				local.rv = "cf_sql_real";
 				break;
 			case "smallint":
 				local.rv = "cf_sql_smallint";
 				break;
-			case "long": case "clob": case "nclob":
+			case "long":
+			case "clob":
+			case "nclob":
 				local.rv = "cf_sql_longvarchar";
 				break;
 			case "time":
 				local.rv = "cf_sql_time";
 				break;
-			case "varchar": case "varchar2": case "rowid":
+			case "varchar":
+			case "varchar2":
+			case "rowid":
 				local.rv = "cf_sql_varchar";
 				break;
 		}
@@ -46,21 +61,21 @@ component extends="Base" output=false {
 	 * Call functions to make adapter specific changes to arguments before executing query.
 	 */
 	public struct function $querySetup(
-	  required array sql,
-	  numeric limit=0,
-	  numeric offset=0,
-	  required boolean parameterize,
-	  string $primaryKey=""
+		required array sql,
+		numeric limit = 0,
+		numeric offset = 0,
+		required boolean parameterize,
+		string $primaryKey = ""
 	) {
-		$removeColumnAliasesInOrderClause(args=arguments);
-		$addColumnsToSelectAndGroupBy(args=arguments);
+		$removeColumnAliasesInOrderClause(args = arguments);
+		$addColumnsToSelectAndGroupBy(args = arguments);
 
 		// Oracle DB doesn't support limit and offset in SQL.
 		StructDelete(arguments, "limit");
 		StructDelete(arguments, "offset");
 
-		$moveAggregateToHaving(args=arguments);
-		return $performQuery(argumentCollection=arguments);
+		$moveAggregateToHaving(args = arguments);
+		return $performQuery(argumentCollection = arguments);
 	}
 
 	/**
@@ -74,20 +89,27 @@ component extends="Base" output=false {
 	 * Override Base adapter's function.
 	 */
 	public any function $identitySelect(
-	  required struct queryAttributes,
-	  required struct result,
-	  required string primaryKey
+		required struct queryAttributes,
+		required struct result,
+		required string primaryKey
 	) {
 		var query = {};
 		local.sql = Trim(arguments.result.sql);
 		if (Left(local.sql, 11) == "INSERT INTO" && !StructKeyExists(arguments.result, $generatedKey())) {
 			local.startPar = Find("(", local.sql) + 1;
 			local.endPar = Find(")", local.sql);
-			local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
+			local.columnList = ReplaceList(
+				Mid(local.sql, local.startPar, (local.endPar - local.startPar)),
+				"#Chr(10)#,#Chr(13)#, ",
+				",,"
+			);
 			if (!ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
 				local.rv = {};
-				local.tbl = SpanExcluding(Right(local.sql, Len(local.sql)-12), " ");
-				query = $query(sql="SELECT #arguments.primaryKey# AS lastId FROM #local.tbl# WHERE ROWID = (SELECT MAX(ROWID) FROM #local.tbl#)", argumentCollection=arguments.queryAttributes);
+				local.tbl = SpanExcluding(Right(local.sql, Len(local.sql) - 12), " ");
+				query = $query(
+					sql = "SELECT #arguments.primaryKey# AS lastId FROM #local.tbl# WHERE ROWID = (SELECT MAX(ROWID) FROM #local.tbl#)",
+					argumentCollection = arguments.queryAttributes
+				);
 				local.rv[$generatedKey()] = query.lastId;
 				return local.rv;
 			}
@@ -117,4 +139,5 @@ component extends="Base" output=false {
 	}
 
 	include "../../plugins/standalone/injection.cfm";
+
 }

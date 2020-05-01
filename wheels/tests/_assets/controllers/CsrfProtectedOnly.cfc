@@ -1,13 +1,15 @@
 component extends="Controller" {
-  function config() {
-    protectsFromForgery(only="create");
-  }
 
-  function index() {
-    renderText("Index ran.");
-  }
+	function config() {
+		protectsFromForgery(only = "create");
+	}
 
-  function create() {
-    renderText("Create ran.");
-  }
+	function index() {
+		renderText("Index ran.");
+	}
+
+	function create() {
+		renderText("Create ran.");
+	}
+
 }

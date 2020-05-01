@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Builds and returns a string containing a text field form control based on the supplied name.
  * Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
@@ -20,23 +19,23 @@
  */
 public string function textFieldTag(
 	required string name,
-	string value="",
+	string value = "",
 	string label,
 	string labelPlacement,
 	string prepend,
 	string append,
 	string prependToLabel,
 	string appendToLabel,
-	string type="text",
+	string type = "text",
 	any encode
 ) {
-	$args(name="textFieldTag", args=arguments);
+	$args(name = "textFieldTag", args = arguments);
 	arguments.property = arguments.name;
 	arguments.objectName = {};
 	arguments.objectName[arguments.name] = arguments.value;
 	StructDelete(arguments, "name");
 	StructDelete(arguments, "value");
-	return textField(argumentCollection=arguments);
+	return textField(argumentCollection = arguments);
 }
 
 /**
@@ -58,7 +57,7 @@ public string function textFieldTag(
  */
 public string function passwordFieldTag(
 	required string name,
-	string value="",
+	string value = "",
 	string label,
 	string labelPlacement,
 	string prepend,
@@ -67,13 +66,13 @@ public string function passwordFieldTag(
 	string appendToLabel,
 	any encode
 ) {
-	$args(name="passwordFieldTag", args=arguments);
+	$args(name = "passwordFieldTag", args = arguments);
 	arguments.property = arguments.name;
 	arguments.objectName = {};
 	arguments.objectName[arguments.name] = arguments.value;
 	StructDelete(arguments, "name");
 	StructDelete(arguments, "value");
-	return passwordField(argumentCollection=arguments);
+	return passwordField(argumentCollection = arguments);
 }
 
 /**
@@ -87,17 +86,13 @@ public string function passwordFieldTag(
  * @value [see:textFieldTag].
  * @encode [see:styleSheetLinkTag].
  */
-public string function hiddenFieldTag(
-	required string name,
-	string value="",
-	boolean encode
-) {
+public string function hiddenFieldTag(required string name, string value = "", boolean encode) {
 	arguments.property = arguments.name;
 	arguments.objectName = {};
 	arguments.objectName[arguments.name] = arguments.value;
 	StructDelete(arguments, "name");
 	StructDelete(arguments, "value");
-	return hiddenField(argumentCollection=arguments);
+	return hiddenField(argumentCollection = arguments);
 }
 
 /**
@@ -126,12 +121,12 @@ public string function fileFieldTag(
 	string appendToLabel,
 	any encode
 ) {
-	$args(name="fileFieldTag", args=arguments);
+	$args(name = "fileFieldTag", args = arguments);
 	arguments.property = arguments.name;
 	arguments.objectName = {};
 	arguments.objectName[arguments.name] = "";
 	StructDelete(arguments, "name");
-	return fileField(argumentCollection=arguments);
+	return fileField(argumentCollection = arguments);
 }
 
 /**
@@ -153,7 +148,7 @@ public string function fileFieldTag(
  */
 public string function textAreaTag(
 	required string name,
-	string content="",
+	string content = "",
 	string label,
 	string labelPlacement,
 	string prepend,
@@ -162,13 +157,13 @@ public string function textAreaTag(
 	string appendToLabel,
 	any encode
 ) {
-	$args(name="textAreaTag", args=arguments);
+	$args(name = "textAreaTag", args = arguments);
 	arguments.property = arguments.name;
 	arguments.objectName = {};
 	arguments.objectName[arguments.name] = arguments.content;
 	StructDelete(arguments, "name");
 	StructDelete(arguments, "content");
-	return textArea(argumentCollection=arguments);
+	return textArea(argumentCollection = arguments);
 }
 
 /**
@@ -192,7 +187,7 @@ public string function textAreaTag(
 public string function radioButtonTag(
 	required string name,
 	required string value,
-	boolean checked=false,
+	boolean checked = false,
 	string label,
 	string labelPlacement,
 	string prepend,
@@ -201,22 +196,20 @@ public string function radioButtonTag(
 	string appendToLabel,
 	any encode
 ) {
-	$args(name="radioButtonTag", args=arguments);
+	$args(name = "radioButtonTag", args = arguments);
 	arguments.property = arguments.name;
 	arguments.objectName = {};
 	arguments.tagValue = arguments.value;
 	if (arguments.checked) {
 		arguments.objectName[arguments.name] = arguments.value;
 	} else {
-
 		// Space added to allow a blank value while still not having the form control checked.
 		arguments.objectName[arguments.name] = " ";
-
 	}
 	StructDelete(arguments, "name");
 	StructDelete(arguments, "value");
 	StructDelete(arguments, "checked");
-	return radioButton(argumentCollection=arguments);
+	return radioButton(argumentCollection = arguments);
 }
 
 /**
@@ -240,9 +233,9 @@ public string function radioButtonTag(
  */
 public string function checkBoxTag(
 	required string name,
-	boolean checked=false,
+	boolean checked = false,
 	string value,
-	string uncheckedValue="",
+	string uncheckedValue = "",
 	string label,
 	string labelPlacement,
 	string prepend,
@@ -251,29 +244,39 @@ public string function checkBoxTag(
 	string appendToLabel,
 	any encode
 ) {
-	$args(name="checkBoxTag", args=arguments);
+	$args(name = "checkBoxTag", args = arguments);
 	arguments.checkedValue = arguments.value;
 	arguments.property = arguments.name;
 	arguments.objectName = {};
 	if (arguments.checked) {
 		arguments.objectName[arguments.name] = arguments.value;
 	} else {
-
 		// Space added to allow a blank value while still not having the form control checked.
 		arguments.objectName[arguments.name] = " ";
-
 	}
 	if (!StructKeyExists(arguments, "id")) {
-		local.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.checkedValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
+		local.valueToAppend = LCase(
+			Replace(
+				ReReplaceNoCase(
+					arguments.checkedValue,
+					"[^a-z0-9- ]",
+					"",
+					"all"
+				),
+				" ",
+				"-",
+				"all"
+			)
+		);
 		arguments.id = $tagId(arguments.objectName, arguments.property);
-		if (len(local.valueToAppend)) {
+		if (Len(local.valueToAppend)) {
 			arguments.id &= "-" & local.valueToAppend;
 		}
 	}
 	StructDelete(arguments, "name");
 	StructDelete(arguments, "value");
 	StructDelete(arguments, "checked");
-	return checkBox(argumentCollection=arguments);
+	return checkBox(argumentCollection = arguments);
 }
 
 /**
@@ -301,7 +304,7 @@ public string function checkBoxTag(
 public string function selectTag(
 	required string name,
 	required any options,
-	string selected="",
+	string selected = "",
 	any includeBlank,
 	boolean multiple,
 	string valueField,
@@ -314,13 +317,12 @@ public string function selectTag(
 	string appendToLabel,
 	any encode
 ) {
-	$args(name="selectTag", args=arguments);
+	$args(name = "selectTag", args = arguments);
 	arguments.property = arguments.name;
 	arguments.objectName = {};
 	arguments.objectName[arguments.name] = arguments.selected;
 	StructDelete(arguments, "name");
 	StructDelete(arguments, "selected");
-	return select(argumentCollection=arguments);
+	return select(argumentCollection = arguments);
 }
-
 </cfscript>

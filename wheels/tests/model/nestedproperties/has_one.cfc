@@ -1,5 +1,4 @@
-﻿component extends="wheels.tests.Test" {
-
+﻿component extends = "wheels.tests.Test"{
 	function setup() {
 		author = model("author");
 		profile = model("profile");
@@ -8,10 +7,10 @@
 	}
 
 	/**
-	* Simulates adding an `author` and its child `profile` through a single
-	* structure passed into `author.create()`, much like what's normally done
-	* with the `params` struct.
-	*/
+	 * Simulates adding an `author` and its child `profile` through a single
+	 * structure passed into `author.create()`, much like what's normally done
+	 * with the `params` struct.
+	 */
 	function test_add_entire_data_set_via_create_and_struct() {
 		transaction {
 			/* Should return `true` on successful create */
@@ -26,10 +25,10 @@
 	}
 
 	/**
-	* Simulates adding an `author` and its child `profile` through a single
-	* structure passed into `author.new()` and saved with `author.save()`, much
-	* like what's normally done with the `params` struct.
-	*/
+	 * Simulates adding an `author` and its child `profile` through a single
+	 * structure passed into `author.new()` and saved with `author.save()`, much
+	 * like what's normally done with the `params` struct.
+	 */
 	function test_add_entire_data_set_via_new_and_struct() {
 		author = author.new(testParamsStruct.author);
 		transaction {
@@ -44,8 +43,8 @@
 	}
 
 	/**
-	* Loads an existing `author` and sets its child `profile` as an object before saving.
-	*/
+	 * Loads an existing `author` and sets its child `profile` as an object before saving.
+	 */
 	function test_add_child_via_object() {
 		transaction {
 			assert("testAuthor.save()");
@@ -56,12 +55,12 @@
 	}
 
 	/*
-	* Loads an existing `author` and sets its child `profile` as a struct before saving.
-	*/
+	 * Loads an existing `author` and sets its child `profile` as a struct before saving.
+	 */
 	function test_add_child_via_struct() {
 		transaction {
 			assert("testAuthor.save()");
-			testAuthor.profile = {dateOfBirth="10/02/1980 18:00:00", bio=bioText};
+			testAuthor.profile = {dateOfBirth = "10/02/1980 18:00:00", bio = bioText};
 			assert("testAuthor.save()");
 			assert("IsObject(testAuthor.profile)");
 			p = profile.findByKey(testAuthor.profile.id);
@@ -71,8 +70,8 @@
 	}
 
 	/**
-	* Loads an existing `author` and deletes its child `profile` by setting the `_delete` property to `true`.
-	*/
+	 * Loads an existing `author` and deletes its child `profile` by setting the `_delete` property to `true`.
+	 */
 	function test_delete_child_through_object_property() {
 		transaction {
 			testAuthor.save();
@@ -81,15 +80,15 @@
 			profileID = testAuthor.profile.id;
 			assert("testAuthor.save()");
 			/* Should return `false` because the record is now deleted */
-			missingProfile = profile.findByKey(key=profileId, reload=true);
+			missingProfile = profile.findByKey(key = profileId, reload = true);
 			transaction action="rollback";
 		}
 		assert("IsBoolean(missingProfile) and not missingProfile");
 	}
 
 	/**
-	* Loads an existing `author` and deletes its child `property` by passing in a struct through `update()`.
-	*/
+	 * Loads an existing `author` and deletes its child `property` by passing in a struct through `update()`.
+	 */
 	function test_delete_child_through_struct() {
 		transaction {
 			/* Save test author with child profile and grab new profile's ID */
@@ -99,7 +98,7 @@
 			updateStruct.profile._delete = true;
 			assert("testAuthor.update(properties=updateStruct)");
 			/* Should return `false` because the record is now deleted */
-			missingProfile = profile.findByKey(key=profileId, reload=true);
+			missingProfile = profile.findByKey(key = profileId, reload = true);
 			transaction action="rollback";
 		}
 		assert("IsBoolean(missingProfile) and not missingProfile");
@@ -210,31 +209,30 @@
 	}
 
 	/**
-	* HELPERS
-	*/
+	 * HELPERS
+	 */
 
 	private void function $setTestObjects() {
-		testAuthor = author.findOneByLastName(value="Peters", include="profile");
+		testAuthor = author.findOneByLastName(value = "Peters", include = "profile");
 		bioText = "Loves learning how to write tests.";
-		testAuthor.profile = model("profile").new(dateOfBirth="10/02/1980 18:00:00", bio=bioText);
+		testAuthor.profile = model("profile").new(dateOfBirth = "10/02/1980 18:00:00", bio = bioText);
 	}
 
 	/**
-	* Sets up test `author` struct reminiscent of what would be passed through a
-	* form. The `author` represented here also includes a nested child `profile` struct.
-	*/
+	 * Sets up test `author` struct reminiscent of what would be passed through a
+	 * form. The `author` represented here also includes a nested child `profile` struct.
+	 */
 	private struct function $setTestParamsStruct() {
 		testParams = {
 			author = {
-				firstName="Brian",
-				lastName="Meloche",
+				firstName = "Brian",
+				lastName = "Meloche",
 				profile = {
-					dateOfBirth="10/02/1970 18:01:00",
-					bio="Host of CFConversations, the best ColdFusion podcast out there."
+					dateOfBirth = "10/02/1970 18:01:00",
+					bio = "Host of CFConversations, the best ColdFusion podcast out there."
 				}
 			}
 		};
 		return testParams;
 	}
-
 }

@@ -9,9 +9,12 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_validates_presence_of_invalid() {
-		StructDelete(user, "username"); /* missing key */
-		user.password = ""; /* zero length string */
-		user.firstName = "      "; /* empty string */
+		StructDelete(user, "username");
+		/* missing key */
+		user.password = "";
+		/* zero length string */
+		user.firstName = "      ";
+		/* empty string */
 		user.valid();
 		assert('ArrayLen(user.allErrors()) eq 3');
 	}
@@ -25,7 +28,7 @@ component extends="wheels.tests.Test" {
 	function test_validates_presence_of_valid_with_default_on_update() {
 		user = model("UserBlank").findOne(); // use existing user to test update
 		user.birthtime = "";
-		user.save(transaction="rollback");
+		user.save(transaction = "rollback");
 		arrResult = user.errorsOn("birthtime");
 		assert("ArrayLen(arrResult) eq 1 AND arrResult[1].message eq 'Birthtime can''t be empty'");
 	}

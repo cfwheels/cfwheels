@@ -41,16 +41,12 @@ component extends="wheels.tests.Test" {
 
 		tableName = "dbm_add_text_tests";
 		columnName = "textCOLUMN";
-		t = migration.createTable(name=tableName, force=true);
-		t.text(columnName=columnName);
+		t = migration.createTable(name = tableName, force = true);
+		t.text(columnName = columnName);
 		t.create();
 
-		info = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			table=tableName,
-			type="columns"
-		);
-		actual = listToArray(valueList(info.TYPE_NAME))[2];
+		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "columns");
+		actual = ListToArray(ValueList(info.TYPE_NAME))[2];
 		migration.dropTable(tableName);
 
 		expected = getTextType();
@@ -65,16 +61,12 @@ component extends="wheels.tests.Test" {
 
 		tableName = "dbm_add_text_tests";
 		columnNames = "textA,textB";
-		t = migration.createTable(name=tableName, force=true);
-		t.text(columnNames=columnNames);
+		t = migration.createTable(name = tableName, force = true);
+		t.text(columnNames = columnNames);
 		t.create();
 
-		info = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			table=tableName,
-			type="columns"
-		);
-		actual = listToArray(valueList(info.TYPE_NAME));
+		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "columns");
+		actual = ListToArray(ValueList(info.TYPE_NAME));
 		migration.dropTable(tableName);
 
 		expected = getTextType();
@@ -82,4 +74,5 @@ component extends="wheels.tests.Test" {
 		assert("ArrayContainsNoCase(expected, actual[2])");
 		assert("ArrayContainsNoCase(expected, actual[3])");
 	}
+
 }

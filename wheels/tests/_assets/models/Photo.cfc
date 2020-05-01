@@ -1,8 +1,8 @@
 component extends="Model" {
 
 	function config() {
-		property(name="DESCRIPTION1", column="description");
-		belongsTo(name="gallery", modelName="gallery", foreignKey="id");
+		property(name = "DESCRIPTION1", column = "description");
+		belongsTo(name = "gallery", modelName = "gallery", foreignKey = "id");
 		beforeValidation("beforeValidationCallbackThatSetsProperty,beforeValidationCallbackThatIncreasesVariable");
 		beforeCreate("beforeCreateCallbackThatIncreasesVariable");
 		beforeSave("beforeSaveCallbackThatIncreasesVariable");
@@ -10,7 +10,10 @@ component extends="Model" {
 		beforeSave("afterSaveCallbackThatIncreasesVariable");
 		validatesPresenceOf("filename");
 		/* The evaluated `condition` will throw an exception if callbacks aren't executed properly when this object is a nested property */
-		validate(method="validateBeforeValidationRunsProperlyAsNestedAssociation", condition="this.beforeValidationCallbackRegistered");
+		validate(
+			method = "validateBeforeValidationRunsProperlyAsNestedAssociation",
+			condition = "this.beforeValidationCallbackRegistered"
+		);
 	}
 
 	private void function afterCreateCallbackThatIncreasesVariable() {
@@ -53,7 +56,6 @@ component extends="Model" {
 	}
 
 	private void function validateBeforeValidationRunsProperlyAsNestedAssociation() {
-
 	}
 
 }

@@ -27,11 +27,11 @@ component extends="wheels.tests.Test" {
 	}
 
 	/**
-	* HELPERS
-	*/
+	 * HELPERS
+	 */
 
 	function run_flashIsEmpty_invalid() {
-		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(success = "Congrats!");
 		result = _controller.flashIsEmpty();
 		assert("result IS false");
 	}

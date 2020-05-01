@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		params = {controller="dummy", action="dummy"};
+		params = {controller = "dummy", action = "dummy"};
 		$$oldCGIScope = request.cgi;
 	}
 

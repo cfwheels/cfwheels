@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		params = {controller="dummy", action="dummy"};
+		params = {controller = "dummy", action = "dummy"};
 		_controller = controller("dummy", params);
 		_controller.before1 = before1;
 		_controller.before2 = before2;
@@ -12,12 +12,11 @@ component extends="wheels.tests.Test" {
 
 
 	function test_return_correct_type() {
-
-		_controller.filters(through="before1", type="before");
-		_controller.filters(through="before2", type="before");
-		_controller.filters(through="before3", type="before");
-		_controller.filters(through="after1", type="after");
-		_controller.filters(through="after2", type="after");
+		_controller.filters(through = "before1", type = "before");
+		_controller.filters(through = "before2", type = "before");
+		_controller.filters(through = "before3", type = "before");
+		_controller.filters(through = "after1", type = "after");
+		_controller.filters(through = "after2", type = "after");
 
 		before = _controller.filterChain("before");
 		after = _controller.filterChain("after");
@@ -54,4 +53,5 @@ component extends="wheels.tests.Test" {
 	function after2() {
 		return "after2";
 	}
+
 }

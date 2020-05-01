@@ -4,19 +4,19 @@ component extends="wheels.tests.Test" {
 		sqltype = model("Sqltype").findOne();
 		sqltype.booleanType = "false";
 		assert('!sqltype.hasChanged("booleanType")');
- 		sqltype.booleanType = "no";
+		sqltype.booleanType = "no";
 		assert('!sqltype.hasChanged("booleanType")');
- 		sqltype.booleanType = 0;
+		sqltype.booleanType = 0;
 		assert('!sqltype.hasChanged("booleanType")');
- 		sqltype.booleanType = "0";
+		sqltype.booleanType = "0";
 		assert('!sqltype.hasChanged("booleanType")');
 		sqltype.booleanType = "true";
 		assert('sqltype.hasChanged("booleanType")');
- 		sqltype.booleanType = "yes";
+		sqltype.booleanType = "yes";
 		assert('sqltype.hasChanged("booleanType")');
- 		sqltype.booleanType = 1;
+		sqltype.booleanType = 1;
 		assert('sqltype.hasChanged("booleanType")');
- 		sqltype.booleanType = "1";
+		sqltype.booleanType = "1";
 		assert('sqltype.hasChanged("booleanType")');
 	}
 

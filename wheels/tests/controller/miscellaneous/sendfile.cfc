@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		params = {controller="test", action="test"};
+		params = {controller = "test", action = "test"};
 		_controller = controller("dummy", params);
 		args = {};
 		args.deliver = false;
@@ -9,7 +9,7 @@ component extends="wheels.tests.Test" {
 
 	function test_only_file_supplied() {
 		args.file = "../wheels/tests/_assets/files/cfwheels-logo.png";
-		r = _controller.sendFile(argumentCollection=args);
+		r = _controller.sendFile(argumentCollection = args);
 		assert('Right(r.file, 17) eq "cfwheels-logo.png"');
 		assert('r.mime eq "image/png"');
 		assert('r.name eq "cfwheels-logo.png"');
@@ -18,7 +18,7 @@ component extends="wheels.tests.Test" {
 	function test_get_test_info() {
 		args.file = "../wheels/tests/_assets/files/cfwheels-logo.png";
 		args.name = "A Weird FileName.png";
-		_controller.sendFile(argumentCollection=args);
+		_controller.sendFile(argumentCollection = args);
 		r = _controller.getFiles();
 		assert('Right(r[1].file, 17) eq "cfwheels-logo.png"');
 		assert('r[1].mime eq "image/png"');
@@ -28,7 +28,7 @@ component extends="wheels.tests.Test" {
 	function test_file_and_name_supplied() {
 		args.file = "../wheels/tests/_assets/files/cfwheels-logo.png";
 		args.name = "A Weird FileName.png";
-		r = _controller.sendFile(argumentCollection=args);
+		r = _controller.sendFile(argumentCollection = args);
 		assert('Right(r.file, 17) eq "cfwheels-logo.png"');
 		assert('r.mime eq "image/png"');
 		assert('r.name eq "A Weird FileName.png"');
@@ -37,7 +37,7 @@ component extends="wheels.tests.Test" {
 	function test_change_disposition() {
 		args.file = "../wheels/tests/_assets/files/cfwheels-logo.png";
 		args.disposition = "attachment";
-		r = _controller.sendFile(argumentCollection=args);
+		r = _controller.sendFile(argumentCollection = args);
 		assert('Right(r.file, 17) eq "cfwheels-logo.png"');
 		assert('r.disposition eq "attachment"');
 		assert('r.mime eq "image/png"');
@@ -47,7 +47,7 @@ component extends="wheels.tests.Test" {
 	function test_overload_mimetype() {
 		args.file = "../wheels/tests/_assets/files/cfwheels-logo.png";
 		args.type = "wheels/custom";
-		r = _controller.sendFile(argumentCollection=args);
+		r = _controller.sendFile(argumentCollection = args);
 		assert('Right(r.file, 17) eq "cfwheels-logo.png"');
 		assert('r.disposition eq "attachment"');
 		assert('r.mime eq "wheels/custom"');
@@ -56,7 +56,7 @@ component extends="wheels.tests.Test" {
 
 	function test_no_extension_one_file_exists() {
 		args.file = "../wheels/tests/_assets/files/sendFile";
-		r = _controller.sendFile(argumentCollection=args);
+		r = _controller.sendFile(argumentCollection = args);
 		assert('Right(r.file, 12) eq "sendFile.txt"');
 		assert('r.mime eq "text/plain"');
 		assert('r.name eq "sendFile.txt"');
@@ -69,9 +69,9 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_specifying_a_directory() {
-		args.directory = expandPath("/wheels/tests/_assets");
+		args.directory = ExpandPath("/wheels/tests/_assets");
 		args.file = "files/cfwheels-logo.png";
-		r = _controller.sendFile(argumentCollection=args);
+		r = _controller.sendFile(argumentCollection = args);
 		assert('Right(r.file, 17) eq "cfwheels-logo.png"');
 		assert('r.mime eq "image/png"');
 		assert('r.name eq "cfwheels-logo.png"');
@@ -79,10 +79,10 @@ component extends="wheels.tests.Test" {
 
 	function test_ram_resource() {
 		include "document.cfm"; // cfscript cfdocuemt isn't supported in cf10
-		fileWrite("ram://cfwheels.pdf", cfwheels_pdf);
+		FileWrite("ram://cfwheels.pdf", cfwheels_pdf);
 		args.file = "ram://cfwheels.pdf";
-		args.deleteFile=true;
-		r = _controller.sendFile(argumentCollection=args);
+		args.deleteFile = true;
+		r = _controller.sendFile(argumentCollection = args);
 		assert('r.file eq "ram://cfwheels.pdf"');
 		assert('r.mime eq "application/pdf"');
 		assert('r.name eq "cfwheels.pdf"');
@@ -93,4 +93,5 @@ component extends="wheels.tests.Test" {
 		r = raised("_controller.sendFile(argumentCollection=args)");
 		assert('r eq "Wheels.FileNotFound"');
 	}
+
 }

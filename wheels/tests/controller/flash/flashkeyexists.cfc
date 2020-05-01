@@ -15,11 +15,11 @@ component extends="wheels.tests.Test" {
 	}
 
 	/**
-	* HELPERS
-	*/
+	 * HELPERS
+	 */
 
 	function run_flash_key_exists() {
-		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(success = "Congrats!");
 		r = _controller.flashKeyExists("success");
 		assert("r IS true");
 	}

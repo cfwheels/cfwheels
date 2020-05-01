@@ -25,4 +25,5 @@ component extends="wheels.tests.Test" {
 		debug("path", false);
 		assert("!$isCoreFile(path)", "path");
 	}
+
 }

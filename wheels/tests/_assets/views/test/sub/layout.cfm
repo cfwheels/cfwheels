@@ -1,5 +1,5 @@
 <cfoutput>
-start:sublayout
+	start:sublayout
 #includeContent()#
-end:sublayout
+	end:sublayout
 </cfoutput>
