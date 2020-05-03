@@ -11,8 +11,8 @@ WEB-INF
 /subfolder/
 /bin/
 /migrator/sql/
-server.json
 cfwheels.*.zip
 settings.json
 .vscode
 settings.xml
+.CommandBox
