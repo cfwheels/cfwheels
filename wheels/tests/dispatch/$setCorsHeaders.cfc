@@ -8,7 +8,7 @@ component extends="wheels.tests.Test" {
 	 *
 	 * As ACF can't return the actual content of the header in a current page context, we're skipping
 	 * ACF Tests for this suite (!)
-	 **/
+
 
 	function setup() {
 		if ($isLucee()) {
@@ -128,10 +128,10 @@ component extends="wheels.tests.Test" {
 			returnedMethods = $getHeader('Access-Control-Allow-Methods');
 			assert("returnedMethods EQ 'GET, PATCH, PUT, DELETE'");
 		}
-	}
+	}**/
 	/**
 	 * Helpers:
-	 **/
+
 	private function $getHeader(string name) {
 		return GetPageContext().getResponse().getHeader(arguments.name);
 	}
@@ -152,6 +152,6 @@ component extends="wheels.tests.Test" {
 
 	private boolean function $isLucee() {
 		return StructKeyExists(server, "lucee");
-	}
+	}**/
 
 }
