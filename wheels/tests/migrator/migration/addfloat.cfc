@@ -18,7 +18,7 @@ component extends="wheels.tests.Test" {
 			case "MicrosoftSQLServer":
 			case "MySQL":
 			case "PostgreSQL":
-				return "FLOAT";
+				return "FLOAT,float8"; // depends on db engine/drivers
 			default:
 				return "`addfloat()` not supported for " & migration.adapter.adapterName();
 		}
@@ -50,7 +50,7 @@ component extends="wheels.tests.Test" {
 
 		expected = getFloatType();
 
-		assert("actual eq expected");
+		assert("ListFindNoCase(expected, actual)");
 	}
 
 	function test_add_multiple_float_columns() {
@@ -70,8 +70,8 @@ component extends="wheels.tests.Test" {
 
 		expected = getFloatType();
 
-		assert("actual[2] eq expected");
-		assert("actual[3] eq expected");
+		assert("ListFindNoCase(expected, actual[2])");
+		assert("ListFindNoCase(expected, actual[3])");
 	}
 
 }

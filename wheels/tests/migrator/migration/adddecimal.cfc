@@ -17,8 +17,9 @@ component extends="wheels.tests.Test" {
 			case "H2":
 			case "MicrosoftSQLServer":
 			case "MySQL":
-			case "PostgreSQL":
 				return "DECIMAL";
+			case "PostgreSQL":
+				return "NUMERIC";
 			default:
 				return "`adddecimal()` not supported for " & migration.adapter.adapterName();
 		}

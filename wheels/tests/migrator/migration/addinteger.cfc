@@ -19,7 +19,7 @@ component extends="wheels.tests.Test" {
 			case "MySQL":
 				return "INT";
 			case "PostgreSQL":
-				return "INTEGER";
+				return "INTEGER,INT4"; // depends on db engine/drivers
 			default:
 				return "`addinteger()` not supported for " & migration.adapter.adapterName();
 		}
@@ -51,7 +51,7 @@ component extends="wheels.tests.Test" {
 
 		expected = getIntegerType();
 
-		assert("actual eq expected");
+		assert("ListFindNoCase(expected, actual)");
 	}
 
 	function test_add_multiple_integer_columns() {
@@ -71,8 +71,8 @@ component extends="wheels.tests.Test" {
 
 		expected = getIntegerType();
 
-		assert("actual[2] eq expected");
-		assert("actual[3] eq expected");
+		assert("ListFindNoCase(expected, actual[2])");
+		assert("ListFindNoCase(expected, actual[3])");
 	}
 
 }
