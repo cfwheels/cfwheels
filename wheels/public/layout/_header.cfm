@@ -65,6 +65,13 @@ request.currentRoute = getActiveRoute(request.wheels.params.route, request.navig
 request.internalPageTitle = StructKeyExists(request.currentRoute, 'title') ? request.currentRoute.title & ' | ' & "CFWheels" : "CFWheels";
 
 request.wheels.internalHeaderLoaded = true;
+
+if (StructKeyExists(url, "refresh")) {
+	_refresh = 3;
+	if (IsNumeric(url.refresh)) {
+		_refresh = url.refresh;
+	}
+}
 </cfscript>
 <cfparam name="request.isFluid" default="false">
 <cfoutput>
@@ -74,8 +81,8 @@ request.wheels.internalHeaderLoaded = true;
 		<title>#request.internalPageTitle#</title>
 		<meta charset="utf-8">
 		<meta name="robots" content="noindex,nofollow">
-		<cfif StructKeyExists(url, "refresh") && IsNumeric(url.refresh)>
-			<meta http-equiv="refresh" content="#url.refresh#">
+		<cfif StructKeyExists(variables, "_refresh")>
+			<meta http-equiv="refresh" content="#_refresh#">
 		</cfif>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

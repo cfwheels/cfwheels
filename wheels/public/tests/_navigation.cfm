@@ -1,10 +1,18 @@
 <cfscript>
 type = request.wheels.params.type;
+_params = [];
+for (p in ["package", "test", "reload", "db", "format"]) {
+	if (StructKeyExists(url, p)) {
+		ArrayAppend(_params, "#p#=#url[p]#")
+	}
+}
+_params = ArrayToList(_params, "&");
 
-subnavigation = [
-	{route = "wheelsPackages", type = "app", text = "<i class='tasks icon'></i> App"},
-	{route = "wheelsPackages", type = "core", text = "<i class='tasks icon'></i> Core"}
-];
+subnavigation = [{route = "wheelsPackages", type = "app", text = "<i class='tasks icon'></i> App"}];
+if (DirectoryExists(ExpandPath("/wheels/tests"))) {
+	ArrayAppend(subnavigation, {route = "wheelsPackages", type = "core", text = "<i class='tasks icon'></i> Core"})
+}
+
 pluginList = "";
 if (application.wheels.enablePluginsComponent) {
 	pluginList = StructKeyList(application.wheels.plugins);
@@ -46,11 +54,14 @@ for (p in pluginList) {
 					</div>
 				</div>
 				<div class="right floated column">
-					<a href="#urlFor(route = "wheelsTests", type = type)#" class="ui button blue">
-						Run All #UCase(type)# Tests <i class='right arrow icon'></i>
+					<a href="#urlFor(route = "wheelsTests", type = type, params = "#_params#&refresh=true")#" class="ui button blue">
+						Refresh <i class='right refresh icon'></i>
 					</a>
-					<a href="#urlFor(route = "wheelsTests", params = "reload=true", type = type)#" class="ui button teal">
-						Run All #UCase(type)# Tests with Reload <i class='right refresh icon'></i>
+					<a href="#urlFor(route = "wheelsTests", type = type, params = _params)#" class="ui button blue">
+						Run Tests <i class='right arrow icon'></i>
+					</a>
+					<a href="#urlFor(route = "wheelsTests", params = "#_params#&reload=true", type = type)#" class="ui button teal">
+						Run Tests with Reload <i class='right refresh icon'></i>
 					</a>
 				</div>
 			</div>
