@@ -27,6 +27,7 @@ component extends="Base" output=false {
 				local.rv = "cf_sql_char";
 				break;
 			case "date":
+			case "datetime":
 			case "timestamp":
 			case "timestamptz":
 				local.rv = "cf_sql_timestamp";
