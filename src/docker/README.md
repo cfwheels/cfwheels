@@ -1,4 +1,5 @@
 
+
 # Wheels Internal Test Suites
 
 ## Directories
@@ -56,6 +57,18 @@ Docker compose basically creates it's own internal network and exposes the vario
 Use the Provided UI at `localhost:3000` for ease. This is just a glorified task runner which hits the respective endpoint for each server as required.
 
 You can also access each CF Engine directly on it's respective port, i.e, to access ACF2016, you just go to `localhost:62016`
+
+### Other useful commands
+
+You can start specific services or rebuild specific services by name. If you just want to start ACF2016 or MSSQL, you can just do
+
+`docker-compose up adobe2016` or `docker-compose up sqlserver`
+
+Likewise if you need to rebuild any of the images, you can do it on an image by image basis if needed:
+
+`docker-compose build testui` *etc*
+
+Which can be quicker than rebuilding everything via `docker-compose build`
 
 #### Known Issues
 There's an issue with CORS tests currently, which means those tests are currently commented out
