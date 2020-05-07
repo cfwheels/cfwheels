@@ -7,7 +7,7 @@ component extends="wheels.Test" {
 	function beforeAll() {
 		local.tables = $dbinfo(datasource = application.wheels.dataSourceName, type = "tables");
 		local.tableList = ValueList(local.tables.table_name);
-		local.populate = StructKeyExists(url, "populate") ? url.populate : false;
+		local.populate = StructKeyExists(url, "populate") ? url.populate : true;
 		if (local.populate || !FindNoCase("authors", local.tableList)) {
 			include "populate.cfm";
 		}
