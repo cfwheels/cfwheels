@@ -493,8 +493,8 @@ public boolean function $validate(required string type, boolean execute = "true"
 							local.thisValidation.args,
 							"allowBlank"
 						) && !local.thisValidation.args.allowBlank && (
-							!StructKeyExists(this, local.thisValidation.args.property) || (
-								!Len(this[local.thisValidation.args.property]) && local.thisValidation.method != "$validatesUniquenessOf"
+							!StructKeyExists(this, local.thisValidation.args.property) || !Len(
+								this[local.thisValidation.args.property]
 							)
 						)
 					) {
