@@ -9,14 +9,14 @@
  * @includeFilters Set to `before` to only execute "before" filters, `after` to only execute "after" filters or `false` to skip all filters. This argument is generally inherited from the `processRequest` function during unit test execution.
  */
 public boolean function processAction(string includeFilters = true) {
-	$runCsrfProtection(action = params.action);
+	$runCsrfProtection(action = variables.params.action);
 
 	// Check if action should be cached, and if so, cache statically or set the time to use later when caching just the action.
 	local.cache = 0;
 	if ($get("cacheActions") && $hasCachableActions() && flashIsEmpty() && StructIsEmpty(form)) {
 		local.cachableActions = $cachableActions();
 		for (local.action in local.cachableActions) {
-			if (local.action.action == params.action || local.action.action == "*") {
+			if (local.action.action == variables.params.action || local.action.action == "*") {
 				if (local.action.static) {
 					local.timeSpan = $timeSpanForCache(local.action.time);
 					$cache(action = "serverCache", timeSpan = local.timeSpan, useQueryString = true);
@@ -37,13 +37,13 @@ public boolean function processAction(string includeFilters = true) {
 	}
 
 	// Run verifications if they exist on the controller.
-	$runVerifications(action = params.action, params = params);
+	$runVerifications(action = variables.params.action, params = variables.params);
 
 	// Continue unless an abort is issued from a verification.
 	if (!$abortIssued()) {
 		// Run before filters if they exist on the controller.
 		if (ListFindNoCase("true,before", arguments.includeFilters)) {
-			$runFilters(type = "before", action = params.action);
+			$runFilters(type = "before", action = variables.params.action);
 		}
 
 		if ($get("showDebugInformation")) {
@@ -72,8 +72,8 @@ public boolean function processAction(string includeFilters = true) {
 				local.conditionArgs.key = local.key;
 				local.conditionArgs.category = local.category;
 				local.executeArgs = {};
-				local.executeArgs.controller = params.controller;
-				local.executeArgs.action = params.action;
+				local.executeArgs.controller = variables.params.controller;
+				local.executeArgs.action = variables.params.action;
 				local.executeArgs.key = local.key;
 				local.executeArgs.time = local.cache;
 				local.executeArgs.category = local.category;
@@ -89,7 +89,7 @@ public boolean function processAction(string includeFilters = true) {
 
 			// If we didn't render anything from a cached action, we call the action here.
 			if (!$performedRender()) {
-				$callAction(action = params.action);
+				$callAction(action = variables.params.action);
 			}
 		}
 
@@ -99,7 +99,7 @@ public boolean function processAction(string includeFilters = true) {
 		}
 
 		if (!$performedRedirect() && ListFindNoCase("true,after", arguments.includeFilters)) {
-			$runFilters(type = "after", action = params.action);
+			$runFilters(type = "after", action = variables.params.action);
 		}
 
 		if ($get("showDebugInformation")) {
