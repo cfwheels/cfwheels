@@ -26,7 +26,7 @@
 		queryAttributes = arguments.queryAttributes,
 		result = local.$wheels.result
 	);
-	if (StructKeyExists(local.$wheels, "id") && Len(local.$wheels.id)) {
+	if (StructKeyExists(local.$wheels, "id") && IsStruct(local.$wheels.id) && !StructIsEmpty(local.$wheels.id)) {
 		StructAppend(local.$wheels.result, local.$wheels.id);
 	}
 
