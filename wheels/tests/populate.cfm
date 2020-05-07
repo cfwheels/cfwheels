@@ -256,6 +256,7 @@ CREATE TABLE tblusers
 	,birthdayyear #local.intColumnType# NULL
 	,birthtime #local.datetimeColumnType# DEFAULT #PreserveSingleQuotes(local.dateTimeDefault)# NOT NULL
 	,isactive #local.intColumnType# NULL
+	,blank varchar(20) NULL
 	,PRIMARY KEY(id)
 ) #local.storageEngine#
 </cfquery>
@@ -279,6 +280,7 @@ CREATE TABLE users
 	,birthdayyear #local.intColumnType# NULL
 	,birthtime #local.datetimeColumnType# DEFAULT #PreserveSingleQuotes(local.dateTimeDefault)# NOT NULL
 	,isactive #local.intColumnType# NULL
+	,blank varchar(20) NULL
 	,PRIMARY KEY(id)
 ) #local.storageEngine#
 </cfquery>

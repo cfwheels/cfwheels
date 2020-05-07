@@ -2,7 +2,6 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		StructDelete(application.wheels.models, "users", false);
-		StructDelete(application.wheels.models, "tag", false);
 		user = model("users").new();
 	}
 
@@ -441,20 +440,16 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_validatesUniquenessOf_with_blank_property_value() {
-		tag = model("tag").new(name = "angel", description = "of death", parentid = "");
-		tag.validatesUniquenessOf(property = "parentid");
-		assert('!tag.valid()');
+		user.blank = "";
+		user.validatesUniquenessOf(property = "blank");
+		assert('user.valid() == false');
 	}
-	/*
+
 	function test_validatesUniquenessOf_with_blank_property_value_with_allowBlank() {
-		tag = model("tag").new(
-			name = "angel",
-			description = "of death",
-			parentid = ""
-		);
-		tag.validatesUniquenessOf(property="parentid", allowBlank="true");
-		assert('tag.valid()');
-	}*/
+		user.blank = "";
+		user.validatesUniquenessOf(property = "blank", allowBlank = true);
+		assert('user.valid() == true');
+	}
 
 	/* validate */
 	function test_validate_registering_methods() {
