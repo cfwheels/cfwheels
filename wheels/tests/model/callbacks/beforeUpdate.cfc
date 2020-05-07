@@ -1,13 +1,13 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		model("tag").$registerCallback(type="beforeUpdate", methods="callbackThatSetsProperty,callbackThatReturnsFalse");
+		model("tag").$registerCallback(type = "beforeUpdate", methods = "callbackThatSetsProperty,callbackThatReturnsFalse");
 		obj = model("tag").findOne();
 		obj.name = "somethingElse";
 	}
 
 	function teardown() {
-		model("tag").$clearCallbacks(type="beforeUpdate");
+		model("tag").$clearCallbacks(type = "beforeUpdate");
 	}
 
 	function test_existing_object() {
@@ -16,7 +16,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_existing_object_with_skipped_callback() {
-		obj.save(callbacks=false, transaction="rollback");
+		obj.save(callbacks = false, transaction = "rollback");
 		assert("NOT StructKeyExists(obj, 'setByCallback')");
 	}
 

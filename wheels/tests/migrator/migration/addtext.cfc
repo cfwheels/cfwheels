@@ -12,14 +12,14 @@ component extends="wheels.tests.Test" {
 		}
 	}
 
-	private string function getTextType() {
+	private array function getTextType() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
 			case "MySQL":
 			case "PostgreSQL":
-				return "TEXT";
+				return ["TEXT"];
 			case "MicrosoftSQLServer":
-				return "NVARCHAR";
+				return ["NVARCHAR", "NVARCHAR(MAX)"];
 			default:
 				return "`addtext()` not supported for " & migration.adapter.adapterName();
 		}
@@ -41,21 +41,17 @@ component extends="wheels.tests.Test" {
 
 		tableName = "dbm_add_text_tests";
 		columnName = "textCOLUMN";
-		t = migration.createTable(name=tableName, force=true);
-		t.text(columnName=columnName);
+		t = migration.createTable(name = tableName, force = true);
+		t.text(columnName = columnName);
 		t.create();
 
-		info = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			table=tableName,
-			type="columns"
-		);
-		actual = listToArray(valueList(info.TYPE_NAME))[2];
+		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "columns");
+		actual = ListToArray(ValueList(info.TYPE_NAME))[2];
 		migration.dropTable(tableName);
 
 		expected = getTextType();
 
-    	assert("actual eq expected");
+		assert("ArrayContainsNoCase(expected, actual)");
 	}
 
 	function test_add_multiple_text_columns() {
@@ -65,21 +61,18 @@ component extends="wheels.tests.Test" {
 
 		tableName = "dbm_add_text_tests";
 		columnNames = "textA,textB";
-		t = migration.createTable(name=tableName, force=true);
-		t.text(columnNames=columnNames);
+		t = migration.createTable(name = tableName, force = true);
+		t.text(columnNames = columnNames);
 		t.create();
 
-		info = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			table=tableName,
-			type="columns"
-		);
-		actual = listToArray(valueList(info.TYPE_NAME));
+		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "columns");
+		actual = ListToArray(ValueList(info.TYPE_NAME));
 		migration.dropTable(tableName);
 
 		expected = getTextType();
 
-		assert("actual[2] eq expected");
-    	assert("actual[3] eq expected");
+		assert("ArrayContainsNoCase(expected, actual[2])");
+		assert("ArrayContainsNoCase(expected, actual[3])");
 	}
+
 }

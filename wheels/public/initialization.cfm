@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Internal function.
  */

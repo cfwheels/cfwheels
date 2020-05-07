@@ -8,22 +8,32 @@ component extends="Base" output=false {
 			case "bigint":
 				local.rv = "cf_sql_bigint";
 				break;
-			case "binary": case "geography": case "geometry": case "timestamp":
+			case "binary":
+			case "geography":
+			case "geometry":
+			case "timestamp":
 				local.rv = "cf_sql_binary";
 				break;
 			case "bit":
 				local.rv = "cf_sql_bit";
 				break;
-			case "char": case "nchar": case "uniqueidentifier":
+			case "char":
+			case "nchar":
+			case "uniqueidentifier":
 				local.rv = "cf_sql_char";
 				break;
 			case "date":
 				local.rv = "cf_sql_date";
 				break;
-			case "datetime": case "datetime2": case "smalldatetime": case "datetimeoffset":
+			case "datetime":
+			case "datetime2":
+			case "smalldatetime":
+			case "datetimeoffset":
 				local.rv = "cf_sql_timestamp";
 				break;
-			case "decimal": case "money": case "smallmoney":
+			case "decimal":
+			case "money":
+			case "smallmoney":
 				local.rv = "cf_sql_decimal";
 				break;
 			case "float":
@@ -35,7 +45,9 @@ component extends="Base" output=false {
 			case "image":
 				local.rv = "cf_sql_longvarbinary";
 				break;
-			case "text": case "ntext": case "xml":
+			case "text":
+			case "ntext":
+			case "xml":
 				local.rv = "cf_sql_longvarchar";
 				break;
 			case "numeric":
@@ -56,7 +68,8 @@ component extends="Base" output=false {
 			case "varbinary":
 				local.rv = "cf_sql_varbinary";
 				break;
-			case "varchar": case "nvarchar":
+			case "varchar":
+			case "nvarchar":
 				local.rv = "cf_sql_varchar";
 				break;
 		}
@@ -67,22 +80,32 @@ component extends="Base" output=false {
 	 * Call functions to make adapter specific changes to arguments before executing query.
 	 */
 	public struct function $querySetup(
-	  required array sql,
-	  numeric limit=0,
-	  numeric offset=0,
-	  required boolean parameterize,
-	  string $primaryKey=""
+		required array sql,
+		numeric limit = 0,
+		numeric offset = 0,
+		required boolean parameterize,
+		string $primaryKey = ""
 	) {
 		if (StructKeyExists(arguments, "maxrows") && arguments.maxrows > 0) {
 			if (arguments.maxrows > 0) {
-				arguments.sql [1] = ReplaceNoCase(arguments.sql[1], "SELECT ", "SELECT TOP #arguments.maxrows# ", "one");
+				arguments.sql[1] = ReplaceNoCase(
+					arguments.sql[1],
+					"SELECT ",
+					"SELECT TOP #arguments.maxrows# ",
+					"one"
+				);
 			}
 			StructDelete(arguments, "maxrows");
 		}
 		if (arguments.limit + arguments.offset > 0) {
 			local.containsGroup = false;
 			local.afterWhere = "";
-			if (IsSimpleValue(arguments.sql[ArrayLen(arguments.sql) - 1]) && FindNoCase("GROUP BY", arguments.sql[ArrayLen(arguments.sql) - 1])) {
+			if (
+				IsSimpleValue(arguments.sql[ArrayLen(arguments.sql) - 1]) && FindNoCase(
+					"GROUP BY",
+					arguments.sql[ArrayLen(arguments.sql) - 1]
+				)
+			) {
 				local.containsGroup = true;
 			}
 
@@ -114,17 +137,30 @@ component extends="Base" output=false {
 			}
 
 			// The first select is the outer most in the query and need to contain columns without table names and using aliases when they exist.
-			local.firstSelect = $columnAlias(list=$tableName(list=local.thirdSelect, action="remove"), action="keep");
+			local.firstSelect = $columnAlias(list = $tableName(list = local.thirdSelect, action = "remove"), action = "keep");
 
 			// We need to add columns from the inner order clause to the select clauses in the inner two queries.
 			local.iEnd = ListLen(local.thirdOrder);
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
-				local.item = REReplace(REReplace(ListGetAt(local.thirdOrder, local.i), " ASC\b", ""), " DESC\b", "");
+				local.item = ReReplace(ReReplace(ListGetAt(local.thirdOrder, local.i), " ASC\b", ""), " DESC\b", "");
 				if (!ListFindNoCase(local.thirdSelect, local.item)) {
+					// The test "order_clause_with_paginated_include_and_ambiguous_columns" passes in a complex order (CASE WHEN registration IN ('foo') THEN 0 ELSE 1 END DESC).
+					// This gets moved up to the SELECT clause to support pagination.
+					// However, we need to add "AS" to it otherwise we get a "No column name was specified" error.
+					// We check if it's complex simply by looking for a space in the table / column name and that it's not a calculated property (the "AS" part).
+					if (Find(" ", local.item) && !Find(" AS ", local.item)) {
+						local.item &= " AS tmpSelect" & local.i;
+					}
+
 					local.thirdSelect = ListAppend(local.thirdSelect, local.item);
 				}
 				if (local.containsGroup) {
-					local.item = REReplace(local.item, "[[:space:]]AS[[:space:]][A-Za-z1-9]+", "", "all");
+					local.item = ReReplace(
+						local.item,
+						"[[:space:]]AS[[:space:]][A-Za-z1-9]+",
+						"",
+						"all"
+					);
 					if (!ListFindNoCase(local.thirdGroup, local.item)) {
 						local.thirdGroup = ListAppend(local.thirdGroup, local.item);
 					}
@@ -132,18 +168,36 @@ component extends="Base" output=false {
 			}
 
 			// The second select also needs to contain columns without table names and using aliases when they exist (but now including the columns added above).
-			local.secondSelect = $columnAlias(list=$tableName(list=local.thirdSelect, action="remove"), action="keep");
+			local.secondSelect = $columnAlias(
+				list = $tableName(list = local.thirdSelect, action = "remove"),
+				action = "keep"
+			);
 
 			// First order also needs the table names removed, the column aliases can be kept since they are removed before running the query anyway.
-			local.firstOrder = $tableName(list=local.thirdOrder, action="remove");
+			local.firstOrder = $tableName(list = local.thirdOrder, action = "remove");
 
 			// Second order clause is the same as the first but with the ordering reversed.
-			local.secondOrder = Replace(REReplace(REReplace(local.firstOrder, " DESC\b", Chr(7), "all"), " ASC\b", " DESC", "all"), Chr(7), " ASC", "all");
+			local.secondOrder = Replace(
+				ReReplace(
+					ReReplace(
+						local.firstOrder,
+						" DESC\b",
+						Chr(7),
+						"all"
+					),
+					" ASC\b",
+					" DESC",
+					"all"
+				),
+				Chr(7),
+				" ASC",
+				"all"
+			);
 
 			// Fix column aliases from order by clauses.
-			local.thirdOrder = $columnAlias(list=local.thirdOrder, action="remove");
-			local.secondOrder = $columnAlias(list=local.secondOrder, action="keep");
-			local.firstOrder = $columnAlias(list=local.firstOrder, action="keep");
+			local.thirdOrder = $columnAlias(list = local.thirdOrder, action = "remove");
+			local.secondOrder = $columnAlias(list = local.secondOrder, action = "keep");
+			local.firstOrder = $columnAlias(list = local.firstOrder, action = "keep");
 
 			// Build new SQL string and replace the old one with it.
 			local.beforeWhere = "SELECT " & local.firstSelect & " FROM (SELECT TOP " & arguments.limit & " " & local.secondSelect & " FROM (SELECT ";
@@ -163,17 +217,16 @@ component extends="Base" output=false {
 			}
 			ArrayPrepend(arguments.sql, local.beforeWhere);
 			ArrayAppend(arguments.sql, local.afterWhere);
-
 		} else {
-			$removeColumnAliasesInOrderClause(args=arguments);
+			$removeColumnAliasesInOrderClause(args = arguments);
 		}
 
 		// SQL Server doesn't support limit and offset in SQL.
 		StructDelete(arguments, "limit");
 		StructDelete(arguments, "offset");
 
-		$moveAggregateToHaving(args=arguments);
-		return $performQuery(argumentCollection=arguments);
+		$moveAggregateToHaving(args = arguments);
+		return $performQuery(argumentCollection = arguments);
 	}
 
 	/**
@@ -187,19 +240,23 @@ component extends="Base" output=false {
 	 * Override Base adapter's function.
 	 */
 	public any function $identitySelect(
-	  required struct queryAttributes,
-	  required struct result,
-	  required string primaryKey
+		required struct queryAttributes,
+		required struct result,
+		required string primaryKey
 	) {
 		var query = {};
 		local.sql = Trim(arguments.result.sql);
 		if (Left(local.sql, 11) == "INSERT INTO" && !StructKeyExists(arguments.result, $generatedKey())) {
 			local.startPar = Find("(", local.sql) + 1;
 			local.endPar = Find(")", local.sql);
-			local.columnList = ReplaceList(Mid(local.sql, local.startPar, (local.endPar-local.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,");
+			local.columnList = ReplaceList(
+				Mid(local.sql, local.startPar, (local.endPar - local.startPar)),
+				"#Chr(10)#,#Chr(13)#, ",
+				",,"
+			);
 			if (!ListFindNoCase(local.columnList, ListFirst(arguments.primaryKey))) {
 				local.rv = {};
-				query = $query(sql="SELECT SCOPE_IDENTITY() AS lastId", argumentCollection=arguments.queryAttributes);
+				query = $query(sql = "SELECT SCOPE_IDENTITY() AS lastId", argumentCollection = arguments.queryAttributes);
 				local.rv[$generatedKey()] = query.lastId;
 				return local.rv;
 			}
@@ -214,4 +271,5 @@ component extends="Base" output=false {
 	}
 
 	include "../../plugins/standalone/injection.cfm";
+
 }

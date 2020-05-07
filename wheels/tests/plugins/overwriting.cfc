@@ -4,13 +4,13 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		config = {
-			path="wheels"
-			,fileName="Plugins"
-			,method="init"
-			,pluginPath="/wheels/tests/_assets/plugins/overwriting"
-			,deletePluginDirectories=false
-			,overwritePlugins=true
-			,loadIncompatiblePlugins=true
+			path = "wheels",
+			fileName = "Plugins",
+			method = "init",
+			pluginPath = "/wheels/tests/_assets/plugins/overwriting",
+			deletePluginDirectories = false,
+			overwritePlugins = true,
+			loadIncompatiblePlugins = true
 		};
 		$writeTestFile();
 	}

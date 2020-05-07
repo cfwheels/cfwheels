@@ -1,14 +1,8 @@
 <cfscript>
-
 /**
  * Internal function.
  */
-public struct function $init(
-	boolean restful=true,
-	boolean methods=arguments.restful,
-	boolean mapFormat=true
-) {
-
+public struct function $init(boolean restful = true, boolean methods = arguments.restful, boolean mapFormat = true) {
 	// Set up control variables.
 	variables.scopeStack = [];
 	variables.restful = arguments.restful;
@@ -25,5 +19,4 @@ public struct function $init(
 
 	return this;
 }
-
 </cfscript>

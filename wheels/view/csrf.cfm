@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Include this in your layouts' `head` sections to include meta tags containing the authenticity token for use by JavaScript AJAX requests needing to `POST` data to your application.
  *
@@ -9,11 +8,15 @@
  * @encode [see:styleSheetLinkTag].
  */
 string function csrfMetaTags(boolean encode) {
-	$args(name="csrfMetaTags", args=arguments);
-  local.metaTags  = $tag(name="meta", attributes={ name="csrf-param", content="authenticityToken" });
-  local.metaTags &= $tag(name="meta", attributes={ name="csrf-token", content=$generateAuthenticityToken() }, encode=arguments.encode);
+	$args(name = "csrfMetaTags", args = arguments);
+	local.metaTags = $tag(name = "meta", attributes = {name = "csrf-param", content = "authenticityToken"});
+	local.metaTags &= $tag(
+		name = "meta",
+		attributes = {name = "csrf-token", content = $generateAuthenticityToken()},
+		encode = arguments.encode
+	);
 
-  return local.metaTags;
+	return local.metaTags;
 }
 
 /**
@@ -23,11 +26,16 @@ string function csrfMetaTags(boolean encode) {
  * [category: General Form Functions]
  */
 string function authenticityTokenField() {
-  // Store a new authenticity token.
-  local.authenticityToken = $generateAuthenticityToken();
+	// Store a new authenticity token.
+	local.authenticityToken = $generateAuthenticityToken();
 
-  // Return hidden field containing new authenticity token.
-  return hiddenFieldTag(name="authenticityToken", value=local.authenticityToken);
+	// Create hidden field containing the authenticity token.
+	local.rv = hiddenFieldTag(name = "authenticityToken", value = local.authenticityToken);
+
+	// Delete the id="authenticityToken" part of the string.
+	// There could be multiple forms on a page and duplicate "id" attributes are not allowed in HTML.
+	local.rv = Replace(local.rv, ' id="authenticityToken" ', " ");
+
+	return local.rv;
 }
-
 </cfscript>

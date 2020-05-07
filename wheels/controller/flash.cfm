@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Returns the value of a specific key in the Flash (or the entire Flash as a struct if no key is passed in).
  *
@@ -11,7 +10,7 @@
 public any function flash(string key) {
 	local.flash = $readFlash();
 	if (StructKeyExists(arguments, "key")) {
-		if (flashKeyExists(key=arguments.key)) {
+		if (flashKeyExists(key = arguments.key)) {
 			local.flash = local.flash[arguments.key];
 		} else {
 			local.flash = "";
@@ -71,23 +70,30 @@ public void function flashInsert() {
 	local.flash = $readFlash();
 
 	for (local.key in arguments) {
-
 		// Does the user want us to append new messages or just replace?
-		if($getFlashAppend() && structKeyExists(local.flash, local.key)){
-
+		if ($getFlashAppend() && StructKeyExists(local.flash, local.key)) {
 			// Are we dealing with just an existing string or an array?
-			if(isArray(local.flash[local.key])){
-				arrayAppend(local.flash[local.key], arguments[local.key]);
+			if (IsArray(local.flash[local.key])) {
+				ArrayAppend(local.flash[local.key], arguments[local.key]);
 			} else {
 				// Capture previous value, make it an array and append new value
-				local.tempArr=[];
-				arrayAppend(local.tempArr, local.flash[local.key]);
-				arrayAppend(local.tempArr, arguments[local.key]);
-				StructInsert(local.flash, local.key, local.tempArr, true);
+				local.tempArr = [];
+				ArrayAppend(local.tempArr, local.flash[local.key]);
+				ArrayAppend(local.tempArr, arguments[local.key]);
+				StructInsert(
+					local.flash,
+					local.key,
+					local.tempArr,
+					true
+				);
 			}
-
 		} else {
-			StructInsert(local.flash, local.key, arguments[local.key], true);
+			StructInsert(
+				local.flash,
+				local.key,
+				arguments[local.key],
+				true
+			);
 		}
 	}
 	$writeFlash(local.flash);
@@ -113,8 +119,8 @@ public boolean function flashIsEmpty() {
  * [section: Controller]
  * [category: Flash Functions]
  */
-public void function flashKeep(string key="") {
-	$args(args=arguments, name="flashKeep", combine="key/keys");
+public void function flashKeep(string key = "") {
+	$args(args = arguments, name = "flashKeep", combine = "key/keys");
 	request.wheels.flashKeep = arguments.key;
 }
 
@@ -138,9 +144,14 @@ public struct function $readFlash() {
 	local.rv = {};
 	if (!StructKeyExists(arguments, "$locked")) {
 		local.lockName = "flashLock" & application.applicationName;
-		local.rv = $simpleLock(name=local.lockName, type="readonly", execute="$readFlash", executeArgs=arguments);
+		local.rv = $simpleLock(
+			name = local.lockName,
+			type = "readonly",
+			execute = "$readFlash",
+			executeArgs = arguments
+		);
 	} else if ($getFlashStorage() == "cookie" && StructKeyExists(cookie, "flash")) {
-		local.rv = DeSerializeJSON(cookie.flash);
+		local.rv = DeserializeJSON(cookie.flash);
 	} else if ($getFlashStorage() == "session" && StructKeyExists(session, "flash")) {
 		local.rv = Duplicate(session.flash);
 	}
@@ -153,7 +164,12 @@ public struct function $readFlash() {
 public any function $writeFlash(struct flash = {}) {
 	if (!StructKeyExists(arguments, "$locked")) {
 		local.lockName = "flashLock" & application.applicationName;
-		local.rv = $simpleLock(name=local.lockName, type="exclusive", execute="$writeFlash", executeArgs=arguments);
+		local.rv = $simpleLock(
+			name = local.lockName,
+			type = "exclusive",
+			execute = "$writeFlash",
+			executeArgs = arguments
+		);
 	} else {
 		if ($getFlashStorage() == "cookie") {
 			cookie.flash = SerializeJSON(arguments.flash);
@@ -170,7 +186,6 @@ public any function $writeFlash(struct flash = {}) {
  * Internal function.
  */
 public void function $flashClear() {
-
 	// Only save the old flash if they want to keep anything.
 	if (StructKeyExists(request.wheels, "flashKeep")) {
 		local.flash = $readFlash();
@@ -192,9 +207,7 @@ public void function $flashClear() {
 
 		// Write to the flash.
 		$writeFlash(local.flash);
-
 	}
-
 }
 
 /**
@@ -224,5 +237,4 @@ public void function $setFlashAppend(required boolean append) {
 public string function $getFlashAppend() {
 	return variables.$class.flashAppend;
 }
-
 </cfscript>

@@ -5,7 +5,8 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_current_test_environment_returns_an_adapter() {
-		result=migration.$getDBType();
+		result = migration.$getDBType();
 		assert("len(result)");
 	}
+
 }

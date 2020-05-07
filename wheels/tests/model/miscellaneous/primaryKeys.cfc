@@ -13,7 +13,7 @@ component extends="wheels.tests.Test" {
 
 	function test_setprimarykey_appends_keys() {
 		author = model("author");
-		author = duplicate(author);
+		author = Duplicate(author);
 		e = author.$classData().keys;
 		r = "id";
 		assert("e IS r");
@@ -25,7 +25,7 @@ component extends="wheels.tests.Test" {
 
 	function test_setprimarykey_not_append_duplicate_keys() {
 		author = model("author");
-		author = duplicate(author);
+		author = Duplicate(author);
 		e = author.$classData().keys;
 		r = "id";
 		assert("e IS r");
@@ -38,7 +38,7 @@ component extends="wheels.tests.Test" {
 
 	function test_retrieve_primary_key_by_position() {
 		author = model("author");
-		author = duplicate(author);
+		author = Duplicate(author);
 		author.setprimaryKeys("id2,id3");
 		e = author.primaryKeys(1);
 		r = "id";

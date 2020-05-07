@@ -21,14 +21,19 @@ this.sessionManagement = true;
 
 // If a plugin has a jar or class file, automatically add the mapping to this.javasettings.
 this.wheels.pluginDir = this.wheels.rootPath & "plugins";
-this.wheels.pluginFolders = DirectoryList(this.wheels.pluginDir, "true", "path", "*.class|*.jar|*.java");
+this.wheels.pluginFolders = DirectoryList(
+	this.wheels.pluginDir,
+	"true",
+	"path",
+	"*.class|*.jar|*.java"
+);
 
 for (this.wheels.folder in this.wheels.pluginFolders) {
-	if(!structKeyExists(this, "javaSettings")){
-		this.javaSettings={};
+	if (!StructKeyExists(this, "javaSettings")) {
+		this.javaSettings = {};
 	}
-	if(!structKeyExists(this.javaSettings, "LoadPaths")){
-		this.javaSettings.LoadPaths=[];
+	if (!StructKeyExists(this.javaSettings, "LoadPaths")) {
+		this.javaSettings.LoadPaths = [];
 	}
 	this.wheels.pluginPath = GetDirectoryFromPath(this.wheels.folder);
 	if (!ArrayFind(this.javaSettings.LoadPaths, this.wheels.pluginPath)) {
@@ -68,5 +73,4 @@ if (StructKeyExists(server, "lucee")) {
 	include "wheels/events/onrequestend.cfm";
 	include "wheels/events/onrequeststart.cfm";
 }
-
 </cfscript>

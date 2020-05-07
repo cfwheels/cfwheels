@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Calculates the average value for a given property.
  * Uses the SQL function `AVG`.
@@ -19,23 +18,33 @@
  */
 public any function average(
 	required string property,
-	string where="",
-	string include="",
+	string where = "",
+	string include = "",
 	boolean distinct,
 	any parameterize,
 	any ifNull,
-	boolean includeSoftDeletes="false",
+	boolean includeSoftDeletes = "false",
 	string group
 ) {
-	$args(name="average", args=arguments);
+	$args(name = "average", args = arguments);
 	arguments.type = "AVG";
 	if (StructKeyExists(arguments, "group")) {
-		local.rv = $calculate(argumentCollection=arguments);
+		local.rv = $calculate(argumentCollection = arguments);
 	} else {
-		if (ListFindNoCase("cf_sql_integer,cf_sql_bigint,cf_sql_smallint,cf_sql_tinyint", variables.wheels.class.properties[arguments.property].type)) {
-
+		if (
+			ListFindNoCase(
+				"cf_sql_integer,cf_sql_bigint,cf_sql_smallint,cf_sql_tinyint",
+				variables.wheels.class.properties[arguments.property].type
+			)
+		) {
 			// This is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it.
-			local.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
+			local.values = findAll(
+				select = arguments.property,
+				where = arguments.where,
+				include = arguments.include,
+				parameterize = arguments.parameterize,
+				includeSoftDeletes = arguments.includeSoftDeletes
+			);
 			local.values = ListToArray(Evaluate("ValueList(local.values.#arguments.property#)"));
 			local.rv = arguments.ifNull;
 			if (!ArrayIsEmpty(local.values)) {
@@ -43,21 +52,23 @@ public any function average(
 					local.tempValues = {};
 					local.iEnd = ArrayLen(local.values);
 					for (local.i = 1; local.i <= local.iEnd; local.i++) {
-						StructInsert(local.tempValues, local.values[local.i], local.values[local.i], true);
+						StructInsert(
+							local.tempValues,
+							local.values[local.i],
+							local.values[local.i],
+							true
+						);
 					}
 					local.values = ListToArray(StructKeyList(local.tempValues));
 				}
 				local.rv = ArrayAvg(local.values);
 			}
-
 		} else {
-
 			// When the column's type is a float or similar we can run an AVG type query since it will always return a value of the same type as the column.
-			local.rv = $calculate(argumentCollection=arguments);
+			local.rv = $calculate(argumentCollection = arguments);
 
 			// We convert the result to a string so that it is the same as what would happen if you calculate an average in ColdFusion code (like we do for integers in this function for example).
-			local.rv = JavaCast("string", local.rv);
-
+			local.rv = Javacast("string", local.rv);
 		}
 	}
 	return local.rv;
@@ -77,15 +88,15 @@ public any function average(
  * @parameterize [see:findAll].
  * @includeSoftDeletes [see:findAll].
  * @group [see:findAll].
-*/
+ */
 public any function count(
-	string where="",
-	string include="",
+	string where = "",
+	string include = "",
 	any parameterize,
-	boolean includeSoftDeletes="false",
+	boolean includeSoftDeletes = "false",
 	string group
 ) {
-	$args(name="count", args=arguments);
+	$args(name = "count", args = arguments);
 	arguments.type = "COUNT";
 	arguments.property = ListFirst(primaryKey());
 	if (Len(arguments.include)) {
@@ -93,7 +104,7 @@ public any function count(
 	} else {
 		arguments.distinct = false;
 	}
-	local.rv = $calculate(argumentCollection=arguments);
+	local.rv = $calculate(argumentCollection = arguments);
 	if (!StructKeyExists(arguments, "group") && !IsNumeric(local.rv)) {
 		local.rv = 0;
 	}
@@ -118,16 +129,16 @@ public any function count(
  */
 public any function maximum(
 	required string property,
-	string where="",
-	string include="",
+	string where = "",
+	string include = "",
 	any parameterize,
 	any ifNull,
-	boolean includeSoftDeletes="false",
+	boolean includeSoftDeletes = "false",
 	string group
 ) {
-	$args(name="maximum", args=arguments);
+	$args(name = "maximum", args = arguments);
 	arguments.type = "MAX";
-	return $calculate(argumentCollection=arguments);
+	return $calculate(argumentCollection = arguments);
 }
 
 /**
@@ -148,16 +159,16 @@ public any function maximum(
  */
 public any function minimum(
 	required string property,
-	string where="",
-	string include="",
+	string where = "",
+	string include = "",
 	any parameterize,
 	any ifNull,
-	boolean includeSoftDeletes="false",
+	boolean includeSoftDeletes = "false",
 	string group
 ) {
-	$args(name="minimum", args=arguments);
+	$args(name = "minimum", args = arguments);
 	arguments.type = "MIN";
-	return $calculate(argumentCollection=arguments);
+	return $calculate(argumentCollection = arguments);
 }
 
 /**
@@ -179,17 +190,17 @@ public any function minimum(
  */
 public any function sum(
 	required string property,
-	string where="",
-	string include="",
+	string where = "",
+	string include = "",
 	boolean distinct,
 	any parameterize,
 	any ifNull,
-	boolean includeSoftDeletes="false",
+	boolean includeSoftDeletes = "false",
 	string group
 ) {
-	$args(name="sum", args=arguments);
+	$args(name = "sum", args = arguments);
 	arguments.type = "SUM";
-	return $calculate(argumentCollection=arguments);
+	return $calculate(argumentCollection = arguments);
 }
 
 /**
@@ -201,12 +212,11 @@ public any function $calculate(
 	required string where,
 	required string include,
 	required any parameterize,
-	boolean distinct="false",
-	any ifNull="",
+	boolean distinct = "false",
+	any ifNull = "",
 	required boolean includeSoftDeletes,
 	string group
-){
-
+) {
 	// Start the select string with the type (SUM, COUNT etc).
 	arguments.select = "#arguments.type#(";
 
@@ -221,7 +231,10 @@ public any function $calculate(
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.item = Trim(ListGetAt(arguments.property, local.i));
 		if (ListFindNoCase(variables.wheels.class.propertyList, local.item)) {
-			local.properties = ListAppend(local.properties, tableName() & "." & variables.wheels.class.properties[local.item].column);
+			local.properties = ListAppend(
+				local.properties,
+				tableName() & "." & variables.wheels.class.properties[local.item].column
+			);
 		} else if (ListFindNoCase(variables.wheels.class.calculatedPropertyList, local.item)) {
 			local.properties = ListAppend(local.properties, variables.wheels.class.calculatedProperties[local.item].sql);
 		}
@@ -237,7 +250,16 @@ public any function $calculate(
 	arguments.select &= ") AS " & local.alias;
 
 	if (StructKeyExists(arguments, "group")) {
-		arguments.select = ListAppend(arguments.select, $createSQLFieldList(clause="select", list=arguments.group, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, returnAs="query"));
+		arguments.select = ListAppend(
+			arguments.select,
+			$createSQLFieldList(
+				clause = "select",
+				list = arguments.group,
+				include = arguments.include,
+				includeSoftDeletes = arguments.includeSoftDeletes,
+				returnAs = "query"
+			)
+		);
 	}
 
 	// Call findAll with select, where, group, parameterize and include but delete all other arguments.
@@ -248,7 +270,7 @@ public any function $calculate(
 	// Since we don't return any records for calculation methods we want to skip the callbacks.
 	arguments.callbacks = false;
 
-	local.rv = findAll(argumentCollection=arguments);
+	local.rv = findAll(argumentCollection = arguments);
 
 	// If not grouping by something we just return the value itself.
 	if (!StructKeyExists(arguments, "group")) {
@@ -260,5 +282,4 @@ public any function $calculate(
 
 	return local.rv;
 }
-
 </cfscript>

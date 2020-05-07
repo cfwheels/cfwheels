@@ -1,10 +1,9 @@
 <cfscript>
-
 /**
  * Call CFML's canonicalize() function but set to blank string if the result is null (happens on Lucee 5).
  */
 public string function $canonicalize(required string input) {
-	local.rv = canonicalize(arguments.input, false, false);
+	local.rv = Canonicalize(arguments.input, false, false);
 	if (IsNull(local.rv)) {
 		local.rv = "";
 	}
@@ -16,9 +15,9 @@ public string function $canonicalize(required string input) {
  */
 public string function $statusCode() {
 	if (StructKeyExists(server, "lucee")) {
-		local.response = getPageContext().getResponse();
+		local.response = GetPageContext().getResponse();
 	} else {
-		local.response = getPageContext().getFusionContext().getResponse();
+		local.response = GetPageContext().getFusionContext().getResponse();
 	}
 	return local.response.getStatus();
 }
@@ -29,9 +28,9 @@ public string function $statusCode() {
 public string function $contentType() {
 	local.rv = "";
 	if (StructKeyExists(server, "lucee")) {
-		local.response = getPageContext().getResponse();
+		local.response = GetPageContext().getResponse();
 	} else {
-		local.response = getPageContext().getFusionContext().getResponse();
+		local.response = GetPageContext().getFusionContext().getResponse();
 	}
 	if (local.response.containsHeader("Content-Type")) {
 		local.header = local.response.getHeader("Content-Type");
@@ -56,11 +55,10 @@ public void function $initializeRequestScope() {
 
 		// Copy HTTP request data (contains content, headers, method and protocol).
 		// This makes internal testing easier since we can overwrite it temporarily from the test suite.
-		request.wheels.httpRequestData = GetHttpRequestData();
+		request.wheels.httpRequestData = GetHTTPRequestData();
 
 		// Create a structure to track the transaction status for all adapters.
 		request.wheels.transactions = {};
-
 	}
 }
 
@@ -70,7 +68,11 @@ public void function $initializeRequestScope() {
 public xml function $toXml(required any data) {
 	// only instantiate the toXml object once per request
 	if (!StructKeyExists(request.wheels, "toXml")) {
-		request.wheels.toXml = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#.vendor.toXml", fileName="toXML", method="init");
+		request.wheels.toXml = $createObjectFromRoot(
+			path = "#application.wheels.wheelsComponentPath#.vendor.toXml",
+			fileName = "toXML",
+			method = "init"
+		);
 	}
 	return request.wheels.toXml.toXml(arguments.data);
 }
@@ -78,7 +80,7 @@ public xml function $toXml(required any data) {
 /**
  * Internal function.
  */
-public string function $convertToString(required any value, string type="") {
+public string function $convertToString(required any value, string type = "") {
 	if (!Len(arguments.type)) {
 		if (IsArray(arguments.value)) {
 			arguments.type = "array";
@@ -109,7 +111,8 @@ public string function $convertToString(required any value, string type="") {
 		case "binary":
 			arguments.value = ToString(arguments.value);
 			break;
-		case "float": case "integer":
+		case "float":
+		case "integer":
 			if (!Len(arguments.value)) {
 				return "";
 			}
@@ -126,7 +129,14 @@ public string function $convertToString(required any value, string type="") {
 		case "datetime":
 			// createdatetime will throw an error
 			if (IsDate(arguments.value)) {
-				arguments.value = CreateDateTime(Year(arguments.value), Month(arguments.value), Day(arguments.value), Hour(arguments.value), Minute(arguments.value), Second(arguments.value));
+				arguments.value = CreateDateTime(
+					Year(arguments.value),
+					Month(arguments.value),
+					Day(arguments.value),
+					Hour(arguments.value),
+					Minute(arguments.value),
+					Second(arguments.value)
+				);
 			}
 			break;
 	}
@@ -138,14 +148,19 @@ public string function $convertToString(required any value, string type="") {
  */
 public any function $cleanInlist(required string where) {
 	local.rv = arguments.where;
-	local.regex = "IN\s?\(.*?,\s.*?\)";
-	local.in = REFind(local.regex, local.rv, 1, true);
+	local.regex = "IN\s?\(.*?,?\s?.*?\)";
+	local.in = ReFind(local.regex, local.rv, 1, true);
 	while (local.in.len[1]) {
 		local.str = Mid(local.rv, local.in.pos[1], local.in.len[1]);
 		local.rv = RemoveChars(local.rv, local.in.pos[1], local.in.len[1]);
 		local.cleaned = $listClean(local.str);
-		local.rv = Insert(local.cleaned, local.rv, local.in.pos[1]-1);
-		local.in = REFind(local.regex, local.rv, local.in.pos[1] + Len(local.cleaned), true);
+		local.rv = Insert(local.cleaned, local.rv, local.in.pos[1] - 1);
+		local.in = ReFind(
+			local.regex,
+			local.rv,
+			local.in.pos[1] + Len(local.cleaned),
+			true
+		);
 	}
 	return local.rv;
 }
@@ -154,11 +169,7 @@ public any function $cleanInlist(required string where) {
  * Removes whitespace between list elements.
  * Optional argument to return the list as an array.
  */
-public any function $listClean(
-	required string list,
-	string delim=",",
-	string returnAs="string"
-) {
+public any function $listClean(required string list, string delim = ",", string returnAs = "string") {
 	local.rv = ListToArray(arguments.list, arguments.delim);
 	local.iEnd = ArrayLen(local.rv);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -177,14 +188,18 @@ public string function $hashedKey() {
 	local.rv = "";
 
 	// make all cache keys domain specific (do not use request scope below since it may not always be initialized)
-	StructInsert(arguments, ListLen(StructKeyList(arguments)) + 1, cgi.http_host, true);
+	StructInsert(
+		arguments,
+		ListLen(StructKeyList(arguments)) + 1,
+		cgi.http_host,
+		true
+	);
 
 	// we need to make sure we are looping through the passed in arguments in the same order everytime
 	local.values = [];
 	local.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
 	local.iEnd = ListLen(local.keyList);
-	for (local.i = 1; local.i <= local.iEnd; local.i++)
-	{
+	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		ArrayAppend(local.values, arguments[ListGetAt(local.keyList, local.i)]);
 	}
 
@@ -197,7 +212,7 @@ public string function $hashedKey() {
 			local.rv = ReplaceList(local.rv, "{,},[,],/", ",,,,");
 			local.rv = ListSort(local.rv, "text");
 		} catch (any e) {
-			local.rv = $wddx(input=local.values);
+			local.rv = $wddx(input = local.values);
 		}
 	}
 	return Hash(local.rv);
@@ -208,8 +223,8 @@ public string function $hashedKey() {
  */
 public any function $timeSpanForCache(
 	required any cache,
-	numeric defaultCacheTime=application.wheels.defaultCacheTime,
-	string cacheDatePart=application.wheels.cacheDatePart
+	numeric defaultCacheTime = application.wheels.defaultCacheTime,
+	string cacheDatePart = application.wheels.cacheDatePart
 ) {
 	local.cache = arguments.defaultCacheTime;
 	if (IsNumeric(arguments.cache)) {
@@ -223,14 +238,19 @@ public any function $timeSpanForCache(
 			local.list = ListSetAt(local.list, local.i, local.cache);
 		}
 	}
-	local.rv = CreateTimeSpan(ListGetAt(local.list, 1), ListGetAt(local.list, 2), ListGetAt(local.list, 3), ListGetAt(local.list, 4));
+	local.rv = CreateTimespan(
+		ListGetAt(local.list, 1),
+		ListGetAt(local.list, 2),
+		ListGetAt(local.list, 3),
+		ListGetAt(local.list, 4)
+	);
 	return local.rv;
 }
 
 /**
  * Internal function.
  */
-public string function $timestamp(string timeStampMode=application.wheels.timeStampMode) {
+public string function $timestamp(string timeStampMode = application.wheels.timeStampMode) {
 	switch (arguments.timeStampMode) {
 		case "utc":
 			local.rv = DateConvert("local2Utc", Now());
@@ -242,7 +262,7 @@ public string function $timestamp(string timeStampMode=application.wheels.timeSt
 			local.rv = Now().getTime();
 			break;
 		default:
-			Throw(type="Wheels.InvalidTimeStampMode", message="Timestamp mode #arguments.timeStampMode# is invalid");
+			Throw(type = "Wheels.InvalidTimeStampMode", message = "Timestamp mode #arguments.timeStampMode# is invalid");
 	}
 	return local.rv;
 }
@@ -253,8 +273,8 @@ public string function $timestamp(string timeStampMode=application.wheels.timeSt
 public void function $combineArguments(
 	required struct args,
 	required string combine,
-	required boolean required=false,
-	string extendedInfo=""
+	required boolean required = false,
+	string extendedInfo = ""
 ) {
 	local.first = ListGetAt(arguments.combine, 1);
 	local.second = ListGetAt(arguments.combine, 2);
@@ -264,7 +284,11 @@ public void function $combineArguments(
 	}
 	if (arguments.required && application.wheels.showErrorInformation) {
 		if (!StructKeyExists(arguments.args, local.first) || !Len(arguments.args[local.first])) {
-			Throw(type="Wheels.IncorrectArguments", message="The `#local.second#` or `#local.first#` argument is required but was not passed in.", extendedInfo="#arguments.extendedInfo#");
+			Throw(
+				type = "Wheels.IncorrectArguments",
+				message = "The `#local.second#` or `#local.first#` argument is required but was not passed in.",
+				extendedInfo = "#arguments.extendedInfo#"
+			);
 		}
 	}
 }
@@ -273,11 +297,17 @@ public void function $combineArguments(
 /**
  * Check to see if all keys in the list exist for the structure and have length.
  */
-public boolean function $structKeysExist(required struct struct, string keys="") {
+public boolean function $structKeysExist(required struct struct, string keys = "") {
 	local.rv = true;
 	local.iEnd = ListLen(arguments.keys);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
-		if (!StructKeyExists(arguments.struct, ListGetAt(arguments.keys, local.i)) || (IsSimpleValue(arguments.struct[ListGetAt(arguments.keys, local.i)]) && !Len(arguments.struct[ListGetAt(arguments.keys, local.i)]))) {
+		if (
+			!StructKeyExists(arguments.struct, ListGetAt(arguments.keys, local.i)) || (
+				IsSimpleValue(arguments.struct[ListGetAt(arguments.keys, local.i)]) && !Len(
+					arguments.struct[ListGetAt(arguments.keys, local.i)]
+				)
+			)
+		) {
 			local.rv = false;
 			break;
 		}
@@ -289,8 +319,8 @@ public boolean function $structKeysExist(required struct struct, string keys="")
  * This copies all the variables CFWheels needs from the CGI scope to the request scope.
  */
 public struct function $cgiScope(
-	string keys="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type,http_x_rewrite_url,http_x_original_url,request_uri,redirect_url",
-	struct scope=cgi
+	string keys = "request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type,http_x_rewrite_url,http_x_original_url,request_uri,redirect_url,http_x_forwarded_for,http_x_forwarded_proto",
+	struct scope = cgi
 ) {
 	local.rv = {};
 	local.iEnd = ListLen(arguments.keys);
@@ -301,14 +331,22 @@ public struct function $cgiScope(
 
 	// fix path_info if it contains any characters that are not ascii (see issue 138)
 	if (StructKeyExists(arguments.scope, "unencoded_url") && Len(arguments.scope.unencoded_url)) {
-		local.requestUrl = URLDecode(arguments.scope.unencoded_url);
-	} else if (IsSimpleValue(getPageContext().getRequest().getRequestURL())) {
+		local.requestUrl = UrlDecode(arguments.scope.unencoded_url);
+	} else if (IsSimpleValue(GetPageContext().getRequest().getRequestURL())) {
 		// remove protocol, domain, port etc from the url
-		local.requestUrl = "/" & ListDeleteAt(ListDeleteAt(URLDecode(getPageContext().getRequest().getRequestURL()), 1, "/"), 1, "/");
+		local.requestUrl = "/" & ListDeleteAt(
+			ListDeleteAt(UrlDecode(GetPageContext().getRequest().getRequestURL()), 1, "/"),
+			1,
+			"/"
+		);
 	}
-	if (StructKeyExists(local, "requestUrl") && REFind("[^\0-\x80]", local.requestUrl)) {
+	if (StructKeyExists(local, "requestUrl") && ReFind("[^\0-\x80]", local.requestUrl)) {
 		// strip out the script_name and query_string leaving us with only the part of the string that should go in path_info
-		local.rv.path_info = Replace(Replace(local.requestUrl, arguments.scope.script_name, ""), "?" & URLDecode(arguments.scope.query_string), "");
+		local.rv.path_info = Replace(
+			Replace(local.requestUrl, arguments.scope.script_name, ""),
+			"?" & UrlDecode(arguments.scope.query_string),
+			""
+		);
 	}
 
 	// fixes IIS issue that returns a blank cgi.path_info
@@ -378,15 +416,22 @@ public struct function $dollarify(required struct input, required string on) {
  * Internal function.
  */
 public void function $abortInvalidRequest() {
-	local.applicationPath = Replace(GetCurrentTemplatePath(), "\", "/", "all");
+	local.applicationPath = Replace(
+		GetCurrentTemplatePath(),
+		"\",
+		"/",
+		"all"
+	);
 	local.callingPath = Replace(GetBaseTemplatePath(), "\", "/", "all");
-	if (ListLen(local.callingPath, "/") > ListLen(local.applicationPath, "/") || GetFileFromPath(local.callingPath) == "root.cfm") {
+	if (
+		ListLen(local.callingPath, "/") > ListLen(local.applicationPath, "/") || GetFileFromPath(local.callingPath) == "root.cfm"
+	) {
 		if (StructKeyExists(application, "wheels")) {
 			if (StructKeyExists(application.wheels, "showErrorInformation") && !application.wheels.showErrorInformation) {
-				$header(statusCode=404, statustext="Not Found");
+				$header(statusCode = 404, statustext = "Not Found");
 			}
 			if (StructKeyExists(application.wheels, "eventPath")) {
-				$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+				$includeAndOutput(template = "#application.wheels.eventPath#/onmissingtemplate.cfm");
 			}
 		}
 		abort;
@@ -397,20 +442,19 @@ public void function $abortInvalidRequest() {
  * Internal function.
  */
 public string function $routeVariables() {
-	return $findRoute(argumentCollection=arguments).variables;
+	return $findRoute(argumentCollection = arguments).variables;
 }
 
 /**
  * Internal function.
  */
 public struct function $findRoute() {
-
 	// Throw error if no route was found.
 	if (!StructKeyExists(application.wheels.namedRoutePositions, arguments.route)) {
 		$throwErrorOrShow404Page(
-			type="Wheels.RouteNotFound",
-			message="Could not find the `#arguments.route#` route.",
-			extendedInfo="Make sure there is a route configured in your `config/routes.cfm` file named `#arguments.route#`."
+			type = "Wheels.RouteNotFound",
+			message = "Could not find the `#arguments.route#` route.",
+			extendedInfo = "Make sure there is a route configured in your `config/routes.cfm` file named `#arguments.route#`."
 		);
 	}
 
@@ -452,8 +496,12 @@ public any function $cachedModelClassExists(required string name) {
 /**
  * Internal function.
  */
-public string function $constructParams(required string params, boolean encode=true, boolean $encodeForHtmlAttribute=false, string $URLRewriting=application.wheels.URLRewriting) {
-
+public string function $constructParams(
+	required string params,
+	boolean encode = true,
+	boolean $encodeForHtmlAttribute = false,
+	string $URLRewriting = application.wheels.URLRewriting
+) {
 	// When rewriting is off we will already have "?controller=" etc in the url so we have to continue with an ampersand.
 	if (arguments.$URLRewriting == "Off") {
 		local.delim = "&";
@@ -464,12 +512,12 @@ public string function $constructParams(required string params, boolean encode=t
 	local.rv = "";
 	local.iEnd = ListLen(arguments.params, "&");
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
-		local.params = listToArray(ListGetAt(arguments.params, local.i, "&"), "=");
+		local.params = ListToArray(ListGetAt(arguments.params, local.i, "&"), "=");
 		local.name = local.params[1];
 		if (arguments.encode && $get("encodeURLs")) {
 			local.name = EncodeForURL($canonicalize(local.name));
 			if (arguments.$encodeForHtmlAttribute) {
-				local.name = EncodeForHtmlAttribute(local.name);
+				local.name = EncodeForHTMLAttribute(local.name);
 			}
 		}
 		local.rv &= local.delim & local.name & "=";
@@ -479,7 +527,7 @@ public string function $constructParams(required string params, boolean encode=t
 			if (arguments.encode && $get("encodeURLs")) {
 				local.value = EncodeForURL($canonicalize(local.value));
 				if (arguments.$encodeForHtmlAttribute) {
-					local.value = EncodeForHtmlAttribute(local.value);
+					local.value = EncodeForHTMLAttribute(local.value);
 				}
 			}
 
@@ -501,9 +549,9 @@ public string function $constructParams(required string params, boolean encode=t
 public void function $args(
 	required struct args,
 	required string name,
-	string reserved="",
-	string combine="",
-	string required=""
+	string reserved = "",
+	string combine = "",
+	string required = ""
 ) {
 	if (Len(arguments.combine)) {
 		local.iEnd = ListLen(arguments.combine);
@@ -515,7 +563,7 @@ public void function $args(
 			if (ListLen(local.item, "/") > 2 || ListFindNoCase(local.first, arguments.required)) {
 				local.required = true;
 			}
-			$combineArguments(args=arguments.args, combine="#local.first#,#local.second#", required=local.required);
+			$combineArguments(args = arguments.args, combine = "#local.first#,#local.second#", required = local.required);
 		}
 	}
 	if (application.wheels.showErrorInformation) {
@@ -525,8 +573,8 @@ public void function $args(
 				local.item = ListGetAt(arguments.reserved, local.i);
 				if (StructKeyExists(arguments.args, local.item)) {
 					Throw(
-						type="Wheels.IncorrectArguments",
-						message="The `#local.item#` argument cannot be passed in since it will be set automatically by Wheels."
+						type = "Wheels.IncorrectArguments",
+						message = "The `#local.item#` argument cannot be passed in since it will be set automatically by Wheels."
 					);
 				}
 			}
@@ -542,7 +590,7 @@ public void function $args(
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.arg = ListGetAt(arguments.required, local.i);
 			if (!StructKeyExists(arguments.args, local.arg)) {
-				Throw(type="Wheels.IncorrectArguments", message="The `#local.arg#` argument is required but not passed in.");
+				Throw(type = "Wheels.IncorrectArguments", message = "The `#local.arg#` argument is required but not passed in.");
 			}
 		}
 	}
@@ -551,11 +599,7 @@ public void function $args(
 /**
  * Internal function.
  */
-public any function $createObjectFromRoot(
-	required string path,
-	required string fileName,
-	required string method
-) {
+public any function $createObjectFromRoot(required string path, required string fileName, required string method) {
 	local.returnVariable = "local.rv";
 	local.method = arguments.method;
 	local.component = ListChangeDelims(arguments.path, ".", "/") & "." & ListChangeDelims(arguments.fileName, ".", "/");
@@ -606,7 +650,7 @@ public any function $fileExistsNoCase(required string absolutePath) {
 	// get all existing files in the directory and place them in a list in application scope
 	local.pathHash = Hash(local.path);
 	if (!StructKeyExists(application[local.appKey].directoryFiles, local.pathHash)) {
-		local.dirInfo = $directory(directory=local.path);
+		local.dirInfo = $directory(directory = local.path);
 		application[local.appKey].directoryFiles[local.pathHash] = ValueList(local.dirInfo.name);
 	}
 	local.fileList = application[local.appKey].directoryFiles[local.pathHash];
@@ -625,40 +669,51 @@ public any function $fileExistsNoCase(required string absolutePath) {
 /**
  * Internal function.
  */
-public string function $objectFileName(
-	required string name,
-	required string objectPath,
-	required string type
-) {
+public string function $objectFileName(required string name, required string objectPath, required string type) {
 	// by default we return Model or Controller so that the base component gets loaded
 	local.rv = capitalize(arguments.type);
 
 	// we are going to store the full controller / model path in the
 	// existing / non-existing lists so we can have controllers / models
 	// in multiple places
-	//
+	// 
 	// The name coming into $objectFileName could have dot notation due to
 	// nested controllers so we need to change delims here on the name
 	local.fullObjectPath = arguments.objectPath & "/" & ListChangeDelims(arguments.name, '/', '.');
 
-	if (!ListFindNoCase(application.wheels.existingObjectFiles, local.fullObjectPath) && !ListFindNoCase(application.wheels.nonExistingObjectFiles, local.fullObjectPath)) {
-
+	if (
+		!ListFindNoCase(application.wheels.existingObjectFiles, local.fullObjectPath) && !ListFindNoCase(
+			application.wheels.nonExistingObjectFiles,
+			local.fullObjectPath
+		)
+	) {
 		// we have not yet checked if this file exists or not so let's do that
 		// here (the function below will return the file name with the correct
 		// case if it exists, false if not)
-		local.file = $fileExistsNoCase(Expandpath(local.fullObjectPath) & ".cfc");
+		local.file = $fileExistsNoCase(ExpandPath(local.fullObjectPath) & ".cfc");
 
 		if (IsBoolean(local.file) && !local.file) {
 			// no file exists, let's store that if caching is on so we don't have to check it again
 			if (application.wheels.cacheFileChecking) {
-				application.wheels.nonExistingObjectFiles = ListAppend(application.wheels.nonExistingObjectFiles, local.fullObjectPath);
+				application.wheels.nonExistingObjectFiles = ListAppend(
+					application.wheels.nonExistingObjectFiles,
+					local.fullObjectPath
+				);
 			}
 		} else {
 			// the file exists, let's store the proper case of the file if caching is turned on
 			local.file = SpanExcluding(local.file, ".");
-			local.fullObjectPath = ListSetAt(local.fullObjectPath, ListLen(local.fullObjectPath, "/"), local.file, "/");
+			local.fullObjectPath = ListSetAt(
+				local.fullObjectPath,
+				ListLen(local.fullObjectPath, "/"),
+				local.file,
+				"/"
+			);
 			if (application.wheels.cacheFileChecking) {
-				application.wheels.existingObjectFiles = ListAppend(application.wheels.existingObjectFiles, local.fullObjectPath);
+				application.wheels.existingObjectFiles = ListAppend(
+					application.wheels.existingObjectFiles,
+					local.fullObjectPath
+				);
 			}
 		}
 	}
@@ -671,8 +726,13 @@ public string function $objectFileName(
 
 	// we've found a file so we'll need to send back the corrected name
 	// argument as it could have dot notation in it from the mapper
-	if (structKeyExists(local, "file") and !IsBoolean(local.file)) {
-		local.rv = ListSetAt(arguments.name, ListLen(arguments.name, "."), local.file, ".");
+	if (StructKeyExists(local, "file") and !IsBoolean(local.file)) {
+		local.rv = ListSetAt(
+			arguments.name,
+			ListLen(arguments.name, "."),
+			local.file,
+			"."
+		);
 	}
 
 	return local.rv;
@@ -683,17 +743,22 @@ public string function $objectFileName(
  */
 public any function $createControllerClass(
 	required string name,
-	string controllerPaths=$get("controllerPath"),
-	string type="controller"
+	string controllerPaths = $get("controllerPath"),
+	string type = "controller"
 ) {
 	// let's allow for multiple controller paths so that plugins can contain controllers
 	// the last path is the one we will instantiate the base controller on if the controller is not found on any of the paths
 	local.iEnd = ListLen(arguments.controllerPaths);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.controllerPath = ListGetAt(arguments.controllerPaths, local.i);
-		local.fileName = $objectFileName(name=arguments.name, objectPath=local.controllerPath, type=arguments.type);
+		local.fileName = $objectFileName(name = arguments.name, objectPath = local.controllerPath, type = arguments.type);
 		if (local.fileName != "Controller" || local.i == ListLen(arguments.controllerPaths)) {
-			application.wheels.controllers[arguments.name] = $createObjectFromRoot(path=local.controllerPath, fileName=local.fileName, method="$initControllerClass", name=arguments.name);
+			application.wheels.controllers[arguments.name] = $createObjectFromRoot(
+				path = local.controllerPath,
+				fileName = local.fileName,
+				method = "$initControllerClass",
+				name = arguments.name
+			);
 			local.rv = application.wheels.controllers[arguments.name];
 			break;
 		}
@@ -707,16 +772,22 @@ public any function $createControllerClass(
 public void function $addToCache(
 	required string key,
 	required any value,
-	numeric time=application.wheels.defaultCacheTime,
-	string category="main"
+	numeric time = application.wheels.defaultCacheTime,
+	string category = "main"
 ) {
-	if (application.wheels.cacheCullPercentage > 0 && application.wheels.cacheLastCulledAt < DateAdd("n", -application.wheels.cacheCullInterval, Now()) && $cacheCount() >= application.wheels.maximumItemsToCache) {
+	if (
+		application.wheels.cacheCullPercentage > 0 && application.wheels.cacheLastCulledAt < DateAdd(
+			"n",
+			-application.wheels.cacheCullInterval,
+			Now()
+		) && $cacheCount() >= application.wheels.maximumItemsToCache
+	) {
 		// cache is full so flush out expired items from this cache to make more room if possible
 		local.deletedItems = 0;
 		local.cacheCount = $cacheCount();
 		for (local.key in application.wheels.cache[arguments.category]) {
 			if (Now() > application.wheels.cache[arguments.category][local.key].expiresAt) {
-				$removeFromCache(key=local.key, category=arguments.category);
+				$removeFromCache(key = local.key, category = arguments.category);
 				if (application.wheels.cacheCullPercentage < 100) {
 					local.deletedItems++;
 					local.percentageDeleted = (local.deletedItems / local.cacheCount) * 100;
@@ -743,12 +814,12 @@ public void function $addToCache(
 /**
  * Internal function.
  */
-public any function $getFromCache(required string key, string category="main") {
+public any function $getFromCache(required string key, string category = "main") {
 	local.rv = false;
 	try {
 		if (StructKeyExists(application.wheels.cache[arguments.category], arguments.key)) {
 			if (Now() > application.wheels.cache[arguments.category][arguments.key].expiresAt) {
-				$removeFromCache(key=arguments.key, category=arguments.category);
+				$removeFromCache(key = arguments.key, category = arguments.category);
 			} else {
 				if (IsSimpleValue(application.wheels.cache[arguments.category][arguments.key].value)) {
 					local.rv = application.wheels.cache[arguments.category][arguments.key].value;
@@ -757,21 +828,22 @@ public any function $getFromCache(required string key, string category="main") {
 				}
 			}
 		}
-	} catch (any e) {}
+	} catch (any e) {
+	}
 	return local.rv;
 }
 
 /**
  * Internal function.
  */
-public void function $removeFromCache(required string key, string category="main") {
+public void function $removeFromCache(required string key, string category = "main") {
 	StructDelete(application.wheels.cache[arguments.category], arguments.key);
 }
 
 /**
  * Internal function.
  */
-public numeric function $cacheCount(string category="") {
+public numeric function $cacheCount(string category = "") {
 	if (Len(arguments.category)) {
 		local.rv = StructCount(application.wheels.cache[arguments.category]);
 	} else {
@@ -786,8 +858,8 @@ public numeric function $cacheCount(string category="") {
 /**
  * Internal function.
  */
-public void function $clearCache(string category="") {
-	if (Len(arguments.category)){
+public void function $clearCache(string category = "") {
+	if (Len(arguments.category)) {
 		StructClear(application.wheels.cache[arguments.category]);
 	} else {
 		StructClear(application.wheels.cache);
@@ -799,17 +871,22 @@ public void function $clearCache(string category="") {
  */
 public any function $createModelClass(
 	required string name,
-	string modelPaths=application.wheels.modelPath,
-	string type="model"
+	string modelPaths = application.wheels.modelPath,
+	string type = "model"
 ) {
 	// let's allow for multiple model paths so that plugins can contain models
 	// the last path is the one we will instantiate the base model on if the model is not found on any of the paths
 	local.iEnd = ListLen(arguments.modelPaths);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.modelPath = ListGetAt(arguments.modelPaths, local.i);
-		local.fileName = $objectFileName(name=arguments.name, objectPath=local.modelPath, type=arguments.type);
+		local.fileName = $objectFileName(name = arguments.name, objectPath = local.modelPath, type = arguments.type);
 		if (local.fileName != arguments.type || local.i == ListLen(arguments.modelPaths)) {
-			application.wheels.models[arguments.name] = $createObjectFromRoot(path=local.modelPath, fileName=local.fileName, method="$initModelClass", name=arguments.name);
+			application.wheels.models[arguments.name] = $createObjectFromRoot(
+				path = local.modelPath,
+				fileName = local.fileName,
+				method = "$initModelClass",
+				name = arguments.name
+			);
 			local.rv = application.wheels.models[arguments.name];
 			break;
 		}
@@ -821,7 +898,12 @@ public any function $createModelClass(
  * Internal function.
  */
 public void function $loadRoutes() {
-	$simpleLock(name="$mapperLoadRoutes", type="exclusive", timeout=5, execute="$lockedLoadRoutes");
+	$simpleLock(
+		name = "$mapperLoadRoutes",
+		type = "exclusive",
+		timeout = 5,
+		execute = "$lockedLoadRoutes"
+	);
 }
 
 /**
@@ -836,9 +918,9 @@ public void function $lockedLoadRoutes() {
 
 	// load wheels internal gui routes
 	// TODO skip this if mode != development|testing?
-	$include(template="wheels/public/routes.cfm");
+	$include(template = "wheels/public/routes.cfm");
 	// load developer routes next
-	$include(template="config/routes.cfm");
+	$include(template = "config/routes.cfm");
 
 	// set lookup info for the named routes
 	$setNamedRoutePositions();
@@ -852,11 +934,14 @@ public void function $setNamedRoutePositions() {
 	local.iEnd = ArrayLen(application[local.appKey].routes);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.route = application[local.appKey].routes[local.i];
-		if (StructKeyExists(local.route, "name") && len(local.route.name)) {
+		if (StructKeyExists(local.route, "name") && Len(local.route.name)) {
 			if (!StructKeyExists(application[local.appKey].namedRoutePositions, local.route.name)) {
 				application[local.appKey].namedRoutePositions[local.route.name] = "";
 			}
-			application[local.appKey].namedRoutePositions[local.route.name] = ListAppend(application[local.appKey].namedRoutePositions[local.route.name], local.i);
+			application[local.appKey].namedRoutePositions[local.route.name] = ListAppend(
+				application[local.appKey].namedRoutePositions[local.route.name],
+				local.i
+			);
 		}
 	}
 }
@@ -896,19 +981,27 @@ private string function $checkMinimumVersion(required string engine, required st
 		local.minimumMinor = "5";
 		local.minimumPatch = "5";
 		local.minimumBuild = "6";
-		local.5 = {minimumMinor=2, minimumPatch=1, minimumBuild=9};
+		local.5 = {minimumMinor = 2, minimumPatch = 1, minimumBuild = 9};
 	} else if (arguments.engine == "Adobe ColdFusion") {
 		local.minimumMajor = "10";
 		local.minimumMinor = "0";
 		local.minimumPatch = "23";
 		local.minimumBuild = "302580";
-		local.11 = {minimumMinor=0, minimumPatch=12, minimumBuild=302575};
-		local.2016 = {minimumMinor=0, minimumPatch=4, minimumBuild=302561};
+		local.11 = {minimumMinor = 0, minimumPatch = 12, minimumBuild = 302575};
+		local.2016 = {minimumMinor = 0, minimumPatch = 4, minimumBuild = 302561};
 	} else {
 		local.rv = false;
 	}
 	if (StructKeyExists(local, "minimumMajor")) {
-		if (local.major < local.minimumMajor || (local.major == local.minimumMajor && local.minor < local.minimumMinor) || (local.major == local.minimumMajor && local.minor == local.minimumMinor && local.patch < local.minimumPatch) || (local.major == local.minimumMajor && local.minor == local.minimumMinor && local.patch == local.minimumPatch && Len(local.minimumBuild) && local.build < local.minimumBuild)) {
+		if (
+			local.major < local.minimumMajor || (local.major == local.minimumMajor && local.minor < local.minimumMinor) || (
+				local.major == local.minimumMajor && local.minor == local.minimumMinor && local.patch < local.minimumPatch
+			) || (
+				local.major == local.minimumMajor && local.minor == local.minimumMinor && local.patch == local.minimumPatch && Len(
+					local.minimumBuild
+				) && local.build < local.minimumBuild
+			)
+		) {
 			local.rv = local.minimumMajor & "." & local.minimumMinor & "." & local.minimumPatch;
 			if (Len(local.minimumBuild)) {
 				local.rv &= "." & local.minimumBuild;
@@ -916,7 +1009,11 @@ private string function $checkMinimumVersion(required string engine, required st
 		}
 		if (StructKeyExists(local, local.major)) {
 			// special requirements for having a specific minor or patch version within a major release exists
-			if (local.minor < local[local.major].minimumMinor || (local.minor == local[local.major].minimumMinor && local.patch < local[local.major].minimumPatch)) {
+			if (
+				local.minor < local[local.major].minimumMinor || (
+					local.minor == local[local.major].minimumMinor && local.patch < local[local.major].minimumPatch
+				)
+			) {
 				local.rv = local.major & "." & local[local.major].minimumMinor & "." & local[local.major].minimumPatch;
 			}
 		}
@@ -930,7 +1027,17 @@ private string function $checkMinimumVersion(required string engine, required st
 public void function $loadPlugins() {
 	local.appKey = $appKey();
 	local.pluginPath = application[local.appKey].webPath & application[local.appKey].pluginPath;
-	application[local.appKey].PluginObj = $createObjectFromRoot(path="wheels", fileName="Plugins", method="init", pluginPath=local.pluginPath, deletePluginDirectories=application[local.appKey].deletePluginDirectories, overwritePlugins=application[local.appKey].overwritePlugins, loadIncompatiblePlugins=application[local.appKey].loadIncompatiblePlugins, wheelsEnvironment=application[local.appKey].environment, wheelsVersion=application[local.appKey].version);
+	application[local.appKey].PluginObj = $createObjectFromRoot(
+		path = "wheels",
+		fileName = "Plugins",
+		method = "init",
+		pluginPath = local.pluginPath,
+		deletePluginDirectories = application[local.appKey].deletePluginDirectories,
+		overwritePlugins = application[local.appKey].overwritePlugins,
+		loadIncompatiblePlugins = application[local.appKey].loadIncompatiblePlugins,
+		wheelsEnvironment = application[local.appKey].environment,
+		wheelsVersion = application[local.appKey].version
+	);
 	application[local.appKey].plugins = application[local.appKey].PluginObj.getPlugins();
 	application[local.appKey].pluginMeta = application[local.appKey].PluginObj.getPluginMeta();
 	application[local.appKey].incompatiblePlugins = application[local.appKey].PluginObj.getIncompatiblePlugins();
@@ -955,8 +1062,8 @@ public string function $appKey() {
 public string function $singularizeOrPluralize(
 	required string text,
 	required string which,
-	numeric count=-1,
-	boolean returnCount=true
+	numeric count = -1,
+	boolean returnCount = true
 ) {
 	// by default we pluralize/singularize the entire string
 	local.text = arguments.text;
@@ -968,11 +1075,11 @@ public string function $singularizeOrPluralize(
 	local.rv = local.text;
 
 	if (arguments.count != 1) {
-		if (REFind("[A-Z]", local.text)) {
+		if (ReFind("[A-Z]", local.text)) {
 			// only pluralize/singularize the last part of a camelCased variable (e.g. in "websiteStatusUpdate" we only change the "update" part)
 			// also set a variable with the unchanged part of the string (to be prepended before returning final result)
-			local.upperCasePos = REFind("[A-Z]", Reverse(local.text));
-			local.prepend = Mid(local.text, 1, Len(local.text)-local.upperCasePos);
+			local.upperCasePos = ReFind("[A-Z]", Reverse(local.text));
+			local.prepend = Mid(local.text, 1, Len(local.text) - local.upperCasePos);
 			local.text = Reverse(Mid(Reverse(local.text), 1, local.upperCasePos));
 		}
 
@@ -992,9 +1099,9 @@ public string function $singularizeOrPluralize(
 		} else if (ListFindNoCase(local.irregulars, local.text)) {
 			local.pos = ListFindNoCase(local.irregulars, local.text);
 			if (arguments.which == "singularize" && local.pos % 2 == 0) {
-				local.rv = ListGetAt(local.irregulars, local.pos-1);
+				local.rv = ListGetAt(local.irregulars, local.pos - 1);
 			} else if (arguments.which == "pluralize" && local.pos % 2 != 0) {
-				local.rv = ListGetAt(local.irregulars, local.pos+1);
+				local.rv = ListGetAt(local.irregulars, local.pos + 1);
 			} else {
 				local.rv = local.text;
 			}
@@ -1008,15 +1115,15 @@ public string function $singularizeOrPluralize(
 			local.rules = ArrayNew(2);
 			local.count = 1;
 			local.iEnd = ListLen(local.ruleList);
-			for (local.i = 1; local.i <= local.iEnd; local.i=local.i+2) {
+			for (local.i = 1; local.i <= local.iEnd; local.i = local.i + 2) {
 				local.rules[local.count][1] = ListGetAt(local.ruleList, local.i);
-				local.rules[local.count][2] = ListGetAt(local.ruleList, local.i+1);
+				local.rules[local.count][2] = ListGetAt(local.ruleList, local.i + 1);
 				local.count = local.count + 1;
 			}
 			local.iEnd = ArrayLen(local.rules);
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
-				if (REFindNoCase(local.rules[local.i][1], local.text)) {
-					local.rv = REReplaceNoCase(local.text, local.rules[local.i][1], local.rules[local.i][2]);
+				if (ReFindNoCase(local.rules[local.i][1], local.text)) {
+					local.rv = ReReplaceNoCase(local.text, local.rules[local.i][1], local.rules[local.i][2]);
 					local.ruleMatched = true;
 					break;
 				}
@@ -1032,7 +1139,7 @@ public string function $singularizeOrPluralize(
 
 	// return the count number in the string (e.g. "5 sites" instead of just "sites")
 	if (arguments.returnCount && arguments.count != -1) {
-		local.rv = LSNumberFormat(arguments.count) & " " & local.rv;
+		local.rv = LsNumberFormat(arguments.count) & " " & local.rv;
 	}
 	return local.rv;
 }
@@ -1056,7 +1163,7 @@ public string function $prependUrl(required string path) {
 	}
 	if (Len(arguments.protocol)) {
 		local.rv = arguments.protocol & "://" & local.rv;
-	} else if (request.cgi.server_port_secure) {
+	} else if (request.cgi.http_x_forwarded_proto == "https" || request.cgi.server_port_secure == "true") {
 		local.rv = "https://" & local.rv;
 	} else {
 		local.rv = "http://" & local.rv;
@@ -1067,7 +1174,10 @@ public string function $prependUrl(required string path) {
 /**
  * NB: url rewriting files need to be removed from here.
  */
-public string function $buildReleaseZip(string version=application.wheels.version, string directory=Expandpath("/")) {
+public string function $buildReleaseZip(
+	string version = application.wheels.version,
+	string directory = ExpandPath("/")
+) {
 	local.name = "cfwheels-" & LCase(Replace(arguments.version, " ", "-", "all"));
 	local.name = Replace(local.name, "alpha-", "alpha.");
 	local.name = Replace(local.name, "beta-", "beta.");
@@ -1098,10 +1208,7 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 	];
 
 	// directories & files to be removed
-	local.exclude = [
-		"wheels/tests",
-		"wheels/public/build.cfm"
-	];
+	local.exclude = ["wheels/tests", "wheels/public/build.cfm"];
 
 	// filter out these bad boys
 	local.filter = "*.settings, *.classpath, *.project, *.DS_Store";
@@ -1112,22 +1219,27 @@ public string function $buildReleaseZip(string version=application.wheels.versio
 
 	for (local.i in local.include) {
 		if (FileExists(ExpandPath(local.i))) {
-			$zip(file=local.path, source=ExpandPath(local.i));
+			$zip(file = local.path, source = ExpandPath(local.i));
 		} else if (DirectoryExists(ExpandPath(local.i))) {
-			$zip(file=local.path, source=ExpandPath(local.i), prefix=local.i);
+			$zip(file = local.path, source = ExpandPath(local.i), prefix = local.i);
 		} else {
-			throw(
-				type="Wheels.Build",
-				message="#ExpandPath(local.i)# not found",
-				detail="All paths specified in local.include must exist"
+			Throw(
+				type = "Wheels.Build",
+				message = "#ExpandPath(local.i)# not found",
+				detail = "All paths specified in local.include must exist"
 			);
 		}
 	};
 
 	for (local.i in local.exclude) {
-		$zip(file=local.path, action="delete", entrypath=local.i);
+		$zip(file = local.path, action = "delete", entrypath = local.i);
 	};
-	$zip(file=local.path, action="delete", filter=local.filter, recurse=true);
+	$zip(
+		file = local.path,
+		action = "delete",
+		filter = local.filter,
+		recurse = true
+	);
 
 	// Clean up.
 	FileDelete(ExpandPath("wheels/CHANGELOG.md"));
@@ -1140,13 +1252,17 @@ public string function $buildReleaseZip(string version=application.wheels.versio
  * Throw a developer friendly CFWheels error if set (typically in development mode).
  * Otherwise show the 404 page for end users (typically in production mode).
  */
-public void function $throwErrorOrShow404Page(required string type, required string message, string extendedInfo="") {
+public void function $throwErrorOrShow404Page(
+	required string type,
+	required string message,
+	string extendedInfo = ""
+) {
 	if ($get("showErrorInformation")) {
-		Throw(type=arguments.type, message=arguments.message, extendedInfo=arguments.extendedInfo);
+		Throw(type = arguments.type, message = arguments.message, extendedInfo = arguments.extendedInfo);
 	} else {
-		$header(statusCode=404, statustext="Not Found");
+		$header(statusCode = 404, statustext = "Not Found");
 		local.template = $get("eventPath") & "/onmissingtemplate.cfm";
-		$includeAndOutput(template=local.template);
+		$includeAndOutput(template = local.template);
 		abort;
 	}
 }
@@ -1164,32 +1280,27 @@ public void function $setCORSHeaders(
 	string pathInfo = request.cgi.PATH_INFO,
 	string scriptName = request.cgi.script_name
 ) {
-
-	local.incomingOrigin = structKeyExists(request.wheels.httprequestdata.headers, "origin")? request.wheels.httprequestdata.headers.origin : false;
+	local.incomingOrigin = StructKeyExists(request.wheels.httprequestdata.headers, "origin") ? request.wheels.httprequestdata.headers.origin : false;
 
 	// Either a wildcard, or if a specific domain is set, we need to ensure the incoming request matches it
-	if(arguments.allowOrigin == "*"){
-
-		$header(name="Access-Control-Allow-Origin", value=arguments.allowOrigin);
-
- 	} else {
-
+	if (arguments.allowOrigin == "*") {
+		$header(name = "Access-Control-Allow-Origin", value = arguments.allowOrigin);
+	} else {
 		// Passed value may be a list or just a single entry
-		local.originArr = listToArray(arguments.allowOrigin);
+		local.originArr = ListToArray(arguments.allowOrigin);
 
 		// Is this origin in the allowed Array?
-		if(arrayFindNoCase(local.originArr, local.incomingOrigin)){
-			$header(name="Access-Control-Allow-Origin", value=local.incomingOrigin);
-			$header(name="Vary", value="Origin");
+		if (ArrayFindNoCase(local.originArr, local.incomingOrigin)) {
+			$header(name = "Access-Control-Allow-Origin", value = local.incomingOrigin);
+			$header(name = "Vary", value = "Origin");
 		}
 	}
 
 	// Set Origin, Content-Type, X-Auth-Token, X-Requested-By, X-Requested-With Allow Headers
-	$header(name="Access-Control-Allow-Headers", value=arguments.allowHeaders);
+	$header(name = "Access-Control-Allow-Headers", value = arguments.allowHeaders);
 
 	// Either Look up Route specific allowed methods, or just use default
-	if(arguments.allowMethodsByRoute){
-
+	if (arguments.allowMethodsByRoute) {
 		local.permittedMethods = [];
 
 		// NB this is basically duplicate logic: needs refactoring
@@ -1201,31 +1312,27 @@ public void function $setCORSHeaders(
 
 		// Attempt to match the requested route and only display the allowed methods for that route
 		// Does this info already exist in scope? It seems silly to have to look it up again
-		for(local.route in application.wheels.routes){
-
+		for (local.route in application.wheels.routes) {
 			// Make sure route has been converted to regular expression.
 			if (!StructKeyExists(local.route, "regex")) {
 				local.route.regex = application.wheels.mapper.$patternToRegex(local.route.pattern);
 			}
 
 			// If route matches regular expression, get the methods
-			if (REFindNoCase(local.route.regex, local.path)) {
-        		arrayAppend(local.permittedMethods, local.route.methods);
+			if (ReFindNoCase(local.route.regex, local.path)) {
+				ArrayAppend(local.permittedMethods, local.route.methods);
 			}
-
-	    }
-	    if(arrayLen(local.permittedMethods)){
-			$header(name="Access-Control-Allow-Methods", value=UCASE( arrayToList(local.permittedMethods, ', ') ) );
-	     }
-
+		}
+		if (ArrayLen(local.permittedMethods)) {
+			$header(name = "Access-Control-Allow-Methods", value = UCase(ArrayToList(local.permittedMethods, ', ')));
+		}
 	} else {
-		$header(name="Access-Control-Allow-Methods", value=arguments.allowMethods);
+		$header(name = "Access-Control-Allow-Methods", value = arguments.allowMethods);
 	}
 
 	// Only add this header if requested (false is an invalid value)
-	if(arguments.allowCredentials){
-		$header(name="Access-Control-Allow-Credentials", value=true);
+	if (arguments.allowCredentials) {
+		$header(name = "Access-Control-Allow-Credentials", value = true);
 	}
-
 }
 </cfscript>

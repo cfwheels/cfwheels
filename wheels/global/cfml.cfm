@@ -5,12 +5,12 @@
 	<cfargument name="conditionArgs" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="timeout" type="numeric" required="false" default="30">
-	<cfset local.rv = $invoke(method=arguments.condition, invokeArgs=arguments.conditionArgs)>
+	<cfset local.rv = $invoke(method = arguments.condition, invokeArgs = arguments.conditionArgs)>
 	<cfif IsBoolean(local.rv) AND NOT local.rv>
 		<cflock name="#arguments.name#" timeout="#arguments.timeout#">
-			<cfset local.rv = $invoke(method=arguments.condition, invokeArgs=arguments.conditionArgs)>
+			<cfset local.rv = $invoke(method = arguments.condition, invokeArgs = arguments.conditionArgs)>
 			<cfif IsBoolean(local.rv) AND NOT local.rv>
-				<cfset local.rv = $invoke(method=arguments.execute, invokeArgs=arguments.executeArgs)>
+				<cfset local.rv = $invoke(method = arguments.execute, invokeArgs = arguments.executeArgs)>
 			</cfif>
 		</cflock>
 	</cfif>
@@ -25,12 +25,16 @@
 	<cfargument name="timeout" type="numeric" required="false" default="30">
 	<cfif StructKeyExists(arguments, "object")>
 		<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
-			<cfset local.rv = $invoke(component="#arguments.object#", method="#arguments.execute#", argumentCollection="#arguments.executeArgs#")>
+			<cfset local.rv = $invoke(
+				component = "#arguments.object#",
+				method = "#arguments.execute#",
+				argumentCollection = "#arguments.executeArgs#"
+			)>
 		</cflock>
 	<cfelse>
 		<cfset arguments.executeArgs.$locked = true>
 		<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
-			<cfset local.rv = $invoke(method="#arguments.execute#", argumentCollection="#arguments.executeArgs#")>
+			<cfset local.rv = $invoke(method = "#arguments.execute#", argumentCollection = "#arguments.executeArgs#")>
 		</cflock>
 	</cfif>
 	<cfif StructKeyExists(local, "rv")>
@@ -68,14 +72,10 @@
 			<cfloop array="#local.mailparts#" index="local.i">
 				<cfset local.innerTagContent = local.i.tagContent>
 				<cfset StructDelete(local.i, "tagContent")>
-				<cfmailpart attributeCollection="#local.i#">
-					#local.innerTagContent#
-				</cfmailpart>
+				<cfmailpart attributeCollection="#local.i#">#local.innerTagContent#</cfmailpart>
 			</cfloop>
 		</cfif>
-		<cfif StructKeyExists(local, "tagContent")>
-			#local.tagContent#
-		</cfif>
+		<cfif StructKeyExists(local, "tagContent")>#local.tagContent#</cfif>
 	</cfmail>
 </cffunction>
 
@@ -114,9 +114,10 @@
 
 	<!--- Include the template and return the result. --->
 	<!--- Variable is set to $wheels to limit chances of it being overwritten in the included template. --->
+	<!--- cfformat-ignore-start --->
 	<cfsavecontent variable="local.$wheels"><cfinclude template="../../#LCase(arguments.$template)#"></cfsavecontent>
+	<!--- cfformat-ignore-end --->
 	<cfreturn local.$wheels>
-
 </cffunction>
 
 <cffunction name="$directory" returntype="any" access="public" output="false">
@@ -136,7 +137,9 @@
 		<cfset arguments.component = arguments.componentReference>
 		<cfset StructDelete(arguments, "componentReference")>
 	<cfelseif NOT StructKeyExists(variables, arguments.method)>
-		<!--- this is done so that we can call dynamic methods via "onMissingMethod" on the object (we need to pass in the object for this so it can call methods on the "this" scope instead) --->
+		<!---
+			this is done so that we can call dynamic methods via "onMissingMethod" on the object (we need to pass in the object for this so it can call methods on the "this" scope instead)
+		--->
 		<cfset arguments.component = this>
 	</cfif>
 	<cfif StructKeyExists(arguments, "invokeArgs")>
@@ -150,12 +153,12 @@
 		</cfif>
 		<cfset StructDelete(arguments, "invokeArgs")>
 	</cfif>
-	<cfif !structKeyExists(request, "$wheelsInvoked")>
-		<cfset request.$wheelsInvoked = arrayNew(1)>
+	<cfif !StructKeyExists(request, "$wheelsInvoked")>
+		<cfset request.$wheelsInvoked = ArrayNew(1)>
 	</cfif>
-	<cfset arrayPrepend(request.$wheelsInvoked, duplicate(arguments))>
+	<cfset ArrayPrepend(request.$wheelsInvoked, Duplicate(arguments))>
 	<cfinvoke attributeCollection="#arguments#">
-	<cfset arrayDeleteAt(request.$wheelsInvoked, 1)>
+	<cfset ArrayDeleteAt(request.$wheelsInvoked, 1)>
 	<cfif StructKeyExists(local, "rv")>
 		<cfreturn local.rv>
 	</cfif>
@@ -182,7 +185,7 @@
 	<cfif StructKeyExists(arguments, "password") && !Len(arguments.password)>
 		<cfset StructDelete(arguments, "password")>
 	</cfif>
-	
+
 	<!---
 		If the cfdbinfo call fails we try it again, this time setting "dbname" explicitly.
 		Sometimes the call fails when using a custom database connection string.
@@ -206,9 +209,12 @@
 			<cfdbinfo attributeCollection="#arguments#">
 		</cfcatch>
 	</cftry>
-	
+
 	<!--- Override name of database adapter when running internal tests --->
-	<cfif arguments.type IS "version" AND StructKeyExists(url, "controller") AND StructKeyExists(url, "action") AND StructKeyExists(url, "view") AND StructKeyExists(url, "type") AND StructKeyExists(url, "adapter")>
+	<cfif arguments.type IS "version" AND StructKeyExists(url, "controller") AND StructKeyExists(url, "action") AND StructKeyExists(
+		url,
+		"view"
+	) AND StructKeyExists(url, "type") AND StructKeyExists(url, "adapter")>
 		<cfif url.controller IS "wheels" AND url.action IS "wheels" AND url.view IS "tests" AND url.type IS "core">
 			<cfset QuerySetCell(local.rv, "driver_name", url.adapter)>
 		</cfif>
@@ -239,7 +245,9 @@
 	<cfif StructKeyExists(arguments, "query") && IsQuery(arguments.query)>
 		<cfset var query = Duplicate(arguments.query)>
 	</cfif>
-	<cfquery attributeCollection="#arguments#" name="local.rv">#PreserveSingleQuotes(arguments.sql)#</cfquery>
+	<cfquery attributeCollection="#arguments#" name="local.rv">
+	#PreserveSingleQuotes(arguments.sql)#
+	</cfquery>
 	<!--- some sql statements may not return a value --->
 	<cfif StructKeyExists(local, "rv")>
 		<cfreturn local.rv>

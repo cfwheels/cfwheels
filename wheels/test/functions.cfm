@@ -99,7 +99,7 @@
 
 // variables that are used by the testing framework itself
 TESTING_FRAMEWORK_VARS = {};
-TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH  = "";
+TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH = "";
 TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = "";
 TESTING_FRAMEWORK_VARS.RUNNING_TEST = "";
 
@@ -138,7 +138,8 @@ public void function assert(required string expression) {
 					if (!(IsNumeric(token) || IsBoolean(token))) {
 						try {
 							local.tokenValue = Evaluate(token);
-						} catch (any e) {}
+						} catch (any e) {
+						}
 					}
 					// Format token value according to type.
 					if ((!IsSimpleValue(local.tokenValue)) || (local.tokenValue != "__INVALID__")) {
@@ -172,12 +173,12 @@ public void function assert(required string expression) {
 
 	@param message	Message to record in test results against failure.
 */
-public void function fail(string message="") {
+public void function fail(string message = "") {
 	/*
 		run() interprets exception with this errorcode as a "Failure".
 		All other errorcodes cause are interpreted as an "Error".
 	*/
-	throw(errorcode="__FAIL__", message="#HTMLEditFormat(message)#");
+	Throw(errorcode = "__FAIL__", message = "#HtmlEditFormat(message)#");
 }
 
 /*
@@ -190,7 +191,7 @@ public void function fail(string message="") {
 					good when you want to leave the debug command in the test for
 					later purposes, but don't want it to display
 	*/
-public any function debug(required string expression, boolean display=true) {
+public any function debug(required string expression, boolean display = true) {
 	var attributeArgs = {};
 	var dump = "";
 
@@ -198,21 +199,21 @@ public any function debug(required string expression, boolean display=true) {
 		return;
 	}
 
-	attributeArgs["var"] = evaluate(arguments.expression);
+	attributeArgs["var"] = Evaluate(arguments.expression);
 	attributeArgs["label"] = arguments.expression;
 
-	structDelete(arguments, "expression");
-	structDelete(arguments, "display");
-	structAppend(attributeArgs, arguments, true);
+	StructDelete(arguments, "expression");
+	StructDelete(arguments, "display");
+	StructAppend(attributeArgs, arguments, true);
 
 	savecontent variable="dump" {
-		writeDump(attributeCollection=attributeArgs);
+		WriteDump(attributeCollection = attributeArgs);
 	}
 
 	if (!StructKeyExists(request["TESTING_FRAMEWORK_DEBUGGING"], TESTING_FRAMEWORK_VARS.RUNNING_TEST)) {
 		request["TESTING_FRAMEWORK_DEBUGGING"][TESTING_FRAMEWORK_VARS.RUNNING_TEST] = [];
 	}
-	arrayAppend(request["TESTING_FRAMEWORK_DEBUGGING"][TESTING_FRAMEWORK_VARS.RUNNING_TEST], dump);
+	ArrayAppend(request["TESTING_FRAMEWORK_DEBUGGING"][TESTING_FRAMEWORK_VARS.RUNNING_TEST], dump);
 }
 
 /*
@@ -221,9 +222,9 @@ public any function debug(required string expression, boolean display=true) {
 	*/
 public string function raised(required string expression) {
 	try {
-		evaluate(arguments.expression);
+		Evaluate(arguments.expression);
 	} catch (any e) {
-		return trim(e.type);
+		return Trim(e.type);
 	}
 	return "";
 }
@@ -235,7 +236,7 @@ public string function raised(required string expression) {
 						request scope, defaults to "test"
 	@returns true if no errors
 	*/
-public boolean function $runTest(string resultKey="test", string testname="") {
+public boolean function $runTest(string resultKey = "test", string testname = "") {
 	var key = "";
 	var keyList = "";
 	var time = "";
@@ -246,7 +247,7 @@ public boolean function $runTest(string resultKey="test", string testname="") {
 	var numTests = 0;
 	var numTestFailures = 0;
 	var numTestErrors = 0;
-	var newline = chr(10) & chr(13);
+	var newline = Chr(10) & Chr(13);
 	var func = "";
 	var functions = "";
 	var tagContext = "";
@@ -259,51 +260,59 @@ public boolean function $runTest(string resultKey="test", string testname="") {
 		$resetTestResults(resultKey);
 	}
 
-	testCase = getMetadata(this).name;
+	testCase = GetMetadata(this).name;
 
 	/*
 		Iterate through the members of the this scope in alphabetical order,
 		invoking methods starting in "test".  Wrap with calls to setup()
 		and teardown() if provided.
 	*/
-	if(!structKeyExists(getMetadata(this), "functions")){
-		functions="";
+	if (!StructKeyExists(GetMetadata(this), "functions")) {
+		functions = "";
 	} else {
-		functions = getMetadata(this).functions;
+		functions = GetMetadata(this).functions;
 	}
 	for (func in functions) {
 		keyList = ListAppend(keyList, func.name);
 	};
 	keyList = ListSort(keyList, "textnocase", "asc");
 
-	for (key in listToArray(keyList)) {
-
+	for (key in ListToArray(keyList)) {
 		/* Include test name and make distinct so debugging doesn't duplicate output */
-		var distinctKey= replace(replace(replace(testCase, ".", "_", "all"), "tests_", "", "one"), "wheels_", "", "one") & '_' & key;
+		var distinctKey = Replace(
+			Replace(
+				Replace(testCase, ".", "_", "all"),
+				"tests_",
+				"",
+				"one"
+			),
+			"wheels_",
+			"",
+			"one"
+		) & '_' & key;
 		/* keep track of the test name so we can display debug information */
 		TESTING_FRAMEWORK_VARS.RUNNING_TEST = distinctkey;
 
-		if ((left(key, 4) eq "test" and isCustomFunction(this[key])) and (!len(arguments.testname) or (len(arguments.testname) and arguments.testname eq key))) {
+		if (
+			(Left(key, 4) eq "test" and IsCustomFunction(this[key])) and (
+				!Len(arguments.testname) or (Len(arguments.testname) and arguments.testname eq key)
+			)
+		) {
+			time = GetTickCount();
 
-			time = getTickCount();
-
-			if (structKeyExists(this, "setup")) {
+			if (StructKeyExists(this, "setup")) {
 				setup();
 			}
 
 			try {
-
 				message = "";
-				invoke(this, key);
+				Invoke(this, key);
 				status = "Success";
 				request[resultkey].numSuccesses = request[resultkey].numSuccesses + 1;
-
 			} catch (any e) {
-
 				message = e.message;
 
 				if (e.ErrorCode eq "__FAIL__") {
-
 					/*
 						fail() throws __FAIL__ exception
 					*/
@@ -311,9 +320,7 @@ public boolean function $runTest(string resultKey="test", string testname="") {
 					request[resultkey].ok = false;
 					request[resultkey].numFailures = request[resultkey].numFailures + 1;
 					numTestFailures = numTestFailures + 1;
-
 				} else {
-
 					/*
 						another exception thrown
 					*/
@@ -346,15 +353,14 @@ public boolean function $runTest(string resultKey="test", string testname="") {
 					request[resultkey].ok = false;
 					request[resultkey].numErrors = request[resultkey].numErrors + 1;
 					numTestErrors = numTestErrors + 1;
-
 				}
 			}
 
-			if (structKeyExists(this, "teardown")) {
+			if (StructKeyExists(this, "teardown")) {
 				teardown();
 			}
 
-			time = getTickCount() - time;
+			time = GetTickCount() - time;
 
 			/*
 				Record test results
@@ -365,11 +371,10 @@ public boolean function $runTest(string resultKey="test", string testname="") {
 			result.time = time;
 			result.status = status;
 			result.message = message;
-			arrayAppend(request[resultkey].results, result);
+			ArrayAppend(request[resultkey].results, result);
 
 			request[resultkey].numTests = request[resultkey].numTests + 1;
 			numTests = numTests + 1;
-
 		}
 	};
 
@@ -378,13 +383,12 @@ public boolean function $runTest(string resultKey="test", string testname="") {
 	result.numTests = numTests;
 	result.numFailures = numTestFailures;
 	result.numErrors = numTestErrors;
-	arrayAppend(request[resultkey].summary, result);
+	ArrayAppend(request[resultkey].summary, result);
 
 	request[resultkey].numCases = request[resultkey].numCases + 1;
-	request[resultkey].end = now();
+	request[resultkey].end = Now();
 
 	return numTestErrors eq 0;
-
 }
 
 /*
@@ -394,9 +398,9 @@ public boolean function $runTest(string resultKey="test", string testname="") {
 						request scope, defaults to "test"
 	*/
 
-public void function $resetTestResults(string resultKey="test") {
+public void function $resetTestResults(string resultKey = "test") {
 	request[resultkey] = {};
-	request[resultkey].begin = now();
+	request[resultkey].begin = Now();
 	request[resultkey].ok = true;
 	request[resultkey].numCases = 0;
 	request[resultkey].numTests = 0;
@@ -416,19 +420,19 @@ public void function $resetTestResults(string resultKey="test") {
 	@returns			HTML formatted test results
 	*/
 
-public any function $results(string resultKey="test") {
+public any function $results(string resultKey = "test") {
 	local.rv = false;
-	if (structkeyexists(request, resultkey)) {
+	if (StructKeyExists(request, resultkey)) {
 		request[resultkey].path = TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH;
 
 		local.summaryLength = ArrayLen(request[resultkey].summary);
-		for (local.i = 1; local.i <=local.summaryLength; local.i++) {
+		for (local.i = 1; local.i <= local.summaryLength; local.i++) {
 			request[resultkey].summary[local.i].cleanTestCase = $cleanTestCase(request[resultkey].summary[local.i].testCase);
 			request[resultkey].summary[local.i].packageName = $cleanTestPath(request[resultkey].summary[local.i].testCase);
 		};
 
 		local.resultsLength = ArrayLen(request[resultkey].results);
-		for (local.i = 1; local.i <=local.resultsLength; local.i++) {
+		for (local.i = 1; local.i <= local.resultsLength; local.i++) {
 			request[resultkey].results[local.i].cleanTestCase = $cleanTestCase(request[resultkey].results[local.i].testCase);
 			request[resultkey].results[local.i].cleanTestName = $cleanTestName(request[resultkey].results[local.i].testName);
 			request[resultkey].results[local.i].packageName = $cleanTestPath(request[resultkey].results[local.i].testCase);
@@ -440,16 +444,16 @@ public any function $results(string resultKey="test") {
 }
 
 /*
-	* The function wheels uses to run tests
-	*/
-public any function $wheelsRunner(struct options={}) {
+ * The function wheels uses to run tests
+ */
+public any function $wheelsRunner(struct options = {}) {
 	// the key in the request scope that will contain the test results
 	local.resultKey = "WheelsTests";
 
 	// save the original environment for overloading
 	local.wheelsApplicationScope = Duplicate(application);
 	// to enable unit testing controllers without actually performing the redirect
-	set(functionName="redirectTo", delay=true);
+	set(functionName = "redirectTo", delay = true);
 
 	// not only can we specify the package, but also the test we want to run
 	local.test = "";
@@ -491,19 +495,18 @@ public any function $wheelsRunner(struct options={}) {
 }
 
 /*
-	* Args:
-	* component: path to the component you want to check as a valid test
-	* shouldExtend: if the component should extend a base component to be a valid test
-	*/
-public boolean function $isValidTest(
-	required string component,
-	string shouldExtend="Test"
-) {
+ * Args:
+ * component: path to the component you want to check as a valid test
+ * shouldExtend: if the component should extend a base component to be a valid test
+ */
+public boolean function $isValidTest(required string component, string shouldExtend = "Test") {
 	local.name = ListLast(arguments.component, ".");
 
 	if (application.wheels.validateTestPackageMetaData && Len(arguments.shouldExtend)) {
-		local.metadata = GetComponentMetaData(arguments.component);
-		if (!StructKeyExists(local.metadata, "extends") or ListLast(local.metadata.extends.fullname, ".") neq arguments.shouldExtend) {
+		local.metadata = GetComponentMetadata(arguments.component);
+		if (
+			!StructKeyExists(local.metadata, "extends") or ListLast(local.metadata.extends.fullname, ".") neq arguments.shouldExtend
+		) {
 			return false;
 		}
 	}
@@ -523,7 +526,7 @@ public boolean function $isValidTest(
  */
 public string function $cleanTestCase(
 	required string name,
-	string path=TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH
+	string path = TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH
 ) {
 	return ListChangeDelims(Replace(arguments.name, arguments.path, ""), ".", ".");
 }
@@ -534,9 +537,18 @@ public string function $cleanTestCase(
 public string function $cleanTestName(required string name) {
 	local.rv = arguments.name;
 	if (Find("_", local.rv)) {
-		local.rv = humanize(Trim(REReplaceNoCase(ListRest(local.rv, "_"), "_|-", " ", "all")));
+		local.rv = humanize(
+			Trim(
+				ReReplaceNoCase(
+					ListRest(local.rv, "_"),
+					"_|-",
+					" ",
+					"all"
+				)
+			)
+		);
 	} else {
-		local.rv = REReplaceNoCase(local.rv, "_|-", " ", "all");
+		local.rv = ReReplaceNoCase(local.rv, "_|-", " ", "all");
 		local.rv = Right(local.rv, Len(local.rv) - 4);
 		local.rv = Trim(capitalize(LCase(humanize(local.rv))));
 	}
@@ -553,8 +565,7 @@ public string function $cleanTestPath(required string path) {
 /*
  * This resolves all the paths needed to run the tests.
  */
-public struct function $resolvePaths(struct options={}) {
-
+public struct function $resolvePaths(struct options = {}) {
 	local.rv = {};
 
 	// default test type
@@ -569,7 +580,7 @@ public struct function $resolvePaths(struct options={}) {
 		local.package = arguments.options.package;
 	}
 	// overwrite the default test type if passed
-	if (structkeyexists(arguments.options, "type") and len(arguments.options.type)) {
+	if (StructKeyExists(arguments.options, "type") and Len(arguments.options.type)) {
 		local.type = arguments.options.type;
 	}
 
@@ -583,34 +594,38 @@ public struct function $resolvePaths(struct options={}) {
 	} else {
 		// specific plugin tests
 		TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.rootComponentPath;
-		TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "#application.wheels.pluginComponentPath#.#local.type#", ".");
+		TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(
+			TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH,
+			"#application.wheels.pluginComponentPath#.#local.type#",
+			"."
+		);
 	}
 
 	TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "tests", ".");
 
 	// add the package if specified
-	local.rv.test_path = listappend("#TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH#", local.package, ".");
+	local.rv.test_path = ListAppend("#TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH#", local.package, ".");
 
 	// clean up testpath
-	local.rv.test_path = listchangedelims(local.rv.test_path, ".", "./\");
+	local.rv.test_path = ListChangeDelims(local.rv.test_path, ".", "./\");
 
 	// convert to regular path
-	local.rv.relative_root_test_path = "/" & listchangedelims(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "/", ".");
-	local.rv.full_root_test_path = expandpath(local.rv.relative_root_test_path);
-	local.rv.relative_test_path = "/" & listchangedelims(local.rv.test_path, "/", ".");
-	local.rv.full_test_path = expandPath(local.rv.relative_test_path);
+	local.rv.relative_root_test_path = "/" & ListChangeDelims(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "/", ".");
+	local.rv.full_root_test_path = ExpandPath(local.rv.relative_root_test_path);
+	local.rv.relative_test_path = "/" & ListChangeDelims(local.rv.test_path, "/", ".");
+	local.rv.full_test_path = ExpandPath(local.rv.relative_test_path);
 
 	if (!DirectoryExists(local.rv.full_test_path)) {
 		if (FileExists(local.rv.full_test_path & ".cfc")) {
-			local.rv.test_filter = reverse(listfirst(reverse(local.rv.test_path), "."));
-			local.rv.test_path = reverse(listrest(reverse(local.rv.test_path), "."));
-			local.rv.relative_test_path = "/" & listchangedelims(local.rv.test_path, "/", ".");
-			local.rv.full_test_path = expandPath(local.rv.relative_test_path);
+			local.rv.test_filter = Reverse(ListFirst(Reverse(local.rv.test_path), "."));
+			local.rv.test_path = Reverse(ListRest(Reverse(local.rv.test_path), "."));
+			local.rv.relative_test_path = "/" & ListChangeDelims(local.rv.test_path, "/", ".");
+			local.rv.full_test_path = ExpandPath(local.rv.relative_test_path);
 		} else {
-			throw(
-				type="Wheels.Testing",
-				message="Cannot find test package or single test",
-				detail="In order to run test you must supply a valid test package or single test file to run"
+			Throw(
+				type = "Wheels.Testing",
+				message = "Cannot find test package or single test",
+				detail = "In order to run test you must supply a valid test package or single test file to run"
 			);
 		}
 	}
@@ -624,13 +639,22 @@ public struct function $resolvePaths(struct options={}) {
 /*
  * Returns a query containing all the test to run and their directory path.
  */
-public query function $listTestPackages(struct options={}, string filter="*") {
+public query function $listTestPackages(struct options = {}, string filter = "*") {
 	local.rv = QueryNew("package", "Varchar");
 	local.paths = $resolvePaths(arguments.options);
 	$initialiseTestEnvironment(local.paths, arguments.options);
-	local.packages = DirectoryList(local.paths.full_test_path, true, "query", "#arguments.filter#.cfc");
+	local.packages = DirectoryList(
+		local.paths.full_test_path,
+		true,
+		"query",
+		"#arguments.filter#.cfc"
+	);
 	for (local.package in local.packages) {
-		local.packageName = ListChangeDelims(RemoveChars(local.package.directory, 1, Len(local.paths.full_test_path)), ".", "\/");
+		local.packageName = ListChangeDelims(
+			RemoveChars(local.package.directory, 1, Len(local.paths.full_test_path)),
+			".",
+			"\/"
+		);
 		// Directories that begin with an underscore are ignored.
 		if (!ReFindNoCase("(^|\.)_", local.packageName)) {
 			local.packageName = ListPrepend(local.packageName, local.paths.test_path, ".");
@@ -667,7 +691,12 @@ public void function $seedDatabase(required struct paths) {
  * Returns true if a file path is a wheels core file.
  */
 public any function $isCoreFile(required string path) {
-	local.path = Replace(arguments.path, ExpandPath("/"), "", "one");
+	local.path = Replace(
+		arguments.path,
+		ExpandPath("/"),
+		"",
+		"one"
+	);
 	return (Left(local.path, 7) == "wheels/" || ListFindNoCase("index.cfm,rewrite.cfm,root.cfm", local.path));
 }
 </cfscript>

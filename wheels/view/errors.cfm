@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Builds and returns a list (`ul` tag with a default `class` of `error-messages`) containing all the error messages for all the properties of the object.
  * Returns an empty string if no errors exist.
@@ -18,10 +17,10 @@ public string function errorMessagesFor(
 	boolean showDuplicates,
 	boolean encode
 ) {
-	$args(name="errorMessagesFor", args=arguments);
+	$args(name = "errorMessagesFor", args = arguments);
 	local.object = $getObject(arguments.objectName);
 	if ($get("showErrorInformation") && !IsObject(local.object)) {
-		Throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
+		Throw(type = "Wheels.IncorrectArguments", message = "The `#arguments.objectName#` variable is not an object.");
 	}
 	local.errors = local.object.allErrors();
 	local.rv = "";
@@ -32,16 +31,22 @@ public string function errorMessagesFor(
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.msg = local.errors[local.i].message;
 			if (arguments.showDuplicates) {
-				local.listItems &= $element(name="li", content=local.msg, encode=arguments.encode);
+				local.listItems &= $element(name = "li", content = local.msg, encode = arguments.encode);
 			} else {
 				if (!ListFind(local.used, local.msg, Chr(7))) {
-					local.listItems &= $element(name="li", content=local.msg, encode=arguments.encode);
+					local.listItems &= $element(name = "li", content = local.msg, encode = arguments.encode);
 					local.used = ListAppend(local.used, local.msg, Chr(7));
 				}
 			}
 		}
 		local.encode = arguments.encode ? "attributes" : false;
-		local.rv = $element(name="ul", skip="objectName,showDuplicates,encode", content=local.listItems, attributes=arguments, encode=local.encode);
+		local.rv = $element(
+			name = "ul",
+			skip = "objectName,showDuplicates,encode",
+			content = local.listItems,
+			attributes = arguments,
+			encode = local.encode
+		);
 	}
 	return local.rv;
 }
@@ -70,35 +75,33 @@ public string function errorMessageOn(
 	string class,
 	boolean encode
 ) {
-	$args(name="errorMessageOn", args=arguments);
+	$args(name = "errorMessageOn", args = arguments);
 	local.object = $getObject(arguments.objectName);
 	if ($get("showErrorInformation") && !IsObject(local.object)) {
-		Throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
+		Throw(type = "Wheels.IncorrectArguments", message = "The `#arguments.objectName#` variable is not an object.");
 	}
 	local.error = local.object.errorsOn(arguments.property);
 	local.rv = "";
 	if (!ArrayIsEmpty(local.error)) {
-
 		// Encode all prepend / append type arguments if specified.
 		if (arguments.encode && $get("encodeHtmlTags")) {
 			if (Len(arguments.prependText)) {
-				arguments.prependText = EncodeForHtml($canonicalize(arguments.prependText));
+				arguments.prependText = EncodeForHTML($canonicalize(arguments.prependText));
 			}
 			if (Len(arguments.appendText)) {
-				arguments.appendText = EncodeForHtml($canonicalize(arguments.appendText));
+				arguments.appendText = EncodeForHTML($canonicalize(arguments.appendText));
 			}
 		}
 
 		local.content = arguments.prependText & local.error[1].message & arguments.appendText;
 		local.rv = $element(
-			attributes=arguments,
-			content=local.content,
-			name=arguments.wrapperElement,
-			skip="objectName,property,prependText,appendText,wrapperElement,encode",
-			encode=arguments.encode
+			attributes = arguments,
+			content = local.content,
+			name = arguments.wrapperElement,
+			skip = "objectName,property,prependText,appendText,wrapperElement,encode",
+			encode = arguments.encode
 		);
 	}
 	return local.rv;
 }
-
 </cfscript>

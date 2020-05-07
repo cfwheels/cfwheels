@@ -16,7 +16,7 @@ component extends="wheels.tests.Test" {
 
 	function test_$listClean_return_array() {
 		mylist = "tony,    per   ,  james    ,,, chris   , raul ,,,,  peter";
-		r = $listClean(list=mylist, returnAs="array");
+		r = $listClean(list = mylist, returnAs = "array");
 		assert('IsArray(r) and ArrayLen(r) eq 6');
 	}
 

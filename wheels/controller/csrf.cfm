@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Tells CFWheels to protect `POST`ed requests from CSRF vulnerabilities.
  * Instructs the controller to verify that `params.authenticityToken` or `X-CSRF-Token` HTTP header is provided along with the request containing a valid authenticity token.
@@ -12,8 +11,8 @@
  * @only List of actions that this check should only run on. Leave blank for all.
  * @except List of actions that this check should be omitted from running on. Leave blank for no exceptions.
  */
-public function protectsFromForgery(string with="exception", string only="", string except="") {
-	$args(args=arguments, name="protectsFromForgery");
+public function protectsFromForgery(string with = "exception", string only = "", string except = "") {
+	$args(args = arguments, name = "protectsFromForgery");
 
 	// Store settings for this controller in `$class` for later use.
 	variables.$class.csrf.type = arguments.with;
@@ -38,7 +37,11 @@ public string function authenticityToken() {
 public function $runCsrfProtection(string action) {
 	if (StructKeyExists(variables.$class, "csrf")) {
 		local.csrf = variables.$class.csrf;
-		if ((!Len(local.csrf.only) && !Len(local.csrf.except)) || (Len(local.csrf.only) && ListFindNoCase(local.csrf.only, arguments.action)) || (Len(local.csrf.except) && !ListFindNoCase(local.csrf.except, arguments.action))) {
+		if (
+			(!Len(local.csrf.only) && !Len(local.csrf.except)) || (
+				Len(local.csrf.only) && ListFindNoCase(local.csrf.only, arguments.action)
+			) || (Len(local.csrf.except) && !ListFindNoCase(local.csrf.except, arguments.action))
+		) {
 			$storeAuthenticityToken();
 			$flagRequestAsProtected();
 			$setAuthenticityToken();
@@ -66,8 +69,8 @@ public function $verifyAuthenticityToken() {
 				return;
 			default:
 				Throw(
-					type="Wheels.InvalidAuthenticityToken",
-					message="This POSTed request was attempted without a valid authenticity token."
+					type = "Wheels.InvalidAuthenticityToken",
+					message = "This POSTed request was attempted without a valid authenticity token."
 				);
 		}
 	}
@@ -126,7 +129,7 @@ public boolean function $isAnyAuthenticityTokenValid() {
  */
 public string function $generateAuthenticityToken() {
 	if (application.wheels.csrfStore == "session") {
-		return CSRFGenerateToken();
+		return CsrfGenerateToken();
 	} else {
 		return $generateCookieAuthenticityToken();
 	}
@@ -149,10 +152,7 @@ public string function $generateCookieAuthenticityToken() {
 	// If cookie doesn't yet exist, create it.
 	if (!Len(local.authenticityToken)) {
 		local.authenticityToken = GenerateSecretKey(application.wheels.csrfCookieEncryptionAlgorithm);
-		local.value = SerializeJson({
-			sessionId=CreateUuid(),
-			authenticityToken=local.authenticityToken
-		});
+		local.value = SerializeJSON({sessionId = CreateUUID(), authenticityToken = local.authenticityToken});
 		local.value = Encrypt(
 			local.value,
 			application.wheels.csrfCookieEncryptionSecretKey,
@@ -163,11 +163,9 @@ public string function $generateCookieAuthenticityToken() {
 		if (application.wheels.csrfStore == "cookie") {
 			cookie[application.wheels.csrfCookieName] = $csrfCookieAttributeCollection(local.value);
 		} else {
-
 			// Tests will mock the cookie in the request scope.
 			request[application.wheels.csrfCookieName] = $csrfCookieAttributeCollection(local.value);
 			request[application.wheels.csrfCookieName].authenticityToken = local.authenticityToken;
-
 		}
 	}
 
@@ -196,10 +194,8 @@ public string function $readAuthenticityTokenFromCookie() {
 			application.wheels.csrfCookieEncryptionEncoding
 		);
 	} catch (any e) {
-
 		// When cookie is corrupted, return empty string.
 		return "";
-
 	}
 
 	// If we don't have cookie attr from above for some strange reason, fail.
@@ -208,12 +204,12 @@ public string function $readAuthenticityTokenFromCookie() {
 	}
 
 	// If we don't have JSON in cookie attrs, fail.
-	if (!IsSimpleValue(local.cookieAttrs) || !IsJson(local.cookieAttrs)) {
+	if (!IsSimpleValue(local.cookieAttrs) || !IsJSON(local.cookieAttrs)) {
 		return "";
 	}
 
 	// Now we have everything we need, deserialize.
-	local.cookieAttrs = DeserializeJson(local.cookieAttrs);
+	local.cookieAttrs = DeserializeJSON(local.cookieAttrs);
 
 	// Check to make sure the JSON we decoded has the authenticity token in it.
 	if (!StructKeyExists(local.cookieAttrs, "authenticityToken")) {
@@ -242,5 +238,4 @@ public struct function $csrfCookieAttributeCollection(required string value) {
 	}
 	return local.cookieStruct;
 }
-
 </cfscript>

@@ -4,11 +4,18 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		migration = CreateObject("component", "wheels.migrator.Migration").init();
-		migrator = CreateObject("component", "wheels.migrator").init(
-			migratePath="wheels/tests/_assets/migrator/migrations/",
-			sqlPath="wheels/tests/_assets/migrator/sql/"
+		migrator = CreateObject("component", "wheels.Migrator").init(
+			migratePath = "wheels/tests/_assets/migrator/migrations/",
+			sqlPath = "wheels/tests/_assets/migrator/sql/"
 		);
-		for (local.table in ["bunyips","dropbears","hoopsnakes","migratorversions"]) {
+		for (
+			local.table in [
+				"bunyips",
+				"dropbears",
+				"hoopsnakes",
+				"migratorversions"
+			]
+		) {
 			migration.dropTable(local.table);
 		};
 	}
@@ -23,4 +30,5 @@ component extends="wheels.tests.Test" {
 		actual = migrator.getCurrentMigrationVersion();
 		assert("actual eq expected");
 	}
+
 }

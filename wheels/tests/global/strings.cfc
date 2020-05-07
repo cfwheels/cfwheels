@@ -36,7 +36,7 @@ component extends="wheels.tests.Test" {
 		assert("NOT Compare(result, 'camelCasedFailure')");
 	}
 
- 	function test_pluralize() {
+	function test_pluralize() {
 		result = pluralize("status");
 		assert("NOT Compare(result, 'statuses')");
 	}

@@ -2,7 +2,16 @@
 application.wheels.controllerPath = "wheels/tests/_assets/controllers";
 application.wheels.modelPath = "/wheels/tests/_assets/models";
 application.wheels.modelComponentPath = "wheels.tests._assets.models";
-application.wheels.dataSourceName = "wheelstestdb";
+
+
+if(structKeyExists(url, "db") && listFind("mysql,sqlserver,postgres", url.db)){
+	application.wheels.dataSourceName = "wheelstestdb_" & url.db;
+} else {
+	application.wheels.dataSourceName = "wheelstestdb";
+}
+
+/* For JS Test Runner */
+$header(name="Access-Control-Allow-Origin", value="*");
 
 /* turn off default validations for testing */
 application.wheels.automaticValidations = false;
@@ -30,11 +39,11 @@ dummyController = controller("dummy");
 csrfToken = dummyController.$generateCookieAuthenticityToken();
 
 cookie[application.wheels.csrfCookieName] = Encrypt(
-  SerializeJson({ authenticityToken=csrfToken }),
-  application.wheels.csrfCookieEncryptionSecretKey,
-  application.wheels.csrfCookieEncryptionAlgorithm,
-  application.wheels.csrfCookieEncryptionEncoding
+	SerializeJSON({authenticityToken = csrfToken}),
+	application.wheels.csrfCookieEncryptionSecretKey,
+	application.wheels.csrfCookieEncryptionAlgorithm,
+	application.wheels.csrfCookieEncryptionEncoding
 );
 
-application.testenv.db=$dbinfo(datasource=application.wheels.dataSourceName, type="version");
+application.testenv.db = $dbinfo(datasource = application.wheels.dataSourceName, type = "version");
 </cfscript>

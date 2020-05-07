@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Returns an associated MIME type based on a file extension.
  *
@@ -9,7 +8,7 @@
  * @extension The extension to get the MIME type for.
  * @fallback The fallback MIME type to return.
  */
-public string function mimeTypes(required string extension, string fallback="application/octet-stream") {
+public string function mimeTypes(required string extension, string fallback = "application/octet-stream") {
 	local.rv = arguments.fallback;
 	if (StructKeyExists(application.wheels.mimetypes, arguments.extension)) {
 		local.rv = application.wheels.mimetypes[arguments.extension];
@@ -28,7 +27,7 @@ public string function mimeTypes(required string extension, string fallback="app
  * @truncateString String to replace the last characters with.
  */
 public string function truncate(required string text, numeric length, string truncateString) {
-	$args(name="truncate", args=arguments);
+	$args(name = "truncate", args = arguments);
 	if (Len(arguments.text) > arguments.length) {
 		local.rv = Left(arguments.text, arguments.length - Len(arguments.truncateString)) & arguments.truncateString;
 	} else {
@@ -48,7 +47,7 @@ public string function truncate(required string text, numeric length, string tru
  * @truncateString String to replace the last characters with.
  */
 public string function wordTruncate(required string text, numeric length, string truncateString) {
-	$args(name="wordTruncate", args=arguments);
+	$args(name = "wordTruncate", args = arguments);
 	local.words = ListToArray(arguments.text, " ", false);
 
 	// When there are fewer (or same) words in the string than the number to be truncated we can just return it unchanged.
@@ -76,8 +75,13 @@ public string function wordTruncate(required string text, numeric length, string
  * @radius Number of characters to extract surrounding the phrase.
  * @excerptString String to replace first and / or last characters with.
  */
-public string function excerpt(required string text, required string phrase, numeric radius, string excerptString) {
-	$args(name="excerpt", args=arguments);
+public string function excerpt(
+	required string text,
+	required string phrase,
+	numeric radius,
+	string excerptString
+) {
+	$args(name = "excerpt", args = arguments);
 	local.pos = FindNoCase(arguments.phrase, arguments.text, 1);
 
 	// Return an empty value if the text wasn't found at all.
@@ -120,7 +124,7 @@ public string function excerpt(required string text, required string phrase, num
  * @includeSeconds Whether or not to include the number of seconds in the returned string.
  */
 public string function distanceOfTimeInWords(required date fromTime, required date toTime, boolean includeSeconds) {
-	$args(name="distanceOfTimeInWords", args=arguments);
+	$args(name = "distanceOfTimeInWords", args = arguments);
 	local.minuteDiff = DateDiff("n", arguments.fromTime, arguments.toTime);
 	local.secondDiff = DateDiff("s", arguments.fromTime, arguments.toTime);
 	local.hours = 0;
@@ -153,7 +157,7 @@ public string function distanceOfTimeInWords(required date fromTime, required da
 	} else if (local.minuteDiff < 2880) {
 		local.rv = "1 day";
 	} else if (local.minuteDiff < 43200) {
-		local.days = Int(local.minuteDiff/1440);
+		local.days = Int(local.minuteDiff / 1440);
 		local.rv = local.days & " days";
 	} else if (local.minuteDiff < 86400) {
 		local.rv = "about 1 month";
@@ -183,9 +187,9 @@ public string function distanceOfTimeInWords(required date fromTime, required da
  * @includeSeconds Whether or not to include the number of seconds in the returned string.
  * @toTime Date to compare to.
  */
-public any function timeAgoInWords(required date fromTime, boolean includeSeconds, date toTime=Now()) {
-	$args(name="timeAgoInWords", args=arguments);
-	return distanceOfTimeInWords(argumentCollection=arguments);
+public any function timeAgoInWords(required date fromTime, boolean includeSeconds, date toTime = Now()) {
+	$args(name = "timeAgoInWords", args = arguments);
+	return distanceOfTimeInWords(argumentCollection = arguments);
 }
 
 /**
@@ -198,9 +202,9 @@ public any function timeAgoInWords(required date fromTime, boolean includeSecond
  * @includeSeconds Whether or not to include the number of seconds in the returned string.
  * @fromTime Date to compare from.
  */
-public string function timeUntilInWords(required date toTime, boolean includeSeconds, date fromTime=Now()) {
-	$args(name="timeUntilInWords", args=arguments);
-	return distanceOfTimeInWords(argumentCollection=arguments);
+public string function timeUntilInWords(required date toTime, boolean includeSeconds, date fromTime = Now()) {
+	$args(name = "timeUntilInWords", args = arguments);
+	return distanceOfTimeInWords(argumentCollection = arguments);
 }
 
 /**
@@ -212,8 +216,8 @@ public string function timeUntilInWords(required date toTime, boolean includeSec
  * @name Variable name to get setting for.
  * @functionName Function name to get setting for.
  */
-public any function get(required string name, string functionName="") {
-	return $get(argumentCollection=arguments);
+public any function get(required string name, string functionName = "") {
+	return $get(argumentCollection = arguments);
 }
 
 /**
@@ -223,7 +227,7 @@ public any function get(required string name, string functionName="") {
  * [category: Miscellaneous Functions]
  */
 public void function set() {
-	$set(argumentCollection=arguments);
+	$set(argumentCollection = arguments);
 }
 
 /**
@@ -250,12 +254,8 @@ public void function addFormat(required string extension, required string mimeTy
  * @methods If not RESTful, then specify allowed routes. Not recommended to set. Will probably be removed in a future version of wheels, as RESTful routes are the default.
  * @mapFormat This is useful for providing formats via URL like `json`, `xml`, `pdf`, etc. Set to false to disable automatic .[format] generation for resource based routes
  */
-public struct function mapper(
-	boolean restful=true,
-	boolean methods=arguments.restful,
-	boolean mapFormat=true
-) {
-	return application[$appKey()].mapper.$draw(argumentCollection=arguments);
+public struct function mapper(boolean restful = true, boolean methods = arguments.restful, boolean mapFormat = true) {
+	return application[$appKey()].mapper.$draw(argumentCollection = arguments);
 }
 
 /**
@@ -279,14 +279,15 @@ public any function processRequest(
 	string returnAs,
 	string rollback,
 	string includeFilters = true
-) {;
-	$args(name="processRequest", args=arguments);
+) {
+	;
+	$args(name = "processRequest", args = arguments);
 
 	// Set the global transaction mode to rollback when specified.
 	// Also save the current state so we can set it back after the tests have run.
 	if (arguments.rollback) {
 		local.transactionMode = $get("transactionMode");
-		$set(transactionMode="rollback");
+		$set(transactionMode = "rollback");
 	}
 
 	// Before proceeding we set the request method to our internal CGI scope if passed in.
@@ -296,17 +297,17 @@ public any function processRequest(
 	}
 
 	// Never deliver email or send files during test.
-	local.deliverEmail = $get(functionName="sendEmail", name="deliver");
-	$set(functionName="sendEmail", deliver=false);
-	local.deliverFile = $get(functionName="sendFile", name="deliver");
-	$set(functionName="sendFile", deliver=false);
+	local.deliverEmail = $get(functionName = "sendEmail", name = "deliver");
+	$set(functionName = "sendEmail", deliver = false);
+	local.deliverFile = $get(functionName = "sendFile", name = "deliver");
+	$set(functionName = "sendFile", deliver = false);
 
-	local.controller = controller(name=arguments.params.controller, params=arguments.params);
+	local.controller = controller(name = arguments.params.controller, params = arguments.params);
 
 	// Set to ignore CSRF errors during testing.
-	local.controller.protectsFromForgery(with="ignore");
+	local.controller.protectsFromForgery(with = "ignore");
 
-	local.controller.processAction(includeFilters=arguments.includeFilters);
+	local.controller.processAction(includeFilters = arguments.includeFilters);
 	local.response = local.controller.response();
 
 	// Get redirect info.
@@ -342,23 +343,23 @@ public any function processRequest(
 
 	// Set back the global transaction mode to the previous value if it has been changed.
 	if (arguments.rollback) {
-		$set(transactionMode=local.transactionMode);
+		$set(transactionMode = local.transactionMode);
 	}
 
 	// Set back the request method to GET (this is fine since the test suite is always run using GET).
 	request.cgi.request_method = "get";
 
 	// Set back email delivery setting to previous value.
-	$set(functionName="sendEmail", deliver=local.deliverEmail);
-	$set(functionName="sendFile", deliver=local.deliverFile);
+	$set(functionName = "sendEmail", deliver = local.deliverEmail);
+	$set(functionName = "sendFile", deliver = local.deliverFile);
 
 	// Set back the status code to 200 so the test suite does not use the same code that the action that was tested did.
 	// If the test suite fails it will set the status code to 500 later.
-	$header(statusCode=200, statusText="OK");
+	$header(statusCode = 200, statusText = "OK");
 
 	// Set the Content-Type header in case it was set to something else (e.g. application/json) during processing.
 	// It's fine to do this because we always want to return the test page as text/html.
-	$header(name="Content-Type", value="text/html", charset="UTF-8");
+	$header(name = "Content-Type", value = "text/html", charset = "UTF-8");
 
 	return local.rv;
 }
@@ -372,13 +373,13 @@ public any function processRequest(
  *
  * @handle The handle given to the query to return pagination information for.
  */
-public struct function pagination(string handle="query") {
+public struct function pagination(string handle = "query") {
 	if ($get("showErrorInformation")) {
 		if (!StructKeyExists(request.wheels, arguments.handle)) {
 			Throw(
-				type="Wheels.QueryHandleNotFound",
-				message="CFWheels couldn't find a query with the handle of `#arguments.handle#`.",
-				extendedInfo="Make sure your `findAll` call has the `page` argument specified and matching `handle` argument if specified."
+				type = "Wheels.QueryHandleNotFound",
+				message = "CFWheels couldn't find a query with the handle of `#arguments.handle#`.",
+				extendedInfo = "Make sure your `findAll` call has the `page` argument specified and matching `handle` argument if specified."
 			);
 		}
 	}
@@ -398,9 +399,9 @@ public struct function pagination(string handle="query") {
  */
 public void function setPagination(
 	required numeric totalRecords,
-	numeric currentPage=1,
-	numeric perPage=25,
-	string handle="query"
+	numeric currentPage = 1,
+	numeric perPage = 25,
+	string handle = "query"
 ) {
 	// NOTE: this should be documented as a controller function but needs to be placed here because the findAll() method calls it.
 
@@ -420,7 +421,7 @@ public void function setPagination(
 	}
 
 	// Calculate the total pages the query will have.
-	arguments.totalPages = Ceiling(arguments.totalRecords/arguments.perPage);
+	arguments.totalPages = Ceiling(arguments.totalRecords / arguments.perPage);
 
 	// The currentPage argument shouldn't be less then 1 or greater then the number of pages.
 	if (arguments.currentPage >= arguments.totalPages) {
@@ -463,15 +464,15 @@ public void function setPagination(
  * @name Name of the controller to create.
  * @params The params struct (combination of form and URL variables).
  */
-public any function controller(required string name, struct params={}) {
+public any function controller(required string name, struct params = {}) {
 	local.args = {};
 	local.args.name = arguments.name;
 	local.rv = $doubleCheckedLock(
-		condition="$cachedControllerClassExists",
-		conditionArgs=local.args,
-		execute="$createControllerClass",
-		executeArgs=local.args,
-		name="controllerLock#application.applicationName#"
+		condition = "$cachedControllerClassExists",
+		conditionArgs = local.args,
+		execute = "$createControllerClass",
+		executeArgs = local.args,
+		name = "controllerLock#application.applicationName#"
 	);
 	if (!StructIsEmpty(arguments.params)) {
 		local.rv = local.rv.$createControllerObject(arguments.params);
@@ -489,11 +490,11 @@ public any function controller(required string name, struct params={}) {
  */
 public any function model(required string name) {
 	return $doubleCheckedLock(
-		condition="$cachedModelClassExists",
-		conditionArgs=arguments,
-		execute="$createModelClass",
-		executeArgs=arguments,
-		name="modelLock#application.applicationName#"
+		condition = "$cachedModelClassExists",
+		conditionArgs = arguments,
+		execute = "$createModelClass",
+		executeArgs = arguments,
+		name = "modelLock#application.applicationName#"
 	);
 }
 
@@ -507,7 +508,7 @@ public any function model(required string name) {
  */
 public string function obfuscateParam(required any param) {
 	local.rv = arguments.param;
-	local.param = ArrayToList(REMatch("[0-9]+",arguments.param),"");
+	local.param = ArrayToList(ReMatch("[0-9]+", arguments.param), "");
 	if (Len(local.param) && local.param > 0 && Left(local.param, 1) != 0) {
 		local.iEnd = Len(local.param);
 		local.a = (10^local.iEnd) + Reverse(local.param);
@@ -516,7 +517,7 @@ public string function obfuscateParam(required any param) {
 			local.b += Left(Right(local.param, local.i), 1);
 		}
 		if (IsValid("integer", local.a)) {
-			local.rv = FormatBaseN(local.b+154, 16) & FormatBaseN(BitXor(local.a, 461), 16);
+			local.rv = FormatBaseN(local.b + 154, 16) & FormatBaseN(BitXor(local.a, 461), 16);
 		}
 	}
 	return local.rv;
@@ -534,8 +535,8 @@ public string function deobfuscateParam(required string param) {
 	if (Val(arguments.param) != arguments.param) {
 		try {
 			local.checksum = Left(arguments.param, 2);
-			local.rv = Right(arguments.param, Len(arguments.param)-2);
-			local.z = BitXor(InputBasen(local.rv, 16), 461);
+			local.rv = Right(arguments.param, Len(arguments.param) - 2);
+			local.z = BitXor(InputBaseN(local.rv, 16), 461);
 			local.rv = "";
 			local.iEnd = Len(local.z) - 1;
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -546,8 +547,8 @@ public string function deobfuscateParam(required string param) {
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.checkSumTest += Left(Right(local.rv, local.i), 1);
 			}
-			local.c1 = ToString(FormatBaseN(local.checkSumTest+154, 10));
-			local.c2 = InputBasen(local.checksum, 16);
+			local.c1 = ToString(FormatBaseN(local.checkSumTest + 154, 10));
+			local.c2 = InputBaseN(local.checksum, 16);
 			if (local.c1 != local.c2) {
 				local.rv = arguments.param;
 			}
@@ -589,21 +590,21 @@ public string function pluginNames() {
  * @encode Encode URL parameters using `EncodeForURL()`. Please note that this does not make the string safe for placement in HTML attributes, for that you need to wrap the result in `EncodeForHtmlAttribute()` or use `linkTo()`, `startFormTag()` etc instead.
  */
 public string function URLFor(
-	string route="",
-	string controller="",
-	string action="",
-	any key="",
-	string params="",
-	string anchor="",
+	string route = "",
+	string controller = "",
+	string action = "",
+	any key = "",
+	string params = "",
+	string anchor = "",
 	boolean onlyPath,
 	string host,
 	string protocol,
 	numeric port,
 	boolean encode,
-	boolean $encodeForHtmlAttribute=false,
-	string $URLRewriting=application.wheels.URLRewriting
+	boolean $encodeForHtmlAttribute = false,
+	string $URLRewriting = application.wheels.URLRewriting
 ) {
-	$args(name="URLFor", args=arguments);
+	$args(name = "URLFor", args = arguments);
 	local.coreVariables = "controller,action,key,format";
 	local.params = {};
 	if (StructKeyExists(variables, "params")) {
@@ -614,9 +615,9 @@ public string function URLFor(
 	local.hostOrProtocolNotEmpty = Len(arguments.host) || Len(arguments.protocol);
 	if (application.wheels.showErrorInformation && arguments.onlyPath && local.hostOrProtocolNotEmpty) {
 		Throw(
-			type="Wheels.IncorrectArguments",
-			message="Can't use the `host` or `protocol` arguments when `onlyPath` is `true`.",
-			extendedInfo="Set `onlyPath` to `false` so that `linkTo` will create absolute URLs and thus allowing you to set the `host` and `protocol` on the link."
+			type = "Wheels.IncorrectArguments",
+			message = "Can't use the `host` or `protocol` arguments when `onlyPath` is `true`.",
+			extendedInfo = "Set `onlyPath` to `false` so that `linkTo` will create absolute URLs and thus allowing you to set the `host` and `protocol` on the link."
 		);
 	}
 
@@ -655,11 +656,11 @@ public string function URLFor(
 	// Either from a passed in route or the Wheels default one.
 	// For the Wheels default we set the controller and action arguments to what's in the params struct.
 	if (Len(arguments.route)) {
-		local.route = $findRoute(argumentCollection=arguments);
+		local.route = $findRoute(argumentCollection = arguments);
 		local.variables = local.route.variables;
 		local.rv &= local.route.pattern;
-	} else if (structKeyExists(local.params,"route") && len (local.params.route)) {
-		local.route = $findRoute(route=local.params.route);
+	} else if (StructKeyExists(local.params, "route") && len(local.params.route)) {
+		local.route = $findRoute(route = local.params.route);
 		local.variables = local.route.variables;
 		local.rv &= local.route.pattern;
 	} else {
@@ -692,9 +693,9 @@ public string function URLFor(
 			local.value = local.route[local.property];
 		} else if (Len(arguments.route) && arguments.$URLRewriting != "Off") {
 			Throw(
-				type="Wheels.IncorrectRoutingArguments",
-				message="Incorrect Arguments",
-				extendedInfo="The route chosen by Wheels `#local.route.name#` requires the argument `#local.property#`. Pass the argument `#local.property#` or change your routes to reflect the proper variables needed."
+				type = "Wheels.IncorrectRoutingArguments",
+				message = "Incorrect Arguments",
+				extendedInfo = "The route chosen by Wheels `#local.route.name#` requires the argument `#local.property#`. Pass the argument `#local.property#` or change your routes to reflect the proper variables needed."
 			);
 		} else {
 			continue;
@@ -709,12 +710,12 @@ public string function URLFor(
 		if (arguments.encode && $get("encodeURLs")) {
 			local.value = EncodeForURL($canonicalize(local.value));
 			if (arguments.$encodeForHtmlAttribute) {
-				local.value = EncodeForHtmlAttribute(local.value);
+				local.value = EncodeForHTMLAttribute(local.value);
 			}
 		}
 
 		// If property is not in pattern, store it in the params argument.
-		if (!REFind(local.reg, local.rv)) {
+		if (!ReFind(local.reg, local.rv)) {
 			if (!ListFindNoCase(local.coreVariables, local.property)) {
 				arguments.params = ListAppend(arguments.params, "#local.property#=#local.value#", "&");
 			}
@@ -727,12 +728,16 @@ public string function URLFor(
 		} else if (application.wheels.obfuscateUrls) {
 			local.value = obfuscateParam(local.value);
 		}
-		local.rv = REReplace(local.rv, local.reg, local.value);
-
+		local.rv = ReReplace(local.rv, local.reg, local.value);
 	}
 
 	// Clean up unused keys in pattern.
-	local.rv = REReplace(local.rv, "((&|\?)\w+=|\/|\.)\[\*?\w+\]", "", "ALL");
+	local.rv = ReReplace(
+		local.rv,
+		"((&|\?)\w+=|\/|\.)\[\*?\w+\]",
+		"",
+		"ALL"
+	);
 
 	// When URL rewriting is on (or partially) we replace the "?controller="" stuff in the URL with just "/".
 	if (arguments.$URLRewriting != "Off") {
@@ -751,10 +756,10 @@ public string function URLFor(
 	// Add params to the URL when supplied.
 	if (Len(arguments.params)) {
 		local.rv &= $constructParams(
-			params=arguments.params,
-			encode=arguments.encode,
-			$encodeForHtmlAttribute=arguments.$encodeForHtmlAttribute,
-			$URLRewriting=arguments.$URLRewriting
+			params = arguments.params,
+			encode = arguments.encode,
+			$encodeForHtmlAttribute = arguments.$encodeForHtmlAttribute,
+			$URLRewriting = arguments.$URLRewriting
 		);
 	}
 
@@ -765,10 +770,9 @@ public string function URLFor(
 
 	// Prepend the full URL if directed.
 	if (!arguments.onlyPath) {
-		local.rv = $prependUrl(path=local.rv, argumentCollection=arguments);
+		local.rv = $prependUrl(path = local.rv, argumentCollection = arguments);
 	}
 
 	return local.rv;
 }
-
 </cfscript>

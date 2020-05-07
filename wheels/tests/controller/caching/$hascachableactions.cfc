@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		_controller = controller(name="dummy");
+		_controller = controller(name = "dummy");
 		_controller.$clearCachableActions();
 	}
 

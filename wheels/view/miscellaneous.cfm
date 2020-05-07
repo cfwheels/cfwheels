@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Highlights the phrase(s) everywhere in the text if found by wrapping them in `span` tags.
  *
@@ -21,8 +20,13 @@ public string function highlight(
 	string class,
 	boolean encode
 ) {
-	$args(name="highlight", args=arguments, combine="phrase/phrases", required="phrase");
-	local.text = arguments.encode && $get("encodeHtmlTags") ? EncodeForHtml($canonicalize(arguments.text)) : arguments.text;
+	$args(
+		name = "highlight",
+		args = arguments,
+		combine = "phrase/phrases",
+		required = "phrase"
+	);
+	local.text = arguments.encode && $get("encodeHtmlTags") ? EncodeForHTML($canonicalize(arguments.text)) : arguments.text;
 
 	// Return the passed in text unchanged (but encoded) if it's blank or the passed in phrase is blank.
 	if (!Len(local.text) || !Len(arguments.phrase)) {
@@ -43,7 +47,12 @@ public string function highlight(
 			local.endBracket = Find(">", local.text, local.foundAt);
 			if (local.startBracket < local.endBracket || !local.endBracket) {
 				local.attributes = {class = arguments.class};
-				local.newText &= $element(name=arguments.tag, content=local.mid, attributes=local.attributes, encode=arguments.encode);
+				local.newText &= $element(
+					name = arguments.tag,
+					content = local.mid,
+					attributes = local.attributes,
+					encode = arguments.encode
+				);
 			} else {
 				local.newText &= local.mid;
 			}
@@ -67,24 +76,39 @@ public string function highlight(
  * @encode [see:styleSheetLinkTag].
  */
 public string function simpleFormat(required string text, boolean wrap, boolean encode) {
-	$args(name="simpleFormat", args=arguments);
+	$args(name = "simpleFormat", args = arguments);
 	local.rv = Trim(arguments.text);
 
 	// Encode for html if specified, but revert the encoding of newline characters and carriage returns.
 	// We can safely revert that part of the encoding since we'll replace them with html tags anyway.
 	if (arguments.encode && $get("encodeHtmlTags")) {
-		local.rv = EncodeForHtml($canonicalize(local.rv));
+		local.rv = EncodeForHTML($canonicalize(local.rv));
 		local.rv = Replace(local.rv, "&##xa;", Chr(10), "all");
 		local.rv = Replace(local.rv, "&##xd;", Chr(13), "all");
 	}
 
 	local.rv = Replace(local.rv, Chr(13), "", "all");
-	local.rv = Replace(local.rv, Chr(10) & Chr(10), "</p><p>", "all");
+	local.rv = Replace(
+		local.rv,
+		Chr(10) & Chr(10),
+		"</p><p>",
+		"all"
+	);
 	local.rv = Replace(local.rv, Chr(10), "<br>", "all");
 
 	// Put the newline characters back in (good for editing in textareas with the original formatting for example).
-	local.rv = Replace(local.rv, "</p><p>", "</p>" & Chr(10) & Chr(10) & "<p>", "all");
-	local.rv = Replace(local.rv, "<br>", "<br>" & Chr(10), "all");
+	local.rv = Replace(
+		local.rv,
+		"</p><p>",
+		"</p>" & Chr(10) & Chr(10) & "<p>",
+		"all"
+	);
+	local.rv = Replace(
+		local.rv,
+		"<br>",
+		"<br>" & Chr(10),
+		"all"
+	);
 
 	if (arguments.wrap) {
 		local.rv = "<p>" & local.rv & "</p>";
@@ -109,7 +133,7 @@ public string function flashMessages(
 	boolean includeEmptyContainer,
 	boolean encode
 ) {
-	$args(name="flashMessages", args=arguments, combine="keys/key");
+	$args(name = "flashMessages", args = arguments, combine = "keys/key");
 	local.flash = $readFlash();
 	local.rv = "";
 
@@ -128,23 +152,39 @@ public string function flashMessages(
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.item = ListGetAt(local.flashKeys, local.i);
 		local.class = LCase(local.item) & "-message";
-		local.attributes = {class=local.class};
+		local.attributes = {class = local.class};
 		if (!StructKeyExists(arguments, "key") || arguments.key == local.item) {
 			local.content = local.flash[local.item];
 			// Do we have an array of values or a simple value?
-			if (isArray(local.content)) {
-				for(local.contentItem in local.content){
-					local.listItems &= $element(name="p", content=local.contentItem, attributes=local.attributes, encode=arguments.encode);
+			if (IsArray(local.content)) {
+				for (local.contentItem in local.content) {
+					local.listItems &= $element(
+						name = "p",
+						content = local.contentItem,
+						attributes = local.attributes,
+						encode = arguments.encode
+					);
 				}
-			} else if(IsSimpleValue(local.content)){
-				local.listItems &= $element(name="p", content=local.content, attributes=local.attributes, encode=arguments.encode);
+			} else if (IsSimpleValue(local.content)) {
+				local.listItems &= $element(
+					name = "p",
+					content = local.content,
+					attributes = local.attributes,
+					encode = arguments.encode
+				);
 			}
 		}
 	}
 
 	if (Len(local.listItems) || arguments.includeEmptyContainer) {
 		local.encode = arguments.encode ? "attributes" : false;
-		local.rv = $element(name="div", skip="key,keys,includeEmptyContainer,encode", content=local.listItems, attributes=arguments, encode=local.encode);
+		local.rv = $element(
+			name = "div",
+			skip = "key,keys,includeEmptyContainer,encode",
+			content = local.listItems,
+			attributes = arguments,
+			encode = local.encode
+		);
 	}
 	return local.rv;
 }
@@ -159,8 +199,7 @@ public string function flashMessages(
  * @position The position in the section's stack where you want the content placed. Valid values are `first`, `last`, or the numeric position.
  * @overwrite Whether or not to overwrite any of the content. Valid values are `false`, `true`, or `all`.
  */
-public void function contentFor(any position="last", any overwrite="false") {
-
+public void function contentFor(any position = "last", any overwrite = "false") {
 	// position in the array for the content
 	local.position = "last";
 
@@ -236,11 +275,11 @@ public void function contentFor(any position="last", any overwrite="false") {
  *
  * @name Name of the layout file to include.
  */
-public string function includeLayout(string name="layout") {
+public string function includeLayout(string name = "layout") {
 	arguments.partial = arguments.name;
 	StructDelete(arguments, "name");
 	arguments.$prependWithUnderscore = false;
-	return includePartial(argumentCollection=arguments);
+	return includePartial(argumentCollection = arguments);
 }
 
 /**
@@ -264,15 +303,17 @@ public string function includeLayout(string name="layout") {
  */
 public string function includePartial(
 	required any partial,
-	string group="",
-	any cache="",
+	string group = "",
+	any cache = "",
 	string layout,
 	string spacer,
 	any dataFunction,
-	boolean $prependWithUnderscore=true
+	boolean $prependWithUnderscore = true
 ) {
-	$args(name="includePartial", args=arguments);
-	return $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,group,cache,layout,spacer,dataFunction"));
+	$args(name = "includePartial", args = arguments);
+	return $includeOrRenderPartial(
+		argumentCollection = $dollarify(arguments, "partial,group,cache,layout,spacer,dataFunction")
+	);
 }
 
 /**
@@ -294,7 +335,7 @@ public string function contentForLayout() {
  * @name Name of layout section to return content for.
  * @defaultValue What to display as a default if the section is not defined.
  */
-public string function includeContent(string name="body", string defaultValue="") {
+public string function includeContent(string name = "body", string defaultValue = "") {
 	if (StructKeyExists(arguments, "default")) {
 		arguments.defaultValue = arguments.default;
 		StructDelete(arguments, "default");
@@ -316,7 +357,7 @@ public string function includeContent(string name="body", string defaultValue=""
  * @values List of values to cycle through.
  * @name Name to give the cycle. Useful when you use multiple cycles on a page.
  */
-public string function cycle(required string values, string name="default") {
+public string function cycle(required string values, string name = "default") {
 	if (!StructKeyExists(request.wheels, "cycle")) {
 		request.wheels.cycle = {};
 	}
@@ -340,7 +381,7 @@ public string function cycle(required string values, string name="default") {
  *
  * @name The name of the cycle to reset.
  */
-public void function resetCycle(string name="default") {
+public void function resetCycle(string name = "default") {
 	if (StructKeyExists(request.wheels, "cycle") && StructKeyExists(request.wheels.cycle, arguments.name)) {
 		StructDelete(request.wheels.cycle, arguments.name);
 	}
@@ -351,11 +392,11 @@ public void function resetCycle(string name="default") {
  */
 public string function $tag(
 	required string name,
-	struct attributes={},
-	string skip="",
-	string skipStartingWith="",
-	boolean encode=false,
-	string encodeExcept=""
+	struct attributes = {},
+	string skip = "",
+	string skipStartingWith = "",
+	boolean encode = false,
+	string encodeExcept = ""
 ) {
 	// start the HTML tag and give it its name
 	local.rv = "<" & arguments.name;
@@ -376,22 +417,34 @@ public string function $tag(
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.key = ListGetAt(local.sortedKeys, local.i);
 		// place the attribute name and value in the string unless it should be skipped according to the arguments or if it's an internal argument (starting with a "$" sign)
-		if (!ListFindNoCase(arguments.skip, local.key) && (!Len(arguments.skipStartingWith) || Left(local.key, Len(arguments.skipStartingWith)) != arguments.skipStartingWith) && Left(local.key, 1) != "$") {
-			local.rv &= $tagAttribute(name=local.key, value=arguments.attributes[local.key], encode=arguments.encode, encodeExcept=arguments.encodeExcept);
+		if (
+			!ListFindNoCase(arguments.skip, local.key) && (
+				!Len(arguments.skipStartingWith) || Left(local.key, Len(arguments.skipStartingWith)) != arguments.skipStartingWith
+			) && Left(local.key, 1) != "$"
+		) {
+			local.rv &= $tagAttribute(
+				name = local.key,
+				value = arguments.attributes[local.key],
+				encode = arguments.encode,
+				encodeExcept = arguments.encodeExcept
+			);
 		}
 	}
 
 	// End the tag and return it.
 	local.rv &= ">";
 	return local.rv;
-
 }
 
 /**
  * Internal function.
  */
-public string function $tagAttribute(required string name, required string value, required boolean encode, required string encodeExcept) {
-
+public string function $tagAttribute(
+	required string name,
+	required string value,
+	required boolean encode,
+	required string encodeExcept
+) {
 	// For custom data attributes we convert underscores and camel case to hyphens.
 	// E.g. "dataDomCache" and "data_dom_cache" becomes "data-dom-cache".
 	// This is to get around the issue with not being able to use a hyphen in an argument name in CFML.
@@ -405,11 +458,20 @@ public string function $tagAttribute(required string name, required string value
 
 	// set standard attribute name / value to use as the default to return (e.g. name / value part of <input name="value">)
 	local.rv = " " & arguments.name & "=""";
-	local.rv &= arguments.encode && !ListFind(arguments.encodeExcept, arguments.name) && $get("encodeHtmlAttributes") ? EncodeForHtmlAttribute($canonicalize(arguments.value)) : arguments.value;
+	local.rv &= arguments.encode && !ListFind(arguments.encodeExcept, arguments.name) && $get("encodeHtmlAttributes") ? EncodeForHTMLAttribute(
+		$canonicalize(arguments.value)
+	) : arguments.value;
 	local.rv &= """";
 
 	// when attribute can be boolean we handle it accordingly and override the above return value
-	if ((!IsBoolean(application.wheels.booleanAttributes) && ListFindNoCase(application.wheels.booleanAttributes, arguments.name)) || (IsBoolean(application.wheels.booleanAttributes) && application.wheels.booleanAttributes)) {
+	if (
+		(
+			!IsBoolean(application.wheels.booleanAttributes) && ListFindNoCase(
+				application.wheels.booleanAttributes,
+				arguments.name
+			)
+		) || (IsBoolean(application.wheels.booleanAttributes) && application.wheels.booleanAttributes)
+	) {
 		if (IsBoolean(arguments.value) || !CompareNoCase(arguments.value, "true") || !CompareNoCase(arguments.value, "false")) {
 			// value passed in can be handled as a boolean
 			if (arguments.value) {
@@ -429,17 +491,18 @@ public string function $tagAttribute(required string name, required string value
  */
 public string function $element(
 	required string name,
-	struct attributes={},
-	string content="",
-	string skip="",
-	string skipStartingWith="",
-	any encode=false,
-	string encodeExcept=""
+	struct attributes = {},
+	string content = "",
+	string skip = "",
+	string skipStartingWith = "",
+	any encode = false,
+	string encodeExcept = ""
 ) {
-
 	// Set a variable with the content of the tag.
 	// Encoded if global encode setting is true and true is also passed in to the function.
-	local.rv = IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags") ? EncodeForHtml($canonicalize(arguments.content)) : arguments.content;
+	local.rv = IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags") ? EncodeForHTML(
+		$canonicalize(arguments.content)
+	) : arguments.content;
 
 	// When only wanting to encode HTML attribute values (and not tag content) we set the encode argument to true before passing on to $tag().
 	if (arguments.encode == "attributes") {
@@ -447,26 +510,22 @@ public string function $element(
 	}
 
 	StructDelete(arguments, "content");
-	return $tag(argumentCollection=arguments) & local.rv & "</" & arguments.name & ">";
+	return $tag(argumentCollection = arguments) & local.rv & "</" & arguments.name & ">";
 }
 
 /**
  * Internal function.
  */
-public any function $objectName(
-	required any objectName,
-	string association="",
-	string position=""
-) {
+public any function $objectName(required any objectName, string association = "", string position = "") {
 	local.currentModelObject = false;
 	local.hasManyAssociationCount = 0;
 
 	// combine our arguments
-	$combineArguments(args=arguments, combine="positions,position");
-	$combineArguments(args=arguments, combine="associations,association");
+	$combineArguments(args = arguments, combine = "positions,position");
+	$combineArguments(args = arguments, combine = "associations,association");
 
 	if (IsObject(arguments.objectName)) {
-		Throw(type="Wheels.InvalidArgument", message="The `objectName` argument passed is not of type string.");
+		Throw(type = "Wheels.InvalidArgument", message = "The `objectName` argument passed is not of type string.");
 	}
 
 	// only try to create the object name if we have a simple value
@@ -476,14 +535,15 @@ public any function $objectName(
 			local.association = ListGetAt(arguments.associations, local.i);
 			local.currentModelObject = $getObject(arguments.objectName);
 			arguments.objectName &= "['" & local.association & "']";
-			local.expanded = local.currentModelObject.$expandedAssociations(include=local.association);
+			local.expanded = local.currentModelObject.$expandedAssociations(include = local.association);
 			local.expanded = local.expanded[1];
 			if (local.expanded.type == "hasMany") {
 				local.hasManyAssociationCount++;
 				if ($get("showErrorInformation") && local.hasManyAssociationCount > ListLen(arguments.positions)) {
 					Throw(
-						type="Wheels.InvalidArgument",
-						message="You passed the hasMany association of `#local.association#` but did not provide a corresponding position.");
+						type = "Wheels.InvalidArgument",
+						message = "You passed the hasMany association of `#local.association#` but did not provide a corresponding position."
+					);
 				}
 				arguments.objectName &= "[" & ListGetAt(arguments.positions, local.hasManyAssociationCount) & "]";
 			}
@@ -495,24 +555,40 @@ public any function $objectName(
 /**
  * Internal function.
  */
-public string function $tagId(
-	required any objectName,
-	required string property,
-	string valueToAppend=""
-) {
+public string function $tagId(required any objectName, required string property, string valueToAppend = "") {
 	if (IsSimpleValue(arguments.objectName)) {
 		// form element for object(s)
 		local.rv = ListLast(arguments.objectName, ".");
 		if (Find("[", local.rv)) {
-			local.rv = $swapArrayPositionsForIds(objectName=local.rv);
+			local.rv = $swapArrayPositionsForIds(objectName = local.rv);
 		}
 		if (Find("($", arguments.property)) {
 			arguments.property = ReplaceList(arguments.property, "($,)", "-,");
 		}
 		if (Find("[", arguments.property)) {
-			local.rv = REReplace(REReplace(local.rv & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
+			local.rv = ReReplace(
+				ReReplace(
+					local.rv & arguments.property,
+					"[,\[]",
+					"-",
+					"all"
+				),
+				"[""'\]]",
+				"",
+				"all"
+			);
 		} else {
-			local.rv = REReplace(REReplace(local.rv & "-" & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
+			local.rv = ReReplace(
+				ReReplace(
+					local.rv & "-" & arguments.property,
+					"[,\[]",
+					"-",
+					"all"
+				),
+				"[""'\]]",
+				"",
+				"all"
+			);
 		}
 	} else {
 		local.rv = ReplaceList(arguments.property, "[,($,],',"",)", "-,-,");
@@ -520,7 +596,7 @@ public string function $tagId(
 	if (Len(arguments.valueToAppend)) {
 		local.rv &= "-" & arguments.valueToAppend;
 	}
-	return REReplace(local.rv, "-+", "-", "all");
+	return ReReplace(local.rv, "-+", "-", "all");
 }
 
 /**
@@ -530,7 +606,7 @@ public string function $tagName(required any objectName, required string propert
 	if (IsSimpleValue(arguments.objectName)) {
 		local.rv = ListLast(arguments.objectName, ".");
 		if (Find("[", local.rv)) {
-			local.rv = $swapArrayPositionsForIds(objectName=local.rv);
+			local.rv = $swapArrayPositionsForIds(objectName = local.rv);
 		}
 		if (Find("[", arguments.property)) {
 			local.rv = ReplaceList(local.rv & arguments.property, "',""", "");
@@ -555,14 +631,19 @@ public string function $swapArrayPositionsForIds(required any objectName) {
 	local.iEnd = ArrayLen(local.array);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		// if we find a digit, we need to replace it with an id
-		if (REFind("\d", local.array[local.i])) {
+		if (ReFind("\d", local.array[local.i])) {
 			// build our object reference
 			local.objectReference = "";
 			local.jEnd = local.i;
 			for (local.j = 1; local.j <= local.jEnd; local.j++) {
 				local.objectReference = ListAppend(local.objectReference, ListGetAt(arguments.objectName, local.j, "["), "[");
 			}
-			local.rv = ListSetAt(local.rv, local.i, $getObject(local.objectReference).key($returnTickCountWhenNew=true) & "]", "[");
+			local.rv = ListSetAt(
+				local.rv,
+				local.i,
+				$getObject(local.objectReference).key($returnTickCountWhenNew = true) & "]",
+				"["
+			);
 		}
 	}
 	return local.rv;
@@ -582,10 +663,11 @@ public any function $getObject(required string objectname) {
 	} catch (any e) {
 		if ($get("showErrorInformation")) {
 			Throw(
-				type="Wheels.ObjectNotFound",
-				message="CFWheels tried to find the model object `#arguments.objectName#` for the form helper, but it does not exist.");
+				type = "Wheels.ObjectNotFound",
+				message = "CFWheels tried to find the model object `#arguments.objectName#` for the form helper, but it does not exist."
+			);
 		} else {
-			Throw(object=e);
+			Throw(object = e);
 		}
 	}
 	return local.rv;
@@ -599,12 +681,14 @@ public struct function $innerArgs(required string name, required struct args) {
 	local.element = arguments.name;
 	for (local.key in arguments.args) {
 		if (Left(local.key, Len(local.element)) == local.element) {
-			local.name = LCase(Mid(local.key, Len(local.element)+1, 1)) & Right(local.key, Len(local.key)-Len(local.element)-1);
+			local.name = LCase(Mid(local.key, Len(local.element) + 1, 1)) & Right(
+				local.key,
+				Len(local.key) - Len(local.element) - 1
+			);
 			local.rv[local.name] = arguments.args[local.key];
 			StructDelete(arguments.args, local.key);
 		}
 	}
 	return local.rv;
 }
-
 </cfscript>

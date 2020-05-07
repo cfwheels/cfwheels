@@ -15,12 +15,12 @@ component extends="wheels.tests.Test" {
 	}
 
 	/**
-	* HELPERS
-	*/
+	 * HELPERS
+	 */
 
 	function run_flashCount_valid() {
-		_controller.flashInsert(success="Congrats!");
-		_controller.flashInsert(anotherKey="Test!");
+		_controller.flashInsert(success = "Congrats!");
+		_controller.flashInsert(anotherKey = "Test!");
 		result = _controller.flashCount();
 		compare = _controller.flashCount();
 		assert("result IS compare");

@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Deletes all queries stored during the request for this model.
  */
@@ -17,7 +16,7 @@ public void function $clearRequestCache() {
  * @username The username for the data source.
  * @password The password for the data source.
  */
-public void function dataSource(required string datasource, string username="", string password="") {
+public void function dataSource(required string datasource, string username = "", string password = "") {
 	variables.wheels.class.datasource = arguments.datasource;
 	variables.wheels.class.username = arguments.username;
 	variables.wheels.class.password = arguments.password;
@@ -46,7 +45,7 @@ public void function table(required any name) {
  * @prefix A prefix to prepend to the table name.
  */
 public void function setTableNamePrefix(required string prefix) {
-	variables.wheels.class.tableNamePrefix =  arguments.prefix;
+	variables.wheels.class.tableNamePrefix = arguments.prefix;
 }
 
 /**
@@ -79,7 +78,7 @@ public void function setPrimaryKey(required string property) {
  * @property [see:setPrimaryKey].
  */
 public void function setPrimaryKeys(required string property) {
-	setPrimaryKey(argumentCollection=arguments);
+	setPrimaryKey(argumentCollection = arguments);
 }
 
 /**
@@ -96,18 +95,24 @@ public void function setPrimaryKeys(required string property) {
  * @parameterize [see:findAll].
  * @includeSoftDeletes [see:findAll].
  */
-public boolean function exists(any key, string where, boolean reload, any parameterize, boolean includeSoftDeletes) {
-	$args(name="exists", args=arguments);
+public boolean function exists(
+	any key,
+	string where,
+	boolean reload,
+	any parameterize,
+	boolean includeSoftDeletes
+) {
+	$args(name = "exists", args = arguments);
 	if ($get("showErrorInformation") && StructKeyExists(arguments, "key") && StructKeyExists(arguments, "where")) {
-			Throw(type="Wheels.IncorrectArguments", message="You cannot pass in both `key` and `where`.");
+		Throw(type = "Wheels.IncorrectArguments", message = "You cannot pass in both `key` and `where`.");
 	}
 	arguments.select = primaryKey();
 	arguments.returnAs = "query";
 	arguments.callbacks = false;
 	if (StructKeyExists(arguments, "key")) {
-		local.rv = findByKey(argumentCollection=arguments).recordCount;
+		local.rv = findByKey(argumentCollection = arguments).recordCount;
 	} else {
-		local.rv = findOne(argumentCollection=arguments).recordCount;
+		local.rv = findOne(argumentCollection = arguments).recordCount;
 	}
 	return local.rv;
 }
@@ -134,7 +139,7 @@ public string function columnNames() {
  *
  * @position If you are accessing a composite primary key, pass the position of a single key to fetch.
  */
-public string function primaryKey(numeric position=0) {
+public string function primaryKey(numeric position = 0) {
 	if (arguments.position > 0) {
 		return ListGetAt(variables.wheels.class.keys, arguments.position);
 	} else {
@@ -151,8 +156,8 @@ public string function primaryKey(numeric position=0) {
  *
  * @position [see:primaryKey].
  */
-public string function primaryKeys(numeric position=0) {
-	return primaryKey(argumentCollection=arguments);
+public string function primaryKeys(numeric position = 0) {
+	return primaryKey(argumentCollection = arguments);
 }
 
 /**
@@ -186,7 +191,7 @@ public string function getTableNamePrefix() {
  * [category: Miscellaneous Functions]
  */
 public string function isClass() {
-	return !isInstance(argumentCollection=arguments);
+	return !isInstance(argumentCollection = arguments);
 }
 
 /**
@@ -198,7 +203,7 @@ public string function isClass() {
  */
 public boolean function isNew() {
 	// The object is new when no values have been persisted to the database.
-	if (!StructKeyExists(variables, "$persistedProperties")){
+	if (!StructKeyExists(variables, "$persistedProperties")) {
 		return true;
 	} else {
 		return false;
@@ -263,9 +268,9 @@ public void function $keyLengthCheck(required any key) {
 	// throw error if the number of keys passed in is not the same as the number of keys defined for the model
 	if (ListLen(primaryKeys()) != ListLen(arguments.key)) {
 		Throw(
-			type="Wheels.InvalidArgumentValue",
-			message="The `key` argument contains an invalid value.",
-			extendedInfo="The `key` argument contains a list, however this table doesn't have a composite key. A list of values is allowed for the `key` argument, but this only applies in the case when the table contains a composite key."
+			type = "Wheels.InvalidArgumentValue",
+			message = "The `key` argument contains an invalid value.",
+			extendedInfo = "The `key` argument contains a list, however this table doesn't have a composite key. A list of values is allowed for the `key` argument, but this only applies in the case when the table contains a composite key."
 		);
 	}
 }
@@ -276,5 +281,4 @@ public void function $keyLengthCheck(required any key) {
 public void function $timestampProperty(required string property) {
 	this[arguments.property] = $timestamp(variables.wheels.class.timeStampMode);
 }
-
 </cfscript>

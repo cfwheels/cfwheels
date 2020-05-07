@@ -6,9 +6,9 @@ try {
 	availableMigrations = application.wheels.migrator.getAvailableMigrations();
 	prefix = "timestamp";
 	if(arrayLen(availableMigrations)){
-	 if(len(availableMigrations[1]["version"]) NEQ 14 ){
-	 	prefix = "numeric";
-	 }
+		if(len(availableMigrations[1]["version"]) NEQ 14 ){
+			prefix = "numeric";
+		}
 	}
 } catch (database err){
 	datasourceAvailable = false;
@@ -35,16 +35,16 @@ try {
 		<cfif !arrayLen(availableMigrations)><p>As you have no migration files yet, we need to define how you would like them prefixed</p></cfif>
 
 		<div class="field">
-		 <div class="ui radio checkbox">
+			<div class="ui radio checkbox">
 			<input type="radio" name="migrationPrefix" value="timestamp" <cfif preFix EQ 'timestamp'>checked</cfif>>
-			<label>Timestamp (e.g. <code>#dateformat(now(),'yyyymmdd')##timeformat(now(),'hhmmss')#</code>)  <strong>(Recommended)</strong></label>
-		 </div>
+			<label>Timestamp (e.g. <code>#dateformat(now(),'yyyymmdd')##timeformat(now(),'hhmmss')#</code>)	<strong>(Recommended)</strong></label>
+			</div>
 		</div>
 		<div class="field">
-		 <div class="ui radio checkbox">
+			<div class="ui radio checkbox">
 			<input type="radio" name="migrationPrefix" value="numeric" <cfif preFix EQ 'numeric'>checked</cfif>>
 			<label>Numeric (e.g. <code>001</code>)</label>
-		 </div>
+			</div>
 		</div>
 	</div>
 		<div class="ui hidden divider"></div>
@@ -99,9 +99,9 @@ try {
 
 		<div class="field">
 			<div class="ui labeled input">
-			  <div class="ui label">
-			   Description
-			  </div>
+				<div class="ui label">
+					Description
+				</div>
 			<input name="migrationName" id="migrationName" type="text" class="" placeholder=" (eg. 'creates member table')">
 			</div>
 		</div>
@@ -112,16 +112,16 @@ try {
 
 		<div id="result"></div>
 
-	  </div><!--/ui form -->
+		</div><!--/ui form -->
 	</div><!-- ui segment -->
 
 <cfelse>
 	<div class="ui placeholder segment">
-	  <div class="ui icon header">
-	    <i class="database icon"></i>
-	    Database Error<br><small>
+		<div class="ui icon header">
+			<i class="database icon"></i>
+			Database Error<br><small>
 		#message#</small>
-	  </div>
+		</div>
 	</div>
 </cfif>
  </div><!--/container -->
@@ -138,9 +138,9 @@ $(document).ready(function() {
 			"migrationName" : $("#migrationName").val()
 		}
 		var resp = $.ajax({
-			 url: url,
-			 method: 'post',
-			 data: data
+				url: url,
+				method: 'post',
+				data: data
 		})
 		.done(function(data, status, req) {
 			var res = $("#result");

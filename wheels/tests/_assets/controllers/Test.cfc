@@ -10,9 +10,9 @@ component extends="Controller" {
 	}
 
 	function testRedirect() {
-		redirectTo(action="dummy");
+		redirectTo(action = "dummy");
 		request.setInActionAfterRedirect = true;
-		renderView(action="test");
+		renderView(action = "test");
 	}
 
 	private struct function $dataForPartial() {

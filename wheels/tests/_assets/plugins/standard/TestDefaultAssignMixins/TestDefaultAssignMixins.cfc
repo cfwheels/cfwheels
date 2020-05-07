@@ -6,11 +6,9 @@ component mixin="wheels.Controller,wheels.Model" {
 	}
 
 	public void function $DefaultMixin1() {
-		
 	}
 
 	public void function $DefaultMixin2() {
-
 	}
 
 }

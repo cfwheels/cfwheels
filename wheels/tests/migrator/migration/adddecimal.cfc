@@ -17,8 +17,9 @@ component extends="wheels.tests.Test" {
 			case "H2":
 			case "MicrosoftSQLServer":
 			case "MySQL":
-			case "PostgreSQL":
 				return "DECIMAL";
+			case "PostgreSQL":
+				return "NUMERIC";
 			default:
 				return "`adddecimal()` not supported for " & migration.adapter.adapterName();
 		}
@@ -40,21 +41,17 @@ component extends="wheels.tests.Test" {
 
 		tableName = "dbm_add_decimal_tests";
 		columnName = "decimalCOLUMN";
-		t = migration.createTable(name=tableName, force=true);
-		t.decimal(columnName=columnName);
+		t = migration.createTable(name = tableName, force = true);
+		t.decimal(columnName = columnName);
 		t.create();
 
-		info = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			table=tableName,
-			type="columns"
-		);
-		actual = listToArray(valueList(info.TYPE_NAME))[2];
+		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "columns");
+		actual = ListToArray(ValueList(info.TYPE_NAME))[2];
 		migration.dropTable(tableName);
 
 		expected = getDecimalType();
 
-    	assert("actual eq expected");
+		assert("actual eq expected");
 	}
 
 	function test_add_multiple_decimal_columns() {
@@ -64,21 +61,18 @@ component extends="wheels.tests.Test" {
 
 		tableName = "dbm_add_decimal_tests";
 		columnNames = "decimalA,decimalB";
-		t = migration.createTable(name=tableName, force=true);
-		t.decimal(columnNames=columnNames);
+		t = migration.createTable(name = tableName, force = true);
+		t.decimal(columnNames = columnNames);
 		t.create();
 
-		info = $dbinfo(
-			datasource=application.wheels.dataSourceName,
-			table=tableName,
-			type="columns"
-		);
-		actual = listToArray(valueList(info.TYPE_NAME));
+		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "columns");
+		actual = ListToArray(ValueList(info.TYPE_NAME));
 		migration.dropTable(tableName);
 
 		expected = getDecimalType();
 
 		assert("actual[2] eq expected");
-    	assert("actual[3] eq expected");
+		assert("actual[3] eq expected");
 	}
+
 }

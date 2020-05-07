@@ -1,8 +1,8 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		migrator = CreateObject("component", "wheels.migrator").init(
-			migratePath="wheels/tests/_assets/migrator/migrations/"
+		migrator = CreateObject("component", "wheels.Migrator").init(
+			migratePath = "wheels/tests/_assets/migrator/migrations/"
 		);
 	}
 
@@ -15,4 +15,5 @@ component extends="wheels.tests.Test" {
 		expected = "001,002,003";
 		assert("actual eq expected");
 	}
+
 }

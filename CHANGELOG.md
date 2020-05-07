@@ -2,14 +2,33 @@
 
 # [2.2](TBC)
 
+### Model Enhancements
+
+- Experimental adapter for Oracle database - [Andrei B]
+- Added `automaticValidations` argument to the `property` method - [Per Djurner]
+- Support named second argument in `findOneBy[Property]And[Property]` and `findAllBy[Property]And[Property]` - [Per Djurner]
+- Support `value` argument in `findOrCreateBy[Property]` - [Per Djurner]
+
 ### View Enhancements
 
 - Added the `required` argument to `imageTag` to suppress exceptions if using non-existent files [#979](https://github.com/cfwheels/cfwheels/issues/979) - [Adam Chapman, Michael Diederich]
+- Removed authenticity token id attribute to avoid non-unique id warnings in Chrome [#953](https://github.com/cfwheels/cfwheels/issues/953) - [Per Djurner]
+
+### Bug Fixes
+
+- Removed authenticity token id attribute to avoid non-unique id warnings in Chrome [#953](https://github.com/cfwheels/cfwheels/issues/953) - [Per Djurner]
+- Fixes regular expression bug when using the SQL `IN` operator [#944](https://github.com/cfwheels/cfwheels/issues/944) - [Adam Chapman, Per Djurner]
+- Display content in maintenance mode on newer Lucee versions [#848](https://github.com/cfwheels/cfwheels/issues/848) - [Per Djurner]
+- `validatesUniquenessOf` does not respect allowBlank [#914](https://github.com/cfwheels/cfwheels/issues/914) - [Adam Chapman]
 
 ### Miscellaneous
 
 - Added the `refresh` url parameter for auto refreshing test framework html - [#986](https://github.com/cfwheels/cfwheels/issues/986) - [Adam Chapman]
 - Allow custom migrator templates by scanning the `/migrator/templates` directory - [Adam Chapman]
+- Minimum Lucee 5 version is now 5.3.2.77
+- Use `http_x_forwarded_proto` to determine if the application is running behind a loadbalancer that is performing SSL offloading - [Peter Amiri]
+- Allow the combination of `url` and `params` arguments with `redirectTo` - [Adam Chapman]
+- Display content in maintenance mode on newer Lucee versions [#848](https://github.com/cfwheels/cfwheels/issues/848) - [Per Djurner]
 
 <a name="2.1"></a>
 

@@ -15,11 +15,11 @@ component extends="wheels.tests.Test" {
 	}
 
 	/**
-	* HELPERS
-	*/
+	 * HELPERS
+	 */
 
 	function run_flashClear_valid() {
-		_controller.flashInsert(success="Congrats!");
+		_controller.flashInsert(success = "Congrats!");
 		_controller.flashClear();
 		result = StructKeyList(_controller.flash());
 		assert("result IS ''");

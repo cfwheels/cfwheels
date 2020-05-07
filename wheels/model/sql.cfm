@@ -1,12 +1,11 @@
 <cfscript>
-
 /**
  * Internal function.
  */
 public array function $addDeleteClause(required array sql, required boolean softDelete) {
 	if (variables.wheels.class.softDeletion && arguments.softDelete) {
 		ArrayAppend(arguments.sql, "UPDATE #tableName()# SET #variables.wheels.class.softDeleteColumn# = ");
-		local.param = {value=Now(), type="cf_sql_timestamp"};
+		local.param = {value = Now(), type = "cf_sql_timestamp"};
 		ArrayAppend(arguments.sql, local.param);
 	} else {
 		ArrayAppend(arguments.sql, "DELETE FROM #tableName()#");
@@ -14,11 +13,7 @@ public array function $addDeleteClause(required array sql, required boolean soft
 	return arguments.sql;
 }
 
-public string function $indexHint(
-	required struct useIndex,
-	required string modelName,
-	required string adapterName
- ) {
+public string function $indexHint(required struct useIndex, required string modelName, required string adapterName) {
 	local.rv = "";
 	if (StructKeyExists(arguments.useIndex, arguments.modelName)) {
 		local.indexName = arguments.useIndex[arguments.modelName];
@@ -40,15 +35,14 @@ public string function $fromClause(
 	struct useIndex = {},
 	string adapterName = get("adapterName")
 ) {
-
 	// start the from statement with the SQL keyword and the table name for the current model
 	local.rv = "FROM " & tableName();
 
 	// add the index hint
 	local.indexHint = this.$indexHint(
-		useIndex=arguments.useIndex,
-		modelName=variables.wheels.class.modelName,
-		adapterName=arguments.adapterName
+		useIndex = arguments.useIndex,
+		modelName = variables.wheels.class.modelName,
+		adapterName = arguments.adapterName
 	);
 	if (Len(local.indexHint)) {
 		local.rv = ListAppend(local.rv, local.indexHint, " ");
@@ -57,21 +51,29 @@ public string function $fromClause(
 	// add join statements if associations have been specified through the include argument
 	if (Len(arguments.include)) {
 		// get info for all associations
-		local.associations = $expandedAssociations(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
+		local.associations = $expandedAssociations(
+			include = arguments.include,
+			includeSoftDeletes = arguments.includeSoftDeletes
+		);
 
 		// add join statement for each include separated by space
 		local.iEnd = ArrayLen(local.associations);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.indexHint = this.$indexHint(
-				useIndex=arguments.useIndex,
-				modelName=local.associations[local.i].modelName,
-				adapterName=arguments.adapterName
+				useIndex = arguments.useIndex,
+				modelName = local.associations[local.i].modelName,
+				adapterName = arguments.adapterName
 			);
 			local.join = local.associations[local.i].join;
 			if (Len(local.indexHint)) {
 				// replace the table name with the table name & index hint
 				// TODO: factor in table aliases.. the index hint is placed after the table alias
-				local.join = Replace(local.join, " #local.associations[local.i].tableName# ", " #local.associations[local.i].tableName# #local.indexHint# ", "one");
+				local.join = Replace(
+					local.join,
+					" #local.associations[local.i].tableName# ",
+					" #local.associations[local.i].tableName# #local.indexHint# ",
+					"one"
+				);
 			}
 			local.rv = ListAppend(local.rv, local.join, " ");
 		}
@@ -98,7 +100,13 @@ public array function $addKeyWhereClause(required array sql) {
 		} else {
 			local.null = true;
 		}
-		local.param = {value=local.value, type=variables.wheels.class.properties[local.key].type, dataType=variables.wheels.class.properties[local.key].dataType, scale=variables.wheels.class.properties[local.key].scale, null=local.null};
+		local.param = {
+			value = local.value,
+			type = variables.wheels.class.properties[local.key].type,
+			dataType = variables.wheels.class.properties[local.key].dataType,
+			scale = variables.wheels.class.properties[local.key].scale,
+			null = local.null
+		};
 		ArrayAppend(arguments.sql, local.param);
 		if (local.i < local.iEnd) {
 			ArrayAppend(arguments.sql, " AND ");
@@ -118,11 +126,10 @@ public string function $orderByClause(required string order, required string inc
 		} else if (Find("(", arguments.order)) {
 			local.rv = arguments.order;
 		} else {
-
 			// Setup an array containing class info for current class and all the ones that should be included.
 			local.classes = [];
 			if (Len(arguments.include)) {
-				local.classes = $expandedAssociations(include=arguments.include);
+				local.classes = $expandedAssociations(include = arguments.include);
 			}
 			ArrayPrepend(local.classes, variables.wheels.class);
 
@@ -144,7 +151,12 @@ public string function $orderByClause(required string order, required string inc
 						if (ListFindNoCase(local.classData.propertyList, local.property)) {
 							local.toAdd = local.classData.tableName & "." & local.classData.properties[local.property].column;
 						} else if (ListFindNoCase(local.classData.calculatedPropertyList, local.property)) {
-							local.toAdd = "(" & Replace(local.classData.calculatedProperties[local.property].sql, ",", "[[comma]]", "all") & ")";
+							local.toAdd = "(" & Replace(
+								local.classData.calculatedProperties[local.property].sql,
+								",",
+								"[[comma]]",
+								"all"
+							) & ")";
 						}
 						if (Len(local.toAdd)) {
 							if (!ListFindNoCase(local.classData.columnList, local.property)) {
@@ -159,9 +171,9 @@ public string function $orderByClause(required string order, required string inc
 					}
 					if (application.wheels.showErrorInformation && !Len(local.toAdd)) {
 						Throw(
-							type="Wheels.ColumnNotFound",
-							message="Wheels looked for the column mapped to the `#local.property#` property but couldn't find it in the database table.",
-							extendedInfo="Verify the `order` argument and/or your property to column mappings done with the `property` method inside the model's `config` method to make sure everything is correct."
+							type = "Wheels.ColumnNotFound",
+							message = "Wheels looked for the column mapped to the `#local.property#` property but couldn't find it in the database table.",
+							extendedInfo = "Verify the `order` argument and/or your property to column mappings done with the `property` method inside the model's `config` method to make sure everything is correct."
 						);
 					}
 				}
@@ -190,10 +202,10 @@ public string function $groupByClause(
 	if (arguments.distinct) {
 		// if we want a distinct statement, we can do it grouping every field in the select
 		local.args.list = arguments.select;
-		local.rv = $createSQLFieldList(argumentCollection=local.args);
+		local.rv = $createSQLFieldList(argumentCollection = local.args);
 	} else if (Len(arguments.group)) {
 		local.args.list = arguments.group;
-		local.rv = $createSQLFieldList(argumentCollection=local.args);
+		local.rv = $createSQLFieldList(argumentCollection = local.args);
 	}
 	if (Len(local.rv)) {
 		local.rv = "GROUP BY " & local.rv;
@@ -207,10 +219,16 @@ public string function $groupByClause(
 public string function $selectClause(
 	required string select,
 	required string include,
-	boolean includeSoftDeletes="false",
+	boolean includeSoftDeletes = "false",
 	required string returnAs
 ) {
-	local.rv = $createSQLFieldList(clause="select", list=arguments.select, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, returnAs=arguments.returnAs);
+	local.rv = $createSQLFieldList(
+		clause = "select",
+		list = arguments.select,
+		include = arguments.include,
+		includeSoftDeletes = arguments.includeSoftDeletes,
+		returnAs = arguments.returnAs
+	);
 	local.rv = "SELECT " & local.rv;
 	return local.rv;
 }
@@ -223,19 +241,22 @@ public string function $createSQLFieldList(
 	required string list,
 	required string include,
 	required string returnAs,
-	boolean includeSoftDeletes="false",
-	boolean useExpandedColumnAliases="#application.wheels.useExpandedColumnAliases#"
+	boolean includeSoftDeletes = "false",
+	boolean useExpandedColumnAliases = "#application.wheels.useExpandedColumnAliases#"
 ) {
 	// setup an array containing class info for current class and all the ones that should be included
 	local.classes = [];
 	if (Len(arguments.include)) {
-		local.classes = $expandedAssociations(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
+		local.classes = $expandedAssociations(
+			include = arguments.include,
+			includeSoftDeletes = arguments.includeSoftDeletes
+		);
 	}
 	ArrayPrepend(local.classes, variables.wheels.class);
 
 	// if the developer passes in tablename.*, translate it into the list of fields for the developer, this is so we don't get *'s in the group by
 	if (Find(".*", arguments.list)) {
-		arguments.list = $expandProperties(list=arguments.list, classes=local.classes);
+		arguments.list = $expandProperties(list = arguments.list, classes = local.classes);
 	}
 
 	// add properties to select if the developer did not specify any
@@ -279,20 +300,27 @@ public string function $createSQLFieldList(
 				}
 
 				// if we find the property in this model and it's not already added we go ahead and add it to the select clause
-				if ((ListFindNoCase(local.classData.propertyList, local.iItem) || ListFindNoCase(local.classData.calculatedPropertyList, local.iItem)) && !ListFindNoCase(local.addedPropertiesByModel[local.classData.modelName], local.iItem)) {
+				if (
+					(
+						ListFindNoCase(local.classData.propertyList, local.iItem) || ListFindNoCase(
+							local.classData.calculatedPropertyList,
+							local.iItem
+						)
+					) && !ListFindNoCase(local.addedPropertiesByModel[local.classData.modelName], local.iItem)
+				) {
 					// if expanded column aliases is enabled then mark all columns from included classes as duplicates in order to prepend them with their class name
 					local.flagAsDuplicate = false;
 					if (arguments.clause == "select") {
 						if (local.duplicateCount) {
 							// always flag as a duplicate when a property with this name has already been added
-							local.flagAsDuplicate  = true;
+							local.flagAsDuplicate = true;
 						} else if (local.j > 1) {
 							if (arguments.useExpandedColumnAliases) {
 								// when on included models and using the new setting we flag every property as a duplicate so that the model name always gets prepended
-								local.flagAsDuplicate  = true;
+								local.flagAsDuplicate = true;
 							} else if (!arguments.useExpandedColumnAliases && arguments.returnAs != "query") {
 								// with the old setting we only do it when we're returning object(s) since when creating instances on none base models we need the model name prepended
-								local.flagAsDuplicate  = true;
+								local.flagAsDuplicate = true;
 							}
 						}
 					}
@@ -310,15 +338,23 @@ public string function $createSQLFieldList(
 							}
 						}
 					} else if (ListFindNoCase(local.classData.calculatedPropertyList, local.iItem)) {
-						local.sql = Replace(local.classData.calculatedProperties[local.iItem].sql, ",", "[[comma]]", "all");
-						if (arguments.clause == "select" || !REFind("^(SELECT )?(AVG|COUNT|MAX|MIN|SUM)\(.*\)", local.sql)) {
+						local.sql = Replace(
+							local.classData.calculatedProperties[local.iItem].sql,
+							",",
+							"[[comma]]",
+							"all"
+						);
+						if (arguments.clause == "select" || !ReFind("^(SELECT )?(AVG|COUNT|MAX|MIN|SUM)\(.*\)", local.sql)) {
 							local.toAppend &= "(" & local.sql & ")";
 							if (arguments.clause == "select") {
 								local.toAppend &= " AS " & local.iItem;
 							}
 						}
 					}
-					local.addedPropertiesByModel[local.classData.modelName] = ListAppend(local.addedPropertiesByModel[local.classData.modelName], local.iItem);
+					local.addedPropertiesByModel[local.classData.modelName] = ListAppend(
+						local.addedPropertiesByModel[local.classData.modelName],
+						local.iItem
+					);
 					break;
 				}
 			}
@@ -340,7 +376,12 @@ public string function $createSQLFieldList(
 
 				// check if this one has been flagged as a duplicate, we get the number of classes to skip and also remove the flagged info from the item
 				local.duplicateCount = 0;
-				local.matches = REFind("^\[\[duplicate\]\](\d+)(.+)$", local.iItem, 1, true);
+				local.matches = ReFind(
+					"^\[\[duplicate\]\](\d+)(.+)$",
+					local.iItem,
+					1,
+					true
+				);
 				if (local.matches.pos[1] > 0) {
 					local.duplicateCount = Mid(local.iItem, local.matches.pos[2], local.matches.len[2]);
 					local.iItem = Mid(local.iItem, local.matches.pos[3], local.matches.len[3]);
@@ -373,7 +414,12 @@ public string function $createSQLFieldList(
 	} else {
 		local.rv = arguments.list;
 		if (arguments.clause == "groupBy" && Find(" AS ", local.rv)) {
-			local.rv = REReplace(local.rv, variables.wheels.class.RESQLAs, "", "all");
+			local.rv = ReReplace(
+				local.rv,
+				variables.wheels.class.RESQLAs,
+				"",
+				"all"
+			);
 		}
 	}
 	return local.rv;
@@ -388,7 +434,11 @@ public array function $addWhereClause(
 	required string include,
 	required boolean includeSoftDeletes
 ) {
-	local.whereClause = $whereClause(where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
+	local.whereClause = $whereClause(
+		where = arguments.where,
+		include = arguments.include,
+		includeSoftDeletes = arguments.includeSoftDeletes
+	);
 	local.iEnd = ArrayLen(local.whereClause);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		ArrayAppend(arguments.sql, local.whereClause[local.i]);
@@ -399,24 +449,30 @@ public array function $addWhereClause(
 /**
  * Internal function.
  */
-public array function $whereClause(
-	required string where,
-	string include="",
-	boolean includeSoftDeletes="false"
-) {
+public array function $whereClause(required string where, string include = "", boolean includeSoftDeletes = "false") {
 	local.rv = [];
 	if (Len(arguments.where)) {
 		// setup an array containing class info for current class and all the ones that should be included
 		local.classes = [];
 		if (Len(arguments.include)) {
-			local.classes = $expandedAssociations(include=arguments.include);
+			local.classes = $expandedAssociations(include = arguments.include);
 		}
 		ArrayPrepend(local.classes, variables.wheels.class);
 
 		ArrayAppend(local.rv, "WHERE");
 		local.wherePos = ArrayLen(local.rv) + 1;
 		local.params = [];
-		local.where = REReplace(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "([^a-zA-Z0-9])(AND|OR)([^a-zA-Z0-9])", "\1#Chr(7)#\2\3", "all");
+		local.where = ReReplace(
+			ReReplace(
+				arguments.where,
+				variables.wheels.class.RESQLWhere,
+				"\1?\8",
+				"all"
+			),
+			"([^a-zA-Z0-9])(AND|OR)([^a-zA-Z0-9])",
+			"\1#Chr(7)#\2\3",
+			"all"
+		);
 		for (local.i = 1; local.i <= ListLen(local.where, Chr(7)); local.i++) {
 			local.param = {};
 			local.element = ListGetAt(local.where, local.i, Chr(7));
@@ -429,10 +485,24 @@ public array function $whereClause(
 			} else {
 				local.elementDataPart = local.element;
 			}
-			local.elementDataPart = Trim(REReplace(local.elementDataPart, "^(AND|OR)", ""));
-			local.temp = REFind("^([a-zA-Z0-9-_\.]*) ?#variables.wheels.class.RESQLOperators#", local.elementDataPart, 1, true);
+			local.elementDataPart = Trim(ReReplace(local.elementDataPart, "^(AND|OR)", ""));
+			local.temp = ReFind(
+				"^([a-zA-Z0-9-_\.]*) ?#variables.wheels.class.RESQLOperators#",
+				local.elementDataPart,
+				1,
+				true
+			);
 			if (ArrayLen(local.temp.len) > 1) {
-				local.where = Replace(local.where, local.element, Replace(local.element, local.elementDataPart, "?", "one"));
+				local.where = Replace(
+					local.where,
+					local.element,
+					Replace(
+						local.element,
+						local.elementDataPart,
+						"?",
+						"one"
+					)
+				);
 				local.param.property = Mid(local.elementDataPart, local.temp.pos[2], local.temp.len[2]);
 				local.jEnd = ArrayLen(local.classes);
 				for (local.j = 1; local.j <= local.jEnd; local.j++) {
@@ -454,7 +524,9 @@ public array function $whereClause(
 							local.param.column = "(" & local.classData.calculatedProperties[local.column].sql & ")";
 							if (StructKeyExists(local.classData.calculatedProperties[local.column], "dataType")) {
 								local.param.dataType = local.classData.calculatedProperties[local.column].dataType;
-								local.param.type = variables.wheels.class.adapter.$getType(local.param.dataType);
+								local.param.type = variables.wheels.class.adapter.$getType(
+									local.param.dataType
+								);
 							}
 							break;
 						}
@@ -462,12 +534,17 @@ public array function $whereClause(
 				}
 				if (application.wheels.showErrorInformation && !StructKeyExists(local.param, "column")) {
 					Throw(
-						type="Wheels.ColumnNotFound",
-						message="Wheels looked for the column mapped to the `#local.param.property#` property but couldn't find it in the database table.",
-						extendedInfo="Verify the `where` argument and/or your property to column mappings done with the `property` method inside the model's `config` method to make sure everything is correct."
+						type = "Wheels.ColumnNotFound",
+						message = "Wheels looked for the column mapped to the `#local.param.property#` property but couldn't find it in the database table.",
+						extendedInfo = "Verify the `where` argument and/or your property to column mappings done with the `property` method inside the model's `config` method to make sure everything is correct."
 					);
 				}
-				local.temp = REFind("^[a-zA-Z0-9-_\.]* ?#variables.wheels.class.RESQLOperators#", local.elementDataPart, 1, true);
+				local.temp = ReFind(
+					"^[a-zA-Z0-9-_\.]* ?#variables.wheels.class.RESQLOperators#",
+					local.elementDataPart,
+					1,
+					true
+				);
 				local.param.operator = Trim(Mid(local.elementDataPart, local.temp.pos[2], local.temp.len[2]));
 				if (Right(local.param.operator, 2) == "IN") {
 					local.param.list = true;
@@ -488,7 +565,12 @@ public array function $whereClause(
 			if (local.i < ListLen(local.where, "?")) {
 				local.column = local.params[local.i].column;
 				ArrayAppend(local.rv, local.column & " " & local.params[local.i].operator);
-				local.param = {type=local.params[local.i].type, dataType=local.params[local.i].dataType, scale=local.params[local.i].scale, list=local.params[local.i].list};
+				local.param = {
+					type = local.params[local.i].type,
+					dataType = local.params[local.i].dataType,
+					scale = local.params[local.i].scale,
+					list = local.params[local.i].list
+				};
 				ArrayAppend(local.rv, local.param);
 			}
 		}
@@ -524,22 +606,38 @@ public array function $addWhereClauseParameters(required array sql, required str
 		local.start = 1;
 		local.originalValues = [];
 		while (!StructKeyExists(local, "temp") || ArrayLen(local.temp.len) > 1) {
-			local.temp = REFind(variables.wheels.class.RESQLWhere, arguments.where, local.start, true);
+			local.temp = ReFind(
+				variables.wheels.class.RESQLWhere,
+				arguments.where,
+				local.start,
+				true
+			);
 			if (ArrayLen(local.temp.len) > 1) {
 				local.start = local.temp.pos[4] + local.temp.len[4];
-				ArrayAppend(local.originalValues, ReplaceList(Chr(7) & Mid(arguments.where, local.temp.pos[4], local.temp.len[4]) & Chr(7), "#Chr(7)#(,)#Chr(7)#,#Chr(7)#','#Chr(7)#,#Chr(7)#"",""#Chr(7)#,#Chr(7)#", ",,,,,,"));
+				ArrayAppend(
+					local.originalValues,
+					ReplaceList(
+						Chr(7) & Mid(arguments.where, local.temp.pos[4], local.temp.len[4]) & Chr(7),
+						"#Chr(7)#(,)#Chr(7)#,#Chr(7)#','#Chr(7)#,#Chr(7)#"",""#Chr(7)#,#Chr(7)#",
+						",,,,,,"
+					)
+				);
 			}
 		}
-		if (StructKeyExists(arguments, "parameterize") && IsNumeric(arguments.parameterize) && arguments.parameterize != ArrayLen(local.originalValues)) {
+		if (
+			StructKeyExists(arguments, "parameterize") && IsNumeric(arguments.parameterize) && arguments.parameterize != ArrayLen(
+				local.originalValues
+			)
+		) {
 			Throw(
-				type="Wheels.ParameterMismatch",
-				message="Wheels found #ArrayLen(local.originalValues)# parameters in the query string but was instructed to parameterize #arguments.parameterize#.",
-				extendedInfo="Verify that the number of parameters specified in the `where` argument mathes the number in the parameterize argument."
+				type = "Wheels.ParameterMismatch",
+				message = "Wheels found #ArrayLen(local.originalValues)# parameters in the query string but was instructed to parameterize #arguments.parameterize#.",
+				extendedInfo = "Verify that the number of parameters specified in the `where` argument mathes the number in the parameterize argument."
 			);
 		}
 		local.pos = ArrayLen(local.originalValues);
 		local.iEnd = ArrayLen(arguments.sql);
-		for (local.i=local.iEnd; local.i > 0; local.i--) {
+		for (local.i = local.iEnd; local.i > 0; local.i--) {
 			if (IsStruct(arguments.sql[local.i]) && local.pos > 0) {
 				arguments.sql[local.i].value = local.originalValues[local.pos];
 				if (local.originalValues[local.pos] == "") {
@@ -557,7 +655,7 @@ public array function $addWhereClauseParameters(required array sql, required str
  */
 public string function $expandProperties(required string list, required array classes) {
 	local.rv = arguments.list;
-	local.matches = REMatch("[A-Za-z1-9]+\.\*", local.rv);
+	local.matches = ReMatch("[A-Za-z1-9]+\.\*", local.rv);
 	local.iEnd = ArrayLen(local.matches);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.match = local.matches[local.i];
@@ -574,12 +672,17 @@ public string function $expandProperties(required string list, required array cl
 			}
 		}
 		if (Len(local.fields)) {
-			local.rv = Replace(local.rv, local.match, local.fields, "all");
+			local.rv = Replace(
+				local.rv,
+				local.match,
+				local.fields,
+				"all"
+			);
 		} else if (application.wheels.showErrorInformation) {
 			Throw(
-				type="Wheels.ModelNotFound",
-				message="Wheels looked for the model mapped to table name `#local.tableName#` but couldn't find it.",
-				extendedInfo="Verify the `select` argument and/or your model association mappings are correct."
+				type = "Wheels.ModelNotFound",
+				message = "Wheels looked for the model mapped to table name `#local.tableName#` but couldn't find it.",
+				extendedInfo = "Verify the `select` argument and/or your model association mappings are correct."
 			);
 		}
 	}
@@ -589,7 +692,7 @@ public string function $expandProperties(required string list, required array cl
 /**
  * Internal function.
  */
-public array function $expandedAssociations(required string include, boolean includeSoftDeletes="false") {
+public array function $expandedAssociations(required string include, boolean includeSoftDeletes = "false") {
 	local.rv = [];
 
 	// add the current class name so that the levels list start at the lowest level
@@ -607,12 +710,17 @@ public array function $expandedAssociations(required string include, boolean inc
 	local.pos = 1;
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		// look for the next delimiter sequence in the string and set it (can be single delims or a chain, e.g ',' or ')),'
-		local.delimFind = ReFind("[(\(|\)|,)]+", local.include, local.pos, true);
+		local.delimFind = ReFind(
+			"[(\(|\)|,)]+",
+			local.include,
+			local.pos,
+			true
+		);
 		local.delimSequence = Mid(local.include, local.delimFind.pos[1], local.delimFind.len[1]);
 
 		// set current association name and set new position to start search in the next loop
-		local.name = Mid(local.include, local.pos, local.delimFind.pos[1]-local.pos);
-		local.pos = REFindNoCase("[a-z]", local.include, local.delimFind.pos[1]);
+		local.name = Mid(local.include, local.pos, local.delimFind.pos[1] - local.pos);
+		local.pos = ReFindNoCase("[a-z]", local.include, local.delimFind.pos[1]);
 
 		// create a reference to current class in include string and get its association info
 		local.class = model(ListLast(local.levels));
@@ -621,9 +729,9 @@ public array function $expandedAssociations(required string include, boolean inc
 		// throw an error if the association was not found
 		if (application.wheels.showErrorInformation && !StructKeyExists(local.classAssociations, local.name)) {
 			Throw(
-				type="Wheels.AssociationNotFound",
-				message="An association named `#local.name#` could not be found on the `#ListLast(local.levels)#` model.",
-				extendedInfo="Setup an association in the `config` method of the `models/#capitalize(ListLast(local.levels))#.cfc` file and name it `#local.name#`. You can use the `belongsTo`, `hasOne` or `hasMany` method to set it up."
+				type = "Wheels.AssociationNotFound",
+				message = "An association named `#local.name#` could not be found on the `#ListLast(local.levels)#` model.",
+				extendedInfo = "Setup an association in the `config` method of the `models/#capitalize(ListLast(local.levels))#.cfc` file and name it `#local.name#`. You can use the `belongsTo`, `hasOne` or `hasMany` method to set it up."
 			);
 		}
 
@@ -632,9 +740,19 @@ public array function $expandedAssociations(required string include, boolean inc
 
 		if (!Len(local.classAssociations[local.name].foreignKey)) {
 			if (local.classAssociations[local.name].type == "belongsTo") {
-				local.classAssociations[local.name].foreignKey = local.associatedClass.$classData().modelName & Replace(local.associatedClass.$classData().keys, ",", ",#local.associatedClass.$classData().modelName#", "all");
+				local.classAssociations[local.name].foreignKey = local.associatedClass.$classData().modelName & Replace(
+					local.associatedClass.$classData().keys,
+					",",
+					",#local.associatedClass.$classData().modelName#",
+					"all"
+				);
 			} else {
-				local.classAssociations[local.name].foreignKey = local.class.$classData().modelName & Replace(local.class.$classData().keys, ",", ",#local.class.$classData().modelName#", "all");
+				local.classAssociations[local.name].foreignKey = local.class.$classData().modelName & Replace(
+					local.class.$classData().keys,
+					",",
+					",#local.class.$classData().modelName#",
+					"all"
+				);
 			}
 		}
 		if (!Len(local.classAssociations[local.name].joinKey)) {
@@ -653,11 +771,21 @@ public array function $expandedAssociations(required string include, boolean inc
 
 		// create the join string if it hasn't already been done
 		if (!StructKeyExists(local.classAssociations[local.name], "join")) {
-			local.join = UCase(ReplaceNoCase(local.classAssociations[local.name].joinType, "outer", "left outer", "one")) & " JOIN " & local.classAssociations[local.name].tableName;
+			local.join = UCase(
+				ReplaceNoCase(
+					local.classAssociations[local.name].joinType,
+					"outer",
+					"left outer",
+					"one"
+				)
+			) & " JOIN " & local.classAssociations[local.name].tableName;
 
 			// alias the table as the association name when joining to itself
 			if (ListFindNoCase(local.tables, local.classAssociations[local.name].tableName)) {
-				local.join = variables.wheels.class.adapter.$tableAlias(local.join,local.classAssociations[local.name].pluralizedName);
+				local.join = variables.wheels.class.adapter.$tableAlias(
+					local.join,
+					local.classAssociations[local.name].pluralizedName
+				);
 			}
 
 			local.join &= " ON ";
@@ -688,12 +816,19 @@ public array function $expandedAssociations(required string include, boolean inc
 				// alias the table as the association name when joining to itself
 				local.tableName = local.classAssociations[local.name].tableName;
 				if (ListFindNoCase(local.tables, local.classAssociations[local.name].tableName)) {
-					local.tableName = local.classAssociations[local.name].pluralizedName;;
+					local.tableName = local.classAssociations[local.name].pluralizedName;
+					;
 				}
 
-				local.toAppend = ListAppend(local.toAppend, "#local.class.$classData().tableName#.#local.class.$classData().properties[local.first].column# = #local.tableName#.#local.associatedClass.$classData().properties[local.second].column#");
+				local.toAppend = ListAppend(
+					local.toAppend,
+					"#local.class.$classData().tableName#.#local.class.$classData().properties[local.first].column# = #local.tableName#.#local.associatedClass.$classData().properties[local.second].column#"
+				);
 				if (!arguments.includeSoftDeletes && local.associatedClass.$softDeletion()) {
-					local.toAppend = ListAppend(local.toAppend, "#local.associatedClass.tableName()#.#local.associatedClass.$softDeleteColumn()# IS NULL");
+					local.toAppend = ListAppend(
+						local.toAppend,
+						"#local.associatedClass.tableName()#.#local.associatedClass.$softDeleteColumn()# IS NULL"
+					);
 				}
 			}
 			local.classAssociations[local.name].join = local.join & Replace(local.toAppend, ",", " AND ", "all");
@@ -722,7 +857,7 @@ public array function $expandedAssociations(required string include, boolean inc
 /**
  * Internal function.
  */
-public string function $keyWhereString(any properties=primaryKeys(), any values="", any keys="") {
+public string function $keyWhereString(any properties = primaryKeys(), any values = "", any keys = "") {
 	local.rv = "";
 	local.iEnd = ListLen(arguments.properties);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -735,7 +870,10 @@ public string function $keyWhereString(any properties=primaryKeys(), any values=
 			local.value = "";
 		}
 		local.type = validationTypeForProperty(local.key);
-		local.toAppend = local.key & "=" & variables.wheels.class.adapter.$quoteValue(str=local.value, type=local.type);
+		local.toAppend = local.key & "=" & variables.wheels.class.adapter.$quoteValue(
+			str = local.value,
+			type = local.type
+		);
 		local.rv = ListAppend(local.rv, local.toAppend, " ");
 		if (local.i < local.iEnd) {
 			local.rv = ListAppend(local.rv, "AND", " ");
@@ -743,5 +881,4 @@ public string function $keyWhereString(any properties=primaryKeys(), any values=
 	}
 	return local.rv;
 }
-
 </cfscript>

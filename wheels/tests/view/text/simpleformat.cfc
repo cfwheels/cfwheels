@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		_controller = controller(name="dummy");
+		_controller = controller(name = "dummy");
 		args = {};
 		args.text = "Lob'ortis, <erat> feugiat jus autem
 
@@ -19,7 +19,7 @@ augue validus cui lucidus.";
 	}
 
 	function test_text_should_format() {
-		e = _controller.simpleFormat(argumentcollection=args, encode=false);
+		e = _controller.simpleFormat(argumentcollection = args, encode = false);
 		r = "<p>Lob'ortis, <erat> feugiat jus autem</p>
 
 <p>vel obruo dolor luptatum, os in interdico ex. Sit typicus</p>
@@ -38,7 +38,7 @@ augue validus cui lucidus.</p>";
 	}
 
 	function test_encoding() {
-		result = _controller.simpleFormat(argumentcollection=args, encode=true);
+		result = _controller.simpleFormat(argumentcollection = args, encode = true);
 		expected = "<p>Lob&##x27;ortis, &lt;erat&gt; feugiat jus autem</p>
 
 <p>vel obruo dolor luptatum, os in interdico ex. Sit typicus</p>

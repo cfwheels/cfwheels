@@ -2,12 +2,12 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		include "setup.cfm";
-		set(functionName="flashMessages", encode=false);
+		set(functionName = "flashMessages", encode = false);
 	}
 
 	function teardown() {
 		include "teardown.cfm";
-		set(functionName="flashMessages", encode=true);
+		set(functionName = "flashMessages", encode = true);
 	}
 
 	function test_normal_output() {
@@ -46,7 +46,7 @@ component extends="wheels.tests.Test" {
 		run_allow_complex_values();
 	}
 
-	function test_appends_if_allowed(){
+	function test_appends_if_allowed() {
 		run_appends_if_allowed();
 		_controller.$setFlashStorage("cookie");
 		run_appends_if_allowed();
@@ -83,26 +83,28 @@ component extends="wheels.tests.Test" {
 	}
 
 	/**
-	* HELPERS
-	*/
+	 * HELPERS
+	 */
 
 	function run_normal_output() {
-		_controller.flashInsert(success="Congrats!");
-		_controller.flashInsert(alert="Error!");
+		_controller.flashInsert(success = "Congrats!");
+		_controller.flashInsert(alert = "Error!");
 		actual = _controller.flashMessages();
-		assert("actual IS '<div class=""flash-messages""><p class=""alert-message"">Error!</p><p class=""success-message"">Congrats!</p></div>'");
+		assert(
+			"actual IS '<div class=""flash-messages""><p class=""alert-message"">Error!</p><p class=""success-message"">Congrats!</p></div>'"
+		);
 	}
 
 	function run_specific_key_only() {
-		_controller.flashInsert(success="Congrats!");
-		_controller.flashInsert(alert="Error!");
-		actual = _controller.flashMessages(key="alert");
+		_controller.flashInsert(success = "Congrats!");
+		_controller.flashInsert(alert = "Error!");
+		actual = _controller.flashMessages(key = "alert");
 		assert("actual IS '<div class=""flash-messages""><p class=""alert-message"">Error!</p></div>'");
 	}
 
 	function run_passing_through_id() {
-		_controller.flashInsert(success="Congrats!");
-		actual = _controller.flashMessages(id="my-id");
+		_controller.flashInsert(success = "Congrats!");
+		actual = _controller.flashMessages(id = "my-id");
 		assert("actual Contains '<p class=""success-message"">Congrats!</p>' AND actual Contains 'id=""my-id""'");
 	}
 
@@ -112,16 +114,18 @@ component extends="wheels.tests.Test" {
 	}
 
 	function run_empty_flash_includeEmptyContainer() {
-		actual = _controller.flashMessages(includeEmptyContainer="true");
+		actual = _controller.flashMessages(includeEmptyContainer = "true");
 		assert("actual IS '<div class=""flash-messages""></div>'");
 	}
 
 	function run_appends_if_allowed() {
 		_controller.$setFlashAppend(true);
-		_controller.flashInsert(success="Congrats!");
-		_controller.flashInsert(success="Congrats Again!");
+		_controller.flashInsert(success = "Congrats!");
+		_controller.flashInsert(success = "Congrats Again!");
 		actual = _controller.flashMessages();
-		assert("actual IS '<div class=""flash-messages""><p class=""success-message"">Congrats!</p><p class=""success-message"">Congrats Again!</p></div>'");
+		assert(
+			"actual IS '<div class=""flash-messages""><p class=""success-message"">Congrats!</p><p class=""success-message"">Congrats Again!</p></div>'"
+		);
 		_controller.$setFlashAppend(false);
 	}
 
@@ -129,45 +133,51 @@ component extends="wheels.tests.Test" {
 		arr = [];
 		arr[1] = "Congrats!";
 		arr[2] = "Congrats Again!";
-		_controller.flashInsert(success=arr);
+		_controller.flashInsert(success = arr);
 		actual = _controller.flashMessages();
-		assert("actual IS '<div class=""flash-messages""><p class=""success-message"">Congrats!</p><p class=""success-message"">Congrats Again!</p></div>'");
+		assert(
+			"actual IS '<div class=""flash-messages""><p class=""success-message"">Congrats!</p><p class=""success-message"">Congrats Again!</p></div>'"
+		);
 	}
 
 	function run_control_order_via_keys_argument() {
-		_controller.flashInsert(success="Congrats!");
-		_controller.flashInsert(alert="Error!");
-		actual = _controller.flashMessages(keys="success,alert");
-		assert("actual IS '<div class=""flash-messages""><p class=""success-message"">Congrats!</p><p class=""alert-message"">Error!</p></div>'");
-		actual = _controller.flashMessages(keys="alert,success");
-		assert("actual IS '<div class=""flash-messages""><p class=""alert-message"">Error!</p><p class=""success-message"">Congrats!</p></div>'");
+		_controller.flashInsert(success = "Congrats!");
+		_controller.flashInsert(alert = "Error!");
+		actual = _controller.flashMessages(keys = "success,alert");
+		assert(
+			"actual IS '<div class=""flash-messages""><p class=""success-message"">Congrats!</p><p class=""alert-message"">Error!</p></div>'"
+		);
+		actual = _controller.flashMessages(keys = "alert,success");
+		assert(
+			"actual IS '<div class=""flash-messages""><p class=""alert-message"">Error!</p><p class=""success-message"">Congrats!</p></div>'"
+		);
 	}
 
 	function run_casing_of_class_attribute() {
- 		_controller.flashInsert(something="");
+		_controller.flashInsert(something = "");
 		actual = _controller.flashMessages();
 		expected = 'class="something-message"';
 		assert('Find(expected, actual)');
-		_controller.flashInsert(someThing="");
+		_controller.flashInsert(someThing = "");
 	}
 
 	function run_casing_of_class_attribute_mixed() {
-		_controller.flashInsert(someThing="");
+		_controller.flashInsert(someThing = "");
 		actual = _controller.flashMessages();
 		expected = 'class="something-message"';
 		assert('Find(expected, actual)');
 	}
 
 	function run_casing_of_class_attribute_upper() {
-		_controller.flashInsert(SOMETHING="");
+		_controller.flashInsert(SOMETHING = "");
 		actual = _controller.flashMessages();
 		expected = 'class="something-message"';
 		assert('Find(expected, actual)');
 	}
 
 	function run_setting_class() {
-		_controller.flashInsert(success="test");
-		actual = _controller.flashMessages(class="custom-class");
+		_controller.flashInsert(success = "test");
+		actual = _controller.flashMessages(class = "custom-class");
 		expected = 'class="custom-class"';
 		e2 = 'class="success-message"';
 		assert('Find(expected, actual) AND Find(e2, actual)');

@@ -7,7 +7,7 @@ component extends="wheels.tests.Test" {
 		oldViewPath = application.wheels.viewPath;
 		application.wheels.viewPath = "wheels/tests/_assets/views";
 		application.wheels.existingHelperFiles = "test";
-		params = {controller="test", action="helperCaller"};
+		params = {controller = "test", action = "helperCaller"};
 		_controller = controller("test", params);
 	}
 

@@ -1,11 +1,10 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-	  _debug = false;
+		_debug = false;
 	}
 
 	function test_setting_and_getting_properties() {
-
 		user = model("user").new();
 
 		args = {};
@@ -37,7 +36,7 @@ component extends="wheels.tests.Test" {
 		args.FirstName = "per";
 		args.LastName = "djurner";
 
-		user.setproperties(firstname="per", lastname="djurner");
+		user.setproperties(firstname = "per", lastname = "djurner");
 		props = user.properties();
 
 		for (i in props) {
@@ -54,7 +53,7 @@ component extends="wheels.tests.Test" {
 		_params.lastname = "peters";
 		_params.zipcode = "33333";
 
-		user.setproperties(firstname="chris", properties=_params);
+		user.setproperties(firstname = "chris", properties = _params);
 		props = user.properties();
 
 		for (i in props) {
@@ -66,14 +65,14 @@ component extends="wheels.tests.Test" {
 
 	function test_setting_and_getting_properties_with_named_arguments() {
 		author = model("author").findOne();
-		author.setProperties(firstName="a", lastName="b");
+		author.setProperties(firstName = "a", lastName = "b");
 		result = author.properties();
 		assert('result.firstName eq "a"');
 		assert('result.lastName eq "b"');
 	}
 
 	function test_properties_returns_expected_struct_keys() {
-		author = model("author").new(firstName="Foo", lastName="Bar");
+		author = model("author").new(firstName = "Foo", lastName = "Bar");
 
 		_properties = author.properties();
 		actual = ListSort(StructKeyList(_properties), "text");
@@ -85,8 +84,8 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_nested_property_returns_an_object() {
-		author = model("author").new(firstName="Foo", lastName="Bar");
-		author.post = model("post").new(title="Brown Fox");
+		author = model("author").new(firstName = "Foo", lastName = "Bar");
+		author.post = model("post").new(title = "Brown Fox");
 		_properties = author.properties();
 
 		actual = IsObject(_properties.post);
@@ -98,11 +97,8 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_nested_properties_returns_array_of_objects() {
-		author = model("author").new(firstName="Foo", lastName="Bar");
-		author.posts = [
-			model("post").new(title="Brown Fox"),
-			model("post").new(title="Lazy Dog")
-		];
+		author = model("author").new(firstName = "Foo", lastName = "Bar");
+		author.posts = [model("post").new(title = "Brown Fox"), model("post").new(title = "Lazy Dog")];
 
 		actual = author.properties().posts[2];
 
@@ -112,10 +108,10 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_nested_property_is_not_returned_when_returnincluded_is_false() {
-		author = model("author").new(firstName="Foo", lastName="Bar");
-		author.post = model("post").new(title="Brown Fox");
+		author = model("author").new(firstName = "Foo", lastName = "Bar");
+		author.post = model("post").new(title = "Brown Fox");
 
-		_properties = author.properties(returnIncluded=false);
+		_properties = author.properties(returnIncluded = false);
 		actual = ListSort(StructKeyList(_properties), "text");
 		expected = "firstName,lastName";
 
@@ -125,7 +121,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_afterfind_callback_returns_included_model_as_object() {
-		mypost = model("postWithAfterFindCallback").findOne(include="author");
+		mypost = model("postWithAfterFindCallback").findOne(include = "author");
 		assert("IsObject(mypost.author)");
 	}
 

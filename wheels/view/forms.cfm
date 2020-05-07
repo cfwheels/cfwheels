@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Builds and returns a string containing the closing `form` tag.
  *
@@ -11,15 +10,15 @@
  * @encode [see:styleSheetLinkTag].
  */
 public string function endFormTag(string prepend, string append, any encode) {
-	$args(name="endFormTag", args=arguments);
+	$args(name = "endFormTag", args = arguments);
 
 	// Encode all prepend / append type arguments if specified.
 	if (IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags")) {
 		if (Len(arguments.prepend)) {
-			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
+			arguments.prepend = EncodeForHTML($canonicalize(arguments.prepend));
 		}
 		if (Len(arguments.append)) {
-			arguments.append = EncodeForHtml($canonicalize(arguments.append));
+			arguments.append = EncodeForHTML($canonicalize(arguments.append));
 		}
 	}
 	arguments.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
@@ -57,12 +56,12 @@ public string function endFormTag(string prepend, string append, any encode) {
 public string function startFormTag(
 	string method,
 	boolean multipart,
-	string route="",
-	string controller="",
-	string action="",
-	any key="",
-	string params="",
-	string anchor="",
+	string route = "",
+	string controller = "",
+	string action = "",
+	any key = "",
+	string params = "",
+	string anchor = "",
 	boolean onlyPath,
 	string host,
 	string protocol,
@@ -71,16 +70,16 @@ public string function startFormTag(
 	string append,
 	any encode
 ) {
-	$args(name="startFormTag", args=arguments);
+	$args(name = "startFormTag", args = arguments);
 	local.routeAndMethodMatch = false;
 
 	// Encode all prepend / append type arguments if specified.
 	if (IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags")) {
 		if (Len(arguments.prepend)) {
-			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
+			arguments.prepend = EncodeForHTML($canonicalize(arguments.prepend));
 		}
 		if (Len(arguments.append)) {
-			arguments.append = EncodeForHtml($canonicalize(arguments.append));
+			arguments.append = EncodeForHTML($canonicalize(arguments.append));
 		}
 	}
 	arguments.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
@@ -89,39 +88,47 @@ public string function startFormTag(
 	request.wheels.currentFormMethod = arguments.method;
 
 	// Check to see if a route exists if not specified
-	if(!Len(arguments.route) && Len(arguments.controller) && Len(arguments.action) && Len(arguments.method)){
-		for (local.route in application.wheels.routes){
-			if (local.route.controller == arguments.controller && local.route.action == arguments.action && ListFindNoCase(local.route.methods,arguments.method)){
+	if (!Len(arguments.route) && Len(arguments.controller) && Len(arguments.action) && Len(arguments.method)) {
+		for (local.route in application.wheels.routes) {
+			if (
+				StructKeyExists(local.route, "controller") && local.route.controller == arguments.controller && StructKeyExists(
+					local.route,
+					"action"
+				) && local.route.action == arguments.action && ListFindNoCase(local.route.methods, arguments.method)
+			) {
 				arguments.route = local.route.name;
 				local.routeAndMethodMatch = true;
 				break;
 			}
 		}
 	}
-	
+
 	// if we have a route and method, tap
 	if (Len(arguments.route) && StructKeyExists(arguments, "method")) {
-
 		// Throw error if no route was found.
 		if (!StructKeyExists(application.wheels.namedRoutePositions, arguments.route)) {
 			$throwErrorOrShow404Page(
-				type="Wheels.RouteNotFound",
-				message="Could not find the `#arguments.route#` route.",
-				extendedInfo="Make sure there is a route configured in your `config/routes.cfm` file named `#arguments.route#`."
+				type = "Wheels.RouteNotFound",
+				message = "Could not find the `#arguments.route#` route.",
+				extendedInfo = "Make sure there is a route configured in your `config/routes.cfm` file named `#arguments.route#`."
 			);
 		}
 
 		// check to see if the route specified has a method to match the one passed in
-		if (!local.routeAndMethodMatch){
+		if (!local.routeAndMethodMatch) {
 			for (local.position in ListToArray(application.wheels.namedRoutePositions[arguments.route])) {
-				if (StructKeyExists(application.wheels.routes[local.position], "methods") && ListFindNoCase(application.wheels.routes[local.position].methods, arguments.method)) {
+				if (
+					StructKeyExists(application.wheels.routes[local.position], "methods") && ListFindNoCase(
+						application.wheels.routes[local.position].methods,
+						arguments.method
+					)
+				) {
 					local.routeAndMethodMatch = true;
 				}
 			}
 		}
 
 		if (local.routeAndMethodMatch) {
-
 			// save the method passed in
 			local.method = arguments.method;
 
@@ -135,7 +142,7 @@ public string function startFormTag(
 	local.encodeExcept = "";
 	if (!ReFindNoCase("^https?:\/\/", arguments.action)) {
 		arguments.$encodeForHtmlAttribute = true;
-		arguments.action = URLFor(argumentCollection=arguments);
+		arguments.action = uRLFor(argumentCollection = arguments);
 		local.encodeExcept = "action";
 	}
 
@@ -148,7 +155,7 @@ public string function startFormTag(
 
 	// variables passed in as route arguments should not be added to the html element
 	if (Len(arguments.route)) {
-		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection=arguments));
+		local.skip = ListAppend(local.skip, $routeVariables(argumentCollection = arguments));
 	}
 
 	// need to re-add action here even if it was removed due to being a route variable above
@@ -156,12 +163,18 @@ public string function startFormTag(
 		local.skip = ListDeleteAt(local.skip, ListFind(local.skip, "action"));
 	}
 
-	local.rv = arguments.prepend & $tag(name="form", skip=local.skip, attributes=arguments, encode=arguments.encode, encodeExcept=local.encodeExcept) & arguments.append;
+	local.rv = arguments.prepend & $tag(
+		name = "form",
+		skip = local.skip,
+		attributes = arguments,
+		encode = arguments.encode,
+		encodeExcept = local.encodeExcept
+	) & arguments.append;
 	if ($isRequestProtectedFromForgery() && ListFindNoCase("post,put,patch,delete", arguments.method)) {
 		local.rv &= authenticityTokenField();
 	}
-	if (structKeyExists(local, "method") && local.method != "get") {
-		local.rv &= hiddenFieldTag(name="_method", value=local.method);
+	if (StructKeyExists(local, "method") && local.method != "get") {
+		local.rv &= hiddenFieldTag(name = "_method", value = local.method);
 	}
 	return local.rv;
 }
@@ -186,15 +199,15 @@ public string function submitTag(
 	string append,
 	any encode
 ) {
-	$args(name="submitTag", reserved="type,src", args=arguments);
+	$args(name = "submitTag", reserved = "type,src", args = arguments);
 
 	// Encode all prepend / append type arguments if specified.
 	if (IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags")) {
 		if (Len(arguments.prepend)) {
-			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
+			arguments.prepend = EncodeForHTML($canonicalize(arguments.prepend));
 		}
 		if (Len(arguments.append)) {
-			arguments.append = EncodeForHtml($canonicalize(arguments.append));
+			arguments.append = EncodeForHTML($canonicalize(arguments.append));
 		}
 	}
 	arguments.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
@@ -209,11 +222,16 @@ public string function submitTag(
 		StructDelete(arguments, "image");
 		StructDelete(arguments, "append");
 		StructDelete(arguments, "prepend");
-		local.rv &= imageTag(argumentCollection=arguments);
+		local.rv &= imageTag(argumentCollection = arguments);
 		local.rv = Replace(local.rv, "<img", "<input");
 	} else {
 		arguments.type = "submit";
-		local.rv &= $tag(name="input", skip="image,append,prepend,encode", attributes=arguments, encode=arguments.encode);
+		local.rv &= $tag(
+			name = "input",
+			skip = "image,append,prepend,encode",
+			attributes = arguments,
+			encode = arguments.encode
+		);
 	}
 	local.rv &= local.append;
 	return local.rv;
@@ -242,15 +260,15 @@ public string function buttonTag(
 	string append,
 	any encode
 ) {
-	$args(name="buttonTag", args=arguments);
+	$args(name = "buttonTag", args = arguments);
 
 	// Encode all prepend / append type arguments if specified.
 	if (IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags")) {
 		if (Len(arguments.prepend)) {
-			arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
+			arguments.prepend = EncodeForHTML($canonicalize(arguments.prepend));
 		}
 		if (Len(arguments.append)) {
-			arguments.append = EncodeForHtml($canonicalize(arguments.append));
+			arguments.append = EncodeForHTML($canonicalize(arguments.append));
 		}
 	}
 
@@ -260,7 +278,7 @@ public string function buttonTag(
 		local.args.type = "image";
 		local.args.source = arguments.image;
 		local.args.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
-		arguments.content = imageTag(argumentCollection=local.args);
+		arguments.content = imageTag(argumentCollection = local.args);
 		arguments.encode = arguments.encode ? "attributes" : false;
 	}
 
@@ -276,7 +294,12 @@ public string function buttonTag(
 	StructDelete(arguments, "encode");
 
 	// create the button
-	return local.prepend & $element(name="button", content=local.content, attributes=arguments, encode=local.encode) & local.append;
+	return local.prepend & $element(
+		name = "button",
+		content = local.content,
+		attributes = arguments,
+		encode = local.encode
+	) & local.append;
 }
 
 /**
@@ -288,7 +311,7 @@ public string function $formValue(required any objectName, required string prope
 	} else {
 		local.object = $getObject(arguments.objectName);
 		if ($get("showErrorInformation") && !IsObject(local.object)) {
-			Throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
+			Throw(type = "Wheels.IncorrectArguments", message = "The `#arguments.objectName#` variable is not an object.");
 		}
 		if (StructKeyExists(local.object, arguments.property)) {
 			local.rv = local.object[arguments.property];
@@ -327,7 +350,7 @@ public boolean function $formHasError(required any objectName, required string p
 	if (!IsStruct(arguments.objectName)) {
 		local.object = $getObject(arguments.objectName);
 		if ($get("showErrorInformation") && !IsObject(local.object)) {
-			Throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
+			Throw(type = "Wheels.IncorrectArguments", message = "The `#arguments.objectName#` variable is not an object.");
 		}
 		if (ArrayLen(local.object.errorsOn(arguments.property))) {
 			local.rv = true;
@@ -344,7 +367,7 @@ public string function $createLabel(
 	required string property,
 	required string label,
 	required string prependToLabel,
-	any encode=false
+	any encode = false
 ) {
 	local.rv = arguments.prependToLabel;
 	local.attributes = {};
@@ -356,7 +379,12 @@ public string function $createLabel(
 	if (StructKeyExists(arguments, "id")) {
 		local.attributes.for = arguments.id;
 	}
-	local.rv &= $element(name="label", content=arguments.label, attributes=local.attributes, encode=arguments.encode);
+	local.rv &= $element(
+		name = "label",
+		content = arguments.label,
+		attributes = local.attributes,
+		encode = arguments.encode
+	);
 	return local.rv;
 }
 
@@ -374,37 +402,34 @@ public string function $formBeforeElement(
 	required string appendToLabel,
 	required string errorElement,
 	required string errorClass,
-	any encode=false
+	any encode = false
 ) {
-
 	// Encode all prepend type arguments if specified.
 	if (StructKeyExists(arguments, "encode") && IsBoolean(arguments.encode)) {
 		if (arguments.encode && $get("encodeHtmlTags")) {
 			if (Len(arguments.prepend)) {
-				arguments.prepend = EncodeForHtml($canonicalize(arguments.prepend));
+				arguments.prepend = EncodeForHTML($canonicalize(arguments.prepend));
 			}
 			if (Len(arguments.prependToLabel)) {
-				arguments.prependToLabel = EncodeForHtml($canonicalize(arguments.prependToLabel));
+				arguments.prependToLabel = EncodeForHTML($canonicalize(arguments.prependToLabel));
 			}
 		}
 	}
 
 	local.rv = "";
-	arguments.label = $getFieldLabel(argumentCollection=arguments);
-	if ($formHasError(argumentCollection=arguments) && Len(arguments.errorElement)) {
+	arguments.label = $getFieldLabel(argumentCollection = arguments);
+	if ($formHasError(argumentCollection = arguments) && Len(arguments.errorElement)) {
 		// the input has an error and should be wrapped in a tag so we need to start that wrapper tag
 		local.encode = IsBoolean(arguments.encode) && !arguments.encode ? false : true;
-		local.rv &= $tag(name=arguments.errorElement, class=arguments.errorClass, encode=local.encode);
+		local.rv &= $tag(name = arguments.errorElement, class = arguments.errorClass, encode = local.encode);
 	}
 	if (Len(arguments.label) && arguments.labelPlacement != "after") {
-		local.rv &= $createLabel(argumentCollection=arguments);
+		local.rv &= $createLabel(argumentCollection = arguments);
 		if (arguments.labelPlacement == "aroundRight") {
-
 			// Strip out both the label text and closing label tag since it will be placed after the form input.
 			// Needs to be done for both encoded and normal content.
-			local.rv = Replace(local.rv, EncodeForHtml($canonicalize(arguments.label)) & "</label>", "");
+			local.rv = Replace(local.rv, EncodeForHTML($canonicalize(arguments.label)) & "</label>", "");
 			local.rv = Replace(local.rv, arguments.label & "</label>", "");
-
 		} else if (arguments.labelPlacement == "before") {
 			// since the entire label is created we can append to it
 			local.rv &= arguments.appendToLabel;
@@ -430,27 +455,26 @@ public string function $formAfterElement(
 	required string prependToLabel,
 	required string appendToLabel,
 	required string errorElement,
-	any encode=false
+	any encode = false
 ) {
-
 	// Encode all append type arguments if specified.
 	if (StructKeyExists(arguments, "encode") && IsBoolean(arguments.encode)) {
 		if (arguments.encode && $get("encodeHtmlTags")) {
 			if (Len(arguments.append)) {
-				arguments.append = EncodeForHtml($canonicalize(arguments.append));
+				arguments.append = EncodeForHTML($canonicalize(arguments.append));
 			}
 			if (Len(arguments.appendToLabel)) {
-				arguments.appendToLabel = EncodeForHtml($canonicalize(arguments.appendToLabel));
+				arguments.appendToLabel = EncodeForHTML($canonicalize(arguments.appendToLabel));
 			}
 		}
 	}
 
 	local.rv = arguments.append;
-	arguments.label = $getFieldLabel(argumentCollection=arguments);
+	arguments.label = $getFieldLabel(argumentCollection = arguments);
 	if (Len(arguments.label) && arguments.labelPlacement != "before") {
 		if (arguments.labelPlacement == "after") {
 			// if the label should be placed after the tag we return the entire label tag
-			local.rv &= $createLabel(argumentCollection=arguments);
+			local.rv &= $createLabel(argumentCollection = arguments);
 		} else if (arguments.labelPlacement == "aroundRight") {
 			// if the text should be placed to the right of the form input we return both the text and the closing tag
 			local.rv &= arguments.label & "</label>";
@@ -460,7 +484,7 @@ public string function $formAfterElement(
 		}
 		local.rv &= arguments.appendToLabel;
 	}
-	if ($formHasError(argumentCollection=arguments) && Len(arguments.errorElement)) {
+	if ($formHasError(argumentCollection = arguments) && Len(arguments.errorElement)) {
 		// the input has an error and is wrapped in a tag so we need to close that wrapper tag
 		local.rv &= "</" & arguments.errorElement & ">";
 	}
@@ -485,5 +509,4 @@ public string function $getFieldLabel(required any objectName, required string p
 	}
 	return local.rv;
 }
-
 </cfscript>

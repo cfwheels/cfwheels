@@ -1,5 +1,4 @@
 <cfscript>
-
 /**
  * Use this method to specify which properties can be set through mass assignment.
  *
@@ -8,7 +7,7 @@
  *
  * @properties Property name (or list of property names) that are allowed to be altered through mass assignment.
  */
-public void function accessibleProperties(string properties="") {
+public void function accessibleProperties(string properties = "") {
 	if (StructKeyExists(arguments, "property")) {
 		arguments.properties = ListAppend(arguments.properties, arguments.property);
 	}
@@ -30,7 +29,7 @@ public void function accessibleProperties(string properties="") {
  *
  * @properties Property name (or list of property names) that are not allowed to be altered through mass assignment.
  */
-public void function protectedProperties(string properties="") {
+public void function protectedProperties(string properties = "") {
 	if (StructKeyExists(arguments, "property")) {
 		arguments.properties = ListAppend(arguments.properties, arguments.property);
 	}
@@ -51,29 +50,31 @@ public void function protectedProperties(string properties="") {
  * @defaultValue A default value for this property.
  * @select Whether to include this property by default in SELECT statements
  * @dataType Specify the column dataType for this property
+ * @automaticValidations Enable / disable automatic validations for this property.
  */
 public void function property(
 	required string name,
-	string column="",
-	string sql="",
-	string label="",
+	string column = "",
+	string sql = "",
+	string label = "",
 	string defaultValue,
-	boolean select="true",
-	string dataType="char"
+	boolean select = "true",
+	string dataType = "char",
+	boolean automaticValidations
 ) {
 	// validate setup
 	if (Len(arguments.column) && Len(arguments.sql)) {
 		Throw(
-			type="Wheels",
-			message="Incorrect Arguments",
-			extendedInfo="You cannot specify both a column and a sql statement when setting up the mapping for this property."
+			type = "Wheels",
+			message = "Incorrect Arguments",
+			extendedInfo = "You cannot specify both a column and a sql statement when setting up the mapping for this property."
 		);
 	}
 	if (Len(arguments.sql) && StructKeyExists(arguments, "defaultValue")) {
 		Throw(
-			type="Wheels",
-			message="Incorrect Arguments",
-			extendedInfo="You cannot specify a default value for calculated properties."
+			type = "Wheels",
+			message = "Incorrect Arguments",
+			extendedInfo = "You cannot specify a default value for calculated properties."
 		);
 	}
 
@@ -97,6 +98,9 @@ public void function property(
 	}
 	if (StructKeyExists(arguments, "defaultValue")) {
 		variables.wheels.class.mapping[arguments.name].defaultValue = arguments.defaultValue;
+	}
+	if (StructKeyExists(arguments, "automaticValidations")) {
+		variables.wheels.class.mapping[arguments.name].automaticValidations = arguments.automaticValidations;
 	}
 }
 
@@ -182,7 +186,7 @@ public any function validationTypeForProperty(required string property) {
  * [section: Model Object]
  * [category: Miscellaneous Functions]
  */
-public string function key(boolean $persisted=false, boolean $returnTickCountWhenNew=false) {
+public string function key(boolean $persisted = false, boolean $returnTickCountWhenNew = false) {
 	local.rv = "";
 	local.iEnd = ListLen(primaryKeys());
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -257,25 +261,25 @@ public boolean function propertyIsBlank(required string property) {
  * @save Argument to decide whether save the property after it has been toggled.
  */
 public boolean function toggle(required string property, boolean save) {
-	$args(name="toggle", args=arguments);
+	$args(name = "toggle", args = arguments);
 	if (!StructKeyExists(this, arguments.property)) {
 		Throw(
-			type="Wheels.PropertyDoesNotExist",
-			message="Property Does Not Exist",
-			extendedInfo="You may only toggle a property that exists on this model."
+			type = "Wheels.PropertyDoesNotExist",
+			message = "Property Does Not Exist",
+			extendedInfo = "You may only toggle a property that exists on this model."
 		);
 	}
 	if (!IsBoolean(this[arguments.property])) {
 		Throw(
-			type="Wheels.PropertyIsIncorrectType",
-			message="Incorrect Arguments",
-			extendedInfo="You may only toggle a property that evaluates to the boolean value."
+			type = "Wheels.PropertyIsIncorrectType",
+			message = "Incorrect Arguments",
+			extendedInfo = "You may only toggle a property that evaluates to the boolean value."
 		);
 	}
 	this[arguments.property] = !this[arguments.property];
 	local.rv = true;
 	if (arguments.save) {
-		local.rv = updateProperty(property=arguments.property, value=this[arguments.property]);
+		local.rv = updateProperty(property = arguments.property, value = this[arguments.property]);
 	}
 	return local.rv;
 }
@@ -288,7 +292,7 @@ public boolean function toggle(required string property, boolean save) {
  *
  * @returnIncluded Whether to return nested properties or not.
  */
-public struct function properties(boolean returnIncluded=true) {
+public struct function properties(boolean returnIncluded = true) {
 	local.rv = {};
 	// loop through all properties and functions in the this scope
 	for (local.key in this) {
@@ -321,8 +325,8 @@ public struct function properties(boolean returnIncluded=true) {
  *
  * @properties The properties you want to set on the object (can also be passed in as named arguments).
  */
-public void function setProperties(struct properties={}) {
-	$setProperties(argumentCollection=arguments);
+public void function setProperties(struct properties = {}) {
+	$setProperties(argumentCollection = arguments);
 }
 
 /**
@@ -334,7 +338,7 @@ public void function setProperties(struct properties={}) {
  *
  * @property Name of property to check for change.
  */
-public boolean function hasChanged(string property="") {
+public boolean function hasChanged(string property = "") {
 	// always return true if $persistedProperties does not exists
 	if (!StructKeyExists(variables, "$persistedProperties")) {
 		return true;
@@ -394,7 +398,12 @@ public string function changedProperties() {
  * @property Name of property to get the previous value for.
  */
 public string function changedFrom(required string property) {
-	if (StructKeyExists(variables, "$persistedProperties") && StructKeyExists(variables.$persistedProperties, arguments.property)) {
+	if (
+		StructKeyExists(variables, "$persistedProperties") && StructKeyExists(
+			variables.$persistedProperties,
+			arguments.property
+		)
+	) {
 		return variables.$persistedProperties[arguments.property];
 	} else {
 		return "";
@@ -435,7 +444,7 @@ public struct function allChanges() {
  * @property string false Name of property to clear information for.
  */
 public void function clearChangeInformation(string property) {
-	$updatePersistedProperties(argumentCollection=arguments);
+	$updatePersistedProperties(argumentCollection = arguments);
 }
 
 /**
@@ -443,9 +452,9 @@ public void function clearChangeInformation(string property) {
  */
 public any function $setProperties(
 	required struct properties,
-	string filterList="",
-	boolean setOnModel="true",
-	boolean $useFilterLists="true"
+	string filterList = "",
+	boolean setOnModel = "true",
+	boolean $useFilterLists = "true"
 ) {
 	local.rv = {};
 	arguments.filterList = ListAppend(arguments.filterList, "properties,filterList,setOnModel,$useFilterLists");
@@ -462,17 +471,27 @@ public any function $setProperties(
 		// required to ignore null keys
 		if (StructKeyExists(arguments.properties, local.key)) {
 			local.accessible = true;
-			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, local.key)) {
+			if (
+				arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(
+					variables.wheels.class.accessibleProperties.whiteList,
+					local.key
+				)
+			) {
 				local.accessible = false;
 			}
-			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, local.key)) {
+			if (
+				arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(
+					variables.wheels.class.accessibleProperties.blackList,
+					local.key
+				)
+			) {
 				local.accessible = false;
 			}
 			if (local.accessible) {
 				local.rv[local.key] = arguments.properties[local.key];
 			}
 			if (local.accessible && arguments.setOnModel) {
-				$setProperty(property=local.key, value=local.rv[local.key]);
+				$setProperty(property = local.key, value = local.rv[local.key]);
 			}
 		}
 	}
@@ -489,16 +508,41 @@ public any function $setProperties(
 public void function $setProperty(
 	required string property,
 	required any value,
-	struct associations=variables.wheels.class.associations
+	struct associations = variables.wheels.class.associations
 ) {
 	if (IsObject(arguments.value)) {
 		this[arguments.property] = arguments.value;
-	} else if (IsStruct(arguments.value) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[arguments.property].nested.allow && ListFindNoCase("belongsTo,hasOne", arguments.associations[arguments.property].type)) {
-		$setOneToOneAssociationProperty(property=arguments.property, value=arguments.value, association=arguments.associations[arguments.property]);
-	} else if (IsStruct(arguments.value) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[arguments.property].nested.allow && arguments.associations[arguments.property].type == "hasMany") {
-		$setCollectionAssociationProperty(property=arguments.property, value=arguments.value, association=arguments.associations[arguments.property]);
-	} else if (IsArray(arguments.value) && ArrayLen(arguments.value) && !IsObject(arguments.value[1]) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[arguments.property].nested.allow && arguments.associations[arguments.property].type == "hasMany") {
-		$setCollectionAssociationProperty(property=arguments.property, value=arguments.value, association=arguments.associations[arguments.property]);
+	} else if (
+		IsStruct(arguments.value) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[
+			arguments.property
+		].nested.allow && ListFindNoCase("belongsTo,hasOne", arguments.associations[arguments.property].type)
+	) {
+		$setOneToOneAssociationProperty(
+			property = arguments.property,
+			value = arguments.value,
+			association = arguments.associations[arguments.property]
+		);
+	} else if (
+		IsStruct(arguments.value) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[
+			arguments.property
+		].nested.allow && arguments.associations[arguments.property].type == "hasMany"
+	) {
+		$setCollectionAssociationProperty(
+			property = arguments.property,
+			value = arguments.value,
+			association = arguments.associations[arguments.property]
+		);
+	} else if (
+		IsArray(arguments.value) && ArrayLen(arguments.value) && !IsObject(arguments.value[1]) && StructKeyExists(
+			arguments.associations,
+			arguments.property
+		) && arguments.associations[arguments.property].nested.allow && arguments.associations[arguments.property].type == "hasMany"
+	) {
+		$setCollectionAssociationProperty(
+			property = arguments.property,
+			value = arguments.value,
+			association = arguments.associations[arguments.property]
+		);
 	} else {
 		this[arguments.property] = arguments.value;
 	}
@@ -519,17 +563,25 @@ public void function $updatePersistedProperties(string property) {
 /**
  * Internal function.
  */
-public any function $setDefaultValues(){
+public any function $setDefaultValues() {
 	// persisted properties
 	for (local.key in variables.wheels.class.properties) {
-		if (StructKeyExists(variables.wheels.class.properties[local.key], "defaultValue") && (!StructKeyExists(this, local.key) || !Len(this[local.key]))) {
+		if (
+			StructKeyExists(variables.wheels.class.properties[local.key], "defaultValue") && (
+				!StructKeyExists(this, local.key) || !Len(this[local.key])
+			)
+		) {
 			// set the default value unless it is blank or a value already exists for that property on the object
 			this[local.key] = variables.wheels.class.properties[local.key].defaultValue;
 		}
 	}
 	// non-persisted properties
 	for (local.key in variables.wheels.class.mapping) {
-		if (StructKeyExists(variables.wheels.class.mapping[local.key], "defaultValue") && (!StructKeyExists(this, local.key) || !Len(this[local.key]))) {
+		if (
+			StructKeyExists(variables.wheels.class.mapping[local.key], "defaultValue") && (
+				!StructKeyExists(this, local.key) || !Len(this[local.key])
+			)
+		) {
 			// set the default value unless it is blank or a value already exists for that property on the object
 			this[local.key] = variables.wheels.class.mapping[local.key].defaultValue;
 		}
@@ -552,17 +604,26 @@ public struct function $propertyInfo(required string property) {
  */
 public string function $label(required string property) {
 	// Prefer label set via `properties` intializer if it exists.
-	if (StructKeyExists(variables.wheels.class.properties, arguments.property) && StructKeyExists(variables.wheels.class.properties[arguments.property], "label")) {
+	if (
+		StructKeyExists(variables.wheels.class.properties, arguments.property) && StructKeyExists(
+			variables.wheels.class.properties[arguments.property],
+			"label"
+		)
+	) {
 		local.rv = variables.wheels.class.properties[arguments.property].label;
-	// Check to see if the mapping has a label to base the name on.
-	} else if (StructKeyExists(variables.wheels.class.mapping, arguments.property) && StructKeyExists(variables.wheels.class.mapping[arguments.property], "label")) {
+		// Check to see if the mapping has a label to base the name on.
+	} else if (
+		StructKeyExists(variables.wheels.class.mapping, arguments.property) && StructKeyExists(
+			variables.wheels.class.mapping[arguments.property],
+			"label"
+		)
+	) {
 		local.rv = variables.wheels.class.mapping[arguments.property].label;
-	// Fall back on property name otherwise.
+		// Fall back on property name otherwise.
 	} else {
 		local.rv = humanize(arguments.property);
 	}
 
 	return local.rv;
 }
-
 </cfscript>
