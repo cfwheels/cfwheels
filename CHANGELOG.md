@@ -29,6 +29,7 @@
 - Use `http_x_forwarded_proto` to determine if the application is running behind a loadbalancer that is performing SSL offloading - [Peter Amiri]
 - Allow the combination of `url` and `params` arguments with `redirectTo` - [Adam Chapman]
 - Display content in maintenance mode on newer Lucee versions [#848](https://github.com/cfwheels/cfwheels/issues/848) - [Per Djurner]
+- Fixed some variable scoping - [Michael Diederich]
 
 <a name="2.1"></a>
 
