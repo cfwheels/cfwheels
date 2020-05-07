@@ -3,14 +3,14 @@ type = request.wheels.params.type;
 _params = [];
 for (p in ["package", "test", "reload", "db", "format"]) {
 	if (StructKeyExists(url, p)) {
-		ArrayAppend(_params, "#p#=#url[p]#")
+		ArrayAppend(_params, "#p#=#url[p]#");
 	}
 }
 _params = ArrayToList(_params, "&");
 
 subnavigation = [{route = "wheelsPackages", type = "app", text = "<i class='tasks icon'></i> App"}];
 if (DirectoryExists(ExpandPath("/wheels/tests"))) {
-	ArrayAppend(subnavigation, {route = "wheelsPackages", type = "core", text = "<i class='tasks icon'></i> Core"})
+	ArrayAppend(subnavigation, {route = "wheelsPackages", type = "core", text = "<i class='tasks icon'></i> Core"});
 }
 
 pluginList = "";
