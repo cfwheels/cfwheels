@@ -442,13 +442,13 @@ component extends="wheels.tests.Test" {
 	function test_validatesUniquenessOf_with_blank_property_value() {
 		user.blank = "";
 		user.validatesUniquenessOf(property = "blank");
-		assert('user.valid() == false');
+		assert('user.valid() eq false');
 	}
 
 	function test_validatesUniquenessOf_with_blank_property_value_with_allowBlank() {
 		user.blank = "";
 		user.validatesUniquenessOf(property = "blank", allowBlank = true);
-		assert('user.valid() == true');
+		assert('user.valid() eq true');
 	}
 
 	/* validate */
