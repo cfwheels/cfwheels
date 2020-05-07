@@ -25,7 +25,7 @@
 
 - Added the `refresh` url parameter for auto refreshing test framework html - [#986](https://github.com/cfwheels/cfwheels/issues/986) - [Adam Chapman]
 - Allow custom migrator templates by scanning the `/migrator/templates` directory - [Adam Chapman]
-- Minimum Lucee 5 version is now 5.3.2.77
+- Minimum Lucee 5 version is now 5.3.2.77 - Tests added - [Michael Diederich]
 - Use `http_x_forwarded_proto` to determine if the application is running behind a loadbalancer that is performing SSL offloading - [Peter Amiri]
 - Allow the combination of `url` and `params` arguments with `redirectTo` - [Adam Chapman]
 - Display content in maintenance mode on newer Lucee versions [#848](https://github.com/cfwheels/cfwheels/issues/848) - [Per Djurner]
