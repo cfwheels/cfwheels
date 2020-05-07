@@ -20,6 +20,7 @@
 - Fixes regular expression bug when using the SQL `IN` operator [#944](https://github.com/cfwheels/cfwheels/issues/944) - [Adam Chapman, Per Djurner]
 - Display content in maintenance mode on newer Lucee versions [#848](https://github.com/cfwheels/cfwheels/issues/848) - [Per Djurner]
 - `validatesUniquenessOf` does not respect allowBlank [#914](https://github.com/cfwheels/cfwheels/issues/914) - [Adam Chapman]
+- `Wheels.RouteNotFound` Error page now escapes the `arguments.path` to prevent XSS attacks - [Michael Diederich]
 
 ### Miscellaneous
 
