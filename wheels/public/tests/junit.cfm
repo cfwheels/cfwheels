@@ -3,6 +3,7 @@
 	<cfheader statuscode="417" statustext="Expectation Failed" />
 </cfif>
 <cfsetting showdebugoutput="false">
+<cfset request.wheels.showDebugInformation = false>
 <cfcontent type="text/xml" />
 </cfsilent><?xml version="1.0" encoding="UTF-8"?>
 <testsuite errors="#testResults.numErrors#" failures="#testResults.numFailures#" name="Tests" tests="#testResults.numTests#" time="#DateDiff("n",testResults.end,testResults.begin)#" timestamp="#now()#">
