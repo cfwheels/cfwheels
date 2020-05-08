@@ -10,10 +10,13 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_lucee_valid() {
-		assert('!Len($checkMinimumVersion(version="4.5.5.006", engine="Lucee"))');
+		assert('!Len($checkMinimumVersion(version="5.3.2.77", engine="Lucee"))');
+		assert('!Len($checkMinimumVersion(version="5.3.5.92", engine="Lucee"))');
 	}
 
 	function test_lucee_invalid() {
+		assert('Len($checkMinimumVersion(version="5.3.1.103", engine="Lucee"))');
+		assert('Len($checkMinimumVersion(version="4.5.5.006", engine="Lucee"))');
 		assert('Len($checkMinimumVersion(version="4.5.1.021", engine="Lucee"))');
 		assert('Len($checkMinimumVersion(version="4.4.0", engine="Lucee"))');
 		assert('Len($checkMinimumVersion(version="4.5.0.023", engine="Lucee"))');
