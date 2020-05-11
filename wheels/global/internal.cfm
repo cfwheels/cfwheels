@@ -977,10 +977,10 @@ private string function $checkMinimumVersion(required string engine, required st
 		local.build = Val(ListGetAt(local.version, 4));
 	}
 	if (arguments.engine == "Lucee") {
-		local.minimumMajor = "4";
-		local.minimumMinor = "5";
-		local.minimumPatch = "5";
-		local.minimumBuild = "6";
+		local.minimumMajor = "5";
+		local.minimumMinor = "3";
+		local.minimumPatch = "2";
+		local.minimumBuild = "77";
 		local.5 = {minimumMinor = 2, minimumPatch = 1, minimumBuild = 9};
 	} else if (arguments.engine == "Adobe ColdFusion") {
 		local.minimumMajor = "10";
