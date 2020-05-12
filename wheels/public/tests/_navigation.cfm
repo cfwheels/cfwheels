@@ -1,12 +1,18 @@
 <cfscript>
 type = request.wheels.params.type;
-_params = [];
-for (p in ["package", "test", "reload", "db", "format"]) {
-	if (StructKeyExists(url, p)) {
-		ArrayAppend(_params, "#p#=#url[p]#");
+packageParamKeys = [
+	"package",
+	"test",
+	"reload",
+	"db",
+	"format"
+];
+_params = "";
+for (key in packageParamKeys) {
+	if (StructKeyExists(url, key)) {
+		_params = ListAppend(_params, "#key#=#url[key]#", "&");
 	}
 }
-_params = ArrayToList(_params, "&");
 
 subnavigation = [{route = "wheelsPackages", type = "app", text = "<i class='tasks icon'></i> App"}];
 if (DirectoryExists(ExpandPath("/wheels/tests"))) {
@@ -54,9 +60,15 @@ for (p in pluginList) {
 					</div>
 				</div>
 				<div class="right floated column">
-					<a href="#urlFor(route = "wheelsTests", type = type, params = "#_params#&refresh=true")#" class="ui button blue">
-						Refresh <i class='right refresh icon'></i>
-					</a>
+					<cfif StructKeyExists(url, "refresh")>
+						<a href="#urlFor(route = "wheelsTests", type = type, params = _params)#" class="ui button gray">
+							Stop Refresh <i class='right refresh icon'></i>
+						</a>
+					<cfelse>
+						<a href="#urlFor(route = "wheelsTests", type = type, params = "#_params#&refresh=true")#" class="ui button blue">
+							Refresh <i class='right refresh icon'></i>
+						</a>
+					</cfif>
 					<a href="#urlFor(route = "wheelsTests", type = type, params = _params)#" class="ui button blue">
 						Run Tests <i class='right arrow icon'></i>
 					</a>
