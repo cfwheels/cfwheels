@@ -3,8 +3,8 @@
 # TODO: loop thru each server/database combo ??
 
 port=${1:-"60005"}
-engine=${1:-"lucee5"}
-db=${1:-"mysql"}
+engine=${2:-"lucee5"}
+db=${3:-"mysql"}
 
 test_url="http://127.0.0.1:${port}/wheels/tests/core?db=${engine}"
 result_file='/tmp/${engine}-${db}-result.txt'
