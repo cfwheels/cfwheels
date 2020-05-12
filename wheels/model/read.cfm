@@ -575,14 +575,14 @@ public void function reload() {
  * Set what variable name to use for the query (shows in debugging output for example).
  */
 public void function $setDebugName(required struct args) {
-	if (!StructKeyExists(args, "$debugName")) {
-		if (args.handle == "query") {
-			args.$debugName = "#variables.wheels.class.modelName##arguments.name#Query";
+	if (!StructKeyExists(arguments.args, "$debugName")) {
+		if (arguments.args.handle == "query") {
+			arguments.args.$debugName = "#variables.wheels.class.modelName##arguments.name#Query";
 		} else {
-			args.$debugName = args.handle;
+			arguments.args.$debugName = arguments.args.handle;
 		}
-		args.$debugName = Replace(
-			Replace(args.$debugName, " ", "", "all"),
+		arguments.args.$debugName = Replace(
+			Replace(arguments.args.$debugName, " ", "", "all"),
 			".",
 			"",
 			"all"
