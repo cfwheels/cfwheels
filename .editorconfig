@@ -7,5 +7,5 @@ indent_style = tab
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[docker-compose.yml]
+[*.yml]
 indent_style = space

@@ -1,0 +1,42 @@
+# Runs the cfwheels core tests across engine/db combos in Docker
+
+name: CI
+
+on:
+  push:
+    branches: [github-actions-ci]
+  pull_request:
+    branches: [github-actions-ci]
+
+jobs:
+  curl:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Start Up
+        run: docker-compose up &
+
+      - name: Wait for Lucee startup
+        run: src/github/tests/server-up.sh 60005
+
+      - name: Wait for ACF 2016 startup
+        run: src/github/tests/server-up.sh 62016
+
+      - name: Wait for ACF 2018 startup
+        run: src/github/tests/server-up.sh 62018
+
+      - name: Run lucee5 mysql core tests
+        run: src/github/tests/core-tests.sh 60005 lucee5 mysql
+
+      - name: Run lucee5 sqlserver core tests
+        run: src/github/tests/core-tests.sh 60005 lucee5 sqlserver
+
+      - name: Run lucee5 postgres core tests
+        run: src/github/tests/core-tests.sh 60005 lucee5 postgres
+
+      - name: Run adobe2016 mysql core tests
+        run: src/github/tests/core-tests.sh 62016 adobe2016 mysql
+
+    # TODO: all the combos
