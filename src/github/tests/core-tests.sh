@@ -4,7 +4,7 @@ port=${1:-"60005"}
 engine=${2:-"lucee5"}
 db=${3:-"mysql"}
 
-test_url="http://127.0.0.1:${port}/wheels/tests/core?db=${engine}"
+test_url="http://127.0.0.1:${port}/wheels/tests/core?db=${db}"
 result_file="/tmp/${engine}-${db}-result.txt"
 
 echo "\nRUNNING SUITE (${engine}/${db}):\n"
