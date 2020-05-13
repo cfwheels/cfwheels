@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Docker Compose
-        run: docker-compose up -d lucee5 mysql
+        run: docker-compose up -d lucee5 mysql56
 
       - name: Wait for server startup
         run: src/github/tests/server-up.sh 60005
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Docker Compose
-        run: docker-compose up -d adobe2016 mysql
+        run: docker-compose up -d adobe2016 mysql56
 
       - name: Wait for server startup
         run: src/github/tests/server-up.sh 62016
@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Docker Compose
-        run: docker-compose up -d adobe2018 mysql
+        run: docker-compose up -d adobe2018 mysql56
 
       - name: Wait for server startup
         run: src/github/tests/server-up.sh 62018
