@@ -1,15 +1,15 @@
 #!/bin/sh
 
-# TODO: loop thru each server/database combo ??
-
 port=${1:-"60005"}
 engine=${2:-"lucee5"}
 db=${3:-"mysql"}
 
 test_url="http://127.0.0.1:${port}/wheels/tests/core?db=${engine}"
-result_file='/tmp/${engine}-${db}-result.txt'
+result_file="/tmp/${engine}-${db}-result.txt"
 
 echo "\nRUNNING SUITE (${engine}/${db}):\n"
+echo ${test_url}
+echo ${result_file}
 
 http_code=$(curl --verbose -s -o '${result_file}' -w '%{http_code}' '${test_url}';)
 
