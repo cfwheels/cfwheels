@@ -11,7 +11,7 @@ echo "\nRUNNING SUITE (${engine}/${db}):\n"
 echo ${test_url}
 echo ${result_file}
 
-http_code=$(curl --verbose -s -o '${result_file}' -w '%{http_code}' '${test_url}';)
+http_code=$(curl --verbose -s -o "${result_file}" -w "%{http_code}" "${test_url}";)
 
 cat $result_file
 
