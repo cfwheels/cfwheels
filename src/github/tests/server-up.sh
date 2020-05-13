@@ -1,16 +1,19 @@
 #!/bin/sh
 
-cfengine=${1:-""}
-
-if [[ "${cfengine}" = "" ]]; then
-	echo "cfengine not provided"
-	exit 1;
-fi
-
-declare -A ports
-ports["lucee5"]=60005
-ports+=( ["adobe2016"]=62016 ["adobe2018"]=62018 )
-port = ${ports[${cfengine}]}
+case ${1} in
+  lucee5)
+    port=60005
+    ;;
+  adobe2016)
+    port=62016
+    ;;
+  adobe2018)
+    port=62018
+    ;;
+  *)
+    echo -n "unknown cfengin"
+    ;;
+esac
 
 max_iterations=10
 wait_seconds=6

@@ -3,15 +3,29 @@
 cfengine=${1}
 dbengine=${2}
 
-declare -A ports
-ports["lucee5"]=60005
-ports+=( ["adobe2016"]=62016 ["adobe2018"]=62018 )
-port = ${ports[${cfengine}]}
+case $cfengine in
+  lucee5)
+    port=60005
+    ;;
+  adobe2016)
+    port=62016
+    ;;
+  adobe2018)
+    port=62018
+    ;;
+  *)
+    echo -n "unknown"
+    ;;
+esac
 
-declare -A dbs
-dbs["mysql56"]=mysql
-dbs+=( ["postgres"]=postgres ["sqlserver"]=sqlserver )
-db = ${dbs[${dbengine}]}
+case $dbengine in
+    mysql56)
+        db=mysql
+        ;;
+    *)
+        db=${dbengine}
+        ;;
+esac
 
 test_url="http://127.0.0.1:${port}/wheels/tests/core?db=${db}&format=json"
 result_file="/tmp/${engine}-${db}-result.txt"
