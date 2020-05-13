@@ -12,6 +12,7 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         cf: [lucee5, adobe2016, adobe2018]
         db: [mysql56, postgres, sqlserver]
