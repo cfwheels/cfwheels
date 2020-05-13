@@ -1,4 +1,7 @@
 <cfsilent>
+<cfif testResults.numErrors || testResults.numFailures>
+	<cfheader statuscode="417" statustext="Expectation Failed" />
+</cfif>
 <!---cfscript>
   content(type="text/json");
   writeOutput(serializeJSON(testResults));
@@ -7,4 +10,4 @@
 <cfset request.wheels.showDebugInformation = false>
 <cfsetting showdebugoutput="false">
 <cfcontent type="text/json">
-</cfsilent><cfoutput>#serializeJSON(testResults)#</cfoutput>
+</cfsilent><cfoutput>#SerializeJSON(testResults)#</cfoutput>
