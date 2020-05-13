@@ -3,34 +3,15 @@
 cfengine=${1}
 dbengine=${2}
 
-case $cfengine in
-  lucee5)
-    port=60005
-    ;;
-  adobe2016)
-    port=62016
-    ;;
-  adobe2018)
-    port=62018
-    ;;
-  *)
-    echo -n "unknown"
-    ;;
-esac
+. $(dirname "$0")/functions.sh
 
-case $dbengine in
-    mysql56)
-        db=mysql
-        ;;
-    *)
-        db=${dbengine}
-        ;;
-esac
+port="$(get_port ${cfengine})"
+db="$(get_db ${dbengine})"
 
 test_url="http://127.0.0.1:${port}/wheels/tests/core?db=${db}&format=json"
-result_file="/tmp/${engine}-${db}-result.txt"
+result_file="/tmp/${cfengine}-${db}-result.txt"
 
-echo "\nRUNNING SUITE (${engine}/${dbengine}):\n"
+echo "\nRUNNING SUITE (${cfengine}/${dbengine}):\n"
 echo ${test_url}
 echo ${result_file}
 

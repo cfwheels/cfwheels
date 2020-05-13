@@ -1,19 +1,8 @@
 #!/bin/sh
 
-case ${1} in
-  lucee5)
-    port=60005
-    ;;
-  adobe2016)
-    port=62016
-    ;;
-  adobe2018)
-    port=62018
-    ;;
-  *)
-    echo -n "unknown cfengin"
-    ;;
-esac
+. $(dirname "$0")/functions.sh
+
+port="$(get_port ${1})"
 
 max_iterations=10
 wait_seconds=6
