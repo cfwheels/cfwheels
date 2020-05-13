@@ -9,8 +9,7 @@ fi
 
 declare -A ports
 ports["lucee5"]=60005
-ports["adobe2016"]=62016
-ports["adobe2018"]=62018
+ports+=( ["adobe2016"]=62016 ["adobe2018"]=62018 )
 port = ${ports[${cfengine}]}
 
 max_iterations=10

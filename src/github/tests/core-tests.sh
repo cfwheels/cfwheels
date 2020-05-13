@@ -5,14 +5,12 @@ dbengine=${2}
 
 declare -A ports
 ports["lucee5"]=60005
-ports["adobe2016"]=62016
-ports["adobe2018"]=62018
+ports+=( ["adobe2016"]=62016 ["adobe2018"]=62018 )
 port = ${ports[${cfengine}]}
 
 declare -A dbs
 dbs["mysql56"]=mysql
-dbs["postgres"]=postgres
-dbs["sqlserver"]=sqlserver
+dbs+=( ["postgres"]=postgres ["sqlserver"]=sqlserver )
 db = ${dbs[${dbengine}]}
 
 test_url="http://127.0.0.1:${port}/wheels/tests/core?db=${db}&format=json"
