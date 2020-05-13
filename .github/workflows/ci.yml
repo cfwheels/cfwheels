@@ -9,17 +9,53 @@ on:
     branches: [github-actions-ci]
 
 jobs:
-  cfwheels-test-suite:
+  cfwheels-test-suite-lucee5-mysql:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Start Up
-        run: docker-compose up -d
+      - name: Docker Compose
+        run: docker-compose up -d lucee5 mysql
 
-      - name: Wait for Lucee startup
+      - name: Wait for server startup
         run: src/github/tests/server-up.sh 60005
+
+      - name: Run core tests
+        run: src/github/tests/core-tests.sh 60005 lucee5 mysql
+
+  cfwheels-test-suite-adobe2016-mysql:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Docker Compose
+        run: docker-compose up -d adobe2016 mysql
+
+      - name: Wait for server startup
+        run: src/github/tests/server-up.sh 62016
+
+      - name: Run core tests
+        run: src/github/tests/core-tests.sh 62016 adobe2016 mysql
+
+  cfwheels-test-suite-adobe2018-mysql:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Docker Compose
+        run: docker-compose up -d adobe2018 mysql
+
+      - name: Wait for server startup
+        run: src/github/tests/server-up.sh 62018
+
+      - name: Run core tests
+        run: src/github/tests/core-tests.sh 62018 adobe2018 mysql
+
+    # TODO: all the combos
+
 
       # - name: Wait for ACF 2016 startup
       #   run: src/github/tests/server-up.sh 62016
@@ -27,8 +63,12 @@ jobs:
       # - name: Wait for ACF 2018 startup
       #   run: src/github/tests/server-up.sh 62018
 
-      - name: Run lucee5 mysql core tests
-        run: src/github/tests/core-tests.sh 60005 lucee5 mysql
+ # - name: Wait for ACF 2016 startup
+      #   run: src/github/tests/server-up.sh 62016
+
+      # - name: Wait for ACF 2018 startup
+      #   run: src/github/tests/server-up.sh 62018
+
 
       # - name: Run lucee5 sqlserver core tests
       #   run: src/github/tests/core-tests.sh 60005 lucee5 sqlserver
@@ -38,5 +78,3 @@ jobs:
 
       # - name: Run adobe2016 mysql core tests
       #   run: src/github/tests/core-tests.sh 62016 adobe2016 mysql
-
-    # TODO: all the combos
