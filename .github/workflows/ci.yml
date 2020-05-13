@@ -8,140 +8,22 @@ on:
   pull_request:
     branches: [github-actions-ci]
 
-# TODO: use matrix strategy.. but engines/ports/db names make this difficult
-
 jobs:
-  lucee5-mysql:
+  run-tests:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cf: [lucee5, adobe2016, adobe2018]
+        db: [mysql56, postgres, sqlserver]
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Docker Compose
-        run: docker-compose up -d lucee5 mysql56
+        run: docker-compose up -d ${{ matrix.cf }} ${{ matrix.db }}
 
-      - name: Wait for server startup
-        run: src/github/tests/server-up.sh 60005
-
-      - name: Run core tests
-        run: src/github/tests/core-tests.sh 60005 lucee5 mysql
-
-  lucee5-sqlserver:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Docker Compose
-        run: docker-compose up -d lucee5 sqlserver
-
-      - name: Wait for server startup
-        run: src/github/tests/server-up.sh 60005
+      - name: Wait for ${{ matrix.cf }} startup
+        run: src/github/tests/server-up.sh ${{ matrix.cf }}
 
       - name: Run core tests
-        run: src/github/tests/core-tests.sh 60005 lucee5 sqlserver
-
-  lucee5-postgres:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Docker Compose
-        run: docker-compose up -d lucee5 postgres
-
-      - name: Wait for server startup
-        run: src/github/tests/server-up.sh 60005
-
-      - name: Run core tests
-        run: src/github/tests/core-tests.sh 60005 lucee5 postgres
-
-  adobe2016-mysql:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Docker Compose
-        run: docker-compose up -d adobe2016 mysql56
-
-      - name: Wait for server startup
-        run: src/github/tests/server-up.sh 62016
-
-      - name: Run core tests
-        run: src/github/tests/core-tests.sh 62016 adobe2016 mysql
-
-  adobe2016-sqlserver:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Docker Compose
-        run: docker-compose up -d adobe2016 sqlserver
-
-      - name: Wait for server startup
-        run: src/github/tests/server-up.sh 62016
-
-      - name: Run core tests
-        run: src/github/tests/core-tests.sh 62016 adobe2016 sqlserver
-
-  adobe2016-postgres:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Docker Compose
-        run: docker-compose up -d adobe2016 postgres
-
-      - name: Wait for server startup
-        run: src/github/tests/server-up.sh 62016
-
-      - name: Run core tests
-        run: src/github/tests/core-tests.sh 62016 adobe2016 postgres
-
-  adobe2018-mysql:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Docker Compose
-        run: docker-compose up -d adobe2018 mysql56
-
-      - name: Wait for server startup
-        run: src/github/tests/server-up.sh 62018
-
-      - name: Run core tests
-        run: src/github/tests/core-tests.sh 62018 adobe2018 mysql
-
-  adobe2018-sqlserver:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Docker Compose
-        run: docker-compose up -d adobe2018 sqlserver
-
-      - name: Wait for server startup
-        run: src/github/tests/server-up.sh 62018
-
-      - name: Run core tests
-        run: src/github/tests/core-tests.sh 62018 adobe2018 sqlserver
-
-  adobe2018-postgres:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Docker Compose
-        run: docker-compose up -d adobe2018 postgres
-
-      - name: Wait for server startup
-        run: src/github/tests/server-up.sh 62018
-
-      - name: Run core tests
-        run: src/github/tests/core-tests.sh 62018 adobe2018 postgres
+        run: src/github/tests/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}

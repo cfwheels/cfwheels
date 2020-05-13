@@ -1,11 +1,17 @@
 #!/bin/sh
 
-port=${1:-""}
+cfengine=${1:-""}
 
-if [[ "${port}" = "" ]]; then
-	echo "Port number not provided"
+if [[ "${cfengine}" = "" ]]; then
+	echo "cfengine not provided"
 	exit 1;
 fi
+
+declare -A ports
+ports["lucee5"]=60005
+ports["adobe2016"]=62016
+ports["adobe2018"]=62018
+port = ${ports[${cfengine}]}
 
 max_iterations=10
 wait_seconds=6

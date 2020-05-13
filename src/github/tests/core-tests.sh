@@ -1,17 +1,28 @@
 #!/bin/sh
 
-port=${1:-"60005"}
-engine=${2:-"lucee5"}
-db=${3:-"mysql"}
+cfengine=${1}
+dbengine=${2}
+
+declare -A ports
+ports["lucee5"]=60005
+ports["adobe2016"]=62016
+ports["adobe2018"]=62018
+port = ${ports[${cfengine}]}
+
+declare -A dbs
+dbs["mysql56"]=mysql
+dbs["postgres"]=postgres
+dbs["sqlserver"]=sqlserver
+db = ${dbs[${dbengine}]}
 
 test_url="http://127.0.0.1:${port}/wheels/tests/core?db=${db}&format=json"
 result_file="/tmp/${engine}-${db}-result.txt"
 
-echo "\nRUNNING SUITE (${engine}/${db}):\n"
+echo "\nRUNNING SUITE (${engine}/${dbengine}):\n"
 echo ${test_url}
 echo ${result_file}
 
-http_code=$(curl --verbose -s -o "${result_file}" -w "%{http_code}" "${test_url}";)
+http_code=$(curl -s -o "${result_file}" --write-out "%{http_code}" "${test_url}";)
 
 cat $result_file
 
