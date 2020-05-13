@@ -20,11 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Docker Compose
+      - name: Docker Compose ${{ matrix.cf }} ${{ matrix.db }}
         run: docker-compose up -d ${{ matrix.cf }} ${{ matrix.db }}
 
       - name: Wait for ${{ matrix.cf }} startup
         run: src/github/tests/server-up.sh ${{ matrix.cf }}
 
-      - name: Run core tests
+      - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
         run: src/github/tests/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}
