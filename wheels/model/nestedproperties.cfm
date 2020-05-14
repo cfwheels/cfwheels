@@ -93,7 +93,7 @@ public boolean function $saveAssociations(
 			)
 		) {
 			local.array = this[local.association];
-			if (IsObject(this[local.association])) {
+			if (!isNull(this[local.association]) && IsObject(this[local.association])) {
 				local.array = [this[local.association]];
 			}
 			if (IsArray(local.array)) {
