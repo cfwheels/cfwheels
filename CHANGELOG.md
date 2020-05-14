@@ -8,6 +8,7 @@
 - Added `automaticValidations` argument to the `property` method - [Per Djurner]
 - Support named second argument in `findOneBy[Property]And[Property]` and `findAllBy[Property]And[Property]` - [Per Djurner]
 - Support `value` argument in `findOrCreateBy[Property]` - [Per Djurner]
+- Minor fix for `full null support` - [Michael Diederich]
 
 ### View Enhancements
 

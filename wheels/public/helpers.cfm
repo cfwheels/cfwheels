@@ -234,7 +234,7 @@ public struct function $$findMatchingRoutes(
 				{
 					type = "Wheels.RouteNotFound - 404",
 					message = "Could not find a route that matched this request",
-					extendedInfo = "Make sure there is a route configured in your `config/routes.cfm` file that matches the `#ESAPIEncode('html', arguments.path)#` request."
+					extendedInfo = "Make sure there is a route configured in your `config/routes.cfm` file that matches the `#EncodeForHTML(arguments.path)#` request."
 				}
 			);
 		}
