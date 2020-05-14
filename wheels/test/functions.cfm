@@ -326,10 +326,10 @@ public boolean function $runTest(string resultKey = "test", string testname = ""
 					*/
 					status = "Error";
 					if (ArrayLen(e.tagContext)) {
-						template = "#ListLast(e.tagContext[1].template, "/")# line #e.tagContext[1].line#";
+						template = "#ListLast(e.tagContext[1].template, "/")#:#e.tagContext[1].line#";
 						tagContext = "<ul>";
 						for (context in e.tagContext) {
-							tagContext = tagContext & '<li>#context.template# line #context.line#</li>';
+							tagContext = tagContext & '<li>#context.template#:#context.line#</li>';
 						};
 						tagContext = tagContext & "</ul>";
 					} else {
@@ -365,12 +365,14 @@ public boolean function $runTest(string resultKey = "test", string testname = ""
 			/*
 				Record test results
 			*/
-			result = {};
-			result.testCase = testCase;
-			result.testName = key;
-			result.time = time;
-			result.status = status;
-			result.message = message;
+			result = {
+				testCase = testCase,
+				testName = key,
+				time = time,
+				status = status,
+				message = message
+			};
+
 			ArrayAppend(request[resultkey].results, result);
 
 			request[resultkey].numTests = request[resultkey].numTests + 1;
@@ -378,15 +380,27 @@ public boolean function $runTest(string resultKey = "test", string testname = ""
 		}
 	};
 
-	result = {};
-	result.testCase = testCase;
-	result.numTests = numTests;
-	result.numFailures = numTestFailures;
-	result.numErrors = numTestErrors;
-	ArrayAppend(request[resultkey].summary, result);
+	result = {
+		testCase = testCase,
+		numTests = numTests,
+		numFailures = numTestFailures,
+		numErrors = numTestErrors
+	};
+
+	// filter test results based on url params
+	// this is exerimental output for ci pipeline
+	if (StructKeyExists(request.wheels.params, "only")) {
+		local.results = ArrayFilter(request[resultkey].results, function(testCase) {
+			return ListFindNoCase(request.wheels.params.only, arguments.testCase.status);
+		});
+		request[resultkey].results = local.results;
+	} else {
+		ArrayAppend(request[resultkey].summary, result);
+	}
 
 	request[resultkey].numCases = request[resultkey].numCases + 1;
 	request[resultkey].end = Now();
+
 
 	return numTestErrors eq 0;
 }
