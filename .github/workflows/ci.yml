@@ -21,8 +21,8 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install Commandbox
-      - run: |
-          sudo apt install libappindicator-dev openjdk-11-jre -y
+        run: |
+          sudo apt install libappindicator-dev -y
           curl -fsSl https://downloads.ortussolutions.com/debs/gpg | sudo apt-key add -
           echo "deb https://downloads.ortussolutions.com/debs/noarch /" | sudo tee -a /etc/apt/sources.list.d/commandbox.list
           sudo apt update -y -qq
