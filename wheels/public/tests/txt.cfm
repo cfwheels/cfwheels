@@ -20,8 +20,7 @@
 		'Success: #testResults.numTests - testResults.numFailures - testResults.numErrors#',
 		'Failures: #testResults.numFailures#',
 		'Errors: #testResults.numErrors#',
-		'Time: #DateDiff("s", testResults.begin, testResults.end)# seconds',
-		''
+		'Time: #DateDiff("s", testResults.begin, testResults.end)# seconds'
 	];
 	for (local.i = 1; local.i <= ArrayLen(testResults.results); local.i++) {
 		ArrayAppend(content, hr);
@@ -29,7 +28,11 @@
 		ArrayAppend(content, "#testResults.results[local.i].testName# (#testResults.results[local.i].time#ms)");
 		ArrayAppend(content, "Status: #testResults.results[local.i].status#");
 		if (testResults.results[local.i].status != "Success") {
-			ArrayAppend(content, Replace(testResults.results[local.i].message, '><', '>#Chr(13)#<', 'all'));
+			// TODO: fix this hacky html removal
+			message = testResults.results[local.i].message;
+			message = Replace(message, '><', '>#Chr(13)#<', 'all');
+			message = ReplaceList(message, "<ul>,</ul>,<li>,</li>", ",,,");
+			ArrayAppend(content, message);
 		}
 	}
 	</cfscript>

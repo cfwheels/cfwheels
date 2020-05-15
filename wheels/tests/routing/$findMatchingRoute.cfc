@@ -15,6 +15,7 @@ component extends="wheels.tests.Test" {
 		r = dispatch.$findMatchingRoute(path = "", format = "");
 		assert('r.controller eq "pages"');
 		assert('r.action eq "index"');
+		assert("actual == expected");
 	}
 
 	function test_controller_only() {
