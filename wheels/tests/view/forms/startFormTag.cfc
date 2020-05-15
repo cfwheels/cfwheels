@@ -16,6 +16,7 @@ component extends="wheels.tests.Test" {
 
 	function teardown() {
 		set(functionName = "startFormTag", encode = true);
+		request.$wheelsProtectedFromForgery = false;
 	}
 
 	function test_no_csrf_when_not_enabled() {
