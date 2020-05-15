@@ -22,11 +22,10 @@ jobs:
 
       - name: Install Commandbox
         run: |
-          sudo apt-get install libappindicator-dev -y
           curl -fsSl https://downloads.ortussolutions.com/debs/gpg | sudo apt-key add -
           echo "deb https://downloads.ortussolutions.com/debs/noarch /" | sudo tee -a /etc/apt/sources.list.d/commandbox.list
           sudo apt-get update -y -qq
-          sudo apt-get install apt-transport-https commandbox -y
+          sudo apt-get install libappindicator-dev apt-transport-https commandbox -y
 
       - name: Docker Compose ${{ matrix.cf }} ${{ matrix.db }}
         run: docker-compose up -d ${{ matrix.cf }} ${{ matrix.db }}
