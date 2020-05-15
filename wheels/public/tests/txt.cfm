@@ -7,7 +7,7 @@
 	request.wheels.showDebugInformation = false;
 	cfcontent(type="text/plain");
 	width = 64;
-	hr = RepeatString("-", width);
+	hr = Chr(13) & RepeatString("=", width) & Chr(13);
 	heading = "TEST RESULTS";
 	padding = Ceiling(((width - 2) - Len(heading)) / 2);
 	content = [
