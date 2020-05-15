@@ -11,6 +11,7 @@ component extends="wheels.tests.Test" {
 		args.protocol = "";
 		args.controller = "testcontroller";
 		set(functionName = "startFormTag", encode = false);
+		request.$wheelsProtectedFromForgery = true;
 	}
 
 	function teardown() {
