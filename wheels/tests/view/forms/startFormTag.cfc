@@ -11,12 +11,12 @@ component extends="wheels.tests.Test" {
 		args.protocol = "";
 		args.controller = "testcontroller";
 		set(functionName = "startFormTag", encode = false);
-		request.$wheelsProtectedFromForgery = true;
+		// request.$wheelsProtectedFromForgery = true;
 	}
 
 	function teardown() {
 		set(functionName = "startFormTag", encode = true);
-		request.$wheelsProtectedFromForgery = false;
+		// request.$wheelsProtectedFromForgery = false;
 	}
 
 	function test_no_csrf_when_not_enabled() {

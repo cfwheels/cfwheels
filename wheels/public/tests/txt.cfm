@@ -6,7 +6,7 @@
 	cfsetting(showdebugoutput=false);
 	request.wheels.showDebugInformation = false;
 	cfcontent(type="text/plain");
-	width = 64;
+	width = 128;
 	hr = Chr(13) & RepeatString("=", width) & Chr(13);
 	heading = "TEST RESULTS";
 	padding = Ceiling(((width - 2) - Len(heading)) / 2);
