@@ -36,4 +36,4 @@
 		}
 	}
 	</cfscript>
-</cfsilent><cfoutput>#ArrayToList(content, Chr(13))#</cfoutput>
+</cfsilent><cfcontent reset="true"><cfoutput>#ArrayToList(content, Chr(13))#</cfoutput>
