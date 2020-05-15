@@ -20,6 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install Commandbox
+        run: src/github/tests/commandbox.sh
+
       - name: Docker Compose ${{ matrix.cf }} ${{ matrix.db }}
         run: docker-compose up -d ${{ matrix.cf }} ${{ matrix.db }}
 
