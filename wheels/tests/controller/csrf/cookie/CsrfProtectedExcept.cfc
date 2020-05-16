@@ -49,7 +49,7 @@ component extends="wheels.tests.Test" {
 			variables.ex = e;
 			debug("ex.Type", false);
 			debug("ex.message", false);
-			debug("request.cgi", false);
+			debug("request", false);
 			type = e.Type;
 			assert("type is 'Wheels.InvalidAuthenticityToken'");
 		}
