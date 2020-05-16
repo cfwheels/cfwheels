@@ -15,6 +15,8 @@ services:
     image: cfwheels-test-lucee5:v1
     depends_on:
       - mysql56
+      - postgres
+      - sqlserver
     environment:
       - ENV_MODE=local
       - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
@@ -34,6 +36,8 @@ services:
     image: cfwheels-test-adobe2016:v1
     depends_on:
       - mysql56
+      - postgres
+      - sqlserver
     environment:
       - ENV_MODE=local
       - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
@@ -53,6 +57,8 @@ services:
     image: cfwheels-test-adobe2018:v1
     depends_on:
       - mysql56
+      - postgres
+      - sqlserver
     environment:
       - ENV_MODE=local
       - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
