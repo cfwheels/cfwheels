@@ -5,44 +5,49 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_addIndex_creates_an_index() {
-		tableName = "dbm_addindex_tests";
-		indexName = "idx_to_add";
-		t = migration.createTable(name = tableName, force = true);
-		t.integer(columnNames = "integercolumn");
-		t.create();
 
-		migration.addIndex(table = tableName, columnName = 'integercolumn', indexName = indexName);
-		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "index");
+		if (! (  application.wheels.serverName == 'Adobe Coldfusion' &&  left(application.wheels.serverVersion, 4) == 2016)) {
+			tableName = "dbm_addindex_tests";
+			indexName = "idx_to_add";
+			t = migration.createTable(name = tableName, force = true);
+			t.integer(columnNames = "integercolumn");
+			t.create();
 
-		migration.dropTable(tableName);
+			migration.addIndex(table = tableName, columnName = 'integercolumn', indexName = indexName);
+			info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "index");
 
-		sql = "SELECT * FROM query WHERE index_name = '#indexName#'";
+			migration.dropTable(tableName);
 
-		actual = $query(query = info, dbtype = "query", sql = sql);
-		assert("actual.recordCount eq 1");
-		assert("actual.non_unique");
+			sql = "SELECT * FROM query WHERE index_name = '#indexName#'";
+
+			actual = $query(query = info, dbtype = "query", sql = sql);
+			assert("actual.recordCount eq 1");
+			assert("actual.non_unique");
+		}
 	}
 
 	function test_add_index_on_mutiple_columns() {
-		tableName = "dbm_addindex_tests";
-		indexName = "idx_to_add_to_multiple_columns";
-		t = migration.createTable(name = tableName, force = true);
-		t.integer(columnNames = "integercolumn,datecolumn");
-		t.create();
+		if (! (  application.wheels.serverName == 'Adobe Coldfusion' &&  left(application.wheels.serverVersion, 4) == 2016)) {
+			tableName = "dbm_addindex_tests";
+			indexName = "idx_to_add_to_multiple_columns";
+			t = migration.createTable(name = tableName, force = true);
+			t.integer(columnNames = "integercolumn,datecolumn");
+			t.create();
 
-		migration.addIndex(table = tableName, columnNames = 'integercolumn,datecolumn', indexName = indexName);
-		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "index");
+			migration.addIndex(table = tableName, columnNames = 'integercolumn,datecolumn', indexName = indexName);
+			info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "index");
 
-		migration.dropTable(tableName);
+			migration.dropTable(tableName);
 
-		sql = "SELECT * FROM query WHERE index_name = '#indexName#'";
+			sql = "SELECT * FROM query WHERE index_name = '#indexName#'";
 
-		actual = $query(query = info, dbtype = "query", sql = sql);
+			actual = $query(query = info, dbtype = "query", sql = sql);
 
-		// Added the ListLen check here for CF2018 because its cfdbinfo behaves a little differently.
-		// It returns the index for multiple columns in one record where as Lucee returns multiple.
-		assert("actual.recordCount eq 2 OR ListLen(actual['column_name'][1]) IS 2");
-		assert("actual.non_unique");
+			// Added the ListLen check here for CF2018 because its cfdbinfo behaves a little differently.
+			// It returns the index for multiple columns in one record where as Lucee returns multiple.
+			assert("actual.recordCount eq 2 OR ListLen(actual['column_name'][1]) IS 2");
+			assert("actual.non_unique");
+		}
 	}
 
 	// todo: unique index
