@@ -13,8 +13,6 @@ services:
       context: ./
       dockerfile: ./src/docker/Lucee5.Dockerfile
     image: cfwheels-test-lucee5:v1
-    depends_on:
-      - mysql56
     environment:
       - ENV_MODE=local
       - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
@@ -32,8 +30,6 @@ services:
       context: ./
       dockerfile: ./src/docker/Adobe2016.Dockerfile
     image: cfwheels-test-adobe2016:v1
-    depends_on:
-      - mysql56
     environment:
       - ENV_MODE=local
       - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
@@ -51,8 +47,6 @@ services:
       context: ./
       dockerfile: ./src/docker/Adobe2018.Dockerfile
     image: cfwheels-test-adobe2018:v1
-    depends_on:
-      - mysql56
     environment:
       - ENV_MODE=local
       - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
