@@ -14,11 +14,11 @@ component extends="wheels.tests.Test" {
 		if ($isLucee()) {
 			$$oldCGIScope = request.cgi;
 			$$oldHeaders = request.wheels.httprequestdata.headers;
-			$$originalRoutes = application[$appKey()].routes;
+			$$originalRoutes = application.wheels.routes;
 			application.wheels.allowCorsRequests = true;
 			d = $createObjectFromRoot(path = "wheels", fileName = "Dispatch", method = "$init");
 			$resetHeaders();
-			application[$appKey()].routes = [];
+			application.wheels.routes = [];
 			config = {path = "wheels", fileName = "Mapper", method = "$init"};
 		}
 	}
@@ -27,7 +27,7 @@ component extends="wheels.tests.Test" {
 		if ($isLucee()) {
 			request.cgi = $$oldCGIScope;
 			request.wheels.httprequestdata.headers = $$oldHeaders;
-			application[$appKey()].routes = $$originalRoutes;
+			application.wheels.routes = $$originalRoutes;
 			application[$appKey()].allowCorsRequests = false;
 			d = "";
 			$resetHeaders();

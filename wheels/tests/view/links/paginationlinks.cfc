@@ -3,7 +3,7 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		_params = {controller = "dummy", action = "dummy"};
 		_controller = controller("dummy", _params);
-		_originalRoutes = application[$appKey()].routes;
+		_originalRoutes = Duplicate(application.wheels.routes);
 		_originalRewrite = application.wheels.URLRewriting;
 		$clearRoutes();
 		mapper().$match(name = "pagination", pattern = "pag/ina/tion/[special]", to = "pagi##nation").end();
@@ -14,14 +14,14 @@ component extends="wheels.tests.Test" {
 	}
 
 	public void function teardown() {
-		application[$appKey()].routes = _originalRoutes;
+		application.wheels.routes = _originalRoutes;
 		application.wheels.URLRewriting = _originalRewrite;
 		set(functionName = "linkTo", encode = true);
 		set(functionName = "paginationLinks", encode = true);
 	}
 
 	public void function $clearRoutes() {
-		application[$appKey()].routes = [];
+		application.wheels.routes = [];
 		application.wheels.namedRoutePositions = {};
 	}
 

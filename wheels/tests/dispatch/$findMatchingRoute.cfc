@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	public void function packageSetup() {
-		_originalRoutes = application[$appKey()].routes;
+		_originalRoutes = Duplicate(application.wheels.routes);
 		$clearRoutes();
 
 
@@ -23,7 +23,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	public void function $clearRoutes() {
-		application[$appKey()].routes = [];
+		application.wheels.routes = [];
 	}
 
 	function setup() {

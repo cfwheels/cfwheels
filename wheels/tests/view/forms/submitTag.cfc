@@ -12,7 +12,6 @@ component extends="wheels.tests.Test" {
 	function test_defaults() {
 		actual = _controller.submitTag();
 		expected = '<input type="submit" value="Save changes">';
-		debug('e', false);
 		assert('actual eq expected');
 	}
 
