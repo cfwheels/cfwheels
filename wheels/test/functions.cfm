@@ -697,7 +697,12 @@ public query function $listTestPackages(struct options = {}, string filter = "*"
 			local.packageName = ListPrepend(local.packageName, local.paths.test_path, ".");
 			local.packageName = ListAppend(local.packageName, ListFirst(local.package.name, "."), ".");
 			// Ignore invalid packages.
-			if ($isValidTest(local.packageName)) {
+			local.useTest = $isValidTest(local.packageName);
+			// a bit hacky.. try to use Left rather than contains
+			if (StructKeyExists(arguments.options, "skip") && local.packageName contains arguments.options.skip) {
+				local.useTest = false;
+			}
+			if (local.useTest) {
 				QueryAddRow(local.rv);
 				QuerySetCell(local.rv, "package", local.packageName);
 			}
