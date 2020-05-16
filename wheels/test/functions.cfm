@@ -683,7 +683,8 @@ public query function $listTestPackages(struct options = {}, string filter = "*"
 		local.paths.full_test_path,
 		true,
 		"query",
-		"#arguments.filter#.cfc"
+		"#arguments.filter#.cfc",
+		arguments.options.sort
 	);
 	for (local.package in local.packages) {
 		local.packageName = ListChangeDelims(
