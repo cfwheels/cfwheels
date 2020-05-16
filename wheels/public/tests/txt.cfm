@@ -34,6 +34,9 @@
 			message = ReplaceList(message, "<ul>,</ul>,<li>,</li>", ",,,");
 			ArrayAppend(content, message);
 		}
+		if (StructKeyExists(testResults.results[local.i], "debugString")) {
+			ArrayAppend(content, testResults.results[local.i].debugString);
+		}
 	}
 	</cfscript>
 </cfsilent><cfoutput>#ArrayToList(content, Chr(13))#</cfoutput>

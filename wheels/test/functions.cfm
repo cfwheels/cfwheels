@@ -107,6 +107,9 @@ TESTING_FRAMEWORK_VARS.RUNNING_TEST = "";
 if (!StructKeyExists(request, "TESTING_FRAMEWORK_DEBUGGING")) {
 	request["TESTING_FRAMEWORK_DEBUGGING"] = {};
 }
+if (!StructKeyExists(request, "TESTING_FRAMEWORK_DEBUG_STRINGS")) {
+	request["TESTING_FRAMEWORK_DEBUG_STRINGS"] = {};
+}
 
 /**
  * Called from a test function.
@@ -192,15 +195,29 @@ public void function fail(string message = "") {
 					later purposes, but don't want it to display
 	*/
 public any function debug(required string expression, boolean display = true) {
-	var attributeArgs = {};
-	var dump = "";
+	local.attributeArgs = {
+		"var" = Evaluate(arguments.expression),
+		"label" = arguments.expression
+	};
+	local.dump = "";
+
+	// this string will be added to the request key regardless of display argument
+	local.debugString = ArrayToList([
+		"",
+		"---------- DEBUG START '#arguments.expression#' --------",
+		SerializeJSON(attributeArgs["var"]),
+		"---------- DEBUG END '#arguments.expression#' --------",
+		""
+	], Chr(13));
+
+	if (!StructKeyExists(request["TESTING_FRAMEWORK_DEBUG_STRINGS"], TESTING_FRAMEWORK_VARS.RUNNING_TEST)) {
+		request["TESTING_FRAMEWORK_DEBUG_STRINGS"][TESTING_FRAMEWORK_VARS.RUNNING_TEST] = "";
+	}
+	request["TESTING_FRAMEWORK_DEBUG_STRINGS"][TESTING_FRAMEWORK_VARS.RUNNING_TEST] &= local.debugString;
 
 	if (!arguments.display) {
 		return;
 	}
-
-	attributeArgs["var"] = Evaluate(arguments.expression);
-	attributeArgs["label"] = arguments.expression;
 
 	StructDelete(arguments, "expression");
 	StructDelete(arguments, "display");
@@ -370,7 +387,8 @@ public boolean function $runTest(string resultKey = "test", string testname = ""
 				testName = key,
 				time = time,
 				status = status,
-				message = message
+				message = message,
+				distinctKey = distinctKey
 			};
 
 			ArrayAppend(request[resultkey].results, result);
@@ -450,6 +468,10 @@ public any function $results(string resultKey = "test") {
 			request[resultkey].results[local.i].cleanTestCase = $cleanTestCase(request[resultkey].results[local.i].testCase);
 			request[resultkey].results[local.i].cleanTestName = $cleanTestName(request[resultkey].results[local.i].testName);
 			request[resultkey].results[local.i].packageName = $cleanTestPath(request[resultkey].results[local.i].testCase);
+			request[resultkey].results[local.i].debugString = "";
+			if (StructKeyExists(request.TESTING_FRAMEWORK_DEBUG_STRINGS, request[resultkey].results[local.i].distinctKey)) {
+				request[resultkey].results[local.i].debugString = request.TESTING_FRAMEWORK_DEBUG_STRINGS[request[resultkey].results[local.i].distinctKey];
+			}
 		};
 
 		local.rv = request[resultkey];
