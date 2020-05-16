@@ -47,8 +47,9 @@ component extends="wheels.tests.Test" {
 			fail("Wheels.InvalidAuthenticityToken error did not occur.");
 		} catch (any e) {
 			variables.ex = e;
-			debug("ex.Type", true);
-			debug("ex.message", true);
+			debug("ex.Type", false);
+			debug("ex.message", false);
+			debug("request.cgi", false);
 			type = e.Type;
 			assert("type is 'Wheels.InvalidAuthenticityToken'");
 		}
