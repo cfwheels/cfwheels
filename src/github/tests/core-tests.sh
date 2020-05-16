@@ -8,7 +8,7 @@ dbengine=${2}
 port="$(get_port ${cfengine})"
 db="$(get_db ${dbengine})"
 
-test_url="http://127.0.0.1:${port}/wheels/tests/core?db=${db}&format=txt&only=failure,error&reload=true&package=controller.csrf.cookie"
+test_url="http://127.0.0.1:${port}/wheels/tests/core?db=${db}&format=txt&only=failure,error&reload=true&package=controller.csrf"
 result_file="/tmp/${cfengine}-${db}-result.txt"
 
 echo "\nRUNNING SUITE (${cfengine}/${dbengine}):\n"
