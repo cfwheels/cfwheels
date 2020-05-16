@@ -15,7 +15,7 @@ echo "\nRUNNING SUITE (${cfengine}/${dbengine}):\n"
 echo ${test_url}
 echo ${result_file}
 
-http_code=$(curl -s -o "${result_file}" --write-out "%{http_code}" "${test_url}";)
+http_code=$(curl -o "${result_file}" --write-out "%{http_code}" "${test_url}";)
 
 cat $result_file
 
