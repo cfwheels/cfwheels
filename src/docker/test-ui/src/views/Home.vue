@@ -9,6 +9,16 @@
 						<b-icon icon="plus-circle" /> {{t.displayname}}
 					</b-list-group-item>
 				</b-list-group>
+
+				<b-form-group label="Execution Order" class="m-3">
+					<b-form-radio-group
+						id="executionOrder"
+						v-model="executionOrder"
+						:options="executionOrders"
+						stacked
+						name="executionOrder"
+						></b-form-radio-group>
+					</b-form-group>
 				</b-card>
 				<b-card class="mt-3" flush header="Open Server" :no-body='true'>
 				<b-list-group>
@@ -144,7 +154,12 @@ export default {
 			status: [],
 			jobs: [],
 			queueIsRunning: false,
-			currentJobName: ""
+			currentJobName: "",
+			executionOrders: [
+				"directory asc",
+				"directory desc",
+			],
+			executionOrder: "directory asc"
 		}
 	},
 	computed:{
@@ -204,7 +219,7 @@ export default {
 			this.status.push({ when: new Date, type: status.type, message: status.message})
 		},
 		getTestURL(t){
-			var rv = t.server + '/wheels/tests/core?reload=true&format=json'
+			var rv = t.server + '/wheels/tests/core?reload=true&format=json' + '&sort=' + this.executionOrder
 			if(t.database){
 				rv += "&db=" + t.database
 			}
