@@ -7,12 +7,15 @@ component extends="wheels.tests.Test" {
 		oldScriptName = request.cgi.script_name;
 		request.cgi.script_name = "/rewrite.cfm";
 		set(functionName = "buttonTo", encode = false);
+		$oldrequestfromforgery = request.$wheelsProtectedFromForgery;
+		request.$wheelsProtectedFromForgery = true;
 	}
 
 	function teardown() {
 		application.wheels.URLRewriting = oldURLRewriting;
 		request.cgi.script_name = oldScriptName;
 		set(functionName = "buttonTo", encode = true);
+		request.$wheelsProtectedFromForgery = $oldrequestfromforgery;
 	}
 
 	function test_buttonto_inner_encoding() {
