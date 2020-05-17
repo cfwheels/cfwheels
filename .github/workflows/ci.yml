@@ -28,7 +28,7 @@ jobs:
       #     sudo apt-get install libappindicator-dev apt-transport-https commandbox -y
 
       - name: Docker Compose ${{ matrix.cf }} ${{ matrix.db }}
-        run: docker-compose up -d ${{ matrix.cf }} ${{ matrix.db }}
+        run: docker-compose up ${{ matrix.cf }} ${{ matrix.db }}
 
       - name: Wait for ${{ matrix.cf }} startup
         run: src/github/tests/server-up.sh ${{ matrix.cf }}
