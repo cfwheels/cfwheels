@@ -169,17 +169,15 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_paginated_records_with_paginationcountmode_as_query() {
-		$oldPaginationCountMode = get("paginationCountMode");
-		application.wheels.paginationCountMode = "query";
 		r = user.findAll(select = "id", order = "id");
 		/* 2nd page */
 		e = user.findAll(
 			perpage = "2",
 			page = "2",
 			handle = "pagination_test_3",
-			order = "id"
+			order = "id",
+			paginationCountMode = "query"
 		);
-		application.wheels.paginationCountMode = $oldPaginationCountMode;
 
 		assert('request.wheels.pagination_test_3.CURRENTPAGE eq 2');
 		assert('request.wheels.pagination_test_3.TOTALPAGES eq 3');

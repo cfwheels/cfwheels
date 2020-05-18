@@ -285,7 +285,6 @@ public void function onApplicationStart() {
 	application.$wheels.timeStampOnCreateProperty = "createdAt";
 	application.$wheels.timeStampOnUpdateProperty = "updatedAt";
 	application.$wheels.timeStampMode = "utc";
-	application.$wheels.paginationCountMode = "count";
 	application.$wheels.ipExceptions = "";
 	application.$wheels.overwritePlugins = true;
 	application.$wheels.deletePluginDirectories = true;

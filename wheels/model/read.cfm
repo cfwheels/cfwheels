@@ -25,6 +25,7 @@
  * @callbacks Set to `false` to disable callbacks for this method.
  * @includeSoftDeletes Set to `true` to include soft-deleted records in the queries that this method runs.
  * @useIndex If you want to specify table index hints, pass in a structure of index names using your model names as the structure keys. Eg: `{user="idx_users", post="idx_posts"}`. This feature is only supported by MySQL and SQL Server.
+ * @paginationCountMode = Set to `query` to use a `query.recordCount` rather than `count()` in paginated queries. The following operators are supported: `count`, `query`
  */
 public any function findAll(
 	string where = "",
@@ -46,6 +47,7 @@ public any function findAll(
 	boolean callbacks = "true",
 	boolean includeSoftDeletes = "false",
 	struct useIndex = {},
+	string paginationCountMode = "count",
 	numeric $limit = "0",
 	numeric $offset = "0"
 ) {
@@ -111,7 +113,7 @@ public any function findAll(
 		if (arguments.count > 0) {
 			local.totalRecords = arguments.count;
 		} else {
-			arguments.$debugName &= "PaginationCount-" & $get("paginationCountMode");
+			arguments.$debugName &= "Pagination#titleize(arguments.paginationCountMode)#";
 			local.paginationCountArgs = {
 				where = arguments.where,
 				reload = arguments.reload,
@@ -121,7 +123,7 @@ public any function findAll(
 				$debugName = arguments.$debugName,
 				includeSoftDeletes = arguments.includeSoftDeletes
 			};
-			if ($get("paginationCountMode") == "query") {
+			if (arguments.paginationCountMode == "query") {
 				local.totalRecordsQuery = this.findAll(argumentCollection = local.paginationCountArgs, select = primaryKey());
 				local.totalRecords = local.totalRecordsQuery.recordCount;
 			} else {
