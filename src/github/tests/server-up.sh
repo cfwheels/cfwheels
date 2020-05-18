@@ -9,10 +9,10 @@ wait_seconds=6
 http_endpoint="http://127.0.0.1:${port}"
 
 iterations=0
-while true
-do
-	((iterations++))
-	echo "Attempt $iterations"
+while true; do
+  iterations=$(expr $iterations + 1)
+
+	echo -n "Attempt ${iterations}.. "
 	sleep $wait_seconds
 
 	http_code=$(curl -s -o /tmp/server-up-${port}.txt -w '%{http_code}' "$http_endpoint";)
