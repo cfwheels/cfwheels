@@ -15,7 +15,9 @@ do
 	echo "Attempt $iterations"
 	sleep $wait_seconds
 
-	http_code=$(curl --verbose -s -o /tmp/server-up-${port}.txt -w '%{http_code}' "$http_endpoint";)
+	http_code=$(curl -s -o /tmp/server-up-${port}.txt -w '%{http_code}' "$http_endpoint";)
+
+  echo $http_code
 
 	if [ "$http_code" -eq 200 ]; then
 		echo "Server Up"
