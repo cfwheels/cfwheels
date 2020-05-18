@@ -168,4 +168,27 @@ component extends="wheels.tests.Test" {
 		assert('q.recordcount eq 3');
 	}
 
+	function test_paginated_records_with_paginationcountmode_as_query() {
+		$oldPaginationCountMode = get("paginationCountMode");
+		application.wheels.paginationCountMode = "query";
+		r = user.findAll(select = "id", order = "id");
+		/* 2nd page */
+		e = user.findAll(
+			perpage = "2",
+			page = "2",
+			handle = "pagination_test_3",
+			order = "id"
+		);
+		application.wheels.paginationCountMode = $oldPaginationCountMode;
+
+		assert('request.wheels.pagination_test_3.CURRENTPAGE eq 2');
+		assert('request.wheels.pagination_test_3.TOTALPAGES eq 3');
+		assert('request.wheels.pagination_test_3.TOTALRECORDS eq 5');
+		assert('request.wheels.pagination_test_3.ENDROW eq 4');
+		assert("e.recordcount eq 2");
+		assert('e.id[1] eq r.id[3]');
+		assert('e.id[2] eq r.id[4]');
+
+	}
+
 }

@@ -111,17 +111,22 @@ public any function findAll(
 		if (arguments.count > 0) {
 			local.totalRecords = arguments.count;
 		} else {
-			arguments.$debugName &= "PaginationCount";
-			local.totalRecords = this.count(
+			arguments.$debugName &= "PaginationCount-" & $get("paginationCountMode");
+			local.paginationCountArgs = {
 				where = arguments.where,
-				include = arguments.include,
 				reload = arguments.reload,
 				cache = arguments.cache,
 				distinct = local.distinct,
 				parameterize = arguments.parameterize,
 				$debugName = arguments.$debugName,
 				includeSoftDeletes = arguments.includeSoftDeletes
-			);
+			};
+			if ($get("paginationCountMode") == "query") {
+				local.totalRecordsQuery = this.findAll(argumentCollection = local.paginationCountArgs, select = primaryKey());
+				local.totalRecords = local.totalRecordsQuery.recordCount;
+			} else {
+				local.totalRecords = this.count(argumentCollection = local.paginationCountArgs, include = arguments.include);
+			}
 		}
 		local.currentPage = arguments.page;
 		if (local.totalRecords == 0) {
