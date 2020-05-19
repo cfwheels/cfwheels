@@ -116,6 +116,7 @@ public any function findAll(
 			arguments.$debugName &= "Pagination#titleize(arguments.paginationCountMode)#";
 			local.paginationCountArgs = {
 				where = arguments.where,
+				include = arguments.include,
 				reload = arguments.reload,
 				cache = arguments.cache,
 				distinct = local.distinct,
