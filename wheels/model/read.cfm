@@ -128,7 +128,7 @@ public any function findAll(
 				local.totalRecordsQuery = this.findAll(argumentCollection = local.paginationCountArgs, select = primaryKey());
 				local.totalRecords = local.totalRecordsQuery.recordCount;
 			} else {
-				local.totalRecords = this.count(argumentCollection = local.paginationCountArgs, include = arguments.include);
+				local.totalRecords = this.count(argumentCollection = local.paginationCountArgs);
 			}
 		}
 		local.currentPage = arguments.page;
