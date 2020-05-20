@@ -25,9 +25,9 @@ if (packages.recordCount) {
 <cfoutput>
 	<div class="ui container">
 		#pageHeader("Test Suites", "Core &amp; App test suites")#
-		
+
 		<cfinclude template="../tests/_navigation.cfm">
-		
+
 		<div class="ui segment">
 			<p>Below is listing of all the #type# test packages. Click the part of the package to run it individually.</p>
 				<cfif packages.recordcount>
@@ -59,7 +59,6 @@ if (packages.recordCount) {
 				</cfif>
 			</div>
 
-		<cfinclude template="../tests/_navigation.cfm">
 	</div>
 </cfoutput>
 
