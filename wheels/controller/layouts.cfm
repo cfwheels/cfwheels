@@ -102,7 +102,9 @@ public any function $useLayout(required string $action) {
 				if (StructKeyExists(local, "result")) {
 					local.rv = local.result;
 				}
-			} else local.rv = local.layout[local.layoutType];
+			} else {
+				local.rv = local.layout[local.layoutType];
+			}
 		}
 	}
 	return local.rv;
