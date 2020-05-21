@@ -35,7 +35,7 @@ jobs:
         # run: box task run taskFile=src/github/tests/Tasks target=serverUp :cfengine=${{ matrix.cf }}
 
       - name: Wait for ${{ matrix.db }} startup
-        run: src/github/tests/db-up.sh ${{ matrix.cf }}
+        run: src/github/tests/db-up.sh ${{ matrix.db }}
 
       - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
         run: src/github/tests/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}
