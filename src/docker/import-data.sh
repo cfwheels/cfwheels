@@ -2,7 +2,7 @@ echo Running import-data.sh
 
 echo Sleep now
 #wait for the SQL Server to come up
-sleep 60s
+sleep 10s
 
 echo Wake up
 #run the setup script to create the DB and the schema in the DB
