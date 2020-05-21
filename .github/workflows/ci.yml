@@ -27,17 +27,20 @@ jobs:
       #     sudo apt-get update -y -qq
       #     sudo apt-get install libappindicator-dev apt-transport-https commandbox -y
 
-      - name: Docker Compose ${{ matrix.cf }} ${{ matrix.db }}
-        run: docker-compose up -d ${{ matrix.cf }} ${{ matrix.db }}
+      - name: Docker Compose ${{ matrix.db }}
+        run: docker-compose up -d ${{ matrix.db }}
+
+      - name: Docker Compose ${{ matrix.cf }}
+        run: docker-compose up -d ${{ matrix.cf }}
 
       - name: Wait for ${{ matrix.cf }} startup
         run: src/github/tests/server-up.sh ${{ matrix.cf }}
         # run: box task run taskFile=src/github/tests/Tasks target=serverUp :cfengine=${{ matrix.cf }}
 
-      - name: Sleep for 60 seconds
-        uses: jakejarvis/wait-action@master
-        with:
-          time: '60s'
+      # - name: Sleep for 60 seconds
+      #   uses: jakejarvis/wait-action@master
+      #   with:
+      #     time: '60s'
       #- name: Wait for ${{ matrix.db }} startup
       #  run: src/github/tests/db-up.sh ${{ matrix.db }}
 
