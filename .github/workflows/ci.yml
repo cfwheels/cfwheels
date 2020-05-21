@@ -34,8 +34,12 @@ jobs:
         run: src/github/tests/server-up.sh ${{ matrix.cf }}
         # run: box task run taskFile=src/github/tests/Tasks target=serverUp :cfengine=${{ matrix.cf }}
 
-      - name: Wait for ${{ matrix.db }} startup
-        run: src/github/tests/db-up.sh ${{ matrix.db }}
+    - name: Sleep for 60 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '60s'
+      #- name: Wait for ${{ matrix.db }} startup
+      #  run: src/github/tests/db-up.sh ${{ matrix.db }}
 
       - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
         run: src/github/tests/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}
