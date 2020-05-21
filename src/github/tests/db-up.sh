@@ -6,4 +6,4 @@ dbengine=${1}
 
 port="$(get_port ${1})"
 
-bash $(dirname "$0")/wait-for-it.sh --timeout=3  --strict localhost:${port}  -- echo ${dbengine} "up"
+bash $(dirname "$0")/wait-for-it.sh --timeout=60  --strict localhost:${port}  -- echo ${dbengine} "up"
