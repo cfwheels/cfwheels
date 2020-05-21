@@ -11,6 +11,15 @@ get_port () {
     adobe2018)
       echo -n "62018"
       ;;
+    mysql56)
+      echo -n "3306"
+      ;;
+    sqlserver)
+      echo -n "1433"
+      ;;
+    postgres)
+      echo -n "5432"
+      ;;
     *)
       echo -n "unknown"
       ;;
