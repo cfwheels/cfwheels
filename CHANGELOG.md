@@ -32,6 +32,7 @@
 - Allow the combination of `url` and `params` arguments with `redirectTo` - [Adam Chapman]
 - Display content in maintenance mode on newer Lucee versions [#848](https://github.com/cfwheels/cfwheels/issues/848) - [Per Djurner]
 - Fixed some variable scoping - [Michael Diederich]
+- Github Actions CI Pipeline - [Adam Chapman, Tom King]
 
 <a name="2.1"></a>
 

@@ -36,12 +36,12 @@ version).
 
 ## Code Status
 
-[![Build Status](https://travis-ci.org/cfwheels/cfwheels.svg?branch=master)](https://travis-ci.org/cfwheels/cfwheels)
+![Wheels Test Suite](https://github.com/cfwheels/cfwheels/workflows/Wheels%20Test%20Suite/badge.svg)
 
 ## License
 
 [CFWheels][1] is released under the Apache License Version 2.0.
- 
+
 [1]: https://cfwheels.org/
 [2]: https://guides.cfwheels.org/docs/beginner-tutorial-hello-world
 [3]: https://guides.cfwheels.org/docs/contributing-to-cfwheels

@@ -4,7 +4,6 @@
 
 ## Directories
 
-`/src/test/` - Current Travis CI stuff
 `/src/docker/` - New Docker based standalone test suite (not for CI)
 `/src/docker/sqlserver` - SQL server specific config
 `/src/docker/test-ui` - VueJS Test Suite front end.
