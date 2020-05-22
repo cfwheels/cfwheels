@@ -170,7 +170,6 @@ component extends="wheels.tests.Test" {
 
 	function test_paginated_records_with_paginationcountmode_as_query() {
 		r = user.findAll(select = "id", order = "id");
-		/* 2nd page */
 		e = user.findAll(
 			perpage = "2",
 			page = "2",
