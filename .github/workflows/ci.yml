@@ -2,33 +2,7 @@
 
 name: Wheels Test Suite
 
-on:
-  push:
-    paths:
-    - '!.editorconfig'
-    - '!.cfformat.json'
-    - '!.gitignore'
-    - '!LICENSE'
-    - '!box.json'
-    - '!**.md'
-    - '!server*.json'
-    - '!**.jpg'
-    - '!**.gif'
-    - '!**.css'
-    - '!**.png'
-  pull_request:
-    paths:
-    - '!.editorconfig'
-    - '!.cfformat.json'
-    - '!.gitignore'
-    - '!LICENSE'
-    - '!box.json'
-    - '!**.md'
-    - '!server*.json'
-    - '!**.jpg'
-    - '!**.gif'
-    - '!**.css'
-    - '!**.png'
+on: [push, pull_request]
 
 jobs:
   run-tests:
