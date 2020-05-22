@@ -987,9 +987,6 @@ private string function $checkMinimumVersion(required string engine, required st
 		local.minimumMinor = "0";
 		local.minimumPatch = "03";
 		local.minimumBuild = "314033";
-		// these keys are not used?
-		//local.11 = {minimumMinor = 0, minimumPatch = 18, minimumBuild = 314030};
-		//local.2016 = {minimumMinor = 0, minimumPatch = 10, minimumBuild = 314028};
 	} else {
 		local.rv = false;
 	}
