@@ -2,7 +2,13 @@
 
 name: Wheels Test Suite
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - '!**.md'
+  pull_request:
+    paths:
+      - '!**.md'
 
 jobs:
   run-tests:
