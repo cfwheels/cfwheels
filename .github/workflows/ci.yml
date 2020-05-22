@@ -2,11 +2,7 @@
 
 name: Wheels Test Suite
 
-on:
-  push:
-    branches: [github-actions-ci]
-  pull_request:
-    branches: [github-actions-ci]
+on: [push, pull_request]
 
 jobs:
   run-tests:
