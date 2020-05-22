@@ -5,6 +5,7 @@ name: Wheels Test Suite
 on:
   push:
     paths:
+    - "*"
     - '!.editorconfig'
     - '!.cfformat.json'
     - '!.gitignore'
@@ -18,6 +19,7 @@ on:
     - '!**.png'
   pull_request:
     paths:
+    - "*"
     - '!.editorconfig'
     - '!.cfformat.json'
     - '!.gitignore'
