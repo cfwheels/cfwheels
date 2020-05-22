@@ -32,6 +32,8 @@ public void function onApplicationStart() {
 		application.$wheels.serverName = "Adobe ColdFusion";
 		application.$wheels.serverVersion = server.coldfusion.productVersion;
 	}
+	application.$wheels.serverVersionMajor = ListFirst(application.$wheels.serverVersion, ".,");
+
 	local.upgradeTo = $checkMinimumVersion(
 		engine = application.$wheels.serverName,
 		version = application.$wheels.serverVersion

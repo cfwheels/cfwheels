@@ -2,13 +2,13 @@ component extends="wheels.tests.Test" {
 
 	public void function setup() {
 		_params = {controller = "test", action = "index"};
-		_originalRoutes = application[$appKey()].routes;
+		_originalRoutes = Duplicate(application.wheels.routes);
 		application.wheels.routes = [];
 		dispatch = CreateObject("component", "wheels.Dispatch");
 	}
 
 	public void function teardown() {
-		application[$appKey()].routes = _originalRoutes;
+		application.wheels.routes = _originalRoutes;
 	}
 
 	function test_route_with_format() {

@@ -3,7 +3,7 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		config = {path = "wheels", fileName = "Mapper", method = "$init"};
 		_params = {controller = "test", action = "index"};
-		_originalRoutes = application[$appKey()].routes;
+		_originalRoutes = Duplicate(application.wheels.routes);
 		_originalUrlRewriting = application.wheels.URLRewriting;
 		_originalObfuscateUrls = application.wheels.obfuscateUrls;
 	}
@@ -21,7 +21,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	public void function $clearRoutes() {
-		application[$appKey()].routes = [];
+		application.wheels.routes = [];
 	}
 
 	function test_issue_455() {

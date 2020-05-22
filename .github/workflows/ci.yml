@@ -1,0 +1,42 @@
+# Runs the cfwheels core tests across engine/db combos in Docker
+
+name: Wheels Test Suite
+
+on: [push, pull_request]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        cf: [lucee5, adobe2016, adobe2018]
+        db: [mysql56, postgres, sqlserver]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # - name: Install Commandbox
+      #   run: |
+      #     curl -fsSl https://downloads.ortussolutions.com/debs/gpg | sudo apt-key add -
+      #     echo "deb https://downloads.ortussolutions.com/debs/noarch /" | sudo tee -a /etc/apt/sources.list.d/commandbox.list
+      #     sudo apt-get update -y -qq
+      #     sudo apt-get install libappindicator-dev apt-transport-https commandbox -y
+
+      - name: Docker Compose ${{ matrix.cf }} ${{ matrix.db }}
+        run: docker-compose up -d ${{ matrix.cf }} ${{ matrix.db }}
+
+      - name: Wait for ${{ matrix.cf }} startup
+        run: src/github/tests/server-up.sh ${{ matrix.cf }}
+        # run: box task run taskFile=src/github/tests/Tasks target=serverUp :cfengine=${{ matrix.cf }}
+
+      - name: Sleep for 60 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '60s'
+      #- name: Wait for ${{ matrix.db }} startup
+      #  run: src/github/tests/db-up.sh ${{ matrix.db }}
+
+      - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
+        run: src/github/tests/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}
+        # run: box task run taskFile=src/github/tests/Tasks target=runTests :cfengine=${{ matrix.cf }} :dbengine=${{ matrix.db }}

@@ -3,11 +3,11 @@ component extends="wheels.tests.Test" {
 	public void function setup() {
 		config = {path = "wheels", fileName = "Mapper", method = "$init"};
 		_params = {controller = "test", action = "index"};
-		_originalRoutes = application[$appKey()].routes;
+		_originalRoutes = Duplicate(application.wheels.routes);
 	}
 
 	public void function teardown() {
-		application[$appKey()].routes = _originalRoutes;
+		application.wheels.routes = _originalRoutes;
 	}
 
 	public struct function $mapper() {
@@ -21,7 +21,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	public void function $clearRoutes() {
-		application[$appKey()].routes = [];
+		application.wheels.routes = [];
 	}
 
 	// resource

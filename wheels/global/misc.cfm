@@ -280,7 +280,7 @@ public any function processRequest(
 	string rollback,
 	string includeFilters = true
 ) {
-	;
+
 	$args(name = "processRequest", args = arguments);
 
 	// Set the global transaction mode to rollback when specified.

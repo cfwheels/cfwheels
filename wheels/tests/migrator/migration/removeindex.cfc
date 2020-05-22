@@ -2,9 +2,14 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		migration = CreateObject("component", "wheels.migrator.Migration").init();
+		isACF2016 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2016;
+		isPostgres = migration.adapter.adapterName() == "PostgreSQL";
 	}
 
 	function test_removeIndex_removes_an_index() {
+		if (isACF2016 && isPostgres) {
+			return;
+		}
 		tableName = "dbm_removeindex_tests";
 		indexName = "idx_to_remove";
 		t = migration.createTable(name = tableName, force = true);
