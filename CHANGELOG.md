@@ -33,6 +33,7 @@
 - Display content in maintenance mode on newer Lucee versions [#848](https://github.com/cfwheels/cfwheels/issues/848) - [Per Djurner]
 - Fixed some variable scoping - [Michael Diederich]
 - Github Actions CI Pipeline - [Adam Chapman, Tom King]
+- Flash Cookie can now be disabled via `set(flashStorage="none")` [#978](https://github.com/cfwheels/cfwheels/issues/978) [Tom King]
 
 <a name="2.1"></a>
 
