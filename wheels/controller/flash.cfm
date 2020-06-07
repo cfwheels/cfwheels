@@ -173,7 +173,7 @@ public any function $writeFlash(struct flash = {}) {
 	} else {
 		if ($getFlashStorage() == "cookie") {
 			cookie.flash = SerializeJSON(arguments.flash);
-		} else {
+		} else if ($getFlashStorage() == "session") {
 			session.flash = arguments.flash;
 		}
 	}
