@@ -171,6 +171,17 @@ component extends="wheels.tests.Test" {
 		assert("$statusCode() EQ 404");
 	}
 
+	function test_custom_status_codes_with_html() {
+		params.action = "test2";
+		_controller = controller("test", params);
+		_controller.renderWith(
+			data = "the rain in spain",
+			layout = false,
+			status = 403
+		);
+		assert("$statusCode() EQ 403");
+	}
+
 	function test_custom_status_codes_OK() {
 		params.format = "json";
 		params.action = "test2";
