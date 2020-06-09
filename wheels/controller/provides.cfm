@@ -91,6 +91,21 @@ public any function renderWith(
 		local.contentType = "html";
 	}
 
+	// If custom statuscode passed in, then set appropriate header.
+	// Status may be a numeric value such as 404, or a text value such as "Forbidden".
+	if (StructKeyExists(arguments, "status")) {
+		local.status = arguments.status;
+		if (IsNumeric(local.status)) {
+			local.statusCode = local.status;
+			local.statusText = $returnStatusText(local.status);
+		} else {
+			// Try for statuscode;
+			local.statusCode = $returnStatusCode(local.status);
+			local.statusText = local.status;
+		}
+		$header(statusCode = local.statusCode, statusText = local.statusText);
+	}
+
 	if (local.contentType == "html") {
 		// Call render page when we are just rendering html.
 		StructDelete(arguments, "data");
@@ -135,21 +150,6 @@ public any function renderWith(
 		local.formats = $get("formats");
 		local.value = local.formats[local.contentType] & "; charset=utf-8";
 		$header(name = "content-type", value = local.value, charset = "utf-8");
-
-		// If custom statuscode passed in, then set appropriate header.
-		// Status may be a numeric value such as 404, or a text value such as "Forbidden".
-		if (StructKeyExists(arguments, "status")) {
-			local.status = arguments.status;
-			if (IsNumeric(local.status)) {
-				local.statusCode = local.status;
-				local.statusText = $returnStatusText(local.status);
-			} else {
-				// Try for statuscode;
-				local.statusCode = $returnStatusCode(local.status);
-				local.statusText = local.status;
-			}
-			$header(statusCode = local.statusCode, statusText = local.statusText);
-		}
 
 		// If we do not have the local.content variable and we are not rendering html then try to create it.
 		if (!StructKeyExists(local, "content")) {
