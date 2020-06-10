@@ -725,7 +725,7 @@ public string function $requestContentType(
 /**
  * Internal function. If custom statuscode passed in, then set appropriate header. Status may be a numeric value such as 404, or a text value such as "Forbidden".
  */
-public void function $setRequestStatusCode(any status) {
+public void function $setRequestStatusCode(required string status) {
 	local.status = arguments.status;
 	if (IsNumeric(local.status)) {
 		local.statusCode = local.status;
