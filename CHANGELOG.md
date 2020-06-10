@@ -4,7 +4,7 @@
 
 ### Controller Enhancements
 
-- Added the `status` argument to all `render*()` functions to force returning a specific HTTP status code [#1025](https://github.com/cfwheels/cfwheels/issues/1025) - [Adam Chapman]
+- Added the `status` argument to all `render*()` functions to force returning a specific HTTP status code [#1025](https://github.com/cfwheels/cfwheels/issues/1025) - [Adam Chapman, Tom King]
 
 ### Model Enhancements
 

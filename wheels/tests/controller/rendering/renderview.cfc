@@ -36,9 +36,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_render_view_with_status() {
-		_controller.renderView(
-			status = 418
-		);
+		_controller.renderView(status = 418);
 		actual = $statusCode();
 		expected = 418;
 		assert("actual eq expected");

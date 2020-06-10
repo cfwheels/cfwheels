@@ -16,9 +16,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_render_nothing_with_status() {
-		_controller.renderNothing(
-			status = 418
-		);
+		_controller.renderNothing(status = 418);
 		actual = $statusCode();
 		expected = 418;
 		assert("actual eq expected");

@@ -21,10 +21,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_rendering_partial_with_status() {
-		_controller.renderPartial(
-			partial = "partialTemplate",
-			status = 418
-		);
+		_controller.renderPartial(partial = "partialTemplate", status = 418);
 		actual = $statusCode();
 		expected = 418;
 		assert("actual eq expected");

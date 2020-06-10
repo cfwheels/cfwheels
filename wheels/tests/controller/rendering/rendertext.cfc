@@ -16,10 +16,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_render_text_with_status() {
-		_controller.renderText(
-			text = "OMG!",
-			status = 418
-		);
+		_controller.renderText(text = "OMG!", status = 418);
 		actual = $statusCode();
 		expected = 418;
 		assert("actual eq expected");

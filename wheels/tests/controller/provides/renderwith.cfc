@@ -174,11 +174,7 @@ component extends="wheels.tests.Test" {
 	function test_custom_status_codes_with_html() {
 		params.action = "test2";
 		_controller = controller("test", params);
-		_controller.renderWith(
-			data = "the rain in spain",
-			layout = false,
-			status = 403
-		);
+		_controller.renderWith(data = "the rain in spain", layout = false, status = 403);
 		assert("$statusCode() EQ 403");
 	}
 
