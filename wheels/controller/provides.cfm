@@ -69,7 +69,7 @@ public void function onlyProvides(string formats = "", string action = variables
  * @cache [see:renderView].
  * @returnAs [see:renderView].
  * @hideDebugInformation [see:renderView].
- * @status Force request to return with specific HTTP status code.
+ * @status [see:renderView].
  */
 public any function renderWith(
 	required any data,
@@ -91,19 +91,8 @@ public any function renderWith(
 		local.contentType = "html";
 	}
 
-	// If custom statuscode passed in, then set appropriate header.
-	// Status may be a numeric value such as 404, or a text value such as "Forbidden".
 	if (StructKeyExists(arguments, "status")) {
-		local.status = arguments.status;
-		if (IsNumeric(local.status)) {
-			local.statusCode = local.status;
-			local.statusText = $returnStatusText(local.status);
-		} else {
-			// Try for statuscode;
-			local.statusCode = $returnStatusCode(local.status);
-			local.statusText = local.status;
-		}
-		$header(statusCode = local.statusCode, statusText = local.statusText);
+		$setRequestStatusCode(arguments.status);
 	}
 
 	if (local.contentType == "html") {
@@ -299,7 +288,21 @@ public string function $requestContentType(
 	}
 	return local.rv;
 }
-
+/**
+ * Internal function. If custom statuscode passed in, then set appropriate header. Status may be a numeric value such as 404, or a text value such as "Forbidden".
+ */
+public void function $setRequestStatusCode(any status){
+		local.status = arguments.status;
+		if (IsNumeric(local.status)) {
+			local.statusCode = local.status;
+			local.statusText = $returnStatusText(local.status);
+		} else {
+			// Try for statuscode;
+			local.statusCode = $returnStatusCode(local.status);
+			local.statusText = local.status;
+		}
+		$header(statusCode = local.statusCode, statusText = local.statusText);
+}
 /**
  * Returns a response text for any status code.
  */

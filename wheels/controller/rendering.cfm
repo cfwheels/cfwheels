@@ -13,6 +13,7 @@
  * @cache Number of minutes to cache the content for.
  * @returnAs Set to `string` to return the result instead of automatically sending it to the client.
  * @hideDebugInformation Set to `true` to hide the debug information at the end of the output. This is useful, for example, when you're testing XML output in an environment where the global setting for `showDebugInformation` is `true`.
+ * @status Force request to return with specific HTTP status code.
  */
 public any function renderView(
 	string controller = variables.params.controller,
@@ -21,7 +22,8 @@ public any function renderView(
 	any layout,
 	any cache = "",
 	string returnAs = "",
-	boolean hideDebugInformation = false
+	boolean hideDebugInformation = false,
+	any status = "200"
 ) {
 	$args(name = "renderView", args = arguments);
 	$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
@@ -42,6 +44,10 @@ public any function renderView(
 	// If renderView was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request.
 	if (!arguments.$hideDebugInformation) {
 		request.wheels.showDebugInformation = true;
+	}
+
+	if (StructKeyExists(arguments, "status")) {
+		$setRequestStatusCode(arguments.status);
 	}
 
 	if ($get("cachePages") && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache))) {
@@ -83,8 +89,13 @@ public any function renderView(
  *
  * [section: Controller]
  * [category: Rendering Functions]
+ *
+ * @status [see:renderView].
  */
-public void function renderNothing() {
+public void function renderNothing(any status = "200") {
+	if (StructKeyExists(arguments, "status")) {
+		$setRequestStatusCode(arguments.status);
+	}
 	variables.$instance.response = "";
 }
 
@@ -95,8 +106,12 @@ public void function renderNothing() {
  * [category: Rendering Functions]
  *
  * @text The text to render.
+ * @status [see:renderView].
  */
-public void function renderText(required any text) {
+public void function renderText(string text="", any status = "200") {
+	if (StructKeyExists(arguments, "status")) {
+		$setRequestStatusCode(arguments.status);
+	}
 	variables.$instance.response = arguments.text;
 }
 
