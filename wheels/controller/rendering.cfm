@@ -23,11 +23,7 @@ public any function renderView(
 	any cache = "",
 	string returnAs = "",
 	boolean hideDebugInformation = false,
-<<<<<<< HEAD
 	string status = "200"
-=======
-	any status = "200"
->>>>>>> 8f788d63bf468735fec00cf76517535470fdf9da
 ) {
 	$args(name = "renderView", args = arguments);
 	$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
