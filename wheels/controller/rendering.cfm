@@ -13,6 +13,7 @@
  * @cache Number of minutes to cache the content for.
  * @returnAs Set to `string` to return the result instead of automatically sending it to the client.
  * @hideDebugInformation Set to `true` to hide the debug information at the end of the output. This is useful, for example, when you're testing XML output in an environment where the global setting for `showDebugInformation` is `true`.
+ * @status Force request to return with specific HTTP status code.
  */
 public any function renderView(
 	string controller = variables.params.controller,
@@ -21,7 +22,8 @@ public any function renderView(
 	any layout,
 	any cache = "",
 	string returnAs = "",
-	boolean hideDebugInformation = false
+	boolean hideDebugInformation = false,
+	string status = "200"
 ) {
 	$args(name = "renderView", args = arguments);
 	$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
@@ -69,6 +71,11 @@ public any function renderView(
 	} else {
 		variables.$instance.response = local.page;
 	}
+
+	if (StructKeyExists(arguments, "status")) {
+		$setStatusCodeHeader(arguments.status);
+	}
+
 	if ($get("showDebugInformation")) {
 		$debugPoint("view");
 	}
@@ -83,9 +90,14 @@ public any function renderView(
  *
  * [section: Controller]
  * [category: Rendering Functions]
+ *
+ * @status Force request to return with specific HTTP status code.
  */
-public void function renderNothing() {
+public void function renderNothing(string status = "200") {
 	variables.$instance.response = "";
+	if (StructKeyExists(arguments, "status")) {
+		$setStatusCodeHeader(arguments.status);
+	}
 }
 
 /**
@@ -95,9 +107,13 @@ public void function renderNothing() {
  * [category: Rendering Functions]
  *
  * @text The text to render.
+ * @status Force request to return with specific HTTP status code.
  */
-public void function renderText(required any text) {
+public void function renderText(required any text, string status = "200") {
 	variables.$instance.response = arguments.text;
+	if (StructKeyExists(arguments, "status")) {
+		$setStatusCodeHeader(arguments.status);
+	}
 }
 
 /**
@@ -111,13 +127,15 @@ public void function renderText(required any text) {
  * @layout [see:renderView].
  * @returnAs [see:renderView].
  * @dataFunction Name of a controller function to load data from.
+ * @status Force request to return with specific HTTP status code.
  */
 public any function renderPartial(
 	required string partial,
 	any cache = "",
 	string layout,
 	string returnAs = "",
-	any dataFunction
+	any dataFunction,
+	string status = "200"
 ) {
 	$args(name = "renderPartial", args = arguments);
 	local.partial = $includeOrRenderPartial(
@@ -127,6 +145,9 @@ public any function renderPartial(
 		local.rv = local.partial;
 	} else {
 		variables.$instance.response = local.partial;
+	}
+	if (StructKeyExists(arguments, "status")) {
+		$setStatusCodeHeader(arguments.status);
 	}
 	if (StructKeyExists(local, "rv")) {
 		return local.rv;
@@ -548,5 +569,23 @@ public boolean function $abortIssued() {
  */
 public boolean function $reCacheRequired() {
 	return StructKeyExists(variables.$instance, "reCache") && variables.$instance.reCache;
+}
+
+/**
+ * Internal function.
+ */
+public void function $setStatusCodeHeader(required string status) {
+	// If custom statuscode passed in, then set appropriate header.
+	// Status may be a numeric value such as 404, or a text value such as "Forbidden".
+	local.status = arguments.status;
+	if (IsNumeric(local.status)) {
+		local.statusCode = local.status;
+		local.statusText = $returnStatusText(local.status);
+	} else {
+		// Try for statuscode;
+		local.statusCode = $returnStatusCode(local.status);
+		local.statusText = local.status;
+	}
+	$header(statusCode = local.statusCode, statusText = local.statusText);
 }
 </cfscript>

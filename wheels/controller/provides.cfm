@@ -80,7 +80,7 @@ public any function renderWith(
 	any cache = "",
 	string returnAs = "",
 	boolean hideDebugInformation = false,
-	any status = "200"
+	string status = "200"
 ) {
 	$args(name = "renderWith", args = arguments);
 	local.contentType = $requestContentType();
@@ -91,19 +91,8 @@ public any function renderWith(
 		local.contentType = "html";
 	}
 
-	// If custom statuscode passed in, then set appropriate header.
-	// Status may be a numeric value such as 404, or a text value such as "Forbidden".
 	if (StructKeyExists(arguments, "status")) {
-		local.status = arguments.status;
-		if (IsNumeric(local.status)) {
-			local.statusCode = local.status;
-			local.statusText = $returnStatusText(local.status);
-		} else {
-			// Try for statuscode;
-			local.statusCode = $returnStatusCode(local.status);
-			local.statusText = local.status;
-		}
-		$header(statusCode = local.statusCode, statusText = local.statusText);
+		$setStatusCodeHeader(arguments.status);
 	}
 
 	if (local.contentType == "html") {
