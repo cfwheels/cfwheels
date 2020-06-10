@@ -126,13 +126,15 @@ public void function renderText(string text="", any status = "200") {
  * @layout [see:renderView].
  * @returnAs [see:renderView].
  * @dataFunction Name of a controller function to load data from.
+ * @status [see:renderView].
  */
 public any function renderPartial(
 	required string partial,
 	any cache = "",
 	string layout,
 	string returnAs = "",
-	any dataFunction
+	any dataFunction,
+	any status = "200"
 ) {
 	$args(name = "renderPartial", args = arguments);
 	local.partial = $includeOrRenderPartial(
@@ -141,6 +143,9 @@ public any function renderPartial(
 	if (arguments.$returnAs == "string") {
 		local.rv = local.partial;
 	} else {
+		if (StructKeyExists(arguments, "status")) {
+			$setRequestStatusCode(arguments.status);
+		}
 		variables.$instance.response = local.partial;
 	}
 	if (StructKeyExists(local, "rv")) {
