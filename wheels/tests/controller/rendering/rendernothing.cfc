@@ -15,4 +15,13 @@ component extends="wheels.tests.Test" {
 		assert("_controller.response() IS ''");
 	}
 
+	function test_render_nothing_with_status() {
+		_controller.renderNothing(
+			status = 418
+		);
+		actual = $statusCode();
+		expected = 418;
+		assert("actual eq expected");
+	}
+
 }

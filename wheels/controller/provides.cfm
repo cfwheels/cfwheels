@@ -376,6 +376,7 @@ public struct function $getStatusCodes() {
 		415 = 'Unsupported Media Type',
 		416 = 'Requested Range Not Satisfiable',
 		417 = 'Expectation Failed',
+		418 = "I'm a teapot",
 		422 = 'Unprocessable Entity',
 		423 = 'Locked',
 		424 = 'Failed Dependency',

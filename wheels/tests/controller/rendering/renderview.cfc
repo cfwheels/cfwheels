@@ -35,4 +35,13 @@ component extends="wheels.tests.Test" {
 		assert("NOT StructKeyExists(request.wheels, 'response') AND result Contains 'view template content'");
 	}
 
+	function test_render_view_with_status() {
+		_controller.renderView(
+			status = 418
+		);
+		actual = $statusCode();
+		expected = 418;
+		assert("actual eq expected");
+	}
+
 }
