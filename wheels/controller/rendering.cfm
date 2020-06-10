@@ -46,9 +46,7 @@ public any function renderView(
 		request.wheels.showDebugInformation = true;
 	}
 
-	if (StructKeyExists(arguments, "status")) {
-		$setRequestStatusCode(arguments.status);
-	}
+	$setRequestStatusCode(arguments.status);
 
 	if ($get("cachePages") && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache))) {
 		local.category = "action";
@@ -93,9 +91,7 @@ public any function renderView(
  * @status [see:renderView].
  */
 public void function renderNothing(string status = "200") {
-	if (StructKeyExists(arguments, "status")) {
-		$setRequestStatusCode(arguments.status);
-	}
+	$setRequestStatusCode(arguments.status);
 	variables.$instance.response = "";
 }
 
@@ -109,9 +105,7 @@ public void function renderNothing(string status = "200") {
  * @status [see:renderView].
  */
 public void function renderText(string text = "", any status = "200") {
-	if (StructKeyExists(arguments, "status")) {
-		$setRequestStatusCode(arguments.status);
-	}
+	$setRequestStatusCode(arguments.status);
 	variables.$instance.response = arguments.text;
 }
 
@@ -140,12 +134,10 @@ public any function renderPartial(
 	local.partial = $includeOrRenderPartial(
 		argumentCollection = $dollarify(arguments, "partial,cache,layout,returnAs,dataFunction")
 	);
+	$setRequestStatusCode(arguments.status);
 	if (arguments.$returnAs == "string") {
 		local.rv = local.partial;
 	} else {
-		if (StructKeyExists(arguments, "status")) {
-			$setRequestStatusCode(arguments.status);
-		}
 		variables.$instance.response = local.partial;
 	}
 	if (StructKeyExists(local, "rv")) {
@@ -191,9 +183,7 @@ public any function renderWith(
 		local.contentType = "html";
 	}
 
-	if (StructKeyExists(arguments, "status")) {
-		$setRequestStatusCode(arguments.status);
-	}
+	$setRequestStatusCode(arguments.status);
 
 	if (local.contentType == "html") {
 		// Call render page when we are just rendering html.
@@ -288,7 +278,7 @@ public any function renderWith(
 		if (arguments.returnAs == "string") {
 			local.rv = local.content;
 		} else {
-			renderText(local.content);
+			renderText(text = local.content, status = arguments.status);
 		}
 	}
 	if (StructKeyExists(local, "rv")) {

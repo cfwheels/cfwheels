@@ -1,14 +1,12 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
+		include "setup.cfm";
 		params = {controller = "test", action = "test"};
-		$$oldViewPath = application.wheels.viewPath;
-		application.wheels.viewPath = "wheels/tests/_assets/views";
 	}
 
 	function teardown() {
-		params = {controller = "test", action = "test"};
-		application.wheels.viewPath = $$oldViewPath;
+		include "teardown.cfm";
 		$header(name = "content-type", value = "text/html", charset = "utf-8");
 	}
 
