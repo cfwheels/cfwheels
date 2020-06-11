@@ -15,4 +15,11 @@ component extends="wheels.tests.Test" {
 		assert("_controller.response() IS 'OMG, look what I rendered!'");
 	}
 
+	function test_render_text_with_status() {
+		_controller.renderText(text = "OMG!", status = 418);
+		actual = $statusCode();
+		expected = 418;
+		assert("actual eq expected");
+	}
+
 }

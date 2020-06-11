@@ -20,4 +20,11 @@ component extends="wheels.tests.Test" {
 		assert("NOT StructKeyExists(request.wheels, 'response') AND result Contains 'partial template content'");
 	}
 
+	function test_rendering_partial_with_status() {
+		_controller.renderPartial(partial = "partialTemplate", status = 418);
+		actual = $statusCode();
+		expected = 418;
+		assert("actual eq expected");
+	}
+
 }
