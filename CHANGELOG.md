@@ -17,7 +17,6 @@
 ### View Enhancements
 
 - Added the `required` argument to `imageTag` to suppress exceptions if using non-existent files [#979](https://github.com/cfwheels/cfwheels/issues/979) - [Adam Chapman, Michael Diederich]
-- Removed authenticity token id attribute to avoid non-unique id warnings in Chrome [#953](https://github.com/cfwheels/cfwheels/issues/953) - [Per Djurner]
 
 ### Bug Fixes
 
@@ -34,7 +33,6 @@
 - Minimum Lucee 5 version is now 5.3.2.77 - Tests added - [Michael Diederich]
 - Use `http_x_forwarded_proto` to determine if the application is running behind a loadbalancer that is performing SSL offloading - [Peter Amiri]
 - Allow the combination of `url` and `params` arguments with `redirectTo` - [Adam Chapman]
-- Display content in maintenance mode on newer Lucee versions [#848](https://github.com/cfwheels/cfwheels/issues/848) - [Per Djurner]
 - Fixed some variable scoping - [Michael Diederich]
 - Github Actions CI Pipeline - [Adam Chapman, Tom King]
 - Flash Cookie can now be disabled via `set(flashStorage="none")` [#978](https://github.com/cfwheels/cfwheels/issues/978) [Tom King]
