@@ -22,4 +22,12 @@ component extends="wheels.tests.Test" {
 		assert("actual eq expected");
 	}
 
+	function test_render_text_with_doesnt_hijack_status() {
+		cfheader(statustext="Leave me be", statuscode=403);
+		_controller.renderText(text = "OMG!");
+		actual = $statusCode();
+		expected = 403;
+		assert("actual eq expected");
+	}
+
 }

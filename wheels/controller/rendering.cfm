@@ -23,7 +23,7 @@ public any function renderView(
 	any cache = "",
 	string returnAs = "",
 	boolean hideDebugInformation = false,
-	string status = "200"
+	string status = $statusCode()
 ) {
 	$args(name = "renderView", args = arguments);
 	$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
@@ -90,7 +90,7 @@ public any function renderView(
  *
  * @status [see:renderView].
  */
-public void function renderNothing(string status = "200") {
+public void function renderNothing(string status = $statusCode()) {
 	$setRequestStatusCode(arguments.status);
 	variables.$instance.response = "";
 }
@@ -104,7 +104,7 @@ public void function renderNothing(string status = "200") {
  * @text The text to render.
  * @status [see:renderView].
  */
-public void function renderText(string text = "", any status = "200") {
+public void function renderText(string text = "", any status = $statusCode()) {
 	$setRequestStatusCode(arguments.status);
 	variables.$instance.response = arguments.text;
 }
@@ -128,7 +128,7 @@ public any function renderPartial(
 	string layout,
 	string returnAs = "",
 	any dataFunction,
-	string status = "200"
+	string status = $statusCode()
 ) {
 	$args(name = "renderPartial", args = arguments);
 	local.partial = $includeOrRenderPartial(
@@ -172,7 +172,7 @@ public any function renderWith(
 	any cache = "",
 	string returnAs = "",
 	boolean hideDebugInformation = false,
-	string status = "200"
+	string status = $statusCode()
 ) {
 	$args(name = "renderWith", args = arguments);
 	local.contentType = $requestContentType();
