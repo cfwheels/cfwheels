@@ -48,8 +48,7 @@ public void function $initializeRequestScope() {
 	if (!StructKeyExists(request, "wheels")) {
 		request.wheels = {};
 		request.wheels.params = {};
-		request.wheels.cache = {};
-		request.wheels.stacks = {};
+		request.wheels.cache = {}; 
 		request.wheels.urlForCache = {};
 		request.wheels.tickCountId = GetTickCount();
 
