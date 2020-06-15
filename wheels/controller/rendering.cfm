@@ -725,7 +725,9 @@ public void function $setRequestStatusCode(required string status) {
 		local.statusCode = $returnStatusCode(local.status);
 		local.statusText = local.status;
 	}
-	$header(statusCode = local.statusCode, statusText = local.statusText);
+	if (local.statusCode != $statusCode()) {
+		$header(statusCode = local.statusCode, statusText = local.statusText);
+	}
 }
 
 /**
