@@ -459,22 +459,15 @@ public struct function $findRoute() {
 	local.routePos = application.wheels.namedRoutePositions[arguments.route];
 	if (Find(",", local.routePos)) {
 		// there are several routes with this name so we need to figure out which one to use by checking the passed in arguments
-		local.foundRoute = false;
 		local.iEnd = ListLen(local.routePos);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.rv = application.wheels.routes[ListGetAt(local.routePos, local.i)];
-			// match the method
-			if (StructKeyExists(arguments, "method") && local.rv.methods == arguments.method) {
-				local.foundRoute = true;
-			}
-			if (Len(local.rv.variables)) {
-				local.foundRoute = true;
-				local.jEnd = ListLen(local.rv.variables);
-				for (local.j = 1; local.j <= local.jEnd; local.j++) {
-					local.variable = ListGetAt(local.rv.variables, local.j);
-					if (!StructKeyExists(arguments, local.variable) || !Len(arguments[local.variable])) {
-						local.foundRoute = false;
-					}
+			local.foundRoute = StructKeyExists(arguments, "method") && local.rv.methods == arguments.method;
+			local.jEnd = ListLen(local.rv.variables);
+			for (local.j = 1; local.j <= local.jEnd; local.j++) {
+				local.variable = ListGetAt(local.rv.variables, local.j);
+				if (!StructKeyExists(arguments, local.variable) || !Len(arguments[local.variable])) {
+					local.foundRoute = false;
 				}
 			}
 			if (local.foundRoute) {
