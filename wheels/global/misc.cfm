@@ -296,9 +296,9 @@ public any function processRequest(
 		request.cgi.request_method = arguments.method;
 	}
 
-	// Look up controller & action via route name
+	// Look up controller & action via route name and method
 	if (StructKeyExists(arguments.params, "route")) {
-		local.route = $findRoute(argumentCollection = arguments.params);
+		local.route = $findRoute(argumentCollection = arguments.params, method = arguments.method);
 		arguments.params.controller = local.route.controller;
 		arguments.params.action = local.route.action;
 	}

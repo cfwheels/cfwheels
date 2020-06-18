@@ -48,7 +48,7 @@ public void function $initializeRequestScope() {
 	if (!StructKeyExists(request, "wheels")) {
 		request.wheels = {};
 		request.wheels.params = {};
-		request.wheels.cache = {}; 
+		request.wheels.cache = {};
 		request.wheels.urlForCache = {};
 		request.wheels.tickCountId = GetTickCount();
 
@@ -456,19 +456,25 @@ public struct function $findRoute() {
 			extendedInfo = "Make sure there is a route configured in your `config/routes.cfm` file named `#arguments.route#`."
 		);
 	}
-
 	local.routePos = application.wheels.namedRoutePositions[arguments.route];
 	if (Find(",", local.routePos)) {
 		// there are several routes with this name so we need to figure out which one to use by checking the passed in arguments
+		local.foundRoute = false;
 		local.iEnd = ListLen(local.routePos);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.rv = application.wheels.routes[ListGetAt(local.routePos, local.i)];
-			local.foundRoute = true;
-			local.jEnd = ListLen(local.rv.variables);
-			for (local.j = 1; local.j <= local.jEnd; local.j++) {
-				local.variable = ListGetAt(local.rv.variables, local.j);
-				if (!StructKeyExists(arguments, local.variable) || !Len(arguments[local.variable])) {
-					local.foundRoute = false;
+			// match the method
+			if (StructKeyExists(arguments, "method") && local.rv.methods == arguments.method) {
+				local.foundRoute = true;
+			}
+			if (Len(local.rv.variables)) {
+				local.foundRoute = true;
+				local.jEnd = ListLen(local.rv.variables);
+				for (local.j = 1; local.j <= local.jEnd; local.j++) {
+					local.variable = ListGetAt(local.rv.variables, local.j);
+					if (!StructKeyExists(arguments, local.variable) || !Len(arguments[local.variable])) {
+						local.foundRoute = false;
+					}
 				}
 			}
 			if (local.foundRoute) {
@@ -675,7 +681,7 @@ public string function $objectFileName(required string name, required string obj
 	// we are going to store the full controller / model path in the
 	// existing / non-existing lists so we can have controllers / models
 	// in multiple places
-	// 
+	//
 	// The name coming into $objectFileName could have dot notation due to
 	// nested controllers so we need to change delims here on the name
 	local.fullObjectPath = arguments.objectPath & "/" & ListChangeDelims(arguments.name, '/', '.');
