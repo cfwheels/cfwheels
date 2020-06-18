@@ -36,6 +36,7 @@
 - Fixed some variable scoping - [Michael Diederich]
 - Github Actions CI Pipeline - [Adam Chapman, Tom King]
 - Flash Cookie can now be disabled via `set(flashStorage="none")` [#978](https://github.com/cfwheels/cfwheels/issues/978) [Tom King]
+- `processRequest()` accepts a route param -[#1030](https://github.com/cfwheels/cfwheels/issues/1030) - [Adam Chapman]
 
 <a name="2.1"></a>
 

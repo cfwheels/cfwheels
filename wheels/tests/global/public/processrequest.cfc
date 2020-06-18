@@ -11,6 +11,16 @@ component extends="wheels.tests.Test" {
 		assert("Find(expected, result)");
 	}
 
+	// this is not so easy to test...
+	/**
+	function test_process_request_using_route() {
+		local.params = {route = "wheelsInfo"};
+		actual = processRequest(params = local.params, returnAs = "struct");
+		assert("actual.controller eq 'wheels'");
+		assert("actual.action eq 'wheels'");
+	}
+	*/
+
 	function test_process_request_return_as_struct() {
 		local.params = {action = "show", controller = "csrfProtectedExcept"};
 		result = processRequest(params = local.params, returnAs = "struct").status;

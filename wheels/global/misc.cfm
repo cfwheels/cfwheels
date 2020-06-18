@@ -296,6 +296,13 @@ public any function processRequest(
 		request.cgi.request_method = arguments.method;
 	}
 
+	// Look up controller & action via route name
+	if (StructKeyExists(arguments.params, "route")) {
+		local.route = $findRoute(argumentCollection = arguments.params);
+		arguments.params.controller = local.route.controller;
+		arguments.params.action = local.route.action;
+	}
+
 	// Never deliver email or send files during test.
 	local.deliverEmail = $get(functionName = "sendEmail", name = "deliver");
 	$set(functionName = "sendEmail", deliver = false);
