@@ -93,7 +93,7 @@ for (p in pluginList) {
 						<cfif StructKeyExists(url, "format")>
 							<cfset __params = ReplaceNoCase(_params, "format=#url.format#", "format=#_format#")>
 						<cfelse>
-							<cfset __params = ListAppend(__params, "format=#_format#", "&")>
+							<cfset __params = ListAppend(_params, "format=#_format#", "&")>
 						</cfif>
 						<a href="#urlFor(route = "wheelsTests", type = type, params = __params)#" class="ui button basic<cfif _format == "html"> active</cfif>">
 							#_format#
