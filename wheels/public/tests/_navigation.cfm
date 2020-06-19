@@ -70,11 +70,11 @@ for (p in pluginList) {
 				<div class="twelve wide column right aligned">
 					<cfif StructKeyExists(url, "refresh")>
 						<a href="#urlFor(route = "wheelsTests", type = type, params = ReplaceNoCase(_params, "refresh=#url.refresh#", ""))#" class="ui button blue active">
-							Stop Refresh <i class='right refresh icon'></i>
+							Stop <i class='right stop icon'></i>
 						</a>
 					<cfelse>
 						<a href="#urlFor(route = "wheelsTests", type = type, params = "#_params#&refresh=true")#" class="ui button basic blue">
-							Refresh <i class='right refresh icon'></i>
+							Refresh <i class='right play icon'></i>
 						</a>
 					</cfif>
 					<cfif StructKeyExists(url, "reload")>
