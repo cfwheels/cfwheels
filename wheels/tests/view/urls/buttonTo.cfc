@@ -45,7 +45,7 @@ component extends="wheels.tests.Test" {
 			encode = 'attributes',
 			value = "customvalue"
 		);
-		expected = '<form action="#application.wheels.webpath#" class="form-class" confirm="confirm-value" disable="disable-value" method="post"><button class="input&##x20;class" type="submit" value="customvalue">' & '<i class=''fa fa-icon'' /> Edit' & '</button>' & _controller.authenticityTokenField() & '</form>';
+		expected = '<form action="#application.wheels.webpath#" class="form-class" confirm="confirm-value" disable="disable-value" method="post" value="customvalue"><button class="input&##x20;class" type="submit" value="save">' & '<i class=''fa fa-icon'' /> Edit' & '</button>' & _controller.authenticityTokenField() & '</form>';
 		assert('actual eq expected');
 	}
 
