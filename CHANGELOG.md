@@ -26,6 +26,7 @@
 - `validatesUniquenessOf` does not respect allowBlank [#914](https://github.com/cfwheels/cfwheels/issues/914) - [Adam Chapman]
 - `Wheels.RouteNotFound` Error page now escapes the `arguments.path` to prevent XSS attacks - [Michael Diederich]
 - `buttonTo()` now uses `<button>` internally instead of `<input>` allowing for html in content - [#798](https://github.com/cfwheels/cfwheels/issues/798) - [Tom Sucaet, Tom King, Per Djurner]
+- Minor SQL preview fix in GUI - [#992](https://github.com/cfwheels/cfwheels/issues/992) - [Brandon Shea, Tom King]
 
 ### Miscellaneous
 
