@@ -16,6 +16,12 @@ component extends="wheels.tests.Test" {
 		assert('e eq r');
 	}
 
+	function test_with_icon_as_html() {
+		r = _controller.buttonTag(content="<i class='fa fa-icon' /> Edit", encode="attributes");
+		e = '<button type="submit" value="save"><i class=''fa fa-icon'' /> Edit</button>';
+		assert('e eq r');
+	}
+
 	function test_with_image() {
 		r = _controller.buttonTag(image = "http://www.cfwheels.com/logo.jpg");
 		e = '<button type="submit" value="save"><img alt="Logo" src="http://www.cfwheels.com/logo.jpg" type="image"></button>';
