@@ -43,6 +43,25 @@
 			"port": "3306",
 			"username": "wheelstestdb"
 		},
+		"wheelstestdb_mysql8": {
+			"allowAlter": true,
+			"allowCreate": true,
+			"allowDelete": true,
+			"allowDrop": true,
+			"allowGrant": true,
+			"allowInsert": true,
+			"allowRevoke": true,
+			"allowSelect": true,
+			"allowUpdate": true,
+			"class": "org.gjt.mm.mysql.Driver",
+			"database": "wheelstestdb",
+			"dbdriver": "mysql",
+			"dsn": "jdbc:mysql://{host}:{port}/{database}",
+			"host": "mysql8",
+			"password": "wheelstestdb",
+			"port": "3306",
+			"username": "wheelstestdb"
+		},
 		"wheelstestdb_postgres": {
 			"blob": "false",
 			"class": "org.postgresql.Driver",

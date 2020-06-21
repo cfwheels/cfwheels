@@ -4,7 +4,7 @@ application.wheels.modelPath = "/wheels/tests/_assets/models";
 application.wheels.modelComponentPath = "wheels.tests._assets.models";
 
 
-if(structKeyExists(url, "db") && listFind("mysql,sqlserver,postgres", url.db)){
+if(structKeyExists(url, "db") && listFind("mysql,mysql8,sqlserver,postgres", url.db)){
 	application.wheels.dataSourceName = "wheelstestdb_" & url.db;
 } else {
 	application.wheels.dataSourceName = "wheelstestdb";

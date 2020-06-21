@@ -4,6 +4,10 @@ const databases = [
 		database: 'mysql'
 	},
 	{
+		databasename: 'MySQL 8',
+		database: 'mysql8'
+	},
+	{
 		databasename: 'MSSQL 2017',
 		database: 'sqlserver'
 	},
