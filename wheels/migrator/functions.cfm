@@ -235,11 +235,18 @@ public string function redoMigration(string version = "") {
  */
 private void function $setVersionAsMigrated(required string version) {
 	local.appKey = $appKey();
-	if (!StructKeyExists(request, "$wheelsDebugSQL"))
-		$query(
+	if (!StructKeyExists(request, "$wheelsDebugSQL")) {
+		local.versionCheck = $query(
 			datasource = application[local.appKey].dataSourceName,
-			sql = "INSERT INTO #application[local.appKey].migratorTableName# (version) VALUES ('#$sanitiseVersion(arguments.version)#')"
+			sql = "SELECT version FROM #application[local.appKey].migratorTableName# WHERE version = '#$sanitiseVersion(arguments.version)#'"
 		);
+		if (local.versionCheck.recordCount == 0) {
+			$query(
+				datasource = application[local.appKey].dataSourceName,
+				sql = "INSERT INTO #application[local.appKey].migratorTableName# (version) VALUES ('#$sanitiseVersion(arguments.version)#')"
+			);
+		}
+	}
 }
 
 /**
@@ -247,11 +254,12 @@ private void function $setVersionAsMigrated(required string version) {
  */
 private void function $removeVersionAsMigrated(required string version) {
 	local.appKey = $appKey();
-	if (!StructKeyExists(request, "$wheelsDebugSQL"))
+	if (!StructKeyExists(request, "$wheelsDebugSQL")) {
 		$query(
 			datasource = application[local.appKey].dataSourceName,
 			sql = "DELETE FROM #application[local.appKey].migratorTableName# WHERE version = '#$sanitiseVersion(arguments.version)#'"
 		);
+	}
 }
 
 /**
