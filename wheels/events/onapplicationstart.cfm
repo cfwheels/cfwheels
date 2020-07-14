@@ -962,16 +962,18 @@ public void function onApplicationStart() {
 	application.wheels = application.$wheels;
 	StructDelete(application, "$wheels");
 
-	// Auto Migrate Database if requested
+	// Enable the migrator component
 	if (application.wheels.enableMigratorComponent) {
 		application.wheels.migrator = $createObjectFromRoot(path = "wheels", fileName = "Migrator", method = "init");
-		if (application.wheels.autoMigrateDatabase) {
-			application.wheels.migrator.migrateToLatest();
-		}
 	}
 
 	// Run the developer's on application start code.
 	$include(template = "#application.wheels.eventPath#/onapplicationstart.cfm");
+
+	// Auto Migrate Database if requested
+	if (application.wheels.enableMigratorComponent && application.wheels.autoMigrateDatabase) {
+		application.wheels.migrator.migrateToLatest();
+	}
 
 	// Redirect away from reloads on GET requests.
 	if (application.wheels.redirectAfterReload && StructKeyExists(url, "reload") && cgi.request_method == "get") {
