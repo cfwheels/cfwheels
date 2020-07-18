@@ -35,6 +35,7 @@
 				<cfloop array="#arguments.exception.cause.tagContext#" index="local.i">
 					<cfset local.pos = local.pos + 1>
 					<cfset local.template = Replace(arguments.exception.cause.tagContext[local.pos].template, local.path, "")>
+					<cfset local.template = Replace(local.template, "/wheels../", "")>
 					<!--- show all non wheels lines --->
 					<cfif local.template Does Not Contain "wheels" AND FindOneOf("/\", local.template) IS NOT 0>
 						Line #arguments.exception.cause.tagContext[local.pos].line# in #local.template#<br>
