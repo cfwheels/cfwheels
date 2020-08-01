@@ -264,6 +264,9 @@ public void function onApplicationStart() {
 	application.$wheels.viewPath = "views";
 	application.$wheels.controllerPath = "controllers";
 
+	// Test framework settings.
+	application.$wheels.validateTestPackageMetaData = true;
+
 	// Miscellaneous settings.
 	application.$wheels.encodeURLs = true;
 	application.$wheels.encodeHtmlTags = true;
@@ -301,7 +304,6 @@ public void function onApplicationStart() {
 	if (ListFindNoCase("production,maintenance", application.$wheels.environment)) {
 		application.$wheels.redirectAfterReload = true;
 	}
-	application.$wheels.validateTestPackageMetaData = true;
 	application.$wheels.resetPropertiesStructKeyCase = true;
 
 	// If session management is enabled in the application we default to storing Flash data in the session scope, if not we use a cookie.

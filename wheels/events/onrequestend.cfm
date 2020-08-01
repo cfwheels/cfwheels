@@ -19,6 +19,10 @@ public void function $runOnRequestEnd(required targetpage) {
 	if (application.wheels.showDebugInformation) {
 		$debugPoint("requestEnd");
 	}
+	// restore the application scope modified by the test runner
+	if (StructKeyExists(request, "wheels") && StructKeyExists(request.wheels, "testRunnerApplicationScope")) {
+		application.wheels = request.wheels.testRunnerApplicationScope;
+	}
 	$include(template = "#application.wheels.eventPath#/onrequestend.cfm");
 	if (application.wheels.showDebugInformation) {
 		$debugPoint("requestEnd,total");
