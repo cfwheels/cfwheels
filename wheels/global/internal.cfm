@@ -1279,7 +1279,7 @@ public boolean function $wildcardDomainMatchCGI(required string domain, struct c
 	return $wildcardDomainMatch(
 		$fullDomainString(local.domain),
 		$fullCgiDomainString(local.cgi)
-	)
+	);
 }
 
 /**
@@ -1303,8 +1303,8 @@ public boolean function $wildcardDomainMatch(required string domain, required st
 
 	// Loop over domain backwards and test the corresponding position in the other array
 	if(local.hasWildcard){
-		local.domainReversed = ArrayReverse(listToArray(local.domainfull, '.'));
-		local.serverNameReversed = ArrayReverse(listToArray(local.originfull, '.'));
+		local.domainReversed = 		 listToArray(Reverse(SpanExcluding(Reverse(local.domainfull), ".")));
+		local.serverNameReversed = listToArray(Reverse(SpanExcluding(Reverse(local.originfull), ".")));
 		local.wildcardPassed = true;
 		// Check each part with corresponding part in other array
 		for (i=1;i LTE ArrayLen(local.domainReversed);i=i+1) {
