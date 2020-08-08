@@ -1265,6 +1265,107 @@ public void function $throwErrorOrShow404Page(
 	}
 }
 
+/**
+ * Wildcard domain match: check if the current cgi.server_name and port satisfies
+ * the passed in domain string whilst checking for wildcards
+ *
+ * @domain string to test against e.g *.foo.com
+ * @cgi Fake CGI Scope for Testing; will default to normal cgi scope
+ */
+public boolean function $wildcardDomainMatchCGI(required string domain, struct cgi){
+	local.domain = arguments.domain;
+	local.cgi = structKeyExists(arguments, "cgi") ? arguments.cgi : $cgiScope();
+
+	return $wildcardDomainMatch(
+		$fullDomainString(local.domain),
+		$fullCgiDomainString(local.cgi)
+	);
+}
+
+/**
+ * Wildcard domain match: domain satifies wildcard
+ *
+ * @domain string to test against e.g *.foo.com
+ * @origin string to test against e.g bar.foo.com
+ */
+public boolean function $wildcardDomainMatch(required string domain, required string origin){
+	local.rv = false;
+	local.domainfull = $fullDomainString(arguments.domain);
+	local.originfull = $fullDomainString(arguments.origin);
+
+	// Do we have a wildcard subdomain?
+	local.hasWildcard = listContainsNoCase(local.domainfull, "*", '.') && len(local.domainfull > 1);
+
+	// If not, is it an exact match?
+	if(!local.hasWildcard && local.domainfull == local.originfull){
+		local.rv = true;
+	}
+
+	// Loop over domain backwards and test the corresponding position in the other array
+	if(local.hasWildcard){
+		local.domainReversed = 		 listToArray(Reverse(SpanExcluding(Reverse(local.domainfull), ".")));
+		local.serverNameReversed = listToArray(Reverse(SpanExcluding(Reverse(local.originfull), ".")));
+		local.wildcardPassed = true;
+		// Check each part with corresponding part in other array
+		for (i=1;i LTE ArrayLen(local.domainReversed);i=i+1) {
+			if( local.domainReversed[i] != local.serverNameReversed[i]
+				&& local.domainReversed[i] DOES NOT CONTAIN '*'
+			){
+				local.wildcardPassed = false;
+				break;
+			}
+		}
+		local.rv = local.wildcardPassed;
+	}
+
+	return local.rv;
+}
+/**
+* Get full domain string from cgi scope: includes protocol and port
+* e.g https://www.cfwheels.com:443
+*
+* @cgi Fake CGI Scope for Testing; will default to normal cgi scope
+**/
+public string function $fullCgiDomainString(struct cgi){
+	local.cgi = structKeyExists(arguments, "cgi") ? arguments.cgi : $cgiScope();
+	local.server_name = local.cgi.server_name;
+	local.server_port = local.cgi.server_port;
+	local.server_protocol =
+		(
+			 (structKeyExists(local.cgi, 'http_x_forwarded_proto') && local.cgi.http_x_forwarded_proto == "https")
+			|| (structKeyExists(local.cgi, 'server_port_secure') && local.cgi.server_port_secure)
+		)
+		? "https":"http";
+	return local.server_protocol & '://' & local.server_name & ':' & local.server_port;
+}
+
+/**
+* Get full domain string from a passed in string: includes protocol and port
+* e.g https://www.cfwheels.com -> https://www.cfwheels.com:443
+* e.g www.cfwheels.com -> http://www.cfwheels.com:80
+*
+* @domain The string to look at
+**/
+public string function $fullDomainString(required string domain){
+	local.domain = arguments.domain;
+	local.protocol = listFirst(local.domain, "://");
+	local.port = listLast(local.domain, ":");
+
+	if(!listFindNoCase("http,https", local.protocol)){
+		if(local.port == 443){
+			local.protocol = "https";
+		} else {
+			local.protocol = "http";
+		}
+		local.domain = local.protocol & '://' & local.domain;
+	}
+	if(!isNumeric(local.port)){
+		if(local.protocol == 'http') local.port = 80;
+		if(local.protocol == 'https') local.port = 443;
+		local.domain &= ':' & local.port;
+	}
+	return local.domain;
+}
 
 /**
  * Set CORS Headers: only triggered if application.wheels.allowCorsRequests = true
@@ -1288,9 +1389,12 @@ public void function $setCORSHeaders(
 		local.originArr = ListToArray(arguments.allowOrigin);
 
 		// Is this origin in the allowed Array?
-		if (ArrayFindNoCase(local.originArr, local.incomingOrigin)) {
-			$header(name = "Access-Control-Allow-Origin", value = local.incomingOrigin);
-			$header(name = "Vary", value = "Origin");
+		for(local.o in local.originArr){
+			if($wildcardDomainMatch(local.o, local.incomingOrigin)){
+				$header(name = "Access-Control-Allow-Origin", value = local.incomingOrigin);
+				$header(name = "Vary", value = "Origin");
+				break;
+			}
 		}
 	}
 
