@@ -5,6 +5,7 @@
 ### Controller Enhancements
 
 - Added the `status` argument to all `render*()` functions to force returning a specific HTTP status code [#1025](https://github.com/cfwheels/cfwheels/issues/1025) - [Adam Chapman, Tom King]
+- CORS `accessControlAllowOrigin` can now match subdomain wildcards [#1031](https://github.com/cfwheels/cfwheels/issues/1031) - [Tom King]
 
 ### Model Enhancements
 
