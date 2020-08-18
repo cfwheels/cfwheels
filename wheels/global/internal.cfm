@@ -1437,4 +1437,13 @@ public void function $setCORSHeaders(
 		$header(name = "Access-Control-Allow-Credentials", value = true);
 	}
 }
+
+/**
+ * Restore the application scope modified by the test runner
+ */
+public void function $restoreTestRunnerApplicationScope() {
+	if (StructKeyExists(request, "wheels") && StructKeyExists(request.wheels, "testRunnerApplicationScope")) {
+		application.wheels = request.wheels.testRunnerApplicationScope;
+	}
+}
 </cfscript>
