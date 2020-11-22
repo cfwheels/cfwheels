@@ -1,6 +1,6 @@
 <a name="2.2"></a>
 
-# [2.2](TBC)
+# [2.2](https://github.com/cfwheels/cfwheels/releases/tag/v2.2.0) (11/22/2020)
 
 ### Controller Enhancements
 
