@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        cf: [lucee5, adobe2016, adobe2018]
+        cf: [lucee5, adobe2016, adobe2018, adobe2021]
         db: [mysql56, postgres, sqlserver]
 
     steps:

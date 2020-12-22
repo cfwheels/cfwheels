@@ -59,6 +59,23 @@ services:
     ports:
       - "62018:8080"
 
+  adobe2021:
+    build:
+      context: ./
+      dockerfile: ./src/docker/Adobe2021.Dockerfile
+    image: cfwheels-test-adobe2021:v1
+    environment:
+      - ENV_MODE=local
+      - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
+      - cfconfigfile=./src/docker/CFConfig.json
+      - APP_DIR=/cfwheels-test-suite
+    volumes:
+      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - .:/cfwheels-test-suite
+      - ./src/docker:/src/docker
+    ports:
+      - "62021:8080"
+
   mysql56:
     image: mysql:5.6
     command: --default-authentication-plugin=mysql_native_password

@@ -48,7 +48,7 @@ component {
 	 * maps a cfengine to it's docker port
 	 */
 	private numeric function getPort(required string cfengine) {
-		local.maps = {"lucee5" = 60005, "adobe2016" = 62016, "adobe2018" = 62018};
+		local.maps = {"lucee5" = 60005, "adobe2016" = 62016, "adobe2018" = 62018, "adobe2021" = 62021};
 		if (StructKeyExists(local.maps, arguments.cfengine)) {
 			return local.maps[arguments.cfengine];
 		}
