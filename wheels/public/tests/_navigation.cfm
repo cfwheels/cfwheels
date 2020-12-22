@@ -95,7 +95,7 @@ for (p in pluginList) {
 						<cfelse>
 							<cfset __params = ListAppend(_params, "format=#_format#", "&")>
 						</cfif>
-						<a href="#urlFor(route = "wheelsTests", type = type, params = __params)#" class="ui button basic<cfif _format == "html"> active</cfif>">
+						<a href="#urlFor(route = "wheelsTests", type = type, params = __params)#" class="ui button basic<cfif _format eq "html"> active</cfif>">
 							#_format#
 						</a>
 					</cfloop>
