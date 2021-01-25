@@ -4,7 +4,7 @@
 
 port="$(get_port ${1})"
 
-max_iterations=20
+max_iterations=10
 wait_seconds=6
 http_endpoint="http://127.0.0.1:${port}"
 
@@ -16,6 +16,9 @@ while true; do
 	sleep $wait_seconds
 
 	http_code=$(curl -s -o /tmp/server-up-${port}.txt -w '%{http_code}' "$http_endpoint";)
+
+  # dump response
+  echo $(curl -s "$http_endpoint")
 
   echo $http_code
 
