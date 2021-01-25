@@ -2,7 +2,7 @@
 public void function onError(required exception, required eventName) {
 	// In case the error was caused by a timeout we have to add extra time for error handling.
 	// We have to check if onErrorRequestTimeout exists since errors can be triggered before the application.wheels struct has been created.
-	local.requestTimeout = 70;
+	local.requestTimeout = $getRequestTimeout() + 30;
 	if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "onErrorRequestTimeout")) {
 		local.requestTimeout = application.wheels.onErrorRequestTimeout;
 	}
