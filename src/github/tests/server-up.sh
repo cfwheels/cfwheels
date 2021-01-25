@@ -4,7 +4,7 @@
 
 port="$(get_port ${1})"
 
-max_iterations=10
+max_iterations=20
 wait_seconds=6
 http_endpoint="http://127.0.0.1:${port}"
 
