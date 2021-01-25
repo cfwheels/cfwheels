@@ -18,7 +18,7 @@ while true; do
 	http_code=$(curl -s -o /tmp/server-up-${port}.txt -w '%{http_code}' "$http_endpoint";)
 
   # dump response
-  echo $(curl -s "$http_endpoint")
+  echo $(curl "$http_endpoint";)
 
   echo $http_code
 
