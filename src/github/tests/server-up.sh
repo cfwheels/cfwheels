@@ -15,16 +15,21 @@ while true; do
 	echo -n "Attempt ${iterations}.. "
 	sleep $wait_seconds
 
-	http_code=$(curl -s -o /tmp/server-up-${port}.txt -w '%{http_code}' "$http_endpoint";)
+  # store the whole response with the status at the and
+  http_response=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" $http_endpoint)
+  # extract the status
+  http_status=$(echo $http_response | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
+  # extract the body
+  http_body=$(echo $http_response | sed -e 's/HTTPSTATUS\:.*//g')
 
-  # dump response
-  echo $(curl "$http_endpoint";)
+  # print the status & body
+  echo "$http_status"
 
-  echo $http_code
-
-	if [ "$http_code" -eq 200 ]; then
+	if [ "$http_status" -eq 200 ]; then
 		echo "Server Up"
 		break
+  else
+    echo "$http_body"
 	fi
 
 	if [ "$iterations" -ge "$max_iterations" ]; then
