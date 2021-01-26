@@ -1433,4 +1433,15 @@ public void function $restoreTestRunnerApplicationScope() {
 		application.wheels = request.wheels.testRunnerApplicationScope;
 	}
 }
+
+/**
+ * Returns the request timeout value in seconds
+ */
+public numeric function $getRequestTimeout() {
+	if (StructKeyExists(server, "lucee")) {
+		return (GetPageContext().getRequestTimeout() / 1000);
+	} else {
+		return CreateObject("java", "coldfusion.runtime.RequestMonitor").GetRequestTimeout();
+	}
+}
 </cfscript>
