@@ -1,3 +1,21 @@
+<a name="2.3"></a>
+
+# [2.3](https://github.com/cfwheels/cfwheels/releases/tag/v2.3.0) (TBA)
+
+<!-- ### Controller Enhancements -->
+
+<!-- ### Model Enhancements -->
+
+<!-- ### View Enhancements -->
+
+### Bug Fixes
+
+- onerror handler should increase user defined requestTimeout value [#1056](https://github.com/cfwheels/cfwheels/issues/1056) - [Adam Chapman]
+
+### Miscellaneous
+
+- Update Docker Lucee Commandbox version to 5.2.0 - [Adam Chapman, Tom King]
+
 <a name="2.2"></a>
 
 # [2.2](https://github.com/cfwheels/cfwheels/releases/tag/v2.2.0) (11/22/2020)
