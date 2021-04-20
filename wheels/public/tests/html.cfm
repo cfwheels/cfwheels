@@ -92,7 +92,12 @@
 								<td class="<cfif result.status eq 'Success'>success<cfelse>failed</cfif>">#result.status#</td>
 							</tr>
 							<tr class="error"><td colspan="4" class="failed">#replace(result.message, chr(10), "<br/>", "ALL")#</td></tr>
-							<cfset distinctKey= replace(replace(replace(result.packageName, ".", "_", "all"), "tests_", "", "one"),  "wheels_", "", "one") & '_' & result.testName>
+							<!-- plugins use a slightly different debug key? -->
+							<cfif type EQ "app" OR type EQ "core">
+								<cfset distinctKey= replace(replace(replace(result.packageName, ".", "_", "all"), "tests_", "", "one"),  "wheels_", "", "one") & '_' & result.testName>
+							<cfelse>
+								<cfset distinctKey= result.DISTINCTKEY>
+							</cfif>
 							<cfif StructKeyExists(request, "TESTING_FRAMEWORK_DEBUGGING") && StructKeyExists(request["TESTING_FRAMEWORK_DEBUGGING"], distinctKey)>
 								<cfloop array="#request['TESTING_FRAMEWORK_DEBUGGING'][distinctKey]#" index="i">
 								<tr class="error"><td colspan="4">#i#</tr>
@@ -115,7 +120,6 @@
 					</tr>
 				</thead>
 				<tbody>
-					<!--- Put errors at top --->
 					<cfloop from="1" to="#arrayLen(passes)#" index="testIndex">
 						<cfset result = passes[testIndex]>
 						<cfif result.status eq 'Success'>
@@ -125,7 +129,12 @@
 								<td class="n">#result.time#</td>
 								<td class="success">#result.status#</td>
 							</tr>
-							<cfset distinctKey= replace(replace(replace(result.packageName, ".", "_", "all"), "tests_", "", "one"),  "wheels_", "", "one") & '_' & result.testName>
+							<!-- plugins use a slightly different debug key? -->
+							<cfif type EQ "app" OR type EQ "core">
+								<cfset distinctKey= replace(replace(replace(result.packageName, ".", "_", "all"), "tests_", "", "one"),  "wheels_", "", "one") & '_' & result.testName>
+							<cfelse>
+								<cfset distinctKey= result.DISTINCTKEY>
+							</cfif>
 							<cfif StructKeyExists(request, "TESTING_FRAMEWORK_DEBUGGING") && StructKeyExists(request["TESTING_FRAMEWORK_DEBUGGING"], distinctKey)>
 								<cfloop array="#request['TESTING_FRAMEWORK_DEBUGGING'][distinctKey]#" index="i">
 								<tr class="positive"><td colspan="4">#i#</tr>
