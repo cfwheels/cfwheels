@@ -99,4 +99,27 @@ component extends="wheels.tests.Test" {
 		assert('left(r, 5) eq "https"');
 	}
 
+	function test_Issues_1046_no_route_argument() {
+		mapper = $mapper();
+		mapper
+			.$draw()
+			.wildcard(mapKey = true)
+			.end();
+		$setNamedRoutePositions();
+		r1 = urlFor(
+			controller = "Example"
+		);
+		r2 = urlFor(
+			controller = "Example",
+			action = "MyAction"
+		);
+		r3 = urlFor(
+			controller = "Example",
+			action = "MyAction",
+			key = 123
+		);
+		assert("r1 EQ '/example/index'");
+		assert("r2 EQ '/example/my-action'");
+		assert("r3 EQ '/example/my-action/123'");
+	}
 }
