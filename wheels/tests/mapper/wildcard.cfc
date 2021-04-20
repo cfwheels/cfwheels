@@ -140,4 +140,19 @@ component extends="wheels.tests.Test" {
 		assert("routesLen eq 4");
 	}
 
+	function test_wildcard_with_map_key() {
+		$mapper()
+			.$draw()
+			.controller("cats")
+			.wildcard(mapKey = true)
+			.end()
+			.end();
+
+		assert("application.wheels.routes[1].pattern is '/cats/[action]/[key]'");
+		assert("application.wheels.routes[2].pattern is '/cats/[action]'");
+		assert("application.wheels.routes[3].pattern is '/cats'");
+		routesLen = ArrayLen(application.wheels.routes);
+		assert("routesLen eq 3");
+	}
+
 }
