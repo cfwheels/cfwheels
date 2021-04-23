@@ -11,10 +11,15 @@
 ### Bug Fixes
 
 - onerror handler should increase user defined requestTimeout value [#1056](https://github.com/cfwheels/cfwheels/issues/1056) - [Adam Chapman]
-
+- deletedAt should also respect timestamp mode (UTC) [#1063](https://github.com/cfwheels/cfwheels/issues/1063) - [David Belanger]
+- 
 ### Miscellaneous
 
 - Update Docker Lucee Commandbox version to 5.2.0 - [Adam Chapman, Tom King]
+
+### Potentially Breaking Changes
+
+- Automatic Time Stamps: the **deletedAt** column was using the server's local time for the timestamp while **createdAt** / **updatedAt** were using the timestamp selected for the timestamp mode. The default for CFWheels' timestamp mode is UTC and therefore all future **deletedAt** timestamps will be in UTC unless you've changed the default.  Please review any SQL that uses **deletedAt** for datetime comparison.
 
 <a name="2.2"></a>
 
