@@ -5,7 +5,7 @@
 public array function $addDeleteClause(required array sql, required boolean softDelete) {
 	if (variables.wheels.class.softDeletion && arguments.softDelete) {
 		ArrayAppend(arguments.sql, "UPDATE #tableName()# SET #variables.wheels.class.softDeleteColumn# = ");
-		local.param = {value = Now(), type = "cf_sql_timestamp"};
+		local.param = {value=$timestamp(variables.wheels.class.timeStampMode), type="cf_sql_timestamp"};
 		ArrayAppend(arguments.sql, local.param);
 	} else {
 		ArrayAppend(arguments.sql, "DELETE FROM #tableName()#");
