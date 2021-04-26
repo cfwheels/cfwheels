@@ -12,7 +12,8 @@
 
 - onerror handler should increase user defined requestTimeout value [#1056](https://github.com/cfwheels/cfwheels/issues/1056) - [Adam Chapman]
 - deletedAt should also respect timestamp mode (UTC) [#1063](https://github.com/cfwheels/cfwheels/issues/1063) - [David Belanger]
-- 
+- Fixes No output from Debug() usage in plugin test cases [#1061](https://github.com/cfwheels/cfwheels/issues/1063) - [Tom King] 
+
 ### Miscellaneous
 
 - Update Docker Lucee Commandbox version to 5.2.0 - [Adam Chapman, Tom King]
