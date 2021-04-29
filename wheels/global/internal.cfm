@@ -434,6 +434,7 @@ public void function $abortInvalidRequest() {
 				$includeAndOutput(template = "#application.wheels.eventPath#/onmissingtemplate.cfm");
 			}
 		}
+		$header(statusCode = 404, statustext = "Not Found");
 		abort;
 	}
 }
