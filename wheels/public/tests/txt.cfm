@@ -2,6 +2,8 @@
 	<cfscript>
 	if (testResults.numErrors || testResults.numFailures) {
 		cfheader(statustext="Expectation Failed", statuscode=417);
+	} else {
+		cfheader(statustext="OK", statuscode=200);
 	}
 	cfsetting(showdebugoutput=false);
 	request.wheels.showDebugInformation = false;

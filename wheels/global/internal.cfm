@@ -434,6 +434,7 @@ public void function $abortInvalidRequest() {
 				$includeAndOutput(template = "#application.wheels.eventPath#/onmissingtemplate.cfm");
 			}
 		}
+		$header(statusCode = 404, statustext = "Not Found");
 		abort;
 	}
 }
@@ -1244,10 +1245,10 @@ public string function $buildReleaseZip(string version = application.wheels.vers
  * Otherwise show the 404 page for end users (typically in production mode).
  */
 public void function $throwErrorOrShow404Page(required string type, required string message, string extendedInfo = "") {
+	$header(statusCode = 404, statustext = "Not Found");
 	if ($get("showErrorInformation")) {
 		Throw(type = arguments.type, message = arguments.message, extendedInfo = arguments.extendedInfo);
 	} else {
-		$header(statusCode = 404, statustext = "Not Found");
 		local.template = $get("eventPath") & "/onmissingtemplate.cfm";
 		$includeAndOutput(template = local.template);
 		abort;
