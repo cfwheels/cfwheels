@@ -15,6 +15,7 @@
 - Fixes No output from Debug() usage in plugin test cases [#1061](https://github.com/cfwheels/cfwheels/issues/1063) - [Tom King] 
 - Development mode will now properly return a 404 status if view not found [#1067](https://github.com/cfwheels/cfwheels/issues/1067) - [Adam Cameron, Tom King]
 - 404 status now properly returned without URL rewriting [#1067](https://github.com/cfwheels/cfwheels/issues/1067) - [Adam Cameron, Tom King]
+- Internal Docs in ACF2018 should now not display duplicate categories [Tom King]
 
 ### Miscellaneous
 
