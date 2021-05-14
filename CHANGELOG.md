@@ -21,6 +21,7 @@
 ### Miscellaneous
 
 - Update Docker Lucee Commandbox version to 5.2.0 - [Adam Chapman, Tom King]
+- Minor internal obselete reference to modelComponentPath removed - [Adam Chapman, Tom King]
 
 ### Potentially Breaking Changes
 
