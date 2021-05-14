@@ -566,13 +566,12 @@ public void function $validatesConfirmationOf() {
 		!StructKeyExists(this, local.virtualConfirmProperty)
 	) {
 		addError(property = local.virtualConfirmProperty, message = $validationErrorMessage(argumentCollection = arguments));
+		return;
 	}
 	if (
-		StructKeyExists(this, local.virtualConfirmProperty) && this[arguments.property] != this[local.virtualConfirmProperty]
+		this[arguments.property] != this[local.virtualConfirmProperty] ||
+		(arguments.caseSensitive && (Compare(this[arguments.property], this[local.virtualConfirmProperty]) != 0))
 	) {
-		addError(property = local.virtualConfirmProperty, message = $validationErrorMessage(argumentCollection = arguments));
-	}
-	if (arguments.caseSensitive && (Compare(this[arguments.property], this[local.virtualConfirmProperty]) != 0)) {
 		addError(property = local.virtualConfirmProperty, message = $validationErrorMessage(argumentCollection = arguments));
 	}
 }
