@@ -257,7 +257,6 @@ public void function onApplicationStart() {
 	application.$wheels.imagePath = "images";
 	application.$wheels.javascriptPath = "javascripts";
 	application.$wheels.modelPath = "models";
-	application.$wheels.modelComponentPath = "models";
 	application.$wheels.pluginPath = "plugins";
 	application.$wheels.pluginComponentPath = "plugins";
 	application.$wheels.stylesheetPath = "stylesheets";
