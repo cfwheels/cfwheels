@@ -563,6 +563,11 @@ public boolean function $evaluateCondition() {
 public void function $validatesConfirmationOf() {
 	local.virtualConfirmProperty = arguments.property & "Confirmation";
 	if (
+		!StructKeyExists(this, local.virtualConfirmProperty)
+	) {
+		addError(property = local.virtualConfirmProperty, message = $validationErrorMessage(argumentCollection = arguments));
+	}
+	if (
 		StructKeyExists(this, local.virtualConfirmProperty) && this[arguments.property] != this[local.virtualConfirmProperty]
 	) {
 		addError(property = local.virtualConfirmProperty, message = $validationErrorMessage(argumentCollection = arguments));

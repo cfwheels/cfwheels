@@ -5,6 +5,10 @@ component extends="wheels.tests.Test" {
 		user = model("users").new();
 	}
 
+	function teardown() {
+		StructDelete(variables, "user");
+	}
+
 	/* validatesConfirmationOf */
 	function test_validatesConfirmationOf_valid() {
 		user.password = "hamsterjelly";
@@ -20,16 +24,10 @@ component extends="wheels.tests.Test" {
 		assert('!user.valid()');
 	}
 
-	function test_validatesConfirmationOf_missing_property_valid() {
-		user.passwordConfirmation = "hamsterjellysucks";
-		user.validatesConfirmationOf(property = "password");
-		assert('user.valid()');
-	}
-
-	function test_validatesConfirmationOf_missing_property_confirmation_valid() {
+	function test_validatesConfirmationOf_missing_property_confirmation_invalid() {
 		user.password = "hamsterjelly";
 		user.validatesConfirmationOf(property = "password");
-		assert('user.valid()');
+		assert('!user.valid()');
 	}
 
 	function test_validatesConfirmationOf_valid_case() {
@@ -40,7 +38,6 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_validatesConfirmationOf_invalid_case() {
-		user = model("users").new();
 		user.password = "HamsterJelly";
 		user.passwordConfirmation = "hamsterjelly";
 		user.validatesConfirmationOf(property = "password", caseSensitive = true);
