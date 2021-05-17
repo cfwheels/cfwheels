@@ -12,11 +12,12 @@
 
 - onerror handler should increase user defined requestTimeout value [#1056](https://github.com/cfwheels/cfwheels/issues/1056) - [Adam Chapman]
 - deletedAt should also respect timestamp mode (UTC) [#1063](https://github.com/cfwheels/cfwheels/issues/1063) - [David Belanger]
-- Fixes No output from Debug() usage in plugin test cases [#1061](https://github.com/cfwheels/cfwheels/issues/1063) - [Tom King] 
+- Fixes No output from `Debug()` usage in plugin test cases [#1061](https://github.com/cfwheels/cfwheels/issues/1063) - [Tom King] 
 - Development mode will now properly return a 404 status if view not found [#1067](https://github.com/cfwheels/cfwheels/issues/1067) - [Adam Cameron, Tom King]
 - 404 status now properly returned without URL rewriting [#1067](https://github.com/cfwheels/cfwheels/issues/1067) - [Adam Cameron, Tom King]
 - Internal Docs in ACF2018 should now not display duplicate categories [Tom King]
 - Internal Docs search now resets itself properly on backspace with empty value [#982](https://github.com/cfwheels/cfwheels/issues/982) - [Brandon Shea, Tom King]
+- `ValidatesConfirmationOf()` now correctly enforces prescence of confirmation property [#1070](https://github.com/cfwheels/cfwheels/issues/1070) - [Adam Cameron, Tom King]
 
 ### Miscellaneous
 
