@@ -5,46 +5,75 @@ component extends="wheels.tests.Test" {
 		user = model("users").new();
 	}
 
+	function teardown() {
+		StructDelete(variables, "user");
+	}
+
 	/* validatesConfirmationOf */
+	// ConfirmProperty and Property exist. CaseSensitive is OFF. Both match including case - VALID
 	function test_validatesConfirmationOf_valid() {
 		user.password = "hamsterjelly";
 		user.passwordConfirmation = "hamsterjelly";
 		user.validatesConfirmationOf(property = "password");
 		assert('user.valid()');
+		assert('arrayLen(user.allErrors()) EQ 0');
 	}
-
+	// ConfirmProperty and Property exist. CaseSensitive is OFF. Both match except case - VALID
+	function test_validatesConfirmationOf_valid_allowcase() {
+		user.password = "hamsterjelly";
+		user.passwordConfirmation = "hamsterJelly";
+		user.validatesConfirmationOf(property = "password");
+		assert('user.valid()');
+		assert('arrayLen(user.allErrors()) EQ 0');
+	}
+	// ConfirmProperty and Property exist. CaseSensitive is OFF. They don't match - INVALID
 	function test_validatesConfirmationOf_invalid() {
 		user.password = "hamsterjelly";
 		user.passwordConfirmation = "hamsterjellysucks";
 		user.validatesConfirmationOf(property = "password");
 		assert('!user.valid()');
+		assert('arrayLen(user.allErrors()) EQ 1');
 	}
-
-	function test_validatesConfirmationOf_missing_property_valid() {
-		user.passwordConfirmation = "hamsterjellysucks";
-		user.validatesConfirmationOf(property = "password");
-		assert('user.valid()');
-	}
-
-	function test_validatesConfirmationOf_missing_property_confirmation_valid() {
+	// ConfirmProperty doesn't exist. No other checks are made. - INVALID (check errors array length is 1)
+	function test_validatesConfirmationOf_missing_property_confirmation_invalid() {
 		user.password = "hamsterjelly";
 		user.validatesConfirmationOf(property = "password");
-		assert('user.valid()');
+		assert('!user.valid()');
+		assert('arrayLen(user.allErrors()) EQ 1');
 	}
-
+	// ConfirmProperty and Property exist. CaseSensitive is ON. Both match including case - VALID
 	function test_validatesConfirmationOf_valid_case() {
 		user.password = "HamsterJelly";
 		user.passwordConfirmation = "HamsterJelly";
 		user.validatesConfirmationOf(property = "password", caseSensitive = true);
 		assert('user.valid()');
+		assert('arrayLen(user.allErrors()) EQ 0');
 	}
-
+	// ConfirmProperty and Property exist. CaseSensitive is ON. Both match except case - INVALID
 	function test_validatesConfirmationOf_invalid_case() {
-		user = model("users").new();
 		user.password = "HamsterJelly";
 		user.passwordConfirmation = "hamsterjelly";
 		user.validatesConfirmationOf(property = "password", caseSensitive = true);
 		assert('!user.valid()');
+		assert('arrayLen(user.allErrors()) EQ 1');
+	}
+	// ConfirmProperty and Property exist. CaseSensitive is ON.  They don't match - INVALID
+	function test_validatesConfirmationOf_invalid_no_matchcase() {
+		user.password = "HamsterJelly";
+		user.passwordConfirmation = "duckjelly";
+		user.validatesConfirmationOf(property = "password", caseSensitive = true);
+		assert('!user.valid()');
+		assert('arrayLen(user.allErrors()) EQ 1');
+	}
+	// check content of message when ConfirmProperty doesn't exist
+	// nb, this validation method only has a single error message returned and
+	// can be overridden by the developer
+	function test_validatesConfirmationOf_missing_property_confirmation_msg() {
+		user.password = "hamsterjelly";
+		user.validatesConfirmationOf(property = "password");
+		assert('!user.valid()');
+		assert('user.allErrors()[1]["property"] EQ "passwordConfirmation"');
+		assert('user.allErrors()[1]["message"] EQ "Password should match confirmation"');
 	}
 
 	/* validatesExclusionOf */
