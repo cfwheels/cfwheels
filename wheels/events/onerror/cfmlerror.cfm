@@ -32,7 +32,7 @@
 				<br>
 				<cfset local.path = GetDirectoryFromPath(GetBaseTemplatePath())>
 				<cfset local.pos = 0>
-				<cfloop array="#arguments.exception.cause.tagContext#" index="local.i">
+				<cfloop array="#Duplicate(arguments.exception.cause.tagContext)#" index="local.i">
 					<cfset local.pos = local.pos + 1>
 					<cfset local.template = Replace(arguments.exception.cause.tagContext[local.pos].template, local.path, "")>
 					<cfset local.template = Replace(local.template, "/wheels../", "")>
