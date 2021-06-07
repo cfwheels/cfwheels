@@ -1,6 +1,6 @@
 <cfscript>
 system = CreateObject("java", "java.lang.System");
-
+applicationMeta = getApplicationMetadata();
 paths = [
 	'eventPath',
 	'filePath',
@@ -141,7 +141,7 @@ settings = [
 </cfscript>
 
 <cfinclude template="../layout/_header.cfm">
-
+<cfdump var="#applicationMeta#">
 <cfoutput>
 	<div class="ui container">
 		#pageHeader("System Information", "Note, these settings reflect the currently loaded environment")#
@@ -229,6 +229,15 @@ settings = [
 
 		#startTable("Environment")#
 		#outputSetting(environment)#
+		#endTable()#
+
+		#startTable("Mappings")#
+			<cfloop collection="#applicationMeta.mappings#" item="key" >
+			<tr>
+				<td class='four wide'>#Key#</td>
+				<td class='eight wide'>#applicationMeta.mappings[key]#</td>
+			</tr>
+			</cfloop>
 		#endTable()#
 
 		#startTable("Paths")#
