@@ -141,7 +141,6 @@ settings = [
 </cfscript>
 
 <cfinclude template="../layout/_header.cfm">
-<cfdump var="#applicationMeta#">
 <cfoutput>
 	<div class="ui container">
 		#pageHeader("System Information", "Note, these settings reflect the currently loaded environment")#
