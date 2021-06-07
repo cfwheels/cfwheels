@@ -1,3 +1,3 @@
 <cfscript>
-include "wheels/index.cfm";
+include "/wheels/index.cfm";
 </cfscript>

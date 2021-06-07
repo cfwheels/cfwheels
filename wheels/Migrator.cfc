@@ -1,7 +1,7 @@
 component output="false" {
 
-	include "migrator/functions.cfm";
-	include "global/functions.cfm";
-	include "plugins/standalone/injection.cfm";
+	include "/wheels/migrator/functions.cfm";
+	include "/wheels/global/functions.cfm";
+	include "/wheels/plugins/standalone/injection.cfm";
 
 }

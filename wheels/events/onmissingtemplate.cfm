@@ -1,5 +1,5 @@
 <cfscript>
-public void function onMissingTemplate(required targetpage) {
+//public void function onMissingTemplate(required targetpage) {
 	local.lockName = "reloadLock" & application.applicationName;
 	$simpleLock(
 		name = local.lockName,
@@ -8,7 +8,7 @@ public void function onMissingTemplate(required targetpage) {
 		type = "readOnly",
 		timeout = 180
 	);
-}
+//}
 
 public void function $runOnMissingTemplate(required targetpage) {
 	if (!application.wheels.showErrorInformation) {

@@ -1,5 +1,5 @@
 <cfscript>
-public void function onError(required exception, required eventName) {
+//public void function onError(required exception, required eventName) {
 	// In case the error was caused by a timeout we have to add extra time for error handling.
 	// We have to check if onErrorRequestTimeout exists since errors can be triggered before the application.wheels struct has been created.
 	local.requestTimeout = $getRequestTimeout() + 30;
@@ -18,7 +18,7 @@ public void function onError(required exception, required eventName) {
 		timeout = 180
 	);
 	WriteOutput(local.rv);
-}
+//}
 
 public string function $runOnError(required exception, required eventName) {
 	if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized")) {

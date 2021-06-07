@@ -1,7 +1,6 @@
 component output="false" displayName="Test" {
 
-	include "test/functions.cfm";
-	include "global/functions.cfm";
-	include "plugins/standalone/injection.cfm";
-
+	include "/wheels/test/functions.cfm";
+	include "/wheels/global/functions.cfm";
+	include "/wheels/plugins/standalone/injection.cfm";
 }

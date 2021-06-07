@@ -96,12 +96,12 @@
 
 <cffunction name="$include" returntype="void" access="public" output="false">
 	<cfargument name="template" type="string" required="true">
-	<cfinclude template="../../#LCase(arguments.template)#">
+	<cfinclude template="#LCase(arguments.template)#">
 </cffunction>
 
 <cffunction name="$includeAndOutput" returntype="void" access="public" output="true">
 	<cfargument name="template" type="string" required="true">
-	<cfinclude template="../../#LCase(arguments.template)#">
+	<cfinclude template="#LCase(arguments.template)#">
 </cffunction>
 
 <cffunction name="$includeAndReturnOutput" returntype="string" access="public" output="false">
