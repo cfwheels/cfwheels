@@ -1,6 +1,11 @@
 component {
 
+	// Put variables we just need internally inside a wheels struct.
+	this.wheels = {};
+	this.wheels.rootPath = GetDirectoryFromPath(GetBaseTemplatePath());
+
 	this.name = createUUID();
+	// this.name = Hash(this.wheels.rootPath);
 	this.bufferOutput = true;
 	// this.localMode = "modern"; <--- don't use this, logbox chokes.
 	// this.applicationTimeout = createTimeSpan( 0, 0, 0, 1 );
@@ -9,9 +14,6 @@ component {
 	// We turn on "sessionManagement" by default since the Flash uses it.
 	this.sessionManagement = true;
 
-	// Put variables we just need internally inside a wheels struct.
-	this.wheels = {};
-	this.wheels.rootPath = GetDirectoryFromPath(GetBaseTemplatePath());
 
 	this.webrootDir = getDirectoryFromPath( getCurrentTemplatePath() );
 	this.appDir     = this.webrootDir;
@@ -73,7 +75,8 @@ component {
 	}
 
 	public void function onError( any Exception, string EventName ) {
-		include "/wheels/events/onerror.cfm";
+		// include "/wheels/events/onerror.cfm";
+		dump(Exception);
 	}
 
 	public boolean function onMissingTemplate( string targetPage ) {

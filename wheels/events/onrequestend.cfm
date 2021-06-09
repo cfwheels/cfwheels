@@ -11,7 +11,7 @@
 	if (
 		application.wheels.showDebugInformation && StructKeyExists(request.wheels, "showDebugInformation") && request.wheels.showDebugInformation
 	) {
-		$includeAndOutput(template = "wheels/events/onrequestend/debug.cfm");
+		$includeAndOutput(template = "/wheels/events/onrequestend/debug.cfm");
 	}
 //}
 

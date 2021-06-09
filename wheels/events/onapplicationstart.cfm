@@ -59,7 +59,7 @@
 	request.cgi = $cgiScope();
 
 	// Set up containers for routes, caches, settings etc.
-	application.$wheels.version = "3.0-alpha-1";
+	application.$wheels.version = "3.0.0-alpha";
 	try {
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
 	} catch (any e) {
@@ -251,17 +251,19 @@
 		application.$wheels.assetQueryString = true;
 	}
 
-	// Configurable paths.
+	// Configurable paths from /app
 	application.$wheels.eventPath = "events";
-	application.$wheels.filePath = "files";
-	application.$wheels.imagePath = "images";
-	application.$wheels.javascriptPath = "javascripts";
+	application.$wheels.controllerPath = "controllers";
 	application.$wheels.modelPath = "models";
 	application.$wheels.pluginPath = "plugins";
 	application.$wheels.pluginComponentPath = "plugins";
-	application.$wheels.stylesheetPath = "stylesheets";
 	application.$wheels.viewPath = "views";
-	application.$wheels.controllerPath = "controllers";
+
+	// Configurable paths from webroot
+	application.$wheels.filePath = "files";
+	application.$wheels.imagePath = "images";
+	application.$wheels.javascriptPath = "javascripts";
+	application.$wheels.stylesheetPath = "stylesheets";
 
 	// Test framework settings.
 	application.$wheels.validateTestPackageMetaData = true;
