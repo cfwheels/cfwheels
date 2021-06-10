@@ -115,7 +115,7 @@
 	<!--- Include the template and return the result. --->
 	<!--- Variable is set to $wheels to limit chances of it being overwritten in the included template. --->
 	<!--- cfformat-ignore-start --->
-	<cfsavecontent variable="local.$wheels"><cfinclude template="../../#LCase(arguments.$template)#"></cfsavecontent>
+	<cfsavecontent variable="local.$wheels"><cfinclude template="/app/#LCase(arguments.$template)#"></cfsavecontent>
 	<!--- cfformat-ignore-end --->
 	<cfreturn local.$wheels>
 </cffunction>
