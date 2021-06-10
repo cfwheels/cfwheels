@@ -131,6 +131,20 @@
 	<cffile attributeCollection="#arguments#">
 </cffunction>
 
+<cffunction name="$cfinvoke" returntype="any" access="public" output="false">
+	<cfargument name="component" type="string" required="true">
+	<cfargument name="method" type="string" required="true">
+	<cfargument name="invokeArguments" type="struct" required="false">
+	<cfset arguments.returnVariable = "local.rv">
+	 <cfinvoke
+		component="#arguments.component#"
+		method="#arguments.method#"
+		returnVariable="#arguments.returnVariable#"
+		argumentCollection="#arguments.invokeArguments#"
+	 >
+	 <cfreturn local.rv>
+</cffunction>
+
 <cffunction name="$invoke" returntype="any" access="public" output="false">
 	<cfset arguments.returnVariable = "local.rv">
 	<cfif StructKeyExists(arguments, "componentReference")>
