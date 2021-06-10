@@ -299,7 +299,7 @@ public struct function $mergeRoutePattern(required struct params, required struc
 	);
 	local.iEnd = ArrayLen(local.matches.pos);
 	for (local.i = 2; local.i <= local.iEnd; local.i++) {
-		local.key = ListGetAt(arguments.route.variables, local.i - 1);
+		local.key = ListGetAt(arguments.route.foundVariables, local.i - 1);
 		local.rv[local.key] = Mid(arguments.path, local.matches.pos[local.i], local.matches.len[local.i]);
 	}
 	return local.rv;
