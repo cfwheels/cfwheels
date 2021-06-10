@@ -1,3 +1,5 @@
+## This is start of a build which is highly experimental, and designed to test some concepts for a core refactor. See /wheels/V3NOTES.md
+
 # CFWheels
 
 [CFWheels][1] provides fast application development, a great organization system for your code, and is
