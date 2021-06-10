@@ -12,6 +12,9 @@ component extends="testbox.system.BaseSpec" {
             beforeEach(function( currentSpec ) {
                 m = new wheels.Mapper();
                 prepareMock(m);
+                makePublic(m, "$compileRegex");
+                makePublic(m, "$normalizePattern");
+                makePublic(m, "$stripRouteVariables");
             });
 
             afterEach(function( currentSpec ) {

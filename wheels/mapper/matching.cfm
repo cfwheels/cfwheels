@@ -266,7 +266,7 @@ public struct function wildcard(
  * @package Namespace to append to controller.
  * @on Created resource route under "member" or "collection".
  */
-public struct function $match(
+private struct function $match(
 	string name,
 	string pattern,
 	string to,

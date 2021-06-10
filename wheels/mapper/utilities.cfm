@@ -2,7 +2,7 @@
 /**
  * Internal function.
  */
-public void function $compileRegex(rquired string regex) {
+private void function $compileRegex(rquired string regex) {
 	local.pattern = CreateObject("java", "java.util.regex.Pattern");
 	try {
 		local.regex = local.pattern.compile(arguments.regex);
@@ -23,7 +23,7 @@ public void function $compileRegex(rquired string regex) {
  * Internal function.
  * Force leading slashes, remove trailing and duplicate slashes.
  */
-public string function $normalizePattern(required string pattern) {
+private string function $normalizePattern(required string pattern) {
 	// First clear the ending slashes.
 	local.pattern = ReReplace(
 		arguments.pattern,
@@ -46,7 +46,7 @@ public string function $normalizePattern(required string pattern) {
  * Internal function.
  * Transform route pattern into regular expression.
  */
-public string function $patternToRegex(required string pattern, struct constraints = {}) {
+private string function $patternToRegex(required string pattern, struct constraints = {}) {
 	// Escape any dots in pattern.
 	local.rv = Replace(arguments.pattern, ".", "\.", "all");
 
@@ -90,7 +90,7 @@ public string function $patternToRegex(required string pattern, struct constrain
  * Internal function.
  * Pull list of variables out of route pattern.
  */
-public string function $stripRouteVariables(required string pattern) {
+private string function $stripRouteVariables(required string pattern) {
 	local.matchArray = ArrayToList(ReMatch("\[\*?(\w+)\]", arguments.pattern));
 	return ReReplace(
 		local.matchArray,
