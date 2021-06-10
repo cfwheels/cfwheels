@@ -116,14 +116,13 @@ private void function $addRoute(required string pattern, required struct constra
 	// Normalize pattern, convert to regex, and strip out variable names.
 	arguments.pattern = $normalizePattern(arguments.pattern);
 	arguments.regex = $patternToRegex(arguments.pattern, arguments.constraints);
-	arguments.variables = $stripRouteVariables(arguments.pattern);
+	arguments.foundvariables = $stripRouteVariables(arguments.pattern);
 
 	// compile our regex to make sure the developer is using proper regex
 	$compileRegex(argumentCollection = arguments);
 
 	// add route to Wheels
 	arrayAppend(variables.routes, arguments);
-	//ArrayAppend(application[$appKey()].routes, arguments);
 }
 
 /**
