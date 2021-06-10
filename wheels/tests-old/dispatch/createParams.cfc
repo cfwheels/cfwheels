@@ -1,6 +1,6 @@
 component extends="wheels.tests.Test" {
 
-	function setup() {
+	/* function setup() {
 		dispatch = CreateObject("component", "wheels.Dispatch");
 		args = {};
 		args.path = "home";
@@ -197,5 +197,6 @@ component extends="wheels.tests.Test" {
 		assert('Compare(_params.controller, "......Wheels00") eq 0');
 		assert('Compare(_params.action, "......test00") eq 0');
 	}
+	*/
 
 }

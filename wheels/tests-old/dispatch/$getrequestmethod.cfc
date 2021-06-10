@@ -1,5 +1,5 @@
 component extends="wheels.tests.Test" {
-
+/*
 	function setup() {
 		_originalForm = Duplicate(form);
 		_originalUrl = Duplicate(url);
@@ -57,5 +57,5 @@ component extends="wheels.tests.Test" {
 		method = d.$getRequestMethod();
 		assert('method eq "POST"');
 	}
-
+*/
 }
