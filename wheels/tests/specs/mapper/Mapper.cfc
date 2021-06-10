@@ -19,7 +19,7 @@ component extends="testbox.system.BaseSpec" {
         "controller",
         "end",
         "namespace",
-        "package",
+        "package"
 	];
 
 	function run() {
