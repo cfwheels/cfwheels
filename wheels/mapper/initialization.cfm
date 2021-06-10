@@ -2,7 +2,12 @@
 /**
  * Internal function.
  */
-public struct function $init(boolean restful = true, boolean methods = arguments.restful, boolean mapFormat = true) {
+public struct function init(
+	boolean restful = true,
+	boolean methods = arguments.restful,
+	boolean mapFormat = true,
+	string resourceControllerNaming = ""
+) {
 	// Set up control variables.
 	variables.scopeStack = [];
 	variables.restful = arguments.restful;
@@ -17,6 +22,16 @@ public struct function $init(boolean restful = true, boolean methods = arguments
 	// Set up constraint for globbed routes.
 	variables.constraints["\*\w+"] = ".+";
 
+	// Resource controller naming
+	variables.resourceControllerNaming = arguments.resourceControllerNaming;
+
+	// placeholder for return value
+	variables.routes = [];
+
 	return this;
+}
+
+public function getRoutes(){
+	return variables.routes;
 }
 </cfscript>

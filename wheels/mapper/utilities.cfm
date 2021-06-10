@@ -122,7 +122,8 @@ private void function $addRoute(required string pattern, required struct constra
 	$compileRegex(argumentCollection = arguments);
 
 	// add route to Wheels
-	ArrayAppend(application[$appKey()].routes, arguments);
+	arrayAppend(variables.routes, arguments);
+	//ArrayAppend(application[$appKey()].routes, arguments);
 }
 
 /**
