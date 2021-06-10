@@ -24,4 +24,52 @@ component {
 	this.mappings['/wheels']   	= getCanonicalPath(this.webrootDir & "../");
 	this.mappings['/app']   	= getCanonicalPath(this.webrootDir & "resources/app");
 
+	function onApplicationStart() {
+		include "/app/config/app.cfm";
+		include "/wheels/controller/appfunctions.cfm";
+		include "/wheels/global/appfunctions.cfm";
+		include "/wheels/events/onapplicationstart.cfm";
+		return true;
+	}
+
+	public void function onApplicationEnd( struct ApplicationScope ) {
+		include "/wheels/events/onapplicationend.cfm";
+	}
+
+	public void function onSessionStart() {
+		include "/wheels/events/onsessionstart.cfm";
+	}
+
+	public void function onSessionEnd( struct SessionScope, struct ApplicationScope ) {
+		include "/wheels/events/onsessionend.cfm";
+	}
+
+	public boolean function onRequestStart( string targetPage ) {
+		include "/wheels/events/onrequeststart.cfm";
+		return true;
+	}
+
+	public boolean function onRequest( string targetPage ) {
+		include "/wheels/events/onrequest.cfm";
+		return true;
+	}
+
+	public void function onRequestEnd( string targetPage ) {
+		include "/wheels/events/onrequestend.cfm";
+	}
+
+	public boolean function onAbort( string targetPage ) {
+		include "/wheels/events/onabort.cfm";
+		return true;
+	}
+
+	public void function onError( any Exception, string EventName ) {
+		// include "/wheels/events/onerror.cfm";
+		dump(Exception);
+	}
+
+	public boolean function onMissingTemplate( string targetPage ) {
+		include "/wheels/events/onmissingtemplate.cfm";
+		return true;
+	}
 }
