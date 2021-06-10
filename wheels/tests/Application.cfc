@@ -65,7 +65,7 @@ component {
 
 	public void function onError( any Exception, string EventName ) {
 		// include "/wheels/events/onerror.cfm";
-		dump(Exception);
+		writedump(Exception);
 	}
 
 	public boolean function onMissingTemplate( string targetPage ) {
