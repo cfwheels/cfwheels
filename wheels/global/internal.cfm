@@ -604,7 +604,19 @@ public any function $createObjectFromRoot(required string path, required string 
 	local.method = arguments.method;
 	local.component = ListChangeDelims(arguments.path, ".", "/") & "." & ListChangeDelims(arguments.fileName, ".", "/");
 	local.argumentCollection = arguments;
-	include "../../root.cfm";
+	cfinvoke(
+		component="#local.component#"
+		method="#local.method#"
+		returnVariable="#local.returnVariable#"
+		argumentCollection="#local.argumentCollection#"
+	);
+	// <cfinvoke
+	// component="#local.component#"
+	// method="#local.method#"
+	// returnVariable="#local.returnVariable#"
+	// argumentCollection="#local.argumentCollection#"
+	// >
+	//include "/root.cfm";
 	return local.rv;
 }
 
@@ -893,19 +905,20 @@ public any function $createModelClass(
 /**
  * Internal function.
  */
-public void function $loadRoutes() {
+public void function $loadRoutes(required mapper) {
 	$simpleLock(
 		name = "$mapperLoadRoutes",
 		type = "exclusive",
 		timeout = 5,
-		execute = "$lockedLoadRoutes"
+		execute = "$lockedLoadRoutes",
+		executeArgs = { mapper: arguments.mapper }
 	);
 }
 
 /**
  * Internal function.
  */
-public void function $lockedLoadRoutes() {
+public void function $lockedLoadRoutes(required mapper) {
 	local.appKey = $appKey();
 	// clear out the route info
 	ArrayClear(application[local.appKey].routes);
@@ -915,6 +928,9 @@ public void function $lockedLoadRoutes() {
 	$include(template = "/wheels/public/routes.cfm");
 	// load developer routes next
 	$include(template = "/app/config/routes.cfm");
+
+	application[local.appKey].routes = arguments.mapper.getRoutes();
+
 	// set lookup info for the named routes
 	$setNamedRoutePositions();
 }
