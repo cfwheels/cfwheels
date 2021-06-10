@@ -11,7 +11,7 @@ component extends="testbox.system.BaseSpec" {
 			});
 		});
 
-		describe("$createParams Creates Params", function() {
+		describe("createParams Creates Params", function() {
 
 			beforeEach(function( currentSpec ) {
 				args = {};
@@ -38,9 +38,9 @@ component extends="testbox.system.BaseSpec" {
 
 			it("checks URL & form scope map the same", function() {
 				mockStruct = {
-					"user[email]": "tpetruzzi@gmail.com",
-					"user[name]": "tony petruzzi",
-					"user[password]": "secret"
+					"user[email]" = "tpetruzzi@gmail.com",
+					"user[name]" = "tony petruzzi",
+					"user[password]" = "secret"
 				}
 				args.UrlScope = duplicate(mockStruct);
 				r1  = d.$createParams(argumentCollection = args);
@@ -123,7 +123,7 @@ component extends="testbox.system.BaseSpec" {
 
 		});
 
-		describe("$createNestedParamStruct Creates Nested Params Struct", function() {
+		describe("createNestedParamStruct Creates Nested Params Struct", function() {
 
 			afterEach(function( currentSpec ) {
 				 structDelete(variables, "result");
@@ -153,7 +153,7 @@ component extends="testbox.system.BaseSpec" {
 		    it("Concats multiple rows into single struct", function() {
 				result  = d.$createNestedParamStruct({
 					"foo[bar][1][baz]" = 1,
-					"foo[bar][2][baz]" = 2,
+					"foo[bar][2][baz]" = 2
 				});
 				// Check whether this is correct
 				// expect(result.foo.bar).toBeTypeOf('array');
@@ -168,26 +168,27 @@ component extends="testbox.system.BaseSpec" {
 			});
 		});
 
-		describe("$parseJsonBody Parses JSON Body", function() {
-
+		describe("parseJsonBody Parses JSON Body", function() {
 
 		   beforeEach(function( currentSpec ) {
 				mockJsonStruct = SerializeJSON({
-					test1: 'foo'
+					test1 = 'foo'
 				});
 				mockJsonArray = SerializeJSON([
-					'alpha','beta','gamma'
+					'alpha',
+					'beta',
+					'gamma'
 				]);
 
 				mockArgs = {
 					params = {},
 					httpRequestData = {
 						headers = {
-							"Content-Type" = "application/json; utf8;",
+							"Content-Type" = "application/json; utf8;"
 						},
 						content = mockJsonStruct
 					}
-				}
+				};
 		   });
 
 		   afterEach(function( currentSpec ) {
@@ -212,11 +213,11 @@ component extends="testbox.system.BaseSpec" {
 				expect(result.test1).toBe("foo");
 			});
 			// TO DO - not simulating binary here properly?
-			 it("TODO Parses JSON Body which is Binary (ACF)", function() {
+			//it("TODO Parses JSON Body which is Binary (ACF)", function() {
 			// mockArgs.httpRequestData.content=ToBinary(mockJsonStruct);
 			// result  = d.$parseJsonBody(argumentCollection=mockArgs);
 			// expect(result.test1).toBe("foo");
-			 });
+			// });
 			it("Parses JSON Body array into params._json", function() {
 				mockArgs.httpRequestData.content=mockJsonArray;
 				result  = d.$parseJsonBody(argumentCollection=mockArgs);
@@ -232,8 +233,7 @@ component extends="testbox.system.BaseSpec" {
 			});
 		});
 
-		describe("$getPathFromRequest Parses the main request path for the router", function() {
-
+		describe("getPathFromRequest Parses the main request path for the router", function() {
 
 			it("Return '' if pathInfo == scriptName", function() {
 				expect(d.$getPathFromRequest("/", "/")).toBe("");
@@ -250,8 +250,7 @@ component extends="testbox.system.BaseSpec" {
 		});
 		// Zero legacy tests for this one.
 		describe("CHECK THIS? Parses the route pattern, identifies the variable markers within the pattern and assigns the value from the url variables with the path.", function() {
-
-
+			/*
 			beforeEach(function( currentSpec ) {
 				args = {};
 				args.path = "test/1/test";
@@ -268,14 +267,14 @@ component extends="testbox.system.BaseSpec" {
 				};
 				args.params  = {
 					controller = "test",
-					action = "test",
+					action = "test"
 				};
 		   });
 
 		   afterEach(function( currentSpec ) {
 				structDelete(variables, "args");
 				structDelete(variables, "result");
-		   });
+		   });*/
 
 		});
 		describe("TODO De-obfuscates Params if Required: TODOFIRST Move to utils", function() {
@@ -283,7 +282,7 @@ component extends="testbox.system.BaseSpec" {
 			// makePublic(d, "deobfuscateParams");
 
 		});
-		describe("$ensureControllerAndAction Ensures Controller and Action are legit", function() {
+		describe("ensureControllerAndAction Ensures Controller and Action are legit", function() {
 
 
 			afterEach(function( currentSpec ) {
@@ -331,10 +330,10 @@ component extends="testbox.system.BaseSpec" {
 			});
 		});
 
-		describe("$addRouteName Adds in the name variable from the route if it exists", function() {
+		describe("addRouteName Adds in the name variable from the route if it exists", function() {
 
 			it("Add route name to params struct", function() {
-				result = d.$addRouteName({}, { name: 'test' });
+				result = d.$addRouteName({}, { name = 'test' });
 				expect(result).toBeStruct();
 				expect(result.route).toBe('test');
 			});
@@ -347,22 +346,22 @@ component extends="testbox.system.BaseSpec" {
 			// 	expect(result.route).toBe('test');
 			// });
 		});
-		describe("$getRequestMethod Switches HTTP verb used in request if using _method override", function() {
+		describe("getRequestMethod Switches HTTP verb used in request if using _method override", function() {
 
 			it("Listens for form _method in POST", function() {
-				expect(d.$getRequestMethod("post", { "_method": 'PUT' })).toBe("PUT");
+				expect(d.$getRequestMethod("post", { "_method" = 'PUT' })).toBe("PUT");
 			});
 			it("Doesn't respond for _method in GET", function() {
-				expect(d.$getRequestMethod("get", { "_method": 'PUT' })).notToBe("PUT");
+				expect(d.$getRequestMethod("get", { "_method" = 'PUT' })).notToBe("PUT");
 			});
 			it("Requires form scope + _method to work", function() {
 				expect(d.$getRequestMethod("post", {   })).toBe("post");
 			});
 			it("Only allows switching to valid verbs", function() {
-				expect(d.$getRequestMethod("post", {  "_method": 'PUT' })).toBe("PUT");
-				expect(d.$getRequestMethod("post", {  "_method": 'PATCH' })).toBe("PATCH");
-				expect(d.$getRequestMethod("post", {  "_method": 'DELETE' })).toBe("DELETE");
-				expect(d.$getRequestMethod("post", {  "_method": 'INVALiD' })).toBe("POST");
+				expect(d.$getRequestMethod("post", {  "_method" = 'PUT' })).toBe("PUT");
+				expect(d.$getRequestMethod("post", {  "_method" = 'PATCH' })).toBe("PATCH");
+				expect(d.$getRequestMethod("post", {  "_method" = 'DELETE' })).toBe("DELETE");
+				expect(d.$getRequestMethod("post", {  "_method" = 'INVALiD' })).toBe("POST");
 			});
 		});
 
@@ -399,9 +398,9 @@ component extends="testbox.system.BaseSpec" {
 
 			it("checks URL & form scope map the same", function() {
 				mockStruct = {
-					"user[email]": "tpetruzzi@gmail.com",
-					"user[name]": "tony petruzzi",
-					"user[password]": "secret"
+					"user[email]" ="tpetruzzi@gmail.com",
+					"user[name]" ="tony petruzzi",
+					"user[password]" ="secret"
 				}
 				mockArgs.params = {};
 				mockArgs.UrlScope = duplicate(mockStruct);
@@ -411,7 +410,7 @@ component extends="testbox.system.BaseSpec" {
 			});
 		});
 
-		describe("$translateDatePartSubmissions Combines date parts from forms into a single value", function() {
+		describe("translateDatePartSubmissions Combines date parts from forms into a single value", function() {
 
 			afterEach(function( currentSpec ) {
 				structDelete(variables, "args");
@@ -429,7 +428,7 @@ component extends="testbox.system.BaseSpec" {
 					"foo($ampm)" = "am"
 				}
 				result = d.$translateDatePartSubmissions(args);
-				expect(result.foo).toBeTypeOf("DateTime");
+				expect(result.foo).toBeTypeOf("date");
 				expect(year(result.foo)).toBe(2021);
 				expect(month(result.foo)).toBe(01);
 				expect(hour(result.foo)).toBe(01);
@@ -443,7 +442,7 @@ component extends="testbox.system.BaseSpec" {
 					"foo($month)" = 01
 				}
 				result = d.$translateDatePartSubmissions(args);
-				expect(result.foo).toBeTypeOf("DateTime");
+				expect(result.foo).toBeTypeOf("date");
 				expect(day(result.foo)).toBe(01);
 			});
 			it("Defaults Month to 1 if not provided", function() {
@@ -452,7 +451,7 @@ component extends="testbox.system.BaseSpec" {
 					"foo($day)" = 01
 				}
 				result = d.$translateDatePartSubmissions(args);
-				expect(result.foo).toBeTypeOf("DateTime");
+				expect(result.foo).toBeTypeOf("date");
 				expect(month(result.foo)).toBe(01);
 			});
 			it("Defaults Year to 1899 if not provided", function() {
@@ -461,12 +460,12 @@ component extends="testbox.system.BaseSpec" {
 					"foo($day)" = 01
 				}
 				result = d.$translateDatePartSubmissions(args);
-				expect(result.foo).toBeTypeOf("DateTime");
+				expect(result.foo).toBeTypeOf("date");
 				expect(year(result.foo)).toBe(1899);
 			});
 
 		});
-		describe("$translateBlankCheckBoxSubmissions Translates Blank Check Box Submissions", function() {
+		describe("translateBlankCheckBoxSubmissions Translates Blank Check Box Submissions", function() {
 
 			afterEach(function( currentSpec ) {
 				structDelete(variables, "args");
