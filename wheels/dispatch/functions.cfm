@@ -249,9 +249,12 @@ public struct function $mergeUrlAndFormScopes(
 /**
  * If content type is JSON, deserialize it into a struct and add to the params struct.
  */
-public struct function $parseJsonBody(required struct params) {
-	local.headers = request.wheels.httpRequestData.headers;
-	local.content = request.wheels.httpRequestData.content;
+public struct function $parseJsonBody(
+	required struct params,
+	struct httpRequestData = GetHTTPRequestData()
+) {
+	local.headers = arguments.httpRequestData.headers;
+	local.content = arguments.httpRequestData.content;
 	if (StructKeyExists(local.headers, "Content-Type")) {
 		// Content-Type may also include charset so we need only check the first item in the list
 		local.type = SpanExcluding(local.headers["Content-Type"], ";");
@@ -485,16 +488,24 @@ public struct function $addRouteName(required struct params, required struct rou
 	}
 	return local.rv;
 }
-
 /**
- * Determine HTTP verb used in request.
+ * Determine HTTP verb used in request. Should only allow switching to PUT PATCH or DELETE
+ * @request_method
+ * @FormScope
  */
-public string function $getRequestMethod() {
-	// If request is a post, check for alternate verb.
-	if (request.cgi.request_method == "post" && StructKeyExists(form, "_method")) {
-		return form["_method"];
+public string function $getRequestMethod(
+	required string request_method = cgi.request_method,
+	required struct FormScope = form
+) {
+	// If request is a post, check for alternate valid verb.
+	if (
+		arguments.request_method == "post"
+		&& StructKeyExists(arguments.FormScope, "_method")
+		&& ArrayFindNoCase(['PUT','PATCH','DELETE'], arguments.FormScope["_method"])
+	) {
+		return arguments.FormScope["_method"];
 	}
 
-	return request.cgi.request_method;
+	return arguments.request_method;
 }
 </cfscript>
