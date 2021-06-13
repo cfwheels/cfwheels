@@ -3,6 +3,22 @@ component extends="testbox.system.BaseSpec" {
 	function run() {
 
 		d = new Wheels.Dispatch();
+		prepareMock(d);
+		makePublic(d, "$createParams");
+		makePublic(d, "$createNestedParamStruct");
+		makePublic(d, "$findMatchingRoute");
+		makePublic(d, "$getPathFromRequest");
+		makePublic(d, "$mergeUrlAndFormScopes");
+		makePublic(d, "$parseJsonBody");
+		makePublic(d, "$mergeRoutePattern");
+		// makePublic(d, "$deobfuscateParams");
+		makePublic(d, "$translateBlankCheckBoxSubmissions");
+		makePublic(d, "$translateDatePartSubmissions");
+		makePublic(d, "$ensureControllerAndAction");
+		// makePublic(d, "$addRouteFormat");
+		makePublic(d, "$addRouteName");
+		makePublic(d, "$getRequestMethod");
+
 
 		describe("Initialise Dispatch",	function() {
 
@@ -168,69 +184,78 @@ component extends="testbox.system.BaseSpec" {
 			});
 		});
 
-		describe("parseJsonBody Parses JSON Body", function() {
+		describe("findMatchingRoute Finds a route", function() {
+			beforeEach(function( currentSpec ) {
+                m = new wheels.Mapper();
+				prepareMock(m);
+				makePublic(m, "$match");
+				r = {};
+		    });
 
-		   beforeEach(function( currentSpec ) {
-				mockJsonStruct = SerializeJSON({
-					test1 = 'foo'
-				});
-				mockJsonArray = SerializeJSON([
-					'alpha',
-					'beta',
-					'gamma'
-				]);
+		    afterEach(function( currentSpec ) {
+				structDelete(variables, "m");
+				structDelete(variables, "routes");
+				structDelete(variables, "r");
+		    });
 
-				mockArgs = {
-					params = {},
-					httpRequestData = {
-						headers = {
-							"Content-Type" = "application/json; utf8;"
-						},
-						content = mockJsonStruct
+			it("Tests empty_route", function() {
+				m.$draw().root(to = "pages##index").end();
+				routes = m.getRoutes();
+				r = d.$findMatchingRoute(path = "", format = "", routes=routes, mapper=m);
+				expect(r).toBeStruct();
+				expect(r.controller).toBe("pages");
+				expect(r.action).toBe("index");
+			});
+
+			it("Tests controller_only", function() {
+				m.$draw().$match(pattern = "pages", to = "pages##index").end();
+				routes = m.getRoutes();
+				r = d.$findMatchingRoute(path = "pages", format = "", routes=routes, mapper=m);
+				expect(r).toBeStruct();
+				expect(r.controller).toBe("pages");
+				expect(r.action).toBe("index");
+			});
+
+			it("Tests controller_and_action_required", function() {
+				m.$draw().$match(pattern = "pages/blah", to = "pages##index").end();
+				routes = m.getRoutes();
+				expect(
+					function(){
+						d.$findMatchingRoute(path = "/pages", format = "", routes=routes, mapper=m)
 					}
-				};
-		   });
+				).toThrow(type="Wheels.RouteNotFound", message="Could not find a route that matched this request.");
+			});
 
-		   afterEach(function( currentSpec ) {
-				structDelete(variables, "result");
-				structDelete(variables, "mockStruct");
-				structDelete(variables, "mockArgs");
-		   });
+			it("Tests extra_variables_passed", function() {
+				m.$draw().$match(pattern = "pages/blah/[firstname]/[lastname]", to = "pages##index").end();
+				routes = m.getRoutes();
+				r = d.$findMatchingRoute(path = "pages/blah/tony/petruzzi", format = "", routes=routes, mapper=m);
+				expect(r).toBeStruct();
+				expect(r.controller).toBe("pages");
+				expect(r.action).toBe("index");
+				expect(r.foundVariables).toBe("firstname,lastname");
+			});
 
-		    it("Parses JSON Body with application/json; utf8", function() {
-				result  = d.$parseJsonBody(argumentCollection=mockArgs);
-                debug(result);
-				expect(result.test1).toBe("foo");
+			it("Tests wildcard_route", function() {
+				m.$draw().$match(pattern = "*", to = "pages##index").end();
+				routes = m.getRoutes();
+				r = d.$findMatchingRoute(path = "thisismyroute/therearemanylikeit/butthisoneismine", format = "", routes=routes, mapper=m);
+				expect(r).toBeStruct();
+				expect(r.controller).toBe("pages");
+				expect(r.action).toBe("index");
 			});
-			it("Parses JSON Body with application/json", function() {
-				mockArgs.httpRequestData.headers["Content-Type"] = "application/json";
-				result  = d.$parseJsonBody(argumentCollection=mockArgs);
-				expect(result.test1).toBe("foo");
+
+			it("mergeRoutePattern identifies the variable markers within the pattern", function() {
+				m.$draw().$match(pattern = "pages/[mysesurl]", to = "pages##index").end();
+				routes = m.getRoutes();
+				debug(routes);
+				r = d.$mergeRoutePattern(
+					params = { }, route = routes[1], path = "pages/blah"
+				);
+				expect(r).toBeStruct();
+				expect(r.mysesurl).toBe("blah");
 			});
-			it("Parses JSON Body with application/vnd.api+json; utf8", function() {
-				mockArgs.httpRequestData.headers["Content-Type"] = "application/vnd.api+json; utf8";
-				result  = d.$parseJsonBody(argumentCollection=mockArgs);
-				expect(result.test1).toBe("foo");
-			});
-			// TO DO - not simulating binary here properly?
-			//it("TODO Parses JSON Body which is Binary (ACF)", function() {
-			// mockArgs.httpRequestData.content=ToBinary(mockJsonStruct);
-			// result  = d.$parseJsonBody(argumentCollection=mockArgs);
-			// expect(result.test1).toBe("foo");
-			// });
-			it("Parses JSON Body array into params._json", function() {
-				mockArgs.httpRequestData.content=mockJsonArray;
-				result  = d.$parseJsonBody(argumentCollection=mockArgs);
-				expect(result).toBeStruct();
-				expect(result['_json']).toBeArray();
-				expect(result['_json'][1]).toBe('alpha');
-				expect(result['_json'][3]).toBe('gamma');
-			});
-			it("Doesn't Parse JSON Body if wrong application type", function() {
-				mockArgs.httpRequestData.headers["Content-Type"] = "text/html; charset=utf-8";
-				result = d.$parseJsonBody(argumentCollection=mockArgs);
-			 	expect(result).toBeStruct().toBeEmpty();
-			});
+
 		});
 
 		describe("getPathFromRequest Parses the main request path for the router", function() {
@@ -248,124 +273,8 @@ component extends="testbox.system.BaseSpec" {
 				expect(d.$getPathFromRequest("/index.cfm/foo", "/index.cfm")).toBe("index.cfm/foo");
 			});
 		});
-		// Zero legacy tests for this one.
-		describe("CHECK THIS? Parses the route pattern, identifies the variable markers within the pattern and assigns the value from the url variables with the path.", function() {
-			/*
-			beforeEach(function( currentSpec ) {
-				args = {};
-				args.path = "test/1/test";
-				args.route = {
-					pattern = "/test/:foo/test",
-					controller = "test",
-					action = "test",
-					regex = "^\/?$",
-					variables = "",
-					on = "",
-					package = "",
-					methods = "get",
-					name = "root"
-				};
-				args.params  = {
-					controller = "test",
-					action = "test"
-				};
-		   });
 
-		   afterEach(function( currentSpec ) {
-				structDelete(variables, "args");
-				structDelete(variables, "result");
-		   });*/
-
-		});
-		describe("TODO De-obfuscates Params if Required: TODOFIRST Move to utils", function() {
-			// TODO
-			// makePublic(d, "deobfuscateParams");
-
-		});
-		describe("ensureControllerAndAction Ensures Controller and Action are legit", function() {
-
-
-			afterEach(function( currentSpec ) {
-				structDelete(variables, "result");
-		   });
-
-			// Note: this always assumes controller + action appear in the route
-			it("Assigns controller and action from route if not in params", function() {
-				result = d.$ensureControllerAndAction({}, {
-					controller = "test1",
-					action = "test2"
-				 });
-				expect(result).toBeStruct();
-				expect(result.controller).toBe('test1');
-				expect(result.action).toBe('test2');
-			});
-
-			it("Allows for dot notation in controller path", function() {
-				result = d.$ensureControllerAndAction({}, {
-					controller = "foo.bar",
-					action = "test"
-				})
-				expect(result.controller).toBe('foo.bar');
-			});
-			it("Filters out illegal characters from the controller and action arguments", function() {
-				result = d.$ensureControllerAndAction({}, {
-					controller = "foobar",
-					action = "test3"
-				 });
-				expect(result.controller).toBe('Foobar');
-			});
-			it("Converts controller to upperCamelCase", function() {
-				result = d.$ensureControllerAndAction({}, {
-					controller = "foobar",
-					action = "test3"
-				 });
-				expect(result.controller).toBe('Foobar');
-			});
-			it("Converts Action to normal camelCase", function() {
-				result = d.$ensureControllerAndAction({}, {
-					controller = "foo*bar",
-					action = "FooBar"
-				 });
-				expect(result.action).toBe('fooBar');
-			});
-		});
-
-		describe("addRouteName Adds in the name variable from the route if it exists", function() {
-
-			it("Add route name to params struct", function() {
-				result = d.$addRouteName({}, { name = 'test' });
-				expect(result).toBeStruct();
-				expect(result.route).toBe('test');
-			});
-		});
-		describe("CHECK THIS? Adds in the format variable from the route if it exists.", function() {
-			// makePublic(d, "addRouteFormat");
-			// it("Add format to params struct", function() {
-			// 	result = d.addRouteFormat({}, { formatVariable: 'test' });
-			// 	expect(result).toBeStruct();
-			// 	expect(result.route).toBe('test');
-			// });
-		});
-		describe("getRequestMethod Switches HTTP verb used in request if using _method override", function() {
-
-			it("Listens for form _method in POST", function() {
-				expect(d.$getRequestMethod("post", { "_method" = 'PUT' })).toBe("PUT");
-			});
-			it("Doesn't respond for _method in GET", function() {
-				expect(d.$getRequestMethod("get", { "_method" = 'PUT' })).notToBe("PUT");
-			});
-			it("Requires form scope + _method to work", function() {
-				expect(d.$getRequestMethod("post", {   })).toBe("post");
-			});
-			it("Only allows switching to valid verbs", function() {
-				expect(d.$getRequestMethod("post", {  "_method" = 'PUT' })).toBe("PUT");
-				expect(d.$getRequestMethod("post", {  "_method" = 'PATCH' })).toBe("PATCH");
-				expect(d.$getRequestMethod("post", {  "_method" = 'DELETE' })).toBe("DELETE");
-				expect(d.$getRequestMethod("post", {  "_method" = 'INVALiD' })).toBe("POST");
-			});
-		});
-
-		describe("M$mergeUrlAndFormScopes merges Url And Form Scopes", function() {
+		describe("mergeUrlAndFormScopes merges Url And Form Scopes", function() {
 
 			afterEach(function( currentSpec ) {
 				 structDelete(variables, "result");
@@ -408,6 +317,76 @@ component extends="testbox.system.BaseSpec" {
 				result  = d.$mergeUrlAndFormScopes(argumentCollection = mockArgs);
 				expect(structCount(result)).toBe(3);
 			});
+		});
+
+		describe("parseJsonBody Parses JSON Body", function() {
+
+		   beforeEach(function( currentSpec ) {
+				mockJsonStruct = SerializeJSON({
+					test1 = 'foo'
+				});
+				mockJsonArray = SerializeJSON([
+					'alpha',
+					'beta',
+					'gamma'
+				]);
+
+				mockArgs = {
+					params = {},
+					httpRequestData = {
+						headers = {
+							"Content-Type" = "application/json; utf8;"
+						},
+						content = mockJsonStruct
+					}
+				};
+		   });
+
+		   afterEach(function( currentSpec ) {
+				structDelete(variables, "result");
+				structDelete(variables, "mockStruct");
+				structDelete(variables, "mockArgs");
+		   });
+
+		    it("Parses JSON Body with application/json; utf8", function() {
+				result  = d.$parseJsonBody(argumentCollection=mockArgs);
+				expect(result.test1).toBe("foo");
+			});
+			it("Parses JSON Body with application/json", function() {
+				mockArgs.httpRequestData.headers["Content-Type"] = "application/json";
+				result  = d.$parseJsonBody(argumentCollection=mockArgs);
+				expect(result.test1).toBe("foo");
+			});
+			it("Parses JSON Body with application/vnd.api+json; utf8", function() {
+				mockArgs.httpRequestData.headers["Content-Type"] = "application/vnd.api+json; utf8";
+				result  = d.$parseJsonBody(argumentCollection=mockArgs);
+				expect(result.test1).toBe("foo");
+			});
+			// TO DO - not simulating binary here properly?
+			//it("TODO Parses JSON Body which is Binary (ACF)", function() {
+			// mockArgs.httpRequestData.content=ToBinary(mockJsonStruct);
+			// result  = d.$parseJsonBody(argumentCollection=mockArgs);
+			// expect(result.test1).toBe("foo");
+			// });
+			it("Parses JSON Body array into params._json", function() {
+				mockArgs.httpRequestData.content=mockJsonArray;
+				result  = d.$parseJsonBody(argumentCollection=mockArgs);
+				expect(result).toBeStruct();
+				expect(result['_json']).toBeArray();
+				expect(result['_json'][1]).toBe('alpha');
+				expect(result['_json'][3]).toBe('gamma');
+			});
+			it("Doesn't Parse JSON Body if wrong application type", function() {
+				mockArgs.httpRequestData.headers["Content-Type"] = "text/html; charset=utf-8";
+				result = d.$parseJsonBody(argumentCollection=mockArgs);
+			 	expect(result).toBeStruct().toBeEmpty();
+			});
+		});
+
+
+		describe("TODO De-obfuscates Params if Required: TODOFIRST Move to utils", function() {
+			// TODO
+			// makePublic(d, "deobfuscateParams");
 		});
 
 		describe("translateDatePartSubmissions Combines date parts from forms into a single value", function() {
@@ -465,6 +444,7 @@ component extends="testbox.system.BaseSpec" {
 			});
 
 		});
+
 		describe("translateBlankCheckBoxSubmissions Translates Blank Check Box Submissions", function() {
 
 			afterEach(function( currentSpec ) {
@@ -480,6 +460,91 @@ component extends="testbox.system.BaseSpec" {
 				result = d.$translateBlankCheckBoxSubmissions(args);
 				expect(result["user[1][isActive]"]).toBe(1);
 				expect(result["user[2][isActive]"]).toBe(0);
+			});
+		});
+
+		describe("ensureControllerAndAction Ensures Controller and Action are legit", function() {
+
+
+			afterEach(function( currentSpec ) {
+				structDelete(variables, "result");
+		   });
+
+			// Note: this always assumes controller + action appear in the route
+			it("Assigns controller and action from route if not in params", function() {
+				result = d.$ensureControllerAndAction({}, {
+					controller = "test1",
+					action = "test2"
+				 });
+				expect(result).toBeStruct();
+				expect(result.controller).toBe('test1');
+				expect(result.action).toBe('test2');
+			});
+
+			it("Allows for dot notation in controller path", function() {
+				result = d.$ensureControllerAndAction({}, {
+					controller = "foo.bar",
+					action = "test"
+				})
+				expect(result.controller).toBe('foo.bar');
+			});
+			it("Filters out illegal characters from the controller and action arguments", function() {
+				result = d.$ensureControllerAndAction({}, {
+					controller = "foobar",
+					action = "test3"
+				 });
+				expect(result.controller).toBe('Foobar');
+			});
+			it("Converts controller to upperCamelCase", function() {
+				result = d.$ensureControllerAndAction({}, {
+					controller = "foobar",
+					action = "test3"
+				 });
+				expect(result.controller).toBe('Foobar');
+			});
+			it("Converts Action to normal camelCase", function() {
+				result = d.$ensureControllerAndAction({}, {
+					controller = "foo*bar",
+					action = "FooBar"
+				 });
+				expect(result.action).toBe('fooBar');
+			});
+		});
+
+		describe("addRouteName Adds in the name variable from the route if it exists", function() {
+
+			it("Add route name to params struct", function() {
+				result = d.$addRouteName({}, { name = 'test' });
+				expect(result).toBeStruct();
+				expect(result.route).toBe('test');
+			});
+		});
+
+		describe("CHECK THIS? Adds in the format variable from the route if it exists.", function() {
+			// makePublic(d, "addRouteFormat");
+			// it("Add format to params struct", function() {
+			// 	result = d.addRouteFormat({}, { formatVariable: 'test' });
+			// 	expect(result).toBeStruct();
+			// 	expect(result.route).toBe('test');
+			// });
+		});
+
+		describe("getRequestMethod Switches HTTP verb used in request if using _method override", function() {
+
+			it("Listens for form _method in POST", function() {
+				expect(d.$getRequestMethod("post", { "_method" = 'PUT' })).toBe("PUT");
+			});
+			it("Doesn't respond for _method in GET", function() {
+				expect(d.$getRequestMethod("get", { "_method" = 'PUT' })).notToBe("PUT");
+			});
+			it("Requires form scope + _method to work", function() {
+				expect(d.$getRequestMethod("post", {   })).toBe("post");
+			});
+			it("Only allows switching to valid verbs", function() {
+				expect(d.$getRequestMethod("post", {  "_method" = 'PUT' })).toBe("PUT");
+				expect(d.$getRequestMethod("post", {  "_method" = 'PATCH' })).toBe("PATCH");
+				expect(d.$getRequestMethod("post", {  "_method" = 'DELETE' })).toBe("DELETE");
+				expect(d.$getRequestMethod("post", {  "_method" = 'INVALiD' })).toBe("POST");
 			});
 		});
 

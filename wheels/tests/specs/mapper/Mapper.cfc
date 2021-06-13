@@ -37,6 +37,10 @@ component extends="testbox.system.BaseSpec" {
 			        expect( isCustomFunction(m[func])).toBeTrue();
 			    }
 			});
+            it("is a valid instance", function() {
+                m = new wheels.Mapper();
+                expect(m).toBeInstanceOf('wheels.Mapper');
+            });
 
 			it("Initialises with defaults", function(){
                 m = new wheels.Mapper();

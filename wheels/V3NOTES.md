@@ -63,7 +63,8 @@ this.mappings['/wheels']   = this.wheelsDir;
 
 ## Internal Stuff
 
- - $createObjectFromRoot() not longer requires `root.cfm` and simply cfinvokes the component
+ - $createObjectFromRoot() not longer requires `root.cfm` and simply $cfinvokes the component
+ - $cfinvoke added a proxy to the tag equivalent
 
 ### Mapper / Routing
  - Where possible, internal methods are now private; exception is `$draw` which is called outside the CFC internally
