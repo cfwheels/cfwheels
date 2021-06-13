@@ -255,6 +255,212 @@ component extends="testbox.system.BaseSpec" {
 				expect(r).toBeStruct();
 				expect(r.mysesurl).toBe("blah");
 			});
+			describe("findMatchingRoute Legacy Tests", function() {
+
+				beforeEach(function( currentSpec ) {
+					m = new wheels.Mapper();
+					m.$draw()
+						.namespace("admin")
+							.resources("users")
+							.root(to = "dashboard##index")
+						.end()
+						.resources("users")
+						.resource("profile")
+						.root(to = "dashboard##index")
+						.end();
+					routes = m.getRoutes();
+				});
+
+				afterEach(function( currentSpec ) {
+					structDelete(variables, "m");
+					structDelete(variables, "routes");
+					structDelete(variables, "r");
+				});
+
+				it("error_raised_when_route_not_found", function() {
+					expect(
+						function(){
+							d.$findMatchingRoute(path = "/scouts", routes=routes, mapper=m);
+						}
+					).toThrow(type="Wheels.RouteNotFound", message="Could not find a route that matched this request.");
+				});
+
+				it("find_get_collection_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "users",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("users");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_get_collection_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "users.csv",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("users");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_post_collection_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "users",  requestMethod="POST", routes=routes, mapper=m);
+					expect(r.name).toBe("users");
+					expect(r.methods).toBe("POST");
+				});
+
+				it("find_post_collection_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "users.json",  requestMethod="POST", routes=routes, mapper=m);
+					expect(r.name).toBe("users");
+					expect(r.methods).toBe("POST");
+				});
+
+				it("find_get_member_new_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "users/new",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("newUser");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_get_member_new_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "users/new.json",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("newUser");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_get_member_edit_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "users/1/edit",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("editUser");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_get_member_edit_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "users/1/edit.json",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("editUser");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_get_member_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "users/1",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("user");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_get_member_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "users/1.json",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("user");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_put_member_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "users/1",  requestMethod="PUT", routes=routes, mapper=m);
+					expect(r.name).toBe("user");
+					expect(r.methods).toBe("PUT");
+				});
+
+				it("find_put_member_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "users/1.json",  requestMethod="PUT", routes=routes, mapper=m);
+					expect(r.name).toBe("user");
+					expect(r.methods).toBe("PUT");
+				});
+
+				it("find_delete_member_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "users/1",  requestMethod="DELETE", routes=routes, mapper=m);
+					expect(r.name).toBe("user");
+					expect(r.methods).toBe("DELETE");
+				});
+
+				it("find_delete_member_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "users/1.json",  requestMethod="DELETE", routes=routes, mapper=m);
+					expect(r.name).toBe("user");
+					expect(r.methods).toBe("DELETE");
+				});
+
+				// nested route tests
+
+				it("find_nested_get_collection_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "admin/users",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("adminUsers");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_nested_get_collection_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "admin/users.csv",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("adminUsers");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_nested_post_collection_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "admin/users",  requestMethod="POST", routes=routes, mapper=m);
+					expect(r.name).toBe("adminUsers");
+					expect(r.methods).toBe("POST");
+				});
+
+				it("find_nested_post_collection_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "admin/users.json",  requestMethod="POST", routes=routes, mapper=m);
+					expect(r.name).toBe("adminUsers");
+					expect(r.methods).toBe("POST");
+				});
+
+				it("find_nested_get_member_new_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "admin/users/new",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("newAdminUser");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_nested_get_member_new_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "admin/users/new.json",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("newAdminUser");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_nested_get_member_edit_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "admin/users/1/edit",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("editAdminUser");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_nested_get_member_edit_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "admin/users/1/edit.json",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("editAdminUser");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_nested_get_member_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "admin/users/1",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("adminUser");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_nested_get_member_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "admin/users/1.json",  requestMethod="GET", routes=routes, mapper=m);
+					expect(r.name).toBe("adminUser");
+					expect(r.methods).toBe("GET");
+				});
+
+				it("find_nested_put_member_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "admin/users/1",  requestMethod="PUT", routes=routes, mapper=m);
+					expect(r.name).toBe("adminUser");
+					expect(r.methods).toBe("PUT");
+				});
+
+				it("find_nested_put_member_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "admin/users/1.json",  requestMethod="PUT", routes=routes, mapper=m);
+					expect(r.name).toBe("adminUser");
+					expect(r.methods).toBe("PUT");
+				});
+
+				it("find_nested_delete_member_route_that_exists", function() {
+					r = d.$findMatchingRoute(path = "admin/users/1",  requestMethod="DELETE", routes=routes, mapper=m);
+					expect(r.name).toBe("adminUser");
+					expect(r.methods).toBe("DELETE");
+				});
+
+				it("find_nested_delete_member_route_that_exists_with_format", function() {
+					r = d.$findMatchingRoute(path = "admin/users/1.json",  requestMethod="DELETE", routes=routes, mapper=m);
+					expect(r.name).toBe("adminUser");
+					expect(r.methods).toBe("DELETE");
+				});
+
+				it("head_request_aliases_get", function() {
+					r = d.$findMatchingRoute(path = "users",  requestMethod="HEAD", routes=routes, mapper=m);
+					expect(r.name).toBe("users");
+					expect(r.methods).toBe("GET");
+				});
+			});
 
 		});
 
