@@ -25,7 +25,7 @@ public string function errorMessagesFor(
 	}
 	local.errors = local.object.allErrors();
 	if (arguments.includeAssociations) {
-		ArrayAppend(local.errors, local.object.allAssociationErrors());
+		ArrayAppend(local.errors, local.object.allAssociationErrors(), true);
 	}
 	local.rv = "";
 	if (!ArrayIsEmpty(local.errors)) {
@@ -46,7 +46,7 @@ public string function errorMessagesFor(
 		local.encode = arguments.encode ? "attributes" : false;
 		local.rv = $element(
 			name = "ul",
-			skip = "objectName,showDuplicates,encode",
+			skip = "objectName,showDuplicates,encode,includeAssociations",
 			content = local.listItems,
 			attributes = arguments,
 			encode = local.encode

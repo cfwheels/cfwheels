@@ -68,7 +68,7 @@ public array function allAssociationErrors(array seen = [], boolean associated =
 					local.iEnd = ArrayLen(local.array);
 					for (local.i = 1; local.i <= local.iEnd; local.i++) {
 						local.associationModel = local.array[local.i];
-						ArrayAppend(local.rv, local.associationModel.associatedErrors(seen, true), true);
+						ArrayAppend(local.rv, local.associationModel.allAssociationErrors(seen, true), true);
 					}
 				}
 			}
