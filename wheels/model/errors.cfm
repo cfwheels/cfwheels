@@ -52,24 +52,25 @@ public array function allAssociationErrors(array seen = [], boolean associated =
 	local.associations = variables.wheels.class.associations;
 	for (local.association in local.associations) {
 		// base case
-		if (!ArrayContains(seen, local.association)) {
-			ArrayAppend(seen, local.association);
-			if (
-				StructKeyExists(
-					this,
-					local.association
-				)
-			) {
-				local.array = this[local.association];
-				if (!isNull(this[local.association]) && IsObject(this[local.association])) {
-					local.array = [this[local.association]];
-				}
-				if (IsArray(local.array)) {
-					local.iEnd = ArrayLen(local.array);
-					for (local.i = 1; local.i <= local.iEnd; local.i++) {
-						local.associationModel = local.array[local.i];
-						ArrayAppend(local.rv, local.associationModel.allAssociationErrors(seen, true), true);
-					}
+		if (ArrayContains(seen, local.association)) {
+			return local.rv;
+		}
+		ArrayAppend(seen, local.association);
+		if (
+			StructKeyExists(
+				this,
+				local.association
+			)
+		) {
+			local.array = this[local.association];
+			if (!isNull(this[local.association]) && IsObject(this[local.association])) {
+				local.array = [this[local.association]];
+			}
+			if (IsArray(local.array)) {
+				local.iEnd = ArrayLen(local.array);
+				for (local.i = 1; local.i <= local.iEnd; local.i++) {
+					local.associationModel = local.array[local.i];
+					ArrayAppend(local.rv, local.associationModel.allAssociationErrors(seen, true), true);
 				}
 			}
 		}
