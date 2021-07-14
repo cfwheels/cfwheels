@@ -52,10 +52,10 @@ public array function allAssociationErrors(array seen = [], boolean associated =
 	local.associations = variables.wheels.class.associations;
 	for (local.association in local.associations) {
 		// base case
-		if (ArrayContains(seen, local.association)) {
+		if (ArrayContains(arguments.seen, local.association)) {
 			return local.rv;
 		}
-		ArrayAppend(seen, local.association);
+		ArrayAppend(arguments.seen, local.association);
 		if (
 			StructKeyExists(
 				this,
@@ -70,7 +70,7 @@ public array function allAssociationErrors(array seen = [], boolean associated =
 				local.iEnd = ArrayLen(local.array);
 				for (local.i = 1; local.i <= local.iEnd; local.i++) {
 					local.associationModel = local.array[local.i];
-					ArrayAppend(local.rv, local.associationModel.allAssociationErrors(seen, true), true);
+					ArrayAppend(local.rv, local.associationModel.allAssociationErrors(arguments.seen, true), true);
 				}
 			}
 		}
