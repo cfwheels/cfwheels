@@ -38,6 +38,46 @@ public array function allErrors() {
 }
 
 /**
+ * Gets all associated errors recursively
+ *
+ * [section: Model Object]
+ * [category: Error Functions]
+ */
+public array function allAssociationErrors(array seen = [], boolean associated = false, string returnAs = "") {
+	local.rv = [];
+	if (arguments.associated) {
+		local.toAppend = arguments.returnAs == "structs" ? { modelName = $classData().modelName, errors: allErrors() } : allErrors();
+		ArrayAppend(local.rv, local.toAppend, true);
+	}
+	local.associations = variables.wheels.class.associations;
+	for (local.association in local.associations) {
+		// base case
+		if (!ArrayContains(seen, local.association)) {
+			ArrayAppend(seen, local.association);
+			if (
+				StructKeyExists(
+					this,
+					local.association
+				)
+			) {
+				local.array = this[local.association];
+				if (!isNull(this[local.association]) && IsObject(this[local.association])) {
+					local.array = [this[local.association]];
+				}
+				if (IsArray(local.array)) {
+					local.iEnd = ArrayLen(local.array);
+					for (local.i = 1; local.i <= local.iEnd; local.i++) {
+						local.associationModel = local.array[local.i];
+						ArrayAppend(local.rv, local.associationModel.associatedErrors(seen, true), true);
+					}
+				}
+			}
+		}
+	}
+	return local.rv;
+}
+
+/**
  * Clears out all errors set on the object or only the ones set for a specific property or name.
  *
  * [section: Model Object]

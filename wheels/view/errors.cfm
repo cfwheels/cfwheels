@@ -15,7 +15,8 @@ public string function errorMessagesFor(
 	required string objectName,
 	string class,
 	boolean showDuplicates,
-	boolean encode
+	boolean encode,
+	boolean includeAssociations
 ) {
 	$args(name = "errorMessagesFor", args = arguments);
 	local.object = $getObject(arguments.objectName);
@@ -23,6 +24,9 @@ public string function errorMessagesFor(
 		Throw(type = "Wheels.IncorrectArguments", message = "The `#arguments.objectName#` variable is not an object.");
 	}
 	local.errors = local.object.allErrors();
+	if (arguments.includeAssociations) {
+		ArrayAppend(local.errors, local.object.allAssociationErrors());
+	}
 	local.rv = "";
 	if (!ArrayIsEmpty(local.errors)) {
 		local.used = "";
