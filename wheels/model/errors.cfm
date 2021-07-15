@@ -51,13 +51,13 @@ public array function allAssociationErrors(array seen = [], boolean associated =
 	}
 	local.associations = variables.wheels.class.associations;
 	for (local.association in local.associations) {
-		// base case
 		if (
 			StructKeyExists(
 				this,
 				local.association
 			)
 		) {
+			// base case
 			if (ArrayContains(seen, this[local.association])) {
 				return local.rv;
 			}
