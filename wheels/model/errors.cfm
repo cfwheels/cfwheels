@@ -58,10 +58,10 @@ public array function allAssociationErrors(array seen = [], boolean associated =
 			)
 		) {
 			// base case
-			if (ArrayContains(seen, this[local.association])) {
+			if (ArrayContains(arguments.seen, this[local.association])) {
 				return local.rv;
 			}
-			ArrayAppend(seen, this[local.association]);
+			ArrayAppend(arguments.seen, this[local.association]);
 			local.array = this[local.association];
 			if (!isNull(this[local.association]) && IsObject(this[local.association])) {
 				local.array = [this[local.association]];
