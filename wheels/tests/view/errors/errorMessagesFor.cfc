@@ -25,9 +25,9 @@ component extends="wheels.tests.Test" {
 		_nestedController = controller(name = "ControllerWithNestedModelErrors")
 		args.showDuplicates = false;
 		args.includeAssociations = true;
-		e = _nestedController.errorMessagesFor(argumentcollection = args);
-		r = '<ul class="errors-found"><li>firstname error1</li><li>lastname error1</li><li>age error1</li></ul>';
-		assert("e eq r");
+		actual = _nestedController.errorMessagesFor(argumentcollection = args);
+		expected = '<ul class="errors-found"><li>firstname error1</li><li>lastname error1</li><li>age error1</li></ul>';
+		assert("actual eq expected");
 	}
 
 }
