@@ -12,6 +12,12 @@ component extends="wheels.tests.Test" {
 
 	}
 
+	function teardown() {
+		user.$classData().associations.author.nested.allow = false;
+		user.$classData().associations.author.nested.autoSave = false;
+	}
+
+
 	function test_model_valid_returns_whether_associations_are_not_valid() {
 
 		user.author = model("author").new();
@@ -32,6 +38,10 @@ component extends="wheels.tests.Test" {
 
 		userValid = user.valid(validateAssociations = true);
 		assert('!userValid');
+
+		user.author.$classData().associations.profile.nested.allow = false;
+		user.author.$classData().associations.profile.nested.autoSave = false;
+
 	}
 
 	function test_model_valid_returns_whether_associations_are_not_valid_with_errors_on_parent_and_associations() {
@@ -46,6 +56,10 @@ component extends="wheels.tests.Test" {
 
 		userValid = user.valid(validateAssociations = true);
 		assert('!userValid');
+
+		user.author.$classData().associations.profile.nested.allow = false;
+		user.author.$classData().associations.profile.nested.autoSave = false;
+
 	}
 
 	function test_model_valid_returns_whether_associations_are_valid() {
