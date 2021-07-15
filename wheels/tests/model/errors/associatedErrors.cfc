@@ -8,12 +8,9 @@ component extends="wheels.tests.Test" {
 		user.addError("firstname", "firstname error1");
 		user.author = model("author").findOne(include = "profile");
 		user.author.addError("lastname", "lastname error1");
-		associatedErrors = user.allAssociationErrors();
-		actual = ArrayLen(associatedErrors);
-		errors = user.allErrors();
-		actual += ArrayLen(errors);
-		ArrayAppend(errors, user.author.allErrors(), true);
-		expected = ArrayLen(errors);
+		errors = user.allErrors(includeAssociations = true);
+		actual = ArrayLen(errors);
+		expected = 2;
 		assert("actual eq expected");
 	}
 
@@ -22,13 +19,9 @@ component extends="wheels.tests.Test" {
 		user.author = model("author").findOne(include = "profile");
 		user.author.addError("lastname", "lastname error1");
 		user.author.profile.addError("profiletype", "profiletype error1");
-		associatedErrors = user.allAssociationErrors();
-		actual = ArrayLen(associatedErrors);
-		errors = user.allErrors();
-		actual += ArrayLen(errors);
-		ArrayAppend(errors, user.author.profile.allErrors(), true);
-		ArrayAppend(errors, user.author.allErrors(), true);
-		expected = ArrayLen(errors);
+		errors = user.allErrors(includeAssociations = true);
+		actual = ArrayLen(errors);
+		expected = 3;
 		assert("actual eq expected");
 	}
 
@@ -37,16 +30,17 @@ component extends="wheels.tests.Test" {
 		user.author = model("author").findOne(include = "profile");
 		user.author.addError("lastname", "lastname error1");
 		user.author.profile.addError("profiletype", "profiletype error1");
-		user.author.profile.$classData().associations.author.nested.allow = false;
+		user.author.profile.$classData().associations.author.nested.allow = true;
+		user.author.profile.$classData().associations.author.nested.autoSave = true;
 		user.author.profile.author = user.author;
-		associatedErrors = user.allAssociationErrors();
-		actual = ArrayLen(associatedErrors);
-		errors = user.allErrors();
-		actual += ArrayLen(errors);
-		ArrayAppend(errors, user.author.profile.allErrors(), true);
-		ArrayAppend(errors, user.author.allErrors(), true);
-		expected = ArrayLen(errors);
+		errors = user.allErrors(includeAssociations = true);
+		actual = ArrayLen(errors);
+		expected = 3;
 		assert("actual eq expected");
+		user.author.profile.$classData().associations.author.nested.allow = false;
+		user.author.profile.$classData().associations.author.nested.autoSave = false;
+
+
 	}
 
 }

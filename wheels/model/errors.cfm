@@ -33,7 +33,13 @@ public void function addErrorToBase(required string message, string name = "") {
  * [section: Model Object]
  * [category: Error Functions]
  */
-public array function allErrors() {
+public array function allErrors(boolean includeAssociations = false, array seen = [], boolean associated = false, string returnAs = "") {
+	if (arguments.includeAssociations) {
+		local.rv = [];
+		ArrayAppend(local.rv, variables.wheels.errors, true);
+		ArrayAppend(local.rv, allAssociationErrors(arguments.seen, arguments.associated, arguments.returnAs), true);
+		return local.rv;
+	}
 	return variables.wheels.errors;
 }
 
@@ -43,12 +49,8 @@ public array function allErrors() {
  * [section: Model Object]
  * [category: Error Functions]
  */
-public array function allAssociationErrors(array seen = [], boolean associated = false, string returnAs = "") {
+private array function allAssociationErrors(array seen = [], boolean associated = false, string returnAs = "") {
 	local.rv = [];
-	if (arguments.associated) {
-		local.toAppend = arguments.returnAs == "structs" ? { modelName = $classData().modelName, errors: allErrors() } : allErrors();
-		ArrayAppend(local.rv, local.toAppend, true);
-	}
 	local.associations = variables.wheels.class.associations;
 	for (local.association in local.associations) {
 		if (
@@ -70,7 +72,7 @@ public array function allAssociationErrors(array seen = [], boolean associated =
 				local.iEnd = ArrayLen(local.array);
 				for (local.i = 1; local.i <= local.iEnd; local.i++) {
 					local.associationModel = local.array[local.i];
-					ArrayAppend(local.rv, local.associationModel.allAssociationErrors(arguments.seen, true), true);
+					ArrayAppend(local.rv, local.associationModel.allErrors(true, arguments.seen, true), true);
 				}
 			}
 		}

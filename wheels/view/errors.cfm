@@ -23,10 +23,7 @@ public string function errorMessagesFor(
 	if ($get("showErrorInformation") && !IsObject(local.object)) {
 		Throw(type = "Wheels.IncorrectArguments", message = "The `#arguments.objectName#` variable is not an object.");
 	}
-	local.errors = local.object.allErrors();
-	if (arguments.includeAssociations) {
-		ArrayAppend(local.errors, local.object.allAssociationErrors(), true);
-	}
+	local.errors = local.object.allErrors(includeAssociations = arguments.includeAssociations);
 	local.rv = "";
 	if (!ArrayIsEmpty(local.errors)) {
 		local.used = "";
