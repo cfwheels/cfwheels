@@ -53,9 +53,4 @@ component extends="wheels.tests.Test" {
 		assert('userValid');
 	}
 
-	function test_aye(){
-		test = ObjectEquals(user, user)
-		assert("test")
-	}
-
 }
