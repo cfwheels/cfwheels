@@ -14,7 +14,7 @@ component extends="wheels.tests.Test" {
 		actual += ArrayLen(errors);
 		ArrayAppend(errors, user.author.allErrors(), true);
 		expected = ArrayLen(errors);
-		assert("actual == expected");
+		assert("actual eq expected");
 	}
 
 	function test_get_associated_errors_returns_array_including_associated_model_errors_deeply() {
@@ -29,7 +29,7 @@ component extends="wheels.tests.Test" {
 		ArrayAppend(errors, user.author.profile.allErrors(), true);
 		ArrayAppend(errors, user.author.allErrors(), true);
 		expected = ArrayLen(errors);
-		assert("actual == expected");
+		assert("actual eq expected");
 	}
 
 	function test_get_associated_errors_returns_array_including_associated_model_errors_and_handles_circular_reference() {
@@ -46,7 +46,7 @@ component extends="wheels.tests.Test" {
 		ArrayAppend(errors, user.author.profile.allErrors(), true);
 		ArrayAppend(errors, user.author.allErrors(), true);
 		expected = ArrayLen(errors);
-		assert("actual == expected");
+		assert("actual eq expected");
 	}
 
 }
