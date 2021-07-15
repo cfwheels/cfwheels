@@ -51,8 +51,9 @@ public void function nestedProperties(
 /**
  * Internal function.
  */
-public boolean function $validateAssociations(required boolean callbacks) {
+public boolean function $validateAssociations(required boolean callbacks, boolean validateAssociations = false) {
 	local.associations = variables.wheels.class.associations;
+	local.rv = true;
 	for (local.association in local.associations) {
 		if (
 			local.associations[local.association].nested.allow && local.associations[local.association].nested.autoSave && StructKeyExists(
@@ -66,12 +67,15 @@ public boolean function $validateAssociations(required boolean callbacks) {
 			}
 			if (IsArray(local.array)) {
 				for (local.i = 1; local.i <= ArrayLen(local.array); local.i++) {
-					$invoke(componentReference = local.array[local.i], method = "valid", invokeArgs = arguments);
+					local.isAssociationValid = local.array[local.i].valid(callbacks = arguments.callbacks,validateAssociations = arguments.validateAssociations);
+					if (!local.isAssociationValid) {
+						local.rv = false;
+					}
 				}
 			}
 		}
 	}
-	return true;
+	return local.rv;
 }
 
 /**

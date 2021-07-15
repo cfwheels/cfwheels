@@ -330,7 +330,7 @@ public void function validatesUniquenessOf(
  *
  * @callbacks [see:findAll].
  */
-public boolean function valid(boolean callbacks = "true") {
+public boolean function valid(boolean callbacks = "true", boolean validateAssociations = false) {
 	local.rv = false;
 	clearErrors();
 	if ($callback("beforeValidation", arguments.callbacks)) {
@@ -354,7 +354,10 @@ public boolean function valid(boolean callbacks = "true") {
 			}
 		}
 	}
-	$validateAssociations(callbacks = arguments.callbacks);
+	local.areAssociationsValid = $validateAssociations(callbacks = arguments.callbacks, validateAssociations = arguments.validateAssociations);
+	if (arguments.validateAssociations && local.rv) {
+		local.rv = local.areAssociationsValid;
+	}
 	return local.rv;
 }
 

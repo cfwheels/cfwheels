@@ -55,5 +55,4 @@ component extends="wheels.tests.Test" {
 		assert("actual == expected");
 	}
 
-
 }
