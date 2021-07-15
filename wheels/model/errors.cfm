@@ -37,7 +37,7 @@ public array function allErrors(boolean includeAssociations = false, array seen 
 	if (arguments.includeAssociations) {
 		local.rv = [];
 		ArrayAppend(local.rv, variables.wheels.errors, true);
-		ArrayAppend(local.rv, allAssociationErrors(arguments.seen, arguments.associated, arguments.returnAs), true);
+		ArrayAppend(local.rv, allAssociationErrors(arguments.seen), true);
 		return local.rv;
 	}
 	return variables.wheels.errors;
