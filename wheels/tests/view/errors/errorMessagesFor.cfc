@@ -22,7 +22,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_show_association_errors() {
-		_nestedController = controller(name = "ControllerWithNestedModelErrors")
+		_nestedController = controller(name = "ControllerWithNestedModelErrors");
 		args.showDuplicates = false;
 		args.includeAssociations = true;
 		actual = _nestedController.errorMessagesFor(argumentcollection = args);
