@@ -33,7 +33,7 @@ public void function addErrorToBase(required string message, string name = "") {
  * [section: Model Object]
  * [category: Error Functions]
  */
-public array function allErrors(boolean includeAssociations = false, array seen = [], boolean associated = false, string returnAs = "") {
+public array function allErrors(boolean includeAssociations = false, array seen = [], boolean associated = false) {
 	if (arguments.includeAssociations) {
 		local.rv = [];
 		ArrayAppend(local.rv, variables.wheels.errors, true);
@@ -49,7 +49,7 @@ public array function allErrors(boolean includeAssociations = false, array seen 
  * [section: Model Object]
  * [category: Error Functions]
  */
-private array function allAssociationErrors(array seen = [], boolean associated = false, string returnAs = "") {
+private array function allAssociationErrors(array seen = [], boolean associated = false) {
 	local.rv = [];
 	local.associations = variables.wheels.class.associations;
 	for (local.association in local.associations) {
