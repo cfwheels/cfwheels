@@ -37,13 +37,7 @@ component extends="wheels.tests.Test" {
 		user.author = model("author").findOne(include = "profile");
 		user.author.addError("lastname", "lastname error1");
 		user.author.profile.addError("profiletype", "profiletype error1");
-		user.author.profile.$classData().associations.author = {
-			modelName: "author",
-			type: "hasOne",
-			nested: {
-				allow: false
-			}
-		};
+		user.author.profile.$classData().associations.author.nested.allow = false;
 		user.author.profile.author = user.author;
 		associatedErrors = user.allAssociationErrors();
 		actual = ArrayLen(associatedErrors);
