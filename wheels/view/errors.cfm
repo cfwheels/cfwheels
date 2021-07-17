@@ -16,7 +16,7 @@ public string function errorMessagesFor(
 	string class,
 	boolean showDuplicates,
 	boolean encode,
-	boolean includeAssociations
+	boolean includeAssociations = false
 ) {
 	$args(name = "errorMessagesFor", args = arguments);
 	local.object = $getObject(arguments.objectName);
