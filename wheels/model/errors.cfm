@@ -54,14 +54,8 @@ public array function allErrors(boolean includeAssociations = false, array seenE
  */
 private array function allAssociationErrors(array seenErrors = []) {
 	local.rv = [];
-	local.associations = variables.wheels.class.associations;
-	for (local.association in local.associations) {
-		if (
-			StructKeyExists(
-				this,
-				local.association
-			)
-		) {
+	for (local.association in variables.wheels.class.associations; {
+		if (StructKeyExists(this, local.association)) {
 			// base case
 			if (ArrayContains(arguments.seenErrors, this[local.association])) {
 				return local.rv;
