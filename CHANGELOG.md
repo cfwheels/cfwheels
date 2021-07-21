@@ -6,7 +6,8 @@
 
 <!-- ### Model Enhancements -->
 
-<!-- ### View Enhancements -->
+### View Enhancements
+- Adds association error support via `includeAssociations` argument [#1080](https://github.com/cfwheels/cfwheels/issues/1080) - [Nikolaj Frey] 
 
 ### Bug Fixes
 
