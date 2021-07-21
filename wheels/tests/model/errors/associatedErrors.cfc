@@ -38,8 +38,6 @@ component extends="wheels.tests.Test" {
 		errors = user.allErrors(includeAssociations = true);
 		actual = ArrayLen(errors);
 		expected = 3;
-		user.author.profile.$classData().associations.author.nested.allow = false;
-		user.author.profile.$classData().associations.author.nested.autoSave = false;
 		assert("actual eq expected");
 	}
 

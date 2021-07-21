@@ -12,10 +12,6 @@ component extends="wheels.tests.Test" {
 
 	}
 
-	function teardown() {
-		user.$classData().associations.author.nested.allow = false;
-		user.$classData().associations.author.nested.autoSave = false;
-	}
 
 
 	function test_model_valid_returns_whether_associations_are_not_valid() {
@@ -37,8 +33,6 @@ component extends="wheels.tests.Test" {
 		user.author.profile.dateOfBirth = "";
 
 		userValid = user.valid(validateAssociations = true);
-		user.author.$classData().associations.profile.nested.allow = false;
-		user.author.$classData().associations.profile.nested.autoSave = false;
 		assert('!userValid');
 
 	}
@@ -54,9 +48,6 @@ component extends="wheels.tests.Test" {
 		user.author.profile.dateOfBirth = "";
 
 		userValid = user.valid(validateAssociations = true);
-
-		user.author.$classData().associations.profile.nested.allow = false;
-		user.author.$classData().associations.profile.nested.autoSave = false;
 		assert('!userValid');
 
 	}
