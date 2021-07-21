@@ -483,7 +483,7 @@ public void function onApplicationStart() {
 		class = "error-message",
 		encode = true
 	};
-	application.$wheels.functions.errorMessagesFor = {class = "error-messages", showDuplicates = true, encode = true};
+	application.$wheels.functions.errorMessagesFor = {class = "error-messages", showDuplicates = true, encode = true, includeAssociations = true};
 	application.$wheels.functions.excerpt = {radius = 100, excerptString = "..."};
 	application.$wheels.functions.exists = {reload = false, parameterize = true};
 	application.$wheels.functions.fileField = {

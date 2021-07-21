@@ -32,9 +32,49 @@ public void function addErrorToBase(required string message, string name = "") {
  *
  * [section: Model Object]
  * [category: Error Functions]
+ *
+ * @seenErrors is a private argument not meant to be used by the user, the function uses this to ensure circular dependancy avoidance.
+ * It does this by storing instances of models that are associations, and not checking associations of those instances because they have already been checked.
  */
-public array function allErrors() {
+public array function allErrors(boolean includeAssociations = false, array seenErrors = []) {
+	if (arguments.includeAssociations) {
+		local.rv = [];
+		ArrayAppend(local.rv, variables.wheels.errors, true);
+		ArrayAppend(local.rv, allAssociationErrors(arguments.seenErrors), true);
+		return local.rv;
+	}
 	return variables.wheels.errors;
+}
+
+/**
+ * Gets all associated errors recursively
+ *
+ * [section: Model Object]
+ * [category: Error Functions]
+ */
+private array function allAssociationErrors(array seenErrors = []) {
+	local.rv = [];
+	for (local.association in variables.wheels.class.associations) {
+		if (StructKeyExists(this, local.association)) {
+			// base case
+			if (ArrayContains(arguments.seenErrors, this[local.association])) {
+				return local.rv;
+			}
+			ArrayAppend(arguments.seenErrors, this[local.association]);
+			local.array = this[local.association];
+			if (!isNull(this[local.association]) && IsObject(this[local.association])) {
+				local.array = [this[local.association]];
+			}
+			if (IsArray(local.array)) {
+				local.iEnd = ArrayLen(local.array);
+				for (local.i = 1; local.i <= local.iEnd; local.i++) {
+					local.associationModel = local.array[local.i];
+					ArrayAppend(local.rv, local.associationModel.allErrors(true, arguments.seenErrors, true), true);
+				}
+			}
+		}
+	}
+	return local.rv;
 }
 
 /**

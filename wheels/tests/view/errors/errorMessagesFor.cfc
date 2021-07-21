@@ -21,4 +21,13 @@ component extends="wheels.tests.Test" {
 		assert("e eq r");
 	}
 
+	function test_show_association_errors() {
+		_nestedController = controller(name = "ControllerWithNestedModelErrors");
+		args.showDuplicates = false;
+		args.includeAssociations = true;
+		actual = _nestedController.errorMessagesFor(argumentcollection = args);
+		expected = '<ul class="errors-found"><li>firstname error1</li><li>lastname error1</li><li>age error1</li></ul>';
+		assert("actual eq expected");
+	}
+
 }
