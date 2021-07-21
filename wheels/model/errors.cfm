@@ -32,6 +32,8 @@ public void function addErrorToBase(required string message, string name = "") {
  *
  * [section: Model Object]
  * [category: Error Functions]
+ *
+ * @seen is a private argument not meant to be used by the user, the function uses this to ensure circular dependancy avoidance.
  */
 public array function allErrors(boolean includeAssociations = false, array seen = []) {
 	if (arguments.includeAssociations) {

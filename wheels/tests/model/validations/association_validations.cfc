@@ -37,10 +37,9 @@ component extends="wheels.tests.Test" {
 		user.author.profile.dateOfBirth = "";
 
 		userValid = user.valid(validateAssociations = true);
-		assert('!userValid');
-
 		user.author.$classData().associations.profile.nested.allow = false;
 		user.author.$classData().associations.profile.nested.autoSave = false;
+		assert('!userValid');
 
 	}
 
@@ -55,10 +54,10 @@ component extends="wheels.tests.Test" {
 		user.author.profile.dateOfBirth = "";
 
 		userValid = user.valid(validateAssociations = true);
-		assert('!userValid');
 
 		user.author.$classData().associations.profile.nested.allow = false;
 		user.author.$classData().associations.profile.nested.autoSave = false;
+		assert('!userValid');
 
 	}
 
