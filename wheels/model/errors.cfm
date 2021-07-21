@@ -33,13 +33,14 @@ public void function addErrorToBase(required string message, string name = "") {
  * [section: Model Object]
  * [category: Error Functions]
  *
- * @modelInstancesSeen is a private argument not meant to be used by the user, the function uses this to ensure circular dependancy avoidance.
+ * @seenErrors is a private argument not meant to be used by the user, the function uses this to ensure circular dependancy avoidance.
+ * It does this by storing instances of models that are associations, and not checking associations of those instances because they have already been checked.
  */
-public array function allErrors(boolean includeAssociations = false, array modelInstancesSeen = []) {
+public array function allErrors(boolean includeAssociations = false, array seenErrors = []) {
 	if (arguments.includeAssociations) {
 		local.rv = [];
 		ArrayAppend(local.rv, variables.wheels.errors, true);
-		ArrayAppend(local.rv, allAssociationErrors(arguments.modelInstancesSeen), true);
+		ArrayAppend(local.rv, allAssociationErrors(arguments.seenErrors), true);
 		return local.rv;
 	}
 	return variables.wheels.errors;
@@ -51,7 +52,7 @@ public array function allErrors(boolean includeAssociations = false, array model
  * [section: Model Object]
  * [category: Error Functions]
  */
-private array function allAssociationErrors(array modelInstancesSeen = []) {
+private array function allAssociationErrors(array seenErrors = []) {
 	local.rv = [];
 	local.associations = variables.wheels.class.associations;
 	for (local.association in local.associations) {
@@ -62,10 +63,10 @@ private array function allAssociationErrors(array modelInstancesSeen = []) {
 			)
 		) {
 			// base case
-			if (ArrayContains(arguments.modelInstancesSeen, this[local.association])) {
+			if (ArrayContains(arguments.seenErrors, this[local.association])) {
 				return local.rv;
 			}
-			ArrayAppend(arguments.modelInstancesSeen, this[local.association]);
+			ArrayAppend(arguments.seenErrors, this[local.association]);
 			local.array = this[local.association];
 			if (!isNull(this[local.association]) && IsObject(this[local.association])) {
 				local.array = [this[local.association]];
@@ -74,7 +75,7 @@ private array function allAssociationErrors(array modelInstancesSeen = []) {
 				local.iEnd = ArrayLen(local.array);
 				for (local.i = 1; local.i <= local.iEnd; local.i++) {
 					local.associationModel = local.array[local.i];
-					ArrayAppend(local.rv, local.associationModel.allErrors(true, arguments.modelInstancesSeen, true), true);
+					ArrayAppend(local.rv, local.associationModel.allErrors(true, arguments.seenErrors, true), true);
 				}
 			}
 		}
