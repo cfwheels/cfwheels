@@ -7,13 +7,13 @@
 <!-- ### Model Enhancements -->
 
 ### View Enhancements
-- Adds association error support via `includeAssociations` argument [#1080](https://github.com/cfwheels/cfwheels/issues/1080) - [Nikolaj Frey] 
+- Adds association error support via `includeAssociations` argument [#1080](https://github.com/cfwheels/cfwheels/issues/1080) - [Nikolaj Frey]
 
 ### Bug Fixes
 
 - onerror handler should increase user defined requestTimeout value [#1056](https://github.com/cfwheels/cfwheels/issues/1056) - [Adam Chapman]
 - deletedAt should also respect timestamp mode (UTC) [#1063](https://github.com/cfwheels/cfwheels/issues/1063) - [David Belanger]
-- Fixes No output from `Debug()` usage in plugin test cases [#1061](https://github.com/cfwheels/cfwheels/issues/1063) - [Tom King] 
+- Fixes No output from `Debug()` usage in plugin test cases [#1061](https://github.com/cfwheels/cfwheels/issues/1063) - [Tom King]
 - Development mode will now properly return a 404 status if view not found [#1067](https://github.com/cfwheels/cfwheels/issues/1067) - [Adam Cameron, Tom King]
 - 404 status now properly returned without URL rewriting [#1067](https://github.com/cfwheels/cfwheels/issues/1067) - [Adam Cameron, Tom King]
 - Internal Docs in ACF2018 should now not display duplicate categories [Tom King]
@@ -24,6 +24,7 @@
 
 - Update Docker Lucee Commandbox version to 5.2.0 - [Adam Chapman, Tom King]
 - Minor internal obselete reference to modelComponentPath removed - [Adam Chapman, Tom King]
+- Minor visual fix for long migration logs overflow in modal (scroll) - [Brian Ramsey]
 
 ### Potentially Breaking Changes
 

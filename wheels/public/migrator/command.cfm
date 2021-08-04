@@ -41,7 +41,7 @@ if (executeAction) {
 }
 </cfscript>
 <cfoutput>
-	<div id="result" class="content longer">
+	<div id="result" class="scrolling content longer">
 		<cfif !executeAction>
 			<div class="ui red message">Confirmation Required: #message#</div>
 			<div class="ui red button execute" data-data-url="#urlFor(route='wheelsMigratorCommand', command=request.wheels.params.command, version=request.wheels.params.version, params="confirm=1")#">Execute</div>
