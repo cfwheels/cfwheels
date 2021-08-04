@@ -133,6 +133,7 @@ component extends="wheels.tests.Test" {
 		routesLen = ArrayLen(application.wheels.routes);
 		assert("routesLen eq 0");
 	}
+
 	function test_resources_produces_no_routes_with_only_empty_nested() {
 		$clearRoutes();
 		mapper = $mapper();
