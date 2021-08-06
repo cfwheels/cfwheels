@@ -123,6 +123,30 @@ component extends="wheels.tests.Test" {
 		assert("routesLen eq 16");
 	}
 
+	function test_resources_produces_no_routes_with_only_empty() {
+		$clearRoutes();
+		mapper = $mapper();
+		mapper
+			.$draw()
+			.resources(name = "pigeons", mapFormat = false, only = "")
+			.end();
+		routesLen = ArrayLen(application.wheels.routes);
+		assert("routesLen eq 0");
+	}
+
+	function test_resources_produces_no_routes_with_only_empty_nested() {
+		$clearRoutes();
+		mapper = $mapper();
+		mapper
+			.$draw()
+			.resources(name = "pigeons", mapFormat = false, only = "", nested = true)
+				.resources(name = "birds", mapFormat = false)
+			.end()
+			.end();
+		routesLen = ArrayLen(application.wheels.routes);
+		assert("routesLen eq 8");
+	}
+
 	function test_resources_raises_error_with_list_and_nesting() {
 		$clearRoutes();
 		mapper = $mapper().$draw();
