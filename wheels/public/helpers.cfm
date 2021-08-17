@@ -234,7 +234,7 @@ public struct function $$findMatchingRoutes(
 				{
 					type = "Wheels.RouteNotFound - 404",
 					message = "Could not find a route that matched this request",
-					extendedInfo = "Make sure there is a route configured in your `config/routes.cfm` file that matches the `#ESAPIEncode('html', arguments.path)#` request."
+					extendedInfo = "Make sure there is a route configured in your `config/routes.cfm` file that matches the `#EncodeForHTML(arguments.path)#` request."
 				}
 			);
 		}
@@ -409,21 +409,20 @@ array function $populateDocFunctionMeta(required array documentScope, required a
  */
 array function $populateDocSections(required array docFunctions) {
 	local.rv = [];
+	local.distinctSections = [];
 	for (local.doc in arguments.docFunctions) {
 		if (StructKeyExists(local.doc.tags, "section") && Len(local.doc.tags.section)) {
-			var section = local.doc.tags.section;
 			if (
-				!ArrayFind(local.rv, function(struct, section) {
-					return struct.name == section;
-				})
+				!ArrayFindNoCase(local.distinctSections, local.doc.tags.section)
 			) {
 				ArrayAppend(local.rv, {"name" = local.doc.tags.section, "categories" = []});
+				ArrayAppend(local.distinctSections, local.doc.tags.section);
 			}
 			for (local.subsection in local.rv) {
 				if (
 					local.subsection.name == local.doc.tags.section
 					&& Len(local.doc.tags.category)
-					&& !ArrayFind(local.subsection.categories, local.doc.tags.category)
+					&& !ArrayFindNoCase(local.subsection.categories, local.doc.tags.category)
 				) {
 					ArrayAppend(local.subsection.categories, local.doc.tags.category);
 				}

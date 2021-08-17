@@ -13,18 +13,21 @@
 					<br>#arguments.exception.rootcause.detail#
 				</cfif>
 			<cfelse>
-							A root cause was not provided.
+				A root cause was not provided.
 			</cfif>
 		</p>
-		<cfif StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "tagContext") && ArrayLen(
-			arguments.exception.cause.tagContext
-		)>
-			<cfset local.tagContext = arguments.exception.cause.tagContext>
-		<cfelseif StructKeyExists(arguments.exception, "rootCause") && StructKeyExists(
-				arguments.exception.rootCause,
-				"tagContext"
-			) && ArrayLen(arguments.exception.rootCause.tagContext)>
-			<cfset local.tagContext = arguments.exception.rootCause.tagContext>
+		<cfif
+			StructKeyExists(arguments.exception, "cause")
+			&& StructKeyExists(arguments.exception.cause, "tagContext")
+			&& ArrayLen(arguments.exception.cause.tagContext)
+		>
+			<cfset local.tagContext = Duplicate(arguments.exception.cause.tagContext)>
+		<cfelseif
+			StructKeyExists(arguments.exception, "rootCause")
+			&& StructKeyExists(arguments.exception.rootCause, "tagContext")
+			&& ArrayLen(arguments.exception.rootCause.tagContext)
+		>
+			<cfset local.tagContext = Duplicate(arguments.exception.rootCause.tagContext)>
 		</cfif>
 		<cfif StructKeyExists(local, "tagContext")>
 			<p>
@@ -32,12 +35,13 @@
 				<br>
 				<cfset local.path = GetDirectoryFromPath(GetBaseTemplatePath())>
 				<cfset local.pos = 0>
-				<cfloop array="#arguments.exception.cause.tagContext#" index="local.i">
+				<cfloop array="#local.tagContext#" index="local.i">
 					<cfset local.pos = local.pos + 1>
-					<cfset local.template = Replace(arguments.exception.cause.tagContext[local.pos].template, local.path, "")>
+					<cfset local.template = Replace(local.tagContext[local.pos].template, local.path, "")>
+					<cfset local.template = Replace(local.template, "/wheels../", "")>
 					<!--- show all non wheels lines --->
 					<cfif local.template Does Not Contain "wheels" AND FindOneOf("/\", local.template) IS NOT 0>
-						Line #arguments.exception.cause.tagContext[local.pos].line# in #local.template#<br>
+						Line #local.tagContext[local.pos].line# in #local.template#<br>
 					</cfif>
 				</cfloop>
 			</p>
@@ -46,11 +50,7 @@
 			<p>
 				<strong>URL:</strong>
 				<br>
-							http<cfif cgi.http_x_forwarded_proto == "https" OR cgi.server_port_secure == "true">s</cfif>
-				://#cgi.server_name##Replace(cgi.script_name, "/#application.wheels.rewriteFile#", "")#<cfif IsDefined("request.cgi.path_info")>
-					#request.cgi.path_info#<cfelse>#cgi.path_info#
-				</cfif>
-				<cfif cgi.query_string IS NOT "">?#cgi.query_string#</cfif>
+				http<cfif cgi.http_x_forwarded_proto == "https" OR cgi.server_port_secure == "true">s</cfif>://#cgi.server_name##Replace(cgi.script_name, "/#application.wheels.rewriteFile#", "")#<cfif IsDefined("request.cgi.path_info")>#request.cgi.path_info#<cfelse>#cgi.path_info#</cfif><cfif cgi.query_string IS NOT "">?#cgi.query_string#</cfif>
 			</p>
 		</cfif>
 		<cfif Len(cgi.http_referer)>

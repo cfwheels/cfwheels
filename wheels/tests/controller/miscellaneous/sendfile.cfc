@@ -76,7 +76,7 @@ component extends="wheels.tests.Test" {
 		assert('r.mime eq "image/png"');
 		assert('r.name eq "cfwheels-logo.png"');
 	}
-
+	/*
 	function test_ram_resource() {
 		include "document.cfm"; // cfscript cfdocuemt isn't supported in cf10
 		FileWrite("ram://cfwheels.pdf", cfwheels_pdf);
@@ -92,6 +92,6 @@ component extends="wheels.tests.Test" {
 		args.file = "ram://doesnt_exist.pdf";
 		r = raised("_controller.sendFile(argumentCollection=args)");
 		assert('r eq "Wheels.FileNotFound"');
-	}
+	}*/
 
 }

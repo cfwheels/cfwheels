@@ -162,6 +162,7 @@
     }
     else
     {
+	  resetSearch();
       // When there is no input or clean again, show everything back
       $("#function-output a").show();
       updateFunctionCount();

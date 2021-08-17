@@ -4,13 +4,13 @@ component extends="wheels.tests.Test" {
 		config = {path = "wheels", fileName = "Mapper", method = "$init"};
 
 		_params = {controller = "test", action = "index"};
-		_originalRoutes = application[$appKey()].routes;
+		_originalRoutes = Duplicate(application.wheels.routes);
 
 		$clearRoutes();
 	}
 
 	public void function teardown() {
-		application[$appKey()].routes = _originalRoutes;
+		application.wheels.routes = _originalRoutes;
 	}
 
 	public struct function $mapper() {
@@ -20,7 +20,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	public void function $clearRoutes() {
-		application[$appKey()].routes = [];
+		application.wheels.routes = [];
 	}
 
 	function test_default_wildcard_produces_routes() {
@@ -138,6 +138,21 @@ component extends="wheels.tests.Test" {
 		assert("application.wheels.routes[4].pattern is '/cats'");
 		routesLen = ArrayLen(application.wheels.routes);
 		assert("routesLen eq 4");
+	}
+
+	function test_wildcard_with_map_key() {
+		$mapper()
+			.$draw()
+			.controller("cats")
+			.wildcard(mapKey = true)
+			.end()
+			.end();
+
+		assert("application.wheels.routes[1].pattern is '/cats/[action]/[key]'");
+		assert("application.wheels.routes[2].pattern is '/cats/[action]'");
+		assert("application.wheels.routes[3].pattern is '/cats'");
+		routesLen = ArrayLen(application.wheels.routes);
+		assert("routesLen eq 3");
 	}
 
 }

@@ -7,12 +7,19 @@ component extends="wheels.tests.Test" {
 		oldScriptName = request.cgi.script_name;
 		request.cgi.script_name = "/rewrite.cfm";
 		set(functionName = "buttonTo", encode = false);
+		if(structKeyExists(request, "$wheelsProtectedFromForgery")){
+		$oldrequestfromforgery = request.$wheelsProtectedFromForgery;
+		}
+		request.$wheelsProtectedFromForgery = true;
 	}
 
 	function teardown() {
 		application.wheels.URLRewriting = oldURLRewriting;
 		request.cgi.script_name = oldScriptName;
 		set(functionName = "buttonTo", encode = true);
+		if(structKeyExists(variables, "$oldrequestfromforgery")){
+		request.$wheelsProtectedFromForgery = $oldrequestfromforgery;
+		}
 	}
 
 	function test_buttonto_inner_encoding() {
@@ -24,7 +31,21 @@ component extends="wheels.tests.Test" {
 			disable = "disable-value",
 			encode = true
 		);
-		expected = '<form action="#application.wheels.webpath#" class="form-class" confirm="confirm-value" disable="disable-value" method="post"><input class="input&##x20;class" type="submit" value="&lt;Click&gt;">' & _controller.authenticityTokenField() & '</form>';
+		expected = '<form action="#application.wheels.webpath#" class="form-class" confirm="confirm-value" disable="disable-value" method="post"><button class="input&##x20;class" type="submit" value="save">' & '&lt;Click&gt;' & '</button>' & _controller.authenticityTokenField() & '</form>';
+		assert('actual eq expected');
+	}
+
+	function test_buttonto_inner_icon() {
+		actual = _controller.buttonTo(
+			text = "<i class='fa fa-icon' /> Edit",
+			class = "form-class",
+			inputClass = "input class",
+			confirm = "confirm-value",
+			disable = "disable-value",
+			encode = 'attributes',
+			value = "customvalue"
+		);
+		expected = '<form action="#application.wheels.webpath#" class="form-class" confirm="confirm-value" disable="disable-value" method="post" value="customvalue"><button class="input&##x20;class" type="submit" value="save">' & '<i class=''fa fa-icon'' /> Edit' & '</button>' & _controller.authenticityTokenField() & '</form>';
 		assert('actual eq expected');
 	}
 
@@ -35,26 +56,26 @@ component extends="wheels.tests.Test" {
 			confirm = "confirm-value",
 			disable = "disable-value"
 		);
-		expected = '<form action="#application.wheels.webpath#" class="form-class" confirm="confirm-value" disable="disable-value" method="post"><input class="input-class" type="submit" value="">' & _controller.authenticityTokenField() & '</form>';
+		expected = '<form action="#application.wheels.webpath#" class="form-class" confirm="confirm-value" disable="disable-value" method="post"><button class="input-class" type="submit" value="save">' & '</button>' & _controller.authenticityTokenField() & '</form>';
 		assert('actual eq expected');
 	}
 
 	function test_buttonto_with_delete_method_argument() {
 		actual = _controller.buttonTo(method = "delete");
-		expected = '<form action="#application.wheels.webpath#" method="post"><input id="_method" name="_method" type="hidden" value="delete"><input type="submit" value="">' & _controller.authenticityTokenField() & '</form>';
+		expected = '<form action="#application.wheels.webpath#" method="post"><input id="_method" name="_method" type="hidden" value="delete"><button type="submit" value="save">' & '</button>' & _controller.authenticityTokenField() & '</form>';
 		assert('actual eq expected');
 	}
 
 	function test_buttonto_with_put_method_argument() {
 		actual = _controller.buttonTo(method = "put");
-		expected = '<form action="#application.wheels.webpath#" method="post"><input id="_method" name="_method" type="hidden" value="put"><input type="submit" value="">' & _controller.authenticityTokenField() & '</form>';
+		expected = '<form action="#application.wheels.webpath#" method="post"><input id="_method" name="_method" type="hidden" value="put"><button type="submit" value="save">' & '</button>' & _controller.authenticityTokenField() & '</form>';
 		assert('actual eq expected');
 	}
 
 	// why one would do this I don't know.. but this is how it should render
 	function test_buttonto_with_get_method_argument() {
 		actual = _controller.buttonTo(method = "get");
-		expected = '<form action="#application.wheels.webpath#" method="get"><input type="submit" value=""></form>';
+		expected = '<form action="#application.wheels.webpath#" method="get"><button type="submit" value="save"></button></form>';
 		assert('actual eq expected');
 	}
 

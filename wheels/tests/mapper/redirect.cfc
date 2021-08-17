@@ -4,13 +4,13 @@ component extends="wheels.tests.Test" {
 		config = {path = "wheels", fileName = "Mapper", method = "$init"};
 
 		_params = {controller = "test", action = "index"};
-		_originalRoutes = application[$appKey()].routes;
+		_originalRoutes = Duplicate(application.wheels.routes);
 
 		$clearRoutes();
 	}
 
 	function teardown() {
-		application[$appKey()].routes = _originalRoutes;
+		application.wheels.routes = _originalRoutes;
 	}
 
 	function test_redirect_argument_is_passed_through() {
@@ -31,7 +31,7 @@ component extends="wheels.tests.Test" {
 
 
 	private function $clearRoutes() {
-		application[$appKey()].routes = [];
+		application.wheels.routes = [];
 	}
 
 	private struct function $mapper() {

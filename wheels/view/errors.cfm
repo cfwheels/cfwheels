@@ -15,14 +15,15 @@ public string function errorMessagesFor(
 	required string objectName,
 	string class,
 	boolean showDuplicates,
-	boolean encode
+	boolean encode,
+	boolean includeAssociations = false
 ) {
 	$args(name = "errorMessagesFor", args = arguments);
 	local.object = $getObject(arguments.objectName);
 	if ($get("showErrorInformation") && !IsObject(local.object)) {
 		Throw(type = "Wheels.IncorrectArguments", message = "The `#arguments.objectName#` variable is not an object.");
 	}
-	local.errors = local.object.allErrors();
+	local.errors = local.object.allErrors(includeAssociations = arguments.includeAssociations);
 	local.rv = "";
 	if (!ArrayIsEmpty(local.errors)) {
 		local.used = "";
@@ -42,7 +43,7 @@ public string function errorMessagesFor(
 		local.encode = arguments.encode ? "attributes" : false;
 		local.rv = $element(
 			name = "ul",
-			skip = "objectName,showDuplicates,encode",
+			skip = "objectName,showDuplicates,encode,includeAssociations",
 			content = local.listItems,
 			attributes = arguments,
 			encode = local.encode

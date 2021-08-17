@@ -7,7 +7,6 @@ paths = [
 	'imagePath',
 	'javascriptPath',
 	'modelPath',
-	'modelComponentPath',
 	'pluginPath',
 	'pluginComponentPath',
 	'stylesheetPath',

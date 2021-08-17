@@ -3,11 +3,11 @@ component extends="wheels.tests.Test" {
 	public void function setup() {
 		config = {path = "wheels", fileName = "Mapper", method = "$init"};
 		_params = {controller = "test", action = "index"};
-		_originalRoutes = application[$appKey()].routes;
+		_originalRoutes = Duplicate(application.wheels.routes);
 	}
 
 	public void function teardown() {
-		application[$appKey()].routes = _originalRoutes;
+		application.wheels.routes = _originalRoutes;
 	}
 
 	public struct function $mapper() {
@@ -21,7 +21,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	public void function $clearRoutes() {
-		application[$appKey()].routes = [];
+		application.wheels.routes = [];
 	}
 
 	// resource
@@ -121,6 +121,30 @@ component extends="wheels.tests.Test" {
 			.end();
 		routesLen = ArrayLen(application.wheels.routes);
 		assert("routesLen eq 16");
+	}
+
+	function test_resources_produces_no_routes_with_only_empty() {
+		$clearRoutes();
+		mapper = $mapper();
+		mapper
+			.$draw()
+			.resources(name = "pigeons", mapFormat = false, only = "")
+			.end();
+		routesLen = ArrayLen(application.wheels.routes);
+		assert("routesLen eq 0");
+	}
+
+	function test_resources_produces_no_routes_with_only_empty_nested() {
+		$clearRoutes();
+		mapper = $mapper();
+		mapper
+			.$draw()
+			.resources(name = "pigeons", mapFormat = false, only = "", nested = true)
+				.resources(name = "birds", mapFormat = false)
+			.end()
+			.end();
+		routesLen = ArrayLen(application.wheels.routes);
+		assert("routesLen eq 8");
 	}
 
 	function test_resources_raises_error_with_list_and_nesting() {

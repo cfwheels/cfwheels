@@ -13,7 +13,7 @@ migrations = application.wheels.migrator.getAvailableMigrations();
 request.$wheelsDebugSQLResult = [];
 
 // Get This migration
-for (var mig in migrations) {
+for (mig in migrations) {
 	if (mig["version"] EQ request.wheels.params.version) {
 		migration = mig;
 	}

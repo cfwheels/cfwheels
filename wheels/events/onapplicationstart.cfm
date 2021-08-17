@@ -32,6 +32,8 @@ public void function onApplicationStart() {
 		application.$wheels.serverName = "Adobe ColdFusion";
 		application.$wheels.serverVersion = server.coldfusion.productVersion;
 	}
+	application.$wheels.serverVersionMajor = ListFirst(application.$wheels.serverVersion, ".,");
+
 	local.upgradeTo = $checkMinimumVersion(
 		engine = application.$wheels.serverName,
 		version = application.$wheels.serverVersion
@@ -57,7 +59,7 @@ public void function onApplicationStart() {
 	request.cgi = $cgiScope();
 
 	// Set up containers for routes, caches, settings etc.
-	application.$wheels.version = "2.2.0-dev";
+	application.$wheels.version = "2.3.0-dev";
 	try {
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
 	} catch (any e) {
@@ -255,12 +257,14 @@ public void function onApplicationStart() {
 	application.$wheels.imagePath = "images";
 	application.$wheels.javascriptPath = "javascripts";
 	application.$wheels.modelPath = "models";
-	application.$wheels.modelComponentPath = "models";
 	application.$wheels.pluginPath = "plugins";
 	application.$wheels.pluginComponentPath = "plugins";
 	application.$wheels.stylesheetPath = "stylesheets";
 	application.$wheels.viewPath = "views";
 	application.$wheels.controllerPath = "controllers";
+
+	// Test framework settings.
+	application.$wheels.validateTestPackageMetaData = true;
 
 	// Miscellaneous settings.
 	application.$wheels.encodeURLs = true;
@@ -299,7 +303,6 @@ public void function onApplicationStart() {
 	if (ListFindNoCase("production,maintenance", application.$wheels.environment)) {
 		application.$wheels.redirectAfterReload = true;
 	}
-	application.$wheels.validateTestPackageMetaData = true;
 	application.$wheels.resetPropertiesStructKeyCase = true;
 
 	// If session management is enabled in the application we default to storing Flash data in the session scope, if not we use a cookie.
@@ -480,7 +483,7 @@ public void function onApplicationStart() {
 		class = "error-message",
 		encode = true
 	};
-	application.$wheels.functions.errorMessagesFor = {class = "error-messages", showDuplicates = true, encode = true};
+	application.$wheels.functions.errorMessagesFor = {class = "error-messages", showDuplicates = true, encode = true, includeAssociations = true};
 	application.$wheels.functions.excerpt = {radius = 100, excerptString = "..."};
 	application.$wheels.functions.exists = {reload = false, parameterize = true};
 	application.$wheels.functions.fileField = {
@@ -960,16 +963,18 @@ public void function onApplicationStart() {
 	application.wheels = application.$wheels;
 	StructDelete(application, "$wheels");
 
-	// Auto Migrate Database if requested
+	// Enable the migrator component
 	if (application.wheels.enableMigratorComponent) {
 		application.wheels.migrator = $createObjectFromRoot(path = "wheels", fileName = "Migrator", method = "init");
-		if (application.wheels.autoMigrateDatabase) {
-			application.wheels.migrator.migrateToLatest();
-		}
 	}
 
 	// Run the developer's on application start code.
 	$include(template = "#application.wheels.eventPath#/onapplicationstart.cfm");
+
+	// Auto Migrate Database if requested
+	if (application.wheels.enableMigratorComponent && application.wheels.autoMigrateDatabase) {
+		application.wheels.migrator.migrateToLatest();
+	}
 
 	// Redirect away from reloads on GET requests.
 	if (application.wheels.redirectAfterReload && StructKeyExists(url, "reload") && cgi.request_method == "get") {

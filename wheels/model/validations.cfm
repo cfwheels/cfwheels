@@ -330,7 +330,7 @@ public void function validatesUniquenessOf(
  *
  * @callbacks [see:findAll].
  */
-public boolean function valid(boolean callbacks = "true") {
+public boolean function valid(boolean callbacks = "true", boolean validateAssociations = false) {
 	local.rv = false;
 	clearErrors();
 	if ($callback("beforeValidation", arguments.callbacks)) {
@@ -354,7 +354,10 @@ public boolean function valid(boolean callbacks = "true") {
 			}
 		}
 	}
-	$validateAssociations(callbacks = arguments.callbacks);
+	local.areAssociationsValid = $validateAssociations(callbacks = arguments.callbacks, validateAssociations = arguments.validateAssociations);
+	if (arguments.validateAssociations && local.rv) {
+		local.rv = local.areAssociationsValid;
+	}
 	return local.rv;
 }
 
@@ -563,11 +566,15 @@ public boolean function $evaluateCondition() {
 public void function $validatesConfirmationOf() {
 	local.virtualConfirmProperty = arguments.property & "Confirmation";
 	if (
-		StructKeyExists(this, local.virtualConfirmProperty) && this[arguments.property] != this[local.virtualConfirmProperty]
+		!StructKeyExists(this, local.virtualConfirmProperty)
 	) {
 		addError(property = local.virtualConfirmProperty, message = $validationErrorMessage(argumentCollection = arguments));
+		return;
 	}
-	if (arguments.caseSensitive && (Compare(this[arguments.property], this[local.virtualConfirmProperty]) != 0)) {
+	if (
+		this[arguments.property] != this[local.virtualConfirmProperty] ||
+		(arguments.caseSensitive && (Compare(this[arguments.property], this[local.virtualConfirmProperty]) != 0))
+	) {
 		addError(property = local.virtualConfirmProperty, message = $validationErrorMessage(argumentCollection = arguments));
 	}
 }

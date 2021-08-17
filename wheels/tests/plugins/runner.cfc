@@ -123,15 +123,4 @@ component extends="wheels.tests.Test" {
 		assert('trim(result) eq "<p>some content</p>"');
 	}
 
-	function test_zzz_all_request_stack_counters_reset_to_one() {
-		result = true;
-		for (item in request.wheels.stacks) {
-			if (request.wheels.stacks[item] != 1) {
-				result = false;
-				break;
-			}
-		}
-		assert('result eq true');
-	}
-
 }

@@ -47,7 +47,7 @@ public string function migrateTo(string version = "") {
 							request.$wheelsMigrationOutput = "";
 							request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_down.sql";
 							if (application[local.appKey].writeMigratorSQLFiles) {
-								FileWrite(request.$wheelsMigrationSQLFile, "");
+								$writeMigrationFile(request.$wheelsMigrationSQLFile, "");
 							}
 							local.migration.cfc.down();
 							local.rv = local.rv & request.$wheelsMigrationOutput;
@@ -71,7 +71,7 @@ public string function migrateTo(string version = "") {
 							request.$wheelsMigrationOutput = "";
 							request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_up.sql";
 							if (application[local.appKey].writeMigratorSQLFiles) {
-								FileWrite(request.$wheelsMigrationSQLFile, "");
+								$writeMigrationFile(request.$wheelsMigrationSQLFile, "");
 							}
 							local.migration.cfc.up();
 							local.rv = local.rv & request.$wheelsMigrationOutput;
@@ -217,7 +217,7 @@ public string function redoMigration(string version = "") {
 		request.$wheelsMigrationOutput = "";
 		request.$wheelsMigrationSQLFile = "#this.paths.sql#/#local.migration.cfcfile#_redo.sql";
 		if (application[local.appKey].writeMigratorSQLFiles) {
-			FileWrite(request.$wheelsMigrationSQLFile, "");
+			$writeMigrationFile(request.$wheelsMigrationSQLFile, "");
 		}
 		if (application[local.appKey].allowMigrationDown) {
 			local.migration.cfc.down();
@@ -328,7 +328,7 @@ private string function $copyTemplateMigrationAndRename(
 			"all"
 		);
 		local.migrationFile = $getNextMigrationNumber(arguments.migrationPrefix) & "_#local.migrationFile#.cfc";
-		FileWrite("#this.paths.migrate#/#local.migrationFile#", local.templateContent);
+		$writeMigrationFile("#this.paths.migrate#/#local.migrationFile#", local.templateContent);
 	} catch (any e) {
 		return "There was an error when creating the migration: #e.message#";
 	}
@@ -366,5 +366,18 @@ private string function $getVersionsPreviouslyMigrated() {
  */
 private string function $sanitiseVersion(required string version) {
 	return ReReplaceNoCase(arguments.version, "[^0-9]", "", "all");
+}
+
+/**
+ * Writes a migration file
+ */
+private void function $writeMigrationFile(required string filePath, required string data) {
+	FileWrite(arguments.filePath, arguments.data);
+	// this try/catch may be unnecessary, but is in place in case FileSetAccessMode throws an exception on non *nix OS
+	try {
+		FileSetAccessMode(arguments.filePath, "664");
+	} catch (any e) {
+		// move along
+	}
 }
 </cfscript>

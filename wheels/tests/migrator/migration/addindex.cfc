@@ -2,9 +2,15 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		migration = CreateObject("component", "wheels.migrator.Migration").init();
+		isACF2016 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2016;
+		isPostgres = migration.adapter.adapterName() == "PostgreSQL";
 	}
 
 	function test_addIndex_creates_an_index() {
+		if (isACF2016 && isPostgres) {
+			return;
+		}
+
 		tableName = "dbm_addindex_tests";
 		indexName = "idx_to_add";
 		t = migration.createTable(name = tableName, force = true);
@@ -24,6 +30,10 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_add_index_on_mutiple_columns() {
+		if (isACF2016 && isPostgres) {
+			return;
+		}
+
 		tableName = "dbm_addindex_tests";
 		indexName = "idx_to_add_to_multiple_columns";
 		t = migration.createTable(name = tableName, force = true);

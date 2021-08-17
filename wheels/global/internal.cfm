@@ -49,7 +49,6 @@ public void function $initializeRequestScope() {
 		request.wheels = {};
 		request.wheels.params = {};
 		request.wheels.cache = {};
-		request.wheels.stacks = {};
 		request.wheels.urlForCache = {};
 		request.wheels.tickCountId = GetTickCount();
 
@@ -424,7 +423,8 @@ public void function $abortInvalidRequest() {
 	);
 	local.callingPath = Replace(GetBaseTemplatePath(), "\", "/", "all");
 	if (
-		ListLen(local.callingPath, "/") > ListLen(local.applicationPath, "/") || GetFileFromPath(local.callingPath) == "root.cfm"
+		ListLen(local.callingPath, "/") > ListLen(local.applicationPath, "/")
+		|| GetFileFromPath(local.callingPath) == "root.cfm"
 	) {
 		if (StructKeyExists(application, "wheels")) {
 			if (StructKeyExists(application.wheels, "showErrorInformation") && !application.wheels.showErrorInformation) {
@@ -434,6 +434,7 @@ public void function $abortInvalidRequest() {
 				$includeAndOutput(template = "#application.wheels.eventPath#/onmissingtemplate.cfm");
 			}
 		}
+		$header(statusCode = 404, statustext = "Not Found");
 		abort;
 	}
 }
@@ -457,14 +458,13 @@ public struct function $findRoute() {
 			extendedInfo = "Make sure there is a route configured in your `config/routes.cfm` file named `#arguments.route#`."
 		);
 	}
-
 	local.routePos = application.wheels.namedRoutePositions[arguments.route];
 	if (Find(",", local.routePos)) {
 		// there are several routes with this name so we need to figure out which one to use by checking the passed in arguments
 		local.iEnd = ListLen(local.routePos);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.rv = application.wheels.routes[ListGetAt(local.routePos, local.i)];
-			local.foundRoute = true;
+			local.foundRoute = StructKeyExists(arguments, "method") && local.rv.methods == arguments.method;
 			local.jEnd = ListLen(local.rv.variables);
 			for (local.j = 1; local.j <= local.jEnd; local.j++) {
 				local.variable = ListGetAt(local.rv.variables, local.j);
@@ -676,16 +676,14 @@ public string function $objectFileName(required string name, required string obj
 	// we are going to store the full controller / model path in the
 	// existing / non-existing lists so we can have controllers / models
 	// in multiple places
-	// 
+	//
 	// The name coming into $objectFileName could have dot notation due to
 	// nested controllers so we need to change delims here on the name
 	local.fullObjectPath = arguments.objectPath & "/" & ListChangeDelims(arguments.name, '/', '.');
 
 	if (
-		!ListFindNoCase(application.wheels.existingObjectFiles, local.fullObjectPath) && !ListFindNoCase(
-			application.wheels.nonExistingObjectFiles,
-			local.fullObjectPath
-		)
+		!ListFindNoCase(application.wheels.existingObjectFiles, local.fullObjectPath)
+		&& !ListFindNoCase(application.wheels.nonExistingObjectFiles, local.fullObjectPath)
 	) {
 		// we have not yet checked if this file exists or not so let's do that
 		// here (the function below will return the file name with the correct
@@ -776,11 +774,9 @@ public void function $addToCache(
 	string category = "main"
 ) {
 	if (
-		application.wheels.cacheCullPercentage > 0 && application.wheels.cacheLastCulledAt < DateAdd(
-			"n",
-			-application.wheels.cacheCullInterval,
-			Now()
-		) && $cacheCount() >= application.wheels.maximumItemsToCache
+		application.wheels.cacheCullPercentage > 0
+		&& application.wheels.cacheLastCulledAt < DateAdd("n", -application.wheels.cacheCullInterval, Now())
+		&& $cacheCount() >= application.wheels.maximumItemsToCache
 	) {
 		// cache is full so flush out expired items from this cache to make more room if possible
 		local.deletedItems = 0;
@@ -911,17 +907,14 @@ public void function $loadRoutes() {
  */
 public void function $lockedLoadRoutes() {
 	local.appKey = $appKey();
-
 	// clear out the route info
 	ArrayClear(application[local.appKey].routes);
 	StructClear(application[local.appKey].namedRoutePositions);
-
 	// load wheels internal gui routes
 	// TODO skip this if mode != development|testing?
 	$include(template = "wheels/public/routes.cfm");
 	// load developer routes next
 	$include(template = "config/routes.cfm");
-
 	// set lookup info for the named routes
 	$setNamedRoutePositions();
 }
@@ -994,12 +987,15 @@ private string function $checkMinimumVersion(required string engine, required st
 	}
 	if (StructKeyExists(local, "minimumMajor")) {
 		if (
-			local.major < local.minimumMajor || (local.major == local.minimumMajor && local.minor < local.minimumMinor) || (
-				local.major == local.minimumMajor && local.minor == local.minimumMinor && local.patch < local.minimumPatch
-			) || (
-				local.major == local.minimumMajor && local.minor == local.minimumMinor && local.patch == local.minimumPatch && Len(
-					local.minimumBuild
-				) && local.build < local.minimumBuild
+			local.major < local.minimumMajor
+			|| (local.major == local.minimumMajor && local.minor < local.minimumMinor)
+			|| (local.major == local.minimumMajor && local.minor == local.minimumMinor && local.patch < local.minimumPatch)
+			|| (
+				local.major == local.minimumMajor
+				&& local.minor == local.minimumMinor
+				&& local.patch == local.minimumPatch
+				&& Len(local.minimumBuild)
+				&& local.build < local.minimumBuild
 			)
 		) {
 			local.rv = local.minimumMajor & "." & local.minimumMinor & "." & local.minimumPatch;
@@ -1010,9 +1006,8 @@ private string function $checkMinimumVersion(required string engine, required st
 		if (StructKeyExists(local, local.major)) {
 			// special requirements for having a specific minor or patch version within a major release exists
 			if (
-				local.minor < local[local.major].minimumMinor || (
-					local.minor == local[local.major].minimumMinor && local.patch < local[local.major].minimumPatch
-				)
+				local.minor < local[local.major].minimumMinor
+				|| (local.minor == local[local.major].minimumMinor && local.patch < local[local.major].minimumPatch)
 			) {
 				local.rv = local.major & "." & local[local.major].minimumMinor & "." & local[local.major].minimumPatch;
 			}
@@ -1174,10 +1169,7 @@ public string function $prependUrl(required string path) {
 /**
  * NB: url rewriting files need to be removed from here.
  */
-public string function $buildReleaseZip(
-	string version = application.wheels.version,
-	string directory = ExpandPath("/")
-) {
+public string function $buildReleaseZip(string version = application.wheels.version, string directory = ExpandPath("/")) {
 	local.name = "cfwheels-" & LCase(Replace(arguments.version, " ", "-", "all"));
 	local.name = Replace(local.name, "alpha-", "alpha.");
 	local.name = Replace(local.name, "beta-", "beta.");
@@ -1252,21 +1244,116 @@ public string function $buildReleaseZip(
  * Throw a developer friendly CFWheels error if set (typically in development mode).
  * Otherwise show the 404 page for end users (typically in production mode).
  */
-public void function $throwErrorOrShow404Page(
-	required string type,
-	required string message,
-	string extendedInfo = ""
-) {
+public void function $throwErrorOrShow404Page(required string type, required string message, string extendedInfo = "") {
+	$header(statusCode = 404, statustext = "Not Found");
 	if ($get("showErrorInformation")) {
 		Throw(type = arguments.type, message = arguments.message, extendedInfo = arguments.extendedInfo);
 	} else {
-		$header(statusCode = 404, statustext = "Not Found");
 		local.template = $get("eventPath") & "/onmissingtemplate.cfm";
 		$includeAndOutput(template = local.template);
 		abort;
 	}
 }
 
+/**
+ * Wildcard domain match: check if the current cgi.server_name and port satisfies
+ * the passed in domain string whilst checking for wildcards
+ *
+ * @domain string to test against e.g *.foo.com
+ * @cgi Fake CGI Scope for Testing; will default to normal cgi scope
+ */
+public boolean function $wildcardDomainMatchCGI(required string domain, struct cgi) {
+	local.domain = arguments.domain;
+	local.cgi = StructKeyExists(arguments, "cgi") ? arguments.cgi : $cgiScope();
+
+	return $wildcardDomainMatch($fullDomainString(local.domain), $fullCgiDomainString(local.cgi));
+}
+
+/**
+ * Wildcard domain match: domain satifies wildcard
+ *
+ * @domain string to test against e.g *.foo.com
+ * @origin string to test against e.g bar.foo.com
+ */
+public boolean function $wildcardDomainMatch(required string domain, required string origin) {
+	local.rv = false;
+	local.domainfull = $fullDomainString(arguments.domain);
+	local.originfull = $fullDomainString(arguments.origin);
+
+	// Do we have a wildcard subdomain?
+	local.hasWildcard = ListContainsNoCase(local.domainfull, "*", '.') && Len(local.domainfull > 1);
+
+	// If not, is it an exact match?
+	if (!local.hasWildcard && local.domainfull == local.originfull) {
+		local.rv = true;
+	}
+
+	// Loop over domain backwards and test the corresponding position in the other array
+	if (local.hasWildcard) {
+		local.domainReversed = ListToArray(Reverse(SpanExcluding(Reverse(local.domainfull), ".")));
+		local.serverNameReversed = ListToArray(Reverse(SpanExcluding(Reverse(local.originfull), ".")));
+		local.wildcardPassed = true;
+		// Check each part with corresponding part in other array
+		for (i = 1; i LTE ArrayLen(local.domainReversed); i = i + 1) {
+			if (local.domainReversed[i] != local.serverNameReversed[i] && local.domainReversed[i] DOES NOT CONTAIN '*') {
+				local.wildcardPassed = false;
+				break;
+			}
+		}
+		local.rv = local.wildcardPassed;
+	}
+
+	return local.rv;
+}
+/**
+ * Get full domain string from cgi scope: includes protocol and port
+ * e.g https://www.cfwheels.com:443
+ *
+ * @cgi Fake CGI Scope for Testing; will default to normal cgi scope
+ **/
+public string function $fullCgiDomainString(struct cgi) {
+	local.cgi = StructKeyExists(arguments, "cgi") ? arguments.cgi : $cgiScope();
+	local.server_name = local.cgi.server_name;
+	local.server_port = local.cgi.server_port;
+	local.server_protocol =
+	(
+		(StructKeyExists(local.cgi, 'http_x_forwarded_proto') && local.cgi.http_x_forwarded_proto == "https")
+		|| (StructKeyExists(local.cgi, 'server_port_secure') && local.cgi.server_port_secure)
+	)
+	 ? "https" : "http";
+	return local.server_protocol & '://' & local.server_name & ':' & local.server_port;
+}
+
+/**
+ * Get full domain string from a passed in string: includes protocol and port
+ * e.g https://www.cfwheels.com -> https://www.cfwheels.com:443
+ * e.g www.cfwheels.com -> http://www.cfwheels.com:80
+ *
+ * @domain The string to look at
+ **/
+public string function $fullDomainString(required string domain) {
+	local.domain = arguments.domain;
+	local.protocol = ListFirst(local.domain, "://");
+	local.port = ListLast(local.domain, ":");
+
+	if (!ListFindNoCase("http,https", local.protocol)) {
+		if (local.port == 443) {
+			local.protocol = "https";
+		} else {
+			local.protocol = "http";
+		}
+		local.domain = local.protocol & '://' & local.domain;
+	}
+	if (!IsNumeric(local.port)) {
+		if (local.protocol == 'http') {
+			local.port = 80;
+		} else if (local.protocol == 'https') {
+			local.port = 443;
+		}
+		local.domain &= ':' & local.port;
+	}
+	return local.domain;
+}
 
 /**
  * Set CORS Headers: only triggered if application.wheels.allowCorsRequests = true
@@ -1290,9 +1377,12 @@ public void function $setCORSHeaders(
 		local.originArr = ListToArray(arguments.allowOrigin);
 
 		// Is this origin in the allowed Array?
-		if (ArrayFindNoCase(local.originArr, local.incomingOrigin)) {
-			$header(name = "Access-Control-Allow-Origin", value = local.incomingOrigin);
-			$header(name = "Vary", value = "Origin");
+		for (local.o in local.originArr) {
+			if ($wildcardDomainMatch(local.o, local.incomingOrigin)) {
+				$header(name = "Access-Control-Allow-Origin", value = local.incomingOrigin);
+				$header(name = "Vary", value = "Origin");
+				break;
+			}
 		}
 	}
 
@@ -1333,6 +1423,26 @@ public void function $setCORSHeaders(
 	// Only add this header if requested (false is an invalid value)
 	if (arguments.allowCredentials) {
 		$header(name = "Access-Control-Allow-Credentials", value = true);
+	}
+}
+
+/**
+ * Restore the application scope modified by the test runner
+ */
+public void function $restoreTestRunnerApplicationScope() {
+	if (StructKeyExists(request, "wheels") && StructKeyExists(request.wheels, "testRunnerApplicationScope")) {
+		application.wheels = request.wheels.testRunnerApplicationScope;
+	}
+}
+
+/**
+ * Returns the request timeout value in seconds
+ */
+public numeric function $getRequestTimeout() {
+	if (StructKeyExists(server, "lucee")) {
+		return (GetPageContext().getRequestTimeout() / 1000);
+	} else {
+		return CreateObject("java", "coldfusion.runtime.RequestMonitor").GetRequestTimeout();
 	}
 }
 </cfscript>

@@ -280,7 +280,7 @@ public any function processRequest(
 	string rollback,
 	string includeFilters = true
 ) {
-	;
+
 	$args(name = "processRequest", args = arguments);
 
 	// Set the global transaction mode to rollback when specified.
@@ -294,6 +294,13 @@ public any function processRequest(
 	// This way it's possible to mock a POST request so that an isPost() call in the action works as expected for example.
 	if (arguments.method != "get") {
 		request.cgi.request_method = arguments.method;
+	}
+
+	// Look up controller & action via route name and method
+	if (StructKeyExists(arguments.params, "route")) {
+		local.route = $findRoute(argumentCollection = arguments.params, method = arguments.method);
+		arguments.params.controller = local.route.controller;
+		arguments.params.action = local.route.action;
 	}
 
 	// Never deliver email or send files during test.

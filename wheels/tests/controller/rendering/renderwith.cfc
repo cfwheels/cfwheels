@@ -1,14 +1,13 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
+		include "setup.cfm";
 		params = {controller = "test", action = "test"};
-		$$oldViewPath = application.wheels.viewPath;
-		application.wheels.viewPath = "wheels/tests/_assets/views";
+		cfheader(statustext="OK", statuscode=200); // start with a fresh status code
 	}
 
 	function teardown() {
-		params = {controller = "test", action = "test"};
-		application.wheels.viewPath = $$oldViewPath;
+		include "teardown.cfm";
 		$header(name = "content-type", value = "text/html", charset = "utf-8");
 	}
 
@@ -169,6 +168,13 @@ component extends="wheels.tests.Test" {
 			status = 404
 		);
 		assert("$statusCode() EQ 404");
+	}
+
+	function test_custom_status_codes_with_html() {
+		params.action = "test2";
+		_controller = controller("test", params);
+		_controller.renderWith(data = "the rain in spain", layout = false, status = 403);
+		assert("$statusCode() EQ 403");
 	}
 
 	function test_custom_status_codes_OK() {

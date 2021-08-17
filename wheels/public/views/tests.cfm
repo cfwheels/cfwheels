@@ -2,6 +2,7 @@
 setting requestTimeout=10000 showDebugOutput=false;
 param name="request.wheels.params.type" default="app";
 param name="request.wheels.params.format" default="html";
+param name="request.wheels.params.sort" default="directory";
 // Run the tests.
 testResults = $createObjectFromRoot(
 	fileName = "Test",

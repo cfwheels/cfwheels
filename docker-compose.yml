@@ -1,96 +1,88 @@
-version: '3.0'
+version: "3.0"
 
 services:
- testui:
-  build:
-   context: ./src/docker/test-ui
-  image: cfwheels-testui:v1
-  ports:
-   - "3000:8080"
+  testui:
+    build:
+      context: ./src/docker/test-ui
+    image: cfwheels-testui:v1
+    ports:
+      - "3000:8080"
 
- lucee5:
-  build:
-   context: ./
-   dockerfile: ./src/docker/Lucee5.Dockerfile
-  image: cfwheels-test-lucee5:v1
-  depends_on:
-   - mysql56
-  environment:
-   - ENV_MODE=local
-   - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
-   - cfconfigfile=./src/docker/CFConfig.json
-   - APP_DIR=/cfwheels-test-suite
-  volumes:
-   - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
-   - .:/cfwheels-test-suite
-   - ./src/docker:/src/docker
-  ports:
-   - "60005:8080"
+  lucee5:
+    build:
+      context: ./
+      dockerfile: ./src/docker/Lucee5.Dockerfile
+    image: cfwheels-test-lucee5:v1
+    environment:
+      - ENV_MODE=local
+      - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
+      - cfconfigfile=./src/docker/CFConfig.json
+      - APP_DIR=/cfwheels-test-suite
+    volumes:
+      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - .:/cfwheels-test-suite
+      - ./src/docker:/src/docker
+    ports:
+      - "60005:8080"
 
- adobe2016:
-  build:
-   context: ./
-   dockerfile: ./src/docker/Adobe2016.Dockerfile
-  image: cfwheels-test-adobe2016:v1
-  depends_on:
-   - mysql56
-  environment:
-   - ENV_MODE=local
-   - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
-   - cfconfigfile=./src/docker/CFConfig.json
-   - APP_DIR=/cfwheels-test-suite
-  volumes:
-   - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
-   - .:/cfwheels-test-suite
-   - ./src/docker:/src/docker
-  ports:
-   - "62016:8080"
+  adobe2016:
+    build:
+      context: ./
+      dockerfile: ./src/docker/Adobe2016.Dockerfile
+    image: cfwheels-test-adobe2016:v1
+    environment:
+      - ENV_MODE=local
+      - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
+      - cfconfigfile=./src/docker/CFConfig.json
+      - APP_DIR=/cfwheels-test-suite
+    volumes:
+      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - .:/cfwheels-test-suite
+      - ./src/docker:/src/docker
+    ports:
+      - "62016:8080"
 
- adobe2018:
-  build:
-   context: ./
-   dockerfile: ./src/docker/Adobe2018.Dockerfile
-  image: cfwheels-test-adobe2018:v1
-  depends_on:
-   - mysql56
-  environment:
-   - ENV_MODE=local
-   - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
-   - cfconfigfile=./src/docker/CFConfig.json
-   - APP_DIR=/cfwheels-test-suite
-  volumes:
-   - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
-   - .:/cfwheels-test-suite
-   - ./src/docker:/src/docker
-  ports:
-   - "62018:8080"
+  adobe2018:
+    build:
+      context: ./
+      dockerfile: ./src/docker/Adobe2018.Dockerfile
+    image: cfwheels-test-adobe2018:v1
+    environment:
+      - ENV_MODE=local
+      - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
+      - cfconfigfile=./src/docker/CFConfig.json
+      - APP_DIR=/cfwheels-test-suite
+    volumes:
+      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - .:/cfwheels-test-suite
+      - ./src/docker:/src/docker
+    ports:
+      - "62018:8080"
 
- mysql56:
-  image: mysql:5.6
-  command: --default-authentication-plugin=mysql_native_password
-  restart: always
-  environment:
-   MYSQL_ROOT_PASSWORD: wheelstestdb
-   MYSQL_DATABASE: wheelstestdb
-   MYSQL_USER: wheelstestdb
-   MYSQL_PASSWORD: wheelstestdb
+  mysql56:
+    image: mysql:5.6
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: wheelstestdb
+      MYSQL_DATABASE: wheelstestdb
+      MYSQL_USER: wheelstestdb
+      MYSQL_PASSWORD: wheelstestdb
 
- postgres:
-  image: postgres
-  restart: always
-  environment:
-    POSTGRES_USER: wheelstestdb
-    POSTGRES_PASSWORD: wheelstestdb
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: wheelstestdb
+      POSTGRES_PASSWORD: wheelstestdb
 
- sqlserver:
-  build:
-   context: ./
-   dockerfile: ./src/docker/SQLServer.Dockerfile
-  image: cfwheels-sqlserver:v1
-  environment:
-   SA_PASSWORD: x!bsT8t60yo0cTVTPq
-   ACCEPT_EULA: Y
-  volumes:
-   - ./src/docker:/src/docker
-
-
+  sqlserver:
+    build:
+      context: ./
+      dockerfile: ./src/docker/SQLServer.Dockerfile
+    image: cfwheels-sqlserver:v1
+    environment:
+      SA_PASSWORD: x!bsT8t60yo0cTVTPq
+      ACCEPT_EULA: Y
+    volumes:
+      - ./src/docker:/src/docker

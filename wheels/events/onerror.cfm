@@ -2,7 +2,7 @@
 public void function onError(required exception, required eventName) {
 	// In case the error was caused by a timeout we have to add extra time for error handling.
 	// We have to check if onErrorRequestTimeout exists since errors can be triggered before the application.wheels struct has been created.
-	local.requestTimeout = 70;
+	local.requestTimeout = $getRequestTimeout() + 30;
 	if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "onErrorRequestTimeout")) {
 		local.requestTimeout = application.wheels.onErrorRequestTimeout;
 	}
@@ -22,6 +22,7 @@ public void function onError(required exception, required eventName) {
 
 public string function $runOnError(required exception, required eventName) {
 	if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized")) {
+		$restoreTestRunnerApplicationScope();
 		if (application.wheels.sendEmailOnError) {
 			local.args = {};
 			$args(name = "sendEmail", args = local.args);
@@ -64,26 +65,27 @@ public string function $runOnError(required exception, required eventName) {
 			if (StructKeyExists(arguments.exception, "rootCause") && Left(arguments.exception.rootCause.type, 6) == "Wheels") {
 				local.wheelsError = arguments.exception.rootCause;
 			} else if (
-				StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "rootCause") && Left(
-					arguments.exception.cause.rootCause.type,
-					6
-				) == "Wheels"
+				StructKeyExists(arguments.exception, "cause")
+				&& StructKeyExists(arguments.exception.cause, "rootCause")
+				&& Left(arguments.exception.cause.rootCause.type, 6) == "Wheels"
 			) {
 				local.wheelsError = arguments.exception.cause.rootCause;
 			}
 			if (StructKeyExists(local, "wheelsError")) {
 				local.rv = "";
 
-				if (!StructKeyExists(request.wheels, "internalHeaderLoaded"))
+				if (!StructKeyExists(request.wheels, "internalHeaderLoaded")) {
 					local.rv &= $includeAndReturnOutput($template = "wheels/public/layout/_header_simple.cfm");
+				}
 
 				local.rv &= $includeAndReturnOutput(
 					$template = "wheels/events/onerror/wheelserror.cfm",
 					wheelsError = local.wheelsError
 				);
 
-				if (!StructKeyExists(request.wheels, "internalHeaderLoaded"))
+				if (!StructKeyExists(request.wheels, "internalHeaderLoaded")) {
 					local.rv &= $includeAndReturnOutput($template = "wheels/public/layout/_footer_simple.cfm");
+				}
 			} else {
 				Throw(object = arguments.exception);
 			}

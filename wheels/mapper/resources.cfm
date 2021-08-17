@@ -94,7 +94,7 @@ public struct function resource(
 
 	// Consider only / except REST routes for resources.
 	// Allow arguments.only to override local.args.only.
-	if (StructKeyExists(arguments, "only") && ListLen(arguments.only) > 0) {
+	if (StructKeyExists(arguments, "only")) {
 		local.args.actions = LCase(arguments.only);
 	}
 

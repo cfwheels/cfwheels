@@ -1,6 +1,44 @@
+<a name="2.3"></a>
+
+# [2.3](https://github.com/cfwheels/cfwheels/releases/tag/v2.3.0) (TBA)
+
+<!-- ### Controller Enhancements -->
+
+<!-- ### Model Enhancements -->
+
+### View Enhancements
+- Adds association error support via `includeAssociations` argument [#1080](https://github.com/cfwheels/cfwheels/issues/1080) - [Nikolaj Frey]
+
+### Bug Fixes
+
+- onerror handler should increase user defined requestTimeout value [#1056](https://github.com/cfwheels/cfwheels/issues/1056) - [Adam Chapman]
+- deletedAt should also respect timestamp mode (UTC) [#1063](https://github.com/cfwheels/cfwheels/issues/1063) - [David Belanger]
+- Fixes No output from `Debug()` usage in plugin test cases [#1061](https://github.com/cfwheels/cfwheels/issues/1063) - [Tom King]
+- Development mode will now properly return a 404 status if view not found [#1067](https://github.com/cfwheels/cfwheels/issues/1067) - [Adam Cameron, Tom King]
+- 404 status now properly returned without URL rewriting [#1067](https://github.com/cfwheels/cfwheels/issues/1067) - [Adam Cameron, Tom King]
+- Internal Docs in ACF2018 should now not display duplicate categories [Tom King]
+- Internal Docs search now resets itself properly on backspace with empty value [#982](https://github.com/cfwheels/cfwheels/issues/982) - [Brandon Shea, Tom King]
+- `ValidatesConfirmationOf()` now correctly enforces prescence of confirmation property [#1070](https://github.com/cfwheels/cfwheels/issues/1070) - [Adam Cameron, Tom King]
+- `resource()`/`resources()` now allows empty `only` property to utilise as non-route parent [#1083](https://github.com/cfwheels/cfwheels/issues/1083) - [Brian Ramsey]
+
+### Miscellaneous
+
+- Update Docker Lucee Commandbox version to 5.2.0 - [Adam Chapman, Tom King]
+- Minor internal obselete reference to modelComponentPath removed - [Adam Chapman, Tom King]
+- Minor visual fix for long migration logs overflow in modal (scroll) - [Brian Ramsey]
+
+### Potentially Breaking Changes
+
+- Automatic Time Stamps: the **deletedAt** column was using the server's local time for the timestamp while **createdAt** / **updatedAt** were using the timestamp selected for the timestamp mode. The default for CFWheels' timestamp mode is UTC and therefore all future **deletedAt** timestamps will be in UTC unless you've changed the default.  Please review any SQL that uses **deletedAt** for datetime comparison.
+
 <a name="2.2"></a>
 
-# [2.2](TBC)
+# [2.2](https://github.com/cfwheels/cfwheels/releases/tag/v2.2.0) (11/22/2020)
+
+### Controller Enhancements
+
+- Added the `status` argument to all `render*()` functions to force returning a specific HTTP status code [#1025](https://github.com/cfwheels/cfwheels/issues/1025) - [Adam Chapman, Tom King]
+- CORS `accessControlAllowOrigin` can now match subdomain wildcards [#1031](https://github.com/cfwheels/cfwheels/issues/1031) - [Tom King]
 
 ### Model Enhancements
 
@@ -8,11 +46,11 @@
 - Added `automaticValidations` argument to the `property` method - [Per Djurner]
 - Support named second argument in `findOneBy[Property]And[Property]` and `findAllBy[Property]And[Property]` - [Per Djurner]
 - Support `value` argument in `findOrCreateBy[Property]` - [Per Djurner]
+- Minor fix for `full null support` - [Michael Diederich]
 
 ### View Enhancements
 
 - Added the `required` argument to `imageTag` to suppress exceptions if using non-existent files [#979](https://github.com/cfwheels/cfwheels/issues/979) - [Adam Chapman, Michael Diederich]
-- Removed authenticity token id attribute to avoid non-unique id warnings in Chrome [#953](https://github.com/cfwheels/cfwheels/issues/953) - [Per Djurner]
 
 ### Bug Fixes
 
@@ -21,6 +59,8 @@
 - Display content in maintenance mode on newer Lucee versions [#848](https://github.com/cfwheels/cfwheels/issues/848) - [Per Djurner]
 - `validatesUniquenessOf` does not respect allowBlank [#914](https://github.com/cfwheels/cfwheels/issues/914) - [Adam Chapman]
 - `Wheels.RouteNotFound` Error page now escapes the `arguments.path` to prevent XSS attacks - [Michael Diederich]
+- `buttonTo()` now uses `<button>` internally instead of `<input>` allowing for html in content - [#798](https://github.com/cfwheels/cfwheels/issues/798) - [Tom Sucaet, Tom King, Per Djurner]
+- Minor SQL preview fix in GUI - [#992](https://github.com/cfwheels/cfwheels/issues/992) - [Brandon Shea, Tom King]
 
 ### Miscellaneous
 
@@ -29,8 +69,11 @@
 - Minimum Lucee 5 version is now 5.3.2.77 - Tests added - [Michael Diederich]
 - Use `http_x_forwarded_proto` to determine if the application is running behind a loadbalancer that is performing SSL offloading - [Peter Amiri]
 - Allow the combination of `url` and `params` arguments with `redirectTo` - [Adam Chapman]
-- Display content in maintenance mode on newer Lucee versions [#848](https://github.com/cfwheels/cfwheels/issues/848) - [Per Djurner]
 - Fixed some variable scoping - [Michael Diederich]
+- Github Actions CI Pipeline - [Adam Chapman, Tom King]
+- Flash Cookie can now be disabled via `set(flashStorage="none")` [#978](https://github.com/cfwheels/cfwheels/issues/978) [Tom King]
+- `processRequest()` accepts a route param -[#1030](https://github.com/cfwheels/cfwheels/issues/1030) - [Adam Chapman]
+- Migration files are written with 664 mode -[#1034](https://github.com/cfwheels/cfwheels/issues/1034) - [Adam Chapman]
 
 <a name="2.1"></a>
 

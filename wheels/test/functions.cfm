@@ -107,6 +107,9 @@ TESTING_FRAMEWORK_VARS.RUNNING_TEST = "";
 if (!StructKeyExists(request, "TESTING_FRAMEWORK_DEBUGGING")) {
 	request["TESTING_FRAMEWORK_DEBUGGING"] = {};
 }
+if (!StructKeyExists(request, "TESTING_FRAMEWORK_DEBUG_STRINGS")) {
+	request["TESTING_FRAMEWORK_DEBUG_STRINGS"] = {};
+}
 
 /**
  * Called from a test function.
@@ -192,15 +195,29 @@ public void function fail(string message = "") {
 					later purposes, but don't want it to display
 	*/
 public any function debug(required string expression, boolean display = true) {
-	var attributeArgs = {};
-	var dump = "";
+	local.attributeArgs = {
+		"var" = Evaluate(arguments.expression),
+		"label" = arguments.expression
+	};
+	local.dump = "";
+
+	// this string will be added to the request key regardless of display argument
+	local.debugString = ArrayToList([
+		"",
+		"---------- DEBUG START '#arguments.expression#' --------",
+		SerializeJSON(attributeArgs["var"]),
+		"---------- DEBUG END '#arguments.expression#' --------",
+		""
+	], Chr(13));
+
+	if (!StructKeyExists(request["TESTING_FRAMEWORK_DEBUG_STRINGS"], TESTING_FRAMEWORK_VARS.RUNNING_TEST)) {
+		request["TESTING_FRAMEWORK_DEBUG_STRINGS"][TESTING_FRAMEWORK_VARS.RUNNING_TEST] = "";
+	}
+	request["TESTING_FRAMEWORK_DEBUG_STRINGS"][TESTING_FRAMEWORK_VARS.RUNNING_TEST] &= local.debugString;
 
 	if (!arguments.display) {
 		return;
 	}
-
-	attributeArgs["var"] = Evaluate(arguments.expression);
-	attributeArgs["label"] = arguments.expression;
 
 	StructDelete(arguments, "expression");
 	StructDelete(arguments, "display");
@@ -326,10 +343,10 @@ public boolean function $runTest(string resultKey = "test", string testname = ""
 					*/
 					status = "Error";
 					if (ArrayLen(e.tagContext)) {
-						template = "#ListLast(e.tagContext[1].template, "/")# line #e.tagContext[1].line#";
+						template = "#ListLast(e.tagContext[1].template, "/")#:#e.tagContext[1].line#";
 						tagContext = "<ul>";
 						for (context in e.tagContext) {
-							tagContext = tagContext & '<li>#context.template# line #context.line#</li>';
+							tagContext = tagContext & '<li>#context.template#:#context.line#</li>';
 						};
 						tagContext = tagContext & "</ul>";
 					} else {
@@ -365,12 +382,15 @@ public boolean function $runTest(string resultKey = "test", string testname = ""
 			/*
 				Record test results
 			*/
-			result = {};
-			result.testCase = testCase;
-			result.testName = key;
-			result.time = time;
-			result.status = status;
-			result.message = message;
+			result = {
+				testCase = testCase,
+				testName = key,
+				time = time,
+				status = status,
+				message = message,
+				distinctKey = distinctKey
+			};
+
 			ArrayAppend(request[resultkey].results, result);
 
 			request[resultkey].numTests = request[resultkey].numTests + 1;
@@ -378,15 +398,27 @@ public boolean function $runTest(string resultKey = "test", string testname = ""
 		}
 	};
 
-	result = {};
-	result.testCase = testCase;
-	result.numTests = numTests;
-	result.numFailures = numTestFailures;
-	result.numErrors = numTestErrors;
-	ArrayAppend(request[resultkey].summary, result);
+	result = {
+		testCase = testCase,
+		numTests = numTests,
+		numFailures = numTestFailures,
+		numErrors = numTestErrors
+	};
+
+	// filter test results based on url params
+	// this is exerimental output for ci pipeline
+	if (StructKeyExists(request.wheels.params, "only")) {
+		local.results = ArrayFilter(request[resultkey].results, function(testCase) {
+			return ListFindNoCase(request.wheels.params.only, arguments.testCase.status);
+		});
+		request[resultkey].results = local.results;
+	} else {
+		ArrayAppend(request[resultkey].summary, result);
+	}
 
 	request[resultkey].numCases = request[resultkey].numCases + 1;
 	request[resultkey].end = Now();
+
 
 	return numTestErrors eq 0;
 }
@@ -436,6 +468,10 @@ public any function $results(string resultKey = "test") {
 			request[resultkey].results[local.i].cleanTestCase = $cleanTestCase(request[resultkey].results[local.i].testCase);
 			request[resultkey].results[local.i].cleanTestName = $cleanTestName(request[resultkey].results[local.i].testName);
 			request[resultkey].results[local.i].packageName = $cleanTestPath(request[resultkey].results[local.i].testCase);
+			request[resultkey].results[local.i].debugString = "";
+			if (StructKeyExists(request.TESTING_FRAMEWORK_DEBUG_STRINGS, request[resultkey].results[local.i].distinctKey)) {
+				request[resultkey].results[local.i].debugString = request.TESTING_FRAMEWORK_DEBUG_STRINGS[request[resultkey].results[local.i].distinctKey];
+			}
 		};
 
 		local.rv = request[resultkey];
@@ -451,7 +487,7 @@ public any function $wheelsRunner(struct options = {}) {
 	local.resultKey = "WheelsTests";
 
 	// save the original environment for overloading
-	local.wheelsApplicationScope = Duplicate(application);
+	request.wheels.testRunnerApplicationScope = Duplicate(application.wheels);
 	// to enable unit testing controllers without actually performing the redirect
 	set(functionName = "redirectTo", delay = true);
 
@@ -488,8 +524,6 @@ public any function $wheelsRunner(struct options = {}) {
 			local.instance.afterAll();
 		}
 	};
-	// swap back the enviroment
-	StructAppend(application, local.wheelsApplicationScope, true);
 	// return the results
 	return $results(local.resultKey);
 }
@@ -647,7 +681,8 @@ public query function $listTestPackages(struct options = {}, string filter = "*"
 		local.paths.full_test_path,
 		true,
 		"query",
-		"#arguments.filter#.cfc"
+		"#arguments.filter#.cfc",
+		arguments.options.sort
 	);
 	for (local.package in local.packages) {
 		local.packageName = ListChangeDelims(
@@ -660,7 +695,12 @@ public query function $listTestPackages(struct options = {}, string filter = "*"
 			local.packageName = ListPrepend(local.packageName, local.paths.test_path, ".");
 			local.packageName = ListAppend(local.packageName, ListFirst(local.package.name, "."), ".");
 			// Ignore invalid packages.
-			if ($isValidTest(local.packageName)) {
+			local.useTest = $isValidTest(local.packageName);
+			// a bit hacky.. try to use Left rather than contains
+			if (StructKeyExists(arguments.options, "skip") && local.packageName contains arguments.options.skip) {
+				local.useTest = false;
+			}
+			if (local.useTest) {
 				QueryAddRow(local.rv);
 				QuerySetCell(local.rv, "package", local.packageName);
 			}
