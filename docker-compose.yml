@@ -70,7 +70,7 @@ services:
       MYSQL_PASSWORD: wheelstestdb
 
   postgres:
-    image: postgres
+    image: postgres:13.6
     restart: always
     environment:
       POSTGRES_USER: wheelstestdb
