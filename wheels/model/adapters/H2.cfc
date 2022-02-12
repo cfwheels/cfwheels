@@ -136,6 +136,36 @@ component extends="Base" output=false {
 		return local.rv;
 	}
 
+	/**
+	 * Override Base adapter's function.
+	 * When using H2, cfdbinfo does not return the primarykey flag
+	 * We need to check the indexes and look for an index with a name starting with primary_key
+	 */
+	public query function $getColumnInfo(
+		required string table,
+		required string datasource,
+		required string username,
+		required string password
+	) {
+		arguments.type = "index";
+		local.index = $dbinfo(argumentCollection = arguments);
+		pkList = "";
+		for (row in local.index) {
+			if ( find( 'primary_key', row.INDEX_NAME ) ) {
+				pkList = listAppend(pkList,row.COLUMN_NAME);
+			}
+		}
+		arguments.type = "columns";
+		local.columns = $dbinfo(argumentCollection = arguments);
+		for (i = 1; i <= local.columns.recordCount; i++) {
+			if ( listFind( pkList,local.columns["COLUMN_NAME"][i] ) ) {
+				querySetCell(local.columns, "IS_PRIMARYKEY", "YES" , i);
+			}
+		}
+
+		return local.columns;
+	}
+
 	include "../../plugins/standalone/injection.cfm";
 
 }
