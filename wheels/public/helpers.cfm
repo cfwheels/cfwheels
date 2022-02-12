@@ -225,7 +225,7 @@ public struct function $$findMatchingRoutes(
 				{
 					type = "Wheels.RouteNotFound",
 					message = "Incorrect HTTP Verb for route",
-					extendedInfo = "The `#arguments.path#` path does not allow `#arguments.requestMethod#` requests, only `#UCase(local.alternativeMatchingMethodsForURL)#` requests. Ensure you are using the correct HTTP Verb and that your `config/routes.cfm` file is configured correctly."
+					extendedInfo = "The `#arguments.path#` path does not allow `#EncodeForHTML(arguments.requestMethod)#` requests, only `#UCase(local.alternativeMatchingMethodsForURL)#` requests. Ensure you are using the correct HTTP Verb and that your `config/routes.cfm` file is configured correctly."
 				}
 			);
 		} else {
