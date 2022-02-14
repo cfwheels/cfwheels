@@ -422,13 +422,15 @@ public string function $tag(
 				!Len(arguments.skipStartingWith) || Left(local.key, Len(arguments.skipStartingWith)) != arguments.skipStartingWith
 			) && Left(local.key, 1) != "$"
 		) {
-			local.rv &= $tagAttribute(
-				name = local.key,
-				value = arguments.attributes[local.key],
-				encode = arguments.encode,
-				encodeExcept = arguments.encodeExcept
-			);
-		}
+				if(isSimpleValue(arguments.attributes[local.key])){
+					local.rv &= $tagAttribute(
+						name = local.key,
+						value = arguments.attributes[local.key],
+						encode = arguments.encode,
+						encodeExcept = arguments.encodeExcept
+					);
+				}
+			}
 	}
 
 	// End the tag and return it.
