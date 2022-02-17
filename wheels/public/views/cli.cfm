@@ -20,27 +20,27 @@ try {
 		data.lastVersion = data.migrations[ArrayLen(data.migrations)].version;
 	}
 
-	if (StructKeyExists(params, "command")) {
-		data.command = params.command;
-		switch (params.command) {
+	if (StructKeyExists(request.wheels.params, "command")) {
+		data.command = request.wheels.params.command;
+		switch (request.wheels.params.command) {
 			case "createMigration":
-				if (StructKeyExists(params, "migrationPrefix") && Len(params.migrationPrefix)) {
-					data.message = migrator.createMigration(params.migrationName, params.templateName, params.migrationPrefix);
+				if (StructKeyExists(request.wheels.params, "migrationPrefix") && Len(request.wheels.params.migrationPrefix)) {
+					data.message = migrator.createMigration(request.wheels.params.migrationName, request.wheels.params.templateName, request.wheels.params.migrationPrefix);
 				} else {
-					data.message = migrator.createMigration(params.migrationName, params.templateName);
+					data.message = migrator.createMigration(request.wheels.params.migrationName, request.wheels.params.templateName);
 				}
 				break;
 			case "migrateTo":
-				if (StructKeyExists(params, "version")) {
-					data.message = migrator.migrateTo(params.version);
+				if (StructKeyExists(request.wheels.params, "version")) {
+					data.message = migrator.migrateTo(request.wheels.params.version);
 				}
 				break;
 			case "migrateToLatest":
 				data.message = migrator.migrateToLatest();
 				break;
 			case "redoMigration":
-				if (StructKeyExists(params, "version")) {
-					local.redoVersion = params.version;
+				if (StructKeyExists(request.wheels.params, "version")) {
+					local.redoVersion = request.wheels.params.version;
 				} else {
 					local.redoVersion = data.lastVersion;
 				}
