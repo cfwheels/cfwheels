@@ -137,10 +137,10 @@ component extends="Base" output=false {
 	}
 
 	/**
-	 * Override Base adapter's function.
-	 * When using H2, cfdbinfo does not return the primarykey flag
-	 * We need to check the indexes and look for an index with a name starting with primary_key
-	 */
+ 	 * Override Base adapter's function.
+ 	 * When using H2, cfdbinfo does not return the primarykey flag
+ 	 * We need to check the indexes and look for an index with a name starting with primary_key
+ 	 */
 	public query function $getColumnInfo(
 		required string table,
 		required string datasource,
