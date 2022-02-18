@@ -8,7 +8,7 @@ component extends="Abstract" {
 	variables.sqlTypes['datetime'] = {name = 'DATETIME'};
 	variables.sqlTypes['decimal'] = {name = 'DECIMAL'};
 	variables.sqlTypes['float'] = {name = 'FLOAT'};
-	variables.sqlTypes['integer'] = {name = 'INT'};
+	variables.sqlTypes['integer'] = {name = 'INTEGER'};
 	variables.sqlTypes['string'] = {name = 'VARCHAR', limit = 255};
 	variables.sqlTypes['text'] = {name = 'TEXT'};
 	variables.sqlTypes['time'] = {name = 'TIME'};
@@ -22,6 +22,9 @@ component extends="Abstract" {
 		return "H2";
 	}
 
+	/**
+	 * generates sql for primary key options on H2 Database
+	 */
 	public string function addPrimaryKeyOptions(required string sql, struct options = {}) {
 		if (StructKeyExists(arguments.options, "null") && arguments.options.null) {
 			arguments.sql = arguments.sql & " NULL";
@@ -31,8 +34,55 @@ component extends="Abstract" {
 		if (StructKeyExists(arguments.options, "autoIncrement") && arguments.options.autoIncrement) {
 			arguments.sql = arguments.sql & " AUTO_INCREMENT";
 		}
-		arguments.sql = arguments.sql & " PRIMARY KEY";
 		return arguments.sql;
+	}
+
+	/**
+	 * generates sql to create a table
+	 */
+	public string function createTable(
+		required string name,
+		required array columns,
+		array primaryKeys = [],
+		array foreignKeys = []
+	) {
+		local.sql = "CREATE TABLE #quoteTableName(arguments.name)# (#Chr(13)##Chr(10)#";
+		local.iEnd = ArrayLen(arguments.primaryKeys);
+
+		if (local.iEnd == 1) {
+			// if we have a single primary key, define the column with the primaryKey adapter method
+			local.sql = local.sql & " " & arguments.primaryKeys[1].toPrimaryKeySQL() & ",#Chr(13)##Chr(10)#";
+
+		} else if (local.iEnd > 1) {
+			// add the primary key columns like we would normal columns
+			for (local.i = 1; local.i <= local.iEnd; local.i++) {
+				local.sql = local.sql & " " & arguments.primaryKeys[local.i].toSQL();
+				if (local.i != local.iEnd || ArrayLen(arguments.columns)) {
+					local.sql = local.sql & ",#Chr(13)##Chr(10)#";
+				}
+			}
+		}
+
+		// define the columns in the sql
+		local.iEnd = ArrayLen(arguments.columns);
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
+			local.sql = local.sql & " " & arguments.columns[local.i].toSQL();
+			if (local.i != local.iEnd) {
+				local.sql = local.sql & ",#Chr(13)##Chr(10)#";
+			}
+		}
+
+		// H2 requires a constraint regardless of the number of primarykeys
+		local.sql = local.sql & ",#Chr(13)##Chr(10)# " & primaryKeyConstraint(argumentCollection = arguments);
+
+		// define the foreign keys
+		local.iEnd = ArrayLen(arguments.foreignKeys);
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
+			local.sql = local.sql & ",#Chr(13)##Chr(10)# " & arguments.foreignKeys[local.i].toForeignKeySQL();
+		}
+		local.sql = local.sql & "#Chr(13)##Chr(10)#)";
+
+		return local.sql;
 	}
 
 	/**
