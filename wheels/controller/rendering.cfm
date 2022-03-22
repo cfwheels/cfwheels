@@ -215,9 +215,9 @@ public any function renderWith(
 
 		// Throw an error if we do not have a template to render the content type that we do not have defaults for.
 		if (
-			!ListFindNoCase("json,xml", local.contentType) && !StructKeyExists(local, "content") && $get(
-				"showErrorInformation"
-			)
+			!ListFindNoCase("json,xml", local.contentType)
+			&& !StructKeyExists(local, "content")
+			&& $get("showErrorInformation")
 		) {
 			Throw(
 				type = "Wheels.RenderingError",
@@ -414,10 +414,11 @@ public struct function $argumentsForPartial() {
 			if (StructKeyExists(variables, local.dataFunction)) {
 				local.metaData = GetMetadata(variables[local.dataFunction]);
 				if (
-					IsStruct(local.metaData) && StructKeyExists(local.metaData, "returnType") && local.metaData.returnType == "struct" && StructKeyExists(
-						local.metaData,
-						"access"
-					) && local.metaData.access == "private"
+					IsStruct(local.metaData)
+					&& StructKeyExists(local.metaData, "returnType")
+					&& local.metaData.returnType == "struct"
+					&& StructKeyExists(local.metaData, "access")
+					&& local.metaData.access == "private"
 				) {
 					local.rv = $invoke(method = local.dataFunction, invokeArgs = arguments);
 				}
@@ -438,7 +439,7 @@ public string function $renderPartial() {
 		Throw(
 			type = "Wheels.InvalidPartialArguments",
 			message = "To use a query with a partial, you must specify both `partial` and `query` arguments",
-			extendedInfo = "E.g. ##includePartial(partial=""user"", query=""users"")##"
+			extendedInfo = 'E.g. ##includePartial(partial="user", query="users")##'
 		);
 	} else if (IsObject(arguments.$partial)) {
 		arguments.$name = arguments.$partial.$classData().modelName;
@@ -662,10 +663,8 @@ public boolean function $formatTemplatePathExists(required string $name) {
 	);
 	local.rv = false;
 	if (
-		!ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name) && !ListFindNoCase(
-			variables.$class.formats.nonExistingTemplates,
-			arguments.$name
-		)
+		!ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name)
+		&& !ListFindNoCase(variables.$class.formats.nonExistingTemplates, arguments.$name)
 	) {
 		if (FileExists(ExpandPath(local.templatePath))) {
 			local.rv = true;
