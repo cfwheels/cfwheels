@@ -81,7 +81,10 @@ public any function $initControllerObject(required string name, required struct 
 			if (local.helperFileExists) {
 				application.wheels.existingHelperFiles = ListAppend(application.wheels.existingHelperFiles, arguments.name);
 			} else {
-				application.wheels.nonExistingHelperFiles = ListAppend(application.wheels.nonExistingHelperFiles, arguments.name);
+				application.wheels.nonExistingHelperFiles = ListAppend(
+					application.wheels.nonExistingHelperFiles,
+					arguments.name
+				);
 			}
 		}
 	}
