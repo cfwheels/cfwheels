@@ -71,10 +71,8 @@ public any function $initControllerObject(required string name, required struct 
 	// When the file is not found in either the existing or nonexisting list we know that we have not yet checked for it.
 	local.helperFileExists = false;
 	if (
-		!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) && !ListFindNoCase(
-			application.wheels.nonExistingHelperFiles,
-			arguments.name
-		)
+		!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name)
+		&& !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.name)
 	) {
 		if (FileExists(ExpandPath(local.template))) {
 			local.helperFileExists = true;
@@ -83,19 +81,15 @@ public any function $initControllerObject(required string name, required struct 
 			if (local.helperFileExists) {
 				application.wheels.existingHelperFiles = ListAppend(application.wheels.existingHelperFiles, arguments.name);
 			} else {
-				application.wheels.nonExistingHelperFiles = ListAppend(
-					application.wheels.nonExistingHelperFiles,
-					arguments.name
-				);
+				application.wheels.nonExistingHelperFiles = ListAppend(application.wheels.nonExistingHelperFiles, arguments.name);
 			}
 		}
 	}
 
 	// Include controller specific helper file if it exists.
 	if (
-		Len(arguments.name) && (
-			ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) || local.helperFileExists
-		)
+		Len(arguments.name)
+		&& (ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) || local.helperFileExists)
 	) {
 		$include(template = local.template);
 	}
