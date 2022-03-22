@@ -88,8 +88,8 @@ public boolean function $isVerifiedRequest() {
  */
 public boolean function $isRequestProtectedFromForgery() {
 	return StructKeyExists(request, "$wheelsProtectedFromForgery")
-		&& IsBoolean(request.$wheelsProtectedFromForgery)
-		&& request.$wheelsProtectedFromForgery;
+	&& IsBoolean(request.$wheelsProtectedFromForgery)
+	&& request.$wheelsProtectedFromForgery;
 }
 
 /**

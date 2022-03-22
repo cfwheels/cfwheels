@@ -134,11 +134,11 @@ public void function $callAction(required string action) {
 			renderView();
 		} catch (any e) {
 			local.file = $get("viewPath")
-				& "/"
-				& LCase(ListChangeDelims(variables.$class.name, '/', '.'))
-				& "/"
-				& LCase(arguments.action)
-				& ".cfm";
+			& "/"
+			& LCase(ListChangeDelims(variables.$class.name, '/', '.'))
+			& "/"
+			& LCase(arguments.action)
+			& ".cfm";
 			if (FileExists(ExpandPath(local.file))) {
 				Throw(object = e);
 			} else {

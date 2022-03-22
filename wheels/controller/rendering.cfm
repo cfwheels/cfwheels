@@ -363,12 +363,7 @@ public string function $renderViewAndAddToCache() {
 	if (!IsNumeric(arguments.$cache)) {
 		arguments.$cache = $get("defaultCacheTime");
 	}
-	$addToCache(
-		key = arguments.key,
-		value = local.rv,
-		time = arguments.$cache,
-		category = arguments.category
-	);
+	$addToCache(key = arguments.key, value = local.rv, time = arguments.$cache, category = arguments.category);
 	return local.rv;
 }
 
@@ -394,12 +389,7 @@ public string function $renderPartialAndAddToCache() {
 	if (!IsNumeric(arguments.$cache)) {
 		arguments.$cache = $get("defaultCacheTime");
 	}
-	$addToCache(
-		key = arguments.key,
-		value = local.rv,
-		time = arguments.$cache,
-		category = arguments.category
-	);
+	$addToCache(key = arguments.key, value = local.rv, time = arguments.$cache, category = arguments.category);
 	return local.rv;
 }
 
@@ -503,12 +493,7 @@ public string function $generateIncludeTemplatePath(
 	arguments.$controllerName = ListChangeDelims(arguments.$controllerName, '/', '.');
 
 	// Extracts the file part of the path and replace ending ".cfm".
-	local.fileName = ReplaceNoCase(
-		Reverse(ListFirst(Reverse(arguments.$name), "/")),
-		".cfm",
-		"",
-		"all"
-	) & ".cfm";
+	local.fileName = ReplaceNoCase(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".cfm", "", "all") & ".cfm";
 
 	// Replace leading "_" when the file is a partial.
 	if (arguments.$type == "partial" && arguments.$prependWithUnderscore) {
@@ -571,12 +556,7 @@ public string function $includeFile(required any $name, required any $template, 
 					for (local.j = 1; local.j <= local.jEnd; local.j++) {
 						local.property = ListGetAt(local.query.columnList, local.j);
 						arguments[local.property] = local.query[local.property][local.i];
-						QuerySetCell(
-							arguments.group,
-							local.property,
-							local.query[local.property][local.i],
-							local.groupQueryCount
-						);
+						QuerySetCell(arguments.group, local.property, local.query[local.property][local.i], local.groupQueryCount);
 					}
 					arguments.current = local.i + 1 - arguments.group.recordCount;
 					local.groupQueryCount++;
@@ -594,12 +574,7 @@ public string function $includeFile(required any $name, required any $template, 
 				if (Right(local.rv, 3) == local.tempSpacer) {
 					local.rv = Left(local.rv, Len(local.rv) - 3);
 				}
-				local.rv = Replace(
-					local.rv,
-					local.tempSpacer,
-					arguments.$spacer,
-					"all"
-				);
+				local.rv = Replace(local.rv, local.tempSpacer, arguments.$spacer, "all");
 			} else {
 				for (local.i = 1; local.i <= local.iEnd; local.i++) {
 					arguments.current = local.i;

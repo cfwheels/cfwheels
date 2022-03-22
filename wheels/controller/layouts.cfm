@@ -85,7 +85,10 @@ public any function $useLayout(required string $action) {
 				local.layoutType = "ajax";
 			}
 			if (
-				(StructKeyExists(this, local.layout[local.layoutType]) && IsCustomFunction(this[local.layout[local.layoutType]]))
+				(
+					StructKeyExists(this, local.layout[local.layoutType])
+					&& IsCustomFunction(this[local.layout[local.layoutType]])
+				)
 				|| IsCustomFunction(local.layout[local.layoutType])
 			) {
 				local.invokeArgs = {};

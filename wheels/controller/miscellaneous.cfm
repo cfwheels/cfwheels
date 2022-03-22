@@ -246,12 +246,7 @@ public any function sendFile(
 		$header(name = "Content-Disposition", value = "#arguments.disposition#; filename=""#local.name#""");
 		$content(type = local.mime, file = local.fullPath, deleteFile = arguments.deleteFile);
 	} else {
-		local.rv = {
-			disposition = arguments.disposition,
-			file = local.fullPath,
-			mime = local.mime,
-			name = local.name
-		};
+		local.rv = {disposition = arguments.disposition, file = local.fullPath, mime = local.mime, name = local.name};
 		if (!$sentFiles()) {
 			variables.$instance.files = [];
 		}
