@@ -13,11 +13,7 @@
 </cfif>
 <cfset local.baseReloadURL = ReplaceNoCase(local.baseReloadURL, "/" & application.wheels.rewriteFile, "")>
 <cfloop list="development,testing,maintenance,production,true" index="local.i">
-	<cfset local.baseReloadURL = ReplaceNoCase(
-		ReplaceNoCase(local.baseReloadURL, "?reload=" & local.i, ""),
-		"&reload=" & local.i,
-		""
-	)>
+	<cfset local.baseReloadURL = ReplaceNoCase(ReplaceNoCase(local.baseReloadURL, "?reload=" & local.i, ""), "&reload=" & local.i, "")>
 </cfloop>
 <cfif local.baseReloadURL Contains "?">
 	<cfset local.baseReloadURL &= "&">
@@ -37,8 +33,8 @@
 	</cfif>
 </cfif>
 <cfsavecontent variable="local.css">
-	<style>#wheels-debug-area
-		{
+	<style>
+	#wheels-debug-area {
 		background: #ececec;
 		border-bottom: 3px solid #999;
 		border-top: 3px solid #999;
@@ -46,14 +42,12 @@
 		margin: 50px 0;
 		padding: 10px;
 		text-align: left;
-		}
-		#wheels-debug-area table
-		{
+	}
+	#wheels-debug-area table {
 		border-collapse: collapse;
 		border-spacing: 0;
-		}
-		#wheels-debug-area td
-		{
+	}
+	#wheels-debug-area td {
 		color: #333;
 		font-family: Arial, Helvetica, sans-serif;
 		font-size: 12px;
@@ -61,32 +55,31 @@
 		padding: 0 10px 0 0;
 		vertical-align: top;
 		border-bottom: none;
-		}
-		#wheels-debug-area th {
+	}
+	#wheels-debug-area th {
 		border-bottom: none;
-		}
-		#wheels-debug-area a
-		{
+	}
+	#wheels-debug-area a {
 		color: #333;
 		padding: 0 1px;
 		text-decoration: underline;
-		}
-		#wheels-debug-area a.btn {
+	}
+	#wheels-debug-area a.btn {
 		background-color: #f5f5f5;
 		padding:5px 10px;
 		margin-right:5px;
-		}
-		#wheels-debug-area a:hover
-		{
+	}
+	#wheels-debug-area a:hover {
 		background: #333;
 		color: #fff;
 		text-decoration: none;
-		}
-		#wheels-debug-area a.btn:hover {
+	}
+	#wheels-debug-area a.btn:hover {
 		background-color: #999;
 		padding:5px 10px;
 		margin-right:5px;
-		}</style>
+	}
+	</style>
 </cfsavecontent>
 <cfset $htmlhead(text = local.css)>
 <cfoutput>
@@ -122,9 +115,10 @@
 		</cfif>
 		<table>
 			<cfif $get("enablePluginsComponent")>
-				<cfif ($get("showIncompatiblePlugins") AND Len(application.wheels.incompatiblePlugins)) OR Len(
-					application.wheels.dependantPlugins
-				)>
+				<cfif
+					($get("showIncompatiblePlugins") AND Len(application.wheels.incompatiblePlugins))
+					OR Len(application.wheels.dependantPlugins)
+				>
 					<tr>
 						<td>
 							<strong>
@@ -154,10 +148,10 @@
 					<strong>Application:</strong>
 				</td>
 				<td>
-					#application.applicationName#<cfif NOT Len($get("reloadPassword"))>
-						[<a href="#local.baseReloadURL#true">Reload</a>
+					#application.applicationName#
+					<cfif NOT Len($get("reloadPassword"))>
+						[<a href="#local.baseReloadURL#true">Reload</a>]
 					</cfif>
-					<cfif NOT Len($get("reloadPassword"))>]</cfif>
 				</td>
 			</tr>
 			<tr>
@@ -175,8 +169,12 @@
 				</td>
 				<td>
 					#capitalize($get("environment"))#<cfif NOT Len($get("reloadPassword"))>
-						<cfset local.environments = "development,testing,maintenance,production"> [<cfset local.pos = 0><cfloop list="#local.environments#" index="local.i">
-							<cfset local.pos = local.pos + 1><cfif $get("environment") IS NOT local.i>
+						<cfset local.environments = "development,testing,maintenance,production">
+						[
+						<cfset local.pos = 0>
+						<cfloop list="#local.environments#" index="local.i">
+							<cfset local.pos = local.pos + 1>
+							<cfif $get("environment") IS NOT local.i>
 								<a href="#local.baseReloadURL##local.i#">#capitalize(local.i)#</a>
 								<cfif ListLen(local.environments) GT local.pos>,</cfif>
 							</cfif>
@@ -236,26 +234,27 @@
 					</td>
 					<td>
 						<cfif StructCount($get("plugins")) IS NOT 0>
-							<cfset local.count = 0><cfloop collection="#$get('plugins')#" item="local.i">
-								<cfset local.count = local.count + 1><a
-									href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#local.i#"
-								>
-									#local.i#<cfif StructCount($get("pluginMeta")) IS NOT 0 && StructKeyExists($get("pluginMeta"), local.i)>#$get("pluginMeta")[local.i]['version']#</cfif>
+							<cfset local.count = 0>
+							<cfloop collection="#$get('plugins')#" item="local.i">
+								<cfset local.count = local.count + 1>
+								<a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#local.i#">
+									#local.i#
+									<cfif StructCount($get("pluginMeta")) IS NOT 0 && StructKeyExists($get("pluginMeta"), local.i)>
+										#$get("pluginMeta")[local.i]['version']#
+									</cfif>
 								</a>
 								<cfif DirectoryExists("#GetDirectoryFromPath(GetBaseTemplatePath())#plugins/#LCase(local.i)#/tests")>
-									[<a
-										href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=#LCase(local.i)#"
-									>Run Tests</a>
-									, <a
-										href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=#LCase(local.i)#"
-									>View Tests</a>
+									[
+										<a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=#LCase(local.i)#">Run Tests</a>,
+										<a href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=#LCase(local.i)#">View Tests</a>
 									]
 								</cfif>
 								<cfif StructCount($get("plugins")) GT local.count>
 									<br/>
 								</cfif>
 							</cfloop>
-							<cfelse>None
+						<cfelse>
+								None
 						</cfif>
 					</td>
 				</tr>
@@ -295,7 +294,13 @@
 				<td>
 					<cfset local.additionalParamsExists = false>
 					<cfloop collection="#request.wheels.params#" item="local.i">
-						<cfif local.i IS NOT "fieldnames" AND local.i IS NOT "route" AND local.i IS NOT "controller" AND local.i IS NOT "action" AND local.i IS NOT "key">
+						<cfif
+							local.i IS NOT "fieldnames"
+							AND local.i IS NOT "route"
+							AND local.i IS NOT "controller"
+							AND local.i IS NOT "action"
+							AND local.i IS NOT "key"
+						>
 							<cfset local.additionalParamsExists = true>
 							<cfif IsStruct(request.wheels.params[local.i])>
 								#LCase(local.i)# = #SerializeJSON(request.wheels.params[local.i])#<br>
@@ -315,7 +320,10 @@
 				</td>
 				<td>
 					#request.wheels.execution.total#ms<cfif request.wheels.execution.total GT 0>
-						(<cfset local.keys = StructSort(request.wheels.execution, "numeric", "desc")><cfset local.firstDone = false><cfloop from="1" to="#ArrayLen(local.keys)#" index="local.i">
+						(
+						<cfset local.keys = StructSort(request.wheels.execution, "numeric", "desc")>
+						<cfset local.firstDone = false>
+						<cfloop from="1" to="#ArrayLen(local.keys)#" index="local.i">
 							<cfset local.key = local.keys[local.i]><cfif local.key IS NOT "total" AND request.wheels.execution[local.key] GT 0>
 								<cfif local.firstDone>,</cfif>
 								#LCase(local.key)# ~#request.wheels.execution[local.key]#ms<cfset local.firstDone = true>
