@@ -39,7 +39,9 @@ public void function onApplicationStart() {
 		version = application.$wheels.serverVersion
 	);
 	if (
-		Len(local.upgradeTo) && !StructKeyExists(this, "disableEngineCheck") && !StructKeyExists(url, "disableEngineCheck")
+		Len(local.upgradeTo)
+		&& !StructKeyExists(this, "disableEngineCheck")
+		&& !StructKeyExists(url, "disableEngineCheck")
 	) {
 		local.type = "Wheels.EngineNotSupported";
 		local.message = "#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by CFWheels.";
@@ -105,13 +107,13 @@ public void function onApplicationStart() {
 
 	// Set environment either from the url or the developer's environment.cfm file.
 	if (
-		StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(
-			application.$wheels,
-			"reloadPassword"
-		) && (
-			!Len(application.$wheels.reloadPassword) || (
-				StructKeyExists(URL, "password") && URL.password == application.$wheels.reloadPassword
-			)
+		StructKeyExists(URL, "reload")
+		&& !IsBoolean(URL.reload)
+		&& Len(url.reload)
+		&& StructKeyExists(application.$wheels, "reloadPassword")
+		&& (
+			!Len(application.$wheels.reloadPassword)
+			|| (StructKeyExists(URL, "password") && URL.password == application.$wheels.reloadPassword)
 		)
 	) {
 		application.$wheels.environment = URL.reload;
@@ -228,9 +230,10 @@ public void function onApplicationStart() {
 	application.$wheels.errorEmailFromAddress = "";
 	application.$wheels.includeErrorInEmailSubject = true;
 	if (Find(".", request.cgi.server_name)) {
-		application.$wheels.errorEmailAddress = "webmaster@" & Reverse(ListGetAt(Reverse(request.cgi.server_name), 2, ".")) & "." & Reverse(
-			ListGetAt(Reverse(request.cgi.server_name), 1, ".")
-		);
+		application.$wheels.errorEmailAddress = "webmaster@"
+		& Reverse(ListGetAt(Reverse(request.cgi.server_name), 2, "."))
+		& "."
+		& Reverse(ListGetAt(Reverse(request.cgi.server_name), 1, "."));
 	} else {
 		application.$wheels.errorEmailAddress = "";
 	}
@@ -483,7 +486,12 @@ public void function onApplicationStart() {
 		class = "error-message",
 		encode = true
 	};
-	application.$wheels.functions.errorMessagesFor = {class = "error-messages", showDuplicates = true, encode = true, includeAssociations = true};
+	application.$wheels.functions.errorMessagesFor = {
+		class = "error-messages",
+		showDuplicates = true,
+		encode = true,
+		includeAssociations = true
+	};
 	application.$wheels.functions.excerpt = {radius = 100, excerptString = "..."};
 	application.$wheels.functions.exists = {reload = false, parameterize = true};
 	application.$wheels.functions.fileField = {
@@ -529,12 +537,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.hasOne = {joinType = "outer", dependent = false};
 	application.$wheels.functions.hiddenField = {encode = true};
 	application.$wheels.functions.hiddenFieldTag = {encode = true};
-	application.$wheels.functions.highlight = {
-		delimiter = ",",
-		tag = "span",
-		class = "highlight",
-		encode = true
-	};
+	application.$wheels.functions.highlight = {delimiter = ",", tag = "span", class = "highlight", encode = true};
 	application.$wheels.functions.hourSelectTag = {
 		label = "",
 		labelPlacement = "around",
@@ -546,22 +549,10 @@ public void function onApplicationStart() {
 		twelveHour = false,
 		encode = true
 	};
-	application.$wheels.functions.imageTag = {
-		onlyPath = true,
-		host = "",
-		protocol = "",
-		port = 0,
-		encode = true
-	};
+	application.$wheels.functions.imageTag = {onlyPath = true, host = "", protocol = "", port = 0, encode = true};
 	application.$wheels.functions.includePartial = {layout = "", spacer = "", dataFunction = true};
 	application.$wheels.functions.javaScriptIncludeTag = {type = "text/javascript", head = false, encode = true};
-	application.$wheels.functions.linkTo = {
-		onlyPath = true,
-		host = "",
-		protocol = "",
-		port = 0,
-		encode = true
-	};
+	application.$wheels.functions.linkTo = {onlyPath = true, host = "", protocol = "", port = 0, encode = true};
 	application.$wheels.functions.mailTo = {encode = true};
 	application.$wheels.functions.maximum = {parameterize = true, ifNull = ""};
 	application.$wheels.functions.minimum = {parameterize = true, ifNull = ""};
@@ -731,12 +722,7 @@ public void function onApplicationStart() {
 	};
 	application.$wheels.functions.stripLinks = {encode = true};
 	application.$wheels.functions.stripTags = {encode = true};
-	application.$wheels.functions.styleSheetLinkTag = {
-		type = "text/css",
-		media = "all",
-		head = false,
-		encode = true
-	};
+	application.$wheels.functions.styleSheetLinkTag = {type = "text/css", media = "all", head = false, encode = true};
 	application.$wheels.functions.submitTag = {
 		value = "Save changes",
 		image = "",
@@ -826,13 +812,7 @@ public void function onApplicationStart() {
 	application.$wheels.functions.updateByKey = {reload = false};
 	application.$wheels.functions.updateOne = {reload = false};
 	application.$wheels.functions.updateProperty = {parameterize = true};
-	application.$wheels.functions.URLFor = {
-		onlyPath = true,
-		host = "",
-		protocol = "",
-		port = 0,
-		encode = true
-	};
+	application.$wheels.functions.URLFor = {onlyPath = true, host = "", protocol = "", port = 0, encode = true};
 	application.$wheels.functions.validatesConfirmationOf = {message = "[property] should match confirmation"};
 	application.$wheels.functions.validatesExclusionOf = {message = "[property] is reserved", allowBlank = false};
 	application.$wheels.functions.validatesFormatOf = {message = "[property] is invalid", allowBlank = false};
