@@ -8,8 +8,12 @@ const databases = [
 		database: 'sqlserver'
 	},
 	{
-		databasename: 'PostGres',
+		databasename: 'PostgreSQL',
 		database: 'postgres'
+	},
+	{
+		databasename: 'H2',
+		database: 'h2'
 	}
 ]
 export default databases
