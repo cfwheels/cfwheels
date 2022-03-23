@@ -12,12 +12,11 @@ jobs:
       matrix:
         cf: [lucee5, adobe2016, adobe2018]
         db: [mysql56, postgres, sqlserver, h2]
-      exclude:
-        # excludes node 8 on macOS
-        - cf: adobe2016
-          db: h2
-        - cf: adobe2018
-          db: h2
+        exclude:
+          - cf: adobe2016
+            db: h2
+          - cf: adobe2018
+            db: h2
 
     steps:
       - uses: actions/checkout@v2
