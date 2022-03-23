@@ -324,9 +324,11 @@
 						<cfset local.keys = StructSort(request.wheels.execution, "numeric", "desc")>
 						<cfset local.firstDone = false>
 						<cfloop from="1" to="#ArrayLen(local.keys)#" index="local.i">
-							<cfset local.key = local.keys[local.i]><cfif local.key IS NOT "total" AND request.wheels.execution[local.key] GT 0>
+							<cfset local.key = local.keys[local.i]>
+							<cfif local.key IS NOT "total" AND request.wheels.execution[local.key] GT 0>
 								<cfif local.firstDone>,</cfif>
-								#LCase(local.key)# ~#request.wheels.execution[local.key]#ms<cfset local.firstDone = true>
+								#LCase(local.key)# ~#request.wheels.execution[local.key]#ms
+								<cfset local.firstDone = true>
 							</cfif>
 						</cfloop>
 						)
