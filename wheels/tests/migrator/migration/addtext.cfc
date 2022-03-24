@@ -53,7 +53,7 @@ component extends="wheels.tests.Test" {
 
 		expected = getTextType();
 
-		assert("ArrayContainsNoCase(expected, actual)");
+		assert("actual eq expected");
 	}
 
 	function test_add_multiple_text_columns() {
