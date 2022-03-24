@@ -33,7 +33,6 @@ jobs:
         run: docker-compose up -d ${{ matrix.cf }} ${{ matrix.db }}
 
         if: ${{ matrix.db == 'h2' }}
-        ${{ github.action_status == 'failure' }}
         run: docker-compose up -d ${{ matrix.cf }}
 
       - name: Wait for ${{ matrix.cf }} startup
