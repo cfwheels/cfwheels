@@ -3,6 +3,7 @@ component extends="wheels.tests.Test" {
 	private boolean function isDbCompatible() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
+				return true;
 			case "MicrosoftSQLServer":
 			case "MySQL":
 			case "PostgreSQL":
