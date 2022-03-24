@@ -54,6 +54,9 @@ component extends="wheels.tests.Test" {
 
 		expected = getTextType();
 
+		debug("expected");
+		debug("actual");
+
 		assert("ArrayContainsNoCase(expected, actual)");
 	}
 
