@@ -16,6 +16,7 @@ component extends="wheels.tests.Test" {
 		switch (migration.adapter.adapterName()) {
 			case "MicrosoftSQLServer":
 			case "H2":
+				return "TIMESTAMP";
 			case "MySQL":
 				return "DATETIME";
 			case "PostgreSQL":
