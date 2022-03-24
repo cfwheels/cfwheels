@@ -5,7 +5,7 @@ component extends="Abstract" {
 	variables.sqlTypes['binary'] = {name = 'BLOB'};
 	variables.sqlTypes['boolean'] = {name = 'TINYINT', limit = 1};
 	variables.sqlTypes['date'] = {name = 'DATE'};
-	variables.sqlTypes['datetime'] = {name = 'DATETIME'};
+	variables.sqlTypes['datetime'] = {name = 'TIMESTAMP'};
 	variables.sqlTypes['decimal'] = {name = 'DECIMAL'};
 	variables.sqlTypes['float'] = {name = 'FLOAT'};
 	variables.sqlTypes['integer'] = {name = 'INTEGER'};
