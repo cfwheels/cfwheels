@@ -20,6 +20,9 @@ get_port () {
     postgres)
       echo -n "5432"
       ;;
+    h2)
+      echo -n "9092"
+      ;;
     *)
       echo -n "unknown"
       ;;
