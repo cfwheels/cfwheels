@@ -28,11 +28,12 @@ jobs:
       #     sudo apt-get update -y -qq
       #     sudo apt-get install libappindicator-dev apt-transport-https commandbox -y
 
+      if: ${{ matrix.db != 'h2' }}
       - name: Docker Compose ${{ matrix.cf }} ${{ matrix.db }}
-        if: ${{ matrix.db != 'h2' }}
         run: docker-compose up -d ${{ matrix.cf }} ${{ matrix.db }}
 
-        if: ${{ matrix.db == 'h2' }}
+      if: ${{ matrix.db == 'h2' }}
+      - name: Docker Compose ${{ matrix.cf }}
         run: docker-compose up -d ${{ matrix.cf }}
 
       - name: Wait for ${{ matrix.cf }} startup
