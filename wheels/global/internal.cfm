@@ -154,12 +154,7 @@ public any function $cleanInlist(required string where) {
 		local.rv = RemoveChars(local.rv, local.in.pos[1], local.in.len[1]);
 		local.cleaned = $listClean(local.str);
 		local.rv = Insert(local.cleaned, local.rv, local.in.pos[1] - 1);
-		local.in = ReFind(
-			local.regex,
-			local.rv,
-			local.in.pos[1] + Len(local.cleaned),
-			true
-		);
+		local.in = ReFind(local.regex, local.rv, local.in.pos[1] + Len(local.cleaned), true);
 	}
 	return local.rv;
 }
@@ -187,12 +182,7 @@ public string function $hashedKey() {
 	local.rv = "";
 
 	// make all cache keys domain specific (do not use request scope below since it may not always be initialized)
-	StructInsert(
-		arguments,
-		ListLen(StructKeyList(arguments)) + 1,
-		cgi.http_host,
-		true
-	);
+	StructInsert(arguments, ListLen(StructKeyList(arguments)) + 1, cgi.http_host, true);
 
 	// we need to make sure we are looping through the passed in arguments in the same order everytime
 	local.values = [];
@@ -206,7 +196,6 @@ public string function $hashedKey() {
 		// this might fail if a query contains binary data so in those rare cases we fall back on using cfwddx (which is a little bit slower which is why we don't use it all the time)
 		try {
 			local.rv = SerializeJSON(local.values);
-
 			// remove the characters that indicate array or struct so that we can sort it as a list below
 			local.rv = ReplaceList(local.rv, "{,},[,],/", ",,,,");
 			local.rv = ListSort(local.rv, "text");
@@ -301,10 +290,10 @@ public boolean function $structKeysExist(required struct struct, string keys = "
 	local.iEnd = ListLen(arguments.keys);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		if (
-			!StructKeyExists(arguments.struct, ListGetAt(arguments.keys, local.i)) || (
-				IsSimpleValue(arguments.struct[ListGetAt(arguments.keys, local.i)]) && !Len(
-					arguments.struct[ListGetAt(arguments.keys, local.i)]
-				)
+			!StructKeyExists(arguments.struct, ListGetAt(arguments.keys, local.i))
+			|| (
+				IsSimpleValue(arguments.struct[ListGetAt(arguments.keys, local.i)])
+				&& !Len(arguments.struct[ListGetAt(arguments.keys, local.i)])
 			)
 		) {
 			local.rv = false;
@@ -415,12 +404,7 @@ public struct function $dollarify(required struct input, required string on) {
  * Internal function.
  */
 public void function $abortInvalidRequest() {
-	local.applicationPath = Replace(
-		GetCurrentTemplatePath(),
-		"\",
-		"/",
-		"all"
-	);
+	local.applicationPath = Replace(GetCurrentTemplatePath(), "\", "/", "all");
 	local.callingPath = Replace(GetBaseTemplatePath(), "\", "/", "all");
 	if (
 		ListLen(local.callingPath, "/") > ListLen(local.applicationPath, "/")
@@ -701,12 +685,7 @@ public string function $objectFileName(required string name, required string obj
 		} else {
 			// the file exists, let's store the proper case of the file if caching is turned on
 			local.file = SpanExcluding(local.file, ".");
-			local.fullObjectPath = ListSetAt(
-				local.fullObjectPath,
-				ListLen(local.fullObjectPath, "/"),
-				local.file,
-				"/"
-			);
+			local.fullObjectPath = ListSetAt(local.fullObjectPath, ListLen(local.fullObjectPath, "/"), local.file, "/");
 			if (application.wheels.cacheFileChecking) {
 				application.wheels.existingObjectFiles = ListAppend(
 					application.wheels.existingObjectFiles,
@@ -725,12 +704,7 @@ public string function $objectFileName(required string name, required string obj
 	// we've found a file so we'll need to send back the corrected name
 	// argument as it could have dot notation in it from the mapper
 	if (StructKeyExists(local, "file") and !IsBoolean(local.file)) {
-		local.rv = ListSetAt(
-			arguments.name,
-			ListLen(arguments.name, "."),
-			local.file,
-			"."
-		);
+		local.rv = ListSetAt(arguments.name, ListLen(arguments.name, "."), local.file, ".");
 	}
 
 	return local.rv;
@@ -894,12 +868,7 @@ public any function $createModelClass(
  * Internal function.
  */
 public void function $loadRoutes() {
-	$simpleLock(
-		name = "$mapperLoadRoutes",
-		type = "exclusive",
-		timeout = 5,
-		execute = "$lockedLoadRoutes"
-	);
+	$simpleLock(name = "$mapperLoadRoutes", type = "exclusive", timeout = 5, execute = "$lockedLoadRoutes");
 }
 
 /**
@@ -1226,12 +1195,7 @@ public string function $buildReleaseZip(string version = application.wheels.vers
 	for (local.i in local.exclude) {
 		$zip(file = local.path, action = "delete", entrypath = local.i);
 	};
-	$zip(
-		file = local.path,
-		action = "delete",
-		filter = local.filter,
-		recurse = true
-	);
+	$zip(file = local.path, action = "delete", filter = local.filter, recurse = true);
 
 	// Clean up.
 	FileDelete(ExpandPath("wheels/CHANGELOG.md"));
