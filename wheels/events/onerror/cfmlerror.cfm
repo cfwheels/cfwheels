@@ -4,8 +4,10 @@
 		<p>
 			<strong>Error:</strong>
 			<br>
-			<cfif StructKeyExists(arguments.exception, "rootcause")
-			&& StructKeyExists(arguments.exception.rootcause, "message")>
+			<cfif
+				StructKeyExists(arguments.exception, "rootcause")
+				&& StructKeyExists(arguments.exception.rootcause, "message")
+			>
 				#arguments.exception.rootcause.message#
 				<cfif arguments.exception.rootcause.detail IS NOT "">
 					<br>#arguments.exception.rootcause.detail#
@@ -14,13 +16,17 @@
 				A root cause was not provided.
 			</cfif>
 		</p>
-		<cfif StructKeyExists(arguments.exception, "cause")
-		&& StructKeyExists(arguments.exception.cause, "tagContext")
-		&& ArrayLen(arguments.exception.cause.tagContext)>
+		<cfif
+			StructKeyExists(arguments.exception, "cause")
+			&& StructKeyExists(arguments.exception.cause, "tagContext")
+			&& ArrayLen(arguments.exception.cause.tagContext)
+		>
 			<cfset local.tagContext = Duplicate(arguments.exception.cause.tagContext)>
-		<cfelseif StructKeyExists(arguments.exception, "rootCause")
+		<cfelseif
+			StructKeyExists(arguments.exception, "rootCause")
 			&& StructKeyExists(arguments.exception.rootCause, "tagContext")
-			&& ArrayLen(arguments.exception.rootCause.tagContext)>
+			&& ArrayLen(arguments.exception.rootCause.tagContext)
+		>
 			<cfset local.tagContext = Duplicate(arguments.exception.rootCause.tagContext)>
 		</cfif>
 		<cfif StructKeyExists(local, "tagContext")>
@@ -44,11 +50,7 @@
 			<p>
 				<strong>URL:</strong>
 				<br>
-				http<cfif cgi.http_x_forwarded_proto == "https" OR cgi.server_port_secure == "true">s</cfif>
-				://#cgi.server_name##Replace(cgi.script_name, "/#application.wheels.rewriteFile#", "")#<cfif IsDefined("request.cgi.path_info")>
-					#request.cgi.path_info#<cfelse>#cgi.path_info#
-				</cfif>
-				<cfif cgi.query_string IS NOT "">?#cgi.query_string#</cfif>
+				http<cfif cgi.http_x_forwarded_proto == "https" OR cgi.server_port_secure == "true">s</cfif>://#cgi.server_name##Replace(cgi.script_name, "/#application.wheels.rewriteFile#", "")#<cfif IsDefined("request.cgi.path_info")>#request.cgi.path_info#<cfelse>#cgi.path_info#</cfif><cfif cgi.query_string IS NOT "">?#cgi.query_string#</cfif>
 			</p>
 		</cfif>
 		<cfif Len(cgi.http_referer)>
