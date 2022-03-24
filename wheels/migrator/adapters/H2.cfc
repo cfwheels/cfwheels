@@ -1,7 +1,7 @@
 component extends="Abstract" {
 
 	variables.sqlTypes = {};
-	variables.sqlTypes['biginteger'] = {name = 'BIGINT UNSIGNED'};
+	variables.sqlTypes['biginteger'] = {name = 'BIGINT'};
 	variables.sqlTypes['binary'] = {name = 'BLOB'};
 	variables.sqlTypes['boolean'] = {name = 'TINYINT', limit = 1};
 	variables.sqlTypes['date'] = {name = 'DATE'};
