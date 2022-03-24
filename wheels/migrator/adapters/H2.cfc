@@ -7,7 +7,7 @@ component extends="Abstract" {
 	variables.sqlTypes['date'] = {name = 'DATE'};
 	variables.sqlTypes['datetime'] = {name = 'TIMESTAMP'};
 	variables.sqlTypes['decimal'] = {name = 'DECIMAL'};
-	variables.sqlTypes['float'] = {name = 'FLOAT'};
+	variables.sqlTypes['float'] = {name = 'DOUBLE'};
 	variables.sqlTypes['integer'] = {name = 'INTEGER'};
 	variables.sqlTypes['string'] = {name = 'VARCHAR', limit = 255};
 	variables.sqlTypes['text'] = {name = 'CLOB'};
