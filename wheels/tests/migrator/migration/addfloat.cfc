@@ -15,6 +15,7 @@ component extends="wheels.tests.Test" {
 	private string function getFloatType() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
+				return "FLOAT";
 			case "MicrosoftSQLServer":
 			case "MySQL":
 			case "PostgreSQL":

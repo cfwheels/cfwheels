@@ -15,6 +15,7 @@ component extends="wheels.tests.Test" {
 	private array function getTextType() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
+				return ["TEXT"];
 			case "MySQL":
 			case "PostgreSQL":
 				return ["TEXT"];
