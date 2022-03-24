@@ -51,6 +51,9 @@ component extends="wheels.tests.Test" {
 
 		expected = getFloatType();
 
+		debug("expected");
+		debug("actual");
+
 		assert("ListFindNoCase(expected, actual)");
 	}
 
