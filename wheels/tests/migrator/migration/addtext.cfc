@@ -5,6 +5,7 @@ component extends="wheels.tests.Test" {
 			case "H2":
 				return true;
 			case "MicrosoftSQLServer":
+				return true;
 			case "MySQL":
 			case "PostgreSQL":
 				return true;
@@ -53,7 +54,7 @@ component extends="wheels.tests.Test" {
 
 		expected = getTextType();
 
-		assert("actual eq expected");
+		assert("ArrayContainsNoCase(expected, actual)");
 	}
 
 	function test_add_multiple_text_columns() {
