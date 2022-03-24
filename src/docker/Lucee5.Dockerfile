@@ -6,7 +6,8 @@ LABEL maintainer "CFWheels Core Team"
 ENV CFENGINE lucee@5.3.5+92
 
 #Add the H2 extension
-ADD https://ext.lucee.org/org.h2-1.3.172.lex ${BOX_SERVER_APP_SERVERHOMEDIRECTORY}/WEB-INF/lucee-server/deploy/org.h2-1.3.172.lex
+ADD https://ext.lucee.org/org.h2-1.3.172.lex /usr/local/lib/serverHome/WEB-INF/lucee-server/deploy/org.h2-1.3.172.lex
+RUN LS /usr/local/lib/serverHome/WEB-INF/lucee-server/deploy/
 
 ENV APP_DIR   "/cfwheels-test-suite"
 ENV HEALTHCHECK_URI "http://127.0.0.1:8080/"
