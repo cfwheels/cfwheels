@@ -65,7 +65,8 @@ public any function $initModelClass(required string name, required string path) 
 	// set calculated properties
 	for (local.key in variables.wheels.class.mapping) {
 		if (
-			StructKeyExists(variables.wheels.class.mapping[local.key], "type") && variables.wheels.class.mapping[local.key].type != "column"
+			StructKeyExists(variables.wheels.class.mapping[local.key], "type")
+			&& variables.wheels.class.mapping[local.key].type != "column"
 		) {
 			variables.wheels.class.calculatedPropertyList = ListAppend(
 				variables.wheels.class.calculatedPropertyList,
@@ -182,10 +183,9 @@ public any function $initModelClass(required string name, required string path) 
 					// check if automatic validations have been turned off specifically for this property before proceeding
 					local.propertyAllowsAutomaticValidations = true;
 					if (
-						StructKeyExists(variables.wheels.class.mapping, local.property) && StructKeyExists(
-							variables.wheels.class.mapping[local.property],
-							"automaticValidations"
-						) && !variables.wheels.class.mapping[local.property].automaticValidations
+						StructKeyExists(variables.wheels.class.mapping, local.property)
+						&& StructKeyExists(variables.wheels.class.mapping[local.property], "automaticValidations")
+						&& !variables.wheels.class.mapping[local.property].automaticValidations
 					) {
 						local.propertyAllowsAutomaticValidations = false;
 					}
@@ -198,10 +198,9 @@ public any function $initModelClass(required string name, required string path) 
 							local.defaultValidationsAllowBlank = true;
 						}
 						if (
-							!ListFindNoCase(primaryKeys(), local.property) && !variables.wheels.class.properties[local.property].nullable && !$validationExists(
-								property = local.property,
-								validation = "validatesPresenceOf"
-							)
+							!ListFindNoCase(primaryKeys(), local.property)
+							&& !variables.wheels.class.properties[local.property].nullable
+							&& !$validationExists(property = local.property, validation = "validatesPresenceOf")
 						) {
 							if (Len(local.columns["column_default_value"][local.i])) {
 								validatesPresenceOf(properties = local.property, when = "onUpdate");
@@ -212,20 +211,16 @@ public any function $initModelClass(required string name, required string path) 
 
 						// always allow blank if a database default or validatesPresenceOf() has been set
 						if (
-							Len(local.columns["column_default_value"][local.i]) || $validationExists(
-								property = local.property,
-								validation = "validatesPresenceOf"
-							)
+							Len(local.columns["column_default_value"][local.i])
+							|| $validationExists(property = local.property, validation = "validatesPresenceOf")
 						) {
 							local.defaultValidationsAllowBlank = true;
 						}
 
 						// set length validations if the developer has not
 						if (
-							variables.wheels.class.properties[local.property].validationtype == "string" && !$validationExists(
-								property = local.property,
-								validation = "validatesLengthOf"
-							)
+							variables.wheels.class.properties[local.property].validationtype == "string"
+							&& !$validationExists(property = local.property, validation = "validatesLengthOf")
 						) {
 							validatesLengthOf(
 								properties = local.property,
@@ -236,10 +231,8 @@ public any function $initModelClass(required string name, required string path) 
 
 						// set numericality validations if the developer has not
 						if (
-							ListFindNoCase("integer,float", variables.wheels.class.properties[local.property].validationtype) && !$validationExists(
-								property = local.property,
-								validation = "validatesNumericalityOf"
-							)
+							ListFindNoCase("integer,float", variables.wheels.class.properties[local.property].validationtype)
+							&& !$validationExists(property = local.property, validation = "validatesNumericalityOf")
 						) {
 							validatesNumericalityOf(
 								properties = local.property,
@@ -250,10 +243,8 @@ public any function $initModelClass(required string name, required string path) 
 
 						// set date validations if the developer has not (checks both dates or times as per the IsDate() function)
 						if (
-							variables.wheels.class.properties[local.property].validationtype == "datetime" && !$validationExists(
-								property = local.property,
-								validation = "validatesFormatOf"
-							)
+							variables.wheels.class.properties[local.property].validationtype == "datetime"
+							&& !$validationExists(property = local.property, validation = "validatesFormatOf")
 						) {
 							validatesFormatOf(
 								properties = local.property,
@@ -285,10 +276,8 @@ public any function $initModelClass(required string name, required string path) 
 	// set up soft deletion and time stamping if the necessary columns in the table exist
 	variables.wheels.class.timeStampMode = application.wheels.timeStampMode;
 	if (
-		Len(application.wheels.softDeleteProperty) && StructKeyExists(
-			variables.wheels.class.properties,
-			application.wheels.softDeleteProperty
-		)
+		Len(application.wheels.softDeleteProperty)
+		&& StructKeyExists(variables.wheels.class.properties, application.wheels.softDeleteProperty)
 	) {
 		variables.wheels.class.softDeletion = true;
 		variables.wheels.class.softDeleteColumn = variables.wheels.class.properties[application.wheels.softDeleteProperty].column;
@@ -296,10 +285,8 @@ public any function $initModelClass(required string name, required string path) 
 		variables.wheels.class.softDeletion = false;
 	}
 	if (
-		Len(application.wheels.timeStampOnCreateProperty) && StructKeyExists(
-			variables.wheels.class.properties,
-			application.wheels.timeStampOnCreateProperty
-		)
+		Len(application.wheels.timeStampOnCreateProperty)
+		&& StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnCreateProperty)
 	) {
 		variables.wheels.class.timeStampingOnCreate = true;
 		variables.wheels.class.timeStampOnCreateProperty = application.wheels.timeStampOnCreateProperty;
@@ -307,10 +294,8 @@ public any function $initModelClass(required string name, required string path) 
 		variables.wheels.class.timeStampingOnCreate = false;
 	}
 	if (
-		Len(application.wheels.timeStampOnUpdateProperty) && StructKeyExists(
-			variables.wheels.class.properties,
-			application.wheels.timeStampOnUpdateProperty
-		)
+		Len(application.wheels.timeStampOnUpdateProperty)
+		&& StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnUpdateProperty)
 	) {
 		variables.wheels.class.timeStampingOnUpdate = true;
 		variables.wheels.class.timeStampOnUpdateProperty = application.wheels.timeStampOnUpdateProperty;

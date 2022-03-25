@@ -149,13 +149,12 @@ public boolean function $save(
 	if ($callback("beforeValidation", arguments.callbacks)) {
 		if (isNew()) {
 			if (
-				$callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate", arguments.validate) && $callback(
-					"afterValidation",
-					arguments.callbacks
-				) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback(
-					"beforeCreate",
-					arguments.callbacks
-				)
+				$callback("beforeValidationOnCreate", arguments.callbacks)
+				&& $validate("onSave,onCreate", arguments.validate)
+				&& $callback("afterValidation", arguments.callbacks)
+				&& $callback("afterValidationOnCreate", arguments.callbacks)
+				&& $callback("beforeSave", arguments.callbacks)
+				&& $callback("beforeCreate", arguments.callbacks)
 			) {
 				local.rollback = false;
 				if (!Len(key())) {
@@ -163,10 +162,9 @@ public boolean function $save(
 				}
 				$create(parameterize = arguments.parameterize, reload = arguments.reload);
 				if (
-					$saveAssociations(argumentCollection = arguments) && $callback("afterCreate", arguments.callbacks) && $callback(
-						"afterSave",
-						arguments.callbacks
-					)
+					$saveAssociations(argumentCollection = arguments)
+					&& $callback("afterCreate", arguments.callbacks)
+					&& $callback("afterSave", arguments.callbacks)
 				) {
 					$updatePersistedProperties();
 					local.rv = true;
@@ -178,20 +176,18 @@ public boolean function $save(
 			}
 		} else {
 			if (
-				$callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave,onUpdate", arguments.validate) && $callback(
-					"afterValidation",
-					arguments.callbacks
-				) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback(
-					"beforeUpdate",
-					arguments.callbacks
-				)
+				$callback("beforeValidationOnUpdate", arguments.callbacks)
+				&& $validate("onSave,onUpdate", arguments.validate)
+				&& $callback("afterValidation", arguments.callbacks)
+				&& $callback("afterValidationOnUpdate", arguments.callbacks)
+				&& $callback("beforeSave", arguments.callbacks)
+				&& $callback("beforeUpdate", arguments.callbacks)
 			) {
 				$update(parameterize = arguments.parameterize, reload = arguments.reload);
 				if (
-					$saveAssociations(argumentCollection = arguments) && $callback("afterUpdate", arguments.callbacks) && $callback(
-						"afterSave",
-						arguments.callbacks
-					)
+					$saveAssociations(argumentCollection = arguments)
+					&& $callback("afterUpdate", arguments.callbacks)
+					&& $callback("afterSave", arguments.callbacks)
 				) {
 					$updatePersistedProperties();
 					local.rv = true;
@@ -213,18 +209,18 @@ public boolean function $create(required any parameterize, required boolean relo
 	// Allow explicit assignment of the createdAt/updatedAt properties if allowExplicitTimestamps is true
 	local.allowExplicitTimestamps = StructKeyExists(this, "allowExplicitTimestamps") && this.allowExplicitTimestamps;
 	if (
-		local.allowExplicitTimestamps && StructKeyExists(this, $get("timeStampOnCreateProperty")) && Len(
-			this[$get("timeStampOnCreateProperty")]
-		)
+		local.allowExplicitTimestamps
+		&& StructKeyExists(this, $get("timeStampOnCreateProperty"))
+		&& Len(this[$get("timeStampOnCreateProperty")])
 	) {
 		// leave createdat unmolested
 	} else if (variables.wheels.class.timeStampingOnCreate) {
 		$timestampProperty(property = variables.wheels.class.timeStampOnCreateProperty);
 	}
 	if (
-		local.allowExplicitTimestamps && StructKeyExists(this, $get("timeStampOnUpdateProperty")) && Len(
-			this[$get("timeStampOnUpdateProperty")]
-		)
+		local.allowExplicitTimestamps
+		&& StructKeyExists(this, $get("timeStampOnUpdateProperty"))
+		&& Len(this[$get("timeStampOnUpdateProperty")])
 	) {
 		// leave updatedat unmolested
 	} else if ($get("setUpdatedAtOnCreate") && variables.wheels.class.timeStampingOnUpdate) {
@@ -237,11 +233,12 @@ public boolean function $create(required any parameterize, required boolean relo
 	for (local.key in variables.wheels.class.properties) {
 		// Only include this property if it has a value, or the column is not nullable and has no default set.
 		if (
-			StructKeyExists(this, local.key) && (
-				Len(this[local.key]) || (
-					!variables.wheels.class.properties[local.key].nullable && !Len(
-						variables.wheels.class.properties[local.key].columndefault
-					)
+			StructKeyExists(this, local.key)
+			&& (
+				Len(this[local.key])
+				|| (
+					!variables.wheels.class.properties[local.key].nullable
+					&& !Len(variables.wheels.class.properties[local.key].columndefault)
 				)
 			)
 		) {
@@ -277,9 +274,7 @@ public boolean function $create(required any parameterize, required boolean relo
 		local.pks = primaryKey(0);
 		ArrayAppend(
 			local.sql,
-			"INSERT INTO #tableName()#" & variables.wheels.class.adapter.$defaultValues(
-				$primaryKey = local.pks
-			)
+			"INSERT INTO #tableName()#" & variables.wheels.class.adapter.$defaultValues($primaryKey = local.pks)
 		);
 	}
 

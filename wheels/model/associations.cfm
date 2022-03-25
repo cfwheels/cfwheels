@@ -152,10 +152,8 @@ public void function $registerAssociation() {
 		}
 		// Set the label (if it hasn't already been specified)
 		if (
-			!StructKeyExists(variables.wheels.class.mapping, local.propertyName) || !StructKeyExists(
-				variables.wheels.class.mapping[local.propertyName],
-				"label"
-			)
+			!StructKeyExists(variables.wheels.class.mapping, local.propertyName)
+			|| !StructKeyExists(variables.wheels.class.mapping[local.propertyName], "label")
 		) {
 			property(name = local.propertyName, label = humanize(arguments.name));
 		}
