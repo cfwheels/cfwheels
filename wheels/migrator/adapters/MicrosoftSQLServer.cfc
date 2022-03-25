@@ -61,12 +61,7 @@ component extends="Abstract" {
 	 * Surrounds table names with square brackets
 	 */
 	public string function quoteTableName(required string name) {
-		return "[#Replace(
-			objectCase(arguments.name),
-			".",
-			"`.`",
-			"ALL"
-		)#]";
+		return "[#Replace(objectCase(arguments.name), ".", "`.`", "ALL")#]";
 	}
 
 	/**
