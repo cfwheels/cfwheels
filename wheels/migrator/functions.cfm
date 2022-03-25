@@ -151,13 +151,7 @@ public array function getAvailableMigrations(string path = this.paths.migrate) {
 	if (!DirectoryExists(this.paths.migrate)) {
 		DirectoryCreate(this.paths.migrate);
 	}
-	local.files = DirectoryList(
-		this.paths.migrate,
-		false,
-		"query",
-		"*.cfc",
-		"name"
-	);
+	local.files = DirectoryList(this.paths.migrate, false, "query", "*.cfc", "name");
 	for (local.row in local.files) {
 		if (ReFind(local.migrationRE, local.row.name)) {
 			local.migration = {};
@@ -308,25 +302,10 @@ private string function $copyTemplateMigrationAndRename(
 		local.templateContent = Replace(
 			local.templateContent,
 			"[description]",
-			Replace(
-				arguments.migrationName,
-				"""",
-				"&quot;",
-				"all"
-			)
+			Replace(arguments.migrationName, """", "&quot;", "all")
 		);
-		local.migrationFile = ReReplace(
-			arguments.migrationName,
-			"[^A-z0-9]+",
-			" ",
-			"all"
-		);
-		local.migrationFile = ReReplace(
-			Trim(local.migrationFile),
-			"[\s]+",
-			"_",
-			"all"
-		);
+		local.migrationFile = ReReplace(arguments.migrationName, "[^A-z0-9]+", " ", "all");
+		local.migrationFile = ReReplace(Trim(local.migrationFile), "[\s]+", "_", "all");
 		local.migrationFile = $getNextMigrationNumber(arguments.migrationPrefix) & "_#local.migrationFile#.cfc";
 		$writeMigrationFile("#this.paths.migrate#/#local.migrationFile#", local.templateContent);
 	} catch (any e) {
