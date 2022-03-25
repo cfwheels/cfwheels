@@ -5,7 +5,7 @@
 public array function $addDeleteClause(required array sql, required boolean softDelete) {
 	if (variables.wheels.class.softDeletion && arguments.softDelete) {
 		ArrayAppend(arguments.sql, "UPDATE #tableName()# SET #variables.wheels.class.softDeleteColumn# = ");
-		local.param = {value=$timestamp(variables.wheels.class.timeStampMode), type="cf_sql_timestamp"};
+		local.param = {value = $timestamp(variables.wheels.class.timeStampMode), type = "cf_sql_timestamp"};
 		ArrayAppend(arguments.sql, local.param);
 	} else {
 		ArrayAppend(arguments.sql, "DELETE FROM #tableName()#");
@@ -151,12 +151,9 @@ public string function $orderByClause(required string order, required string inc
 						if (ListFindNoCase(local.classData.propertyList, local.property)) {
 							local.toAdd = local.classData.tableName & "." & local.classData.properties[local.property].column;
 						} else if (ListFindNoCase(local.classData.calculatedPropertyList, local.property)) {
-							local.toAdd = "(" & Replace(
-								local.classData.calculatedProperties[local.property].sql,
-								",",
-								"[[comma]]",
-								"all"
-							) & ")";
+							// cfformat-ignore-start
+							local.toAdd = "(" & Replace(local.classData.calculatedProperties[local.property].sql, ",", "[[comma]]", "all") & ")";
+							// cfformat-ignore-end
 						}
 						if (Len(local.toAdd)) {
 							if (!ListFindNoCase(local.classData.columnList, local.property)) {
@@ -302,11 +299,10 @@ public string function $createSQLFieldList(
 				// if we find the property in this model and it's not already added we go ahead and add it to the select clause
 				if (
 					(
-						ListFindNoCase(local.classData.propertyList, local.iItem) || ListFindNoCase(
-							local.classData.calculatedPropertyList,
-							local.iItem
-						)
-					) && !ListFindNoCase(local.addedPropertiesByModel[local.classData.modelName], local.iItem)
+						ListFindNoCase(local.classData.propertyList, local.iItem)
+						|| ListFindNoCase(local.classData.calculatedPropertyList, local.iItem)
+					)
+					&& !ListFindNoCase(local.addedPropertiesByModel[local.classData.modelName], local.iItem)
 				) {
 					// if expanded column aliases is enabled then mark all columns from included classes as duplicates in order to prepend them with their class name
 					local.flagAsDuplicate = false;
@@ -338,12 +334,7 @@ public string function $createSQLFieldList(
 							}
 						}
 					} else if (ListFindNoCase(local.classData.calculatedPropertyList, local.iItem)) {
-						local.sql = Replace(
-							local.classData.calculatedProperties[local.iItem].sql,
-							",",
-							"[[comma]]",
-							"all"
-						);
+						local.sql = Replace(local.classData.calculatedProperties[local.iItem].sql, ",", "[[comma]]", "all");
 						if (arguments.clause == "select" || !ReFind("^(SELECT )?(AVG|COUNT|MAX|MIN|SUM)\(.*\)", local.sql)) {
 							local.toAppend &= "(" & local.sql & ")";
 							if (arguments.clause == "select") {
@@ -376,12 +367,7 @@ public string function $createSQLFieldList(
 
 				// check if this one has been flagged as a duplicate, we get the number of classes to skip and also remove the flagged info from the item
 				local.duplicateCount = 0;
-				local.matches = ReFind(
-					"^\[\[duplicate\]\](\d+)(.+)$",
-					local.iItem,
-					1,
-					true
-				);
+				local.matches = ReFind("^\[\[duplicate\]\](\d+)(.+)$", local.iItem, 1, true);
 				if (local.matches.pos[1] > 0) {
 					local.duplicateCount = Mid(local.iItem, local.matches.pos[2], local.matches.len[2]);
 					local.iItem = Mid(local.iItem, local.matches.pos[3], local.matches.len[3]);
@@ -414,12 +400,7 @@ public string function $createSQLFieldList(
 	} else {
 		local.rv = arguments.list;
 		if (arguments.clause == "groupBy" && Find(" AS ", local.rv)) {
-			local.rv = ReReplace(
-				local.rv,
-				variables.wheels.class.RESQLAs,
-				"",
-				"all"
-			);
+			local.rv = ReReplace(local.rv, variables.wheels.class.RESQLAs, "", "all");
 		}
 	}
 	return local.rv;
@@ -463,12 +444,7 @@ public array function $whereClause(required string where, string include = "", b
 		local.wherePos = ArrayLen(local.rv) + 1;
 		local.params = [];
 		local.where = ReReplace(
-			ReReplace(
-				arguments.where,
-				variables.wheels.class.RESQLWhere,
-				"\1?\8",
-				"all"
-			),
+			ReReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8", "all"),
 			"([^a-zA-Z0-9])(AND|OR)([^a-zA-Z0-9])",
 			"\1#Chr(7)#\2\3",
 			"all"
@@ -493,16 +469,7 @@ public array function $whereClause(required string where, string include = "", b
 				true
 			);
 			if (ArrayLen(local.temp.len) > 1) {
-				local.where = Replace(
-					local.where,
-					local.element,
-					Replace(
-						local.element,
-						local.elementDataPart,
-						"?",
-						"one"
-					)
-				);
+				local.where = Replace(local.where, local.element, Replace(local.element, local.elementDataPart, "?", "one"));
 				local.param.property = Mid(local.elementDataPart, local.temp.pos[2], local.temp.len[2]);
 				local.jEnd = ArrayLen(local.classes);
 				for (local.j = 1; local.j <= local.jEnd; local.j++) {
@@ -524,9 +491,7 @@ public array function $whereClause(required string where, string include = "", b
 							local.param.column = "(" & local.classData.calculatedProperties[local.column].sql & ")";
 							if (StructKeyExists(local.classData.calculatedProperties[local.column], "dataType")) {
 								local.param.dataType = local.classData.calculatedProperties[local.column].dataType;
-								local.param.type = variables.wheels.class.adapter.$getType(
-									local.param.dataType
-								);
+								local.param.type = variables.wheels.class.adapter.$getType(local.param.dataType);
 							}
 							break;
 						}
@@ -606,12 +571,7 @@ public array function $addWhereClauseParameters(required array sql, required str
 		local.start = 1;
 		local.originalValues = [];
 		while (!StructKeyExists(local, "temp") || ArrayLen(local.temp.len) > 1) {
-			local.temp = ReFind(
-				variables.wheels.class.RESQLWhere,
-				arguments.where,
-				local.start,
-				true
-			);
+			local.temp = ReFind(variables.wheels.class.RESQLWhere, arguments.where, local.start, true);
 			if (ArrayLen(local.temp.len) > 1) {
 				local.start = local.temp.pos[4] + local.temp.len[4];
 				ArrayAppend(
@@ -625,9 +585,9 @@ public array function $addWhereClauseParameters(required array sql, required str
 			}
 		}
 		if (
-			StructKeyExists(arguments, "parameterize") && IsNumeric(arguments.parameterize) && arguments.parameterize != ArrayLen(
-				local.originalValues
-			)
+			StructKeyExists(arguments, "parameterize")
+			&& IsNumeric(arguments.parameterize)
+			&& arguments.parameterize != ArrayLen(local.originalValues)
 		) {
 			Throw(
 				type = "Wheels.ParameterMismatch",
@@ -672,12 +632,7 @@ public string function $expandProperties(required string list, required array cl
 			}
 		}
 		if (Len(local.fields)) {
-			local.rv = Replace(
-				local.rv,
-				local.match,
-				local.fields,
-				"all"
-			);
+			local.rv = Replace(local.rv, local.match, local.fields, "all");
 		} else if (application.wheels.showErrorInformation) {
 			Throw(
 				type = "Wheels.ModelNotFound",
@@ -710,12 +665,7 @@ public array function $expandedAssociations(required string include, boolean inc
 	local.pos = 1;
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		// look for the next delimiter sequence in the string and set it (can be single delims or a chain, e.g ',' or ')),'
-		local.delimFind = ReFind(
-			"[(\(|\)|,)]+",
-			local.include,
-			local.pos,
-			true
-		);
+		local.delimFind = ReFind("[(\(|\)|,)]+", local.include, local.pos, true);
 		local.delimSequence = Mid(local.include, local.delimFind.pos[1], local.delimFind.len[1]);
 
 		// set current association name and set new position to start search in the next loop
@@ -739,21 +689,13 @@ public array function $expandedAssociations(required string include, boolean inc
 		local.associatedClass = model(local.classAssociations[local.name].modelName);
 
 		if (!Len(local.classAssociations[local.name].foreignKey)) {
+			// cfformat-ignore-start
 			if (local.classAssociations[local.name].type == "belongsTo") {
-				local.classAssociations[local.name].foreignKey = local.associatedClass.$classData().modelName & Replace(
-					local.associatedClass.$classData().keys,
-					",",
-					",#local.associatedClass.$classData().modelName#",
-					"all"
-				);
+				local.classAssociations[local.name].foreignKey = local.associatedClass.$classData().modelName & Replace(local.associatedClass.$classData().keys, ",", ",#local.associatedClass.$classData().modelName#", "all");
 			} else {
-				local.classAssociations[local.name].foreignKey = local.class.$classData().modelName & Replace(
-					local.class.$classData().keys,
-					",",
-					",#local.class.$classData().modelName#",
-					"all"
-				);
+				local.classAssociations[local.name].foreignKey = local.class.$classData().modelName & Replace(local.class.$classData().keys, ",", ",#local.class.$classData().modelName#", "all");
 			}
+			// cfformat-ignore-end
 		}
 		if (!Len(local.classAssociations[local.name].joinKey)) {
 			if (local.classAssociations[local.name].type == "belongsTo") {
@@ -771,15 +713,9 @@ public array function $expandedAssociations(required string include, boolean inc
 
 		// create the join string if it hasn't already been done
 		if (!StructKeyExists(local.classAssociations[local.name], "join")) {
-			local.join = UCase(
-				ReplaceNoCase(
-					local.classAssociations[local.name].joinType,
-					"outer",
-					"left outer",
-					"one"
-				)
-			) & " JOIN " & local.classAssociations[local.name].tableName;
-
+			// cfformat-ignore-start
+			local.join = UCase(ReplaceNoCase(local.classAssociations[local.name].joinType, "outer", "left outer", "one")) & " JOIN " & local.classAssociations[local.name].tableName;
+			// cfformat-ignore-end
 			// alias the table as the association name when joining to itself
 			if (ListFindNoCase(local.tables, local.classAssociations[local.name].tableName)) {
 				local.join = variables.wheels.class.adapter.$tableAlias(
@@ -870,10 +806,7 @@ public string function $keyWhereString(any properties = primaryKeys(), any value
 			local.value = "";
 		}
 		local.type = validationTypeForProperty(local.key);
-		local.toAppend = local.key & "=" & variables.wheels.class.adapter.$quoteValue(
-			str = local.value,
-			type = local.type
-		);
+		local.toAppend = local.key & "=" & variables.wheels.class.adapter.$quoteValue(str = local.value, type = local.type);
 		local.rv = ListAppend(local.rv, local.toAppend, " ");
 		if (local.i < local.iEnd) {
 			local.rv = ListAppend(local.rv, "AND", " ");
