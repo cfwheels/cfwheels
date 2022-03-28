@@ -17,7 +17,7 @@ component extends="wheels.tests.Test" {
 
 			newPost.save(transaction="none");
 			
-			assert("newPost.createdAt == twentyDaysAgo");
+			assert("newPost.createdAt eq twentyDaysAgo");
 			
 			transaction action="rollback";
 		}
@@ -39,7 +39,7 @@ component extends="wheels.tests.Test" {
 			newPost.updatedAt = twentyDaysAgo;
 			newPost.save(transaction="none");
 			
-			assert("newPost.updatedAt == twentyDaysAgo");
+			assert("newPost.updatedAt eq twentyDaysAgo");
 			
 			transaction action="rollback";
 		}

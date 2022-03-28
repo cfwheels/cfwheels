@@ -81,7 +81,7 @@ component extends="wheels.tests.Test" {
 				allowExplicitTimestamps=true
 			);
 			
-			assert("newPost.createdAt == twentyDaysAgo");
+			assert("newPost.createdAt eq twentyDaysAgo");
 			
 			transaction action="rollback";
 		}
@@ -105,7 +105,7 @@ component extends="wheels.tests.Test" {
 				allowExplicitTimestamps=true
 			);
 			
-			assert("newPost.updatedAt == twentyDaysAgo");
+			assert("newPost.updatedAt eq twentyDaysAgo");
 			
 			transaction action="rollback";
 		}
