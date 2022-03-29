@@ -4,12 +4,9 @@
 param name="request.wheels.params.type" default="core";
 param name="request.wheels.params.format" default="html";
 
-if(structKeyExists(application.wheels, "docs")){
-
+if (StructKeyExists(application.wheels, "docs")) {
 	docs = application.wheels.docs;
-
 } else {
-
 	documentScope = [];
 
 	// Plugins First, as they can potentially hijack an internal function
