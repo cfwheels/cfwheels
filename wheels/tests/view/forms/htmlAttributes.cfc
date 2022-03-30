@@ -10,13 +10,23 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_tag_with_disabled_and_readonly_set_to_true() {
-		textField = _controller.textFieldTag(label = "First Name", name = "firstName", disabled = true, readonly = true);
+		textField = _controller.textFieldTag(
+			label = "First Name",
+			name = "firstName",
+			disabled = true,
+			readonly = true
+		);
 		expected = '<label for="firstName">First Name<input disabled id="firstName" name="firstName" readonly type="text" value=""></label>';
 		assert('expected eq textField');
 	}
 
 	function test_tag_with_disabled_and_readonly_set_to_false() {
-		textField = _controller.textFieldTag(label = "First Name", name = "firstName", disabled = false, readonly = false);
+		textField = _controller.textFieldTag(
+			label = "First Name",
+			name = "firstName",
+			disabled = false,
+			readonly = false
+		);
 		expected = '<label for="firstName">First Name<input id="firstName" name="firstName" type="text" value=""></label>';
 		assert('expected eq textField');
 	}

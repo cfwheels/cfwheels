@@ -14,5 +14,4 @@ component extends="wheels.tests.Test" {
 		actual = _controller.flashMessages();
 		assert("actual IS ''");
 	}
-
 }

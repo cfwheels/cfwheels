@@ -2,7 +2,12 @@ component extends="wheels.tests.Test" {
 
 	function test_table_name_with_star_translates_to_all_fields() {
 		postModel = model("post");
-		r = postModel.$createSQLFieldList(clause = "select", list = "posts.*", include = "", returnAs = "query");
+		r = postModel.$createSQLFieldList(
+			clause = "select",
+			list = "posts.*",
+			include = "",
+			returnAs = "query"
+		);
 		props = postModel.$classData().properties;
 		assert('ListLen(r) eq StructCount(props)');
 	}

@@ -30,7 +30,12 @@ component extends="wheels.tests.Test" {
 			model("Post").getClass().timeStampOnUpdateProperty = "updatedAtEpoch";
 			model("Post").getClass().timeStampMode = "epoch";
 			author = model("Author").findOne();
-			post = author.createPost(title = "test post", body = "here is some text", createdAt = Now(), updatedAt = Now());
+			post = author.createPost(
+				title = "test post",
+				body = "here is some text",
+				createdAt = Now(),
+				updatedAt = Now()
+			);
 			assert('post.createdAtEpoch - epochtime lte 2000'); // allow 1 second between test value and inserted value
 			assert('post.updatedAtEpoch - epochtime lte 2000'); // allow 1 second between test value and inserted value
 			transaction action="rollback";

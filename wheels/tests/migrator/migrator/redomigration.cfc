@@ -12,7 +12,12 @@ component extends="wheels.tests.Test" {
 
 		migration.dropTable(tableName);
 		t = migration.createTable(name = tableName);
-		t.string(columnNames = "name", default = "", null = true, limit = 255);
+		t.string(
+			columnNames = "name",
+			default = "",
+			null = true,
+			limit = 255
+		);
 		t.create();
 		migration.removeRecord(table = "migratorversions");
 		migration.addRecord(table = "migratorversions", version = "001");
@@ -33,7 +38,12 @@ component extends="wheels.tests.Test" {
 		local.originalColumnNames = 'columnNames="name"';
 		local.newColumnNames = 'columnNames="name,hobbies"';
 		local.originalContent = FileRead(local.path);
-		local.newContent = ReplaceNoCase(local.originalContent, local.originalColumnNames, local.newColumnNames, "one");
+		local.newContent = ReplaceNoCase(
+			local.originalContent,
+			local.originalColumnNames,
+			local.newColumnNames,
+			"one"
+		);
 
 		FileDelete(local.path);
 		FileWrite(local.path, local.newContent);

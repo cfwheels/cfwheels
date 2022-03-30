@@ -32,7 +32,12 @@ component extends="wheels.tests.Test" {
 
 	function test_overloaded_argument_become_link_attributes() {
 		str = 'Download CFWheels from http://cfwheels.org/download';
-		r = _controller.autoLink(text = str, link = "URLs", target = "_blank", class = "wheels-href");
+		r = _controller.autoLink(
+			text = str,
+			link = "URLs",
+			target = "_blank",
+			class = "wheels-href"
+		);
 		e = 'Download CFWheels from <a class="wheels-href" href="http://cfwheels.org/download" target="_blank">http://cfwheels.org/download</a>';
 		assert('e eq r');
 	}

@@ -25,7 +25,13 @@ component extends="wheels.tests.Test" {
 		r = user.findAll(select = "id", order = "id");
 
 		/* 1st page */
-		e = user.findAll(select = "id", perpage = "2", page = "1", handle = "pagination_test_2", order = "id");
+		e = user.findAll(
+			select = "id",
+			perpage = "2",
+			page = "1",
+			handle = "pagination_test_2",
+			order = "id"
+		);
 		assert('request.wheels.pagination_test_2.CURRENTPAGE eq 1');
 		assert('request.wheels.pagination_test_2.TOTALPAGES eq 3');
 		assert('request.wheels.pagination_test_2.TOTALRECORDS eq 5');
@@ -35,7 +41,12 @@ component extends="wheels.tests.Test" {
 		assert('e.id[2] eq r.id[2]');
 
 		/* 2nd page */
-		e = user.findAll(perpage = "2", page = "2", handle = "pagination_test_3", order = "id");
+		e = user.findAll(
+			perpage = "2",
+			page = "2",
+			handle = "pagination_test_3",
+			order = "id"
+		);
 		assert('request.wheels.pagination_test_3.CURRENTPAGE eq 2');
 		assert('request.wheels.pagination_test_3.TOTALPAGES eq 3');
 		assert('request.wheels.pagination_test_3.TOTALRECORDS eq 5');
@@ -45,7 +56,12 @@ component extends="wheels.tests.Test" {
 		assert('e.id[2] eq r.id[4]');
 
 		/* 3rd page */
-		e = user.findAll(perpage = "2", page = "3", handle = "pagination_test_4", order = "id");
+		e = user.findAll(
+			perpage = "2",
+			page = "3",
+			handle = "pagination_test_4",
+			order = "id"
+		);
 		assert('request.wheels.pagination_test_4.CURRENTPAGE eq 3');
 		assert('request.wheels.pagination_test_4.TOTALPAGES eq 3');
 		assert('request.wheels.pagination_test_4.TOTALRECORDS eq 5');
@@ -143,7 +159,12 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_incorrect_number_of_record_returned_when_where_clause_satisfies_records_beyond_the_first_identifier_value() {
-		q = model("author").findAll(include = "posts", where = "posts.views > 2", page = 1, perpage = 5);
+		q = model("author").findAll(
+			include = "posts",
+			where = "posts.views > 2",
+			page = 1,
+			perpage = 5
+		);
 		assert('q.recordcount eq 3');
 	}
 

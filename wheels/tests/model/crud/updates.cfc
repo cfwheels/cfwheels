@@ -91,7 +91,14 @@ component extends="wheels.tests.Test" {
 
 	function test_columns_that_are_not_null_should_allow_for_blank_string_during_update() {
 		info = $dbinfo(datasource = application.wheels.dataSourceName, type = "version");
-		db = LCase(Replace(info.database_productname, " ", "", "all"));
+		db = LCase(
+			Replace(
+				info.database_productname,
+				" ",
+				"",
+				"all"
+			)
+		);
 		transaction action="begin" {
 			author = model("author").findOne(where = "firstName='Tony'");
 			author.lastName = "";
