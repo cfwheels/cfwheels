@@ -712,9 +712,8 @@ public array function $expandedAssociations(required string include, boolean inc
 
 		// create the join string if it hasn't already been done
 		if (!StructKeyExists(local.classAssociations[local.name], "join")) {
-			// cfformat-ignore-start
-			local.join = UCase(ReplaceNoCase(local.classAssociations[local.name].joinType, "outer", "left outer", "one")) & " JOIN " & local.classAssociations[local.name].tableName;
-			// cfformat-ignore-end
+			local.joinType = UCase(ReplaceNoCase(local.classAssociations[local.name].joinType, "outer", "left outer", "one"));
+			local.join = local.joinType & " JOIN " & local.classAssociations[local.name].tableName;
 			// alias the table as the association name when joining to itself
 			if (ListFindNoCase(local.tables, local.classAssociations[local.name].tableName)) {
 				local.join = variables.wheels.class.adapter.$tableAlias(
