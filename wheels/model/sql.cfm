@@ -151,9 +151,8 @@ public string function $orderByClause(required string order, required string inc
 						if (ListFindNoCase(local.classData.propertyList, local.property)) {
 							local.toAdd = local.classData.tableName & "." & local.classData.properties[local.property].column;
 						} else if (ListFindNoCase(local.classData.calculatedPropertyList, local.property)) {
-							// cfformat-ignore-start
-							local.toAdd = "(" & Replace(local.classData.calculatedProperties[local.property].sql, ",", "[[comma]]", "all") & ")";
-							// cfformat-ignore-end
+							local.sql = local.classData.calculatedProperties[local.property].sql;
+							local.toAdd = "(" & Replace(local.sql, ",", "[[comma]]", "all") & ")";
 						}
 						if (Len(local.toAdd)) {
 							if (!ListFindNoCase(local.classData.columnList, local.property)) {
