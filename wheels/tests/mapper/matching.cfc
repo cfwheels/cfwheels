@@ -31,12 +31,7 @@ component extends="wheels.tests.Test" {
 		mapper = $mapper();
 		mapper
 			.$draw()
-			.$match(
-				name = "signIn",
-				method = "get",
-				controller = "sessions",
-				action = "new"
-			)
+			.$match(name = "signIn", method = "get", controller = "sessions", action = "new")
 			.end();
 		routesLen = ArrayLen(application.wheels.routes);
 		assert("routesLen eq 1");
@@ -106,12 +101,7 @@ component extends="wheels.tests.Test" {
 		mapper
 			.$draw()
 			.namespace("admin")
-			.$match(
-				name = "signIn",
-				method = "get",
-				action = "new",
-				controller = "sessions"
-			)
+			.$match(name = "signIn", method = "get", action = "new", controller = "sessions")
 			.end()
 			.end();
 		routesLen = ArrayLen(application.wheels.routes);

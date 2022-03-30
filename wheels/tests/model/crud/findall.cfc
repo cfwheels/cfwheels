@@ -5,12 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_paginated_finder_calls_with_no_records_include_column_names() {
-		q = model("user").findAll(
-			select = "id, firstName",
-			where = "id = -1",
-			page = 1,
-			perPage = 10
-		);
+		q = model("user").findAll(select = "id, firstName", where = "id = -1", page = 1, perPage = 10);
 		assert("ListSort(q.columnList, 'text') eq 'FIRSTNAME,ID'");
 	}
 
@@ -47,12 +42,7 @@ component extends="wheels.tests.Test" {
 	function test_in_operator_with_spaces() {
 		authors = model("author").findAll(
 			where = ArrayToList(
-				[
-					"id != 0",
-					"id IN (1, 2, 3)",
-					"firstName IN ('Per', 'Tony')",
-					"lastName IN ('Djurner', 'Petruzzi')"
-				],
+				["id != 0", "id IN (1, 2, 3)", "firstName IN ('Per', 'Tony')", "lastName IN ('Djurner', 'Petruzzi')"],
 				" AND "
 			)
 		);

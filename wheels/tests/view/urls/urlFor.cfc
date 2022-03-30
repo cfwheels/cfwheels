@@ -21,12 +21,7 @@ component extends="wheels.tests.Test" {
 	function test_ampersand_in_params_with_url_rewriting() {
 		request.cgi.script_name = "/rewrite.cfm";
 		e = '#application.wheels.webpath#x/x?a=c+ats%26dogs&b=a+c';
-		r = _controller.URLFor(
-			controller = "x",
-			action = "x",
-			params = "a=c ats%26dogs&b=a c",
-			encode = true
-		);
+		r = _controller.URLFor(controller = "x", action = "x", params = "a=c ats%26dogs&b=a c", encode = true);
 		assert('e eq r');
 	}
 

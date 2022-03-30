@@ -17,7 +17,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_with_icon_as_html() {
-		r = _controller.buttonTag(content="<i class='fa fa-icon' /> Edit", encode="attributes");
+		r = _controller.buttonTag(content = "<i class='fa fa-icon' /> Edit", encode = "attributes");
 		e = '<button type="submit" value="save"><i class=''fa fa-icon'' /> Edit</button>';
 		assert('e eq r');
 	}
