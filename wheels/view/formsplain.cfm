@@ -256,17 +256,7 @@ public string function checkBoxTag(
 	}
 	if (!StructKeyExists(arguments, "id")) {
 		local.valueToAppend = LCase(
-			Replace(
-				ReReplaceNoCase(
-					arguments.checkedValue,
-					"[^a-z0-9- ]",
-					"",
-					"all"
-				),
-				" ",
-				"-",
-				"all"
-			)
+			Replace(ReReplaceNoCase(arguments.checkedValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all")
 		);
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 		if (Len(local.valueToAppend)) {

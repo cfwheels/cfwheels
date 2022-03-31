@@ -10,12 +10,7 @@
  */
 public string function stripLinks(required string html, boolean encode) {
 	$args(name = "stripLinks", args = arguments);
-	local.rv = ReReplaceNoCase(
-		arguments.html,
-		"<a.*?>(.*?)</a>",
-		"\1",
-		"all"
-	);
+	local.rv = ReReplaceNoCase(arguments.html, "<a.*?>(.*?)</a>", "\1", "all");
 	if (arguments.encode && $get("encodeHtmlTags")) {
 		local.rv = EncodeForHTML($canonicalize(local.rv));
 	}
@@ -33,18 +28,8 @@ public string function stripLinks(required string html, boolean encode) {
  */
 public string function stripTags(required string html, boolean encode) {
 	$args(name = "stripTags", args = arguments);
-	local.rv = ReReplaceNoCase(
-		arguments.html,
-		"<\ *[a-z].*?>",
-		"",
-		"all"
-	);
-	local.rv = ReReplaceNoCase(
-		local.rv,
-		"<\ */\ *[a-z].*?>",
-		"",
-		"all"
-	);
+	local.rv = ReReplaceNoCase(arguments.html, "<\ *[a-z].*?>", "", "all");
+	local.rv = ReReplaceNoCase(local.rv, "<\ */\ *[a-z].*?>", "", "all");
 	if (arguments.encode && $get("encodeHtmlTags")) {
 		local.rv = EncodeForHTML($canonicalize(local.rv));
 	}
