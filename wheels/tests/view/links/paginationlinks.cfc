@@ -45,12 +45,7 @@ component extends="wheels.tests.Test" {
 
 	function test_route() {
 		authors = model("author").findAll(page = 2, perPage = 3, order = "lastName");
-		link = _controller.linkTo(
-			route = "pagination",
-			special = 99,
-			text = "3",
-			params = "page=3"
-		);
+		link = _controller.linkTo(route = "pagination", special = 99, text = "3", params = "page=3");
 		result = _controller.paginationLinks(route = "pagination", special = 99);
 		assert("result Contains '#link#' AND result Contains '?page='");
 	}

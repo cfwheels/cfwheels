@@ -52,12 +52,7 @@ component extends="wheels.tests.Test" {
 
 	function test_invalid_types_guid() {
 		request.cgi.request_method = "post";
-		params = {
-			controller = "verifies",
-			action = "actionPostWithTypesInValid",
-			userid = "0",
-			authorid = "invalidguid"
-		};
+		params = {controller = "verifies", action = "actionPostWithTypesInValid", userid = "0", authorid = "invalidguid"};
 		_controller = controller("verifies", params);
 		_controller.processAction("actionPostWithTypesInValid", params);
 		assert('_controller.$abortIssued() eq "true"');
@@ -78,12 +73,7 @@ component extends="wheels.tests.Test" {
 
 	function test_strings_allow_blank() {
 		request.cgi.request_method = "post";
-		params = {
-			controller = "verifies",
-			action = "actionPostWithString",
-			username = "tony",
-			password = ""
-		};
+		params = {controller = "verifies", action = "actionPostWithString", username = "tony", password = ""};
 		_controller = controller("verifies", params);
 		_controller.processAction("actionPostWithString", params);
 		assert('_controller.$abortIssued() eq "false"');
@@ -91,12 +81,7 @@ component extends="wheels.tests.Test" {
 
 	function test_strings_cannot_be_blank() {
 		request.cgi.request_method = "post";
-		params = {
-			controller = "verifies",
-			action = "actionPostWithString",
-			username = "",
-			password = ""
-		};
+		params = {controller = "verifies", action = "actionPostWithString", username = "", password = ""};
 		_controller = controller("verifies", params);
 		_controller.processAction("actionPostWithString", params);
 		assert('_controller.$abortIssued() eq "true"');

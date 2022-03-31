@@ -155,12 +155,7 @@ component extends="wheels.tests.Test" {
 
 	function test_should_respect_exceptions_ajax_match_no_default() {
 		request.cgi.http_x_requested_with = "XMLHTTPRequest";
-		args = {
-			template = "mylayout",
-			ajax = "mylayout_ajax",
-			except = "index",
-			usedefault = false
-		};
+		args = {template = "mylayout", ajax = "mylayout_ajax", except = "index", usedefault = false};
 		_controller.usesLayout(argumentCollection = args);
 
 		e = "false";
@@ -217,12 +212,7 @@ component extends="wheels.tests.Test" {
 
 	function test_should_respect_only_ajax_no_match_no_default() {
 		request.cgi.http_x_requested_with = "XMLHTTPRequest";
-		args = {
-			template = "mylayout",
-			ajax = "mylayout_ajax",
-			only = "index",
-			usedefault = false
-		};
+		args = {template = "mylayout", ajax = "mylayout_ajax", only = "index", usedefault = false};
 		_controller.usesLayout(argumentCollection = args);
 
 		e = "false";

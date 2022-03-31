@@ -44,12 +44,7 @@ component extends="wheels.tests.Test" {
 
 	function test_order_clause_with_paginated_include_and_identical_columns() {
 		if (get("adaptername") != "MySQL") {
-			result = model("post").findAll(
-				page = 1,
-				perPage = 3,
-				include = "comments",
-				order = "createdAt,createdAt"
-			);
+			result = model("post").findAll(page = 1, perPage = 3, include = "comments", order = "createdAt,createdAt");
 			assert("result['title'][1] IS 'Title for first test post'");
 		} else {
 			// Skipping on MySQL, see issue for details:

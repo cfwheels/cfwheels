@@ -3,12 +3,7 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		_controller = controller(name = "dummy");
 		args = {};
-		webPath = Replace(
-			application.wheels.webpath,
-			"/",
-			"&##x2f;",
-			"all"
-		);
+		webPath = Replace(application.wheels.webpath, "/", "&##x2f;", "all");
 	}
 
 	function test_should_handle_extensions_nonextensions_and_multiple_extensions() {

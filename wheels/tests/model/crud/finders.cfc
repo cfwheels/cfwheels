@@ -14,12 +14,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_select_users_groupby_address() {
-		q = user.findAll(
-			select = "address",
-			group = "address",
-			order = "address",
-			result = "result"
-		);
+		q = user.findAll(select = "address", group = "address", order = "address", result = "result");
 		assert('q.recordcount eq 4');
 		e = "123 Petruzzi St.|456 Peters Dr.|789 Djurner Ave.|987 Riera Blvd.";
 		r = ValueList(q.address, "|");

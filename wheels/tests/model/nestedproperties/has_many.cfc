@@ -1,4 +1,5 @@
-﻿component extends = "wheels.tests.Test"{
+﻿component extends="wheels.tests.Test" {
+
 	function setup() {
 		gallery = model("gallery");
 		photo = model("photo");
@@ -184,4 +185,5 @@
 		];
 		return g;
 	}
+
 }

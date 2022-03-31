@@ -5,7 +5,7 @@ component extends="wheels.Test" {
 	 * Populates the test database on reload or if the authors table does not exist.
 	 */
 	function beforeAll() {
-		application.$$$wheels = duplicate(application.wheels);
+		application.$$$wheels = Duplicate(application.wheels);
 		local.tables = $dbinfo(datasource = application.wheels.dataSourceName, type = "tables");
 		local.tableList = ValueList(local.tables.table_name);
 		local.populate = StructKeyExists(url, "populate") ? url.populate : true;
@@ -31,7 +31,7 @@ component extends="wheels.Test" {
 	 */
 	function afterAll() {
 		application.wheels = application.$$$wheels;
-		structDelete(application, "$$$wheels");
+		StructDelete(application, "$$$wheels");
 	}
 
 }

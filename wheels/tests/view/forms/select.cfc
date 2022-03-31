@@ -12,12 +12,7 @@ component extends="wheels.tests.Test" {
 
 	function test_with_list_as_options() {
 		options = "Opt1,Opt2";
-		r = _controller.select(
-			objectName = "user",
-			property = "firstname",
-			options = options,
-			label = false
-		);
+		r = _controller.select(objectName = "user", property = "firstname", options = options, label = false);
 		e = '<select id="user-firstname" name="user[firstname]"><option value="Opt1">Opt1</option><option value="Opt2">Opt2</option></select>';
 		assert('e eq r');
 	}
@@ -27,12 +22,7 @@ component extends="wheels.tests.Test" {
 		options[1] = "Opt1";
 		options[2] = "Opt2";
 		options[3] = "Opt3";
-		r = _controller.select(
-			objectName = "user",
-			property = "firstname",
-			options = options,
-			label = false
-		);
+		r = _controller.select(objectName = "user", property = "firstname", options = options, label = false);
 		e = '<select id="user-firstname" name="user[firstname]"><option value="Opt1">Opt1</option><option value="Opt2">Opt2</option><option value="Opt3">Opt3</option></select>';
 		assert('e eq r');
 	}
@@ -41,12 +31,7 @@ component extends="wheels.tests.Test" {
 		options = {};
 		options.x = "xVal";
 		options.y = "yVal";
-		r = _controller.select(
-			objectName = "user",
-			property = "firstname",
-			options = options,
-			label = false
-		);
+		r = _controller.select(objectName = "user", property = "firstname", options = options, label = false);
 		e = '<select id="user-firstname" name="user[firstname]"><option value="x">xVal</option><option value="y">yVal</option></select>';
 		assert('e eq r');
 	}
@@ -67,24 +52,14 @@ component extends="wheels.tests.Test" {
 
 	function test_first_non_numeric_property_default_text_field_on_query() {
 		users = user.findAll(returnAs = "query", order = "id");
-		r = _controller.select(
-			objectName = "user",
-			property = "firstname",
-			options = users,
-			label = false
-		);
+		r = _controller.select(objectName = "user", property = "firstname", options = users, label = false);
 		e = '<select id="user-firstname" name="user[firstname]"><option value="#users["id"][1]#">tonyp</option><option value="#users["id"][2]#">chrisp</option><option value="#users["id"][3]#">perd</option><option value="#users["id"][4]#">raulr</option><option value="#users["id"][5]#">joeb</option></select>';
 		assert('e eq r');
 	}
 
 	function test_first_non_numeric_property_default_text_field_on_objects() {
 		users = user.findAll(returnAs = "objects", order = "id");
-		r = _controller.select(
-			objectName = "user",
-			property = "firstname",
-			options = users,
-			label = false
-		);
+		r = _controller.select(objectName = "user", property = "firstname", options = users, label = false);
 		e = '<select id="user-firstname" name="user[firstname]"><option value="#users[1].id#">tonyp</option><option value="#users[2].id#">chrisp</option><option value="#users[3].id#">perd</option><option value="#users[4].id#">raulr</option><option value="#users[5].id#">joeb</option></select>';
 		assert('e eq r');
 	}
@@ -95,12 +70,7 @@ component extends="wheels.tests.Test" {
 		options[1].tp = "tony petruzzi";
 		options[2] = {};
 		options[2].pd = "per djurner";
-		r = _controller.select(
-			objectName = "user",
-			property = "firstname",
-			options = options,
-			label = false
-		);
+		r = _controller.select(objectName = "user", property = "firstname", options = options, label = false);
 		e = '<select id="user-firstname" name="user[firstname]"><option value="tp">tony petruzzi</option><option value="pd">per djurner</option></select>';
 		assert('e eq r');
 	}

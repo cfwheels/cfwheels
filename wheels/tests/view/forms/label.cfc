@@ -62,12 +62,7 @@ component extends="wheels.tests.Test" {
 
 	function test_custom_label_on_object_helper_and_overriding_id() {
 		tag = model("tag").findOne(order = "id");
-		actual = textField(
-			objectName = "tag",
-			property = "name",
-			label = "The Label:",
-			id = "the-id"
-		);
+		actual = textField(objectName = "tag", property = "name", label = "The Label:", id = "the-id");
 		expected = '<label for="the-id">The Label:<input id="the-id" maxlength="50" name="tag[name]" type="text" value="releases"></label>';
 		assert('actual eq expected');
 	}

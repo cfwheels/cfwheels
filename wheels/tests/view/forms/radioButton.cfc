@@ -5,12 +5,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_x_radioButton_valid() {
-		_controller.radioButton(
-			objectName = "user",
-			property = "gender",
-			tagValue = "m",
-			label = "Male"
-		);
+		_controller.radioButton(objectName = "user", property = "gender", tagValue = "m", label = "Male");
 	}
 
 }
