@@ -8,6 +8,7 @@
 
 ### View Enhancements
 - Adds association error support via `includeAssociations` argument [#1080](https://github.com/cfwheels/cfwheels/issues/1080) - [Nikolaj Frey]
+- Add test suite for Lucee and H2 Database to the GitHub Actions test suite. - [Peter Amiri]
 
 ### Bug Fixes
 
