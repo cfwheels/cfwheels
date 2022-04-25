@@ -3,6 +3,7 @@ component extends="wheels.tests.Test" {
 	private boolean function isDbCompatible() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
+				return true;
 			case "MicrosoftSQLServer":
 			case "MySQL":
 			case "PostgreSQL":
@@ -15,6 +16,7 @@ component extends="wheels.tests.Test" {
 	private string function getIntegerType() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
+				return "INTEGER";
 			case "MicrosoftSQLServer":
 			case "MySQL":
 				return "INT";
@@ -50,6 +52,9 @@ component extends="wheels.tests.Test" {
 		migration.dropTable(tableName);
 
 		expected = getIntegerType();
+
+		debug("expected");
+		debug("actual");
 
 		assert("ListFindNoCase(expected, actual)");
 	}
