@@ -60,14 +60,14 @@ jobs:
           box package set version=@build.version@+@build.number@
           # master or snapshot
           echo "BRANCH=master" >> $GITHUB_ENV
-          if [ $GITHUB_REF == 'refs/heads/development' ]
+          if [ $GITHUB_REF == 'refs/heads/develop' ]
           then
-            echo "BRANCH=development" >> $GITHUB_ENV
+            echo "BRANCH=develop" >> $GITHUB_ENV
           fi
 
-      - name: Install Dependencies
-        run: |
-          cd apidocs && box install
+#      - name: Install Dependencies
+#        run: |
+#          cd apidocs && box install
 
       - name: Build CFWheels Variants for ${{ env.BRANCH }} v${{ env.CFWHEELS_VERSION }}
         run: |
@@ -93,16 +93,16 @@ jobs:
 #          SOURCE_DIR: "artifacts"
 #          DEST_DIR: "ortussolutions"
 
-      - name: Upload API Docs to S3
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --acl public-read
-        env:
-          AWS_S3_BUCKET: "apidocs.ortussolutions.com"
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_SECRET }}
-          SOURCE_DIR: "build-cfwheels/apidocs"
-          DEST_DIR: ""
+#      - name: Upload API Docs to S3
+#        uses: jakejarvis/s3-sync-action@master
+#        with:
+#          args: --acl public-read
+#        env:
+#          AWS_S3_BUCKET: "apidocs.ortussolutions.com"
+#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_SECRET }}
+#          SOURCE_DIR: "build-cfwheels/apidocs"
+#          DEST_DIR: ""
 
       - name: Publish
         run: |
