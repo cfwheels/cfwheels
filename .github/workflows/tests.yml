@@ -3,7 +3,7 @@ name: CFWheels Test Suites
 
 # We are a reusable Workflow only
 on:
-  workflow_call
+  [workflow_call, workflow_dispatch]
 
 jobs:
   tests:
