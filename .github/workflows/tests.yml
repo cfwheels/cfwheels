@@ -1,0 +1,44 @@
+# This is a reusable workflow for executing the full ColdBox Test Suites
+name: CFWheels Test Suites
+
+# We are a reusable Workflow only
+on:
+  workflow_call
+
+jobs:
+  tests:
+    name: Test Suites
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        cf: [lucee5, adobe2016, adobe2018]
+        db: [mysql56, postgres, sqlserver, h2]
+        exclude:
+          - cf: adobe2016
+            db: h2
+          - cf: adobe2018
+            db: h2
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Docker Compose ${{ matrix.cf }} ${{ matrix.db }}
+        if: ${{ matrix.db != 'h2' }}
+        run: docker-compose up -d ${{ matrix.cf }} ${{ matrix.db }}
+
+      - name: Docker Compose ${{ matrix.cf }}
+        if: ${{ matrix.db == 'h2' }}
+        run: docker-compose up -d ${{ matrix.cf }}
+
+      - name: Wait for ${{ matrix.cf }} startup
+        run: src/github/tests/server-up.sh ${{ matrix.cf }}
+
+      - name: Sleep for 60 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '60s'
+
+      - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
+        run: src/github/tests/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}
