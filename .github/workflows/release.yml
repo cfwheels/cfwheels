@@ -56,7 +56,7 @@ jobs:
       - name: Setup Environment Variables For Build Process
         id: current_version
         run: |
-          echo "COLDBOX_VERSION=`cat box.json | jq '.version' -r`" >> $GITHUB_ENV
+          echo "CFWHEELS_VERSION=`cat box.json | jq '.version' -r`" >> $GITHUB_ENV
           box package set version=@build.version@+@build.number@
           # master or snapshot
           echo "BRANCH=master" >> $GITHUB_ENV
@@ -69,29 +69,29 @@ jobs:
         run: |
           cd apidocs && box install
 
-      - name: Build ColdBox Variants for ${{ env.BRANCH }} v${{ env.COLDBOX_VERSION }}
+      - name: Build CFWheels Variants for ${{ env.BRANCH }} v${{ env.CFWHEELS_VERSION }}
         run: |
           box server start serverConfigFile="server-lucee@5.json" --debug
-          ant -DisPreRelease=${{ env.COLDBOX_PRERELEASE }} -Dcoldbox.version=${{ env.COLDBOX_VERSION }} -Dbuild.branch=${{ env.BRANCH }} -Dbuild.number=${{ github.run_number }} -f build/build.xml
+          ant -DisPreRelease=${{ env.CFWHEELS_PRERELEASE }} -Dcfwheels.version=${{ env.CFWHEELS_VERSION }} -Dbuild.branch=${{ env.BRANCH }} -Dbuild.number=${{ github.run_number }} -f build/build.xml
 
       - name: Upload Build Artifacts
         if: success()
         uses: actions/upload-artifact@v2
         with:
-          name: coldbox-variants
+          name: cfwheels-variants
           path: |
             artifacts/**/*
 
-      - name: Upload Binaries to S3
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --acl public-read
-        env:
-          AWS_S3_BUCKET: "downloads.ortussolutions.com"
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_SECRET }}
-          SOURCE_DIR: "artifacts"
-          DEST_DIR: "ortussolutions"
+#      - name: Upload Binaries to S3
+#        uses: jakejarvis/s3-sync-action@master
+#        with:
+#          args: --acl public-read
+#        env:
+#          AWS_S3_BUCKET: "downloads.ortussolutions.com"
+#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_SECRET }}
+#          SOURCE_DIR: "artifacts"
+#          DEST_DIR: "ortussolutions"
 
       - name: Upload API Docs to S3
         uses: jakejarvis/s3-sync-action@master
@@ -101,16 +101,13 @@ jobs:
           AWS_S3_BUCKET: "apidocs.ortussolutions.com"
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_SECRET }}
-          SOURCE_DIR: "build-coldbox/apidocs"
+          SOURCE_DIR: "build-cfwheels/apidocs"
           DEST_DIR: ""
 
       - name: Publish
         run: |
           ROOT_DIR=`pwd`
-          cd $ROOT_DIR/artifacts/coldbox/${{ env.COLDBOX_VERSION }} && box forgebox publish
-          cd $ROOT_DIR/artifacts/cachebox/${{ env.COLDBOX_VERSION }} && box forgebox publish
-          cd $ROOT_DIR/artifacts/wirebox/${{ env.COLDBOX_VERSION }} && box forgebox publish
-          cd $ROOT_DIR/artifacts/logbox/${{ env.COLDBOX_VERSION }} && box forgebox publish
+          cd $ROOT_DIR/artifacts/cfwheels/${{ env.CFWHEELS_VERSION }} && box forgebox publish
 
       - name: Inform Slack
         if: ${{ always() }}
@@ -119,7 +116,7 @@ jobs:
           SLACK_CHANNEL: coding
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
           SLACK_ICON_EMOJI: ":bell:"
-          SLACK_MESSAGE: 'ColdBox ${{ env.COLDBOX_VERSION }} Built with ${{ job.status }}!'
-          SLACK_TITLE: "ColdBox Build"
+          SLACK_MESSAGE: 'CFWheels ${{ env.CFWHEELS_VERSION }} Built with ${{ job.status }}!'
+          SLACK_TITLE: "CFWheels Build"
           SLACK_USERNAME: CI
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}

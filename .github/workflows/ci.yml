@@ -2,7 +2,7 @@
 
 name: Wheels Test Suite
 
-on: [push, pull_request]
+# on: [push, pull_request]
 
 jobs:
   run-tests:
