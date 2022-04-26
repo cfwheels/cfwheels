@@ -1,0 +1,30 @@
+# This workflow tests the CFWheels code using many permutations in the matrix.
+# If successful, then it creates the bleeding edge artifact and publishes it to ForgeBox
+name: CFWheels Snapshots
+
+on:
+  workflow_dispatch,
+  push:
+    branches:
+      - develop
+
+env:
+  CFWHEELS_PRERELEASE: false
+
+jobs:
+  tests:
+    uses: ./.github/workflows/tests.yml
+    # secrets:
+    #  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  #############################################
+  # Build Snapshot Release
+  #############################################
+  build:
+    needs: tests
+    uses: ./.github/workflows/release.yml
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      FORGEBOX_API_TOKEN: ${{ secrets.FORGEBOX_API_TOKEN }}
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_ACCESS_SECRET: ${{ secrets.AWS_ACCESS_SECRET }}
