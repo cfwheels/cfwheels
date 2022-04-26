@@ -3,8 +3,7 @@
 name: CFWheels Snapshots
 
 on:
-  workflow_dispatch,
-  push:
+workflow_dispatch  push:
     branches:
       - develop
 
