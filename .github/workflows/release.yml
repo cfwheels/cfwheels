@@ -72,7 +72,7 @@ jobs:
       - name: Build CFWheels Variants for ${{ env.BRANCH }} v${{ env.CFWHEELS_VERSION }}
         run: |
           box server start serverConfigFile="server-lucee5.json" --debug
-          box task run build.cfc --debug
+          box task run ./build/build.cfc --debug
 #          ant -DisPreRelease=${{ env.CFWHEELS_PRERELEASE }} -Dcfwheels.version=${{ env.CFWHEELS_VERSION }} -Dbuild.branch=${{ env.BRANCH }} -Dbuild.number=${{ github.run_number }} -f build/build.xml
 
       - name: Upload Build Artifacts
