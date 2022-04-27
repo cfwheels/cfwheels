@@ -2,20 +2,16 @@
 <!-- ======================================================================
      CFWheels Core Build
      ====================================================================== -->
-<project name="coldbox-platform-build" default="build.all" basedir="../">
+<project name="cfwheels-core-build" default="build.all" basedir="../">
 	<description>
-    	Build a new distribution of ColdBox Platform with standalone
-		versions of CacheBox, WireBox and LogBox
+    	Build a new distribution of CFWheels Core
     </description>
 
 	<!-- UPDATE ON EACH VERSION CYCLE -->
-	<property name="groupID"				value="ortussolutions" />
-	<property name="coldbox.slug"	 		value="coldbox"/>
-	<property name="cachebox.slug"	 		value="cachebox"/>
-	<property name="logbox.slug"	 		value="logbox"/>
-	<property name="wirebox.slug"	 		value="wirebox"/>
+	<property name="groupID"				value="bpamiri" />
+	<property name="cfwheels.slug"	 		value="cfwheels-core-ci"/>
 
-    <!-- Default environment check, if not passed via -Denvironment -->
+  <!-- Default environment check, if not passed via -Denvironment -->
 	<condition property="environment" value="local">
 		<not><isset property="environment" /></not>
 	</condition>
