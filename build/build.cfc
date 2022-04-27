@@ -60,7 +60,7 @@ component{
 	fileSystemUtil.createMapping( arguments.projectName, variables.cwd );
 
 			// Run the tests
-			runTests();
+			// runTests();
 
 			// Build the source
 			buildSource( argumentCollection=arguments );
