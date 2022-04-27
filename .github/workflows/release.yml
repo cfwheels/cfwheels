@@ -107,7 +107,7 @@ jobs:
       - name: Publish
         run: |
           ROOT_DIR=`pwd`
-          cd $ROOT_DIR/artifacts/cfwheels/${{ env.CFWHEELS_VERSION }} && box forgebox publish
+          cd $ROOT_DIR/artifacts/cfwheels-core-ci/${{ env.CFWHEELS_VERSION }} && box forgebox publish
 
       - name: Inform Slack
         if: ${{ always() }}
