@@ -67,8 +67,8 @@
 		</if>
 
 		<!-- Cleanup + Init -->
-		<delete dir="${dir.build}" />
-		<mkdir dir="${dir.build}" />
+	<!--	<delete dir="${dir.build}" />
+		<mkdir dir="${dir.build}" /> -->
 		<delete dir="${dir.exports}" />
 		<mkdir dir="${dir.exports}" />
 
@@ -101,7 +101,7 @@
 		</delete>
 
 		<!-- Build Label -->
-		<property name="build.label" value="cfwheels-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
+		<property name="build.label" value="${cfwheels.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
 		<concat destfile="${dir.build}/cfwheels/${build.label}">Built on ${start.TODAY}</concat>
 
 		<!-- Copy Src -->
