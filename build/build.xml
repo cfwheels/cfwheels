@@ -163,7 +163,7 @@
 
 		<!-- Copy box.json to exports -->
 		<copy file="${dir.build}/cfwheels/box.json" 	toFile="${dir.cfwheels.exports}/box.json" 	encoding="UTF-8" />
-		<copy file="${dir.build}/cfwheels/README.md" toFile="${dir.cfwheels.exports}/README.md" 	encoding="UTF-8" />
+	<!--	<copy file="${dir.build}/cfwheels/README.md" toFile="${dir.cfwheels.exports}/README.md" 	encoding="UTF-8" /> -->
 
 		<!-- Build Checksum -->
 		<checksum forceoverwrite="true" fileext=".md5">
