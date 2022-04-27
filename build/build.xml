@@ -151,10 +151,10 @@
 		</if>
 
 		<!-- Zip CFWheels Bundle -->
-		<zip destfile="${dir.cfwheels.exports}/cfwheels-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
+		<zip destfile="${dir.cfwheels.exports}/${cfwheels.slug}-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
 
 		<!-- Zip Standalone -->
-		<zip destfile="${dir.cfwheels.exports}/cfwheels-standalone-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels">
+		<zip destfile="${dir.cfwheels.exports}/${cfwheels.slug}-standalone-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels">
 			<exclude name="apidocs/**"/>
 			<exclude name="test-runner/**"/>
 			<exclude name="test-browser/**"/>
@@ -178,11 +178,11 @@
 		</checksum>
 
 		<!-- Move Bleeding Edge to Root -->
-		<copy file="${dir.cfwheels.exports}/cfwheels-${cfwheels.version}.zip"
+		<copy file="${dir.cfwheels.exports}/${cfwheels.slug}-${cfwheels.version}.zip"
 			  tofile="${be.cfwheels.exports}/${cfwheels.slug}-be.zip"
 			  overwrite="true"
 			  encoding="UTF-8"/>
-		<copy file="${dir.cfwheels.exports}/cfwheels-standalone-${cfwheels.version}.zip"
+		<copy file="${dir.cfwheels.exports}/${cfwheels.slug}-standalone-${cfwheels.version}.zip"
 			  tofile="${be.cfwheels.exports}/${cfwheels.slug}-be-standalone.zip"
 			  overwrite="true"
 			  encoding="UTF-8"/>
