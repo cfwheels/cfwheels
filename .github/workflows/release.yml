@@ -32,6 +32,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          path: cfwheels
 
       - name: Setup Java
         uses: actions/setup-java@v2
