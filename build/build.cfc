@@ -18,6 +18,7 @@ component{
 			// Source Excludes Not Added to final binary
 			variables.excludes      = [
 					".github",
+					"build",
 					"config",
 					"controllers",
 					"docs",
@@ -51,10 +52,9 @@ component{
 					"server-cf2018.json",
 					"server-lucee4.json",
 					"server-lucee5.json",
-					"urlrewrite.xml"
+					"urlrewrite.xml",
 					".artifacts",
 					".tmp",
-					"build",
 					".DS_Store",
 					".git"
 			];
