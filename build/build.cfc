@@ -238,19 +238,19 @@ component{
 function latestChangelog(){
 	print.blueLine( "Building latest changelog..." ).toConsole();
 
-	if( !fileExists( variables.cwd & "changelog.md" ) ){
-		return error( "Cannot continue building, changelog.md file doesn't exist!" );
+	if( !fileExists( variables.cwd & "CHANGELOG.md" ) ){
+		return error( "Cannot continue building, CHANGELOG.md file doesn't exist!" );
 	}
 
 	fileWrite(
-		variables.cwd & "changelog-latest.md",
-		fileRead( variables.cwd & 'changelog.md' ).split( '----' )[2].trim() & chr( 13 ) & chr( 10 )
+		variables.cwd & "CHANGELOG-LATEST.md",
+		fileRead( variables.cwd & 'CHANGELOG.md' ).split( '----' )[2].trim() & chr( 13 ) & chr( 10 )
 	);
 
 	print
-		.greenLine( "Latest changelog file created at `changelog-latest.md`" )
+		.greenLine( "Latest changelog file created at `CHANGELOG-LATEST.md`" )
 		.line()
-		.line( fileRead( variables.cwd & "changelog-latest.md" ) );
+		.line( fileRead( variables.cwd & "CHANGELOG-LATEST.md" ) );
 }
 
 	/********************************************* PRIVATE HELPERS *********************************************/
