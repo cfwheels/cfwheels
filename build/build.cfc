@@ -98,8 +98,8 @@ component{
 			buildSource( argumentCollection=arguments );
 
 			// Build Docs
-			arguments.outputDir = variables.buildDir & "/apidocs";
-			docs( argumentCollection=arguments );
+			//arguments.outputDir = variables.buildDir & "/apidocs";
+			//docs( argumentCollection=arguments );
 
 			// checksums
 			buildChecksums();
