@@ -69,9 +69,9 @@ jobs:
 #        run: |
 #          cd apidocs && box install
 
-      - name: Build CFWheels Variants for ${{ env.BRANCH }} v${{ env.CFWHEELS_VERSION }}
+      - name: Build CFWheels Variants for ${{ env.BRANCH }} v${{ env.CFWHEELS_VERSION }} @build.version@
         run: |
-          box task run ./build/build.cfc --debug
+          box task run ./build/build.cfc :projectName=cfwheels :version=${{ env.CFWHEELS_VERSION }} :buldID=1 :branch=${{ env.BRANCH }} --debug
 #          box server start serverConfigFile="server-lucee5.json" --debug
 #          ant -DisPreRelease=${{ env.CFWHEELS_PRERELEASE }} -Dcfwheels.version=${{ env.CFWHEELS_VERSION }} -Dbuild.branch=${{ env.BRANCH }} -Dbuild.number=${{ github.run_number }} -f build/build.xml
 
