@@ -67,8 +67,8 @@
 		</if>
 
 		<!-- Cleanup + Init -->
-	<!--	<delete dir="${dir.build}" />
-		<mkdir dir="${dir.build}" /> -->
+		<delete dir="${dir.build}" />
+		<mkdir dir="${dir.build}" />
 		<delete dir="${dir.exports}" />
 		<mkdir dir="${dir.exports}" />
 
