@@ -173,7 +173,7 @@
 		<concat destfile="${dir.build}/cfwheels/${build.base.label}">Built on ${start.TODAY}</concat>
 
 		<copy todir="${dir.build}/cfwheel" encoding="UTF-8" overwrite="true">
-			<fileset dir="${basedir}">
+			<fileset dir="">
 				<include name="**/*"/>
 				<exclude name="**/.github/**"/>
 				<exclude name="**/build/**"/>
