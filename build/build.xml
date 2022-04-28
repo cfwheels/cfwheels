@@ -88,8 +88,17 @@
 		depends="build.cfwheels.core,build.cfwheels.base">
 	</target>
 
-	<target name="build.cfwheels.core" description="Build a new CFWheels Core distribution" depends="init"></target>
-	<target name="build.cfwheels.base" description="Build a new CFWheels Base distribution" depends="init"></target>
+	<!-- Build CFWheels Core Distribution -->
+	<target name="build.cfwheels.core" description="Build a new CFWheels Core distribution" depends="init">
+		<!-- Init Platform Dirs -->
+		<property name="dir.cfwheels.exports"	value="${dir.exports}/cfwheels/${cfwheels.version}" />
+		<property name="be.cfwheels.exports" 	value="${be.exports}/cfwheels" />
+
+	</target>
+
+	<!-- Build CFWheels Base Distribution -->
+	<target name="build.cfwheels.base" description="Build a new CFWheels Base distribution" depends="init">
+	</target>
 
 	<!-- Build CFWheels Distribution -->
 	<target name="build.cfwheels" description="Build a new CFWheels Core distribution" depends="init">
