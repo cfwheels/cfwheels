@@ -10,6 +10,8 @@
 	<!-- UPDATE ON EACH VERSION CYCLE -->
 	<property name="groupID"				value="bpamiri" />
 	<property name="cfwheels.slug"	 		value="cfwheels-core-ci"/>
+	<property name="cfwheels.core.slug"	 		value="cfwheels-core-ci"/>
+	<property name="cfwheels.base.slug"	 		value="cfwheels-base-ci"/>
 
   <!-- Default environment check, if not passed via -Denvironment -->
 	<condition property="environment" value="local">
@@ -91,6 +93,10 @@
 		<!-- Init Platform Dirs -->
 		<property name="dir.cfwheels.exports"	value="${dir.exports}/${cfwheels.slug}/${cfwheels.version}" />
 		<property name="be.cfwheels.exports" 	value="${be.exports}/${cfwheels.slug}" />
+		<property name="dir.cfwheels.core.exports"	value="${dir.exports}/${cfwheels.core.slug}/${cfwheels.version}" />
+		<property name="be.cfwheels.core.exports" 	value="${be.exports}/${cfwheels.core.slug}" />
+		<property name="dir.cfwheels.base.exports"	value="${dir.exports}/${cfwheels.base.slug}/${cfwheels.version}" />
+		<property name="be.cfwheels.base.exports" 	value="${be.exports}/${cfwheels.base.slug}" />
 
 		<!-- Cleanup Old Code -->
 		<delete verbose="true" failonerror="false">
@@ -98,11 +104,21 @@
 			<fileset dir="${dir.exports}/${cfwheels.slug}">
 				<include name="cfwheels-be*" />
 			</fileset>
+			<fileset dir="${dir.exports}/${cfwheels.core.slug}">
+				<include name="cfwheels-be*" />
+			</fileset>
+			<fileset dir="${dir.exports}/${cfwheels.base.slug}">
+				<include name="cfwheels-be*" />
+			</fileset>
 		</delete>
 
 		<!-- Build Label -->
 		<property name="build.label" value="${cfwheels.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
+		<property name="build.core.label" value="${cfwheels.core.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
+		<property name="build.base.label" value="${cfwheels.base.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
 		<concat destfile="${dir.build}/cfwheels/${build.label}">Built on ${start.TODAY}</concat>
+		<concat destfile="${dir.build}/cfwheels/${build.core.label}">Built on ${start.TODAY}</concat>
+		<concat destfile="${dir.build}/cfwheels/${build.base.label}">Built on ${start.TODAY}</concat>
 
 		<!-- Copy Src -->
       	<copy todir="${dir.build}/cfwheels/wheels" encoding="UTF-8" overwrite="true">
@@ -152,14 +168,8 @@
 
 		<!-- Zip CFWheels Bundle -->
 		<zip destfile="${dir.cfwheels.exports}/${cfwheels.slug}-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
-
-		<!-- Zip Standalone -->
-		<zip destfile="${dir.cfwheels.exports}/${cfwheels.slug}-standalone-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels">
-			<exclude name="apidocs/**"/>
-			<exclude name="test-runner/**"/>
-			<exclude name="test-browser/**"/>
-			<exclude name="install/**"/>
-		</zip>
+		<zip destfile="${dir.cfwheels.exports}/${cfwheels.core.slug}-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
+		<zip destfile="${dir.cfwheels.exports}/${cfwheels.base.slug}-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
 
 		<!-- Copy box.json to exports -->
 		<copy file="${dir.build}/cfwheels/box.json" 	toFile="${dir.cfwheels.exports}/box.json" 	encoding="UTF-8" />
@@ -182,8 +192,12 @@
 			  tofile="${be.cfwheels.exports}/${cfwheels.slug}-be.zip"
 			  overwrite="true"
 			  encoding="UTF-8"/>
-		<copy file="${dir.cfwheels.exports}/${cfwheels.slug}-standalone-${cfwheels.version}.zip"
-			  tofile="${be.cfwheels.exports}/${cfwheels.slug}-be-standalone.zip"
+		<copy file="${dir.cfwheels.exports}/${cfwheels.core.slug}-${cfwheels.version}.zip"
+			  tofile="${be.cfwheels.exports}/${cfwheels.core.slug}-be.zip"
+			  overwrite="true"
+			  encoding="UTF-8"/>
+		<copy file="${dir.cfwheels.exports}/${cfwheels.base.slug}-${cfwheels.version}.zip"
+			  tofile="${be.cfwheels.exports}/${cfwheels.base.slug}-be.zip"
 			  overwrite="true"
 			  encoding="UTF-8"/>
     </target>
