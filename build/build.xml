@@ -97,7 +97,7 @@
 		<property name="build.core.label" value="${cfwheels.core.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
 		<concat destfile="${dir.build}/cfwheels/${build.core.label}">Built on ${start.TODAY}</concat>
 
-		<copy todir="${dir.build}/cfwheels/wheels" encoding="UTF-8" overwrite="true">
+		<copy todir="${dir.build}/cfwheels" encoding="UTF-8" overwrite="true">
 			<fileset dir="wheels" />
 		</copy>
 
