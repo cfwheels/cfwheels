@@ -73,8 +73,6 @@ jobs:
       - name: Build CFWheels Variants for ${{ env.BRANCH }} v${{ env.CFWHEELS_VERSION }}
         run: |
           ant -DisPreRelease=${{ env.CFWHEELS_PRERELEASE }} -Dcfwheels.version=${{ env.CFWHEELS_VERSION }} -Dbuild.branch=${{ env.BRANCH }} -Dbuild.number=${{ github.run_number }} -f build/build.xml
-#          box task run taskFile=./build/build.cfc :projectName=cfwheels :version=${{ env.CFWHEELS_VERSION }} :branch=${{ env.BRANCH }} --debug
-#          box server start serverConfigFile="server-lucee5.json" --debug
 
       - name: Upload CFWheels Artifacts
         if: success()
@@ -84,10 +82,10 @@ jobs:
           path: |
             artifacts/**/*
 
-#      - name: Publish
-#        run: |
-#          ROOT_DIR=`pwd`
-#          cd $ROOT_DIR/artifacts/cfwheels-core-ci/${{ env.CFWHEELS_VERSION }} && box forgebox publish
+      - name: Publish
+        run: |
+          ROOT_DIR=`pwd`
+          cd $ROOT_DIR/artifacts/cfwheels/${{ env.CFWHEELS_VERSION }} && box forgebox publish
 
 #      - name: Inform Slack
 #        if: ${{ always() }}
