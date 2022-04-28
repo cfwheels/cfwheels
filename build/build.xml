@@ -94,6 +94,76 @@
 		<property name="dir.cfwheels.exports"	value="${dir.exports}/cfwheels/${cfwheels.version}" />
 		<property name="be.cfwheels.exports" 	value="${be.exports}/cfwheels" />
 
+		<property name="build.core.label" value="${cfwheels.core.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
+		<concat destfile="${dir.build}/cfwheels/${build.core.label}">Built on ${start.TODAY}</concat>
+
+		<copy todir="${dir.build}/cfwheels/wheels" encoding="UTF-8" overwrite="true">
+			<fileset dir="wheels" />
+		</copy>
+
+		<!--Copy text files to install folder-->
+		<copy todir="${dir.build}/cfwheels/" encoding="UTF-8" overwrite="true">
+			<fileset file="license.txt" />
+			<fileset file="readme.md" />
+		</copy>
+
+		<!-- Copy box.json to build -->
+		<copy file="box-original.json" toFile="${dir.build}/cfwheels/box.json" encoding="UTF-8" overwrite="true"/>
+
+		<!-- Replace Version + Build Numbers -->
+		<replaceregexp match='@build.version@' replace="${cfwheels.version}" flags="ig" byline="true" encoding="UTF-8">
+		  <fileset dir="${dir.build}/cfwheels" />
+		</replaceregexp>
+
+		<!-- Determine snapshot vs isPrerelease vs master artifact -->
+		<if>
+			<equals arg1="${isPreRelease}" arg2="true" />
+			<then>
+				<replaceregexp match='@build.number@' replace="${build.number}" flags="ig" byline="true" encoding="UTF-8">
+					<fileset dir="${dir.build}/cfwheels" />
+				</replaceregexp>
+			</then>
+
+			<elseif>
+				<equals arg1="${build.branch}" arg2="develop" />
+				<then>
+					<replaceregexp match='\+@build.number@' replace="-snapshot" flags="ig" byline="true" encoding="UTF-8">
+					  <fileset dir="${dir.build}/cfwheels" />
+					</replaceregexp>
+				</then>
+			</elseif>
+
+			<else>
+				<replaceregexp match='@build.number@' replace="${build.number}" flags="ig" byline="true" encoding="UTF-8">
+				  <fileset dir="${dir.build}/cfwheels" />
+				</replaceregexp>
+			</else>
+		</if>
+
+		<!-- Zip CFWheels Bundle -->
+		<zip destfile="${dir.cfwheels.exports}/${cfwheels.core.slug}-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
+
+		<!-- Copy box.json to exports -->
+		<copy file="${dir.build}/cfwheels/box-core.json" 	toFile="${dir.cfwheels.exports}/box.json" 	encoding="UTF-8" />
+		<copy file="${dir.build}/cfwheels/readme-core.md" toFile="${dir.cfwheels.exports}/readme.md" 	encoding="UTF-8" />
+
+		<!-- Build Checksum -->
+		<checksum forceoverwrite="true" fileext=".md5">
+			<fileset dir="${dir.cfwheels.exports}">
+				<include name="*.zip" />
+			</fileset>
+		</checksum>
+		<checksum forceoverwrite="true" algorithm="SHA-512" fileext=".sha512">
+			<fileset dir="${dir.cfwheels.exports}">
+				<include name="*.zip" />
+			</fileset>
+		</checksum>
+
+		<!-- Move Bleeding Edge to Root -->
+		<copy file="${dir.cfwheels.exports}/${cfwheels.core.slug}-${cfwheels.version}.zip"
+			  tofile="${be.cfwheels.exports}/${cfwheels.core.slug}-be.zip"
+			  overwrite="true"
+			  encoding="UTF-8"/>
 	</target>
 
 	<!-- Build CFWheels Base Distribution -->
@@ -110,7 +180,7 @@
 		<property name="dir.cfwheels.base.exports"	value="${dir.exports}/${cfwheels.base.slug}/${cfwheels.version}" />
 		<property name="be.cfwheels.base.exports" 	value="${be.exports}/${cfwheels.base.slug}" />
 
-		<!-- Cleanup Old Code -->
+		<!-- Cleanup Old Code
 		<delete verbose="true" failonerror="false">
 			<fileset dir="${dir.cfwheels.exports}" />
 			<fileset dir="${dir.exports}/${cfwheels.slug}">
@@ -122,7 +192,7 @@
 			<fileset dir="${dir.exports}/${cfwheels.base.slug}">
 				<include name="cfwheels-be*" />
 			</fileset>
-		</delete>
+		</delete>-->
 
 		<!-- Build Label -->
 		<property name="build.label" value="${cfwheels.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
@@ -134,8 +204,7 @@
 
 		<!-- Copy Src -->
       	<copy todir="${dir.build}/cfwheels/wheels" encoding="UTF-8" overwrite="true">
-        	<fileset dir="wheels">
-        	</fileset>
+        	<fileset dir="wheels" />
         </copy>
 
 		<!--Copy text files to install folder-->
@@ -154,7 +223,6 @@
 
 		<!-- Determine snapshot vs isPrerelease vs master artifact -->
 		<if>
-
 			<equals arg1="${isPreRelease}" arg2="true" />
 			<then>
 				<replaceregexp match='@build.number@' replace="${build.number}" flags="ig" byline="true" encoding="UTF-8">
