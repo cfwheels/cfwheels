@@ -88,6 +88,7 @@
 		depends="build.cfwheels.core,build.cfwheels.base">
 	</target>
 
+  <!-- ================================ -->
 	<!-- Build CFWheels Core Distribution -->
 	<target name="build.cfwheels.core" description="Build a new CFWheels Core distribution" depends="init">
 		<!-- Init Platform Dirs -->
@@ -140,12 +141,12 @@
 			</else>
 		</if>
 
+		<!-- Copy box.json to exports -->
+		<copy file="box-core.json" 	toFile="${dir.build}/cfwheels/box.json" 	encoding="UTF-8" />
+		<copy file="readme-core.md" toFile="${dir.build}/cfwheels/readme.md" 	encoding="UTF-8" />
+
 		<!-- Zip CFWheels Bundle -->
 		<zip destfile="${dir.cfwheels.exports}/${cfwheels.core.slug}-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
-
-		<!-- Copy box.json to exports -->
-		<copy file="box-core.json" 	toFile="${dir.cfwheels.exports}/box.json" 	encoding="UTF-8" />
-		<copy file="readme-core.md" toFile="${dir.cfwheels.exports}/readme.md" 	encoding="UTF-8" />
 
 		<!-- Build Checksum -->
 		<checksum forceoverwrite="true" fileext=".md5">
@@ -165,6 +166,7 @@
 			  overwrite="true"
 			  encoding="UTF-8"/>
 	</target>
+  <!-- ================================ -->
 
 	<!-- Build CFWheels Base Distribution -->
 	<target name="build.cfwheels.base" description="Build a new CFWheels Base distribution" depends="init">
