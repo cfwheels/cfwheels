@@ -85,12 +85,12 @@ jobs:
       - name: List files in the core directory
         run: |
           ROOT_DIR=`pwd`
-          ls $ROOT_DIR/build-cfwheels-core
+          ls $ROOT_DIR/build-cfwheels-core/cfwheels
 
       - name: Publish Core
         run: |
           ROOT_DIR=`pwd`
-          cd $ROOT_DIR/build-cfwheels-core && box forgebox publish
+          cd $ROOT_DIR/build-cfwheels-core/cfwheels && box forgebox publish
 
 #      - name: Inform Slack
 #        if: ${{ always() }}
