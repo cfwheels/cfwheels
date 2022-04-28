@@ -12,7 +12,7 @@ As a Forgebox package there is some interesting things going on here. Although t
 
 ```
 "Dependencies":{
-  "cfwheels-core":"^2.2.0"
+  "cfwheels":"^2.0.0"
 }
 ```
 
@@ -20,7 +20,7 @@ The core files are put into the `wheels/` folder acording to these settings.
 
 ```
 "installPaths":{
-  "cfwheels-core":"wheels/"
+  "cfwheels":"wheels/"
 }
 ```
 
@@ -31,11 +31,11 @@ To install this package you'll need to have a running CommandBox installation. T
 ```
 box
 mkdir myapp --cd
-install cfwheels-template-base
+install cfwheels-base-template
 ```
 
 This could be shortened to a single command run in an empty directory:
 
 ```
-box install cfwheels-template-base
+box install cfwheels-base-template
 ```
