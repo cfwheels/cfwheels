@@ -176,6 +176,12 @@
 			<fileset file="Application.cfc" />
 			<fileset dir="config" />
 		</copy>
+		<copy todir="${dir.build}/cfwheel" encoding="UTF-8" overwrite="true">
+			<fileset dir="./">
+				<exclude name=".github"/>
+				<exclude name="build"/>
+			</fileset>
+		</copy>
 
 		<!-- Copy box.json to exports -->
 		<copy file="box-base.json" 	toFile="${dir.build}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
