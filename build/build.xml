@@ -68,15 +68,6 @@
 			</then>
 		</if>
 
-		<!-- Cleanup + Init -->
-		<delete dir="${dir.build}" />
-		<mkdir dir="${dir.build}" />
-		<delete dir="${dir.exports}" />
-		<mkdir dir="${dir.exports}" />
-
-		<!-- Copy over original box.json as the getDependencies might update it -->
-		<copy file="box.json" toFile="box-original.json" encoding="UTF-8" overwrite="true"/>
-
 		<!-- Mark as init -->
 		<property name="src.isInit" value="true" />
 	</target>
@@ -91,6 +82,12 @@
   <!-- ================================ -->
 	<!-- Build CFWheels Core Distribution -->
 	<target name="build.cfwheels.core" description="Build a new CFWheels Core distribution" depends="init">
+		<!-- Cleanup + Init -->
+		<delete dir="${dir.build}" />
+		<mkdir dir="${dir.build}" />
+		<delete dir="${dir.exports}" />
+		<mkdir dir="${dir.exports}" />
+
 		<!-- Init Platform Dirs -->
 		<property name="dir.cfwheels.exports"	value="${dir.exports}/cfwheels/${cfwheels.version}" />
 		<property name="be.cfwheels.exports" 	value="${be.exports}/cfwheels" />
@@ -162,6 +159,12 @@
   <!-- ================================ -->
 	<!-- Build CFWheels Base Distribution -->
 	<target name="build.cfwheels.base" description="Build a new CFWheels Base distribution" depends="init">
+		<!-- Cleanup + Init -->
+		<delete dir="${dir.build}" />
+		<mkdir dir="${dir.build}" />
+		<delete dir="${dir.exports}" />
+		<mkdir dir="${dir.exports}" />
+
 		<!-- Init Platform Dirs -->
 		<property name="dir.cfwheels.exports"	value="${dir.exports}/cfwheels/${cfwheels.version}" />
 		<property name="be.cfwheels.exports" 	value="${be.exports}/cfwheels" />
