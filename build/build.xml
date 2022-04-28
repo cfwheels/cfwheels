@@ -85,8 +85,11 @@
 	<target
 		name="build.all"
 		description="Builds CFWheels"
-		depends="build.cfwheels">
+		depends="build.cfwheels.core,build.cfwheels.base">
 	</target>
+
+	<target name="build.cfwheels.core" description="Build a new CFWheels Core distribution" depends="init"></target>
+	<target name="build.cfwheels.base" description="Build a new CFWheels Base distribution" depends="init"></target>
 
 	<!-- Build CFWheels Distribution -->
 	<target name="build.cfwheels" description="Build a new CFWheels Core distribution" depends="init">
