@@ -87,28 +87,28 @@
 	<!-- Build CFWheels Core Distribution -->
 	<target name="build.cfwheels.core" description="Build a new CFWheels Core distribution" depends="init">
 		<!-- Cleanup + Init -->
-		<property name="dir.build" value="${basedir}/build-cfwheels-core"/>
-		<delete dir="${dir.build}" />
-		<mkdir dir="${dir.build}" />
+		<property name="dir.build.core" value="${basedir}/build-cfwheels-core"/>
+		<delete dir="${dir.build.core}" />
+		<mkdir dir="${dir.build.core}" />
 
 		<!-- Init Platform Dirs -->
 		<property name="dir.cfwheels.exports"	value="${dir.exports}/cfwheels/${cfwheels.version}" />
 		<property name="be.cfwheels.exports" 	value="${be.exports}/cfwheels" />
 
 		<property name="build.core.label" value="${cfwheels.core.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
-		<concat destfile="${dir.build}/cfwheels/${build.core.label}">Built on ${start.TODAY}</concat>
+		<concat destfile="${dir.build.core}/cfwheels/${build.core.label}">Built on ${start.TODAY}</concat>
 
-		<copy todir="${dir.build}/cfwheels" encoding="UTF-8" overwrite="true">
+		<copy todir="${dir.build.core}/cfwheels" encoding="UTF-8" overwrite="true">
 			<fileset dir="wheels" />
 		</copy>
 
 		<!-- Copy box.json to exports -->
-		<copy file="box-core.json" 	toFile="${dir.build}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
-		<copy file="readme-core.md" toFile="${dir.build}/cfwheels/readme.md" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="box-core.json" 	toFile="${dir.build.core}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="readme-core.md" toFile="${dir.build.core}/cfwheels/readme.md" 	encoding="UTF-8" overwrite="true"/>
 
 		<!-- Replace Version + Build Numbers -->
 		<replaceregexp match='@build.version@' replace="${cfwheels.version}" flags="ig" byline="true" encoding="UTF-8">
-		  <fileset dir="${dir.build}/cfwheels" />
+		  <fileset dir="${dir.build.core}/cfwheels" />
 		</replaceregexp>
 
 		<!-- Determine snapshot vs isPrerelease vs master artifact -->
@@ -116,7 +116,7 @@
 			<equals arg1="${isPreRelease}" arg2="true" />
 			<then>
 				<replaceregexp match='@build.number@' replace="${build.number}" flags="ig" byline="true" encoding="UTF-8">
-					<fileset dir="${dir.build}/cfwheels" />
+					<fileset dir="${dir.build.core}/cfwheels" />
 				</replaceregexp>
 			</then>
 
@@ -124,20 +124,20 @@
 				<equals arg1="${build.branch}" arg2="develop" />
 				<then>
 					<replaceregexp match='\+@build.number@' replace="-snapshot" flags="ig" byline="true" encoding="UTF-8">
-					  <fileset dir="${dir.build}/cfwheels" />
+					  <fileset dir="${dir.build.core}/cfwheels" />
 					</replaceregexp>
 				</then>
 			</elseif>
 
 			<else>
 				<replaceregexp match='@build.number@' replace="${build.number}" flags="ig" byline="true" encoding="UTF-8">
-				  <fileset dir="${dir.build}/cfwheels" />
+				  <fileset dir="${dir.build.core}/cfwheels" />
 				</replaceregexp>
 			</else>
 		</if>
 
 		<!-- Zip CFWheels Bundle -->
-		<zip destfile="${dir.cfwheels.exports}/${cfwheels.core.slug}-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
+		<zip destfile="${dir.cfwheels.exports}/${cfwheels.core.slug}-${cfwheels.version}.zip" basedir="${dir.build.core}/cfwheels" />
 
 		<!-- Build Checksum -->
 		<checksum forceoverwrite="true" fileext=".md5">
@@ -163,18 +163,18 @@
 	<!-- Build CFWheels Base Distribution -->
 	<target name="build.cfwheels.base" description="Build a new CFWheels Base distribution" depends="init">
 		<!-- Cleanup build dir -->
-		<property name="dir.build" value="${basedir}/build-cfwheels-base"/>
-		<delete dir="${dir.build}" />
-		<mkdir dir="${dir.build}" />
+		<property name="dir.build.base" value="${basedir}/build-cfwheels-base"/>
+		<delete dir="${dir.build.base}" />
+		<mkdir dir="${dir.build.base}" />
 
 		<!-- Init Platform Dirs -->
 		<property name="dir.cfwheels.exports"	value="${dir.exports}/cfwheels/${cfwheels.version}" />
 		<property name="be.cfwheels.exports" 	value="${be.exports}/cfwheels" />
 
 		<property name="build.base.label" value="${cfwheels.base.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
-		<concat destfile="${dir.build}/cfwheels/${build.base.label}">Built on ${start.TODAY}</concat>
+		<concat destfile="${dir.build.base}/cfwheels/${build.base.label}">Built on ${start.TODAY}</concat>
 
-		<copy todir="${dir.build}/cfwheels" encoding="UTF-8" overwrite="true">
+		<copy todir="${dir.build.base}/cfwheels" encoding="UTF-8" overwrite="true">
 			<fileset dir="${basedir}">
 				<include name="**/Application.cfc"/>
 				<include name="**/config/**"/>
@@ -199,12 +199,12 @@
 		</copy>
 
 		<!-- Copy box.json to exports -->
-		<copy file="box-base.json" 	toFile="${dir.build}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
-		<copy file="readme-base.md" toFile="${dir.build}/cfwheels/readme.md" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="box-base.json" 	toFile="${dir.build.base}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="readme-base.md" toFile="${dir.build.base}/cfwheels/readme.md" 	encoding="UTF-8" overwrite="true"/>
 
 		<!-- Replace Version + Build Numbers -->
 		<replaceregexp match='@build.version@' replace="${cfwheels.version}" flags="ig" byline="true" encoding="UTF-8">
-		  <fileset dir="${dir.build}/cfwheels" />
+		  <fileset dir="${dir.build.base}/cfwheels" />
 		</replaceregexp>
 
 		<!-- Determine snapshot vs isPrerelease vs master artifact -->
@@ -212,7 +212,7 @@
 			<equals arg1="${isPreRelease}" arg2="true" />
 			<then>
 				<replaceregexp match='@build.number@' replace="${build.number}" flags="ig" byline="true" encoding="UTF-8">
-					<fileset dir="${dir.build}/cfwheels" />
+					<fileset dir="${dir.build.base}/cfwheels" />
 				</replaceregexp>
 			</then>
 
@@ -220,20 +220,20 @@
 				<equals arg1="${build.branch}" arg2="develop" />
 				<then>
 					<replaceregexp match='\+@build.number@' replace="-snapshot" flags="ig" byline="true" encoding="UTF-8">
-					  <fileset dir="${dir.build}/cfwheels" />
+					  <fileset dir="${dir.build.base}/cfwheels" />
 					</replaceregexp>
 				</then>
 			</elseif>
 
 			<else>
 				<replaceregexp match='@build.number@' replace="${build.number}" flags="ig" byline="true" encoding="UTF-8">
-				  <fileset dir="${dir.build}/cfwheels" />
+				  <fileset dir="${dir.build.base}/cfwheels" />
 				</replaceregexp>
 			</else>
 		</if>
 
 		<!-- Zip CFWheels Bundle -->
-		<zip destfile="${dir.cfwheels.exports}/${cfwheels.base.slug}-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
+		<zip destfile="${dir.cfwheels.exports}/${cfwheels.base.slug}-${cfwheels.version}.zip" basedir="${dir.build.base}/cfwheels" />
 
 		<!-- Build Checksum -->
 		<checksum forceoverwrite="true" fileext=".md5">
