@@ -82,6 +82,10 @@ jobs:
           path: |
             artifacts/**/*
 
+      - name: List files in the core directory
+        run: |
+          ls $ROOT_DIR/build-cfwheels-core
+
       - name: Publish Core
         run: |
           ROOT_DIR=`pwd`
