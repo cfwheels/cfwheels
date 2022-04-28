@@ -159,55 +159,24 @@
 	</target>
   <!-- ================================ -->
 
+  <!-- ================================ -->
 	<!-- Build CFWheels Base Distribution -->
 	<target name="build.cfwheels.base" description="Build a new CFWheels Base distribution" depends="init">
-	</target>
-
-	<!-- Build CFWheels Distribution -->
-	<target name="build.cfwheels" description="Build a new CFWheels Core distribution" depends="init">
 		<!-- Init Platform Dirs -->
 		<property name="dir.cfwheels.exports"	value="${dir.exports}/cfwheels/${cfwheels.version}" />
 		<property name="be.cfwheels.exports" 	value="${be.exports}/cfwheels" />
-		<property name="dir.cfwheels.core.exports"	value="${dir.exports}/${cfwheels.core.slug}/${cfwheels.version}" />
-		<property name="be.cfwheels.core.exports" 	value="${be.exports}/${cfwheels.core.slug}" />
-		<property name="dir.cfwheels.base.exports"	value="${dir.exports}/${cfwheels.base.slug}/${cfwheels.version}" />
-		<property name="be.cfwheels.base.exports" 	value="${be.exports}/${cfwheels.base.slug}" />
 
-		<!-- Cleanup Old Code
-		<delete verbose="true" failonerror="false">
-			<fileset dir="${dir.cfwheels.exports}" />
-			<fileset dir="${dir.exports}/${cfwheels.slug}">
-				<include name="cfwheels-be*" />
-			</fileset>
-			<fileset dir="${dir.exports}/${cfwheels.core.slug}">
-				<include name="cfwheels-be*" />
-			</fileset>
-			<fileset dir="${dir.exports}/${cfwheels.base.slug}">
-				<include name="cfwheels-be*" />
-			</fileset>
-		</delete>-->
-
-		<!-- Build Label -->
-		<property name="build.label" value="${cfwheels.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
-		<property name="build.core.label" value="${cfwheels.core.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
 		<property name="build.base.label" value="${cfwheels.base.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
-		<concat destfile="${dir.build}/cfwheels/${build.label}">Built on ${start.TODAY}</concat>
-		<concat destfile="${dir.build}/cfwheels/${build.core.label}">Built on ${start.TODAY}</concat>
 		<concat destfile="${dir.build}/cfwheels/${build.base.label}">Built on ${start.TODAY}</concat>
 
-		<!-- Copy Src -->
-      	<copy todir="${dir.build}/cfwheels/wheels" encoding="UTF-8" overwrite="true">
-        	<fileset dir="wheels" />
-        </copy>
-
-		<!--Copy text files to install folder-->
-		<copy todir="${dir.build}/cfwheels/" encoding="UTF-8" overwrite="true">
-			<fileset file="license.txt" />
-			<fileset file="readme.md" />
+		<copy todir="${dir.build}/cfwheels" encoding="UTF-8" overwrite="true">
+			<fileset file="Application.cfc" />
+			<fileset dir="config" />
 		</copy>
 
-		<!-- Copy box.json to build -->
-		<copy file="box-original.json" toFile="${dir.build}/cfwheels/box.json" encoding="UTF-8" overwrite="true"/>
+		<!-- Copy box.json to exports -->
+		<copy file="box-base.json" 	toFile="${dir.build}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="readme-base.md" toFile="${dir.build}/cfwheels/readme.md" 	encoding="UTF-8" overwrite="true"/>
 
 		<!-- Replace Version + Build Numbers -->
 		<replaceregexp match='@build.version@' replace="${cfwheels.version}" flags="ig" byline="true" encoding="UTF-8">
@@ -240,13 +209,7 @@
 		</if>
 
 		<!-- Zip CFWheels Bundle -->
-		<zip destfile="${dir.cfwheels.exports}/${cfwheels.slug}-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
-		<zip destfile="${dir.cfwheels.exports}/${cfwheels.core.slug}-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
 		<zip destfile="${dir.cfwheels.exports}/${cfwheels.base.slug}-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
-
-		<!-- Copy box.json to exports -->
-		<copy file="${dir.build}/cfwheels/box.json" 	toFile="${dir.cfwheels.exports}/box.json" 	encoding="UTF-8" />
-	<!--	<copy file="${dir.build}/cfwheels/README.md" toFile="${dir.cfwheels.exports}/README.md" 	encoding="UTF-8" /> -->
 
 		<!-- Build Checksum -->
 		<checksum forceoverwrite="true" fileext=".md5">
@@ -261,18 +224,11 @@
 		</checksum>
 
 		<!-- Move Bleeding Edge to Root -->
-		<copy file="${dir.cfwheels.exports}/${cfwheels.slug}-${cfwheels.version}.zip"
-			  tofile="${be.cfwheels.exports}/${cfwheels.slug}-be.zip"
-			  overwrite="true"
-			  encoding="UTF-8"/>
-		<copy file="${dir.cfwheels.exports}/${cfwheels.core.slug}-${cfwheels.version}.zip"
-			  tofile="${be.cfwheels.exports}/${cfwheels.core.slug}-be.zip"
-			  overwrite="true"
-			  encoding="UTF-8"/>
 		<copy file="${dir.cfwheels.exports}/${cfwheels.base.slug}-${cfwheels.version}.zip"
 			  tofile="${be.cfwheels.exports}/${cfwheels.base.slug}-be.zip"
 			  overwrite="true"
 			  encoding="UTF-8"/>
-    </target>
+	</target>
+  <!-- ================================ -->
 
 </project>
