@@ -1,6 +1,5 @@
 /**
- * Build process for CFWheels Modules
- * Adapt to your needs.
+ * Build process for CFWheels Core and Base Template
  */
 component{
 
@@ -8,74 +7,26 @@ component{
 	 * Constructor
 	 */
 	function init(){
-			// Setup Pathing
-			variables.cwd           = getCWD().reReplace( "\.$", "" );
-			variables.artifactsDir  = cwd & "/.artifacts";
-			variables.buildDir      = cwd & "/.tmp";
-			variables.apiDocsURL    = "http://localhost:60299/apidocs/";
-			variables.testRunner    = "http://localhost:60299/tests/runner.cfm";
+		// Setup Pathing
+		variables.cwd           = getCWD().reReplace( "\.$", "" );
+		variables.artifactsDir  = cwd & "/.artifacts";
+		variables.coreDir  			= artifactsDir & "/core";
+		variables.baseDir  			= artifactsDir & "/base";
 
-			// Source Excludes Not Added to final binary
-			variables.excludes      = [
-					".github",
-					"build",
-					"config",
-					"controllers",
-					"docs",
-					"event",
-					"files",
-					"global",
-					"images",
-					"javascripts",
-					"miscellaneous",
-					"models",
-					"plugins",
-					"src",
-					"stylesheets",
-					"tests",
-					"views",
-					".cfformat.json",
-					".editorconfig",
-					".gitignore",
-					"Application.cfc",
-					"CHANGELOG.md",
-					"CODE_OF_CONDUCT.md",
-					"LICENSE",
-					"README.md",
-					"docker-compose.yml",
-					"index.cfm",
-					"rewrite.cfm",
-					"root.cfm",
-					"server-cf10.json",
-					"server-cf11.json",
-					"server-cf2016.json",
-					"server-cf2018.json",
-					"server-lucee4.json",
-					"server-lucee5.json",
-					"urlrewrite.xml",
-					".artifacts",
-					".tmp",
-					".DS_Store",
-					".git"
-			];
+		// Cleanup + Init Directories
+		[ variables.coreDir, variables.baseDir, variables.artifactsDir ].each( function( item ){
+			if( directoryExists( item ) ){
+					directoryDelete( item, true );
+			}
+			// Create directories
+			directoryCreate( item, true, true );
+		} );
 
-			// Cleanup + Init Build Directories
-			[ variables.buildDir, variables.artifactsDir ].each( function( item ){
-					if( directoryExists( item ) ){
-							directoryDelete( item, true );
-					}
-					// Create directories
-					directoryCreate( item, true, true );
-	} );
-
-	// Create Mappings
-	fileSystemUtil.createMapping( "coldbox", variables.cwd & "test-harness/coldbox" );
-
-			return this;
+		return this;
 	}
 
 	/**
-	 * Run the build process: test, build source, docs, checksums
+	 * Run the build process: test, build core, build base template, checksums
 	 *
 	 * @projectName The project name used for resources and slugs
 	 * @version The version you are building
@@ -87,12 +38,9 @@ component{
 			version="1.0.0",
 			buildID=createUUID(),
 			branch="develop"
-	){
+	) {
 	// Create project mapping
 	fileSystemUtil.createMapping( arguments.projectName, variables.cwd );
-
-			// Run the tests
-			// runTests();
 
 			// Build the source
 			buildSource( argumentCollection=arguments );
@@ -102,15 +50,15 @@ component{
 			//docs( argumentCollection=arguments );
 
 			// checksums
-			buildChecksums();
+			// buildChecksums();
 
 			// Build latest changelog
-			latestChangelog();
+			// latestChangelog();
 
 			// Finalize Message
 			print.line()
-					.boldMagentaLine( "Build Process is done! Enjoy your build!" )
-					.toConsole();
+				.boldMagentaLine( "Build Process is done! Enjoy your build!" )
+				.toConsole();
 	}
 
 	/**
@@ -143,49 +91,44 @@ component{
 	 * @branch The branch you are building
 	 */
 	function buildSource(
-			required projectName,
-			version="1.0.0",
-			buildID=createUUID(),
-			branch="development"
+		required projectName,
+		version="1.0.0",
+		buildID=createUUID(),
+		branch="develop"
 	){
-			// Build Notice ID
-			print.line()
-					.boldMagentaLine( "Building #arguments.projectName# v#arguments.version#+#arguments.buildID# from #cwd# using the #arguments.branch# branch." )
-					.toConsole();
+		// Build Notice ID
+		print.line()
+				.boldMagentaLine( "Building #arguments.projectName# v#arguments.version#+#arguments.buildID# from #cwd# using the #arguments.branch# branch." )
+				.toConsole();
 
-			// Prepare exports directory
-			variables.exportsDir = variables.artifactsDir & "/#projectName#/#arguments.version#";
-			directoryCreate( variables.exportsDir, true, true );
+		// Copy source
+		print.blueLine( "Copying source wheels folder to core folder..." ).toConsole();
+		copy( variables.cwd & "/wheels", variables.coreDir );
+		print.blueLine( "Copying source template folders to base folder..." ).toConsole();
+		copy( variables.cwd, variables.baseDir );
 
-			// Project Build Dir
-			variables.projectBuildDir = variables.buildDir & "/#projectName#";
-			directoryCreate( variables.projectBuildDir, true, true );
+/*
+		// Create build ID
+		fileWrite( "#variables.projectBuildDir#/#projectName#-#version#+#buildID#", "Built with love on #dateTimeFormat( now(), "full")#" );
 
-			// Copy source
-			print.blueLine( "Copying source to build folder..." ).toConsole();
-			copy( variables.cwd, variables.projectBuildDir );
+		// Updating Placeholders
+		print.greenLine( "Updating version identifier to #arguments.version#" ).toConsole();
+		command( 'tokenReplace' )
+				.params(
+						path = "/#variables.projectBuildDir#/**",
+						token = "@build.version@",
+						replacement = arguments.version
+				)
+				.run();
 
-			// Create build ID
-			fileWrite( "#variables.projectBuildDir#/#projectName#-#version#+#buildID#", "Built with love on #dateTimeFormat( now(), "full")#" );
-
-			// Updating Placeholders
-			print.greenLine( "Updating version identifier to #arguments.version#" ).toConsole();
-			command( 'tokenReplace' )
-					.params(
-							path = "/#variables.projectBuildDir#/**",
-							token = "@build.version@",
-							replacement = arguments.version
-					)
-					.run();
-
-			print.greenLine( "Updating build identifier to #arguments.buildID#" ).toConsole();
-			command( 'tokenReplace' )
-					.params(
-							path = "/#variables.projectBuildDir#/**",
-							token = ( arguments.branch == "maim" ? "@build.number@" : "+@build.number@" ),
-							replacement = ( arguments.branch == "main" ? arguments.buildID : "-snapshot" )
-					)
-					.run();
+		print.greenLine( "Updating build identifier to #arguments.buildID#" ).toConsole();
+		command( 'tokenReplace' )
+				.params(
+						path = "/#variables.projectBuildDir#/**",
+						token = ( arguments.branch == "maim" ? "@build.number@" : "+@build.number@" ),
+						replacement = ( arguments.branch == "main" ? arguments.buildID : "-snapshot" )
+				)
+				.run();
 
 			// zip up source
 			var destination = "#variables.exportsDir#/#projectName#-#version#.zip";
@@ -200,6 +143,7 @@ component{
 
 			// Copy box.json for convenience
 			fileCopy( "#variables.projectBuildDir#/box.json", variables.exportsDir );
+	*/
 	}
 
 	/**
