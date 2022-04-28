@@ -174,7 +174,7 @@
 
 		<copy todir="${dir.build}/cfwheel" encoding="UTF-8" overwrite="true">
 			<fileset dir="${basedir}">
-				<include name=”**/*”/>
+				<include name="**/*"/>
 				<exclude name=".github"/>
 				<exclude name="build"/>
 				<exclude name="wheels"/>
