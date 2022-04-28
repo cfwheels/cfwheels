@@ -92,7 +92,7 @@
 	<target name="build.cfwheels" description="Build a new CFWheels Core distribution" depends="init">
 		<!-- Init Platform Dirs -->
 		<property name="dir.cfwheels.exports"	value="${dir.exports}/cfwheels/${cfwheels.version}" />
-		<property name="be.cfwheels.exports" 	value="${be.exports}/${cfwheels.slug}" />
+		<property name="be.cfwheels.exports" 	value="${be.exports}/cfwheels" />
 		<property name="dir.cfwheels.core.exports"	value="${dir.exports}/${cfwheels.core.slug}/${cfwheels.version}" />
 		<property name="be.cfwheels.core.exports" 	value="${be.exports}/${cfwheels.core.slug}" />
 		<property name="dir.cfwheels.base.exports"	value="${dir.exports}/${cfwheels.base.slug}/${cfwheels.version}" />
