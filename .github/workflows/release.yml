@@ -102,14 +102,14 @@ jobs:
           ROOT_DIR=`pwd`
           cd $ROOT_DIR/build-cfwheels-base/cfwheels && box forgebox publish
 
-#      - name: Inform Slack
-#        if: ${{ always() }}
-#        uses: rtCamp/action-slack-notify@v2
-#        env:
-#          SLACK_CHANNEL: coding
-#          SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
-#          SLACK_ICON_EMOJI: ":bell:"
-#          SLACK_MESSAGE: 'CFWheels ${{ env.CFWHEELS_VERSION }} Built with ${{ job.status }}!'
-#          SLACK_TITLE: "CFWheels Build"
-#          SLACK_USERNAME: CI
-#          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Inform Slack
+        if: ${{ always() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_CHANNEL: coding
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
+          SLACK_ICON_EMOJI: ":bell:"
+          SLACK_MESSAGE: 'CFWheels ${{ env.CFWHEELS_VERSION }} Built with ${{ job.status }}!'
+          SLACK_TITLE: "CFWheels Build"
+          SLACK_USERNAME: CI
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}

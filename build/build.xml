@@ -8,10 +8,10 @@
 	</description>
 
 	<!-- UPDATE ON EACH VERSION CYCLE -->
-	<property name="groupID"				value="bpamiri" />
-	<property name="cfwheels.slug"	 		value="cfwheels-core-ci"/>
-	<property name="cfwheels.core.slug"	 		value="cfwheels-core-ci"/>
-	<property name="cfwheels.base.slug"	 		value="cfwheels-base-ci"/>
+	<property name="groupID"				value="cfwheels" />
+	<property name="cfwheels.slug"	 		value="cfwheels"/>
+	<property name="cfwheels.core.slug"	 		value="cfwheels"/>
+	<property name="cfwheels.base.slug"	 		value="cfwheels-base-template"/>
 
   <!-- Default environment check, if not passed via -Denvironment -->
 	<condition property="environment" value="local">
