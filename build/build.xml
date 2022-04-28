@@ -174,10 +174,24 @@
 
 		<copy todir="${dir.build}/cfwheels" encoding="UTF-8" overwrite="true">
 			<fileset dir="${basedir}">
-				<include name="**/*"/>
-				<exclude name="**/.github/**"/>
-				<exclude name="**/build/**"/>
-				<exclude name="**/wheels/**"/>
+				<include name="**/Application.cfc"/>
+				<include name="**/config/**"/>
+				<include name="**/controllers/**"/>
+				<include name="**/events/**"/>
+				<include name="**/files/**"/>
+				<include name="**/global/**"/>
+				<include name="**/images/**"/>
+				<include name="**/index.cfm"/>
+				<include name="**/javascripts/**"/>
+				<include name="**/LICENSE"/>
+				<include name="**/miscellaneous/**"/>
+				<include name="**/models/**"/>
+				<include name="**/plugins/**"/>
+				<include name="**/rewrite.cfm"/>
+				<include name="**/root.cfm"/>
+				<include name="**/stylesheets/**"/>
+				<include name="**/tests/**"/>
+				<include name="**/views/**"/>
 			</fileset>
 		</copy>
 
