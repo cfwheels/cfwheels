@@ -82,10 +82,10 @@ jobs:
           path: |
             artifacts/**/*
 
-      - name: Publish
+      - name: Publish Core
         run: |
           ROOT_DIR=`pwd`
-          cd $ROOT_DIR/artifacts/cfwheels/${{ env.CFWHEELS_VERSION }} && box forgebox publish
+          cd $ROOT_DIR/build-cfwheels-core && box forgebox publish
 
 #      - name: Inform Slack
 #        if: ${{ always() }}

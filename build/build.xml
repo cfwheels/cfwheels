@@ -87,6 +87,7 @@
 	<!-- Build CFWheels Core Distribution -->
 	<target name="build.cfwheels.core" description="Build a new CFWheels Core distribution" depends="init">
 		<!-- Cleanup + Init -->
+		<property name="dir.build" value="${basedir}/build-cfwheels-core"/>
 		<delete dir="${dir.build}" />
 		<mkdir dir="${dir.build}" />
 
@@ -162,6 +163,7 @@
 	<!-- Build CFWheels Base Distribution -->
 	<target name="build.cfwheels.base" description="Build a new CFWheels Base distribution" depends="init">
 		<!-- Cleanup build dir -->
+		<property name="dir.build" value="${basedir}/build-cfwheels-base"/>
 		<delete dir="${dir.build}" />
 		<mkdir dir="${dir.build}" />
 
