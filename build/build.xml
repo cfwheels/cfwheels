@@ -144,8 +144,8 @@
 		<zip destfile="${dir.cfwheels.exports}/${cfwheels.core.slug}-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
 
 		<!-- Copy box.json to exports -->
-		<copy file="${dir.build}/cfwheels/box-core.json" 	toFile="${dir.cfwheels.exports}/box.json" 	encoding="UTF-8" />
-		<copy file="${dir.build}/cfwheels/readme-core.md" toFile="${dir.cfwheels.exports}/readme.md" 	encoding="UTF-8" />
+		<copy file="box-core.json" 	toFile="${dir.cfwheels.exports}/box.json" 	encoding="UTF-8" />
+		<copy file="readme-core.md" toFile="${dir.cfwheels.exports}/readme.md" 	encoding="UTF-8" />
 
 		<!-- Build Checksum -->
 		<checksum forceoverwrite="true" fileext=".md5">
