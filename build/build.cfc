@@ -19,7 +19,7 @@ component{
 					directoryDelete( item, true );
 			}
 			// Create directories
-			directoryCreate( item, true, true );
+			directoryCreate( item, true, false );
 		} );
 
 		return this;
