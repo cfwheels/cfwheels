@@ -76,21 +76,13 @@ jobs:
 #          box task run taskFile=./build/build.cfc :projectName=cfwheels :version=${{ env.CFWHEELS_VERSION }} :branch=${{ env.BRANCH }} --debug
 #          box server start serverConfigFile="server-lucee5.json" --debug
 
-      - name: Upload CFWheels Core Artifacts
+      - name: Upload CFWheels Artifacts
         if: success()
         uses: actions/upload-artifact@v2
         with:
           name: cfwheels-core
           path: |
-            .artifacts/core/**/*
-
-      - name: Upload CFWheels Base Template Artifacts
-        if: success()
-        uses: actions/upload-artifact@v2
-        with:
-          name: cfwheels-base
-          path: |
-            .artifacts/base/**/*
+            .artifacts/**/*
 
 #      - name: Publish
 #        run: |
