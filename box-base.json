@@ -4,7 +4,7 @@
     "author":"CFWheels Core Team and Community, repackaged by Peter Amiri",
     "shortDescription":"CFWheels MVC Framework Base Template",
     "location":"forgeboxStorage",
-    "slug":"cfwheels-base",
+    "slug":"cfwheels-base-template",
     "createPackageDirectory":false,
     "type":"cfwheels-templates",
     "keywords":[

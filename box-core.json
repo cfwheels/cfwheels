@@ -4,7 +4,7 @@
     "author":"CFWheels Core Team and Community, repackaged by Peter Amiri",
     "shortDescription":"CFWheels MVC Framework Core Directory",
     "location":"ForgeboxStorage",
-    "slug":"cfwheels-core",
+    "slug":"cfwheels",
     "directory":"wheels",
     "createPackageDirectory":true,
     "packageDirectory":"wheels",
