@@ -80,7 +80,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v2
         with:
-          name: cfwheels-core
+          name: cfwheels-variants
           path: |
             artifacts/**/*
 
