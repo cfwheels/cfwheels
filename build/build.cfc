@@ -43,7 +43,7 @@ component{
 	fileSystemUtil.createMapping( arguments.projectName, variables.cwd );
 
 			// Build the source
-			buildSource( argumentCollection=arguments );
+			//buildSource( argumentCollection=arguments );
 
 			// Build Docs
 			//arguments.outputDir = variables.buildDir & "/apidocs";
