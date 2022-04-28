@@ -102,7 +102,7 @@ component{
 				.toConsole();
 
 		// Copy source
-		print.blueLine( "Copying source wheels folder to core folder..." ).toConsole();
+/*		print.blueLine( "Copying source wheels folder to core folder..." ).toConsole();
 		// Source Excludes Not Added to final binary
 		variables.excludes      = [
 			".gitignore",
@@ -115,7 +115,7 @@ component{
 			".git"
 		];
 		copy( variables.cwd & "/wheels", variables.coreDir );
-
+*/
 		print.blueLine( "Copying source template folders to base folder..." ).toConsole();
 		variables.excludes      = [
 			".gitignore",
