@@ -254,7 +254,7 @@ function latestChangelog(){
 							fileCopy( item, target );
 					} else {
 							print.greenLine( "Copying directory #item#" ).toConsole();
-							directoryCopy( item, target & "/" & item.replace( src, "" ), true );
+							directoryCopy( item, target & "/" & item.replace( src, "" ), true, "", true );
 					}
 			} );
 	}
