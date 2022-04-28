@@ -102,11 +102,9 @@
 			<fileset dir="wheels" />
 		</copy>
 
-		<!--Copy text files to install folder-->
-		<copy todir="${dir.build}/cfwheels/" encoding="UTF-8" overwrite="true">
-			<fileset file="license.txt" />
-			<fileset file="readme.md" />
-		</copy>
+		<!-- Copy box.json to exports -->
+		<copy file="box-core.json" 	toFile="${dir.build}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="readme-core.md" toFile="${dir.build}/cfwheels/readme.md" 	encoding="UTF-8" overwrite="true"/>
 
 		<!-- Copy box.json to build -->
 		<copy file="box-original.json" toFile="${dir.build}/cfwheels/box.json" encoding="UTF-8" overwrite="true"/>
@@ -140,10 +138,6 @@
 				</replaceregexp>
 			</else>
 		</if>
-
-		<!-- Copy box.json to exports -->
-		<copy file="box-core.json" 	toFile="${dir.build}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
-		<copy file="readme-core.md" toFile="${dir.build}/cfwheels/readme.md" 	encoding="UTF-8" overwrite="true"/>
 
 		<!-- Zip CFWheels Bundle -->
 		<zip destfile="${dir.cfwheels.exports}/${cfwheels.core.slug}-${cfwheels.version}.zip" basedir="${dir.build}/cfwheels" />
