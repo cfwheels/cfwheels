@@ -172,8 +172,8 @@
 		<property name="build.base.label" value="${cfwheels.base.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
 		<concat destfile="${dir.build}/cfwheels/${build.base.label}">Built on ${start.TODAY}</concat>
 
-		<copy todir="${dir.build}/cfwheel" encoding="UTF-8" overwrite="true">
-			<fileset dir="">
+		<copy todir="${dir.build}/cfwheels" encoding="UTF-8" overwrite="true">
+			<fileset dir="${basedir}">
 				<include name="**/*"/>
 				<exclude name="**/.github/**"/>
 				<exclude name="**/build/**"/>
