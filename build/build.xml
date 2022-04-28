@@ -68,6 +68,10 @@
 			</then>
 		</if>
 
+		<!-- Cleanup exports dir -->
+		<delete dir="${dir.exports}" />
+		<mkdir dir="${dir.exports}" />
+
 		<!-- Mark as init -->
 		<property name="src.isInit" value="true" />
 	</target>
@@ -85,8 +89,6 @@
 		<!-- Cleanup + Init -->
 		<delete dir="${dir.build}" />
 		<mkdir dir="${dir.build}" />
-		<delete dir="${dir.exports}" />
-		<mkdir dir="${dir.exports}" />
 
 		<!-- Init Platform Dirs -->
 		<property name="dir.cfwheels.exports"	value="${dir.exports}/cfwheels/${cfwheels.version}" />
@@ -159,11 +161,9 @@
   <!-- ================================ -->
 	<!-- Build CFWheels Base Distribution -->
 	<target name="build.cfwheels.base" description="Build a new CFWheels Base distribution" depends="init">
-		<!-- Cleanup + Init -->
+		<!-- Cleanup build dir -->
 		<delete dir="${dir.build}" />
 		<mkdir dir="${dir.build}" />
-		<delete dir="${dir.exports}" />
-		<mkdir dir="${dir.exports}" />
 
 		<!-- Init Platform Dirs -->
 		<property name="dir.cfwheels.exports"	value="${dir.exports}/cfwheels/${cfwheels.version}" />
