@@ -4,8 +4,8 @@
      ====================================================================== -->
 <project name="cfwheels-core-build" default="build.all" basedir="../">
 	<description>
-    	Build a new distribution of CFWheels Core
-    </description>
+		Build a new distribution of CFWheels
+	</description>
 
 	<!-- UPDATE ON EACH VERSION CYCLE -->
 	<property name="groupID"				value="bpamiri" />
