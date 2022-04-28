@@ -92,6 +92,16 @@ jobs:
           ROOT_DIR=`pwd`
           cd $ROOT_DIR/build-cfwheels-core/cfwheels && box forgebox publish
 
+      - name: List files in the base directory
+        run: |
+          ROOT_DIR=`pwd`
+          ls $ROOT_DIR/build-cfwheels-base/cfwheels
+
+      - name: Publish Base
+        run: |
+          ROOT_DIR=`pwd`
+          cd $ROOT_DIR/build-cfwheels-base/cfwheels && box forgebox publish
+
 #      - name: Inform Slack
 #        if: ${{ always() }}
 #        uses: rtCamp/action-slack-notify@v2
