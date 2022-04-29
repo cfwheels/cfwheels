@@ -86,7 +86,7 @@ jobs:
       - name: Publish Core
         run: |
           ROOT_DIR=`pwd`
-          cd $ROOT_DIR/build-cfwheels-core/cfwheels && box forgebox publish
+          cd $ROOT_DIR/build-cfwheels-core/cfwheels && box forgebox publish --force
 
       - name: List files in the base directory
         run: |
@@ -96,7 +96,7 @@ jobs:
       - name: Publish Base
         run: |
           ROOT_DIR=`pwd`
-          cd $ROOT_DIR/build-cfwheels-base/cfwheels && box forgebox publish
+          cd $ROOT_DIR/build-cfwheels-base/cfwheels && box forgebox publish --force
 
       - name: Inform Slack
         if: ${{ always() }}
