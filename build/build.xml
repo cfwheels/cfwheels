@@ -99,8 +99,9 @@
 		<concat destfile="${dir.build.core}/cfwheels/${build.core.label}">Built on ${start.TODAY}</concat>
 
 		<copy todir="${dir.build.core}/cfwheels" encoding="UTF-8" overwrite="true">
-			<fileset dir="wheels" />
-			<exclude name="**/tests/**"/>
+			<fileset dir="wheels">
+				<exclude name="**/tests/**"/>
+			</fileset>
 		</copy>
 
 		<!-- Copy box.json to exports -->
