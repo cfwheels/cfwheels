@@ -178,23 +178,23 @@
 
 		<copy todir="${dir.build.base}/cfwheels" encoding="UTF-8" overwrite="true">
 			<fileset dir="${basedir}">
-				<include name="**/config/**"/>
-				<include name="**/controllers/**"/>
-				<include name="**/events/**"/>
-				<include name="**/files/**"/>
-				<include name="**/global/**"/>
-				<include name="**/images/**"/>
-				<include name="**/javascripts/**"/>
-				<include name="**/miscellaneous/**"/>
-				<include name="**/models/**"/>
-				<include name="**/plugins/**"/>
-				<include name="**/stylesheets/**"/>
-				<include name="**/tests/**"/>
-				<include name="**/views/**"/>
-				<include name="**/Application.cfc"/>
-				<include name="**/index.cfm"/>
-				<include name="**/rewrite.cfm"/>
-				<include name="**/root.cfm"/>
+				<include name="config/**"/>
+				<include name="controllers/**"/>
+				<include name="events/**"/>
+				<include name="files/**"/>
+				<include name="global/**"/>
+				<include name="images/**"/>
+				<include name="javascripts/**"/>
+				<include name="miscellaneous/**"/>
+				<include name="models/**"/>
+				<include name="plugins/**"/>
+				<include name="stylesheets/**"/>
+				<include name="tests/**"/>
+				<include name="views/**"/>
+				<include name="Application.cfc"/>
+				<include name="index.cfm"/>
+				<include name="rewrite.cfm"/>
+				<include name="root.cfm"/>
 			</fileset>
 		</copy>
 
