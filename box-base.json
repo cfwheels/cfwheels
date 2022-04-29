@@ -31,10 +31,10 @@
         "commandbox-cfformat":"*"
     },
     "installPaths":{
-        "cfwheels-core":"wheels/"
+        "cfwheels":"wheels/"
     },
     "dependencies":{
-        "cfwheels-core":"^2.0.0"
+        "cfwheels":"2.3.0-wip"
     },
     "private":false,
     "license":[
