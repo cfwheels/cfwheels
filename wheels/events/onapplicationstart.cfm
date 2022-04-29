@@ -59,7 +59,7 @@ public void function onApplicationStart() {
 	request.cgi = $cgiScope();
 
 	// Set up containers for routes, caches, settings etc.
-	application.$wheels.version = "2.3.0-dev";
+	application.$wheels.version = "@build.version@";
 	try {
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
 	} catch (any e) {
