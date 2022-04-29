@@ -100,6 +100,7 @@
 
 		<copy todir="${dir.build.core}/cfwheels" encoding="UTF-8" overwrite="true">
 			<fileset dir="wheels" />
+			<exclude name="**/tests/**"/>
 		</copy>
 
 		<!-- Copy box.json to exports -->
