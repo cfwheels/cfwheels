@@ -12,10 +12,6 @@ on:
         required: true
       FORGEBOX_API_TOKEN:
         required: true
-      AWS_ACCESS_KEY:
-        required: true
-      AWS_ACCESS_SECRET:
-        required: true
 
 env:
   CFWHEELS_PRERELEASE: false
