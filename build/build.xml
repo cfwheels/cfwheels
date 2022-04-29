@@ -178,6 +178,7 @@
 
 		<copy todir="${dir.build.base}/cfwheels" encoding="UTF-8" overwrite="true">
 			<fileset dir="${basedir}">
+				<include name="**/config/**"/>
 			</fileset>
 		</copy>
 
