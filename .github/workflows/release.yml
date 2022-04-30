@@ -35,14 +35,14 @@ jobs:
           distribution: "adopt"
           java-version: "11"
 
-      - name: Cache CommandBox Dependencies
-        uses: actions/cache@v1
-        if: ${{ true }}
-        with:
-          path: ~/.CommandBox/artifacts
-          key: ${{ runner.OS }}-commandbox-cache-${{ hashFiles( 'box.json' ) }}
-          restore-keys: |
-            ${{ runner.OS }}-commandbox-cache-${{ hashFiles( 'box.json' ) }}
+#      - name: Cache CommandBox Dependencies
+#        uses: actions/cache@v1
+#        if: ${{ true }}
+#        with:
+#          path: ~/.CommandBox/artifacts
+#          key: ${{ runner.OS }}-commandbox-cache-${{ hashFiles( 'box.json' ) }}
+#          restore-keys: |
+#            ${{ runner.OS }}-commandbox-cache-${{ hashFiles( 'box.json' ) }}
 
       - name: Setup CommandBox
         uses: Ortus-Solutions/setup-commandbox@v2.0.0
