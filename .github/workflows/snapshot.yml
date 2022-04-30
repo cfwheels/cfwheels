@@ -11,16 +11,16 @@ env:
   CFWHEELS_PRERELEASE: false
 
 jobs:
-  tests:
-    uses: ./.github/workflows/tests.yml
-    secrets:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#  tests:
+#    uses: ./.github/workflows/tests.yml
+#    secrets:
+#      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   #############################################
   # Build Snapshot Release
   #############################################
   build:
-    needs: tests
+#    needs: tests
     uses: ./.github/workflows/release.yml
     secrets:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
