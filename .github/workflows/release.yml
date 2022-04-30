@@ -63,9 +63,9 @@ jobs:
             echo "BRANCH=develop" >> $GITHUB_ENV
           fi
 
-      - name: Install Dependencies
-        run: |
-          box install
+#      - name: Install Dependencies
+#        run: |
+#          box install
 #          cd apidocs && box install
 
       - name: Build CFWheels Variants for ${{ env.BRANCH }} v${{ env.CFWHEELS_VERSION }}
