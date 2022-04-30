@@ -29,17 +29,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: "adopt"
-          java-version: "11"
+#      - name: Setup Java
+#        uses: actions/setup-java@v2
+#        with:
+#          distribution: "adopt"
+#          java-version: "11"
 
-      - name: Setup CommandBox
-        uses: Ortus-Solutions/setup-commandbox@v2.0.0
-        with:
-          forgeboxAPIKey: ${{ secrets.FORGEBOX_API_TOKEN }}
-          version: 5.5.0
+#      - name: Setup CommandBox
+#        uses: Ortus-Solutions/setup-commandbox@v2.0.0
+#        with:
+#          forgeboxAPIKey: ${{ secrets.FORGEBOX_API_TOKEN }}
+#          version: 5.5.0
 
       - name: Setup Environment Variables For Build Process
         id: current_version
@@ -66,19 +66,27 @@ jobs:
           path: |
             artifacts/**/*
             
-      - name: Remove Artifacts Folder
-        run: |
-          box rm artifacts --force --recurse
+#      - name: Remove Artifacts Folder
+#        run: |
+#          box rm artifacts --force --recurse
 
-      - name: List files in the core directory
-        run: |
-          ROOT_DIR=`pwd`
-          ls $ROOT_DIR/build-cfwheels-core/cfwheels
+#      - name: List files in the core directory
+#        run: |
+#          ROOT_DIR=`pwd`
+#          ls $ROOT_DIR/build-cfwheels-core/cfwheels
 
-      - name: Publish Core
-        run: |
-          ROOT_DIR=`pwd`
-          cd $ROOT_DIR/build-cfwheels-core/cfwheels && box forgebox publish --force
+#      - name: Publish Core
+#        run: |
+#          ROOT_DIR=`pwd`
+#          cd $ROOT_DIR/build-cfwheels-core/cfwheels && box forgebox publish --force
+
+      # publish core package
+      - uses: pixl8/github-action-box-publish@v3
+        with: 
+          forgebox_user: cfwheels
+          forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
+        env:
+          BOXJSON_DIR: $ROOT_DIR/build-cfwheels-core/cfwheels
 
       - name: List files in the base directory
         run: |
