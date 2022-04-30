@@ -54,10 +54,10 @@ jobs:
             
       # publish core package
       - uses: pixl8/github-action-box-publish@v3
-        env: 
-          FORGEBOX_USER: cfwheels
-          FORGEBOX_PASS: ${{ secrets.FORGEBOX_PASS }}
-          BOXJSON_DIR: $ROOT_DIR/build-cfwheels-core/cfwheels
+        with:
+      	  forgebox_user: cfwheels
+      	  forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
+          boxjson_dir: $ROOT_DIR/build-cfwheels-core/cfwheels
 
       - name: List files in the base directory
         run: |
