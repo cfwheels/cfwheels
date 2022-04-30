@@ -53,9 +53,9 @@ jobs:
             artifacts/**/*
             
       # publish core package
-      - uses: pixl8/github-action-box-publish@v3
+      - uses: pixl8/github-action-box-publish@v1
         with:
-      	  FORGEBOX_USER: cfwheels
+      	  forgebox_user: cfwheels
       	  forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
           boxjson_dir: $ROOT_DIR/build-cfwheels-core/cfwheels
 
