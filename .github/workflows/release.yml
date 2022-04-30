@@ -45,8 +45,8 @@ jobs:
         id: current_version
         run: |
           echo "CFWHEELS_VERSION=`cat box.json | jq '.version' -r`" >> $GITHUB_ENV
-          box package set version=@build.version@+@build.number@
-          box config set verboseErrors=true
+ #         box package set version=@build.version@+@build.number@
+ #         box config set verboseErrors=true
           # main or snapshot
           echo "BRANCH=main" >> $GITHUB_ENV
           if [ $GITHUB_REF == 'refs/heads/develop' ]
