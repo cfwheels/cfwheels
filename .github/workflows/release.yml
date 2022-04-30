@@ -35,15 +35,6 @@ jobs:
           distribution: "adopt"
           java-version: "11"
 
-#      - name: Cache CommandBox Dependencies
-#        uses: actions/cache@v1
-#        if: ${{ true }}
-#        with:
-#          path: ~/.CommandBox/artifacts
-#          key: ${{ runner.OS }}-commandbox-cache-${{ hashFiles( 'box.json' ) }}
-#          restore-keys: |
-#            ${{ runner.OS }}-commandbox-cache-${{ hashFiles( 'box.json' ) }}
-
       - name: Setup CommandBox
         uses: Ortus-Solutions/setup-commandbox@v2.0.0
         with:
@@ -62,11 +53,6 @@ jobs:
           then
             echo "BRANCH=develop" >> $GITHUB_ENV
           fi
-
-#      - name: Install Dependencies
-#        run: |
-#          box install
-#          cd apidocs && box install
 
       - name: Build CFWheels Variants for ${{ env.BRANCH }} v${{ env.CFWHEELS_VERSION }}
         run: |
