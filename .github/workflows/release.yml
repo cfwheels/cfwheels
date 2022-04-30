@@ -79,6 +79,10 @@ jobs:
           name: cfwheels-variants
           path: |
             artifacts/**/*
+            
+      - name: Remove Artifacts Folder
+        run: |
+          box rm artifacts --force --recurse
 
       - name: List files in the core directory
         run: |
