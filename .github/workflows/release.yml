@@ -12,8 +12,6 @@ on:
         required: true
       FORGEBOX_API_TOKEN:
         required: true
-      FORGEBOX_PASS:
-        required: true
 
 env:
   CFWHEELS_PRERELEASE: false
