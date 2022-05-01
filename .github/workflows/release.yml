@@ -58,15 +58,6 @@ jobs:
       	  forgebox_user: cfwheels
       	  forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
 #          boxjson_dir: $ROOT_DIR/build-cfwheels-core/cfwheels
-
-      - name: List files in the base directory
-        run: |
-          ROOT_DIR=`pwd`
-          ls $ROOT_DIR/build-cfwheels-base/cfwheels
-
-      - name: Publish Base
-        run: |
-          ROOT_DIR=`pwd`
           cd $ROOT_DIR/build-cfwheels-base/cfwheels && box forgebox publish --force
 
 #      - name: Inform Slack
