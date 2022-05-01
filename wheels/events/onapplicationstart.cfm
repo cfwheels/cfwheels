@@ -59,6 +59,7 @@ public void function onApplicationStart() {
 	request.cgi = $cgiScope();
 
 	// Set up containers for routes, caches, settings etc.
+	// TODO remove the static version number
 	application.$wheels.version = "2.3.0-wip";
 	try {
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
