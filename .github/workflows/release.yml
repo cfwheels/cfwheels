@@ -60,7 +60,7 @@ jobs:
           forgebox_user: cfwheels
           forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
         env:
-          boxjson_dir: $ROOT_DIR/build-cfwheels-core/cfwheels
+          BOXJSON_DIR: /build-cfwheels-core/cfwheels
       
       # publish base package
       - uses: pixl8/github-action-box-publish@v1
@@ -68,7 +68,7 @@ jobs:
           forgebox_user: cfwheels
           forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
         env:
-          boxjson_dir: $ROOT_DIR/build-cfwheels-base/cfwheels
+          BOXJSON_DIR: /build-cfwheels-base/cfwheels
       
 #      - name: Publish core package
 #        uses: pixl8/github-action-box-publish@v3
