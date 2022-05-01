@@ -53,13 +53,18 @@ jobs:
           name: cfwheels-variants
           path: |
             artifacts/**/*
-            
-      - name: Publish core package
-        uses: pixl8/github-action-box-publish@v3
+      
+      - uses: pixl8/github-action-box-publish@v1
         with:
-      	  forgebox_user: cfwheels
-      	  forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
-          boxjson_dir: $ROOT_DIR/build-cfwheels-core/cfwheels
+          forgebox_user: pixl8
+          forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
+      
+#      - name: Publish core package
+#        uses: pixl8/github-action-box-publish@v3
+#        with:
+#      	  forgebox_user: cfwheels
+#      	  forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
+#          boxjson_dir: $ROOT_DIR/build-cfwheels-core/cfwheels
 
 #      - name: Inform Slack
 #        if: ${{ always() }}
