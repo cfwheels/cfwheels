@@ -55,7 +55,7 @@ jobs:
             artifacts/**/*
       
       # publish core package
-      - uses: ./.github/actions/publish-forgebox-package
+      - uses: ./.github/actions/publish_forgebox_package
         with:
           forgebox_user: cfwheels
           forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
