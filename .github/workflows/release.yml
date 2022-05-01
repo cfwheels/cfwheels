@@ -52,8 +52,8 @@ jobs:
           path: |
             artifacts/**/*
             
-      # publish core package
-      - uses: pixl8/github-action-box-publish@v3
+      - name: Publish core package
+        uses: pixl8/github-action-box-publish@v3
         with:
       	  forgebox_user: cfwheels
       	  forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
