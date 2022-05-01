@@ -56,7 +56,7 @@ jobs:
       
       - uses: pixl8/github-action-box-publish@v1
         with:
-          forgebox_user: pixl8
+          forgebox_user: cfwheels
           forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
         env:
           boxjson_dir: $ROOT_DIR/build-cfwheels-core/cfwheels
