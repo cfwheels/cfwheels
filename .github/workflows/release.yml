@@ -58,7 +58,7 @@ jobs:
         with:
           forgebox_user: cfwheels
           forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
-          args: --force
+          args: force=true
         env:
           boxjson_dir: $ROOT_DIR/build-cfwheels-core/cfwheels
       
