@@ -22,7 +22,7 @@ if [[ -f $BOX_JSON_FILE ]] ; then
 	echo "--------------------------------"
 
 	box forgebox login username="$INPUT_FORGEBOX_USER" password="$INPUT_FORGEBOX_PASS" || exit 1;
-	box publish directory="$FULL_DIR" || exit 1;
+	box publish directory="$FULL_DIR" --force || exit 1;
 
 	echo ""
 	echo "------------------"
