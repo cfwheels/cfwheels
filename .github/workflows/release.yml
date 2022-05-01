@@ -57,7 +57,7 @@ jobs:
         with:
       	  forgebox_user: cfwheels
       	  forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
-          boxjson_dir: $ROOT_DIR/build-cfwheels-core/cfwheels
+#          boxjson_dir: $ROOT_DIR/build-cfwheels-core/cfwheels
 
       - name: List files in the base directory
         run: |
