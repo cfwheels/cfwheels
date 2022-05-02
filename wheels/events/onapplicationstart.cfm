@@ -60,7 +60,7 @@ public void function onApplicationStart() {
 
 	// Set up containers for routes, caches, settings etc.
 	// TODO remove the static version number
-	application.$wheels.version = "2.3.0-wip";
+	application.$wheels.version = "2.3.0-rc.1";
 	try {
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
 	} catch (any e) {
