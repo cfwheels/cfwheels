@@ -33,12 +33,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_passing_through_to_urlfor() {
-		args = {
-			action = "test",
-			onlyPath = false,
-			protocol = "https",
-			params = "test1=1&test2=2"
-		};
+		args = {action = "test", onlyPath = false, protocol = "https", params = "test1=1&test2=2"};
 		_controller.redirectTo(argumentCollection = args);
 		r = _controller.getRedirect();
 		assert("r.url Contains args.protocol AND r.url Contains args.params");

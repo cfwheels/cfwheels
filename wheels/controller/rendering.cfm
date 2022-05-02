@@ -215,9 +215,9 @@ public any function renderWith(
 
 		// Throw an error if we do not have a template to render the content type that we do not have defaults for.
 		if (
-			!ListFindNoCase("json,xml", local.contentType) && !StructKeyExists(local, "content") && $get(
-				"showErrorInformation"
-			)
+			!ListFindNoCase("json,xml", local.contentType)
+			&& !StructKeyExists(local, "content")
+			&& $get("showErrorInformation")
 		) {
 			Throw(
 				type = "Wheels.RenderingError",
@@ -363,12 +363,7 @@ public string function $renderViewAndAddToCache() {
 	if (!IsNumeric(arguments.$cache)) {
 		arguments.$cache = $get("defaultCacheTime");
 	}
-	$addToCache(
-		key = arguments.key,
-		value = local.rv,
-		time = arguments.$cache,
-		category = arguments.category
-	);
+	$addToCache(key = arguments.key, value = local.rv, time = arguments.$cache, category = arguments.category);
 	return local.rv;
 }
 
@@ -394,12 +389,7 @@ public string function $renderPartialAndAddToCache() {
 	if (!IsNumeric(arguments.$cache)) {
 		arguments.$cache = $get("defaultCacheTime");
 	}
-	$addToCache(
-		key = arguments.key,
-		value = local.rv,
-		time = arguments.$cache,
-		category = arguments.category
-	);
+	$addToCache(key = arguments.key, value = local.rv, time = arguments.$cache, category = arguments.category);
 	return local.rv;
 }
 
@@ -414,10 +404,11 @@ public struct function $argumentsForPartial() {
 			if (StructKeyExists(variables, local.dataFunction)) {
 				local.metaData = GetMetadata(variables[local.dataFunction]);
 				if (
-					IsStruct(local.metaData) && StructKeyExists(local.metaData, "returnType") && local.metaData.returnType == "struct" && StructKeyExists(
-						local.metaData,
-						"access"
-					) && local.metaData.access == "private"
+					IsStruct(local.metaData)
+					&& StructKeyExists(local.metaData, "returnType")
+					&& local.metaData.returnType == "struct"
+					&& StructKeyExists(local.metaData, "access")
+					&& local.metaData.access == "private"
 				) {
 					local.rv = $invoke(method = local.dataFunction, invokeArgs = arguments);
 				}
@@ -438,7 +429,7 @@ public string function $renderPartial() {
 		Throw(
 			type = "Wheels.InvalidPartialArguments",
 			message = "To use a query with a partial, you must specify both `partial` and `query` arguments",
-			extendedInfo = "E.g. ##includePartial(partial=""user"", query=""users"")##"
+			extendedInfo = 'E.g. ##includePartial(partial="user", query="users")##'
 		);
 	} else if (IsObject(arguments.$partial)) {
 		arguments.$name = arguments.$partial.$classData().modelName;
@@ -502,12 +493,7 @@ public string function $generateIncludeTemplatePath(
 	arguments.$controllerName = ListChangeDelims(arguments.$controllerName, '/', '.');
 
 	// Extracts the file part of the path and replace ending ".cfm".
-	local.fileName = ReplaceNoCase(
-		Reverse(ListFirst(Reverse(arguments.$name), "/")),
-		".cfm",
-		"",
-		"all"
-	) & ".cfm";
+	local.fileName = ReplaceNoCase(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".cfm", "", "all") & ".cfm";
 
 	// Replace leading "_" when the file is a partial.
 	if (arguments.$type == "partial" && arguments.$prependWithUnderscore) {
@@ -570,12 +556,7 @@ public string function $includeFile(required any $name, required any $template, 
 					for (local.j = 1; local.j <= local.jEnd; local.j++) {
 						local.property = ListGetAt(local.query.columnList, local.j);
 						arguments[local.property] = local.query[local.property][local.i];
-						QuerySetCell(
-							arguments.group,
-							local.property,
-							local.query[local.property][local.i],
-							local.groupQueryCount
-						);
+						QuerySetCell(arguments.group, local.property, local.query[local.property][local.i], local.groupQueryCount);
 					}
 					arguments.current = local.i + 1 - arguments.group.recordCount;
 					local.groupQueryCount++;
@@ -593,12 +574,7 @@ public string function $includeFile(required any $name, required any $template, 
 				if (Right(local.rv, 3) == local.tempSpacer) {
 					local.rv = Left(local.rv, Len(local.rv) - 3);
 				}
-				local.rv = Replace(
-					local.rv,
-					local.tempSpacer,
-					arguments.$spacer,
-					"all"
-				);
+				local.rv = Replace(local.rv, local.tempSpacer, arguments.$spacer, "all");
 			} else {
 				for (local.i = 1; local.i <= local.iEnd; local.i++) {
 					arguments.current = local.i;
@@ -662,10 +638,8 @@ public boolean function $formatTemplatePathExists(required string $name) {
 	);
 	local.rv = false;
 	if (
-		!ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name) && !ListFindNoCase(
-			variables.$class.formats.nonExistingTemplates,
-			arguments.$name
-		)
+		!ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name)
+		&& !ListFindNoCase(variables.$class.formats.nonExistingTemplates, arguments.$name)
 	) {
 		if (FileExists(ExpandPath(local.templatePath))) {
 			local.rv = true;

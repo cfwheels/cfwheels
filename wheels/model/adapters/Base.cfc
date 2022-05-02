@@ -131,10 +131,8 @@ component output=false {
 	 */
 	public void function $removeColumnAliasesInOrderClause(required struct args) {
 		if (
-			IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql)]) && Left(
-				arguments.args.sql[ArrayLen(arguments.args.sql)],
-				9
-			) == "ORDER BY "
+			IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql)])
+			&& Left(arguments.args.sql[ArrayLen(arguments.args.sql)], 9) == "ORDER BY "
 		) {
 			local.pos = ArrayLen(arguments.args.sql);
 			local.list = ReplaceNoCase(arguments.args.sql[local.pos], "ORDER BY ", "");
@@ -167,37 +165,24 @@ component output=false {
 	 */
 	public void function $addColumnsToSelectAndGroupBy(required struct args) {
 		if (
-			IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql)]) && Left(
-				arguments.args.sql[ArrayLen(arguments.args.sql)],
-				8
-			) == "ORDER BY" && IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql) - 1]) && Left(
-				arguments.args.sql[ArrayLen(arguments.args.sql) - 1],
-				8
-			) == "GROUP BY"
+			IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql)])
+			&& Left(arguments.args.sql[ArrayLen(arguments.args.sql)], 8) == "ORDER BY"
+			&& IsSimpleValue(arguments.args.sql[ArrayLen(arguments.args.sql) - 1])
+			&& Left(arguments.args.sql[ArrayLen(arguments.args.sql) - 1], 8) == "GROUP BY"
 		) {
 			local.iEnd = ListLen(arguments.args.sql[ArrayLen(arguments.args.sql)]);
+			// cfformat-ignore-start
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
-				local.item = Trim(
-					ReplaceNoCase(
-						ReplaceNoCase(
-							ReplaceNoCase(ListGetAt(arguments.args.sql[ArrayLen(arguments.args.sql)], local.i), "ORDER BY ", ""),
-							" ASC",
-							""
-						),
-						" DESC",
-						""
-					)
-				);
+				local.item = Trim(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(ListGetAt(arguments.args.sql[ArrayLen(arguments.args.sql)], local.i), "ORDER BY ", ""), " ASC",""), " DESC", ""));
 				if (
-					!ListFindNoCase(
-						ReplaceNoCase(arguments.args.sql[ArrayLen(arguments.args.sql) - 1], "GROUP BY ", ""),
-						local.item
-					) && !$isAggregateFunction(local.item)
+					!ListFindNoCase(ReplaceNoCase(arguments.args.sql[ArrayLen(arguments.args.sql) - 1], "GROUP BY ", ""), local.item)
+					&& !$isAggregateFunction(local.item)
 				) {
 					local.key = ArrayLen(arguments.args.sql) - 1;
 					arguments.args.sql[local.key] = ListAppend(arguments.args.sql[local.key], local.item);
 				}
 			}
+			// cfformat-ignore-end
 		}
 	}
 

@@ -47,24 +47,9 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_url_and_form_scope_map_the_same() {
-		StructInsert(
-			args.urlScope,
-			"user[email]",
-			"tpetruzzi@gmail.com",
-			true
-		);
-		StructInsert(
-			args.urlScope,
-			"user[name]",
-			"tony petruzzi",
-			true
-		);
-		StructInsert(
-			args.urlScope,
-			"user[password]",
-			"secret",
-			true
-		);
+		StructInsert(args.urlScope, "user[email]", "tpetruzzi@gmail.com", true);
+		StructInsert(args.urlScope, "user[name]", "tony petruzzi", true);
+		StructInsert(args.urlScope, "user[password]", "secret", true);
 		args.formScope = {};
 		url_params = dispatch.$createParams(argumentCollection = args);
 		args.formScope = Duplicate(args.urlScope);
@@ -74,30 +59,10 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_url_overrides_form() {
-		StructInsert(
-			args.urlScope,
-			"user[email]",
-			"per.djurner@gmail.com",
-			true
-		);
-		StructInsert(
-			args.formScope,
-			"user[email]",
-			"tpetruzzi@gmail.com",
-			true
-		);
-		StructInsert(
-			args.formScope,
-			"user[name]",
-			"tony petruzzi",
-			true
-		);
-		StructInsert(
-			args.formScope,
-			"user[password]",
-			"secret",
-			true
-		);
+		StructInsert(args.urlScope, "user[email]", "per.djurner@gmail.com", true);
+		StructInsert(args.formScope, "user[email]", "tpetruzzi@gmail.com", true);
+		StructInsert(args.formScope, "user[name]", "tony petruzzi", true);
+		StructInsert(args.formScope, "user[password]", "secret", true);
 		_params = dispatch.$createParams(argumentCollection = args);
 		e = {};
 		e.email = "per.djurner@gmail.com";
@@ -120,36 +85,16 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_url_scope_not_overwritten() {
-		StructInsert(
-			args.urlScope,
-			"user[email]",
-			"tpetruzzi@gmail.com",
-			true
-		);
+		StructInsert(args.urlScope, "user[email]", "tpetruzzi@gmail.com", true);
 		_params = dispatch.$createParams(argumentCollection = args);
 		exists = StructKeyExists(args.urlScope, "user[email]");
 		assert('exists eq true');
 	}
 
 	function test_multiple_objects_with_checkbox() {
-		StructInsert(
-			args.urlScope,
-			"user[1][isActive]($checkbox)",
-			"0",
-			true
-		);
-		StructInsert(
-			args.urlScope,
-			"user[1][isActive]",
-			"1",
-			true
-		);
-		StructInsert(
-			args.urlScope,
-			"user[2][isActive]($checkbox)",
-			"0",
-			true
-		);
+		StructInsert(args.urlScope, "user[1][isActive]($checkbox)", "0", true);
+		StructInsert(args.urlScope, "user[1][isActive]", "1", true);
+		StructInsert(args.urlScope, "user[2][isActive]($checkbox)", "0", true);
 		_params = dispatch.$createParams(argumentCollection = args);
 		assert('_params.user["1"].isActive eq 1');
 		assert('_params.user["2"].isActive eq 0');

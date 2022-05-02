@@ -336,7 +336,6 @@ public boolean function $queryCallback(required string method, required query co
 					if (!ListFindNoCase(arguments.collection.columnList, local.key)) {
 						QueryAddColumn(arguments.collection, local.key, []);
 					}
-
 					arguments.collection[local.key][local.i] = local.result[local.key];
 				}
 			} else if (IsBoolean(local.result) && !local.result) {

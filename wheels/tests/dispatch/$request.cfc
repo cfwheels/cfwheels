@@ -36,12 +36,7 @@ component extends="wheels.tests.Test" {
 
 	function test_route_without_format_should_ignore_fullstops() {
 		mapper()
-			.$match(
-				pattern = "users/[username]",
-				controller = "test",
-				action = "test",
-				constraints = {"username" = "[^/]+"}
-			)
+			.$match(pattern = "users/[username]", controller = "test", action = "test", constraints = {"username" = "[^/]+"})
 			.end();
 		args = {};
 		args.pathinfo = "/users/foo.bar";

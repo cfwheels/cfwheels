@@ -22,12 +22,7 @@ component extends="[extends]" hint="[description]" {
 
 			if (StructKeyExists(local, "exception")) {
 				transaction action="rollback";
-				Throw(
-					errorCode = "1",
-					detail = local.exception.detail,
-					message = local.exception.message,
-					type = "any"
-				);
+				Throw(errorCode = "1", detail = local.exception.detail, message = local.exception.message, type = "any");
 			} else {
 				transaction action="commit";
 			}
@@ -37,25 +32,14 @@ component extends="[extends]" hint="[description]" {
 	function down() {
 		transaction {
 			try {
-				addColumn(
-					table = 'tableName',
-					columnType = '',
-					columnName = 'columnName',
-					default = '',
-					null = true
-				);
+				addColumn(table = 'tableName', columnType = '', columnName = 'columnName', default = '', null = true);
 			} catch (any e) {
 				local.exception = e;
 			}
 
 			if (StructKeyExists(local, "exception")) {
 				transaction action="rollback";
-				Throw(
-					errorCode = "1",
-					detail = local.exception.detail,
-					message = local.exception.message,
-					type = "any"
-				);
+				Throw(errorCode = "1", detail = local.exception.detail, message = local.exception.message, type = "any");
 			} else {
 				transaction action="commit";
 			}

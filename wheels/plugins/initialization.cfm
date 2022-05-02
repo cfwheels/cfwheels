@@ -16,12 +16,7 @@ public any function init(
 	variables.$class.dependantPlugins = "";
 	StructAppend(variables.$class, arguments);
 	/* handle pathing for different operating systems */
-	variables.$class.pluginPathFull = ReplaceNoCase(
-		ExpandPath(variables.$class.pluginPath),
-		"\",
-		"/",
-		"all"
-	);
+	variables.$class.pluginPathFull = ReplaceNoCase(ExpandPath(variables.$class.pluginPath), "\", "/", "all");
 	/* sort direction */
 	variables.sort = "ASC";
 	/* extract out plugins */
@@ -90,12 +85,7 @@ public void function $pluginsExtract() {
 					//
 				}
 			}
-			$zip(
-				action = "unzip",
-				destination = local.plugin.folderPath,
-				file = local.plugin.file,
-				overwrite = true
-			);
+			$zip(action = "unzip", destination = local.plugin.folderPath, file = local.plugin.file, overwrite = true);
 		}
 	};
 }
@@ -123,20 +113,19 @@ public void function $pluginsProcess() {
 		local.pluginValue = local.plugins[local.pluginKey];
 		local.plugin = CreateObject("component", $componentPathToPlugin(local.pluginKey, local.pluginValue.name)).init();
 		if (
-			!StructKeyExists(local.plugin, "version") || ListFind(local.plugin.version, local.wheelsVersion) || variables.$class.loadIncompatiblePlugins
+			!StructKeyExists(local.plugin, "version")
+			|| ListFind(local.plugin.version, local.wheelsVersion)
+			|| variables.$class.loadIncompatiblePlugins
 		) {
 			variables.$class.plugins[local.pluginKey] = local.plugin;
-
 			// If plugin author has specified compatibility version as 2.0, only check against that major version
 			// If they've specified 2.0.1, then be more specific
 			if (StructKeyExists(local.plugin, "version")) {
 				if (
 					(ListLen(local.plugin.version, ".") > 2 && !ListFind(local.plugin.version, local.wheelsVersion))
 					|| (
-						ListLen(local.plugin.version, ".") == 2 && !ListFind(
-							local.plugin.version,
-							ListDeleteAt(local.wheelsVersion, 3, ".")
-						)
+						ListLen(local.plugin.version, ".") == 2
+						&& !ListFind(local.plugin.version, ListDeleteAt(local.wheelsVersion, 3, "."))
 					)
 				) {
 					variables.$class.incompatiblePlugins = ListAppend(variables.$class.incompatiblePlugins, local.pluginKey);
@@ -198,15 +187,11 @@ public void function $processMixins() {
 	for (local.iPlugin in local.pluginKeys) {
 		// reference the plugin
 		local.plugin = variables.$class.plugins[local.iPlugin];
-
 		// grab meta data of the plugin
 		local.pluginMeta = GetMetadata(local.plugin);
-
 		if (
-			!StructKeyExists(local.pluginMeta, "environment") || ListFindNoCase(
-				local.pluginMeta.environment,
-				variables.$class.wheelsEnvironment
-			)
+			!StructKeyExists(local.pluginMeta, "environment")
+			|| ListFindNoCase(local.pluginMeta.environment, variables.$class.wheelsEnvironment)
 		) {
 			// by default and for backwards compatibility, we inject all methods
 			// into all objects
@@ -234,9 +219,9 @@ public void function $processMixins() {
 					if (local.methodMixins != "none") {
 						for (local.iMixableComponent in variables.$class.mixableComponents) {
 							if (local.methodMixins == "global" || ListFindNoCase(local.methodMixins, local.iMixableComponent)) {
-								variables.$class.mixins[local.iMixableComponent][local.iPluginMethods] = local.plugin[
-									local.iPluginMethods
-								];
+								// cfformat-ignore-start
+								variables.$class.mixins[local.iMixableComponent][local.iPluginMethods] = local.plugin[local.iPluginMethods];
+								// cfformat-ignore-end
 							}
 						}
 					}

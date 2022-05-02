@@ -38,9 +38,9 @@ public function $runCsrfProtection(string action) {
 	if (StructKeyExists(variables.$class, "csrf")) {
 		local.csrf = variables.$class.csrf;
 		if (
-			(!Len(local.csrf.only) && !Len(local.csrf.except)) || (
-				Len(local.csrf.only) && ListFindNoCase(local.csrf.only, arguments.action)
-			) || (Len(local.csrf.except) && !ListFindNoCase(local.csrf.except, arguments.action))
+			(!Len(local.csrf.only) && !Len(local.csrf.except))
+			|| (Len(local.csrf.only) && ListFindNoCase(local.csrf.only, arguments.action))
+			|| (Len(local.csrf.except) && !ListFindNoCase(local.csrf.except, arguments.action))
 		) {
 			$storeAuthenticityToken();
 			$flagRequestAsProtected();
@@ -87,7 +87,9 @@ public boolean function $isVerifiedRequest() {
  * Internal function.
  */
 public boolean function $isRequestProtectedFromForgery() {
-	return StructKeyExists(request, "$wheelsProtectedFromForgery") && IsBoolean(request.$wheelsProtectedFromForgery) && request.$wheelsProtectedFromForgery;
+	return StructKeyExists(request, "$wheelsProtectedFromForgery")
+	&& IsBoolean(request.$wheelsProtectedFromForgery)
+	&& request.$wheelsProtectedFromForgery;
 }
 
 /**

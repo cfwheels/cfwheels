@@ -24,9 +24,8 @@ public void function $set() {
 			if (local.key != "functionName") {
 				local.iEnd = ListLen(arguments.functionName);
 				for (local.i = 1; local.i <= local.iEnd; local.i++) {
-					application[local.appKey].functions[Trim(ListGetAt(arguments.functionName, local.i))][local.key] = arguments[
-						local.key
-					];
+					local.functionName = Trim(ListGetAt(arguments.functionName, local.i));
+					application[local.appKey].functions[local.functionName][local.key] = arguments[local.key];
 				}
 			}
 		}
@@ -63,45 +62,20 @@ public string function capitalize(required string text) {
  */
 public string function humanize(required string text, string except = "") {
 	// add a space before every capitalized word
-	local.rv = ReReplace(
-		arguments.text,
-		"([[:upper:]])",
-		" \1",
-		"all"
-	);
+	local.rv = ReReplace(arguments.text, "([[:upper:]])", " \1", "all");
 
 	// remove space after punctuation chars
-	local.rv = ReReplace(
-		local.rv,
-		"([[:punct:]])([[:space:]])",
-		"\1",
-		"all"
-	);
+	local.rv = ReReplace(local.rv, "([[:punct:]])([[:space:]])", "\1", "all");
 
 	// fix abbreviations so they form a word again (example: aURLVariable)
-	local.rv = ReReplace(
-		local.rv,
-		"([[:upper:]]) ([[:upper:]])(?:\s|\b)",
-		"\1\2",
-		"all"
-	);
-	local.rv = ReReplace(
-		local.rv,
-		"([[:upper:]])([[:upper:]])([[:lower:]])",
-		"\1\2 \3",
-		"all"
-	);
+	local.rv = ReReplace(local.rv, "([[:upper:]]) ([[:upper:]])(?:\s|\b)", "\1\2", "all");
+	local.rv = ReReplace(local.rv, "([[:upper:]])([[:upper:]])([[:lower:]])", "\1\2 \3", "all");
 
 	if (Len(arguments.except)) {
 		local.iEnd = ListLen(arguments.except, " ");
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.item = ListGetAt(arguments.except, local.i);
-			local.rv = ReReplaceNoCase(
-				local.rv,
-				"#local.item#(?:\b)",
-				"#local.item#",
-				"all"
-			);
+			local.rv = ReReplaceNoCase(local.rv, "#local.item#(?:\b)", "#local.item#", "all");
 		}
 	}
 
@@ -153,18 +127,8 @@ public string function singularize(required string word) {
  * @string The string to hyphenize.
  */
 public string function hyphenize(required string string) {
-	local.rv = ReReplace(
-		arguments.string,
-		"([A-Z][a-z])",
-		"-\l\1",
-		"all"
-	);
-	local.rv = ReReplace(
-		local.rv,
-		"([a-z])([A-Z])",
-		"\1-\l\2",
-		"all"
-	);
+	local.rv = ReReplace(arguments.string, "([A-Z][a-z])", "-\l\1", "all");
+	local.rv = ReReplace(local.rv, "([a-z])([A-Z])", "\1-\l\2", "all");
 	local.rv = ReReplace(local.rv, "^-", "", "one");
 	local.rv = LCase(local.rv);
 	return local.rv;

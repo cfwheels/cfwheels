@@ -80,20 +80,10 @@ public void function flashInsert() {
 				local.tempArr = [];
 				ArrayAppend(local.tempArr, local.flash[local.key]);
 				ArrayAppend(local.tempArr, arguments[local.key]);
-				StructInsert(
-					local.flash,
-					local.key,
-					local.tempArr,
-					true
-				);
+				StructInsert(local.flash, local.key, local.tempArr, true);
 			}
 		} else {
-			StructInsert(
-				local.flash,
-				local.key,
-				arguments[local.key],
-				true
-			);
+			StructInsert(local.flash, local.key, arguments[local.key], true);
 		}
 	}
 	$writeFlash(local.flash);
@@ -144,12 +134,7 @@ public struct function $readFlash() {
 	local.rv = {};
 	if (!StructKeyExists(arguments, "$locked")) {
 		local.lockName = "flashLock" & application.applicationName;
-		local.rv = $simpleLock(
-			name = local.lockName,
-			type = "readonly",
-			execute = "$readFlash",
-			executeArgs = arguments
-		);
+		local.rv = $simpleLock(name = local.lockName, type = "readonly", execute = "$readFlash", executeArgs = arguments);
 	} else if ($getFlashStorage() == "cookie" && StructKeyExists(cookie, "flash")) {
 		local.rv = DeserializeJSON(cookie.flash);
 	} else if ($getFlashStorage() == "session" && StructKeyExists(session, "flash")) {
@@ -164,12 +149,7 @@ public struct function $readFlash() {
 public any function $writeFlash(struct flash = {}) {
 	if (!StructKeyExists(arguments, "$locked")) {
 		local.lockName = "flashLock" & application.applicationName;
-		local.rv = $simpleLock(
-			name = local.lockName,
-			type = "exclusive",
-			execute = "$writeFlash",
-			executeArgs = arguments
-		);
+		local.rv = $simpleLock(name = local.lockName, type = "exclusive", execute = "$writeFlash", executeArgs = arguments);
 	} else {
 		if ($getFlashStorage() == "cookie") {
 			cookie.flash = SerializeJSON(arguments.flash);

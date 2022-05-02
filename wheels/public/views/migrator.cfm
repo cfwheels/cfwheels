@@ -42,7 +42,6 @@ try {
 						}
 						if(mig.version EQ currentVersion){
 							class="active";
-
 						}
 					</cfscript>
 					<tr class="#class#">

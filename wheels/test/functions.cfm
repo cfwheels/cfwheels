@@ -195,20 +195,20 @@ public void function fail(string message = "") {
 					later purposes, but don't want it to display
 	*/
 public any function debug(required string expression, boolean display = true) {
-	local.attributeArgs = {
-		"var" = Evaluate(arguments.expression),
-		"label" = arguments.expression
-	};
+	local.attributeArgs = {"var" = Evaluate(arguments.expression), "label" = arguments.expression};
 	local.dump = "";
 
 	// this string will be added to the request key regardless of display argument
-	local.debugString = ArrayToList([
-		"",
-		"---------- DEBUG START '#arguments.expression#' --------",
-		SerializeJSON(attributeArgs["var"]),
-		"---------- DEBUG END '#arguments.expression#' --------",
-		""
-	], Chr(13));
+	local.debugString = ArrayToList(
+		[
+			"",
+			"---------- DEBUG START '#arguments.expression#' --------",
+			SerializeJSON(attributeArgs["var"]),
+			"---------- DEBUG END '#arguments.expression#' --------",
+			""
+		],
+		Chr(13)
+	);
 
 	if (!StructKeyExists(request["TESTING_FRAMEWORK_DEBUG_STRINGS"], TESTING_FRAMEWORK_VARS.RUNNING_TEST)) {
 		request["TESTING_FRAMEWORK_DEBUG_STRINGS"][TESTING_FRAMEWORK_VARS.RUNNING_TEST] = "";
@@ -296,24 +296,13 @@ public boolean function $runTest(string resultKey = "test", string testname = ""
 
 	for (key in ListToArray(keyList)) {
 		/* Include test name and make distinct so debugging doesn't duplicate output */
-		var distinctKey = Replace(
-			Replace(
-				Replace(testCase, ".", "_", "all"),
-				"tests_",
-				"",
-				"one"
-			),
-			"wheels_",
-			"",
-			"one"
-		) & '_' & key;
+		var distinctKey = Replace(Replace(Replace(testCase, ".", "_", "all"), "tests_", "", "one"), "wheels_", "", "one") & '_' & key;
 		/* keep track of the test name so we can display debug information */
 		TESTING_FRAMEWORK_VARS.RUNNING_TEST = distinctkey;
 
 		if (
-			(Left(key, 4) eq "test" and IsCustomFunction(this[key])) and (
-				!Len(arguments.testname) or (Len(arguments.testname) and arguments.testname eq key)
-			)
+			(Left(key, 4) eq "test" and IsCustomFunction(this[key]))
+			and (!Len(arguments.testname) or (Len(arguments.testname) and arguments.testname eq key))
 		) {
 			time = GetTickCount();
 
@@ -398,12 +387,7 @@ public boolean function $runTest(string resultKey = "test", string testname = ""
 		}
 	};
 
-	result = {
-		testCase = testCase,
-		numTests = numTests,
-		numFailures = numTestFailures,
-		numErrors = numTestErrors
-	};
+	result = {testCase = testCase, numTests = numTests, numFailures = numTestFailures, numErrors = numTestErrors};
 
 	// filter test results based on url params
 	// this is exerimental output for ci pipeline
@@ -418,7 +402,6 @@ public boolean function $runTest(string resultKey = "test", string testname = ""
 
 	request[resultkey].numCases = request[resultkey].numCases + 1;
 	request[resultkey].end = Now();
-
 
 	return numTestErrors eq 0;
 }
@@ -470,7 +453,9 @@ public any function $results(string resultKey = "test") {
 			request[resultkey].results[local.i].packageName = $cleanTestPath(request[resultkey].results[local.i].testCase);
 			request[resultkey].results[local.i].debugString = "";
 			if (StructKeyExists(request.TESTING_FRAMEWORK_DEBUG_STRINGS, request[resultkey].results[local.i].distinctKey)) {
-				request[resultkey].results[local.i].debugString = request.TESTING_FRAMEWORK_DEBUG_STRINGS[request[resultkey].results[local.i].distinctKey];
+				request[resultkey].results[local.i].debugString = request.TESTING_FRAMEWORK_DEBUG_STRINGS[
+					request[resultkey].results[local.i].distinctKey
+				];
 			}
 		};
 
@@ -539,7 +524,8 @@ public boolean function $isValidTest(required string component, string shouldExt
 	if (application.wheels.validateTestPackageMetaData && Len(arguments.shouldExtend)) {
 		local.metadata = GetComponentMetadata(arguments.component);
 		if (
-			!StructKeyExists(local.metadata, "extends") or ListLast(local.metadata.extends.fullname, ".") neq arguments.shouldExtend
+			!StructKeyExists(local.metadata, "extends")
+			or ListLast(local.metadata.extends.fullname, ".") neq arguments.shouldExtend
 		) {
 			return false;
 		}
@@ -571,16 +557,7 @@ public string function $cleanTestCase(
 public string function $cleanTestName(required string name) {
 	local.rv = arguments.name;
 	if (Find("_", local.rv)) {
-		local.rv = humanize(
-			Trim(
-				ReReplaceNoCase(
-					ListRest(local.rv, "_"),
-					"_|-",
-					" ",
-					"all"
-				)
-			)
-		);
+		local.rv = humanize(Trim(ReReplaceNoCase(ListRest(local.rv, "_"), "_|-", " ", "all")));
 	} else {
 		local.rv = ReReplaceNoCase(local.rv, "_|-", " ", "all");
 		local.rv = Right(local.rv, Len(local.rv) - 4);
@@ -731,12 +708,7 @@ public void function $seedDatabase(required struct paths) {
  * Returns true if a file path is a wheels core file.
  */
 public any function $isCoreFile(required string path) {
-	local.path = Replace(
-		arguments.path,
-		ExpandPath("/"),
-		"",
-		"one"
-	);
+	local.path = Replace(arguments.path, ExpandPath("/"), "", "one");
 	return (Left(local.path, 7) == "wheels/" || ListFindNoCase("index.cfm,rewrite.cfm,root.cfm", local.path));
 }
 </cfscript>

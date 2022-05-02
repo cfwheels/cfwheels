@@ -83,12 +83,7 @@ public struct function namespace(
 	string package = arguments.name,
 	string path = hyphenize(arguments.name)
 ) {
-	return scope(
-		name = arguments.name,
-		package = arguments.package,
-		path = arguments.path,
-		$call = "namespace"
-	);
+	return scope(name = arguments.name, package = arguments.package, path = arguments.path, $call = "namespace");
 }
 
 /**

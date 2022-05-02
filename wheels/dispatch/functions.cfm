@@ -288,12 +288,7 @@ public struct function $parseJsonBody(required struct params) {
  */
 public struct function $mergeRoutePattern(required struct params, required struct route, required string path) {
 	local.rv = arguments.params;
-	local.matches = ReFindNoCase(
-		arguments.route.regex,
-		arguments.path,
-		1,
-		true
-	);
+	local.matches = ReFindNoCase(arguments.route.regex, arguments.path, 1, true);
 	local.iEnd = ArrayLen(local.matches.pos);
 	for (local.i = 2; local.i <= local.iEnd; local.i++) {
 		local.key = ListGetAt(arguments.route.variables, local.i - 1);
@@ -420,46 +415,21 @@ public struct function $ensureControllerAndAction(required struct params, requir
 	}
 
 	// We now need to have dot notation allowed in the controller hence the \.
-	local.rv.controller = ReReplace(
-		local.rv.controller,
-		"[^0-9A-Za-z-_\.]",
-		"",
-		"all"
-	);
+	local.rv.controller = ReReplace(local.rv.controller, "[^0-9A-Za-z-_\.]", "", "all");
 
 	// Filter out illegal characters from the controller and action arguments.
-	local.rv.action = ReReplace(
-		local.rv.action,
-		"[^0-9A-Za-z-_\.]",
-		"",
-		"all"
-	);
+	local.rv.action = ReReplace(local.rv.action, "[^0-9A-Za-z-_\.]", "", "all");
 
 	// Convert controller to upperCamelCase.
 	local.cName = ListLast(local.rv.controller, ".");
-	local.cName = ReReplace(
-		local.cName,
-		"(^|-)([a-z])",
-		"\u\2",
-		"all"
-	);
+	local.cName = ReReplace(local.cName, "(^|-)([a-z])", "\u\2", "all");
 	local.cLen = ListLen(local.rv.controller, ".");
 	if (local.cLen) {
-		local.rv.controller = ListSetAt(
-			local.rv.controller,
-			local.cLen,
-			local.cName,
-			"."
-		);
+		local.rv.controller = ListSetAt(local.rv.controller, local.cLen, local.cName, ".");
 	}
 
 	// Action to normal camelCase.
-	local.rv.action = ReReplace(
-		local.rv.action,
-		"-([a-z])",
-		"\u\1",
-		"all"
-	);
+	local.rv.action = ReReplace(local.rv.action, "-([a-z])", "\u\1", "all");
 
 	return local.rv;
 }

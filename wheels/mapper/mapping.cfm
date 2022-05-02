@@ -12,12 +12,7 @@ public struct function $draw(
 	variables.mapFormat = arguments.mapFormat;
 
 	// Start with clean scope stack that is locked for race conditions.
-	$simpleLock(
-		name = "mapper.reset",
-		timeout = 5,
-		type = "exclusive",
-		execute = "$resetScopeStack"
-	);
+	$simpleLock(name = "mapper.reset", timeout = 5, type = "exclusive", execute = "$resetScopeStack");
 
 	return this;
 }

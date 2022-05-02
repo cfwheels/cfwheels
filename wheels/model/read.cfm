@@ -56,10 +56,11 @@ public any function findAll(
 
 	// we only allow direct associations to be loaded when returning objects
 	if (
-		$get("showErrorInformation") && Len(arguments.returnAs) && arguments.returnAs != "query" && Find(
-			"(",
-			arguments.include
-		) && arguments.returnIncluded
+		$get("showErrorInformation")
+		&& Len(arguments.returnAs)
+		&& arguments.returnAs != "query"
+		&& Find("(", arguments.include)
+		&& arguments.returnIncluded
 	) {
 		Throw(
 			type = "Wheels",
@@ -80,21 +81,14 @@ public any function findAll(
 		if (Len(arguments.order)) {
 			// insert primary keys to order clause unless they are already there, this guarantees that the ordering is unique which is required to make pagination work properly
 			local.compareList = $listClean(
-				ReplaceNoCase(
-					ReplaceNoCase(arguments.order, " ASC", "", "all"),
-					" DESC",
-					"",
-					"all"
-				)
+				ReplaceNoCase(ReplaceNoCase(arguments.order, " ASC", "", "all"), " DESC", "", "all")
 			);
 			local.iEnd = ListLen(primaryKeys());
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				local.item = primaryKeys(local.i);
 				if (
-					!ListFindNoCase(local.compareList, local.item) && !ListFindNoCase(
-						local.compareList,
-						tableName() & "." & local.item
-					)
+					!ListFindNoCase(local.compareList, local.item)
+					&& !ListFindNoCase(local.compareList, tableName() & "." & local.item)
 				) {
 					arguments.order = ListAppend(arguments.order, "#tableName()#.#local.item#");
 				}
@@ -180,12 +174,7 @@ public any function findAll(
 							Chr(7)
 						);
 					}
-					local.paginationWhere = Replace(
-						local.paginationWhere,
-						Chr(7),
-						" OR ",
-						"all"
-					);
+					local.paginationWhere = Replace(local.paginationWhere, Chr(7), " OR ", "all");
 
 					// this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
 					if (Len(arguments.where) && Len(arguments.include)) {
@@ -203,12 +192,7 @@ public any function findAll(
 			}
 		}
 		// store pagination info in the request scope so all pagination methods can access it
-		setPagination(
-			local.totalRecords,
-			local.currentPage,
-			arguments.perPage,
-			arguments.handle
-		);
+		setPagination(local.totalRecords, local.currentPage, arguments.perPage, arguments.handle);
 	}
 
 	if (StructKeyExists(local, "rv") && !Len(local.rv)) {
@@ -225,24 +209,9 @@ public any function findAll(
 				list = arguments.select,
 				returnAs = arguments.returnAs
 			);
-			local.columns = ReReplace(
-				local.columns,
-				"\w*?\.([\w\s]*?)(,|$)",
-				"\1\2",
-				"all"
-			);
-			local.columns = ReReplace(
-				local.columns,
-				"\(.*?\)\sAS\s([\w\s]*?)(,|$)",
-				"\1\2",
-				"all"
-			);
-			local.columns = ReReplace(
-				local.columns,
-				"\w*?\sAS\s([\w\s]*?)(,|$)",
-				"\1\2",
-				"all"
-			);
+			local.columns = ReReplace(local.columns, "\w*?\.([\w\s]*?)(,|$)", "\1\2", "all");
+			local.columns = ReReplace(local.columns, "\(.*?\)\sAS\s([\w\s]*?)(,|$)", "\1\2", "all");
+			local.columns = ReReplace(local.columns, "\w*?\sAS\s([\w\s]*?)(,|$)", "\1\2", "all");
 			local.rv = QueryNew(local.columns);
 		} else if (singularize(arguments.returnAs) == arguments.returnAs) {
 			local.rv = false;
@@ -252,12 +221,7 @@ public any function findAll(
 	} else if (!StructKeyExists(local, "rv")) {
 		// make the where clause generic for use in caching
 		local.originalWhere = arguments.where;
-		arguments.where = ReReplace(
-			arguments.where,
-			variables.wheels.class.RESQLWhere,
-			"\1?\8",
-			"all"
-		);
+		arguments.where = ReReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8", "all");
 
 		// get info from cache when available, otherwise create the generic select, from, where and order by clause
 		local.queryShellKey = $hashedKey(variables.wheels.class.modelName, arguments);
@@ -319,10 +283,9 @@ public any function findAll(
 		// return existing query result if it has been run already in current request, otherwise pass off the sql array to the query
 		local.queryKey = $hashedKey(variables.wheels.class.modelName, arguments, local.originalWhere);
 		if (
-			application.wheels.cacheQueriesDuringRequest && !arguments.reload && StructKeyExists(
-				request.wheels[variables.wheels.class.modelName],
-				local.queryKey
-			)
+			application.wheels.cacheQueriesDuringRequest
+			&& !arguments.reload
+			&& StructKeyExists(request.wheels[variables.wheels.class.modelName], local.queryKey)
 		) {
 			local.findAll = request.wheels[variables.wheels.class.modelName][local.queryKey];
 		} else {
@@ -342,9 +305,7 @@ public any function findAll(
 			) {
 				local.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
 			}
-			local.findAll = variables.wheels.class.adapter.$querySetup(
-				argumentCollection = local.finderArgs
-			);
+			local.findAll = variables.wheels.class.adapter.$querySetup(argumentCollection = local.finderArgs);
 			request.wheels[variables.wheels.class.modelName][local.queryKey] = local.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 		}
 
@@ -460,10 +421,10 @@ public any function findOne(
 	$setDebugName(name = "findOne", args = arguments);
 	arguments.include = $listClean(arguments.include);
 	if (
-		!Len(arguments.include) || (
-			StructKeyExists(variables.wheels.class.associations, arguments.include) && variables.wheels.class.associations[
-				arguments.include
-			].type != "hasMany"
+		!Len(arguments.include)
+		|| (
+			StructKeyExists(variables.wheels.class.associations, arguments.include)
+			&& variables.wheels.class.associations[arguments.include].type != "hasMany"
 		)
 	) {
 		// No joins will be done or the join will be done to a single record so we can safely get just one record from the database.
@@ -581,12 +542,7 @@ public void function $setDebugName(required struct args) {
 		} else {
 			arguments.args.$debugName = arguments.args.handle;
 		}
-		arguments.args.$debugName = Replace(
-			Replace(arguments.args.$debugName, " ", "", "all"),
-			".",
-			"",
-			"all"
-		);
+		arguments.args.$debugName = Replace(Replace(arguments.args.$debugName, " ", "", "all"), ".", "", "all");
 	}
 }
 </cfscript>

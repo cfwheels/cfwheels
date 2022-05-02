@@ -3,7 +3,7 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		include "setup.cfm";
 		params = {controller = "test", action = "test"};
-		cfheader(statustext="OK", statuscode=200); // start with a fresh status code
+		cfheader(statustext = "OK", statuscode = 200); // start with a fresh status code
 	}
 
 	function teardown() {
@@ -146,12 +146,7 @@ component extends="wheels.tests.Test" {
 		_controller = controller("test", params);
 		_controller.provides("json");
 		user = model("user").findOne(where = "username = 'tonyp'");
-		_controller.renderWith(
-			data = user,
-			layout = false,
-			returnAs = "string",
-			status = 403
-		);
+		_controller.renderWith(data = user, layout = false, returnAs = "string", status = 403);
 		assert("$statusCode() EQ 403");
 	}
 
@@ -161,12 +156,7 @@ component extends="wheels.tests.Test" {
 		_controller = controller("test", params);
 		_controller.provides("json");
 		user = model("user").findOne(where = "username = 'tonyp'");
-		_controller.renderWith(
-			data = user,
-			layout = false,
-			returnAs = "string",
-			status = 404
-		);
+		_controller.renderWith(data = user, layout = false, returnAs = "string", status = 404);
 		assert("$statusCode() EQ 404");
 	}
 
@@ -183,12 +173,7 @@ component extends="wheels.tests.Test" {
 		_controller = controller("test", params);
 		_controller.provides("json");
 		user = model("user").findOne(where = "username = 'tonyp'");
-		_controller.renderWith(
-			data = user,
-			layout = false,
-			returnAs = "string",
-			status = "OK"
-		);
+		_controller.renderWith(data = user, layout = false, returnAs = "string", status = "OK");
 		assert("$statusCode() EQ 200");
 	}
 	function test_custom_status_codes_Not_Found() {
@@ -198,12 +183,7 @@ component extends="wheels.tests.Test" {
 		_controller = controller("test", params);
 		_controller.provides("json");
 		user = model("user").findOne(where = "username = 'tonyp'");
-		_controller.renderWith(
-			data = user,
-			layout = false,
-			returnAs = "string",
-			status = "Not Found"
-		);
+		_controller.renderWith(data = user, layout = false, returnAs = "string", status = "Not Found");
 		assert("$statusCode() EQ 404");
 	}
 	function test_custom_status_codes_Method_Not_Allowed() {
@@ -213,12 +193,7 @@ component extends="wheels.tests.Test" {
 		_controller = controller("test", params);
 		_controller.provides("json");
 		user = model("user").findOne(where = "username = 'tonyp'");
-		_controller.renderWith(
-			data = user,
-			layout = false,
-			returnAs = "string",
-			status = "Method Not Allowed"
-		);
+		_controller.renderWith(data = user, layout = false, returnAs = "string", status = "Method Not Allowed");
 		assert("$statusCode() EQ 405");
 	}
 
@@ -229,12 +204,7 @@ component extends="wheels.tests.Test" {
 		_controller = controller("test", params);
 		_controller.provides("json");
 		user = model("user").findOne(where = "username = 'tonyp'");
-		_controller.renderWith(
-			data = user,
-			layout = false,
-			returnAs = "string",
-			status = "method not allowed"
-		);
+		_controller.renderWith(data = user, layout = false, returnAs = "string", status = "method not allowed");
 		assert("$statusCode() EQ 405");
 	}
 

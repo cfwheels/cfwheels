@@ -52,12 +52,7 @@ public any function average(
 					local.tempValues = {};
 					local.iEnd = ArrayLen(local.values);
 					for (local.i = 1; local.i <= local.iEnd; local.i++) {
-						StructInsert(
-							local.tempValues,
-							local.values[local.i],
-							local.values[local.i],
-							true
-						);
+						StructInsert(local.tempValues, local.values[local.i], local.values[local.i], true);
 					}
 					local.values = ListToArray(StructKeyList(local.tempValues));
 				}

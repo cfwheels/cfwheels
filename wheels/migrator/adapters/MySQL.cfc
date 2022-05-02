@@ -54,12 +54,7 @@ component extends="Abstract" {
 	 * surrounds table or index names with backticks
 	 */
 	public string function quoteTableName(required string name) {
-		return "`#Replace(
-			objectCase(arguments.name),
-			".",
-			"`.`",
-			"ALL"
-		)#`";
+		return "`#Replace(objectCase(arguments.name), ".", "`.`", "ALL")#`";
 	}
 
 	/**

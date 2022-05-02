@@ -10,12 +10,7 @@
  * @static Set to `true` to tell CFWheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions). Please note that the `onSessionStart` and `onRequestStart` events still execute though.
  * @appendToKey List of variables to be evaluated at runtime and included in the cache key so that content can be cached separately.
  */
-public void function caches(
-	string action = "",
-	numeric time,
-	boolean static,
-	string appendToKey = ""
-) {
+public void function caches(string action = "", numeric time, boolean static, string appendToKey = "") {
 	$args(args = arguments, name = "caches", combine = "action/actions");
 	arguments.action = $listClean(arguments.action);
 
