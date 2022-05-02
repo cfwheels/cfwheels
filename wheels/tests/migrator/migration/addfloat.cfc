@@ -3,6 +3,7 @@ component extends="wheels.tests.Test" {
 	private boolean function isDbCompatible() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
+				return true;
 			case "MicrosoftSQLServer":
 			case "MySQL":
 			case "PostgreSQL":
@@ -15,6 +16,7 @@ component extends="wheels.tests.Test" {
 	private string function getFloatType() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
+				return "DOUBLE";
 			case "MicrosoftSQLServer":
 			case "MySQL":
 			case "PostgreSQL":
@@ -49,6 +51,9 @@ component extends="wheels.tests.Test" {
 		migration.dropTable(tableName);
 
 		expected = getFloatType();
+
+		debug("expected");
+		debug("actual");
 
 		assert("ListFindNoCase(expected, actual)");
 	}

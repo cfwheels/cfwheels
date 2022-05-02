@@ -21,7 +21,7 @@
 ### On first run
 
 If this is the first time you've run it, docker will download a lot of stuff, namely:
- - **Commandbox Docker image**, which in turn will get L**ucee5 / ACF2016 / ACF2018** (note, the Commandbox artifacts directory will be created/aliased to `/.Commandbox` for caching, so your images won't have to get them every time your image is rebuilt)
+ - **Commandbox Docker image**, which in turn will get **Lucee5 / ACF2016 / ACF2018** (note, the Commandbox artifacts directory will be created/aliased to `/.Commandbox` for caching, so your images won't have to get them every time your image is rebuilt)
  - **MySQL**
  - **Postgres**
  - **MSSQL 2017**

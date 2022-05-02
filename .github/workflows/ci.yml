@@ -2,7 +2,7 @@
 
 name: Wheels Test Suite
 
-on: [push, pull_request]
+on: workflow_dispatch #[pull_request]
 
 jobs:
   run-tests:
@@ -11,7 +11,12 @@ jobs:
       fail-fast: false
       matrix:
         cf: [lucee5, adobe2016, adobe2018]
-        db: [mysql56, postgres, sqlserver]
+        db: [mysql56, postgres, sqlserver, h2]
+        exclude:
+          - cf: adobe2016
+            db: h2
+          - cf: adobe2018
+            db: h2
 
     steps:
       - uses: actions/checkout@v2
@@ -24,7 +29,12 @@ jobs:
       #     sudo apt-get install libappindicator-dev apt-transport-https commandbox -y
 
       - name: Docker Compose ${{ matrix.cf }} ${{ matrix.db }}
+        if: ${{ matrix.db != 'h2' }}
         run: docker-compose up -d ${{ matrix.cf }} ${{ matrix.db }}
+
+      - name: Docker Compose ${{ matrix.cf }}
+        if: ${{ matrix.db == 'h2' }}
+        run: docker-compose up -d ${{ matrix.cf }}
 
       - name: Wait for ${{ matrix.cf }} startup
         run: src/github/tests/server-up.sh ${{ matrix.cf }}

@@ -13,6 +13,7 @@ component extends="wheels.tests.Test" {
 	private string function getBigIntegerType() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
+				return "BIGINT";
 			case "MySQL":
 				return "BIGINT UNSIGNED";
 			default:

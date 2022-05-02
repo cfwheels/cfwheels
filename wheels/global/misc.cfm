@@ -660,10 +660,6 @@ public string function URLFor(
 		local.route = $findRoute(argumentCollection = arguments);
 		local.variables = local.route.variables;
 		local.rv &= local.route.pattern;
-	} else if (StructKeyExists(local.params, "route") && Len(local.params.route)) {
-		local.route = $findRoute(route = local.params.route);
-		local.variables = local.route.variables;
-		local.rv &= local.route.pattern;
 	} else {
 		local.route = {};
 		local.variables = local.coreVariables;
