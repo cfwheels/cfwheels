@@ -17,7 +17,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### View Enhancements
 - Adds association error support via `includeAssociations` argument [#1080](https://github.com/cfwheels/cfwheels/issues/1080) - [Nikolaj Frey]
-- Add test suite for Lucee and H2 Database to the GitHub Actions test suite. - [Peter Amiri]
 
 ### Bug Fixes
 
@@ -31,12 +30,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ValidatesConfirmationOf()` now correctly enforces prescence of confirmation property [#1070](https://github.com/cfwheels/cfwheels/issues/1070) - [Adam Cameron, Tom King]
 - `resource()`/`resources()` now allows empty `only` property to utilise as non-route parent [#1083](https://github.com/cfwheels/cfwheels/issues/1083) - [Brian Ramsey]
 - Handle XSS Injection in development enviroment - [Michael Diederich]
+- Fix params bug in CLI API [#1106] - [Peter Amiri]
 
 ### Miscellaneous
 
 - Update Docker Lucee Commandbox version to 5.2.0 - [Adam Chapman, Tom King]
 - Minor internal obselete reference to modelComponentPath removed - [Adam Chapman, Tom King]
 - Minor visual fix for long migration logs overflow in modal (scroll) - [Brian Ramsey]
+- Add test suite for Lucee and H2 Database to the GitHub Actions test suite. - [Peter Amiri]
+- On going changes to update the H2 drivers [#1107] - [Peter Amiri]
 
 ### Potentially Breaking Changes
 
