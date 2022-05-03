@@ -49,7 +49,7 @@
 		<li>
 			You will see a line similar to this for a route named <code>root</code>
 			:
-<pre>
+			<pre>
 				<code>.root(to=&quot;wheels####wheels&quot;, method=&quot;get&quot;)</code>
 			</pre>
 		</li>

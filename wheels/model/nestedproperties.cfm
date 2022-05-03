@@ -56,10 +56,9 @@ public boolean function $validateAssociations(required boolean callbacks, boolea
 	local.rv = true;
 	for (local.association in local.associations) {
 		if (
-			local.associations[local.association].nested.allow && local.associations[local.association].nested.autoSave && StructKeyExists(
-				this,
-				local.association
-			)
+			local.associations[local.association].nested.allow
+			&& local.associations[local.association].nested.autoSave
+			&& StructKeyExists(this, local.association)
 		) {
 			local.array = this[local.association];
 			if (IsObject(this[local.association])) {
@@ -67,7 +66,10 @@ public boolean function $validateAssociations(required boolean callbacks, boolea
 			}
 			if (IsArray(local.array)) {
 				for (local.i = 1; local.i <= ArrayLen(local.array); local.i++) {
-					local.isAssociationValid = local.array[local.i].valid(callbacks = arguments.callbacks,validateAssociations = arguments.validateAssociations);
+					local.isAssociationValid = local.array[local.i].valid(
+						callbacks = arguments.callbacks,
+						validateAssociations = arguments.validateAssociations
+					);
 					if (!local.isAssociationValid) {
 						local.rv = false;
 					}
@@ -91,13 +93,12 @@ public boolean function $saveAssociations(
 	local.associations = variables.wheels.class.associations;
 	for (local.association in local.associations) {
 		if (
-			local.associations[local.association].nested.allow && local.associations[local.association].nested.autoSave && StructKeyExists(
-				this,
-				local.association
-			)
+			local.associations[local.association].nested.allow
+			&& local.associations[local.association].nested.autoSave
+			&& StructKeyExists(this, local.association)
 		) {
 			local.array = this[local.association];
-			if (!isNull(this[local.association]) && IsObject(this[local.association])) {
+			if (!IsNull(this[local.association]) && IsObject(this[local.association])) {
 				local.array = [this[local.association]];
 			}
 			if (IsArray(local.array)) {
@@ -110,11 +111,7 @@ public boolean function $saveAssociations(
 					if (ListFindNoCase("hasMany,hasOne", local.associations[local.association].type)) {
 						$setForeignKeyValues(missingMethodArguments = local.array[local.i], keys = local.info.foreignKey);
 					}
-					local.saveResult = $invoke(
-						componentReference = local.array[local.i],
-						method = "save",
-						invokeArgs = arguments
-					);
+					local.saveResult = $invoke(componentReference = local.array[local.i], method = "save", invokeArgs = arguments);
 					if (local.rv) {
 						// Don't change the return value when we have already received a false.
 						local.rv = local.saveResult;
@@ -170,10 +167,9 @@ public void function $setOneToOneAssociationProperty(
 	boolean delete = "false"
 ) {
 	if (
-		!StructKeyExists(this, arguments.property) || !IsObject(this[arguments.property]) || StructKeyExists(
-			this[arguments.property],
-			"_delete"
-		)
+		!StructKeyExists(this, arguments.property)
+		|| !IsObject(this[arguments.property])
+		|| StructKeyExists(this[arguments.property], "_delete")
 	) {
 		this[arguments.property] = $getAssociationObject(argumentCollection = arguments);
 	}
@@ -235,9 +231,10 @@ public void function $setCollectionAssociationProperty(
 	} else if (IsArray(arguments.value)) {
 		for (local.i = 1; local.i <= ArrayLen(arguments.value); local.i++) {
 			if (
-				IsObject(arguments.value[local.i]) && ArrayLen(this[arguments.property]) >= local.i && IsObject(
-					this[arguments.property][local.i]
-				) && this[arguments.property][local.i].compareTo(arguments.value[local.i])
+				IsObject(arguments.value[local.i])
+				&& ArrayLen(this[arguments.property]) >= local.i
+				&& IsObject(this[arguments.property][local.i])
+				&& this[arguments.property][local.i].compareTo(arguments.value[local.i])
 			) {
 				this[arguments.property][local.i] = $getAssociationObject(
 					property = arguments.property,
@@ -252,9 +249,9 @@ public void function $setCollectionAssociationProperty(
 					$updateCollectionObject(property = arguments.property, value = arguments.value[local.i], position = local.i);
 				}
 			} else if (
-				IsStruct(arguments.value[local.i]) && ArrayLen(this[arguments.property]) >= local.i && IsObject(
-					this[arguments.property][local.i]
-				)
+				IsStruct(arguments.value[local.i])
+				&& ArrayLen(this[arguments.property]) >= local.i
+				&& IsObject(this[arguments.property][local.i])
 			) {
 				this[arguments.property][local.i] = $getAssociationObject(
 					property = arguments.property,
@@ -291,9 +288,8 @@ public void function $setCollectionAssociationProperty(
 			if (!IsNumeric(this[arguments.property][local.i][arguments.association.nested.sortProperty])) {
 				return;
 			}
-			local.sortedArray[this[arguments.property][local.i][arguments.association.nested.sortProperty]] = this[
-				arguments.property
-			][local.i];
+			local.prop = this[arguments.property][local.i];
+			local.sortedArray[this[arguments.property][local.i][arguments.association.nested.sortProperty]] = local.prop;
 		}
 		this[arguments.property] = local.sortedArray;
 	}
@@ -416,7 +412,8 @@ public void function $resetAssociationsToNew() {
  */
 public boolean function $persistedOnInitialization() {
 	if (
-		StructKeyExists(variables.wheels.instance, "persistedOnInitialization") && variables.wheels.instance.persistedOnInitialization
+		StructKeyExists(variables.wheels.instance, "persistedOnInitialization")
+		&& variables.wheels.instance.persistedOnInitialization
 	) {
 		return true;
 	} else {

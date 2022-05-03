@@ -140,7 +140,7 @@ component extends="wheels.tests.Test" {
 		mapper
 			.$draw()
 			.resources(name = "pigeons", mapFormat = false, only = "", nested = true)
-				.resources(name = "birds", mapFormat = false)
+			.resources(name = "birds", mapFormat = false)
 			.end()
 			.end();
 		routesLen = ArrayLen(application.wheels.routes);

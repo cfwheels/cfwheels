@@ -156,7 +156,9 @@ public string function hiddenField(
 		arguments.value = $formValue(argumentCollection = arguments);
 	}
 	if (
-		application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get"
+		application.wheels.obfuscateUrls
+		&& StructKeyExists(request.wheels, "currentFormMethod")
+		&& request.wheels.currentFormMethod == "get"
 	) {
 		arguments.value = obfuscateParam(arguments.value);
 	}
@@ -318,19 +320,7 @@ public string function radioButton(
 ) {
 	$args(name = "radioButton", reserved = "type,name,value,checked", args = arguments);
 	arguments.objectName = $objectName(argumentCollection = arguments);
-	local.valueToAppend = LCase(
-		Replace(
-			ReReplaceNoCase(
-				arguments.tagValue,
-				"[^a-z0-9- ]",
-				"",
-				"all"
-			),
-			" ",
-			"-",
-			"all"
-		)
-	);
+	local.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
 	if (!StructKeyExists(arguments, "id")) {
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 		if (Len(local.valueToAppend)) {
@@ -407,9 +397,9 @@ public string function checkBox(
 	arguments.value = arguments.checkedValue;
 	local.value = $formValue(argumentCollection = arguments);
 	if (
-		local.value == arguments.value || IsNumeric(local.value) && local.value == 1 || !IsNumeric(local.value) && IsBoolean(
-			local.value
-		) && local.value
+		local.value == arguments.value
+		|| (IsNumeric(local.value) && local.value == 1)
+		|| (!IsNumeric(local.value) && IsBoolean(local.value) && local.value)
 	) {
 		arguments.checked = "checked";
 	}
@@ -606,10 +596,9 @@ public string function $optionsForSelect(
 				local.optionValue = arguments.options[local.i][1];
 				local.optionText = arguments.options[local.i][2];
 			} else if (
-				IsStruct(arguments.options[local.i]) && StructKeyExists(arguments.options[local.i], "value") && StructKeyExists(
-					arguments.options[local.i],
-					"text"
-				)
+				IsStruct(arguments.options[local.i])
+				&& StructKeyExists(arguments.options[local.i], "value")
+				&& StructKeyExists(arguments.options[local.i], "text")
 			) {
 				local.optionValue = arguments.options[local.i]["value"];
 				local.optionText = arguments.options[local.i]["text"];
@@ -678,7 +667,9 @@ public string function $option(
 		local.optionAttributes.selected = "selected";
 	}
 	if (
-		application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get"
+		application.wheels.obfuscateUrls
+		&& StructKeyExists(request.wheels, "currentFormMethod")
+		&& request.wheels.currentFormMethod == "get"
 	) {
 		local.optionAttributes.value = obfuscateParam(local.optionAttributes.value);
 	}

@@ -248,10 +248,7 @@ public boolean function updateProperty(
  * Internal function.
  **/
 public numeric function $updateAll() {
-	local.updated = variables.wheels.class.adapter.$querySetup(
-		parameterize = arguments.parameterize,
-		sql = arguments.sql
-	);
+	local.updated = variables.wheels.class.adapter.$querySetup(parameterize = arguments.parameterize, sql = arguments.sql);
 	$clearRequestCache();
 	return local.updated.result.recordCount;
 }
@@ -265,9 +262,9 @@ public boolean function $update(required any parameterize, required boolean relo
 		// Allow explicit assignment of the createdAt/updatedAt properties if allowExplicitTimestamps is true
 		local.allowExplicitTimestamps = StructKeyExists(this, "allowExplicitTimestamps") && this.allowExplicitTimestamps;
 		if (
-			local.allowExplicitTimestamps && StructKeyExists(this, $get("timeStampOnUpdateProperty")) && Len(
-				this[$get("timeStampOnUpdateProperty")]
-			)
+			local.allowExplicitTimestamps
+			&& StructKeyExists(this, $get("timeStampOnUpdateProperty"))
+			&& Len(this[$get("timeStampOnUpdateProperty")])
 		) {
 			// leave updatedat unmolested
 		} else if ($get("setUpdatedAtOnCreate") && variables.wheels.class.timeStampingOnUpdate) {
@@ -290,10 +287,7 @@ public boolean function $update(required any parameterize, required boolean relo
 		if (ArrayLen(local.sql) > 1) {
 			ArrayDeleteAt(local.sql, ArrayLen(local.sql));
 			local.sql = $addKeyWhereClause(sql = local.sql);
-			variables.wheels.class.adapter.$querySetup(
-				sql = local.sql,
-				parameterize = arguments.parameterize
-			);
+			variables.wheels.class.adapter.$querySetup(sql = local.sql, parameterize = arguments.parameterize);
 			$clearRequestCache();
 			if (arguments.reload) {
 				this.reload();

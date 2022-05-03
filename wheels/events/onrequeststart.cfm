@@ -15,22 +15,18 @@ public void function onRequestStart(required targetPage) {
 
 	// Reload application by calling onApplicationStart if requested.
 	if (
-		StructKeyExists(url, "reload") && (
-			!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(
-				application.wheels.reloadPassword
-			) || (StructKeyExists(url, "password") && url.password == application.wheels.reloadPassword)
+		StructKeyExists(url, "reload")
+		&& (
+			!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword")
+			|| !Len(application.wheels.reloadPassword)
+			|| (StructKeyExists(url, "password") && url.password == application.wheels.reloadPassword)
 		)
 	) {
 		$debugPoint("total,reload");
 		if (StructKeyExists(url, "lock") && !url.lock) {
 			this.onApplicationStart();
 		} else {
-			$simpleLock(
-				name = local.lockName,
-				execute = "onApplicationStart",
-				type = "exclusive",
-				timeout = 180
-			);
+			$simpleLock(name = local.lockName, execute = "onApplicationStart", type = "exclusive", timeout = 180);
 		}
 	}
 

@@ -190,13 +190,7 @@ public struct function wildcard(
 	} else if (Len(arguments.method)) {
 		local.methods = ListToArray(arguments.method);
 	} else {
-		local.methods = [
-			"get",
-			"post",
-			"put",
-			"patch",
-			"delete"
-		];
+		local.methods = ["get", "post", "put", "patch", "delete"];
 	}
 
 	local.formatPattern = "";
@@ -220,12 +214,7 @@ public struct function wildcard(
 				pattern = "[action]#local.formatPattern#",
 				action = arguments.action
 			);
-			$match(
-				method = local.method,
-				name = "wildcard",
-				pattern = local.formatPattern,
-				action = arguments.action
-			);
+			$match(method = local.method, name = "wildcard", pattern = local.formatPattern, action = arguments.action);
 		}
 	} else {
 		for (local.method in local.methods) {

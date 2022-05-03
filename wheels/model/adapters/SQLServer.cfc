@@ -88,12 +88,7 @@ component extends="Base" output=false {
 	) {
 		if (StructKeyExists(arguments, "maxrows") && arguments.maxrows > 0) {
 			if (arguments.maxrows > 0) {
-				arguments.sql[1] = ReplaceNoCase(
-					arguments.sql[1],
-					"SELECT ",
-					"SELECT TOP #arguments.maxrows# ",
-					"one"
-				);
+				arguments.sql[1] = ReplaceNoCase(arguments.sql[1], "SELECT ", "SELECT TOP #arguments.maxrows# ", "one");
 			}
 			StructDelete(arguments, "maxrows");
 		}
@@ -101,10 +96,8 @@ component extends="Base" output=false {
 			local.containsGroup = false;
 			local.afterWhere = "";
 			if (
-				IsSimpleValue(arguments.sql[ArrayLen(arguments.sql) - 1]) && FindNoCase(
-					"GROUP BY",
-					arguments.sql[ArrayLen(arguments.sql) - 1]
-				)
+				IsSimpleValue(arguments.sql[ArrayLen(arguments.sql) - 1])
+				&& FindNoCase("GROUP BY", arguments.sql[ArrayLen(arguments.sql) - 1])
 			) {
 				local.containsGroup = true;
 			}
@@ -155,12 +148,7 @@ component extends="Base" output=false {
 					local.thirdSelect = ListAppend(local.thirdSelect, local.item);
 				}
 				if (local.containsGroup) {
-					local.item = ReReplace(
-						local.item,
-						"[[:space:]]AS[[:space:]][A-Za-z1-9]+",
-						"",
-						"all"
-					);
+					local.item = ReReplace(local.item, "[[:space:]]AS[[:space:]][A-Za-z1-9]+", "", "all");
 					if (!ListFindNoCase(local.thirdGroup, local.item)) {
 						local.thirdGroup = ListAppend(local.thirdGroup, local.item);
 					}
@@ -168,27 +156,14 @@ component extends="Base" output=false {
 			}
 
 			// The second select also needs to contain columns without table names and using aliases when they exist (but now including the columns added above).
-			local.secondSelect = $columnAlias(
-				list = $tableName(list = local.thirdSelect, action = "remove"),
-				action = "keep"
-			);
+			local.secondSelect = $columnAlias(list = $tableName(list = local.thirdSelect, action = "remove"), action = "keep");
 
 			// First order also needs the table names removed, the column aliases can be kept since they are removed before running the query anyway.
 			local.firstOrder = $tableName(list = local.thirdOrder, action = "remove");
 
 			// Second order clause is the same as the first but with the ordering reversed.
 			local.secondOrder = Replace(
-				ReReplace(
-					ReReplace(
-						local.firstOrder,
-						" DESC\b",
-						Chr(7),
-						"all"
-					),
-					" ASC\b",
-					" DESC",
-					"all"
-				),
+				ReReplace(ReReplace(local.firstOrder, " DESC\b", Chr(7), "all"), " ASC\b", " DESC", "all"),
 				Chr(7),
 				" ASC",
 				"all"

@@ -5,10 +5,9 @@ component output="false" displayName="Controller" {
 	include "view/functions.cfm";
 	include "plugins/standalone/injection.cfm";
 	if (
-		IsDefined("application") && StructKeyExists(application, "wheels") && StructKeyExists(
-			application.wheels,
-			"viewPath"
-		)
+		IsDefined("application")
+		&& StructKeyExists(application, "wheels")
+		&& StructKeyExists(application.wheels, "viewPath")
 	) {
 		include "../#application.wheels.viewPath#/helpers.cfm";
 	}

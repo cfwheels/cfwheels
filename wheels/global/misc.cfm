@@ -75,12 +75,7 @@ public string function wordTruncate(required string text, numeric length, string
  * @radius Number of characters to extract surrounding the phrase.
  * @excerptString String to replace first and / or last characters with.
  */
-public string function excerpt(
-	required string text,
-	required string phrase,
-	numeric radius,
-	string excerptString
-) {
+public string function excerpt(required string text, required string phrase, numeric radius, string excerptString) {
 	$args(name = "excerpt", args = arguments);
 	local.pos = FindNoCase(arguments.phrase, arguments.text, 1);
 
@@ -280,7 +275,6 @@ public any function processRequest(
 	string rollback,
 	string includeFilters = true
 ) {
-
 	$args(name = "processRequest", args = arguments);
 
 	// Set the global transaction mode to rollback when specified.
@@ -735,12 +729,7 @@ public string function URLFor(
 	}
 
 	// Clean up unused keys in pattern.
-	local.rv = ReReplace(
-		local.rv,
-		"((&|\?)\w+=|\/|\.)\[\*?\w+\]",
-		"",
-		"ALL"
-	);
+	local.rv = ReReplace(local.rv, "((&|\?)\w+=|\/|\.)\[\*?\w+\]", "", "ALL");
 
 	// When URL rewriting is on (or partially) we replace the "?controller="" stuff in the URL with just "/".
 	if (arguments.$URLRewriting != "Off") {

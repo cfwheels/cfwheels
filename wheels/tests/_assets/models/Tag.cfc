@@ -1,12 +1,7 @@
 component extends="Model" {
 
 	function config() {
-		belongsTo(
-			name = "parent",
-			modelName = "tag",
-			foreignKey = "parentid",
-			joinType = "outer"
-		);
+		belongsTo(name = "parent", modelName = "tag", foreignKey = "parentid", joinType = "outer");
 		hasMany(name = "children", modelName = "tag", foreignKey = "parentid");
 		hasMany(name = "classifications");
 		beforeSave("callbackThatReturnsTrue");

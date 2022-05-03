@@ -25,12 +25,7 @@ component extends="Abstract" {
 	 */
 	public string function addPrimaryKeyOptions(required string sql, struct options = {}) {
 		if (StructKeyExists(arguments.options, "autoIncrement") && arguments.options.autoIncrement) {
-			arguments.sql = ReplaceNoCase(
-				arguments.sql,
-				"INTEGER",
-				"SERIAL",
-				"all"
-			);
+			arguments.sql = ReplaceNoCase(arguments.sql, "INTEGER", "SERIAL", "all");
 		}
 		arguments.sql = arguments.sql & " PRIMARY KEY";
 		return arguments.sql;
@@ -50,11 +45,10 @@ component extends="Abstract" {
 					arguments.sql = arguments.sql & " SET";
 				}
 				if (
-					arguments.options.default eq "NULL" || (
-						arguments.options.default eq "" && ListFindNoCase(
-							"boolean,date,datetime,time,timestamp,decimal,float,integer",
-							arguments.options.type
-						)
+					arguments.options.default == "NULL"
+					|| (
+						arguments.options.default == ""
+						&& ListFindNoCase("boolean,date,datetime,time,timestamp,decimal,float,integer", arguments.options.type)
 					)
 				) {
 					arguments.sql = arguments.sql & " DEFAULT NULL";
@@ -78,7 +72,7 @@ component extends="Abstract" {
 				}
 			}
 		}
-		if (StructKeyExists(arguments.options, "afterColumn") And Len(Trim(arguments.options.afterColumn)) GT 0) {
+		if (StructKeyExists(arguments.options, "afterColumn") && Len(Trim(arguments.options.afterColumn)) GT 0) {
 			arguments.sql = arguments.sql & " AFTER #arguments.options.afterColumn#";
 		}
 		return arguments.sql;

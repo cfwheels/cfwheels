@@ -25,9 +25,16 @@ try {
 		switch (request.wheels.params.command) {
 			case "createMigration":
 				if (StructKeyExists(request.wheels.params, "migrationPrefix") && Len(request.wheels.params.migrationPrefix)) {
-					data.message = migrator.createMigration(request.wheels.params.migrationName, request.wheels.params.templateName, request.wheels.params.migrationPrefix);
+					data.message = migrator.createMigration(
+						request.wheels.params.migrationName,
+						request.wheels.params.templateName,
+						request.wheels.params.migrationPrefix
+					);
 				} else {
-					data.message = migrator.createMigration(request.wheels.params.migrationName, request.wheels.params.templateName);
+					data.message = migrator.createMigration(
+						request.wheels.params.migrationName,
+						request.wheels.params.templateName
+					);
 				}
 				break;
 			case "migrateTo":

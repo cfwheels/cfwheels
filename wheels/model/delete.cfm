@@ -179,10 +179,7 @@ public boolean function delete(
  * The only reason this is in its own method is so we can wrap it in an "invokeWithTransaction" call.
  */
 public numeric function $deleteAll() {
-	local.deleted = variables.wheels.class.adapter.$querySetup(
-		sql = arguments.sql,
-		parameterize = arguments.parameterize
-	);
+	local.deleted = variables.wheels.class.adapter.$querySetup(sql = arguments.sql, parameterize = arguments.parameterize);
 	$clearRequestCache();
 	return local.deleted.result.recordCount;
 }

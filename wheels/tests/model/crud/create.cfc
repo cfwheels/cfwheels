@@ -42,14 +42,7 @@ component extends="wheels.tests.Test" {
 
 	function test_columns_that_are_not_null_should_allow_for_blank_string_during_create() {
 		info = $dbinfo(datasource = application.wheels.dataSourceName, type = "version");
-		db = LCase(
-			Replace(
-				info.database_productname,
-				" ",
-				"",
-				"all"
-			)
-		);
+		db = LCase(Replace(info.database_productname, " ", "", "all"));
 		author = model("author").create(firstName = "Test", lastName = "", transaction = "rollback");
 		assert("IsObject(author) AND !len(author.lastName)");
 	}

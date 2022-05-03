@@ -437,13 +437,7 @@ component extends="wheels.tests.Test" {
 		// Special case for testing when we already have duplicates in the database:
 		// https://github.com/cfwheels/cfwheels/issues/480
 		transaction action="begin" {
-			user.create(
-				firstName = "Tony",
-				username = "xxxx",
-				password = "xxxx",
-				lastname = "xxxx",
-				validate = false
-			);
+			user.create(firstName = "Tony", username = "xxxx", password = "xxxx", lastname = "xxxx", validate = false);
 			firstUser = model("user").findOne(where = "firstName = 'Tony'", order = "id ASC");
 			lastUser = model("user").findOne(where = "firstName = 'Tony'", order = "id DESC");
 			assert('!firstUser.valid() && !lastUser.valid()');

@@ -7,62 +7,46 @@
  */
 public any function onMissingMethod(required string missingMethodName, required struct missingMethodArguments) {
 	if (
-		Right(arguments.missingMethodName, 10) == "hasChanged" && StructKeyExists(
-			variables.wheels.class.properties,
-			ReplaceNoCase(arguments.missingMethodName, "hasChanged", "")
-		)
+		Right(arguments.missingMethodName, 10) == "hasChanged"
+		&& StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "hasChanged", ""))
 	) {
 		local.rv = hasChanged(property = ReplaceNoCase(arguments.missingMethodName, "hasChanged", ""));
 	} else if (
-		Right(arguments.missingMethodName, 11) == "changedFrom" && StructKeyExists(
-			variables.wheels.class.properties,
-			ReplaceNoCase(arguments.missingMethodName, "changedFrom", "")
-		)
+		Right(arguments.missingMethodName, 11) == "changedFrom"
+		&& StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "changedFrom", ""))
 	) {
 		local.rv = changedFrom(property = ReplaceNoCase(arguments.missingMethodName, "changedFrom", ""));
 	} else if (
-		Right(arguments.missingMethodName, 9) == "IsPresent" && StructKeyExists(
-			variables.wheels.class.properties,
-			ReplaceNoCase(arguments.missingMethodName, "IsPresent", "")
-		)
+		Right(arguments.missingMethodName, 9) == "IsPresent"
+		&& StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "IsPresent", ""))
 	) {
 		local.rv = propertyIsPresent(property = ReplaceNoCase(arguments.missingMethodName, "IsPresent", ""));
 	} else if (
-		Right(arguments.missingMethodName, 7) == "IsBlank" && StructKeyExists(
-			variables.wheels.class.properties,
-			ReplaceNoCase(arguments.missingMethodName, "IsBlank", "")
-		)
+		Right(arguments.missingMethodName, 7) == "IsBlank"
+		&& StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "IsBlank", ""))
 	) {
 		local.rv = propertyIsBlank(property = ReplaceNoCase(arguments.missingMethodName, "IsBlank", ""));
 	} else if (
-		Left(arguments.missingMethodName, 9) == "columnFor" && StructKeyExists(
-			variables.wheels.class.properties,
-			ReplaceNoCase(arguments.missingMethodName, "columnFor", "")
-		)
+		Left(arguments.missingMethodName, 9) == "columnFor"
+		&& StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "columnFor", ""))
 	) {
 		local.rv = columnForProperty(property = ReplaceNoCase(arguments.missingMethodName, "columnFor", ""));
 	} else if (
-		Left(arguments.missingMethodName, 6) == "toggle" && StructKeyExists(
-			variables.wheels.class.properties,
-			ReplaceNoCase(arguments.missingMethodName, "toggle", "")
-		)
+		Left(arguments.missingMethodName, 6) == "toggle"
+		&& StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "toggle", ""))
 	) {
 		local.rv = toggle(
 			property = ReplaceNoCase(arguments.missingMethodName, "toggle", ""),
 			argumentCollection = arguments.missingMethodArguments
 		);
 	} else if (
-		Left(arguments.missingMethodName, 3) == "has" && StructKeyExists(
-			variables.wheels.class.properties,
-			ReplaceNoCase(arguments.missingMethodName, "has", "")
-		)
+		Left(arguments.missingMethodName, 3) == "has"
+		&& StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "has", ""))
 	) {
 		local.rv = hasProperty(property = ReplaceNoCase(arguments.missingMethodName, "has", ""));
 	} else if (
-		Left(arguments.missingMethodName, 6) == "update" && StructKeyExists(
-			variables.wheels.class.properties,
-			ReplaceNoCase(arguments.missingMethodName, "update", "")
-		)
+		Left(arguments.missingMethodName, 6) == "update"
+		&& StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "update", ""))
 	) {
 		if (!StructKeyExists(arguments.missingMethodArguments, "value")) {
 			Throw(
@@ -75,51 +59,18 @@ public any function onMissingMethod(required string missingMethodName, required 
 			property = ReplaceNoCase(arguments.missingMethodName, "update", ""),
 			value = arguments.missingMethodArguments.value
 		);
-	} else if (Left(arguments.missingMethodName, 9) == "findOneBy" || Left(arguments.missingMethodName, 9) == "findAllBy") {
+	} else if (
+		Left(arguments.missingMethodName, 9) == "findOneBy"
+		|| Left(arguments.missingMethodName, 9) == "findAllBy"
+	) {
+		// cfformat-ignore-start
 		if (StructKeyExists(server, "lucee")) {
 			// since Lucee passes in the method name in all upper case we have to do this here
-			local.finderProperties = ListToArray(
-				LCase(
-					ReplaceNoCase(
-						ReplaceNoCase(
-							ReplaceNoCase(
-								arguments.missingMethodName,
-								"And",
-								"|",
-								"all"
-							),
-							"findAllBy",
-							"",
-							"all"
-						),
-						"findOneBy",
-						"",
-						"all"
-					)
-				),
-				"|"
-			);
+			local.finderProperties = ListToArray(LCase(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, "And", "|", "all"), "findAllBy", "", "all"), "findOneBy", "", "all")), "|");
 		} else {
-			local.finderProperties = ListToArray(
-				ReplaceNoCase(
-					ReplaceNoCase(
-						Replace(
-							arguments.missingMethodName,
-							"And",
-							"|",
-							"all"
-						),
-						"findAllBy",
-						"",
-						"all"
-					),
-					"findOneBy",
-					"",
-					"all"
-				),
-				"|"
-			);
+			local.finderProperties = ListToArray(ReplaceNoCase(ReplaceNoCase(Replace(arguments.missingMethodName, "And", "|", "all"), "findAllBy", "", "all"), "findOneBy", "", "all"), "|");
 		}
+		// cfformat-ignore-end
 
 		// sometimes values will have commas in them, allow the developer to change the delimiter
 		local.delimiter = ",";
@@ -162,10 +113,7 @@ public any function onMissingMethod(required string missingMethodName, required 
 			}
 			ArrayAppend(
 				local.addToWhere,
-				"#local.property# #$dynamicFinderOperator(local.property)# #variables.wheels.class.adapter.$quoteValue(
-					str = local.value,
-					type = validationTypeForProperty(local.property)
-				)#"
+				"#local.property# #$dynamicFinderOperator(local.property)# #variables.wheels.class.adapter.$quoteValue(str = local.value, type = validationTypeForProperty(local.property))#"
 			);
 		}
 
@@ -262,9 +210,8 @@ public any function $findOrCreateBy() {
  */
 public string function $dynamicFinderOperator(required string property) {
 	if (
-		StructKeyExists(variables.wheels.class.properties, arguments.property) && variables.wheels.class.properties[
-			arguments.property
-		].dataType == "text"
+		StructKeyExists(variables.wheels.class.properties, arguments.property)
+		&& variables.wheels.class.properties[arguments.property].dataType == "text"
 	) {
 		return "LIKE";
 	} else {
@@ -279,9 +226,8 @@ public any function $associationMethod() {
 	for (local.key in variables.wheels.class.associations) {
 		local.method = "";
 		if (
-			StructKeyExists(variables.wheels.class.associations[local.key], "shortcut") && arguments.missingMethodName == variables.wheels.class.associations[
-				local.key
-			].shortcut
+			StructKeyExists(variables.wheels.class.associations[local.key], "shortcut")
+			&& arguments.missingMethodName == variables.wheels.class.associations[local.key].shortcut
 		) {
 			local.method = "findAll";
 			local.joinAssociation = $expandedAssociations(include = local.key);
@@ -358,9 +304,8 @@ public any function $associationMethod() {
 					} else {
 						// multiple arguments so ensure that either 'key' or the association name exists (local.key)
 						if (
-							StructKeyExists(arguments.missingMethodArguments, local.key) && IsObject(
-								arguments.missingMethodArguments[local.key]
-							)
+							StructKeyExists(arguments.missingMethodArguments, local.key)
+							&& IsObject(arguments.missingMethodArguments[local.key])
 						) {
 							local.componentReference = arguments.missingMethodArguments[local.key];
 							local.method = "update";
@@ -408,9 +353,8 @@ public any function $associationMethod() {
 					} else {
 						// multiple arguments so ensure that either 'key' or the singularized association name exists (local.singularKey)
 						if (
-							StructKeyExists(arguments.missingMethodArguments, local.singularKey) && IsObject(
-								arguments.missingMethodArguments[local.singularKey]
-							)
+							StructKeyExists(arguments.missingMethodArguments, local.singularKey)
+							&& IsObject(arguments.missingMethodArguments[local.singularKey])
 						) {
 							local.componentReference = arguments.missingMethodArguments[local.singularKey];
 							local.method = "update";
@@ -440,9 +384,8 @@ public any function $associationMethod() {
 					} else {
 						// multiple arguments so ensure that either 'key' or the singularized object name exists (local.singularKey)
 						if (
-							StructKeyExists(arguments.missingMethodArguments, local.singularKey) && IsObject(
-								arguments.missingMethodArguments[local.singularKey]
-							)
+							StructKeyExists(arguments.missingMethodArguments, local.singularKey)
+							&& IsObject(arguments.missingMethodArguments[local.singularKey])
 						) {
 							local.componentReference = arguments.missingMethodArguments[local.singularKey];
 							local.method = "update";
@@ -476,9 +419,8 @@ public any function $associationMethod() {
 					} else {
 						// multiple arguments so ensure that either 'key' or the singularized object name exists (local.singularKey)
 						if (
-							StructKeyExists(arguments.missingMethodArguments, local.singularKey) && IsObject(
-								arguments.missingMethodArguments[local.singularKey]
-							)
+							StructKeyExists(arguments.missingMethodArguments, local.singularKey)
+							&& IsObject(arguments.missingMethodArguments[local.singularKey])
 						) {
 							local.componentReference = arguments.missingMethodArguments[local.singularKey];
 							local.method = "delete";

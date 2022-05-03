@@ -20,12 +20,7 @@ public string function highlight(
 	string class,
 	boolean encode
 ) {
-	$args(
-		name = "highlight",
-		args = arguments,
-		combine = "phrase/phrases",
-		required = "phrase"
-	);
+	$args(name = "highlight", args = arguments, combine = "phrase/phrases", required = "phrase");
 	local.text = arguments.encode && $get("encodeHtmlTags") ? EncodeForHTML($canonicalize(arguments.text)) : arguments.text;
 
 	// Return the passed in text unchanged (but encoded) if it's blank or the passed in phrase is blank.
@@ -88,27 +83,12 @@ public string function simpleFormat(required string text, boolean wrap, boolean 
 	}
 
 	local.rv = Replace(local.rv, Chr(13), "", "all");
-	local.rv = Replace(
-		local.rv,
-		Chr(10) & Chr(10),
-		"</p><p>",
-		"all"
-	);
+	local.rv = Replace(local.rv, Chr(10) & Chr(10), "</p><p>", "all");
 	local.rv = Replace(local.rv, Chr(10), "<br>", "all");
 
 	// Put the newline characters back in (good for editing in textareas with the original formatting for example).
-	local.rv = Replace(
-		local.rv,
-		"</p><p>",
-		"</p>" & Chr(10) & Chr(10) & "<p>",
-		"all"
-	);
-	local.rv = Replace(
-		local.rv,
-		"<br>",
-		"<br>" & Chr(10),
-		"all"
-	);
+	local.rv = Replace(local.rv, "</p><p>", "</p>" & Chr(10) & Chr(10) & "<p>", "all");
+	local.rv = Replace(local.rv, "<br>", "<br>" & Chr(10), "all");
 
 	if (arguments.wrap) {
 		local.rv = "<p>" & local.rv & "</p>";
@@ -127,12 +107,7 @@ public string function simpleFormat(required string text, boolean wrap, boolean 
  * @includeEmptyContainer Includes the `div` container even if the Flash is empty.
  * @encode [see:styleSheetLinkTag].
  */
-public string function flashMessages(
-	string keys,
-	string class,
-	boolean includeEmptyContainer,
-	boolean encode
-) {
+public string function flashMessages(string keys, string class, boolean includeEmptyContainer, boolean encode) {
 	$args(name = "flashMessages", args = arguments, combine = "keys/key");
 	local.flash = $readFlash();
 	local.rv = "";
@@ -418,19 +393,22 @@ public string function $tag(
 		local.key = ListGetAt(local.sortedKeys, local.i);
 		// place the attribute name and value in the string unless it should be skipped according to the arguments or if it's an internal argument (starting with a "$" sign)
 		if (
-			!ListFindNoCase(arguments.skip, local.key) && (
-				!Len(arguments.skipStartingWith) || Left(local.key, Len(arguments.skipStartingWith)) != arguments.skipStartingWith
-			) && Left(local.key, 1) != "$"
+			!ListFindNoCase(arguments.skip, local.key)
+			&& (
+				!Len(arguments.skipStartingWith)
+				|| Left(local.key, Len(arguments.skipStartingWith)) != arguments.skipStartingWith
+			)
+			&& Left(local.key, 1) != "$"
 		) {
-				if(isSimpleValue(arguments.attributes[local.key])){
-					local.rv &= $tagAttribute(
-						name = local.key,
-						value = arguments.attributes[local.key],
-						encode = arguments.encode,
-						encodeExcept = arguments.encodeExcept
-					);
-				}
+			if (IsSimpleValue(arguments.attributes[local.key])) {
+				local.rv &= $tagAttribute(
+					name = local.key,
+					value = arguments.attributes[local.key],
+					encode = arguments.encode,
+					encodeExcept = arguments.encodeExcept
+				);
 			}
+		}
 	}
 
 	// End the tag and return it.
@@ -460,21 +438,24 @@ public string function $tagAttribute(
 
 	// set standard attribute name / value to use as the default to return (e.g. name / value part of <input name="value">)
 	local.rv = " " & arguments.name & "=""";
-	local.rv &= arguments.encode && !ListFind(arguments.encodeExcept, arguments.name) && $get("encodeHtmlAttributes") ? EncodeForHTMLAttribute(
-		$canonicalize(arguments.value)
-	) : arguments.value;
+	local.rv &= arguments.encode && !ListFind(arguments.encodeExcept, arguments.name) && $get("encodeHtmlAttributes")
+		? EncodeForHTMLAttribute($canonicalize(arguments.value))
+		: arguments.value;
 	local.rv &= """";
 
 	// when attribute can be boolean we handle it accordingly and override the above return value
 	if (
 		(
-			!IsBoolean(application.wheels.booleanAttributes) && ListFindNoCase(
-				application.wheels.booleanAttributes,
-				arguments.name
-			)
-		) || (IsBoolean(application.wheels.booleanAttributes) && application.wheels.booleanAttributes)
+			!IsBoolean(application.wheels.booleanAttributes)
+			&& ListFindNoCase(application.wheels.booleanAttributes, arguments.name)
+		)
+		|| (IsBoolean(application.wheels.booleanAttributes) && application.wheels.booleanAttributes)
 	) {
-		if (IsBoolean(arguments.value) || !CompareNoCase(arguments.value, "true") || !CompareNoCase(arguments.value, "false")) {
+		if (
+			IsBoolean(arguments.value)
+			|| !CompareNoCase(arguments.value, "true")
+			|| !CompareNoCase(arguments.value, "false")
+		) {
 			// value passed in can be handled as a boolean
 			if (arguments.value) {
 				// when value is true we just add the attribute name itself (e.g. <input type="checkbox" checked>)
@@ -502,9 +483,9 @@ public string function $element(
 ) {
 	// Set a variable with the content of the tag.
 	// Encoded if global encode setting is true and true is also passed in to the function.
-	local.rv = IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags") ? EncodeForHTML(
-		$canonicalize(arguments.content)
-	) : arguments.content;
+	local.rv = IsBoolean(arguments.encode) && arguments.encode && $get("encodeHtmlTags")
+		? EncodeForHTML($canonicalize(arguments.content))
+		: arguments.content;
 
 	// When only wanting to encode HTML attribute values (and not tag content) we set the encode argument to true before passing on to $tag().
 	if (arguments.encode == "attributes") {
@@ -568,29 +549,9 @@ public string function $tagId(required any objectName, required string property,
 			arguments.property = ReplaceList(arguments.property, "($,)", "-,");
 		}
 		if (Find("[", arguments.property)) {
-			local.rv = ReReplace(
-				ReReplace(
-					local.rv & arguments.property,
-					"[,\[]",
-					"-",
-					"all"
-				),
-				"[""'\]]",
-				"",
-				"all"
-			);
+			local.rv = ReReplace(ReReplace(local.rv & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
 		} else {
-			local.rv = ReReplace(
-				ReReplace(
-					local.rv & "-" & arguments.property,
-					"[,\[]",
-					"-",
-					"all"
-				),
-				"[""'\]]",
-				"",
-				"all"
-			);
+			local.rv = ReReplace(ReReplace(local.rv & "-" & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
 		}
 	} else {
 		local.rv = ReplaceList(arguments.property, "[,($,],',"",)", "-,-,");

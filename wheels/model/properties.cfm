@@ -399,10 +399,8 @@ public string function changedProperties() {
  */
 public string function changedFrom(required string property) {
 	if (
-		StructKeyExists(variables, "$persistedProperties") && StructKeyExists(
-			variables.$persistedProperties,
-			arguments.property
-		)
+		StructKeyExists(variables, "$persistedProperties")
+		&& StructKeyExists(variables.$persistedProperties, arguments.property)
 	) {
 		return variables.$persistedProperties[arguments.property];
 	} else {
@@ -472,18 +470,16 @@ public any function $setProperties(
 		if (StructKeyExists(arguments.properties, local.key)) {
 			local.accessible = true;
 			if (
-				arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(
-					variables.wheels.class.accessibleProperties.whiteList,
-					local.key
-				)
+				arguments.$useFilterLists &&
+				StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList")
+				&& !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, local.key)
 			) {
 				local.accessible = false;
 			}
 			if (
-				arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(
-					variables.wheels.class.accessibleProperties.blackList,
-					local.key
-				)
+				arguments.$useFilterLists
+				&& StructKeyExists(variables.wheels.class.accessibleProperties, "blackList")
+				&& ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, local.key)
 			) {
 				local.accessible = false;
 			}
@@ -513,9 +509,10 @@ public void function $setProperty(
 	if (IsObject(arguments.value)) {
 		this[arguments.property] = arguments.value;
 	} else if (
-		IsStruct(arguments.value) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[
-			arguments.property
-		].nested.allow && ListFindNoCase("belongsTo,hasOne", arguments.associations[arguments.property].type)
+		IsStruct(arguments.value)
+		&& StructKeyExists(arguments.associations, arguments.property)
+		&& arguments.associations[arguments.property].nested.allow
+		&& ListFindNoCase("belongsTo,hasOne", arguments.associations[arguments.property].type)
 	) {
 		$setOneToOneAssociationProperty(
 			property = arguments.property,
@@ -523,9 +520,10 @@ public void function $setProperty(
 			association = arguments.associations[arguments.property]
 		);
 	} else if (
-		IsStruct(arguments.value) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[
-			arguments.property
-		].nested.allow && arguments.associations[arguments.property].type == "hasMany"
+		IsStruct(arguments.value)
+		&& StructKeyExists(arguments.associations, arguments.property)
+		&& arguments.associations[arguments.property].nested.allow
+		&& arguments.associations[arguments.property].type == "hasMany"
 	) {
 		$setCollectionAssociationProperty(
 			property = arguments.property,
@@ -533,10 +531,12 @@ public void function $setProperty(
 			association = arguments.associations[arguments.property]
 		);
 	} else if (
-		IsArray(arguments.value) && ArrayLen(arguments.value) && !IsObject(arguments.value[1]) && StructKeyExists(
-			arguments.associations,
-			arguments.property
-		) && arguments.associations[arguments.property].nested.allow && arguments.associations[arguments.property].type == "hasMany"
+		IsArray(arguments.value)
+		&& ArrayLen(arguments.value)
+		&& !IsObject(arguments.value[1])
+		&& StructKeyExists(arguments.associations, arguments.property)
+		&& arguments.associations[arguments.property].nested.allow
+		&& arguments.associations[arguments.property].type == "hasMany"
 	) {
 		$setCollectionAssociationProperty(
 			property = arguments.property,
@@ -567,9 +567,8 @@ public any function $setDefaultValues() {
 	// persisted properties
 	for (local.key in variables.wheels.class.properties) {
 		if (
-			StructKeyExists(variables.wheels.class.properties[local.key], "defaultValue") && (
-				!StructKeyExists(this, local.key) || !Len(this[local.key])
-			)
+			StructKeyExists(variables.wheels.class.properties[local.key], "defaultValue")
+			&& (!StructKeyExists(this, local.key) || !Len(this[local.key]))
 		) {
 			// set the default value unless it is blank or a value already exists for that property on the object
 			this[local.key] = variables.wheels.class.properties[local.key].defaultValue;
@@ -578,9 +577,8 @@ public any function $setDefaultValues() {
 	// non-persisted properties
 	for (local.key in variables.wheels.class.mapping) {
 		if (
-			StructKeyExists(variables.wheels.class.mapping[local.key], "defaultValue") && (
-				!StructKeyExists(this, local.key) || !Len(this[local.key])
-			)
+			StructKeyExists(variables.wheels.class.mapping[local.key], "defaultValue")
+			&& (!StructKeyExists(this, local.key) || !Len(this[local.key]))
 		) {
 			// set the default value unless it is blank or a value already exists for that property on the object
 			this[local.key] = variables.wheels.class.mapping[local.key].defaultValue;
@@ -605,18 +603,14 @@ public struct function $propertyInfo(required string property) {
 public string function $label(required string property) {
 	// Prefer label set via `properties` intializer if it exists.
 	if (
-		StructKeyExists(variables.wheels.class.properties, arguments.property) && StructKeyExists(
-			variables.wheels.class.properties[arguments.property],
-			"label"
-		)
+		StructKeyExists(variables.wheels.class.properties, arguments.property)
+		&& StructKeyExists(variables.wheels.class.properties[arguments.property], "label")
 	) {
 		local.rv = variables.wheels.class.properties[arguments.property].label;
 		// Check to see if the mapping has a label to base the name on.
 	} else if (
-		StructKeyExists(variables.wheels.class.mapping, arguments.property) && StructKeyExists(
-			variables.wheels.class.mapping[arguments.property],
-			"label"
-		)
+		StructKeyExists(variables.wheels.class.mapping, arguments.property)
+		&& StructKeyExists(variables.wheels.class.mapping[arguments.property], "label")
 	) {
 		local.rv = variables.wheels.class.mapping[arguments.property].label;
 		// Fall back on property name otherwise.

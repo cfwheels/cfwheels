@@ -157,12 +157,7 @@ component extends="wheels.tests.Test" {
 			transaction action="rollback";
 		}
 		transaction {
-			newPost = model("post").create(
-				authorId = author.id,
-				title = "New Title",
-				body = "New Body",
-				transaction = "none"
-			);
+			newPost = model("post").create(authorId = author.id, title = "New Title", body = "New Body", transaction = "none");
 			coreResult = newPost.authorId;
 			transaction action="rollback";
 		}
