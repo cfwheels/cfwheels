@@ -945,6 +945,7 @@ private string function $checkMinimumVersion(required string engine, required st
 		local.minimumBuild = "77";
 		local.5 = {minimumMinor = 2, minimumPatch = 1, minimumBuild = 9};
 	} else if (arguments.engine == "Adobe ColdFusion") {
+<<<<<<< HEAD
 		local.minimumMajor = "2016";
 		local.minimumMajor = "11";
 		local.minimumMinor = "0";
@@ -956,6 +957,8 @@ private string function $checkMinimumVersion(required string engine, required st
 		local.minimumPatch = "10";
 		local.minimumBuild = "314028";
 	} else if (arguments.engine == "Adobe ColdFusion") {
+=======
+>>>>>>> a4752b9e (Revert "Update internal.cfm")
 		local.minimumMajor = "2018";
 		local.minimumMinor = "0";
 		local.minimumPatch = "10";
