@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="2.3"></a>
 
-## [2.3.0-rc.1] => TBA
+## [2.3.0-rc.1] => 2020.05.03
 
 <!-- ### Controller Enhancements -->
 
