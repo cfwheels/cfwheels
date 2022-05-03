@@ -35,8 +35,7 @@ public any function create(
 		parameterize = arguments.parameterize,
 		reload = arguments.reload,
 		transaction = arguments.transaction,
-		validate = arguments.validate,
-		allowExplicitTimestamps = arguments.allowExplicitTimestamps
+		validate = arguments.validate
 	);
 	return local.rv;
 }
@@ -51,8 +50,13 @@ public any function create(
  *
  * @properties The properties you want to set on the object (can also be passed in as named arguments).
  * @callbacks [see:findAll].
+ * @allowExplicitTimestamps Set this to `true` to allow explicit assignment of `createdAt` or `updatedAt` properties
  */
-public any function new(struct properties = {}, boolean callbacks = true) {
+public any function new(
+	struct properties = {}, 
+	boolean callbacks = true,
+	boolean allowExplicitTimestamps = false
+) {
 	arguments.properties = $setProperties(
 		argumentCollection = arguments,
 		filterList = "properties,reload,transaction,callbacks",
@@ -75,15 +79,13 @@ public any function new(struct properties = {}, boolean callbacks = true) {
  * @validate Set to `false` to skip validations for this operation.
  * @transaction Set this to `commit` to update the database, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.
  * @callbacks [see:findAll].
- * @allowExplicitTimestamps Set this to `true` to allow explicit assignment of `createdAt` or `updatedAt` properties
  */
 public boolean function save(
 	any parameterize,
 	boolean reload,
 	boolean validate = true,
 	string transaction = $get("transactionMode"),
-	boolean callbacks = true,
-	boolean allowExplicitTimestamps = false
+	boolean callbacks = true
 ) {
 	$args(name = "save", args = arguments);
 	clearErrors();
