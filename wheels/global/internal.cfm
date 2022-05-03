@@ -945,10 +945,20 @@ private string function $checkMinimumVersion(required string engine, required st
 		local.minimumBuild = "77";
 		local.5 = {minimumMinor = 2, minimumPatch = 1, minimumBuild = 9};
 	} else if (arguments.engine == "Adobe ColdFusion") {
+		local.minimumMajor = "11";
+		local.minimumMinor = "0";
+		local.minimumPatch = "18";
+		local.minimumBuild = "314030";
+	} else if (arguments.engine == "Adobe ColdFusion") {
+		local.minimumMajor = "2016";
+		local.minimumMinor = "0";
+		local.minimumPatch = "10";
+		local.minimumBuild = "314028";
+	} else if (arguments.engine == "Adobe ColdFusion") {
 		local.minimumMajor = "2018";
 		local.minimumMinor = "0";
-		local.minimumPatch = "03";
-		local.minimumBuild = "314033";
+		local.minimumPatch = "10";
+		local.minimumBuild = "314028";
 	} else {
 		local.rv = false;
 	}
