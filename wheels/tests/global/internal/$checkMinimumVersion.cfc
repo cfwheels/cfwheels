@@ -23,11 +23,14 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_adobe_valid() {
-		assert('!Len($checkMinimumVersion(version="10,0,23,302580", engine="Adobe ColdFusion"))');
-		assert('!Len($checkMinimumVersion(version="11,0,12,302575", engine="Adobe ColdFusion"))');
+		assert('!Len($checkMinimumVersion(version="2018,0,03,314033", engine="Adobe ColdFusion"))');
+		assert('!Len($checkMinimumVersion(version="2016,0,10,314028", engine="Adobe ColdFusion"))');
+		assert('!Len($checkMinimumVersion(version="11,0,18,314030", engine="Adobe ColdFusion"))');
 	}
 
 	function test_adobe_invalid() {
+		assert('Len($checkMinimumVersion(version="10,0,23,302580", engine="Adobe ColdFusion"))');
+		assert('Len($checkMinimumVersion(version="11,0,12,302575", engine="Adobe ColdFusion"))');
 		assert('Len($checkMinimumVersion(version="9,0,0,251028", engine="Adobe ColdFusion"))');
 		assert('Len($checkMinimumVersion(version="8,0,1,195765", engine="Adobe ColdFusion"))');
 		assert('Len($checkMinimumVersion(version="10,0,4,277803", engine="Adobe ColdFusion"))');

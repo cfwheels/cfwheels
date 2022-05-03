@@ -108,11 +108,6 @@ component extends="wheels.tests.Test" {
 		}
 	}
 
-	function test_allowexplicittimestamps_is_not_an_object_property() {
-		author = model("Author").new();
-		assert("author.propertyIsBlank('allowExplicitTimestamps')");
-	}
-
 	function teardown() {
 		// reset all changes to post model class
 		model("Post").getClass().timeStampOnCreateProperty = "createdAt";

@@ -40,6 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add test suite for Lucee and H2 Database to the GitHub Actions test suite. - [Peter Amiri]
 - On going changes to update the H2 drivers [#1107] - [Peter Amiri]
 - Fixes some syntax formating introduced by cfformat [#1111] - [Adam Chapman]
+- Minimum ColdFusion version is now ColdFusion (2018 release) Update 3 (2018,0,03,314033) / ColdFusion (2016 release) Update 10 (2016,0,10,314028) / ColdFusion 11 Update 18 (11,0,18,314030) [#923](https://github.com/cfwheels/cfwheels/issues/923) - [Michael Diederich]
+- Wheels save(allowExplicitTimestamps=true) doesn't produce the expected result [#1113] - [SebastienFCT]
 
 ### Potentially Breaking Changes
 
