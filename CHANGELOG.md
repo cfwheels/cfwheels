@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="2.3"></a>
 
-## [2.3.0-wip] => TBA
+## [2.3.0-rc.1] => TBA
 
 <!-- ### Controller Enhancements -->
 
@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minor visual fix for long migration logs overflow in modal (scroll) - [Brian Ramsey]
 - Add test suite for Lucee and H2 Database to the GitHub Actions test suite. - [Peter Amiri]
 - On going changes to update the H2 drivers [#1107] - [Peter Amiri]
+- Fixes some syntax formating introduced by cfformat [#1111] - [Adam Chapman]
 
 ### Potentially Breaking Changes
 
