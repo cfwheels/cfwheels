@@ -946,6 +946,17 @@ private string function $checkMinimumVersion(required string engine, required st
 		local.5 = {minimumMinor = 2, minimumPatch = 1, minimumBuild = 9};
 	} else if (arguments.engine == "Adobe ColdFusion") {
 		local.minimumMajor = "2016";
+		local.minimumMajor = "11";
+		local.minimumMinor = "0";
+		local.minimumPatch = "18";
+		local.minimumBuild = "314030";
+	} else if (arguments.engine == "Adobe ColdFusion") {
+		local.minimumMajor = "2016";
+		local.minimumMinor = "0";
+		local.minimumPatch = "10";
+		local.minimumBuild = "314028";
+	} else if (arguments.engine == "Adobe ColdFusion") {
+		local.minimumMajor = "2018";
 		local.minimumMinor = "0";
 		local.minimumPatch = "10";
 		local.minimumBuild = "314028";
