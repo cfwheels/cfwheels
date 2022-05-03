@@ -38,10 +38,10 @@ jobs:
       - name: Wait for ${{ matrix.cf }} startup
         run: src/github/tests/server-up.sh ${{ matrix.cf }}
 
-      - name: Sleep for 10 seconds
+      - name: Sleep for 30 seconds
         uses: jakejarvis/wait-action@master
         with:
-          time: '10s'
+          time: '30s'
 
       - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
         run: src/github/tests/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}
