@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add test suite for Lucee and H2 Database to the GitHub Actions test suite. - [Peter Amiri]
 - On going changes to update the H2 drivers [#1107] - [Peter Amiri]
 - Fixes some syntax formating introduced by cfformat [#1111] - [Adam Chapman]
+- Minimum ColdFusion version is now ColdFusion (2018 release) Update 3 (2018,0,03,314033) / ColdFusion (2016 release) Update 10 (2016,0,10,314028) / ColdFusion 11 Update 18 (11,0,18,314030) [#923](https://github.com/cfwheels/cfwheels/issues/923) - [Michael Diederich]
 
 ### Potentially Breaking Changes
 
@@ -83,7 +84,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the `refresh` url parameter for auto refreshing test framework html - [#986](https://github.com/cfwheels/cfwheels/issues/986) - [Adam Chapman]
 - Allow custom migrator templates by scanning the `/migrator/templates` directory - [Adam Chapman]
 - Minimum Lucee 5 version is now 5.3.2.77 - Tests added - [Michael Diederich]
-- Minimum ColdFusion version is now ColdFusion (2018 release) Update 3 (2018,0,03,314033) / ColdFusion (2016 release) Update 10 (2016,0,10,314028) / ColdFusion 11 Update 18 (11,0,18,314030) [#923](https://github.com/cfwheels/cfwheels/issues/923) - [Michael Diederich]
 - Use `http_x_forwarded_proto` to determine if the application is running behind a loadbalancer that is performing SSL offloading - [Peter Amiri]
 - Allow the combination of `url` and `params` arguments with `redirectTo` - [Adam Chapman]
 - Fixed some variable scoping - [Michael Diederich]
