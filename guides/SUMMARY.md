@@ -13,4 +13,6 @@
 * [Upgrading](upgrading.md)
 * [Screencasts](screencasts.md)
 
-***
+## 2. CommandBox & The CLI
+
+* [CLI Commands](2.-commandbox-and-the-cli/cli-commands.md)
