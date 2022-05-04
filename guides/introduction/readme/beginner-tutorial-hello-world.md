@@ -84,3 +84,107 @@ used to call our `say` controller:
 
 Once again, we get a ColdFusion error. Although we have created the controller\
 and added the `hello` action to it, we haven't created the view.
+
+### Setting up the View
+
+By default, when an action is called, CFWheels will look for a view file with\
+the same name as the action. It then hands off the processing to the view to\
+display the user interface. In our case, CFWheels tried to find a view file for\
+our `say/hello` action and couldn't find one.
+
+Let's remedy the situation and create a view file. View files are simple CFML\
+pages that handle the output of our application. In most cases, views will\
+return HTML code to the brower. By default, the view files will have the same\
+name as our controller actions and will be grouped into a directory under the\
+view directory. This new directory will have the same name as our controller.
+
+Find the `views` directory in the root of your CFWheels installation. There will\
+be a few directories in there already. For now, we need to create a new\
+directory in the `views` directory called `say`. This is the same name as the\
+controller that we created above.
+
+Now inside the `say` directory, create a file called `hello.cfm`. In the\
+`hello.cfm` file, add the following line of code:
+
+{% code title="views/say/hello.cfm" %}
+```html
+<h1>Hello World!</h>
+```
+{% endcode %}
+
+Save your `hello.cfm` file, and let's call our `say/hello` action once again.\
+You have your first working CFWheels page if your browser looks like _Figure 3_\
+below.
+
+![Figure 3: Your first working CFWheels action.](../../.gitbook/assets/5298d15-cfwheels-tutorial\_0004\_3.png)
+
+You have just created your first functional CFWheels page, albeit it is a very\
+simple one. Pat yourself on the back, go grab a snack, and when you're ready,\
+let's go on and extend the functionality of our _Hello World!_ application a\
+little more.
+
+### Adding Dynamic Content to Your View
+
+We will add some simple dynamic content to our `hello` action and add a second\
+action to the application. We'll then use some CFWheels code to tie the 2\
+actions together. Let's get get to it!
+
+#### The Dynamic Content
+
+The first thing we are going to do is to add some dynamic content to our\
+`say/hello` action. Modify your `say` controller so it looks like the code block\
+below:
+
+{% code title="controllers/Say.cfc" %}
+```javascript
+component extends="Controller" {
+    function hello() {
+        time = Now();
+    }
+}
+```
+{% endcode %}
+
+All we are doing here is creating a variable called `time` and setting its value\
+to the current server time using the basic ColdFusion `Now()` function. When we\
+do this, the variable becomes immediately available to our view code.
+
+Why not just set up this value directly in the view? If you think about it,\
+maybe the logic behind the value of time may eventually change. What if\
+eventually we want to display its value based on the user's time zone? What if\
+later we decide to pull it from a web service instead? Remember, the controller\
+is supposed to coordinate all of the data and business logic, not the view.
+
+#### Displaying the Dynamic Content
+
+Next, we will modify our `say/hello.cfm` view file so that it looks like the\
+code block bellow. When we do this, the value will be displayed in the browser.
+
+{% code title="views/say/hello.cfm" %}
+```html
+<h1>Hello World!</h1>
+<p>Current time: <cfoutput>#time#</cfoutput></p>
+```
+{% endcode %}
+
+&#x20;call your `say/hello` action again in your browser. Your browser should look\
+like _Figure 4_ below.
+
+![Figure 4: Hello World with the current date and time](../../.gitbook/assets/9f1a966-cfwheels-tutorial\_0003\_4.png)
+
+This simple example showed that any dynamic content created in a controller\
+action is available to the corresponding view file. In our application, we\
+created a `time` variable in the `say/hello` controller action and display that\
+variable in our `say/hello.cfm` view file.
+
+### Adding a Second Action: Goodbye
+
+Now we will expand the functionality of our application once again by adding a\
+second action to our `say` controller. If you feel adventurous, go ahead and add\
+a `goodbye` action to the `say` controller on your own, then create a\
+`goodbye.cfm` view file that displays a "Goodbye" message to the user. If you're\
+not feeling that adventurous, we'll quickly go step by step.
+
+First, modify the the `say` controller file so that it looks like the code block\
+below.&#x20;
+
