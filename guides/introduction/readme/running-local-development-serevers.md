@@ -95,3 +95,45 @@ awesomesite (stopped)
  CF Engine: lucee 4.5.4+017 
  Webroot: /Users/cfwheels/Documents/awesomeo
 ```
+
+To remove a server configuration from the list, you can do `server forget myapp`. Note the status of the servers on the list is somewhat unreliable, as you it only remembers the last known state of the server: so if you start a server and then turn on your local machine, it may remember it as `running` which is why we recommend the use of `force: true`in the `server.json` file.
+
+### Specifying different CF engines
+
+By default, Commandbox will run Lucee (version 4.5.x at time of writing). You may wish to specify an exact version of Lucee, or use Adobe ColdFusion. We can do this via either setting the appropriate `cfengine` setting in `server.json`, or at runtime with the `cfengine=` argument.
+
+{% tabs %}
+{% tab title="CommandBox" %}
+_Start the default engine_
+
+CommandBox> start
+
+__
+
+_Start the latest stable Lucee 5.x engine_
+
+CommandBox> start cfengine=lucee@5
+
+__
+
+_Start a specific engine and version_
+
+CommandBox> start cfengine=adobe@10.0.12
+
+__
+
+_Start the most recent Adobe server that starts with version "11"_
+
+CommandBox> start cfengine=adobe@11
+
+
+
+Start the most recent adobe engine that matches the range
+
+CommandBox> start cfengine="adobe@>9.0 <=11"
+{% endtab %}
+
+{% tab title="Second Tab" %}
+
+{% endtab %}
+{% endtabs %}
