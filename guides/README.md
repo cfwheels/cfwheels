@@ -6,7 +6,7 @@ description: Install CFWheels and get a local development server running
 
 By far the quickest way to get started with CFWheels is via [CommandBox](https://www.ortussolutions.com/products/commandbox). CommandBox brings a whole host of command line capability to the CFML developer. It allows you to write scripts that can be executed at the command line written entirely in CFML. It allows you to start a CFML server from any directory on your machine and wire up the code in that directory as the web root of the server. What's more is, those servers can be either Lucee servers or Adobe ColdFusion servers. You can even specify what version of each server to launch. Lastly, CommandBox is a package manager for CFML. That means you can take some CFML code and package it up into a module, host it on ForgeBox.io, and make it available to other CFML developers. In fact we make extensive use of these capabilities to distribute CFWheels plugins and templates. More on that later.
 
-One module that we have created is a module that extends CommandBox itself with commands and features specific to the CFWheels framework. The CFWheels CLI module for CommandBox is modeled after the Ruby on Rails CLI module and gives similar capabilities to the CFWheels developer.&#x20;
+One module that we have created is a module that extends CommandBox itself with commands and features specific to the CFWheels framework. The CFWheels CLI module for CommandBox is modeled after the Ruby on Rails CLI module and gives similar capabilities to the CFWheels developer.
 
 ### Install Commandbox
 
@@ -26,11 +26,11 @@ version
 {% endtab %}
 {% endtabs %}
 
-This is a good concept to grasp, cause depending on your workflow, you may find it easier to do one versus the other. Most of the commands you will see in these CLI guides will assume that you are entering the command in the actual CommandBox shell so the `box` prefix is left off.&#x20;
+This is a good concept to grasp, cause depending on your workflow, you may find it easier to do one versus the other. Most of the commands you will see in these CLI guides will assume that you are entering the command in the actual CommandBox shell so the `box` prefix is left off.
 
 ### Install the cfwheels-cli CommandBox Module
 
-Okay, now that we have CommandBox installed, let's add the CFWheels CLI module.&#x20;
+Okay, now that we have CommandBox installed, let's add the CFWheels CLI module.
 
 {% tabs %}
 {% tab title="CommandBox" %}
@@ -65,7 +65,7 @@ A few minutes after submitting the above commands a new browser window should op
 
 ![](.gitbook/assets/76e1179-Screen\_Shot\_2022-02-08\_at\_9.12.06\_AM.png)
 
-So what just happened? Since we didn't supply many parameters to the `wheels generate app` command, it used default values for most of its parameters and downloaded our Base template (cfwheels-template-base) from ForgeBox.io, then downloaded the framework itself (cfwheels-core) from ForgeBox.io and placed it int he wheels directory, then configured the application name and reload password, and started a Lucee server on a random port.&#x20;
+So what just happened? Since we didn't supply many parameters to the `wheels generate app` command, it used default values for most of its parameters and downloaded our Base template (cfwheels-template-base) from ForgeBox.io, then downloaded the framework itself (cfwheels-core) from ForgeBox.io and placed it int he wheels directory, then configured the application name and reload password, and started a Lucee server on a random port.
 
 {% hint style="info" %}
 #### A Word About Command Aliases
