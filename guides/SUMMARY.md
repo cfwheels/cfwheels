@@ -14,28 +14,3 @@
 * [Screencasts](screencasts.md)
 
 ***
-
-## COMMANDBOX & THE CLI
-
-***
-
-## WORKING WITH CFWHEELS
-
-***
-
-## HANDLING REQUESTS WITH CONTROLLERS
-
-***
-
-## DISPLAY VIEWS TO USERS
-
-***
-
-## DATABASE INTERACTION THROUGH MODELS
-
-***
-
-## PLUGINS
-
-***
-
