@@ -8,10 +8,6 @@ With Commandbox, we don't need to have Lucee or Adobe ColdFusion installed local
 {% tab title="CommanBox" %}
 server start
 {% endtab %}
-
-{% tab title="Second Tab" %}
-
-{% endtab %}
 {% endtabs %}
 
 The server will then start on a random port on `127.0.0.1` and will create a `server.json` file in your webroot. We can add various options to `server.json` to customise our server. Here's an example:
@@ -46,10 +42,6 @@ Obviously, anything you start, you might want to stop. Servers can be stopped ei
 {% tab title="CommandBox" %}
 server stop
 {% endtab %}
-
-{% tab title="Second Tab" %}
-
-{% endtab %}
 {% endtabs %}
 
 You can also stop the server from anywhere by name:
@@ -58,10 +50,6 @@ You can also stop the server from anywhere by name:
 {% tab title="CommandBox" %}
 server stop myApp
 {% endtab %}
-
-{% tab title="Second Tab" %}
-
-{% endtab %}
 {% endtabs %}
 
 If you want to see what server configurations exist on your system and their current status, simply do `server list`
@@ -69,10 +57,6 @@ If you want to see what server configurations exist on your system and their cur
 {% tabs %}
 {% tab title="CommandBox" %}
 server list
-{% endtab %}
-
-{% tab title="Second Tab" %}
-
 {% endtab %}
 {% endtabs %}
 
@@ -108,33 +92,29 @@ _Start the default engine_
 
 CommandBox> start
 
-__
+\_\_
 
 _Start the latest stable Lucee 5.x engine_
 
 CommandBox> start cfengine=lucee@5
 
-__
+\_\_
 
 _Start a specific engine and version_
 
 CommandBox> start cfengine=adobe@10.0.12
 
-__
+\_\_
 
 _Start the most recent Adobe server that starts with version "11"_
 
 CommandBox> start cfengine=adobe@11
 
-__
+\_\_
 
 _Start the most recent adobe engine that matches the range_
 
 CommandBox> start cfengine="adobe@>9.0 <=11"
-{% endtab %}
-
-{% tab title="Second Tab" %}
-
 {% endtab %}
 {% endtabs %}
 
@@ -159,3 +139,31 @@ Or via `server.json`
     },
 }
 ```
+
+{% hint style="info" %}
+#### CFIDE / Lucee administrators
+
+The default username and password for all administrators is `admin` & `commandbox`
+{% endhint %}
+
+You can of course run multiple servers, so if you need to test your app on Lucee 4.x, Lucee 5.x and Adobe 2016, you can just start three servers with different `cfengine=` arguments!
+
+{% hint style="info" %}
+#### Watch out
+
+Commandbox 5.1 required to install dependencies easily
+{% endhint %}
+
+CFWheels can run just fine on lucee-light (which is after all, Lucee, minus all the extensions) but at the minimum requires the following extensions to be installed as dependencies in your `box.json`
+
+```json
+"dependencies":{
+    "lucee-image":"lex:https://ext.lucee.org/lucee.image.extension-1.0.0.35.lex",
+    "lucee-zip": "lex:https://ext.lucee.org/compress-extension-1.0.0.2.lex",
+    json"lucee-esapi": "lex:https://ext.lucee.org/esapi-extension-2.1.0.18.lex"
+}
+```
+
+Once added to your box.json file, while the server is running, just do `box install`, which will install the dependencies, and load them into the running server within 60 seconds.
+
+Alternatively you can download the extensions and add them manually to your server root's deploy folder (i.e `\WEB-INF\lucee-server\deploy`)
