@@ -126,9 +126,9 @@ _Start the most recent Adobe server that starts with version "11"_
 
 CommandBox> start cfengine=adobe@11
 
+__
 
-
-Start the most recent adobe engine that matches the range
+_Start the most recent adobe engine that matches the range_
 
 CommandBox> start cfengine="adobe@>9.0 <=11"
 {% endtab %}
@@ -137,3 +137,25 @@ CommandBox> start cfengine="adobe@>9.0 <=11"
 
 {% endtab %}
 {% endtabs %}
+
+Or via `server.json`
+
+```json
+{
+    "name":"myApp",
+    "force":true,
+    "web":{
+        "http":{
+            "host":"localhost",
+            "port":60000
+        },
+        "rewrites":{
+            "enable":true,
+            "config":"urlrewrite.xml"
+        }
+    },
+    "app":{
+        "cfengine":"adobe@2016"
+    },
+}
+```
