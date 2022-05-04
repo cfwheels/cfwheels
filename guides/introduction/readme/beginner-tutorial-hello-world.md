@@ -188,3 +188,64 @@ not feeling that adventurous, we'll quickly go step by step.
 First, modify the the `say` controller file so that it looks like the code block\
 below.&#x20;
 
+{% code title="controllers/Say.cfc" %}
+```javascript
+component extends="Controller" {
+    function hello() {
+        time = Now();
+    }
+
+    function goodbye() {
+    }
+}
+```
+{% endcode %}
+
+Now go to the `views/say` directory and create a `goodbye.cfm` page.
+
+Add the following code to the `goodbye.cfm` page and save it.
+
+{% code title="views/say/goodbye.cfm" %}
+```
+Goodbye World!
+```
+{% endcode %}
+
+If we did everything right, we should be able to call the new `say/goodbye`\
+action using the following URL:
+
+`http://127.0.0.1:60000/index.cfm/say/goodbye`
+
+Your browser should look like _Figure 5_ below:
+
+![Figure 5: Your new goodbye action](../../.gitbook/assets/4d9523e-cfwheels-tutorial\_0002\_5.png)
+
+### Linking to Other Actions
+
+Now let's link our two actions together. We will do this by adding a link to the\
+bottom of each page so that it calls the other page.
+
+#### Linking Hello to Goodbye
+
+Open the `say/hello.cfm` view file. We are going to add a line of code to the\
+end of this file so our `say/hello.cfm` view file looks like the code block\
+below:
+
+{% code title="views/say/hello.cfm" %}
+```html
+<h1>Hello World!</h1>
+<p>Current time: <cfoutput>#time#</cfoutput></p>
+<p>Time to say <cfoutput>#linkTo(text="goodbye", action="goodbye")#?</cfoutput></p>
+```
+{% endcode %}
+
+The [linkTo()](https://api.cfwheels.org/controller.linkto.html) function is a built-in CFWheels function. In this case, we are passing 2 named parameters to it. The first parameter, `text`, is the text\
+that will be displayed in the hyperlink. The second parameter, `action`, defines the action to point the link to. By using this built-in function, your application's main URL may change, and even controllers and actions may get shifted around, but you won't suffer from the dreaded dead link. CFWheels will\
+always create a valid link for you as long as you configure it correctly when you make infrastructure changes to your application.
+
+Once you have added the additional line of code to the end of the\
+`say/hello.cfm` view file, save your file and call the `say/hello` action from\
+your browser. Your browser should look like _Figure 6_ below.
+
+![Figure 6: Your say/hello action with a link to the goodbye action](../../.gitbook/assets/f600144-cfwheels-tutorial\_0001\_6.png)
+
