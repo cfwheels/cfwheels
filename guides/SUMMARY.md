@@ -11,3 +11,7 @@
 ***
 
 * [Frameworks and CFWheels](frameworks-and-cfwheels.md)
+* [Requirements](requirements.md)
+* [Manual Installation](manual-installation.md)
+* [Upgrading](upgrading.md)
+* [Screencasts](screencasts.md)
