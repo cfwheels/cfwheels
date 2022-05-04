@@ -249,3 +249,35 @@ your browser. Your browser should look like _Figure 6_ below.
 
 ![Figure 6: Your say/hello action with a link to the goodbye action](../../.gitbook/assets/f600144-cfwheels-tutorial\_0001\_6.png)
 
+You can see that CFWheels created a link for us and added an appropriate URL for\
+the `say/goodbye` action to the link.
+
+#### Linking Goodbye to Hello
+
+Let's complete our little app and add a corresponding link to the bottom of our\
+`say/goodbye.cfm` view page.
+
+Open your `say/goodbye.cfm` view page and modify it so it looks like the code\
+block below.
+
+CFML: views/say/goodbye.cfm
+
+{% code title="views/say/goodbye.cfm" %}
+```html
+<h1>Goodbye World!</h1>
+<p>Time to say <cfoutput>#linkTo(text="hello", action="hello")#?</cfoutput></p>
+```
+{% endcode %}
+
+If you now call the `say/goodbye` action in your browser, your browser should\
+look like _Figure 7_ below.
+
+![Figure 7: Your say/goodbye action with a link to the hello action](../../.gitbook/assets/fc38a30-cfwheels-tutorial\_0000\_7.png)
+
+### Much More to Learn
+
+You now know enough to be dangerous with CFWheels. Look out! But there are many\
+more powerful features to cover. You may have noticed that we haven't even\
+talked about the M in MVC.
+
+No worries. We will get there. And we think you will enjoy it.
