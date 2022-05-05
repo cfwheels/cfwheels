@@ -44,3 +44,4 @@
   * [Apache](handling-requests-with-controllers/url-rewriting/apache.md)
   * [IIS](handling-requests-with-controllers/url-rewriting/iis.md)
   * [Tomcat](handling-requests-with-controllers/url-rewriting/tomcat.md)
+  * [Nginx](handling-requests-with-controllers/url-rewriting/nginx.md)
