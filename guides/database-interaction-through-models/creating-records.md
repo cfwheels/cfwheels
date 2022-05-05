@@ -49,9 +49,7 @@ Note that if we have opted to have the database create the primary key for us (w
 
 This means you can read the value by doing something like this. (This example assumes you have an auto-incrementing `integer` column named `id` as the primary key.)
 
-Text
-
-```
+```javascript
 <cfscript>
 newAuthor = model("author").new();
 newAuthor.firstName = "Joe";
@@ -73,9 +71,7 @@ However, unlike the primary key, Wheels will not automatically load database def
 
 Of course, if you do need to access the database default immediately after saving, Wheels allows this. Simply add `reload=true` to the [create()](https://api.cfwheels.org/model.create.html), [update()](https://api.cfwheels.org/model.update.html), or [save()](https://api.cfwheels.org/model.save.html) methods:
 
-Text
-
-```
+```javascript
 newAuthor = model("author").new();
 newAuthor.firstName = "Joe";
 newAuthor.lastName = "Jones";
@@ -86,18 +82,14 @@ newAuthor.save(reload=true);
 
 Sometimes a database default isn't the most appropriate solution because the value is only set after the model has been inserted. If you want to set a default value when it is first created with [new()](https://api.cfwheels.org/model.new.html) or [create()](https://api.cfwheels.org/model.create.html), then you can pass the `defaultValue` argument of the [property()](https://api.cfwheels.org/model.property.html) method used in your model's `config()` block.
 
-Text
-
-```
+```javascript
 property(name="welcomeText", defaultValue="Hello world!");
 ```
 
 This is effectively the same as doing this:
 
-Text
-
-```
+```javascript
 model("myModel").new(welcomeText="Hello world!");
 ```
 
-..except you only need to set it once per model.vajava
+..except you only need to set it once per model.
