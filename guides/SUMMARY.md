@@ -30,3 +30,4 @@
 ## Handling Requests with Controllers
 
 * [Request Handling](handling-requests-with-controllers/request-handling.md)
+* [Rendering Content](handling-requests-with-controllers/rendering-content.md)
