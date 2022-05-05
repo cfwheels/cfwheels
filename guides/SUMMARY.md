@@ -21,3 +21,5 @@
 
 * [Conventions](working-with-cfwheels/conventions.md)
 * [Configuration and Defaults](working-with-cfwheels/configuration-and-defaults.md)
+* [Directory Structure](working-with-cfwheels/directory-structure.md)
+* [Switching Environments](working-with-cfwheels/switching-environments.md)
