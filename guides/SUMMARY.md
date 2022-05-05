@@ -38,3 +38,4 @@
 * [Using the Flash](handling-requests-with-controllers/using-the-flash.md)
 * [Using Filters](handling-requests-with-controllers/using-filters.md)
 * [Verification](handling-requests-with-controllers/verification.md)
+* [Event Handlers](handling-requests-with-controllers/event-handlers.md)
