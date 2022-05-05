@@ -25,3 +25,4 @@
 * [Switching Environments](working-with-cfwheels/switching-environments.md)
 * [Testing Your Application](working-with-cfwheels/testing-your-application.md)
 * [Contributing to CFWheels](working-with-cfwheels/contributing-to-cfwheels.md)
+* [Documenting your Code](working-with-cfwheels/documenting-your-code.md)
