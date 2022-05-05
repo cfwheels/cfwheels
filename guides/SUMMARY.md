@@ -24,3 +24,4 @@
 * [Directory Structure](working-with-cfwheels/directory-structure.md)
 * [Switching Environments](working-with-cfwheels/switching-environments.md)
 * [Testing Your Application](working-with-cfwheels/testing-your-application.md)
+* [Contributing to CFWheels](working-with-cfwheels/contributing-to-cfwheels.md)
