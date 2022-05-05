@@ -2,7 +2,7 @@
 
 ## INTRODUCTION
 
-* [Getting Started](introduction/getting-started/getting-started.md)
+* [Getting Started](README.md)
   * [Running Local Development Serevers](introduction/getting-started/running-local-development-serevers.md)
   * [Beginner Tutorial: Hello World](introduction/getting-started/beginner-tutorial-hello-world.md)
   * [Beginner Tutorial: Hello Database](introduction/getting-started/beginner-tutorial-hello-database.md)
@@ -26,3 +26,7 @@
 * [Testing Your Application](working-with-cfwheels/testing-your-application.md)
 * [Contributing to CFWheels](working-with-cfwheels/contributing-to-cfwheels.md)
 * [Documenting your Code](working-with-cfwheels/documenting-your-code.md)
+
+## Handling Requests with Controllers
+
+* [Request Handling](handling-requests-with-controllers/request-handling.md)

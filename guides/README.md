@@ -36,10 +36,6 @@ Okay, now that we have CommandBox installed, let's add the CFWheels CLI module.
 {% tab title="CommandBox" %}
 install cfwheels-cli
 {% endtab %}
-
-{% tab title="Second Tab" %}
-
-{% endtab %}
 {% endtabs %}
 
 Installing this module will add a number of commands to your default CommandBox installation. All of these commands are prefixed by the `wheels` name space. There are commands to create a brand new CFWheels application or scaffold out sections of your application. We'll see some of these commands in action momentarily.
@@ -53,22 +49,18 @@ Now that we have CommandBox installed and extended it with the CFWheels CLI modu
 wheels generate app myApp\
 server start
 {% endtab %}
-
-{% tab title="Second Tab" %}
-
-{% endtab %}
 {% endtabs %}
 
-![](../../.gitbook/assets/73279f3-wheels\_generate\_app\_larger.gif)
+![](.gitbook/assets/73279f3-wheels\_generate\_app\_larger.gif)
 
 A few minutes after submitting the above commands a new browser window should open up and display the default CFWheels congratulations screen.
 
-![](../../.gitbook/assets/76e1179-Screen\_Shot\_2022-02-08\_at\_9.12.06\_AM.png)
+![](.gitbook/assets/76e1179-Screen\_Shot\_2022-02-08\_at\_9.12.06\_AM.png)
 
 So what just happened? Since we didn't supply many parameters to the `wheels generate app` command, it used default values for most of its parameters and downloaded our Base template (cfwheels-template-base) from ForgeBox.io, then downloaded the framework itself (cfwheels-core) from ForgeBox.io and placed it int he wheels directory, then configured the application name and reload password, and started a Lucee server on a random port.
 
 {% hint style="info" %}
-#### A Word About Command Aliases
+**A Word About Command Aliases**
 
 CommandBox commands have the capability to be called by multiple names or aliases. The command above `wheels generate app` can also be initiated by typing `wheels g app`. In fact `g` is an alias for `generate` so wherever you see a command in the CLI documentation that has `generate` in it you can substitute `g` instead. \n\nIn addition to shortening `generate` to `g`, aliases can completely change the name space as well. A command that you haven't seen yet is the `wheels generate app-wizard` command. This command guides the user through a series of menu options, building up all the parameters needed to customize the start of a new CFWheels project. You're likely to use the wizard when starting a new CFWheels application so it's good to become familiar with it. This command has the normal alias referenced above at `wheels g app-wizard` but it also has an additional alias at `wheels new` which is the command more prevalent in the Rails community. So the three commands `wheels generate app-wizard`, `wheels g app-wizard`, and `wheels new` all call the same functionality which guides the user though a set of menus, collecting details on how to configure the desired app. Once all the parameters have been gathered, this command actually calls the `wheels generate app` command to create the actual CFWheels application.
 {% endhint %}
