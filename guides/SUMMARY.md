@@ -35,3 +35,4 @@
 * [Sending Files](handling-requests-with-controllers/sending-files.md)
 * [Sending Email](handling-requests-with-controllers/sending-email.md)
 * [Responding with Multiple Formats](handling-requests-with-controllers/responding-with-multiple-formats.md)
+* [Using the Flash](handling-requests-with-controllers/using-the-flash.md)
