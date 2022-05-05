@@ -14,8 +14,6 @@ If you just need to satisfy your CORS requirement quickly, you can do so from CF
 
 By default, this will enable the following CORS headers:
 
-Text
-
 ```
 Access-Control-Allow-Origin 
 *
@@ -31,9 +29,11 @@ This will satisfy most requirements to get going quickly, but is more of a blank
 
 ### Custom CORS Headers
 
-> #### 🚧
->
-> The options below were introduced in CFWheels 2.1:
+{% hint style="info" %}
+#### From CFWheels 2.1
+
+The options below were introduced in CFWheels 2.1
+{% endhint %}
 
 From CFWheels 2.1, we can be more specific. We still need to specify `set(allowCorsRequests=true);` in our `/config/settings.cfm` to turn on the main CORS functionality, but we can now provide some additional configuration options to fine tune our responses.
 
@@ -42,8 +42,6 @@ From CFWheels 2.1, we can be more specific. We still need to specify `set(allowC
 The Access Control Allow Origin header tells the browser whether the domain they are connecting from can access the requested resource.
 
 By default, this header is set to a wildcard allowing connection from any domain. But it might be your VueJS app lives at `app.domain.com` and we only want to allow access from that domain to our API.
-
-cfscript
 
 ```javascript
 // Wildcard
@@ -59,8 +57,6 @@ set(accessControlAllowOrigin="https://app.domain.com,https://staging-app.domain.
 You can also take advantage of the environment specific configurations, such as only allowing access to `localhost:8080` in `/config/development/settings.cfm` for example.
 
 **CFWheels 2.2** allows for subdomain wildcard matching for CORS permitted origins:
-
-JavaScript
 
 ```javascript
 // Match https://foo.domain.com or https://bar.domain.com or https://www.mydomain.com
@@ -94,8 +90,6 @@ Whilst setting Access Control Allow Methods site-wide is fine, it doesn't actual
 
 Thankfully, we can pull this information in from the routing system automatically! Note, `set(accessControlAllowMethodsByRoute=true)` will override `set(accessControlAllowMethods())`
 
-cfscript
-
 ```javascript
 // automatically look up the available routes in application.wheels.routes and return the valid methods for the requested route
 set(accessControlAllowMethodsByRoute=true);
@@ -104,8 +98,6 @@ set(accessControlAllowMethodsByRoute=true);
 ### Access Control Allow Credentials
 
 If you're sending credentials such as a cookie from your front end application, you may need to turn this header on.
-
-cfscript
 
 ```javascript
 // if set to true, include the Access-Control-Allow-Credentials header
@@ -116,12 +108,7 @@ set(accessControlAllowCredentials=true);
 
 If you need to specify a specific list of allowed headers, you can simply pass them into this configuration setting
 
-cfscript
-
 ```javascript
 // Set site wide allowed headers
 set(accessControlAllowHeaders = "Origin, Content-Type, X-Auth-Token, X-Requested-By, X-Requested-With, X-MyHeader")
 ```
-
-\
-\
