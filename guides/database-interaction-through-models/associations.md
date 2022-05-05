@@ -433,7 +433,7 @@ At this point, it's still fairly easy to get data from the many-to-many associat
 We can include the related tables from the `subscription` bridge entity to get the same effect:
 
 {% code title="controllers/subscriptions.cfc" %}
-```
+```javascript
 component extends="Controller" {
  function index() {
 
@@ -450,10 +450,8 @@ With the `shortcut` argument to [hasMany()](https://api.cfwheels.org/model.hasma
 
 For our example above, you can alter the [hasMany()](https://api.cfwheels.org/model.hasmany.html) call on the `customer` model to look like this instead:
 
-Text
-
-```
-// models/customer.cfc
+{% code title="models/customer.cfc" %}
+```javascript
 component extends="Model" {
 
  function config() {
@@ -461,13 +459,12 @@ component extends="Model" {
  }
 }
 ```
+{% endcode %}
 
 Now you can get a customer's publications directly by using code like this:
 
-Text
-
-```
-// controllers/customers.cfc --->
+{% code title="controllers/customers.cfc" %}
+```javascript
 component extends="Controller" {
  function edit() {
 
@@ -477,6 +474,7 @@ component extends="Controller" {
  }
 }
 ```
+{% endcode %}
 
 This functionality relies on having set up all the appropriate [hasMany()](https://api.cfwheels.org/model.hasmany.html) and [belongsTo()](https://api.cfwheels.org/model.belongsto.html) associations in all 3 models (like we have in our example in this chapter).
 
