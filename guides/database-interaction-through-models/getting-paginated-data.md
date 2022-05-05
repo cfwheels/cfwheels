@@ -21,9 +21,7 @@ This chapter will deal with the first part: getting the paginated data. Please p
 
 Let's jump straight to an example:
 
-Text
-
-```
+```javascript
 authors = model("Author").findAll(page=2, perPage=25, order="lastName");
 ```
 
@@ -33,9 +31,7 @@ What SQL statements are actually being executed depends on which database engine
 
 One important thing that you should be aware of is that pagination is done based on objects and not records. To illustrate what that means, we can expand on the above example a little:
 
-Text
-
-```
+```javascript
 authorsAndBooks = model("Author").findAll(
   include="Books", page=2, perPage=25, order="lastName"
 );
@@ -45,9 +41,7 @@ Here, we tell Wheels that we also want to include any books written by the autho
 
 If you do want to paginate based on the books instead, all that you need to do is flip the `findAll()` statement around a little:
 
-Text
-
-```
+```javascript
 booksAndAuthors = model("Book").findAll(
   include="Author", page=2, perPage=25, order="lastName"
 );
@@ -60,6 +54,3 @@ If you need to know more about the returned query, you can use the `pagination()
 That's all there is to it, really. The best way to learn pagination is to play around with it with debugging turned on.
 
 Don't forget to check the chapter [Displaying Links for Pagination](https://guides.cfwheels.org/docs/displaying-links-for-pagination).
-
-\
-\
