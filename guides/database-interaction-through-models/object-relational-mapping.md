@@ -14,9 +14,7 @@ Unlike most other languages, there is no notion of class level (a.k.a. "static")
 
 In CFWheels, we create an object like this:
 
-Text
-
-```
+```javascript
 model("author");
 ```
 
@@ -26,26 +24,20 @@ Once you have the `author` object, you can start calling class methods on it, li
 
 Obviously, `author` is just an example here, and you'll use the names of the `.cfc` files you have created in the `models` folder.
 
-Text
-
-```
+```javascript
 authorClass = model("author");
 authorObject = authorClass.findByKey(1);
 ```
 
 For readability, this is usually combined into the following:
 
-Text
-
-```
+```javascript
 authorObject = model("author").findByKey(1);
 ```
 
 Now `authorObject` is an instance of the `Author` class, and you can call object level methods on it, like [update()](https://api.cfwheels.org/model.update.html) and [save()](https://api.cfwheels.org/model.save.html).
 
-Text
-
-```
+```javascript
 authorObject.update(firstName="Joe");
 ```
 
@@ -65,9 +57,7 @@ CFWheels comes with a custom built ORM. ORM stands for "Object-Relational Mappin
 
 To create a class in your application that maps to a table in your database, all you need to do is create a new class file in your `models` folder and make it extend the `Model.cfc` file.
 
-Text
-
-```
+```javascript
 component extends="Model" {
 }
 ```
@@ -78,9 +68,7 @@ Once you have created the file (or deliberately chosen not to for now), you will
 
 For example, you can write the following code to get the author with the primary key of `1`, change his first name, and save the record back to the database.
 
-Text
-
-```
+```javascript
 auth = model("author").findByKey(1);
 auth.firstName = "Joe";
 auth.save();
@@ -96,9 +84,7 @@ To change this behavior you can use the [table()](https://api.cfwheels.org/model
 
 So, for example, if you wanted for your `author` model to map to a table in your database named `tbl_authors`, you would add the following code to the `config()` method:
 
-Text
-
-```
+```javascript
 component extends="Model" {
     function config() {
     table("tbl_authors");
@@ -110,9 +96,7 @@ component extends="Model" {
 
 Most of the time, you will want to have your model mapped to a database table. However, it is possible to skip this requirement with a simple setting:
 
-Text
-
-```
+```javascript
 function config() {
     table(false);
 }
@@ -126,17 +110,17 @@ Typically, you will want to configure properties and validations manually for ta
 
 Objects in CFWheels have properties that correspond to the columns in the table that it maps to. The first time you call a method on a model, CFWheels will reflect on the schema inside the database for the table the class maps to and extract all the column information.
 
-> #### 🚧
->
-> In order for CFWheels to successfully read all schema data from your database be sure the data source user has the required access for your DBMS. For example, Microsoft SQL Server requires the "ddl\_admin" permission for some meta data such as column defaults.
+{% hint style="warning" %}
+#### Note about database permissions
+
+In order for CFWheels to successfully read all schema data from your database be sure the data source user has the required access for your DBMS. For example, Microsoft SQL Server requires the "ddl\_admin" permission for some meta data such as column defaults.
+{% endhint %}
 
 To keep things as simple as possible, there are no getters or setters in CFWheels. Instead, all the properties are made available in the `this` scope.
 
 If you want to map a specific property to a column with a different name, you can override the CFWheels mapping by using the [property()](https://api.cfwheels.org/model.property.html) method like this:
 
-Text
-
-```
+```javascript
 component extends="Model" {
     function config() {
     property(name="firstName", column="tbl_auth_f_name");
