@@ -60,3 +60,4 @@
 * [Displaying Links for Pagination](displaying-views-to-users/displaying-links-for-pagination.md)
 * [Date, Media, and Text Helpers](displaying-views-to-users/date-media-and-text-helpers.md)
 * [Creating Custom View Helpers](displaying-views-to-users/creating-custom-view-helpers.md)
+* [Localization](displaying-views-to-users/localization.md)
