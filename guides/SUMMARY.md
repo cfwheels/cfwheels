@@ -47,3 +47,4 @@
   * [Nginx](handling-requests-with-controllers/url-rewriting/nginx.md)
 * [Obfuscating URLs](handling-requests-with-controllers/obfuscating-urls.md)
 * [Caching](handling-requests-with-controllers/caching.md)
+* [Nesting Controllers](handling-requests-with-controllers/nesting-controllers.md)
