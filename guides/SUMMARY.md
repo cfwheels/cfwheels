@@ -23,3 +23,4 @@
 * [Configuration and Defaults](working-with-cfwheels/configuration-and-defaults.md)
 * [Directory Structure](working-with-cfwheels/directory-structure.md)
 * [Switching Environments](working-with-cfwheels/switching-environments.md)
+* [Testing Your Application](working-with-cfwheels/testing-your-application.md)
