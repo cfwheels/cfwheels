@@ -55,3 +55,4 @@
 * [Pages](displaying-views-to-users/pages.md)
 * [Partials](displaying-views-to-users/partials.md)
 * [Linking Pages](displaying-views-to-users/linking-pages.md)
+* [Layouts](displaying-views-to-users/layouts.md)
