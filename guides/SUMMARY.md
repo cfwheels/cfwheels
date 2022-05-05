@@ -57,3 +57,4 @@
 * [Linking Pages](displaying-views-to-users/linking-pages.md)
 * [Layouts](displaying-views-to-users/layouts.md)
 * [Form Helpers and Showing Errors](displaying-views-to-users/form-helpers-and-showing-errors.md)
+* [Displaying Links for Pagination](displaying-views-to-users/displaying-links-for-pagination.md)
