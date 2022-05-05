@@ -16,17 +16,13 @@ Let's start with the [count()](https://api.cfwheels.org/model.count.html) functi
 
 To count how many rows you have in your `authors` table, simply do this:
 
-Text
-
-```
+```javascript
 authorCount = model("author").count();
 ```
 
 What if you only want to count authors with a last name starting with "A"? Like the [findAll()](https://api.cfwheels.org/model.findall.html) function, [count()](https://api.cfwheels.org/model.count.html) will accept a `where` argument, so you can do this:
 
-Text
-
-```
+```javascript
 authorCount = model("author").count(where="lastName LIKE 'A%'");
 ```
 
@@ -36,49 +32,43 @@ Just like in the [findAll()](https://api.cfwheels.org/model.findall.html) functi
 
 In our case, the code would end up looking something like this:
 
-Text
-
-```
+```javascript
 authorCount = model("author").count(include="profile", where="countryId=1 AND lastName LIKE 'A%'");
 ```
 
 Or, if you care more about readability than performance, why not just join in the `countries` table as well?
 
-Text
-
-```
+```javascript
 authorCount = model("author").count(include="profile(country)", where="name='USA' AND lastName LIKE 'A%'");
 ```
 
 In the background, these functions all perform SQL that looks like this:
 
-MySQL
-
+{% code title="MySQL" %}
 ```sql
 SELECT COUNT(*)
 FROM authors
 WHERE ...
 ```
+{% endcode %}
 
 However, if you include a `hasMany` association, CFWheels will be smart enough to add the `DISTINCT` keyword to the SQL. This makes sure that you're only counting unique rows.
 
 For example, the following method call:
 
-Text
-
-```
+```javascript
 authorCount = model("author").count(include="books", where="title LIKE 'Wheels%'");
 ```
 
 Will execute this SQL (presuming `id` is the primary key of the `authors` table and the correct associations have been setup):
 
-MySQL
-
+{% code title="MySQL" %}
 ```sql
 SELECT COUNT(DISTINCT authors.id)
 FROM authors LEFT OUTER JOIN books ON authors.id = books.authorid
 WHERE ..
 ```
+{% endcode %}
 
 OK, so now we've covered the [count()](https://api.cfwheels.org/model.count.html) function, but there are a few other functions you can use as well to get column statistics.
 
@@ -90,9 +80,7 @@ The same goes for the remaining column statistics functions as well; they all ac
 
 Here's an example of getting the average salary in a specific department:
 
-Text
-
-```
+```javascript
 avgSalary = model("employee").average(property="salary", where="departmentId=1");
 ```
 
@@ -104,9 +92,7 @@ To get the highest and lowest values for a property, you can use the [minimum()]
 
 They are pretty self explanatory, as you can tell by the following examples:
 
-Text
-
-```
+```javascript
 highestSalary = model("employee").maximum("salary");
 lowestSalary = model("employee").minimum("salary");
 ```
@@ -119,9 +105,7 @@ As you have probably already figured out, [sum()](https://api.cfwheels.org/model
 
 Let's wrap up this chapter on a happy note by getting the total dollar amount you've made:
 
-Text
-
-```
+```javascript
 howRichAmI = model("invoice").sum("billedAmount");
 ```
 
@@ -129,17 +113,14 @@ howRichAmI = model("invoice").sum("billedAmount");
 
 All of the methods we've covered in this chapter accepts the `group` argument. Let's build on the example with getting the average salary for a department above, but this time, let's get the average for all departments instead.
 
-Text
-
-```
+```javascript
 avgSalaries = model("employee").average(property="salary", group="departmentId");
 ```
 
 When you choose to group results like this you get a `cfquery` result set back, as opposed to a single value.
 
-> #### 📘
->
-> The `group` argument is currently only supported on SQL Server and MySQL databases.
+{% hint style="info" %}
+#### Limited Support
 
-\
-\
+The `group` argument is currently only supported on SQL Server and MySQL databases.
+{% endhint %}
