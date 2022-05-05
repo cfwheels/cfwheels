@@ -71,3 +71,4 @@
 * [Deleting Records](database-interaction-through-models/deleting-records.md)
 * [Column Statistics](database-interaction-through-models/column-statistics.md)
 * [Dynamic Finders](database-interaction-through-models/dynamic-finders.md)
+* [Getting Paginated Data](database-interaction-through-models/getting-paginated-data.md)
