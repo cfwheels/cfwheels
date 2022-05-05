@@ -45,3 +45,4 @@
   * [IIS](handling-requests-with-controllers/url-rewriting/iis.md)
   * [Tomcat](handling-requests-with-controllers/url-rewriting/tomcat.md)
   * [Nginx](handling-requests-with-controllers/url-rewriting/nginx.md)
+* [Obfuscating URLs](handling-requests-with-controllers/obfuscating-urls.md)
