@@ -13,6 +13,10 @@
 * [Upgrading](1/upgrading.md)
 * [Screencasts](1/screencasts.md)
 
-## 2. CommandBox & The CLI
+## CommandBox & The CLI
 
-* [CLI Commands](2/cli-commands.md)
+* [CLI Commands](commandbox-and-the-cli/cli-commands.md)
+
+## Working with CFWheels
+
+* [Conventions](working-with-cfwheels/conventions.md)

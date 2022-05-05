@@ -13,7 +13,7 @@ Let's make sure we're all on the same page. I'm going to assume that you've foll
 Okay, so you have CFWheels installed and can see the CFWheels "Congratulations!"\
 page as shown below. That wasn't that hard now, was it?
 
-![Figure 1: Wheels congratulations screen](../../.gitbook/assets/a1f5810-Screen\_Shot\_2022-03-25\_at\_8.59.25\_AM.png)
+![Figure 1: Wheels congratulations screen](../../../.gitbook/assets/a1f5810-Screen\_Shot\_2022-03-25\_at\_8.59.25\_AM.png)
 
 ### Hello World: Your First CFWheels App
 
@@ -49,7 +49,7 @@ local server is installed on port 60000, my URL is `http://127.0.0.1:60000/index
 You may need to enter a different URL, depending on how your web server is\
 configured. In my case, I'm using [commandbox](https://guides.cfwheels.org/docs/commandbox).
 
-![Figure 2: Wheels error after setting up your blank say controller](../../.gitbook/assets/660aaf3-cfwheels-tutorial\_0005\_2.png)
+![Figure 2: Wheels error after setting up your blank say controller](../../../.gitbook/assets/660aaf3-cfwheels-tutorial\_0005\_2.png)
 
 The error says "Could not find the view page for the 'index' action in the 'say'\
 controller." Where did "index" come from? The URL we typed in only specified a\
@@ -116,7 +116,7 @@ Save your `hello.cfm` file, and let's call our `say/hello` action once again.\
 You have your first working CFWheels page if your browser looks like _Figure 3_\
 below.
 
-![Figure 3: Your first working CFWheels action.](../../.gitbook/assets/5298d15-cfwheels-tutorial\_0004\_3.png)
+![Figure 3: Your first working CFWheels action.](../../../.gitbook/assets/5298d15-cfwheels-tutorial\_0004\_3.png)
 
 You have just created your first functional CFWheels page, albeit it is a very\
 simple one. Pat yourself on the back, go grab a snack, and when you're ready,\
@@ -170,7 +170,7 @@ code block bellow. When we do this, the value will be displayed in the browser.
 &#x20;call your `say/hello` action again in your browser. Your browser should look\
 like _Figure 4_ below.
 
-![Figure 4: Hello World with the current date and time](../../.gitbook/assets/9f1a966-cfwheels-tutorial\_0003\_4.png)
+![Figure 4: Hello World with the current date and time](../../../.gitbook/assets/9f1a966-cfwheels-tutorial\_0003\_4.png)
 
 This simple example showed that any dynamic content created in a controller\
 action is available to the corresponding view file. In our application, we\
@@ -218,7 +218,7 @@ action using the following URL:
 
 Your browser should look like _Figure 5_ below:
 
-![Figure 5: Your new goodbye action](../../.gitbook/assets/4d9523e-cfwheels-tutorial\_0002\_5.png)
+![Figure 5: Your new goodbye action](../../../.gitbook/assets/4d9523e-cfwheels-tutorial\_0002\_5.png)
 
 ### Linking to Other Actions
 
@@ -247,7 +247,7 @@ Once you have added the additional line of code to the end of the\
 `say/hello.cfm` view file, save your file and call the `say/hello` action from\
 your browser. Your browser should look like _Figure 6_ below.
 
-![Figure 6: Your say/hello action with a link to the goodbye action](../../.gitbook/assets/f600144-cfwheels-tutorial\_0001\_6.png)
+![Figure 6: Your say/hello action with a link to the goodbye action](../../../.gitbook/assets/f600144-cfwheels-tutorial\_0001\_6.png)
 
 You can see that CFWheels created a link for us and added an appropriate URL for\
 the `say/goodbye` action to the link.
@@ -272,7 +272,7 @@ CFML: views/say/goodbye.cfm
 If you now call the `say/goodbye` action in your browser, your browser should\
 look like _Figure 7_ below.
 
-![Figure 7: Your say/goodbye action with a link to the hello action](../../.gitbook/assets/fc38a30-cfwheels-tutorial\_0000\_7.png)
+![Figure 7: Your say/goodbye action with a link to the hello action](../../../.gitbook/assets/fc38a30-cfwheels-tutorial\_0000\_7.png)
 
 ### Much More to Learn
 
