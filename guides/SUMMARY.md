@@ -48,3 +48,4 @@
 * [Obfuscating URLs](handling-requests-with-controllers/obfuscating-urls.md)
 * [Caching](handling-requests-with-controllers/caching.md)
 * [Nesting Controllers](handling-requests-with-controllers/nesting-controllers.md)
+* [CORS Requests](handling-requests-with-controllers/cors-requests.md)
