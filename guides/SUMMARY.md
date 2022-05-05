@@ -40,4 +40,6 @@
 * [Verification](handling-requests-with-controllers/verification.md)
 * [Event Handlers](handling-requests-with-controllers/event-handlers.md)
 * [Routing](handling-requests-with-controllers/routing.md)
-* [URL Rewriting](handling-requests-with-controllers/url-rewriting.md)
+* [URL Rewriting](handling-requests-with-controllers/url-rewriting/README.md)
+  * [Apache](handling-requests-with-controllers/url-rewriting/apache.md)
+  * [IIS](handling-requests-with-controllers/url-rewriting/iis.md)
