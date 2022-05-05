@@ -58,3 +58,4 @@
 * [Layouts](displaying-views-to-users/layouts.md)
 * [Form Helpers and Showing Errors](displaying-views-to-users/form-helpers-and-showing-errors.md)
 * [Displaying Links for Pagination](displaying-views-to-users/displaying-links-for-pagination.md)
+* [Date, Media, and Text Helpers](displaying-views-to-users/date-media-and-text-helpers.md)
