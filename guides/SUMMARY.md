@@ -74,3 +74,4 @@
 * [Getting Paginated Data](database-interaction-through-models/getting-paginated-data.md)
 * [Associations](database-interaction-through-models/associations.md)
 * [Nested Properties](database-interaction-through-models/nested-properties.md)
+* [Object Validation](database-interaction-through-models/object-validation.md)
