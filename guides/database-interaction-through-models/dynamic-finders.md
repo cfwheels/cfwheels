@@ -10,17 +10,13 @@ The concept is simple. Instead of using arguments to tell CFWheels what you want
 
 For example, the following code:
 
-Text
-
-```
+```javascript
 me = model("user").findOne(where="email='me@myself.com'");
 ```
 
 Can also be written as:
 
-Text
-
-```
+```javascript
 me = model("user").findOneByEmail("me@myself.com");
 ```
 
@@ -30,9 +26,7 @@ Through the power of `onMissingMethod()`, CFWheels will parse the method name an
 
 You can take this one step further by using code such as:
 
-Text
-
-```
+```javascript
 me = model("user").findOneByUserNameAndPassword("bob,pass");
 ```
 
@@ -50,17 +44,13 @@ In the background, these dynamically-named methods just pass along execution to 
 
 The below code, for example, is perfectly valid:
 
-Text
-
-```
+```javascript
 users = model("user").findAllByState(value="NY", order="name", page=3);
 ```
 
 When passing in multiple arguments like above, you have to start naming them instead of relying on the order of the arguments though. When doing so, you need to name the argument `value` if you're passing in just one value and `values` if you're passing in multiple values in a list. In other words, you need to name it `values` when calling an `And`type dynamic finder.
 
-Text
-
-```
+```javascript
 users = model("user").findAllByCityAndState(
         values="Buffalo,NY", order="name", page=3
 );
@@ -69,6 +59,3 @@ users = model("user").findAllByCityAndState(
 ### Avoid the Word "And" in Database Column Names
 
 Keep in mind that this dynamic method calling will break down completely if you ever name a column `firstandlastname` or something similar because CFWheels will then split the method name incorrectly. So avoid using "And" in the column name if you plan on taking advantage of dynamically-named finder methods.
-
-\
-\
