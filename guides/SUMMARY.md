@@ -66,3 +66,4 @@
 
 * [Object Relational Mapping](database-interaction-through-models/object-relational-mapping.md)
 * [Creating Records](database-interaction-through-models/creating-records.md)
+* [Reading Records](database-interaction-through-models/reading-records.md)
