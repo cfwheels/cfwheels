@@ -53,3 +53,4 @@
 ## Displaying Views to Users
 
 * [Pages](displaying-views-to-users/pages.md)
+* [Partials](displaying-views-to-users/partials.md)
