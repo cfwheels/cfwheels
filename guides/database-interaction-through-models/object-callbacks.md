@@ -28,8 +28,7 @@ Object callbacks to the rescue! By using object callbacks to implement this sort
 
 Part of the `Order.cfc` model file:
 
-Order.cfc
-
+{% code title="Order.cfc" %}
 ```javascript
 component extends="Model" {
 
@@ -50,6 +49,7 @@ component extends="Model" {
 
 }
 ```
+{% endcode %}
 
 The above code registers 2 methods to be run at specific points in the life cycle of all objects in your application.
 
@@ -96,8 +96,6 @@ If you want to completely break the callback chain for an object, you can do so 
 
 Sometimes you need to run more than one method at a specific point in the object's life cycle. You can do this by passing in a list of method names like this:
 
-Code Example
-
 ```javascript
 beforeSave("checkSomething,checkSomethingElse");
 ```
@@ -110,15 +108,15 @@ When you read about the [afterFind()](https://api.cfwheels.org/model.afterfind.h
 
 Believe it or not, but callbacks are even triggered on [findAll()](https://api.cfwheels.org/model.afterfind.html)! You do need to write your callback code differently though because there will be no `this` scope in the query object. Instead of modifying properties in the `this` scope like you normally would, the properties are passed to the callback method via the `arguments` struct.
 
-> #### 📘
->
-> We recommend that you respect the query column types. If you have a date / time value in the query, don't try to change it to a string for example. Some engines will allow it while others (CF 2016 for example) won't.
+{% hint style="info" %}
+#### Column Types
+
+We recommend that you respect the query column types. If you have a date / time value in the query, don't try to change it to a string for example. Some engines will allow it while others (CF 2016 for example) won't.
+{% endhint %}
 
 Does that sound complicated? This example should clear it up a little. Let's show some code to display how you can handle setting a `fullName` property on a hypothetical `artist` model.
 
 Because all [afterFind()](https://api.cfwheels.org/model.afterfind.html) callbacks run when fetching records from the database, it's a good idea to check to make sure that the columns used in the method's logic exist before performing any operations. You mostly encounter this issue when using the `select` argument on a finder to limit the number of columns returned. But no worries! You can use `StructKeyExists()` and perform a simple check to make sure that the columns exists in the `arguments` scope.
-
-Code Example
 
 ```javascript
 component extends="Model" output="false" {
@@ -146,8 +144,6 @@ In our example model, an artist's name can consist of both a first name and a la
 Always remember to return the `arguments` struct, otherwise Wheels won't be able to tell that you actually wanted to make any changes to the query.
 
 Note that callbacks set on included models are not executed. Look at this example:
-
-Code Example
 
 ```javascript
 fooBars = model("foo").findAll(include="bars");
