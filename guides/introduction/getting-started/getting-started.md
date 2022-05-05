@@ -59,11 +59,11 @@ server start
 {% endtab %}
 {% endtabs %}
 
-![](.gitbook/assets/73279f3-wheels\_generate\_app\_larger.gif)
+![](../../.gitbook/assets/73279f3-wheels\_generate\_app\_larger.gif)
 
 A few minutes after submitting the above commands a new browser window should open up and display the default CFWheels congratulations screen.
 
-![](.gitbook/assets/76e1179-Screen\_Shot\_2022-02-08\_at\_9.12.06\_AM.png)
+![](../../.gitbook/assets/76e1179-Screen\_Shot\_2022-02-08\_at\_9.12.06\_AM.png)
 
 So what just happened? Since we didn't supply many parameters to the `wheels generate app` command, it used default values for most of its parameters and downloaded our Base template (cfwheels-template-base) from ForgeBox.io, then downloaded the framework itself (cfwheels-core) from ForgeBox.io and placed it int he wheels directory, then configured the application name and reload password, and started a Lucee server on a random port.
 
