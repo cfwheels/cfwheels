@@ -20,10 +20,8 @@ If your database table contains a field that is a foreign key to another table, 
 
 If we had a comments table that contains a foreign key to the posts table called `postid`, then we would have this `config()` method within our comment model:
 
-Comment.cfc
-
+{% code title="models/comment.cfc" %}
 ```javascript
-// models/comment.cfc
 component extends="Model" {
 
     function config() {
@@ -32,6 +30,7 @@ component extends="Model" {
 
 }
 ```
+{% endcode %}
 
 ### The hasOne and hasMany Associations
 
@@ -43,10 +42,8 @@ At this time, you need to be a little eccentric and talk to yourself. Your assoc
 
 So let's consider the `post / comment` relationship mentioned above for `belongsTo()`. If we were to talk to ourselves, we would say, "A post has many comments." And that's how you should construct your post model:
 
-Post.cfc
-
+{% code title="models/Post.cfc" %}
 ```javascript
-// models/post.cfc
 component extends="Model" {
 
     function config() {
@@ -55,6 +52,7 @@ component extends="Model" {
 
 }
 ```
+{% endcode %}
 
 You may be a little concerned because our model is called `comment` and not `comments`. No need to worry: Wheels understands the need for the plural in conjunction with the `hasMany()` method.
 
@@ -68,10 +66,8 @@ Let's consider an association between `user` and `profile`. A lot of websites al
 
 In this case, our `profile` model would look like this:
 
-Profile.cfc
-
+{% code title="models/profile.cfc" %}
 ```javascript
-// models/profile.cfc
 component extends="Model" {
 
     function config() {
@@ -80,13 +76,12 @@ component extends="Model" {
 
 }
 ```
+{% endcode %}
 
 And our user model would look like this:
 
-User.cfc
-
+{% code title="models/user.cfc" %}
 ```javascript
-// models/user.cfc
 component extends="Model" {
 
     function config() {
@@ -95,6 +90,7 @@ component extends="Model" {
 
 }
 ```
+{% endcode %}
 
 As you can see, you do not pluralize "profile" in this case because there is only one profile.
 
@@ -130,10 +126,8 @@ You can create dependencies on `hasOne()` and `hasMany()` associations, but not 
 
 It's possible for a model to be associated to itself. Take a look at the below setup where an employee belongs to a manager for example:
 
-Employee.cfc
-
+{% code title="models/employee.cfc" %}
 ```javascript
-// models/employee.cfc
 component extends="Model" {
 
     function config() {
@@ -142,6 +136,7 @@ component extends="Model" {
 
 }
 ```
+{% endcode %}
 
 Both the manager and employee are stored in the same `employees` table and share the same `Employee` model.
 
@@ -151,10 +146,8 @@ This is important to remember because if you, for example, want to select the ma
 
 Here's an example of how to select both the name of the employee and their manager:
 
-employees.cfc
-
+{% code title="controllers/employees.cfc" %}
 ```javascript
-// controllers/employees.cfc --->
 component extends="Controller" {
  function index() {
 
@@ -163,10 +156,13 @@ component extends="Controller" {
  }
 }
 ```
+{% endcode %}
 
-> #### 📘
->
-> Because the default `joinType` for `belongsTo()` is `inner`, employees without a manager assigned to them will not be returned in the `findAll()` call above. To return all rows you can set `jointype` to `outer`instead.
+{% hint style="info" %}
+#### Know Your Joins
+
+Because the default `joinType` for `belongsTo()` is `inner`, employees without a manager assigned to them will not be returned in the `findAll()` call above. To return all rows you can set `jointype` to `outer`instead.
+{% endhint %}
 
 ### Database Table Setup
 
@@ -182,10 +178,8 @@ Let's pretend that you have a relationship between`author` and `post`, but you d
 
 Your post's `config()` method would then need to look like this:
 
-Post.cfc
-
+{% code title="models/post.cfc" %}
 ```javascript
-// models/post.cfc --->
 component extends="Model" {
 
     function config() {
@@ -194,6 +188,7 @@ component extends="Model" {
 
 }
 ```
+{% endcode %}
 
 You can keep your underscores if it's your preference or if it's required of your application.
 
@@ -209,10 +204,8 @@ To join data from related tables in our [findAll()](https://api.cfwheels.org/mod
 
 Here's what that call would look like:
 
-posts.cfc
-
+{% code title="controllers/posts.cfc" %}
 ```javascript
-// controllers/posts.cfc --->
 component extends="Controller" {
  function index() {
 
@@ -221,15 +214,14 @@ component extends="Controller" {
  }
 }
 ```
+{% endcode %}
 
 It's that simple. Wheels will then join the `authors` table automatically so that you can use that data along with the data from `posts`.
 
 Note that if you switch the above statement around like this:
 
-authors.cfc
-
+{% code title="controllers/authors.cfc" %}
 ```javascript
-// controllers/authors.cfc --->
 component extends="Controller" {
  function index() {
 
@@ -238,6 +230,7 @@ component extends="Controller" {
  }
 }
 ```
+{% endcode %}
 
 Then you would need to specify "post" in its plural form, "posts." If you're thinking about when to use the singular form and when to use the plural form, just use the one that seems most natural.
 
@@ -245,10 +238,8 @@ If you look at the two examples above, you'll see that in example #1, you're ask
 
 You're not limited to specifying just one association in the `include` argument. You can for example return data for `authors, posts`, and `bios` in one call like this:
 
-authors.cfc
-
+{% code title="controllers/authors.cfc" %}
 ```javascript
-// controllers/authors.cfc --->
 component extends="Controller" {
  function index() {
 
@@ -257,6 +248,7 @@ component extends="Controller" {
  }
 }
 ```
+{% endcode %}
 
 To include several tables, simply delimit the names of the models with a comma. All models should contain related associations, or else you'll get a mountain of repeated data back.
 
@@ -264,10 +256,8 @@ To include several tables, simply delimit the names of the models with a comma. 
 
 When you need to include tables more than one step away in a chain of joins, you will need to start using parenthesis. Look at the following example:
 
-Comments.cfc
-
+{% code title="controllers/comments.cfc" %}
 ```javascript
-// controllers/comments.cfc --->
 component extends="Controller" {
  function index() {
 
@@ -276,6 +266,7 @@ component extends="Controller" {
  }
 }
 ```
+{% endcode %}
 
 The use of parentheses above tells Wheels to look for an association named `author` on the `post` model instead of on the `comment` model. (Looking at the `comment` model is the default behavior when not using parenthesis.)
 
@@ -287,10 +278,8 @@ In order to include both columns, you can override this behavior with the `selec
 
 For example, if we had a column named `name` in both your `posts` and `authors` tables, then you could use the `select` argument like so:
 
-posts.cfc
-
+{% code title="controllers/posts.cfc" %}
 ```javascript
-// controllers/posts.cfc --->
 component extends="Controller" {
  function index() {
 
@@ -302,6 +291,7 @@ component extends="Controller" {
  }
 }
 ```
+{% endcode %}
 
 You would need to hard-code all column names that you need in that case, which does remove some of the simplicity. There are always trade-offs!
 
@@ -382,8 +372,6 @@ If it makes you feel any better, all calls in your Wheels request that generate 
 
 You can also pass arguments to dynamic shortcut methods where applicable. For example, with the `XXX()` method, perhaps we'd want to limit a `post`'s comment listing to just ones created today. We can pass a `where` argument similar to what is passed to the `findAll()` function that powers `XXX()` behind the scenes.
 
-JavaScript
-
 ```javascript
 today = DateFormat(Now(), "yyyy-mm-dd");
 comments = post.comments(where="createdAt >= '#today# 00:00:00'");
@@ -399,10 +387,8 @@ Let's say that we wanted to set up a relationship between `customers` and `publi
 
 Here are the representative models:
 
-Customer.cfc
-
+{% code title="models/Customer.cfc" %}
 ```javascript
-// models/Customer.cfc --->
 component extends="Model" {
 
     function config() {
@@ -411,11 +397,10 @@ component extends="Model" {
 
 }
 ```
+{% endcode %}
 
-Publication.cfc
-
+{% code title="models/Publication.cfc" %}
 ```javascript
-// models/Publication.cfc
 component extends="Model" {
 
     function config() {
@@ -424,11 +409,10 @@ component extends="Model" {
 
 }
 ```
+{% endcode %}
 
-Subscription.cfc
-
+{% code title="models/Subscription.cfc" %}
 ```javascript
-// models/Subscription.cfc
 component extends="Model" {
 
     function config() {
@@ -438,6 +422,7 @@ component extends="Model" {
 
 }
 ```
+{% endcode %}
 
 This assumes that there are foreign key columns in `subscriptions` called `customerid` and `publicationid`.
 
@@ -447,10 +432,8 @@ At this point, it's still fairly easy to get data from the many-to-many associat
 
 We can include the related tables from the `subscription` bridge entity to get the same effect:
 
-subscriptions.cfc
-
+{% code title="controllers/subscriptions.cfc" %}
 ```
-// controllers/subscriptions.cfc --->
 component extends="Controller" {
  function index() {
 
@@ -459,6 +442,7 @@ component extends="Controller" {
  }
 }
 ```
+{% endcode %}
 
 ### Creating a Shortcut for a Many-to-Many Relationship
 
