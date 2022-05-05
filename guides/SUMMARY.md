@@ -2,16 +2,16 @@
 
 ## INTRODUCTION
 
-* [Getting Started](README.md)
-  * [Running Local Development Serevers](1/introduction/readme/running-local-development-serevers.md)
-  * [Beginner Tutorial: Hello World](1/introduction/readme/beginner-tutorial-hello-world.md)
-  * [Beginner Tutorial: Hello Database](introduction/readme/beginner-tutorial-hello-database.md)
-  * [Tutorial: CFWheels, AJAX, and You](introduction/readme/tutorial-cfwheels-ajax-and-you.md)
+* [Getting Started](introduction/getting-started/getting-started.md)
+  * [Running Local Development Serevers](introduction/getting-started/running-local-development-serevers.md)
+  * [Beginner Tutorial: Hello World](introduction/getting-started/beginner-tutorial-hello-world.md)
+  * [Beginner Tutorial: Hello Database](introduction/getting-started/beginner-tutorial-hello-database.md)
+  * [Tutorial: CFWheels, AJAX, and You](introduction/getting-started/tutorial-cfwheels-ajax-and-you.md)
 * [Frameworks and CFWheels](introduction/frameworks-and-cfwheels.md)
 * [Requirements](introduction/requirements.md)
-* [Manual Installation](1/manual-installation.md)
-* [Upgrading](1/upgrading.md)
-* [Screencasts](1/screencasts.md)
+* [Manual Installation](introduction/manual-installation.md)
+* [Upgrading](introduction/upgrading.md)
+* [Screencasts](introduction/screencasts.md)
 
 ## Command Line Tools
 
