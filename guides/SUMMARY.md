@@ -15,8 +15,9 @@
 
 ## CommandBox & The CLI
 
-* [CLI Commands](commandbox-and-the-cli/cli-commands.md)
+* [CLI Commands](2/cli-commands.md)
 
 ## Working with CFWheels
 
 * [Conventions](working-with-cfwheels/conventions.md)
+* [Configuration and Defaults](working-with-cfwheels/configuration-and-defaults.md)
