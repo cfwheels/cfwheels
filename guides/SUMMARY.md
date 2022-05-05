@@ -76,3 +76,4 @@
 * [Nested Properties](database-interaction-through-models/nested-properties.md)
 * [Object Validation](database-interaction-through-models/object-validation.md)
 * [Object Callbacks](database-interaction-through-models/object-callbacks.md)
+* [Calculated Properties](database-interaction-through-models/calculated-properties.md)
