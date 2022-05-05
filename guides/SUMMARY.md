@@ -56,3 +56,4 @@
 * [Partials](displaying-views-to-users/partials.md)
 * [Linking Pages](displaying-views-to-users/linking-pages.md)
 * [Layouts](displaying-views-to-users/layouts.md)
+* [Form Helpers and Showing Errors](displaying-views-to-users/form-helpers-and-showing-errors.md)
