@@ -13,9 +13,9 @@
 * [Upgrading](1/upgrading.md)
 * [Screencasts](1/screencasts.md)
 
-## CommandBox & The CLI
+## Command Line Tools
 
-* [CLI Commands](2/cli-commands.md)
+* [CLI Commands](command-line-tools/cli-commands.md)
 
 ## Working with CFWheels
 
