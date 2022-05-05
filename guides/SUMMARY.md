@@ -68,3 +68,4 @@
 * [Creating Records](database-interaction-through-models/creating-records.md)
 * [Reading Records](database-interaction-through-models/reading-records.md)
 * [Updating Records](database-interaction-through-models/updating-records.md)
+* [Deleting Records](database-interaction-through-models/deleting-records.md)
