@@ -10,15 +10,13 @@ The CFWheels routing system inspects a request's HTTP verb and URL and decides w
 
 Consider the following request:
 
-HTTP
-
+{% code title="HTTP" %}
 ```http
 GET /products/5
 ```
+{% endcode %}
 
 The routing system may match the request to a route like this, which tells CFWheels to load the `show` action on the `Products` controller:
-
-CFScript
 
 ```javascript
 .get(name="product", pattern="products/[key]", to="products##show")
@@ -60,13 +58,13 @@ A _pattern_ is a URL path, sometimes with _parameters_ in `[squareBrackets]`. Pa
 
 You'll see patterns like these in routes:
 
-Example Route Patterns
-
+{% code title="Example Route Patterns" %}
 ```
 posts/[key]/[slug]
 posts/[key]
 posts
 ```
+{% endcode %}
 
 In this example, `key` and `slug` are parameters that must be present in the URL for the first route to match, and they are required when linking to the route. In the controller, these parameters will be available at `params.key` and `params.slug`, respectively.&#x20;
 
@@ -88,19 +86,21 @@ If you don't see debugging information at the bottom of the page, see the docs f
 
 Many parts of your application will likely be CRUD-based (create, read, update, delete) for specific types of records (users, products, categories). _Resources_ allow you to define a conventional routing structure for this common use case.
 
-> #### 🚧
->
-> You'll want to pay close attention to how resource-based routing works because this is considered an important convention in CFWheels applications.
+{% hint style="warning" %}
+#### Resources are important
+
+You'll want to pay close attention to how resource-based routing works because this is considered an important convention in CFWheels applications.
+{% endhint %}
 
 If we have a `products` table and want to have a section of our application for managing the products, we can set up the routes using the [resources()](https://api.cfwheels.org/mapper.resources.html) method like this in `config/routes.cfm`:
 
-CFScript: /config/routes.cfm
-
+{% code title="/config/routes.cfm" %}
 ```javascript
 mapper()
     .resources("products")
 .end();
 ```
+{% endcode %}
 
 This will set up the following routes, pointing to specific actions within the `products` controller:
 
@@ -116,17 +116,17 @@ This will set up the following routes, pointing to specific actions within the `
 
 Because the router uses a combination of HTTP verb and path, we only need 4 different URL paths to connect to 7 different actions on the controller.
 
-> #### 📘
->
-> There has been some confusion in the web community on whether requests to update data should happen along with a `PUT` or `PATCH` HTTP verb. It has been settled mostly that `PATCH` is the way to go for most situations. CFWheels resources set up both `PUT` and `PATCH` to address this confusion, but you should probably prefer linking up `PATCH` when you are able.
+{% hint style="info" %}
+#### Whats with the `PUT`?
+
+There has been some confusion in the web community on whether requests to update data should happen along with a `PUT` or `PATCH` HTTP verb. It has been settled mostly that `PATCH` is the way to go for most situations. CFWheels resources set up both `PUT` and `PATCH` to address this confusion, but you should probably prefer linking up `PATCH` when you are able.
+{% endhint %}
 
 ### Singular Resources
 
 Standard resources using the [resources()](https://api.cfwheels.org/mapper.resources.html) method assume that there is a primary key associated with the resource. (Notice the `[key]` placeholder in the paths listed above in the _Strongly Encouraged: Resource Routing_ section.)
 
 CFWheels also provides a _singular_ resource for routing that will not expose a primary key through the URL.
-
-CFScript
 
 ```javascript
 mapper()
@@ -138,7 +138,7 @@ This is handy especially when you're manipulating records related directly to th
 
 Calling [resource()](https://api.cfwheels.org/mapper.resource.html) (notice that there's no "s" on the end) then exposes the following routes:
 
-|          | HTTP Verb | Path       | Controller & Action | Description                            |
+| Name     | HTTP Verb | Path       | Controller & Action | Description                            |
 | -------- | --------- | ---------- | ------------------- | -------------------------------------- |
 | cart     | GET       | /cart      | carts.show          | Display the cart                       |
 | newCart  | GET       | /cart/new  | carts.new           | Display a form for creating a new cart |
@@ -166,14 +166,15 @@ As a refresher, these are the intended purpose for each HTTP verb:
 | PATCH/PUT | Update a record or set of records |
 | DELETE    | Delete a record                   |
 
-> #### 🚧
->
-> We strongly recommend that you not allow any `GET` requests to modify resources in your database (i.e., creating, updating, or deleting records). Always require `POST`, `PUT`, `PATCH`, or `DELETE` verbs for those sorts of routing endpoints.
+{% hint style="danger" %}
+#### Security Warning
+
+We strongly recommend that you not allow any `GET` requests to modify resources in your database (i.e., creating, updating, or deleting records). Always require `POST`, `PUT`, `PATCH`, or `DELETE` verbs for those sorts of routing endpoints.
+{% endhint %}
 
 Consider a few examples:
 
-CFScript
-
+{% code title="config/routes.cfm" %}
 ```javascript
 mapper()
     .patch(name="heartbeat", to="sessions##update")
@@ -190,6 +191,7 @@ mapper()
     .get(name="dashboard", controller="dashboards", action="show")
 .end();
 ```
+{% endcode %}
 
 Rather than creating a whole resource for simple one-off actions or pages, you can create individual endpoints for them.
 
@@ -197,8 +199,7 @@ Notice that you can use the `to="controller##action"` or use separate `controlle
 
 In fact, you could mock a `users` resource using these methods like so (though obviously there is little practical reason for doing so):
 
-CFScript: config/routes.cfm
-
+{% code title="config/routes.cfm" %}
 ```javascript
 mapper()
     // The following is roughly equivalent to .resources("users")
@@ -212,11 +213,11 @@ mapper()
     .get(name="users", to="users##index")
 .end();
 ```
+{% endcode %}
 
 If you need to limit the actions that are exposed by [resources()](https://api.cfwheels.org/mapper.resources.html) and [resource()](https://api.cfwheels.org/mapper.resource.html), you can also pass in `only` or `except`arguments:
 
-CFScript: config/routes.cfm
-
+{% code title="config/routes.cfm" %}
 ```javascript
 mapper()
     // Only offer endpoints for cart show, update, and delete:
@@ -235,6 +236,7 @@ mapper()
     .resources(name="wishlists", except="delete")
 .end();
 ```
+{% endcode %}
 
 ### Browser Support for PUT, PATCH, and DELETE
 
@@ -257,8 +259,6 @@ Let's say that we want to have an "admin" section of the application that is sep
 
 That's what the [namespace()](https://api.cfwheels.org/mapper.namespace.html) method is for:
 
-CFScript
-
 ```javascript
 mapper()
     .namespace("admin")
@@ -272,8 +272,6 @@ In this example, we have an admin section that will allow the user to manage pro
 ### Packages
 
 Let's say that you want to group a set of controllers together in a subfolder (aka package) in your application but don't want to affect a URL. You can do so using the `package` mapper method:&#x20;
-
-CFScript
 
 ```javascript
 mapper()
@@ -294,15 +292,13 @@ Let's consider an example where we want to enable CRUD for a `customer` and its 
 
 In this situation, we'd perhaps want for our URL to look like this for editing a specific customer's appointment:
 
-HTTP
-
+{% code title="HTTP" %}
 ```
 GET /customers/489/appointments/1909/edit
 ```
+{% endcode %}
 
 To code up this nested resource, we'd write this code in `config/routes.cfm`:
-
-CFScript
 
 ```javascript
 mapper()
@@ -337,8 +333,6 @@ You can nest resources and routes as deep as you want, though we recommend consi
 
 Here's an example of how nesting can be used with different route mapping methods:
 
-CFScript
-
 ```javascript
 mapper()
     // /products/[key]
@@ -363,17 +357,15 @@ mapper()
 
 CFWheels 1.x had a default routing pattern: `[controller]/[action]/[key]`. The convention for URLs was as follows:
 
-HTTP
-
+{% code title="HTTP" %}
 ```http
 GET /news/show/5
 ```
+{% endcode %}
 
 With this convention, the URL above told CFWheels to invoke the `show` action in the `news` controller. It also passed a parameter called `key` to the action, with a value of `5`.
 
 If you're upgrading from 1.x or still prefer this style of routing for your CFWheels 2+ application, you can use the [wildcard()](https://api.cfwheels.org/mapper.wildcard.html) method to enable it part of it:&#x20;
-
-CFScript
 
 ```javascript
 mapper()
@@ -385,8 +377,6 @@ CFWheels 2 will only generate routes for `[controller]/[action]`, however, becau
 
 Here is a sample of the patterns that `wildcard` generates:
 
-HTTP
-
 ```
 /news/new
 /news/create
@@ -396,27 +386,25 @@ HTTP
 
 The `wildcard` method by default will only generate routes for the `GET` request method. If you would like to enable other request methods on the wildcard, you can pass in the `method` or `methods` argument:
 
-CFScript
-
 ```javascript
 mapper()
     .wildcard(methods="get,post")
 .end();
 ```
 
-> #### ❗️
->
-> Specifying a `method` argument to `wildcard` with anything other than `get` gives you the potential to accidentally expose a route that could change data in your application with a `GET` request. This opens your application to Cross Site Request Forgery (CSRF) vulnerabilities.
->
-> `wildcard` is provided for convenience. Once you're comfortable with routing concepts in CFWheels, we strongly recommend that you use resources (`resources`, `resource`) and the other verb-based helpers (`get`, `post`, `patch`, `put`, and `delete`) listed above instead.
+{% hint style="danger" %}
+#### Security Warning
+
+Specifying a `method` argument to `wildcard` with anything other than `get` gives you the potential to accidentally expose a route that could change data in your application with a `GET` request. This opens your application to Cross Site Request Forgery (CSRF) vulnerabilities.
+
+`wildcard` is provided for convenience. Once you're comfortable with routing concepts in CFWheels, we strongly recommend that you use resources (`resources`, `resource`) and the other verb-based helpers (`get`, `post`, `patch`, `put`, and `delete`) listed above instead.
+{% endhint %}
 
 ### Order of Precedence
 
 CFWheels gives precedence to the first listed custom route in your `config/routes.cfm` file.
 
 Consider this example to demonstrate when this can create unexpected issues:
-
-CFScript
 
 ```javascript
 mapper()
@@ -433,8 +421,6 @@ mapper()
 In this case, when the user visits `/users/promoted`, this will load the `show` action of the `users` controller because that was the first pattern that was matched by the CFWheels router.
 
 To fix this, you need the more specific route listed first, leaving the dynamic routing to pick up the less specific pattern:
-
-CFScript
 
 ```javascript
 mapper()
@@ -456,8 +442,6 @@ Let's say you want to have both `/welcome-to-the-site` and `/terms-of-use` handl
 
 First, add a new route to `config/routes.cfm` that catches all pages like this:
 
-CFScript
-
 ```javascript
 mapper()
     .get(name="page", pattern="[title]", to="pages##show")
@@ -469,8 +453,6 @@ Now when you access `/welcome-to-the-site`, this route will be triggered and the
 The problem with this is that this will break any of your normal controllers though, so you'll need to add them specifically _before_ this route. (Remember the order of precedence explained above.)
 
 You'll end up with a `config/routes.cfm` file looking something like this:
-
-CFScript
 
 ```javascript
 mapper()
@@ -487,8 +469,6 @@ mapper()
 
 The constraints feature can be added either at an argument level directly into a `resources()` or other individual route call, or can be added as a chained function in it's own right. Constraints allow you to add regex to a route matching pattern, so you could for instance, have `/users/1/` and `/users/bob/` go to different controller actions.
 
-CFScript
-
 ```javascript
 mapper()
    // users/1234 
@@ -499,8 +479,6 @@ mapper()
 ```
 
 Constraints can also be used as a wrapping function:
-
-CFScript
 
 ```javascript
 mapper()
@@ -518,8 +496,6 @@ In this example, the `key` argument being made of digits only will apply to all 
 
 Wildcard segments allow for wildcards to be used at any point in the URL pattern.
 
-CFScript
-
 ```javascript
 mapper()
   // Match /user/anything/you/want
@@ -534,8 +510,6 @@ In the above example, `anything/you/want` you gets set to the `params.username` 
 ### Shallow Resources
 
 If you have a nested resource where you want to enforce the presence of the parent resource, but only on creation of that resource, then shallow routes can give you a bit of a short cut. An example might be Blog Articles, which have Comments. If we're thinking in terms of our models, let's say that Articles _Have Many_ Comments.
-
-CFScript
 
 ```javascript
 mapper()
@@ -557,8 +531,6 @@ So in this case, we get `index`, `new` and `create` with the `/articles/[article
 
 A `member()` block is used within a nested resource to create routes which act 'on an object'; A member route will require an ID, because it _acts on_ a member. `photos/1/preview` is an example of a member route, because it acts on (and displays) a single object.
 
-CFScript
-
 ```javascript
 mapper()
     // Create a route like `photos/1/preview`
@@ -571,8 +543,6 @@ mapper()
 ```
 
 A collection route doesn't require an id because it acts on a collection of objects. `photos/search` is an example of a collection route, because it acts on (and displays) a collection of objects.
-
-CFScript
 
 ```javascript
 mapper()
@@ -605,15 +575,15 @@ This is useful for the occasional redirect, and saves you having to create a ded
 
 ### Disabling automatic \[format] routes
 
-> #### 📘
->
-> Introduced in CFWheels 2.1
+{% hint style="info" %}
+#### Note
+
+Introduced in CFWheels 2.1
+{% endhint %}
 
 By default, CFWheels will add `.[format]` routes when using `resources()`. You may wish to disable this behaviour to trim down the number of generated routes for clarity and performance reasons (or you just don't use this feature!).
 
 You can either disable this via `mapFormat = false` on a per resource basis, or more widely, on a mapper basis:
-
-JavaScript
 
 ```javascript
 // For all chained calls
