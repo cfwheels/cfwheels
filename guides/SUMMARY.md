@@ -85,8 +85,8 @@
   * [Migrations In Production](database-interaction-through-models/database-migrations/migrations-in-production.md)
 * [Using Multiple Data Sources](database-interaction-through-models/using-multiple-data-sources.md)
 
-## Group 1
+## Plugins
 
-* [Installing and Using Plugins](group-1/installing-and-using-plugins.md)
-* [Developing Plugins](group-1/developing-plugins.md)
-* [Publishing Plugins](group-1/publishing-plugins.md)
+* [Installing and Using Plugins](plugins/installing-and-using-plugins.md)
+* [Developing Plugins](plugins/developing-plugins.md)
+* [Publishing Plugins](plugins/publishing-plugins.md)
