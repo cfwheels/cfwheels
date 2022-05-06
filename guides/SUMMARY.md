@@ -80,3 +80,4 @@
 * [Transactions](database-interaction-through-models/transactions.md)
 * [Dirty Records](database-interaction-through-models/dirty-records.md)
 * [Soft Delete](database-interaction-through-models/soft-delete.md)
+* [Automatic Time Stamps](database-interaction-through-models/automatic-time-stamps.md)
