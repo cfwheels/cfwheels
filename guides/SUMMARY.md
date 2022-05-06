@@ -91,9 +91,11 @@
 * [Developing Plugins](plugins/developing-plugins.md)
 * [Publishing Plugins](plugins/publishing-plugins.md)
 
-***
+## External Links
 
 * [Source Code](https://github.com/cfwheels/cfwheels)
 * [Issue Tracker](https://github.com/cfwheels/cfwheels/issues)
 * [Sponsor Us](https://opencollective.com/cfwheels)
 * [Community](https://github.com/cfwheels/cfwheels/discussions)
+
+***
