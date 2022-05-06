@@ -122,4 +122,19 @@ component extends="wheels.tests.Test" {
 		assert("r2 EQ '/example/my-action'");
 		assert("r3 EQ '/example/my-action/123'");
 	}
+
+	function test_urlfor_issues_1098() {
+		mapper = $mapper();
+		mapper
+			.$draw()
+			.wildcard(mapKey = true)
+			.end();
+		$setNamedRoutePositions();
+
+		actual = urlFor(action = "MyAction");
+		expected = "/my-action";
+
+		assert('actual eq expected');
+	}
+
 }

@@ -632,7 +632,7 @@ public string function URLFor(
 	// Loop over all routes to find matching one, break the loop on first match.
 	// If the route is already in the cache we get it from there instead.
 	if (!Len(arguments.route) && Len(arguments.action)) {
-		if (!Len(arguments.controller)) {
+		if (!Len(arguments.controller) && StructKeyExists(local.params, "controller")) {
 			arguments.controller = local.params.controller;
 		}
 		local.key = arguments.controller & "##" & arguments.action;

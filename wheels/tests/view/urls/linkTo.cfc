@@ -79,4 +79,11 @@ component extends="wheels.tests.Test" {
 		assert('e eq r');
 	}
 
+	function test_linkTo_issues_1098() {
+		actual = _controller.linkTo(text="bye", action="goodbye");
+		expected = '<a href="#application.wheels.webpath#goodbye">bye</a>';
+
+		assert('actual eq expected');
+	}
+
 }
