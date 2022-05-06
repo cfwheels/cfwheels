@@ -12,7 +12,7 @@ With CFWheels 2.x, you can now create, alter and populate your database via cfsc
 
 If you're new to this concept, the best way to get going is by following the `[migrations]` link in the debug footer to load the built in GUI. Naturally, you will need your application's datasource setup and ready to go to get started.
 
-![](https://files.readme.io/cc70cb0-dbmigrate\_1.png)![](https://files.readme.io/cc70cb0-dbmigrate\_1.png)
+![](../../.gitbook/assets/cc70cb0-dbmigrate\_1.png)
 
 On the first tab, we provide some simple database info, just so you can check you're running against the correct datasource. We're going to start by creating a simple template.
 
@@ -20,7 +20,7 @@ On the first tab, we provide some simple database info, just so you can check yo
 
 The create template tab allows for creation of either a blank CFC file, or from a selection of pre-populated templates. Whilst none of these templates will provide all the information required for a complete database migration, they are a good starting point and fairly heavily commented.
 
-![](https://files.readme.io/a70878e-dbmigrate\_2.png)![](https://files.readme.io/a70878e-dbmigrate\_2.png)
+![](../../.gitbook/assets/a70878e-dbmigrate\_2.png)
 
 As we've not setup any migrations before, the system needs to know what prefix we want to use for our migration files. Each approach - `Timestamp` and `Numeric` is perfectly valid, but we recommend the `Timestamp` prefix if you're just starting out. Once you have a migration file, this section will disappear as it will get that info from the existing files.
 
@@ -143,11 +143,11 @@ This would be a typical setup for a join table where you have a many to many rel
 
 Returning to our migration GUI, we can now see some options under the Migrations tab.
 
-![](https://files.readme.io/aa84665-dbmigrate\_3.png)![](https://files.readme.io/aa84665-dbmigrate\_3.png)
+![](../../.gitbook/assets/aa84665-dbmigrate\_3.png)
 
 Simply click the button to migrate the database to our new version. From this screen we can also roll back to previous schema versions, or even reset the database back to `0`.
 
-![](https://files.readme.io/eb3836d-dbmigrate\_4.png)![](https://files.readme.io/eb3836d-dbmigrate\_4.png)
+![](../../.gitbook/assets/eb3836d-dbmigrate\_4.png)
 
 ### Migrator Configuration Settings
 
