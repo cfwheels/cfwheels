@@ -81,3 +81,5 @@
 * [Dirty Records](database-interaction-through-models/dirty-records.md)
 * [Soft Delete](database-interaction-through-models/soft-delete.md)
 * [Automatic Time Stamps](database-interaction-through-models/automatic-time-stamps.md)
+* [Database Migrations](database-interaction-through-models/database-migrations/README.md)
+  * [Migrations In Production](database-interaction-through-models/database-migrations/migrations-in-production.md)
