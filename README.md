@@ -42,11 +42,11 @@ version).
 
 [CFWheels][1] is released under the Apache License Version 2.0.
 
+## Our Contributors
+
 <a href="https://github.com/cfwheels/cfwheels/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=cfwheels/cfwheels" />
 </a>
-
-## Our Contributors
 
 Made with [contrib.rocks](https://contrib.rocks).
 
