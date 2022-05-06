@@ -15,6 +15,7 @@ component extends="wheels.tests.Test" {
 	private string function getDatetimeType() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
+				return "TIMESTAMP";
 			case "MicrosoftSQLServer":
 			case "MySQL":
 				return "DATETIME";

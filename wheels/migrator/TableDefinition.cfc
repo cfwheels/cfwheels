@@ -97,12 +97,7 @@ component extends="Base" {
 	 * [section: Migrator]
 	 * [category: Table Definition Functions]
 	 */
-	public any function bigInteger(
-		string columnNames,
-		numeric limit,
-		string default,
-		boolean null
-	) {
+	public any function bigInteger(string columnNames, numeric limit, string default, boolean null) {
 		$combineArguments(args = arguments, combine = "columnNames,columnName", required = true);
 		arguments.columnType = "biginteger";
 		local.iEnd = ListLen(arguments.columnNames);
@@ -187,13 +182,7 @@ component extends="Base" {
 	 * [section: Migrator]
 	 * [category: Table Definition Functions]
 	 */
-	public any function decimal(
-		string columnNames,
-		string default,
-		boolean null,
-		numeric precision,
-		numeric scale
-	) {
+	public any function decimal(string columnNames, string default, boolean null, numeric precision, numeric scale) {
 		$combineArguments(args = arguments, combine = "columnNames,columnName", required = true);
 		arguments.columnType = "decimal";
 		local.iEnd = ListLen(arguments.columnNames);
@@ -227,12 +216,7 @@ component extends="Base" {
 	 * [section: Migrator]
 	 * [category: Table Definition Functions]
 	 */
-	public any function integer(
-		string columnNames,
-		numeric limit,
-		string default,
-		boolean null
-	) {
+	public any function integer(string columnNames, numeric limit, string default, boolean null) {
 		$combineArguments(args = arguments, combine = "columnNames,columnName", required = true);
 		arguments.columnType = "integer";
 		local.iEnd = ListLen(arguments.columnNames);
@@ -249,12 +233,7 @@ component extends="Base" {
 	 * [section: Migrator]
 	 * [category: Table Definition Functions]
 	 */
-	public any function string(
-		string columnNames,
-		any limit,
-		string default,
-		boolean null
-	) {
+	public any function string(string columnNames, any limit, string default, boolean null) {
 		$combineArguments(args = arguments, combine = "columnNames,columnName", required = true);
 		arguments.columnType = "string";
 		local.iEnd = ListLen(arguments.columnNames);
@@ -271,12 +250,7 @@ component extends="Base" {
 	 * [section: Migrator]
 	 * [category: Table Definition Functions]
 	 */
-	public any function char(
-		string columnNames,
-		any limit,
-		string default,
-		boolean null
-	) {
+	public any function char(string columnNames, any limit, string default, boolean null) {
 		$combineArguments(args = arguments, combine = "columnNames,columnName", required = true);
 		arguments.columnType = "char";
 		local.iEnd = ListLen(arguments.columnNames);
@@ -344,12 +318,7 @@ component extends="Base" {
 	 * [section: Migrator]
 	 * [category: Table Definition Functions]
 	 */
-	public any function timestamp(
-		string columnNames,
-		string default,
-		boolean null,
-		string columnType = "datetime"
-	) {
+	public any function timestamp(string columnNames, string default, boolean null, string columnType = "datetime") {
 		$combineArguments(args = arguments, combine = "columnNames,columnName", required = true);
 		local.iEnd = ListLen(arguments.columnNames);
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {

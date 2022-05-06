@@ -25,9 +25,8 @@ public void function usesLayout(
 
 	// If the layout is a function, the function itself should handle all the logic.
 	if (
-		(StructKeyExists(this, arguments.template) && IsCustomFunction(this[arguments.template])) || IsCustomFunction(
-			arguments.template
-		)
+		(StructKeyExists(this, arguments.template) && IsCustomFunction(this[arguments.template]))
+		|| IsCustomFunction(arguments.template)
 	) {
 		StructDelete(arguments, "except");
 		StructDelete(arguments, "only");
@@ -79,20 +78,18 @@ public any function $useLayout(required string $action) {
 		local.rv = local.layout.useDefault;
 
 		if (
-			(!StructKeyExists(local.layout, "except") || !ListFindNoCase(local.layout.except, arguments.$action)) && (
-				!StructKeyExists(local.layout, "only") || ListFindNoCase(local.layout.only, arguments.$action)
-			)
+			(!StructKeyExists(local.layout, "except") || !ListFindNoCase(local.layout.except, arguments.$action))
+			&& (!StructKeyExists(local.layout, "only") || ListFindNoCase(local.layout.only, arguments.$action))
 		) {
 			if (isAjax() && StructKeyExists(local.layout, "ajax") && Len(local.layout.ajax)) {
 				local.layoutType = "ajax";
 			}
-
 			if (
 				(
-					StructKeyExists(this, local.layout[local.layoutType]) && IsCustomFunction(
-						this[local.layout[local.layoutType]]
-					)
-				) || IsCustomFunction(local.layout[local.layoutType])
+					StructKeyExists(this, local.layout[local.layoutType])
+					&& IsCustomFunction(this[local.layout[local.layoutType]])
+				)
+				|| IsCustomFunction(local.layout[local.layoutType])
 			) {
 				local.invokeArgs = {};
 				local.invokeArgs.action = arguments.$action;
@@ -114,7 +111,10 @@ public any function $useLayout(required string $action) {
  * Internal function.
  */
 public string function $renderLayout(required string $content, required $layout) {
-	if ((IsBoolean(arguments.$layout) && arguments.$layout) || (!IsBoolean(arguments.$layout) && Len(arguments.$layout))) {
+	if (
+		(IsBoolean(arguments.$layout) && arguments.$layout)
+		|| (!IsBoolean(arguments.$layout) && Len(arguments.$layout))
+	) {
 		// Store the content in a variable in the request scope so it can be accessed by the includeContent function that the developer uses in layout files.
 		// This is done so we avoid passing data to/from it since it would complicate things for the developer.
 		contentFor(body = arguments.$content, overwrite = true);
@@ -124,10 +124,8 @@ public string function $renderLayout(required string $content, required $layout)
 		if (IsBoolean(arguments.$layout)) {
 			local.layoutFileExists = false;
 			if (
-				!ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) && !ListFindNoCase(
-					application.wheels.nonExistingLayoutFiles,
-					variables.params.controller
-				)
+				!ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller)
+				&& !ListFindNoCase(application.wheels.nonExistingLayoutFiles, variables.params.controller)
 			) {
 				local.file = local.viewPath & "/" & LCase(variables.params.controller) & "/layout.cfm";
 				if (FileExists(ExpandPath(local.file))) {
@@ -147,7 +145,10 @@ public string function $renderLayout(required string $content, required $layout)
 					}
 				}
 			}
-			if (ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) || local.layoutFileExists) {
+			if (
+				ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller)
+				|| local.layoutFileExists
+			) {
 				local.include &= "/" & variables.params.controller & "/" & "layout.cfm";
 			} else {
 				local.include &= "/" & "layout.cfm";

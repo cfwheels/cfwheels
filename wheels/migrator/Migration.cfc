@@ -401,18 +401,15 @@ component extends="Base" {
 		local.columnNames = "";
 		local.columnValues = "";
 		if (
-			!StructKeyExists(arguments, application[local.appKey].timeStampOnCreateProperty) && ListFindNoCase(
-				$getColumns(arguments.table),
-				application[local.appKey].timeStampOnCreateProperty
-			)
+			!StructKeyExists(arguments, application[local.appKey].timeStampOnCreateProperty)
+			&& ListFindNoCase($getColumns(arguments.table), application[local.appKey].timeStampOnCreateProperty)
 		) {
 			arguments[application[local.appKey].timeStampOnCreateProperty] = $timestamp();
 		}
 		if (
-			application[local.appKey].setUpdatedAtOnCreate && !StructKeyExists(
-				arguments,
-				application[local.appKey].timeStampOnUpdateProperty
-			) && ListFindNoCase($getColumns(arguments.table), application[local.appKey].timeStampOnUpdateProperty)
+			application[local.appKey].setUpdatedAtOnCreate
+			&& !StructKeyExists(arguments, application[local.appKey].timeStampOnUpdateProperty)
+			&& ListFindNoCase($getColumns(arguments.table), application[local.appKey].timeStampOnUpdateProperty)
 		) {
 			announce(application[local.appKey].setUpdatedAtOnCreate);
 			arguments[application[local.appKey].timeStampOnUpdateProperty] = $timestamp();
@@ -463,10 +460,8 @@ component extends="Base" {
 		local.appKey = $appKey();
 		local.columnUpdates = "";
 		if (
-			!StructKeyExists(arguments, application[local.appKey].timeStampOnUpdateProperty) && ListFindNoCase(
-				$getColumns(arguments.table),
-				application[local.appKey].timeStampOnUpdateProperty
-			)
+			!StructKeyExists(arguments, application[local.appKey].timeStampOnUpdateProperty)
+			&& ListFindNoCase($getColumns(arguments.table), application[local.appKey].timeStampOnUpdateProperty)
 		) {
 			arguments[application[local.appKey].timeStampOnUpdateProperty] = $timestamp();
 		}

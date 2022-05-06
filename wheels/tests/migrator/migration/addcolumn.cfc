@@ -18,12 +18,7 @@ component extends="wheels.tests.Test" {
 		t.string(columnNames = "stringcolumn");
 		t.create();
 
-		migration.addColumn(
-			table = tableName,
-			columnType = 'integer',
-			columnName = columnName,
-			null = true
-		);
+		migration.addColumn(table = tableName, columnType = 'integer', columnName = columnName, null = true);
 		info = $dbinfo(datasource = application.wheels.dataSourceName, table = tableName, type = "columns");
 		actual = ValueList(info.column_name);
 		expected = columnName;

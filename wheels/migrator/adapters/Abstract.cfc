@@ -12,10 +12,8 @@ component {
 				sql = variables.sqlTypes[arguments.type]['name'];
 				if (arguments.type == 'decimal') {
 					if (
-						!StructKeyExists(arguments.options, 'precision') && StructKeyExists(
-							variables.sqlTypes[arguments.type],
-							'precision'
-						)
+						!StructKeyExists(arguments.options, 'precision')
+						&& StructKeyExists(variables.sqlTypes[arguments.type], 'precision')
 					) {
 						arguments.options.precision = variables.sqlTypes[arguments.type]['precision'];
 					}
@@ -77,11 +75,10 @@ component {
 		if (StructKeyExists(arguments.options, 'type') && arguments.options.type != 'primaryKey') {
 			if (StructKeyExists(arguments.options, 'default') && optionsIncludeDefault(argumentCollection = arguments.options)) {
 				if (
-					arguments.options.default eq "NULL" || (
-						arguments.options.default eq "" && ListFindNoCase(
-							"boolean,date,datetime,time,timestamp,decimal,float,integer",
-							arguments.options.type
-						)
+					arguments.options.default eq "NULL"
+					|| (
+						arguments.options.default eq ""
+						&& ListFindNoCase("boolean,date,datetime,time,timestamp,decimal,float,integer", arguments.options.type)
 					)
 				) {
 					arguments.sql = arguments.sql & " DEFAULT NULL";
@@ -136,12 +133,7 @@ component {
 	 * surrounds table or index names with quotes
 	 */
 	public string function quoteTableName(required string name) {
-		return "'#Replace(
-			objectCase(arguments.name),
-			".",
-			"`.`",
-			"ALL"
-		)#'";
+		return "'#Replace(objectCase(arguments.name), ".", "`.`", "ALL")#'";
 	}
 
 	/**

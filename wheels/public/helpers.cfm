@@ -86,12 +86,7 @@ function outputSetting(array setting) {
 	local.rv = "";
 	for (var i = 1; i LTE ArrayLen(arguments.setting); i = i + 1) {
 		local.rv &= '<tr><td class="four wide">';
-		local.rv &= ReReplace(
-			ReReplace(arguments.setting[i], "(^[a-z])", "\u\1"),
-			"([A-Z])",
-			" \1",
-			"all"
-		);
+		local.rv &= ReReplace(ReReplace(arguments.setting[i], "(^[a-z])", "\u\1"), "([A-Z])", " \1", "all");
 		local.rv &= '</td><td class="eight wide">';
 		local.rv &= formatSettingOutput(get(arguments.setting[i]));
 		local.rv &= '</td></tr>';
@@ -325,12 +320,7 @@ string function $replaceSeeTag(required string string, required string name, req
 	if (ArrayLen(local.tags)) {
 		for (local.tag in local.tags) {
 			// Get the contents of see:"Foo"
-			var lookUpfunctionName = Replace(
-				ListLast(local.tag, ":"),
-				"]",
-				"",
-				"one"
-			);
+			var lookUpfunctionName = Replace(ListLast(local.tag, ":"), "]", "", "one");
 			// Look for that function in the main function struct
 			local.match = ArrayFind(arguments.allfunctions, function(struct) {
 				return (struct.name == lookUpfunctionName);
@@ -412,9 +402,7 @@ array function $populateDocSections(required array docFunctions) {
 	local.distinctSections = [];
 	for (local.doc in arguments.docFunctions) {
 		if (StructKeyExists(local.doc.tags, "section") && Len(local.doc.tags.section)) {
-			if (
-				!ArrayFindNoCase(local.distinctSections, local.doc.tags.section)
-			) {
+			if (!ArrayFindNoCase(local.distinctSections, local.doc.tags.section)) {
 				ArrayAppend(local.rv, {"name" = local.doc.tags.section, "categories" = []});
 				ArrayAppend(local.distinctSections, local.doc.tags.section);
 			}
@@ -502,17 +490,7 @@ string function $getDocTag(required string string, required string tagname) {
 	local.tags = ReMatchNoCase('\[((' & local.tagname & '?):(.*?))\]', local.string);
 	if (ArrayLen(local.tags)) {
 		for (local.tag in local.tags) {
-			local.rv = ListAppend(
-				local.rv,
-				Trim(
-					Replace(
-						ListLast(local.tag, ":"),
-						"]",
-						"",
-						"one"
-					)
-				)
-			);
+			local.rv = ListAppend(local.rv, Trim(Replace(ListLast(local.tag, ":"), "]", "", "one")));
 		}
 	}
 	return local.rv;
@@ -528,12 +506,7 @@ string function $replaceDocLink(required string string) {
 	local.tags = ReMatchNoCase('\[((doc?):(.*?))\]', local.rv);
 	if (ArrayLen(local.tags)) {
 		for (local.tag in local.tags) {
-			local.link = Replace(
-				ListLast(local.tag, ":"),
-				"]",
-				"",
-				"one"
-			);
+			local.link = Replace(ListLast(local.tag, ":"), "]", "", "one");
 			local.rv = ReplaceNoCase(local.rv, local.tag, "<a href='##" & LCase(local.link) & "'>" & local.link & "</a>");
 		}
 	}
@@ -545,12 +518,7 @@ string function $replaceDocLink(required string string) {
  * @string String to search
  **/
 string function $stripDocTags(required string string) {
-	return ReReplaceNoCase(
-		arguments.string,
-		"\[((.*?):(.*?))\]",
-		"",
-		"ALL"
-	);
+	return ReReplaceNoCase(arguments.string, "\[((.*?):(.*?))\]", "", "ALL");
 }
 
 
@@ -590,12 +558,7 @@ string function $hintOutput(str) {
  * @str The String to search
  */
 string function $backTickReplace(str) {
-	return ReReplaceNoCase(
-		arguments.str,
-		'`(.*?)`',
-		'<code>\1</code>',
-		"ALL"
-	);
+	return ReReplaceNoCase(arguments.str, '`(.*?)`', '<code>\1</code>', "ALL");
 }
 /**
  * Turns "My Thing" into "mything"

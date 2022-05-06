@@ -25,7 +25,10 @@ public string function $getDBType() {
 	);
 	local.adapterName = "";
 	if (
-		local.info.driver_name Contains "SQLServer" || local.info.driver_name Contains "Microsoft SQL Server" || local.info.driver_name Contains "MS SQL Server" || local.info.database_productname Contains "Microsoft SQL Server"
+		local.info.driver_name Contains "SQLServer"
+		|| local.info.driver_name Contains "Microsoft SQL Server"
+		|| local.info.driver_name Contains "MS SQL Server"
+		|| local.info.database_productname Contains "Microsoft SQL Server"
 	) {
 		local.adapterName = "MicrosoftSQLServer";
 	} else if (local.info.driver_name Contains "MySQL") {

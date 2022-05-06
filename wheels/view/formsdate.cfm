@@ -262,12 +262,7 @@ public string function $yearMonthHourMinuteSecondSelectTagContent() {
 	if (arguments.$type == "minute" || arguments.$type == "second") {
 		arguments.optionContent = NumberFormat(arguments.optionContent, "09");
 	}
-	return $element(
-		name = "option",
-		content = arguments.optionContent,
-		attributes = local.args,
-		encode = false
-	);
+	return $element(name = "option", content = arguments.optionContent, attributes = local.args, encode = false);
 }
 
 /**

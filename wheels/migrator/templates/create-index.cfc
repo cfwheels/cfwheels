@@ -23,12 +23,7 @@ component extends="[extends]" hint="[description]" {
 
 			if (StructKeyExists(local, "exception")) {
 				transaction action="rollback";
-				Throw(
-					errorCode = "1",
-					detail = local.exception.detail,
-					message = local.exception.message,
-					type = "any"
-				);
+				Throw(errorCode = "1", detail = local.exception.detail, message = local.exception.message, type = "any");
 			} else {
 				transaction action="commit";
 			}
@@ -45,12 +40,7 @@ component extends="[extends]" hint="[description]" {
 
 			if (StructKeyExists(local, "exception")) {
 				transaction action="rollback";
-				Throw(
-					errorCode = "1",
-					detail = local.exception.detail,
-					message = local.exception.message,
-					type = "any"
-				);
+				Throw(errorCode = "1", detail = local.exception.detail, message = local.exception.message, type = "any");
 			} else {
 				transaction action="commit";
 			}

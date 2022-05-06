@@ -1,0 +1,7 @@
+root: ./guides
+
+​structure:
+    readme: introduction/getting-started/getting-started.md
+    summary: SUMMARY.md​
+
+redirects:

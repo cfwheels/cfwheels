@@ -2,12 +2,7 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		user = model("user");
-		args = {
-			username = "myusername",
-			password = "mypassword",
-			firstname = "myfirstname",
-			lastname = "mylastname"
-		};
+		args = {username = "myusername", password = "mypassword", firstname = "myfirstname", lastname = "mylastname"};
 	}
 
 	function test_can_create_new_record_validation_execute() {

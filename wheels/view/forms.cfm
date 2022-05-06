@@ -91,10 +91,11 @@ public string function startFormTag(
 	if (!Len(arguments.route) && Len(arguments.controller) && Len(arguments.action) && Len(arguments.method)) {
 		for (local.route in application.wheels.routes) {
 			if (
-				StructKeyExists(local.route, "controller") && local.route.controller == arguments.controller && StructKeyExists(
-					local.route,
-					"action"
-				) && local.route.action == arguments.action && ListFindNoCase(local.route.methods, arguments.method)
+				StructKeyExists(local.route, "controller")
+				&& local.route.controller == arguments.controller
+				&& StructKeyExists(local.route, "action")
+				&& local.route.action == arguments.action
+				&& ListFindNoCase(local.route.methods, arguments.method)
 			) {
 				arguments.route = local.route.name;
 				local.routeAndMethodMatch = true;
@@ -118,10 +119,8 @@ public string function startFormTag(
 		if (!local.routeAndMethodMatch) {
 			for (local.position in ListToArray(application.wheels.namedRoutePositions[arguments.route])) {
 				if (
-					StructKeyExists(application.wheels.routes[local.position], "methods") && ListFindNoCase(
-						application.wheels.routes[local.position].methods,
-						arguments.method
-					)
+					StructKeyExists(application.wheels.routes[local.position], "methods")
+					&& ListFindNoCase(application.wheels.routes[local.position].methods, arguments.method)
 				) {
 					local.routeAndMethodMatch = true;
 				}
@@ -192,13 +191,7 @@ public string function startFormTag(
  * @append [see:textField]
  * @encode [see:styleSheetLinkTag].
  */
-public string function submitTag(
-	string value,
-	string image,
-	string prepend,
-	string append,
-	any encode
-) {
+public string function submitTag(string value, string image, string prepend, string append, any encode) {
 	$args(name = "submitTag", reserved = "type,src", args = arguments);
 
 	// Encode all prepend / append type arguments if specified.

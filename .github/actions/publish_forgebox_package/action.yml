@@ -1,0 +1,16 @@
+name: publish-forgebox-package
+description: This is an action to publish your package to forgebox
+author: Peter Amiri
+branding:
+  icon: 'upload'
+  color: 'green'
+inputs:
+  forgebox_user:
+    description: Forgebox user to authenticate with when publishing the package
+    required: true
+  forgebox_pass:
+    description: Forgebox password to authenticate with when publishing the package
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

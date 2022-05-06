@@ -119,7 +119,8 @@ public any function $serializeQueryToStructs(
 									);
 								}
 								if (
-									Len(local._model.$keyFromStruct(local.hasManyStruct)) && this.$keyFromStruct(local.struct) == local.primaryKeyColumnValues
+									Len(local._model.$keyFromStruct(local.hasManyStruct))
+									&& this.$keyFromStruct(local.struct) == local.primaryKeyColumnValues
 								) {
 									ArrayAppend(local.struct[local.include], local.hasManyStruct);
 								}

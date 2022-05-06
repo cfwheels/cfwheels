@@ -25,12 +25,7 @@ public void function $compileRegex(rquired string regex) {
  */
 public string function $normalizePattern(required string pattern) {
 	// First clear the ending slashes.
-	local.pattern = ReReplace(
-		arguments.pattern,
-		"(^\/+|\/+$)",
-		"",
-		"all"
-	);
+	local.pattern = ReReplace(arguments.pattern, "(^\/+|\/+$)", "", "all");
 
 	// Reset middle slashes to singles if they are multiple.
 	local.pattern = ReReplace(local.pattern, "\/+", "/", "all");
@@ -52,32 +47,17 @@ public string function $patternToRegex(required string pattern, struct constrain
 
 	// Further mask pattern variables.
 	// This keeps constraint patterns from being replaced twice.
-	local.rv = ReReplace(
-		local.rv,
-		"\[(\*?\w+)\]",
-		":::\1:::",
-		"all"
-	);
+	local.rv = ReReplace(local.rv, "\[(\*?\w+)\]", ":::\1:::", "all");
 
 	// Replace known variable keys using constraints.
 	local.constraints = StructCopy(arguments.constraints);
 	StructAppend(local.constraints, variables.constraints, false);
 	for (local.key in local.constraints) {
-		local.rv = ReReplaceNoCase(
-			local.rv,
-			":::#local.key#:::",
-			"(#local.constraints[local.key]#)",
-			"all"
-		);
+		local.rv = ReReplaceNoCase(local.rv, ":::#local.key#:::", "(#local.constraints[local.key]#)", "all");
 	}
 
 	// Replace remaining variables with default regex.
-	local.rv = ReReplace(
-		local.rv,
-		":::\w+:::",
-		"([^\./]+)",
-		"all"
-	);
+	local.rv = ReReplace(local.rv, ":::\w+:::", "([^\./]+)", "all");
 	local.rv = ReReplace(local.rv, "^\/*(.*)\/*$", "^\1/?$");
 
 	// Escape any forward slashes.
@@ -92,12 +72,7 @@ public string function $patternToRegex(required string pattern, struct constrain
  */
 public string function $stripRouteVariables(required string pattern) {
 	local.matchArray = ArrayToList(ReMatch("\[\*?(\w+)\]", arguments.pattern));
-	return ReReplace(
-		local.matchArray,
-		"[\*\[\]]",
-		"",
-		"all"
-	);
+	return ReReplace(local.matchArray, "[\*\[\]]", "", "all");
 }
 
 /**

@@ -120,11 +120,7 @@ public string function hasManyCheckBox(
  * @association Name of the association set in the parent object to represent with this form field.
  * @keys Primary keys associated with this form field. Note that these keys should be listed in the order that they appear in the database table.
  */
-public boolean function includedInObject(
-	required string objectName,
-	required string association,
-	required string keys
-) {
+public boolean function includedInObject(required string objectName, required string association, required string keys) {
 	local.rv = false;
 	local.object = $getObject(arguments.objectName);
 

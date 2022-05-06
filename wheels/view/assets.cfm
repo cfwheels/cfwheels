@@ -22,12 +22,7 @@ public string function styleSheetLinkTag(
 	string delim = ",",
 	boolean encode
 ) {
-	$args(
-		name = "styleSheetLinkTag",
-		args = arguments,
-		combine = "sources/source/!",
-		reserved = "href"
-	);
+	$args(name = "styleSheetLinkTag", args = arguments, combine = "sources/source/!", reserved = "href");
 	if (!Len(arguments.type)) {
 		StructDelete(arguments, "type");
 	}
@@ -89,12 +84,7 @@ public string function javaScriptIncludeTag(
 	string delim = ",",
 	boolean encode
 ) {
-	$args(
-		name = "javaScriptIncludeTag",
-		args = arguments,
-		combine = "sources/source/!",
-		reserved = "src"
-	);
+	$args(name = "javaScriptIncludeTag", args = arguments, combine = "sources/source/!", reserved = "src");
 	if (!Len(arguments.type)) {
 		StructDelete(arguments, "type");
 	}
@@ -324,15 +314,7 @@ public string function $assetDomain(required string pathToAsset) {
 		// Now comes the interesting part, lets take the pathToAsset argument, hash it and create a number from it so that we can do mod based off the length of the domain list.
 		// This is an easy way to apply the same sub-domain to each asset, so we do not create more work for the server.
 		// At the same time we are getting a very random hash value to rotate the domains over the assets evenly.
-		local.pathNumber = Right(
-			ReReplace(
-				Hash(arguments.pathToAsset),
-				"[A-Za-z]",
-				"",
-				"all"
-			),
-			5
-		);
+		local.pathNumber = Right(ReReplace(Hash(arguments.pathToAsset), "[A-Za-z]", "", "all"), 5);
 		local.position = (local.pathNumber % local.domainLen) + 1;
 	} else {
 		local.position = local.domainLen;

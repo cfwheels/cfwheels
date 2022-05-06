@@ -17,25 +17,14 @@ component extends="wheels.tests.Test" {
 
 	function test_ampersand_and_equals_sign_encoding() {
 		e = '<a href="#application.wheels.webpath#x/x?a=cats%26dogs%3Dtrouble&b=1">x</a>';
-		r = _controller.linkTo(
-			text = "x",
-			controller = "x",
-			action = "x",
-			params = "a=cats%26dogs%3Dtrouble&b=1"
-		);
+		r = _controller.linkTo(text = "x", controller = "x", action = "x", params = "a=cats%26dogs%3Dtrouble&b=1");
 		assert('e eq r');
 	}
 
 	function test_do_not_attribute_encode_href() {
 		e = '<a class="we&##x27;re" href="/we&##x25;27re/x?x=1&y=2&##x2b;3">x</a>';
 		set(functionName = "linkTo", encode = true);
-		r = _controller.linkTo(
-			class = "we're",
-			text = "x",
-			controller = "we're",
-			action = "x",
-			params = "x=1&y=2 3"
-		);
+		r = _controller.linkTo(class = "we're", text = "x", controller = "we're", action = "x", params = "x=1&y=2 3");
 		set(functionName = "linkTo", encode = false);
 		assert('e eq r');
 	}
@@ -43,15 +32,7 @@ component extends="wheels.tests.Test" {
 	function test_do_not_encode_dash() {
 		e = 'ca-ts">x</a>';
 		set(functionName = "linkTo", encode = true);
-		r = Right(
-			_controller.linkTo(
-				text = "x",
-				controller = "x",
-				action = "x",
-				params = "cats=ca-ts"
-			),
-			12
-		);
+		r = Right(_controller.linkTo(text = "x", controller = "x", action = "x", params = "cats=ca-ts"), 12);
 		set(functionName = "linkTo", encode = false);
 		assert('e eq r');
 	}
@@ -70,12 +51,7 @@ component extends="wheels.tests.Test" {
 
 	function test_linkto_arguments() {
 		e = '<a confirm="confirm-value" disabled="disabled-value" href="/">CFWheels</a>';
-		r = _controller.linkTo(
-			href = "/",
-			text = "CFWheels",
-			confirm = "confirm-value",
-			disabled = "disabled-value"
-		);
+		r = _controller.linkTo(href = "/", text = "CFWheels", confirm = "confirm-value", disabled = "disabled-value");
 		assert('e eq r');
 	}
 

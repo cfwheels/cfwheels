@@ -136,7 +136,7 @@ public string function buttonTo(
 	local.args = $innerArgs(name = "input", args = arguments);
 	local.args.image = arguments.image;
 	local.args.encode = arguments.encode;
-	local.content &= buttonTag(argumentCollection=local.args, content=arguments.text);
+	local.content &= buttonTag(argumentCollection = local.args, content = arguments.text);
 	local.skip = "image,text,route,controller,key,params,anchor,onlyPath,host,protocol,port,encode";
 	if (Len(arguments.route)) {
 		// variables passed in as route arguments should not be added to the html element
@@ -294,9 +294,8 @@ public string function paginationLinks(
 		local.middle = "";
 		for (local.i = 1; local.i <= local.totalPages; local.i++) {
 			if (
-				(local.i >= (local.currentPage - arguments.windowSize) && local.i <= local.currentPage) || (
-					local.i <= (local.currentPage + arguments.windowSize) && local.i >= local.currentPage
-				)
+				(local.i >= (local.currentPage - arguments.windowSize) && local.i <= local.currentPage)
+				|| (local.i <= (local.currentPage + arguments.windowSize) && local.i >= local.currentPage)
 			) {
 				if (!arguments.pageNumberAsParam) {
 					local.linkToArguments[arguments.name] = local.i;
@@ -390,12 +389,7 @@ public string function paginationLinks(
  * @relative Should we auto-link relative urls.
  * @encode [see:styleSheetLinkTag].
  */
-public string function autoLink(
-	required string text,
-	string link,
-	boolean relative = true,
-	boolean encode
-) {
+public string function autoLink(required string text, string link, boolean relative = true, boolean encode) {
 	$args(name = "autoLink", args = arguments);
 	local.rv = arguments.text;
 
@@ -425,24 +419,14 @@ public string function autoLink(
 public string function $autoLinkLoop(required string text, required string regex, string protocol = "") {
 	local.punctuationRegEx = "([^\w\/-]+)$";
 	local.startPosition = 1;
-	local.match = ReFindNoCase(
-		arguments.regex,
-		arguments.text,
-		local.startPosition,
-		true
-	);
+	local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
 	while (local.match.pos[1] > 0) {
 		local.startPosition = local.match.pos[1] + local.match.len[1];
 		local.str = Mid(arguments.text, local.match.pos[1], local.match.len[1]);
 		if (Left(local.str, 2) != "<a") {
 			arguments.text = RemoveChars(arguments.text, local.match.pos[1], local.match.len[1]);
 			local.punctuation = ArrayToList(ReMatchNoCase(local.punctuationRegEx, local.str));
-			local.str = ReReplaceNoCase(
-				local.str,
-				local.punctuationRegEx,
-				"",
-				"all"
-			);
+			local.str = ReReplaceNoCase(local.str, local.punctuationRegEx, "", "all");
 
 			// Make sure that links beginning with "www." have a protocol.
 			if (Left(local.str, 4) == "www." && !Len(arguments.protocol)) {
@@ -461,12 +445,7 @@ public string function $autoLinkLoop(required string text, required string regex
 			local.startPosition = local.match.pos[1] + Len(local.element);
 		}
 		local.startPosition++;
-		local.match = ReFindNoCase(
-			arguments.regex,
-			arguments.text,
-			local.startPosition,
-			true
-		);
+		local.match = ReFindNoCase(arguments.regex, arguments.text, local.startPosition, true);
 	}
 	return arguments.text;
 }

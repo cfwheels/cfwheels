@@ -1,0 +1,85 @@
+# This workflow is used to release master releases and also by the snapshot workflow
+# to release snapshots.
+name: CFWheels Release
+
+on:
+  push:
+    branches:
+      - master
+  workflow_call:
+    secrets:
+      SLACK_WEBHOOK_URL:
+        required: true
+      FORGEBOX_API_TOKEN:
+        required: true
+      FORGEBOX_PASS:
+        required: true
+
+env:
+  CFWHEELS_PRERELEASE: false
+
+jobs:
+  #############################################
+  # Build Snapshot or Final Release
+  #############################################
+  build:
+    name: Build & Publish Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Environment Variables For Build Process
+        id: current_version
+        run: |
+          echo "CFWHEELS_VERSION=`cat box.json | jq '.version' -r`" >> $GITHUB_ENV
+          # main or snapshot
+          echo "BRANCH=main" >> $GITHUB_ENV
+          if [ $GITHUB_REF == 'refs/heads/develop' ]
+          then
+            echo "BRANCH=develop" >> $GITHUB_ENV
+          fi
+
+      - name: Build CFWheels Variants for ${{ env.BRANCH }} v${{ env.CFWHEELS_VERSION }}
+        run: |
+          ant -DisPreRelease=${{ env.CFWHEELS_PRERELEASE }} -Dcfwheels.version=${{ env.CFWHEELS_VERSION }} -Dbuild.branch=${{ env.BRANCH }} -Dbuild.number=${{ github.run_number }} -f build/build.xml
+
+      - name: Upload CFWheels Artifacts
+        if: success()
+        uses: actions/upload-artifact@v2
+        with:
+          name: cfwheels-variants
+          path: |
+            artifacts/**/*
+      
+      # publish core package
+      - uses: pixl8/github-action-box-publish@v4
+        with:
+          forgebox_user: cfwheels
+          forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
+          force: "true"
+        env:
+          BOXJSON_DIR: /build-cfwheels-core/cfwheels
+      
+      # publish base package
+      - uses: pixl8/github-action-box-publish@v4
+        with:
+          forgebox_user: cfwheels
+          forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
+          force: "true"
+        env:
+          BOXJSON_DIR: /build-cfwheels-base/cfwheels
+      
+      - name: Inform Slack
+        if: ${{ always() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_CHANNEL: coding
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
+          SLACK_ICON_EMOJI: ":bell:"
+          SLACK_MESSAGE: 'CFWheels ${{ env.CFWHEELS_VERSION }} Built with ${{ job.status }}!'
+          SLACK_TITLE: "CFWheels Build"
+          SLACK_USERNAME: CI
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}

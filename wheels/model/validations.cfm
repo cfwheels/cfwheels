@@ -22,12 +22,7 @@ public void function automaticValidations(required boolean value) {
  * @unless [see:validatesConfirmationOf].
  * @when [see:validatesConfirmationOf].
  */
-public void function validate(
-	string methods = "",
-	string condition = "",
-	string unless = "",
-	string when = "onSave"
-) {
+public void function validate(string methods = "", string condition = "", string unless = "", string when = "onSave") {
 	$registerValidation(argumentCollection = arguments);
 }
 
@@ -144,7 +139,8 @@ public void function validatesFormatOf(
 	$args(name = "validatesFormatOf", args = arguments);
 	if ($get("showErrorInformation")) {
 		if (
-			Len(arguments.type) && !ListFindNoCase(
+			Len(arguments.type)
+			&& !ListFindNoCase(
 				"creditcard,date,email,eurodate,guid,social_security_number,ssn,telephone,time,URL,USdate,UUID,variableName,zipcode,boolean",
 				arguments.type
 			)
@@ -336,25 +332,28 @@ public boolean function valid(boolean callbacks = "true", boolean validateAssoci
 	if ($callback("beforeValidation", arguments.callbacks)) {
 		if (isNew()) {
 			if (
-				$callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate") && $callback(
-					"afterValidation",
-					arguments.callbacks
-				) && $callback("afterValidationOnCreate", arguments.callbacks)
+				$callback("beforeValidationOnCreate", arguments.callbacks)
+				&& $validate("onSave,onCreate")
+				&& $callback("afterValidation", arguments.callbacks)
+				&& $callback("afterValidationOnCreate", arguments.callbacks)
 			) {
 				local.rv = true;
 			}
 		} else {
 			if (
-				$callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave,onUpdate") && $callback(
-					"afterValidation",
-					arguments.callbacks
-				) && $callback("afterValidationOnUpdate", arguments.callbacks)
+				$callback("beforeValidationOnUpdate", arguments.callbacks)
+				&& $validate("onSave,onUpdate")
+				&& $callback("afterValidation", arguments.callbacks)
+				&& $callback("afterValidationOnUpdate", arguments.callbacks)
 			) {
 				local.rv = true;
 			}
 		}
 	}
-	local.areAssociationsValid = $validateAssociations(callbacks = arguments.callbacks, validateAssociations = arguments.validateAssociations);
+	local.areAssociationsValid = $validateAssociations(
+		callbacks = arguments.callbacks,
+		validateAssociations = arguments.validateAssociations
+	);
 	if (arguments.validateAssociations && local.rv) {
 		local.rv = local.areAssociationsValid;
 	}
@@ -428,24 +427,9 @@ public string function $validationErrorMessage(required string property, require
 			if (local.key == "property") {
 				local.value = this.$label(local.value);
 			}
-			local.rv = Replace(
-				local.rv,
-				"[[#local.key#]]",
-				"{{#Chr(7)#}}",
-				"all"
-			);
-			local.rv = Replace(
-				local.rv,
-				"[#local.key#]",
-				local.value,
-				"all"
-			);
-			local.rv = Replace(
-				local.rv,
-				"{{#Chr(7)#}}",
-				"[#local.key#]",
-				"all"
-			);
+			local.rv = Replace(local.rv, "[[#local.key#]]", "{{#Chr(7)#}}", "all");
+			local.rv = Replace(local.rv, "[#local.key#]", local.value, "all");
+			local.rv = Replace(local.rv, "{{#Chr(7)#}}", "[#local.key#]", "all");
 		}
 	}
 	return local.rv;
@@ -474,14 +458,14 @@ public boolean function $validate(required string type, boolean execute = "true"
 				if (local.thisValidation.method == "$validatesPresenceOf") {
 					// if the property does not exist or if it's blank we add an error on the object (for all other validation types we call corresponding methods below instead)
 					if (
-						!StructKeyExists(this, local.thisValidation.args.property) || (
-							IsSimpleValue(this[local.thisValidation.args.property]) && !Len(
-								Trim(this[local.thisValidation.args.property])
-							)
-						) || (
-							IsStruct(this[local.thisValidation.args.property]) && !StructCount(
-								this[local.thisValidation.args.property]
-							)
+						!StructKeyExists(this, local.thisValidation.args.property)
+						|| (
+							IsSimpleValue(this[local.thisValidation.args.property])
+							&& !Len(Trim(this[local.thisValidation.args.property]))
+						)
+						|| (
+							IsStruct(this[local.thisValidation.args.property])
+							&& !StructCount(this[local.thisValidation.args.property])
 						)
 					) {
 						addError(
@@ -492,13 +476,12 @@ public boolean function $validate(required string type, boolean execute = "true"
 				} else {
 					// if the validation set does not allow blank values we can set an error right away, otherwise we call a method to run the actual check
 					if (
-						StructKeyExists(local.thisValidation.args, "property") && StructKeyExists(
-							local.thisValidation.args,
-							"allowBlank"
-						) && !local.thisValidation.args.allowBlank && (
-							!StructKeyExists(this, local.thisValidation.args.property) || !Len(
-								this[local.thisValidation.args.property]
-							)
+						StructKeyExists(local.thisValidation.args, "property")
+						&& StructKeyExists(local.thisValidation.args,"allowBlank")
+						&& !local.thisValidation.args.allowBlank
+						&& (
+							!StructKeyExists(this, local.thisValidation.args.property)
+							|| !Len(this[local.thisValidation.args.property])
 						)
 					) {
 						addError(
@@ -506,9 +489,12 @@ public boolean function $validate(required string type, boolean execute = "true"
 							property = local.thisValidation.args.property
 						);
 					} else if (
-						!StructKeyExists(local.thisValidation.args, "property") || (
-							StructKeyExists(this, local.thisValidation.args.property) && (
-								Len(this[local.thisValidation.args.property]) || local.thisValidation.method == "$validatesUniquenessOf"
+						!StructKeyExists(local.thisValidation.args, "property")
+						|| (
+							StructKeyExists(this, local.thisValidation.args.property)
+							&& (
+								Len(this[local.thisValidation.args.property])
+								|| local.thisValidation.method == "$validatesUniquenessOf"
 							)
 						)
 					) {
@@ -538,12 +524,9 @@ public boolean function $evaluateCondition() {
 			try {
 				local[local.key] = Evaluate(arguments[local.item]);
 			} catch (any e) {
-				arguments[local.item] = Replace(
-					ReplaceList(arguments[local.item], "==,!=,<,<=,>,>=", " eq , neq , lt , lte , gt , gte "),
-					"  ",
-					" ",
-					"all"
-				);
+				// cfformat-ignore-start
+				arguments[local.item] = Replace(ReplaceList(arguments[local.item], "==,!=,<,<=,>,>=", " eq , neq , lt , lte , gt , gte "), "  ", " ", "all");
+				// cfformat-ignore-end
 				local[local.key] = Evaluate(arguments[local.item]);
 			}
 		}
@@ -551,9 +534,8 @@ public boolean function $evaluateCondition() {
 	// proceed with validation when "condition" has been supplied and it evaluates to "true" or when "unless" has been supplied and it evaluates to "false"
 	// if both "condition" and "unless" have been supplied though, they both need to be evaluated correctly ("true"/false" that is) for validation to proceed
 	if (
-		(!StructKeyExists(arguments, "condition") || !Len(arguments.condition) || local.conditionEvaluated) && (
-			!StructKeyExists(arguments, "unless") || !Len(arguments.unless) || !local.unlessEvaluated
-		)
+		(!StructKeyExists(arguments, "condition") || !Len(arguments.condition) || local.conditionEvaluated)
+		&& (!StructKeyExists(arguments, "unless") || !Len(arguments.unless) || !local.unlessEvaluated)
 	) {
 		local.rv = true;
 	}
@@ -565,9 +547,7 @@ public boolean function $evaluateCondition() {
  */
 public void function $validatesConfirmationOf() {
 	local.virtualConfirmProperty = arguments.property & "Confirmation";
-	if (
-		!StructKeyExists(this, local.virtualConfirmProperty)
-	) {
+	if (!StructKeyExists(this, local.virtualConfirmProperty)) {
 		addError(property = local.virtualConfirmProperty, message = $validationErrorMessage(argumentCollection = arguments));
 		return;
 	}
@@ -593,9 +573,8 @@ public void function $validatesExclusionOf() {
  */
 public void function $validatesFormatOf() {
 	if (
-		(Len(arguments.regEx) && !ReFindNoCase(arguments.regEx, this[arguments.property])) || (
-			Len(arguments.type) && !IsValid(arguments.type, this[arguments.property])
-		)
+		(Len(arguments.regEx) && !ReFindNoCase(arguments.regEx, this[arguments.property]))
+		|| (Len(arguments.type) && !IsValid(arguments.type, this[arguments.property]))
 	) {
 		addError(property = arguments.property, message = $validationErrorMessage(argumentCollection = arguments));
 	}
@@ -620,9 +599,9 @@ public void function $validatesPresenceOf(
 ) {
 	// if the property does not exist or if it's blank we add an error on the object
 	if (
-		!StructKeyExists(arguments.properties, arguments.property) || (
-			IsSimpleValue(arguments.properties[arguments.property]) && !Len(Trim(arguments.properties[arguments.property]))
-		) || (IsStruct(arguments.properties[arguments.property]) && !StructCount(arguments.properties[arguments.property]))
+		!StructKeyExists(arguments.properties, arguments.property)
+		|| (IsSimpleValue(arguments.properties[arguments.property]) && !Len(Trim(arguments.properties[arguments.property])))
+		|| (IsStruct(arguments.properties[arguments.property]) && !StructCount(arguments.properties[arguments.property]))
 	) {
 		addError(property = arguments.property, message = $validationErrorMessage(argumentCollection = arguments));
 	}
@@ -649,9 +628,9 @@ public void function $validatesLengthOf(
 	}
 
 	if (
-		(arguments.maximum && local.lenValue > arguments.maximum) || (arguments.minimum && local.lenValue < arguments.minimum) || (
-			arguments.exactly && local.lenValue != arguments.exactly
-		)
+		(arguments.maximum && local.lenValue > arguments.maximum)
+		|| (arguments.minimum && local.lenValue < arguments.minimum)
+		|| (arguments.exactly && local.lenValue != arguments.exactly)
 	) {
 		addError(property = arguments.property, message = $validationErrorMessage(argumentCollection = arguments));
 	}
@@ -697,10 +676,8 @@ public void function $validatesUniquenessOf(
 			type = validationTypeForProperty(arguments.property)
 		);
 		if (
-			Right(local.part, 3) == "=''" && ListFindNoCase(
-				"integer,float,boolean",
-				validationTypeForProperty(arguments.property)
-			)
+			Right(local.part, 3) == "=''"
+			&& ListFindNoCase("integer,float,boolean", validationTypeForProperty(arguments.property))
 		) {
 			// when numeric property but blank we need to translate to IS NULL
 			local.part = SpanExcluding(local.part, "=") & " IS NULL";
@@ -717,9 +694,7 @@ public void function $validatesUniquenessOf(
 				str = this[local.item],
 				type = validationTypeForProperty(local.item)
 			);
-			if (
-				Right(local.part, 3) == "=''" && ListFindNoCase("integer,float,boolean", validationTypeForProperty(local.item))
-			) {
+			if (Right(local.part, 3) == "=''" && ListFindNoCase("integer,float,boolean", validationTypeForProperty(local.item))) {
 				// when numeric property but blank we need to translate to IS NULL
 				local.part = SpanExcluding(local.part, "=") & " IS NULL";
 			}
@@ -767,9 +742,9 @@ public boolean function $validationExists(required string property, required str
 			local.iEnd = ArrayLen(local.eventArray);
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {
 				if (
-					StructKeyExists(local.eventArray[local.i].args, "property") && local.eventArray[local.i].args.property == arguments.property && local.eventArray[
-						local.i
-					].method == "$#arguments.validation#"
+					StructKeyExists(local.eventArray[local.i].args, "property")
+					&& local.eventArray[local.i].args.property == arguments.property
+					&& local.eventArray[local.i].method == "$#arguments.validation#"
 				) {
 					local.rv = true;
 					break;

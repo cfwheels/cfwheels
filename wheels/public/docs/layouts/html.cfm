@@ -23,7 +23,7 @@
 					<div id="atoz" class="ui list link forcescroll sticky">
 					<cfloop from="1" to="#arraylen(docs.functions)#" index="func">
 					<cfset meta=docs.functions[func]>
-						<a href="" class="functionlink item"	data-section="#meta.tags.sectionClass#" data-category="#meta.tags.categoryClass#" data-function="#lcase(meta.slug)#">#meta.name#()</a>
+						<a href="" class="functionlink item" data-section="#meta.tags.sectionClass#" data-category="#meta.tags.categoryClass#" data-function="#lcase(meta.slug)#">#meta.name#()</a>
 					</cfloop>
 					</div>
 				</div>
