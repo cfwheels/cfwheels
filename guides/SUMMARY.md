@@ -79,3 +79,4 @@
 * [Calculated Properties](database-interaction-through-models/calculated-properties.md)
 * [Transactions](database-interaction-through-models/transactions.md)
 * [Dirty Records](database-interaction-through-models/dirty-records.md)
+* [Soft Delete](database-interaction-through-models/soft-delete.md)
