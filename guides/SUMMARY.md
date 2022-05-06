@@ -88,3 +88,4 @@
 ## Group 1
 
 * [Installing and Using Plugins](group-1/installing-and-using-plugins.md)
+* [Developing Plugins](group-1/developing-plugins.md)
