@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="2.3"></a>
 
-## [2.3.0-rc.1] => 2020.05.03
+## [2.3.0-rc.1](https://github.com/cfwheels/cfwheels/releases/tag/v2.3.0-rc.1) => 2020.05.03
 
 <!-- ### Controller Enhancements -->
 
@@ -51,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="2.2"></a>
 
-# [2.2](https://github.com/cfwheels/cfwheels/releases/tag/v2.2.0) (11/22/2020)
+# [2.2](https://github.com/cfwheels/cfwheels/releases/tag/v2.2.0) => 2020.11.22
 
 ### Controller Enhancements
 
@@ -97,7 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="2.1"></a>
 
-# [2.1](https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0) (04/12/2020)
+# [2.1](https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0) => 2020.04.12
 
 ### Bug Fixes
 
@@ -108,7 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="2.1.0-beta"></a>
 
-# [2.1.0-Beta](https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0-beta) (02/24/2020)
+# [2.1.0-Beta](https://github.com/cfwheels/cfwheels/releases/tag/v2.1.0-beta) => 2020.02.24
 
 ### Potentially Breaking Changes
 
@@ -179,7 +179,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="2.0.1"></a>
 
-# [2.0.1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.1) (01/31/2018)
+# [2.0.1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.1) => 2018.01.31
 
 ### Bug Fixes
 
@@ -197,7 +197,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="2.0.0"></a>
 
-# [2.0.0](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0) (09/30/2017)
+# [2.0.0](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0) => 2017.09.30
 
 ### Bug Fixes
 
@@ -212,7 +212,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="2.0.0-rc.1"></a>
 
-# [2.0.0 RC 1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-rc.1) (08/21/2017)
+# [2.0.0 RC 1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-rc.1) => 08/21/2017.08.21
 
 ### Model Enhancements
 
@@ -245,7 +245,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="2.0.0-beta.1"></a>
 
-# [2.0.0 Beta 1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-beta.1) (5/31/2017)
+# [2.0.0 Beta 1](https://github.com/cfwheels/cfwheels/releases/tag/v2.0.0-beta.1) => 2017.05.31
 
 ### Model Enhancements
 
@@ -352,7 +352,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="1.4.6"></a>
 
-## [1.4.6](https://github.com/cfwheels/cfwheels/releases/tag/v1.4.6) (10/1/2017)
+## [1.4.6](https://github.com/cfwheels/cfwheels/releases/tag/v1.4.6) => 2017.10.01
 
 ### Bug Fixes
 
@@ -366,7 +366,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="1.4.5"></a>
 
-## [1.4.5](https://github.com/cfwheels/cfwheels/releases/tag/v1.4.5) (3/30/2016)
+## [1.4.5](https://github.com/cfwheels/cfwheels/releases/tag/v1.4.5) => 2016.03.30
 
 ### Bug Fixes
 
@@ -382,7 +382,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="1.4.4"></a>
 
-## [1.4.4](https://github.com/cfwheels/cfwheels/releases/tag/v1.4.4) (12/10/2015)
+## [1.4.4](https://github.com/cfwheels/cfwheels/releases/tag/v1.4.4) => 2015.02.10
 
 ### Bug Fixes
 
@@ -399,7 +399,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="1.4.3"></a>
 
-## [1.4.3](https://github.com/cfwheels/cfwheels/releases/tag/v1.4.3) (10/16/2015)
+## [1.4.3](https://github.com/cfwheels/cfwheels/releases/tag/v1.4.3) => 2015.10.16
 
 ### Bug Fixes
 
@@ -416,7 +416,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="1.4.2"></a>
 
-## [1.4.2](https://github.com/cfwheels/cfwheels/releases/tag/v1.4.2) (08/31/2015)
+## [1.4.2](https://github.com/cfwheels/cfwheels/releases/tag/v1.4.2) => 2015.08.31
 
 ### Bug Fixes
 
@@ -445,7 +445,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="1.4.1"></a>
 
-## [1.4.1](https://github.com/cfwheels/cfwheels/releases/tag/v1.4.1) (05/30/2015)
+## [1.4.1](https://github.com/cfwheels/cfwheels/releases/tag/v1.4.1) => 2015.05.30
 
 ### Bug Fixes
 
@@ -465,7 +465,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="1.4"></a>
 
-# [1.4](https://github.com/cfwheels/cfwheels/releases/tag/v1.4) (05/08/2015)
+# [1.4](https://github.com/cfwheels/cfwheels/releases/tag/v1.4) => 2015.05.08
 
 ### Model Enhancements
 
@@ -513,7 +513,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="1.3.4"></a>
 
-## [1.3.4](https://github.com/cfwheels/cfwheels/releases/tag/v1.3.4) (02/03/2015)
+## [1.3.4](https://github.com/cfwheels/cfwheels/releases/tag/v1.3.4) => 2015.02.30
 
 ### Miscellaneous
 
@@ -523,7 +523,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="1.3.3"></a>
 
-## [1.3.3](https://github.com/cfwheels/cfwheels/releases/tag/v1.3.3) (02/02/2015)
+## [1.3.3](https://github.com/cfwheels/cfwheels/releases/tag/v1.3.3) => 2015.02.02
 
 ### Bug Fixes
 
@@ -536,7 +536,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="1.3.2"></a>
 
-## [1.3.2](https://github.com/cfwheels/cfwheels/releases/tag/v1.3.2) (11/11/2014)
+## [1.3.2](https://github.com/cfwheels/cfwheels/releases/tag/v1.3.2) => 2014.11.11
 
 ### Bug Fixes
 
@@ -556,7 +556,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="1.3.1"></a>
 
-## [1.3.1](https://github.com/cfwheels/cfwheels/releases/tag/v1.3.1) (08/25/2014)
+## [1.3.1](https://github.com/cfwheels/cfwheels/releases/tag/v1.3.1) => 2014.08.25
 
 ### Bug Fixes
 
@@ -579,7 +579,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-# 1.3 (08/05/2014)
+# [1.3] => 2014.08.05
 
 ### Model Enhancements
 
@@ -646,7 +646,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## 1.1.8 (05/21/2012)
+## [1.1.8] => 2012.05.21
 
 ### Model Enhancements
 
@@ -672,7 +672,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## 1.1.7 (12/11/2011)
+## [1.1.7] => 12/11/2011.12.11
 
 ### Bug Fixes
 
@@ -680,7 +680,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## 1.1.6 (10/08/2011)
+## [1.1.6] => 2011.10.08
 
 ### Model Enhancements
 
@@ -701,7 +701,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## 1.1.5 (08/01/2011)
+## [1.1.5] => 2011.08.01
 
 ### View Enhancements
 
@@ -713,7 +713,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## 1.1.4 (07/20/2011)
+## [1.1.4] => 2011.07.20
 
 ### Model Enhancements
 
@@ -751,7 +751,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## 1.1.3 (03/24/2011)
+## [1.1.3] => 2011.03.24
 
 ### Model Enhancements
 
@@ -780,7 +780,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## 1.1.2 (01/29/2011)
+## [1.1.2] => 2011.01.29
 
 ### Model Enhancements
 
@@ -804,7 +804,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## 1.1.1 (11/21/2010)
+## [1.1.1] => 2010.11.21
 
 ### Bug Fixes
 
@@ -820,7 +820,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-# 1.1 (11/9/2010)
+# [1.1] => 2010.11.19
 
 ### Bug Fixes
 
@@ -834,7 +834,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-# 1.1 RC 1 (10/27/2010)
+# [1.1 RC 1] => 2010.10.27
 
 ### Bug Fixes
 
@@ -861,7 +861,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-# 1.1 Beta 2 (10/5/2010)
+# [1.1 Beta 2] => 2010.10.05
 
 ### Bug Fixes
 
@@ -892,7 +892,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-# 1.1 Beta 1 (9/10/2010)
+# [1.1 Beta 1] => 2010.09.10
 
 ### Model Enhancements
 
@@ -991,7 +991,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## 1.0.5 (6/18/2010)
+## [1.0.5] => 2010.06.18
 
 ### Bug Fixes
 
@@ -1021,7 +1021,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## 1.0.4 (4/21/2010)
+## [1.0.4] => 2010.04.21
 
 ### Bug Fixes
 
@@ -1038,7 +1038,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## 1.0.3 (3/26/2010)
+## [1.0.3] => 2010.03.26
 
 ### Bug Fixes
 
@@ -1058,7 +1058,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## 1.0.2 (2/19/2010)
+## [1.0.2] => 2010.02.19
 
 ### Bug Fixes
 
@@ -1067,7 +1067,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-## 1.0.1 (2/16/2010)
+## [1.0.1] => 2010.02.16
 
 ### Bug Fixes
 
@@ -1100,7 +1100,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-# 1.0 (11/24/2009)
+# [1.0] => 2009.11.24
 
 ### Model Enhancements
 
