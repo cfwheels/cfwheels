@@ -2,7 +2,7 @@
 
 name: Wheels Test Suite
 
-on: workflow_dispatch [pull_request]
+on: [pull_request]
 
 jobs:
   run-tests:
