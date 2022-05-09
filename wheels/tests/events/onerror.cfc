@@ -10,7 +10,7 @@ component extends="wheels.tests.Test" {
 		}
 
 		actual = $includeAndReturnOutput($template = "wheels/events/onerror/cfmlerror.cfm", exception = exception);
-		expected = "wheels/tests/events/onerror.cfc:7"; // line 7 is the throw() line in this test case
+		expected = "wheels/tests/events/onerror.cfc:7"; // line 7 is the throw() line in this test case.
 
 		assert("actual contains expected");
 	}
