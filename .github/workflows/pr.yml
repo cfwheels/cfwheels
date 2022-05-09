@@ -1,45 +1,34 @@
-# Runs the cfwheels core tests across engine/db combos in Docker
+name: CFWheels Pull Requests
 
-name: Wheels Test Suite
-
-on: [pull_request]
-
+on:
+  push:
+    branches-ignore:
+      - "main"
+      - "master"
+      - "develop"
+  pull_request:
+    branches:
+      - develop
+      
 jobs:
-  run-tests:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        cf: [lucee5, adobe2016, adobe2018]
-        db: [mysql56, postgres, sqlserver, h2]
-        exclude:
-          - cf: adobe2016
-            db: h2
-          - cf: adobe2018
-            db: h2
+  tests:
+    uses: ./.github/workflows/tests.yml@develop
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
+  format:
+    name: Format
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      - name: Docker Compose ${{ matrix.cf }} ${{ matrix.db }}
-        if: ${{ matrix.db != 'h2' }}
-        run: docker-compose up -d ${{ matrix.cf }} ${{ matrix.db }}
-
-      - name: Docker Compose ${{ matrix.cf }}
-        if: ${{ matrix.db == 'h2' }}
-        run: docker-compose up -d ${{ matrix.cf }}
-
-      - name: Wait for ${{ matrix.cf }} startup
-        run: src/github/tests/server-up.sh ${{ matrix.cf }}
-        # run: box task run taskFile=src/github/tests/Tasks target=serverUp :cfengine=${{ matrix.cf }}
-
-      - name: Sleep for 60 seconds
-        uses: jakejarvis/wait-action@master
+      - uses: Ortus-Solutions/commandbox-action@v1.0.2
         with:
-          time: '60s'
-      #- name: Wait for ${{ matrix.db }} startup
-      #  run: src/github/tests/db-up.sh ${{ matrix.db }}
+          cmd: run-script format
 
-      - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
-        run: src/github/tests/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}
-        # run: box task run taskFile=src/github/tests/Tasks target=runTests :cfengine=${{ matrix.cf }} :dbengine=${{ matrix.db }}
+      - name: Commit Format Changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Apply cfformat changes
+          
