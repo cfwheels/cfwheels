@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         cf: [lucee5, adobe2016, adobe2018]
-        db: [mysql56, mysql57, mysql80, postgres, sqlserver, h2]
+        db: [mysql56, postgres, sqlserver, h2]
         exclude:
           - cf: adobe2016
             db: h2
