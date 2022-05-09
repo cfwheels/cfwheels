@@ -69,6 +69,26 @@ services:
       MYSQL_USER: wheelstestdb
       MYSQL_PASSWORD: wheelstestdb
 
+  mysql57:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: wheelstestdb
+      MYSQL_DATABASE: wheelstestdb
+      MYSQL_USER: wheelstestdb
+      MYSQL_PASSWORD: wheelstestdb
+
+  mysql80:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: wheelstestdb
+      MYSQL_DATABASE: wheelstestdb
+      MYSQL_USER: wheelstestdb
+      MYSQL_PASSWORD: wheelstestdb
+
   postgres:
     image: postgres:13.6
     restart: always
