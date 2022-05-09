@@ -34,6 +34,7 @@ jobs:
       - name: Setup Environment Variables For Build Process
         id: current_version
         run: |
+          cat box.json
           echo "CFWHEELS_VERSION=`cat box.json | jq '.version' -r`" >> $GITHUB_ENV
           # main or snapshot
           echo "BRANCH=main" >> $GITHUB_ENV
