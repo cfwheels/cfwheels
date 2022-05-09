@@ -1,4 +1,4 @@
-<cfoutput>
+	<cfoutput>
 	<div class="ui container">
 		<h1>Summary</h1>
 		<p>
@@ -28,6 +28,11 @@
 			&& ArrayLen(arguments.exception.rootCause.tagContext)
 		>
 			<cfset local.tagContext = Duplicate(arguments.exception.rootCause.tagContext)>
+		<cfelseif
+			StructKeyExists(arguments.exception, "tagContext")
+			&& ArrayLen(arguments.exception.tagContext)
+		>
+			<cfset local.tagContext = Duplicate(arguments.exception.tagContext)>
 		</cfif>
 		<cfif StructKeyExists(local, "tagContext")>
 			<p>
@@ -39,10 +44,7 @@
 					<cfset local.pos = local.pos + 1>
 					<cfset local.template = Replace(local.tagContext[local.pos].template, local.path, "")>
 					<cfset local.template = Replace(local.template, "/wheels../", "")>
-					<!--- show all non wheels lines --->
-					<cfif local.template Does Not Contain "wheels" AND FindOneOf("/\", local.template) IS NOT 0>
-						Line #local.tagContext[local.pos].line# in #local.template#<br>
-					</cfif>
+					#local.template#:#local.tagContext[local.pos].line#<br>
 				</cfloop>
 			</p>
 		</cfif>
