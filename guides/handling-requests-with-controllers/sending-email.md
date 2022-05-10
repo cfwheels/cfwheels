@@ -161,7 +161,7 @@ sendEmail(
 
 ### Using Email Layouts
 
-Much like the layouts outlined in the [Layouts](https://guides.cfwheels.org/cfwheels-guides/displaying-views-to-users/layouts) chapter, you can also create layouts for your emails.
+Much like the layouts outlined in the [Layouts](https://guides.cfwheels.org/docs/layouts) chapter, you can also create layouts for your emails.
 
 A layout should be used just as the name implies: for layout and stylistic aspects of the email body. Based on the example given above, let's assume that the same email content needs to be sent twice.
 

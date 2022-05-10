@@ -129,7 +129,7 @@ When CFWheels handles this response, it will set the appropriate MIME type in th
 
 ### Providing the HTML Format
 
-Responding to requests for the HTML version is the same as you're already used to with [Rendering Content](https://guides.cfwheels.org/docs/rendering-content). [renderwith()](https://api.cfwheels.org/controller.renderwith.html) will accept the same arguments as [renderView()](https://api.cfwheels.org/controller.renderview.html), and you create just a view template in the `views` folder like normal.
+Responding to requests for the HTML version is the same as you're already used to with [Rendering Content](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/rendering-content). [renderwith()](https://api.cfwheels.org/controller.renderwith.html) will accept the same arguments as [renderView()](https://api.cfwheels.org/controller.renderview.html), and you create just a view template in the `views` folder like normal.
 
 ### Automatic Generation of XML and JSON Formats
 
