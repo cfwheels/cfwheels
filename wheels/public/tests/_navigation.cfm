@@ -37,6 +37,7 @@ for (p in pluginList) {
 	ArrayAppend(subnavigation, {"route" = "wheelsPackages", "type" = p, "text" = "<i class='plug icon'></i> #p#"});
 }
 </cfscript>
+<!--- cfformat-ignore-start --->
 <cfoutput>
 	<div class="ui pointing stackable menu">
 		<cfloop from="1" to="#ArrayLen(subnavigation)#" index="i">
@@ -106,3 +107,4 @@ for (p in pluginList) {
 		</div>
 	</div>
 </cfoutput>
+<!--- cfformat-ignore-end --->

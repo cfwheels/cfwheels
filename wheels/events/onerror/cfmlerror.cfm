@@ -1,4 +1,5 @@
 <cfoutput>
+	<!--- cfformat-ignore-start --->
 	<div class="ui container">
 		<h1>Summary</h1>
 		<p>
@@ -113,4 +114,5 @@
 			</cfif>
 		</cfloop>
 	</div>
+	<!--- cfformat-ignore-end --->
 </cfoutput>

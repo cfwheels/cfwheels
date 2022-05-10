@@ -7,7 +7,7 @@ loadedPlugins = application.wheels.plugins;
 </cfscript>
 <cfinclude template="../layout/_header.cfm">
 <cfoutput>
-
+<!--- cfformat-ignore-start --->
 <div class="ui container">
 	#pageHeader("Plugins", "What you've got loaded..")#
 
@@ -72,5 +72,4 @@ loadedPlugins = application.wheels.plugins;
 
 </cfoutput>
 <cfinclude template="../layout/_footer.cfm">
-
-
+<!--- cfformat-ignore-end --->
