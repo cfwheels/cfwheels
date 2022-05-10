@@ -6,7 +6,7 @@ description: Instructions for installing CFWheels on your system.
 
 Installing CFWheels is so simple that there is barely a need for a chapter devoted to it. But we figured we'd better make one anyway in case anyone is specifically looking for a chapter about installation.
 
-So, here are the simple steps you need to follow to get rolling on CFWheels...
+So, here are the simple steps you need to follow to get rolling on CFWheels...&#x20;
 
 ### Manual Installation
 
@@ -24,12 +24,12 @@ Let's assume you have downloaded the latest official release. (Really, you shoul
 
 Getting an empty website running with CFWheels installed is an easy process if you already know your way around IIS or Apache. Basically, you need to create a new website in your web server of choice and unzip the contents of the file into the root of it.
 
-In case you're not sure, here are the instructions for setting up an empty CFWheels site that can be accessed when typing `localhost` in your browser. The instructions refer to a system running Windows Server 2003 and IIS, but you should be able to follow along and apply the instructions with minor modifications to your system. (See [Requirements](https://guides.cfwheels.org/cfwheels-guides/introduction/requirements) for a list of tested systems).
+In case you're not sure, here are the instructions for setting up an empty CFWheels site that can be accessed when typing `localhost` in your browser. The instructions refer to a system running Windows Server 2003 and IIS, but you should be able to follow along and apply the instructions with minor modifications to your system. (See [Requirements](https://guides.cfwheels.org/docs/requirements)for a list of tested systems).
 
 * Create a new folder under your web root (usually `C:\Inetpub\wwwroot`) named `wheels_site` and unzip the CFWheels `.zip` file into the root of it.
 * Create a new website using IIS called `CFWheels Site` with `localhost` as the host header name and `C:\Inetpub\wwwroot\mysite` as the path to your home directory.
 
-If you want to run a CFWheels-powered application from a subfolder in an existing website, this is entirely possible, but you may need to get a little creative with your URL rewrite rules if you want to get pretty URLs--it will only work out of the box on recent versions of Apache. (Read more about this in the [URL Rewriting](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/url-rewriting) chapter.)
+If you want to run a CFWheels-powered application from a subfolder in an existing website, this is entirely possible, but you may need to get a little creative with your URL rewrite rules if you want to get pretty URLs--it will only work out of the box on recent versions of Apache. (Read more about this in the [URL Rewriting](https://guides.cfwheels.org/docs/url-rewriting) chapter.)
 
 ### 3. Setup the Database (Optional)
 
