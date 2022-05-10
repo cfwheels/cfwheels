@@ -49,7 +49,7 @@ component extends="wheels.Test" {
 
 If the testing framework sees that a component does not extend `wheels.Test`, that component will be skipped. This lets you create and store any mock components that you might want to use with your tests and keep everything together.
 
-Any test methods must begin their name with "test\_":
+Any test methods must begin their name with "test":
 
 ```java
 function testExpectedEqualsActual() {
@@ -57,7 +57,7 @@ function testExpectedEqualsActual() {
 }
 ```
 
-If a method does not begin with `test_`, it is ignored and skipped. This lets you create as many helper methods for your testing components as you want.
+If a method does not begin with `test`, it is ignored and skipped. This lets you create as many helper methods for your testing components as you want.
 
 Do not `var`-scope and variables used in your tests. In order for the testing framework to access the variables within the tests that you're writing, all variables need to be within the component's `variables` scope. The easy way to do this is to just not `var` variables within your tests, and your CFML engine will automatically assign these variables into the `variables` scope of the component for you. You'll see this in the examples below.
 
@@ -86,7 +86,7 @@ function testWithSecondsBelow5Seconds() {
   args.toTime = DateAdd("s", number, args.fromTime);
   actual = _controller.distanceOfTimeInWords(argumentCollection=args);
   expected = "less than 5 seconds";
-  
+
   assert("actual eq expected");
 }
 
@@ -95,7 +95,7 @@ function testWithSecondsBelow10Seconds() {
   args.toTime = DateAdd("s", number, args.fromTime);
     actual = _controller.distanceOfTimeInWords(argumentCollection=args);
   expected = "less than 10 seconds";
-  
+
   assert("actual eq expected");
 }
 ```
@@ -169,16 +169,16 @@ function testKeyExistsInStructure() {
     foo="bar"
   };
   key = "foo";
-  
+
   // displaying the debug output
   debug("struct");
-  
+
   // calling debug but NOT displaying the output
   debug("struct", false);
-  
+
   // displaying the output of debug as text with a label
   debug(expression="struct", format="text", label="my struct");
-  
+
   assert("StructKeyExists(struct, key)");
 }
 ```
@@ -204,7 +204,7 @@ component extends="Model" {
         addError(
         property="username",
         message="Username cannot start with a number."
-      ); 
+      );
     }
   }
 
@@ -243,17 +243,17 @@ As you can see, we invoke our model by using the `model()` method just like you 
 The first thing we do is add a simple test to make sure that our custom model validation works.
 
 ```java
-function testUserModelShouldFailCustomValidation() {  
+function testUserModelShouldFailCustomValidation() {
   // set the properties of the model
   user.setProperties(properties);
   user.username = "2theBatmobile!";
-  
+
   // run the validation
   user.valid();
-    
+
   actual = user.allErrors()[1].message;
   expected = "Username cannot start with a number.";
-  
+
   // assert that the expected error message is generated
   assert("actual eq expected");
 }
@@ -267,7 +267,7 @@ function testSanitiseEmailCallbackShouldReturnExpectedValue() {
   user.setProperties(properties);
   user.email = " FOO@bar.COM ";
 
-  /* 
+  /*
     Save the model, but use transactions so we don't actually write to
     the database. this prevents us from having to have to reload a new
     copy of the database every time the test runs.
@@ -285,7 +285,7 @@ The next part of our application that we need to test is our controller. Below i
 
 ```javascript
 component extends="Controller" {
-  
+
   // users/index
   public void function index() {
     users = model("user").findAll();
@@ -310,7 +310,7 @@ component extends="Controller" {
       flashInsert(error="There was a problem creating the user.");
       renderView(action="new");
     }
-  } 
+  }
 }
 ```
 
@@ -340,12 +340,12 @@ function testRedirectAndFlashStatus() {
 
   // process the create action of the controller
   result = processRequest(params=local.params, method="post", returnAs="struct");
-  
+
   // make sure that the expected redirect happened
   assert("result.status eq 302");
   assert("result.flash.success eq 'Hugh was created'");
   assert("result.redirect eq '/users/show/1'");
-  
+
 }
 ```
 
@@ -358,7 +358,7 @@ We use this information to make sure that the controller redirected the visitor 
 Below are some examples are how a controller can be tested:
 
 ```java
-// asserts that a failed user update returns a 302 http response, an error exists in the flash and will be redirected to the error page 
+// asserts that a failed user update returns a 302 http response, an error exists in the flash and will be redirected to the error page
 function testStatusFlashAndRedirect() {
   local.params = {
     controller = "users",
@@ -446,14 +446,14 @@ If you think that's too "ugly", you can instead make a public function on the co
 You may at some point want to test a partial (usually called via `includePartial()`) outside of a request. You'll notice that if you just try and call `includePartial()` from within the test suite, it won't work. Thankfully there's a fairly easy technique you can use by calling a "fake" or "dummy" controller.
 
 ```javascript
-component extends="tests.Test" { 
+component extends="tests.Test" {
     function setup() {
           params = {controller="dummy", action="dummy"};
           _controller = controller("dummy", params);
     }
 
-    function test_Test_MyPartial(){ 
-        result=_controller.includePartial(partial="/foo/bar/");
+    function testMyPartial(){
+        result = _controller.includePartial(partial="/foo/bar/");
         assert("result CONTAINS 'foobar'");
     }
 }
@@ -483,7 +483,7 @@ Next we will look at testing the view layer. Below is the code for `new.cfm`, wh
       #linkTo(text="Return to the listing", route="users")#
     </p>
 #endFormTag()#
-  
+
 </cfoutput>
 ```
 
@@ -495,7 +495,7 @@ Once we have this output, we can then search through it to make sure that whatev
 function testUsersIndexContainsHeading() {
 
   local.params = {
-    controller = "users", 
+    controller = "users",
     action = "index"
   };
 
@@ -677,8 +677,8 @@ The test URL will look something like this:\
 Running an individual package:\
 `/index.cfm?controller=wheels&action=wheels&view=tests&type=app&package=controllers`
 
-Running an single test:\
-`/index.cfm?controller=wheels&action=wheels&view=tests&type=app&package=controllers&test=test_case_one`
+Running a single test:\
+`/index.cfm?controller=wheels&action=wheels&view=tests&type=app&package=controllers&test=testCaseOne`
 
 These URLs are useful should you want an external system to run your tests.
 
@@ -704,16 +704,16 @@ Test.cfc -`beforeAll()`
 
 Foo.cfc - `packageSetup()`\
 Foo.cfc - `setup()`\
-Foo.cfc - `test_case_one()`\
+Foo.cfc - `testCaseOne()`\
 Foo.cfc - `teardown()`\
 Foo.cfc - `setup()`\
-Foo.cfc - `test_case_two()`\
+Foo.cfc - `testCaseTwo()`\
 Foo.cfc - `teardown()`\
 Foo.cfc - `packageTeardown()`
 
 Bar.cfc - `packageSetup()`\
 Bar.cfc - `setup()`\
-Bar.cfc - `test_case_three()`\
+Bar.cfc - `testCaseThree()`\
 Bar.cfc - `teardown()`\
 Bar.cfc - `packageTeardown()`
 
@@ -742,7 +742,7 @@ component extends="wheels.Test" output=false {
    * Executes before every tests case unless overridden in a package.
    */
   function setup() {
-    
+
   }
 
   /*
