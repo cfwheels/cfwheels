@@ -97,7 +97,7 @@ The variables themselves are fairly self-explanatory. When `cacheDatabaseSchema`
 Note that "Design" mode has been removed in CFWheels 2.x: please use development mode instead.
 {% endhint %}
 
-Please refer to the [Configuration and Defaults](https://guides.cfwheels.org/cfwheels-guides/working-with-cfwheels/configuration-and-defaults) chapter for a complete listing of all the variables you can set and their default values.
+Please refer to the [Configuration and Defaults](https://guides.cfwheels.org/docs/configuration-and-defaults) chapter for a complete listing of all the variables you can set and their default values.
 
 ### 4 Ways to Cache
 
@@ -141,7 +141,7 @@ When the second user requests the same page, CFWheels will serve the HTML direct
 
 All subsequent requests now get the cached page until it expires.
 
-But there are 2 exceptions to this (which you can make good use of in your code to have the cache re-created at the right times). If the request is a post request (normally coming from a form submission) or if the Flash (you can read everything about the Flash in the [Using the Flash](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/using-the-flash) chapter) is not empty, then the cache won't be used. Instead, a new fresh page will be created.
+But there are 2 exceptions to this (which you can make good use of in your code to have the cache re-created at the right times). If the request is a post request (normally coming from a form submission) or if the Flash (you can read everything about the Flash in the [Using the Flash](https://guides.cfwheels.org/docs/using-the-flash) chapter) is not empty, then the cache won't be used. Instead, a new fresh page will be created.
 
 One way to use this feature is to submit your forms to the same page to have it re-created or redirect to the cached page with a message in the Flash.
 
