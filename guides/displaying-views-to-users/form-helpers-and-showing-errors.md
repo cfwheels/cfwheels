@@ -111,9 +111,9 @@ I know what you are thinking. 9 lines of code can't replace all that work, right
 
 ### Linking up the Form's Action with startFormTag
 
-The first helper you'll notice in the CFWheels-ified version of the form is [startFormTag()](https://guides.cfwheels.org/reference/startformtag). This helper allows you to easily link up the form to the action that it's posting to in a secure way.
+The first helper you'll notice in the CFWheels-ified version of the form is [startFormTag()](https://api.cfwheels.org/v2.2/controller.startFormTag.html). This helper allows you to easily link up the form to the action that it's posting to in a secure way.
 
-You'll need to configure the `route` and `method` arguments, depending on the route that you're sending the form to. Also, if the route expects any parameters, you must pass those in as arguments to startFormTag as well. If you haven't already, read up about routes in the [Routing](https://guides.cfwheels.org/docs/routing) chapter.
+You'll need to configure the `route` and `method` arguments, depending on the route that you're sending the form to. Also, if the route expects any parameters, you must pass those in as arguments to startFormTag as well. If you haven't already, read up about routes in the [Routing](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/routing) chapter.
 
 As we said, when linking a form to a route, there are 3 pieces of information that you will need to work with:
 
@@ -124,7 +124,7 @@ As we said, when linking a form to a route, there are 3 pieces of information th
 {% hint style="info" %}
 #### Use Routes for Form Posts
 
-CFWheels's default wildcard `controller/action`-based URLs will not accept form posts for security reasons. This is due to an attack known as [Cross Site Request Forgery (CSRF)](https://www.owasp.org/index.php/Cross-Site\_Request\_Forgery\_\(CSRF\)). We strongly recommend configuring [routes](https://guides.cfwheels.org/docs/routing) to post your forms to.
+CFWheels's default wildcard `controller/action`-based URLs will not accept form posts for security reasons. This is due to an attack known as [Cross Site Request Forgery (CSRF)](https://www.owasp.org/index.php/Cross-Site\_Request\_Forgery\_\(CSRF\)). We strongly recommend configuring [routes](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/routing) to post your forms to.
 {% endhint %}
 
 Most of the time, you'll probably be working with a resource. Your `config/routes.cfm` may look something like this:
@@ -148,7 +148,7 @@ If you click the **View Routes** link in the debug footer, you'll be most intere
 
 Once you get to this list of routes, it really doesn't matter how you authored them in your `config/routes.cfm`. What matters is that you know the names, methods, and parameters that the routes expect. (With some practice, you'll probably be able to look at `config/routes.cfm` and know exactly what the names, methods, and parameters are though.)
 
-If you are creating a record, your route is likely setup to accept a `POST` method. That happens to be the default for [startFormTag()](https://guides.cfwheels.org/reference/startformtag), so you don't even need to include the `method` argument. You can then pass the `users` route name to the `route` argument:
+If you are creating a record, your route is likely setup to accept a `POST` method. That happens to be the default for [startFormTag()](https://api.cfwheels.org/v2.2/controller.startFormTag.html), so you don't even need to include the `method` argument. You can then pass the `users` route name to the `route` argument:
 
 {% code title="views/users/new.cfm" %}
 ```html
@@ -219,7 +219,7 @@ Browsers (even the modern ones) tend to only work well with `GET` and `POST` req
 
 To keep things secure, CFWheels will still use `method="post"` on the form to send `PATCH` and `DELETE` requests. But the CFWheels router will recognize a `PATCH` or `DELETE` request if a form variable called `_method` is also sent, specifying the `PATCH` or `DELETE` method.
 
-Under the hood, [startFormTag()](https://guides.cfwheels.org/reference/startformtag) will also generate a hidden field called `_method` that passes the request method along with the form `POST`.
+Under the hood, [startFormTag()](https://api.cfwheels.org/v2.2/controller.startFormTag.html) will also generate a hidden field called `_method` that passes the request method along with the form `POST`.
 
 So the `<form>` tag generated along with a `method` of `patch` will look something like this:
 
@@ -230,13 +230,13 @@ So the `<form>` tag generated along with a `method` of `patch` will look somethi
 </form>
 ```
 
-You'll notice that [startFormTag()](https://guides.cfwheels.org/reference/startformtag) will also add another hidden field along with `POST`ed requests called `authenticityToken`, which helps prevent against [Cross-Site Request Forgery (CSRF) attacks](https://www.owasp.org/index.php/Cross-Site\_Request\_Forgery\_\(CSRF\)).
+You'll notice that [startFormTag()](https://api.cfwheels.org/v2.2/controller.startFormTag.html) will also add another hidden field along with `POST`ed requests called `authenticityToken`, which helps prevent against [Cross-Site Request Forgery (CSRF) attacks](https://www.owasp.org/index.php/Cross-Site\_Request\_Forgery\_\(CSRF\)).
 
-The moral of the story: [startFormTag()](https://guides.cfwheels.org/reference/startformtag) takes care of all of this for you. If you for some reason decide to wire up your own custom `<form>` tag that must `POST` data, be sure to add your own hidden fields for `_method` and use the [authenticityTokenField()](https://guides.cfwheels.org/reference/authenticitytokenfield) helper to generate the hidden field for the `authenticityToken` that CFWheels will require on the `POST`.
+The moral of the story: [startFormTag()](https://api.cfwheels.org/v2.2/controller.startFormTag.html) takes care of all of this for you. If you for some reason decide to wire up your own custom `<form>` tag that must `POST` data, be sure to add your own hidden fields for `_method` and use the [authenticityTokenField()](https://api.cfwheels.org/v2.2/controller.authenticityTokenField.html) helper to generate the hidden field for the `authenticityToken` that CFWheels will require on the `POST`.
 
 ### Refactoring Common Settings with Global Defaults
 
-By setting up global defaults (as explained in the [Configuration and Defaults](https://guides.cfwheels.org/docs/configuration-and-defaults)) for the `prependToLabel`, `append`, and `labelPlacement` arguments, you can make the form code ever simpler across your whole application.
+By setting up global defaults (as explained in the [Configuration and Defaults](https://guides.cfwheels.org/cfwheels-guides/working-with-cfwheels/configuration-and-defaults)) for the `prependToLabel`, `append`, and `labelPlacement` arguments, you can make the form code ever simpler across your whole application.
 
 Here are the settings that you would apply in `config/settings.cfm`:
 
@@ -290,7 +290,7 @@ If you pass the form an empty instance named `profile` (for example, created by 
 
 ### Refactoring Label Names
 
-If you look at the previous examples, there is one other bit of configuration that we can clean up: the `label` arguments passed to [textField()](https://guides.cfwheels.org/reference/textfield) and [select()](https://guides.cfwheels.org/reference/select).
+If you look at the previous examples, there is one other bit of configuration that we can clean up: the `label` arguments passed to [textField()](https://api.cfwheels.org/v2.2/controller.textField.html) and [select()](https://api.cfwheels.org/v2.2/controller.select.html).
 
 Because we've named `firstName`, `lastName`, and `departmentId` in conventional ways (camel case), CFWheels will generate the labels for us automatically:
 
@@ -319,7 +319,7 @@ Because we've named `firstName`, `lastName`, and `departmentId` in conventional 
 
 You'll notice that CFWheels is even smart enough to translate the `departmentId` property to `Department`.
 
-If you ever need to override a label, you can do so in the model's initializer using the `label` argument of the [property()](https://guides.cfwheels.org/reference/property)method:
+If you ever need to override a label, you can do so in the model's initializer using the `label` argument of the [property()](https://api.cfwheels.org/v2.2/model.property.html)method:
 
 {% code title="models/User.cfc" %}
 ```javascript
@@ -335,7 +335,7 @@ component extends="Model" {
 
 If you really want to secure a form, you need to do it server side. Sure, you can add JavaScript here and there to validate your web form. Unfortunately, disabling JavaScript (and thus your JavaScript-powered form validation) is simple in web browsers, and malicious bots tend not to listen to JavaScript.
 
-Securing the integrity of your web forms in CFWheels on the server side is very easy. Assuming that you have read the chapter on [Object Validation](https://guides.cfwheels.org/docs/object-validation), you can rest assured that your code is a lot more secure now.
+Securing the integrity of your web forms in CFWheels on the server side is very easy. Assuming that you have read the chapter on [Object Validation](https://guides.cfwheels.org/cfwheels-guides/database-interaction-through-models/object-validation), you can rest assured that your code is a lot more secure now.
 
 ### Displaying a List of Model Validation Errors
 
@@ -366,7 +366,7 @@ function update() {
 ```
 {% endcode %}
 
-Notice that the view for the `edit` action is rendered if the `profile` object's [update()](https://guides.cfwheels.org/reference/update) returns `false`.
+Notice that the view for the `edit` action is rendered if the `profile` object's [update()](https://api.cfwheels.org/v2.2/model.update.html) returns `false`.
 
 Let's take the previous form example and add some visual indication to the user about what he did wrong and where, by simply adding the following code on your form page.
 
@@ -501,7 +501,7 @@ Assume that the `departments` variable passed to the options argument contains a
 
 Each data type has its advantages and disadvantages:
 
-* **Queries** allow you to order your results, but you can only use one column. But this can be overcome using [Calculated Properties](https://guides.cfwheels.org/docs/calculated-properties).
+* **Queries** allow you to order your results, but you can only use one column. But this can be overcome using [Calculated Properties](https://guides.cfwheels.org/cfwheels-guides/database-interaction-through-models/calculated-properties).
 * **Structs** allow you to build out static or dynamic values using whatever data that you please, but there is no guarantee that your CFML engine will honor the order in which you add the elements.
 * **Arrays** also allow you to build out static or dynamic values, and there is a guarantee that your CFML engine will honor the order. But arrays are a tad more verbose to work with.
 

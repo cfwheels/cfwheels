@@ -203,7 +203,7 @@ Note that setting the `layout` argument on [renderView()](https://api.cfwheels.o
 
 ### Using No Layout
 
-If you don't want for a given template to be wrapped by a layout at all, you may want to consider creating the page as a _partial_. See the chapter about [Partials](https://guides.cfwheels.org/cfwheels-guides/displaying-views-to-users/partials) for more information.
+If you don't want for a given template to be wrapped by a layout at all, you may want to consider creating the page as a _partial_. See the chapter about [Partials](https://guides.cfwheels.org/docs/partials) for more information.
 
 Another alternative is to use the [renderView()](https://api.cfwheels.org/controller.renderview.html) function and set the `layout` argument to `false`.
 
@@ -260,4 +260,4 @@ That was a fairly basic example of how you can achieve nested layouts in Wheels 
 
 ### Layouts for Emails and Partials
 
-Besides having layouts for view pages in Wheels, you can also have them on emails that you send out and partial files that you include. We have chosen to speak about these in their respective chapters though: [Sending Email](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/sending-email) and [Partials](https://guides.cfwheels.org/cfwheels-guides/displaying-views-to-users/partials).
+Besides having layouts for view pages in Wheels, you can also have them on emails that you send out and partial files that you include. We have chosen to speak about these in their respective chapters though: [Sending Email](https://guides.cfwheels.org/docs/sending-email) and [Partials](https://guides.cfwheels.org/docs/partials).
