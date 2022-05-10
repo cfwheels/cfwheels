@@ -13,7 +13,7 @@ CFWheels's built in model provides your application with some simple and powerfu
 We'll learn by building part of a sample user management application. This tutorial will teach you the basics of setting up a resource that interacts with the CFWheels ORM.
 
 {% hint style="info" %}
-#### Download source code
+**Download source code**
 
 You can download all the source code for this sample application from [https://github.com/dhgassoc/Cfwheels-Beginner-Tutorial-Hello-Database](https://github.com/dhgassoc/Cfwheels-Beginner-Tutorial-Hello-Database)
 {% endhint %}
@@ -67,7 +67,7 @@ Note a couple things about this `users` table:
 1. The table name is plural.
 2. The table has an auto-incrementing primary key named `id`.
 
-These are database [conventions](https://guides.cfwheels.org/docs/conventions) used by CFWheels. This framework strongly encourages that everyone follow _convention over configuration_. That way everyone is doing things mostly the same way, leading to less maintenance and training headaches down the road.
+These are database [conventions](https://guides.cfwheels.org/cfwheels-guides/working-with-cfwheels/conventions) used by CFWheels. This framework strongly encourages that everyone follow _convention over configuration_. That way everyone is doing things mostly the same way, leading to less maintenance and training headaches down the road.
 
 Fortunately, there are ways of going outside of these conventions when you really need it. But let's learn the conventional way first. Sometimes you need to learn the rules before you can know how to break them.
 
@@ -114,7 +114,7 @@ This will create URL endpoints for creating, reading, updating, and deleting use
 * _URL Path_ is the URL that CFWheels listens for to match up the request.
 
 {% hint style="info" %}
-#### Don't forget to reload
+**Don't forget to reload**
 
 You will need to reload your application after adding new routes!
 {% endhint %}
@@ -329,7 +329,7 @@ In the view at `views/users/index.cfm`, it's as simple as looping through the qu
 {% endcode %}
 
 {% hint style="info" %}
-#### When to use `EncodeForHtml`
+**When to use `EncodeForHtml`**
 
 You'll see references to `EncodeForHtml` in some of our examples that output data. This helps escape HTML code in data that attackers could use to embed inject harmful JavaScript. (This is commonly referred to as an "XSS attack," short for "Cross-site Scripting attack.")
 
@@ -342,9 +342,9 @@ We'll now show another cool aspect of form helpers by creating a screen for edit
 
 #### Coding the Edit Form
 
-You probably noticed in the code listed above that we'll have an action for editing a single `users` record. We used the linkTo() form helper function to add an "Edit" button to the form. This action expects a `key` as well.&#x20;
+You probably noticed in the code listed above that we'll have an action for editing a single `users` record. We used the linkTo() form helper function to add an "Edit" button to the form. This action expects a `key` as well.
 
-Because in the linkTo() form helper function we specified the parameter `key`, Wheels adds this parameter into the URL when generating the route.&#x20;
+Because in the linkTo() form helper function we specified the parameter `key`, Wheels adds this parameter into the URL when generating the route.
 
 Wheels will automatically add the provided 'key' from the URL to the params struct in the controllers edit() function.
 
@@ -470,7 +470,7 @@ function update() {
 
 To update the `user`, simply call its [update()](https://api.cfwheels.org/model.update.html) method with the `user` struct passed from the form via `params`. It's that simple.
 
-After the update, we'll add a success message [using the Flash](https://guides.cfwheels.org/docs/using-the-flash) and send the end user back to the edit form in case they want to make more changes.
+After the update, we'll add a success message [using the Flash](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/using-the-flash) and send the end user back to the edit form in case they want to make more changes.
 
 ### Deleting Users
 

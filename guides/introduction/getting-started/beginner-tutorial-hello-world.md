@@ -47,7 +47,7 @@ So what happens if we try to call our new controller right now? Lets take a\
 look. Open your browser and point your browser to the new controller. Because my\
 local server is installed on port 60000, my URL is `http://127.0.0.1:60000/index.cfm/say`.\
 You may need to enter a different URL, depending on how your web server is\
-configured. In my case, I'm using [commandbox](https://guides.cfwheels.org/cfwheels-guides/introduction/getting-started/running-local-development-serevers).
+configured. In my case, I'm using [commandbox](https://guides.cfwheels.org/docs/commandbox).
 
 ![Figure 2: Wheels error after setting up your blank say controller](../../.gitbook/assets/660aaf3-cfwheels-tutorial\_0005\_2.png)
 
