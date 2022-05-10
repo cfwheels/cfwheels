@@ -8,7 +8,7 @@ description: >-
 
 ### Testing Your Install
 
-Let's make sure we're all on the same page. I'm going to assume that you've followed the [Getting Started](https://guides.cfwheels.org/docs/commandbox) guide and have CommandBox all setup. If you haven't done that, stop and read that guide get everything setup. It's okay, this web page will wait for you.
+Let's make sure we're all on the same page. I'm going to assume that you've followed the [Getting Started](https://app.gitbook.com/o/ZCJLW1aBatPAwpmEV7ux/s/bJHOVUkiNubRJ8g5VX0E/) guide and have CommandBox all setup. If you haven't done that, stop and read that guide get everything setup. It's okay, this web page will wait for you.
 
 Okay, so you have CFWheels installed and can see the CFWheels "Congratulations!"\
 page as shown below. That wasn't that hard now, was it?
@@ -167,7 +167,7 @@ code block bellow. When we do this, the value will be displayed in the browser.
 ```
 {% endcode %}
 
-&#x20;call your `say/hello` action again in your browser. Your browser should look\
+call your `say/hello` action again in your browser. Your browser should look\
 like _Figure 4_ below.
 
 ![Figure 4: Hello World with the current date and time](../../.gitbook/assets/9f1a966-cfwheels-tutorial\_0003\_4.png)
@@ -186,7 +186,7 @@ a `goodbye` action to the `say` controller on your own, then create a\
 not feeling that adventurous, we'll quickly go step by step.
 
 First, modify the the `say` controller file so that it looks like the code block\
-below.&#x20;
+below.
 
 {% code title="controllers/Say.cfc" %}
 ```javascript
