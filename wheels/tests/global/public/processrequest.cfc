@@ -35,6 +35,14 @@ component extends="wheels.tests.Test" {
 		assert("Find(expected, result)");
 	}
 
+	// this is more of a framwork test, but just using processRequest to do it
+	function test_process_request_does_not_add_whitespace() {
+		local.params = {action = "actionGet", controller = "verifies"};
+		result = processRequest(method = "get", params = local.params);
+		assert("Find(Chr(13), result) == 0");
+		assert("Find(Chr(10), result) == 0");
+	}
+
 	function test_process_request_as_post() {
 		local.params = {action = "actionPost", controller = "verifies"};
 		result = processRequest(method = "post", params = local.params);
