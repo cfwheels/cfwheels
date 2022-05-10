@@ -97,5 +97,3 @@
 * [Issue Tracker](https://github.com/cfwheels/cfwheels/issues)
 * [Sponsor Us](https://opencollective.com/cfwheels)
 * [Community](https://github.com/cfwheels/cfwheels/discussions)
-
-***
