@@ -346,5 +346,5 @@
 			</tr>
 		</table>
 	</div>
-	<!--- cfformat-ignore-end --->
 </cfoutput>
+<!--- cfformat-ignore-end --->
