@@ -76,7 +76,7 @@ By the way, by using URL rewriting in Apache or IIS, you can completely get rid\
 of the `index.cfm` part of the URL so that\
 `http://localhost/index.cfm/shop/products` becomes\
 `http://localhost/shop/products`. You can read more about this in the\
-[URL Rewriting](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/url-rewriting) chapter.
+[URL Rewriting](https://guides.cfwheels.org/docs/url-rewriting) chapter.
 
 For the remainder of this chapter, we'll type out the URLs in this shorter and\
 prettier way.
@@ -111,7 +111,7 @@ The [renderView()](https://api.cfwheels.org/controller.renderview.html) function
 
 So, how does [renderView()](https://api.cfwheels.org/controller.renderview.html) work? Well, it accepts the arguments `controller` and `action` (among others, such as `route`), and, based on these, it will try to include a view file. In our case, the view file is stored at `views/shop/products.cfm`.
 
-You can read the chapter about [Rendering Content](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/rendering-content) for more information about the [renderView()](https://api.cfwheels.org/controller.renderview.html) function.
+You can read the chapter about [Rendering Content](https://guides.cfwheels.org/docs/rendering-content) for more information about the [renderView()](https://api.cfwheels.org/controller.renderview.html) function.
 
 It's important to note that the [renderView()](https://api.cfwheels.org/controller.renderview.html) function does not cause any controller actions or functions to be executed. It just specifies what view\
 files to get content from. Keep this in mind going forward because it's a common assumption that it does. (Especially when you want to include the view page for another action, it's easy to jump to the incorrect conclusion that the code for that action would also get executed.)
@@ -223,7 +223,7 @@ you can just use the `params` struct for all of them instead.
 
 This concept becomes even more useful once we start getting into creating forms\
 specifically meant for accessing object properties. But let's save the details\
-of all that for the [Form Helpers and Showing Errors](https://guides.cfwheels.org/cfwheels-guides/displaying-views-to-users/form-helpers-and-showing-errors) chapter.
+of all that for the [Form Helpers and Showing Errors](https://guides.cfwheels.org/docs/form-helpers-and-showing-errors) chapter.
 
 ### JSON as part of the request body
 
@@ -240,4 +240,4 @@ The mapping of a json array to params.\_json was introduced in CFWheels 2.1
 ### Routing
 
 For more advanced URL-to-code mappings, you are encourage to use a concept called _routing_.\
-It allows for you to fully customize every URL in your application, including which HTTP verb can be used. You can read more about this in the chapter called [Routing](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/routing).
+It allows for you to fully customize every URL in your application, including which HTTP verb can be used. You can read more about this in the chapter called [Routing](https://guides.cfwheels.org/docs/routing).
