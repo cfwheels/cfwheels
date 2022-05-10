@@ -162,5 +162,4 @@
 		<cfreturn local.rv />
 	</cffunction>
 	<!--- cfformat-ignore-end --->
-
 </cfcomponent>
