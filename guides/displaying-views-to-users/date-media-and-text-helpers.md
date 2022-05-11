@@ -12,7 +12,7 @@ Wheels's included view helper functions can help you out in those tricky little 
 * Media Helpers
 * Text Helpers
 
-We also have separate chapters about Wheels form helpers in [Form Helpers and Showing Errors](https://guides.cfwheels.org/cfwheels-guides/displaying-views-to-users/form-helpers-and-showing-errors) and creating your own helpers in [Creating Custom View Helpers](https://guides.cfwheels.org/cfwheels-guides/displaying-views-to-users/creating-custom-view-helpers).
+We also have separate chapters about Wheels form helpers in [Form Helpers and Showing Errors](https://guides.cfwheels.org/docs/form-helpers-and-showing-errors) and creating your own helpers in [Creating Custom View Helpers](https://guides.cfwheels.org/docs/creating-custom-view-helpers).
 
 ### Date Helpers
 
@@ -56,7 +56,7 @@ Working with media is also a walk in the park with Wheels. Let's jump into a few
 
 **Style Sheets**
 
-First, to include CSS files in your layout, you can use the [styleSheetLinkTag()](https://api.cfwheels.org/v2.2/controller.styleSheetLinkTag.html) function:
+First, to include CSS files in your layout, you can use the [styleSheetLinkTag()](https://guides.cfwheels.org/docs/stylesheetlinktag) function:
 
 ```javascript
 <!--- layout.cfm --->
@@ -135,4 +135,4 @@ To illustrate what the text helpers can help you with, let's see a piece of code
 
 That code will highlight all occurrences of `params.q` and will pluralize the word "result" to "results" if the number of records in `searchResults` is greater than 1. How about them apples? No `<cfif>` statements, no extra lines, no nothing.
 
-The functions we have shown in this chapter are only the tip of the iceberg when it comes to helper functions. There's plenty more, so don't forget to check out the View Helper Functions API.
+The functions we have shown in this chapter are only the tip of the iceberg when it comes to helper functions. There's plenty more, so don't forget to check out the [View Helper Functions](https://guides.cfwheels.org/docs/view-helper-functions) API.
