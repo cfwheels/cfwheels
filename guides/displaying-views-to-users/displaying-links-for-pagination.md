@@ -4,7 +4,7 @@ description: How to create links to other pages in your paginated data in your v
 
 # Displaying Links for Pagination
 
-In the chapter titled [Getting Paginated Data](https://guides.cfwheels.org/cfwheels-guides/database-interaction-through-models/getting-paginated-data), we talked about how to get pages of records from the database (records 11-20, for example). Now we'll show you how to create links to the other pages in your view.
+In the chapter titled [Getting Paginated Data](https://guides.cfwheels.org/docs/getting-paginated-data), we talked about how to get pages of records from the database (records 11-20, for example). Now we'll show you how to create links to the other pages in your view.
 
 ### Displaying Paginated Links with the paginationLinks Function
 
