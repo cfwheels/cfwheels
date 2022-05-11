@@ -1,7 +1,7 @@
 {
     "name":"CFWheels",
     "version":"2.3.0",
-    "author":"CFWheels Core Team and Community, repackaged by Peter Amiri",
+    "author":"CFWheels Core Team and Community",
     "shortDescription":"CFWheels MVC Framework Core Directory",
     "location":"ForgeboxStorage",
     "slug":"cfwheels",
