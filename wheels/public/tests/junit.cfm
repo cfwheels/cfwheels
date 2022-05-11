@@ -1,4 +1,4 @@
-<cfoutput><cfsilent>
+<!--- cfformat-ignore-start ---><cfoutput><cfsilent>
 <cfif testResults.numErrors || testResults.numFailures>
 	<cfheader statuscode="417" statustext="Expectation Failed" />
 <cfelse>
@@ -13,3 +13,4 @@
 	<system-out><![CDATA[]]></system-out>
 	<system-err><![CDATA[]]></system-err>
 </testsuite></cfoutput>
+<!--- cfformat-ignore-start --->

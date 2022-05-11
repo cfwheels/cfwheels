@@ -12,9 +12,8 @@ for (r in application.wheels.routes){
 		ArrayAppend(routes.appRoutes, r);
 	}
 }
-
 </cfscript>
-
+<!--- cfformat-ignore-start --->
 <cfinclude template="../layout/_header.cfm">
 
 <cfoutput>
@@ -106,3 +105,4 @@ for (r in application.wheels.routes){
 </cfoutput>
 
 <cfinclude template="../layout/_footer.cfm">
+<!--- cfformat-ignore-end --->

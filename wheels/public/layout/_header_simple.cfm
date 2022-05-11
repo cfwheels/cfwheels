@@ -2,6 +2,7 @@
 Static simple version of the header/navigation for output on error screens
 --->
 <cfoutput>
+<!--- cfformat-ignore-start --->
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,3 +28,4 @@ Static simple version of the header/navigation for output on error screens
 <div class="container ui">
 	<div class="ui segment">
 </cfoutput>
+<!--- cfformat-ignore-end --->

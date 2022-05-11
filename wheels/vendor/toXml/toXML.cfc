@@ -18,6 +18,7 @@
 
 --->
 
+	<!--- cfformat-ignore-start --->
 	<cffunction name="init" returntype="any" access="public" output="false" hint="I return the toXml Object">
 		<cfreturn this />
 	</cffunction>
@@ -161,6 +162,6 @@
 
 		<cfreturn local.rv />
 	</cffunction>
-
+	<!--- cfformat-ignore-end --->
 </cfcomponent>
 <!--- cfformat-ignore-start --->

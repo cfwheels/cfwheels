@@ -11,6 +11,7 @@ try {
 	message = err.message;
 }
 </cfscript>
+<!--- cfformat-ignore-start --->
 <cfoutput>
 	<div class="ui container">
 		#pageHeader("Migrator", "Database Migrations")#
@@ -215,3 +216,4 @@ $('.ui.icon.button')
 });
 </script>
 <cfinclude template="../layout/_footer.cfm">
+<!--- cfformat-ignore-end --->

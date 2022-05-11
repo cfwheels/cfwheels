@@ -1,6 +1,6 @@
 <cfparam name="docs">
 <cfoutput>
-
+	<!--- cfformat-ignore-start --->
 	<!--- Function AZ --->
 		<div class="three wide column" id="function-navigation">
 			<div class="ui vertical menu fluid">
@@ -119,4 +119,5 @@
 				</div>
 			</div>
 	</div><!--/ col -->
+	<!--- cfformat-ignore-end --->
 </cfoutput>

@@ -24,6 +24,7 @@ if (packages.recordCount) {
 }
 </cfscript>
 <cfoutput>
+	<!--- cfformat-ignore-start --->
 	<div class="ui container">
 		#pageHeader("Test Suites", "Core &amp; App test suites")#
 
@@ -61,6 +62,7 @@ if (packages.recordCount) {
 			</div>
 
 	</div>
+	<!--- cfformat-ignore-end --->
 </cfoutput>
 
 <cfinclude template="../layout/_footer.cfm">
