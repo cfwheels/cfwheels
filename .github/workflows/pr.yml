@@ -1,14 +1,14 @@
 name: CFWheels Pull Requests
 
 on:
-  push:
-    branches-ignore:
-      - "main"
-      - "develop"
+#  push:
+#    branches-ignore:
+#      - "main"
+#      - "develop"
   pull_request:
     branches:
       - develop
-      
+
 jobs:
   tests:
     uses: ./.github/workflows/tests.yml
@@ -30,4 +30,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Apply cfformat changes
-          
+
