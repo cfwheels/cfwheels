@@ -57,49 +57,45 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_override_created_at_with_allow_explicit_timestamps() {
-
 		author = model("author").findOne(order = "id");
-		
-		transaction {
 
-			twentyDaysAgo = dateAdd("d", -20, now());
-			
+		transaction {
+			twentyDaysAgo = DateAdd("d", -20, Now());
+
 			newPost = model("post").create(
 				authorId = author.id,
 				title = "New title",
 				body = "New Body",
 				createdAt = twentyDaysAgo,
 				updatedAt = twentyDaysAgo,
-				transaction="none",
-				allowExplicitTimestamps=true
+				transaction = "none",
+				allowExplicitTimestamps = true
 			);
-			
+
 			assert("newPost.createdAt eq twentyDaysAgo");
-			
+
 			transaction action="rollback";
 		}
 	}
 
 	function test_override_updated_at_with_allow_explicit_timestamps() {
-
 		author = model("author").findOne(order = "id");
-		
-		transaction {
 
-			twentyDaysAgo = dateAdd("d", -20, now());
-			
+		transaction {
+			twentyDaysAgo = DateAdd("d", -20, Now());
+
 			newPost = model("post").create(
 				authorId = author.id,
 				title = "New title",
 				body = "New Body",
 				createdAt = twentyDaysAgo,
 				updatedAt = twentyDaysAgo,
-				transaction="none",
-				allowExplicitTimestamps=true
+				transaction = "none",
+				allowExplicitTimestamps = true
 			);
-			
+
 			assert("newPost.updatedAt eq twentyDaysAgo");
-			
+
 			transaction action="rollback";
 		}
 	}
