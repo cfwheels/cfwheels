@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
+# [2.4.0-dev] => TBD
+
+<!-- ### Controller Enhancements -->
+
+<!-- ### Model Enhancements -->
+
+<!-- ### View Enhancements -->
+
+<!-- ### Bug Fixes -->
+
+<!-- ### Miscellaneous -->
+
+<!-- ### Potentially Breaking Changes -->
+
+----
+
 # [2.3.0](https://github.com/cfwheels/cfwheels/releases/tag/v2.3.0) => 2020.05.11
 
 This relese finalizes the 2.3.0 release and doesn't include any new enhancements or bug fixes. Bellow is the change log from the 2.3.0.rc.1 release.
