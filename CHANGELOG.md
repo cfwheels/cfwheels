@@ -18,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Bug Fixes
 - issue-1091-wheels-paths-in-error-template [#1091](https://github.com/cfwheels/cfwheels/issues/1091) - [Adam Chapman]
 
-<!-- ### Miscellaneous -->
+### Miscellaneous
+- Adds cfformat ignore marker comments around core "view" cfm files that contain html markup - [Adam Chapman]
 
 <!-- ### Potentially Breaking Changes -->
 
