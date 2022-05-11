@@ -461,7 +461,7 @@ public boolean function $validate(required string type, boolean execute = "true"
 						!StructKeyExists(this, local.thisValidation.args.property)
 						|| (
 							IsSimpleValue(this[local.thisValidation.args.property])
-							&& !Len(Trim(this[local.thisValidation.args.property]))
+							&& !Len((this[local.thisValidation.args.property]))
 						)
 						|| (
 							IsStruct(this[local.thisValidation.args.property])
@@ -600,7 +600,7 @@ public void function $validatesPresenceOf(
 	// if the property does not exist or if it's blank we add an error on the object
 	if (
 		!StructKeyExists(arguments.properties, arguments.property)
-		|| (IsSimpleValue(arguments.properties[arguments.property]) && !Len(Trim(arguments.properties[arguments.property])))
+		|| (IsSimpleValue(arguments.properties[arguments.property]) && !Len(arguments.properties[arguments.property]))
 		|| (IsStruct(arguments.properties[arguments.property]) && !StructCount(arguments.properties[arguments.property]))
 	) {
 		addError(property = arguments.property, message = $validationErrorMessage(argumentCollection = arguments));
