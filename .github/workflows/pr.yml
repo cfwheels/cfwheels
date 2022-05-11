@@ -1,10 +1,10 @@
 name: CFWheels Pull Requests
 
 on:
-  push:
-    branches-ignore:
-      - "main"
-      - "develop"
+#  push:
+#    branches-ignore:
+#      - "main"
+#      - "develop"
   pull_request:
     branches:
       - develop
