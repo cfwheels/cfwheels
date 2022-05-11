@@ -22,7 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Adds cfformat ignore marker comments around core "view" cfm files that contain html markup - [Adam Chapman]
 
 ### Guides
+- Fix broken links throughout the guides. - [Peter Amiri]
 - Fixed mailto link in CONTRIBUTING.md [#1123](https://github.com/cfwheels/cfwheels/pull/1123) - [Coleman Sperando * *New Contributor* *]
+- Fix test guides examples [#1125](https://github.com/cfwheels/cfwheels/pull/1125) [Adam Chapman]
 
 <!-- ### Potentially Breaking Changes -->
 
