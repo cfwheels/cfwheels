@@ -80,7 +80,7 @@ t.create();
 ```
 {% endcode %}
 
-`t.timestamps();` creates CFWheels [automatic timestamp](https://guides.cfwheels.org/docs/automatic-time-stamps) columns of `createdAt`,`updatedAt` and `deletedAt`.
+`t.timestamps();` creates CFWheels [automatic timestamp](https://guides.cfwheels.org/cfwheels-guides/database-interaction-through-models/automatic-time-stamps) columns of `createdAt`,`updatedAt` and `deletedAt`.
 
 The `t.create();` is the final statement which executes the actual action.
 
