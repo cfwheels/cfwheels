@@ -1,6 +1,6 @@
 {
-    "name":"CFWheels Core",
-    "version":"2.3.0-rc.1",
+    "name":"CFWheels",
+    "version":"2.3.0",
     "author":"CFWheels Core Team and Community, repackaged by Peter Amiri",
     "shortDescription":"CFWheels MVC Framework Core Directory",
     "location":"ForgeboxStorage",
@@ -37,5 +37,10 @@
             "type":"Apache License 2.0",
             "URL":"https://github.com/cfwheels/cfwheels/blob/master/LICENSE"
         }
-    ]
+    ],
+    "scripts":{
+       "format":"cfformat run --overwrite",
+       "format:watch":"cfformat watch ./.cfformat.json",
+       "format:check":"cfformat check"
+    }
 }

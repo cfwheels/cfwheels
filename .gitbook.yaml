@@ -1,7 +1,7 @@
 root: ./guides
 
 ​structure:
-    readme: README.md
+    readme: introduction/getting-started/getting-started.md
     summary: SUMMARY.md​
 
 redirects:
