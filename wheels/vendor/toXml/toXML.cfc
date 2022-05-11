@@ -1,3 +1,4 @@
+<!--- cfformat-ignore-start --->
 <cfcomponent displayname="toXML" hint="Set of utility functions to generate XML" output="false">
 <!---
 	Based on the toXML component by Raymond Camden: http://www.coldfusionjedi.com/index.cfm/2006/7/2/ToXML-CFC--Converting-data-types-to-XML
@@ -162,3 +163,4 @@
 	</cffunction>
 
 </cfcomponent>
+<!--- cfformat-ignore-start --->

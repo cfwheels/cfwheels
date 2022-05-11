@@ -52,7 +52,6 @@ component extends="Abstract" {
 		if (local.iEnd == 1) {
 			// if we have a single primary key, define the column with the primaryKey adapter method
 			local.sql = local.sql & " " & arguments.primaryKeys[1].toPrimaryKeySQL() & ",#Chr(13)##Chr(10)#";
-
 		} else if (local.iEnd > 1) {
 			// add the primary key columns like we would normal columns
 			for (local.i = 1; local.i <= local.iEnd; local.i++) {

@@ -137,10 +137,10 @@ component extends="Base" output=false {
 	}
 
 	/**
- 	 * Override Base adapter's function.
- 	 * When using H2, cfdbinfo does not return the primarykey flag
- 	 * We need to check the indexes and look for an index with a name starting with primary_key
- 	 */
+	 * Override Base adapter's function.
+	 * When using H2, cfdbinfo does not return the primarykey flag
+	 * We need to check the indexes and look for an index with a name starting with primary_key
+	 */
 	public query function $getColumnInfo(
 		required string table,
 		required string datasource,
@@ -151,15 +151,15 @@ component extends="Base" output=false {
 		local.index = $dbinfo(argumentCollection = arguments);
 		pkList = "";
 		for (row in local.index) {
-			if ( find( 'primary_key', row.INDEX_NAME ) ) {
-				pkList = listAppend(pkList,row.COLUMN_NAME);
+			if (Find('primary_key', row.INDEX_NAME)) {
+				pkList = ListAppend(pkList, row.COLUMN_NAME);
 			}
 		}
 		arguments.type = "columns";
 		local.columns = $dbinfo(argumentCollection = arguments);
 		for (i = 1; i <= local.columns.recordCount; i++) {
-			if ( listFind( pkList,local.columns["COLUMN_NAME"][i] ) ) {
-				querySetCell(local.columns, "IS_PRIMARYKEY", "YES" , i);
+			if (ListFind(pkList, local.columns["COLUMN_NAME"][i])) {
+				QuerySetCell(local.columns, "IS_PRIMARYKEY", "YES", i);
 			}
 		}
 
