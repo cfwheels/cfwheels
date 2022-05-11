@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ### View Enhancements -->
 
-<!-- ### Bug Fixes -->
+### Bug Fixes
+- issue-1091-wheels-paths-in-error-template [#1091](https://github.com/cfwheels/cfwheels/issues/1091) - [Adam Chapman]
 
 <!-- ### Miscellaneous -->
 
