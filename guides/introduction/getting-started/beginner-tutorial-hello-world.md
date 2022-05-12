@@ -45,7 +45,7 @@ functionality and is now tied into our CFWheels application.
 
 So what happens if we try to call our new controller right now? Lets take a\
 look. Open your browser and point your browser to the new controller. Because my\
-local server is installed on port 60000, my URL is `http://127.0.0.1:60000/index.cfm/say`.\
+local server is installed on port 60000, my URL is `http://127.0.0.1:60000/say`.\
 You may need to enter a different URL, depending on how your web server is\
 configured. In my case, I'm using [commandbox](https://guides.cfwheels.org/docs/commandbox).
 
@@ -80,7 +80,7 @@ Now let's call our new action in the browser and see what we get. To call the\
 `hello` action, we simply add `/hello` to the end of the previous URL that we\
 used to call our `say` controller:
 
-`http://127.0.0.1:60000/index.cfm/say/hello`
+`http://127.0.0.1:60000/say/hello`
 
 Once again, we get a ColdFusion error. Although we have created the controller\
 and added the `hello` action to it, we haven't created the view.
@@ -214,7 +214,7 @@ Goodbye World!
 If we did everything right, we should be able to call the new `say/goodbye`\
 action using the following URL:
 
-`http://127.0.0.1:60000/index.cfm/say/goodbye`
+`http://127.0.0.1:60000/say/goodbye`
 
 Your browser should look like _Figure 5_ below:
 
