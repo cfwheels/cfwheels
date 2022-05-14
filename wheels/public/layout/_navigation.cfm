@@ -1,5 +1,6 @@
 
 <cfoutput>
+<!--- cfformat-ignore-start --->
 <div class="sixteen wide column">
 	<nav class="ui pointing fluid eight stackable item  menu ">
 		<a href="/" class="item">
@@ -21,4 +22,5 @@
 		</cfloop>
 	</nav>
 </div>
+<!--- cfformat-ignore-end --->
 </cfoutput>

@@ -1,4 +1,5 @@
 <cfoutput>
+<!--- cfformat-ignore-start --->
 <cfinclude template="../layout/_header.cfm">
 <div class="ui container">
 
@@ -150,4 +151,5 @@
 </div>
 
 <cfinclude template="../layout/_footer.cfm">
+<!--- cfformat-ignore-end --->
 </cfoutput>

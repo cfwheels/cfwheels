@@ -1,4 +1,5 @@
 <cfoutput>
+	<!--- cfformat-ignore-start --->
 	<div class="ui container">
 		<h1>Summary</h1>
 		<p>
@@ -28,6 +29,11 @@
 			&& ArrayLen(arguments.exception.rootCause.tagContext)
 		>
 			<cfset local.tagContext = Duplicate(arguments.exception.rootCause.tagContext)>
+		<cfelseif
+			StructKeyExists(arguments.exception, "tagContext")
+			&& ArrayLen(arguments.exception.tagContext)
+		>
+			<cfset local.tagContext = Duplicate(arguments.exception.tagContext)>
 		</cfif>
 		<cfif StructKeyExists(local, "tagContext")>
 			<p>
@@ -39,10 +45,7 @@
 					<cfset local.pos = local.pos + 1>
 					<cfset local.template = Replace(local.tagContext[local.pos].template, local.path, "")>
 					<cfset local.template = Replace(local.template, "/wheels../", "")>
-					<!--- show all non wheels lines --->
-					<cfif local.template Does Not Contain "wheels" AND FindOneOf("/\", local.template) IS NOT 0>
-						Line #local.tagContext[local.pos].line# in #local.template#<br>
-					</cfif>
+					#local.template#:#local.tagContext[local.pos].line#<br>
 				</cfloop>
 			</p>
 		</cfif>
@@ -50,7 +53,7 @@
 			<p>
 				<strong>URL:</strong>
 				<br>
-				http<cfif cgi.http_x_forwarded_proto == "https" OR cgi.server_port_secure == "true">s</cfif>://#cgi.server_name##Replace(cgi.script_name, "/#application.wheels.rewriteFile#", "")#<cfif IsDefined("request.cgi.path_info")>#request.cgi.path_info#<cfelse>#cgi.path_info#</cfif><cfif cgi.query_string IS NOT "">?#cgi.query_string#</cfif>
+				http<cfif cgi.http_x_forwarded_proto EQ "https" OR cgi.server_port_secure EQ "true">s</cfif>://#cgi.server_name##Replace(cgi.script_name, "/#application.wheels.rewriteFile#", "")#<cfif IsDefined("request.cgi.path_info")>#request.cgi.path_info#<cfelse>#cgi.path_info#</cfif><cfif cgi.query_string IS NOT "">?#cgi.query_string#</cfif>
 			</p>
 		</cfif>
 		<cfif Len(cgi.http_referer)>
@@ -113,4 +116,5 @@
 			</cfif>
 		</cfloop>
 	</div>
+	<!--- cfformat-ignore-end --->
 </cfoutput>

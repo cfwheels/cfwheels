@@ -21,7 +21,7 @@ component {
 			local.iterations++;
 			print.line("Attempt #local.iterations#!");
 			Sleep(local.waitSeconds * 1000);
-			cfhttp(url=local.endpoint, result="local.response");
+			cfhttp(url = local.endpoint, result = "local.response");
 			if (local.response.statusCode == 200) {
 				print.line("Server Up");
 				break;
@@ -40,7 +40,7 @@ component {
 		local.db = this.getDB(arguments.dbengine);
 		local.endpoint = "http://127.0.0.1:#local.port#/wheels/tests/core?db=#local.db#&format=txt&only=failure,error";
 		print.line("RUNNING TESTS (#arguments.cfengine#/#arguments.dbengine#)");
-		cfhttp(url=local.endpoint, result="local.response");
+		cfhttp(url = local.endpoint, result = "local.response");
 		print.line(local.response.fileContent);
 	}
 

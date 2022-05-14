@@ -413,11 +413,16 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_validatesPresenceOf_invalid_when_blank() {
-		user.firstname = "   ";
+		user.firstname = "";
 		user.validatesPresenceOf(property = "firstname");
 		assert('!user.valid()');
 	}
 
+	function test_validatesPresenceOf_does_not_trim_properties() {
+		user.firstname = " ";
+		user.validatesPresenceOf(property = "firstname");
+		assert('user.valid()');
+	}
 
 	/* validatesUniquenessOf */
 	function test_validatesUniquenessOf_valid() {

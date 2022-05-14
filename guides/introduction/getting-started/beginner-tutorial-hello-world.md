@@ -8,7 +8,7 @@ description: >-
 
 ### Testing Your Install
 
-Let's make sure we're all on the same page. I'm going to assume that you've followed the [Getting Started](https://guides.cfwheels.org/docs/commandbox) guide and have CommandBox all setup. If you haven't done that, stop and read that guide get everything setup. It's okay, this web page will wait for you.
+Let's make sure we're all on the same page. I'm going to assume that you've followed the [Getting Started](https://app.gitbook.com/o/ZCJLW1aBatPAwpmEV7ux/s/bJHOVUkiNubRJ8g5VX0E/) guide and have CommandBox all setup. If you haven't done that, stop and read that guide get everything setup. It's okay, this web page will wait for you.
 
 Okay, so you have CFWheels installed and can see the CFWheels "Congratulations!"\
 page as shown below. That wasn't that hard now, was it?
@@ -45,7 +45,7 @@ functionality and is now tied into our CFWheels application.
 
 So what happens if we try to call our new controller right now? Lets take a\
 look. Open your browser and point your browser to the new controller. Because my\
-local server is installed on port 60000, my URL is `http://127.0.0.1:60000/index.cfm/say`.\
+local server is installed on port 60000, my URL is `http://127.0.0.1:60000/say`.\
 You may need to enter a different URL, depending on how your web server is\
 configured. In my case, I'm using [commandbox](https://guides.cfwheels.org/docs/commandbox).
 
@@ -80,7 +80,7 @@ Now let's call our new action in the browser and see what we get. To call the\
 `hello` action, we simply add `/hello` to the end of the previous URL that we\
 used to call our `say` controller:
 
-`http://127.0.0.1:60000/index.cfm/say/hello`
+`http://127.0.0.1:60000/say/hello`
 
 Once again, we get a ColdFusion error. Although we have created the controller\
 and added the `hello` action to it, we haven't created the view.
@@ -167,7 +167,7 @@ code block bellow. When we do this, the value will be displayed in the browser.
 ```
 {% endcode %}
 
-&#x20;call your `say/hello` action again in your browser. Your browser should look\
+call your `say/hello` action again in your browser. Your browser should look\
 like _Figure 4_ below.
 
 ![Figure 4: Hello World with the current date and time](../../.gitbook/assets/9f1a966-cfwheels-tutorial\_0003\_4.png)
@@ -186,7 +186,7 @@ a `goodbye` action to the `say` controller on your own, then create a\
 not feeling that adventurous, we'll quickly go step by step.
 
 First, modify the the `say` controller file so that it looks like the code block\
-below.&#x20;
+below.
 
 {% code title="controllers/Say.cfc" %}
 ```javascript
@@ -214,7 +214,7 @@ Goodbye World!
 If we did everything right, we should be able to call the new `say/goodbye`\
 action using the following URL:
 
-`http://127.0.0.1:60000/index.cfm/say/goodbye`
+`http://127.0.0.1:60000/say/goodbye`
 
 Your browser should look like _Figure 5_ below:
 

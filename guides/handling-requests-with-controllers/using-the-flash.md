@@ -105,7 +105,7 @@ outputting an empty `<p>` tag on requests where the Flash is empty.\
 ( [flash()](https://api.cfwheels.org/controller.flash.html) will return an empty string when the specified key does not\
 exist.)
 
-Check out the [Controller > Flash Functions](https://api.cfwheels.org/v2.0) section in the API listing of all the functions that deal with the Flash.
+Check out the [Controller > Flash Functions](https://api.cfwheels.org/) section in the API listing of all the functions that deal with the Flash.
 
 #### Wholesale Flash Handling with [flashMessages()](https://api.cfwheels.org/controller.flashmessages.html)
 
@@ -176,7 +176,7 @@ You can override this setting in the same way that you override other Wheels\
 settings by running the [set()](https://api.cfwheels.org/controller.set.html) function like this:
 
 ```javascript
-//In `config/settings.cfm` or another `settings.cfm` file within the `config` subfolders 
+//In `config/settings.cfm` or another `settings.cfm` file within the `config` subfolders
 set(flashStorage="session");
 ```
 

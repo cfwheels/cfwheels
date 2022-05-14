@@ -1,7 +1,7 @@
 {
     "name":"CFWheels",
-    "version":"2.3.0-rc.1",
-    "author":"CFWheels Core Team and Community, repackaged by Peter Amiri",
+    "version":"2.4.0-dev",
+    "author":"CFWheels Core Team and Community",
     "shortDescription":"CFWheels MVC Framework Core Directory",
     "location":"ForgeboxStorage",
     "slug":"cfwheels",
@@ -39,7 +39,7 @@
         }
     ],
     "scripts":{
-       "format":"cfformat run --overwrite",
+       "format":"cfformat run --overwrite --cfm",
        "format:watch":"cfformat watch ./.cfformat.json",
        "format:check":"cfformat check"
     }

@@ -75,6 +75,7 @@ if (StructKeyExists(url, "refresh")) {
 </cfscript>
 <cfparam name="request.isFluid" default="false">
 <cfoutput>
+	<!--- cfformat-ignore-start --->
 	<DOCTYPE html>
 	<html>
 	<head>
@@ -109,4 +110,5 @@ if (StructKeyExists(url, "refresh")) {
 		<cfinclude template="_navigation.cfm">
 		<div id="top" class="margin-top">
 	</cfif>
+	<!--- cfformat-ignore-end --->
 </cfoutput>

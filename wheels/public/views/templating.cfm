@@ -16,6 +16,7 @@ try {
 }
 </cfscript>
 <cfoutput>
+<!--- cfformat-ignore-start --->
 <div class="ui container">
 	#pageHeader("Migrator", "Migration Templates")#
 
@@ -154,5 +155,4 @@ $(document).ready(function() {
 });
 </script>
 <cfinclude template="../layout/_footer.cfm">
-
-
+<!--- cfformat-ignore-end --->

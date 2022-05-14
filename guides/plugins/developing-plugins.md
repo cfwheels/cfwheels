@@ -43,7 +43,7 @@ It is also important to note that although you can overwrite functions, they are
 
 ### Example: Overriding timeAgoInWords()
 
-Let's say that we wanted Wheels's built-in function [timeAgoInWords()](https://guides.cfwheels.org/docs/timeagoinwords) to return the time followed by the string " (approximately)":
+Let's say that we wanted Wheels's built-in function [timeAgoInWords()](https://api.cfwheels.org/v2.2/controller.timeAgoInWords.html) to return the time followed by the string " (approximately)":
 
 {% code title="timeAgoInWords.cfc" %}
 ```javascript
@@ -109,7 +109,7 @@ set(deletePluginDirectories=false);
 
 With this setting, you can now develop new plugins in your application without worrying about having a corresponding zip file in place.
 
-See the chapter on [Configuration and Defaults](https://guides.cfwheels.org/docs/configuration-and-defaults) for more details about changing Wheels settings.
+See the chapter on [Configuration and Defaults](https://guides.cfwheels.org/cfwheels-guides/working-with-cfwheels/configuration-and-defaults) for more details about changing Wheels settings.
 
 ### Stand-Alone Plugins
 

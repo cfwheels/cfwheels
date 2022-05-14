@@ -1,3 +1,4 @@
+<!--- cfformat-ignore-start --->
 </div></div><!--/main-->
 <cfif request.isFluid>
 </div>
@@ -201,3 +202,4 @@ $('.ui.radio.checkbox')
 
 </body>
 </html>
+<!--- cfformat-ignore-end --->

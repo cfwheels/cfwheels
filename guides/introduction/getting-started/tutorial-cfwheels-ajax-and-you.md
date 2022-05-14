@@ -45,22 +45,22 @@ Then, let's create a link to a controller's action in a view file, like so:
 
 That piece of code by itself will work just like you expect it to. When you click the link, you will load the `hello` action inside the `say` controller.
 
-But let's make it into an asynchronous request. Add this JavaScript (either on the page inside `script` tags or in a separate `.js` file included via [javaScriptIncludeTag()](https://api.cfwheels.org/v2.0/controller.javaScriptIncludeTag.html) ):
+But let's make it into an asynchronous request. Add this JavaScript (either on the page inside `script` tags or in a separate `.js` file included via [javaScriptIncludeTag()](https://api.cfwheels.org/controller.javaScriptIncludeTag.html) ):
 
 {% code title="JavaScript" %}
 ```javascript
 (function($) {
     // Listen to the "click" event of the "alert-button" link and make an AJAX request
     $("#alert-button").on("click", function(event) {
-        $.ajax({ 
+        $.ajax({
             type: "GET",
             // References "/say/hello?format=json"
             url: $(this).attr("href") + "?format=json",
-            dataType: "json", 
-            success: function(response) { 
+            dataType: "json",
+            success: function(response) {
                 $("h1").html(response.message);
                 $("p").html(response.time);
-            } 
+            }
         });
 
         event.preventDefault();
@@ -73,7 +73,7 @@ With that code, we are listening to the `click` event of the hyperlink, which wi
 
 Note that the `success` block inserts keys from the response into the empty `h1` and `p` blocks in the calling view. (You may have been wondering about those when you saw the first example. Mystery solved.)
 
-The last thing that we need to do is implement the `say/hello` action. Note that the request expects a `dataType` of `JSON`. By default, CFWheels controllers only generate HTML responses, but there is an easy way to generate JSON instead using CFWheels's [provides()](https://api.cfwheels.org/v2.0/controller.provides.html) and [renderWith()](https://api.cfwheels.org/v2.0/controller.renderWith.html) functions:
+The last thing that we need to do is implement the `say/hello` action. Note that the request expects a `dataType` of `JSON`. By default, CFWheels controllers only generate HTML responses, but there is an easy way to generate JSON instead using CFWheels's [provides()](https://api.cfwheels.org/controller.provides.html) and [renderWith()](https://api.cfwheels.org/controller.renderWith.html) functions:
 
 {% code title="controllers/Say.cfc" %}
 ```javascript
@@ -87,7 +87,7 @@ component extends="Controller" {
         greeting = {};
         greeting["message"] = "Hi there";
         greeting["time"] = Now();
-                
+
         // Respond to all requests with `renderWith()`.
         renderWith(greeting);
     }
@@ -95,9 +95,9 @@ component extends="Controller" {
 ```
 {% endcode %}
 
-In this controller's `config()` method, we use the [provides()](https://api.cfwheels.org/v2.0/controller.provides.html) function to indicate that we want all actions in the controller to be able to respond with the data in HTML or JSON formats. Note that the client calling the action can request the type by passing a URL parameter named format or by sending the `format` in the request header.
+In this controller's `config()` method, we use the [provides()](https://api.cfwheels.org/controller.provides.html) function to indicate that we want all actions in the controller to be able to respond with the data in HTML or JSON formats. Note that the client calling the action can request the type by passing a URL parameter named format or by sending the `format` in the request header.
 
-The call to [renderWith()](https://api.cfwheels.org/v2.0/controller.renderWith.html) in the `hello` action takes care of the translation to the requested format. Our JavaScript is requesting JSON, so Wheels will format the `greeting` struct as JSON automatically and send it back to the client. If the client requested HTML or the default of none, Wheels will process and serve the view template at `views/say/hello.cfm`. For more information about  [provides()](https://api.cfwheels.org/v2.0/controller.provides.html) and  [renderWith()](https://api.cfwheels.org/v2.0/controller.renderWith.html), reference the chapter on [Responding with Multiple Formats](https://guides.cfwheels.org/docs/responding-with-multiple-formats).
+The call to [renderWith()](https://api.cfwheels.org/controller.renderWith.html) in the `hello` action takes care of the translation to the requested format. Our JavaScript is requesting JSON, so Wheels will format the `greeting` struct as JSON automatically and send it back to the client. If the client requested HTML or the default of none, Wheels will process and serve the view template at `views/say/hello.cfm`. For more information about  [provides()](https://api.cfwheels.org/controller.provides.html) and  [renderWith()](https://api.cfwheels.org/controller.renderWith.html), reference the chapter on [Responding with Multiple Formats](https://guides.cfwheels.org/docs/responding-with-multiple-formats).
 
 Lastly, notice the lines where we're setting `greeting["message"]` and `greeting["time"]`. Due to the case-insensitive nature of ColdFusion, we recommend setting variables to be consumed by JavaScript using bracket notation like that. If you do not use that notation (i.e., `greetings.message` and `greetings.time` instead), your JavaScript will need to reference those keys from the JSON as `MESSAGE` and `TIME` (all caps). Unless you like turning caps lock on and off, you can see how that would get annoying after some time.
 

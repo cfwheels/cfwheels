@@ -35,6 +35,7 @@ try {
 	down[1] = e.message;
 }
 </cfscript>
+<!--- cfformat-ignore-start --->
 <cfoutput>
 	<div class="ui info message">
 		<div class="header">Note</div>
@@ -67,3 +68,4 @@ try {
 		<p>No SQL returned: this might be an empty migration file?</p>
 	</cfif>
 </cfoutput>
+<!--- cfformat-ignore-end --->

@@ -36,6 +36,7 @@
 		<cfset local.hasAppTests = false>
 	</cfif>
 </cfif>
+<!--- cfformat-ignore-start --->
 <cfsavecontent variable="local.css">
 	<style>#wheels-debug-area {
 		background: #ececec;
@@ -174,7 +175,7 @@
 					#capitalize($get("environment"))#<cfif NOT Len($get("reloadPassword"))>
 						<cfset local.environments = "development,testing,maintenance,production">
 						[
-<cfset local.pos = 0>
+						<cfset local.pos = 0>
 						<cfloop list="#local.environments#" index="local.i">
 							<cfset local.pos = local.pos + 1>
 							<cfif $get("environment") IS NOT local.i>
@@ -250,11 +251,11 @@
 								</a>
 								<cfif DirectoryExists("#GetDirectoryFromPath(GetBaseTemplatePath())#plugins/#LCase(local.i)#/tests")>
 									[
-<a
+									<a
 										href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=#LCase(local.i)#"
 									>Run Tests</a>
 									,
-<a
+									<a
 										href="#$get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=#LCase(local.i)#"
 									>View Tests</a>
 									]
@@ -329,14 +330,14 @@
 				<td>
 					#request.wheels.execution.total#ms<cfif request.wheels.execution.total GT 0>
 						(
-<cfset local.keys = StructSort(request.wheels.execution, "numeric", "desc")>
+						<cfset local.keys = StructSort(request.wheels.execution, "numeric", "desc")>
 						<cfset local.firstDone = false>
 						<cfloop from="1" to="#ArrayLen(local.keys)#" index="local.i">
 							<cfset local.key = local.keys[local.i]>
 							<cfif local.key IS NOT "total" AND request.wheels.execution[local.key] GT 0>
 								<cfif local.firstDone>,</cfif>
 								#LCase(local.key)# ~#request.wheels.execution[local.key]#ms
-<cfset local.firstDone = true>
+								<cfset local.firstDone = true>
 							</cfif>
 						</cfloop>
 						)
@@ -346,3 +347,4 @@
 		</table>
 	</div>
 </cfoutput>
+<!--- cfformat-ignore-end --->
