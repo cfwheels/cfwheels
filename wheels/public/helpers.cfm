@@ -41,12 +41,15 @@ function endTable() {
  **/
 function startTab(string tab = "", boolean active = false) {
 	local.rv = '<div class="ui bottom attached tab segment';
-	if (arguments.active) local.rv &= ' active ';
+	if (arguments.active) {
+		local.rv &= ' active';
+	}
 	local.rv &= '" data-tab="';
 	local.rv &= arguments.tab;
-	local.rv &= '">';
+	local.rv &= '" style="overflow-x: auto;">';
 	return local.rv;
 }
+
 /**
  * End tab markup
  **/
