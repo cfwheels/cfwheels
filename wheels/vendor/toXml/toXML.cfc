@@ -1,24 +1,22 @@
 <!--- cfformat-ignore-start --->
 <cfcomponent displayname="toXML" hint="Set of utility functions to generate XML" output="false">
-<!---
-	Based on the toXML component by Raymond Camden: http://www.coldfusionjedi.com/index.cfm/2006/7/2/ToXML-CFC--Converting-data-types-to-XML
+	<!---
+		Based on the toXML component by Raymond Camden: http://www.coldfusionjedi.com/index.cfm/2006/7/2/ToXML-CFC--Converting-data-types-to-XML
 
-	toXML function made by Paul Klinkenberg, 25-feb-2009
-	http://www.coldfusiondeveloper.nl/post.cfm/toxml-function-for-coldfusion
+		toXML function made by Paul Klinkenberg, 25-feb-2009
+		http://www.coldfusiondeveloper.nl/post.cfm/toxml-function-for-coldfusion
 
-	Version 1.1, March 8, 2010
-	Now using <cfsavecontent> while generating the xml output in the functions, since it increases process speed
-	Thanks to Brian Meloche (http://www.brianmeloche.com/blog/) for pointing it out
+		Version 1.1, March 8, 2010
+		Now using <cfsavecontent> while generating the xml output in the functions, since it increases process speed
+		Thanks to Brian Meloche (http://www.brianmeloche.com/blog/) for pointing it out
 
-	Version 1.2, September 1, 2010
-	- Cleaned up variables to reference the arguments scope so CF doesn't have to search the different scopes
-	- Cleaned up methods to only use var once per method call
-	- Created a new method $simpleValueToXml()
-	- Add tests outside of component
+		Version 1.2, September 1, 2010
+		- Cleaned up variables to reference the arguments scope so CF doesn't have to search the different scopes
+		- Cleaned up methods to only use var once per method call
+		- Created a new method $simpleValueToXml()
+		- Add tests outside of component
+	--->
 
---->
-
-	<!--- cfformat-ignore-start --->
 	<cffunction name="init" returntype="any" access="public" output="false" hint="I return the toXml Object">
 		<cfreturn this />
 	</cffunction>
@@ -162,6 +160,6 @@
 
 		<cfreturn local.rv />
 	</cffunction>
-	<!--- cfformat-ignore-end --->
+
 </cfcomponent>
-<!--- cfformat-ignore-start --->
+<!--- cfformat-ignore-end --->
