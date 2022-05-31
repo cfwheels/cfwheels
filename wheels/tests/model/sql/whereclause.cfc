@@ -86,9 +86,7 @@ component extends="wheels.tests.Test" {
 
 	// https://github.com/cfwheels/cfwheels/issues/1088
 	function test_RESQLWhere_regex_handles_whitespace_between_single_quote_and_parenthesis() {
-		actual = model("post").findAll(
-			where = "(title LIKE '%test%' )"
-		);
+		actual = model("post").findAll(where = "(title LIKE '%test%' )");
 		assert("actual.recordCount gt 0");
 	}
 
