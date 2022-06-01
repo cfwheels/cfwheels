@@ -1,3 +1,3 @@
 <cfoutput>
-  <p>some content</p>
+	<p>some content</p>
 </cfoutput>

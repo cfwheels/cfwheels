@@ -52,11 +52,7 @@ public any function create(
  * @callbacks [see:findAll].
  * @allowExplicitTimestamps Set this to `true` to allow explicit assignment of `createdAt` or `updatedAt` properties
  */
-public any function new(
-	struct properties = {}, 
-	boolean callbacks = true,
-	boolean allowExplicitTimestamps = false
-) {
+public any function new(struct properties = {}, boolean callbacks = true, boolean allowExplicitTimestamps = false) {
 	arguments.properties = $setProperties(
 		argumentCollection = arguments,
 		filterList = "properties,reload,transaction,callbacks",

@@ -1,13 +1,13 @@
 <cfsilent>
 	<cfscript>
 	if (testResults.numErrors || testResults.numFailures) {
-		cfheader(statustext="Expectation Failed", statuscode=417);
+		cfheader(statustext = "Expectation Failed", statuscode = 417);
 	} else {
-		cfheader(statustext="OK", statuscode=200);
+		cfheader(statustext = "OK", statuscode = 200);
 	}
-	cfsetting(showdebugoutput=false);
+	cfsetting(showdebugoutput = false);
 	request.wheels.showDebugInformation = false;
-	cfcontent(type="text/plain");
+	cfcontent(type = "text/plain");
 	width = 128;
 	hr = Chr(13) & RepeatString("=", width) & Chr(13);
 	heading = "TEST RESULTS";
@@ -41,4 +41,5 @@
 		}
 	}
 	</cfscript>
-</cfsilent><cfcontent reset="true"><cfoutput>#ArrayToList(content, Chr(13))#</cfoutput>
+</cfsilent>
+<cfcontent reset="true"><cfoutput>#ArrayToList(content, Chr(13))#</cfoutput>

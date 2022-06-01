@@ -98,12 +98,7 @@ settings = [
 	},
 	{
 		name = 'Plugins',
-		values = [
-			'deletePluginDirectories',
-			'loadIncompatiblePlugins',
-			'overwritePlugins',
-			'showIncompatiblePlugins'
-		]
+		values = ['deletePluginDirectories', 'loadIncompatiblePlugins', 'overwritePlugins', 'showIncompatiblePlugins']
 	},
 	{
 		name = 'Models',

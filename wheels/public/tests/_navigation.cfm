@@ -2,19 +2,13 @@
 formats = DirectoryList(ExpandPath("/wheels/public/tests"), false, "name", "", "name")
 	.filter(function(name) {
 		return !Find("_", arguments.name);
-	}).map(function(name) {
+	})
+	.map(function(name) {
 		return ListFirst(arguments.name, ".");
 	});
 
 type = request.wheels.params.type;
-packageParamKeys = [
-	"package",
-	"test",
-	"reload",
-	"db",
-	"format",
-	"refresh"
-];
+packageParamKeys = ["package", "test", "reload", "db", "format", "refresh"];
 _params = "";
 for (key in packageParamKeys) {
 	if (StructKeyExists(url, key)) {

@@ -1,5 +1,5 @@
 <cfoutput>
-start:sharedlayout
-#includeContent()#
-end:sharedlayout
+	start:sharedlayout
+	#includeContent()#
+	end:sharedlayout
 </cfoutput>
