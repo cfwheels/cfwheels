@@ -10,31 +10,7 @@ on:
       - develop
 
 jobs:
-#  tests:
-#    uses: ./.github/workflows/tests.yml
-#    secrets:
-#      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-  cfformat:
-    runs-on: ubuntu-latest
-#    runs-on: ubuntu-20.04
-#    needs: tests
-#    secrets:
-#      PAT: ${{ secrets.PAT }}
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-          token: ${{ secrets.PAT }}
-
-      - uses: Ortus-Solutions/commandbox-action@v1.0.2
-        with:
-          cmd: run-script format
-
-      - name: Commit Format Changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Apply CFFormat changes
-          push_options: --force
+  tests:
+    uses: ./.github/workflows/tests.yml
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

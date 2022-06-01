@@ -1,3 +1,3 @@
 <cfoutput>
-  #includePartial(partial="testpartial2")#
+	#includePartial(partial = "testpartial2")#
 </cfoutput>

@@ -1,6 +1,6 @@
 <cfif StructKeyExists(arguments, "customQuery")>
 	<cfoutput>#arguments.customQuery['firstName'][3]#</cfoutput>
-<cfelse>
+	<cfelse>
 	<cfinclude template="_user.cfm">
 	<cfif StructKeyExists(arguments, "query")>
 		<cfset request.partialTests.noQueryArg = false>

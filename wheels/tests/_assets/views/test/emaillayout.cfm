@@ -1,3 +1,3 @@
 <div>
-<cfoutput>#includeContent()#</cfoutput>
+	<cfoutput>#includeContent()#</cfoutput>
 </div>
