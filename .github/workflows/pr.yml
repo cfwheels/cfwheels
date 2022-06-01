@@ -18,6 +18,8 @@ jobs:
   format:
     runs-on: ubuntu-20.04
     needs: tests
+    secrets:
+      PAT: ${{ secrets.PAT }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
