@@ -7,6 +7,8 @@ on:
     secrets:
       SLACK_WEBHOOK_URL:
         required: true
+      PAT:
+        required: true
 
 jobs:
   tests:
