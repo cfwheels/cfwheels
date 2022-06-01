@@ -1,16 +1,16 @@
 <cfinclude template="../layout/_header.cfm">
 <cfscript>
-datasourceAvailable = true;
+datasourceAvailable=true;
 message = "";
 try {
 	availableMigrations = application.wheels.migrator.getAvailableMigrations();
 	prefix = "timestamp";
-	if (ArrayLen(availableMigrations)) {
-		if (Len(availableMigrations[1]["version"]) NEQ 14) {
+	if(arrayLen(availableMigrations)){
+		if(len(availableMigrations[1]["version"]) NEQ 14 ){
 			prefix = "numeric";
 		}
 	}
-} catch (database err) {
+} catch (database err){
 	datasourceAvailable = false;
 	message = err.message;
 }

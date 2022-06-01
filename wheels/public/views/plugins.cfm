@@ -1,8 +1,9 @@
 <cfscript>
-if (!application.wheels.enablePluginsComponent)
-	Throw(type = "wheels.plugins", message = "The Wheels Plugin component is disabled...");
+if(!application.wheels.enablePluginsComponent)
+	throw(type="wheels.plugins", message="The Wheels Plugin component is disabled...");
 
 loadedPlugins = application.wheels.plugins;
+
 </cfscript>
 <cfinclude template="../layout/_header.cfm">
 <cfoutput>

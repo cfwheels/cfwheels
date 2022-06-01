@@ -8,7 +8,14 @@
 		>
 	</cfcatch>
 </cftry>
-<cfset local.db = LCase(Replace(local.dbinfo.database_productname, " ", "", "all"))>
+<cfset local.db = LCase(
+	Replace(
+		local.dbinfo.database_productname,
+		" ",
+		"",
+		"all"
+	)
+)>
 
 <!--- handle differences in database for identity inserts, column types etc --->
 <cfset local.storageEngine = "">
@@ -25,12 +32,12 @@
 <cfif local.db IS "microsoftsqlserver">
 	<cfset local.identityColumnType = "int NOT NULL IDENTITY(1,1)">
 	<cfset local.binaryColumnType = "image">
-	<cfelseif local.db IS "mysql" or local.db IS "mariadb">
+<cfelseif local.db IS "mysql" or local.db IS "mariadb">
 	<cfset local.identityColumnType = "int NOT NULL AUTO_INCREMENT">
 	<cfset local.storageEngine = "ENGINE=InnoDB">
-	<cfelseif local.db IS "h2">
+<cfelseif local.db IS "h2">
 	<cfset local.identityColumnType = "int NOT NULL IDENTITY">
-	<cfelseif local.db IS "postgresql">
+<cfelseif local.db IS "postgresql">
 	<cfset local.identityColumnType = "SERIAL NOT NULL">
 	<cfset local.dateTimeColumnType = "timestamp">
 	<cfset local.binaryColumnType = "bytea">
@@ -437,9 +444,24 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 	</cfloop>
 </cfloop>
 
-<cfset model("user2").create(username = "Chris", password = "x", firstName = "x", lastName = "x")>
-<cfset model("user2").create(username = "Tim", password = "x", firstName = "x", lastName = "x")>
-<cfset model("user2").create(username = "Tom", password = "x", firstName = "x", lastName = "x")>
+<cfset model("user2").create(
+	username = "Chris",
+	password = "x",
+	firstName = "x",
+	lastName = "x"
+)>
+<cfset model("user2").create(
+	username = "Tim",
+	password = "x",
+	firstName = "x",
+	lastName = "x"
+)>
+<cfset model("user2").create(
+	username = "Tom",
+	password = "x",
+	firstName = "x",
+	lastName = "x"
+)>
 
 <!--- create a profile with an author --->
 <cfset model("profile").create(dateOfBirth = "1/1/1970", bio = "Unknown Author")>

@@ -4,7 +4,7 @@ component extends="wheels.tests.Test" {
 	// are shown in the stack trace as well as the tagContext, its tricky to isolate without some html parsing.
 	function test_onerror_cfmlerror_shows_wheels_templates() {
 		try {
-			Throw(type = "UnitTestError");
+			throw(type="UnitTestError");
 		} catch (any e) {
 			exception = e;
 		}
@@ -14,5 +14,4 @@ component extends="wheels.tests.Test" {
 
 		assert("actual contains expected");
 	}
-
 }

@@ -1,4 +1,4 @@
 <cfscript>
-globalHelperFunction();
-controllerHelperFunction();
+	globalHelperFunction();
+	controllerHelperFunction();
 </cfscript>

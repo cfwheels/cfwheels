@@ -3,7 +3,7 @@
 	<cfif request.cgi.path_info IS NOT cgi.script_name>
 		<cfset local.baseReloadURL &= request.cgi.path_info>
 	</cfif>
-	<cfelse>
+<cfelse>
 	<cfif cgi.path_info IS NOT cgi.script_name>
 		<cfset local.baseReloadURL &= cgi.path_info>
 	</cfif>
@@ -21,7 +21,7 @@
 </cfloop>
 <cfif local.baseReloadURL Contains "?">
 	<cfset local.baseReloadURL &= "&">
-	<cfelse>
+<cfelse>
 	<cfset local.baseReloadURL &= "?">
 </cfif>
 <cfset local.baseReloadURL &= "reload=">

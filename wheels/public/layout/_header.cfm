@@ -9,9 +9,24 @@ request.wheelsInternalAssetPath = application.wheels.webpath & "wheels/public/as
 
 // Primary Navigation
 request.navigation = [
-	{route = "wheelsInfo", title = "System Information", isFluid = false, text = "<i class='info circle icon'></i> Info"},
-	{route = "wheelsRoutes", title = "Routes", isFluid = false, text = "<i class='random icon'></i> Routes"},
-	{route = "wheelsDocs", title = "Docs", isFluid = true, text = "<i class='icon file alternate'></i> Docs"},
+	{
+		route = "wheelsInfo",
+		title = "System Information",
+		isFluid = false,
+		text = "<i class='info circle icon'></i> Info"
+	},
+	{
+		route = "wheelsRoutes",
+		title = "Routes",
+		isFluid = false,
+		text = "<i class='random icon'></i> Routes"
+	},
+	{
+		route = "wheelsDocs",
+		title = "Docs",
+		isFluid = true,
+		text = "<i class='icon file alternate'></i> Docs"
+	},
 	{
 		route = "wheelsPackages",
 		type = "app",
@@ -23,13 +38,23 @@ request.navigation = [
 if (application.wheels.enableMigratorComponent) {
 	ArrayAppend(
 		request.navigation,
-		{route = "wheelsMigrator", title = "Migrator", isFluid = false, text = "<i class='database icon'></i> Migrator"}
+		{
+			route = "wheelsMigrator",
+			title = "Migrator",
+			isFluid = false,
+			text = "<i class='database icon'></i> Migrator"
+		}
 	);
 }
 if (application.wheels.enablePluginsComponent) {
 	ArrayAppend(
 		request.navigation,
-		{route = "wheelsPlugins", title = "Plugins", isFluid = false, text = "<i class='plug icon'></i> Plugins"}
+		{
+			route = "wheelsPlugins",
+			title = "Plugins",
+			isFluid = false,
+			text = "<i class='plug icon'></i> Plugins"
+		}
 	);
 }
 

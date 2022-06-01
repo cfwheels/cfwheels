@@ -1,5 +1,5 @@
 <cfoutput>
-	start:partiallayout
-	#includeContent()#
-	end:partiallayout
+start:partiallayout
+#includeContent()#
+end:partiallayout
 </cfoutput>

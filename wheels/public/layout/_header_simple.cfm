@@ -1,4 +1,6 @@
-<!--- Static simple version of the header/navigation for output on error screens --->
+<!---
+Static simple version of the header/navigation for output on error screens
+--->
 <cfoutput>
 <!--- cfformat-ignore-start --->
 <!DOCTYPE html>

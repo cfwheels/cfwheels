@@ -477,7 +477,7 @@ public boolean function $validate(required string type, boolean execute = "true"
 					// if the validation set does not allow blank values we can set an error right away, otherwise we call a method to run the actual check
 					if (
 						StructKeyExists(local.thisValidation.args, "property")
-						&& StructKeyExists(local.thisValidation.args, "allowBlank")
+						&& StructKeyExists(local.thisValidation.args,"allowBlank")
 						&& !local.thisValidation.args.allowBlank
 						&& (
 							!StructKeyExists(this, local.thisValidation.args.property)
@@ -527,9 +527,7 @@ public boolean function $evaluateCondition() {
 				// cfformat-ignore-start
 				arguments[local.item] = Replace(ReplaceList(arguments[local.item], "==,!=,<,<=,>,>=", " eq , neq , lt , lte , gt , gte "), "  ", " ", "all");
 				// cfformat-ignore-end
-				local[
-					local.key
-				] = Evaluate(arguments[local.item]);
+				local[local.key] = Evaluate(arguments[local.item]);
 			}
 		}
 	}
