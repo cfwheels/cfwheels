@@ -310,9 +310,6 @@ public any function findAll(
 		}
 
 		switch (arguments.returnAs) {
-			case "sql":
-				local.rv = local.findAll.result.sql;
-				break;
 			case "query":
 				local.rv = local.findAll.query;
 				// execute callbacks unless we're currently running the count or primary key pagination queries (we only want the callback to run when we have the actual data)
