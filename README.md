@@ -3,7 +3,7 @@
 [CFWheels][1] provides fast application development, a great organization system for your code, and is
 just plain fun to use.
 
-One of our biggest goals is for you to be able to get up and running with CFWheels quickly. We want for
+One of our biggest goals is for you to be able to get up and running with CFWheels quickly. We want
 you to be able to learn it as rapidly as it is to write applications with it.
 
 ## Getting Started
