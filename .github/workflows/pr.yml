@@ -18,6 +18,9 @@ jobs:
   cfformat:
     runs-on: ubuntu-20.04
     needs: tests
+    secrets: 
+      token: ${{ secrets.PAT }}
+
 
     steps:
       - name: Checkout Repository
