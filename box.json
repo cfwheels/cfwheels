@@ -39,7 +39,7 @@
         }
     ],
     "scripts":{
-       "format":"cfformat run --overwrite --cfm",
+       "format":"cfformat run --overwrite",
        "format:watch":"cfformat watch ./.cfformat.json",
        "format:check":"cfformat check"
     }
