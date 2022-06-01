@@ -17,7 +17,6 @@ jobs:
 
   format:
    needs: tests
-    name: Format
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout Repository
