@@ -16,8 +16,8 @@ jobs:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   format:
-   needs: tests
     runs-on: ubuntu-20.04
+    needs: tests
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
