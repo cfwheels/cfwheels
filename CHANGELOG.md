@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Bug Fixes
 - issue-1091-wheels-paths-in-error-template [#1091](https://github.com/cfwheels/cfwheels/issues/1091) - [Adam Chapman]
 - issue-1082-validations should not trim properties [#1082](https://github.com/cfwheels/cfwheels/issues/1082) - [Adam Chapman]
+- issue-1088-Adds SQL parsing regex tweak which correctly handles whitespace [#1088](https://github.com/cfwheels/cfwheels/issues/1088) - [Adam Chapman, Adam Cameron]
 
 ### Miscellaneous
 - Adds cfformat ignore marker comments around core "view" cfm files that contain html markup - [Adam Chapman]
