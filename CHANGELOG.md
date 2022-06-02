@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Adds cfformat ignore marker comments around core "view" cfm files that contain html markup - [Adam Chapman]
 - Adds the ability to scroll large items horizontally in the test runner UI [#1130](https://github.com/cfwheels/cfwheels/pull/1130) - [Adam Chapman]
 - Fix cfformat ignore markers [#1129](https://github.com/cfwheels/cfwheels/pull/1129) - [Adam Chapman]
+- Enable finder model methods to returnAs "sql", mainly for debugging [#1141](https://github.com/cfwheels/cfwheels/pull/1141) - [Adam Chapman]
 
 ### Guides
 - Fix broken links throughout the guides. - [Peter Amiri]
