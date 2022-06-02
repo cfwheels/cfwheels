@@ -88,4 +88,15 @@ component extends="wheels.tests.Test" {
 		assert("actual.recordCount eq 10");
 	}
 
+	function test_findall_returnas_sql() {
+		actual = model("author").findAll(select = "id", returnAs = "sql");
+		// remove line breaks
+		actual = ReplaceList(actual, "#Chr(13)#,#Chr(10)#", " , ");
+		// remove double spaces
+		actual = ReplaceList(actual, "  ", " ", "all");
+		expected = "SELECT authors.id FROM authors";
+
+		assert("actual eq expected");
+	}
+
 }
