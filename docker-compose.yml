@@ -70,11 +70,12 @@ services:
       MYSQL_PASSWORD: wheelstestdb
 
   postgres:
-    image: postgres:13.6
+    image: postgres:latest
     restart: always
     environment:
       POSTGRES_USER: wheelstestdb
       POSTGRES_PASSWORD: wheelstestdb
+      POSTGRES_INITDB_ARGS: --auth-host=md5
 
   sqlserver:
     build:

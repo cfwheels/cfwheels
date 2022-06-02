@@ -1,4 +1,4 @@
-FROM ortussolutions/commandbox:commandbox-5.2.0
+FROM ortussolutions/commandbox:latest
 
 LABEL maintainer "CFWheels Core Team"
 
