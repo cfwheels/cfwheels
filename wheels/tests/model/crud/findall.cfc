@@ -94,6 +94,9 @@ component extends="wheels.tests.Test" {
 		actual = ReplaceList(actual, "#Chr(13)#,#Chr(10)#", " , ");
 		// remove double spaces
 		actual = ReplaceList(actual, "  ", " ", "all");
+		// trim extra whitespace
+		actual = Trim(actual);
+
 		expected = "SELECT authors.id FROM authors";
 
 		assert("actual eq expected");
