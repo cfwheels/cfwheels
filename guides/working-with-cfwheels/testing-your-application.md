@@ -355,7 +355,7 @@ We use this information to make sure that the controller redirected the visitor 
 
 **Note:** `processRequest()` is only for use within the test framework.
 
-Below are some examples are how a controller can be tested:
+Below are some examples of how a controller can be tested:
 
 ```java
 // asserts that a failed user update returns a 302 http response, an error exists in the flash and will be redirected to the error page
