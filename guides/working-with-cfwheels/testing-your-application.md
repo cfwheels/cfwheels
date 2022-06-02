@@ -59,7 +59,7 @@ function testExpectedEqualsActual() {
 
 If a method does not begin with `test`, it is ignored and skipped. This lets you create as many helper methods for your testing components as you want.
 
-Do not `var`-scope and variables used in your tests. In order for the testing framework to access the variables within the tests that you're writing, all variables need to be within the component's `variables` scope. The easy way to do this is to just not `var` variables within your tests, and your CFML engine will automatically assign these variables into the `variables` scope of the component for you. You'll see this in the examples below.
+Do not `var`-scope any variables used in your tests. In order for the testing framework to access the variables within the tests that you're writing, all variables need to be within the component's `variables` scope. The easy way to do this is to just not `var` variables within your tests, and your CFML engine will automatically assign these variables into the `variables` scope of the component for you. You'll see this in the examples below.
 
 ### Setup & Teardown
 
