@@ -73,6 +73,21 @@
 			"username": "sa",
 			"validate": "false"
 		},
+		"msdb_sqlserver": {
+			"blob": "false",
+			"class": "com.microsoft.jdbc.sqlserver.SQLServerDriver",
+			"clob": "false",
+			"connectionLimit": "-1",
+			"connectionTimeout": "20",
+			"database": "msdb",
+			"dbdriver": "MSSQL",
+			"dsn": "jdbc:sqlserver://{host}:{port}",
+			"host": "sqlserver",
+			"password": "x!bsT8t60yo0cTVTPq",
+			"port": "1433",
+			"username": "sa",
+			"validate": "false"
+		},
 		"wheelstestdb_h2": {
 			"class":"org.h2.Driver",
 			"dbdriver":"H2",
