@@ -3,7 +3,7 @@ FROM ortussolutions/commandbox:latest
 LABEL maintainer "CFWheels Core Team"
 
 #Hard Code our engine environment
-ENV CFENGINE lucee
+ENV BOX_SERVER_APP_CFENGINE lucee
 
 #Add the H2 extension
 ADD https://ext.lucee.org/org.h2-1.3.172.lex /usr/local/lib/serverHome/WEB-INF/lucee-server/deploy/org.h2-1.3.172.lex
