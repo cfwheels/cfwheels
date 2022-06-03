@@ -54,7 +54,7 @@ jobs:
           SLACK_CHANNEL: builds
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
           SLACK_ICON_EMOJI: ":bell:"
-          SLACK_MESSAGE: 'CFWheels tests failed :cry:, check them out here: https://github.com/bpamiri/cfwheels/actions'
+          SLACK_MESSAGE: 'CFWheels tests failed :cry:, check them out here: https://github.com/cfwheels/cfwheels/actions'
           SLACK_TITLE: 'CFWheels Tests For (${{ matrix.cf }}, ${{ matrix.db }}) failed'
           SLACK_USERNAME: Peter Amiri
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
