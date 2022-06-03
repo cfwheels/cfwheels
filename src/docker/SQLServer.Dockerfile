@@ -1,9 +1,6 @@
-FROM mcr.microsoft.com/mssql/server:2017-latest
+FROM mcr.microsoft.com/azure-sql-edge:latest
 
 LABEL maintainer "CFWheels Core Team"
-
-ENV SA_PASSWORD "x!bsT8t60yo0cTVTPq"
-ENV ACCEPT_EULA "Y"
 
 # Create work directory
 RUN mkdir -p /usr/work
@@ -14,7 +11,19 @@ COPY ./src/docker/sqlserver/entrypoint.sh /usr/work/
 COPY ./src/docker/sqlserver/import-data.sh /usr/work/
 COPY ./src/docker/sqlserver/setup.sql /usr/work/
 
+USER root
+
 # Grant permissions for the import-data script to be executable
-RUN chmod +x /usr/work/*.sh
+RUN chmod +x /usr/work/entrypoint.sh
+RUN chmod +x /usr/work/import-data.sh
+
+# Set environment variables, not to have to write them with docker run command
+ENV MSSQL_SA_PASSWORD "x!bsT8t60yo0cTVTPq"
+ENV ACCEPT_EULA "Y"
+ENV MSSQL_PID "Developer"
+
+# Expose port 1433 in case accesing from other container
 EXPOSE 1433
-CMD /bin/bash ./entrypoint.sh
+
+# Run Microsoft SQl Server and initialization script (at the same time)
+#CMD /bin/bash ./entrypoint.sh

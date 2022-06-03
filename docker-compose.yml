@@ -83,7 +83,8 @@ services:
       dockerfile: ./src/docker/SQLServer.Dockerfile
     image: cfwheels-sqlserver:v1
     environment:
-      SA_PASSWORD: x!bsT8t60yo0cTVTPq
+      MSSQL_SA_PASSWORD: x!bsT8t60yo0cTVTPq
       ACCEPT_EULA: Y
+      MSSQL_PID: Developer
     volumes:
       - ./src/docker:/src/docker
