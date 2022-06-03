@@ -119,6 +119,8 @@
 
 							<b-alert show class="mt-2" variant="danger" v-for="(t, rindex) in filterResults(j.data.RESULTS)" :key="rindex">
 								<b-badge variant="danger">{{t.STATUS}}</b-badge> <strong>{{t.CLEANTESTNAME}} <b-icon icon="arrow-right" /> {{t.PACKAGENAME}}</strong><br>
+								<pre v-html="t.DEBUGSTRING"></pre>
+								<hr>
 								<pre v-html="t.MESSAGE"></pre>
 							</b-alert>
 						</b-card-text>
