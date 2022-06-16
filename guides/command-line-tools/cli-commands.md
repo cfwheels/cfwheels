@@ -11,9 +11,25 @@ The commands are all listed below. We are working on documenting each command.
 
 This command is the most basic of the commands and other than printing some pretty ASCII art it also displays the Current Working Directory, the CommandBox Module Root which can be handy when trying to diagnoise version discrepencies, and lastly the CFWheels version currently installed. The version is determined from a variaty of sources. First and foremost, if there is a `box.json` file in the `wheels/` directory the version is extracted from that `box.json`. Alternatively, if there is no `box.json` file in the `wheels/` directory, we look in `wheels/events/onapplicationstart.cfm` and extract a version number from that file. That is the version number that is displayed on the default congradulations screen by the way. If both of these fail to get us a version number we can use, we ask you to let us know what version of wheels you are using and give you the obtion of generating a `box.json` file. This is handy for bringing old legacy installations under CLI control.
 
+```
+
+```
+
 ## `wheels init`
 ## `wheels reload`
 ## `wheels test`
 ## `wheels scaffold`
 ## `wheels destroy`
 ## `wheels travis`
+## `wheels generate`
+
+The `wheels generate` command is what CommandBox calls a namespace and contains many sub commands beneeth it. It als o has an alias `wheels g` which allows you to shorten all the following commands. We have opted to show all the commands with their full names however in the list below.
+
+## `wheels generate app-wizard`
+## `wheels generate app`
+## `wheels generate route`
+## `wheels generate controller`
+## `wheels generate model`
+## `wheels generate property`
+## `wheels generate view`
+## `wheels generate test`
