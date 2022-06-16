@@ -33,3 +33,18 @@ The `wheels generate` command is what CommandBox calls a namespace and contains 
 ## `wheels generate property`
 ## `wheels generate view`
 ## `wheels generate test`
+## `wheels dbmigrate`
+This is another namespace with sub commands within it.
+## `wheels dbmigrate info`
+## `wheels dbmigrate latest`
+## `wheels dbmigrate up`
+## `wheels dbmigrate down`
+## `wheels dbmigrate exec`
+## `wheels dbmigrate create`
+This is another namespace with sub commands within it.
+## `wheels dbmigrate create table`
+## `wheels dbmigrate create column`
+## `wheels dbmigrate create blank`
+## `wheels dbmigrate remove`
+This is another namespace with sub commands within it.
+## `wheels dbmigrate remove table`
