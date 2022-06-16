@@ -48,3 +48,6 @@ This is another namespace with sub commands within it.
 ## `wheels dbmigrate remove`
 This is another namespace with sub commands within it.
 ## `wheels dbmigrate remove table`
+## `wheels plugins`
+This is another namespace with sub commands within it.
+## `wheels plugins list`
