@@ -32,7 +32,7 @@ Current CFWheels Version in this directory: 2.3.0
 ## `wheels travis`
 ## `wheels generate`
 
-The `wheels generate` command is what CommandBox calls a namespace and contains many sub commands beneeth it. It als o has an alias `wheels g` which allows you to shorten all the following commands. We have opted to show all the commands with their full names however in the list below.
+The `wheels generate` command is what CommandBox calls a namespace and contains many sub commands beneeth it. It also has an alias of `wheels g` which allows you to shorten the commands you have to type. However, we have opted to show all the commands with their full names in the list below.
 
 ## `wheels generate app-wizard`
 ## `wheels generate app`
@@ -43,7 +43,8 @@ The `wheels generate` command is what CommandBox calls a namespace and contains 
 ## `wheels generate view`
 ## `wheels generate test`
 ## `wheels dbmigrate`
-This is another namespace with sub commands within it.
+This is another namespace with sub commands within it. It also has an alias of `wheels db` which allows you to shorten the command you need to type.
+
 ## `wheels dbmigrate info`
 ## `wheels dbmigrate latest`
 ## `wheels dbmigrate up`
