@@ -25,6 +25,11 @@ Current CFWheels Version in this directory: 2.3.0
 ```
 
 ## `wheels init`
+
+This will attempt to bootstrap an EXISTING wheels app to work with the CLI.
+
+We'll assume the database/datasource exists and the other config options like reloadpassword is all set up. If there's no box.json, create it, and ask for the version number if we can't determine it. If there's no server.json, create it, and ask for cfengine preferences. We'll ignore other templating objects for now, as this will probably be in place too.
+
 ## `wheels reload`
 ## `wheels test`
 ## `wheels scaffold`
