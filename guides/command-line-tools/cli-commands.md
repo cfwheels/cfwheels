@@ -31,6 +31,9 @@ This will attempt to bootstrap an EXISTING wheels app to work with the CLI.
 We'll assume the database/datasource exists and the other config options like reloadpassword is all set up. If there's no box.json, create it, and ask for the version number if we can't determine it. If there's no server.json, create it, and ask for cfengine preferences. We'll ignore other templating objects for now, as this will probably be in place too.
 
 ## `wheels reload`
+
+This command will reload your CFWheels application. In order for this command to work, your local server needs to be started and running. This command basically issues a request to the running CFWheels application to reload as if you were doing it from your browsers address bar. You will be prompted for your reload password that will be passed to the reload endpoint. An optional parameter `mode=` can be passed in with possible values being `development, testing, maintenance, and production`.
+
 ## `wheels test`
 ## `wheels scaffold`
 ## `wheels destroy`
