@@ -1,9 +1,6 @@
 # CLI Commands
 
-The command line tools extends the functionality of CommandBox with some commands specifically designed for CFWheels
-development. These tools allow you to adopt a more modern workflow and allow you to create and manipulate many CFWheels
-objects from the command line. By making these tools available in the command line, not only will you be able to speed up
-your development but you can also utilize these commands in Continous Integration (CI) and Continous Deployment (CD) work flows.
+The command line tools extends the functionality of CommandBox with some commands specifically designed for CFWheels development. These tools allow you to adopt a more modern workflow and allow you to create and manipulate many CFWheels objects from the command line. By making these tools available in the command line, not only will you be able to speed up your development but you can also utilize these commands in Continous Integration (CI) and Continous Deployment (CD) work flows.
 
 The commands are all listed below. We are working on documenting each command.
 
@@ -32,40 +29,72 @@ We'll assume the database/datasource exists and the other config options like re
 
 ## `wheels reload`
 
-This command will reload your CFWheels application. In order for this command to work, your local server needs to be started and running. This command basically issues a request to the running CFWheels application to reload as if you were doing it from your browsers address bar. You will be prompted for your reload password that will be passed to the reload endpoint. An optional parameter `mode=` can be passed in with possible values being `development, testing, maintenance, and production`.
+This command will reload your CFWheels application. In order for this command to work, your local server needs to be started and running. This command basically issues a request to the running CFWheels application to reload as if you were doing it from your browsers address bar. You will be prompted for your reload password that will be passed to the reload endpoint.
+
+| Parameter | Required | Default     | Description                                                   |
+| --------- | -------- | ----------- | ------------------------------------------------------------- |
+| mode      | false    | development | possible values development, testing, maintenance, production |
 
 ## `wheels test`
+
 ## `wheels scaffold`
+
 ## `wheels destroy`
+
 ## `wheels travis`
+
 ## `wheels generate`
 
 The `wheels generate` command is what CommandBox calls a namespace and contains many sub commands beneeth it. It also has an alias of `wheels g` which allows you to shorten the commands you have to type. However, we have opted to show all the commands with their full names in the list below.
 
 ## `wheels generate app-wizard`
+
 ## `wheels generate app`
+
 ## `wheels generate route`
+
 ## `wheels generate controller`
+
 ## `wheels generate model`
+
 ## `wheels generate property`
+
 ## `wheels generate view`
+
 ## `wheels generate test`
+
 ## `wheels dbmigrate`
+
 This is another namespace with sub commands within it. It also has an alias of `wheels db` which allows you to shorten the command you need to type.
 
 ## `wheels dbmigrate info`
+
 ## `wheels dbmigrate latest`
+
 ## `wheels dbmigrate up`
+
 ## `wheels dbmigrate down`
+
 ## `wheels dbmigrate exec`
+
 ## `wheels dbmigrate create`
+
 This is another namespace with sub commands within it.
+
 ## `wheels dbmigrate create table`
+
 ## `wheels dbmigrate create column`
+
 ## `wheels dbmigrate create blank`
+
 ## `wheels dbmigrate remove`
+
 This is another namespace with sub commands within it.
+
 ## `wheels dbmigrate remove table`
+
 ## `wheels plugins`
+
 This is another namespace with sub commands within it.
+
 ## `wheels plugins list`
