@@ -29,13 +29,11 @@ We'll assume the database/datasource exists and the other config options like re
 
 ## `wheels reload`
 
-This command will reload your CFWheels application. In order for this command to work, your local server needs to be started and running. This command basically issues a request to the running CFWheels application to reload as if you were doing it from your browsers address bar. You will be prompted for your reload password that will be passed to the reload endpoint. An optional parameter `mode=` can be passed in with possible values being `development, testing, maintenance, and production`.
+This command will reload your CFWheels application. In order for this command to work, your local server needs to be started and running. This command basically issues a request to the running CFWheels application to reload as if you were doing it from your browsers address bar. You will be prompted for your reload password that will be passed to the reload endpoint.
 
 | Parameter | Required | Default     | Description                                                   |
 | --------- | -------- | ----------- | ------------------------------------------------------------- |
 | mode      | false    | development | possible values development, testing, maintenance, production |
-|           |          |             |                                                               |
-|           |          |             |                                                               |
 
 ## `wheels test`
 
