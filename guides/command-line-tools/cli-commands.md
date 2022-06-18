@@ -261,6 +261,42 @@ wheels generate model user false
 
 ## `wheels generate property`
 
+This command generates a dbmigration file to add a property to an object and scaffold into _form.cfm and show.cfm if they exist (i.e, wheels generate property table columnName columnType).
+
+Create the a string/textField property called firstname on the User model:
+```
+wheels generate property user firstname
+```
+
+Create a boolean/Checkbox property called isActive on the User model with a default of 0:
+```
+wheels generate property user isActive boolean
+```
+
+Create a boolean/Checkbox property called hasActivated on the User model with a default of 1 (i.e, true):
+```
+wheels generate property user isActive boolean 1
+```
+
+ Create a datetime/datetimepicker property called lastloggedin on the User model:
+ ```
+ wheels generate property user lastloggedin datetime
+ ```
+
+ All columnType options:
+ biginteger,binary,boolean,date,datetime,decimal,float,integer,string,limit,text,time,timestamp,uuid
+
+| Parameter  | Required | Default | Description                                                           |
+| ---------- | -------- | ------- |---------------------------------------------------------------------- |
+| name       | true     |         | Table Name                                                            |
+| columnName | false    |         | Name of Column                                                        |
+| columnType | false    |         | Type of Column on of biginteger, binary, boolean, date, datetime, decimal, float,integer, string, limit, text, time, timestamp, uuid    |
+| default    | false    |         | Default Value for column                                              |
+| null       | false    |         | Whether to allow null values |
+| limit      | false    |         | character or integer size limit for column |
+| precision  | false    |         | ision value for decimal columns, i.e. number of digits the column can hold |
+| scale      | false    |         | scale value for decimal columns, i.e. number of digits that can be placed to the right of the decimal point (must be less than or equal to precision) |
+
 ## `wheels generate view`
 
 ## `wheels generate test`
