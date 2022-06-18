@@ -37,6 +37,20 @@ This command will reload your CFWheels application. In order for this command to
 
 ## `wheels test`
 
+This command will call the Test Runner in the curently running server and run the defined tests. You can optionally specify if only the application test or the core tests should be run as well as tests for a particular plugin.
+
+wheels test [type] [servername] [reload] [debug]
+
+| Parameter  | Required | Default | Description                                    |
+| ---------- | -------- | ------- | ---------------------------------------------- |
+| type       | false    | app     | Either Core, App, or the name of the plugin    |
+| servername | false    |         | Servername to run the tests against            |
+| reload     | false    | false   | Force Reload                                   |
+| debug      | false    | false   | Output passing tests as well as failing ones   |
+| format     | false    | json    | Force a specific return format for debug       |
+| adapter    | false    |         | Attempt to override what dbadapter wheels uses |
+
+
 ## `wheels scaffold`
 
 ## `wheels destroy`
