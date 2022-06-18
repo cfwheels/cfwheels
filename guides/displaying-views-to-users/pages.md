@@ -4,13 +4,13 @@ description: Where to place your view files and what to put in them.
 
 # Pages
 
-We've talked previously about how the controller is responsible for deciding which view files to render to the user. Read the [Rendering Content](https://guides.cfwheels.org/docs/rendering-content) chapter if you need to refresh your memory about that topic.
+We've talked previously about how the controller is responsible for deciding which view files to render to the user. Read the [Rendering Content](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/rendering-content) chapter if you need to refresh your memory about that topic.
 
 In this chapter, we'll explain exactly _where_ to place these files and _what_ to put in them.
 
 ### Where to Place the Files
 
-In the simplest case, your controller action (typically a function inside your controller CFC file) will have a view file associated with it. As explained in the [Rendering Content](https://guides.cfwheels.org/docs/rendering-content) chapter, this file will be included automatically at the end of the controller action code. So if you're running the `show` action in the `blog` controller, for example, Wheels will include the `views/blog/show.cfm` file.
+In the simplest case, your controller action (typically a function inside your controller CFC file) will have a view file associated with it. As explained in the [Rendering Content](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/rendering-content) chapter, this file will be included automatically at the end of the controller action code. So if you're running the `show` action in the `blog` controller, for example, Wheels will include the `views/blog/show.cfm` file.
 
 Some rules can be spotted here:
 
@@ -51,7 +51,7 @@ Also note that both `renderView(template="thepage")` and `renderView(template="t
 
 This is the output of your application: what the users will see in their browsers. Most often this will consist of HTML, but it can also be JavaScript, CSS, XML, etc. You are of course free to use any CFML tags and functions that you want to in the file as well. (This is a CFML application, right?)
 
-In addition to this normal code that you'll see in most ColdFusion applications—whether they are made for a framework or not—Wheels also gives you some nice constructs to help keep your code clean. The most important ones of these are [Layouts](https://guides.cfwheels.org/docs/layouts) , Partials, and Helpers.
+In addition to this normal code that you'll see in most ColdFusion applications—whether they are made for a framework or not—Wheels also gives you some nice constructs to help keep your code clean. The most important ones of these are [Layouts](https://guides.cfwheels.org/cfwheels-guides/displaying-views-to-users/layouts) , Partials, and Helpers.
 
 When writing your view code, you will have access to the variables you have set up in the controller file. The idea is that the variables you want to access in the view should be set unscoped (or in the `variables` scope if you prefer to set it explicitly) in the controller so that they are available to the view template.
 
@@ -75,7 +75,7 @@ For example, if the view is to display the `title` column from a query object ca
 
 Please note that you do **not** need to do this when passing in data to CFWheels view helpers. The view helpers themselves will handle calling `EncodeForUrl`, `EncodeForHtml` and `EncodeForHtmlAttribute` internally as needed.
 
-By "view helpers" we mean everything listed as such in the [API reference](https://api.cfwheels.org), so be aware that global helpers, such as [capitalize](https://api.cfwheels.org/controller.capitalize.html), [humanize](https://api.cfwheels.org/controller.humanize.html) etc, do not encode the content you pass in. When in doubt, simply test by passing in a string and check the HTML source of the output to see whether CFWheels encoded it or not.
+By "view helpers" we mean everything listed as such in the [API reference](https://api.cfwheels.org/), so be aware that global helpers, such as [capitalize](https://api.cfwheels.org/controller.capitalize.html), [humanize](https://api.cfwheels.org/controller.humanize.html) etc, do not encode the content you pass in. When in doubt, simply test by passing in a string and check the HTML source of the output to see whether CFWheels encoded it or not.
 
 To control encoding in general you have three global settings at your disposal (they all default to `true`):
 

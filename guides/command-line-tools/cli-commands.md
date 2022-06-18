@@ -56,53 +56,47 @@ wheels test [type] [servername] [reload] [debug]
 | format     | false    | json    | Force a specific return format for debug       |
 | adapter    | false    |         | Attempt to override what dbadapter wheels uses |
 
-
 ## `wheels scaffold`
 
-This command will completely scaffold a new object. Typically you would run this command to stub
-out all the CRUD related files and then follow it up with a series of `wheels g property` commands
-to add the individual fields to the object. This command will:
-- Create a model file
-- A Default CRUD Controller complete with create/edit/update/delete code
-- View files for all those actions
-- Associated test stubs
-- DB migration file
+This command will completely scaffold a new object. Typically you would run this command to stub out all the CRUD related files and then follow it up with a series of `wheels g property` commands to add the individual fields to the object. This command will:
 
-This command can be run without the server running except the database migration portion because that requires
-a running database. So if your server is already up and running you can run this command completely including the
-database migraton portion. Afterwards make sure to run `wheels reload` to reload your application since we just made
-model changes. If the server isn't running, you can run this command and stub out all the files, then start your server
-with `server start` and finally migrade the database with `wheels db latest`.
+* Create a model file
+* A Default CRUD Controller complete with create/edit/update/delete code
+* View files for all those actions
+* Associated test stubs
+* DB migration file
 
- ```
- wheels scaffold [objectName]
- ```
+This command can be run without the server running except the database migration portion because that requires a running database. So if your server is already up and running you can run this command completely including the database migraton portion. Afterwards make sure to run `wheels reload` to reload your application since we just made model changes. If the server isn't running, you can run this command and stub out all the files, then start your server with `server start` and finally migrade the database with `wheels db latest`.
 
-| Parameter | Required | Default | Description                                                   |
-| --------- | -------- | ------- | ------------------------------------------------------------- |
-| Name      | true     |         | Name of the object to scaffold out                            |
+```
+wheels scaffold [objectName]
+```
+
+| Parameter | Required | Default | Description                        |
+| --------- | -------- | ------- | ---------------------------------- |
+| Name      | true     |         | Name of the object to scaffold out |
 
 ## `wheels destroy`
 
 This command will destroy a given object. This is highly destructive, given the name, so proceed with caution. If you created an object using the `wheels scaffold [objectName]` command, this command is the inverse of that command and will remove all elements created by that command.
 
 This command will destroy the following elements:
-- the models definition file
-- the controllers definition file
-- the view sub folder and all it's contents
-- the model test file
-- the controller test file
-- the views test file
-- resouce route configuration
+
+* the models definition file
+* the controllers definition file
+* the view sub folder and all it's contents
+* the model test file
+* the controller test file
+* the views test file
+* resouce route configuration
 
 ```
 wheels destroy [objectName]
 ```
 
-| Parameter | Required | Default | Description                                                   |
-| --------- | -------- | ------- | ------------------------------------------------------------- |
-| Name      | true     |         | Name of the object to destroy                                 |
-
+| Parameter | Required | Default | Description                   |
+| --------- | -------- | ------- | ----------------------------- |
+| Name      | true     |         | Name of the object to destroy |
 
 ## `wheels generate`
 
@@ -110,17 +104,17 @@ The `wheels generate` command is what CommandBox calls a namespace and contains 
 
 ## `wheels generate app-wizard`
 
-Creates a new CFWheels application using our wizard to gather all the
-necessary information. This is the recommended route to start a new application.
+Creates a new CFWheels application using our wizard to gather all the necessary information. This is the recommended route to start a new application.
 
 This command will ask for:
-- An Application Name (a new directoery will be created with this name)
-- Template to use
-- A reload Password
-- A datasource name
-- What local cfengine you want to run
-- If using Lucee, do you want to setup a local h2 dev database
-- Do you want to initialize the app as a ForgBox module
+
+* An Application Name (a new directoery will be created with this name)
+* Template to use
+* A reload Password
+* A datasource name
+* What local cfengine you want to run
+* If using Lucee, do you want to setup a local h2 dev database
+* Do you want to initialize the app as a ForgBox module
 
 ```
 wheels new
@@ -128,14 +122,45 @@ wheels g app-wizard
 wheels generate app-wizard
 ```
 
-All these three commands areequivelent and will call the same wizard. The wizard in turn gathers
-all the required data and passes it all off to the `wheels generate app` command to do all the
-heavy lifting.
+All these three commands areequivelent and will call the same wizard. The wizard in turn gathers all the required data and passes it all off to the `wheels generate app` command to do all the heavy lifting.
 
 Let's take a look at the wizard pages after issuing the `wheels new` command:
 
-You can accept the name offered or change it to whatever name you like. We try to clean up the name
-and take out special characters and spaces if we need to.
+![wheels new - step 1](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.30.34 PM.png>)
+
+You can accept the name offered or change it to whatever name you like. We try to clean up the name and take out special characters and spaces if we need to.
+
+![wheels new - step 2](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.31.01 PM.png>)
+
+You can select a template to use. If you are reading this before CFWheels 2.4 is released you may want to select the Bleeding Edge Base Template.
+
+![wheels new - step 3](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.32.14 PM.png>)
+
+You can set what you want to use as your reload password or accept the default. Please make sure to change this before you go into produciton. Ideally this should be kept out of your source repository by using somethign like the (CFWheels DotEnvSettings Plugin)\[[https://www.forgebox.io/view/cfwheels-dotenvsettings](https://www.forgebox.io/view/cfwheels-dotenvsettings)].
+
+![wheels new - step 4](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.32.43 PM.png>)
+
+The datasource is somethign you'll have to take care of unless you opt to use the H2 Embedded database in a Lucee server. Here you can define the datasource name if you would like to use something different than the application name.
+
+![wheels new - step 5](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.33.18 PM.png>)
+
+In this step you can choose what CF Engine and version to launch. Lucee has an embedded SQL compliant database server called H2. So if you use one of the Lucee options you can specify to use the H2 database as well. Notice the last item allows you to specify the module slug or URI to a CF Engine not on the list.
+
+![wheels new - step 6](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.34.17 PM.png>)
+
+On this step you are asked if you'd like to use the H2 Database, in which case we can set everything up for you, or if you would prefer to use another database engine and will take care of setting up the database yourself.
+
+![wheels new - step 7](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.34.44 PM.png>)
+
+On this last step, you are asked if you want us to include a box.json file so you can eventually submit this to ForgeBox.io for sharing witht he world.
+
+![wheels new - step 8](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.35.09 PM.png>)
+
+This is the confirmation screen that shows all the choices you've made and gives you one last chance to bail out. If you choose to continue, the choices you've made will be sent over to the `wheels g app` command to do the actual app creation.
+
+![wheels new - final screen](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.35.40 PM.png>)
+
+If you opted to continue you'll see a bunch of things scroll across your screen as the various items are downloaded and configured. Eventually you will see this status screen letting you know that everything was installed properly.&#x20;
 
 ## `wheels generate app`
 

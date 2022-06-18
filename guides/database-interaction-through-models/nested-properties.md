@@ -290,13 +290,13 @@ Writing the action to save the data is clearly the easiest part of this process!
 
 As mentioned earlier, Wheels will automatically wrap your database operations for nested properties in a transaction. That way if something goes wrong with any of the operations, the transaction will rollback, and you won't end up with incomplete saves.
 
-See the chapter on [Transactions](https://guides.cfwheels.org/docs/transactions) for more details.
+See the chapter on [Transactions](https://guides.cfwheels.org/cfwheels-guides/database-interaction-through-models/transactions) for more details.
 
 ### Many-to-Many Relationships with Nested Properties
 
 We all enter the scenario where we have "join tables" where we need to associate models in a many-to-many fashion. Wheels makes this pairing of entities simple with some form helpers.
 
-Consider the many-to-many associations related to `customers, publications`, and `subscriptions`, straight from the [Associations](https://guides.cfwheels.org/docs/associations) chapter.
+Consider the many-to-many associations related to `customers, publications`, and `subscriptions`, straight from the [Associations](https://guides.cfwheels.org/cfwheels-guides/database-interaction-through-models/associations) chapter.
 
 ```javascript
 //  models/Customer.cfc
@@ -459,4 +459,4 @@ In fact, there is nothing special about this. But with the nested properties def
 
 * Wheels will update the `customers` table with any changes submitted in the Customers `<fieldset>`.
 * Wheels will add and remove records in the `subscriptions` table depending on which check boxes are selected by the user in the Subscriptions `<fieldset>`.
-* All of these database queries will be wrapped in a [Transaction](https://guides.cfwheels.org/docs/transactions) . If any of the above updates don't pass validation or if the database queries fail, the transaction will roll back.
+* All of these database queries will be wrapped in a [Transaction](https://guides.cfwheels.org/cfwheels-guides/database-interaction-through-models/transactions) . If any of the above updates don't pass validation or if the database queries fail, the transaction will roll back.

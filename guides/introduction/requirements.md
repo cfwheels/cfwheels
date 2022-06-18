@@ -10,7 +10,7 @@ We can identify 3 different types of requirements that you should be aware of:
 
 * **Project Requirements.** Is CFWheels a good fit for your project?
 * **Developer Requirements.** Do you have the knowledge and mindset to program effectively in CFWheels?
-* **System Requirements.** Is your server ready for CFWheels?&#x20;
+* **System Requirements.** Is your server ready for CFWheels?
 
 ### Project Requirements
 
@@ -40,7 +40,7 @@ Yes, there are actually some things you should familiarize yourself with before 
 
 #### CFML
 
-Simply the best web development language in the world! The best way to learn it, in our humble opinion, is to get the free developer edition of Adobe ColdFusion, buy Ben Forta's ColdFusion Web Application Construction Kit series, and start coding using your programming editor of choice. Remember it's not just the commercial Adobe offering that's available; [Lucee](http://luc.ee) offers an excellent open source alternative. Using [CommandBox](https://www.ortussolutions.com/products/commandbox) is a great and simple way to get a local development environment of your choice up and running quickly.
+Simply the best web development language in the world! The best way to learn it, in our humble opinion, is to get the free developer edition of Adobe ColdFusion, buy Ben Forta's ColdFusion Web Application Construction Kit series, and start coding using your programming editor of choice. Remember it's not just the commercial Adobe offering that's available; [Lucee](https://lucee.org) offers an excellent open source alternative. Using [CommandBox](https://www.ortussolutions.com/products/commandbox) is a great and simple way to get a local development environment of your choice up and running quickly.
 
 #### Object Oriented Programming (OOP)
 
@@ -62,7 +62,7 @@ MVC is how CFWheels structures your code for you. As you start working with CFWh
 
 CFWheels requires that you use one of these CFML engines:
 
-* [Adobe ColdFusion](http://www.adobe.com/products/coldfusion/) 10.0.23 / 11.0.12+ / 2016.0.4+ / 2018&#x20;
+* [Adobe ColdFusion](http://www.adobe.com/products/coldfusion/) 10.0.23 / 11.0.12+ / 2016.0.4+ / 2018
 * [Lucee](http://lucee.org) 4.5.5.006 + / 5.2.1.9+
 
 #### Operating Systems
@@ -73,7 +73,7 @@ Your ColdFusion or Lucee engine can be installed on Windows, Mac, UNIX, or Linux
 
 You also need a web server. CFWheels runs on all popular web servers, including Apache, Microsoft IIS, Jetty, and the JRun or Tomcat web server that ships with Adobe ColdFusion. Some web servers support URL rewriting out of the box, some support the `cgi.PATH_INFO` variable which is used to achieve partial rewriting, and some don't have support for either. For local development, we strongly encourage the use of [CommandBox](https://www.ortussolutions.com/products/commandbox).
 
-Don't worry though. CFWheels will adopt to your setup and run just fine, but the URLs that it creates might differ a bit. You can read more about this in the [URL Rewriting](https://guides.cfwheels.org/docs/url-rewriting) chapter.
+Don't worry though. CFWheels will adopt to your setup and run just fine, but the URLs that it creates might differ a bit. You can read more about this in the [URL Rewriting](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/url-rewriting) chapter.
 
 #### Database Engines
 
@@ -85,11 +85,11 @@ Finally, to build any kind of meaningful website application, you will likely in
 * H2 1.4+
 
 {% hint style="info" %}
-#### MySQL
+**MySQL**
 
 * CFWheels maybe incompatible with newer MySQL JDBC drivers. It is recommended you downgrade the driver to version 5.1.x for full ORM functionality.
 * If you're using MySQL 5.7.5+ you should be aware that the `ONLY_FULL_GROUP_BY` setting is enabled by default and it's currently not compatible with the CFWheels ORM. However, you can work around this by either disabling the `ONLY_FULL_GROUP_BY` setting or using `ANY_VALUE()` in a calculated property. You can read more about it [here](https://dev.mysql.com/doc/refman/5.7/en/group-by-handling.html).
-* We also recommend using the InnoDB engine if you want [Transactions](https://guides.cfwheels.org/docs/transactions) to work.
+* We also recommend using the InnoDB engine if you want [Transactions](https://guides.cfwheels.org/cfwheels-guides/database-interaction-through-models/transactions) to work.
 * **MySQL 4 is not supported.**
 {% endhint %}
 
