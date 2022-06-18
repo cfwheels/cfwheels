@@ -1,8 +1,16 @@
 {
+	"name":"|appName|",
+	"force":true,
 	"web":{
-		"rewrites":{
-			"enable":true,
-			"config":"urlrewrite.xml"
-		}
+			"http":{
+					"host":"localhost"
+			},
+			"rewrites":{
+					"enable":true,
+					"config":"urlrewrite.xml"
+			}
+	},
+	"app":{
+			"cfengine":"|cfmlEngine|"
 	}
 }
