@@ -31,6 +31,10 @@ We'll assume the database/datasource exists and the other config options like re
 
 This command will reload your CFWheels application. In order for this command to work, your local server needs to be started and running. This command basically issues a request to the running CFWheels application to reload as if you were doing it from your browsers address bar. You will be prompted for your reload password that will be passed to the reload endpoint.
 
+```
+wheels reload [mode]
+```
+
 | Parameter | Required | Default     | Description                                                   |
 | --------- | -------- | ----------- | ------------------------------------------------------------- |
 | mode      | false    | development | possible values development, testing, maintenance, production |
