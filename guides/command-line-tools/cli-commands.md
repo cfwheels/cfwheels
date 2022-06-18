@@ -299,6 +299,24 @@ wheels generate property user isActive boolean 1
 
 ## `wheels generate view`
 
+This command generates a view file in the `views/` direcotry when specifying the object name and the action. If a directory for the object does not exist a subdirectory will be created in the `views/` directory and the action NAME.cfm file place into it.
+
+ Create a default file called show.cfm without a template
+ ```
+ wheels generate view user show
+ ```
+
+ Create a default file called show.cfm using the default CRUD template
+ ```
+ wheels generate view user show crud/show
+ ```
+
+| Parameter  | Required | Default | Description                                                           |
+| ---------- | -------- | ------- |---------------------------------------------------------------------- |
+| objectname | true     |         | View path folder, i.e user                                            |
+| name       | true     |         | Name of the file to create, i.e, edit                                 |
+| template   | false    |         | template (used in Scaffolding) - options crud/_form,crud/edit,crud/index,crud/new,crud/show |
+
 ## `wheels generate test`
 
 ## `wheels dbmigrate`
