@@ -80,7 +80,25 @@ with `server start` and finally migrade the database with `wheels db latest`.
 
 ## `wheels destroy`
 
-## `wheels travis`
+This command will destroy a given object. This is highly destructive, given the name, so proceed with caution. If you created an object using the `wheels scaffold [objectName]` command, this command is the inverse of that command and will remove all elements created by that command.
+
+This command will destroy the following elements:
+- the models definition file
+- the controllers definition file
+- the view sub folder and all it's contents
+- the model test file
+- the controller test file
+- the views test file
+- resouce route configuration
+
+```
+wheels destroy [objectName]
+```
+
+| Parameter | Required | Default | Description                                                   |
+| --------- | -------- | ------- | ------------------------------------------------------------- |
+| Name      | true     |         | Name of the object to destroy                                 |
+
 
 ## `wheels generate`
 
