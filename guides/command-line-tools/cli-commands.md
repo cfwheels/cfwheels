@@ -55,6 +55,29 @@ wheels test [type] [servername] [reload] [debug]
 
 ## `wheels scaffold`
 
+This command will completely scaffold a new object. Typically you would run this command to stub
+out all the CRUD related files and then follow it up with a series of `wheels g property` commands
+to add the individual fields to the object. This command will:
+- Create a model file
+- A Default CRUD Controller complete with create/edit/update/delete code
+- View files for all those actions
+- Associated test stubs
+- DB migration file
+
+This command can be run without the server running except the database migration portion because that requires
+a running database. So if your server is already up and running you can run this command completely including the
+database migraton portion. Afterwards make sure to run `wheels reload` to reload your application since we just made
+model changes. If the server isn't running, you can run this command and stub out all the files, then start your server
+with `server start` and finally migrade the database with `wheels db latest`.
+
+ ```
+ wheels scaffold [objectName]
+ ```
+
+| Parameter | Required | Default | Description                                                   |
+| --------- | -------- | ------- | ------------------------------------------------------------- |
+| Name      | true     |         | Name of the object to scaffold out                            |
+
 ## `wheels destroy`
 
 ## `wheels travis`
