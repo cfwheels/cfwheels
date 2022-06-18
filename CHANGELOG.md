@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix cfformat ignore markers [#1129](https://github.com/cfwheels/cfwheels/pull/1129) - [Adam Chapman]
 - Enable finder model methods to returnAs "sql", mainly for debugging [#1141](https://github.com/cfwheels/cfwheels/pull/1141) - [Adam Chapman]
 - Show the Test Runner buttons in the CFWheels GUI on the Package List screen allowing the developer to run the entire test suite instead of one package at a time. - [Peter Amiri]
+- The Base Template now contains all necessary placeholders for the CLI to interact with the application and be able to inject code properly.
 
 ### Guides
 - Fix broken links throughout the guides. - [Peter Amiri]
