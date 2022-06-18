@@ -39,7 +39,9 @@ This command will reload your CFWheels application. In order for this command to
 
 This command will call the Test Runner in the curently running server and run the defined tests. You can optionally specify if only the application test or the core tests should be run as well as tests for a particular plugin.
 
+```
 wheels test [type] [servername] [reload] [debug]
+```
 
 | Parameter  | Required | Default | Description                                    |
 | ---------- | -------- | ------- | ---------------------------------------------- |
