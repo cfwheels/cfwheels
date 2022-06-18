@@ -319,6 +319,26 @@ This command generates a view file in the `views/` direcotry when specifying the
 
 ## `wheels generate test`
 
+This command generates a test stub in `/test/TYPE/NAME.cfc`.
+
+```
+wheels generate test model user
+```
+
+```
+wheels generate test controller users
+```
+
+```
+wheels generate test view users edit
+```
+
+| Parameter  | Required | Default | Description                                                           |
+| ---------- | -------- | ------- |---------------------------------------------------------------------- |
+| type       | true     |         | Type of test to generate. Options are model, controller, and view     |
+| objectname | true     |         | View path folder or name of object, i.e user                          |
+| name       | true     |         | Name of the action/view                                               |
+
 ## `wheels dbmigrate`
 
 This is another namespace with sub commands within it. It also has an alias of `wheels db` which allows you to shorten the command you need to type.
