@@ -196,6 +196,18 @@ The template parameter can also be any valid Endpoint ID, which includes a Git r
 wheels create app template=http://site.com/myCustomAppTemplate.zip
 ```
 
+| Parameter      | Required | Default        | Description                                           |
+| -------------- | -------- | -------------- | ----------------------------------------------------- |
+| name           | false    | MyCFWheelsApp  | The name of the app you want to create                |
+| template       | false    | base template  | The name of the app template to use                   |
+| directory      | false    | mycfwheelsapp/ | The directory to create the app in                    |
+| reloadPassword | false    | ChangeMe       | The reload passwrod to set for the app                |
+| datasourceName | false    | MyCFWheelsApp  | The datasource name to set for the app                |
+| cfmlEngine     | false    | Lucee          | The CFML engine to use for the app                    |
+| setupH2        | false    | false          | Setup the H2 database for development                 |
+| init           | false    | false          | "init" the directory as a package if it isn't already |
+| force          | false    | false          | Force installation into an none empty directory       |
+
 ## `wheels generate route`
 
 ## `wheels generate controller`
