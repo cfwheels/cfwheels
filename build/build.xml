@@ -189,6 +189,7 @@
 				<include name="models/**"/>
 				<include name="plugins/**"/>
 				<include name="stylesheets/**"/>
+				<include name="templates/**"/>
 				<include name="tests/**"/>
 				<include name="views/**"/>
 				<include name="Application.cfc"/>
