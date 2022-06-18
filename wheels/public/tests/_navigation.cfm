@@ -68,41 +68,39 @@ for (p in pluginList) {
 						</button>
 					</div>
 				</div>
-				<cfif StructKeyExists(url, "package")>
-					<div class="twelve wide column right aligned">
-						<cfif StructKeyExists(url, "refresh")>
-							<a href="#urlFor(route = "wheelsTests", type = type, params = ReplaceNoCase(_params, "refresh=#url.refresh#", ""))#" class="ui button blue active">
-								Stop <i class='right stop icon'></i>
-							</a>
-						<cfelse>
-							<a href="#urlFor(route = "wheelsTests", type = type, params = "#_params#&refresh=true")#" class="ui button basic blue">
-								Refresh <i class='right play icon'></i>
-							</a>
-						</cfif>
-						<cfif StructKeyExists(url, "reload")>
-							<a href="#urlFor(route = "wheelsTests", params = ReplaceNoCase(_params, "reload=#url.reload#", ""), type = type)#" class="ui button blue">
-								Without Reload <i class='right refresh icon'></i>
-							</a>
-						<cfelse>
-							<a href="#urlFor(route = "wheelsTests", params = "#_params#&reload=true", type = type)#" class="ui button basic blue">
-								Reload <i class='right refresh icon'></i>
-							</a>
-						</cfif>
-						<a href="#urlFor(route = "wheelsTests", type = type, params = _params)#" class="ui button basic blue">
-							Run All Tests <i class='right arrow icon'></i>
+				<div class="twelve wide column right aligned">
+					<cfif StructKeyExists(url, "refresh")>
+						<a href="#urlFor(route = "wheelsTests", type = type, params = ReplaceNoCase(_params, "refresh=#url.refresh#", ""))#" class="ui button blue active">
+							Stop <i class='right stop icon'></i>
 						</a>
-						<cfloop array="#formats#" index="_format">
-							<cfif StructKeyExists(url, "format")>
-								<cfset __params = ReplaceNoCase(_params, "format=#url.format#", "format=#_format#")>
-							<cfelse>
-								<cfset __params = ListAppend(_params, "format=#_format#", "&")>
-							</cfif>
-							<a href="#urlFor(route = "wheelsTests", type = type, params = __params)#" class="ui button basic<cfif _format eq "html"> active</cfif>">
-								#_format#
-							</a>
-						</cfloop>
-					</div>
-				</cfif>
+					<cfelse>
+						<a href="#urlFor(route = "wheelsTests", type = type, params = "#_params#&refresh=true")#" class="ui button basic blue">
+							Refresh <i class='right play icon'></i>
+						</a>
+					</cfif>
+					<cfif StructKeyExists(url, "reload")>
+						<a href="#urlFor(route = "wheelsTests", params = ReplaceNoCase(_params, "reload=#url.reload#", ""), type = type)#" class="ui button blue">
+							Without Reload <i class='right refresh icon'></i>
+						</a>
+					<cfelse>
+						<a href="#urlFor(route = "wheelsTests", params = "#_params#&reload=true", type = type)#" class="ui button basic blue">
+							Reload <i class='right refresh icon'></i>
+						</a>
+					</cfif>
+					<a href="#urlFor(route = "wheelsTests", type = type, params = _params)#" class="ui button basic blue">
+						Run All Tests <i class='right arrow icon'></i>
+					</a>
+					<cfloop array="#formats#" index="_format">
+						<cfif StructKeyExists(url, "format")>
+							<cfset __params = ReplaceNoCase(_params, "format=#url.format#", "format=#_format#")>
+						<cfelse>
+							<cfset __params = ListAppend(_params, "format=#_format#", "&")>
+						</cfif>
+						<a href="#urlFor(route = "wheelsTests", type = type, params = __params)#" class="ui button basic<cfif _format eq "html"> active</cfif>">
+							#_format#
+						</a>
+					</cfloop>
+				</div>
 			</div>
 		</div>
 	</div>
