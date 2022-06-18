@@ -333,11 +333,11 @@ wheels generate test controller users
 wheels generate test view users edit
 ```
 
-| Parameter  | Required | Default | Description                                                           |
-| ---------- | -------- | ------- |---------------------------------------------------------------------- |
-| type       | true     |         | Type of test to generate. Options are model, controller, and view     |
-| objectname | true     |         | View path folder or name of object, i.e user                          |
-| name       | true     |         | Name of the action/view                                               |
+| Parameter | Required | Default | Description |
+| ---------- | -------- | ------- | ----------- |
+| type | true | | Type of test to generate. Options are model, controller, and view |
+| objectname | true | | View path folder or name of object, i.e user |
+| name | true | | Name of the action/view |
 
 ## `wheels dbmigrate`
 
