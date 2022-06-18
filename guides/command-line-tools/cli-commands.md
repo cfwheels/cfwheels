@@ -210,6 +210,16 @@ wheels create app template=http://site.com/myCustomAppTemplate.zip
 
 ## `wheels generate route`
 
+Adds a default resources Route to the routes table. All the normal CRUD routes are automatically added.
+
+```
+wheels generate route [objectname]
+```
+
+| Parameter  | Required | Default | Description                                         |
+| ---------- | -------- | ------- | --------------------------------------------------- |
+| objectname | true     |         | The name of the resource to add to the routes table |
+
 ## `wheels generate controller`
 
 ## `wheels generate model`
