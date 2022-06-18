@@ -106,9 +106,36 @@ wheels destroy [objectName]
 
 ## `wheels generate`
 
-The `wheels generate` command is what CommandBox calls a namespace and contains many sub commands beneeth it. It also has an alias of `wheels g` which allows you to shorten the commands you have to type. However, we have opted to show all the commands with their full names in the list below.
+The `wheels generate` command is what CommandBox calls a namespace and contains many sub commands beneeth it. It's main purpose is to isolate those sub commands so there is no name collisions. It also has an alias of `wheels g` which allows you to shorten the commands you have to type. However, we have opted to show all the commands with their full names in the list below.
 
 ## `wheels generate app-wizard`
+
+Creates a new CFWheels application using our wizard to gather all the
+necessary information. This is the recommended route to start a new application.
+
+This command will ask for:
+- An Application Name (a new directoery will be created with this name)
+- Template to use
+- A reload Password
+- A datasource name
+- What local cfengine you want to run
+- If using Lucee, do you want to setup a local h2 dev database
+- Do you want to initialize the app as a ForgBox module
+
+```
+wheels new
+wheels g app-wizard
+wheels generate app-wizard
+```
+
+All these three commands areequivelent and will call the same wizard. The wizard in turn gathers
+all the required data and passes it all off to the `wheels generate app` command to do all the
+heavy lifting.
+
+Let's take a look at the wizard pages after issuing the `wheels new` command:
+
+You can accept the name offered or change it to whatever name you like. We try to clean up the name
+and take out special characters and spaces if we need to.
 
 ## `wheels generate app`
 
