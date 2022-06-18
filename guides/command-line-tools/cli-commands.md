@@ -240,8 +240,24 @@ wheels generate controller user index,customaction
 | actionList | false    |         | optional list of actions, comma delimited                          |
 | directory  | false    |         | if for some reason you don't have your controllers in controllers/ |
 
-
 ## `wheels generate model`
+
+This command generates a model in the `models/` folder and creates the associated DB Table using migrations.
+
+Create "users" table and "User.cfc" in models:
+```
+wheels generate model user
+```
+
+Create just "User.cfc" in models:
+```
+wheels generate model user false
+```
+
+| Parameter  | Required | Default | Description                                                                    |
+| ---------- | -------- | ------- | ------------------------------------------------------------------------------ |
+| name       | true     |         | Name of the model to create without the .cfc: assumes singluar                 |
+| db         | false    |         | Boolean attribute specifying if the database table should be generated as well |
 
 ## `wheels generate property`
 
