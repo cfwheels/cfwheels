@@ -222,6 +222,25 @@ wheels generate route [objectname]
 
 ## `wheels generate controller`
 
+I generate a controller in the `controllers/` directory. You can either pass in a list of actions to stub out or the standard CRUD methods will be generated.
+
+Create a user controller with full CRUD methods
+```
+wheels generate controller user
+```
+
+Create a user object with just "index" and "customaction" methods
+```
+wheels generate controller user index,customaction
+```
+
+| Parameter  | Required | Default | Description                                                        |
+| ---------- | -------- | ------- | ------------------------------------------------------------------ |
+| name       | true     |         | Name of the controller to create without the .cfc                  |
+| actionList | false    |         | optional list of actions, comma delimited                          |
+| directory  | false    |         | if for some reason you don't have your controllers in controllers/ |
+
+
 ## `wheels generate model`
 
 ## `wheels generate property`
