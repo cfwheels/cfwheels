@@ -164,6 +164,38 @@ If you opted to continue you'll see a bunch of things scroll across your screen 
 
 ## `wheels generate app`
 
+Create a blank CFWheels app from one of our app templates or a template using a valid Endpoint ID which can come from ForgeBox, HTTP/S, git, github, etc.
+
+By default an app named MyCFWheelsApp will be created in a sub directoryt call MyCFWheelsApp.
+
+The most basic call...
+```
+wheels generate app
+```
+
+This can be shortened to...
+```
+wheels g app
+```
+
+Here are the basic templates that are available for you that come from ForgeBox
+- CFWheels Base Template - Stable (default)
+- CFWheels Base Template - Bleeding Edge
+- CFWheels Template - HelloWorld
+- CFWheels Template - HelloDynamic
+- CFWheels Template - HelloPages
+- CFWheels Example App
+- CFWheels - TodoMVC - HTMX - Demp App
+
+```
+wheels create app template=base
+```
+The template parameter can also be any valid Endpoint ID, which includes a Git repo or HTTP URL pointing to a package. So you can use this to publish your own templates to use to start new projects.
+
+```
+wheels create app template=http://site.com/myCustomAppTemplate.zip
+```
+
 ## `wheels generate route`
 
 ## `wheels generate controller`
