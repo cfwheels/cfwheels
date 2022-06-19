@@ -16,6 +16,9 @@
 ## Command Line Tools
 
 * [CLI Commands](command-line-tools/cli-commands.md)
+* [wheels - commands](command-line-tools/wheels-commands.md)
+* [wheels generate - commands](command-line-tools/wheels-generate-commands.md)
+* [wheels dbmigrate - commands](command-line-tools/wheels-dbmigrate-commands.md)
 
 ## Working with CFWheels
 
