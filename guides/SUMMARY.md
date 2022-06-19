@@ -19,7 +19,7 @@
 * [wheels - commands](command-line-tools/wheels-commands.md)
 * [wheels generate - commands](command-line-tools/wheels-generate-commands.md)
 * [wheels dbmigrate - commands](command-line-tools/wheels-dbmigrate-commands.md)
-* [wheels plugin - commands](command-line-tools/wheels-plugin-commands.md)
+* [wheels plugins - commands](command-line-tools/wheels-plugins-commands.md)
 
 ## Working with CFWheels
 

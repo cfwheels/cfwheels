@@ -5,7 +5,7 @@ The command line tools extends the functionality of CommandBox with some command
 * [wheels - commands](wheels-commands.md)
 * [wheels generate - commands](wheels-generate-commands.md)
 * [wheels dbmigrate - commands](wheels-dbmigrate-commands.md)
-* [wheels plugin - commands](wheels-plugin-commands.md)
+* [wheels plugins - commands](wheels-plugins-commands.md)
 
 ## `wheels plugins`
 
