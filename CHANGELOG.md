@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show the Test Runner buttons in the CFWheels GUI on the Package List screen allowing the developer to run the entire test suite instead of one package at a time. - [Peter Amiri]
 - The Base Template now contains all necessary placeholders for the CLI to interact with the application and be able to inject code properly. - [Peter Amiri]
 - By default the Core tests will run in the the application datasouce, but the developer can setup a different database for running the Core tests to ensure there is no side effects from running the tests. If you do end up setting a different database for the coreTestDatasouceName, make sure to reload your application after running the Core tests. - [Peter Amiri]
+- Fix two broken links in README. [John Bampton -  * *New Contributor* *]
+- Fix spelling - [John Bampton -  * *New Contributor* *]
 
 ### Guides
 - Fix broken links throughout the guides. - [Peter Amiri]
