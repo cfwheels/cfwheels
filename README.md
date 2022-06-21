@@ -51,6 +51,6 @@ version).
 Made with [contrib.rocks](https://contrib.rocks).
 
 [1]: https://cfwheels.org/
-[2]: https://guides.cfwheels.org/docs/beginner-tutorial-hello-world
-[3]: https://guides.cfwheels.org/docs/contributing-to-cfwheels
+[2]: https://guides.cfwheels.org/cfwheels-guides/introduction/readme/beginner-tutorial-hello-world
+[3]: https://guides.cfwheels.org/cfwheels-guides/working-with-cfwheels/contributing-to-cfwheels
 [4]: https://github.com/cfwheels/cfwheels/issues
