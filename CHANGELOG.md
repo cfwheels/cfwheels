@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # [2.3.0](https://github.com/cfwheels/cfwheels/releases/tag/v2.3.0) => 2020.05.11
 
-This relese finalizes the 2.3.0 release and doesn't include any new enhancements or bug fixes. Bellow is the change log from the 2.3.0.rc.1 release.
+This release finalizes the 2.3.0 release and doesn't include any new enhancements or bug fixes. Bellow is the change log from the 2.3.0.rc.1 release.
 
 ### View Enhancements
 - Adds association error support via `includeAssociations` argument [#1080](https://github.com/cfwheels/cfwheels/issues/1080) - [Nikolaj Frey]
