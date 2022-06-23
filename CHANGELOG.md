@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - By default the Core tests will run in the the application datasouce, but the developer can setup a different database for running the Core tests to ensure there is no side effects from running the tests. If you do end up setting a different database for the coreTestDatasouceName, make sure to reload your application after running the Core tests. - [Peter Amiri]
 - Fix two broken links in README. [John Bampton -  * *New Contributor* *]
 - Fix spelling - [John Bampton -  * *New Contributor* *]
+- Add .evn parser to parse .env files and add the properties found in the file to this.env scope. [#1157](https://github.com/cfwheels/cfwheels/pull/1157) - [Peter Amiri]
 
 ### Guides
 - Fix broken links throughout the guides. - [Peter Amiri]
