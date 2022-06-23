@@ -36,6 +36,30 @@ for (this.wheels.folder in this.wheels.pluginFolders) {
 	}
 }
 
+// Put environment vars into env struct
+if ( !structKeyExists(this,"env") ) {
+  this.env = {};
+  envFilePath = this.wheels.rootPath & ".env";
+  if (fileExists(envFilePath)) {
+    envStruct = {};
+
+    envFile = fileRead(envFilePath);
+    if (isJSON(envFile)) {
+      envStruct = deserializeJSON(envFile);
+    }
+    else { // assume it is a .properties file
+      properties = createObject('java', 'java.util.Properties').init();
+      properties.load(CreateObject('java', 'java.io.FileInputStream').init(envFilePath));
+      envStruct = properties;
+    }
+
+    // Append to env struct
+    for (key in envStruct) {
+      this.env["#key#"] = envStruct[key];
+    }
+  }
+}
+
 // Include developer's app config so they can set their own variables in this scope (or override "sessionManagement").
 // Include Wheels controller and global functions.
 // Include Wheels event functions (which in turn includes the developer's event files).
