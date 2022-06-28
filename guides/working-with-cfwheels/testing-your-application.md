@@ -59,7 +59,7 @@ function testExpectedEqualsActual() {
 
 If a method does not begin with `test`, it is ignored and skipped. This lets you create as many helper methods for your testing components as you want.
 
-Do not `var`-scope and variables used in your tests. In order for the testing framework to access the variables within the tests that you're writing, all variables need to be within the component's `variables` scope. The easy way to do this is to just not `var` variables within your tests, and your CFML engine will automatically assign these variables into the `variables` scope of the component for you. You'll see this in the examples below.
+Do not `var`-scope any variables used in your tests. In order for the testing framework to access the variables within the tests that you're writing, all variables need to be within the component's `variables` scope. The easy way to do this is to just not `var` variables within your tests, and your CFML engine will automatically assign these variables into the `variables` scope of the component for you. You'll see this in the examples below.
 
 ### Setup & Teardown
 
@@ -355,7 +355,7 @@ We use this information to make sure that the controller redirected the visitor 
 
 **Note:** `processRequest()` is only for use within the test framework.
 
-Below are some examples are how a controller can be tested:
+Below are some examples of how a controller can be tested:
 
 ```java
 // asserts that a failed user update returns a 302 http response, an error exists in the flash and will be redirected to the error page

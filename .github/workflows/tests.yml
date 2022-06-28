@@ -18,8 +18,28 @@ jobs:
         cf: [lucee5, adobe2016, adobe2018]
         db: [mysql56, postgres, sqlserver, h2]
         exclude:
+          - cf: lucee5
+            db: mysql56
+          - cf: lucee5
+            db: postgres
+          - cf: lucee5
+            db: sqlserver
+#          - cf: lucee5
+#            db: h2
+          - cf: adobe2016
+            db: mysql56
+          - cf: adobe2016
+            db: postgres
+          - cf: adobe2016
+            db: sqlserver
           - cf: adobe2016
             db: h2
+          - cf: adobe2018
+            db: mysql56
+          - cf: adobe2018
+            db: postgres
+          - cf: adobe2018
+            db: sqlserver
           - cf: adobe2018
             db: h2
 
@@ -54,7 +74,7 @@ jobs:
           SLACK_CHANNEL: builds
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
           SLACK_ICON_EMOJI: ":bell:"
-          SLACK_MESSAGE: 'CFWheels tests failed :cry:, check them out here: https://github.com/bpamiri/cfwheels/actions'
+          SLACK_MESSAGE: 'CFWheels tests failed :cry:, check them out here: https://github.com/cfwheels/cfwheels/actions'
           SLACK_TITLE: 'CFWheels Tests For (${{ matrix.cf }}, ${{ matrix.db }}) failed'
           SLACK_USERNAME: Peter Amiri
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}

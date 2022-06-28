@@ -76,7 +76,7 @@ By default, these validations will run without your needing to set up anything i
 
 Note these extra behaviors as well:
 
-* Automatic validations will not run for [Automatic Time Stamps](https://guides.cfwheels.org/docs/automatic-time-stamps).
+* Automatic validations will not run for [Automatic Time Stamps](https://guides.cfwheels.org/cfwheels-guides/database-interaction-through-models/automatic-time-stamps).
 * If you've already set a validation on a particular property in your model, the automatic validations will be overridden by your settings.
 * If your database column provides a default value for a given field, Wheels will not enforce a [validatesPresenceOf()](https://api.cfwheels.org/model.validatespresenceof.html)rule on that property.
 
@@ -86,9 +86,9 @@ To disable automatic validations in your Wheels application, change this setting
 set(automaticValidations=false);
 ```
 
-You can also turn on or off the automatic validations on a per model basis by calling the [automaticValidations()](https://api.cfwheels.org/model.automaticvalidation.html) method from a model's `config()` method.
+You can also turn on or off the automatic validations on a per model basis by calling the [automaticValidations()](https://api.cfwheels.org/v2.2/model.automaticValidations.html) method from a model's `config()` method.
 
-See the chapter on [Configuration and Defaults](https://guides.cfwheels.org/docs/configuration-and-defaults) for more information on available Wheels ORM settings.
+See the chapter on [Configuration and Defaults](https://guides.cfwheels.org/cfwheels-guides/working-with-cfwheels/configuration-and-defaults) for more information on available Wheels ORM settings.
 
 ### Use when, condition, or unless to Limit the Scope of Validation
 
@@ -201,7 +201,7 @@ The first line of the action creates a `newUser` based on the `user` model and t
 
 Now, to persist the object to the database, the model's [save()](https://api.cfwheels.org/model.save.html) call can be placed within a `<cfif>` test. If the save succeeds, the [save()](https://api.cfwheels.org/model.save.html) method will return `true`, and the contents of the `<cfif>` will be executed. But if any of the validations set up in the model fail, the [save()](https://api.cfwheels.org/model.save.html) method returns `false`, and the `<cfelse>` will execute.
 
-The important step here is to recognize that the `<cfelse>` renders the original form input page using the [renderView()](https://guides.cfwheels.org/docs/renderview)function. When this happens, the view will use the `newUser` object defined in our [save()](https://api.cfwheels.org/model.save.html) method. If a [redirectTo()](https://api.cfwheels.org/controller.redirectto.html) were used instead, the validation information loaded in our [save()](https://api.cfwheels.org/model.save.html) method would be lost.
+The important step here is to recognize that the `<cfelse>` renders the original form input page using the [renderView()](https://api.cfwheels.org/v2.2/controller.renderWith.html)function. When this happens, the view will use the `newUser` object defined in our [save()](https://api.cfwheels.org/model.save.html) method. If a [redirectTo()](https://api.cfwheels.org/controller.redirectto.html) were used instead, the validation information loaded in our [save()](https://api.cfwheels.org/model.save.html) method would be lost.
 
 ### The View
 
@@ -228,9 +228,9 @@ Wheels factors out much of the error display code that you'll ever need. As you 
 </cfoutput>
 ```
 
-The biggest thing to note in this example is that a field called `passwordConfirmation` was provided so that the [validatesConfirmationOf()](https://api.cfwheels.org/model.validate.htmlsconfirmationof) validation in the model can be properly tested.
+The biggest thing to note in this example is that a field called `passwordConfirmation` was provided so that the [validatesConfirmationOf()](https://api.cfwheels.org/v2.2/model.validatesConfirmationOf.html) validation in the model can be properly tested.
 
-For more information on how this code behaves when there is an error, refer to the [Form Helpers and Showing Errors](https://guides.cfwheels.org/docs/form-helpers-and-showing-errors)chapter.
+For more information on how this code behaves when there is an error, refer to the [Form Helpers and Showing Errors](https://guides.cfwheels.org/cfwheels-guides/displaying-views-to-users/form-helpers-and-showing-errors)chapter.
 
 ### Error Messages
 

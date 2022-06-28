@@ -6,7 +6,7 @@ application.wheels.modelPath = "/wheels/tests/_assets/models";
 if(structKeyExists(url, "db") && listFind("mysql,sqlserver,postgres,h2", url.db)){
 	application.wheels.dataSourceName = "wheelstestdb_" & url.db;
 } else {
-	application.wheels.dataSourceName = "wheelstestdb";
+	application.wheels.dataSourceName = application.wheels.coreTestDataSourceName;
 }
 
 /* For JS Test Runner */

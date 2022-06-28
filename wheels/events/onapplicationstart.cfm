@@ -146,6 +146,11 @@ public void function onApplicationStart() {
 		);
 	}
 
+	// Set the coreTestDatasourceName to the application dataSourceName if it doesn't exits
+	if (!StructKeyExists(application.$wheels, "coreTestDataSourceName")) {
+		application.$wheels.coreTestDataSourceName = application.$wheels.dataSourceName;
+	}
+
 	application.$wheels.dataSourceUserName = "";
 	application.$wheels.dataSourcePassword = "";
 	application.$wheels.transactionMode = "commit";

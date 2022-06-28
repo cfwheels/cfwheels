@@ -52,7 +52,7 @@ set(transactionMode=false);
 ```
 {% endcode %}
 
-See the chapter about [Configuration and Defaults](https://guides.cfwheels.org/docs/configuration-and-defaults) for more details.
+See the chapter about [Configuration and Defaults](https://guides.cfwheels.org/cfwheels-guides/working-with-cfwheels/configuration-and-defaults) for more details.
 
 ### Using Rollbacks
 
