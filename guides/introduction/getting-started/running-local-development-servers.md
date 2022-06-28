@@ -1,4 +1,4 @@
-# Running Local Development Serevers
+# Running Local Development servers
 
 ### Starting a local development server
 
@@ -61,8 +61,8 @@ server list
 {% endtabs %}
 
 ```shell-session
-myapp (stopped) 
- http://127.0.0.1:60000 
+myapp (stopped)
+ http://127.0.0.1:60000
  Webroot: /Users/cfwheels/Documents/myapp
 
 myAPI (stopped)
@@ -70,13 +70,13 @@ myAPI (stopped)
  Webroot: /Users/cfwheels/Documents/myAPI
 
 megasite (stopped)
- http://127.0.0.1:61280 
- CF Engine: lucee 4.5.4+017 
+ http://127.0.0.1:61280
+ CF Engine: lucee 4.5.4+017
  Webroot: /Users/cfwheels/Documents/megasite
 
 awesomesite (stopped)
- http://127.0.0.1:60015 
- CF Engine: lucee 4.5.4+017 
+ http://127.0.0.1:60015
+ CF Engine: lucee 4.5.4+017
  Webroot: /Users/cfwheels/Documents/awesomeo
 ```
 

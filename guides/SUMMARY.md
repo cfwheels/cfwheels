@@ -3,7 +3,7 @@
 ## INTRODUCTION
 
 * [Getting Started](README.md)
-  * [Running Local Development Serevers](introduction/getting-started/running-local-development-serevers.md)
+  * [Running Local Development servers](introduction/getting-started/running-local-development-servers.md)
   * [Beginner Tutorial: Hello World](introduction/getting-started/beginner-tutorial-hello-world.md)
   * [Beginner Tutorial: Hello Database](introduction/getting-started/beginner-tutorial-hello-database.md)
   * [Tutorial: CFWheels, AJAX, and You](introduction/getting-started/tutorial-cfwheels-ajax-and-you.md)
