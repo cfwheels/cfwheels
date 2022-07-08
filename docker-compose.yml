@@ -13,14 +13,8 @@ services:
       context: ./
       dockerfile: ./src/docker/Lucee5.Dockerfile
     image: cfwheels-test-lucee5:v1
-    environment:
-      - ENV_MODE=local
-      - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
-      - BOX_SERVER_CFCONFIGFILE=./src/docker/CFConfig.json
-      - APP_DIR=/cfwheels-test-suite
     volumes:
       - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
-      - .:/cfwheels-test-suite
       - ./src/docker:/src/docker
     ports:
       - "60005:8080"
@@ -30,14 +24,8 @@ services:
       context: ./
       dockerfile: ./src/docker/Adobe2016.Dockerfile
     image: cfwheels-test-adobe2016:v1
-    environment:
-      - ENV_MODE=local
-      - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
-      - BOX_SERVER_CFCONFIGFILE=./src/docker/CFConfig.json
-      - APP_DIR=/cfwheels-test-suite
     volumes:
-      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
-      - .:/cfwheels-test-suite
+      - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
       - ./src/docker:/src/docker
     ports:
       - "62016:8080"
@@ -47,20 +35,14 @@ services:
       context: ./
       dockerfile: ./src/docker/Adobe2018.Dockerfile
     image: cfwheels-test-adobe2018:v1
-    environment:
-      - ENV_MODE=local
-      - HEALTHCHECK_URI=http://127.0.0.1:8443/health.cfm
-      - BOX_SERVER_CFCONFIGFILE=./src/docker/CFConfig.json
-      - APP_DIR=/cfwheels-test-suite
     volumes:
       - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
-      - .:/cfwheels-test-suite
       - ./src/docker:/src/docker
     ports:
       - "62018:8080"
 
   mysql:
-    image: mysql:oracle
+    image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
