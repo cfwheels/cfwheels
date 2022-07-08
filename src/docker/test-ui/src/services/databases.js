@@ -4,7 +4,7 @@ const databases = [
 		database: 'mysql'
 	},
 	{
-		databasename: 'MSSQL',
+		databasename: 'SQL Server',
 		database: 'sqlserver'
 	},
 	{
