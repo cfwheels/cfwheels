@@ -11,7 +11,7 @@ for (var s = 0; s < servers.length; s++){
 		}
 		testsuites.push({
 			id: servers[s].server + '_' + databases[d].database,
-			displayname: servers[s].servername + ' ' + databases[d].databasename,
+			displayname: servers[s].servername + ': ' + databases[d].databasename,
 			servername: servers[s].servername,
 			server: servers[s].server,
 			databasename: databases[d].databasename,
