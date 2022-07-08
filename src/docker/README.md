@@ -63,13 +63,13 @@ You can start specific services or rebuild specific services by name. If you jus
 
 Likewise if you need to rebuild any of the images, you can do it on an image by image basis if needed:
 
-`docker-compose build testui` *etc*
+`docker-compose up testui --build` *etc*
 
-Which can be quicker than rebuilding everything via `docker-compose build`
+Which can be quicker than rebuilding everything via `docker-compose up --build`
 
 #### Known Issues
 There's an issue with CORS tests currently, which means those tests are currently commented out
 
 ### Rebuilding
 
-You can force a rebuild of the images via `docker-compose up --build` which is useful if you change configuration of any of the Dockerfiles etc. The two adobe engines still take ages to boot this way (just an fyi)
+You can force a rebuild of all the images via `docker-compose up --build` which is useful if you change configuration of any of the Dockerfiles etc. The two adobe engines still take ages to boot this way (just an fyi)
