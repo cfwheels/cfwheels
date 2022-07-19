@@ -84,7 +84,7 @@ To remove a server configuration from the list, you can use `server forget myapp
 
 ### Specifying different CF engines
 
-By default, Commandbox will run Lucee (version 4.5.x at time of writing). You may wish to specify an exact version of Lucee, or use Adobe ColdFusion. We can do this via either setting the appropriate `cfengine` setting in `server.json`, or at runtime with the `cfengine=` argument.
+By default, Commandbox will run Lucee (version 5.x at time of writing). You may wish to specify an exact version of Lucee, or use Adobe ColdFusion. We can do this via either setting the appropriate `cfengine` setting in `server.json`, or at runtime with the `cfengine=` argument.
 
 {% tabs %}
 {% tab title="CommandBox" %}
@@ -154,13 +154,13 @@ You can of course run multiple servers, so if you need to test your app on Lucee
 Commandbox 5.1 required to install dependencies easily
 {% endhint %}
 
-CFWheels can run just fine on lucee-light (which is after all, Lucee, minus all the extensions) but at the minimum requires the following extensions to be installed as dependencies in your `box.json`
+By default the Lucee server that CommandBox starts has all the basic Lucee extensions that you are going to need installed, but if need to minimize the size of the Lucee instance you launch, then you can use Lucee-Light by specifying `cfengine=lucee-light` in your `server.json` file. CFWheels can run just fine on lucee-light (which is after all, Lucee, minus all the extensions) but at a minimum, requires the following extensions to be installed as dependencies in your `box.json`. Please note you may have to add any drivers you need for your database to this list as well.
 
 ```json
 "dependencies":{
     "lucee-image":"lex:https://ext.lucee.org/lucee.image.extension-1.0.0.35.lex",
     "lucee-zip": "lex:https://ext.lucee.org/compress-extension-1.0.0.2.lex",
-    json"lucee-esapi": "lex:https://ext.lucee.org/esapi-extension-2.1.0.18.lex"
+    "lucee-esapi": "lex:https://ext.lucee.org/esapi-extension-2.1.0.18.lex"
 }
 ```
 
