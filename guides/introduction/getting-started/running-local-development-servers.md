@@ -80,7 +80,7 @@ awesomesite (stopped)
  Webroot: /Users/cfwheels/Documents/awesomeo
 ```
 
-To remove a server configuration from the list, you can do `server forget myapp`. Note the status of the servers on the list is somewhat unreliable, as you it only remembers the last known state of the server: so if you start a server and then turn on your local machine, it may remember it as `running` which is why we recommend the use of `force: true`in the `server.json` file.
+To remove a server configuration from the list, you can use `server forget myapp`. Note the status of the servers on the list are somewhat unreliable, as it only remembers the last known state of the server: so if you start a server and then turn off your local machine, it may still remember it as `running` when you turn your local machine back on, which is why we recommend the use of `force: true` in the `server.json` file.
 
 ### Specifying different CF engines
 
