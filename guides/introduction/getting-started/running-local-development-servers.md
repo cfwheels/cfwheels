@@ -36,7 +36,7 @@ You can also specify hosts other than localhost: there's a useful commandbox mod
 
 ### Controlling local servers
 
-Obviously, anything you start, you might want to stop. Servers can be stopped either via right/ctrl clicking on the icon in the taskbar, or by the `stop` command
+Obviously, anything you start, you might want to stop. Servers can be stopped either via right/ctrl clicking on the icon in the taskbar, or by the `stop` command. To stop a server running in the current directory issue the following:
 
 {% tabs %}
 {% tab title="CommandBox" %}
@@ -44,7 +44,7 @@ server stop
 {% endtab %}
 {% endtabs %}
 
-You can also stop the server from anywhere by name:
+You can also stop a server from anywhere by using it's name:
 
 {% tabs %}
 {% tab title="CommandBox" %}
