@@ -70,7 +70,7 @@ In this example, `key` and `slug` are parameters that must be present in the URL
 
 When a request is made to CFWheels, the router will look for the first route that matches the requested URL. As an example, this means that if `key` is present in the URL but not `slug`, then it's the second route above that will match.
 
-Please note that `.` and `_` are treated as special characters in patterns and should generally not be used (one exception being when you are [responding with multiple formats](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/responding-with-multiple-formats)). If your parameters may have `.` or `_` in their value, plese use the long form URL format i.e. `/?controller=[controller_name]&action=[action_name]&[parameter_name]=[parameter_value]`.
+Please note that `.` and `_` are treated as special characters in patterns and should generally not be used (one exception being when you are [responding with multiple formats](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/responding-with-multiple-formats)). If your parameters may have `.` or `_` in their value, please use the long form URL format i.e. `/?controller=[controller_name]&action=[action_name]&[parameter_name]=[parameter_value]`.
 
 ### Viewing a List of Routes
 
