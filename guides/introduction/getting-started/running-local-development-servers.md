@@ -44,7 +44,7 @@ server stop
 {% endtab %}
 {% endtabs %}
 
-You can also stop a server from anywhere by using it's name:
+You can also stop a server from anywhere by using its name:
 
 {% tabs %}
 {% tab title="CommandBox" %}
