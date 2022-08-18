@@ -32,6 +32,13 @@ Once you have added the rewrite rules (usually in either `.htaccess`, `web.confi
 Since 2.x, engine specific URL rewrite files are not included in the default distribution. Don't worry - we've got you covered though!
 {% endhint %}
 
+For webserver specific instructions look at the following pages:
+
+* [Apache](apache.md)
+* [IIS](iis.md)
+* [Tomcat](tomcat.md)
+* [Nginx](nginx.md)
+
 ### Don't Forget to Restart
 
 If you need to make changes to get URL rewriting to work, it's important to remember to always restart the web server and the ColdFusion server to make sure the changes are picked up by Wheels.

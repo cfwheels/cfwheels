@@ -1,0 +1,17 @@
+{
+	"force":true,
+	"web":{
+			"http":{
+					"port":"8080",
+					"enable":true
+			},
+			"rewrites":{
+					"enable":true,
+					"config":"urlrewrite.xml"
+			}
+	},
+	"app":{
+			"cfengine":"Lucee",
+			"libDirs":"src/docker/lib"
+	}
+}

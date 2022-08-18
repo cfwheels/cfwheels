@@ -38,7 +38,7 @@ The terminology goes like this:
 
 #### Name
 
-A route _name_ is set up for reference in your CFML code for building [links](https://guides.cfwheels.org/docs/linking-pages), [forms](https://guides.cfwheels.org/docs/form-helpers-and-showing-errors), and such. To build URLs, you'll use this name along with helpers like [linkTo()](https://api.cfwheels.org/controller.linkto.html), [startFormTag()](https://api.cfwheels.org/controller.startformtag.html), [urlFor()](https://api.cfwheels.org/controller.urlfor.html), and so on.
+A route _name_ is set up for reference in your CFML code for building [links](https://guides.cfwheels.org/cfwheels-guides/displaying-views-to-users/linking-pages), [forms](https://guides.cfwheels.org/cfwheels-guides/displaying-views-to-users/form-helpers-and-showing-errors), and such. To build URLs, you'll use this name along with helpers like [linkTo()](https://api.cfwheels.org/controller.linkto.html), [startFormTag()](https://api.cfwheels.org/controller.startformtag.html), [urlFor()](https://api.cfwheels.org/controller.urlfor.html), and so on.
 
 #### Method
 
@@ -70,7 +70,9 @@ In this example, `key` and `slug` are parameters that must be present in the URL
 
 When a request is made to CFWheels, the router will look for the first route that matches the requested URL. As an example, this means that if `key` is present in the URL but not `slug`, then it's the second route above that will match.
 
-Please note that `.` is treated as a special character in patterns and should generally not be used (one exception being when you are [responding with multiple formats](https://guides.cfwheels.org/v2.0/docs/responding-with-multiple-formats)).
+{% hint style="warning" %}
+Please note that `.` is treated as a special characters in patterns and should generally not be used (one exception being when you are [responding with multiple formats](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/responding-with-multiple-formats)). If your parameters may have `.` in their value, please use the long form URL format: `/?controller=[controller_name]&action=[action_name]&[parameter_name]=[parameter_value]`
+{% endhint %}
 
 ### Viewing a List of Routes
 
@@ -80,7 +82,7 @@ In the debugging footer, you'll see a **View Routes** link next to your applicat
 
 Clicking that will load a filterable list of routes drawn in the `config/routes.cfm` file, including name, method, pattern, controller, and action.
 
-If you don't see debugging information at the bottom of the page, see the docs for the `showDebugInformation` setting in the [Configuration and Defaults](https://guides.cfwheels.org/docs/configuration-and-defaults) chapter.
+If you don't see debugging information at the bottom of the page, see the docs for the `showDebugInformation` setting in the [Configuration and Defaults](https://guides.cfwheels.org/cfwheels-guides/working-with-cfwheels/configuration-and-defaults) chapter.
 
 ### Resource Routing
 
@@ -247,7 +249,7 @@ To get around this, the CFWheels router recognizes the specialized verbs from br
 * Via a `POST` request with a
 * `POST` variable named `_method` specifying the specific HTTP verb (e.g., `_method=delete`)
 
-See the chapter on [Linking Pages](https://guides.cfwheels.org/docs/linking-pages) for strategies for working with this constraint.
+See the chapter on [Linking Pages](https://guides.cfwheels.org/cfwheels-guides/displaying-views-to-users/linking-pages) for strategies for working with this constraint.
 
 Note that using CFWheels to write a REST API doesn't typically have this constraint. You should confidently require API clients to use the specific verbs like `PATCH` and `DELETE`.
 

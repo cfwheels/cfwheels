@@ -16,3 +16,4 @@ settings.json
 .vscode
 settings.xml
 .CommandBox
+*.db

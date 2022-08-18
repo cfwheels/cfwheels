@@ -20,7 +20,7 @@ Some scripted commands also require the git CLI, although these are technically 
 
 ### Setup a forgebox user account
 
-If you've not got a [forgebox.io](http://forgebox.io) account you can either [register directly on forgebox](https://www.forgebox.io/security/registration) or very quickly via commandbox itself
+If you've not got a [forgebox.io](http://forgebox.io/) account you can either [register directly on forgebox](https://www.forgebox.io/security/registration) or very quickly via commandbox itself
 
 {% code title="Commandbox" %}
 ```shell
@@ -138,7 +138,7 @@ Your completed `box.json` might look something like this:
 
 ### Using the forgebox staging server (optional)
 
-If this is the first time you've done this, you might want to try the forgebox staging server. That way you can make sure your publishing process is spot on without having lots of unnecessary versions pushed up. You can view the staging server version at [http://forgebox.stg.ortussolutions.com/](http://forgebox.stg.ortussolutions.com)
+If this is the first time you've done this, you might want to try the forgebox staging server. That way you can make sure your publishing process is spot on without having lots of unnecessary versions pushed up. You can view the staging server version at [http://forgebox.stg.ortussolutions.com/](http://forgebox.stg.ortussolutions.com/)
 
 {% code title="Commandbox" %}
 ```shell

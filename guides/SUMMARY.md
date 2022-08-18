@@ -3,7 +3,7 @@
 ## INTRODUCTION
 
 * [Getting Started](README.md)
-  * [Running Local Development Serevers](introduction/getting-started/running-local-development-serevers.md)
+  * [Running Local Development servers](introduction/getting-started/running-local-development-servers.md)
   * [Beginner Tutorial: Hello World](introduction/getting-started/beginner-tutorial-hello-world.md)
   * [Beginner Tutorial: Hello Database](introduction/getting-started/beginner-tutorial-hello-database.md)
   * [Tutorial: CFWheels, AJAX, and You](introduction/getting-started/tutorial-cfwheels-ajax-and-you.md)
@@ -16,6 +16,10 @@
 ## Command Line Tools
 
 * [CLI Commands](command-line-tools/cli-commands.md)
+* [wheels - commands](command-line-tools/wheels-commands.md)
+* [wheels generate - commands](command-line-tools/wheels-generate-commands.md)
+* [wheels dbmigrate - commands](command-line-tools/wheels-dbmigrate-commands.md)
+* [wheels plugins - commands](command-line-tools/wheels-plugins-commands.md)
 
 ## Working with CFWheels
 

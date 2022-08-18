@@ -20,7 +20,7 @@ We take our open source community seriously and hold ourselves and other contrib
 
 Contributions are made to this repo via Issues and Pull Requests (PRs). A few general guidelines that cover both:
 
-- To report security vulnerabilities, please use our [Responsible Disclosure Program](mailto:webmaster@cfwheels.org?subject=Responsible Disclosure Program) which is monitored by our security team.
+- To report security vulnerabilities, please use our [Responsible Disclosure Program](mailto:webmaster@cfwheels.org?subject=Responsible%20Disclosure%20Program) which is monitored by our security team.
 - Search for existing Issues and PRs before creating your own.
 - We work hard to makes sure issues are handled in a timely manner but, depending on the impact, it could take a while to investigate the root cause. A friendly ping in the comment thread to the submitter or a contributor can help draw attention if your issue is blocking.
 - If you've never contributed before, see [the Contributing to CFWheels Guide](https://guides.cfwheels.org/docs/contributing-to-cfwheels/) for resources and tips on how to get started.

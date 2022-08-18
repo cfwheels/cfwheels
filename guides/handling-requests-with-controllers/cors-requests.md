@@ -66,7 +66,7 @@ set(accessControlAllowOrigin = [
 ]);
 ```
 
-The CORS spec specifies that you are only allowed either a \* wildcard, or a specific URL , i.e [https://www.foo.com:8080](https://www.foo.com:8080)- it doesn't in itself allow for wildcard subdomains. However in this scenario CFWheels will attempt to match the wildcard and return the full matched domain.
+The CORS spec specifies that you are only allowed either a \* wildcard, or a specific URL , i.e [https://www.foo.com:8080](https://www.foo.com:8080/)- it doesn't in itself allow for wildcard subdomains. However in this scenario CFWheels will attempt to match the wildcard and return the full matched domain.
 
 ### Access Control Allow Methods
 

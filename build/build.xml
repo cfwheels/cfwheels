@@ -100,7 +100,7 @@
 
 		<copy todir="${dir.build.core}/cfwheels" encoding="UTF-8" overwrite="true">
 			<fileset dir="wheels">
-				<exclude name="**/tests/**"/>
+			<!--	<exclude name="tests/**"/> -->
 			</fileset>
 		</copy>
 
@@ -189,6 +189,7 @@
 				<include name="models/**"/>
 				<include name="plugins/**"/>
 				<include name="stylesheets/**"/>
+				<include name="templates/**"/>
 				<include name="tests/**"/>
 				<include name="views/**"/>
 				<include name="Application.cfc"/>

@@ -2,11 +2,22 @@
 application.wheels.controllerPath = "wheels/tests/_assets/controllers";
 application.wheels.modelPath = "/wheels/tests/_assets/models";
 
+if(structKeyExists(url, "db") && url.db == "sqlserver"){
+	createDB = queryExecute(
+		"IF NOT EXISTS (
+			SELECT *
+			FROM sys.databases
+			WHERE name = 'wheelstestdb'
+			)
+		BEGIN
+			CREATE DATABASE [wheelstestdb]
+		END", {}, {datasource = "msdb_sqlserver"});
+}
 
 if(structKeyExists(url, "db") && listFind("mysql,sqlserver,postgres,h2", url.db)){
 	application.wheels.dataSourceName = "wheelstestdb_" & url.db;
 } else {
-	application.wheels.dataSourceName = "wheelstestdb";
+	application.wheels.dataSourceName = application.wheels.coreTestDataSourceName;
 }
 
 /* For JS Test Runner */

@@ -143,6 +143,7 @@ settings = [
 <cfinclude template="../layout/_header.cfm">
 
 <cfoutput>
+	<!--- cfformat-ignore-start --->
 	<div class="ui container">
 		#pageHeader("System Information", "Note, these settings reflect the currently loaded environment")#
 
@@ -297,4 +298,5 @@ settings = [
 	<!--/container-->
 
 	<cfinclude template="../layout/_footer.cfm">
+	<!--- cfformat-ignore-end --->
 </cfoutput>

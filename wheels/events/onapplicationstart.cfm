@@ -62,7 +62,7 @@ public void function onApplicationStart() {
 
 	// Set up containers for routes, caches, settings etc.
 	// TODO remove the static version number
-	application.$wheels.version = "2.3.0";
+	application.$wheels.version = "2.4.0";
 	try {
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
 	} catch (any e) {
@@ -144,6 +144,11 @@ public void function onApplicationStart() {
 		application.$wheels.dataSourceName = LCase(
 			ListLast(GetDirectoryFromPath(GetBaseTemplatePath()), Right(GetDirectoryFromPath(GetBaseTemplatePath()), 1))
 		);
+	}
+
+	// Set the coreTestDatasourceName to the application dataSourceName if it doesn't exits
+	if (!StructKeyExists(application.$wheels, "coreTestDataSourceName")) {
+		application.$wheels.coreTestDataSourceName = application.$wheels.dataSourceName;
 	}
 
 	application.$wheels.dataSourceUserName = "";

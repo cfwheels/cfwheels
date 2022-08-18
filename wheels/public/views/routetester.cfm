@@ -5,6 +5,7 @@ result = $$findMatchingRoutes(path = request.wheels.params.path, requestMethod =
 </cfscript>
 
 <cfoutput>
+	<!--- cfformat-ignore-start --->
 	<div class="ui horizontal section divider">Results</div>
 
 	<cfif ArrayLen(result.errors)>
@@ -47,5 +48,6 @@ result = $$findMatchingRoutes(path = request.wheels.params.path, requestMethod =
 			</tbody>
 		</table>
 	</cfif>
+	<!--- cfformat-ignore-end --->
 </cfoutput>
 

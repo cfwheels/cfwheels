@@ -40,6 +40,7 @@ if (executeAction) {
 	}
 }
 </cfscript>
+<!--- cfformat-ignore-start --->
 <cfoutput>
 	<div id="result" class="scrolling content longer">
 		<cfif !executeAction>
@@ -73,3 +74,4 @@ $(document).ready(function() {
 	});
 });
 </script>
+<!--- cfformat-ignore-end --->

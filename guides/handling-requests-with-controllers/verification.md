@@ -94,7 +94,7 @@ The only thing you need to make sure of is that the number of variables in the `
 
 ### Controller Verification vs. Model Object Validation
 
-[verifies()](https://api.cfwheels.org/controller.verifies.html) exists solely to validate _controller_ and _environment level_ variables and is not a substitute for [Object Validation](https://guides.cfwheels.org/docs/object-validation)in your model.
+[verifies()](https://api.cfwheels.org/controller.verifies.html) exists solely to validate _controller_ and _environment level_ variables and is not a substitute for [Object Validation](https://guides.cfwheels.org/cfwheels-guides/database-interaction-through-models/object-validation)in your model.
 
 A basic example of this is to validate params passed through to your controller from routes. Suppose we have the following route in our application:
 

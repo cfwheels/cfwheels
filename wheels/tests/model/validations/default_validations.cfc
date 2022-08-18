@@ -9,14 +9,12 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_validates_presence_of_invalid() {
-		StructDelete(user, "username");
 		/* missing key */
-		user.password = "";
+		StructDelete(user, "username");
 		/* zero length string */
-		user.firstName = "      ";
-		/* empty string */
+		user.password = "";
 		user.valid();
-		assert('ArrayLen(user.allErrors()) eq 3');
+		assert('ArrayLen(user.allErrors()) eq 2');
 	}
 
 	function test_validates_presence_of_valid() {

@@ -12,7 +12,7 @@ We all love the "Convention over Configuration" motto of CFWheels, but what abou
 
 You will find configuration files in the `config` folder of your CFWheels application. In general, most of your settings will go in `config/settings.cfm`.
 
-You can also set values based on what environment you have set. For example, you can have different values for your settings depending on whether you're in `development` mode or `production` mode. See the chapter on [Switching Environments](https://guides.cfwheels.org/docs/switching-environments) for more details.
+You can also set values based on what environment you have set. For example, you can have different values for your settings depending on whether you're in `development` mode or `production` mode. See the chapter on [Switching Environments](switching-environments.md) for more details.
 
 ### How to Set Configurations
 
@@ -54,19 +54,20 @@ this.customTagPaths = ListAppend(
 
 There are several types of configurations that you can perform in CFWheels to override all those default behaviors. In CFWheels, you can find all these configuration options:
 
-* [Environment settings](https://guides.cfwheels.org/docs#environment-settings)
-* [URL rewriting settings](https://guides.cfwheels.org/docs#url-rewriting-settings)
-* [Data source settings](https://guides.cfwheels.org/docs#data-source-settings)
-* [Function settings](https://guides.cfwheels.org/docs#function-settings)
-* [Debugging and error settings](https://guides.cfwheels.org/docs#debugging-and-error-settings)
-* [Caching settings](https://guides.cfwheels.org/docs#caching-settings)
-* [ORM settings](https://guides.cfwheels.org/docs#orm-settings)
-* [Plugin settings](https://guides.cfwheels.org/docs#plugin-settings)
-* [Media settings](https://guides.cfwheels.org/docs#media-settings)
-* [Routing settings](https://guides.cfwheels.org/docs#routing-settings)
-* [View helper settings](https://guides.cfwheels.org/docs#view-helper-settings)
-* [CSRF protection settings](https://guides.cfwheels.org/docs#csrf-protection-settings)
-* [Migrator settings](https://guides.cfwheels.org/docs#migrator-configuration-settings)
+* [Environment settings](configuration-and-defaults.md#environment-settings)
+* [URL rewriting settings](configuration-and-defaults.md#url-rewriting-settings)
+* [Data source settings](configuration-and-defaults.md#data-source-settings)
+* [Function settings](configuration-and-defaults.md#function-settings)
+* [Debugging and error settings](configuration-and-defaults.md#debugging-and-error-settings)
+* [Caching settings](configuration-and-defaults.md#caching-settings)
+* [ORM settings](configuration-and-defaults.md#orm-settings)
+* [Plugin settings](configuration-and-defaults.md#plugin-settings)
+* [Media settings](configuration-and-defaults.md#media-settings)
+* [Routing settings](configuration-and-defaults.md#routing-settings)
+* [View helper settings](configuration-and-defaults.md#view-helper-settings)
+* [CSRF protection settings](configuration-and-defaults.md#csrf-protection-settings)
+* [Miscellaneous Settings](configuration-and-defaults.md#miscellaneous-settings)
+* [Migrator settings](configuration-and-defaults.md#migrator-configuration-settings)
 
 Let's take a closer look at each of these options.
 
@@ -106,7 +107,7 @@ The code above will tell CFWheels to skip its automatic detection of the URL Rew
 
 You can also set it to "Partial" if you believe that your web server is capable of rewriting the URL as folders after `index.cfm`.
 
-For more information, read the chapter about [URL Rewriting](https://guides.cfwheels.org/docs/url-rewriting).
+For more information, read the chapter about [URL Rewriting](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/url-rewriting).
 
 ### Data Source Settings
 
@@ -161,7 +162,7 @@ set(showDebugInformation=false);
 | showDebugInformation  | boolean | Enabled in development mode.                                             | When set to true, CFWheels will show debugging information in the footers of your pages.                                                                                        |
 | showErrorInformation  | boolean | Enabled in development, maintenance, and testing mode.                   | When set to false, CFWheels will run and display code stored at events/onerror.cfm instead of revealing CFML errors.                                                            |
 
-For more information, refer to the chapter about [Switching Environments](https://guides.cfwheels.org/docs/switching-environments).
+For more information, refer to the chapter about [Switching Environments](switching-environments.md).
 
 ### Caching Settings
 
@@ -195,7 +196,7 @@ set(cacheRoutes=false);
 | defaultCacheTime        | numeric | 60                                                           | Number of minutes an item should be cached when it has not been specifically set through one of the functions that perform the caching in CFWheels (i.e., caches(), findAll(), includePartial(), etc.) |
 | maximumItemsToCache     | numeric | 5000                                                         | Maximum number of items to store in CFWheels's cache at one time. When the cache is full, items will be deleted automatically at a regular interval based on the other cache settings.                 |
 
-For more information, refer to the chapter on [Caching](https://guides.cfwheels.org/docs/caching).
+For more information, refer to the chapter on [Caching](../handling-requests-with-controllers/caching.md).
 
 ### ORM Settings
 
@@ -251,7 +252,7 @@ See the chapter on [Installing and Using Plugins](https://guides.cfwheels.org/do
 
 Configure how CFWheels handles linking to assets through view helpers like [imageTag()](https://api.cfwheels.org/controller.imagetag.html), [styleSheetLinkTag()](https://api.cfwheels.org/controller.stylesheetlinktag.html), and [javaScriptIncludeTag()](https://api.cfwheels.org/controller.javascriptincludetag.html).
 
-See the chapter about [Date, Media, and Text Helpers](https://guides.cfwheels.org/docs/date-media-and-text-helpers) for more information.
+See the chapter about [Date, Media, and Text Helpers](../displaying-views-to-users/date-media-and-text-helpers.md) for more information.
 
 **Full Listing of Asset Settings**
 
@@ -264,7 +265,7 @@ See the chapter about [Date, Media, and Text Helpers](https://guides.cfwheels.or
 
 CFWheels includes a powerful routing system. Parts of it are configurable with the following settings.
 
-See the chapters about [Using Routes](https://guides.cfwheels.org/docs/using-routes) and [Obfuscating URLs](https://guides.cfwheels.org/docs/obfuscating-urls) for more information about how this all works together.
+See the chapters about [Using Routes](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/routing) and [Obfuscating URLs](../handling-requests-with-controllers/obfuscating-urls.md) for more information about how this all works together.
 
 **Full Listing of Miscellaneous Settings**
 
@@ -287,7 +288,7 @@ CFWheels includes built-in Cross-Site Request Forgery (CSRF) protection for form
 
 | Name                          | Type    | Default                | Description                                                                                                                                                                                                                                                                                                                                             |
 | ----------------------------- | ------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| csrfStore                     | string  | session                | <p>Which storage strategy to use for storing the CSRF authenticity token. Value values are <code>session</code> or <code>cookie</code>.<br><br>Choosing <code>session</code> requires no additional configuration.<br><br>Choosing <code>cookie</code> for this requires additional configuration listed below.</p>                                     |
+| csrfStore                     | string  | session                | <p>Which storage strategy to use for storing the CSRF authenticity token. Valid values are <code>session</code> or <code>cookie</code>.<br><br>Choosing <code>session</code> requires no additional configuration.<br><br>Choosing <code>cookie</code> for this requires additional configuration listed below.</p>                                     |
 | csrfCookieEncryptionAlgorithm | string  | AES                    | Encryption algorithm to use for encrypting the authenticity token cookie contents. This setting is ignored if you're using `session` storage. See your CF engine's documentation for the `Encrypt()`function for more information.                                                                                                                      |
 | csrfCookieEncryptionSecretKey | string  |                        | Secret key used to encrypt the authenticity token cookie contents. This value must be configured to a string compatible with the `csrfCookieEncryptionAlgorithm`setting if you're using `cookie` storage. This value is ignored if you're using `session` storage. See your CF engine's documentation for the `Encrypt()`function for more information. |
 | csrfCookieEncryptionEncoding  | string  | Base64                 | Encoding to use to write the encrypted value to the cookie. This value is ignored if you're using `session` storage. See your CF engine's documentation for the `Encrypt()` function for more information.                                                                                                                                              |
