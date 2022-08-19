@@ -1,12 +1,12 @@
 # CLI Commands
 
-The command line tools extends the functionality of [CommandBox](https://www.ortussolutions.com/products/commandbox) with some commands specifically designed for CFWheels development. 
+The command line tools extends the functionality of [CommandBox](https://www.ortussolutions.com/products/commandbox) with some commands specifically designed for CFWheels development.
 
 [CommandBox](https://www.ortussolutions.com/products/commandbox) brings a whole host of command line capabilities to the CFML developer. It allows you to write scripts that can be executed at the command line written entirely in CFML. It allows you to start a CFML server from any directory on your machine and wire up the code in that directory as the web root of the server. What's more is, those servers can be either Lucee servers or Adobe ColdFusion servers. You can even specify what version of each server to launch. Lastly, CommandBox is a package manager for CFML. That means you can take some CFML code and package it up into a module, host it on ForgeBox.io, and make it available to other CFML developers. In fact we make extensive use of these capabilities to distribute CFWheels plugins and templates. More on that later.
 
 One module that we have created is a module that extends CommandBox itself with commands and features specific to the CFWheels framework. The CFWheels CLI module for CommandBox is modeled after the Ruby on Rails CLI module and gives similar capabilities to the CFWheels developer.
 
-### Install Commandbox
+### Install CommandBox
 
 The first step is to get [CommandBox](https://www.ortussolutions.com/products/commandbox) downloaded and running. CommandBox is available for Windows, Mac & Linux, and can be installed manually or using one of the respective package managers for each OS. You can use [Chocolatey](https://chocolatey.org) on Windows, [Homebrew](https://brew.sh) on MacOS, or Yum/Apt on Linux depending on your flavor of Linux. Please follow the instructions on how to install CommandBox on your particular operating system. At the end of the installation process you want to make sure the `box` command is part of your system path so you can call the command from any directory on your system.
 

@@ -1,11 +1,11 @@
 # wheels generate - commands
 
 These are the commands in the `wheels generate` namespace. These commands are called by some of
-the top level commands but you can use them directly to speed up your development proces.
+the top level commands but you can use them directly to speed up your development process.
 
 ## `wheels generate`
 
-The `wheels generate` command is what CommandBox calls a namespace and contains many sub commands beneeth it. It's main purpose is to isolate those sub commands so there is no name collisions. It also has an alias of `wheels g` which allows you to shorten the commands you have to type. However, we have opted to show all the commands with their full names in the list below.
+The `wheels generate` command is what CommandBox calls a namespace and contains many sub commands beneath it. It's main purpose is to isolate those sub commands so there is no name collisions. It also has an alias of `wheels g` which allows you to shorten the commands you have to type. However, we have opted to show all the commands with their full names in the list below.
 
 ## `wheels generate app-wizard`
 
@@ -13,13 +13,13 @@ Creates a new CFWheels application using our wizard to gather all the necessary 
 
 This command will ask for:
 
-* An Application Name (a new directoery will be created with this name)
+* An Application Name (a new directory will be created with this name)
 * Template to use
 * A reload Password
 * A datasource name
 * What local cfengine you want to run
 * If using Lucee, do you want to setup a local h2 dev database
-* Do you want to initialize the app as a ForgBox module
+* Do you want to initialize the app as a ForgeBox module
 
 ```
 wheels new
@@ -27,7 +27,7 @@ wheels g app-wizard
 wheels generate app-wizard
 ```
 
-All these three commands areequivelent and will call the same wizard. The wizard in turn gathers all the required data and passes it all off to the `wheels generate app` command to do all the heavy lifting.
+All these three commands are equivalent and will call the same wizard. The wizard in turn gathers all the required data and passes it all off to the `wheels generate app` command to do all the heavy lifting.
 
 Let's take a look at the wizard pages after issuing the `wheels new` command:
 
@@ -41,11 +41,11 @@ You can select a template to use. If you are reading this before CFWheels 2.4 is
 
 ![wheels new - step 3](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.32.14 PM.png>)
 
-You can set what you want to use as your reload password or accept the default. Please make sure to change this before you go into produciton. Ideally this should be kept out of your source repository by using somethign like the (CFWheels DotEnvSettings Plugin)\[[https://www.forgebox.io/view/cfwheels-dotenvsettings](https://www.forgebox.io/view/cfwheels-dotenvsettings)].
+You can set what you want to use as your reload password or accept the default. Please make sure to change this before you go into production. Ideally this should be kept out of your source repository by using something like the (CFWheels DotEnvSettings Plugin)\[[https://www.forgebox.io/view/cfwheels-dotenvsettings](https://www.forgebox.io/view/cfwheels-dotenvsettings)].
 
 ![wheels new - step 4](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.32.43 PM.png>)
 
-The datasource is somethign you'll have to take care of unless you opt to use the H2 Embedded database in a Lucee server. Here you can define the datasource name if you would like to use something different than the application name.
+The datasource is something you'll have to take care of unless you opt to use the H2 Embedded database in a Lucee server. Here you can define the datasource name if you would like to use something different than the application name.
 
 ![wheels new - step 5](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.33.18 PM.png>)
 
@@ -57,7 +57,7 @@ On this step you are asked if you'd like to use the H2 Database, in which case w
 
 ![wheels new - step 7](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.34.44 PM.png>)
 
-On this last step, you are asked if you want us to include a box.json file so you can eventually submit this to ForgeBox.io for sharing witht he world.
+On this last step, you are asked if you want us to include a box.json file so you can eventually submit this to ForgeBox.io for sharing with he world.
 
 ![wheels new - step 8](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.35.09 PM.png>)
 
@@ -71,7 +71,7 @@ If you opted to continue you'll see a bunch of things scroll across your screen 
 
 Create a blank CFWheels app from one of our app templates or a template using a valid Endpoint ID which can come from ForgeBox, HTTP/S, git, github, etc.
 
-By default an app named MyCFWheelsApp will be created in a sub directoryt call MyCFWheelsApp.
+By default an app named MyCFWheelsApp will be created in a sub directory called MyCFWheelsApp.
 
 The most basic call...
 ```
@@ -90,7 +90,7 @@ Here are the basic templates that are available for you that come from ForgeBox
 - CFWheels Template - HelloDynamic
 - CFWheels Template - HelloPages
 - CFWheels Example App
-- CFWheels - TodoMVC - HTMX - Demp App
+- CFWheels - TodoMVC - HTMX - Demo App
 
 ```
 wheels create app template=base
@@ -106,7 +106,7 @@ wheels create app template=http://site.com/myCustomAppTemplate.zip
 | name           | false    | MyCFWheelsApp  | The name of the app you want to create                |
 | template       | false    | base template  | The name of the app template to use                   |
 | directory      | false    | mycfwheelsapp/ | The directory to create the app in                    |
-| reloadPassword | false    | ChangeMe       | The reload passwrod to set for the app                |
+| reloadPassword | false    | ChangeMe       | The reload password to set for the app                |
 | datasourceName | false    | MyCFWheelsApp  | The datasource name to set for the app                |
 | cfmlEngine     | false    | Lucee          | The CFML engine to use for the app                    |
 | setupH2        | false    | false          | Setup the H2 database for development                 |
@@ -161,7 +161,7 @@ wheels generate model user false
 
 | Parameter  | Required | Default | Description                                                                    |
 | ---------- | -------- | ------- | ------------------------------------------------------------------------------ |
-| name       | true     |         | Name of the model to create without the .cfc: assumes singluar                 |
+| name       | true     |         | Name of the model to create without the .cfc: assumes singular                 |
 | db         | false    |         | Boolean attribute specifying if the database table should be generated as well |
 
 ## `wheels generate property`
@@ -199,12 +199,12 @@ wheels generate property user isActive boolean 1
 | default    | false    |         | Default Value for column                                              |
 | null       | false    |         | Whether to allow null values |
 | limit      | false    |         | character or integer size limit for column |
-| precision  | false    |         | ision value for decimal columns, i.e. number of digits the column can hold |
+| precision  | false    |         | precision value for decimal columns, i.e. number of digits the column can hold |
 | scale      | false    |         | scale value for decimal columns, i.e. number of digits that can be placed to the right of the decimal point (must be less than or equal to precision) |
 
 ## `wheels generate view`
 
-This command generates a view file in the `views/` direcotry when specifying the object name and the action. If a directory for the object does not exist a subdirectory will be created in the `views/` directory and the action NAME.cfm file place into it.
+This command generates a view file in the `views/` directory when specifying the object name and the action. If a directory for the object does not exist a subdirectory will be created in the `views/` directory and the action NAME.cfm file place into it.
 
  Create a default file called show.cfm without a template
  ```
