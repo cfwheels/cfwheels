@@ -473,7 +473,7 @@ The constraints feature can be added either at an argument level directly into a
 
 ```javascript
 mapper()
-   // users/1234 
+   // users/1234
   .resources(name = "users", constraints = { key = "\d+" })
    // users/abc123
   .resources(name = "users", constraints = { key = "\w+\d+" })
@@ -583,7 +583,7 @@ This is useful for the occasional redirect, and saves you having to create a ded
 Introduced in CFWheels 2.1
 {% endhint %}
 
-By default, CFWheels will add `.[format]` routes when using `resources()`. You may wish to disable this behaviour to trim down the number of generated routes for clarity and performance reasons (or you just don't use this feature!).
+By default, CFWheels will add `.[format]` routes when using `resources()`. You may wish to disable this behavior to trim down the number of generated routes for clarity and performance reasons (or you just don't use this feature!).
 
 You can either disable this via `mapFormat = false` on a per resource basis, or more widely, on a mapper basis:
 

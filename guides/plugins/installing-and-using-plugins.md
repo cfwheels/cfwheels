@@ -22,7 +22,7 @@ Reloading Wheels is required when installing/uninstalling. (Issue a `reload=true
 
 With the CFWheels CLI installed, you can just do:
 
-{% code title="Commandbox" %}
+{% code title="CommandBox" %}
 ```shell
 # List all CFWheels plugins on forgebox
 $ wheels plugins list
@@ -31,7 +31,7 @@ $ wheels plugins list
 
 This will present a list of available plugins. To install one, simply take note of the "Slug" and run with the `install` command.
 
-{% code title="Commandbox" %}
+{% code title="CommandBox" %}
 ```shell
 # install the Shortcodes plugin which has a slug of shortcodes
 $ install shortcodes
