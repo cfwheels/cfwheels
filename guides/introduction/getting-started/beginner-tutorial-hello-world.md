@@ -47,7 +47,7 @@ So what happens if we try to call our new controller right now? Lets take a\
 look. Open your browser and point your browser to the new controller. Because my\
 local server is installed on port 60000, my URL is `http://127.0.0.1:60000/say`.\
 You may need to enter a different URL, depending on how your web server is\
-configured. In my case, I'm using [commandbox](https://guides.cfwheels.org/docs/commandbox).
+configured. In my case, I'm using [CommandBox](https://guides.cfwheels.org/docs/commandbox).
 
 ![Figure 2: Wheels error after setting up your blank say controller](../../.gitbook/assets/660aaf3-cfwheels-tutorial\_0005\_2.png)
 
@@ -94,7 +94,7 @@ our `say/hello` action and couldn't find one.
 
 Let's remedy the situation and create a view file. View files are simple CFML\
 pages that handle the output of our application. In most cases, views will\
-return HTML code to the brower. By default, the view files will have the same\
+return HTML code to the browser. By default, the view files will have the same\
 name as our controller actions and will be grouped into a directory under the\
 view directory. This new directory will have the same name as our controller.
 
