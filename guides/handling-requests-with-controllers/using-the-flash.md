@@ -203,7 +203,7 @@ considerations.
 
 ### Appending to, rather than replacing the flash
 
-From CFWheels 2.1, you can now change the default flash behaviour to append to an existing key, rather than directly replacing it. To turn on this behaviour, add `set(flashAppend=true)` to you `/config/settings.cfm` file.
+From CFWheels 2.1, you can now change the default flash behavior to append to an existing key, rather than directly replacing it. To turn on this behavior, add `set(flashAppend=true)` to you `/config/settings.cfm` file.
 
 An example of where this might be useful:
 

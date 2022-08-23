@@ -1,6 +1,6 @@
 # Nesting Controllers
 
-With the new routing system in CFWheels 2.x, there are lots of nice features which allow for better code organisation. One of these is the ability to nest controllers into folders using the `namespace()` method in our `mapper()` call.
+With the new routing system in CFWheels 2.x, there are lots of nice features which allow for better code organization. One of these is the ability to nest controllers into folders using the `namespace()` method in our `mapper()` call.
 
 For example, we may have a whole "Admin" section, where for each endpoint, we need to check some permissions, and possibly load some default data. Let's say we have a `Users` controller which provides standard CRUD operations.
 
@@ -29,7 +29,7 @@ component extends="app.controllers.Controller" {
   function config(){
     super.config();
   }
-  
+
 }
 ```
 {% endcode %}
@@ -63,8 +63,8 @@ component extends="app.models.Model"
 {
     function config() {
         table(false);
-    } 
-    function save(){ 
+    }
+    function save(){
     }
 }
 ```

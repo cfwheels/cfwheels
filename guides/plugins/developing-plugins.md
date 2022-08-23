@@ -139,9 +139,9 @@ Here's an example from the cfwheels ical4J plugin:
  * @to When to generate repeat range till
  */
 public array function getRecurringDates(
- required string pattern, 
- required date seed, 
- date from, 
+ required string pattern,
+ required date seed,
+ date from,
  date to
 ){
     local.recur = $ical_createRecur(arguments.pattern);
@@ -150,7 +150,7 @@ public array function getRecurringDates(
 ```
 {% endcode %}
 
-The javaDoc style comments will automatically show this function under Plugins > Calendaring, rather than in the "Uncategorised" functions. The `@parameter` lines give a helpful hint to the user
+The javaDoc style comments will automatically show this function under Plugins > Calendaring, rather than in the "Uncategorized" functions. The `@parameter` lines give a helpful hint to the user
 
 ### Box.json
 
@@ -174,7 +174,7 @@ This means you can distribute plugins with Java libs and they'll work properly w
 
 ### Enabling Travis CI Testing
 
-One of the nicest things about `2.x` is the tighter integration with command-line tools such as Commandbox. We can take advantage of the new testing suite JSON return type and the new CFWheels CLI in Commandbox 2.x to easily build a Travis CI test. It's perhaps easiest to just show the `.travis.yml` file - this goes in the root of your gitHub plugin repository, and once you've turned on testing under Travis.org, will run your test suite on every commit.
+One of the nicest things about `2.x` is the tighter integration with command-line tools such as CommandBox. We can take advantage of the new testing suite JSON return type and the new CFWheels CLI in CommandBox 2.x to easily build a Travis CI test. It's perhaps easiest to just show the `.travis.yml` file - this goes in the root of your gitHub plugin repository, and once you've turned on testing under Travis.org, will run your test suite on every commit.
 
 {% code title=".travis.yml" %}
 ```yaml
@@ -188,7 +188,7 @@ before_install:
   - sudo echo "deb http://downloads.ortussolutions.com/debs/noarch /" | sudo tee -a /etc/apt/sources.list.d/commandbox.list
 install:
   # Install Commandbox
-  - sudo apt-get update && sudo apt-get --assume-yes install commandbox
+  - sudo apt-get update && sudo apt-get --assume-yes install CommandBox
   # Check it's working
   - box version
   # Install CLI: needed to repackage the plugin to a zip on install
@@ -212,7 +212,7 @@ notifications:
 
 In sum, this:
 
-* Installs Commandbox
+* Installs CommandBox
 * Installs the CFWheels CLI
 * Installs the master branch of the CFWheels repository
 * Installs your plugin from your repository (rather than the forgebox version which will be the version behind)

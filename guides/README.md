@@ -8,7 +8,7 @@ By far the quickest way to get started with CFWheels is via [CommandBox](https:/
 
 One module that we have created is a module that extends CommandBox itself with commands and features specific to the CFWheels framework. The CFWheels CLI module for CommandBox is modeled after the Ruby on Rails CLI module and gives similar capabilities to the CFWheels developer.
 
-### Install Commandbox
+### Install CommandBox
 
 The first step is to get [CommandBox](https://www.ortussolutions.com/products/commandbox) downloaded and running. CommandBox is available for Windows, Mac & Linux, and can be installed manually or using one of the respective package managers for each OS. You can use [Chocolatey](https://chocolatey.org) on Windows, [Homebrew](https://brew.sh) on MacOS, or Yum/Apt on Linux depending on your flavor of Linux. Please follow the instructions on how to install CommandBox on your particular operating system. At the end of the installation process you want to make sure the `box` command is part of your system path so you can call the command from any directory on your system.
 
@@ -62,9 +62,9 @@ So what just happened? Since we only passed the application name `myApp` to the 
 {% hint style="info" %}
 **A Word About Command Aliases**
 
-CommandBox commands have the capability to be called by multiple names or aliases. The command above `wheels generate app` can also be initiated by typing `wheels g app`. In fact `g` is an alias for `generate` so wherever you see a command in the CLI documentation that has `generate` in it you can substitute `g` instead. 
+CommandBox commands have the capability to be called by multiple names or aliases. The command above `wheels generate app` can also be initiated by typing `wheels g app`. In fact `g` is an alias for `generate` so wherever you see a command in the CLI documentation that has `generate` in it you can substitute `g` instead.
 
-In addition to shortening `generate` to `g`, aliases can completely change the name space as well. A command that you haven't seen yet is the `wheels generate app-wizard` command. This command guides the user through a series of menu options, building up all the parameters needed to customize the start of a new CFWheels project. You're likely to use the wizard when starting a new CFWheels application so it's good to become familiar with it. 
+In addition to shortening `generate` to `g`, aliases can completely change the name space as well. A command that you haven't seen yet is the `wheels generate app-wizard` command. This command guides the user through a series of menu options, building up all the parameters needed to customize the start of a new CFWheels project. You're likely to use the wizard when starting a new CFWheels application so it's good to become familiar with it.
 
 This command has the normal alias referenced above at `wheels g app-wizard` but it also has an additional alias at `wheels new` which is the command more prevalent in the Rails community. So the three commands `wheels generate app-wizard`, `wheels g app-wizard`, and `wheels new` all call the same functionality which guides the user though a set of menus, collecting details on how to configure the desired app. Once all the parameters have been gathered, this command actually calls the `wheels generate app` command to create the actual CFWheels application.
 {% endhint %}

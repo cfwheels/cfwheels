@@ -2,15 +2,15 @@
 
 ### Starting a local development server
 
-With Commandbox, we don't need to have Lucee or Adobe ColdFusion installed locally. With a simple command, we can make Commandbox go and get the CFML engine we've requested, and quickly create a server running on Undertow. Make sure you're in the root of your website, and then run:
+With CommandBox, we don't need to have Lucee or Adobe ColdFusion installed locally. With a simple command, we can make CommandBox go and get the CFML engine we've requested, and quickly create a server running on Undertow. Make sure you're in the root of your website, and then run:
 
 {% tabs %}
-{% tab title="CommanBox" %}
+{% tab title="CommandBox" %}
 server start
 {% endtab %}
 {% endtabs %}
 
-The server will then start on a random port on `127.0.0.1` and will create a `server.json` file in your webroot. We can add various options to `server.json` to customise our server. Here's an example:
+The server will then start on a random port on `127.0.0.1` and will create a `server.json` file in your webroot. We can add various options to `server.json` to customize our server. Here's an example:
 
 ```json
 {
@@ -28,11 +28,11 @@ The server will then start on a random port on `127.0.0.1` and will create a `se
 }
 ```
 
-In this example, I've set the servername to `myApp`, meaning I can now start the server from any directory by simply calling `start myApp`. I've also specified a specific port, `60000`, but you can specify any port you want, or just remove that to start on a random port each time. Lastly, I've enabled URL rewriting, and pointing the URL rewrite configuration file to the `urlrewrite.xml` which is included in CFWheels 2.x. (If you've used the `wheels new` command to create your app, this will already be done for you).
+In this example, I've set the server name to `myApp`, meaning I can now start the server from any directory by simply calling `start myApp`. I've also specified a specific port, `60000`, but you can specify any port you want, or just remove that to start on a random port each time. Lastly, I've enabled URL rewriting, and pointing the URL rewrite configuration file to the `urlrewrite.xml` which is included in CFWheels 2.x. (If you've used the `wheels new` command to create your app, this will already be done for you).
 
-#### Using custom hostnames
+#### Using custom host names
 
-You can also specify hosts other than localhost: there's a useful commandbox module to do that ([Host updater](https://www.forgebox.io/view/commandbox-hostupdater)) which will automatically create entries in your hosts file to allow for domains such as `myapp.local` running on port 80. You can install it via `install commandbox-hostupdater` when running the box shell with administrator privileges.
+You can also specify hosts other than localhost: there's a useful CommandBox module to do that ([Host updater](https://www.forgebox.io/view/commandbox-hostupdater)) which will automatically create entries in your hosts file to allow for domains such as `myapp.local` running on port 80. You can install it via `install commandbox-hostupdater` when running the box shell with administrator privileges.
 
 ### Controlling local servers
 
@@ -84,7 +84,7 @@ To remove a server configuration from the list, you can use `server forget myapp
 
 ### Specifying different CF engines
 
-By default, Commandbox will run Lucee (version 5.x at time of writing). You may wish to specify an exact version of Lucee, or use Adobe ColdFusion. We can do this via either setting the appropriate `cfengine` setting in `server.json`, or at runtime with the `cfengine=` argument.
+By default, CommandBox will run Lucee (version 5.x at time of writing). You may wish to specify an exact version of Lucee, or use Adobe ColdFusion. We can do this via either setting the appropriate `cfengine` setting in `server.json`, or at runtime with the `cfengine=` argument.
 
 {% tabs %}
 {% tab title="CommandBox" %}
@@ -151,7 +151,7 @@ You can of course run multiple servers, so if you need to test your app on Lucee
 {% hint style="info" %}
 #### Watch out
 
-Commandbox 5.1 required to install dependencies easily
+CommandBox 5.1 required to install dependencies easily
 {% endhint %}
 
 By default the Lucee server that CommandBox starts has all the basic Lucee extensions that you are going to need installed, but if need to minimize the size of the Lucee instance you launch, then you can use Lucee-Light by specifying `cfengine=lucee-light` in your `server.json` file. CFWheels can run just fine on lucee-light (which is after all, Lucee, minus all the extensions) but at a minimum, requires the following extensions to be installed as dependencies in your `box.json`. Please note you may have to add any drivers you need for your database to this list as well.

@@ -123,7 +123,7 @@ This file is used by Apache, and you specifically need it for URL rewriting to w
 
 #### urlrewrite.xml
 
-If you use Tomcat and Tuckey, or Commandbox [URL Rewriting](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/url-rewriting), you'll need this file. Otherwise, you can safely delete it. No longer included by default in 2.x
+If you use Tomcat and Tuckey, or CommandBox [URL Rewriting](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/url-rewriting), you'll need this file. Otherwise, you can safely delete it. No longer included by default in 2.x
 
 #### web.config
 
