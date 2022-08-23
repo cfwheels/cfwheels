@@ -8,9 +8,6 @@
     "directory":"/wheels",
     "createPackageDirectory":true,
     "packageDirectory":"/wheels",
-    "installPaths":{
-			"cfwheels":"wheels/"
-		},
 		"homepage":"https://cfwheels.org/",
     "documentation":"https://docs.cfwheels.org/",
     "changelog":"https://github.com/cfwheels/cfwheels/blob/master/CHANGELOG.md",
