@@ -274,6 +274,7 @@ public void function onApplicationStart() {
 
 	// Test framework settings.
 	application.$wheels.validateTestPackageMetaData = true;
+	application.$wheels.restoreTestRunnerApplicationScope = true;
 
 	// Miscellaneous settings.
 	application.$wheels.encodeURLs = true;
