@@ -26,7 +26,7 @@ component extends="wheels.tests.Test" {
 	function test_sum_with_group_on_calculated_property() {
 		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
 			result = model("photo").sum(property = "galleryId", group = "DESCRIPTION1");
-			assert("result['galleryIdSum'][2] IS 10");
+			assert("result.recordcount IS 250");
 		} else {
 			assert(true);
 		}
@@ -35,7 +35,7 @@ component extends="wheels.tests.Test" {
 	function test_sum_with_group_on_calculated_property_on_associated_model() {
 		if (ListFindNoCase("MySQL,SQLServer", get("adaptername"))) {
 			result = model("gallery").sum(property = "userId", include = "photos", group = "DESCRIPTION1");
-			assert("result['userIdSum'][3] IS 3");
+			assert("result.recordcount IS 250");
 		} else {
 			assert(true);
 		}

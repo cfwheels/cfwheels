@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-# [2.4.0-dev] => TBD
+# [2.4.0] => 2022.08.17
 
 <!-- ### Controller Enhancements -->
 
@@ -31,11 +31,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix two broken links in README. [#1150] - [John Bampton -  * *New Contributor* *]
 - Fix spelling [#1151][#1158] - [John Bampton -  * *New Contributor* *]
 - Add .env parser to parse .env files and add the properties found in the file to this.env scope. [#1157](https://github.com/cfwheels/cfwheels/pull/1157) - [Peter Amiri]
+- Update the local test suite to supported ARM architecture docker images to make the suite compatible with the Apple Silicon Macs. [#1143](https://github.com/cfwheels/cfwheels/pull/1143) - [Peter Amiri]
 
 ### Guides
 - Fix broken links throughout the guides. - [Peter Amiri]
 - Fixed mailto link in CONTRIBUTING.md [#1123](https://github.com/cfwheels/cfwheels/pull/1123) - [Coleman Sperando * *New Contributor* *]
 - Fix test guides examples [#1125](https://github.com/cfwheels/cfwheels/pull/1125) [Adam Chapman]
+- Fix typos in the guides [#1161](https://github.com/cfwheels/cfwheels/pull/1161) [Adam Chapman]
 
 <!-- ### Potentially Breaking Changes -->
 

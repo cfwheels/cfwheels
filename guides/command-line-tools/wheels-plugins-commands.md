@@ -1,6 +1,6 @@
 # wheels plugin - commands
 
-These are the commands in the `wheels plugins` namespace. Currently this section is pretty sparce, make suggestions of what you may want to see in this section.
+These are the commands in the `wheels plugins` namespace. Currently this section is pretty sparse, make suggestions of what you may want to see in this section.
 
 ## `wheels plugins list`
 
@@ -12,7 +12,7 @@ wheels plugins list
 
 ```
 ❯ wheels plugins list
-================ CFWheels Plugins From Forgebox ======================
+================ CFWheels Plugins From ForgeBox ======================
 Contacting ForgeBox, please wait...
 
  CFWheels Example Plugin    ( Tom King )

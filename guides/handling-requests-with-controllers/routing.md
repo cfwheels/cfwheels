@@ -70,7 +70,9 @@ In this example, `key` and `slug` are parameters that must be present in the URL
 
 When a request is made to CFWheels, the router will look for the first route that matches the requested URL. As an example, this means that if `key` is present in the URL but not `slug`, then it's the second route above that will match.
 
-Please note that `.` is treated as a special character in patterns and should generally not be used (one exception being when you are [responding with multiple formats](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/responding-with-multiple-formats)).
+{% hint style="warning" %}
+Please note that `.` is treated as a special characters in patterns and should generally not be used (one exception being when you are [responding with multiple formats](https://guides.cfwheels.org/cfwheels-guides/handling-requests-with-controllers/responding-with-multiple-formats)). If your parameters may have `.` in their value, please use the long form URL format: `/?controller=[controller_name]&action=[action_name]&[parameter_name]=[parameter_value]`
+{% endhint %}
 
 ### Viewing a List of Routes
 
@@ -471,7 +473,7 @@ The constraints feature can be added either at an argument level directly into a
 
 ```javascript
 mapper()
-   // users/1234 
+   // users/1234
   .resources(name = "users", constraints = { key = "\d+" })
    // users/abc123
   .resources(name = "users", constraints = { key = "\w+\d+" })
@@ -581,7 +583,7 @@ This is useful for the occasional redirect, and saves you having to create a ded
 Introduced in CFWheels 2.1
 {% endhint %}
 
-By default, CFWheels will add `.[format]` routes when using `resources()`. You may wish to disable this behaviour to trim down the number of generated routes for clarity and performance reasons (or you just don't use this feature!).
+By default, CFWheels will add `.[format]` routes when using `resources()`. You may wish to disable this behavior to trim down the number of generated routes for clarity and performance reasons (or you just don't use this feature!).
 
 You can either disable this via `mapFormat = false` on a per resource basis, or more widely, on a mapper basis:
 

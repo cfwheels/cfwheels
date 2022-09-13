@@ -193,7 +193,7 @@ component extends="Model" {
     // validation
     validate("checkUsernameDoesNotStartWithNumber")
     // callbacks
-    beforeSave("sanitiseEmail");
+    beforeSave("sanitizeEmail");
   }
 
   /**
@@ -211,7 +211,7 @@ component extends="Model" {
   /**
    * trim and force email address to lowercase before saving
    */
-  private void function sanitiseEmail() {
+  private void function sanitizeEmail() {
       this.email = Trim(LCase(this.email));
   }
 }
@@ -262,7 +262,7 @@ function testUserModelShouldFailCustomValidation() {
 Now that we have tests to make sure that our model validations work, it's time to make sure that the callback works as expected when a valid model is created.
 
 ```java
-function testSanitiseEmailCallbackShouldReturnExpectedValue() {
+function testSanitizeEmailCallbackShouldReturnExpectedValue() {
   // set the properties of the model
   user.setProperties(properties);
   user.email = " FOO@bar.COM ";
@@ -274,7 +274,7 @@ function testSanitiseEmailCallbackShouldReturnExpectedValue() {
   */
   user.save(transaction="rollback");
 
-  // make sure that email address was sanitised
+  // make sure that email address was sanitized
   assert('user.email eq "foo@bar.com"');
 }
 ```
@@ -688,7 +688,7 @@ CFWheels can return your test results in either HTML, JUnit or JSON formats, sim
 
 ### Additional Techniques
 
-Once you're comfortable with the concepts thus far, there are a few more functions available which can be used to modify the behaviour of your test suite.
+Once you're comfortable with the concepts thus far, there are a few more functions available which can be used to modify the behavior of your test suite.
 
 `beforeAll()` - Runs once before the test suite has run. Here is where you might populate a test database or set suite-specific application variables\*.
 

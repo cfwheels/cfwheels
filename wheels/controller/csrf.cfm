@@ -7,7 +7,7 @@
  * [section: Controller]
  * [category: Configuration Functions]
  *
- * @with How to handle invalid authenticity token checks. Valid values are `error` (throws a `Wheels.InvalidAuthenticityToken` error) and `abort` (aborts the request silently and sends a blank response to the client).
+ * @with How to handle invalid authenticity token checks. Valid values are `error` (throws a `Wheels.InvalidAuthenticityToken` error), `abort` (aborts the request silently and sends a blank response to the client), and `ignore` (ignores the check and lets the request proceed).
  * @only List of actions that this check should only run on. Leave blank for all.
  * @except List of actions that this check should be omitted from running on. Leave blank for no exceptions.
  */

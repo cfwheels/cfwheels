@@ -185,7 +185,7 @@ To get a blank set of properties in the model, we'll also call the generated mod
 ```javascript
 component extends="Controller" {
     function config(){}
-  
+
     function new() {
         user = model("user").new();
     }
@@ -400,7 +400,7 @@ With the `user` model populated, we'll end up seeing code similar to this:
 
 <form action="/users/1" method="post">
     <input type="hidden" name="_method" value="patch">
-  
+
     <div>
         <input type="hidden" name="user&#x5b;id&#x5d;" value="15">
     </div>

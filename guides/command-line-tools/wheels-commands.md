@@ -1,10 +1,10 @@
 # wheels - commands
 
-These are the top level commands in the `wheels` namespace. 
+These are the top level commands in the `wheels` namespace.
 
 ## `wheels info`
 
-This command is the most basic of the commands and other than printing some pretty ASCII art it also displays the Current Working Directory, the CommandBox Module Root which can be handy when trying to diagnoise version discrepencies, and lastly the CFWheels version currently installed. The version is determined from a variaty of sources. First and foremost, if there is a `box.json` file in the `wheels/` directory the version is extracted from that `box.json`. Alternatively, if there is no `box.json` file in the `wheels/` directory, we look in `wheels/events/onapplicationstart.cfm` and extract a version number from that file. That is the version number that is displayed on the default congradulations screen by the way. If both of these fail to get us a version number we can use, we ask you to let us know what version of wheels you are using and give you the obtion of generating a `box.json` file. This is handy for bringing old legacy installations under CLI control.
+This command is the most basic of the commands and other than printing some pretty ASCII art it also displays the Current Working Directory, the CommandBox Module Root which can be handy when trying to diagnose version discrepancies, and lastly the CFWheels version currently installed. The version is determined from a variaty of sources. First and foremost, if there is a `box.json` file in the `wheels/` directory the version is extracted from that `box.json`. Alternatively, if there is no `box.json` file in the `wheels/` directory, we look in `wheels/events/onapplicationstart.cfm` and extract a version number from that file. That is the version number that is displayed on the default congratulations screen by the way. If both of these fail to get us a version number we can use, we ask you to let us know what version of wheels you are using and give you the option of generating a `box.json` file. This is handy for bringing old legacy installations under CLI control.
 
 ```
  ,-----.,------.,--.   ,--.,--.                   ,--.            ,-----.,--.   ,--.
@@ -39,7 +39,7 @@ wheels reload [mode]
 
 ## `wheels test`
 
-This command will call the Test Runner in a running server and return the results. The command can be run from within the directory of the running server or you can specify the server name to run against. Additionally you can specify the test suite to run, possible joices include the running application's test suite (app), the core framework test suite (core), or a particular plugin's test suite by passing in the plugin name.
+This command will call the Test Runner in a running server and return the results. The command can be run from within the directory of the running server or you can specify the server name to run against. Additionally you can specify the test suite to run, possible choices include the running application's test suite (app), the core framework test suite (core), or a particular plugin's test suite by passing in the plugin name.
 
 ```
 wheels test [type] [servername] [reload] [debug]
@@ -64,7 +64,7 @@ This command will completely scaffold a new object. Typically you would run this
 * Associated test stubs
 * DB migration file
 
-This command can be run without the server running except the database migration portion because that requires a running database. So if your server is already up and running you can run this command completely including the database migraton portion. Afterwards make sure to run `wheels reload` to reload your application since we just made model changes. If the server isn't running, you can run this command and stub out all the files, then start your server with `server start` and finally migrade the database with `wheels db latest`.
+This command can be run without the server running except the database migration portion because that requires a running database. So if your server is already up and running you can run this command completely including the database migration portion. Afterwards make sure to run `wheels reload` to reload your application since we just made model changes. If the server isn't running, you can run this command and stub out all the files, then start your server with `server start` and finally migrate the database with `wheels db latest`.
 
 ```
 wheels scaffold [objectName]
@@ -86,7 +86,7 @@ This command will destroy the following elements:
 * the model test file
 * the controller test file
 * the views test file
-* resouce route configuration
+* resource route configuration
 
 ```
 wheels destroy [objectName]

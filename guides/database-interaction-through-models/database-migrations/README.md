@@ -6,7 +6,7 @@ description: >-
 
 # Database Migrations
 
-With CFWheels 2.x, you can now create, alter and populate your database via cfscript in an organised manner. Using custom CFC files, you can create an organised database schema, and move between versions easily, either programmatically, via the provided GUI, or via the CLI.&#x20;
+With CFWheels 2.x, you can now create, alter and populate your database via cfscript in an organized manner. Using custom CFC files, you can create an organized database schema, and move between versions easily, either programmatically, via the provided GUI, or via the CLI.&#x20;
 
 ### Getting Started
 
@@ -98,23 +98,23 @@ t = createTable(name='users');
 t.string(
  columnNames='firstname,lastname,password',
  default='', null=false, limit='60');
-          
+
 t.string(
  columnNames='username,passwordresettoken,apikey',
  default='', null=true, limit='60');
-          
+
 t.string(
  columnNames='email,address1,address2,city,county,country,tel,www',
  default='', null=true, limit='255');
-          
+
 t.string(
  columnNames='title,postcode,lang,locale,timezone',
  default='', null=true, limit='15');
-          
+
 t.integer(columnNames='roleid', default='0', null=false, limit='11');
 t.datetime(columnNames='pwresettokenat', default='', null=true);
 t.datetime(columnNames='pwlastresetat', default='', null=true);
-            
+
 t.timestamps();
 t.create();
 ```
@@ -128,7 +128,7 @@ At this point, we can get going on actually creating this table
 
 ### Creating Tables with composite primary keys
 
-While `t = createTable(name='users');` will create a standard auto-increment numeric ID, sometimes you need to create a table which has a composite, or non standard primary key. In this example, we're setting `id=false` on the `createTable()` call to bypass the default behavior, then specifying our primarykeys seperately via `primaryKey()`:
+While `t = createTable(name='users');` will create a standard auto-increment numeric ID, sometimes you need to create a table which has a composite, or non standard primary key. In this example, we're setting `id=false` on the `createTable()` call to bypass the default behavior, then specifying our primarykeys separately via `primaryKey()`:
 
 ```javascript
 t = createTable(name='rolepermissions', id=false);

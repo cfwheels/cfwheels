@@ -11,7 +11,7 @@ This is another namespace with sub commands within it. It also has an alias of `
 
 ## `wheels dbmigrate info`
 
-This command doesn't take any inputs but simply tries to communiate with the running server and gather information
+This command doesn't take any inputs but simply tries to communicate with the running server and gather information
 about your migrations and displays them in a table.
 
 ```
@@ -36,8 +36,8 @@ Call to bridge was successful.
 ```
 
 From the information presented in the two tables you can see how many migration files are in your
-appliation and of those how many have allready been applied and available to be applied. You are
-also presented with the datasouce name and database type information.
+application and of those how many have already been applied and available to be applied. You are
+also presented with the datasource name and database type information.
 
 ## `wheels dbmigrate latest`
 
@@ -51,7 +51,7 @@ wheels dbmigrate latest
 
 ## `wheels dbmigrate reset`
 
-This command will migrate the database to version 0 effectively reseting the database to nothing.
+This command will migrate the database to version 0 effectively resetting the database to nothing.
 
 ```
 wheels dbmigrate reset
@@ -110,7 +110,7 @@ wheels dbmigrate create table [name] [force] [id] [primaryKey]
 This command will generate a new migration file for adding a new column to an existing table.
 
 ```
-wheels dbmigrate create column [name] [columnType] [columnName] [default] [null] [limit] [percision] [scale]
+wheels dbmigrate create column [name] [columnType] [columnName] [default] [null] [limit] [precision] [scale]
 ```
 
 | Parameter  | Required | Default | Description                                         |
@@ -121,7 +121,7 @@ wheels dbmigrate create column [name] [columnType] [columnName] [default] [null]
 | default    | false    |         | The default value to set for the column             |
 | null       | false    | true    | Should the column allow nulls                       |
 | limit      | false    |         | The character limit of the column                   |
-| precision  | false    |         | The percision of the numeric column                 |
+| precision  | false    |         | The precision of the numeric column                 |
 | scale      | false    |         | The scale of the numeric column                     |
 
 ## `wheels dbmigrate create blank`
