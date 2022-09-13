@@ -6,15 +6,9 @@ component extends="wheels.tests.Test" {
 		isTestable = true;
 		if (application.wheels.dataSourceName eq altDatasource) {
 			isTestable = false;
-		} else if (
-			application.wheels.serverName contains "Coldfusion"
-			&& ListFirst(application.wheels.serverVersion, ".,") eq "2016"
-		) {
-			// seems ACF2016 can't handle H2 datasources
+		} else if (application.wheels.serverName contains "Coldfusion") {
+			// seems ACF can't handle H2 datasources
 			isTestable = false;
-		}
-		if (!isTestable) {
-			return;
 		}
 	}
 
