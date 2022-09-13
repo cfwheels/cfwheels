@@ -3,7 +3,8 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		// we can only test h2 as the alt dsn.. the tables are not created in populate.cfm otherwise
 		altDatasource = "wheelstestdb_h2";
-		isTestable = application.wheels.dataSourceName neq altDatasource;
+		// ACF has issues with H2 apparently
+		isTestable = application.wheels.dataSourceName neq altDatasource && StructKeyExists(server, "lucee");
 		if (!isTestable) {
 			return;
 		}
