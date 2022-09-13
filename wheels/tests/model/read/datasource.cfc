@@ -3,8 +3,7 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		// we can only test h2 as the alt dsn.. the tables are not created in populate.cfm otherwise
 		altDatasource = "wheelstestdb_h2";
-		// ACF has issues with H2 apparently
-		isTestable = application.wheels.dataSourceName neq altDatasource && StructKeyExists(server, "lucee");
+		isTestable = application.wheels.dataSourceName neq altDatasource;
 		if (!isTestable) {
 			return;
 		}
@@ -12,7 +11,7 @@ component extends="wheels.tests.Test" {
 
 	function db_setup() {
 		// ensure the authors table exists in the alt datasource
-		QueryExecute(
+		$query(
 			sql = "
 				CREATE TABLE IF NOT EXISTS authors
 				(
@@ -25,7 +24,7 @@ component extends="wheels.tests.Test" {
 			options = {datasource = altDatasource}
 		);
 		firstName = "Troll";
-		QueryExecute(
+		$query(
 			sql = "INSERT INTO authors (firstName, lastName) VALUES ('#firstName#', 'Dolls');",
 			options = {datasource = altDatasource}
 		);
