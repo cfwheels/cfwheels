@@ -12,7 +12,7 @@ component extends="wheels.tests.Test" {
 	function db_setup() {
 		// ensure the authors table exists in the alt datasource
 		QueryExecute(
-			sql="
+			sql = "
 				CREATE TABLE IF NOT EXISTS authors
 				(
 					id int NOT NULL IDENTITY
@@ -21,12 +21,12 @@ component extends="wheels.tests.Test" {
 					,PRIMARY KEY(id)
 				);
 			",
-			options={datasource=altDatasource}
+			options = {datasource = altDatasource}
 		);
 		firstName = "Troll";
 		QueryExecute(
-			sql="INSERT INTO authors (firstName, lastName) VALUES ('#firstName#', 'Dolls');",
-			options={datasource=altDatasource}
+			sql = "INSERT INTO authors (firstName, lastName) VALUES ('#firstName#', 'Dolls');",
+			options = {datasource = altDatasource}
 		);
 		finderArgs = {where = "firstName = '#firstName#'", datasource = altDatasource};
 	}
