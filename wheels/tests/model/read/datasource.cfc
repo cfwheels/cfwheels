@@ -3,7 +3,16 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		// we can only test h2 as the alt dsn.. the tables are not created in populate.cfm otherwise
 		altDatasource = "wheelstestdb_h2";
-		isTestable = application.wheels.dataSourceName neq altDatasource;
+		isTestable = true;
+		if (application.wheels.dataSourceName eq altDatasource) {
+			isTestable = false;
+		} else if (
+			application.wheels.serverName contains "Coldfusion"
+			&& ListFirst(application.wheels.serverVersion, ".,") eq "2016"
+		) {
+			// seems ACF2016 can't handle H2 datasources
+			isTestable = false;
+		}
 		if (!isTestable) {
 			return;
 		}
