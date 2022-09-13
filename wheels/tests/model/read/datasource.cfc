@@ -21,12 +21,12 @@ component extends="wheels.tests.Test" {
 					,PRIMARY KEY(id)
 				);
 			",
-			options = {datasource = altDatasource}
+			datasource = altDatasource
 		);
 		firstName = "Troll";
 		$query(
 			sql = "INSERT INTO authors (firstName, lastName) VALUES ('#firstName#', 'Dolls');",
-			options = {datasource = altDatasource}
+			datasource = altDatasource
 		);
 		finderArgs = {where = "firstName = '#firstName#'", datasource = altDatasource};
 	}
