@@ -14,7 +14,7 @@ services:
       dockerfile: ./src/docker/Lucee5.Dockerfile
     image: cfwheels-test-lucee5:v1
     volumes:
-      - ./:/cfwheels-test-suite
+      - ./:./cfwheels-test-suitest
       - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
       - ./src/docker:/src/docker
     ports:
@@ -26,6 +26,7 @@ services:
       dockerfile: ./src/docker/Adobe2016.Dockerfile
     image: cfwheels-test-adobe2016:v1
     volumes:
+      - ./:./cfwheels-test-suitest
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
       - ./src/docker:/src/docker
     ports:
@@ -37,6 +38,7 @@ services:
       dockerfile: ./src/docker/Adobe2018.Dockerfile
     image: cfwheels-test-adobe2018:v1
     volumes:
+      - ./:./cfwheels-test-suitest
       - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
       - ./src/docker:/src/docker
     ports:
