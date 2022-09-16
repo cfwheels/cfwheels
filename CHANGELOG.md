@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ### Controller Enhancements -->
 
-<!-- ### Model Enhancements -->
+### Model Enhancements
+- PR-1183-Allow datasource argument in finders [#1183](https://github.com/cfwheels/cfwheels/pull/1183) - [Adam Chapman]
 
 <!-- ### View Enhancements -->
 
