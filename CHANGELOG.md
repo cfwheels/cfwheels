@@ -17,7 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ### Bug Fixes -->
 
-<!-- ### Miscellaneous -->
+### Miscellaneous
+- PR-1175-restoreTestRunnerApplicationScope setting [#1175](https://github.com/cfwheels/cfwheels/pull/1175) - [Adam Chapman]
 
 <!-- ### Guides -->
 
