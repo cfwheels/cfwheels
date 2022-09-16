@@ -7,7 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
-# [2.4.0] => 2022.08.17
+# [2.5.0-dev] => TBD
+
+<!-- ### Controller Enhancements -->
+
+<!-- ### Model Enhancements -->
+
+<!-- ### View Enhancements -->
+
+<!-- ### Bug Fixes -->
+
+<!-- ### Miscellaneous -->
+
+<!-- ### Guides -->
+
+<!-- ### Potentially Breaking Changes -->
+
+----
+
+# [2.4.0](https://github.com/cfwheels/cfwheels/releases/tag/v2.4.0%2B1) => 2022.08.17
 
 <!-- ### Controller Enhancements -->
 
