@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1176-fix text in core readme file [#1176](https://github.com/cfwheels/cfwheels/pull/1176) - [Per Djurner]
 - PR-1177-fix text in base template readme file [#1177](https://github.com/cfwheels/cfwheels/pull/1177) - [Per Djurner]
 - PR-1178-fix text in default template file [#1178](https://github.com/cfwheels/cfwheels/pull/1178) - [Per Djurner]
+- PR-1185-adds-root-docker-volume [#1185](https://github.com/cfwheels/cfwheels/pull/1185) - [Adam Chapman]
 
 <!-- ### Guides -->
 
