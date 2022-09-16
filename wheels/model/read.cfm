@@ -25,6 +25,7 @@
  * @callbacks Set to `false` to disable callbacks for this method.
  * @includeSoftDeletes Set to `true` to include soft-deleted records in the queries that this method runs.
  * @useIndex If you want to specify table index hints, pass in a structure of index names using your model names as the structure keys. Eg: `{user="idx_users", post="idx_posts"}`. This feature is only supported by MySQL and SQL Server.
+ * @dataSource Override the default datasource
  */
 public any function findAll(
 	string where = "",
@@ -46,6 +47,7 @@ public any function findAll(
 	boolean callbacks = "true",
 	boolean includeSoftDeletes = "false",
 	struct useIndex = {},
+	string dataSource = application.wheels.dataSourceName,
 	numeric $limit = "0",
 	numeric $offset = "0"
 ) {
@@ -114,7 +116,8 @@ public any function findAll(
 				distinct = local.distinct,
 				parameterize = arguments.parameterize,
 				$debugName = arguments.$debugName,
-				includeSoftDeletes = arguments.includeSoftDeletes
+				includeSoftDeletes = arguments.includeSoftDeletes,
+				dataSource = arguments.dataSource
 			);
 		}
 		local.currentPage = arguments.page;
@@ -150,6 +153,7 @@ public any function findAll(
 					parameterize = arguments.parameterize,
 					$debugName = arguments.$debugName,
 					includeSoftDeletes = arguments.includeSoftDeletes,
+					dataSource = arguments.dataSource,
 					callbacks = false
 				);
 				if (local.values.RecordCount) {
@@ -300,6 +304,7 @@ public any function findAll(
 			local.finderArgs.limit = arguments.$limit;
 			local.finderArgs.offset = arguments.$offset;
 			local.finderArgs.$primaryKey = primaryKeys();
+			local.finderArgs.dataSource = arguments.dataSource;
 			if (
 				application.wheels.cacheQueries && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache))
 			) {
@@ -359,6 +364,7 @@ public any function findAll(
  * @returnAs [see:findAll].
  * @callbacks [see:findAll].
  * @includeSoftDeletes [see:findAll].
+ * @dataSource [see:findAll].
  */
 public any function findByKey(
 	required any key,
@@ -370,7 +376,8 @@ public any function findByKey(
 	any parameterize,
 	string returnAs,
 	boolean callbacks = "true",
-	boolean includeSoftDeletes = "false"
+	boolean includeSoftDeletes = "false",
+	string dataSource = application.wheels.dataSourceName
 ) {
 	$args(name = "findByKey", args = arguments);
 	$setDebugName(name = "FindByKey", args = arguments);
@@ -405,6 +412,7 @@ public any function findByKey(
  * @returnAs [see:findAll].
  * @includeSoftDeletes [see:findAll].
  * @useIndex [see:findAll].
+ * @dataSource [see:findAll].
  */
 public any function findOne(
 	string where = "",
@@ -417,7 +425,8 @@ public any function findOne(
 	any parameterize,
 	string returnAs,
 	boolean includeSoftDeletes = "false",
-	struct useIndex = {}
+	struct useIndex = {},
+	string dataSource = application.wheels.dataSourceName
 ) {
 	$args(name = "findOne", args = arguments);
 	$setDebugName(name = "findOne", args = arguments);

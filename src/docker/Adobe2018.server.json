@@ -1,4 +1,5 @@
 {
+	"profile": "development",
 	"force":true,
 	"web":{
 			"http":{
