@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Miscellaneous
 - PR-1175-restoreTestRunnerApplicationScope setting [#1175](https://github.com/cfwheels/cfwheels/pull/1175) - [Adam Chapman]
+- PR-1176-fix typo in core readme file [#1176](https://github.com/cfwheels/cfwheels/pull/1176) - [Per Djurner]
 
 <!-- ### Guides -->
 
