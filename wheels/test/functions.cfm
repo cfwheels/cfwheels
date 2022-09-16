@@ -472,7 +472,9 @@ public any function $wheelsRunner(struct options = {}) {
 	local.resultKey = "WheelsTests";
 
 	// save the original environment for overloading
-	request.wheels.testRunnerApplicationScope = Duplicate(application.wheels);
+	if (application.wheels.restoreTestRunnerApplicationScope) {
+		request.wheels.testRunnerApplicationScope = Duplicate(application.wheels);
+	}
 	// to enable unit testing controllers without actually performing the redirect
 	set(functionName = "redirectTo", delay = true);
 
