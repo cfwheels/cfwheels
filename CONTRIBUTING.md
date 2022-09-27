@@ -55,7 +55,7 @@ In general, we follow the ["fork-and-pull" Git workflow](https://github.com/susa
 
 ### Developing with Docker
 
-To easily develop and test CFWheels locally on multiple CFML engines using Docker, check out the [Docker Instructions][https://github.com/cfwheels/cfwheels/blob/main/src/docker/README.md]
+To easily develop and test CFWheels locally on multiple CFML engines using Docker, check out the [Docker Instructions](https://github.com/cfwheels/cfwheels/blob/main/src/docker/README.md)
 
 ## Getting Help
 
