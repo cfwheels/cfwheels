@@ -31,12 +31,12 @@ Here's the process that we'd like for you to follow. This process is in place ma
 1. Open an issue in the [issue tracker](https://github.com/cfwheels/cfwheels/issues), outlining the changes or additions that you would like to make.
 2. A member of the core team will review your submission and leave feedback if necessary.
 3. Once the core team member is satisfied with the scope of the issue, they will indicate so in a comment to the issue. This is your green light to start working. Get to coding, grasshopper!
-4. Need help or running across any issues while coding? Start a [Discussion](https://github.com/cfwheels/cfwheels/discussions). When you start a discussions about one of these guides, please put the name of the guide as part of the subject.
+4. Need help or running across any issues while coding? Start a [Discussion](https://github.com/cfwheels/cfwheels/discussions).
 5. When you have implemented your enhancement or change, use your Git repository to create a pull request with your changes.
    * You should annotate your commits with the issue number as `#55` if the code issue is `55`
-6. A core team will review it and post any necessary feedback in the issue tracker.
-7. Once everything is resolved, a core team member will pull your commit into the Git repository.
-8. If needed, open an issue to have the additions and changes in your revision documented. You may claim the issue if you'd like to do this, but it's entirely your choice.
+6. A core team member will review it and post any necessary feedback in the issue tracker.
+7. Once everything is resolved, a core team member will merge your commit into the Git repository.
+8. If needed, open an issue to have the additions and changes in your revision documented in the [CHANGELOG](https://github.com/cfwheels/cfwheels/blob/main/CHANGELOG.md). You may claim the issue if you'd like to do this, but it's entirely your choice.
 
 ## Developing with Docker
 
