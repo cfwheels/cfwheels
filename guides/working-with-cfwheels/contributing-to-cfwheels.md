@@ -50,7 +50,7 @@ Additionally, we recommend that any applications written using the CFWheels fram
 
 ## Supported CFML Engines
 
-All code for CFWheels should be written for use with Adobe ColdFusion 2016 upwards, and Lucee 5 upwards.
+All code for CFWheels should be written for use with both Adobe ColdFusion 2016 upwards, and Lucee 5 upwards.
 
 ## Naming Conventions
 
