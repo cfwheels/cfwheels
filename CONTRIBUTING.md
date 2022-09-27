@@ -36,10 +36,10 @@ If you find an Issue that addresses the problem you're having, please add your o
 
 PRs to our repositories are always welcome and can be a quick way to get your fix or improvement slated for the next release. In general, PRs should:
 
-* Only fix/add the functionality in question **OR** address wide*spread whitespace/style issues, not both.
-* Add unit or integration tests for fixed or changed functionality (if a test suite already exists).
+* Only fix/add the functionality in question **OR** address widespread whitespace/style issues, not both.
+* Add unit or integration tests for fixed or changed functionality.
 * Address a single concern in the least number of changed lines as possible.
-* Include documentation in the repo under the /guides subdirectory.
+* Include documentation updates in the repo under the /guides subdirectory (if applicable).
 
 For changes that address core functionality or would require breaking changes (e.g. a major release), it's best to open an Issue to discuss your proposal first. This is not required but can save time creating and reviewing changes.
 
