@@ -14,5 +14,8 @@ ENV BOX_SERVER_PROFILE      "none"
 COPY . /cfwheels-test-suite
 COPY ./src/docker/Lucee5.server.json /cfwheels-test-suite/server.json
 
+RUN ls /cfwheels-test-suite
+RUN ls /src/docker
+
 # WARM UP THE SERVER
 RUN ${BUILD_DIR}/util/warmup-server.sh
