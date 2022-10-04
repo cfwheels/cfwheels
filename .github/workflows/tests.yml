@@ -49,11 +49,11 @@ jobs:
 
       - name: Docker Compose ${{ matrix.cf }} ${{ matrix.db }}
         if: ${{ matrix.db != 'h2' }}
-        run: docker compose -f up ${{ matrix.cf }} ${{ matrix.db }} --detach --wait
+        run: docker compose up ${{ matrix.cf }} ${{ matrix.db }} --detach --wait
 
       - name: Docker Compose ${{ matrix.cf }}
         if: ${{ matrix.db == 'h2' }}
-        run: docker compose -f up ${{ matrix.cf }} --detach --wait
+        run: docker compose up ${{ matrix.cf }} --detach --wait
 
       - name: Wait for ${{ matrix.cf }} startup
         run: src/github/tests/server-up.sh ${{ matrix.cf }}
