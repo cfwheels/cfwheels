@@ -58,13 +58,6 @@ jobs:
       - name: Wait for ${{ matrix.cf }} startup
         run: src/github/tests/server-up.sh ${{ matrix.cf }}
 
-      - name: Sleep for 30 seconds
-        # this was the only way we knew how to ensure that sqlserver is up
-        if: ${{ matrix.db == 'sqlserver' }}
-        uses: jakejarvis/wait-action@master
-        with:
-          time: '30s'
-
       - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
         run: src/github/tests/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}
 
