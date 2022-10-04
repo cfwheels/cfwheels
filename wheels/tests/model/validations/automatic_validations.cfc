@@ -35,28 +35,31 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_automatic_validations_on_create_should_not_validate_presence_of_default_value_columns() {
-		user = model("UserAutoMaticValidations").create(
-			username = 'oscargrouch',
-			password = 'oscarg123',
-			firstname = 'Oscar',
-			lastname = 'The Grouch',
-			address = '123 Sesame St.',
-			city = 'New York',
-			state = 'NY',
-			zipcode = '11111',
-			phone = '1235551212',
-			fax = '4565551212',
-			birthday = '01/01/1969',
-			birthdaymonth = 01,
-			birthdayyear = 1969,
-			isactive = 1
-		);
+		transaction {
+			user = model("UserAutoMaticValidations").create(
+				username = 'oscargrouch',
+				password = 'oscarg123',
+				firstname = 'Oscar',
+				lastname = 'The Grouch',
+				address = '123 Sesame St.',
+				city = 'New York',
+				state = 'NY',
+				zipcode = '11111',
+				phone = '1235551212',
+				fax = '4565551212',
+				birthday = '01/01/1969',
+				birthdaymonth = 01,
+				birthdayyear = 1969,
+				isactive = 1
+			);
+			transaction action="rollback";
+		}
 
-		debug("user.valid()", true);
-		debug("user.allErrors()", true);
+		// debug("user.valid()", true);
+		// debug("user.allErrors()", true);
+
 		/* should be valid since birthtime has a column default */
 		assert('user.valid()');
-
 	}
 
 	function test_automatic_validations_can_be_turned_off_for_property() {
