@@ -7,7 +7,7 @@ CFWheels is an open source CFML (ColdFusion Markup Language) framework inspired 
 This package includes the core CFWheels directory and is used as a dependency by the core CFWheels templates. 
 
 ## To install
-You probably will never need to install this directory by itself but just incase you do you can install it using:
+You probably will never need to install this directory by itself but just in case you do you can install it using:
 
 `box install cfwheels`
 
@@ -15,4 +15,4 @@ Typically this package is installed automatically by one of the CFWheels templat
 
 `box install cfwheels-base-template`
 
-This command installs the base template which includes all the directories your applicaiton will need and then install this package as a dependency.
+This command installs the base template which includes all the directories your application will need and then installs this package as a dependency.

@@ -1,4 +1,5 @@
 {
+	"profile": "development",
 	"robustExceptionEnabled": true,
 	"adminPassword": "commandbox",
 	"adminPasswordDefault": "commandbox",

@@ -62,7 +62,7 @@ public void function onApplicationStart() {
 
 	// Set up containers for routes, caches, settings etc.
 	// TODO remove the static version number
-	application.$wheels.version = "2.4.0";
+	application.$wheels.version = "2.5.0-dev";
 	try {
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
 	} catch (any e) {
@@ -274,6 +274,7 @@ public void function onApplicationStart() {
 
 	// Test framework settings.
 	application.$wheels.validateTestPackageMetaData = true;
+	application.$wheels.restoreTestRunnerApplicationScope = true;
 
 	// Miscellaneous settings.
 	application.$wheels.encodeURLs = true;
