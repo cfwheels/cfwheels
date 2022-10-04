@@ -14,9 +14,9 @@ services:
       dockerfile: ./src/docker/Lucee5.Dockerfile
     image: cfwheels-test-lucee5:v1
     volumes:
-      - ./:./cfwheels-test-suite
+      # uncomment when developing with this docker-compose file
+      # - ./:/cfwheels-test-suite
       - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
-      # - ./src/docker:/src/docker
     ports:
       - "60005:8080"
 
@@ -26,9 +26,9 @@ services:
       dockerfile: ./src/docker/Adobe2016.Dockerfile
     image: cfwheels-test-adobe2016:v1
     volumes:
-      - ./:/cfwheels-test-suite
+      # uncomment when developing with this docker-compose file
+      # - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
-      # - ./src/docker:/src/docker
     ports:
       - "62016:8080"
 
@@ -38,9 +38,9 @@ services:
       dockerfile: ./src/docker/Adobe2018.Dockerfile
     image: cfwheels-test-adobe2018:v1
     volumes:
-      - ./:/cfwheels-test-suite
+      # uncomment when developing with this docker-compose file
+      # - ./:/cfwheels-test-suite
       - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
-      # - ./src/docker:/src/docker
     ports:
       - "62018:8080"
 
