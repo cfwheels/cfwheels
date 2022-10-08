@@ -457,28 +457,21 @@ public boolean function $validate(required string type, boolean execute = "true"
 			if ($evaluateCondition(argumentCollection = local.thisValidation.args)) {
 				if (local.thisValidation.method == "$validatesPresenceOf") {
 					// if the property does not exist, but it's db column has a default value, skip validatesPresenceOf
-					if (
-						!StructKeyExists(this, local.thisValidation.args.property)
-						&& StructKeyExists(variables.wheels.class.properties, local.thisValidation.args.property)
-						&& Len(variables.wheels.class.properties[local.thisValidation.args.property].columndefault)
-					) {
+					local.propertyName = local.thisValidation.args.property;
+					local.isDatabaseColumn = StructKeyExists(variables.wheels.class.properties, local.propertyName);
+					local.hasDatabaseColumnDefault = local.isDatabaseColumn && Len(variables.wheels.class.properties[local.propertyName].columndefault);
+					if (!this.hasProperty(local.propertyName) && local.hasDatabaseColumnDefault) {
 						continue;
 					}
 					// if the property does not exist or if it's blank we add an error on the object (for all other validation types we call corresponding methods below instead)
 					if (
-						!StructKeyExists(this, local.thisValidation.args.property)
-						|| (
-							IsSimpleValue(this[local.thisValidation.args.property])
-							&& !Len((this[local.thisValidation.args.property]))
-						)
-						|| (
-							IsStruct(this[local.thisValidation.args.property])
-							&& !StructCount(this[local.thisValidation.args.property])
-						)
+						!this.hasProperty(local.propertyName)
+						|| (IsSimpleValue(this[local.propertyName]) && !Len((this[local.propertyName])))
+						|| (IsStruct(this[local.propertyName]) && !StructCount(this[local.propertyName]))
 					) {
 						addError(
-							message = $validationErrorMessage(local.thisValidation.args.property, local.thisValidation.args.message),
-							property = local.thisValidation.args.property
+							message = $validationErrorMessage(local.propertyName, local.thisValidation.args.message),
+							property = local.propertyName
 						);
 					}
 				} else {
