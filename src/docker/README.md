@@ -16,7 +16,7 @@
   - `62018`
   - `3000`
 - Navigate to the repo root
-- Run `docker-compose up`
+- Run `docker compose up`
 
 ### On first run
 
@@ -27,20 +27,22 @@ If this is the first time you've run it, docker will download a lot of stuff, na
 - **Postgres**
 - **MSSQL 2017**
 
-Once all the images are downloaded (this may take some time), the databases will attempt to start. MySQL/Postgres are fairly simple, using the predefined images which allow for a database to be created directly from docker compose; MSSQL doesn't allow for this annoyingly, so we're actually spinning up a custom image based on the MS one, which allows us to script for the creation of a new database. NB there's a 60 second sleep command in this to ensure SQL Server is actually running before the scripts kick in.
+Once all the images are downloaded (this may take some time), the databases will attempt to start. MySQL/Postgres are fairly simple, using the predefined images which allow for a database to be created directly from docker compose; MSSQL doesn't allow for this annoyingly, so we're actually spinning up a custom image based on the Microsoft Azure one, which allows us to script for the creation of a new database.
 
 Once the Databases are running, the Commandbox images will start. URL Rewriting is included by default. Note we're not using Commandbox's default, as we need Wheels-specific rewrites
 
 ### Datasources
-
-Each database type is added as a datasource via `/src/docker/CFConfig.json` so there are actually 4 datasources *automatically* added to each instance - you don't need to setup `wheelstestdb`.
+Each database type is added as a datasource via `CFConfig.json` files. But there are different version of `CFConfig.json` for each flavor of engine. All engines get a copy of `wheelstestdb` which defaults to MySQL if no DB is sprecified. Additioanlly, all engines get a copy of `wheelstestdb_mysql`, `wheelstestdb_sqlserver`, and `wheelstestdb_postgres`. Please note, that due to a driver change between Adobe ColdFusion 2016 and 2018 the actual specification of `wheelstestdb_sqlserver` between those two engines are different Lastly, the Lucee engine gets and additional datasource `wheelstestdb_h2` for testing against the built in H2 Database.
 
 - `wheelstestdb` - Defaults to mySQL
 - `wheelstestdb_mysql` MySQL
 - `wheelstestdb_sqlserver` MSSQL
 - `wheelstestdb_postgres` Postgres
+- `wheelstestdb_h2` H2 Database
 
 There's a new `db={{database}}` URL var which switches which datasource is used: the vue UI just appends this string to the test runner.
+
+Please note that there is an additional datasource defined `msdb_sqlserver` which is initially used to create the wheelstestdb if it doesn't exists.
 
 ### What runs on what port
 
@@ -57,17 +59,19 @@ Use the Provided UI at `localhost:3000` for ease. This is just a glorified task 
 
 You can also access each CF Engine directly on it's respective port, i.e, to access ACF2016, you just go to `localhost:62016`
 
+A sample task runner URL is `http://localhost:60005/wheels/tests/core?reload=true&format=json&sort=directory asc&db=mysql`. You can change the port to hit a different engine and change the db name to test a different database.
+
 ### Other useful commands
 
 You can start specific services or rebuild specific services by name. If you just want to start ACF2016 or MSSQL, you can just do
 
-`docker-compose up adobe2016` or `docker-compose up sqlserver`
+`docker compose up adobe2016` or `docker compose up sqlserver`
 
 Likewise if you need to rebuild any of the images, you can do it on an image by image basis if needed:
 
-`docker-compose up testui --build` *etc*
+`docker compose up testui --build` *etc*
 
-Which can be quicker than rebuilding everything via `docker-compose up --build`
+Which can be quicker than rebuilding everything via `docker compose up --build`
 
 #### Known Issues
 
@@ -75,4 +79,4 @@ There's an issue with CORS tests currently, which means those tests are currentl
 
 ### Rebuilding
 
-You can force a rebuild of all the images via `docker-compose up --build` which is useful if you change configuration of any of the Dockerfiles etc. The two adobe engines still take ages to boot this way (just an fyi)
+You can force a rebuild of all the images via `docker compose up --build` which is useful if you change configuration of any of the Dockerfiles etc. The two adobe engines still take ages to boot this way (just an fyi)
