@@ -17,7 +17,7 @@
 
 		<div class="ui breadcrumb">
 			<cfif type EQ "app" OR type EQ "core">
-				<a class="section" href="#urlFor(route="wheelsPackages",  type=type)#">#type#</a>
+				<a class="section" href="#urlFor(route="wheelsPackages", type=type, params=_baseParams)#">#type#</a>
 			<cfelse>
 			<div class="section">Plugins</div>
 			</cfif>
@@ -28,14 +28,12 @@
 				<cfset prevPath= listAppend(prevPath, i, '.')>
 				<i class="right angle icon divider"></i>
 					<cfif !listLast(testResults.path, '.') EQ i>
-				<a class="section"
-				href="#urlFor(route="wheelsPackages", params="package=#prevPath#", type=type)#">#listLast(prevPath, '.')#</a>
+						<a class="section" href="#urlFor(route="wheelsPackages", params="package=#prevPath#", type=type, params=_baseParams)#">#listLast(prevPath, '.')#</a>
 					<cfelse>
-				<a class="section active" href="#urlFor(route="wheelsPackages", params="package=#prevPath#", type=type)#">#listLast(prevPath, '.')#</a>
+						<a class="section active" href="#urlFor(route="wheelsPackages", params="package=#prevPath#&#_baseParams#", type=type, params=_baseParams)#">#listLast(prevPath, '.')#</a>
 					</cfif>
 			</cfif>
 			</cfloop>
-
 		</div>
 
 		#startTable(title="Test Results", colspan=6)#
@@ -87,8 +85,8 @@
 						<cfset result = failures[testIndex]>
 						<cfif result.status neq 'Success'>
 							<tr class="error">
-								<td><a href="?package=#result.packageName#">#result.cleanTestCase#</a></td>
-								<td><a href="?package=#result.packageName#&test=#result.testName#">#result.cleanTestName#</a></td>
+								<td><a href="?package=#result.packageName#&#_baseParams#">#result.cleanTestCase#</a></td>
+								<td><a href="?package=#result.packageName#&test=#result.testName#&#_baseParams#">#result.cleanTestName#</a></td>
 								<td class="n">#result.time#</td>
 								<td class="<cfif result.status eq 'Success'>success<cfelse>failed</cfif>">#result.status#</td>
 							</tr>
@@ -125,8 +123,8 @@
 						<cfset result = passes[testIndex]>
 						<cfif result.status eq 'Success'>
 							<tr class="positive">
-								<td><a href="?package=#result.packageName#">#result.cleanTestCase#</a></td>
-								<td><a href="?package=#result.packageName#&test=#result.testName#">#result.cleanTestName#</a></td>
+								<td><a href="?package=#result.packageName#&#_baseParams#">#result.cleanTestCase#</a></td>
+								<td><a href="?package=#result.packageName#&test=#result.testName#&#_baseParams#">#result.cleanTestName#</a></td>
 								<td class="n">#result.time#</td>
 								<td class="success">#result.status#</td>
 							</tr>
