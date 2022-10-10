@@ -20,6 +20,18 @@ services:
     ports:
       - "60005:8080"
 
+  lucee6:
+    build:
+      context: ./
+      dockerfile: ./src/docker/Lucee6.Dockerfile
+    image: cfwheels-test-lucee6:v1
+    volumes:
+      # uncomment when developing with this docker-compose file
+      # - ./:/cfwheels-test-suite
+      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
+    ports:
+      - "60006:8080"
+
   adobe2016:
     build:
       context: ./
