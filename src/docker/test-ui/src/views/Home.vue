@@ -230,6 +230,7 @@ export default {
 		runTestSuite(item){
 			this.queueIsRunning = true
 			this.addStatus({ type: 'info', message: "Test Started - " + item.displayname})
+			this.addStatus({ type: 'info', message: "URL: " + this.getTestURL(item)})
 			this.currentJobName = item.displayname
 			this.api.get(this.getTestURL(item))
 				.then((response) => {
