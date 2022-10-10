@@ -5,6 +5,9 @@ get_port () {
     lucee5)
       echo -n "60005"
       ;;
+    lucee6)
+      echo -n "60006"
+      ;;
     adobe2016)
       echo -n "62016"
       ;;
