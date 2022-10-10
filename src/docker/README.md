@@ -11,20 +11,21 @@
 - Ensure docker is installed (beyond the scope of this document)
 - Increase Docker's default allocated 2GB memory to about 4GB
 - Ensure the following ports are free
-	- `60005`
-	- `62016`
-	- `62018`
-	- `3000`
+  - `60005`
+  - `62016`
+  - `62018`
+  - `3000`
 - Navigate to the repo root
 - Run `docker compose up`
 
 ### On first run
 
 If this is the first time you've run it, docker will download a lot of stuff, namely:
- - **Commandbox Docker image**, which in turn will get **Lucee5 / ACF2016 / ACF2018** (note, the Commandbox artifacts directory will be created/aliased to `/.Commandbox` for caching, so your images won't have to get them every time your image is rebuilt)
- - **MySQL**
- - **Postgres**
- - **MSSQL 2017**
+
+- **Commandbox Docker image**, which in turn will get **Lucee5 / ACF2016 / ACF2018** (note, the Commandbox artifacts directory will be created/aliased to `/.Commandbox` for caching, so your images won't have to get them every time your image is rebuilt)
+- **MySQL**
+- **Postgres**
+- **MSSQL 2017**
 
 Once all the images are downloaded (this may take some time), the databases will attempt to start. MySQL/Postgres are fairly simple, using the predefined images which allow for a database to be created directly from docker compose; MSSQL doesn't allow for this annoyingly, so we're actually spinning up a custom image based on the Microsoft Azure one, which allows us to script for the creation of a new database.
 
@@ -73,6 +74,7 @@ Likewise if you need to rebuild any of the images, you can do it on an image by 
 Which can be quicker than rebuilding everything via `docker compose up --build`
 
 #### Known Issues
+
 There's an issue with CORS tests currently, which means those tests are currently commented out
 
 ### Rebuilding
