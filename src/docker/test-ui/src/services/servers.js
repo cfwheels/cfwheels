@@ -5,6 +5,10 @@ const servers =
 		server: 'http://localhost:60005'
 	},
 	{
+		servername: 'Lucee 6',
+		server: 'http://localhost:60006'
+	},
+	{
 		servername: 'Adobe 2016',
 		server: 'http://localhost:62016'
 	},
