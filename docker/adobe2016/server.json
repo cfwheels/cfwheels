@@ -13,6 +13,6 @@
 	},
 	"app":{
 			"cfengine":"adobe@2016.0.16+320445",
-			"libDirs":"src/docker/lib"
+			"libDirs":"docker/adobe2016/lib"
 	}
 }
