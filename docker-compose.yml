@@ -56,6 +56,18 @@ services:
     ports:
       - "62018:8080"
 
+  adobe2021:
+    build:
+      context: ./
+      dockerfile: ./src/docker/Adobe2021.Dockerfile
+    image: cfwheels-test-adobe2021:v1
+    volumes:
+      # uncomment when developing with this docker-compose file
+      # - ./:/cfwheels-test-suite
+      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
+    ports:
+      - "62021:8080"
+
   mysql:
     image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
