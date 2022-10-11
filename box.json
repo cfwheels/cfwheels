@@ -39,7 +39,7 @@
         }
     ],
     "scripts":{
-       "install:2021":"run-script cfpm:install zip,debugger,orm,mysql,postgresql,sqlserver,feed",
+			"onServerInstall":"cfpm install image,mail,zip,debugger,caching,mysql,postgresql,sqlserver",
        "format":"cfformat run --overwrite",
        "format:watch":"cfformat watch ./.cfformat.json",
        "format:check":"cfformat check"
