@@ -13,6 +13,6 @@
 	},
 	"app":{
 			"cfengine":"Lucee@6.0.0-snapshot",
-			"libDirs":"src/docker/lib"
+			"libDirs":"docker/lucee6/lib"
 	}
 }
