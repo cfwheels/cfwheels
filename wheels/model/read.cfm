@@ -269,7 +269,15 @@ public any function findAll(
 			if (Len(local.orderBy)) {
 				ArrayAppend(local.sql, local.orderBy);
 			}
-			$addToCache(key = local.queryShellKey, value = local.sql, category = "sql");
+			local.lockName = "findAllSQLLock" & application.applicationName;
+			local.executeArgs = {key = local.queryShellKey, value = local.sql, category = "sql"};
+			$simpleLock(
+				name = local.lockName,
+				type = "exclusive",
+				execute = "$addToCache",
+				executeArgs = local.executeArgs,
+				timeout = 10
+			);
 		}
 
 		// add where clause parameters to the generic sql info
