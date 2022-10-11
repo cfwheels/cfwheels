@@ -89,7 +89,7 @@ services:
   sqlserver:
     build:
       context: ./
-      dockerfile: ./src/docker/SQLServer.Dockerfile
+      dockerfile: ./docker/sqlserver/Dockerfile
     image: cfwheels-sqlserver:v1
     environment:
       MSSQL_SA_PASSWORD: x!bsT8t60yo0cTVTPq
