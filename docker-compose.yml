@@ -35,7 +35,7 @@ services:
   adobe2016:
     build:
       context: ./
-      dockerfile: ./src/docker/Adobe2016.Dockerfile
+      dockerfile: ./docker/adobe2016/Dockerfile
     image: cfwheels-test-adobe2016:v1
     volumes:
       # uncomment when developing with this docker-compose file
