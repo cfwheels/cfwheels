@@ -47,7 +47,7 @@ services:
   adobe2018:
     build:
       context: ./
-      dockerfile: ./src/docker/Adobe2018.Dockerfile
+      dockerfile: ./docker/adobe2018/Dockerfile
     image: cfwheels-test-adobe2018:v1
     volumes:
       # uncomment when developing with this docker-compose file
