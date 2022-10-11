@@ -9,7 +9,7 @@ ENV BOX_SERVER_CFCONFIGFILE "/cfwheels-test-suite/src/docker/Adobe2016.CFConfig.
 ENV BOX_SERVER_PROFILE      "none"
 
 COPY . /cfwheels-test-suite
-COPY ./src/docker/Adobe2016.server.json /cfwheels-test-suite/server.json
+COPY ./docker/adobe2016/server.json /cfwheels-test-suite/server.json
 
 # WARM UP THE SERVER
 RUN ${BUILD_DIR}/util/warmup-server.sh
