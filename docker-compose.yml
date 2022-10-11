@@ -59,7 +59,7 @@ services:
   adobe2021:
     build:
       context: ./
-      dockerfile: ./src/docker/Adobe2021.Dockerfile
+      dockerfile: ./docker/adobe2021/Dockerfile
     image: cfwheels-test-adobe2021:v1
     volumes:
       # uncomment when developing with this docker-compose file
