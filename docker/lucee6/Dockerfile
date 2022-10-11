@@ -12,7 +12,7 @@ ENV BOX_SERVER_CFCONFIGFILE "/cfwheels-test-suite/src/docker/Lucee6.CFConfig.jso
 ENV BOX_SERVER_PROFILE      "none"
 
 COPY . /cfwheels-test-suite
-COPY ./src/docker/Lucee6.server.json /cfwheels-test-suite/server.json
+COPY ./docker/lucee6/server.json /cfwheels-test-suite/server.json
 
 # WARM UP THE SERVER
 RUN ${BUILD_DIR}/util/warmup-server.sh
