@@ -95,5 +95,3 @@ services:
       MSSQL_SA_PASSWORD: x!bsT8t60yo0cTVTPq
       ACCEPT_EULA: Y
       MSSQL_PID: Developer
-    # volumes:
-      # - ./src/docker:/src/docker
