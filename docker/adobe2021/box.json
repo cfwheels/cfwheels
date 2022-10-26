@@ -1,6 +1,6 @@
 {
     "name":"cfwheels-test-suite",
     "scripts":{
-			"onServerInstall":"cfpm install image:2021.0.02.328618,mail:2021.0.02.328618,zip:2021.0.02.328618,debugger:2021.0.02.328618,caching:2021.0.02.328618,mysql:2021.0.02.328618,postgresql:2021.0.02.328618,sqlserver:2021.0.02.328618"
+			"onServerInstall":"cfpm install image,mail,zip,debugger,caching,mysql,postgresql,sqlserver"
     }
 }
