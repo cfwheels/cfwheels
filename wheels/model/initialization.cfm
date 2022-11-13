@@ -47,6 +47,11 @@ public any function $initModelClass(required string name, required string path) 
 		variables.wheels.class.validations[ListGetAt(local.validations, local.i)] = [];
 	}
 
+	variables.wheels.class.propertyStruct = StructNew("ordered");
+	variables.wheels.class.columnStruct = StructNew("ordered");
+	variables.wheels.class.calculatedPropertyStruct = StructNew("ordered");
+
+	// TODO: deprecate these lists in favour of the structs to avoid ListFind (use StructKeyList to create the list)
 	variables.wheels.class.propertyList = "";
 	variables.wheels.class.columnList = "";
 	variables.wheels.class.calculatedPropertyList = "";
@@ -68,6 +73,8 @@ public any function $initModelClass(required string name, required string path) 
 			StructKeyExists(variables.wheels.class.mapping[local.key], "type")
 			&& variables.wheels.class.mapping[local.key].type != "column"
 		) {
+			variables.wheels.class.calculatedPropertyStruct[local.key] = true;
+			// TODO: deprecate (use StructKeyList of calculatedPropertyStruct)
 			variables.wheels.class.calculatedPropertyList = ListAppend(
 				variables.wheels.class.calculatedPropertyList,
 				local.key
@@ -92,19 +99,19 @@ public any function $initModelClass(required string name, required string path) 
 		local.columns = variables.wheels.class.adapter.$getColumns(tableName());
 
 		// do not process columns already assigned to a calculated property
-		local.processedColumns = variables.wheels.class.calculatedPropertyList;
+		local.processedColumns = variables.wheels.class.calculatedPropertyStruct;
 
 		local.iEnd = local.columns.recordCount;
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			// set up properties and column mapping
-			if (!ListFindNoCase(local.processedColumns, local.columns["column_name"][local.i])) {
+			if (!StructKeyExists(local.processedColumns, local.columns["column_name"][local.i])) {
 				// default the column to map to a property with the same name
 				local.property = local.columns["column_name"][local.i];
 				for (local.key in variables.wheels.class.mapping) {
 					if (
-						StructKeyExists(variables.wheels.class.mapping[local.key], "type") && variables.wheels.class.mapping[
-							local.key
-						].type == "column" && variables.wheels.class.mapping[local.key].value == local.property
+						StructKeyExists(variables.wheels.class.mapping[local.key], "type")
+						&& variables.wheels.class.mapping[local.key].type == "column"
+						&& variables.wheels.class.mapping[local.key].value == local.property
 					) {
 						// developer has chosen to map this column to a property with a different name so set that here
 						local.property = local.key;
@@ -254,12 +261,16 @@ public any function $initModelClass(required string name, required string path) 
 						}
 					}
 				}
+
+				variables.wheels.class.propertyStruct[local.property] = true;
+				variables.wheels.class.columnStruct[variables.wheels.class.properties[local.property].column] = true;
+
 				variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, local.property);
 				variables.wheels.class.columnList = ListAppend(
 					variables.wheels.class.columnList,
 					variables.wheels.class.properties[local.property].column
 				);
-				local.processedColumns = ListAppend(local.processedColumns, local.columns["column_name"][local.i]);
+				local.processedColumns[local.columns["column_name"][local.i]] = true;
 			}
 		}
 

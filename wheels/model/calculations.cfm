@@ -225,12 +225,12 @@ public any function $calculate(
 	local.iEnd = ListLen(arguments.property);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		local.item = Trim(ListGetAt(arguments.property, local.i));
-		if (ListFindNoCase(variables.wheels.class.propertyList, local.item)) {
+		if (StructKeyExists(variables.wheels.class.propertyStruct, local.item)) {
 			local.properties = ListAppend(
 				local.properties,
 				tableName() & "." & variables.wheels.class.properties[local.item].column
 			);
-		} else if (ListFindNoCase(variables.wheels.class.calculatedPropertyList, local.item)) {
+		} else if (StructKeyExists(variables.wheels.class.calculatedPropertyStruct, local.item)) {
 			local.properties = ListAppend(local.properties, variables.wheels.class.calculatedProperties[local.item].sql);
 		}
 	}
