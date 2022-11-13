@@ -150,7 +150,7 @@ public string function $orderByClause(required string order, required string inc
 						local.classData = local.classes[local.j];
 						if (StructKeyExists(local.classData.propertyStruct, local.property)) {
 							local.toAdd = local.classData.tableName & "." & local.classData.properties[local.property].column;
-						} else if (StructKeyExists(local.classData.calculatedPropertyStruct, local.property)) {
+						} else if (StructKeyExists(local.classData.calculatedProperties, local.property)) {
 							local.sql = local.classData.calculatedProperties[local.property].sql;
 							local.toAdd = "(" & Replace(local.sql, ",", "[[comma]]", "all") & ")";
 						}
@@ -299,7 +299,7 @@ public string function $createSQLFieldList(
 				if (
 					(
 						StructKeyExists(local.classData.propertyStruct, local.iItem)
-						|| StructKeyExists(local.classData.calculatedPropertyStruct, local.iItem)
+						|| StructKeyExists(local.classData.calculatedProperties, local.iItem)
 					)
 					&& !ListFindNoCase(local.addedPropertiesByModel[local.classData.modelName], local.iItem)
 				) {
@@ -332,7 +332,7 @@ public string function $createSQLFieldList(
 								local.toAppend &= " AS " & local.iItem;
 							}
 						}
-					} else if (StructKeyExists(local.classData.calculatedPropertyStruct, local.iItem)) {
+					} else if (StructKeyExists(local.classData.calculatedProperties, local.iItem)) {
 						local.sql = Replace(local.classData.calculatedProperties[local.iItem].sql, ",", "[[comma]]", "all");
 						if (arguments.clause == "select" || !ReFind("^(SELECT )?(AVG|COUNT|MAX|MIN|SUM)\(.*\)", local.sql)) {
 							local.toAppend &= "(" & local.sql & ")";
@@ -486,7 +486,7 @@ public array function $whereClause(required string where, string include = "", b
 							local.param.type = local.classData.properties[local.column].type;
 							local.param.scale = local.classData.properties[local.column].scale;
 							break;
-						} else if (StructKeyExists(local.classData.calculatedPropertyStruct, local.column)) {
+						} else if (StructKeyExists(local.classData.calculatedProperties, local.column)) {
 							local.param.column = "(" & local.classData.calculatedProperties[local.column].sql & ")";
 							if (StructKeyExists(local.classData.calculatedProperties[local.column], "dataType")) {
 								local.param.dataType = local.classData.calculatedProperties[local.column].dataType;
@@ -712,7 +712,6 @@ public array function $expandedAssociations(required string include, boolean inc
 		// TODO: deprecate the lists above in favour of these structs to avoid listFind
 		local.classAssociations[local.name].columnStruct = local.associatedClass.$classData().columnStruct;
 		local.classAssociations[local.name].propertyStruct = local.associatedClass.$classData().propertyStruct;
-		local.classAssociations[local.name].calculatedPropertyStruct = local.associatedClass.$classData().calculatedPropertyStruct;
 
 		// create the join string if it hasn't already been done
 		if (!StructKeyExists(local.classAssociations[local.name], "join")) {

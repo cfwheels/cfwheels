@@ -49,7 +49,6 @@ public any function $initModelClass(required string name, required string path) 
 
 	variables.wheels.class.propertyStruct = StructNew("ordered");
 	variables.wheels.class.columnStruct = StructNew("ordered");
-	variables.wheels.class.calculatedPropertyStruct = StructNew("ordered");
 
 	// TODO: deprecate these lists in favour of the structs to avoid ListFind (use StructKeyList to create the list)
 	variables.wheels.class.propertyList = "";
@@ -73,7 +72,6 @@ public any function $initModelClass(required string name, required string path) 
 			StructKeyExists(variables.wheels.class.mapping[local.key], "type")
 			&& variables.wheels.class.mapping[local.key].type != "column"
 		) {
-			variables.wheels.class.calculatedPropertyStruct[local.key] = true;
 			// TODO: deprecate (use StructKeyList of calculatedPropertyStruct)
 			variables.wheels.class.calculatedPropertyList = ListAppend(
 				variables.wheels.class.calculatedPropertyList,

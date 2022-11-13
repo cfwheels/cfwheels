@@ -230,7 +230,7 @@ public any function $calculate(
 				local.properties,
 				tableName() & "." & variables.wheels.class.properties[local.item].column
 			);
-		} else if (StructKeyExists(variables.wheels.class.calculatedPropertyStruct, local.item)) {
+		} else if (StructKeyExists(variables.wheels.class.calculatedProperties, local.item)) {
 			local.properties = ListAppend(local.properties, variables.wheels.class.calculatedProperties[local.item].sql);
 		}
 	}
