@@ -2,6 +2,10 @@ version: "3.0"
 
 services:
   testui:
+    depends_on:
+      - mysql
+      - postgres
+      - sqlserver
     build:
       context: ./docker/testui
     image: cfwheels-testui:v1
@@ -9,6 +13,8 @@ services:
       - "3000:8080"
 
   lucee5:
+    depends_on:
+      - testui
     build:
       context: ./
       dockerfile: ./docker/lucee5/Dockerfile
@@ -26,6 +32,8 @@ services:
       - "60005:8080"
 
   lucee6:
+    depends_on:
+      - lucee5
     build:
       context: ./
       dockerfile: ./docker/lucee6/Dockerfile
@@ -43,6 +51,11 @@ services:
       - "60006:8080"
 
   adobe2016:
+    depends_on:
+      testui:
+        condition: service_healthy
+      lucee6:
+        condition: service_healthy
     build:
       context: ./
       dockerfile: ./docker/adobe2016/Dockerfile
@@ -60,36 +73,30 @@ services:
       - "62016:8080"
 
   adobe2018:
+    depends_on:
+      - adobe2016
     build:
       context: ./
       dockerfile: ./docker/adobe2018/Dockerfile
     image: cfwheels-test-adobe2018:v1
     volumes:
-      - ./:/cfwheels-test-suite
-      - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
-      - type: bind
-        source: ./docker/adobe2018/box.json
-        target: /cfwheels-test-suite/box.json
-      - type: bind
-        source: ./docker/adobe2018/server.json
-        target: /cfwheels-test-suite/server.json
+      # uncomment when developing with this docker-compose file
+      # - ./:/cfwheels-test-suite
+      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
     ports:
       - "62018:8080"
 
   adobe2021:
+    depends_on:
+      - adobe2018
     build:
       context: ./
       dockerfile: ./docker/adobe2021/Dockerfile
     image: cfwheels-test-adobe2021:v1
     volumes:
-      - ./:/cfwheels-test-suite
-      - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
-      - type: bind
-        source: ./docker/adobe2021/box.json
-        target: /cfwheels-test-suite/box.json
-      - type: bind
-        source: ./docker/adobe2021/server.json
-        target: /cfwheels-test-suite/server.json
+      # uncomment when developing with this docker-compose file
+      # - ./:/cfwheels-test-suite
+      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
     ports:
       - "62021:8080"
 
