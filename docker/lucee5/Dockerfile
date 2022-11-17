@@ -11,9 +11,5 @@ ENV ENV_MODE                "remote"
 ENV BOX_SERVER_CFCONFIGFILE "/cfwheels-test-suite/docker/lucee5/CFConfig.json"
 ENV BOX_SERVER_PROFILE      "none"
 
-# COPY . /cfwheels-test-suite
-# COPY ./docker/lucee5/server.json /cfwheels-test-suite/server.json
-# COPY ./docker/lucee5/box.json /cfwheels-test-suite/box.json
-
 # WARM UP THE SERVER
 RUN ${BUILD_DIR}/util/warmup-server.sh

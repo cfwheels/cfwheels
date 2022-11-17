@@ -8,9 +8,5 @@ ENV ENV_MODE                "remote"
 ENV BOX_SERVER_CFCONFIGFILE "/cfwheels-test-suite/docker/adobe2018/CFConfig.json"
 ENV BOX_SERVER_PROFILE      "none"
 
-# COPY . /cfwheels-test-suite
-# COPY ./docker/adobe2018/server.json /cfwheels-test-suite/server.json
-# COPY ./docker/adobe2018/box.json /cfwheels-test-suite/box.json
-
 # WARM UP THE SERVER
 RUN ${BUILD_DIR}/util/warmup-server.sh
