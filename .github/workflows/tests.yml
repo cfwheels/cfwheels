@@ -43,7 +43,7 @@ jobs:
         run: |
           # Install Adobe 2021 cfpm modules
           if [[ "${{ matrix.cf }}" == "adobe2021" ]] ; then
-            box cfpm install image,mail,zip,debugger,caching,mysql,postgresql,sqlserver
+            cfpm install image,mail,zip,debugger,caching,mysql,postgresql,sqlserver
           fi
 
       - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
