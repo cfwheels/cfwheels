@@ -65,9 +65,14 @@ services:
       dockerfile: ./docker/adobe2018/Dockerfile
     image: cfwheels-test-adobe2018:v1
     volumes:
-      # uncomment when developing with this docker-compose file
-      # - ./:/cfwheels-test-suite
-      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - ./:/cfwheels-test-suite
+      - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - type: bind
+        source: ./docker/adobe2018/box.json
+        target: /cfwheels-test-suite/box.json
+      - type: bind
+        source: ./docker/adobe2018/server.json
+        target: /cfwheels-test-suite/server.json
     ports:
       - "62018:8080"
 
