@@ -52,10 +52,7 @@ services:
 
   adobe2016:
     depends_on:
-      testui:
-        condition: service_healthy
-      lucee6:
-        condition: service_healthy
+      - lucee6
     build:
       context: ./
       dockerfile: ./docker/adobe2016/Dockerfile
