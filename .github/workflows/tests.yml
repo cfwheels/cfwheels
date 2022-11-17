@@ -15,33 +15,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        cf: [lucee5, lucee6, adobe2016, adobe2018]
+        cf: [lucee5, lucee6, adobe2016, adobe2018, adobe2021]
         db: [mysql, postgres, sqlserver, h2]
         exclude:
-#          - cf: lucee5
-#            db: mysql56
-#          - cf: lucee5
-#            db: postgres
-#          - cf: lucee5
-#            db: sqlserver
-#          - cf: lucee5
-#            db: h2
-#          - cf: adobe2016
-#            db: mysql56
-#          - cf: adobe2016
-#            db: postgres
-#          - cf: adobe2016
-#            db: sqlserver
           - cf: adobe2016
             db: h2
-#          - cf: adobe2018
-#            db: mysql56
-#          - cf: adobe2018
-#            db: postgres
-#          - cf: adobe2018
-#            db: sqlserver
           - cf: adobe2018
             db: h2
+          - cf: adobe2021
+            db: h2
+          - cf: adobe2021
+            db: mysql
 
     steps:
       - name: Checkout Repository
@@ -54,13 +38,6 @@ jobs:
       - name: Docker Compose ${{ matrix.cf }}
         if: ${{ matrix.db == 'h2' }}
         run: docker compose up ${{ matrix.cf }} --detach --wait
-
-      - name: install Adobe 2021 Server Packages If Needed
-        run: |
-          # Install Adobe 2021 cfpm modules
-          if [[ "${{ matrix.cf }}" == "adobe2021" ]] ; then
-            box run-script install:2021
-          fi
 
       - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
         run: src/github/tests/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}
