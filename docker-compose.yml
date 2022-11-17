@@ -82,9 +82,14 @@ services:
       dockerfile: ./docker/adobe2021/Dockerfile
     image: cfwheels-test-adobe2021:v1
     volumes:
-      # uncomment when developing with this docker-compose file
-      # - ./:/cfwheels-test-suite
-      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - ./:/cfwheels-test-suite
+      - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - type: bind
+        source: ./docker/adobe2021/box.json
+        target: /cfwheels-test-suite/box.json
+      - type: bind
+        source: ./docker/adobe2021/server.json
+        target: /cfwheels-test-suite/server.json
     ports:
       - "62021:8080"
 
