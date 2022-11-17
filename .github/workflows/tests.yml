@@ -39,13 +39,6 @@ jobs:
         if: ${{ matrix.db == 'h2' }}
         run: docker compose up ${{ matrix.cf }} --detach --wait
 
-      - name: install Adobe 2021 Server Packages If Needed
-        run: |
-          # Install Adobe 2021 cfpm modules
-          if [[ "${{ matrix.cf }}" == "adobe2021" ]] ; then
-            cfpm install image,mail,zip,debugger,caching,mysql,postgresql,sqlserver
-          fi
-
       - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
         run: src/github/tests/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}
 
