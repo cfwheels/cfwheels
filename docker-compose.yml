@@ -2,10 +2,6 @@ version: "3.0"
 
 services:
   testui:
-    depends_on:
-      - mysql
-      - postgres
-      - sqlserver
     build:
       context: ./docker/testui
     image: cfwheels-testui:v1
@@ -13,8 +9,6 @@ services:
       - "3000:8080"
 
   lucee5:
-    depends_on:
-      - testui
     build:
       context: ./
       dockerfile: ./docker/lucee5/Dockerfile
@@ -32,8 +26,6 @@ services:
       - "60005:8080"
 
   lucee6:
-    depends_on:
-      - lucee5
     build:
       context: ./
       dockerfile: ./docker/lucee6/Dockerfile
@@ -51,8 +43,6 @@ services:
       - "60006:8080"
 
   adobe2016:
-    depends_on:
-      - lucee6
     build:
       context: ./
       dockerfile: ./docker/adobe2016/Dockerfile
@@ -70,8 +60,6 @@ services:
       - "62016:8080"
 
   adobe2018:
-    depends_on:
-      - adobe2016
     build:
       context: ./
       dockerfile: ./docker/adobe2018/Dockerfile
@@ -89,8 +77,6 @@ services:
       - "62018:8080"
 
   adobe2021:
-    depends_on:
-      - adobe2018
     build:
       context: ./
       dockerfile: ./docker/adobe2021/Dockerfile
