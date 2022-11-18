@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Print Working Directory
-        run: echo pwd
+        run: pwd
 
       - name: Start Application Server and DB ${{ matrix.cf }} ${{ matrix.db }}
         if: ${{ matrix.db != 'h2' }}
