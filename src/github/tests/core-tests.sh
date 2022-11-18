@@ -24,7 +24,7 @@ echo "\nls:"
 ls
 
 echo "\nbox server status"
-box server status
+/usr/local/bin/box server status
 
 echo "\n"
 cat $result_file
