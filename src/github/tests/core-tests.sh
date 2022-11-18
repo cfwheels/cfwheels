@@ -26,6 +26,9 @@ ls
 echo "\nbox server status"
 /usr/local/bin/box server status
 
+echo "\nwhich box"
+which box
+
 echo "\n"
 cat $result_file
 
