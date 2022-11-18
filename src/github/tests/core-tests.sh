@@ -15,9 +15,14 @@ result_file="./${cfengine}-${db}-result.txt"
 echo "\nRUNNING SUITE (${cfengine}/${dbengine}):\n"
 echo ${test_url}
 echo ${result_file}
-cat ${result_file}
 
 http_code=$(curl -s -o "${result_file}" --write-out "%{http_code}" "${test_url}";)
+
+echo "\nResult file:"
+cat ${result_file}
+
+echo "\nHTTP Code Pulled Down:"
+echo ${http_code}
 
 echo "\npwd:"
 pwd
