@@ -17,6 +17,10 @@ echo ${result_file}
 
 http_code=$(curl -s -o "${result_file}" --write-out "%{http_code}" "${test_url}";)
 
+pwd
+
+ls
+
 cat $result_file
 
 if [ "$http_code" -eq "200" ]; then
