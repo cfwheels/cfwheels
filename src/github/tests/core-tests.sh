@@ -17,10 +17,16 @@ echo ${result_file}
 
 http_code=$(curl -s -o "${result_file}" --write-out "%{http_code}" "${test_url}";)
 
+echo "\npwd:"
 pwd
 
+echo "\nls:"
 ls
 
+echo "\nbox server status"
+box server status
+
+echo "\n"
 cat $result_file
 
 if [ "$http_code" -eq "200" ]; then
