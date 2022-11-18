@@ -63,6 +63,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Print Working Directory
+        run: echo pwd
+
       - name: Start Application Server and DB ${{ matrix.cf }} ${{ matrix.db }}
         if: ${{ matrix.db != 'h2' }}
         run: docker compose up ${{ matrix.cf }} ${{ matrix.db }} --detach --wait
