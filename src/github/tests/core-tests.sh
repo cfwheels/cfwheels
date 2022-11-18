@@ -9,7 +9,7 @@ port="$(get_port ${cfengine})"
 db="$(get_db ${dbengine})"
 
 #test_url="http://127.0.0.1:8080/wheels/tests/core?db=${db}&format=txt&only=failure,error&reload=true"
-test_url="http://127.0.0.1:8080/"
+test_url="http://localhost:8080/"
 result_file="./${cfengine}-${db}-result.txt"
 
 echo "\nRUNNING SUITE (${cfengine}/${dbengine}):\n"
