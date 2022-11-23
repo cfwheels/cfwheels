@@ -1,6 +1,6 @@
 component output="false" displayName="Internal GUI" {
 
-	include "public/initialization.cfm";
-	include "public/includes.cfm";
+	include "/wheels/public/initialization.cfm";
+	include "/wheels/public/includes.cfm";
 
 }

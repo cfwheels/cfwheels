@@ -1,5 +1,5 @@
 <cfscript>
-public void function onRequestStart(required targetPage) {
+// public void function onRequestStart(required targetPage) {
 	local.lockName = "reloadLock" & application.applicationName;
 
 	// Abort if called from incorrect file.
@@ -38,7 +38,7 @@ public void function onRequestStart(required targetPage) {
 		type = "readOnly",
 		timeout = 180
 	);
-}
+// }
 
 public void function $runOnRequestStart(required targetPage) {
 	// If the first debug point has not already been set in a reload request we set it here.
@@ -68,7 +68,7 @@ public void function $runOnRequestStart(required targetPage) {
 
 	// Inject methods from plugins directly to Application.cfc.
 	if (!StructIsEmpty(application.wheels.mixins)) {
-		$include(template = "wheels/plugins/standalone/injection.cfm");
+		$include(template = "/wheels/plugins/standalone/injection.cfm");
 	}
 
 	if (application.wheels.environment == "maintenance") {
@@ -97,7 +97,7 @@ public void function $runOnRequestStart(required targetPage) {
 			// Set the content to be displayed in maintenance mode to a request variable and exit the function.
 			// This variable is then checked in the Wheels $request function (which is what sets what to render).
 			request.$wheelsAbortContent = $includeAndReturnOutput(
-				$template = "#application.wheels.eventPath#/onmaintenance.cfm"
+				$template = "/app/#application.wheels.eventPath#/onmaintenance.cfm"
 			);
 			return;
 		}
@@ -126,7 +126,7 @@ public void function $runOnRequestStart(required targetPage) {
 			allowMethodsByRoute = application.wheels.accessControlAllowMethodsByRoute
 		);
 	}
-	$include(template = "#application.wheels.eventPath#/onrequeststart.cfm");
+	$include(template = "/app/#application.wheels.eventPath#/onrequeststart.cfm");
 	if (application.wheels.showDebugInformation) {
 		$debugPoint("requestStart");
 	}

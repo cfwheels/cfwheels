@@ -1,5 +1,5 @@
 <cfscript>
-public void function onError(required exception, required eventName) {
+// public void function onError(required exception, required eventName) {
 	// In case the error was caused by a timeout we have to add extra time for error handling.
 	// We have to check if onErrorRequestTimeout exists since errors can be triggered before the application.wheels struct has been created.
 	local.requestTimeout = $getRequestTimeout() + 30;
@@ -18,7 +18,7 @@ public void function onError(required exception, required eventName) {
 		timeout = 180
 	);
 	WriteOutput(local.rv);
-}
+// }
 
 public string function $runOnError(required exception, required eventName) {
 	if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized")) {
@@ -50,7 +50,7 @@ public string function $runOnError(required exception, required eventName) {
 				}
 				local.args.type = "html";
 				local.args.tagContent = $includeAndReturnOutput(
-					$template = "wheels/events/onerror/cfmlerror.cfm",
+					$template = "/wheels/events/onerror/cfmlerror.cfm",
 					exception = arguments.exception
 				);
 				StructDelete(local.args, "layouts", false);
@@ -75,16 +75,16 @@ public string function $runOnError(required exception, required eventName) {
 				local.rv = "";
 
 				if (!StructKeyExists(request.wheels, "internalHeaderLoaded")) {
-					local.rv &= $includeAndReturnOutput($template = "wheels/public/layout/_header_simple.cfm");
+					local.rv &= $includeAndReturnOutput($template = "/wheels/public/layout/_header_simple.cfm");
 				}
 
 				local.rv &= $includeAndReturnOutput(
-					$template = "wheels/events/onerror/wheelserror.cfm",
+					$template = "/wheels/events/onerror/wheelserror.cfm",
 					wheelsError = local.wheelsError
 				);
 
 				if (!StructKeyExists(request.wheels, "internalHeaderLoaded")) {
-					local.rv &= $includeAndReturnOutput($template = "wheels/public/layout/_footer_simple.cfm");
+					local.rv &= $includeAndReturnOutput($template = "/wheels/public/layout/_footer_simple.cfm");
 				}
 			} else {
 				Throw(object = arguments.exception);
@@ -92,7 +92,7 @@ public string function $runOnError(required exception, required eventName) {
 		} else {
 			$header(statusCode = 500, statusText = "Internal Server Error");
 			local.rv = $includeAndReturnOutput(
-				$template = "#application.wheels.eventPath#/onerror.cfm",
+				$template = "/app/#application.wheels.eventPath#/onerror.cfm",
 				eventName = arguments.eventName,
 				exception = arguments.exception
 			);

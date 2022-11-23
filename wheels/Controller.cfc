@@ -1,15 +1,15 @@
 component output="false" displayName="Controller" {
 
-	include "controller/functions.cfm";
-	include "global/functions.cfm";
-	include "view/functions.cfm";
-	include "plugins/standalone/injection.cfm";
+	include "/wheels/controller/functions.cfm";
+	include "/wheels/global/functions.cfm";
+	include "/wheels/view/functions.cfm";
+	include "/wheels/plugins/standalone/injection.cfm";
 	if (
 		IsDefined("application")
 		&& StructKeyExists(application, "wheels")
 		&& StructKeyExists(application.wheels, "viewPath")
 	) {
-		include "../#application.wheels.viewPath#/helpers.cfm";
+		include "/app/#application.wheels.viewPath#/helpers.cfm";
 	}
 
 }

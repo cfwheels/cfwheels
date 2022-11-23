@@ -415,7 +415,7 @@ public void function $abortInvalidRequest() {
 				$header(statusCode = 404, statustext = "Not Found");
 			}
 			if (StructKeyExists(application.wheels, "eventPath")) {
-				$includeAndOutput(template = "#application.wheels.eventPath#/onmissingtemplate.cfm");
+				$includeAndOutput(template = "/app/#application.wheels.eventPath#/onmissingtemplate.cfm");
 			}
 		}
 		$header(statusCode = 404, statustext = "Not Found");
@@ -881,9 +881,9 @@ public void function $lockedLoadRoutes() {
 	StructClear(application[local.appKey].namedRoutePositions);
 	// load wheels internal gui routes
 	// TODO skip this if mode != development|testing?
-	$include(template = "wheels/public/routes.cfm");
+	$include(template = "/wheels/public/routes.cfm");
 	// load developer routes next
-	$include(template = "config/routes.cfm");
+	$include(template = "/app/config/routes.cfm");
 	// set lookup info for the named routes
 	$setNamedRoutePositions();
 }

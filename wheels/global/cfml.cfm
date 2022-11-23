@@ -96,12 +96,12 @@
 
 <cffunction name="$include" returntype="void" access="public" output="false">
 	<cfargument name="template" type="string" required="true">
-	<cfinclude template="../../#LCase(arguments.template)#">
+	<cfinclude template="#LCase(arguments.template)#">
 </cffunction>
 
 <cffunction name="$includeAndOutput" returntype="void" access="public" output="true">
 	<cfargument name="template" type="string" required="true">
-	<cfinclude template="../../#LCase(arguments.template)#">
+	<cfinclude template="#LCase(arguments.template)#">
 </cffunction>
 
 <cffunction name="$includeAndReturnOutput" returntype="string" access="public" output="false">
@@ -115,7 +115,7 @@
 	<!--- Include the template and return the result. --->
 	<!--- Variable is set to $wheels to limit chances of it being overwritten in the included template. --->
 	<!--- cfformat-ignore-start --->
-	<cfsavecontent variable="local.$wheels"><cfinclude template="../../#LCase(arguments.$template)#"></cfsavecontent>
+	<cfsavecontent variable="local.$wheels"><cfinclude template="#LCase(arguments.$template)#"></cfsavecontent>
 	<!--- cfformat-ignore-end --->
 	<cfreturn local.$wheels>
 </cffunction>

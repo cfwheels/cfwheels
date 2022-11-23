@@ -1,5 +1,5 @@
 <cfscript>
-public void function onSessionStart() {
+// public void function onSessionStart() {
 	local.lockName = "reloadLock" & application.applicationName;
 
 	// Fix for shared application name (issue 359).
@@ -8,10 +8,10 @@ public void function onSessionStart() {
 	}
 
 	$simpleLock(name = local.lockName, execute = "$runOnSessionStart", type = "readOnly", timeout = 180);
-}
+// }
 
 public void function $runOnSessionStart() {
 	$initializeRequestScope();
-	$include(template = "#application.wheels.eventPath#/onsessionstart.cfm");
+	$include(template = "/app/#application.wheels.eventPath#/onsessionstart.cfm");
 }
 </cfscript>
