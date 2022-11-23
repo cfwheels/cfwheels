@@ -1,6 +1,7 @@
 <cfscript>
 system = CreateObject("java", "java.lang.System");
 
+applicationMeta = getApplicationMetadata();
 paths = [
 	'eventPath',
 	'filePath',
@@ -230,6 +231,15 @@ settings = [
 
 		#startTable("Environment")#
 		#outputSetting(environment)#
+		#endTable()#
+
+		#startTable("Mappings")#
+			<cfloop collection="#applicationMeta.mappings#" item="key">
+			<tr>
+				<td class='four wide'>#Key#</td>
+				<td class='eight wide'>#applicationMeta.mappings[key]#</td>
+			</tr>
+			</cfloop>
 		#endTable()#
 
 		#startTable("Paths")#
