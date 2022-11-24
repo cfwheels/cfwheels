@@ -584,12 +584,18 @@ public void function $args(
  * Internal function.
  */
 public any function $createObjectFromRoot(required string path, required string fileName, required string method) {
-	local.returnVariable = "local.rv";
+
 	local.method = arguments.method;
 	local.component = ListChangeDelims(arguments.path, ".", "/") & "." & ListChangeDelims(arguments.fileName, ".", "/");
 	local.argumentCollection = arguments;
-	include "../../root.cfm";
-	return local.rv;
+
+	// this is a hacky thing as cfinvoke can't exist in script in ACF;
+	// lucee works of course. But doing it this way means we don't need a root.cfm file
+	return $cfinvoke(
+	 	component=local.component,
+	 	method=local.method,
+	 	invokeArguments=local.argumentCollection
+	 );
 }
 
 /**
@@ -867,23 +873,32 @@ public any function $createModelClass(
 /**
  * Internal function.
  */
-public void function $loadRoutes() {
-	$simpleLock(name = "$mapperLoadRoutes", type = "exclusive", timeout = 5, execute = "$lockedLoadRoutes");
+public void function $loadRoutes(required mapper) {
+	$simpleLock(
+		name = "$mapperLoadRoutes", 
+		type = "exclusive", 
+		timeout = 5, 
+		execute = "$lockedLoadRoutes",
+		executeArgs = { mapper: arguments.mapper }
+	);
 }
 
 /**
  * Internal function.
  */
-public void function $lockedLoadRoutes() {
+public void function $lockedLoadRoutes(required mapper) {
 	local.appKey = $appKey();
 	// clear out the route info
 	ArrayClear(application[local.appKey].routes);
 	StructClear(application[local.appKey].namedRoutePositions);
 	// load wheels internal gui routes
 	// TODO skip this if mode != development|testing?
-	$include(template = "/wheels/public/routes.cfm");
+	// $include(template = "/wheels/public/routes.cfm");
 	// load developer routes next
 	$include(template = "/app/config/routes.cfm");
+
+	application[local.appKey].routes = arguments.mapper.getRoutes();
+	
 	// set lookup info for the named routes
 	$setNamedRoutePositions();
 }
