@@ -249,7 +249,10 @@ public struct function $mergeUrlAndFormScopes(
 /**
  * If content type is JSON, deserialize it into a struct and add to the params struct.
  */
-public struct function $parseJsonBody(required struct params) {
+public struct function $parseJsonBody(
+	required struct params,
+	struct httpRequestData = GetHTTPRequestData()
+) {
 	local.headers = request.wheels.httpRequestData.headers;
 	local.content = request.wheels.httpRequestData.content;
 	if (StructKeyExists(local.headers, "Content-Type")) {
@@ -459,12 +462,19 @@ public struct function $addRouteName(required struct params, required struct rou
 /**
  * Determine HTTP verb used in request.
  */
-public string function $getRequestMethod() {
+public string function $getRequestMethod(
+	required string request_method = cgi.request_method,
+	required struct FormScope = form
+) {
 	// If request is a post, check for alternate verb.
-	if (request.cgi.request_method == "post" && StructKeyExists(form, "_method")) {
-		return form["_method"];
+	if (
+		arguments.request_method == "post" 
+		&& StructKeyExists(form, "_method")
+		&& ArrayFindNoCase(['PUT','PATCH','DELETE'], arguments.FormScope["_method"])
+	) {
+		return arguments.FormScope["_method"];
 	}
 
-	return request.cgi.request_method;
+	return arguments.request_method;
 }
 </cfscript>
