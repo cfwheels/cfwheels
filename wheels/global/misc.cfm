@@ -658,11 +658,11 @@ public string function URLFor(
 	// For the Wheels default we set the controller and action arguments to what's in the params struct.
 	if (Len(arguments.route)) {
 		local.route = $findRoute(argumentCollection = arguments);
-		local.variables = local.route.variables;
+		local.foundVariables  = local.route.foundVariables ;
 		local.rv &= local.route.pattern;
 	} else {
 		local.route = {};
-		local.variables = local.coreVariables;
+		local.foundVariables = local.coreVariables;
 		local.rv &= "?controller=[controller]&action=[action]&key=[key]&format=[format]";
 		if (StructKeyExists(local, "params")) {
 			if (!Len(arguments.action)) {
@@ -679,8 +679,8 @@ public string function URLFor(
 	}
 
 	// Replace each params variable with the correct value.
-	for (local.i = 1; local.i <= ListLen(local.variables); local.i++) {
-		local.property = ListGetAt(local.variables, local.i);
+	for (local.i = 1; local.i <= ListLen(local.foundVariables); local.i++) {
+		local.property = ListGetAt(local.foundVariables, local.i);
 		local.reg = "\[\*?#local.property#\]";
 
 		// Read necessary variables from different sources.
