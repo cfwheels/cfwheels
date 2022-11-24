@@ -9,7 +9,7 @@ public any function $init() {
 /**
  * Create a struct to hold the params, merge form and url scopes into it, add JSON body etc.
  */
-public struct function $createParams(
+private struct function $createParams(
 	required string path,
 	required struct route,
 	required struct formScope,
@@ -35,7 +35,7 @@ public struct function $createParams(
 /**
  * Internal function.
  */
-public struct function $createNestedParamStruct(required struct params) {
+private struct function $createNestedParamStruct(required struct params) {
 	local.rv = arguments.params;
 	for (local.key in local.rv) {
 		if (Find("[", local.key) && Right(local.key, 1) == "]") {
@@ -77,14 +77,19 @@ public struct function $createNestedParamStruct(required struct params) {
 /**
  * Internal function.
  */
-public struct function $findMatchingRoute(required string path, string requestMethod = $getRequestMethod()) {
+private struct function $findMatchingRoute(
+	required string path, 
+	string requestMethod = $getRequestMethod(),
+	array routes = application.wheels.routes,
+	object mapper = application.wheels.mapper
+) {
 	// If this is a HEAD request, look for the corresponding GET route
 	if (arguments.requestMethod == 'HEAD') {
 		arguments.requestMethod = 'GET';
 	}
 
 	// Loop over Wheels routes.
-	for (local.route in application.wheels.routes) {
+	for (local.route in arguments.routes) {
 		// If method doesn't match, skip this route.
 		if (StructKeyExists(local.route, "methods") && !ListFindNoCase(local.route.methods, arguments.requestMethod)) {
 			continue;
@@ -92,7 +97,7 @@ public struct function $findMatchingRoute(required string path, string requestMe
 
 		// Make sure route has been converted to regular expression.
 		if (!StructKeyExists(local.route, "regex")) {
-			local.route.regex = application.wheels.mapper.$patternToRegex(local.route.pattern);
+			local.route.regex = arguments.mapper.$patternToRegex(local.route.pattern);
 		}
 
 		// If route matches regular expression, set it for return.
@@ -113,10 +118,10 @@ public struct function $findMatchingRoute(required string path, string requestMe
 
 		// Try and provide some more information for why the route hasn't matched:
 		// For example, the developer is accidentally GETing to a route which only allows POST
-		for (local.route in application.wheels.routes) {
+		for (local.route in arguments.routes) {
 			// Make sure route has been converted to regular expression.
 			if (!StructKeyExists(local.route, "regex")) {
-				local.route.regex = application.wheels.mapper.$patternToRegex(local.route.pattern);
+				local.route.regex = arguments.mapper.$patternToRegex(local.route.pattern);
 			}
 
 			// If route matches regular expression, append to alternatives to display
@@ -147,7 +152,7 @@ public struct function $findMatchingRoute(required string path, string requestMe
 /**
  * Return the path without the leading "/".
  */
-public string function $getPathFromRequest(required string pathInfo, required string scriptName) {
+private string function $getPathFromRequest(required string pathInfo, required string scriptName) {
 	if (arguments.pathInfo == arguments.scriptName || arguments.pathInfo == "/" || !Len(arguments.pathInfo)) {
 		return "";
 	} else {
@@ -158,6 +163,7 @@ public string function $getPathFromRequest(required string pathInfo, required st
 /**
  * Parse incoming params, create controller object, call an action on it and return the response.
  * Called from index.cfm in the root so what we return here is the final result of the request processing.
+ * This currently needs to be public as it's called from elsewhere
  */
 public string function $request(
 	string pathInfo = request.cgi.path_info,
@@ -213,7 +219,7 @@ public string function $request(
 /**
  * Find the route that matches the path, create params struct and return it.
  */
-public struct function $paramParser(
+private struct function $paramParser(
 	string pathInfo = request.cgi.path_info,
 	string scriptName = request.cgi.script_name,
 	struct formScope = form,
@@ -232,7 +238,7 @@ public struct function $paramParser(
 /**
  * Merges the URL and form scope into a single structure, URL scope has precedence.
  */
-public struct function $mergeUrlAndFormScopes(
+private struct function $mergeUrlAndFormScopes(
 	required struct params,
 	required struct urlScope,
 	required struct formScope
@@ -249,7 +255,7 @@ public struct function $mergeUrlAndFormScopes(
 /**
  * If content type is JSON, deserialize it into a struct and add to the params struct.
  */
-public struct function $parseJsonBody(
+private struct function $parseJsonBody(
 	required struct params,
 	struct httpRequestData = GetHTTPRequestData()
 ) {
@@ -289,7 +295,7 @@ public struct function $parseJsonBody(
 /**
  * Parses the route pattern, identifies the variable markers within the pattern and assigns the value from the url variables with the path.
  */
-public struct function $mergeRoutePattern(required struct params, required struct route, required string path) {
+private struct function $mergeRoutePattern(required struct params, required struct route, required string path) {
 	local.rv = arguments.params;
 	local.matches = ReFindNoCase(arguments.route.regex, arguments.path, 1, true);
 	local.iEnd = ArrayLen(local.matches.pos);
@@ -304,7 +310,7 @@ public struct function $mergeRoutePattern(required struct params, required struc
  * Loops through the params struct passed in and attempts to deobfuscate it.
  * Ignores the controller and action params values.
  */
-public struct function $deobfuscateParams(required struct params) {
+private struct function $deobfuscateParams(required struct params) {
 	local.rv = arguments.params;
 	if ($get("obfuscateUrls")) {
 		for (local.key in local.rv) {
@@ -322,7 +328,7 @@ public struct function $deobfuscateParams(required struct params) {
 /**
  * Loops through the params struct and handle the cases where checkboxes are unchecked.
  */
-public struct function $translateBlankCheckBoxSubmissions(required struct params) {
+private struct function $translateBlankCheckBoxSubmissions(required struct params) {
 	local.rv = arguments.params;
 	for (local.key in local.rv) {
 		if (FindNoCase("($checkbox)", local.key)) {
@@ -343,7 +349,7 @@ public struct function $translateBlankCheckBoxSubmissions(required struct params
 /**
  * Combines date parts into a single value.
  */
-public struct function $translateDatePartSubmissions(required struct params) {
+private struct function $translateDatePartSubmissions(required struct params) {
 	local.rv = arguments.params;
 	local.dates = {};
 	for (local.key in local.rv) {
@@ -408,7 +414,7 @@ public struct function $translateDatePartSubmissions(required struct params) {
 /**
  * Ensure that the controller and action params exist and are camelized.
  */
-public struct function $ensureControllerAndAction(required struct params, required struct route) {
+private struct function $ensureControllerAndAction(required struct params, required struct route) {
 	local.rv = arguments.params;
 	if (!StructKeyExists(local.rv, "controller")) {
 		local.rv.controller = arguments.route.controller;
@@ -440,7 +446,7 @@ public struct function $ensureControllerAndAction(required struct params, requir
 /**
  * Adds in the format variable from the route if it exists.
  */
-public struct function $addRouteFormat(required struct params, required struct route) {
+private struct function $addRouteFormat(required struct params, required struct route) {
 	local.rv = arguments.params;
 	if (StructKeyExists(arguments.route, "formatVariable") && StructKeyExists(arguments.route, "format")) {
 		local.rv[arguments.route.formatVariable] = arguments.route.format;
@@ -451,7 +457,7 @@ public struct function $addRouteFormat(required struct params, required struct r
 /**
  * Adds in the name variable from the route if it exists.
  */
-public struct function $addRouteName(required struct params, required struct route) {
+private struct function $addRouteName(required struct params, required struct route) {
 	local.rv = arguments.params;
 	if (StructKeyExists(arguments.route, "name") && Len(arguments.route.name) && !StructKeyExists(local.rv, "route")) {
 		local.rv.route = arguments.route.name;
@@ -462,7 +468,7 @@ public struct function $addRouteName(required struct params, required struct rou
 /**
  * Determine HTTP verb used in request.
  */
-public string function $getRequestMethod(
+private string function $getRequestMethod(
 	required string request_method = cgi.request_method,
 	required struct FormScope = form
 ) {
