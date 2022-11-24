@@ -940,10 +940,17 @@
 
 	// Create the mapper that will handle creating routes.
 	// Needs to be before $loadRoutes and after $loadPlugins.
-	application.$wheels.mapper = $createObjectFromRoot(path = "wheels", fileName = "Mapper", method = "$init");
+	application.$wheels.mapper = $createObjectFromRoot(
+		path = "wheels", 
+		fileName = "Mapper", 
+		method = "$init",
+		executeArgs = {
+			resourceControllerNaming = application.$wheels.resourceControllerNaming
+		}
+	);
 
 	// Load developer routes and adds the default CFWheels routes (unless the developer has specified not to).
-	$loadRoutes();
+	$loadRoutes(application.$wheels.mapper);
 
 	// Create the dispatcher that will handle all incoming requests.
 	application.$wheels.dispatch = $createObjectFromRoot(path = "wheels", fileName = "Dispatch", method = "$init");

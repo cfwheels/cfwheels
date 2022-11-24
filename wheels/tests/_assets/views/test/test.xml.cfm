@@ -1,1 +1,0 @@
-xml template content

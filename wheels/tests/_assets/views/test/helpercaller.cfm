@@ -1,4 +1,0 @@
-<cfscript>
-	globalHelperFunction();
-	controllerHelperFunction();
-</cfscript>

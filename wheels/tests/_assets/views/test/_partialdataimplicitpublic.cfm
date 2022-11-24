@@ -1,1 +1,0 @@
-<cfoutput>#arguments.fruit#</cfoutput>
