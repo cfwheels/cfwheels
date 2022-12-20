@@ -81,7 +81,7 @@ private struct function $findMatchingRoute(
 	required string path, 
 	string requestMethod = $getRequestMethod(),
 	array routes = application.wheels.routes,
-	object mapper = application.wheels.mapper
+	component mapper = application.wheels.mapper
 ) {
 	// If this is a HEAD request, look for the corresponding GET route
 	if (arguments.requestMethod == 'HEAD') {

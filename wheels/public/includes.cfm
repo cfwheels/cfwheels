@@ -15,6 +15,7 @@ function routes() {
 	return "";
 }
 function routetester(verb, path) {
+	include "helpers.cfm";
 	include "views/routetester.cfm";
 	return "";
 }
@@ -23,6 +24,7 @@ function routetesterprocess(verb, path) {
 	return "";
 }
 function docs() {
+	include "helpers.cfm";
 	include "views/docs.cfm";
 	return "";
 }

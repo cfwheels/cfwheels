@@ -23,11 +23,11 @@ if (StructKeyExists(application.wheels, "docs")) {
 		ArrayAppend(documentScope, {"name" = "migrator", "scope" = application.wheels.migrator});
 		ArrayAppend(
 			documentScope,
-			{"name" = "migration", "scope" = CreateObject("component", "app.wheels.migrator.Migration")}
+			{"name" = "migration", "scope" = CreateObject("component", "wheels.migrator.Migration")}
 		);
 		ArrayAppend(
 			documentScope,
-			{"name" = "tabledefinition", "scope" = CreateObject("component", "app.wheels.migrator.TableDefinition")}
+			{"name" = "tabledefinition", "scope" = CreateObject("component", "wheels.migrator.TableDefinition")}
 		);
 	}
 	// Array of functions to ignore

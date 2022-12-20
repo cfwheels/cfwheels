@@ -11,5 +11,5 @@ if (!StructKeyExists(variables, "$wheelsInclude") || ListFind(variables.$wheelsI
 if (!StructKeyExists(variables, "$wheelsInclude") || ListFind(variables.$wheelsInclude, "util")) {
 	include "util.cfm";
 }
-include "../../global/functions.cfm";
+include "/app/global/functions.cfm";
 </cfscript>

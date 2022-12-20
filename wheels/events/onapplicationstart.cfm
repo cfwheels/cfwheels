@@ -62,7 +62,7 @@
 
 	// Set up containers for routes, caches, settings etc.
 	// TODO remove the static version number
-	application.$wheels.version = "3.0-alpha-1";
+	application.$wheels.version = "3.0.0-alpha-1";
 	try {
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
 	} catch (any e) {
@@ -261,18 +261,18 @@
 	}
 
 	// Configurable paths from /app
-	application.$wheels.eventPath = "events";
-	application.$wheels.controllerPath = "controllers";
-	application.$wheels.modelPath = "models";
-	application.$wheels.pluginPath = "plugins";
-	application.$wheels.pluginComponentPath = "plugins";
-	application.$wheels.viewPath = "views";
+	application.$wheels.eventPath = "/events";
+	application.$wheels.controllerPath = "/controllers";
+	application.$wheels.modelPath = "/models";
+	application.$wheels.pluginPath = "/plugins";
+	application.$wheels.pluginComponentPath = "/plugins";
+	application.$wheels.viewPath = "/views";
 
 	// Configurable paths from webroot
-	application.$wheels.filePath = "files";
-	application.$wheels.imagePath = "images";
-	application.$wheels.javascriptPath = "javascripts";
-	application.$wheels.stylesheetPath = "stylesheets";
+	application.$wheels.filePath = "/files";
+	application.$wheels.imagePath = "/images";
+	application.$wheels.javascriptPath = "/javascripts";
+	application.$wheels.stylesheetPath = "/stylesheets";
 
 	// Test framework settings.
 	application.$wheels.validateTestPackageMetaData = true;

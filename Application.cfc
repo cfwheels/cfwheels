@@ -50,7 +50,7 @@ component {
 		this.env = {};
 		envFilePath = this.appDir & ".env";
 		if (fileExists(envFilePath)) {
-			envFilePath		Struct = {};
+			envStruct = {};
 
 			envFile = fileRead(envFilePath);
 			if (isJSON(envFile)) {

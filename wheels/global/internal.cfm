@@ -427,7 +427,7 @@ public void function $abortInvalidRequest() {
  * Internal function.
  */
 public string function $routeVariables() {
-	return $findRoute(argumentCollection = arguments).variables;
+	return $findRoute(argumentCollection = arguments).foundvariables;
 }
 
 /**
@@ -449,9 +449,9 @@ public struct function $findRoute() {
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.rv = application.wheels.routes[ListGetAt(local.routePos, local.i)];
 			local.foundRoute = StructKeyExists(arguments, "method") && local.rv.methods == arguments.method;
-			local.jEnd = ListLen(local.rv.variables);
+			local.jEnd = ListLen(local.rv.foundvariables);
 			for (local.j = 1; local.j <= local.jEnd; local.j++) {
-				local.variable = ListGetAt(local.rv.variables, local.j);
+				local.variable = ListGetAt(local.rv.foundvariables, local.j);
 				if (!StructKeyExists(arguments, local.variable) || !Len(arguments[local.variable])) {
 					local.foundRoute = false;
 				}
@@ -1169,6 +1169,7 @@ public string function $buildReleaseZip(string version = application.wheels.vers
 	local.path = arguments.directory & local.name & ".zip";
 
 	// directories & files to add to the zip
+	/* Removed wheels from local.include because it is outside the app dir now */
 	local.include = [
 		"config",
 		"controllers",
@@ -1183,7 +1184,6 @@ public string function $buildReleaseZip(string version = application.wheels.vers
 		"stylesheets",
 		"tests",
 		"views",
-		"wheels",
 		"Application.cfc",
 		"box.json",
 		"index.cfm",
@@ -1198,8 +1198,9 @@ public string function $buildReleaseZip(string version = application.wheels.vers
 	local.filter = "*.settings, *.classpath, *.project, *.DS_Store";
 
 	// The change log and license are copied to the wheels directory only for the build.
-	FileCopy(ExpandPath("CHANGELOG.md"), ExpandPath("wheels/CHANGELOG.md"));
-	FileCopy(ExpandPath("LICENSE"), ExpandPath("wheels/LICENSE"));
+	/* Might not need this because the wheels folder is outside the app now */
+	// FileCopy(ExpandPath("CHANGELOG.md"), ExpandPath("wheels/CHANGELOG.md"));
+	// FileCopy(ExpandPath("LICENSE"), ExpandPath("wheels/LICENSE"));
 
 	for (local.i in local.include) {
 		if (FileExists(ExpandPath(local.i))) {
@@ -1221,8 +1222,9 @@ public string function $buildReleaseZip(string version = application.wheels.vers
 	$zip(file = local.path, action = "delete", filter = local.filter, recurse = true);
 
 	// Clean up.
-	FileDelete(ExpandPath("wheels/CHANGELOG.md"));
-	FileDelete(ExpandPath("wheels/LICENSE"));
+	/* Might not need this because the wheels folder is outside the app now */
+	// FileDelete(ExpandPath("wheels/CHANGELOG.md"));
+	// FileDelete(ExpandPath("wheels/LICENSE"));
 
 	return local.path;
 }
