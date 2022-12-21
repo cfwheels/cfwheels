@@ -47,7 +47,7 @@ component {
 	}
 
 	/**
-	 * throw an execption for adapters without its own addPrimaryKeyOptions implementation
+	 * throw an exception for adapters without its own addPrimaryKeyOptions implementation
 	 */
 	public string function addPrimaryKeyOptions() {
 		Throw(message = "The `addPrimaryKeyOptions` must be implented in the storage specific adapter.");

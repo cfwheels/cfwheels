@@ -39,7 +39,7 @@ Route Listings - a quick searchable index. Also lists the internal routes used b
 A POST endpoint for internal use in the above route tester
 
 ### /wheels/docs
-All internal documentation - a merged collection of the core documenation and any other documentation that the developer sees fit to add to their app (assuming it matches the javaDoc style output of the internal functions)
+All internal documentation - a merged collection of the core documentation and any other documentation that the developer sees fit to add to their app (assuming it matches the javaDoc style output of the internal functions)
 
 ### /wheels/packages
 Displays all Core (if using master branch), App & Plugin Test packages. Includes a testrunner which can return multiple formats - html, json, junit

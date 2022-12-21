@@ -310,7 +310,7 @@ struct function $returnInternalDocumentation(required array documentScope, requi
 /**
  * Directly replace a see tag i.e [see:findAll] with it's param equivalent in the other function
  * NB, this is actually a catch 22 as the params for other functions might not yet have been parsed
- * So we do this as a seperate loop at the end.
+ * So we do this as a separate loop at the end.
  *
  * @string String containing [see:otherFunctionName]
  * @name the param name to get from the other function

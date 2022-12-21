@@ -19,7 +19,7 @@ for (mig in migrations) {
 	}
 }
 try {
-	// We're going to fake a migration up and down to get the SQL (using redo doesn't let us seperate the values easily)
+	// We're going to fake a migration up and down to get the SQL (using redo doesn't let us separate the values easily)
 	migration.CFC.up();
 	up = request.$wheelsDebugSQLResult;
 } catch (any e) {

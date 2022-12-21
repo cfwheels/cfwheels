@@ -430,7 +430,7 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 	<cfloop from="1" to="5" index="local.i">
 		<cfset local.gallery = model("gallery").create(
 			userid = "#local.users.id#",
-			title = "#local.users.firstname# Test Galllery #local.i#",
+			title = "#local.users.firstname# Test Gallery #local.i#",
 			description = "test gallery #local.i# for #local.users.firstname#"
 		)>
 

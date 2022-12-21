@@ -390,7 +390,7 @@ public boolean function $runTest(string resultKey = "test", string testname = ""
 	result = {testCase = testCase, numTests = numTests, numFailures = numTestFailures, numErrors = numTestErrors};
 
 	// filter test results based on url params
-	// this is exerimental output for ci pipeline
+	// this is experimental output for ci pipeline
 	if (StructKeyExists(request.wheels.params, "only")) {
 		local.results = ArrayFilter(request[resultkey].results, function(testCase) {
 			return ListFindNoCase(request.wheels.params.only, arguments.testCase.status);

@@ -33,7 +33,7 @@ public void function addErrorToBase(required string message, string name = "") {
  * [section: Model Object]
  * [category: Error Functions]
  *
- * @seenErrors is a private argument not meant to be used by the user, the function uses this to ensure circular dependancy avoidance.
+ * @seenErrors is a private argument not meant to be used by the user, the function uses this to ensure circular dependency avoidance.
  * It does this by storing instances of models that are associations, and not checking associations of those instances because they have already been checked.
  */
 public array function allErrors(boolean includeAssociations = false, array seenErrors = []) {

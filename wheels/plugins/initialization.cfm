@@ -31,8 +31,8 @@ public any function init(
 	$pluginMetaData();
 	/* process mixins */
 	$processMixins();
-	/* dependancies */
-	$determineDependancy();
+	/* dependencies */
+	$determineDependency();
 	return this;
 }
 
@@ -153,7 +153,7 @@ public void function $pluginMetaData() {
 	}
 }
 
-public void function $determineDependancy() {
+public void function $determineDependency() {
 	for (local.iPlugins in variables.$class.plugins) {
 		local.pluginMeta = GetMetadata(variables.$class.plugins[local.iPlugins]);
 		if (StructKeyExists(local.pluginMeta, "dependency")) {
