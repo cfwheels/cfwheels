@@ -244,7 +244,7 @@ public string function paginationLinks(
 		// of the route variables specified, we need to force the
 		// arguments.pageNumberAsParam to be false
 		local.routeConfig = $findRoute(argumentCollection = arguments);
-		if (ListFindNoCase(local.routeConfig.variables, arguments.name)) {
+		if (ListFindNoCase(local.routeConfig.foundvariables, arguments.name)) {
 			arguments.pageNumberAsParam = false;
 		}
 	}
