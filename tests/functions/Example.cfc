@@ -7,12 +7,18 @@ component extends="app.tests.Test" {
 
 	/**
 	 * Executes once before this package's first test case.
+	 *
+	 * [section: Test Model Configuration]
+	 * [category: Callback Functions]
 	 */
 	function packageSetup() {
 	}
 
 	/**
 	 * Executes before every test case.
+	 *
+	 * [section: Test Model Configuration]
+	 * [category: Callback Functions]
 	 */
 	function setup() {
 		super.setup();
@@ -27,6 +33,9 @@ component extends="app.tests.Test" {
 
 	/**
 	 * Executes after every test case.
+	 *
+	 * [section: Test Model Configuration]
+	 * [category: Callback Functions]
 	 */
 	function teardown() {
 		super.teardown();
@@ -34,6 +43,9 @@ component extends="app.tests.Test" {
 
 	/**
 	 * Executes once after this package's last test case.
+	 *
+	 * [section: Test Model Configuration]
+	 * [category: Callback Functions]
 	 */
 	function packageTeardown() {
 	}

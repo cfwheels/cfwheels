@@ -18,6 +18,23 @@ if (StructKeyExists(application.wheels, "docs")) {
 
 	ArrayAppend(documentScope, {"name" = "controller", "scope" = CreateObject("component", "app.controllers.Controller")});
 	ArrayAppend(documentScope, {"name" = "model", "scope" = CreateObject("component", "app.models.Model")});
+	
+	/* 
+		To fix the issue below:
+		https://github.com/cfwheels/cfwheels/issues/1132
+		
+		To add the test framework functions in the documentation. Added the Test componenet in the documentscope.
+
+		As app/test/functions/Example.cfc can be deleted, so check if that component exists then create that component's object.
+		As Example.cfc extends app.tests.Test so we are checking the Example.cfc first as that will include both component's functions.
+	*/
+	try{
+		ArrayAppend(documentScope, {"name" = "test", "scope" = CreateObject("component", "app.tests.functions.Example")});
+	}
+	catch (any exception){
+		ArrayAppend(documentScope, {"name" = "test", "scope" = CreateObject("component", "app.tests.Test")});
+	}
+
 	ArrayAppend(documentScope, {"name" = "mapper", "scope" = application.wheels.mapper});
 	if (application.wheels.enablePluginsComponent) {
 		ArrayAppend(documentScope, {"name" = "migrator", "scope" = application.wheels.migrator});
