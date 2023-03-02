@@ -300,11 +300,29 @@ public string function $createSQLFieldList(
 					(
 						ListFindNoCase(local.classData.propertyList, local.iItem)
 						|| ListFindNoCase(local.classData.calculatedPropertyList, local.iItem)
+						|| ListFindNoCase(local.classData.aliasedPropertyList, local.iItem)
 					)
 					&& !ListFindNoCase(local.addedPropertiesByModel[local.classData.modelName], local.iItem)
 				) {
 					// if expanded column aliases is enabled then mark all columns from included classes as duplicates in order to prepend them with their class name
 					local.flagAsDuplicate = false;
+
+					/* 
+						To fix the issue below:
+						https://github.com/cfwheels/cfwheels/issues/580
+
+						Get the column passed in the select argument with the included table's name prepended to it and replace table name to get the original name.
+
+						For example,
+						If the developer includes "comment" table and passes commentcreatedat column name in select, then get the createdat column in comment table and return that.
+
+						This is only valid for id,createdat,updatedat,deletedat columns.
+					 */
+					if(Len(arguments.include) && ListFindNoCase(local.classData.aliasedPropertyList, local.iItem)){
+						local.iItem = replaceNoCase(local.iItem, local.classData.modelName, '');
+						local.flagAsDuplicate = true;
+					}
+
 					if (arguments.clause == "select") {
 						if (local.duplicateCount) {
 							// always flag as a duplicate when a property with this name has already been added
@@ -707,6 +725,15 @@ public array function $expandedAssociations(required string include, boolean inc
 		local.classAssociations[local.name].columnList = local.associatedClass.$classData().columnList;
 		local.classAssociations[local.name].properties = local.associatedClass.$classData().properties;
 		local.classAssociations[local.name].propertyList = local.associatedClass.$classData().propertyList;
+
+		/* 
+			To fix the issue below:
+			https://github.com/cfwheels/cfwheels/issues/580
+
+			Add aliasedPropertyList in the associated class that will be used to check the duplicate column
+		 */
+		local.classAssociations[local.name].aliasedPropertyList = local.associatedClass.$classData().aliasedPropertyList;
+
 		local.classAssociations[local.name].calculatedProperties = local.associatedClass.$classData().calculatedProperties;
 		local.classAssociations[local.name].calculatedPropertyList = local.associatedClass.$classData().calculatedPropertyList;
 

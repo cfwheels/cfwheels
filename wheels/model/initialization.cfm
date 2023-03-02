@@ -48,6 +48,7 @@ public any function $initModelClass(required string name, required string path) 
 	}
 
 	variables.wheels.class.propertyList = "";
+	variables.wheels.class.aliasedPropertyList = "";
 	variables.wheels.class.columnList = "";
 	variables.wheels.class.calculatedPropertyList = "";
 
@@ -255,6 +256,20 @@ public any function $initModelClass(required string name, required string path) 
 					}
 				}
 				variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, local.property);
+
+				/* 
+					To fix the issue below:
+					https://github.com/cfwheels/cfwheels/issues/580
+
+					Added a new property called aliasedPropertyList in model class that will contain column names list that are prepended with the tablename.
+					For example, if there is a "user" table then the columns "id,createdat,updatedat,deletedat" will be added in the list with "user" prepended to it.
+					
+					Then the list will contain, userid,usercreatedat,userupdatedat,userdeletedat.
+				  */
+				if(ListFindNoCase('id,createdat,updatedat,deletedat', local.property)) {
+					variables.wheels.class.aliasedPropertyList = ListAppend(variables.wheels.class.aliasedPropertyList, variables.wheels.class.modelname & local.property);
+				}
+
 				variables.wheels.class.columnList = ListAppend(
 					variables.wheels.class.columnList,
 					variables.wheels.class.properties[local.property].column

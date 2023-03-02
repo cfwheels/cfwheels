@@ -102,4 +102,10 @@ component extends="wheels.tests.Test" {
 		assert("actual eq expected");
 	}
 
+	function test_select_ambiguous_column_name_using_alias() {
+		loc.query = model("Post").findAll(select="createdat,commentcreatedat", include="Comments");
+	    loc.columnList = ListSort(loc.query.columnList, "text");
+	    assert('loc.columnList eq "commentcreatedat,createdat"');
+	}
+
 }
