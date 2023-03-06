@@ -33,4 +33,10 @@ component extends="wheels.tests.Test" {
 		assert("e eq r");
 	}
 
+	function test_invalid_select_column(){
+		e = raised('model("user").findAll(select="id,email,firstname,lastname,createdat,foo")');
+		r = "Wheels.ColumnNotFound";
+		assert("e eq r");
+	}
+
 }
