@@ -266,10 +266,7 @@ public any function $initModelClass(required string name, required string path) 
 					
 					Then the list will contain, userid,usercreatedat,userupdatedat,userdeletedat.
 				  */
-				if(ListFindNoCase('id,createdat,updatedat,deletedat', local.property)) {
-					variables.wheels.class.aliasedPropertyList = ListAppend(variables.wheels.class.aliasedPropertyList, variables.wheels.class.modelname & local.property);
-				}
-
+				variables.wheels.class.aliasedPropertyList = ListAppend(variables.wheels.class.aliasedPropertyList, variables.wheels.class.modelname & local.property);
 				variables.wheels.class.columnList = ListAppend(
 					variables.wheels.class.columnList,
 					variables.wheels.class.properties[local.property].column

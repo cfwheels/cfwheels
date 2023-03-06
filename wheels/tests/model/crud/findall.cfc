@@ -103,9 +103,9 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_select_ambiguous_column_name_using_alias() {
-		loc.query = model("Post").findAll(select="createdat,commentcreatedat", include="Comments");
+		loc.query = model("Post").findAll(select="createdat,commentcreatedat,commentbody", include="Comments");
 	    loc.columnList = ListSort(loc.query.columnList, "text");
-	    assert('loc.columnList eq "commentcreatedat,createdat"');
+	    assert('loc.columnList eq "commentbody,commentcreatedat,createdat"');
 	}
 
 }
