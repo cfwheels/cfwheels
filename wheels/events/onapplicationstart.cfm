@@ -601,6 +601,7 @@ public void function onApplicationStart() {
 		prepend = "",
 		append = "",
 		prependToPage = "",
+		addActiveClassToPrependedParent = false,
 		prependOnFirst = true,
 		prependOnAnchor = true,
 		appendToPage = "",

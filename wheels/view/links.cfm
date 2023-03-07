@@ -215,6 +215,7 @@ public string function paginationLinks(
 	string prepend,
 	string append,
 	string prependToPage,
+	boolean addActiveClassToPrependedParent,
 	boolean prependOnFirst,
 	boolean prependOnAnchor,
 	string appendToPage,
@@ -228,7 +229,7 @@ public string function paginationLinks(
 	any encode
 ) {
 	$args(name = "paginationLinks", args = arguments);
-	local.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,prependOnAnchor,appendToPage,appendOnLast,appendOnAnchor,classForCurrent,handle,name,showSinglePage,pageNumberAsParam";
+	local.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,addActiveClassToPrependedParent,prependOnFirst,prependOnAnchor,appendToPage,appendOnLast,appendOnAnchor,classForCurrent,handle,name,showSinglePage,pageNumberAsParam";
 	local.linkToArguments = Duplicate(arguments);
 	local.iEnd = ListLen(local.skipArgs);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
@@ -317,7 +318,30 @@ public string function paginationLinks(
 					StructDelete(local.linkToArguments, "class");
 				}
 				if (Len(arguments.prependToPage)) {
-					local.middle &= arguments.prependToPage;
+
+					/* 
+						To fix the bug below:
+						https://github.com/cfwheels/cfwheels/issues/908
+
+						We need the paginationLinks() function to set the active class to the parent of the current page item.
+						The changes made here set the active class to the immediate parent of the current page element in case nested elements are passed in.
+					 */
+					if(local.currentPage == local.i  && arguments.addActiveClassToPrependedParent && findNoCase('class', arguments.prependToPage)) {
+						local.prependToPageElementArr = listToArray(arguments.prependToPage, '<');
+						local.lastElementArrIndex = arrayLen(local.prependToPageElementArr);
+						local.lastElement = local.prependToPageElementArr[local.lastElementArrIndex];
+						local.classStringIndex = findNoCase('class=', local.lastElement) + 6;
+						local.startString = mid(local.lastElement, 1, local.classStringIndex);
+						local.midString = mid(local.lastElement, local.classStringIndex+1, len(local.lastElement)-local.classStringIndex+1);
+						local.activeMidString = 'active ' & local.midString;
+						local.modifiedLastElement = local.startString & local.activeMidString;
+						local.prependToPageElementArr[local.lastElementArrIndex] = local.modifiedLastElement;
+						local.activePrependToPage = arrayToList(local.prependToPageElementArr, '<');
+						local.activePrependToPage = '<' & local.activePrependToPage;
+						local.middle &= local.activePrependToPage;
+					} else {
+						local.middle &= arguments.prependToPage;
+					}
 				}
 				if (local.currentPage != local.i || arguments.linkToCurrentPage) {
 					local.middle &= linkTo(argumentCollection = local.linkToArguments);
