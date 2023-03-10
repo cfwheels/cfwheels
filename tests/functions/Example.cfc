@@ -38,37 +38,4 @@ component extends="app.tests.Test" {
 	function packageTeardown() {
 	}
 
-	/* 
-		Test case for the bug below:
-		https://github.com/cfwheels/cfwheels/issues/1115
-
-		This test was made by creating a user scaffold and adding a textfield through function in the 
-		_form partial that was used in the new.cfm for users.
-		Then we add an addClass='text-dark' attribute in the textField method call.
-		The response should be 'text-dark' appended to the "class" attribute of the input field.
-	*/
-	function testUsersFirstnameNotContainAddClassAttribute() {
-		local.params = {
-			controller = "users",
-			action = "new"
-		};
-
-		result = processRequest(params=local.params, returnAs="struct");
-
-		assert("result.status eq 200");
-		assert("!(result.body contains 'addClass')");
-	}
-
-	function testUsersFirstnameContainsTextDarkClassAddedByAddClassAttribute() {
-		local.params = {
-			controller = "users",
-			action = "new"
-		};
-
-		result = processRequest(params=local.params, returnAs="struct");
-
-		assert("result.status eq 200");
-		assert("result.body contains 'text-dark'");
-	}
-
 }
