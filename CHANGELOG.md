@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1201-Issue #929 validate not nullable columns with default [#1201](https://github.com/cfwheels/cfwheels/pull/1201) - [Adam Chapman]
 - PR-1202-Remove old oracle test workaround [#1202](https://github.com/cfwheels/cfwheels/pull/1202) - [Adam Chapman]
 - PR-1205-issue-1182-adds-simplelock-to-sql-caching [#1205](https://github.com/cfwheels/cfwheels/pull/1205) - [Adam Chapman]
+- PR-1222-Findall() performance bottleneck [#1222](https://github.com/cfwheels/cfwheels/pull/1222) - [Adam Chapman]
 
 <!-- ### View Enhancements -->
 
