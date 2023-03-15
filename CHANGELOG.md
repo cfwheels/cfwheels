@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1201-Issue #929 validate not nullable columns with default [#1201](https://github.com/cfwheels/cfwheels/pull/1201) - [Adam Chapman]
 - PR-1202-Remove old oracle test workaround [#1202](https://github.com/cfwheels/cfwheels/pull/1202) - [Adam Chapman]
 - PR-1205-issue-1182-adds-simplelock-to-sql-caching [#1205](https://github.com/cfwheels/cfwheels/pull/1205) - [Adam Chapman]
+- PR-1222-Findall() performance bottleneck [#1222](https://github.com/cfwheels/cfwheels/pull/1222) - [Adam Chapman]
 
 <!-- ### View Enhancements -->
 
@@ -31,7 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1200-Update the docker-compose command to docker compose v2 syntax [#1200](https://github.com/cfwheels/cfwheels/pull/1200/) - [Adam Chapman, Peter Amiri]
 - PR-1204-Add Lucee 6 to test matrix on local Docker test suite [#1204](https://github.com/cfwheels/cfwheels/pull/1204/) - [Peter Amiri]
 - PR-1203-ensure testing params maintained [#1203](https://github.com/cfwheels/cfwheels/pull/1203) - [Adam Chapman]
-- PR-1222-Findall() performance bottleneck [#1222](https://github.com/cfwheels/cfwheels/pull/1222) - [Adam Chapman]
 
 <!-- ### Guides -->
 
