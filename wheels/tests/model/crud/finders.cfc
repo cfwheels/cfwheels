@@ -3,6 +3,8 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		user = model("user");
 		shop = model("shop");
+		isACF2016 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2016;
+		isACF2018 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2018;
 	}
 
 	function test_select_distinct_addresses() {
@@ -158,6 +160,17 @@ component extends="wheels.tests.Test" {
 		r = "Wheels.IncorrectArgumentValue";
 		debug('q', false);
 		assert('q eq r');
+	}
+
+	function test_findAll_supports_inbuilt_returnType() {
+		// returnType wasn't supported until ACF2021
+		if (isACF2016 || isACF2018) {
+			return;
+		}
+		actual = user.findAll(returnType = "struct", keyColumn = "id");
+
+		assert('IsStruct(actual)');
+		assert("IsStruct(actual['1'])");
 	}
 
 	function test_exists_by_key_valid() {

@@ -318,29 +318,37 @@ public any function findAll(
 			) {
 				local.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
 			}
+			// optional arguments
+			for (local.argumentName in ["returnType","keyColumn"]) {
+				if (StructKeyExists(arguments, local.argumentName)) {
+					local.finderArgs[local.argumentName] = arguments[local.argumentName];
+				}
+			}
 			local.findAll = variables.wheels.class.adapter.$querySetup(argumentCollection = local.finderArgs);
 			request.wheels[variables.wheels.class.modelName][local.queryKey] = local.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 		}
 
+		// return using the lucee query returntype if the argument is present
+		if (StructKeyExists(arguments, "returnType")) {
+			return local.findAll.query;
+		}
+
 		switch (arguments.returnAs) {
 			case "sql":
-				local.rv = local.findAll.result.sql;
-				break;
+				return local.findAll.result.sql;
 			case "query":
 				local.rv = local.findAll.query;
 				// execute callbacks unless we're currently running the count or primary key pagination queries (we only want the callback to run when we have the actual data)
 				if (local.rv.columnList != "wheelsqueryresult" && !arguments.$limit && !arguments.$offset) {
 					$callback("afterFind", arguments.callbacks, local.rv);
 				}
-				break;
+				return local.rv;
 			case "struct":
 			case "structs":
-				local.rv = $serializeQueryToStructs(query = local.findAll.query, argumentCollection = arguments);
-				break;
+				return $serializeQueryToStructs(query = local.findAll.query, argumentCollection = arguments);
 			case "object":
 			case "objects":
-				local.rv = $serializeQueryToObjects(query = local.findAll.query, argumentCollection = arguments);
-				break;
+				return $serializeQueryToObjects(query = local.findAll.query, argumentCollection = arguments);
 			default:
 				if (application.wheels.showErrorInformation) {
 					Throw(
@@ -351,7 +359,6 @@ public any function findAll(
 				}
 		}
 	}
-	return local.rv;
 }
 
 /**
