@@ -335,20 +335,23 @@ public any function findAll(
 
 		switch (arguments.returnAs) {
 			case "sql":
-				return local.findAll.result.sql;
+				local.rv = local.findAll.result.sql;
+				break;
 			case "query":
 				local.rv = local.findAll.query;
 				// execute callbacks unless we're currently running the count or primary key pagination queries (we only want the callback to run when we have the actual data)
 				if (local.rv.columnList != "wheelsqueryresult" && !arguments.$limit && !arguments.$offset) {
 					$callback("afterFind", arguments.callbacks, local.rv);
 				}
-				return local.rv;
+				break;
 			case "struct":
 			case "structs":
-				return $serializeQueryToStructs(query = local.findAll.query, argumentCollection = arguments);
+				local.rv = $serializeQueryToStructs(query = local.findAll.query, argumentCollection = arguments);
+				break;
 			case "object":
 			case "objects":
-				return $serializeQueryToObjects(query = local.findAll.query, argumentCollection = arguments);
+				local.rv = $serializeQueryToObjects(query = local.findAll.query, argumentCollection = arguments);
+				break;
 			default:
 				if (application.wheels.showErrorInformation) {
 					Throw(
@@ -359,6 +362,7 @@ public any function findAll(
 				}
 		}
 	}
+	return local.rv;
 }
 
 /**
