@@ -328,7 +328,7 @@ public any function findAll(
 			request.wheels[variables.wheels.class.modelName][local.queryKey] = local.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 		}
 
-		// return using the lucee query returntype if the argument is present
+		// return using the native cfml query returntype if the argument is present
 		if (StructKeyExists(arguments, "returnType")) {
 			return local.findAll.query;
 		}

@@ -173,6 +173,14 @@ component extends="wheels.tests.Test" {
 		assert("IsStruct(actual['1'])");
 	}
 
+	function test_findAll_inbuilt_returnType_takes_precedence_over_returnAs() {
+		if (isACF2016 || isACF2018) {
+			return;
+		}
+		actual = user.findAll(returnType = "array", returnAs = "query");
+		assert('IsArray(actual)');
+	}
+
 	function test_exists_by_key_valid() {
 		e = user.findOne(where = "lastname = 'Petruzzi'");
 		r = user.exists(e.id);
