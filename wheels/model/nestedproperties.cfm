@@ -32,11 +32,7 @@ public void function nestedProperties(
 
 			// Add to the white list if it exists.
 			if (StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList")) {
-				variables.wheels.class.accessibleProperties.whiteList = ListAppend(
-					variables.wheels.class.accessibleProperties.whiteList,
-					local.association,
-					","
-				);
+				variables.wheels.class.accessibleProperties.whiteList[local.association] = 1;
 			}
 		} else if (application.wheels.showErrorInformation) {
 			Throw(

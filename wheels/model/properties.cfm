@@ -18,7 +18,7 @@ public void function accessibleProperties(string properties = "") {
 			arguments.properties = ListAppend(arguments.properties, local.association);
 		}
 	}
-	variables.wheels.class.accessibleProperties.whiteList = $listClean(arguments.properties);
+	variables.wheels.class.accessibleProperties.whiteList = $listToStruct(arguments.properties);
 }
 
 /**
@@ -33,7 +33,7 @@ public void function protectedProperties(string properties = "") {
 	if (StructKeyExists(arguments, "property")) {
 		arguments.properties = ListAppend(arguments.properties, arguments.property);
 	}
-	variables.wheels.class.accessibleProperties.blackList = $listClean(arguments.properties);
+	variables.wheels.class.accessibleProperties.blackList = $listToStruct(arguments.properties);
 }
 
 /**
@@ -472,14 +472,14 @@ public any function $setProperties(
 			if (
 				arguments.$useFilterLists &&
 				StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList")
-				&& !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, local.key)
+				&& !StructKeyExists(variables.wheels.class.accessibleProperties.whiteList, local.key)
 			) {
 				local.accessible = false;
 			}
 			if (
 				arguments.$useFilterLists
 				&& StructKeyExists(variables.wheels.class.accessibleProperties, "blackList")
-				&& ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, local.key)
+				&& StructKeyExists(variables.wheels.class.accessibleProperties.blackList, local.key)
 			) {
 				local.accessible = false;
 			}

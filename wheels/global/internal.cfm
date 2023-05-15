@@ -176,6 +176,17 @@ public any function $listClean(required string list, string delim = ",", string 
 }
 
 /**
+ * Converts a comma delimted list to a struct
+ */
+public struct function $listToStruct(required string list, string value = 1) {
+	local.rv = {};
+	for (local.key in $listClean(list = arguments.list, returnAs = "array")) {
+		local.rv[local.key] = arguments.value;
+	}
+	return local.rv;
+}
+
+/**
  * Creates a unique string based on any arguments passed in (used as a key for caching mostly).
  */
 public string function $hashedKey() {

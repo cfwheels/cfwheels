@@ -154,15 +154,17 @@ public struct function $queryRowToStruct(
 	boolean base = "true"
 ) {
 	local.rv = {};
-	local.allProperties = ListAppend(variables.wheels.class.propertyList, variables.wheels.class.calculatedPropertyList);
-	local.iEnd = ListLen(local.allProperties);
+	local.allProperties = ListToArray(ListAppend(variables.wheels.class.propertyList, variables.wheels.class.calculatedPropertyList));
+	// a struct key is much faster than a list element
+	local.columnStruct = $listToStruct(arguments.properties.columnList);
+	local.iEnd = ArrayLen(local.allProperties);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		// Wrap in try/catch because coldfusion has a problem with empty strings in queries for bit types.
 		try {
-			local.item = ListGetAt(local.allProperties, local.i);
-			if (!arguments.base && ListFindNoCase(arguments.properties.columnList, arguments.name & local.item)) {
+			local.item = local.allProperties[local.i];
+			if (!arguments.base && StructKeyExists(local.columnStruct, arguments.name & local.item)) {
 				local.rv[local.item] = arguments.properties[arguments.name & local.item][arguments.row];
-			} else if (ListFindNoCase(arguments.properties.columnList, local.item)) {
+			} else if (StructKeyExists(local.columnStruct, local.item)) {
 				local.rv[local.item] = arguments.properties[local.item][arguments.row];
 			}
 		} catch (any e) {
