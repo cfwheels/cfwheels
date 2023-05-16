@@ -180,7 +180,8 @@ public any function $listClean(required string list, string delim = ",", string 
  */
 public struct function $listToStruct(required string list, string value = 1) {
 	local.rv = {};
-	for (local.key in $listClean(list = arguments.list, returnAs = "array")) {
+	local.cleanList = $listClean(list = arguments.list, returnAs = "array");
+	for (local.key in local.cleanList) {
 		local.rv[local.key] = arguments.value;
 	}
 	return local.rv;
