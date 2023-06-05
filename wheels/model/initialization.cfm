@@ -97,7 +97,10 @@ public any function $initModelClass(required string name, required string path) 
 		local.columns = variables.wheels.class.adapter.$getColumns(tableName());
 
 		// do not process columns already assigned to a calculated property
-		local.processedColumns = Duplicate(variables.wheels.class.calculatedProperties);
+		local.processedColumns = {};
+		for (local.key in StructKeyArray(variables.wheels.class.calculatedProperties)) {
+			local.processedColumns[local.key] = true;
+		}
 
 		local.iEnd = local.columns.recordCount;
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
