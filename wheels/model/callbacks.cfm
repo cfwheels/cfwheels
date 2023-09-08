@@ -307,36 +307,22 @@ public boolean function $callback(required string type, required boolean execute
 public boolean function $queryCallback(required string method, required query collection) {
 	// We return true by default, will be overridden only if the callback method returns false on one of the iterations.
 	local.rv = true;
-
 	// Loop over all query rows and execute the callback method for each.
-	local.iEnd = arguments.collection.recordCount;
-	for (local.i = 1; local.i <= local.iEnd; local.i++) {
-		// Get the values in the current query row so that we can pass them in as arguments to the callback method.
-		local.invokeArgs = {};
-		local.jEnd = ListLen(arguments.collection.columnList);
-		for (local.j = 1; local.j <= local.jEnd; local.j++) {
-			local.item = ListGetAt(arguments.collection.columnList, local.j);
-
-			// Coldfusion has a problem with empty strings in queries for bit types.
-			try {
-				local.invokeArgs[local.item] = arguments.collection[local.item][local.i];
-			} catch (any e) {
-				local.invokeArgs[local.item] = "";
-			}
-		}
-
+	local.rowNumber = 0;
+	for (local.row in arguments.collection) {
+		local.rowNumber++;
 		// Execute the callback method.
-		local.result = $invoke(method = arguments.method, invokeArgs = local.invokeArgs);
+		local.result = $invoke(method = arguments.method, invokeArgs = local.row);
 
 		if (StructKeyExists(local, "result")) {
 			if (IsStruct(local.result)) {
 				// The arguments struct was returned so we need to add the changed values to the query row.
 				for (local.key in local.result) {
 					// Add a new column to the query if a value was passed back for a column that did not exist originally.
-					if (!ListFindNoCase(arguments.collection.columnList, local.key)) {
+					if (!QueryKeyExists(arguments.collection, local.key)) {
 						QueryAddColumn(arguments.collection, local.key, []);
 					}
-					arguments.collection[local.key][local.i] = local.result[local.key];
+					arguments.collection[local.key][local.rowNumber] = local.result[local.key];
 				}
 			} else if (IsBoolean(local.result) && !local.result) {
 				// Break the loop and return false if the callback returned false.
