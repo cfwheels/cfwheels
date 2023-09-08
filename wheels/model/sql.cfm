@@ -348,6 +348,22 @@ public string function $createSQLFieldList(
 					break;
 				}
 			}
+
+			/* 
+				To fix the bug below:
+				https://github.com/cfwheels/cfwheels/issues/591
+
+				Added an exception in case the column specified in the select or group argument does not exist in the database.
+				This will only be in case when not using "table.column" or "column AS something" since in those cases Wheels passes through the select clause unchanged.
+			*/
+			if (application.wheels.showErrorInformation && !Len(local.toAppend) && arguments.clause == "select" && ListFindNoCase(local.addedPropertiesByModel[local.classData.modelName], local.iItem) EQ 0) {
+				Throw(
+					type = "Wheels.ColumnNotFound",
+					message = "Wheels looked for the column mapped to the `#local.iItem#` property but couldn't find it in the database table.",
+					extendedInfo = "Verify the `#arguments.clause#` argument and/or your property to column mappings done with the `property` method inside the model's `config` method to make sure everything is correct."
+				);
+			}
+			
 			if (Len(local.toAppend)) {
 				local.rv = ListAppend(local.rv, local.toAppend);
 			}
