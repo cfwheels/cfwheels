@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1205-issue-1182-adds-simplelock-to-sql-caching [#1205](https://github.com/cfwheels/cfwheels/pull/1205) - [Adam Chapman]
 - PR-1222-Findall() performance bottleneck [#1222](https://github.com/cfwheels/cfwheels/pull/1222) - [Adam Chapman]
 - PR-1223-refactor-queryCallback-with-inbuilt-query-functions [#1223](https://github.com/cfwheels/cfwheels/pull/1223) - [Adam Chapman]
+- PR-1226-Invalid column not throwing exception in select argument [#1226](https://github.com/cfwheels/cfwheels/pull/1226) - [Zain Ul Abideen]
 
 <!-- ### View Enhancements -->
 
