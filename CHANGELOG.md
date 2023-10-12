@@ -22,7 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ### View Enhancements -->
 
-<!-- ### Bug Fixes -->
+### Bug Fixes
+- PR-1227-Return a numeric value if the primary key is Numeric [#1227]
+(https://github.com/cfwheels/cfwheels/pull/1227) - [Zain Ul Abideen]
 
 ### Miscellaneous
 - PR-1175-restoreTestRunnerApplicationScope setting [#1175](https://github.com/cfwheels/cfwheels/pull/1175) - [Adam Chapman]
