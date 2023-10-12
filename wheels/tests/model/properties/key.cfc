@@ -30,14 +30,11 @@ component extends="wheels.tests.Test" {
 		author = model("author").findByKey(1);
 		authorArr = [];
 
-		arrayAppend(authorArr, {
-			"id": author.key(),
-			"firstname": author.firstname,
-			"lastname": author.lastname
-		});
-		
-		responseJSON = serializeJSON(authorArr);
+		ArrayAppend(authorArr, {"id" = author.key(), "firstname" = author.firstname, "lastname" = author.lastname});
+
+		responseJSON = SerializeJSON(authorArr);
 
 		assert("find('""id"":1',responseJSON)");
 	}
+
 }
