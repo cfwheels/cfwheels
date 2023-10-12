@@ -31,5 +31,11 @@ component extends="wheels.tests.Test" {
 		r = controller("dummy").paginationLinks(classForCurrent = "active", handle = "testPaginationLinksQuery");
 		assert(Find("<span class=""active"">2</span>", r));
 	}
-
+	
+	function test_addclass_attribute_adds_value_in_class() {
+		args.addClass = "newClass";
+		e = _controller.$tag(argumentCollection = args);
+		r = '<input class="wheelstest newClass" id="inputtest" maxlength="50" name="inputtest" onmouseover="function(this){this.focus();}" size="30" type="text">';
+		assert("e eq r");
+	}
 }
