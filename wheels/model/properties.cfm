@@ -202,7 +202,17 @@ public string function key(boolean $persisted = false, boolean $returnTickCountW
 	if (!Len(local.rv) && arguments.$returnTickCountWhenNew) {
 		local.rv = variables.wheels.tickCountId;
 	}
-	return local.rv;
+
+	/* To fix the bug below:
+	   https://github.com/cfwheels/cfwheels/issues/1029
+
+	   This will return a numeric value if the primary key is Numeric and a String otherwise.
+	 */
+	if(isNumeric(local.rv)){
+		return JavaCast("int", local.rv);
+	} else {
+		return local.rv;
+	}
 }
 
 /**
