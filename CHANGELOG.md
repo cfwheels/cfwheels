@@ -36,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1200-Update the docker-compose command to docker compose v2 syntax [#1200](https://github.com/cfwheels/cfwheels/pull/1200/) - [Adam Chapman, Peter Amiri]
 - PR-1204-Add Lucee 6 to test matrix on local Docker test suite [#1204](https://github.com/cfwheels/cfwheels/pull/1204/) - [Peter Amiri]
 - PR-1203-ensure testing params maintained [#1203](https://github.com/cfwheels/cfwheels/pull/1203) - [Adam Chapman]
+- PR-1228-Adding addClass attribute in the function textField [#1228]
+(https://github.com/cfwheels/cfwheels/pull/1228) - [Zain Ul Abideen]
 
 <!-- ### Guides -->
 
