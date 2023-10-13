@@ -13,7 +13,7 @@
 			}
 	},
 	"app":{
-			"cfengine":"adobe@2021",
+			"cfengine":"adobe@2021.0.11+330247",
 			"libDirs":"docker/adobe2021/lib"
 	}
 }

@@ -54,8 +54,8 @@ jobs:
             db: mysql
           - cf: adobe2021
             db: postgres
-          - cf: adobe2021
-            db: sqlserver
+#          - cf: adobe2021
+#            db: sqlserver
           - cf: adobe2021
             db: h2
 

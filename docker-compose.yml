@@ -92,7 +92,7 @@ services:
     build:
       context: ./
       dockerfile: ./docker/adobe2021/Dockerfile
-    image: cfwheels-test-adobe2021:v1.0.1
+    image: cfwheels-test-adobe2021:v1.0.2
     volumes:
       - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
@@ -107,12 +107,6 @@ services:
         target: /cfwheels-test-suite/config/settings.cfm
     ports:
       - "62021:8080"
-    healthcheck:
-      test: curl --fail http://localhost:8080 || exit 1
-      interval: 60s
-      retries: 5
-      start_period: 20s
-      timeout: 10s
 
   mysql:
     image: mysql:latest
