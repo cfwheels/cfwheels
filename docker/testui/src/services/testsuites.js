@@ -7,8 +7,7 @@ for (var s = 0; s < servers.length; s++){
 	for (var d = 0; d < databases.length; d++){
 		if ((servers[s].servername === 'Adobe 2016' && databases[d].databasename === 'H2') ||
 			(servers[s].servername === 'Adobe 2018' && databases[d].databasename === 'H2') ||
-			(servers[s].servername === 'Adobe 2021' && databases[d].databasename === 'H2') ||
-			(servers[s].servername === 'Adobe 2021' && databases[d].databasename === 'MySQL')) {
+			(servers[s].servername === 'Adobe 2021' && databases[d].databasename === 'H2')) {
 			continue;
 		}
 		testsuites.push({
