@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Model Enhancements
 - PR-1183-Allow datasource argument in finders [#1183](https://github.com/cfwheels/cfwheels/pull/1183) - [Adam Chapman]
+- PR-1230-Add Adobe 2021 Support to local Docker and GitHub Actions testing - [#1230]
+(https://github.com/cfwheels/cfwheels/pull/1230) - Peter Amiri
 
 <!-- ### View Enhancements -->
 
