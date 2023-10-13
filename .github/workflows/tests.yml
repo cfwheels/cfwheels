@@ -34,8 +34,8 @@ jobs:
             db: sqlserver
 #          - cf: lucee6
 #            db: h2
-          - cf: adobe2016
-            db: mysql
+#          - cf: adobe2016
+#            db: mysql
           - cf: adobe2016
             db: postgres
           - cf: adobe2016
