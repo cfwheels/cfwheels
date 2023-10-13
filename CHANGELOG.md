@@ -38,6 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1203-ensure testing params maintained [#1203](https://github.com/cfwheels/cfwheels/pull/1203) - [Adam Chapman]
 - PR-1228-Adding addClass attribute in the function textField [#1228]
 (https://github.com/cfwheels/cfwheels/pull/1228) - [Zain Ul Abideen]
+- PR-1230-Add Adobe 2021 Support to local Docker and GitHub Actions testing - [#1230]
+(https://github.com/cfwheels/cfwheels/pull/1230) - Peter Amiri
 
 <!-- ### Guides -->
 
