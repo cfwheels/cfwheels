@@ -17,8 +17,8 @@
     "vue-router": "^3.4.9"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~5.0.0",
-	"@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-babel": "~5.0.8",
+	"@vue/cli-plugin-router": "~5.0.8",
 	"@vue/cli-plugin-vuex": "~5.0.0",
 	"@vue/cli-service": "~5.0.0",
 	"vue-cli-plugin-tailwind": "~3.0.0",
