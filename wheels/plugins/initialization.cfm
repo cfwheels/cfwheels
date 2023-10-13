@@ -38,33 +38,34 @@ public any function init(
 
 public struct function $pluginFolders() {
 	local.plugins = {};
+	local.folders = $folders();
 	// Within plugin folders, grab info about each plugin and package up into a struct.
-	for (local.folder in $folders()) {
+	for (i = 1; i <= local.folders.recordCount; i++) {
 		// For *nix, we need a case-sensitive name for the plugin component, so we must reference its CFC file name.
-		local.subfolder = DirectoryList("#local.folder.directory#/#local.folder.name#", false, "query");
+		local.subfolder = DirectoryList("#local.folders["directory"][i]#/#local.folders["name"][i]#", false, "query");
 		local.pluginCfc = $query(
 			dbtype = "query",
 			query = local.subfolder,
-			sql = "SELECT name FROM query WHERE LOWER(name) = '#LCase(local.folder.name)#.cfc'"
+			sql = "SELECT name FROM query WHERE LOWER(name) = '#LCase(local.folders["name"][i])#.cfc'"
 		);
 		local.temp = {};
 		local.temp.name = Replace(local.pluginCfc.name, ".cfc", "");
-		local.temp.folderPath = $fullPathToPlugin(local.folder.name);
-		local.temp.componentName = local.folder.name & "." & Replace(local.pluginCfc.name, ".cfc", "");
-		local.plugins[local.folder.name] = local.temp;
+		local.temp.folderPath = $fullPathToPlugin(local.folders["name"][i]);
+		local.temp.componentName = local.folders["name"][i] & "." & Replace(local.pluginCfc.name, ".cfc", "");
+		local.plugins[local.folders["name"][i]] = local.temp;
 	}
 	return local.plugins;
 }
 
 public struct function $pluginFiles() {
 	// get all plugin zip files
-	local.files = $files();
 	local.plugins = {};
-	for (local.i in local.files) {
-		local.name = ListFirst(local.i.name, "-");
+	local.files = $files();
+	for (i = 1; i <= local.files.recordCount; i++) {
+		local.name = ListFirst(local.files["name"][i], "-");
 		local.temp = {};
-		local.temp.file = $fullPathToPlugin(local.i.name);
-		local.temp.name = local.i.name;
+		local.temp.file = $fullPathToPlugin(local.files["name"][i]);
+		local.temp.name = local.files["name"][i];
 		local.temp.folderPath = $fullPathToPlugin(LCase(local.name));
 		local.temp.folderExists = DirectoryExists(local.temp.folderPath);
 		local.plugins[local.name] = local.temp;

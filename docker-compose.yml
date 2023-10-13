@@ -3,7 +3,7 @@ version: "3.0"
 services:
   testui:
     build:
-      context: ./src/docker/test-ui
+      context: ./docker/testui
     image: cfwheels-testui:v1
     ports:
       - "3000:8080"
@@ -11,50 +11,102 @@ services:
   lucee5:
     build:
       context: ./
-      dockerfile: ./src/docker/Lucee5.Dockerfile
-    image: cfwheels-test-lucee5:v1
+      dockerfile: ./docker/lucee5/Dockerfile
+    image: cfwheels-test-lucee5:v1.0.6
     volumes:
-      # uncomment when developing with this docker-compose file
-      # - ./:/cfwheels-test-suite
-      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - ./:/cfwheels-test-suite
+      - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - type: bind
+        source: ./docker/lucee5/box.json
+        target: /cfwheels-test-suite/box.json
+      - type: bind
+        source: ./docker/lucee5/server.json
+        target: /cfwheels-test-suite/server.json
+      - type: bind
+        source: ./docker/lucee5/settings.cfm
+        target: /cfwheels-test-suite/config/settings.cfm
     ports:
       - "60005:8080"
 
   lucee6:
     build:
       context: ./
-      dockerfile: ./src/docker/Lucee6.Dockerfile
-    image: cfwheels-test-lucee6:v1
+      dockerfile: ./docker/lucee6/Dockerfile
+    image: cfwheels-test-lucee6:v1.0.2
     volumes:
-      # uncomment when developing with this docker-compose file
-      # - ./:/cfwheels-test-suite
-      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - ./:/cfwheels-test-suite
+      - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - type: bind
+        source: ./docker/lucee6/box.json
+        target: /cfwheels-test-suite/box.json
+      - type: bind
+        source: ./docker/lucee6/server.json
+        target: /cfwheels-test-suite/server.json
+      - type: bind
+        source: ./docker/lucee5/settings.cfm
+        target: /cfwheels-test-suite/config/settings.cfm
     ports:
       - "60006:8080"
 
   adobe2016:
     build:
       context: ./
-      dockerfile: ./src/docker/Adobe2016.Dockerfile
-    image: cfwheels-test-adobe2016:v1
+      dockerfile: ./docker/adobe2016/Dockerfile
+    image: cfwheels-test-adobe2016:v1.0.2
     volumes:
-      # uncomment when developing with this docker-compose file
-      # - ./:/cfwheels-test-suite
+      - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - type: bind
+        source: ./docker/adobe2016/box.json
+        target: /cfwheels-test-suite/box.json
+      - type: bind
+        source: ./docker/adobe2016/server.json
+        target: /cfwheels-test-suite/server.json
+      - type: bind
+        source: ./docker/adobe2016/settings.cfm
+        target: /cfwheels-test-suite/config/settings.cfm
     ports:
       - "62016:8080"
 
   adobe2018:
     build:
       context: ./
-      dockerfile: ./src/docker/Adobe2018.Dockerfile
-    image: cfwheels-test-adobe2018:v1
+      dockerfile: ./docker/adobe2018/Dockerfile
+    image: cfwheels-test-adobe2018:v1.0.2
     volumes:
-      # uncomment when developing with this docker-compose file
-      # - ./:/cfwheels-test-suite
-      - ./.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - ./:/cfwheels-test-suite
+      - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - type: bind
+        source: ./docker/adobe2018/box.json
+        target: /cfwheels-test-suite/box.json
+      - type: bind
+        source: ./docker/adobe2018/server.json
+        target: /cfwheels-test-suite/server.json
+      - type: bind
+        source: ./docker/adobe2018/settings.cfm
+        target: /cfwheels-test-suite/config/settings.cfm
     ports:
       - "62018:8080"
+
+  adobe2021:
+    build:
+      context: ./
+      dockerfile: ./docker/adobe2021/Dockerfile
+    image: cfwheels-test-adobe2021:v1.0.2
+    volumes:
+      - ./:/cfwheels-test-suite
+      - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - type: bind
+        source: ./docker/adobe2021/box.json
+        target: /cfwheels-test-suite/box.json
+      - type: bind
+        source: ./docker/adobe2021/server.json
+        target: /cfwheels-test-suite/server.json
+      - type: bind
+        source: ./docker/adobe2021/settings.cfm
+        target: /cfwheels-test-suite/config/settings.cfm
+    ports:
+      - "62021:8080"
 
   mysql:
     image: mysql:latest
@@ -77,11 +129,9 @@ services:
   sqlserver:
     build:
       context: ./
-      dockerfile: ./src/docker/SQLServer.Dockerfile
-    image: cfwheels-sqlserver:v1
+      dockerfile: ./docker/sqlserver/Dockerfile
+    image: cfwheels-sqlserver:v1.0.1
     environment:
       MSSQL_SA_PASSWORD: x!bsT8t60yo0cTVTPq
       ACCEPT_EULA: Y
       MSSQL_PID: Developer
-    # volumes:
-      # - ./src/docker:/src/docker

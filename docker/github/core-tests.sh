@@ -17,6 +17,25 @@ echo ${result_file}
 
 http_code=$(curl -s -o "${result_file}" --write-out "%{http_code}" "${test_url}";)
 
+echo "\nls /tmp/:"
+ls /tmp -la
+
+echo "\nResult file:"
+cat ${result_file}
+
+echo "\nHTTP Code Pulled Down:"
+echo ${http_code}
+
+echo "\npwd:"
+pwd
+
+echo "\nls:"
+ls -la
+
+echo "\nwhich box"
+which box
+
+echo "\n"
 cat $result_file
 
 if [ "$http_code" -eq "200" ]; then
