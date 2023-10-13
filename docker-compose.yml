@@ -52,7 +52,7 @@ services:
     build:
       context: ./
       dockerfile: ./docker/adobe2016/Dockerfile
-    image: cfwheels-test-adobe2016:v1
+    image: cfwheels-test-adobe2016:v1.0.1
     volumes:
       - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
