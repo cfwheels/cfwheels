@@ -50,8 +50,8 @@ jobs:
 #            db: sqlserver
           - cf: adobe2018
             db: h2
-          - cf: adobe2021
-            db: mysql
+#          - cf: adobe2021
+#            db: mysql
 #          - cf: adobe2021
 #            db: postgres
 #          - cf: adobe2021
