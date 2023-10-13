@@ -12,7 +12,7 @@ services:
     build:
       context: ./
       dockerfile: ./docker/lucee5/Dockerfile
-    image: cfwheels-test-lucee5:v1
+    image: cfwheels-test-lucee5:v1.0.6
     volumes:
       - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
@@ -22,6 +22,12 @@ services:
       - type: bind
         source: ./docker/lucee5/server.json
         target: /cfwheels-test-suite/server.json
+      - type: bind
+        source: ./docker/lucee5/CFConfig.json
+        target: /cfwheels-test-suite/CFConfig.json
+      - type: bind
+        source: ./docker/lucee5/settings.cfm
+        target: /cfwheels-test-suite/config/settings.cfm
     ports:
       - "60005:8080"
 
