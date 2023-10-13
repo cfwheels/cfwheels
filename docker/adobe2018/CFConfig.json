@@ -6,25 +6,6 @@
 	"adminAllowedIPList": "*.*.*.*",
 	"secureProfileEnabled": false,
 	"datasources": {
-		"wheelstestdb": {
-			"allowAlter": true,
-			"allowCreate": true,
-			"allowDelete": true,
-			"allowDrop": true,
-			"allowGrant": true,
-			"allowInsert": true,
-			"allowRevoke": true,
-			"allowSelect": true,
-			"allowUpdate": true,
-			"class": "com.mysql.cj.jdbc.Driver",
-			"database": "wheelstestdb",
-			"dbdriver": "mysql",
-			"dsn": "jdbc:mysql://{host}:{port}/{database}",
-			"host": "mysql",
-			"password": "wheelstestdb",
-			"port": "3306",
-			"username": "wheelstestdb"
-		},
 		"wheelstestdb_mysql": {
 			"allowAlter": true,
 			"allowCreate": true,
