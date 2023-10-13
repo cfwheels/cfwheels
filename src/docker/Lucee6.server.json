@@ -1,0 +1,18 @@
+{
+	"profile": "development",
+	"force":true,
+	"web":{
+			"http":{
+					"port":"8080",
+					"enable":true
+			},
+			"rewrites":{
+					"enable":true,
+					"config":"urlrewrite.xml"
+			}
+	},
+	"app":{
+			"cfengine":"Lucee@6.0.0-SNAPSHOT+13",
+			"libDirs":"src/docker/lib"
+	}
+}
