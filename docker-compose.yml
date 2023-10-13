@@ -52,7 +52,7 @@ services:
     build:
       context: ./
       dockerfile: ./docker/adobe2016/Dockerfile
-    image: cfwheels-test-adobe2016:v1.0.1
+    image: cfwheels-test-adobe2016:v1.0.2
     volumes:
       - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
@@ -72,7 +72,7 @@ services:
     build:
       context: ./
       dockerfile: ./docker/adobe2018/Dockerfile
-    image: cfwheels-test-adobe2018:v1
+    image: cfwheels-test-adobe2018:v1.0.1
     volumes:
       - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
@@ -92,7 +92,7 @@ services:
     build:
       context: ./
       dockerfile: ./docker/adobe2021/Dockerfile
-    image: cfwheels-test-adobe2021:v1
+    image: cfwheels-test-adobe2021:v1.0.1
     volumes:
       - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
