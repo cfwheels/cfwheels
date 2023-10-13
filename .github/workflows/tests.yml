@@ -20,32 +20,32 @@ jobs:
         exclude:
 #          - cf: lucee5
 #            db: mysql
-          - cf: lucee5
-            db: postgres
+#          - cf: lucee5
+#            db: postgres
 #          - cf: lucee5
 #            db: sqlserver
 #          - cf: lucee5
 #            db: h2
 #          - cf: lucee6
 #            db: mysql
-          - cf: lucee6
-            db: postgres
+#          - cf: lucee6
+#            db: postgres
 #          - cf: lucee6
 #            db: sqlserver
 #          - cf: lucee6
 #            db: h2
 #          - cf: adobe2016
 #            db: mysql
-          - cf: adobe2016
-            db: postgres
+#          - cf: adobe2016
+#            db: postgres
 #          - cf: adobe2016
 #            db: sqlserver
           - cf: adobe2016
             db: h2
 #          - cf: adobe2018
 #            db: mysql
-          - cf: adobe2018
-            db: postgres
+#          - cf: adobe2018
+#            db: postgres
 #          - cf: adobe2018
 #            db: sqlserver
           - cf: adobe2018
