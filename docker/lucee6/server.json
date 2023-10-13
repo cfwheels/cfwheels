@@ -2,6 +2,7 @@
 	"profile": "development",
 	"force":true,
 	"web":{
+			"host":"localhost",
 			"http":{
 					"port":"8080",
 					"enable":true
