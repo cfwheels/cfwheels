@@ -62,6 +62,9 @@ services:
       - type: bind
         source: ./docker/adobe2016/server.json
         target: /cfwheels-test-suite/server.json
+      - type: bind
+        source: ./docker/adobe2016/settings.cfm
+        target: /cfwheels-test-suite/config/settings.cfm
     ports:
       - "62016:8080"
 
@@ -79,6 +82,9 @@ services:
       - type: bind
         source: ./docker/adobe2018/server.json
         target: /cfwheels-test-suite/server.json
+      - type: bind
+        source: ./docker/adobe2018/settings.cfm
+        target: /cfwheels-test-suite/config/settings.cfm
     ports:
       - "62018:8080"
 
@@ -96,6 +102,9 @@ services:
       - type: bind
         source: ./docker/adobe2021/server.json
         target: /cfwheels-test-suite/server.json
+      - type: bind
+        source: ./docker/adobe2021/settings.cfm
+        target: /cfwheels-test-suite/config/settings.cfm
     ports:
       - "62021:8080"
     healthcheck:
