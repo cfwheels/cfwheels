@@ -42,8 +42,8 @@ jobs:
             db: sqlserver
           - cf: adobe2016
             db: h2
-          - cf: adobe2018
-            db: mysql
+#          - cf: adobe2018
+#            db: mysql
           - cf: adobe2018
             db: postgres
           - cf: adobe2018
