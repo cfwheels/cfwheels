@@ -23,9 +23,6 @@ services:
         source: ./docker/lucee5/server.json
         target: /cfwheels-test-suite/server.json
       - type: bind
-        source: ./docker/lucee5/CFConfig.json
-        target: /cfwheels-test-suite/CFConfig.json
-      - type: bind
         source: ./docker/lucee5/settings.cfm
         target: /cfwheels-test-suite/config/settings.cfm
     ports:
