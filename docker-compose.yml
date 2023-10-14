@@ -4,7 +4,7 @@ services:
   testui:
     build:
       context: ./docker/testui
-    image: cfwheels-testui:v1
+    image: cfwheels-testui:v1.0.2
     ports:
       - "3000:8080"
 
@@ -107,6 +107,26 @@ services:
         target: /cfwheels-test-suite/config/settings.cfm
     ports:
       - "62021:8080"
+
+  adobe2023:
+    build:
+      context: ./
+      dockerfile: ./docker/adobe2023/Dockerfile
+    image: cfwheels-test-adobe2023:v1.0.1
+    volumes:
+      - ./:/cfwheels-test-suite
+      - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
+      - type: bind
+        source: ./docker/adobe2023/box.json
+        target: /cfwheels-test-suite/box.json
+      - type: bind
+        source: ./docker/adobe2023/server.json
+        target: /cfwheels-test-suite/server.json
+      - type: bind
+        source: ./docker/adobe2023/settings.cfm
+        target: /cfwheels-test-suite/config/settings.cfm
+    ports:
+      - "62023:8080"
 
   mysql:
     image: mysql:latest
