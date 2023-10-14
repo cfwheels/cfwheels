@@ -17,6 +17,9 @@ get_port () {
     adobe2021)
       echo -n "62021"
       ;;
+    adobe2023)
+      echo -n "62023"
+      ;;
     mysql56)
       echo -n "3306"
       ;;
