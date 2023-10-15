@@ -26,4 +26,27 @@ component extends="wheels.tests.Test" {
 		assert("e eq r");
 	}
 
+	function test_checkbox_is_unchecked_with_checkedvalue_when_property_value_is_1() {
+		args.property = "isactive";
+		args.checkedvalue = "0";
+
+		actual = _controller.checkBox(argumentcollection = args);
+		assert("actual does not contain 'checked'");
+	}
+
+	function test_checkbox_is_checked_with_checkedvalue_when_property_value_is_1() {
+		args.property = "isactive";
+		args.checkedvalue = "1";
+
+		actual = _controller.checkBox(argumentcollection = args);
+		assert("actual contains 'checked'");
+	}
+
+	function test_checkbox_is_checked_with_default_checkedvalue_when_property_value_is_1() {
+		args.property = "isactive";
+
+		actual = _controller.checkBox(argumentcollection = args);
+		assert("actual contains 'checked'");
+	}
+
 }
