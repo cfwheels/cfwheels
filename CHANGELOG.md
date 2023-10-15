@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1223-refactor-queryCallback-with-inbuilt-query-functions [#1223](https://github.com/cfwheels/cfwheels/pull/1223) - [Adam Chapman]
 - PR-1226-Invalid column not throwing exception in select argument [#1226](https://github.com/cfwheels/cfwheels/pull/1226) - [Zain Ul Abideen]
 - PR-1265-improve-performance-refactor-out-listfind [#1265](https://github.com/cfwheels/cfwheels/pull/1265) -  [Adam Chapman]
+- PR-1260-Adds support for native query returnType [#1260](https://github.com/cfwheels/cfwheels/pull/1260) - [Adam Chapman]
 
 <!-- ### View Enhancements -->
 
