@@ -5,8 +5,8 @@ component extends="wheels.tests.Test" {
 		shop = model("shop");
 		isACF2016 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2016;
 		isACF2018 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2018;
-    isACF2021 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2021;
-    isACF2023 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2023;
+		isACF2021 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2021;
+		isACF2023 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2023;
 	}
 
 	function test_select_distinct_addresses() {
