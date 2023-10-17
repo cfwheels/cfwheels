@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1227-Return a numeric value if the primary key is Numeric [#1227](https://github.com/cfwheels/cfwheels/pull/1227) - [Zain Ul Abideen]
 - PR-1257-Checkbox bug when checkedvalue is not true [#1257](https://github.com/cfwheels/cfwheels/pull/1257) - [Adam Chapman]
 - PR-1246-set the default route if it is not passed in the function [#1246](https://github.com/cfwheels/cfwheels/pull/1246) - [Zain Ul Abideen]
+- PR-1256-issue 889 unable to duplicate component [#1256](https://github.com/cfwheels/cfwheels/pull/1256) - [Zain Ul Abideen]
 
 ### Miscellaneous
 - PR-1175-restoreTestRunnerApplicationScope setting [#1175](https://github.com/cfwheels/cfwheels/pull/1175) - [Adam Chapman]
@@ -37,7 +38,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1177-fix text in base template readme file [#1177](https://github.com/cfwheels/cfwheels/pull/1177) - [Per Djurner]
 - PR-1178-fix text in default template file [#1178](https://github.com/cfwheels/cfwheels/pull/1178) - [Per Djurner]
 - PR-1185-adds-root-docker-volume [#1185](https://github.com/cfwheels/cfwheels/pull/1185) - [Adam Chapman]
-- PR-1198-Documentation-fixes [#1198](https://github.com/cfwheels/cfwheels/pull/1198) - [Adam Chapman]
 - PR-1200-Update the docker-compose command to docker compose v2 syntax [#1200](https://github.com/cfwheels/cfwheels/pull/1200/) - [Adam Chapman, Peter Amiri]
 - PR-1204-Add Lucee 6 to test matrix on local Docker test suite [#1204](https://github.com/cfwheels/cfwheels/pull/1204/) - [Peter Amiri]
 - PR-1203-ensure testing params maintained [#1203](https://github.com/cfwheels/cfwheels/pull/1203) - [Adam Chapman]
@@ -49,7 +49,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1250-Added test framework functions in the docs [#1250](https://github.com/cfwheels/cfwheels/pull/1250) - [Zain Ul Abideen]
 - PR-1255-issue 1179 Downloaded the CDN files and changed paths in files [#1255](https://github.com/cfwheels/cfwheels/pull/1255) - [Zain Ul Abideen]
 
-<!-- ### Guides -->
+### Guides
+- PR-1198-Documentation-fixes [#1198](https://github.com/cfwheels/cfwheels/pull/1198) - [Adam Chapman]
 
 <!-- ### Potentially Breaking Changes -->
 
