@@ -102,4 +102,9 @@ component extends="wheels.tests.Test" {
 		assert("actual eq expected");
 	}
 
+	function test_select_calculated_property_when_implicitly_selecting_fields() {
+		posts = model("Post").findAll(select="posts.id,posts.title,posts.authorid,comments.id AS commentid,comments.name,titleAlias", include="Comments");
+
+		assert("isDefined('posts.titleAlias')");
+	}
 }
