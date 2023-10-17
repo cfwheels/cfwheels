@@ -23,7 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1260-Adds support for native query returnType [#1260](https://github.com/cfwheels/cfwheels/pull/1260) - [Adam Chapman]
 - PR-1249-Removed the original IF/ELSE condition that invalidates calculated props and added condition [#1240](https://github.com/cfwheels/cfwheels/pull/1249) - [Zain Ul Abideen]
 
-<!-- ### View Enhancements -->
+### View Enhancements
+- PR-1254-issue 908 enable paginationLinks() to set active class on parent [#1254](https://github.com/cfwheels/cfwheels/pull/1254) - [Zain Ul Abideen]
 
 ### Bug Fixes
 - PR-1227-Return a numeric value if the primary key is Numeric [#1227](https://github.com/cfwheels/cfwheels/pull/1227) - [Zain Ul Abideen]
