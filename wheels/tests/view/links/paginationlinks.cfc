@@ -85,4 +85,18 @@ component extends="wheels.tests.Test" {
 		assert("result Contains '/pag/ina/tion/99/3'");
 	}
 
+	function test_pagination_links_adds_active_class_to_parent_element() {
+		authors = model("author").findAll(page = 2, perPage = 3, order = "lastName");
+		result = _controller.paginationLinks(
+			prepend                         = "<ul class='pagination'>", 
+			append                          = "</ul>", 
+			prependToPage                   = "<li class='page-item'>", 
+			appendToPage                    = "</li>", 
+			addActiveClassToPrependedParent = true,
+			linkToCurrentPage               = true, 
+			encode                          = "attributes",
+			class                           = "page-link"
+		);
+		assert("result Contains '<li class=''active page-item''>'");
+	}
 }
