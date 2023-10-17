@@ -227,6 +227,19 @@ public string function paginationLinks(
 	boolean pageNumberAsParam,
 	any encode
 ) {
+	/* To fix the bug below:
+		https://github.com/cfwheels/cfwheels/issues/942
+
+		The paginationLinks() function does not set the correct URL on the anchor tag if route is not passed in. Added condition to default the route, if it is not passed in, to the route defined in the request.wheels.params, if the action is index.
+	*/
+	if (!StructKeyExists(arguments, "route")) {
+		if(structKeyExists(request.wheels, 'params') AND structKeyExists(request.wheels.params, 'route')) {
+			if(request.wheels.params.action EQ "index"){
+				arguments.route = request.wheels.params.route;
+			}
+		}
+	}
+
 	$args(name = "paginationLinks", args = arguments);
 	local.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,prependOnAnchor,appendToPage,appendOnLast,appendOnAnchor,classForCurrent,handle,name,showSinglePage,pageNumberAsParam";
 	local.linkToArguments = Duplicate(arguments);
