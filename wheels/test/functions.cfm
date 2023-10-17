@@ -115,6 +115,9 @@ if (!StructKeyExists(request, "TESTING_FRAMEWORK_DEBUG_STRINGS")) {
  * Called from a test function.
  * If expression evaluates to false, record a failure against the test.
  *
+ * [section: Test Model]
+ * [category: Testing Functions]
+ *
  * @expression String containing CFML expression to evaluate.
  * @2..n String(s) containing space-delimited list of variables to evaluate and include in the failure message to help determine cause of failed assertion.
  */
@@ -184,15 +187,15 @@ public void function fail(string message = "") {
 	Throw(errorcode = "__FAIL__", message = "#HtmlEditFormat(message)#");
 }
 
-/*
-	Used to examine an expression. any overloaded arguments get passed to
-	cfdump's attributeCollection
-
-	@param	expression	The expression to examine
-	@param display Optional. boolean.  Whether to display the debug call.
-					false returns without outputting anything into the buffer.
-					good when you want to leave the debug command in the test for
-					later purposes, but don't want it to display
+/**
+ * Used to examine an expression
+ * Any overloaded arguments get passed to cfdump's attributeCollection
+ * 
+ * [section: Test Model]
+ * [category: Testing Functions]
+ * 
+ * @expression The expression to examine
+ * @display  Whether to display the debug call. False returns without outputting anything into the buffer. Good when you want to leave the debug command in the test for later purposes, but don't want it to display
 	*/
 public any function debug(required string expression, boolean display = true) {
 	local.attributeArgs = {"var" = Evaluate(arguments.expression), "label" = arguments.expression};
@@ -233,10 +236,15 @@ public any function debug(required string expression, boolean display = true) {
 	ArrayAppend(request["TESTING_FRAMEWORK_DEBUGGING"][TESTING_FRAMEWORK_VARS.RUNNING_TEST], dump);
 }
 
-/*
-	Catches a raised error and returns the error type. great if you want to
-	test that a certain exception will be raised.
-	*/
+/**
+ * Catches a raised error and returns the error type
+ * Great if you want to	test that a certain exception will be raised.
+ * 
+ * [section: Test Model]
+ * [category: Testing Functions]
+ * 
+ * @expression String containing CFML expression to evaluate
+ */
 public string function raised(required string expression) {
 	try {
 		Evaluate(arguments.expression);

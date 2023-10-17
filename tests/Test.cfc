@@ -6,24 +6,37 @@ component extends="wheels.Test" {
 
 	/**
 	 * Executes once before the test suite runs.
+	 *
+	 * [section: Test Model Configuration]
+	 * [category: Callback Functions]
+	 * 
 	 */
 	function beforeAll() {
 	}
 
 	/**
 	 * Executes before every test case (unless overridden in a package without calling super.setup()).
+	 *
+	 * [section: Test Model Configuration]
+	 * [category: Callback Functions]
 	 */
 	function setup() {
 	}
 
 	/**
 	 * Executes after every test case (unless overridden in a package without calling super.teardown()).
+	 *
+	 * [section: Test Model Configuration]
+	 * [category: Callback Functions]
 	 */
 	function teardown() {
 	}
 
 	/**
 	 * Executes once after the test suite runs.
+	 *
+	 * [section: Test Model Configuration]
+	 * [category: Callback Functions]
 	 */
 	function afterAll() {
 	}
