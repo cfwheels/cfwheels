@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1264-update Lucee 6 version used for tests to latest [#1264](https://github.com/cfwheels/cfwheels/pull/1264) - [Zac Spitzer -  * *New Contributor* *]
 - PR-1241-Fix spelling and remove whitespace from link [#1241](https://github.com/cfwheels/cfwheels/pull/1241) - [John Bampton]
 - PR-1247-show the current git branch in the debug layout [#1247](https://github.com/cfwheels/cfwheels/pull/1247) - [Michael Diederich]
+- PR-1250-Added test framework functions in the docs [#1250](https://github.com/cfwheels/cfwheels/pull/1250) - [Zain Ul Abideen]
 
 <!-- ### Guides -->
 
