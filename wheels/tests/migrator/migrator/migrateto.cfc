@@ -18,7 +18,7 @@ component extends="wheels.tests.Test" {
 
 	function teardown() {
 		$cleanSqlDirectory();
-		// revert to orginal values
+		// revert to original values
 		application.wheels.writeMigratorSQLFiles = originalWriteMigratorSQLFiles;
 		application.wheels.migratorTableName = originalMigratorTableName;
 	}
