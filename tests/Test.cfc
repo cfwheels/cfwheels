@@ -9,7 +9,7 @@ component extends="wheels.Test" {
 	 *
 	 * [section: Test Model Configuration]
 	 * [category: Callback Functions]
-	 * 
+	 *
 	 */
 	function beforeAll() {
 	}
