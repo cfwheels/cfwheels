@@ -88,11 +88,11 @@ if (StructKeyExists(url, "refresh")) {
 		<cfif StructKeyExists(variables, "_refresh")>
 			<meta http-equiv="refresh" content="#_refresh#">
 		</cfif>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
-		<script src="https://semantic-ui.com/javascript/library/highlight.min.js"></script>
+		<link rel="stylesheet" href="/wheels/public/assets/css/semantic.min.css">
+		<script src="/wheels/public/assets/js/jquery.min.js"></script>
+		<script src="/wheels/public/assets/js/semantic.min.js"></script>
+		<link rel="stylesheet" href="/wheels/public/assets/css/highlight_default.min.css">
+		<script src="/wheels/public/assets/js/highlight.min.js"></script>
 		<style>
 			.h-100 {height:100%;}
 			.forcescroll { overflow-y: scroll; max-height: 40rem;   }
