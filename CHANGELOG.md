@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1226-Invalid column not throwing exception in select argument [#1226](https://github.com/cfwheels/cfwheels/pull/1226) - [Zain Ul Abideen]
 - PR-1265-improve-performance-refactor-out-listfind [#1265](https://github.com/cfwheels/cfwheels/pull/1265) -  [Adam Chapman]
 - PR-1260-Adds support for native query returnType [#1260](https://github.com/cfwheels/cfwheels/pull/1260) - [Adam Chapman]
+- PR-1249-Removed the original IF/ELSE condition that invalidates calculated props and added condition [#1240](https://github.com/cfwheels/cfwheels/pull/1249) - [Zain Ul Abideen]
 
 <!-- ### View Enhancements -->
 
