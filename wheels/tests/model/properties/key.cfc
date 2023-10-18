@@ -26,4 +26,15 @@ component extends="wheels.tests.Test" {
 		assert("result IS 1");
 	}
 
+	function test_return_numeric_value_if_PK_is_numeric() {
+		author = model("author").findByKey(1);
+		authorArr = [];
+
+		ArrayAppend(authorArr, {"id" = author.key(), "firstname" = author.firstname, "lastname" = author.lastname});
+
+		responseJSON = SerializeJSON(authorArr);
+
+		assert("find('""id"":1',responseJSON)");
+	}
+
 }

@@ -9,9 +9,9 @@ Static simple version of the header/navigation for output on error screens
 	<title>CFWheels</title>
 	<meta charset="utf-8">
 	<meta name="robots" content="noindex,nofollow">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+	<link rel="stylesheet" href="/wheels/public/assets/css/semantic.min.css">
+	<script src="/wheels/public/assets/js/jquery.min.js"></script>
+	<script src="/wheels/public/assets/js/semantic.min.js"></script>
 </head>
 <body>
 <div class="ui pointing fluid eight item  menu stackable">

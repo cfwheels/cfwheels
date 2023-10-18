@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -49,12 +49,12 @@ jobs:
 
       - name: Upload CFWheels Artifacts
         if: success()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: cfwheels-variants
           path: |
             artifacts/**/*
-      
+
       # publish core package
       - uses: pixl8/github-action-box-publish@v4
         with:
@@ -63,7 +63,7 @@ jobs:
           force: "true"
         env:
           BOXJSON_DIR: /build-cfwheels-core/cfwheels
-      
+
       # publish base package
       - uses: pixl8/github-action-box-publish@v4
         with:
@@ -72,7 +72,7 @@ jobs:
           force: "true"
         env:
           BOXJSON_DIR: /build-cfwheels-base/cfwheels
-      
+
       - name: Inform Slack
         if: ${{ always() }}
         uses: rtCamp/action-slack-notify@v2

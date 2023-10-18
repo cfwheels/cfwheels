@@ -385,6 +385,18 @@ public string function $tag(
 		}
 	}
 
+	/* To fix the bug below:
+	   https://github.com/cfwheels/cfwheels/issues/1115
+
+	   Checked if "addClass" attribute is present then add that attribute's value to class so that it does not overwrite the default class value present in config/settings.cfm
+	*/
+	if(structKeyExists(arguments.attributes, 'addClass')) {
+		if(structKeyExists(arguments.attributes, 'class')) {
+			arguments.attributes.class = arguments.attributes.class & ' ' & arguments.attributes.addClass;
+			structDelete(arguments.attributes, 'addClass');
+		}
+	}
+	
 	// add the names of the attributes and their values to the output string with a space in between (class="something" name="somethingelse" etc)
 	// since the order of a struct can differ we sort the attributes in alphabetical order before placing them in the HTML tag (we could just place them in random order in the HTML but that would complicate testing for example)
 	local.sortedKeys = ListSort(StructKeyList(arguments.attributes), "textnocase");

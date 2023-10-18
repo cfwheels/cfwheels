@@ -148,14 +148,14 @@ public string function $orderByClause(required string order, required string inc
 					for (local.j = 1; local.j <= local.jEnd; local.j++) {
 						local.toAdd = "";
 						local.classData = local.classes[local.j];
-						if (ListFindNoCase(local.classData.propertyList, local.property)) {
+						if (StructKeyExists(local.classData.propertyStruct, local.property)) {
 							local.toAdd = local.classData.tableName & "." & local.classData.properties[local.property].column;
-						} else if (ListFindNoCase(local.classData.calculatedPropertyList, local.property)) {
+						} else if (StructKeyExists(local.classData.calculatedProperties, local.property)) {
 							local.sql = local.classData.calculatedProperties[local.property].sql;
 							local.toAdd = "(" & Replace(local.sql, ",", "[[comma]]", "all") & ")";
 						}
 						if (Len(local.toAdd)) {
-							if (!ListFindNoCase(local.classData.columnList, local.property)) {
+							if (!StructKeyExists(local.classData.columnStruct, local.property)) {
 								local.toAdd &= " AS " & local.property;
 							}
 							local.toAdd &= " " & UCase(ListLast(local.iItem, " "));
@@ -272,7 +272,13 @@ public string function $createSQLFieldList(
 	}
 
 	// go through the properties and map them to the database unless the developer passed in a table name or an alias in which case we assume they know what they're doing and leave the select clause as is
-	if (!Find(".", arguments.list) && !Find(" AS ", arguments.list)) {
+	
+	/* To fix the issue below:
+		https://github.com/cfwheels/cfwheels/issues/1048
+
+		The original issue was due to the alias not being passed in to identify the same columns in multiple tables. When we pass in the alias/dot notation in the select clause, it does not add the calculated properties due to the below condition which causes the orignal name of calculated property to be passed in the final query instead of the definition of calculated property, and that gives an invalid column when executed. Commented the below if and else condition and made fixes in case "." and " AS " is passed in.
+	*/
+	// if (!Find(".", arguments.list) && !Find(" AS ", arguments.list)) {
 		local.rv = "";
 		local.addedProperties = "";
 		local.addedPropertiesByModel = {};
@@ -283,6 +289,16 @@ public string function $createSQLFieldList(
 			// look for duplicates
 			local.duplicateCount = ListValueCountNoCase(local.addedProperties, local.iItem);
 			local.addedProperties = ListAppend(local.addedProperties, local.iItem);
+
+			/* To fix the issue below:
+				https://github.com/cfwheels/cfwheels/issues/1048
+
+				In case "." or " AS " is passed in the column name item, append that as it is in the select query and then move onto the next iteration.
+			*/
+			if (Find(".", local.iItem) || Find(" AS ", local.iItem)) {
+				local.rv = ListAppend(local.rv, local.iItem);
+				continue;
+			}
 
 			// loop through all classes (current and all included ones)
 			local.jEnd = ArrayLen(local.classes);
@@ -298,8 +314,8 @@ public string function $createSQLFieldList(
 				// if we find the property in this model and it's not already added we go ahead and add it to the select clause
 				if (
 					(
-						ListFindNoCase(local.classData.propertyList, local.iItem)
-						|| ListFindNoCase(local.classData.calculatedPropertyList, local.iItem)
+						StructKeyExists(local.classData.propertyStruct, local.iItem)
+						|| StructKeyExists(local.classData.calculatedProperties, local.iItem)
 					)
 					&& !ListFindNoCase(local.addedPropertiesByModel[local.classData.modelName], local.iItem)
 				) {
@@ -322,9 +338,9 @@ public string function $createSQLFieldList(
 					if (local.flagAsDuplicate) {
 						local.toAppend &= "[[duplicate]]" & local.j;
 					}
-					if (ListFindNoCase(local.classData.propertyList, local.iItem)) {
+					if (StructKeyExists(local.classData.propertyStruct, local.iItem)) {
 						local.toAppend &= local.classData.tableName & ".";
-						if (ListFindNoCase(local.classData.columnList, local.iItem)) {
+						if (StructKeyExists(local.classData.columnStruct, local.iItem)) {
 							local.toAppend &= local.iItem;
 						} else {
 							local.toAppend &= local.classData.properties[local.iItem].column;
@@ -332,7 +348,7 @@ public string function $createSQLFieldList(
 								local.toAppend &= " AS " & local.iItem;
 							}
 						}
-					} else if (ListFindNoCase(local.classData.calculatedPropertyList, local.iItem)) {
+					} else if (StructKeyExists(local.classData.calculatedProperties, local.iItem)) {
 						local.sql = Replace(local.classData.calculatedProperties[local.iItem].sql, ",", "[[comma]]", "all");
 						if (arguments.clause == "select" || !ReFind("^(SELECT )?(AVG|COUNT|MAX|MIN|SUM)\(.*\)", local.sql)) {
 							local.toAppend &= "(" & local.sql & ")";
@@ -348,6 +364,22 @@ public string function $createSQLFieldList(
 					break;
 				}
 			}
+
+			/* 
+				To fix the bug below:
+				https://github.com/cfwheels/cfwheels/issues/591
+
+				Added an exception in case the column specified in the select or group argument does not exist in the database.
+				This will only be in case when not using "table.column" or "column AS something" since in those cases Wheels passes through the select clause unchanged.
+			*/
+			if (application.wheels.showErrorInformation && !Len(local.toAppend) && arguments.clause == "select" && ListFindNoCase(local.addedPropertiesByModel[local.classData.modelName], local.iItem) EQ 0) {
+				Throw(
+					type = "Wheels.ColumnNotFound",
+					message = "Wheels looked for the column mapped to the `#local.iItem#` property but couldn't find it in the database table.",
+					extendedInfo = "Verify the `#arguments.clause#` argument and/or your property to column mappings done with the `property` method inside the model's `config` method to make sure everything is correct."
+				);
+			}
+			
 			if (Len(local.toAppend)) {
 				local.rv = ListAppend(local.rv, local.toAppend);
 			}
@@ -396,12 +428,16 @@ public string function $createSQLFieldList(
 			}
 			local.rv = local.newSelect;
 		}
-	} else {
-		local.rv = arguments.list;
+		
 		if (arguments.clause == "groupBy" && Find(" AS ", local.rv)) {
 			local.rv = ReReplace(local.rv, variables.wheels.class.RESQLAs, "", "all");
 		}
-	}
+	// } else {
+	// 	local.rv = arguments.list;
+	// 	if (arguments.clause == "groupBy" && Find(" AS ", local.rv)) {
+	// 		local.rv = ReReplace(local.rv, variables.wheels.class.RESQLAs, "", "all");
+	// 	}
+	// }
 	return local.rv;
 }
 
@@ -480,13 +516,13 @@ public array function $whereClause(required string where, string include = "", b
 					local.table = ListFirst(local.param.property, ".");
 					local.column = ListLast(local.param.property, ".");
 					if (!Find(".", local.param.property) || local.table == local.classData.tableName) {
-						if (ListFindNoCase(local.classData.propertyList, local.column)) {
+						if (StructKeyExists(local.classData.propertyStruct, local.column)) {
 							local.param.column = local.classData.tableName & "." & local.classData.properties[local.column].column;
 							local.param.dataType = local.classData.properties[local.column].dataType;
 							local.param.type = local.classData.properties[local.column].type;
 							local.param.scale = local.classData.properties[local.column].scale;
 							break;
-						} else if (ListFindNoCase(local.classData.calculatedPropertyList, local.column)) {
+						} else if (StructKeyExists(local.classData.calculatedProperties, local.column)) {
 							local.param.column = "(" & local.classData.calculatedProperties[local.column].sql & ")";
 							if (StructKeyExists(local.classData.calculatedProperties[local.column], "dataType")) {
 								local.param.dataType = local.classData.calculatedProperties[local.column].dataType;
@@ -709,6 +745,9 @@ public array function $expandedAssociations(required string include, boolean inc
 		local.classAssociations[local.name].propertyList = local.associatedClass.$classData().propertyList;
 		local.classAssociations[local.name].calculatedProperties = local.associatedClass.$classData().calculatedProperties;
 		local.classAssociations[local.name].calculatedPropertyList = local.associatedClass.$classData().calculatedPropertyList;
+		// TODO: deprecate the lists above in favour of these structs to avoid listFind
+		local.classAssociations[local.name].columnStruct = local.associatedClass.$classData().columnStruct;
+		local.classAssociations[local.name].propertyStruct = local.associatedClass.$classData().propertyStruct;
 
 		// create the join string if it hasn't already been done
 		if (!StructKeyExists(local.classAssociations[local.name], "join")) {

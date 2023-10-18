@@ -1,4 +1,8 @@
-FROM ortussolutions/commandbox:latest
+ARG ENGINE_VERSION=Lucee@6
+ARG JDK_TAG=jdk11
+ARG IMAGE_VERSION=3.6.3
+
+FROM ortussolutions/commandbox:${JDK_TAG}-${IMAGE_VERSION}
 
 LABEL maintainer "CFWheels Core Team"
 
