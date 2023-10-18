@@ -24,7 +24,7 @@ component extends="wheels.tests.Test" {
 			"text"
 		);
 		assert(
-			'columnList eq "authors.firstname,authors.id,authors.lastname,posts.authorid AS postauthorid,posts.averagerating AS postaveragerating,posts.body AS postbody,posts.createdat AS postcreatedat,posts.deletedat AS postdeletedat,posts.id AS postid,posts.title AS posttitle,posts.updatedat AS postupdatedat,posts.views AS postviews"'
+			'columnList eq "authors.firstname,authors.id,authors.id AS authorid,authors.lastname,posts.averagerating AS postaveragerating,posts.body AS postbody,posts.createdat AS postcreatedat,posts.deletedat AS postdeletedat,posts.id AS postid,posts.title AS posttitle,posts.updatedat AS postupdatedat,posts.views AS postviews"'
 		);
 	}
 
@@ -40,7 +40,7 @@ component extends="wheels.tests.Test" {
 			"text"
 		);
 		assert(
-			'columnList eq "authors.firstname,authors.id,authors.lastname,posts.authorid,posts.averagerating,posts.body,posts.createdat,posts.deletedat,posts.id AS postid,posts.title,posts.updatedat,posts.views"'
+			'columnList eq "authors.firstname,authors.id,authors.id AS authorid,authors.lastname,posts.averagerating,posts.body,posts.createdat,posts.deletedat,posts.id AS postid,posts.title,posts.updatedat,posts.views"'
 		);
 	}
 
