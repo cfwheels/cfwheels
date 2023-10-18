@@ -12,7 +12,7 @@
 			}
 	},
 	"app":{
-			"cfengine":"Lucee",
+			"cfengine":"Lucee@5.3.10+120",
 			"libDirs":"src/docker/lib"
 	}
 }

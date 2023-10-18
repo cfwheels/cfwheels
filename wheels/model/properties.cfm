@@ -18,7 +18,7 @@ public void function accessibleProperties(string properties = "") {
 			arguments.properties = ListAppend(arguments.properties, local.association);
 		}
 	}
-	variables.wheels.class.accessibleProperties.whiteList = $listClean(arguments.properties);
+	variables.wheels.class.accessibleProperties.whiteList = $listToStruct(arguments.properties);
 }
 
 /**
@@ -33,7 +33,7 @@ public void function protectedProperties(string properties = "") {
 	if (StructKeyExists(arguments, "property")) {
 		arguments.properties = ListAppend(arguments.properties, arguments.property);
 	}
-	variables.wheels.class.accessibleProperties.blackList = $listClean(arguments.properties);
+	variables.wheels.class.accessibleProperties.blackList = $listToStruct(arguments.properties);
 }
 
 /**
@@ -202,7 +202,17 @@ public string function key(boolean $persisted = false, boolean $returnTickCountW
 	if (!Len(local.rv) && arguments.$returnTickCountWhenNew) {
 		local.rv = variables.wheels.tickCountId;
 	}
-	return local.rv;
+
+	/* To fix the bug below:
+	   https://github.com/cfwheels/cfwheels/issues/1029
+
+	   This will return a numeric value if the primary key is Numeric and a String otherwise.
+	 */
+	if(isNumeric(local.rv)){
+		return JavaCast("int", local.rv);
+	} else {
+		return local.rv;
+	}
 }
 
 /**
@@ -472,14 +482,14 @@ public any function $setProperties(
 			if (
 				arguments.$useFilterLists &&
 				StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList")
-				&& !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, local.key)
+				&& !StructKeyExists(variables.wheels.class.accessibleProperties.whiteList, local.key)
 			) {
 				local.accessible = false;
 			}
 			if (
 				arguments.$useFilterLists
 				&& StructKeyExists(variables.wheels.class.accessibleProperties, "blackList")
-				&& ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, local.key)
+				&& StructKeyExists(variables.wheels.class.accessibleProperties.blackList, local.key)
 			) {
 				local.accessible = false;
 			}

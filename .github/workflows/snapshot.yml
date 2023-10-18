@@ -15,13 +15,13 @@ jobs:
     uses: ./.github/workflows/tests.yml
     secrets:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      
+
   cfformat:
     runs-on: ubuntu-20.04
     needs: tests
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - uses: Ortus-Solutions/commandbox-action@v1.0.2
         with:
@@ -31,7 +31,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Apply CFFormat changes
-          
+
   #############################################
   # Build Snapshot Release
   #############################################
