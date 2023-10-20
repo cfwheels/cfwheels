@@ -68,4 +68,8 @@ component extends="wheels.tests.Test" {
 		assert("posts[1].something eq 'hello world'");
 	} */
 
+	function test_getting_columns_added_when_returnAs_is_struct() {
+		posts = model("post").findAll(returnAs = "struct");
+		assert("posts[1].something eq 'hello world'");
+	}
 }
