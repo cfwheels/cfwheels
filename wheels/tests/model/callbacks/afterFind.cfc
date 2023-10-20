@@ -72,4 +72,5 @@ component extends="wheels.tests.Test" {
 		posts = model("post").findAll(returnAs = "struct");
 		assert("posts[1].something eq 'hello world'");
 	}
+
 }
