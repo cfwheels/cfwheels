@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1246-set the default route if it is not passed in the function [#1246](https://github.com/cfwheels/cfwheels/pull/1246) - [Zain Ul Abideen]
 - PR-1256-issue 889 unable to duplicate component [#1256](https://github.com/cfwheels/cfwheels/pull/1256) - [Zain Ul Abideen]
 - PR-1253-Issue 580 select ambiguous column name using the wheels alias [#1253](https://github.com/cfwheels/cfwheels/pull/1253) - [Zain Ul Abideen]
+- PR-1245-Added afterFind callback hook in the findAll function in case of structs [#1245](https://github.com/cfwheels/cfwheels/pull/1245) - [Zain Ul Abideen]
 
 ### Miscellaneous
 - PR-1175-restoreTestRunnerApplicationScope setting [#1175](https://github.com/cfwheels/cfwheels/pull/1175) - [Adam Chapman]
