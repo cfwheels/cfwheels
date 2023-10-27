@@ -9,7 +9,7 @@ component output="false" displayName="Controller" {
 		&& StructKeyExists(application, "wheels")
 		&& StructKeyExists(application.wheels, "viewPath")
 	) {
-		include "/app/#application.wheels.viewPath#/helpers.cfm";
+		include "/wheels/tests/_assets/views/helpers.cfm";
 	}
 
 }
