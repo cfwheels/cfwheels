@@ -1,3 +1,5 @@
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/cfwheels/cfwheels/snapshot.yml?logo=github&label=CFWheels%20Snapshots)
+
 # CFWheels
 
 [CFWheels][1] provides fast application development, a great organization system for your code, and is
