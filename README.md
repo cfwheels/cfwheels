@@ -1,3 +1,8 @@
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/cfwheels/cfwheels/snapshot.yml?style=flat-square&logo=github&label=CFWheels%20Snapshots)
+<img src="https://www.forgebox.io/api/v1/entry/cfwheels/badges/version" />
+<img src="https://www.forgebox.io/api/v1/entry/cfwheels/badges/downloads" />
+![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.forgebox.io%2Fapi%2Fv1%2Fentry%2Fcfwheels%2Fbadges%2F&query=%24.data.versions.0.version&style=flat-square&label=Bleeding%20Edge%20Release)
+
 # CFWheels
 
 [CFWheels][1] provides fast application development, a great organization system for your code, and is
@@ -33,10 +38,6 @@ of time for the tests to complete and may cause your engine to become unresponsi
 Please report any errors that you may encounter on our [issue tracker][4]. Please be sure to report the
 database engine (including version), CFML engine (including version), and HTTP server (including
 version).
-
-## Code Status
-
-![Wheels Test Suite](https://github.com/cfwheels/cfwheels/workflows/Wheels%20Test%20Suite/badge.svg)
 
 ## License
 
