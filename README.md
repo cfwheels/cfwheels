@@ -36,7 +36,7 @@ version).
 
 ## Code Status
 
-![Wheels Test Suite](https://github.com/cfwheels/cfwheels/workflows/Wheels%20Test%20Suite/badge.svg)
+![Wheels Test Suite](https://img.shields.io/github/actions/workflow/status/cfwheels/cfwheels/snapshot.yml)
 
 ## License
 
