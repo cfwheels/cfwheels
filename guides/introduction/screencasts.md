@@ -45,7 +45,7 @@ Learn about basic read operations when building standard CRUD functionality in C
 [Episode 3: "U" Is for "Update" - Basic CRUD](https://vimeo.com/channels/cfwheels/44346234)\
 Chris Peters demonstrates updating data in a simple CRUD CFWheels application
 
-[Episode 4: "D" Is for Delete - Basic CRUD ](https://vimeo.com/channels/cfwheels/44534195)\
+[Episode 4: "D" Is for Delete - Basic CRUD](https://vimeo.com/channels/cfwheels/44534195)\
 Learn how simple it is to delete records in a basic CRUD application using CFWheels
 
 #### "Building a Social Network"

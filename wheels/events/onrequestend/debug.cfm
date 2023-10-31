@@ -30,6 +30,8 @@
 <cfset local.hasFrameworkBuildFile = FileExists(GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels/public/build.cfm")>
 <cfset local.appTestDir = GetDirectoryFromPath(GetBaseTemplatePath()) & "tests">
 <cfset local.hasAppTests = DirectoryExists(local.appTestDir)>
+<cfset local.gitbranch = DirectoryExists(GetDirectoryFromPath(GetBaseTemplatePath()) & ".git") ? FileRead(GetDirectoryFromPath(GetBaseTemplatePath()) & ".git/HEAD") : "">
+
 <cfif local.hasAppTests>
 	<cfdirectory action="list" directory="#local.appTestDir#" name="local.tests">
 	<cfif NOT local.tests.recordCount>
@@ -145,6 +147,14 @@
 						</td>
 					</tr>
 				</cfif>
+			</cfif>
+			<cfif Len(local.gitbranch)>
+			<tr>
+				<td>
+					<strong>Git Branch:</strong>
+				</td>
+				<td>#local.gitbranch#</td>
+			</tr>
 			</cfif>
 			<tr>
 				<td>

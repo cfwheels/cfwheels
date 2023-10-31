@@ -318,8 +318,19 @@ public any function findAll(
 			) {
 				local.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
 			}
+			// optional arguments
+			for (local.argumentName in ["returnType","keyColumn"]) {
+				if (StructKeyExists(arguments, local.argumentName)) {
+					local.finderArgs[local.argumentName] = arguments[local.argumentName];
+				}
+			}
 			local.findAll = variables.wheels.class.adapter.$querySetup(argumentCollection = local.finderArgs);
 			request.wheels[variables.wheels.class.modelName][local.queryKey] = local.findAll; // <- store in request cache so we never run the exact same query twice in the same request
+		}
+
+		// return using the native cfml query returntype if the argument is present
+		if (StructKeyExists(arguments, "returnType")) {
+			return local.findAll.query;
 		}
 
 		switch (arguments.returnAs) {
