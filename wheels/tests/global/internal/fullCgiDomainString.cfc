@@ -1,4 +1,5 @@
 component extends="wheels.tests.Test" {
+
     function setup(){
     }
     function teardown(){

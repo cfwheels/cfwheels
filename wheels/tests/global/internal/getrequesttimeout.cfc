@@ -10,4 +10,5 @@ component extends="wheels.tests.Test" {
 		expected = 666;
 		assert("actual eq expected");
 	}
+
 }

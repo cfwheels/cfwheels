@@ -57,11 +57,10 @@ component extends="wheels.tests.Test" {
 			"users"
 		];
 
-		// $clearRoutes();
+		$clearRoutes();
 
 
 		dr = mapper().root(to = "dashboard##index").namespace("admin");
-
 		for (local.item in nounPlurals) {
 			dr.resources(name = local.item, nested = true)
 				.resources(name = "comments", shallow = true)
@@ -76,8 +75,7 @@ component extends="wheels.tests.Test" {
 				.end();
 		}
 		dr.resource("profile").end();
-		// writeDump(application.wheels.routes);
-		// abort;
+
 		d = $createObjectFromRoot(path = "wheels", fileName = "Dispatch", method = "$init");
 	}
 
@@ -113,7 +111,6 @@ component extends="wheels.tests.Test" {
 	function test_find_nested_get_collection_route_that_exists() {
 		request.cgi["request_method"] = "GET";
 		route = d.$findMatchingRoute(path = "admin/users");
-		// writeDump(route);abort;
 		assert('route.name eq "adminUsers" and route.methods eq "GET"');
 	}
 

@@ -17,12 +17,7 @@ component extends="wheels.tests.Test" {
 	function test_$objectFileName_returns_model_class_name_in_same_case_as_file_wo_exandpath() {
 		actual = $objectFileName(name = "PhotoGallery", objectPath = objectPath, type = "model");
 		expected = "PhotoGallery";
-		assert(
-			"Compare(actual, expected) eq 0",
-			"actual",
-			"expected",
-			"objectPath"
-		);
+		assert("Compare(actual, expected) eq 0", "actual", "expected", "objectPath");
 	}
 
 }
