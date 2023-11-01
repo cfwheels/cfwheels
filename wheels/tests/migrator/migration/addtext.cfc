@@ -3,7 +3,9 @@ component extends="wheels.tests.Test" {
 	private boolean function isDbCompatible() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
+				return true;
 			case "MicrosoftSQLServer":
+				return true;
 			case "MySQL":
 			case "PostgreSQL":
 				return true;
@@ -15,6 +17,7 @@ component extends="wheels.tests.Test" {
 	private array function getTextType() {
 		switch (migration.adapter.adapterName()) {
 			case "H2":
+				return ["CLOB"];
 			case "MySQL":
 			case "PostgreSQL":
 				return ["TEXT"];
@@ -50,6 +53,9 @@ component extends="wheels.tests.Test" {
 		migration.dropTable(tableName);
 
 		expected = getTextType();
+
+		debug("expected");
+		debug("actual");
 
 		assert("ArrayContainsNoCase(expected, actual)");
 	}
