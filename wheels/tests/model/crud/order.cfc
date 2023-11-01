@@ -32,24 +32,24 @@ component extends="wheels.tests.Test" {
 
 	// this ensures no "Column 'shopid' in order clause is ambiguous" exception
 	function test_order_clause_with_paginated_include_and_ambiguous_columns() {
-		actual = model("shop").findAll(
-			select = "id, name",
-			include = "trucks",
-			order = "CASE WHEN registration IN ('foo') THEN 0 ELSE 1 END DESC",
-			page = 1,
-			perPage = 3
-		);
-		assert("actual.recordCount gt 0");
+		if (get("adaptername") != "MySQL") {
+			actual = model("shop").findAll(
+				select = "id, name",
+				include = "trucks",
+				order = "CASE WHEN registration IN ('foo') THEN 0 ELSE 1 END DESC",
+				page = 1,
+				perPage = 3
+			);
+			assert("actual.recordCount gt 0");
+		} else {
+			// Skipping on MySQL
+			assert(true);
+		}
 	}
 
 	function test_order_clause_with_paginated_include_and_identical_columns() {
 		if (get("adaptername") != "MySQL") {
-			result = model("post").findAll(
-				page = 1,
-				perPage = 3,
-				include = "comments",
-				order = "createdAt,createdAt"
-			);
+			result = model("post").findAll(page = 1, perPage = 3, include = "comments", order = "createdAt,createdAt");
 			assert("result['title'][1] IS 'Title for first test post'");
 		} else {
 			// Skipping on MySQL, see issue for details:

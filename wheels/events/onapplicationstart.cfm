@@ -271,8 +271,8 @@
 	// Configurable paths from webroot
 	application.$wheels.filePath = "/files";
 	application.$wheels.imagePath = "/images";
-	application.$wheels.javascriptPath = "/javascripts";
-	application.$wheels.stylesheetPath = "/stylesheets";
+	application.$wheels.javascriptPath = "javascripts";
+	application.$wheels.stylesheetPath = "stylesheets";
 
 	// Test framework settings.
 	application.$wheels.validateTestPackageMetaData = true;
