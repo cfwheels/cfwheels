@@ -22,6 +22,7 @@ component extends="wheels.tests.Test" {
 		args.birthday = "11/01/1975";
 		args.birthdaymonth = "11";
 		args.birthdayyear = "1975";
+		args.allowExplicitTimestamps = false;
 
 		user.setProperties(args);
 
@@ -76,7 +77,7 @@ component extends="wheels.tests.Test" {
 
 		_properties = author.properties();
 		actual = ListSort(StructKeyList(_properties), "text");
-		expected = "firstName,lastName";
+		expected = "allowExplicitTimestamps,firstName,lastName";
 
 		assert('actual eq expected');
 		assert("author.firstName eq 'Foo'");
@@ -113,7 +114,7 @@ component extends="wheels.tests.Test" {
 
 		_properties = author.properties(returnIncluded = false);
 		actual = ListSort(StructKeyList(_properties), "text");
-		expected = "firstName,lastName";
+		expected = "allowExplicitTimestamps,firstName,lastName";
 
 		debug("author.properties()", _debug);
 
