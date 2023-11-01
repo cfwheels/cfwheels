@@ -72,7 +72,14 @@ public void function $runOnRequestStart(required targetPage) {
 	}
 
 	if (application.wheels.environment == "maintenance") {
-		if (StructKeyExists(url, "except")) {
+		if (
+			StructKeyExists(url, "except")
+			&& (
+				!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword")
+				|| !Len(application.wheels.reloadPassword)
+				|| (StructKeyExists(url, "password") && url.password == application.wheels.reloadPassword)
+			)
+		) {
 			application.wheels.ipExceptions = url.except;
 		}
 		local.makeException = false;
