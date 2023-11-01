@@ -9,7 +9,7 @@ public any function $init() {
 /**
  * Create a struct to hold the params, merge form and url scopes into it, add JSON body etc.
  */
-private struct function $createParams(
+public struct function $createParams(
 	required string path,
 	required struct route,
 	required struct formScope,
@@ -35,7 +35,7 @@ private struct function $createParams(
 /**
  * Internal function.
  */
-private struct function $createNestedParamStruct(required struct params) {
+public struct function $createNestedParamStruct(required struct params) {
 	local.rv = arguments.params;
 	for (local.key in local.rv) {
 		if (Find("[", local.key) && Right(local.key, 1) == "]") {
@@ -77,7 +77,7 @@ private struct function $createNestedParamStruct(required struct params) {
 /**
  * Internal function.
  */
-private struct function $findMatchingRoute(
+public struct function $findMatchingRoute(
 	required string path, 
 	string requestMethod = $getRequestMethod(),
 	array routes = application.wheels.routes,
@@ -152,7 +152,7 @@ private struct function $findMatchingRoute(
 /**
  * Return the path without the leading "/".
  */
-private string function $getPathFromRequest(required string pathInfo, required string scriptName) {
+public string function $getPathFromRequest(required string pathInfo, required string scriptName) {
 	if (arguments.pathInfo == arguments.scriptName || arguments.pathInfo == "/" || !Len(arguments.pathInfo)) {
 		return "";
 	} else {
@@ -219,7 +219,7 @@ public string function $request(
 /**
  * Find the route that matches the path, create params struct and return it.
  */
-private struct function $paramParser(
+public struct function $paramParser(
 	string pathInfo = request.cgi.path_info,
 	string scriptName = request.cgi.script_name,
 	struct formScope = form,
@@ -238,7 +238,7 @@ private struct function $paramParser(
 /**
  * Merges the URL and form scope into a single structure, URL scope has precedence.
  */
-private struct function $mergeUrlAndFormScopes(
+public struct function $mergeUrlAndFormScopes(
 	required struct params,
 	required struct urlScope,
 	required struct formScope
@@ -255,7 +255,7 @@ private struct function $mergeUrlAndFormScopes(
 /**
  * If content type is JSON, deserialize it into a struct and add to the params struct.
  */
-private struct function $parseJsonBody(
+public struct function $parseJsonBody(
 	required struct params,
 	struct httpRequestData = GetHTTPRequestData()
 ) {
@@ -295,7 +295,7 @@ private struct function $parseJsonBody(
 /**
  * Parses the route pattern, identifies the variable markers within the pattern and assigns the value from the url variables with the path.
  */
-private struct function $mergeRoutePattern(required struct params, required struct route, required string path) {
+public struct function $mergeRoutePattern(required struct params, required struct route, required string path) {
 	local.rv = arguments.params;
 	local.matches = ReFindNoCase(arguments.route.regex, arguments.path, 1, true);
 	local.iEnd = ArrayLen(local.matches.pos);
@@ -310,7 +310,7 @@ private struct function $mergeRoutePattern(required struct params, required stru
  * Loops through the params struct passed in and attempts to deobfuscate it.
  * Ignores the controller and action params values.
  */
-private struct function $deobfuscateParams(required struct params) {
+public struct function $deobfuscateParams(required struct params) {
 	local.rv = arguments.params;
 	if ($get("obfuscateUrls")) {
 		for (local.key in local.rv) {
@@ -328,7 +328,7 @@ private struct function $deobfuscateParams(required struct params) {
 /**
  * Loops through the params struct and handle the cases where checkboxes are unchecked.
  */
-private struct function $translateBlankCheckBoxSubmissions(required struct params) {
+public struct function $translateBlankCheckBoxSubmissions(required struct params) {
 	local.rv = arguments.params;
 	for (local.key in local.rv) {
 		if (FindNoCase("($checkbox)", local.key)) {
@@ -349,7 +349,7 @@ private struct function $translateBlankCheckBoxSubmissions(required struct param
 /**
  * Combines date parts into a single value.
  */
-private struct function $translateDatePartSubmissions(required struct params) {
+public struct function $translateDatePartSubmissions(required struct params) {
 	local.rv = arguments.params;
 	local.dates = {};
 	for (local.key in local.rv) {
@@ -414,7 +414,7 @@ private struct function $translateDatePartSubmissions(required struct params) {
 /**
  * Ensure that the controller and action params exist and are camelized.
  */
-private struct function $ensureControllerAndAction(required struct params, required struct route) {
+public struct function $ensureControllerAndAction(required struct params, required struct route) {
 	local.rv = arguments.params;
 	if (!StructKeyExists(local.rv, "controller")) {
 		local.rv.controller = arguments.route.controller;
@@ -446,7 +446,7 @@ private struct function $ensureControllerAndAction(required struct params, requi
 /**
  * Adds in the format variable from the route if it exists.
  */
-private struct function $addRouteFormat(required struct params, required struct route) {
+public struct function $addRouteFormat(required struct params, required struct route) {
 	local.rv = arguments.params;
 	if (StructKeyExists(arguments.route, "formatVariable") && StructKeyExists(arguments.route, "format")) {
 		local.rv[arguments.route.formatVariable] = arguments.route.format;
@@ -457,7 +457,7 @@ private struct function $addRouteFormat(required struct params, required struct 
 /**
  * Adds in the name variable from the route if it exists.
  */
-private struct function $addRouteName(required struct params, required struct route) {
+public struct function $addRouteName(required struct params, required struct route) {
 	local.rv = arguments.params;
 	if (StructKeyExists(arguments.route, "name") && Len(arguments.route.name) && !StructKeyExists(local.rv, "route")) {
 		local.rv.route = arguments.route.name;
@@ -468,19 +468,12 @@ private struct function $addRouteName(required struct params, required struct ro
 /**
  * Determine HTTP verb used in request.
  */
-private string function $getRequestMethod(
-	required string request_method = cgi.request_method,
-	required struct FormScope = form
-) {
+public string function $getRequestMethod() {
 	// If request is a post, check for alternate verb.
-	if (
-		arguments.request_method == "post" 
-		&& StructKeyExists(form, "_method")
-		&& ArrayFindNoCase(['PUT','PATCH','DELETE'], arguments.FormScope["_method"])
-	) {
-		return arguments.FormScope["_method"];
+	if (request.cgi.request_method == "post" && StructKeyExists(form, "_method")) {
+		return form["_method"];
 	}
 
-	return arguments.request_method;
+	return request.cgi.request_method;
 }
 </cfscript>
