@@ -358,7 +358,7 @@ function edit() {
 ```
 {% endcode %}
 
-The view at `views/user/edit.cfm` looks almost exactly the same as the view for creating a user:
+The view at `views/users/edit.cfm` looks almost exactly the same as the view for creating a user:
 
 {% code title="views/users/edit.cfm" %}
 ```html
