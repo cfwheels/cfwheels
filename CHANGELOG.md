@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----
 
+# [3.0.0-SNAPSHOT](https://github.com/cfwheels/cfwheels/tree/develop) => TBD
+
+### Controller Enhancements
+
+### Model Enhancements
+
+### View Enhancements
+
+### Bug Fixes
+
+### Miscellaneous
+
+### Guides
+- PR-1304-Update beginner-tutorial-hello-database.md [#1304](https://github.com/cfwheels/cfwheels/pull/1304) - [MvdO79](https://github.com/MvdO79)
+- PR-1305-Update beginner-tutorial-hello-database.md [#1305](https://github.com/cfwheels/cfwheels/pull/1305) - [MvdO79](https://github.com/MvdO79)
+
+### Potentially Breaking Changes
+- PR-1240-Feature/move wheels outside the app root and make changes to mappings [#1240](https://github.com/cfwheels/cfwheels/pull/1240) - [Zain Ul Abideen](https://github.com/zainforbjs)
+
+---
+
 # [2.5.0](https://github.com/cfwheels/cfwheels/releases/tag/v2.5.0) => 2023.11.01
 
 <!-- ### Controller Enhancements -->
