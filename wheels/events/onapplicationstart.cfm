@@ -62,7 +62,7 @@
 
 	// Set up containers for routes, caches, settings etc.
 	// TODO remove the static version number
-	application.$wheels.version = "3.0.0-alpha-1";
+	application.$wheels.version = "3.0.0-SNAPSHOT";
 	try {
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
 	} catch (any e) {
