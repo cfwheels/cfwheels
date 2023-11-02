@@ -95,6 +95,10 @@
 * [Developing Plugins](plugins/developing-plugins.md)
 * [Publishing Plugins](plugins/publishing-plugins.md)
 
+## Project Documentation
+
+* [Overview](project-documentation/overview.md)
+
 ## External Links
 
 * [Source Code](https://github.com/cfwheels/cfwheels)
