@@ -17,8 +17,18 @@ For this tutorial, let's create the simplest example of all: a link that will re
 
 In this example, we'll wire up some simple JavaScript code that calls a CFWheels action asynchronously. All of this will be done with basic jQuery code and built-in CFWheels functionality.
 
-First, let's make sure we've got an appropriate route setup. It might be you're still using the default `wildcard()` route which will create some default `GET` routes for the `controller/action` pattern, but we'll add a new route here just for practice:
+First, let's make sure we've got an appropriate route setup. It might be you're still using the default `wildcard()` route which will create some default `GET` routes for the `controller/action` pattern, but we'll add a new route here just for practice. We are going to create a route named `sayHello` and direct it to the `hello` action of the `say` controller. There are two ways you could write this code a long hand method specifying the controller and action separately as well as a short hand method that combines the two into a single parameter.
 
+The longhand way would look like:
+{% code title="config/routes.cfm" %}
+```javascript
+mapper()
+  .get(name="sayHello", controller="say", action="hello")
+.end()
+```
+{% endcode %}
+
+The shorthand method would look like:
 {% code title="config/routes.cfm" %}
 ```javascript
 mapper()
@@ -26,6 +36,8 @@ mapper()
 .end()
 ```
 {% endcode %}
+
+You can decide which method you prefer. Both sets of code above are equivalent.
 
 Then, let's create a link to a controller's action in a view file, like so:
 
