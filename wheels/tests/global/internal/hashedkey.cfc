@@ -15,7 +15,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_same_output() {
-		binaryData = FileReadBinary(ExpandPath('wheels/tests/_assets/files/cfwheels-logo.png'));
+		binaryData = FileReadBinary(ExpandPath('/wheels/tests/_assets/files/cfwheels-logo.png'));
 		transaction action="begin" {
 			photo = model("photo").findOne();
 			photo.update(filename = "somefilename", fileData = binaryData);

@@ -20,7 +20,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_remaining_action_code_should_run() {
-		application.wheels.viewPath = "wheels/tests/_assets/views";
+		application.wheels.viewPath = "/wheels/tests/_assets/views";
 		_controller.$callAction(action = "testRedirect");
 		r = _controller.getRedirect();
 		assert("IsDefined('r.url') AND IsDefined('request.setInActionAfterRedirect')");
@@ -33,7 +33,12 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_passing_through_to_urlfor() {
-		args = {action = "test", onlyPath = false, protocol = "https", params = "test1=1&test2=2"};
+		args = {
+			action = "test",
+			onlyPath = false,
+			protocol = "https",
+			params = "test1=1&test2=2"
+		};
 		_controller.redirectTo(argumentCollection = args);
 		r = _controller.getRedirect();
 		assert("r.url Contains args.protocol AND r.url Contains args.params");

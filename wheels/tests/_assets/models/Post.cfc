@@ -7,7 +7,12 @@ component extends="Model" {
 		validatesUniquenessOf("title");
 		property(name = "titleAlias", sql = "title", select = false);
 		property(name = "firstId", sql = "MAX(posts.id)", select = false);
-		property(name = "createdAtAlias", sql = "posts.createdat", dataType = "datetime", select = false);
+		property(
+			name = "createdAtAlias",
+			sql = "posts.createdat",
+			dataType = "datetime",
+			select = false
+		);
 	}
 
 	function afterFindCallback() {

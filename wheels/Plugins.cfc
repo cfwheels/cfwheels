@@ -1,6 +1,6 @@
 component output="false" {
 
-	include "plugins/functions.cfm";
-	include "global/functions.cfm";
+	include "/wheels/plugins/functions.cfm";
+	include "/wheels/global/functions.cfm";
 
 }

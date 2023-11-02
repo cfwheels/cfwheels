@@ -5,7 +5,7 @@ component extends="wheels.tests.Test" {
 			StructDelete(request, "test");
 		}
 		oldViewPath = application.wheels.viewPath;
-		application.wheels.viewPath = "wheels/tests/_assets/views";
+		application.wheels.viewPath = "/wheels/tests/_assets/views";
 		application.wheels.existingHelperFiles = "test";
 		params = {controller = "test", action = "helperCaller"};
 		_controller = controller("test", params);

@@ -181,7 +181,7 @@ component extends="wheels.tests.Test" {
 		transaction {
 			photo = model("photo").findOne(order = model("photo").primaryKey());
 			assert("NOT photo.hasChanged('fileData')");
-			binaryData = FileReadBinary(ExpandPath('wheels/tests/_assets/files/cfwheels-logo.png'));
+			binaryData = FileReadBinary(ExpandPath('/wheels/tests/_assets/files/cfwheels-logo.png'));
 			photo.fileData = binaryData;
 			assert("photo.hasChanged('fileData')");
 			photo.galleryid = 99;
@@ -189,7 +189,7 @@ component extends="wheels.tests.Test" {
 			assert("NOT photo.hasChanged('fileData')");
 			photo = model("photo").findOne(where = "galleryid=99");
 			assert("NOT photo.hasChanged('fileData')");
-			binaryData = FileReadBinary(ExpandPath('wheels/tests/_assets/files/cfwheels-logo.txt'));
+			binaryData = FileReadBinary(ExpandPath('/wheels/tests/_assets/files/cfwheels-logo.txt'));
 			photo.fileData = binaryData;
 			assert("photo.hasChanged('fileData')");
 			transaction action="rollback";

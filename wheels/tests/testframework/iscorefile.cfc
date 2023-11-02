@@ -15,7 +15,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function _test_$isCoreFile_Dispatch_cfc_is_false() {
-		path = ExpandPath('wheels/Dispatch.cfc');
+		path = ExpandPath('/wheels/Dispatch.cfc');
 		debug("path", false);
 		assert("$isCoreFile(path)", "path");
 	}

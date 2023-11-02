@@ -44,7 +44,13 @@ component extends="wheels.tests.Test" {
 		args = {};
 		args["dataDomCache"] = "cache";
 		args["dataRole"] = "button";
-		result = _controller.textFieldTag(name = "num", type = "range", min = 5, max = 10, argumentCollection = args);
+		result = _controller.textFieldTag(
+			name = "num",
+			type = "range",
+			min = 5,
+			max = 10,
+			argumentCollection = args
+		);
 		correct = '<input data-dom-cache="cache" data-role="button" id="num" max="10" min="5" name="num" type="range" value="">';
 		assert('result IS correct');
 	}

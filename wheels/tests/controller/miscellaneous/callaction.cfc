@@ -4,7 +4,7 @@ component extends="wheels.tests.Test" {
 		params = {controller = "test", action = "test"};
 		_controller = controller("test", params);
 		oldViewPath = application.wheels.viewPath;
-		application.wheels.viewPath = "wheels/tests/_assets/views";
+		application.wheels.viewPath = "/wheels/tests/_assets/views";
 	}
 
 	function teardown() {

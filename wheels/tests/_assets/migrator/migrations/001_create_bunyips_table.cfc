@@ -5,7 +5,12 @@
 			<cfscript>
 			try {
 				t = createTable(name = "bunyips");
-				t.string(columnNames = "name", default = "", null = true, limit = 255);
+				t.string(
+					columnNames = "name",
+					default = "",
+					null = true,
+					limit = 255
+				);
 				t.timestamps();
 				t.create();
 			} catch (any ex) {

@@ -1,5 +1,5 @@
 <cfscript>
-public void function onRequestEnd(required targetpage) {
+// public void function onRequestEnd(required targetpage) {
 	local.lockName = "reloadLock" & application.applicationName;
 	$simpleLock(
 		name = local.lockName,
@@ -11,16 +11,16 @@ public void function onRequestEnd(required targetpage) {
 	if (
 		application.wheels.showDebugInformation && StructKeyExists(request.wheels, "showDebugInformation") && request.wheels.showDebugInformation
 	) {
-		$includeAndOutput(template = "wheels/events/onrequestend/debug.cfm");
+		$includeAndOutput(template = "/wheels/events/onrequestend/debug.cfm");
 	}
-}
+// }
 
 public void function $runOnRequestEnd(required targetpage) {
 	if (application.wheels.showDebugInformation) {
 		$debugPoint("requestEnd");
 	}
 	$restoreTestRunnerApplicationScope();
-	$include(template = "#application.wheels.eventPath#/onrequestend.cfm");
+	$include(template = "/app/#application.wheels.eventPath#/onrequestend.cfm");
 	if (application.wheels.showDebugInformation) {
 		$debugPoint("requestEnd,total");
 	}

@@ -1,8 +1,8 @@
 component output="false" {
 
 	variables.$wheelsInclude = "cfml,internal,util";
-	include "mapper/functions.cfm";
-	include "global/functions.cfm";
-	include "plugins/standalone/injection.cfm";
+	include "/wheels/mapper/functions.cfm";
+	include "/wheels/global/functions.cfm";
+	include "/wheels/plugins/standalone/injection.cfm";
 
 }

@@ -143,6 +143,6 @@ component extends="Base" output=false {
 		return "random()";
 	}
 
-	include "../../plugins/standalone/injection.cfm";
+	include "/wheels/plugins/standalone/injection.cfm";
 
 }

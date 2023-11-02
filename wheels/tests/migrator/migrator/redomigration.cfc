@@ -5,14 +5,19 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		migration = CreateObject("component", "wheels.migrator.Migration").init();
 		migrator = CreateObject("component", "wheels.migrator").init(
-			migratePath = "wheels/tests/_assets/migrator/migrations/",
-			sqlPath = "wheels/tests/_assets/migrator/sql/"
+			migratePath = "/wheels/tests/_assets/migrator/migrations/",
+			sqlPath = "/wheels/tests/_assets/migrator/sql/"
 		);
 		tableName = "bunyips";
 
 		migration.dropTable(tableName);
 		t = migration.createTable(name = tableName);
-		t.string(columnNames = "name", default = "", null = true, limit = 255);
+		t.string(
+			columnNames = "name",
+			default = "",
+			null = true,
+			limit = 255
+		);
 		t.create();
 		migration.removeRecord(table = "migratorversions");
 		migration.addRecord(table = "migratorversions", version = "001");
@@ -33,7 +38,12 @@ component extends="wheels.tests.Test" {
 		local.originalColumnNames = 'columnNames="name"';
 		local.newColumnNames = 'columnNames="name,hobbies"';
 		local.originalContent = FileRead(local.path);
-		local.newContent = ReplaceNoCase(local.originalContent, local.originalColumnNames, local.newColumnNames, "one");
+		local.newContent = ReplaceNoCase(
+			local.originalContent,
+			local.originalColumnNames,
+			local.newColumnNames,
+			"one"
+		);
 
 		FileDelete(local.path);
 		FileWrite(local.path, local.newContent);

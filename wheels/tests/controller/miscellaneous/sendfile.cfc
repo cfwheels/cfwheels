@@ -8,7 +8,8 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_only_file_supplied() {
-		args.file = "../wheels/tests/_assets/files/cfwheels-logo.png";
+		args.directory = "/wheels/tests/_assets";
+		args.file = "files/cfwheels-logo.png";
 		r = _controller.sendFile(argumentCollection = args);
 		assert('Right(r.file, 17) eq "cfwheels-logo.png"');
 		assert('r.mime eq "image/png"');
@@ -16,7 +17,8 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_get_test_info() {
-		args.file = "../wheels/tests/_assets/files/cfwheels-logo.png";
+		args.directory = "/wheels/tests/_assets";
+		args.file = "files/cfwheels-logo.png";
 		args.name = "A Weird FileName.png";
 		_controller.sendFile(argumentCollection = args);
 		r = _controller.getFiles();
@@ -26,7 +28,8 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_file_and_name_supplied() {
-		args.file = "../wheels/tests/_assets/files/cfwheels-logo.png";
+		args.directory = "/wheels/tests/_assets";
+		args.file = "files/cfwheels-logo.png";
 		args.name = "A Weird FileName.png";
 		r = _controller.sendFile(argumentCollection = args);
 		assert('Right(r.file, 17) eq "cfwheels-logo.png"');
@@ -35,7 +38,8 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_change_disposition() {
-		args.file = "../wheels/tests/_assets/files/cfwheels-logo.png";
+		args.directory = "/wheels/tests/_assets";
+		args.file = "files/cfwheels-logo.png";
 		args.disposition = "attachment";
 		r = _controller.sendFile(argumentCollection = args);
 		assert('Right(r.file, 17) eq "cfwheels-logo.png"');
@@ -45,7 +49,8 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_overload_mimetype() {
-		args.file = "../wheels/tests/_assets/files/cfwheels-logo.png";
+		args.directory = "/wheels/tests/_assets";
+		args.file = "files/cfwheels-logo.png";
 		args.type = "wheels/custom";
 		r = _controller.sendFile(argumentCollection = args);
 		assert('Right(r.file, 17) eq "cfwheels-logo.png"');
@@ -55,7 +60,8 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_no_extension_one_file_exists() {
-		args.file = "../wheels/tests/_assets/files/sendFile";
+		args.directory = "/wheels/tests/_assets";
+		args.file = "files/sendFile";
 		r = _controller.sendFile(argumentCollection = args);
 		assert('Right(r.file, 12) eq "sendFile.txt"');
 		assert('r.mime eq "text/plain"');
@@ -69,7 +75,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_specifying_a_directory() {
-		args.directory = ExpandPath("/wheels/tests/_assets");
+		args.directory = "/wheels/tests/_assets";
 		args.file = "files/cfwheels-logo.png";
 		r = _controller.sendFile(argumentCollection = args);
 		assert('Right(r.file, 17) eq "cfwheels-logo.png"');

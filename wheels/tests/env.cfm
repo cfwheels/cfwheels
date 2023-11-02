@@ -1,6 +1,8 @@
 <cfscript>
-application.wheels.controllerPath = "wheels/tests/_assets/controllers";
+application.wheels.controllerPath = "/wheels/tests/_assets/controllers";
 application.wheels.modelPath = "/wheels/tests/_assets/models";
+
+application.wheels.showDebugInformation = false;
 
 if(structKeyExists(url, "db") && url.db == "sqlserver"){
 	createDB = queryExecute(

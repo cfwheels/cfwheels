@@ -7,4 +7,5 @@
 	<cffunction name="$GobalTestMixin" returntype="void">
 		
 	</cffunction>
+
 </cfcomponent>

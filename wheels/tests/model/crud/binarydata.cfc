@@ -1,7 +1,7 @@
 component extends="wheels.tests.Test" {
 
 	function setup() {
-		binaryData = FileReadBinary(ExpandPath('wheels/tests/_assets/files/cfwheels-logo.png'));
+		binaryData = FileReadBinary(ExpandPath('/wheels/tests/_assets/files/cfwheels-logo.png'));
 	}
 
 	function test_update() {

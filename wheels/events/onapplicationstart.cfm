@@ -1,5 +1,5 @@
 <cfscript>
-public void function onApplicationStart() {
+// public void function onApplicationStart() {
 	// Abort if called from incorrect file.
 	$abortInvalidRequest();
 
@@ -119,7 +119,7 @@ public void function onApplicationStart() {
 	) {
 		application.$wheels.environment = URL.reload;
 	} else {
-		$include(template = "config/environment.cfm");
+		$include(template = "/app/config/environment.cfm");
 	}
 
 	// If we're not allowed to switch, override and replace with the old environment
@@ -260,17 +260,19 @@ public void function onApplicationStart() {
 		application.$wheels.assetQueryString = true;
 	}
 
-	// Configurable paths.
-	application.$wheels.eventPath = "events";
-	application.$wheels.filePath = "files";
-	application.$wheels.imagePath = "images";
+	// Configurable paths from /app
+	application.$wheels.eventPath = "/events";
+	application.$wheels.controllerPath = "/controllers";
+	application.$wheels.modelPath = "/models";
+	application.$wheels.pluginPath = "/plugins";
+	application.$wheels.pluginComponentPath = "/plugins";
+	application.$wheels.viewPath = "/views";
+
+	// Configurable paths from webroot
+	application.$wheels.filePath = "/files";
+	application.$wheels.imagePath = "/images";
 	application.$wheels.javascriptPath = "javascripts";
-	application.$wheels.modelPath = "models";
-	application.$wheels.pluginPath = "plugins";
-	application.$wheels.pluginComponentPath = "plugins";
 	application.$wheels.stylesheetPath = "stylesheets";
-	application.$wheels.viewPath = "views";
-	application.$wheels.controllerPath = "controllers";
 
 	// Test framework settings.
 	application.$wheels.validateTestPackageMetaData = true;
@@ -892,9 +894,9 @@ public void function onApplicationStart() {
 	application.$wheels.initialized = true;
 
 	// Load general developer settings first, then override with environment specific ones.
-	$include(template = "config/settings.cfm");
+	$include(template = "/app/config/settings.cfm");
 	if (FileExists(ExpandPath("/app/config/#application.$wheels.environment#/settings.cfm"))) {
-		$include(template = "config/#application.$wheels.environment#/settings.cfm");
+		$include(template = "/app/config/#application.$wheels.environment#/settings.cfm");
 	}
 
 	// Clear query (cfquery) and page (cfcache) caches.
@@ -934,15 +936,22 @@ public void function onApplicationStart() {
 
 	// Allow developers to inject plugins into the application variables scope.
 	if (!StructIsEmpty(application.$wheels.mixins)) {
-		$include(template = "wheels/plugins/standalone/injection.cfm");
+		$include(template = "/wheels/plugins/standalone/injection.cfm");
 	}
 
 	// Create the mapper that will handle creating routes.
 	// Needs to be before $loadRoutes and after $loadPlugins.
-	application.$wheels.mapper = $createObjectFromRoot(path = "wheels", fileName = "Mapper", method = "$init");
+	application.$wheels.mapper = $createObjectFromRoot(
+		path = "wheels", 
+		fileName = "Mapper", 
+		method = "$init",
+		executeArgs = {
+			resourceControllerNaming = application.$wheels.resourceControllerNaming
+		}
+	);
 
 	// Load developer routes and adds the default CFWheels routes (unless the developer has specified not to).
-	$loadRoutes();
+	$loadRoutes(application.$wheels.mapper);
 
 	// Create the dispatcher that will handle all incoming requests.
 	application.$wheels.dispatch = $createObjectFromRoot(path = "wheels", fileName = "Dispatch", method = "$init");
@@ -957,7 +966,7 @@ public void function onApplicationStart() {
 	}
 
 	// Run the developer's on application start code.
-	$include(template = "#application.wheels.eventPath#/onapplicationstart.cfm");
+	$include(template = "/app/#application.wheels.eventPath#/onapplicationstart.cfm");
 
 	// Auto Migrate Database if requested
 	if (application.wheels.enableMigratorComponent && application.wheels.autoMigrateDatabase) {
@@ -989,5 +998,5 @@ public void function onApplicationStart() {
 		}
 		$location(url = local.url, addToken = false);
 	}
-}
+// }
 </cfscript>

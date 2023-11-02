@@ -1,5 +1,4 @@
-﻿component extends="wheels.tests.Test" {
-
+﻿component extends = "wheels.tests.Test"{
 	function setup() {
 		author = model("author");
 		profile = model("profile");
@@ -236,5 +235,4 @@
 		};
 		return testParams;
 	}
-
 }

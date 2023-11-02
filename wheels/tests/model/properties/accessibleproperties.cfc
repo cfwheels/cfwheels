@@ -13,7 +13,12 @@ component extends="wheels.tests.Test" {
 		_model = model("post");
 		_model = Duplicate(_model);
 		_model.accessibleProperties(properties = "views");
-		properties = {views = "2000", averageRating = 4.9, body = "This is the body", title = "this is the title"};
+		properties = {
+			views = "2000",
+			averageRating = 4.9,
+			body = "This is the body",
+			title = "this is the title"
+		};
 		_model = _model.new(properties = properties);
 		assert('StructKeyExists(_model, "averageRating") eq false');
 		assert('StructKeyExists(_model, "body") eq false');

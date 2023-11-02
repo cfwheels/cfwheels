@@ -1,7 +1,7 @@
 component output="false" {
 
-	include "dispatch/functions.cfm";
-	include "global/functions.cfm";
-	include "plugins/standalone/injection.cfm";
+	include "/wheels/dispatch/functions.cfm";
+	include "/wheels/global/functions.cfm";
+	include "/wheels/plugins/standalone/injection.cfm";
 
 }

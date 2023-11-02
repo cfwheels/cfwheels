@@ -14,7 +14,7 @@ component extends="wheels.tests.Test" {
 
 	function test_specifying_one_action_to_cache_and_running_it() {
 		$$oldViewPath = application.wheels.viewPath;
-		application.wheels.viewPath = "wheels/tests/_assets/views";
+		application.wheels.viewPath = "/wheels/tests/_assets/views";
 		_controller.caches(action = "test");
 		result = _controller.processAction("test", params);
 		application.wheels.viewPath = $$oldViewPath;

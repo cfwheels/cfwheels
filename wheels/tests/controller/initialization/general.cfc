@@ -2,7 +2,7 @@ component extends="wheels.tests.Test" {
 
 	function setup() {
 		_originalViewPath = get("viewPath");
-		application.wheels.viewPath = "wheels/tests/_assets/views";
+		application.wheels.viewPath = "/wheels/tests/_assets/views";
 	}
 
 	function teardown() {

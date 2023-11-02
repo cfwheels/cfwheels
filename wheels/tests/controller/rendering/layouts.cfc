@@ -31,7 +31,9 @@ component extends="wheels.tests.Test" {
 	function test_rendering_with_default_layout_in_root() {
 		_controller.renderView();
 		r = _controller.response();
-		assert("r Contains 'view template content' AND r Contains 'start:defaultlayout' AND r Contains 'end:defaultlayout'");
+		assert(
+			"r Contains 'view template content' AND r Contains 'start:defaultlayout' AND r Contains 'end:defaultlayout'"
+		);
 	}
 
 	function test_rendering_with_specific_layout() {

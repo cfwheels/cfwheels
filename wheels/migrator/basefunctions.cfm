@@ -1,6 +1,6 @@
 <cfscript>
 if (!StructKeyExists(variables, "$wddx")) {
-	include "../global/functions.cfm";
+	include "/wheels/global/functions.cfm";
 }
 
 /**

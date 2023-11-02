@@ -54,7 +54,7 @@ public void function redirectTo(
 		if (Len(arguments.route)) {
 			local.nonFlashArgumentNames = ListAppend(
 				local.nonFlashArgumentNames,
-				$findRoute(argumentCollection = arguments).variables
+				$findRoute(argumentCollection = arguments).foundvariables
 			);
 		}
 		local.iEnd = ArrayLen(local.functionInfo.parameters);

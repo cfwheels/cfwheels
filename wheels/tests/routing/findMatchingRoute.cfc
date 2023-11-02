@@ -38,7 +38,7 @@ component extends="wheels.tests.Test" {
 		r = dispatch.$findMatchingRoute(path = "pages/blah/tony/petruzzi", format = "");
 		assert('r.controller eq "pages"');
 		assert('r.action eq "index"');
-		assert('r.variables eq "firstname,lastname"');
+		assert('r.foundvariables eq "firstname,lastname"');
 	}
 
 	function test_wildcard_route() {

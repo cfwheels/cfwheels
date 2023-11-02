@@ -427,7 +427,7 @@ public void function $abortInvalidRequest() {
 				$header(statusCode = 404, statustext = "Not Found");
 			}
 			if (StructKeyExists(application.wheels, "eventPath")) {
-				$includeAndOutput(template = "#application.wheels.eventPath#/onmissingtemplate.cfm");
+				$includeAndOutput(template = "/app/#application.wheels.eventPath#/onmissingtemplate.cfm");
 			}
 		}
 		$header(statusCode = 404, statustext = "Not Found");
@@ -439,7 +439,7 @@ public void function $abortInvalidRequest() {
  * Internal function.
  */
 public string function $routeVariables() {
-	return $findRoute(argumentCollection = arguments).variables;
+	return $findRoute(argumentCollection = arguments).foundvariables;
 }
 
 /**
@@ -461,9 +461,9 @@ public struct function $findRoute() {
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			local.rv = application.wheels.routes[ListGetAt(local.routePos, local.i)];
 			local.foundRoute = StructKeyExists(arguments, "method") && local.rv.methods == arguments.method;
-			local.jEnd = ListLen(local.rv.variables);
+			local.jEnd = ListLen(local.rv.foundvariables);
 			for (local.j = 1; local.j <= local.jEnd; local.j++) {
-				local.variable = ListGetAt(local.rv.variables, local.j);
+				local.variable = ListGetAt(local.rv.foundvariables, local.j);
 				if (!StructKeyExists(arguments, local.variable) || !Len(arguments[local.variable])) {
 					local.foundRoute = false;
 				}
@@ -596,12 +596,18 @@ public void function $args(
  * Internal function.
  */
 public any function $createObjectFromRoot(required string path, required string fileName, required string method) {
-	local.returnVariable = "local.rv";
+
 	local.method = arguments.method;
 	local.component = ListChangeDelims(arguments.path, ".", "/") & "." & ListChangeDelims(arguments.fileName, ".", "/");
 	local.argumentCollection = arguments;
-	include "../../root.cfm";
-	return local.rv;
+
+	// this is a hacky thing as cfinvoke can't exist in script in ACF;
+	// lucee works of course. But doing it this way means we don't need a root.cfm file
+	return $cfinvoke(
+	 	component=local.component,
+	 	method=local.method,
+	 	invokeArguments=local.argumentCollection
+	 );
 }
 
 /**
@@ -879,23 +885,32 @@ public any function $createModelClass(
 /**
  * Internal function.
  */
-public void function $loadRoutes() {
-	$simpleLock(name = "$mapperLoadRoutes", type = "exclusive", timeout = 5, execute = "$lockedLoadRoutes");
+public void function $loadRoutes(required mapper) {
+	$simpleLock(
+		name = "$mapperLoadRoutes", 
+		type = "exclusive", 
+		timeout = 5, 
+		execute = "$lockedLoadRoutes",
+		executeArgs = { mapper: arguments.mapper }
+	);
 }
 
 /**
  * Internal function.
  */
-public void function $lockedLoadRoutes() {
+public void function $lockedLoadRoutes(required mapper) {
 	local.appKey = $appKey();
 	// clear out the route info
 	ArrayClear(application[local.appKey].routes);
 	StructClear(application[local.appKey].namedRoutePositions);
 	// load wheels internal gui routes
 	// TODO skip this if mode != development|testing?
-	$include(template = "wheels/public/routes.cfm");
+	$include(template = "/wheels/public/routes.cfm");
 	// load developer routes next
-	$include(template = "config/routes.cfm");
+	$include(template = "/app/config/routes.cfm");
+
+	application[local.appKey].routes = arguments.mapper.getRoutes();
+	
 	// set lookup info for the named routes
 	$setNamedRoutePositions();
 }
@@ -1166,6 +1181,7 @@ public string function $buildReleaseZip(string version = application.wheels.vers
 	local.path = arguments.directory & local.name & ".zip";
 
 	// directories & files to add to the zip
+	/* Removed wheels from local.include because it is outside the app dir now */
 	local.include = [
 		"config",
 		"controllers",
@@ -1180,7 +1196,6 @@ public string function $buildReleaseZip(string version = application.wheels.vers
 		"stylesheets",
 		"tests",
 		"views",
-		"wheels",
 		"Application.cfc",
 		"box.json",
 		"index.cfm",
@@ -1195,8 +1210,9 @@ public string function $buildReleaseZip(string version = application.wheels.vers
 	local.filter = "*.settings, *.classpath, *.project, *.DS_Store";
 
 	// The change log and license are copied to the wheels directory only for the build.
-	FileCopy(ExpandPath("CHANGELOG.md"), ExpandPath("wheels/CHANGELOG.md"));
-	FileCopy(ExpandPath("LICENSE"), ExpandPath("wheels/LICENSE"));
+	/* Might not need this because the wheels folder is outside the app now */
+	// FileCopy(ExpandPath("CHANGELOG.md"), ExpandPath("wheels/CHANGELOG.md"));
+	// FileCopy(ExpandPath("LICENSE"), ExpandPath("wheels/LICENSE"));
 
 	for (local.i in local.include) {
 		if (FileExists(ExpandPath(local.i))) {
@@ -1218,8 +1234,9 @@ public string function $buildReleaseZip(string version = application.wheels.vers
 	$zip(file = local.path, action = "delete", filter = local.filter, recurse = true);
 
 	// Clean up.
-	FileDelete(ExpandPath("wheels/CHANGELOG.md"));
-	FileDelete(ExpandPath("wheels/LICENSE"));
+	/* Might not need this because the wheels folder is outside the app now */
+	// FileDelete(ExpandPath("wheels/CHANGELOG.md"));
+	// FileDelete(ExpandPath("wheels/LICENSE"));
 
 	return local.path;
 }

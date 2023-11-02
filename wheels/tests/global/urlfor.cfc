@@ -33,7 +33,12 @@ component extends="wheels.tests.Test" {
 		$setNamedRoutePositions();
 		application.wheels.URLRewriting = "Off";
 		application.wheels.obfuscateUrls = true;
-		r = urlFor(route = "user_2", user_id = "5559", controller = "SurveyTemplates", action = "index");
+		r = urlFor(
+			route = "user_2",
+			user_id = "5559",
+			controller = "SurveyTemplates",
+			action = "index"
+		);
 		assert('r contains "b24dae"');
 	}
 
@@ -46,7 +51,12 @@ component extends="wheels.tests.Test" {
 		$setNamedRoutePositions();
 		application.wheels.URLRewriting = "On";
 		e = "/user/5559/survey-templates/index";
-		r = urlFor(route = "user_2", user_id = "5559", controller = "SurveyTemplates", action = "index");
+		r = urlFor(
+			route = "user_2",
+			user_id = "5559",
+			controller = "SurveyTemplates",
+			action = "index"
+		);
 		assert('r contains e');
 	}
 
@@ -59,7 +69,13 @@ component extends="wheels.tests.Test" {
 		$setNamedRoutePositions();
 		application.wheels.URLRewriting = "On";
 		e = "/user/5559/survey-templates/index.csv";
-		r = urlFor(route = "user_2", user_id = "5559", controller = "SurveyTemplates", action = "index", format = "csv");
+		r = urlFor(
+			route = "user_2",
+			user_id = "5559",
+			controller = "SurveyTemplates",
+			action = "index",
+			format = "csv"
+		);
 		assert('r contains e');
 	}
 
@@ -90,12 +106,20 @@ component extends="wheels.tests.Test" {
 			.wildcard(mapKey = true)
 			.end();
 		$setNamedRoutePositions();
-		r1 = urlFor(controller = "Example");
-		r2 = urlFor(controller = "Example", action = "MyAction");
-		r3 = urlFor(controller = "Example", action = "MyAction", key = 123);
+		r1 = urlFor(
+			controller = "Example"
+		);
+		r2 = urlFor(
+			controller = "Example",
+			action = "MyAction"
+		);
+		r3 = urlFor(
+			controller = "Example",
+			action = "MyAction",
+			key = 123
+		);
 		assert("r1 EQ '/example/index'");
 		assert("r2 EQ '/example/my-action'");
 		assert("r3 EQ '/example/my-action/123'");
 	}
-
 }

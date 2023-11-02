@@ -77,14 +77,19 @@ public struct function $createNestedParamStruct(required struct params) {
 /**
  * Internal function.
  */
-public struct function $findMatchingRoute(required string path, string requestMethod = $getRequestMethod()) {
+public struct function $findMatchingRoute(
+	required string path, 
+	string requestMethod = $getRequestMethod(),
+	array routes = application.wheels.routes,
+	component mapper = application.wheels.mapper
+) {
 	// If this is a HEAD request, look for the corresponding GET route
 	if (arguments.requestMethod == 'HEAD') {
 		arguments.requestMethod = 'GET';
 	}
 
 	// Loop over Wheels routes.
-	for (local.route in application.wheels.routes) {
+	for (local.route in arguments.routes) {
 		// If method doesn't match, skip this route.
 		if (StructKeyExists(local.route, "methods") && !ListFindNoCase(local.route.methods, arguments.requestMethod)) {
 			continue;
@@ -92,7 +97,7 @@ public struct function $findMatchingRoute(required string path, string requestMe
 
 		// Make sure route has been converted to regular expression.
 		if (!StructKeyExists(local.route, "regex")) {
-			local.route.regex = application.wheels.mapper.$patternToRegex(local.route.pattern);
+			local.route.regex = arguments.mapper.$patternToRegex(local.route.pattern);
 		}
 
 		// If route matches regular expression, set it for return.
@@ -113,10 +118,10 @@ public struct function $findMatchingRoute(required string path, string requestMe
 
 		// Try and provide some more information for why the route hasn't matched:
 		// For example, the developer is accidentally GETing to a route which only allows POST
-		for (local.route in application.wheels.routes) {
+		for (local.route in arguments.routes) {
 			// Make sure route has been converted to regular expression.
 			if (!StructKeyExists(local.route, "regex")) {
-				local.route.regex = application.wheels.mapper.$patternToRegex(local.route.pattern);
+				local.route.regex = arguments.mapper.$patternToRegex(local.route.pattern);
 			}
 
 			// If route matches regular expression, append to alternatives to display
@@ -158,6 +163,7 @@ public string function $getPathFromRequest(required string pathInfo, required st
 /**
  * Parse incoming params, create controller object, call an action on it and return the response.
  * Called from index.cfm in the root so what we return here is the final result of the request processing.
+ * This currently needs to be public as it's called from elsewhere
  */
 public string function $request(
 	string pathInfo = request.cgi.path_info,
@@ -249,7 +255,10 @@ public struct function $mergeUrlAndFormScopes(
 /**
  * If content type is JSON, deserialize it into a struct and add to the params struct.
  */
-public struct function $parseJsonBody(required struct params) {
+public struct function $parseJsonBody(
+	required struct params,
+	struct httpRequestData = GetHTTPRequestData()
+) {
 	local.headers = request.wheels.httpRequestData.headers;
 	local.content = request.wheels.httpRequestData.content;
 	if (StructKeyExists(local.headers, "Content-Type")) {
@@ -291,7 +300,7 @@ public struct function $mergeRoutePattern(required struct params, required struc
 	local.matches = ReFindNoCase(arguments.route.regex, arguments.path, 1, true);
 	local.iEnd = ArrayLen(local.matches.pos);
 	for (local.i = 2; local.i <= local.iEnd; local.i++) {
-		local.key = ListGetAt(arguments.route.variables, local.i - 1);
+		local.key = ListGetAt(arguments.route.foundVariables, local.i - 1);
 		local.rv[local.key] = Mid(arguments.path, local.matches.pos[local.i], local.matches.len[local.i]);
 	}
 	return local.rv;

@@ -191,7 +191,12 @@ component extends="wheels.tests.Test" {
 	function test_transaction_closed_when_error_raised() {
 		hash = model("tag").$hashedConnectionArgs();
 		try {
-			tag = model("tag").create(id = "", name = "Kermit", description = "The Frog", transaction = "rollback");
+			tag = model("tag").create(
+				id = "",
+				name = "Kermit",
+				description = "The Frog",
+				transaction = "rollback"
+			);
 		} catch (any e) {
 		}
 		assert('request.wheels.transactions[hash] is false');

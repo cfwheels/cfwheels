@@ -28,7 +28,7 @@ component extends="wheels.tests.Test" {
 		PluginObj = $pluginObj(config);
 		previousMixins = Duplicate(application.wheels.mixins);
 		application.wheels.mixins = PluginObj.getMixins();
-		set(viewPath = "wheels/tests/_assets/views");
+		set(viewPath = "/wheels/tests/_assets/views");
 		c = controller("test", _params);
 		m = model("authors").new();
 		d = $createObjectFromRoot(path = "wheels", fileName = "Dispatch", method = "$init");

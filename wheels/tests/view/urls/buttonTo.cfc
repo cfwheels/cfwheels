@@ -7,8 +7,8 @@ component extends="wheels.tests.Test" {
 		oldScriptName = request.cgi.script_name;
 		request.cgi.script_name = "/rewrite.cfm";
 		set(functionName = "buttonTo", encode = false);
-		if (StructKeyExists(request, "$wheelsProtectedFromForgery")) {
-			$oldrequestfromforgery = request.$wheelsProtectedFromForgery;
+		if(structKeyExists(request, "$wheelsProtectedFromForgery")){
+		$oldrequestfromforgery = request.$wheelsProtectedFromForgery;
 		}
 		request.$wheelsProtectedFromForgery = true;
 	}
@@ -17,8 +17,8 @@ component extends="wheels.tests.Test" {
 		application.wheels.URLRewriting = oldURLRewriting;
 		request.cgi.script_name = oldScriptName;
 		set(functionName = "buttonTo", encode = true);
-		if (StructKeyExists(variables, "$oldrequestfromforgery")) {
-			request.$wheelsProtectedFromForgery = $oldrequestfromforgery;
+		if(structKeyExists(variables, "$oldrequestfromforgery")){
+		request.$wheelsProtectedFromForgery = $oldrequestfromforgery;
 		}
 	}
 

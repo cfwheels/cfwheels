@@ -26,7 +26,12 @@ component extends="wheels.tests.Test" {
 
 	function test_database_defaults_load_after_save() {
 		transaction action="begin" {
-			user = model("UserBlank").new(username = "The Dude", password = "doodle", firstName = "The", lastName = "Dude");
+			user = model("UserBlank").new(
+				username = "The Dude",
+				password = "doodle",
+				firstName = "The",
+				lastName = "Dude"
+			);
 			user.save(reload = true);
 			transaction action="rollback";
 		}
