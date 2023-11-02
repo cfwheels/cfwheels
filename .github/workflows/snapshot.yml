@@ -36,7 +36,7 @@ jobs:
   # Build Snapshot Release
   #############################################
   build:
-    needs: cfformat
+    needs: tests
     uses: ./.github/workflows/release.yml
     secrets:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
