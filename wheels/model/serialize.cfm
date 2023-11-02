@@ -137,6 +137,19 @@ public any function $serializeQueryToStructs(
 					}
 				}
 			}
+
+			/* To fix the bug below:
+			   https://github.com/cfwheels/cfwheels/issues/605
+
+			   Added callback for Afterfind in function. The afterFind hook was not being called when findAll(returnAs = 'struct') is used on the model.
+			   Called the afterFind hook, the hook adds the arguments defined in the hook to the object so get the properties using properties() function and then append the property struct to the individual record struct
+			*/
+			if (arguments.callbacks && structKeyExists(this, 'afterFindCallback') && arguments.returnas eq "struct") {
+				$callback("afterFind", arguments.callbacks);
+				local.objectProps = properties();
+				structAppend(local.struct, local.objectProps);
+			}
+			
 			ArrayAppend(local.rv, local.struct);
 			local.doneStructs = ListAppend(local.doneStructs, local.structHash, Chr(7));
 		}
@@ -154,15 +167,17 @@ public struct function $queryRowToStruct(
 	boolean base = "true"
 ) {
 	local.rv = {};
-	local.allProperties = ListAppend(variables.wheels.class.propertyList, variables.wheels.class.calculatedPropertyList);
-	local.iEnd = ListLen(local.allProperties);
+	local.allProperties = ListToArray(ListAppend(variables.wheels.class.propertyList, variables.wheels.class.calculatedPropertyList));
+	// a struct key is much faster than a list element
+	local.columnStruct = $listToStruct(arguments.properties.columnList);
+	local.iEnd = ArrayLen(local.allProperties);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		// Wrap in try/catch because coldfusion has a problem with empty strings in queries for bit types.
 		try {
-			local.item = ListGetAt(local.allProperties, local.i);
-			if (!arguments.base && ListFindNoCase(arguments.properties.columnList, arguments.name & local.item)) {
+			local.item = local.allProperties[local.i];
+			if (!arguments.base && StructKeyExists(local.columnStruct, arguments.name & local.item)) {
 				local.rv[local.item] = arguments.properties[arguments.name & local.item][arguments.row];
-			} else if (ListFindNoCase(arguments.properties.columnList, local.item)) {
+			} else if (StructKeyExists(local.columnStruct, local.item)) {
 				local.rv[local.item] = arguments.properties[local.item][arguments.row];
 			}
 		} catch (any e) {

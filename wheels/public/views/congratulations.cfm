@@ -9,8 +9,7 @@
 	<p>
 		<i class="fa fa-check-circle"></i>
 		<strong>
-			You have successfully installed<cfif Len(get("version"))>version #get("version")# of</cfif>
-			 CFWheels.
+			You have successfully installed<cfif Len(get("version"))> version #get("version")# of</cfif> CFWheels.
 		</strong>
 		<br>
 		Welcome to the wonderful world of CFWheels. We hope you will enjoy it!
@@ -21,14 +20,14 @@
 
 	<div class="row">
 		<div class="column">
-			<a class="" href="https://guides.cfwheels.org/v#thisVersion#/docs/beginner-tutorial-hello-world" target="_blank">View and code along with our
+			<a class="" href="https://guides.cfwheels.org/cfwheels-guides/introduction/readme/beginner-tutorial-hello-world" target="_blank">View and code along with our
 		&quot;Hello World&quot; tutorial.</a>
 		</div>
 		<div class="column">
-			<a class="" href="https://guides.cfwheels.org/v#thisVersion#/docs" target="_blank">Have a look at the rest of our documentation.</a>
+			<a class="" href="https://guides.cfwheels.org" target="_blank">Have a look at the rest of our documentation.</a>
 		</div>
 		<div class="column">
-			<a class="" href="http://groups.google.com/group/cfwheels" target="_blank">Say &quot;Hello!&quot; to everyone in the Google Group.</a>
+			<a class="" href="https://github.com/cfwheels/cfwheels/discussions" target="_blank">Say &quot;Hello!&quot; to everyone in the CFWheels community.</a>
 		</div>
 		<div class="column">Build the next killer website on the World Wide Web...</div>
 	</div>

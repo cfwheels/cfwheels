@@ -47,7 +47,12 @@ public any function $initModelClass(required string name, required string path) 
 		variables.wheels.class.validations[ListGetAt(local.validations, local.i)] = [];
 	}
 
+	variables.wheels.class.propertyStruct = StructNew("ordered");
+	variables.wheels.class.columnStruct = StructNew("ordered");
+
+	// TODO: deprecate these lists in favour of the structs to avoid ListFind (use StructKeyList to create the list)
 	variables.wheels.class.propertyList = "";
+	variables.wheels.class.aliasedPropertyList = "";
 	variables.wheels.class.columnList = "";
 	variables.wheels.class.calculatedPropertyList = "";
 
@@ -68,6 +73,7 @@ public any function $initModelClass(required string name, required string path) 
 			StructKeyExists(variables.wheels.class.mapping[local.key], "type")
 			&& variables.wheels.class.mapping[local.key].type != "column"
 		) {
+			// TODO: deprecate (use StructKeyList of calculatedPropertyStruct)
 			variables.wheels.class.calculatedPropertyList = ListAppend(
 				variables.wheels.class.calculatedPropertyList,
 				local.key
@@ -92,19 +98,22 @@ public any function $initModelClass(required string name, required string path) 
 		local.columns = variables.wheels.class.adapter.$getColumns(tableName());
 
 		// do not process columns already assigned to a calculated property
-		local.processedColumns = variables.wheels.class.calculatedPropertyList;
+		local.processedColumns = {};
+		for (local.key in StructKeyArray(variables.wheels.class.calculatedProperties)) {
+			local.processedColumns[local.key] = true;
+		}
 
 		local.iEnd = local.columns.recordCount;
 		for (local.i = 1; local.i <= local.iEnd; local.i++) {
 			// set up properties and column mapping
-			if (!ListFindNoCase(local.processedColumns, local.columns["column_name"][local.i])) {
+			if (!StructKeyExists(local.processedColumns, local.columns["column_name"][local.i])) {
 				// default the column to map to a property with the same name
 				local.property = local.columns["column_name"][local.i];
 				for (local.key in variables.wheels.class.mapping) {
 					if (
-						StructKeyExists(variables.wheels.class.mapping[local.key], "type") && variables.wheels.class.mapping[
-							local.key
-						].type == "column" && variables.wheels.class.mapping[local.key].value == local.property
+						StructKeyExists(variables.wheels.class.mapping[local.key], "type")
+						&& variables.wheels.class.mapping[local.key].type == "column"
+						&& variables.wheels.class.mapping[local.key].value == local.property
 					) {
 						// developer has chosen to map this column to a property with a different name so set that here
 						local.property = local.key;
@@ -254,12 +263,27 @@ public any function $initModelClass(required string name, required string path) 
 						}
 					}
 				}
+
+				variables.wheels.class.propertyStruct[local.property] = true;
+				variables.wheels.class.columnStruct[variables.wheels.class.properties[local.property].column] = true;
+
 				variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, local.property);
+
+				/* 
+					To fix the issue below:
+					https://github.com/cfwheels/cfwheels/issues/580
+
+					Added a new property called aliasedPropertyList in model class that will contain column names list that are prepended with the tablename.
+					For example, if there is a "user" table then the columns "id,createdat,updatedat,deletedat" will be added in the list with "user" prepended to it.
+					
+					Then the list will contain, userid,usercreatedat,userupdatedat,userdeletedat.
+				  */
+				variables.wheels.class.aliasedPropertyList = ListAppend(variables.wheels.class.aliasedPropertyList, variables.wheels.class.modelname & local.property);
 				variables.wheels.class.columnList = ListAppend(
 					variables.wheels.class.columnList,
 					variables.wheels.class.properties[local.property].column
 				);
-				local.processedColumns = ListAppend(local.processedColumns, local.columns["column_name"][local.i]);
+				local.processedColumns[local.columns["column_name"][local.i]] = true;
 			}
 		}
 

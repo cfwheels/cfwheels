@@ -406,11 +406,12 @@ component output=false {
 		required boolean parameterize,
 		numeric limit = 0,
 		numeric offset = 0,
+		string dataSource = variables.dataSource,
 		string $primaryKey = "",
 		string $debugName = "query"
 	) {
 		local.queryAttributes = {};
-		local.queryAttributes.dataSource = variables.dataSource;
+		local.queryAttributes.dataSource = arguments.dataSource;
 		local.queryAttributes.username = variables.username;
 		local.queryAttributes.password = variables.password;
 		local.queryAttributes.result = "local.$wheels.result";

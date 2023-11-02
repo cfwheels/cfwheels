@@ -7,16 +7,14 @@ formats = DirectoryList(ExpandPath("/wheels/public/tests"), false, "name", "", "
 	});
 
 type = request.wheels.params.type;
-packageParamKeys = [
-	"package",
-	"test",
-	"reload",
-	"db",
-	"format",
-	"refresh"
-];
-_params = "";
-for (key in packageParamKeys) {
+_baseParams = "";
+for (key in "reload,db,format,refresh") {
+	if (StructKeyExists(url, key)) {
+		_baseParams = ListAppend(_baseParams, "#key#=#url[key]#", "&");
+	}
+}
+_params = _baseParams;
+for (key in "package,test") {
 	if (StructKeyExists(url, key)) {
 		_params = ListAppend(_params, "#key#=#url[key]#", "&");
 	}
@@ -42,7 +40,7 @@ for (p in pluginList) {
 	<div class="ui pointing stackable menu">
 		<cfloop from="1" to="#ArrayLen(subnavigation)#" index="i">
 			<cfscript>
-			navArgs = {"route" = subnavigation[i]['route'], "text" = subnavigation[i]['text']};
+			navArgs = {"route" = subnavigation[i]['route'], "text" = subnavigation[i]['text'], params = _baseParams};
 			if (StructKeyExists(subnavigation[i], "type")) navArgs['type'] = subnavigation[i]['type'];
 			</cfscript>
 			<a href="#urlFor(argumentCollection = navArgs)#" class="item">#navArgs['text']#</a>

@@ -46,7 +46,7 @@ if (packages.recordCount) {
 							<cfloop from="1" to="#packagesLen#" index="i">
 								<a href="#urlFor(route="wheelsTests",
 								type = request.wheels.params.type,
-								params="package=#ArrayToList(testablePackages.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#&format=html")#">#testablePackages[i]#<cfif i neq packagesLen> .</cfif></a>
+								params="package=#ArrayToList(testablePackages.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#&format=html&#_baseParams#")#">#testablePackages[i]#<cfif i neq packagesLen> .</cfif></a>
 							</cfloop>
 						</td></tr>
 					</cfloop>

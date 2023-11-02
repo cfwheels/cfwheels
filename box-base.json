@@ -34,7 +34,7 @@
         "cfwheels":"wheels/"
     },
     "dependencies":{
-        "cfwheels":"@build.version@"
+        "cfwheels":"^@build.version@"
     },
     "private":false,
     "license":[

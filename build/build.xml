@@ -95,7 +95,7 @@
 		<property name="dir.cfwheels.exports"	value="${dir.exports}/cfwheels/${cfwheels.version}" />
 		<property name="be.cfwheels.exports" 	value="${be.exports}/cfwheels" />
 
-		<property name="build.core.label" value="${cfwheels.core.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
+		<property name="build.core.label" value="${cfwheels.core.slug}-${cfwheels.version}-${start.DSTAMP}${start.TSTAMP}"/>
 		<concat destfile="${dir.build.core}/cfwheels/${build.core.label}">Built on ${start.TODAY}</concat>
 
 		<copy todir="${dir.build.core}/cfwheels" encoding="UTF-8" overwrite="true">
@@ -173,7 +173,7 @@
 		<property name="dir.cfwheels.exports"	value="${dir.exports}/cfwheels/${cfwheels.version}" />
 		<property name="be.cfwheels.exports" 	value="${be.exports}/cfwheels" />
 
-		<property name="build.base.label" value="${cfwheels.base.slug}-${cfwheels.version}+${build.number}-${start.DSTAMP}${start.TSTAMP}"/>
+		<property name="build.base.label" value="${cfwheels.base.slug}-${cfwheels.version}-${start.DSTAMP}${start.TSTAMP}"/>
 		<concat destfile="${dir.build.base}/cfwheels/${build.base.label}">Built on ${start.TODAY}</concat>
 
 		<copy todir="${dir.build.base}/cfwheels" encoding="UTF-8" overwrite="true">

@@ -4,11 +4,11 @@ This is a blank application written in CFWheels.
 
 ## As an Application
 
-As an application, this is a starting point for a modern CFWheels applicaiton with Bootstrap integration.
+As an application, this is a starting point for a modern CFWheels application with Bootstrap integration.
 
-## As a Forgbox Package
+## As a ForgeBox Package
 
-As a Forgebox package there is some interesting things going on here. Although this package doesn't contains much custom code, it does have a dependies which pulls in the core folder the framework needs to function. This folder is pulled in via this dependency:
+As a ForgeBox package there is some interesting things going on here. Although this package doesn't contain much custom code, it does have a dependency which pulls in the core folder the framework needs to function. This folder is pulled in via this dependency:
 
 ```
 "Dependencies":{
@@ -16,7 +16,7 @@ As a Forgebox package there is some interesting things going on here. Although t
 }
 ```
 
-The core files are put into the `wheels/` folder acording to these settings.
+The core files are put into the `wheels/` folder according to these settings.
 
 ```
 "installPaths":{
@@ -24,7 +24,7 @@ The core files are put into the `wheels/` folder acording to these settings.
 }
 ```
 
-## To install
+## To Install
 
 To install this package you'll need to have a running CommandBox installation. Then you can install this package with the following:
 

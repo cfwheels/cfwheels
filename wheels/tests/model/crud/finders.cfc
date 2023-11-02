@@ -3,6 +3,10 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		user = model("user");
 		shop = model("shop");
+		isACF2016 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2016;
+		isACF2018 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2018;
+		isACF2021 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2021;
+		isACF2023 = application.wheels.serverName == "Adobe Coldfusion" && application.wheels.serverVersionMajor == 2023;
 	}
 
 	function test_select_distinct_addresses() {
@@ -158,6 +162,25 @@ component extends="wheels.tests.Test" {
 		r = "Wheels.IncorrectArgumentValue";
 		debug('q', false);
 		assert('q eq r');
+	}
+
+	function test_findAll_supports_inbuilt_returnType() {
+		// returnType wasn't supported until ACF2021
+		if (isACF2016 || isACF2018 || isACF2021 || isACF2023) {
+			return;
+		}
+		actual = user.findAll(returnType = "struct", keyColumn = "id");
+
+		assert('IsStruct(actual)');
+		assert("IsStruct(actual['1'])");
+	}
+
+	function test_findAll_inbuilt_returnType_takes_precedence_over_returnAs() {
+		if (isACF2016 || isACF2018 || isACF2021 || isACF2023) {
+			return;
+		}
+		actual = user.findAll(returnType = "array", returnAs = "query");
+		assert('IsArray(actual)');
 	}
 
 	function test_exists_by_key_valid() {

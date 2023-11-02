@@ -41,7 +41,7 @@ Besides the 2 environments mentioned above, there are 2 more. Let's go through t
 
 **Maintenance**
 
-* Shows your custom maintenance page unless the requesting IP address or user agent is in the exception list (set by calling `set(ipExceptions="127.0.0.1")` in `config/settings.cfm` or passed along in the URL as `except=127.0.0.1`, or as `except=myuseragentstring` to match against the user agent instead).
+* Shows your custom maintenance page unless the requesting IP address or user agent is in the exception list (set by calling `set(ipExceptions="127.0.0.1")` in `config/settings.cfm` or passed along in the URL as `except=127.0.0.1`, or as `except=myuseragentstring` to match against the user agent instead. Please note that if passing an exception on the URL using the `except` parameter, you must also provide the `password` parameter if a reload password has been define. This eliminates the possibility of a rouge actor breaking out of maintenance mode by simply adding an `except` to the URL.
 
 This environment mode comes in handy when you want to briefly take your website offline to upload changes or modify databases on production servers.
 

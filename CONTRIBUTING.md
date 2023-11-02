@@ -8,8 +8,9 @@ Reading and following these guidelines will help us make the contribution proces
 
 * [Code of Conduct](#code-of-conduct)
 * [Getting Started](#getting-started)
-    * [Issues](#issues)
-    * [Pull Requests](#pull-requests)
+  * [Issues](#issues)
+  * [Pull Requests](#pull-requests)
+  * [Developing with Docker](#developing-with-docker)
 * [Getting Help](#getting-help)
 
 ## Code of Conduct
@@ -20,10 +21,10 @@ We take our open source community seriously and hold ourselves and other contrib
 
 Contributions are made to this repo via Issues and Pull Requests (PRs). A few general guidelines that cover both:
 
-- To report security vulnerabilities, please use our [Responsible Disclosure Program](mailto:webmaster@cfwheels.org?subject=Responsible%20Disclosure%20Program) which is monitored by our security team.
-- Search for existing Issues and PRs before creating your own.
-- We work hard to makes sure issues are handled in a timely manner but, depending on the impact, it could take a while to investigate the root cause. A friendly ping in the comment thread to the submitter or a contributor can help draw attention if your issue is blocking.
-- If you've never contributed before, see [the Contributing to CFWheels Guide](https://guides.cfwheels.org/docs/contributing-to-cfwheels/) for resources and tips on how to get started.
+* To report security vulnerabilities, please use our [Responsible Disclosure Program](mailto:webmaster@cfwheels.org?subject=Responsible%20Disclosure%20Program) which is monitored by our security team.
+* Search for existing Issues and PRs before creating your own.
+* We work hard to makes sure issues are handled in a timely manner but, depending on the impact, it could take a while to investigate the root cause. A friendly ping in the comment thread to the submitter or a contributor can help draw attention if your issue is blocking.
+* If you've never contributed before, see [the Contributing to CFWheels Guide](https://guides.cfwheels.org/cfwheels-guides/working-with-cfwheels/contributing-to-cfwheels) for resources and tips on how to get started.
 
 ### Issues
 
@@ -35,10 +36,10 @@ If you find an Issue that addresses the problem you're having, please add your o
 
 PRs to our repositories are always welcome and can be a quick way to get your fix or improvement slated for the next release. In general, PRs should:
 
-- Only fix/add the functionality in question **OR** address wide-spread whitespace/style issues, not both.
-- Add unit or integration tests for fixed or changed functionality (if a test suite already exists).
-- Address a single concern in the least number of changed lines as possible.
-- Include documentation in the repo under the /guides subdirectory.
+* Only fix/add the functionality in question **OR** address widespread whitespace/style issues, not both.
+* Add unit or integration tests for fixed or changed functionality.
+* Address a single concern in the least number of changed lines as possible.
+* Include documentation updates in the repo under the /guides subdirectory (if applicable).
 
 For changes that address core functionality or would require breaking changes (e.g. a major release), it's best to open an Issue to discuss your proposal first. This is not required but can save time creating and reviewing changes.
 
@@ -51,6 +52,10 @@ In general, we follow the ["fork-and-pull" Git workflow](https://github.com/susa
 5. Following any formatting and testing guidelines specific to this repo
 6. Push changes to your fork
 7. Open a PR in our repository and follow the PR template so that we can efficiently review the changes.
+
+### Developing with Docker
+
+To easily develop and test CFWheels locally on multiple CFML engines using Docker, check out the [Docker Instructions](https://github.com/cfwheels/cfwheels/blob/main/src/docker/README.md)
 
 ## Getting Help
 

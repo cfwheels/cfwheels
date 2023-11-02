@@ -1,6 +1,6 @@
 {
     "name":"CFWheels",
-    "version":"2.4.0",
+    "version":"2.5.0",
     "author":"CFWheels Core Team and Community",
     "shortDescription":"CFWheels MVC Framework Core Directory",
     "location":"ForgeboxStorage",
@@ -39,6 +39,7 @@
         }
     ],
     "scripts":{
+			"onServerInstall":"cfpm install image,mail,zip,debugger,caching,mysql,postgresql,sqlserver",
        "format":"cfformat run --overwrite",
        "format:watch":"cfformat watch ./.cfformat.json",
        "format:check":"cfformat check"

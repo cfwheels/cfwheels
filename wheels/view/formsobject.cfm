@@ -396,10 +396,15 @@ public string function checkBox(
 	arguments.name = $tagName(arguments.objectName, arguments.property);
 	arguments.value = arguments.checkedValue;
 	local.value = $formValue(argumentCollection = arguments);
+	// either the property value & checkedValue are equal or assume the checkedValue is a truthy value
 	if (
 		local.value == arguments.value
-		|| (IsNumeric(local.value) && local.value == 1)
-		|| (!IsNumeric(local.value) && IsBoolean(local.value) && local.value)
+		|| (!Len(arguments.checkedValue)
+			&& (
+				(IsNumeric(local.value) && local.value == 1)
+				|| (!IsNumeric(local.value) && IsBoolean(local.value) && local.value)
+			)
+		)
 	) {
 		arguments.checked = "checked";
 	}

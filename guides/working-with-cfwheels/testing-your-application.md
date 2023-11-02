@@ -623,7 +623,7 @@ Once the setup is done, we simply execute the plugin functions and assert that t
 component extends="wheels.Test" {
 
     function setup() {
-        // save the orginal environment
+        // save the original environment
         applicationScope = Duplicate(application);
         // a relative path to our plugin's assets folder where we will store any plugin specific components and files
         assetsPath = "plugins/timeAgo/tests/assets/";
