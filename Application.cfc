@@ -8,17 +8,17 @@ component {
 	// this.name = Hash(this.wheels.rootPath);
 
 	this.bufferOutput = true;
-	
+
+	// Setup paths to the webroot then set the paths to the app folders and wheels folder based on the webroot
 	this.webrootDir = getDirectoryFromPath( getCurrentTemplatePath() );
 	this.appDir     = this.webrootDir;
+	this.wheelsDir  = this.webrootDir & 'wheels';
+	// You can move the application folders and wheels folder out of the webroot
+	// this.appDir     = this.webrootDir & '../app';
+	// this.wheelsDir  = this.webrootDir & '../vendor/wheels';
 
-	// Add mapping to the root of the site (e.g. C:\inetpub\wwwroot\, C:\inetpub\wwwroot\appfolder\).
-	// This is useful when extending controllers and models in parent folders (e.g. extends="app.controllers.Controller").
 	this.mappings["/app"] = this.appDir;
-
-	// Add mapping to the wheels folder inside the app folder (e.g. C:\inetpub\wwwroot\appfolder\wheels).
-	// This is used extensively when writing tests.
-	this.mappings["/wheels"] = this.webrootDir & "wheels";
+	this.mappings["/wheels"] = this.wheelsDir;
 
 	// We turn on "sessionManagement" by default since the Flash uses it.
 	this.sessionManagement = true;
@@ -26,9 +26,9 @@ component {
 	// If a plugin has a jar or class file, automatically add the mapping to this.javasettings.
 	this.wheels.pluginDir = this.appDir & "plugins";
 	this.wheels.pluginFolders = DirectoryList(
-		this.wheels.pluginDir, 
-		"true", 
-		"path", 
+		this.wheels.pluginDir,
+		"true",
+		"path",
 		"*.class|*.jar|*.java"
 	);
 
