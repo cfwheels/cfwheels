@@ -1271,7 +1271,7 @@ public boolean function $wildcardDomainMatchCGI(required string domain, struct c
 }
 
 /**
- * Wildcard domain match: domain satifies wildcard
+ * Wildcard domain match: domain satisfies wildcard
  *
  * @domain string to test against e.g *.foo.com
  * @origin string to test against e.g bar.foo.com
