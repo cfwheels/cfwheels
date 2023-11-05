@@ -2,7 +2,7 @@
 post = model("post").findByKey(33);
 post.update(title="New version of Wheels just released");
 
-// Get a post object and then update its title and other properties based on what is pased in from the URL/form
+// Get a post object and then update its title and other properties based on what is passed in from the URL/form
 post = model("post").findByKey(params.key);
 post.update(title="New version of Wheels just released", properties=params.post);
 
