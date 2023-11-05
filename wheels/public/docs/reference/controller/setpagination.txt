@@ -8,7 +8,7 @@
 	In the example below, we will show how to write a custom query
 	using both of these methods. Note that the syntax where your
 	database performs the pagination will differ depending on the
-	database engine you are using. Plese consult your database
+	database engine you are using. Please consult your database
 	engine's documentation for the correct syntax.
 	Also note that the view code will differ depending on the method
 	used.
