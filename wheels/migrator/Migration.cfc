@@ -380,7 +380,7 @@ component extends="Base" {
 	 * [section: Migrator]
 	 * [category: Migration Functions]
 	 *
-	 * @sql Arbitary SQL String
+	 * @sql Arbitrary SQL String
 	 */
 	public void function execute(required string sql) {
 		$execute(arguments.sql);
