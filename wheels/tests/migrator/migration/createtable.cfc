@@ -17,7 +17,7 @@ component extends="wheels.tests.Test" {
 		t.time(columnNames = "timecolumn");
 		t.decimal(columnNames = "decimalcolumn");
 		t.float(columnNames = "floatcolumn");
-		// TODO: this datatype doesnt work on sqlserver
+		// TODO: this datatype doesn't work on sqlserver
 		// t.bigInteger(columnNames="bigintegercolumn", default=0);
 		t.timeStamps();
 		t.create();
