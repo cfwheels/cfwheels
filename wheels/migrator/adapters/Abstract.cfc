@@ -50,7 +50,7 @@ component {
 	 * throw an exception for adapters without its own addPrimaryKeyOptions implementation
 	 */
 	public string function addPrimaryKeyOptions() {
-		Throw(message = "The `addPrimaryKeyOptions` must be implented in the storage specific adapter.");
+		Throw(message = "The `addPrimaryKeyOptions` must be implemented in the storage specific adapter.");
 	}
 
 	/**
@@ -177,7 +177,7 @@ component {
 			}
 		}
 
-		// if we have multiple primarykeys the adapater might need to add a constraint here
+		// if we have multiple primarykeys the adapter might need to add a constraint here
 		if (ArrayLen(arguments.primaryKeys) > 1) {
 			local.sql = local.sql & ",#Chr(13)##Chr(10)# " & primaryKeyConstraint(argumentCollection = arguments);
 		}
