@@ -366,7 +366,7 @@ public any function processRequest(
 }
 
 /**
- * Returns a struct with information about the specificed paginated query.
+ * Returns a struct with information about the specified paginated query.
  * The keys that will be included in the struct are `currentPage`, `totalPages` and `totalRecords`.
  *
  * [section: Controller]
