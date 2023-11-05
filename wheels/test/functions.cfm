@@ -438,7 +438,7 @@ public void function $resetTestResults(string resultKey = "test") {
 	Report test results at overall, test case and test level, highlighting
 	failures and errors.
 
-	@param resultKey	Key to retrive distinct test result sets from in
+	@param resultKey	Key to retrieve distinct test result sets from in
 						request scope, defaults to "test"
 	@returns			HTML formatted test results
 	*/
