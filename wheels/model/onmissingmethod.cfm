@@ -125,7 +125,7 @@ public any function onMissingMethod(required string missingMethodName, required 
 			"local.addToWhere"
 		);
 
-		// remove uneeded arguments
+		// remove unneeded arguments
 		StructDelete(arguments.missingMethodArguments, "delimiter");
 		StructDelete(arguments.missingMethodArguments, "1");
 		StructDelete(arguments.missingMethodArguments, "value");
