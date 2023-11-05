@@ -57,7 +57,7 @@ On this step you are asked if you'd like to use the H2 Database, in which case w
 
 ![wheels new - step 7](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.34.44 PM.png>)
 
-On this last step, you are asked if you want us to include a box.json file so you can eventually submit this to ForgeBox.io for sharing with he world.
+On this last step, you are asked if you want us to include a box.json file so you can eventually submit this to ForgeBox.io for sharing with the world.
 
 ![wheels new - step 8](<../.gitbook/assets/Screen Shot 2022-06-18 at 12.35.09 PM.png>)
 
