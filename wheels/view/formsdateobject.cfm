@@ -10,7 +10,7 @@
  * @association The name of the association that the property is located on. Used for building nested forms that work with nested properties. If you are building a form with deep nesting, simply pass in a list to the nested object, and CFWheels will figure it out.
  * @position The position used when referencing a `hasMany` relationship in the association argument. Used for building nested forms that work with nested properties. If you are building a form with deep nestings, simply pass in a list of positions, and CFWheels will figure it out.
  * @order Use to change the order of or exclude date `select` tags.
- * @seperator Use to change the character that is displayed between the date `select` tags.
+ * @separator Use to change the character that is displayed between the date `select` tags.
  * @startYear First year in `select` list.
  * @endYear Last year in `select` list.
  * @monthDisplay Pass in names, numbers, or abbreviations to control display.
@@ -122,7 +122,7 @@ public string function timeSelect(
  * @association The name of the association that the property is located on. Used for building nested forms that work with nested properties. If you are building a form with deep nesting, simply pass in a list to the nested object, and Wheels will figure it out.
  * @position The position used when referencing a hasMany relationship in the association argument. Used for building nested forms that work with nested properties. If you are building a form with deep nestings, simply pass in a list of positions, and Wheels will figure it out.
  * @dateOrder Use to change the order of or exclude date select tags.
- * @dateSeperator Use to change the character that is displayed between the date select tags.
+ * @dateseparator Use to change the character that is displayed between the date select tags.
  * @startYear First year in select list.
  * @startYear Last year in select list.
  * @monthDisplay Pass in names, numbers, or abbreviations to control display.
