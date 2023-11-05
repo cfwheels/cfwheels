@@ -682,7 +682,7 @@ Running a single test:\
 
 These URLs are useful should you want an external system to run your tests.
 
-**Test Resuts Format**
+**Test Results Format**
 
 CFWheels can return your test results in either HTML, JUnit or JSON formats, simply by using the `format` url parameter. Eg: `format=junit`
 
