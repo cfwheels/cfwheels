@@ -26,7 +26,7 @@ component extends="wheels.tests.Test" {
 		args.phrase = "excerpt view helper";
 		args.radius = "10";
 		e = _controller.excerpt(argumentcollection = args);
-		r = "[more]testing the excerpt view helper to see if[more]";
+		r = "[more]sting the excerpt view helper to see if[more]";
 		assert("e eq r");
 	}
 
