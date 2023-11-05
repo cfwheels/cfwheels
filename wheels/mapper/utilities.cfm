@@ -2,7 +2,7 @@
 /**
  * Internal function.
  */
-public void function $compileRegex(rquired string regex) {
+public void function $compileRegex(required string regex) {
 	local.pattern = CreateObject("java", "java.util.regex.Pattern");
 	try {
 		local.regex = local.pattern.compile(arguments.regex);
