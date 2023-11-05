@@ -31,7 +31,7 @@ public any function $serializeStructsToObjects(
 	local.iEnd = ArrayLen(local.rv);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		if (Len(arguments.include) && arguments.returnIncluded) {
-			// create each object from the assocations before creating our root object
+			// create each object from the associations before creating our root object
 			local.jEnd = ListLen(arguments.include);
 			for (local.j = 1; local.j <= local.jEnd; local.j++) {
 				local.include = ListGetAt(arguments.include, local.j);
@@ -47,7 +47,7 @@ public any function $serializeStructsToObjects(
 						);
 					}
 				} else {
-					// We have a hasOne or belongsTo assocation, so just add the object to the root object.
+					// We have a hasOne or belongsTo association, so just add the object to the root object.
 					local.rv[local.i][local.include] = local._model.$createInstance(
 						properties = local.rv[local.i][local.include],
 						persisted = true,
@@ -86,16 +86,16 @@ public any function $serializeQueryToStructs(
 		local.structHash = $hashedKey(local.struct);
 		if (!ListFind(local.doneStructs, local.structHash, Chr(7))) {
 			if (Len(arguments.include) && arguments.returnIncluded) {
-				// loop through our assocations to build nested objects attached to the main object
+				// loop through our associations to build nested objects attached to the main object
 				local.jEnd = ListLen(arguments.include);
 				for (local.j = 1; local.j <= local.jEnd; local.j++) {
 					local.include = ListGetAt(arguments.include, local.j);
 					if (variables.wheels.class.associations[local.include].type == "hasMany") {
-						// we have a hasMany assocation, so loop through all of the records again to find the ones that belong to our root object
+						// we have a hasMany association, so loop through all of the records again to find the ones that belong to our root object
 						local.struct[local.include] = [];
 						local.hasManyDoneStructs = "";
 
-						// only get a reference to our model once per assocation
+						// only get a reference to our model once per association
 						local._model = model(variables.wheels.class.associations[local.include].modelName);
 
 						local.kEnd = arguments.query.recordCount;
@@ -128,7 +128,7 @@ public any function $serializeQueryToStructs(
 							}
 						}
 					} else {
-						// We have a hasOne or belongsTo assocation, so just add the object to the root object.
+						// We have a hasOne or belongsTo association, so just add the object to the root object.
 						local.struct[local.include] = model(variables.wheels.class.associations[local.include].modelName).$queryRowToStruct(
 							properties = arguments.query,
 							row = local.i,
