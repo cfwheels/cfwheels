@@ -127,7 +127,7 @@
 		application.$wheels.environment = local.oldEnvironment;
 	}
 
-	// Rewrite settings based on web server rewrite capabilites.
+	// Rewrite settings based on web server rewrite capabilities.
 	application.$wheels.rewriteFile = "rewrite.cfm";
 	if (Right(request.cgi.script_name, 12) == "/" & application.$wheels.rewriteFile) {
 		application.$wheels.URLRewriting = "On";
