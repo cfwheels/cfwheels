@@ -4,7 +4,7 @@
 
 - `/src/docker/` - New Docker based standalone test suite (not for CI)
 - `/src/docker/sqlserver` - SQL server specific config
-- `/src/docker/test-ui` - VueJS Test Suite front end
+- `/src/docker/testui` - VueJS Test Suite front end
 
 ### How to run
 
