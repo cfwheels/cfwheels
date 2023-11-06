@@ -18,13 +18,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Bug Fixes
 
 ### Miscellaneous
+- PR-1316-Feature/fix testui container [#1316](https://github.com/cfwheels/cfwheels/pull/1316) - [Peter Amiri](https://github.com/bpamiri)
 
 ### Guides
 - PR-1304-Update beginner-tutorial-hello-database.md [#1304](https://github.com/cfwheels/cfwheels/pull/1304) - [MvdO79](https://github.com/MvdO79)
 - PR-1305-Update beginner-tutorial-hello-database.md [#1305](https://github.com/cfwheels/cfwheels/pull/1305) - [MvdO79](https://github.com/MvdO79)
+- PR-1308-Added: "Nested queries not allowed" in WHERE clause documentation [#1308](https://github.com/cfwheels/cfwheels/pull/1308) - [MvdO79](https://github.com/MvdO79)
+- PR-1313-Spelling checks [#1313](https://github.com/cfwheels/cfwheels/pull/1313) - [MvdO79](https://github.com/MvdO79)
 
 ### Potentially Breaking Changes
 - PR-1240-Feature/move wheels outside the app root and make changes to mappings [#1240](https://github.com/cfwheels/cfwheels/pull/1240) - [Zain Ul Abideen](https://github.com/zainforbjs)
+- PR-1310-update paths in application.cfm [#1310](https://github.com/cfwheels/cfwheels/pull/1310) - [Peter Amiri](https://github.com/bpamiri)
+- PR-1314-Added some missing mappings [#1314](https://github.com/cfwheels/cfwheels/pull/1314) - [Zain Ul Abideen](https://github.com/zainforbjs)
 
 ---
 
