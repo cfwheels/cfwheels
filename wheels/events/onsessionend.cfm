@@ -11,6 +11,6 @@
 // }
 
 public void function $runOnSessionEnd(required sessionScope, required applicationScope) {
-	$include(template = "/app/#arguments.applicationScope.wheels.eventPath#/onsessionend.cfm", argumentCollection = arguments);
+	$include(template = "#arguments.applicationScope.wheels.eventPath#/onsessionend.cfm", argumentCollection = arguments);
 }
 </cfscript>

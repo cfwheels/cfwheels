@@ -104,7 +104,7 @@ public void function $runOnRequestStart(required targetPage) {
 			// Set the content to be displayed in maintenance mode to a request variable and exit the function.
 			// This variable is then checked in the Wheels $request function (which is what sets what to render).
 			request.$wheelsAbortContent = $includeAndReturnOutput(
-				$template = "/app/#application.wheels.eventPath#/onmaintenance.cfm"
+				$template = "#application.wheels.eventPath#/onmaintenance.cfm"
 			);
 			return;
 		}
@@ -133,7 +133,7 @@ public void function $runOnRequestStart(required targetPage) {
 			allowMethodsByRoute = application.wheels.accessControlAllowMethodsByRoute
 		);
 	}
-	$include(template = "/app/#application.wheels.eventPath#/onrequeststart.cfm");
+	$include(template = "#application.wheels.eventPath#/onrequeststart.cfm");
 	if (application.wheels.showDebugInformation) {
 		$debugPoint("requestStart");
 	}

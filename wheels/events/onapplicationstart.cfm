@@ -261,12 +261,12 @@
 	}
 
 	// Configurable paths from /app
-	application.$wheels.eventPath = "/events";
-	application.$wheels.controllerPath = "/controllers";
-	application.$wheels.modelPath = "/models";
-	application.$wheels.pluginPath = "/plugins";
-	application.$wheels.pluginComponentPath = "/plugins";
-	application.$wheels.viewPath = "/views";
+	application.$wheels.eventPath = "/app/events";
+	application.$wheels.controllerPath = "/app/controllers";
+	application.$wheels.modelPath = "/app/models";
+	application.$wheels.pluginPath = "/app/plugins";
+	application.$wheels.pluginComponentPath = "/app/plugins";
+	application.$wheels.viewPath = "/app/views";
 
 	// Configurable paths from webroot
 	application.$wheels.filePath = "/files";
@@ -966,7 +966,7 @@
 	}
 
 	// Run the developer's on application start code.
-	$include(template = "/app/#application.wheels.eventPath#/onapplicationstart.cfm");
+	$include(template = "#application.wheels.eventPath#/onapplicationstart.cfm");
 
 	// Auto Migrate Database if requested
 	if (application.wheels.enableMigratorComponent && application.wheels.autoMigrateDatabase) {
