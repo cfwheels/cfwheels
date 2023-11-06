@@ -14,7 +14,7 @@ public void function $runOnMissingTemplate(required targetpage) {
 	if (!application.wheels.showErrorInformation) {
 		$header(statusCode = 404, statustext = "Not Found");
 	}
-	$includeAndOutput(template = "/app/#application.wheels.eventPath#/onmissingtemplate.cfm");
+	$includeAndOutput(template = "#application.wheels.eventPath#/onmissingtemplate.cfm");
 	abort;
 }
 </cfscript>

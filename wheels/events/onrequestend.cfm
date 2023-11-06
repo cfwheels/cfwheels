@@ -20,7 +20,7 @@ public void function $runOnRequestEnd(required targetpage) {
 		$debugPoint("requestEnd");
 	}
 	$restoreTestRunnerApplicationScope();
-	$include(template = "/app/#application.wheels.eventPath#/onrequestend.cfm");
+	$include(template = "#application.wheels.eventPath#/onrequestend.cfm");
 	if (application.wheels.showDebugInformation) {
 		$debugPoint("requestEnd,total");
 	}

@@ -12,6 +12,6 @@
 
 public void function $runOnSessionStart() {
 	$initializeRequestScope();
-	$include(template = "/app/#application.wheels.eventPath#/onsessionstart.cfm");
+	$include(template = "#application.wheels.eventPath#/onsessionstart.cfm");
 }
 </cfscript>

@@ -1,7 +1,7 @@
 <cfscript>
 // public void function onApplicationEnd(required struct applicationScope) {
 	$include(
-		template = "/app/#arguments.applicationScope.wheels.eventPath#/onapplicationend.cfm",
+		template = "#arguments.applicationScope.wheels.eventPath#/onapplicationend.cfm",
 		argumentCollection = arguments
 	);
 // }

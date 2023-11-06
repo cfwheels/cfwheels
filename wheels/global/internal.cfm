@@ -427,7 +427,7 @@ public void function $abortInvalidRequest() {
 				$header(statusCode = 404, statustext = "Not Found");
 			}
 			if (StructKeyExists(application.wheels, "eventPath")) {
-				$includeAndOutput(template = "/app/#application.wheels.eventPath#/onmissingtemplate.cfm");
+				$includeAndOutput(template = "#application.wheels.eventPath#/onmissingtemplate.cfm");
 			}
 		}
 		$header(statusCode = 404, statustext = "Not Found");

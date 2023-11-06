@@ -92,7 +92,7 @@ public string function $runOnError(required exception, required eventName) {
 		} else {
 			$header(statusCode = 500, statusText = "Internal Server Error");
 			local.rv = $includeAndReturnOutput(
-				$template = "/app/#application.wheels.eventPath#/onerror.cfm",
+				$template = "#application.wheels.eventPath#/onerror.cfm",
 				eventName = arguments.eventName,
 				exception = arguments.exception
 			);
