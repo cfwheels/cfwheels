@@ -37,7 +37,7 @@ public void function nestedProperties(
 		} else if (application.wheels.showErrorInformation) {
 			Throw(
 				type = "Wheels.AssociationNotFound",
-				message = "The `#local.association#` assocation was not found on the `#variables.wheels.class.modelName#` model.",
+				message = "The `#local.association#` association was not found on the `#variables.wheels.class.modelName#` model.",
 				extendedInfo = "Make sure you have called `hasMany()`, `hasOne()`, or `belongsTo()` before calling the `nestedProperties()` method."
 			);
 		}

@@ -112,7 +112,7 @@ component extends="wheels.tests.Test" {
 		debug('q', false);
 		assert('isboolean(q) and q eq false');
 
-		/* readd when we have implemented the code to throw an error when an incorrect returnAs value is passed in
+		/* read when we have implemented the code to throw an error when an incorrect returnAs value is passed in
 		q = raised('user.findByKey(key="0", returnas="objects")');
 		r = "Wheels.IncorrectArgumentValue";
 		debug('q', false);
@@ -132,7 +132,7 @@ component extends="wheels.tests.Test" {
 		debug('q', false);
 		assert('isboolean(q) and q eq false');
 
-		/* readd when we have implemented the code to throw an error when an incorrect returnAs value is passed in
+		/* read when we have implemented the code to throw an error when an incorrect returnAs value is passed in
 		q = raised('user.findOne(where="id = 0", returnas="objects")');
 		r = "Wheels.IncorrectArgumentValue";
 		debug('q', false);

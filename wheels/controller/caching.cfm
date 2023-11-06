@@ -14,7 +14,7 @@ public void function caches(string action = "", numeric time, boolean static, st
 	$args(args = arguments, name = "caches", combine = "action/actions");
 	arguments.action = $listClean(arguments.action);
 
-	// When no actions are passed in we assume that all actions should be cachable and indicate this with a *.
+	// When no actions are passed in we assume that all actions should be cacheable and indicate this with a *.
 	if (!Len(arguments.action)) {
 		arguments.action = "*";
 	}
@@ -40,7 +40,7 @@ public void function $addCachableAction(required struct action) {
 }
 
 /**
- * Called when processing a request, and from other functions in this file, to get all cachable actions.
+ * Called when processing a request, and from other functions in this file, to get all cacheable actions.
  */
 public array function $cachableActions() {
 	return variables.$class.cachableActions;
@@ -71,7 +71,7 @@ public void function $clearCachableActions() {
 }
 
 /**
- * Called when processing a request to see if any actions are cachable.
+ * Called when processing a request to see if any actions are cacheable.
  */
 public boolean function $hasCachableActions() {
 	if (ArrayIsEmpty($cachableActions())) {

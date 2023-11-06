@@ -366,7 +366,7 @@ public boolean function hasChanged(string property = "") {
 			if (!StructKeyExists(variables.$persistedProperties, local.key)) {
 				return true;
 			} else {
-				// convert each datatype to a string for easier comparision
+				// convert each datatype to a string for easier comparison
 				local.type = validationTypeForProperty(local.key);
 				local.a = $convertToString(this[local.key], local.type);
 				local.b = $convertToString(variables.$persistedProperties[local.key], local.type);
@@ -611,7 +611,7 @@ public struct function $propertyInfo(required string property) {
  * Internal function.
  */
 public string function $label(required string property) {
-	// Prefer label set via `properties` intializer if it exists.
+	// Prefer label set via `properties` initializer if it exists.
 	if (
 		StructKeyExists(variables.wheels.class.properties, arguments.property)
 		&& StructKeyExists(variables.wheels.class.properties[arguments.property], "label")

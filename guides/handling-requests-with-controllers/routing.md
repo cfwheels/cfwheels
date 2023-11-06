@@ -119,7 +119,7 @@ This will set up the following routes, pointing to specific actions within the `
 Because the router uses a combination of HTTP verb and path, we only need 4 different URL paths to connect to 7 different actions on the controller.
 
 {% hint style="info" %}
-#### Whats with the `PUT`?
+#### What's with the `PUT`?
 
 There has been some confusion in the web community on whether requests to update data should happen along with a `PUT` or `PATCH` HTTP verb. It has been settled mostly that `PATCH` is the way to go for most situations. CFWheels resources set up both `PUT` and `PATCH` to address this confusion, but you should probably prefer linking up `PATCH` when you are able.
 {% endhint %}

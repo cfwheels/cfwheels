@@ -196,7 +196,7 @@ public string function $hashedKey() {
 	// make all cache keys domain specific (do not use request scope below since it may not always be initialized)
 	StructInsert(arguments, ListLen(StructKeyList(arguments)) + 1, cgi.http_host, true);
 
-	// we need to make sure we are looping through the passed in arguments in the same order everytime
+	// we need to make sure we are looping through the passed in arguments in the same order every time
 	local.values = [];
 	local.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
 	local.iEnd = ListLen(local.keyList);
@@ -1271,7 +1271,7 @@ public boolean function $wildcardDomainMatchCGI(required string domain, struct c
 }
 
 /**
- * Wildcard domain match: domain satifies wildcard
+ * Wildcard domain match: domain satisfies wildcard
  *
  * @domain string to test against e.g *.foo.com
  * @origin string to test against e.g bar.foo.com

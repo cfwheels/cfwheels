@@ -86,7 +86,7 @@ function build() {
 		view=migrate
 		view=cli
 
-		// Pacakges
+		// Packages
 		view=packages&type=core
 		view=packages&type=app
 		view=packages&type=[PLUGIN]

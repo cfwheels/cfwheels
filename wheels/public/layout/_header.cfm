@@ -1,5 +1,5 @@
 <cfscript>
-// NB ACF10/11 throw duplicate routines if aleady defined here
+// NB ACF10/11 throw duplicate routines if already defined here
 if (!IsDefined("pageHeader")) {
 	include "../helpers.cfm";
 }

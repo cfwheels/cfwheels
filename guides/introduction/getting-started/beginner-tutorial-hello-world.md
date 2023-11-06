@@ -158,7 +158,7 @@ is supposed to coordinate all of the data and business logic, not the view.
 #### Displaying the Dynamic Content
 
 Next, we will modify our `say/hello.cfm` view file so that it looks like the\
-code block bellow. When we do this, the value will be displayed in the browser.
+code block below. When we do this, the value will be displayed in the browser.
 
 {% code title="views/say/hello.cfm" %}
 ```html

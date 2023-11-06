@@ -118,7 +118,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # [2.3.0](https://github.com/cfwheels/cfwheels/releases/tag/v2.3.0) => 2020.05.11
 
-This release finalizes the 2.3.0 release and doesn't include any new enhancements or bug fixes. Bellow is the change log from the 2.3.0.rc.1 release.
+This release finalizes the 2.3.0 release and doesn't include any new enhancements or bug fixes. Below is the change log from the 2.3.0.rc.1 release.
 
 ### View Enhancements
 - Adds association error support via `includeAssociations` argument [#1080](https://github.com/cfwheels/cfwheels/issues/1080) - [Nikolaj Frey]
@@ -134,17 +134,17 @@ This release finalizes the 2.3.0 release and doesn't include any new enhancement
 - Internal Docs search now resets itself properly on backspace with empty value [#982](https://github.com/cfwheels/cfwheels/issues/982) - [Brandon Shea, Tom King]
 - `ValidatesConfirmationOf()` now correctly enforces prescence of confirmation property [#1070](https://github.com/cfwheels/cfwheels/issues/1070) - [Adam Cameron, Tom King]
 - `resource()`/`resources()` now allows empty `only` property to utilise as non-route parent [#1083](https://github.com/cfwheels/cfwheels/issues/1083) - [Brian Ramsey]
-- Handle XSS Injection in development enviroment - [Michael Diederich]
+- Handle XSS Injection in development environment - [Michael Diederich]
 - Fix params bug in CLI API [#1106] - [Peter Amiri]
 
 ### Miscellaneous
 
 - Update Docker Lucee Commandbox version to 5.2.0 - [Adam Chapman, Tom King]
-- Minor internal obselete reference to modelComponentPath removed - [Adam Chapman, Tom King]
+- Minor internal obsolete reference to modelComponentPath removed - [Adam Chapman, Tom King]
 - Minor visual fix for long migration logs overflow in modal (scroll) - [Brian Ramsey]
 - Add test suite for Lucee and H2 Database to the GitHub Actions test suite. - [Peter Amiri]
 - On going changes to update the H2 drivers [#1107] - [Peter Amiri]
-- Fixes some syntax formating introduced by cfformat [#1111] - [Adam Chapman]
+- Fixes some syntax formatting introduced by cfformat [#1111] - [Adam Chapman]
 - Minimum ColdFusion version is now ColdFusion (2018 release) Update 3 (2018,0,03,314033) / ColdFusion (2016 release) Update 10 (2016,0,10,314028) / ColdFusion 11 Update 18 (11,0,18,314030) [#923](https://github.com/cfwheels/cfwheels/issues/923) - [Michael Diederich]
 - Wheels save(allowExplicitTimestamps=true) doesn't produce the expected result [#1113] - [SebastienFCT]
 
@@ -174,17 +174,17 @@ This release finalizes the 2.3.0 release and doesn't include any new enhancement
 - Internal Docs search now resets itself properly on backspace with empty value [#982](https://github.com/cfwheels/cfwheels/issues/982) - [Brandon Shea, Tom King]
 - `ValidatesConfirmationOf()` now correctly enforces prescence of confirmation property [#1070](https://github.com/cfwheels/cfwheels/issues/1070) - [Adam Cameron, Tom King]
 - `resource()`/`resources()` now allows empty `only` property to utilise as non-route parent [#1083](https://github.com/cfwheels/cfwheels/issues/1083) - [Brian Ramsey]
-- Handle XSS Injection in development enviroment - [Michael Diederich]
+- Handle XSS Injection in development environment - [Michael Diederich]
 - Fix params bug in CLI API [#1106] - [Peter Amiri]
 
 ### Miscellaneous
 
 - Update Docker Lucee Commandbox version to 5.2.0 - [Adam Chapman, Tom King]
-- Minor internal obselete reference to modelComponentPath removed - [Adam Chapman, Tom King]
+- Minor internal obsolete reference to modelComponentPath removed - [Adam Chapman, Tom King]
 - Minor visual fix for long migration logs overflow in modal (scroll) - [Brian Ramsey]
 - Add test suite for Lucee and H2 Database to the GitHub Actions test suite. - [Peter Amiri]
 - On going changes to update the H2 drivers [#1107] - [Peter Amiri]
-- Fixes some syntax formating introduced by cfformat [#1111] - [Adam Chapman]
+- Fixes some syntax formatting introduced by cfformat [#1111] - [Adam Chapman]
 - Minimum ColdFusion version is now ColdFusion (2018 release) Update 3 (2018,0,03,314033) / ColdFusion (2016 release) Update 10 (2016,0,10,314028) / ColdFusion 11 Update 18 (11,0,18,314030) [#923](https://github.com/cfwheels/cfwheels/issues/923) - [Michael Diederich]
 - Wheels save(allowExplicitTimestamps=true) doesn't produce the expected result [#1113] - [SebastienFCT]
 
@@ -313,7 +313,7 @@ This release finalizes the 2.3.0 release and doesn't include any new enhancement
 - CORS Header can now be set via `accessControlAllowHeaders(value)` [#888](https://github.com/cfwheels/cfwheels/issues/888) [Tom King]
 - Performance Improvement: Scanning of Models and Controllers [#917](https://github.com/cfwheels/cfwheels/issues/917) [Adam Chapman]
 - Added the `authenticityToken()` function for returning the raw CSRF authenticity token [#925](https://github.com/cfwheels/cfwheels/issues/925) [Adam Chapman]
-- Adds `enablePublicComponent`, `enableMigratorComponent`,`enablePluginsComponent` enviroment settings to completely disable those features [#926](https://github.com/cfwheels/cfwheels/issues/936) [Tom King]
+- Adds `enablePublicComponent`, `enableMigratorComponent`,`enablePluginsComponent` environment settings to completely disable those features [#926](https://github.com/cfwheels/cfwheels/issues/936) [Tom King]
 - New CFWheels Internal GUI [#931](https://github.com/cfwheels/cfwheels/issues/931) [Tom King]
 - `pluginRunner()` now removed in favour of 1.x plugin behaviour for performance purposes [#916](https://github.com/cfwheels/cfwheels/issues/916) [Core Team]
 - Adds `validateTestPackageMetaData` environment setting for skipping test package validation on large test suites [#950](https://github.com/cfwheels/cfwheels/issues/950) [Adam Chapman]
@@ -886,7 +886,7 @@ This release finalizes the 2.3.0 release and doesn't include any new enhancement
 - AMPM select displaying twice - [#768](https://github.com/cfwheels/cfwheels/issues/768) [John Bliss, Tony Petruzzi]
 - \$request argumentsCollection: should be argumentCollection - [#772](https://github.com/cfwheels/cfwheels/issues/772) [William Fisk, Tony Petruzzi]
 - Pagination pull incorrect number of results with compounded keys - [#725](https://github.com/cfwheels/cfwheels/issues/725) [Jeff Greenhouse, Tony Petruzzi]
-- Update hasChanged() to properly chech floats - [Andy Bellenie, Tony Petruzzi]
+- Update hasChanged() to properly check floats - [Andy Bellenie, Tony Petruzzi]
 - Date tags selected date throws out of range error - [Ben Garrett, Tony Petruzzi]
 
 ### Miscellaneous
@@ -942,7 +942,7 @@ This release finalizes the 2.3.0 release and doesn't include any new enhancement
 ### Bug Fixes
 
 - Added the varchar_ignorecase type to the H2 adapter - [#664](https://github.com/cfwheels/cfwheels/issues/664) [Per Djurner]
-- Fix so that the full tablename is always retuned - [#667](https://github.com/cfwheels/cfwheels/issues/667) [Tony Petruzzi]
+- Fix so that the full tablename is always returned - [#667](https://github.com/cfwheels/cfwheels/issues/667) [Tony Petruzzi]
 - Pagaination with parameterize set to false for numeric keys - [#656](https://github.com/cfwheels/cfwheels/issues/656) [levi730, Tony Petruzzi]
 - Blank should be the selected value when includeBlank is set - [#633](https://github.com/cfwheels/cfwheels/issues/633) [Tony Petruzzi]
 - validatesLengthOf failed when both maximum and minimum were specified - [Tony Petruzzi]
@@ -1286,7 +1286,7 @@ This release finalizes the 2.3.0 release and doesn't include any new enhancement
 - Corrected execution time report when reloading application - [Tony Petruzzi, Per Djurner]
 - Allowing negative values in where clause - Groups [Don Humphreys, Tony Petruzzi]
 - Work-around for a Railo mapping bug that was causing slowness - [#268](https://github.com/cfwheels/cfwheels/issues/268) [Tony Petruzzi, Per Djurner]
-- Fixed an includePartial() error with caching that occured in production mode - [#285](https://github.com/cfwheels/cfwheels/issues/285) [James Gibson, Per Djurner]
+- Fixed an includePartial() error with caching that occurred in production mode - [#285](https://github.com/cfwheels/cfwheels/issues/285) [James Gibson, Per Djurner]
 - Support passing in a single column query to select() and selectTag() - [#300](https://github.com/cfwheels/cfwheels/issues/300) [Tony Petruzzi]
 - Fixed radio button ids to work properly with negative number values - [#274](https://github.com/cfwheels/cfwheels/issues/274) [Elezotte, Per Djurner]
 - Removed display of "rewrite.cfm" in error emails - [#280](https://github.com/cfwheels/cfwheels/issues/280) [Raul Riera, Per Djurner]
@@ -1297,7 +1297,7 @@ This release finalizes the 2.3.0 release and doesn't include any new enhancement
 - Fixed so pagination aborts early when no records exist in the table instead of causing an error - Groups [Per Djurner, James Gibson]
 - Fixed so return type is correct when no records are found on using findOne() with returnAs="object" - [Raul Riera, Per Djurner]
 - Fixed Railo bug caused by argument defaults on a number of functions - [#201](https://github.com/cfwheels/cfwheels/issues/201), #264 [William Fisk, Tony Petruzzi, Per Djurner]
-- Fixed so you can order on included tables in finders without speciyfing table name - [Per Djurner]
+- Fixed so you can order on included tables in finders without specifying table name - [Per Djurner]
 - Fixed so pagination returns an empty query instead of the full record set when specifying a page out of range - [Per Djurner]
 
 ### Miscellaneous

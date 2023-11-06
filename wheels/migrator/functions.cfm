@@ -15,7 +15,7 @@ public struct function init(
 }
 
 /**
- * Migrates database to a specified version. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
+ * Migrates database to a specified version. Whilst you can use this in your application, the recommended usage is via either the CLI or the provided GUI interface
  *
  * [section: Migrator]
  * [category: General Functions]
@@ -109,7 +109,7 @@ public string function migrateToLatest() {
 }
 
 /**
- * Returns current database version. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
+ * Returns current database version. Whilst you can use this in your application, the recommended usage is via either the CLI or the provided GUI interface
  *
  * [section: Migrator]
  * [category: General Functions]
@@ -119,7 +119,7 @@ public string function getCurrentMigrationVersion() {
 }
 
 /**
- * Creates a migration file. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
+ * Creates a migration file. Whilst you can use this in your application, the recommended usage is via either the CLI or the provided GUI interface
  *
  * [section: Migrator]
  * [category: General Functions]
@@ -137,7 +137,7 @@ public string function createMigration(
 }
 
 /**
- * Searches db/migrate folder for migrations. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
+ * Searches db/migrate folder for migrations. Whilst you can use this in your application, the recommended usage is via either the CLI or the provided GUI interface
  *
  * [section: Migrator]
  * [category: General Functions]
@@ -184,7 +184,7 @@ public array function getAvailableMigrations(string path = this.paths.migrate) {
 }
 
 /**
- * Reruns the specified migration version. Whilst you can use this in your application, the recommended useage is via either the CLI or the provided GUI interface
+ * Reruns the specified migration version. Whilst you can use this in your application, the recommended usage is via either the CLI or the provided GUI interface
  *
  * [section: Migrator]
  * [category: General Functions]

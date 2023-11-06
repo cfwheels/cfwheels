@@ -645,7 +645,7 @@ public array function $addWhereClauseParameters(required array sql, required str
 			Throw(
 				type = "Wheels.ParameterMismatch",
 				message = "Wheels found #ArrayLen(local.originalValues)# parameters in the query string but was instructed to parameterize #arguments.parameterize#.",
-				extendedInfo = "Verify that the number of parameters specified in the `where` argument mathes the number in the parameterize argument."
+				extendedInfo = "Verify that the number of parameters specified in the `where` argument matches the number in the parameterize argument."
 			);
 		}
 		local.pos = ArrayLen(local.originalValues);
