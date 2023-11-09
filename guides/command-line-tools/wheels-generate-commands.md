@@ -222,6 +222,10 @@ This command generates a view file in the `views/` directory when specifying the
 | name       | true     |         | Name of the file to create, i.e, edit                                 |
 | template   | false    |         | template (used in Scaffolding) - options crud/_form,crud/edit,crud/index,crud/new,crud/show |
 
+The "crud/show" parameter of this command is referring to an existing template to be used to generate the "user/show" view. The prefix "crud" points to a templates directory in the app that holds a "crud" directory in which templates like "show" are placed. In this way the "crud/show" parameter fetches the show.txt template in the "templates/crud" directory and uses that for generating the "user/show" view.
+
+![](.gitbook/assets/222650494-da2c1b95-f817-40c3-a38e-b9f9db555ae8.png)
+
 ## `wheels generate test`
 
 This command generates a test stub in `/test/TYPE/NAME.cfc`.
