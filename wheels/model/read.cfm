@@ -47,7 +47,7 @@ public any function findAll(
 	boolean callbacks = "true",
 	boolean includeSoftDeletes = "false",
 	struct useIndex = {},
-	string dataSource = application.wheels.dataSourceName,
+	string dataSource = variables.wheels.class.dataSource,
 	numeric $limit = "0",
 	numeric $offset = "0"
 ) {
