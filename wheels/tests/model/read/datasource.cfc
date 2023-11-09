@@ -6,6 +6,9 @@ component extends="wheels.tests.Test" {
 		isTestable = true;
 		if (application.wheels.dataSourceName eq altDatasource) {
 			isTestable = false;
+		} else if (application.wheels.serverName contains "Coldfusion") {
+			// seems ACF can't handle H2 datasources
+			isTestable = false;
 		}
 	}
 
