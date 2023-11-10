@@ -62,7 +62,7 @@
 
 	// Set up containers for routes, caches, settings etc.
 	// TODO remove the static version number
-	application.$wheels.version = "3.0.0-SNAPSHOT";
+	application.$wheels.version = "@build.version@";
 	try {
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
 	} catch (any e) {
@@ -942,8 +942,8 @@
 	// Create the mapper that will handle creating routes.
 	// Needs to be before $loadRoutes and after $loadPlugins.
 	application.$wheels.mapper = $createObjectFromRoot(
-		path = "wheels", 
-		fileName = "Mapper", 
+		path = "wheels",
+		fileName = "Mapper",
 		method = "$init",
 		executeArgs = {
 			resourceControllerNaming = application.$wheels.resourceControllerNaming
