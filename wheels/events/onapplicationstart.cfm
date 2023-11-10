@@ -61,7 +61,6 @@
 	request.cgi = $cgiScope();
 
 	// Set up containers for routes, caches, settings etc.
-	// TODO remove the static version number
 	application.$wheels.version = "@build.version@";
 	try {
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
