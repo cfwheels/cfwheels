@@ -96,7 +96,7 @@ public any function $initModelClass(required string name, required string path) 
 		variables.wheels.class.adapter = $assignAdapter();
 
 		// get columns for the table
-		local.columns = variables.wheels.class.adapter.$getColumns(tableName()).filter((r) => {
+		local.columns = variables.wheels.class.adapter.$getColumns(tableName()).filter(function(r) {
 			return !StructKeyExists(variables.wheels.class.ignoredColumns, arguments.r.column_name);
 		});
 
