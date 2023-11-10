@@ -109,7 +109,11 @@ public void function $pluginDelete() {
 public void function $pluginsProcess() {
 	local.plugins = $pluginFolders();
 	local.pluginKeys = ListSort(StructKeyList(local.plugins), "textnocase", variables.sort);
-	local.wheelsVersion = SpanExcluding(variables.$class.wheelsVersion, " ");
+	if (SpanExcluding(variables.$class.wheelsVersion, " ") == "@build.version@") {
+		local.wheelsVersion = "0.0.0";
+	} else {
+		local.wheelsVersion = SpanExcluding(variables.$class.wheelsVersion, " ");
+	}
 	for (local.pluginKey in local.pluginKeys) {
 		local.pluginValue = local.plugins[local.pluginKey];
 		local.plugin = CreateObject("component", $componentPathToPlugin(local.pluginKey, local.pluginValue.name)).init();
