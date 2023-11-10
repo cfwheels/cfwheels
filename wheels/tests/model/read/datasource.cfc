@@ -34,6 +34,17 @@ component extends="wheels.tests.Test" {
 		finderArgs = {where = "firstName = '#firstName#'", datasource = altDatasource};
 	}
 
+	function test_findall_respects_model_config_datasource() {
+		if (!isTestable) return;
+		transaction {
+			this.db_setup();
+			// ensure this is using the wheelstestdb_h2 as defined in the model config
+			actual = model("AuthorAlternateDatasource").findAll(where = "firstName = '#firstName#'");
+			TransactionRollback();
+		}
+		assert("actual.recordCount");
+	}
+
 	function test_findall_with_datasource_argument() {
 		if (!isTestable) return;
 		transaction {

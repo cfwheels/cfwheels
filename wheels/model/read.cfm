@@ -47,7 +47,7 @@ public any function findAll(
 	boolean callbacks = "true",
 	boolean includeSoftDeletes = "false",
 	struct useIndex = {},
-	string dataSource = application.wheels.dataSourceName,
+	string dataSource = variables.wheels.class.dataSource,
 	numeric $limit = "0",
 	numeric $offset = "0"
 ) {
@@ -396,7 +396,7 @@ public any function findByKey(
 	string returnAs,
 	boolean callbacks = "true",
 	boolean includeSoftDeletes = "false",
-	string dataSource = application.wheels.dataSourceName
+	string dataSource = variables.wheels.class.dataSource
 ) {
 	$args(name = "findByKey", args = arguments);
 	$setDebugName(name = "FindByKey", args = arguments);
@@ -445,7 +445,7 @@ public any function findOne(
 	string returnAs,
 	boolean includeSoftDeletes = "false",
 	struct useIndex = {},
-	string dataSource = application.wheels.dataSourceName
+	string dataSource = variables.wheels.class.dataSource
 ) {
 	$args(name = "findOne", args = arguments);
 	$setDebugName(name = "findOne", args = arguments);
