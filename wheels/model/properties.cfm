@@ -37,6 +37,22 @@ public void function protectedProperties(string properties = "") {
 }
 
 /**
+ * Use this method to specify which columns cannot be used by the wheels ORM.
+ *
+ * [section: Model Configuration]
+ * [category: Miscellaneous Functions]
+ *
+ * @columns Array of columns names that will be ignored.
+ */
+public void function ignoredColumns(array columns = []) {
+	local.rv = {};
+	for (local.column in arguments.columns) {
+		local.rv[local.column] = 1;
+	}
+	variables.wheels.class.ignoredColumns = local.rv;
+}
+
+/**
  * Use this method to map an object property to either a table column with a different name than the property or to a SQL expression.
  * You only need to use this method when you want to override the default object relational mapping that CFWheels performs.
  *

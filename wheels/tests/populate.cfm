@@ -195,6 +195,7 @@ CREATE TABLE shops
 	shopid char(9) NOT NULL
 	,citycode #local.intColumnType# NULL
 	,name varchar(80) NOT NULL
+	,isblackmarket #local.intColumnType# NULL
 	,PRIMARY KEY(shopid)
 ) #local.storageEngine#
 </cfquery>
