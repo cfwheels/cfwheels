@@ -16,9 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### View Enhancements
 
 ### Bug Fixes
+- PR-1327-issue #1319 model datasource bug [#1327](https://github.com/cfwheels/cfwheels/pull/1327) - [Adam Chapman](https://github.com/chapmandu)
 
 ### Miscellaneous
 - PR-1316-Feature/fix testui container [#1316](https://github.com/cfwheels/cfwheels/pull/1316) - [Peter Amiri](https://github.com/bpamiri)
+- PR-1328-Backport datasource changes to develop branch [#1328](https://github.com/cfwheels/cfwheels/pull/1328) - [Peter Amiri](https://github.com/bpamiri)
+- PR-1329-use github build vars to remove the hardcoded version number [#1329](https://github.com/cfwheels/cfwheels/pull/1329) - [Peter Amiri](https://github.com/bpamiri)
 
 ### Guides
 - PR-1304-Update beginner-tutorial-hello-database.md [#1304](https://github.com/cfwheels/cfwheels/pull/1304) - [MvdO79](https://github.com/MvdO79)
