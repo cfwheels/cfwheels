@@ -32,7 +32,8 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SEARCH_QUERY: 'repo:cfwheels/cfwheels created:${{ env.last_month }} -reason:"not planned"'
-
+      run: echo ./issue_metrics.md
+ 
     - name: Create issue
       uses: peter-evans/create-issue-from-file@v4
       with:
