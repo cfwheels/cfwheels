@@ -42,7 +42,7 @@ jobs:
 
     - name: Create a new GitHub Discussion
       id: create-discussion
-      uses: abirismyname/create-discussion@v1.x
+      uses: abirismyname/create-discussion@v1.1.0
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
       with:
