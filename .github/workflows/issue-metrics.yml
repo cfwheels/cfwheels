@@ -13,7 +13,6 @@ jobs:
     name: issue metrics
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
     - name: Get dates for last month
       shell: bash
       run: |
@@ -32,6 +31,8 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SEARCH_QUERY: 'repo:cfwheels/cfwheels created:${{ env.last_month }} -reason:"not planned"'
+
+    - name: Echo file content
       run: echo ./issue_metrics.md
  
     - name: Create issue
