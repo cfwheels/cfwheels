@@ -27,6 +27,7 @@ public any function $initModelClass(required string name, required string path) 
 	variables.wheels.class.properties = {};
 	variables.wheels.class.accessibleProperties = {};
 	variables.wheels.class.calculatedProperties = {};
+	variables.wheels.class.ignoredColumns = {};
 	variables.wheels.class.associations = {};
 	variables.wheels.class.callbacks = {};
 	variables.wheels.class.keys = "";
@@ -95,7 +96,9 @@ public any function $initModelClass(required string name, required string path) 
 		variables.wheels.class.adapter = $assignAdapter();
 
 		// get columns for the table
-		local.columns = variables.wheels.class.adapter.$getColumns(tableName());
+		local.columns = variables.wheels.class.adapter.$getColumns(tableName()).filter(function(r) {
+			return !StructKeyExists(variables.wheels.class.ignoredColumns, arguments.r.column_name);
+		});
 
 		// do not process columns already assigned to a calculated property
 		local.processedColumns = {};
@@ -269,13 +272,13 @@ public any function $initModelClass(required string name, required string path) 
 
 				variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, local.property);
 
-				/* 
+				/*
 					To fix the issue below:
 					https://github.com/cfwheels/cfwheels/issues/580
 
 					Added a new property called aliasedPropertyList in model class that will contain column names list that are prepended with the tablename.
 					For example, if there is a "user" table then the columns "id,createdat,updatedat,deletedat" will be added in the list with "user" prepended to it.
-					
+
 					Then the list will contain, userid,usercreatedat,userupdatedat,userdeletedat.
 				  */
 				variables.wheels.class.aliasedPropertyList = ListAppend(variables.wheels.class.aliasedPropertyList, variables.wheels.class.modelname & local.property);
