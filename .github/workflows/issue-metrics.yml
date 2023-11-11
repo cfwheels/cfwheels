@@ -47,10 +47,6 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
       with:
         title: Monthly issue/pull request metrics report
-        body-filepath: ./issue_metrics.md
-        repository-id: MDEwOlJlcG9zaXRvcnkxMjUwMzM1
-        category-id: DIC_kwDOABMUH84CO3DF  
-    - name: Print discussion url and id
-      run: |
-        echo discussion-id: ${{steps.create-discussion.outputs.discussion-id}} 
-        echo discussion-url: ${{steps.create-discussion.outputs.discussion-url}}
+        body-filepath: './issue_metrics.md'
+        repository-id: 'MDEwOlJlcG9zaXRvcnkxMjUwMzM1'
+        category-id: 'DIC_kwDOABMUH84CO3DF'  
