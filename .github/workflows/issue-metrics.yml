@@ -39,13 +39,17 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         content-filepath: ./issue_metrics.md
 
-    - name: Generate new discussion using file
-      id: create-discussion-with-file
-      uses: abirismyname/create-discussion@v1.1.0
+    - name: Create a new GitHub Discussion
+      id: create-discussion
+      uses: abirismyname/create-discussion@v1.x
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
       with:
         title: Monthly issue/pull request metrics report
         body-filepath: ./issue_metrics.md
-        repository-id: 'MDEwOlJlcG9zaXRvcnkxMjUwMzM1'
-        category-id: 'DIC_kwDOABMUH84CO3DF'           
+        repository-id: MDEwOlJlcG9zaXRvcnkxMjUwMzM1
+        category-id: DIC_kwDOABMUH84CO3DF  
+    - name: Print discussion url and id
+      run: |
+        echo discussion-id: ${{steps.create-discussion.outputs.discussion-id}} 
+        echo discussion-url: ${{steps.create-discussion.outputs.discussion-url}}
