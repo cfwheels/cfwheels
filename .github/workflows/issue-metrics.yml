@@ -51,4 +51,4 @@ jobs:
         title: Monthly issue/pull request metrics report
         body-filepath: './issue_metrics.md'
         repository-id: 'MDEwOlJlcG9zaXRvcnkxMjUwMzM1'
-        category-id: 'DIC_kwDOABMUH84CO3DF'  
+        category-id: 'DIC_kwDOABMUH84CO3DG'  
