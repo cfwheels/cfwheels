@@ -13,6 +13,7 @@ jobs:
     name: issue metrics
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
     - name: Get dates for last month
       shell: bash
       run: |
