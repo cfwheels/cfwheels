@@ -45,7 +45,7 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
       with:
-        title: "Monthly issue/pull request metrics report for ${{ env.last_month }}"
+        title: Monthly issue/pull request metrics report
         body-filepath: ./issue_metrics.md
         repository-id: 'MDEwOlJlcG9zaXRvcnkxMjUwMzM1'
-        category-id: 'DIC_kwDOABMUH84Ca3i-'           
+        category-id: 'DIC_kwDOABMUH84CO3DF'           
