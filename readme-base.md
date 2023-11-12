@@ -1,4 +1,4 @@
-# cfwheels-template-base
+# cfwheels-base-template
 
 This is a blank application written in CFWheels. 
 
