@@ -104,7 +104,15 @@ function config() {
 
 With that in place, you have the foundation for a model that never touches the database. When you call methods like [save()](https://api.cfwheels.org/model.save.html), [create()](https://api.cfwheels.org/model.create.html), [update()](https://api.cfwheels.org/model.update.html), and [delete()](https://api.cfwheels.org/model.delete.html) on a tableless model, the entire model lifecycle will still run, including object validation and object callbacks.
 
-Typically, you will want to configure properties and validations manually for tableless models and then override [save()](https://api.cfwheels.org/model.save.html)and other persistence methods needed by your application to persist with the data elsewhere (maybe in the `session`scope, an external NoSQL database, or as an email sent from a contact form).
+Typically, you will want to configure properties and validations manually for tableless models and then override [save()](https://api.cfwheels.org/model.save.html) and other persistence methods needed by your application to persist with the data elsewhere (maybe in the `session` scope, an external NoSQL database, or as an email sent from a contact form).
+
+Features supported:
+
+- Properties
+- Validations
+- Callbacks involving initialisation and validations
+
+See [Building search forms with tableless models in CFWheels](https://cfwheels.org/blog/building-search-forms-with-tableless-models-in-cfwheels) for a worked-out example.
 
 ### Columns and Properties
 
