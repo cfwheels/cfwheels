@@ -172,9 +172,23 @@ In this case, the convention is to use the singular name of the related table wi
 
 ### Breaking the Convention
 
-Wheels offers a way to configure your models to break this naming convention, however. This is done by using the `foreignKey` argument in your models' `belongsTo()` calls.
+Wheels offers a way to configure your models to break this naming convention, however. This is done by using the `foreignKey` argument in your models' `hasOne()`, `hasMany()`, or `belongsTo()` calls.
 
 Let's pretend that you have a relationship between`author` and `post`, but you didn't use the naming convention and instead called the column `author_id`. (You just can't seem to let go of the underscores, can you?)
+
+Your author's `config()` method would then need to look like this:
+
+{% code title="models/author.cfc" %}
+```javascript
+component extends="Model" {
+
+    function config() {
+        hasMany(name="posts", foreignKey="author_id");
+    }
+
+}
+```
+{% endcode %}
 
 Your post's `config()` method would then need to look like this:
 
