@@ -78,7 +78,7 @@ public string function linkTo(
 }
 
 /**
- * Creates a form containing a single button that submits to the URL.
+ * Creates a form containing a single button that submits to the URL. Note: Pass any additional arguments by prefixing them with "input" like inputClass, inputRel, and inputId, and the generated tag will also include those values as HTML attributes.
  * The URL is built the same way as the `linkTo` function.
  *
  * [section: View Helpers]
