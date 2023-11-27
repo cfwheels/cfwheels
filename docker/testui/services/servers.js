@@ -25,4 +25,6 @@ const servers =
 		server: 'http://localhost:62023'
 	}
 ]
-export default servers
+window.servers = servers;
+
+export default window.servers;

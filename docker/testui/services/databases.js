@@ -16,4 +16,6 @@ const databases = [
 		database: 'h2'
 	}
 ]
-export default databases
+window.databases  = databases;
+
+export default window.databases;
