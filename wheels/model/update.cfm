@@ -69,7 +69,19 @@ public numeric function updateAll(
 		}
 	} else {
 		arguments.sql = [];
-		ArrayAppend(arguments.sql, "UPDATE #tableName()# SET");
+		// Issue#1273: Added this section to allow included tables to be referenced in the query
+		local.associations = [];
+		local.list = "";
+		local.associations = $expandedAssociations(
+			include = arguments.include,
+			includeSoftDeletes = arguments.includeSoftDeletes
+		);
+		
+		local.iEnd = ArrayLen(local.associations);
+		for (local.i = 1; local.i <= local.iEnd; local.i++) {
+			local.list &= local.associations[local.i].join;
+		}
+		ArrayAppend(arguments.sql, "UPDATE #tableName()# #local.list# SET");
 		local.pos = 0;
 		for (local.key in arguments.properties) {
 			local.pos++;
