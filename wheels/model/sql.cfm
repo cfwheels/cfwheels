@@ -468,11 +468,28 @@ public array function $addWhereClause(
 	required string include,
 	required boolean includeSoftDeletes
 ) {
+	// Issue#1273: Added this section to allow included tables to be referenced in the query
+	local.migration = CreateObject("component", "wheels.migrator.Migration").init();
+	local.tempSql = "";
+	if(arguments.include != "" && ListFind('PostgreSQL,H2,MicrosoftSQLServer', local.migration.adapter.adapterName()) && structKeyExists(arguments, "sql")){
+		local.tempSql = arguments.sql;
+	}
 	local.whereClause = $whereClause(
 		where = arguments.where,
 		include = arguments.include,
-		includeSoftDeletes = arguments.includeSoftDeletes
+		includeSoftDeletes = arguments.includeSoftDeletes,
+		sql = local.tempSql
 	);
+	if(arguments.include != "" && ListFind('PostgreSQL,H2', local.migration.adapter.adapterName()) && structKeyExists(arguments, "sql")){
+		if(left(arguments.sql[1], 6) == 'UPDATE'){
+			ArrayAppend(arguments.sql, "FROM #arguments.include#");
+		}
+	}
+	if(arguments.include != "" && ListFind('MicrosoftSQLServer', local.migration.adapter.adapterName()) && structKeyExists(arguments, "sql")){
+		if(left(arguments.sql[1], 6) == 'UPDATE'){
+			ArrayAppend(arguments.sql, "FROM #tablename()#");
+		}
+	}
 	local.iEnd = ArrayLen(local.whereClause);
 	for (local.i = 1; local.i <= local.iEnd; local.i++) {
 		ArrayAppend(arguments.sql, local.whereClause[local.i]);
@@ -483,7 +500,7 @@ public array function $addWhereClause(
 /**
  * Internal function.
  */
-public array function $whereClause(required string where, string include = "", boolean includeSoftDeletes = "false") {
+public array function $whereClause(required string where, string include = "", boolean includeSoftDeletes = "false", sql = "") {
 	local.rv = [];
 	if (Len(arguments.where)) {
 		// setup an array containing class info for current class and all the ones that should be included
@@ -492,8 +509,28 @@ public array function $whereClause(required string where, string include = "", b
 			local.classes = $expandedAssociations(include = arguments.include);
 		}
 		ArrayPrepend(local.classes, variables.wheels.class);
-
-		ArrayAppend(local.rv, "WHERE");
+		// Issue#1273: Added this section to allow included tables to be referenced in the query
+		local.joinclause = "";
+		local.migration = CreateObject("component", "wheels.migrator.Migration").init();
+		if(arguments.include != "" && ListFind('PostgreSQL,H2', local.migration.adapter.adapterName()) && left(arguments.sql[1], 6) == 'UPDATE'){
+			for(local.i = 1; local.i<= arrayLen(local.classes); i++){
+				if(structKeyExists(local.classes[local.i], "JOIN")){
+					local.joinclause &= local.classes[local.i].JOIN.Split("ON")[2];
+				}
+			}
+			ArrayAppend(local.rv, "WHERE #local.joinclause# AND");
+		}
+		else if(arguments.include != "" && ListFind('MicrosoftSQLServer', local.migration.adapter.adapterName()) && left(arguments.sql[1], 6) == 'UPDATE'){
+			for(local.i = 1; local.i<= arrayLen(local.classes); i++){
+				if(structKeyExists(local.classes[local.i], "JOIN")){
+					local.joinclause &= local.classes[local.i].JOIN;
+				}
+			}
+			ArrayAppend(local.rv, "#local.joinclause# WHERE ");
+		}
+		else{
+			ArrayAppend(local.rv, "WHERE");
+		}
 		local.wherePos = ArrayLen(local.rv) + 1;
 		local.params = [];
 		local.where = ReReplace(

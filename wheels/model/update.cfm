@@ -70,18 +70,23 @@ public numeric function updateAll(
 	} else {
 		arguments.sql = [];
 		// Issue#1273: Added this section to allow included tables to be referenced in the query
-		local.associations = [];
-		local.list = "";
-		local.associations = $expandedAssociations(
-			include = arguments.include,
-			includeSoftDeletes = arguments.includeSoftDeletes
-		);
-		
-		local.iEnd = ArrayLen(local.associations);
-		for (local.i = 1; local.i <= local.iEnd; local.i++) {
-			local.list &= local.associations[local.i].join;
+		local.migration = CreateObject("component", "wheels.migrator.Migration").init();
+		if (ListFind('MySQL', local.migration.adapter.adapterName())){
+			local.list = "";
+			local.associations = [];
+			local.associations = $expandedAssociations(
+				include = arguments.include,
+				includeSoftDeletes = arguments.includeSoftDeletes
+			);
+			local.iEnd = ArrayLen(local.associations);
+			for (local.i = 1; local.i <= local.iEnd; local.i++) {
+				local.list &= local.associations[local.i].join;
+			}
+			ArrayAppend(arguments.sql, "UPDATE #tableName()# #local.list# SET");
 		}
-		ArrayAppend(arguments.sql, "UPDATE #tableName()# #local.list# SET");
+		else if (ListFind('PostgreSQL,H2,MicrosoftSQLServer', local.migration.adapter.adapterName())){
+			ArrayAppend(arguments.sql, "UPDATE #tableName()# SET");
+		}
 		local.pos = 0;
 		for (local.key in arguments.properties) {
 			local.pos++;
