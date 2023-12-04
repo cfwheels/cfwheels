@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR-1308-Added: "Nested queries not allowed" in WHERE clause documentation [#1308](https://github.com/cfwheels/cfwheels/pull/1308) - [MvdO79](https://github.com/MvdO79)
 - PR-1313-Spelling checks [#1313](https://github.com/cfwheels/cfwheels/pull/1313) - [MvdO79](https://github.com/MvdO79)
 - PR-1323-Update guides with description of the templates directory [#1323](https://github.com/cfwheels/cfwheels/pull/1323) - [MvdO79](https://github.com/MvdO79)
+- PR-1350-Update documentation for  Reading Rrecords [#1350](https://github.com/cfwheels/cfwheels/pull/1323) - [MvdO79](https://github.com/MvdO79)
 
 ### Potentially Breaking Changes
 - PR-1240-Feature/move wheels outside the app root and make changes to mappings [#1240](https://github.com/cfwheels/cfwheels/pull/1240) - [Zain Ul Abideen](https://github.com/zainforbjs)

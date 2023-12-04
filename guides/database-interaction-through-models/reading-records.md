@@ -174,6 +174,30 @@ model("author").findAll(
     useIndex={
         author="idx_authors_123",
         post="idx_posts_123"
-    }
+		}
 );
+```
+
+### Ignoring Column(s)
+
+For the above finder methods you are able to ignore specified column(s). For instance this can be useful when working with an existing database that has many irrelevant columns. Ignoring column(s) is achieved by adjusting the desired model's config function like below.
+
+Ignoring one column:
+
+```javascript
+component extends="Model" {
+		function config() {
+			ignoredColumns(columns = ["column1"]);
+		}
+}
+```
+
+Ignoring multiple columns:
+
+```javascript
+component extends="Model" {
+		function config() {
+			ignoredColumns(columns = ["column1","column2"]);
+		}
+}
 ```
