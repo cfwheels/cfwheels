@@ -1,8 +1,7 @@
-import servers from "@/services/servers"
-import databases from "@/services/databases"
+import servers from "../services/servers.js"
+import databases from "../services/databases.js"
 
 let testsuites = []
-
 for (var s = 0; s < servers.length; s++){
 	for (var d = 0; d < databases.length; d++){
 		if ((servers[s].servername === 'Adobe 2016' && databases[d].databasename === 'H2') ||
@@ -22,4 +21,4 @@ for (var s = 0; s < servers.length; s++){
 		})
 	}
 }
-export default testsuites
+window.testsuites = testsuites;
