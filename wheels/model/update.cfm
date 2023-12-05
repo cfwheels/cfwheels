@@ -110,6 +110,9 @@ public numeric function updateAll(
 			includeSoftDeletes = arguments.includeSoftDeletes
 		);
 		arguments.sql = $addWhereClauseParameters(sql = arguments.sql, where = arguments.where);
+		if (ListFind('H2', local.migration.adapter.adapterName()) && arguments.include != ""){
+			arrayAppend(arguments.sql, ")")
+		}
 		local.rv = invokeWithTransaction(method = "$updateAll", argumentCollection = arguments);
 	}
 	return local.rv;

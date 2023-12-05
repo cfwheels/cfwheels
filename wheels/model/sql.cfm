@@ -480,14 +480,19 @@ public array function $addWhereClause(
 		includeSoftDeletes = arguments.includeSoftDeletes,
 		sql = local.tempSql
 	);
-	if(arguments.include != "" && ListFind('PostgreSQL,H2', local.migration.adapter.adapterName()) && structKeyExists(arguments, "sql")){
+	if(arguments.include != "" && ListFind('PostgreSQL', local.migration.adapter.adapterName()) && structKeyExists(arguments, "sql")){
 		if(left(arguments.sql[1], 6) == 'UPDATE'){
 			ArrayAppend(arguments.sql, "FROM #arguments.include#");
 		}
 	}
-	if(arguments.include != "" && ListFind('MicrosoftSQLServer', local.migration.adapter.adapterName()) && structKeyExists(arguments, "sql")){
+	else if(arguments.include != "" && ListFind('MicrosoftSQLServer', local.migration.adapter.adapterName()) && structKeyExists(arguments, "sql")){
 		if(left(arguments.sql[1], 6) == 'UPDATE'){
 			ArrayAppend(arguments.sql, "FROM #tablename()#");
+		}
+	}
+	else if(arguments.include != "" && ListFind('H2', local.migration.adapter.adapterName()) && structKeyExists(arguments, "sql")){
+		if(left(arguments.sql[1], 6) == 'UPDATE'){
+			ArrayAppend(arguments.sql, "WHERE EXISTS (SELECT 1 FROM #arguments.include#");
 		}
 	}
 	local.iEnd = ArrayLen(local.whereClause);
