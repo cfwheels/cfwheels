@@ -109,4 +109,15 @@ component extends="wheels.tests.Test" {
 		assert("IsObject(author) AND !len(author.lastName)");
 	}
 
+	// Issue#1273: Added this test for includes in the updateAll function
+	function test_update_all_with_include() {
+		transaction action="begin"	{
+			loc.query0 = model("Post").findAll(where="averagerating = '5.0'");
+			assert("loc.query0.recordcount eq 0");
+			loc.query1 = model("Post").updateAll(averagerating = "5.0", where = "comments.postid = '1'", include = "Comments");
+			loc.query2 = model("Post").findAll(where="averagerating = '5.0'");
+			transaction action="rollback";
+		}
+		assert("loc.query2.recordcount eq 1");
+	}
 }
