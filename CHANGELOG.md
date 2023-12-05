@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bug Fixes
 - PR-1327-issue #1319 model datasource bug [#1327](https://github.com/cfwheels/cfwheels/pull/1327) - [Adam Chapman](https://github.com/chapmandu)
+- PR-1360-updateAll() is missing JOIN statement(s) when passing a value for the include argument [#1360](https://github.com/cfwheels/cfwheels/pull/1360) - [Zain Ul Abideen](https://github.com/zainforbjs)
 
 ### Miscellaneous
 - PR-1316-Feature/fix testui container [#1316](https://github.com/cfwheels/cfwheels/pull/1316) - [Peter Amiri](https://github.com/bpamiri)
