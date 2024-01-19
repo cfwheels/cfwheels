@@ -1,0 +1,34 @@
+{
+    "name":"WireBox DI/AOP",
+    "version":"6.8.2+6",
+    "location":"https://downloads.ortussolutions.com/ortussolutions/wirebox/6.8.2/wirebox-6.8.2.zip",
+    "author":"Ortus Solutions <info@ortussolutions.com>",
+    "slug":"wirebox",
+    "type":"di",
+    "packageDirectory":"wirebox",
+    "keywords":"di,aop,dependeny injection,ioc",
+    "homepage":"https://www.coldbox.org",
+    "documentation":"https://wirebox.ortusbooks.com",
+    "repository":{
+        "type":"git",
+        "url":"https://github.com/coldbox/coldbox-platform"
+    },
+    "bugs":"https://ortussolutions.atlassian.net/browse/WIREBOX",
+    "shortDescription":"AOP and Dependency Injection Framework",
+    "license":[
+        {
+            "type":"Apache2",
+            "url":"http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    ],
+    "contributors":[
+        "Brad Wood <bdw429s@gmail.com>",
+        "Curt Gratz <gratz@computerknowhow.com>"
+    ],
+    "ignore":[
+        "**/.*",
+        "tests",
+        "apidocs",
+        "*/.md"
+    ]
+}

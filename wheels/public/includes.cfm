@@ -28,6 +28,10 @@ function docs() {
 	include "views/docs.cfm";
 	return "";
 }
+function runner(){
+	include "views/runner.cfm";
+	return "";
+}
 function packages() {
 	include "views/packages.cfm";
 	return "";
@@ -105,6 +109,7 @@ function wheels() {
 		case "docs":
 		case "cli":
 		case "tests":
+		case "testbox":
 			include "views/#local.view#.cfm";
 			break;
 		case "packages":

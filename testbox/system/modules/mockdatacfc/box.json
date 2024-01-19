@@ -1,0 +1,58 @@
+{
+    "name":"MockDataCFC",
+    "version":"3.6.0+13",
+    "location":"https://downloads.ortussolutions.com/ortussolutions/coldbox-modules/MockDataCFC/3.6.0/MockDataCFC-3.6.0.zip",
+    "author":"Ortus Solutions",
+    "homepage":"https://github.com/Ortus-Solutions/MockDataCFC",
+    "documentation":"https://github.com/Ortus-Solutions/MockDataCFC",
+    "repository":{
+        "type":"git",
+        "URL":"https://github.com/Ortus-Solutions/MockDataCFC"
+    },
+    "license":[
+        {
+            "type":"MIT",
+            "URL":"https://github.com/Ortus-Solutions/MockDataCFC/LICENSE"
+        }
+    ],
+    "bugs":"https://github.com/Ortus-Solutions/MockDataCFC/issues",
+    "slug":"mockdatacfc",
+    "shortDescription":"MockData is a service to generate fake JSON data via command line arguments, CFC calls or embedded RESTFul service",
+    "type":"modules",
+    "keywords":[
+        "Mock Data"
+    ],
+    "contributors":[
+        "Ray Camden",
+        "Luis Majano <lmajano@ortussolutions.com>"
+    ],
+    "dependencies":{},
+    "devDependencies":{
+        "commandbox-cfformat":"*",
+        "commandbox-docbox":"*",
+        "commandbox-dotenv":"*",
+        "commandbox-cfconfig":"*"
+    },
+    "installPaths":{},
+    "ignore":[
+        "**/.*",
+        "build/**",
+        "test-harness",
+        "/server*.json"
+    ],
+    "testbox":{
+        "runner":"http://localhost:60299/tests/runner.cfm"
+    },
+    "scripts":{
+        "build:module":"task run taskFile=build/Build.cfc :projectName=`package show slug` :version=`package show version`",
+        "build:docs":"task run taskFile=build/Build.cfc target=docs :projectName=`package show slug` :version=`package show version`",
+        "release":"recipe build/release.boxr",
+        "format":"cfformat run handlers,models,test-harness/tests/**.cfc,ModuleConfig.cfc --overwrite",
+        "format:watch":"cfformat watch handlers,models,test-harness/tests/**.cfc,ModuleConfig.cfc ./.cfformat.json",
+        "format:check":"cfformat check handlers,models,test-harness/tests/**.cfc,ModuleConfig.cfc",
+        "cfpm":"echo '\".engine/adobe2021/WEB-INF/cfusion/bin/cfpm.sh\"' | run",
+        "cfpm:install":"echo '\".engine/adobe2021/WEB-INF/cfusion/bin/cfpm.sh\" install ${1}' | run",
+        "install:2021":"run-script cfpm:install zip,debugger,orm,mysql,postgresql,sqlserver,feed,chart",
+        "install:dependencies":"install && cd test-harness && install"
+    }
+}

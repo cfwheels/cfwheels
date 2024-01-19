@@ -6,7 +6,7 @@ component {
 
 	this.name = Hash(
 		GetDirectoryFromPath(
-			Left(GetBaseTemplatePath(), Len(GetBaseTemplatePath()) - Len("wheels/tests/_assets/sharedappname/test.cfm"))
+			Left(GetBaseTemplatePath(), Len(GetBaseTemplatePath()) - Len("/wheels/tests/_assets/sharedappname/test.cfm"))
 		)
 	);
 

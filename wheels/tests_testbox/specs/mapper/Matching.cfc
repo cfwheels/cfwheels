@@ -11,6 +11,7 @@ component extends="testbox.system.BaseSpec" {
 
             beforeEach(function( currentSpec ) {
                 m = new wheels.Mapper();
+                m.$init();
                 prepareMock(m);
                 makePublic(m, "$match");
             });

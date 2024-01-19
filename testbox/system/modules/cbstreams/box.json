@@ -1,0 +1,39 @@
+{
+    "name":"CBStreams",
+    "version":"1.5.0+51",
+    "location":"https://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbstreams/1.5.0/cbstreams-1.5.0.zip",
+    "author":"Ortus Solutions, Corp",
+    "homepage":"https://github.com/ortus-solutions/cbstreams",
+    "documentation":"https://github.com/ortus-solutions/cbstreams",
+    "repository":{
+        "type":"git",
+        "url":"https://github.com/ortus-solutions/cbstreams"
+    },
+    "bugs":"https://github.com/ortus-solutions/cbstreams/issues",
+    "shortDescription":"The CFML implementation of Java Streams",
+    "slug":"cbstreams",
+    "type":"modules",
+    "keywords":"java streams, reactive, streaming",
+    "license":[
+        {
+            "type":"Apache2",
+            "url":"http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    ],
+    "contributors":[],
+    "dependencies":{},
+    "devDependencies":{
+        "testbox":"^2.6.0"
+    },
+    "installPaths":{
+        "testbox":"testbox/"
+    },
+    "ignore":[
+        "**/.*",
+        "test-harness",
+        "*/.md"
+    ],
+    "scripts":{
+        "toMaster":"recipe build/toMaster.boxr"
+    }
+}

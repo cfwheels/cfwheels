@@ -1,26 +1,73 @@
-<cfsetting showDebugOutput="false">
-<!--- Executes all tests in the 'specs' folder with simple reporter by default --->
-<cfparam name="url.reporter" 			default="simple">
-<cfparam name="url.directory" 			default="specs">
-<cfparam name="url.recurse" 			default="true" type="boolean">
-<cfparam name="url.bundles" 			default="">
-<cfparam name="url.labels" 				default="">
-<cfparam name="url.excludes" 			default="">
-<cfparam name="url.reportpath" 			default="#expandPath( "/tests/results" )#">
-<cfparam name="url.propertiesFilename" 	default="TEST.properties">
-<cfparam name="url.propertiesSummary" 	default="false" type="boolean">
+﻿<cfscript>
+    testBox = new testbox.system.TestBox(directory="wheels.tests_testbox.specs")
 
-<cfparam name="url.coverageEnabled"					default="true" type="boolean">
-<cfparam name="url.coverageSonarQubeXMLOutputPath"	default="">
-<cfparam name="url.coveragePathToCapture"			default="#expandPath( '../testbox/system/' )#">
-<cfparam name="url.coverageWhitelist"				default="">
-<cfparam name="url.coverageBlacklist"				default="/stubs/**,/modules/**,/coverage/**,Application.cfc">
+    setTestboxEnvironment()
 
-<!--- FYI the "coverageBrowserOutputDir" folder will be DELETED and RECREATED each time
-	  you generate the report. Don't point this setting to a folder that has other important
-	  files. Pick a blank, essentially "temp" folder somewhere. Brad may or may not have
-	  learned this the hard way. Learn from his mistakes. :) --->
-<cfparam name="url.coverageBrowserOutputDir"		default="#expandPath( '/tests/results/coverageReport' )#">
+    result = testBox.run(
+        reporter = "testbox.system.reports.SimpleReporter"
+    )
+    writeOutput(result)
 
-<!--- Include the TestBox HTML Runner --->
-<cfinclude template="/testbox/system/runners/HTMLRunner.cfm" >
+    // reset the original environment
+    application.wheels = application.$$$wheels
+    structDelete(application, "$$$wheels")
+
+    private function setTestboxEnvironment() {
+        // creating backup for original environment
+        application.$$$wheels = Duplicate(application.wheels)
+
+        // load testbox routes
+        application.wo.$include(template = "/wheels/tests_testbox/routes.cfm")
+        application.wo.$setNamedRoutePositions()
+
+        local.AssetPath = "/wheels/tests_testbox/_assets/"
+        
+        application.wo.set(rewriteFile = "rewrite.cfm")
+        application.wo.set(controllerPath = local.AssetPath & "controllers")
+        application.wo.set(viewPath = local.AssetPath & "views")
+        application.wo.set(modelPath = local.AssetPath & "models")
+        application.wo.set(wheelsComponentPath = "/wheels")
+
+        /* turn off default validations for testing */
+        application.wheels.automaticValidations = false
+        application.wheels.assetQueryString = false
+        application.wheels.assetPaths = false
+
+        /* redirections should always delay when testing */
+        application.wheels.functions.redirectTo.delay = true
+
+        /* turn off transactions by default */
+        application.wheels.transactionMode = "none"
+
+        /* turn off request query caching */
+        application.wheels.cacheQueriesDuringRequest = false
+
+        // CSRF
+        application.wheels.csrfCookieName = "_wheels_test_authenticity"
+        application.wheels.csrfCookieEncryptionAlgorithm = "AES"
+        application.wheels.csrfCookieEncryptionSecretKey = GenerateSecretKey("AES")
+        application.wheels.csrfCookieEncryptionEncoding = "Base64"
+
+        // Setup CSRF token and cookie. The cookie can always be in place, even when the session-based CSRF storage is being
+        // tested.
+        dummyController = application.wo.controller("dummy")
+        csrfToken = dummyController.$generateCookieAuthenticityToken()
+
+        cookie[application.wheels.csrfCookieName] = Encrypt(
+            SerializeJSON({authenticityToken = csrfToken}),
+            application.wheels.csrfCookieEncryptionSecretKey,
+            application.wheels.csrfCookieEncryptionAlgorithm,
+            application.wheels.csrfCookieEncryptionEncoding
+        )
+
+        application.testenv.db = application.wo.$dbinfo(datasource = application.wheels.dataSourceName, type = "version")
+
+        // Setting up test database for test environment
+        local.tables = application.wo.$dbinfo(datasource = application.wheels.dataSourceName, type = "tables")
+        local.tableList = ValueList(local.tables.table_name)
+        local.populate = StructKeyExists(url, "populate") ? url.populate : true
+        if (local.populate || !FindNoCase("authors", local.tableList)) {
+            include "populate.cfm"
+        }
+    }
+</cfscript>

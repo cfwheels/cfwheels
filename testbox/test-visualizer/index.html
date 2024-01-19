@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta
+			name="generator"
+			content="TestBox v5.0.0+1"
+		/>
+		<title>Test Visualizer</title>
+		<link rel="stylesheet" href="main.css" />
+		<script
+			src="https://code.jquery.com/jquery-3.3.1.min.js"
+			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+			integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"
+			integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp"
+			crossorigin="anonymous"
+		></script>
+		<script
+			defer
+			src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
+			integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
+			crossorigin="anonymous"
+		></script>
+
+		<script>
+			$(document).ready(function() {
+				$(document).ajaxStop(function() {
+					$("#loading-div")
+						.removeClass("d-flex")
+						.addClass("d-none");
+					$("#content")
+						.removeClass("d-none")
+						.addClass("d-block");
+				});
+
+				$.getJSON("test-results.json")
+					.done(function(data) {
+						setPageTitle(
+							data.totalPass,
+							data.totalFail,
+							data.totalError
+						);
+						if (data.coverage.enabled === true) {
+							renderCodeCoverageStats(data.coverage.data);
+						}
+						renderTestResultsStats(data);
+						renderBundles(data);
+					})
+					.fail(function(jqxhr, textStatus, error) {
+						$("body").html(
+							"<h1>Could not load the report's JSON file, by convention it should be <code>test-results.json</code> in this same folder.</h1>"
+						);
+						console.log("Request Failed: " + err);
+					});
+				
+				$(".accordion").on("click", ".expand-collapse", function(event) {
+					let button = $(this).find(".toggle");
+					let button_target = button.attr("data-target");
+					let icon = button.find(".svg-inline--fa");
+					let icon_fa_icon = icon.attr("data-icon");
+					$(button_target).collapse('toggle');
+
+					if (icon_fa_icon === "minus-square") {
+						icon.attr("data-icon", "plus-square");
+					} else if (icon_fa_icon === "plus-square") {
+						icon.attr("data-icon", "minus-square");
+					}
+				});
+			});
+			$(window).on("load", function() {
+				// spec toggler
+				$("body").on("click", "span.spec-status", function( event ) {
+  				event.stopPropagation();
+					$(this)
+						.parent()
+						.children()
+						.removeClass("active");
+					$(this).addClass("active");
+					toggleSpecs(
+						$(this).attr("data-status"),
+						$(this).attr("data-bundleid")
+					);
+				});
+
+				// spec reseter
+				$("body").on("click", "span.reset", function( event ) {
+    			event.stopPropagation();
+					resetSpecs( $(this) );
+				});
+
+				// Filter Bundles
+				$( "#bundleFilter" ).keyup( debounce( function() {
+					let targetText = $( this ).val().toLowerCase();
+					$( ".bundle" ).each( function( index ) {
+						let bundle = $( this ).data( "bundle" ).toLowerCase();
+						if ( bundle.search( targetText ) < 0 ) {
+							// hide it
+							$( this ).hide();
+						} else {
+							$( this ).removeAttr('style');
+						}
+					});
+				}, 100));
+
+				$("#bundleFilter").focus();
+
+				// Bootstrap Collapse
+				$("body").on("click", "#collapse-bundles", function() {
+					$(".details-panel").collapse("hide");
+					$(".toggle svg.svg-inline--fa").attr("data-icon", "plus-square");
+				});
+					
+				$("body").on("click", "#expand-bundles", function() {
+					$(".details-panel:not(.show)").collapse("show");
+					$(".toggle svg.svg-inline--fa").attr("data-icon", "minus-square");
+				});
+			});
+
+			function setPageTitle(totalPass, totalFail, totalError) {
+				document.title = `Pass: ${totalPass} Fail: ${totalFail} Errors: ${totalError}`;
+			}
+
+			function renderCodeCoverageStats(coverageData) {
+				const totalCoveragePercent = parseFloat(
+					coverageData.stats.percTotalCoverage * 100
+				).toFixed(2);
+				const codeCoverageStatsHtml =
+					`<div class="list-group-item list-group-item-info p-2" id="coverageStats">
+						<div class="d-flex flex-fill justify-content-between align-items-stretch">
+							<div class="d-flex align-items-start flex-column">
+								<h3 class="mb-auto"><i class="fas fa-microscope"></i> Code Coverage Stats</h3>
+								${sonaqubeCoverageXML(coverageData.sonarQubeResults)}
+								${coverageBrowserReport(coverageData.browserResults)}
+							</div>
+							<div class="d-flex align-items-end flex-column">
+								<div class="mt-auto text-right">
+									<span class="h5">Files Processed:<span class="badge badge-info ml-1">46</span></span>
+									<div class="d-inline-block ml-2">
+										<div class="d-inline-block align-bottom" style="width:200px;">
+											<div class="ml-1 progress position-relative" style="height: 1.4rem;">
+												<div class="progress-bar bg-danger" role="progressbar" style="width: ${totalCoveragePercent}%" aria-valuenow="${totalCoveragePercent}" aria-valuemin="0" aria-valuemax="100">
+												</div>
+												<div class="progress-bar bg-secondary" role="progressbar" style="width: ${100 - totalCoveragePercent}%" aria-valuenow="${100 - totalCoveragePercent}" aria-valuemin="0" aria-valuemax="100">
+												</div>
+												<span class="justify-content-center text-light d-flex position-absolute w-100" style="line-height: 1.25rem; font-size: 1.2rem;">
+													${totalCoveragePercent}% coverage
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>`;
+				$("div#coverage-data").html(codeCoverageStatsHtml);
+			}
+
+			function coverageBrowserReport (coverageReport) {
+				return `
+					<h5 class="mt-2">
+						Coverage Browser generated in <br>
+            <span class="badge badge-info">${coverageReport}</span>
+					</h5>`;
+			}
+
+			function sonaqubeCoverageXML (sonarQubeResults) {
+				return `
+					<h5 class="mt-2">
+						SonarQube code coverage XML file generated in <br>
+	          <span class="badge badge-info">${sonarQubeResults}</span>
+					</h5>`;
+			}
+
+			function renderTestResultsStats(data) {
+				let testResultsStatsHtml =
+					`<div>
+						<h3><i class="fas fa-chart-line"></i> Test Results Stats (${data.totalDuration} ms)</h3>
+						<div>
+							<h5 class="mt-2">
+								<span>Bundles:<span class="badge badge-info ml-1">${data.totalBundles}</span></span>
+								<span class="ml-3">Suites:<span class="badge badge-info ml-1">${data.totalSuites}</span></span>
+								<span class="ml-3">Specs:<span class="badge badge-info ml-1">${data.totalSpecs}</span></span>
+							</h5>
+							${labelsHtml(data.labels)}
+							${excludesHtml(data.excludes)}
+						</div>
+					</div>
+					<div>
+						<span class="spec-status btn btn-sm btn-success passed" data-status="passed">
+							<i class="fas fa-check"></i> Pass: ${data.totalPass}
+						</span>
+						<span class="spec-status btn btn-sm btn-warning failed" data-status="failed">
+							<i class="fas fa-exclamation-triangle"></i> Failures: ${data.totalFail}
+						</span>
+						<span class="spec-status btn btn-sm btn-danger error" data-status="error">
+							<i class="fas fa-times"></i> Errors: ${data.totalError}
+						</span>
+						<span class="spec-status btn btn-sm btn-secondary skipped" data-status="skipped">
+							<i class="fas fa-minus-circle"></i> Skipped: ${data.totalSkipped}
+						</span>
+						<span class="reset btn btn-sm btn-dark" title="Clear status filters">
+							<i class="fas fa-broom"></i> Reset
+						</span>
+					</div>`;
+				$("div#global-stats").html(testResultsStatsHtml);
+			}
+
+			function labelsHtml(labels) {
+				if (labels.length) {
+					return `
+						<h5 class="mt-2 mb-0">
+							<span>Labels Applied: <span class="badge badge-info ml-1">${labels.join(", ")}</span></span>
+						</h5>`;
+				}
+				return "";
+			}
+
+			function excludesHtml(excludes) {
+				if (excludes.length) {
+					return `
+						<h5 class="mt-2 mb-0">
+							<span>Excludes Applied: <span class="badge badge-info ml-1">${excludes.join(", ")}</span></span>
+						</h5>`;
+				}
+				return "";
+			}
+
+			function renderBundles(data) {
+				const bundlesHtml = data.bundleStats.map(bundleHtml).join("");
+				$("div#bundles").html(bundlesHtml);
+			}
+
+			function bundleHtml(bundleStat) {
+				const bundleHtml =
+				 `<div class="bundle card" id="${bundleStat.id}" data-bundle="${bundleStat.path}">
+              ${bundleHeaderHtml(bundleStat)}
+              ${bundleDetailsBodyHtml(bundleStat)}
+          </div>`;
+
+				return bundleHtml;
+			}
+
+			function globalExceptionHtml(bundleStat) {
+				let globalExceptionHtml = "";
+				if (bundleStat.globalException !== "") {
+					globalExceptionHtml =
+						`<!-- Global exception -->
+						<li class="list-group-item list-group-item-danger" data-bundleid="${bundleStat.id}">
+							<div class="clearfix">
+								<span class="h5">
+									<strong><i class="fas fa-times"></i> Global Bundle Exception</strong>(${bundleStat.totalDuration}" ms)
+								</span>
+							</div>
+							<div>
+								${bundleStat.globalException.Message}
+							</div>
+							<div class="pl-5 bg-light">
+								<code>
+									${bundleStat.globalException.TagContext[0].codePrintHTML}
+								</code>
+							</div>
+						</li>`;
+				}
+				return globalExceptionHtml;
+			}
+
+			function bundleHeaderHtml(bundleStat) {
+				const bundleHeaderHtml =
+					`<div class="card-header expand-collapse"
+						data-toggle="collapse"
+						data-target="#details_${bundleStat.id}"
+						aria-expanded="false"
+						aria-controls="details_${bundleStat.id}"
+						id="header_${bundleStat.id}"
+						style="cursor: pointer;"
+						>
+            <h5 class="mb-0 clearfix">
+              ${bundleStat.name} (${bundleStat.totalDuration} ms)
+							<button
+								class="btn btn-link float-right py-0 toggle"
+								style="text-decoration: none;"
+								type="button"
+							>
+								<i class="fas fa-minus-square"></i>
+							</button>
+            </h5>
+						<div class="float-right">
+							<span
+								class="spec-status btn btn-sm btn-success passed"
+								data-status="passed"
+								data-bundleid="${bundleStat.id}"
+								><i class="fas fa-check"></i> Pass: ${bundleStat.totalPass}</span>
+							<span
+								class="spec-status btn btn-sm btn-warning failed"
+								data-status="failed"
+								data-bundleid="${bundleStat.id}"
+								><i class="fas fa-exclamation-triangle"></i> Failures: ${bundleStat.totalFail}</span>
+							<span
+								class="spec-status btn btn-sm btn-danger error"
+								data-status="error"
+								data-bundleid="${bundleStat.id}"
+								><i class="fas fa-times"></i> Errors: ${bundleStat.totalError}</span>
+							<span
+								class="spec-status btn btn-sm btn-secondary skipped"
+								data-status="skipped"
+								data-bundleid="${bundleStat.id}"
+								><i class="fas fa-minus-circle"></i> Skipped: ${bundleStat.totalSkipped}</span>
+							<span
+								class="reset btn btn-sm btn-dark"
+								title="Clear status filters"								
+								data-bundleid="${bundleStat.id}"
+								><i class="fas fa-broom"></i> Reset</span>
+						</div>
+						<h5 class="d-inline-block">
+							<span>Suites:<span class="badge badge-info ml-1">${bundleStat.totalSuites}</span></span>
+							<span class="ml-3">Specs:<span class="badge badge-info ml-1">${bundleStat.totalSpecs}</span></span>
+						</h5>
+          </div>`;
+
+				return bundleHeaderHtml;
+			}
+
+			function bundleDetailsBodyHtml(bundleStat) {
+				const bundleDetailsBodyHtml =
+					`<div
+							id="details_${bundleStat.id}"
+							class="collapse details-panel show"
+							aria-labelledby="header_${bundleStat.id}"
+							data-bundle="${bundleStat.name}"
+						>
+							<div class="suite card-body" data-bundleid="${bundleStat.id}">
+								<ul class="list-group">
+									${globalExceptionHtml(bundleStat)}
+									${renderSuites(bundleStat.suiteStats)}
+								</ul>
+							</div>
+					</div>`;
+
+				return bundleDetailsBodyHtml;
+			}
+
+			function renderSuites(suiteStats) {
+				const suitesHtml = suiteStats.map(suiteHtml).join("");
+				return suitesHtml;
+			}
+
+			function suiteHtml(suite) {
+				let nestedSuites = "";
+				if (suite.suiteStats.length) {
+					nestedSuites = renderSuites(suite.suiteStats);
+				}
+
+				const suiteHtml =
+				`<li class="list-group-item ${suite.status.toLowerCase()}" data-bundleid="${suite.bundleID}">
+					<h5 class="text-${statusToBootstrapClass(suite.status)}">
+						${statusToIcon(suite.status)} <strong>${suite.name}</strong>(${suite.totalDuration} ms)
+					</h5>
+					<ul class="list-group">
+						${renderSpecs(suite.specStats, suite.bundleID)}
+						${nestedSuites}
+					</ul>
+				</li>`;
+
+				return suiteHtml;
+			}
+
+			function renderSpecs(specStats, bundleID) {
+				const specsHtml = specStats
+					.map(specHtml, {
+						bundleID: bundleID
+					})
+					.join("");
+				return specsHtml;
+			}
+
+			function specHtml(spec) {
+				let specMessage = "";
+				if (spec.status === "Failed") {
+					specMessage = spec.failMessage;
+				} else if (spec.status === "Error") {
+					specMessage = spec.error.Message;
+				}
+
+				let specMessageHtml = "";
+				if (specMessage !== "" && spec.failOrigin.length) {
+					specMessageHtml =
+						`<div>${spec.failOrigin[0].Raw_Trace}</div>
+						<div class="pl-5 bg-light mb-2">
+							<code>
+								${spec.failOrigin[0].codePrintHTML}
+							</code>
+						</div>`;
+				}
+
+				const specHtml =
+					`<li class="spec list-group-item ${spec.status.toLowerCase()}"
+						data-bundleid="${this.bundleID}"
+						data-specid="${spec.id}"
+					>
+					<div class="clearfix text-${statusToBootstrapClass(spec.status)}">
+						${statusToIcon(spec.status)} ${spec.name}(${spec.totalDuration} ms)
+					</div>
+        	${specMessageHtml}
+      		</li>`;
+				return specHtml;
+			}
+
+			function debounce(func, wait, immediate) {
+				let timeout;
+				return function() {
+					let context = this,
+						args = arguments;
+					let later = function() {
+						timeout = null;
+						if (!immediate) {
+							func.apply(context, args);
+						}
+					};
+					let callNow = immediate && !timeout;
+					clearTimeout(timeout);
+					timeout = setTimeout(later, wait);
+					if (callNow) {
+						func.apply(context, args);
+					}
+				};
+			}
+
+			function resetSpecs(element) {
+				let selector = $( "li.spec, ul.suite, div.suite" );
+
+				if ( element.attr( 'data-bundleid' ) ) {
+					selector = $( `#details_${element.attr( 'data-bundleid' )}` );
+					selector.find( "li.spec" ).each(function() {
+						$( this ).removeAttr('style');
+					});
+					selector.find( "ul.suite" ).each(function() {
+						$( this ).removeAttr('style');
+					});
+					selector.find( "div.suite" ).each(function() {
+						$( this ).removeAttr('style');
+					});
+					selector.addClass("show");
+				}
+				else {
+					selector.each(function() {
+						$( this ).removeAttr('style');
+					});
+					$( ".details-panel" ).addClass("show");
+				}
+			}
+
+			function toggleSpecs( type, bundleID ) {
+				$( "ul.suite" ).each( function() {
+					handleToggle( $( this ), bundleID, type );
+				});
+				$( "div.suite" ).each( function() {
+					handleToggle( $( this ), bundleID, type );
+				});
+				$( "li.spec" ).each( function() {
+					handleToggle( $( this ), bundleID, type );
+				});
+			}
+
+			function handleToggle( target, bundleID, type ) {
+				let $this = target;
+
+				// if bundleid passed and not the same bundle, skip
+				if ( bundleID != undefined && $this.attr( "data-bundleid" ) != bundleID ) {
+					return;
+				}
+				// toggle the opposite type
+				if ( !$this.hasClass( type.toLowerCase() ) ) {
+					$this.hide();
+				} else {
+					// show the type you sent
+					$this.removeAttr('style');
+					$this.parents().removeAttr('style');
+					$this.parents(".bundle").find(".details-panel:not(.show)").addClass("show");
+					$this.parents(".bundle").find(".toggle svg.svg-inline--fa").attr("data-icon", "minus-square");
+				}
+			}
+
+			function statusToBootstrapClass(status) {
+				let classes = "";
+				if (status === "Failed") {
+					classes = "warning";
+				} else if (status === "Error") {
+					classes = "danger";
+				} else if (status === "Passed") {
+					classes = "success";
+				} else if (status === "Skipped") {
+					classes = "secondary";
+				}
+				return classes;
+			}
+
+			function statusToIcon(status) {
+				let icon = "";
+				if (status === "Failed") {
+					icon = '<i class="fas fa-exclamation-triangle"></i>';
+				} else if (status === "Error") {
+					icon = '<i class="fas fa-times"></i>';
+				} else if (status === "Passed") {
+					icon = '<i class="fas fa-check"></i>';
+				} else if (status === "Skipped") {
+					icon = '<i class="fas fa-minus-circle"></i>';
+				}
+				return icon;
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="container-fluid mt-3">
+			<div class="d-flex justify-content-between align-items-end">
+				<div>
+					<div>
+						<img src="data:image/png;base64, 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" height="75">
+						<span class="badge badge-info">v5.0.0+1</span>
+					</div>
+				</div>
+				<div>
+					<input class="d-inline col-7 ml-2 form-control float-right mb-1" type="text" name="bundleFilter" id="bundleFilter" placeholder="Filter Bundles..." size="35">
+					<div class="buttonBar mb-1 float-right">
+						<button id="collapse-bundles" class="ml-1 btn btn-sm btn-primary float-right" title="Collapse all bundles">
+							<i class="fas fa-minus-square"></i> Collapse All Bundles
+						</button>
+						<button id="expand-bundles" class="ml-1 btn btn-sm btn-primary float-right" title="Expand all bundles">
+							<i class="fas fa-plus-square"></i> Expand All Bundles
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="loading-div" class="d-flex justify-content-center mb-3">
+			<div class="spinner-border" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+		</div>
+		<div id="content" class="container-fluid d-none">
+			<div id="coverage-data" class="list-group mb-2"></div>
+			<div class="list-group">
+				<div class="list-group-item list-group-item-info p-2 d-flex justify-content-between align-items-end" id="global-stats"></div>
+			</div>
+			<div class="list-group-item accordion pl-0" id="bundles"></div>
+		</div>
+	</body>
+</html>

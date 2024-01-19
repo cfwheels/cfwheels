@@ -1,0 +1,65 @@
+{
+    "name":"TestBox",
+    "version":"5.0.0+1",
+    "location":"https://downloads.ortussolutions.com/ortussolutions/testbox/5.0.0/testbox-5.0.0.zip",
+    "author":"Ortus Solutions <info@ortussolutions.com>",
+    "slug":"testbox",
+    "type":"testing",
+    "keywords":"testing,xunit,bdd,testbox,mxunit,tdd",
+    "homepage":"https://www.ortussolutions.com/products/testbox",
+    "documentation":"https://testbox.ortusbooks.com",
+    "repository":{
+        "type":"git",
+        "url":"https://github.com/Ortus-Solutions/TestBox"
+    },
+    "bugs":"https://ortussolutions.atlassian.net/browse/TESTBOX",
+    "shortDescription":"A BDD and xUnit testing framework with Mocking Goodness",
+    "license":[
+        {
+            "type":"Apache2",
+            "url":"https://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    ],
+    "contributors":[
+        "Brad Wood <bdw429s@gmail.com>",
+        "Curt Gratz <gratz@computerknowhow.com>"
+    ],
+    "ignore":[
+        "**/.*"
+    ],
+    "testbox":{
+        "runner":"http://localhost:49616/tests/runner.cfm",
+        "watchers":[
+            "system/**.cfc",
+            "tests/**.cfc"
+        ],
+        "watchDelay":"250"
+    },
+    "dependencies":{
+        "cbstreams":"^1.5.0",
+        "mockdatacfc":"^3.3.0+22",
+        "globber":"^3.1.3"
+    },
+    "devDependencies":{
+        "commandbox-dotenv":"*",
+        "commandbox-cfconfig":"*",
+        "commandbox-cfformat":"*"
+    },
+    "installPaths":{
+        "cbstreams":"system/modules/cbstreams/",
+        "mockdatacfc":"system/modules/mockdatacfc/",
+        "globber":"system/modules/globber/"
+    },
+    "scripts":{
+        "release":"recipe build/release.boxr",
+        "format":"cfformat run system/**/*.cfc,test-harness/**/*.cfc,tests/specs/**/*.cfc --overwrite",
+        "format:check":"cfformat check system/**/*.cfc,test-harness/**/*.cfc,tests/specs/**/*.cfc ./.cfformat.json",
+        "format:watch":"cfformat watch system/**/*.cfc,test-harness/**/*.cfc,tests/specs/**/*.cfc ./.cfformat.json",
+        "start:lucee":"server start serverConfigFile=server-lucee@5.json",
+        "start:2018":"server start serverConfigFile=server-adobe@2018.json",
+        "start:2021":"server start serverConfigFile=server-adobe@2021.json",
+        "log:lucee":"server log testbox-lucee@5 --follow",
+        "log:2018":"server log testbox-adobe@2018 --follow",
+        "log:2021":"server log testbox-adobe@2021 --follow"
+    }
+}

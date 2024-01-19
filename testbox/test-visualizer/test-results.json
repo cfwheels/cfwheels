@@ -1,0 +1,1619 @@
+{
+	"totalSuites": 3,
+	"startTime": 1553009673073,
+	"bundleStats": [{
+		"totalSuites": 1,
+		"startTime": 1553009673088,
+		"totalPass": 1,
+		"totalDuration": 35,
+		"totalSkipped": 0,
+		"totalFail": 1,
+		"totalSpecs": 2,
+		"path": "tests.specsWithFailures.TeardownWithFailureTest",
+		"endTime": 1553009673123,
+		"totalError": 0,
+		"name": "tests.specsWithFailures.TeardownWithFailureTest",
+		"id": "7FB7EEAB1B9B025D803C404484858BC4",
+		"suiteStats": [{
+			"startTime": 1553009673095,
+			"totalPass": 1,
+			"totalDuration": 26,
+			"totalSkipped": 0,
+			"totalFail": 1,
+			"totalSpecs": 2,
+			"bundleID": "7FB7EEAB1B9B025D803C404484858BC4",
+			"status": "Failed",
+			"parentID": "",
+			"specStats": [{
+				"error": {},
+				"startTime": 1553009673096,
+				"totalDuration": 7,
+				"failOrigin": {},
+				"status": "Passed",
+				"suiteID": "C661C0D148339356A96A2DE9010FC851",
+				"endTime": 1553009673103,
+				"name": "stonesSuccessTest",
+				"id": "51F16F531C908CE0995A709E3E103A05",
+				"failMessage": ""
+			}, {
+				"error": {},
+				"startTime": 1553009673103,
+				"totalDuration": 18,
+				"failOrigin": [{
+					"Raw_Trace": "specswithfailures.teardownwithfailuretest_cfc$cf.udfCall(/tests/specsWithFailures/TeardownWithFailureTest.cfc:33)",
+					"codePrintPlain": "31: \n32: \t\t<!--- make some assertion based on the result of exercising the component --->\n33: \t\t<cfset assertEquals(\"Keith Richards\",result,\"This is really NOT equal\")>\n34: \t</cffunction>\n35: \n",
+					"column": 0,
+					"line": 33,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/TeardownWithFailureTest.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "31: <br>\n32: \t\t&lt;!--- make some assertion based on the result of exercising the component ---&gt;<br>\n<b>33: \t\t&lt;cfset assertEquals(&quot;Keith Richards&quot;,result,&quot;This is really NOT equal&quot;)&gt;</b><br>\n34: \t&lt;/cffunction&gt;<br>\n35: <br>\n"
+				}, {
+					"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:993)",
+					"codePrintPlain": "991: \t\t\t\t// Execute Spec\n992: \t\t\t\ttry{\n993: \t\t\t\t\tinvoke( this, arguments.spec.name );\n994: \n995: \t\t\t\t\t// Where we expecting an exception and it did not throw?\n",
+					"column": 0,
+					"line": 993,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "991: \t\t\t\t// Execute Spec<br>\n992: \t\t\t\ttry{<br>\n<b>993: \t\t\t\t\tinvoke( this, arguments.spec.name );</b><br>\n994: <br>\n995: \t\t\t\t\t// Where we expecting an exception and it did not throw?<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+					"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+					"column": 0,
+					"line": 208,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+					"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+					"column": 0,
+					"line": 81,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+					"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+					"column": 0,
+					"line": 478,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+					"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+					"column": 0,
+					"line": 251,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+					"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+					"column": 0,
+					"line": 160,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+					"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+					"column": 0,
+					"line": 49,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+				}],
+				"status": "Failed",
+				"suiteID": "C661C0D148339356A96A2DE9010FC851",
+				"endTime": 1553009673121,
+				"name": "stonesFailTest",
+				"id": "63245483E59F4CDF07004CDB9D60F510",
+				"failMessage": "This is really NOT equal. Expected [Keith Richards] Actual [Mick Jagger]"
+			}],
+			"endTime": 1553009673121,
+			"totalError": 0,
+			"name": "tests.specsWithFailures.TeardownWithFailureTest",
+			"id": "C661C0D148339356A96A2DE9010FC851",
+			"suiteStats": []
+		}],
+		"globalException": ""
+	}, {
+		"totalSuites": 1,
+		"startTime": 1553009673136,
+		"totalPass": 0,
+		"totalDuration": 31,
+		"totalSkipped": 0,
+		"totalFail": 0,
+		"totalSpecs": 7,
+		"path": "tests.specsWithFailures.MXUnitExpectedExceptions",
+		"endTime": 1553009673167,
+		"totalError": 7,
+		"name": "tests.specsWithFailures.MXUnitExpectedExceptions",
+		"id": "46D12A8CA3F9A0EBC5DF1F2A51147864",
+		"suiteStats": [{
+			"startTime": 1553009673136,
+			"totalPass": 0,
+			"totalDuration": 31,
+			"totalSkipped": 0,
+			"totalFail": 0,
+			"totalSpecs": 7,
+			"bundleID": "46D12A8CA3F9A0EBC5DF1F2A51147864",
+			"status": "Error",
+			"parentID": "",
+			"specStats": [{
+				"error": {
+					"Extended_Info": "",
+					"Message": "java.util.ConcurrentModificationException",
+					"Detail": "",
+					"additional": {},
+					"TagContext": [{
+						"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+						"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+						"column": 0,
+						"line": 18,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+					}, {
+						"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)",
+						"codePrintPlain": "1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n1013: \t\t\t\t// store spec status\n",
+						"column": 0,
+						"line": 1011,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "1009: \t\t\t\t\t// execute teardown()<br>\n1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }<br>\n<b>1011: \t\t\t\t}</b><br>\n1012: <br>\n1013: \t\t\t\t// store spec status<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+						"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+						"column": 0,
+						"line": 208,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+						"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+						"column": 0,
+						"line": 81,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+						"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+						"column": 0,
+						"line": 478,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+						"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+						"column": 0,
+						"line": 251,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+						"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+						"column": 0,
+						"line": 160,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+						"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+						"column": 0,
+						"line": 49,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+					}, {
+						"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+						"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+						"column": 0,
+						"line": 21,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+					}],
+					"ErrorCode": "0",
+					"type": "java.util.ConcurrentModificationException",
+					"StackTrace": "lucee.runtime.exp.NativeException: java.util.ConcurrentModificationException\n\tat java.util.HashMap$HashIterator.nextNode(HashMap.java:1442)\n\tat java.util.HashMap$KeyIterator.next(HashMap.java:1466)\n\tat io.undertow.servlet.util.IteratorEnumeration.nextElement(IteratorEnumeration.java:44)\n\tat lucee.runtime.type.scope.RequestImpl.clear(RequestImpl.java:157)\n\tat lucee.runtime.functions.struct.StructClear.call(StructClear.java:36)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)\n\tat system.basespec_cfc$cf.udfCall(/testbox/system/BaseSpec.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.call(UDFImpl.java:226)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:693)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.call(ComponentImpl.java:1997)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithoutNamedValues(VariableUtilImpl.java:756)\n\tat lucee.runtime.PageContextImpl.getFunction(PageContextImpl.java:1718)\n\tat system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.PageContextImpl.doInclude(PageContextImpl.java:805)\n\tat tests.runner_cfm$cf.call(/tests/runner.cfm:21)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.listener.ModernAppListener._onRequest(ModernAppListener.java:218)\n\tat lucee.runtime.listener.MixedAppListener.onRequest(MixedAppListener.java:43)\n\tat lucee.runtime.PageContextImpl.execute(PageContextImpl.java:2464)\n\tat lucee.runtime.PageContextImpl._execute(PageContextImpl.java:2454)\n\tat lucee.runtime.PageContextImpl.executeCFML(PageContextImpl.java:2427)\n\tat lucee.runtime.engine.Request.exe(Request.java:44)\n\tat lucee.runtime.engine.CFMLEngineImpl._service(CFMLEngineImpl.java:1090)\n\tat lucee.runtime.engine.CFMLEngineImpl.serviceCFML(CFMLEngineImpl.java:1038)\n\tat lucee.loader.engine.CFMLEngineWrapper.serviceCFML(CFMLEngineWrapper.java:102)\n\tat lucee.loader.servlet.CFMLServlet.service(CFMLServlet.java:51)\n\tat javax.servlet.http.HttpServlet.service(HttpServlet.java:790)\n\tat io.undertow.servlet.handlers.ServletHandler.handleRequest(ServletHandler.java:74)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:129)\n\tat org.cfmlprojects.regexpathinfofilter.RegexPathInfoFilter.doFilter(RegexPathInfoFilter.java:47)\n\tat io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:61)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)\n\tat sun.reflect.GeneratedMethodAccessor53.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:134)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doNext(FusionReactorRequestHandler.java:764)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doHttpServletRequest(FusionReactorRequestHandler.java:344)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doFusionRequest(FusionReactorRequestHandler.java:207)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.handle(FusionReactorRequestHandler.java:801)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorCoreFilter.doFilter(FusionReactorCoreFilter.java:36)\n\tat sun.reflect.GeneratedMethodAccessor51.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:71)\n\tat sun.reflect.GeneratedMethodAccessor50.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.agent.filter.FusionReactorStaticFilter.doFilter(FusionReactorStaticFilter.java:54)\n\tat com.intergral.fusionreactor.agent.pointcuts.NewFilterChainPointCut$1.invoke(NewFilterChainPointCut.java:41)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java)\n\tat io.undertow.servlet.handlers.FilterHandler.handleRequest(FilterHandler.java:84)\n\tat io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)\n\tat io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:64)\n\tat io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)\n\tat io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:132)\n\tat io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)\n\tat io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)\n\tat io.undertow.security.handlers.AuthenticationMechanismsHandler.handleRequest(AuthenticationMechanismsHandler.java:60)\n\tat io.undertow.servlet.handlers.security.CachedAuthenticatedSessionHandler.handleRequest(CachedAuthenticatedSessionHandler.java:77)\n\tat io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:292)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$100(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:138)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)\n\tat io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)\n\tat io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:272)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$000(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:104)\n\tat io.undertow.server.Connectors.executeRootHandler(Connectors.java:336)\n\tat io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:830)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: java.util.ConcurrentModificationException\n\t... 137 more\n",
+					"ExtendedInfo": ""
+				},
+				"startTime": 1553009673137,
+				"totalDuration": 7,
+				"failOrigin": [{
+					"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+					"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+					"column": 0,
+					"line": 18,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+				}, {
+					"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)",
+					"codePrintPlain": "1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n1013: \t\t\t\t// store spec status\n",
+					"column": 0,
+					"line": 1011,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "1009: \t\t\t\t\t// execute teardown()<br>\n1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }<br>\n<b>1011: \t\t\t\t}</b><br>\n1012: <br>\n1013: \t\t\t\t// store spec status<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+					"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+					"column": 0,
+					"line": 208,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+					"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+					"column": 0,
+					"line": 81,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+					"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+					"column": 0,
+					"line": 478,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+					"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+					"column": 0,
+					"line": 251,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+					"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+					"column": 0,
+					"line": 160,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+					"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+					"column": 0,
+					"line": 49,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+				}, {
+					"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+					"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+					"column": 0,
+					"line": 21,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+				}],
+				"status": "Error",
+				"suiteID": "0F9E64ECB27A3F1E33BC78FB7266E610",
+				"endTime": 1553009673144,
+				"name": "testExpectedExceptionNoValue",
+				"id": "EA719766B29000E8EB13E08618EB62D8",
+				"failMessage": ""
+			}, {
+				"error": {
+					"Extended_Info": "",
+					"Message": "java.util.ConcurrentModificationException",
+					"Detail": "",
+					"additional": {},
+					"TagContext": [{
+						"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+						"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+						"column": 0,
+						"line": 18,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+					}, {
+						"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)",
+						"codePrintPlain": "1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n1013: \t\t\t\t// store spec status\n",
+						"column": 0,
+						"line": 1011,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "1009: \t\t\t\t\t// execute teardown()<br>\n1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }<br>\n<b>1011: \t\t\t\t}</b><br>\n1012: <br>\n1013: \t\t\t\t// store spec status<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+						"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+						"column": 0,
+						"line": 208,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+						"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+						"column": 0,
+						"line": 81,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+						"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+						"column": 0,
+						"line": 478,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+						"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+						"column": 0,
+						"line": 251,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+						"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+						"column": 0,
+						"line": 160,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+						"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+						"column": 0,
+						"line": 49,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+					}, {
+						"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+						"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+						"column": 0,
+						"line": 21,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+					}],
+					"ErrorCode": "0",
+					"type": "java.util.ConcurrentModificationException",
+					"StackTrace": "lucee.runtime.exp.NativeException: java.util.ConcurrentModificationException\n\tat java.util.HashMap$HashIterator.nextNode(HashMap.java:1442)\n\tat java.util.HashMap$KeyIterator.next(HashMap.java:1466)\n\tat io.undertow.servlet.util.IteratorEnumeration.nextElement(IteratorEnumeration.java:44)\n\tat lucee.runtime.type.scope.RequestImpl.clear(RequestImpl.java:157)\n\tat lucee.runtime.functions.struct.StructClear.call(StructClear.java:36)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)\n\tat system.basespec_cfc$cf.udfCall(/testbox/system/BaseSpec.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.call(UDFImpl.java:226)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:693)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.call(ComponentImpl.java:1997)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithoutNamedValues(VariableUtilImpl.java:756)\n\tat lucee.runtime.PageContextImpl.getFunction(PageContextImpl.java:1718)\n\tat system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.PageContextImpl.doInclude(PageContextImpl.java:805)\n\tat tests.runner_cfm$cf.call(/tests/runner.cfm:21)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.listener.ModernAppListener._onRequest(ModernAppListener.java:218)\n\tat lucee.runtime.listener.MixedAppListener.onRequest(MixedAppListener.java:43)\n\tat lucee.runtime.PageContextImpl.execute(PageContextImpl.java:2464)\n\tat lucee.runtime.PageContextImpl._execute(PageContextImpl.java:2454)\n\tat lucee.runtime.PageContextImpl.executeCFML(PageContextImpl.java:2427)\n\tat lucee.runtime.engine.Request.exe(Request.java:44)\n\tat lucee.runtime.engine.CFMLEngineImpl._service(CFMLEngineImpl.java:1090)\n\tat lucee.runtime.engine.CFMLEngineImpl.serviceCFML(CFMLEngineImpl.java:1038)\n\tat lucee.loader.engine.CFMLEngineWrapper.serviceCFML(CFMLEngineWrapper.java:102)\n\tat lucee.loader.servlet.CFMLServlet.service(CFMLServlet.java:51)\n\tat javax.servlet.http.HttpServlet.service(HttpServlet.java:790)\n\tat io.undertow.servlet.handlers.ServletHandler.handleRequest(ServletHandler.java:74)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:129)\n\tat org.cfmlprojects.regexpathinfofilter.RegexPathInfoFilter.doFilter(RegexPathInfoFilter.java:47)\n\tat io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:61)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)\n\tat sun.reflect.GeneratedMethodAccessor53.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:134)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doNext(FusionReactorRequestHandler.java:764)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doHttpServletRequest(FusionReactorRequestHandler.java:344)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doFusionRequest(FusionReactorRequestHandler.java:207)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.handle(FusionReactorRequestHandler.java:801)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorCoreFilter.doFilter(FusionReactorCoreFilter.java:36)\n\tat sun.reflect.GeneratedMethodAccessor51.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:71)\n\tat sun.reflect.GeneratedMethodAccessor50.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.agent.filter.FusionReactorStaticFilter.doFilter(FusionReactorStaticFilter.java:54)\n\tat com.intergral.fusionreactor.agent.pointcuts.NewFilterChainPointCut$1.invoke(NewFilterChainPointCut.java:41)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java)\n\tat io.undertow.servlet.handlers.FilterHandler.handleRequest(FilterHandler.java:84)\n\tat io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)\n\tat io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:64)\n\tat io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)\n\tat io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:132)\n\tat io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)\n\tat io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)\n\tat io.undertow.security.handlers.AuthenticationMechanismsHandler.handleRequest(AuthenticationMechanismsHandler.java:60)\n\tat io.undertow.servlet.handlers.security.CachedAuthenticatedSessionHandler.handleRequest(CachedAuthenticatedSessionHandler.java:77)\n\tat io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:292)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$100(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:138)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)\n\tat io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)\n\tat io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:272)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$000(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:104)\n\tat io.undertow.server.Connectors.executeRootHandler(Connectors.java:336)\n\tat io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:830)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: java.util.ConcurrentModificationException\n\t... 137 more\n",
+					"ExtendedInfo": ""
+				},
+				"startTime": 1553009673144,
+				"totalDuration": 4,
+				"failOrigin": [{
+					"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+					"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+					"column": 0,
+					"line": 18,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+				}, {
+					"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)",
+					"codePrintPlain": "1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n1013: \t\t\t\t// store spec status\n",
+					"column": 0,
+					"line": 1011,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "1009: \t\t\t\t\t// execute teardown()<br>\n1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }<br>\n<b>1011: \t\t\t\t}</b><br>\n1012: <br>\n1013: \t\t\t\t// store spec status<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+					"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+					"column": 0,
+					"line": 208,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+					"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+					"column": 0,
+					"line": 81,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+					"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+					"column": 0,
+					"line": 478,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+					"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+					"column": 0,
+					"line": 251,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+					"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+					"column": 0,
+					"line": 160,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+					"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+					"column": 0,
+					"line": 49,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+				}, {
+					"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+					"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+					"column": 0,
+					"line": 21,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+				}],
+				"status": "Error",
+				"suiteID": "0F9E64ECB27A3F1E33BC78FB7266E610",
+				"endTime": 1553009673148,
+				"name": "testExpectedExceptionFromMethodWithType",
+				"id": "DEA4D1B7E4D5685C8F5E56FC2EF4B07F",
+				"failMessage": ""
+			}, {
+				"error": {
+					"Extended_Info": "",
+					"Message": "java.util.ConcurrentModificationException",
+					"Detail": "",
+					"additional": {},
+					"TagContext": [{
+						"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+						"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+						"column": 0,
+						"line": 18,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+					}, {
+						"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)",
+						"codePrintPlain": "1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n1013: \t\t\t\t// store spec status\n",
+						"column": 0,
+						"line": 1011,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "1009: \t\t\t\t\t// execute teardown()<br>\n1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }<br>\n<b>1011: \t\t\t\t}</b><br>\n1012: <br>\n1013: \t\t\t\t// store spec status<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+						"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+						"column": 0,
+						"line": 208,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+						"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+						"column": 0,
+						"line": 81,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+						"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+						"column": 0,
+						"line": 478,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+						"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+						"column": 0,
+						"line": 251,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+						"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+						"column": 0,
+						"line": 160,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+						"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+						"column": 0,
+						"line": 49,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+					}, {
+						"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+						"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+						"column": 0,
+						"line": 21,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+					}],
+					"ErrorCode": "0",
+					"type": "java.util.ConcurrentModificationException",
+					"StackTrace": "lucee.runtime.exp.NativeException: java.util.ConcurrentModificationException\n\tat java.util.HashMap$HashIterator.nextNode(HashMap.java:1442)\n\tat java.util.HashMap$KeyIterator.next(HashMap.java:1466)\n\tat io.undertow.servlet.util.IteratorEnumeration.nextElement(IteratorEnumeration.java:44)\n\tat lucee.runtime.type.scope.RequestImpl.clear(RequestImpl.java:157)\n\tat lucee.runtime.functions.struct.StructClear.call(StructClear.java:36)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)\n\tat system.basespec_cfc$cf.udfCall(/testbox/system/BaseSpec.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.call(UDFImpl.java:226)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:693)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.call(ComponentImpl.java:1997)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithoutNamedValues(VariableUtilImpl.java:756)\n\tat lucee.runtime.PageContextImpl.getFunction(PageContextImpl.java:1718)\n\tat system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.PageContextImpl.doInclude(PageContextImpl.java:805)\n\tat tests.runner_cfm$cf.call(/tests/runner.cfm:21)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.listener.ModernAppListener._onRequest(ModernAppListener.java:218)\n\tat lucee.runtime.listener.MixedAppListener.onRequest(MixedAppListener.java:43)\n\tat lucee.runtime.PageContextImpl.execute(PageContextImpl.java:2464)\n\tat lucee.runtime.PageContextImpl._execute(PageContextImpl.java:2454)\n\tat lucee.runtime.PageContextImpl.executeCFML(PageContextImpl.java:2427)\n\tat lucee.runtime.engine.Request.exe(Request.java:44)\n\tat lucee.runtime.engine.CFMLEngineImpl._service(CFMLEngineImpl.java:1090)\n\tat lucee.runtime.engine.CFMLEngineImpl.serviceCFML(CFMLEngineImpl.java:1038)\n\tat lucee.loader.engine.CFMLEngineWrapper.serviceCFML(CFMLEngineWrapper.java:102)\n\tat lucee.loader.servlet.CFMLServlet.service(CFMLServlet.java:51)\n\tat javax.servlet.http.HttpServlet.service(HttpServlet.java:790)\n\tat io.undertow.servlet.handlers.ServletHandler.handleRequest(ServletHandler.java:74)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:129)\n\tat org.cfmlprojects.regexpathinfofilter.RegexPathInfoFilter.doFilter(RegexPathInfoFilter.java:47)\n\tat io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:61)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)\n\tat sun.reflect.GeneratedMethodAccessor53.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:134)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doNext(FusionReactorRequestHandler.java:764)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doHttpServletRequest(FusionReactorRequestHandler.java:344)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doFusionRequest(FusionReactorRequestHandler.java:207)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.handle(FusionReactorRequestHandler.java:801)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorCoreFilter.doFilter(FusionReactorCoreFilter.java:36)\n\tat sun.reflect.GeneratedMethodAccessor51.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:71)\n\tat sun.reflect.GeneratedMethodAccessor50.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.agent.filter.FusionReactorStaticFilter.doFilter(FusionReactorStaticFilter.java:54)\n\tat com.intergral.fusionreactor.agent.pointcuts.NewFilterChainPointCut$1.invoke(NewFilterChainPointCut.java:41)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java)\n\tat io.undertow.servlet.handlers.FilterHandler.handleRequest(FilterHandler.java:84)\n\tat io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)\n\tat io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:64)\n\tat io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)\n\tat io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:132)\n\tat io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)\n\tat io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)\n\tat io.undertow.security.handlers.AuthenticationMechanismsHandler.handleRequest(AuthenticationMechanismsHandler.java:60)\n\tat io.undertow.servlet.handlers.security.CachedAuthenticatedSessionHandler.handleRequest(CachedAuthenticatedSessionHandler.java:77)\n\tat io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:292)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$100(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:138)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)\n\tat io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)\n\tat io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:272)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$000(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:104)\n\tat io.undertow.server.Connectors.executeRootHandler(Connectors.java:336)\n\tat io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:830)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: java.util.ConcurrentModificationException\n\t... 137 more\n",
+					"ExtendedInfo": ""
+				},
+				"startTime": 1553009673148,
+				"totalDuration": 4,
+				"failOrigin": [{
+					"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+					"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+					"column": 0,
+					"line": 18,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+				}, {
+					"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)",
+					"codePrintPlain": "1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n1013: \t\t\t\t// store spec status\n",
+					"column": 0,
+					"line": 1011,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "1009: \t\t\t\t\t// execute teardown()<br>\n1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }<br>\n<b>1011: \t\t\t\t}</b><br>\n1012: <br>\n1013: \t\t\t\t// store spec status<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+					"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+					"column": 0,
+					"line": 208,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+					"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+					"column": 0,
+					"line": 81,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+					"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+					"column": 0,
+					"line": 478,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+					"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+					"column": 0,
+					"line": 251,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+					"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+					"column": 0,
+					"line": 160,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+					"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+					"column": 0,
+					"line": 49,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+				}, {
+					"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+					"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+					"column": 0,
+					"line": 21,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+				}],
+				"status": "Error",
+				"suiteID": "0F9E64ECB27A3F1E33BC78FB7266E610",
+				"endTime": 1553009673152,
+				"name": "testRaiseException_pass",
+				"id": "DB1CDA5E9576C02CE49C6A3009AC84EA",
+				"failMessage": ""
+			}, {
+				"error": {
+					"Extended_Info": "",
+					"Message": "java.util.ConcurrentModificationException",
+					"Detail": "",
+					"additional": {},
+					"TagContext": [{
+						"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+						"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+						"column": 0,
+						"line": 18,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+					}, {
+						"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)",
+						"codePrintPlain": "1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n1013: \t\t\t\t// store spec status\n",
+						"column": 0,
+						"line": 1011,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "1009: \t\t\t\t\t// execute teardown()<br>\n1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }<br>\n<b>1011: \t\t\t\t}</b><br>\n1012: <br>\n1013: \t\t\t\t// store spec status<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+						"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+						"column": 0,
+						"line": 208,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+						"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+						"column": 0,
+						"line": 81,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+						"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+						"column": 0,
+						"line": 478,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+						"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+						"column": 0,
+						"line": 251,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+						"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+						"column": 0,
+						"line": 160,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+						"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+						"column": 0,
+						"line": 49,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+					}, {
+						"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+						"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+						"column": 0,
+						"line": 21,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+					}],
+					"ErrorCode": "0",
+					"type": "java.util.ConcurrentModificationException",
+					"StackTrace": "lucee.runtime.exp.NativeException: java.util.ConcurrentModificationException\n\tat java.util.HashMap$HashIterator.nextNode(HashMap.java:1442)\n\tat java.util.HashMap$KeyIterator.next(HashMap.java:1466)\n\tat io.undertow.servlet.util.IteratorEnumeration.nextElement(IteratorEnumeration.java:44)\n\tat lucee.runtime.type.scope.RequestImpl.clear(RequestImpl.java:157)\n\tat lucee.runtime.functions.struct.StructClear.call(StructClear.java:36)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)\n\tat system.basespec_cfc$cf.udfCall(/testbox/system/BaseSpec.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.call(UDFImpl.java:226)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:693)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.call(ComponentImpl.java:1997)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithoutNamedValues(VariableUtilImpl.java:756)\n\tat lucee.runtime.PageContextImpl.getFunction(PageContextImpl.java:1718)\n\tat system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.PageContextImpl.doInclude(PageContextImpl.java:805)\n\tat tests.runner_cfm$cf.call(/tests/runner.cfm:21)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.listener.ModernAppListener._onRequest(ModernAppListener.java:218)\n\tat lucee.runtime.listener.MixedAppListener.onRequest(MixedAppListener.java:43)\n\tat lucee.runtime.PageContextImpl.execute(PageContextImpl.java:2464)\n\tat lucee.runtime.PageContextImpl._execute(PageContextImpl.java:2454)\n\tat lucee.runtime.PageContextImpl.executeCFML(PageContextImpl.java:2427)\n\tat lucee.runtime.engine.Request.exe(Request.java:44)\n\tat lucee.runtime.engine.CFMLEngineImpl._service(CFMLEngineImpl.java:1090)\n\tat lucee.runtime.engine.CFMLEngineImpl.serviceCFML(CFMLEngineImpl.java:1038)\n\tat lucee.loader.engine.CFMLEngineWrapper.serviceCFML(CFMLEngineWrapper.java:102)\n\tat lucee.loader.servlet.CFMLServlet.service(CFMLServlet.java:51)\n\tat javax.servlet.http.HttpServlet.service(HttpServlet.java:790)\n\tat io.undertow.servlet.handlers.ServletHandler.handleRequest(ServletHandler.java:74)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:129)\n\tat org.cfmlprojects.regexpathinfofilter.RegexPathInfoFilter.doFilter(RegexPathInfoFilter.java:47)\n\tat io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:61)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)\n\tat sun.reflect.GeneratedMethodAccessor53.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:134)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doNext(FusionReactorRequestHandler.java:764)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doHttpServletRequest(FusionReactorRequestHandler.java:344)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doFusionRequest(FusionReactorRequestHandler.java:207)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.handle(FusionReactorRequestHandler.java:801)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorCoreFilter.doFilter(FusionReactorCoreFilter.java:36)\n\tat sun.reflect.GeneratedMethodAccessor51.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:71)\n\tat sun.reflect.GeneratedMethodAccessor50.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.agent.filter.FusionReactorStaticFilter.doFilter(FusionReactorStaticFilter.java:54)\n\tat com.intergral.fusionreactor.agent.pointcuts.NewFilterChainPointCut$1.invoke(NewFilterChainPointCut.java:41)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java)\n\tat io.undertow.servlet.handlers.FilterHandler.handleRequest(FilterHandler.java:84)\n\tat io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)\n\tat io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:64)\n\tat io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)\n\tat io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:132)\n\tat io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)\n\tat io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)\n\tat io.undertow.security.handlers.AuthenticationMechanismsHandler.handleRequest(AuthenticationMechanismsHandler.java:60)\n\tat io.undertow.servlet.handlers.security.CachedAuthenticatedSessionHandler.handleRequest(CachedAuthenticatedSessionHandler.java:77)\n\tat io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:292)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$100(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:138)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)\n\tat io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)\n\tat io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:272)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$000(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:104)\n\tat io.undertow.server.Connectors.executeRootHandler(Connectors.java:336)\n\tat io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:830)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: java.util.ConcurrentModificationException\n\t... 137 more\n",
+					"ExtendedInfo": ""
+				},
+				"startTime": 1553009673152,
+				"totalDuration": 4,
+				"failOrigin": [{
+					"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+					"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+					"column": 0,
+					"line": 18,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+				}, {
+					"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)",
+					"codePrintPlain": "1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n1013: \t\t\t\t// store spec status\n",
+					"column": 0,
+					"line": 1011,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "1009: \t\t\t\t\t// execute teardown()<br>\n1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }<br>\n<b>1011: \t\t\t\t}</b><br>\n1012: <br>\n1013: \t\t\t\t// store spec status<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+					"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+					"column": 0,
+					"line": 208,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+					"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+					"column": 0,
+					"line": 81,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+					"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+					"column": 0,
+					"line": 478,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+					"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+					"column": 0,
+					"line": 251,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+					"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+					"column": 0,
+					"line": 160,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+					"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+					"column": 0,
+					"line": 49,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+				}, {
+					"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+					"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+					"column": 0,
+					"line": 21,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+				}],
+				"status": "Error",
+				"suiteID": "0F9E64ECB27A3F1E33BC78FB7266E610",
+				"endTime": 1553009673156,
+				"name": "testExpectedExceptionFromMethodWithTypeAndRegex",
+				"id": "5F2998DAA434E0999157C33D2998677F",
+				"failMessage": ""
+			}, {
+				"error": {
+					"Extended_Info": "",
+					"Message": "java.util.ConcurrentModificationException",
+					"Detail": "",
+					"additional": {},
+					"TagContext": [{
+						"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+						"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+						"column": 0,
+						"line": 18,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+					}, {
+						"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)",
+						"codePrintPlain": "1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n1013: \t\t\t\t// store spec status\n",
+						"column": 0,
+						"line": 1011,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "1009: \t\t\t\t\t// execute teardown()<br>\n1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }<br>\n<b>1011: \t\t\t\t}</b><br>\n1012: <br>\n1013: \t\t\t\t// store spec status<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+						"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+						"column": 0,
+						"line": 208,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+						"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+						"column": 0,
+						"line": 81,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+						"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+						"column": 0,
+						"line": 478,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+						"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+						"column": 0,
+						"line": 251,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+						"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+						"column": 0,
+						"line": 160,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+						"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+						"column": 0,
+						"line": 49,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+					}, {
+						"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+						"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+						"column": 0,
+						"line": 21,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+					}],
+					"ErrorCode": "0",
+					"type": "java.util.ConcurrentModificationException",
+					"StackTrace": "lucee.runtime.exp.NativeException: java.util.ConcurrentModificationException\n\tat java.util.HashMap$HashIterator.nextNode(HashMap.java:1442)\n\tat java.util.HashMap$KeyIterator.next(HashMap.java:1466)\n\tat io.undertow.servlet.util.IteratorEnumeration.nextElement(IteratorEnumeration.java:44)\n\tat lucee.runtime.type.scope.RequestImpl.clear(RequestImpl.java:157)\n\tat lucee.runtime.functions.struct.StructClear.call(StructClear.java:36)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)\n\tat system.basespec_cfc$cf.udfCall(/testbox/system/BaseSpec.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.call(UDFImpl.java:226)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:693)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.call(ComponentImpl.java:1997)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithoutNamedValues(VariableUtilImpl.java:756)\n\tat lucee.runtime.PageContextImpl.getFunction(PageContextImpl.java:1718)\n\tat system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.PageContextImpl.doInclude(PageContextImpl.java:805)\n\tat tests.runner_cfm$cf.call(/tests/runner.cfm:21)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.listener.ModernAppListener._onRequest(ModernAppListener.java:218)\n\tat lucee.runtime.listener.MixedAppListener.onRequest(MixedAppListener.java:43)\n\tat lucee.runtime.PageContextImpl.execute(PageContextImpl.java:2464)\n\tat lucee.runtime.PageContextImpl._execute(PageContextImpl.java:2454)\n\tat lucee.runtime.PageContextImpl.executeCFML(PageContextImpl.java:2427)\n\tat lucee.runtime.engine.Request.exe(Request.java:44)\n\tat lucee.runtime.engine.CFMLEngineImpl._service(CFMLEngineImpl.java:1090)\n\tat lucee.runtime.engine.CFMLEngineImpl.serviceCFML(CFMLEngineImpl.java:1038)\n\tat lucee.loader.engine.CFMLEngineWrapper.serviceCFML(CFMLEngineWrapper.java:102)\n\tat lucee.loader.servlet.CFMLServlet.service(CFMLServlet.java:51)\n\tat javax.servlet.http.HttpServlet.service(HttpServlet.java:790)\n\tat io.undertow.servlet.handlers.ServletHandler.handleRequest(ServletHandler.java:74)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:129)\n\tat org.cfmlprojects.regexpathinfofilter.RegexPathInfoFilter.doFilter(RegexPathInfoFilter.java:47)\n\tat io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:61)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)\n\tat sun.reflect.GeneratedMethodAccessor53.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:134)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doNext(FusionReactorRequestHandler.java:764)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doHttpServletRequest(FusionReactorRequestHandler.java:344)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doFusionRequest(FusionReactorRequestHandler.java:207)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.handle(FusionReactorRequestHandler.java:801)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorCoreFilter.doFilter(FusionReactorCoreFilter.java:36)\n\tat sun.reflect.GeneratedMethodAccessor51.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:71)\n\tat sun.reflect.GeneratedMethodAccessor50.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.agent.filter.FusionReactorStaticFilter.doFilter(FusionReactorStaticFilter.java:54)\n\tat com.intergral.fusionreactor.agent.pointcuts.NewFilterChainPointCut$1.invoke(NewFilterChainPointCut.java:41)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java)\n\tat io.undertow.servlet.handlers.FilterHandler.handleRequest(FilterHandler.java:84)\n\tat io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)\n\tat io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:64)\n\tat io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)\n\tat io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:132)\n\tat io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)\n\tat io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)\n\tat io.undertow.security.handlers.AuthenticationMechanismsHandler.handleRequest(AuthenticationMechanismsHandler.java:60)\n\tat io.undertow.servlet.handlers.security.CachedAuthenticatedSessionHandler.handleRequest(CachedAuthenticatedSessionHandler.java:77)\n\tat io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:292)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$100(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:138)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)\n\tat io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)\n\tat io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:272)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$000(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:104)\n\tat io.undertow.server.Connectors.executeRootHandler(Connectors.java:336)\n\tat io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:830)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: java.util.ConcurrentModificationException\n\t... 137 more\n",
+					"ExtendedInfo": ""
+				},
+				"startTime": 1553009673156,
+				"totalDuration": 4,
+				"failOrigin": [{
+					"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+					"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+					"column": 0,
+					"line": 18,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+				}, {
+					"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1011)",
+					"codePrintPlain": "1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n1013: \t\t\t\t// store spec status\n",
+					"column": 0,
+					"line": 1011,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "1009: \t\t\t\t\t// execute teardown()<br>\n1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }<br>\n<b>1011: \t\t\t\t}</b><br>\n1012: <br>\n1013: \t\t\t\t// store spec status<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+					"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+					"column": 0,
+					"line": 208,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+					"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+					"column": 0,
+					"line": 81,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+					"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+					"column": 0,
+					"line": 478,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+					"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+					"column": 0,
+					"line": 251,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+					"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+					"column": 0,
+					"line": 160,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+					"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+					"column": 0,
+					"line": 49,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+				}, {
+					"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+					"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+					"column": 0,
+					"line": 21,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+				}],
+				"status": "Error",
+				"suiteID": "0F9E64ECB27A3F1E33BC78FB7266E610",
+				"endTime": 1553009673160,
+				"name": "testExpectedExceptionWithValue",
+				"id": "821A8EBFF6CCAD78FF707B72D7566B3E",
+				"failMessage": ""
+			}, {
+				"error": {
+					"Extended_Info": "",
+					"Message": "java.util.ConcurrentModificationException",
+					"Detail": "",
+					"additional": {},
+					"TagContext": [{
+						"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+						"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+						"column": 0,
+						"line": 18,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+					}, {
+						"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1010)",
+						"codePrintPlain": "1008: \t\t\t\t} finally {\n1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n",
+						"column": 0,
+						"line": 1010,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "1008: \t\t\t\t} finally {<br>\n1009: \t\t\t\t\t// execute teardown()<br>\n<b>1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }</b><br>\n1011: \t\t\t\t}<br>\n1012: <br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+						"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+						"column": 0,
+						"line": 208,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+						"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+						"column": 0,
+						"line": 81,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+						"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+						"column": 0,
+						"line": 478,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+						"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+						"column": 0,
+						"line": 251,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+						"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+						"column": 0,
+						"line": 160,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+						"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+						"column": 0,
+						"line": 49,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+					}, {
+						"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+						"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+						"column": 0,
+						"line": 21,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+					}],
+					"ErrorCode": "0",
+					"type": "java.util.ConcurrentModificationException",
+					"StackTrace": "lucee.runtime.exp.NativeException: java.util.ConcurrentModificationException\n\tat java.util.HashMap$HashIterator.nextNode(HashMap.java:1442)\n\tat java.util.HashMap$KeyIterator.next(HashMap.java:1466)\n\tat io.undertow.servlet.util.IteratorEnumeration.nextElement(IteratorEnumeration.java:44)\n\tat lucee.runtime.type.scope.RequestImpl.clear(RequestImpl.java:157)\n\tat lucee.runtime.functions.struct.StructClear.call(StructClear.java:36)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1010)\n\tat system.basespec_cfc$cf.udfCall(/testbox/system/BaseSpec.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.call(UDFImpl.java:226)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:693)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.call(ComponentImpl.java:1997)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithoutNamedValues(VariableUtilImpl.java:756)\n\tat lucee.runtime.PageContextImpl.getFunction(PageContextImpl.java:1718)\n\tat system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.PageContextImpl.doInclude(PageContextImpl.java:805)\n\tat tests.runner_cfm$cf.call(/tests/runner.cfm:21)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.listener.ModernAppListener._onRequest(ModernAppListener.java:218)\n\tat lucee.runtime.listener.MixedAppListener.onRequest(MixedAppListener.java:43)\n\tat lucee.runtime.PageContextImpl.execute(PageContextImpl.java:2464)\n\tat lucee.runtime.PageContextImpl._execute(PageContextImpl.java:2454)\n\tat lucee.runtime.PageContextImpl.executeCFML(PageContextImpl.java:2427)\n\tat lucee.runtime.engine.Request.exe(Request.java:44)\n\tat lucee.runtime.engine.CFMLEngineImpl._service(CFMLEngineImpl.java:1090)\n\tat lucee.runtime.engine.CFMLEngineImpl.serviceCFML(CFMLEngineImpl.java:1038)\n\tat lucee.loader.engine.CFMLEngineWrapper.serviceCFML(CFMLEngineWrapper.java:102)\n\tat lucee.loader.servlet.CFMLServlet.service(CFMLServlet.java:51)\n\tat javax.servlet.http.HttpServlet.service(HttpServlet.java:790)\n\tat io.undertow.servlet.handlers.ServletHandler.handleRequest(ServletHandler.java:74)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:129)\n\tat org.cfmlprojects.regexpathinfofilter.RegexPathInfoFilter.doFilter(RegexPathInfoFilter.java:47)\n\tat io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:61)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)\n\tat sun.reflect.GeneratedMethodAccessor53.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:134)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doNext(FusionReactorRequestHandler.java:764)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doHttpServletRequest(FusionReactorRequestHandler.java:344)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doFusionRequest(FusionReactorRequestHandler.java:207)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.handle(FusionReactorRequestHandler.java:801)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorCoreFilter.doFilter(FusionReactorCoreFilter.java:36)\n\tat sun.reflect.GeneratedMethodAccessor51.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:71)\n\tat sun.reflect.GeneratedMethodAccessor50.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.agent.filter.FusionReactorStaticFilter.doFilter(FusionReactorStaticFilter.java:54)\n\tat com.intergral.fusionreactor.agent.pointcuts.NewFilterChainPointCut$1.invoke(NewFilterChainPointCut.java:41)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java)\n\tat io.undertow.servlet.handlers.FilterHandler.handleRequest(FilterHandler.java:84)\n\tat io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)\n\tat io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:64)\n\tat io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)\n\tat io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:132)\n\tat io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)\n\tat io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)\n\tat io.undertow.security.handlers.AuthenticationMechanismsHandler.handleRequest(AuthenticationMechanismsHandler.java:60)\n\tat io.undertow.servlet.handlers.security.CachedAuthenticatedSessionHandler.handleRequest(CachedAuthenticatedSessionHandler.java:77)\n\tat io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:292)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$100(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:138)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)\n\tat io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)\n\tat io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:272)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$000(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:104)\n\tat io.undertow.server.Connectors.executeRootHandler(Connectors.java:336)\n\tat io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:830)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: java.util.ConcurrentModificationException\n\t... 137 more\n",
+					"ExtendedInfo": ""
+				},
+				"startTime": 1553009673160,
+				"totalDuration": 3,
+				"failOrigin": [{
+					"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+					"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+					"column": 0,
+					"line": 18,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+				}, {
+					"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1010)",
+					"codePrintPlain": "1008: \t\t\t\t} finally {\n1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n",
+					"column": 0,
+					"line": 1010,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "1008: \t\t\t\t} finally {<br>\n1009: \t\t\t\t\t// execute teardown()<br>\n<b>1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }</b><br>\n1011: \t\t\t\t}<br>\n1012: <br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+					"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+					"column": 0,
+					"line": 208,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+					"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+					"column": 0,
+					"line": 81,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+					"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+					"column": 0,
+					"line": 478,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+					"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+					"column": 0,
+					"line": 251,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+					"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+					"column": 0,
+					"line": 160,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+					"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+					"column": 0,
+					"line": 49,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+				}, {
+					"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+					"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+					"column": 0,
+					"line": 21,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+				}],
+				"status": "Error",
+				"suiteID": "0F9E64ECB27A3F1E33BC78FB7266E610",
+				"endTime": 1553009673163,
+				"name": "testRaiseException_fail_wrong_exception_raised",
+				"id": "38E9FBD5CD24CC185DB762502F1D2E1E",
+				"failMessage": ""
+			}, {
+				"error": {
+					"Extended_Info": "",
+					"Message": "java.util.ConcurrentModificationException",
+					"Detail": "",
+					"additional": {},
+					"TagContext": [{
+						"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+						"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+						"column": 0,
+						"line": 18,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+					}, {
+						"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1010)",
+						"codePrintPlain": "1008: \t\t\t\t} finally {\n1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n",
+						"column": 0,
+						"line": 1010,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "1008: \t\t\t\t} finally {<br>\n1009: \t\t\t\t\t// execute teardown()<br>\n<b>1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }</b><br>\n1011: \t\t\t\t}<br>\n1012: <br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+						"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+						"column": 0,
+						"line": 208,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+						"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+						"column": 0,
+						"line": 81,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+						"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+						"column": 0,
+						"line": 478,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+						"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+						"column": 0,
+						"line": 251,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+					}, {
+						"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+						"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+						"column": 0,
+						"line": 160,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+					}, {
+						"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+						"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+						"column": 0,
+						"line": 49,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+					}, {
+						"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+						"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+						"column": 0,
+						"line": 21,
+						"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+						"id": "??",
+						"type": "cfml",
+						"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+					}],
+					"ErrorCode": "0",
+					"type": "java.util.ConcurrentModificationException",
+					"StackTrace": "lucee.runtime.exp.NativeException: java.util.ConcurrentModificationException\n\tat java.util.HashMap$HashIterator.nextNode(HashMap.java:1442)\n\tat java.util.HashMap$KeyIterator.next(HashMap.java:1466)\n\tat io.undertow.servlet.util.IteratorEnumeration.nextElement(IteratorEnumeration.java:44)\n\tat lucee.runtime.type.scope.RequestImpl.clear(RequestImpl.java:157)\n\tat lucee.runtime.functions.struct.StructClear.call(StructClear.java:36)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)\n\tat specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1010)\n\tat system.basespec_cfc$cf.udfCall(/testbox/system/BaseSpec.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.call(UDFImpl.java:226)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:693)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.call(ComponentImpl.java:1997)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithoutNamedValues(VariableUtilImpl.java:756)\n\tat lucee.runtime.PageContextImpl.getFunction(PageContextImpl.java:1718)\n\tat system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.type.scope.UndefinedImpl.callWithNamedValues(UndefinedImpl.java:812)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)\n\tat system.testbox_cfc$cf.udfCall(/testbox/system/TestBox.cfc)\n\tat lucee.runtime.type.UDFImpl.implementation(UDFImpl.java:107)\n\tat lucee.runtime.type.UDFImpl._call(UDFImpl.java:357)\n\tat lucee.runtime.type.UDFImpl.callWithNamedValues(UDFImpl.java:212)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:695)\n\tat lucee.runtime.ComponentImpl._call(ComponentImpl.java:573)\n\tat lucee.runtime.ComponentImpl.callWithNamedValues(ComponentImpl.java:2014)\n\tat lucee.runtime.util.VariableUtilImpl.callFunctionWithNamedValues(VariableUtilImpl.java:833)\n\tat lucee.runtime.PageContextImpl.getFunctionWithNamedValues(PageContextImpl.java:1737)\n\tat system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.PageContextImpl.doInclude(PageContextImpl.java:805)\n\tat tests.runner_cfm$cf.call(/tests/runner.cfm:21)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:933)\n\tat lucee.runtime.PageContextImpl._doInclude(PageContextImpl.java:823)\n\tat lucee.runtime.listener.ModernAppListener._onRequest(ModernAppListener.java:218)\n\tat lucee.runtime.listener.MixedAppListener.onRequest(MixedAppListener.java:43)\n\tat lucee.runtime.PageContextImpl.execute(PageContextImpl.java:2464)\n\tat lucee.runtime.PageContextImpl._execute(PageContextImpl.java:2454)\n\tat lucee.runtime.PageContextImpl.executeCFML(PageContextImpl.java:2427)\n\tat lucee.runtime.engine.Request.exe(Request.java:44)\n\tat lucee.runtime.engine.CFMLEngineImpl._service(CFMLEngineImpl.java:1090)\n\tat lucee.runtime.engine.CFMLEngineImpl.serviceCFML(CFMLEngineImpl.java:1038)\n\tat lucee.loader.engine.CFMLEngineWrapper.serviceCFML(CFMLEngineWrapper.java:102)\n\tat lucee.loader.servlet.CFMLServlet.service(CFMLServlet.java:51)\n\tat javax.servlet.http.HttpServlet.service(HttpServlet.java:790)\n\tat io.undertow.servlet.handlers.ServletHandler.handleRequest(ServletHandler.java:74)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:129)\n\tat org.cfmlprojects.regexpathinfofilter.RegexPathInfoFilter.doFilter(RegexPathInfoFilter.java:47)\n\tat io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:61)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)\n\tat sun.reflect.GeneratedMethodAccessor53.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:134)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doNext(FusionReactorRequestHandler.java:764)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doHttpServletRequest(FusionReactorRequestHandler.java:344)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.doFusionRequest(FusionReactorRequestHandler.java:207)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorRequestHandler.handle(FusionReactorRequestHandler.java:801)\n\tat com.intergral.fusionreactor.j2ee.filter.FusionReactorCoreFilter.doFilter(FusionReactorCoreFilter.java:36)\n\tat sun.reflect.GeneratedMethodAccessor51.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.j2ee.filterchain.WrappedFilterChain.doFilter(WrappedFilterChain.java:71)\n\tat sun.reflect.GeneratedMethodAccessor50.invoke(Unknown Source)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat com.intergral.fusionreactor.agent.filter.FusionReactorStaticFilter.doFilter(FusionReactorStaticFilter.java:54)\n\tat com.intergral.fusionreactor.agent.pointcuts.NewFilterChainPointCut$1.invoke(NewFilterChainPointCut.java:41)\n\tat io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java)\n\tat io.undertow.servlet.handlers.FilterHandler.handleRequest(FilterHandler.java:84)\n\tat io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)\n\tat io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:64)\n\tat io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)\n\tat io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:132)\n\tat io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)\n\tat io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)\n\tat io.undertow.security.handlers.AuthenticationMechanismsHandler.handleRequest(AuthenticationMechanismsHandler.java:60)\n\tat io.undertow.servlet.handlers.security.CachedAuthenticatedSessionHandler.handleRequest(CachedAuthenticatedSessionHandler.java:77)\n\tat io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:292)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$100(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:138)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)\n\tat io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)\n\tat io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:272)\n\tat io.undertow.servlet.handlers.ServletInitialHandler.access$000(ServletInitialHandler.java:81)\n\tat io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:104)\n\tat io.undertow.server.Connectors.executeRootHandler(Connectors.java:336)\n\tat io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:830)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: java.util.ConcurrentModificationException\n\t... 137 more\n",
+					"ExtendedInfo": ""
+				},
+				"startTime": 1553009673163,
+				"totalDuration": 4,
+				"failOrigin": [{
+					"Raw_Trace": "specswithfailures.mxunitexpectedexceptions_cfc$cf.udfCall1(/tests/specsWithFailures/MXUnitExpectedExceptions.cfc:18)",
+					"codePrintPlain": "16: \n17: \tfunction teardown(){\n18: \t\tstructClear( request );\n19: \t}\n20: \n",
+					"column": 0,
+					"line": 18,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/MXUnitExpectedExceptions.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "16: <br>\n17: \tfunction teardown(){<br>\n<b>18: \t\tstructClear( request );</b><br>\n19: \t}<br>\n20: <br>\n"
+				}, {
+					"Raw_Trace": "system.basespec_cfc$cf.udfCall5(/testbox/system/BaseSpec.cfc:1010)",
+					"codePrintPlain": "1008: \t\t\t\t} finally {\n1009: \t\t\t\t\t// execute teardown()\n1010: \t\t\t\t\tif( structKeyExists( this, \"teardown\" ) ){ this.teardown( currentMethod=arguments.spec.name ); }\n1011: \t\t\t\t}\n1012: \n",
+					"column": 0,
+					"line": 1010,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "1008: \t\t\t\t} finally {<br>\n1009: \t\t\t\t\t// execute teardown()<br>\n<b>1010: \t\t\t\t\tif( structKeyExists( this, &quot;teardown&quot; ) ){ this.teardown( currentMethod=arguments.spec.name ); }</b><br>\n1011: \t\t\t\t}<br>\n1012: <br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:208)",
+					"codePrintPlain": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n207: \t\t\t\t\t\trunner=this\n208: \t\t\t\t\t);\n209: \n210: \t\t\t\t\t// verify call backs\n",
+					"column": 0,
+					"line": 208,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "206: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n207: \t\t\t\t\t\trunner=this<br>\n<b>208: \t\t\t\t\t);</b><br>\n209: <br>\n210: \t\t\t\t\t// verify call backs<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.unitrunner_cfc$cf.udfCall(/testbox/system/runners/UnitRunner.cfc:81)",
+					"codePrintPlain": "79: \t\t\t\t\t\ttestResults=arguments.testResults,\n80: \t\t\t\t\t\tbundleStats=bundleStats,\n81: \t\t\t\t\t\tcallbacks=arguments.callbacks\n82: \t\t\t\t\t);\n83: \n",
+					"column": 0,
+					"line": 81,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/UnitRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "79: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n80: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>81: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n82: \t\t\t\t\t);<br>\n83: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:478)",
+					"codePrintPlain": "476: \t\t\t\t// Run via xUnit Style\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )\n478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n479: \t\t\t}\n480: \t\t} catch( Any e ){\n",
+					"column": 0,
+					"line": 478,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "476: \t\t\t\t// Run via xUnit Style<br>\n477: \t\t\t\tnew testbox.system.runners.UnitRunner( options=variables.options,testbox=this )<br>\n<b>478: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n479: \t\t\t}<br>\n480: \t\t} catch( Any e ){<br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+					"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+					"column": 0,
+					"line": 251,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+					"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+					"column": 0,
+					"line": 160,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+					"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+					"column": 0,
+					"line": 49,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+				}, {
+					"Raw_Trace": "tests.runner_cfm$cf.call(/tests/runner.cfm:21)",
+					"codePrintPlain": "19: \n20: <!--- Include the TestBox HTML Runner --->\n21: <cfinclude template=\"/testbox/system/runners/HTMLRunner.cfm\" >\n",
+					"column": 0,
+					"line": 21,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/runner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "19: <br>\n20: &lt;!--- Include the TestBox HTML Runner ---&gt;<br>\n<b>21: &lt;cfinclude template=&quot;/testbox/system/runners/HTMLRunner.cfm&quot; &gt;</b><br>\n"
+				}],
+				"status": "Error",
+				"suiteID": "0F9E64ECB27A3F1E33BC78FB7266E610",
+				"endTime": 1553009673167,
+				"name": "testExpectException_should_fail",
+				"id": "9AE953744ABF596DB46DABAAF47A36E0",
+				"failMessage": ""
+			}],
+			"endTime": 1553009673167,
+			"totalError": 7,
+			"name": "tests.specsWithFailures.MXUnitExpectedExceptions",
+			"id": "0F9E64ECB27A3F1E33BC78FB7266E610",
+			"suiteStats": []
+		}],
+		"globalException": ""
+	}, {
+		"totalSuites": 1,
+		"startTime": 1553009673173,
+		"totalPass": 1,
+		"totalDuration": 15,
+		"totalSkipped": 0,
+		"totalFail": 1,
+		"totalSpecs": 2,
+		"path": "tests.specsWithFailures.TeardownWithFailureBDD",
+		"endTime": 1553009673188,
+		"totalError": 0,
+		"name": "tests.specsWithFailures.TeardownWithFailureBDD",
+		"id": "7DA7FE371A5DA234729404FCED6D1494",
+		"suiteStats": [{
+			"startTime": 1553009673174,
+			"totalPass": 1,
+			"totalDuration": 13,
+			"totalSkipped": 0,
+			"totalFail": 1,
+			"totalSpecs": 2,
+			"bundleID": "7DA7FE371A5DA234729404FCED6D1494",
+			"status": "Failed",
+			"parentID": "",
+			"specStats": [{
+				"error": {},
+				"startTime": 1553009673174,
+				"totalDuration": 5,
+				"failOrigin": {},
+				"status": "Passed",
+				"suiteID": "734EAC2A2E0173AB943C7F55FC61E4B4",
+				"endTime": 1553009673179,
+				"name": "passes",
+				"id": "60E1FD85154BCE145E454EB6A78FED66",
+				"failMessage": ""
+			}, {
+				"error": {},
+				"startTime": 1553009673179,
+				"totalDuration": 8,
+				"failOrigin": [{
+					"Raw_Trace": "specswithfailures.teardownwithfailurebdd_cfc$cf.udfCall(/tests/specsWithFailures/TeardownWithFailureBDD.cfc:34)",
+					"codePrintPlain": "32: \n33: \t\t\tit(\"fails\", function(){\n34: \t\t\t\texpect( 1 ).toBe( 3 );\n35: \t\t\t});\n36: \n",
+					"column": 0,
+					"line": 34,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/tests/specsWithFailures/TeardownWithFailureBDD.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "32: <br>\n33: \t\t\tit(&quot;fails&quot;, function(){<br>\n<b>34: \t\t\t\texpect( 1 ).toBe( 3 );</b><br>\n35: \t\t\t});<br>\n36: <br>\n"
+				}, {
+					"Raw_Trace": "system.basespec_cfc$cf.udfCall6(/testbox/system/BaseSpec.cfc:1237)",
+					"codePrintPlain": "1235: \t\tstring implements=\"\"\n1236: \t){\n1237: \t\treturn this.$mockBox.createStub( argumentCollection=arguments );\n1238: \t}\n1239: \n",
+					"column": 0,
+					"line": 1237,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "1235: \t\tstring implements=&quot;&quot;<br>\n1236: \t){<br>\n<b>1237: \t\treturn this.$mockBox.createStub( argumentCollection=arguments );</b><br>\n1238: \t}<br>\n1239: <br>\n"
+				}, {
+					"Raw_Trace": "system.basespec_cfc$cf.udfCall4(/testbox/system/BaseSpec.cfc:888)",
+					"codePrintPlain": "886: \t\t\treturn function(){\n887: \t\t\t\t// Execute the body of the spec\n888: \t\t\t\tnextClosure.body( spec = thread.spec, suite = thread.suite, data = nextClosure.data );\n889: \t\t\t};\n890: \t\t}\n",
+					"column": 0,
+					"line": 888,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "886: \t\t\treturn function(){<br>\n887: \t\t\t\t// Execute the body of the spec<br>\n<b>888: \t\t\t\tnextClosure.body( spec = thread.spec, suite = thread.suite, data = nextClosure.data );</b><br>\n889: \t\t\t};<br>\n890: \t\t}<br>\n"
+				}, {
+					"Raw_Trace": "system.basespec_cfc$cf.udfCall4(/testbox/system/BaseSpec.cfc:863)",
+					"codePrintPlain": "861: \t\t);\n862: \t\t// Run the specs\n863: \t\tspecStack();\n864: \n865: \t\treturn this;\n",
+					"column": 0,
+					"line": 863,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "861: \t\t);<br>\n862: \t\t// Run the specs<br>\n<b>863: \t\tspecStack();</b><br>\n864: <br>\n865: \t\treturn this;<br>\n"
+				}, {
+					"Raw_Trace": "system.basespec_cfc$cf.udfCall3(/testbox/system/BaseSpec.cfc:701)",
+					"codePrintPlain": "699: \n700: \t\t\t\ttry{\n701: \t\t\t\t\trunAroundEachClosures( arguments.suite, arguments.spec );\n702: \t\t\t\t} catch( any e ){\n703: \t\t\t\t\trethrow;\n",
+					"column": 0,
+					"line": 701,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/BaseSpec.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "699: <br>\n700: \t\t\t\ttry{<br>\n<b>701: \t\t\t\t\trunAroundEachClosures( arguments.suite, arguments.spec );</b><br>\n702: \t\t\t\t} catch( any e ){<br>\n703: \t\t\t\t\trethrow;<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.bddrunner_cfc$cf.udfCall(/testbox/system/runners/BDDRunner.cfc:221)",
+					"codePrintPlain": "219: \t\t\t\t\t\tsuiteStats=thread.suiteStats,\n220: \t\t\t\t\t\trunner=this\n221: \t\t\t\t\t);\n222: \n223: \t\t\t\t\t// verify call backs\n",
+					"column": 0,
+					"line": 221,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/BDDRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "219: \t\t\t\t\t\tsuiteStats=thread.suiteStats,<br>\n220: \t\t\t\t\t\trunner=this<br>\n<b>221: \t\t\t\t\t);</b><br>\n222: <br>\n223: \t\t\t\t\t// verify call backs<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.bddrunner_cfc$cf.udfCall(/testbox/system/runners/BDDRunner.cfc:83)",
+					"codePrintPlain": "81: \t\t\t\t\t\ttestResults=arguments.testResults,\n82: \t\t\t\t\t\tbundleStats=bundleStats,\n83: \t\t\t\t\t\tcallbacks=arguments.callbacks\n84: \t\t\t\t\t);\n85: \n",
+					"column": 0,
+					"line": 83,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/BDDRunner.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "81: \t\t\t\t\t\ttestResults=arguments.testResults,<br>\n82: \t\t\t\t\t\tbundleStats=bundleStats,<br>\n<b>83: \t\t\t\t\t\tcallbacks=arguments.callbacks</b><br>\n84: \t\t\t\t\t);<br>\n85: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall2(/testbox/system/TestBox.cfc:473)",
+					"codePrintPlain": "471: \t\t\t\t// Run via BDD Style\n472: \t\t\t\tnew testbox.system.runners.BDDRunner( options=variables.options, testbox=this )\n473: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );\n474: \t\t\t}\n475: \t\t\telse{\n",
+					"column": 0,
+					"line": 473,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "471: \t\t\t\t// Run via BDD Style<br>\n472: \t\t\t\tnew testbox.system.runners.BDDRunner( options=variables.options, testbox=this )<br>\n<b>473: \t\t\t\t\t.run( target, arguments.testResults, arguments.callbacks );</b><br>\n474: \t\t\t}<br>\n475: \t\t\telse{<br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:251)",
+					"codePrintPlain": "249: \t\t\t\tbundlePath  = thisBundlePath,\n250: \t\t\t\ttestResults = results,\n251: \t\t\t\tcallbacks   = arguments.callbacks\n252: \t\t\t);\n253: \n",
+					"column": 0,
+					"line": 251,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "249: \t\t\t\tbundlePath  = thisBundlePath,<br>\n250: \t\t\t\ttestResults = results,<br>\n<b>251: \t\t\t\tcallbacks   = arguments.callbacks</b><br>\n252: \t\t\t);<br>\n253: <br>\n"
+				}, {
+					"Raw_Trace": "system.testbox_cfc$cf.udfCall1(/testbox/system/TestBox.cfc:160)",
+					"codePrintPlain": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }\n159: \t\t// run it and get results\n160: \t\tvar results = runRaw( argumentCollection=arguments );\n161: \t\t// store latest results\n162: \t\tvariables.result = results;\n",
+					"column": 0,
+					"line": 160,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/TestBox.cfc",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "158: \t\tif( !isNull( arguments.reporter ) ){ variables.reporter = arguments.reporter; }<br>\n159: \t\t// run it and get results<br>\n<b>160: \t\tvar results = runRaw( argumentCollection=arguments );</b><br>\n161: \t\t// store latest results<br>\n162: \t\tvariables.result = results;<br>\n"
+				}, {
+					"Raw_Trace": "system.runners.htmlrunner_cfm$cf.call(/testbox/system/runners/HTMLRunner.cfm:49)",
+					"codePrintPlain": "47: \n48: // Run Tests using correct reporter\n49: results = testbox.run( reporter=url.reporter );\n50: \n51: // Write TEST.properties in report destination path.\n",
+					"column": 0,
+					"line": 49,
+					"template": "/Users/iurquiza/Projects/ortus/TestBox/system/runners/HTMLRunner.cfm",
+					"id": "??",
+					"type": "cfml",
+					"codePrintHTML": "47: <br>\n48: // Run Tests using correct reporter<br>\n<b>49: results = testbox.run( reporter=url.reporter );</b><br>\n50: <br>\n51: // Write TEST.properties in report destination path.<br>\n"
+				}],
+				"status": "Failed",
+				"suiteID": "734EAC2A2E0173AB943C7F55FC61E4B4",
+				"endTime": 1553009673187,
+				"name": "fails",
+				"id": "5C518249D53779A16FA8302C61C4DDDA",
+				"failMessage": "Expected [3] but received [1]"
+			}],
+			"endTime": 1553009673187,
+			"totalError": 0,
+			"name": "A suite",
+			"id": "734EAC2A2E0173AB943C7F55FC61E4B4",
+			"suiteStats": []
+		}],
+		"globalException": ""
+	}],
+	"totalPass": 2,
+	"totalDuration": 115,
+	"version": "5.0.0+1",
+	"totalSkipped": 0,
+	"totalFail": 2,
+	"totalSpecs": 11,
+	"excludes": ["exclude1", "exclude2"],
+	"labels": ["label1", "label2"],
+	"resultID": "",
+	"endTime": 1553009673188,
+	"coverage": {
+		"data": {
+			"sonarQubeResults": "/Users/iurquiza/Projects/ortus/TestBox/tests/results/sonarQubeResults",
+			"browserResults": "/Users/iurquiza/Projects/ortus/TestBox/tests/results/coverageReport",
+			"stats": {
+				"totalCoveredLines": 1253,
+				"numFiles": 78,
+				"percTotalCoverage": 0.167022127433,
+				"totalExecutableLines": 7502
+			}
+		},
+		"enabled": true
+	},
+	"totalError": 7,
+	"totalBundles": 3
+}

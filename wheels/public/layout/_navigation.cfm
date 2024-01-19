@@ -18,7 +18,7 @@
 			if(structKeyExists(item, "type"))
 				navArgs['type'] = item['type'];
 			</cfscript>
-			<a href="#urlFor(argumentCollection = navArgs)#" class="#navArgs['class']#">#navArgs.Text#</a>
+			<a href="#urlFor(argumentCollection = navArgs)#" <cfif item.title eq 'Testbox Packages'>target="_blank"</cfif> class="#navArgs['class']#">#navArgs.Text#</a>
 		</cfloop>
 	</nav>
 </div>
