@@ -30,11 +30,19 @@
         "commandbox-cfconfig":"*",
         "commandbox-cfformat":"*"
     },
+		"installPathConvention":{
+			"modules":"vendor/",
+			"cfwheels-plugins":"vendor/"
+		},
     "installPaths":{
-        "cfwheels":"wheels/"
+        "cfwheels":"vendor/wheels/",
+				"wirebox":"vendor/wirebox/",
+				"testbox":"vendor/testbox/"
     },
     "dependencies":{
-        "cfwheels":"^@build.version@"
+        "cfwheels":"^@build.version@",
+				"wirebox":"^7",
+				"testbox":"^5"
     },
     "private":false,
     "license":[
