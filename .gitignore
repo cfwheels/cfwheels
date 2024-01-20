@@ -17,3 +17,5 @@ settings.json
 settings.xml
 .CommandBox
 *.db
+/vendor/testbox/
+/vendor/wirebox/
