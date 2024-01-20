@@ -1,6 +1,4 @@
 {
-	"name":"cfwheels",
-	"force":true,
 	"web":{
 			"host":"localhost",
 			"webroot": "public",
