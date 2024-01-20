@@ -1,7 +1,7 @@
 {
     "name":"CFWheels Base Template",
     "version":"@build.version@",
-    "author":"CFWheels Core Team and Community, repackaged by Peter Amiri",
+    "author":"CFWheels Core Team and Community",
     "shortDescription":"CFWheels MVC Framework Base Template",
     "location":"forgeboxStorage",
     "slug":"cfwheels-base-template",
@@ -35,7 +35,7 @@
 			"cfwheels-plugins":"vendor/"
 		},
     "installPaths":{
-        "cfwheels":"vendor/wheels/",
+        "cfwheels":"vendor/cfwheels/",
 				"wirebox":"vendor/wirebox/",
 				"testbox":"vendor/testbox/"
     },

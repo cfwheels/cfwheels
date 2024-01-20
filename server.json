@@ -3,7 +3,8 @@
 	"force":true,
 	"web":{
 			"http":{
-					"host":"localhost"
+					"host":"localhost",
+					"webroot": "public/",
 			},
 			"rewrites":{
 					"enable":true,
