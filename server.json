@@ -2,10 +2,8 @@
 	"name":"cfwheels",
 	"force":true,
 	"web":{
-			"http":{
-					"host":"localhost",
-					"webroot": "public/",
-			},
+			"host":"localhost",
+			"webroot": "public",
 			"rewrites":{
 					"enable":true,
 					"config":"urlrewrite.xml"
