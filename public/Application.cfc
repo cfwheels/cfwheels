@@ -9,17 +9,21 @@ component output="false" {
 	// this.name = Hash(this.wheels.rootPath);
 
 	this.bufferOutput = true;
-	
+
+	// Set up the application paths.
 	this.webrootDir = getDirectoryFromPath( getCurrentTemplatePath() );
-	this.appDir     = this.webrootDir;
+	this.appDir     = expandPath(this.webrootDir & "../app/");
+	this.vendorDir  = expandPath(this.webrootDir & "../vendor/");
+	this.wheelsDir  = expandpath(this.vendorDir & "cfwheels/");
+	this.wireboxDir = expandpath(this.vendorDir & "wirebox/");
+	this.testboxDir = expandpath(this.vendorDir & "testbox/");
 
-	// Add mapping to the root of the site (e.g. C:\inetpub\wwwroot\, C:\inetpub\wwwroot\appfolder\).
-	// This is useful when extending controllers and models in parent folders (e.g. extends="app.controllers.Controller").
-	this.mappings["/app"] = this.appDir;
-
-	// Add mapping to the wheels folder inside the app folder (e.g. C:\inetpub\wwwroot\appfolder\wheels).
-	// This is used extensively when writing tests.
-	this.mappings["/wheels"] = this.webrootDir & "wheels";
+	// Set up the mappings for the application.
+	this.mappings["/app"]     = this.appDir;
+	this.mappings["/vendor"]  = this.vendorDir;
+	this.mappings["/wheels"]  = this.wheelsDir;
+	this.mappings["/wirebox"] = this.wireboxDir;
+	this.mappings["/testbox"] = this.testboxDir;
 
 	// We turn on "sessionManagement" by default since the Flash uses it.
 	this.sessionManagement = true;
@@ -27,9 +31,9 @@ component output="false" {
 	// If a plugin has a jar or class file, automatically add the mapping to this.javasettings.
 	this.wheels.pluginDir = this.appDir & "plugins";
 	this.wheels.pluginFolders = DirectoryList(
-		this.wheels.pluginDir, 
-		"true", 
-		"path", 
+		this.wheels.pluginDir,
+		"true",
+		"path",
 		"*.class|*.jar|*.java"
 	);
 
@@ -76,11 +80,11 @@ component output="false" {
 		include "/app/config/app.cfm";
 		// include "/wheels/controller/appfunctions.cfm";
 
-		wirebox = new wirebox.system.ioc.Injector("wheels.Wirebox");
-		
+		wirebox = new wirebox.system.ioc.Injector("wheels.wirebox");
+
 		/* wheels/global object */
 		application.wo = wirebox.getInstance("global");
-		
+
 		application.webrootDir = getDirectoryFromPath( getCurrentTemplatePath() );
 		application.appDir     = application.webrootDir;
 		application.mappings["/app"] = application.appDir;
@@ -1089,7 +1093,7 @@ component output="false" {
 		// Fix for shared application name (issue 359).
 		if (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "eventpath")) {
 			local.executeArgs = {"componentReference" = "application"};
-			
+
 			application.wo.$simpleLock(name = local.lockName, execute = "onApplicationStart", type = "exclusive", timeout = 180, executeArgs = local.executeArgs);
 		}
 
@@ -1167,7 +1171,7 @@ component output="false" {
 		local.lockName = "reloadLock" & application.applicationName;
 
 		arguments.componentReference = "wheels.events.eventmethods";
-		
+
 		application.wo.$simpleLock(
 			name = local.lockName,
 			execute = "$runOnRequestEnd",
@@ -1189,9 +1193,9 @@ component output="false" {
 	}
 
 	public void function onError( any Exception, string EventName ) {
-		wirebox = new wirebox.system.ioc.Injector("wheels.Wirebox");
+		wirebox = new wirebox.system.ioc.Injector("wheels.wirebox");
 		application.wo = wirebox.getInstance("global");
-		
+
 		// In case the error was caused by a timeout we have to add extra time for error handling.
 		// We have to check if onErrorRequestTimeout exists since errors can be triggered before the application.wheels struct has been created.
 		local.requestTimeout = application.wo.$getRequestTimeout() + 30;
