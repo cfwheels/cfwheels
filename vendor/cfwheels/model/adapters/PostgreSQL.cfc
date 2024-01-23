@@ -56,10 +56,16 @@ component extends="Base" output=false {
 				local.rv = "cf_sql_real";
 				break;
 			case "smallint":
+			case "smallserial":
 			case "int2":
 				local.rv = "cf_sql_smallint";
 				break;
+			case "json":
+			case "jsonb":
 			case "text":
+			case "cidr":
+			case "inet":
+			case "xml":
 				local.rv = "cf_sql_longvarchar";
 				break;
 			case "time":
@@ -70,7 +76,19 @@ component extends="Base" output=false {
 			case "varying":
 			case "bpchar":
 			case "uuid":
+			case "macaddr":
+			case "macaddr8":
 				local.rv = "cf_sql_varchar";
+				break;
+			case "point":
+			case "line":
+			case "lseg":
+			case "box":
+			case "path":
+			case "polygon":
+			case "circle":
+			case "geography":
+				local.rv = "cf_sql_other";
 				break;
 		}
 		return local.rv;

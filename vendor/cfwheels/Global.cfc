@@ -887,7 +887,7 @@
 			local.method = arguments.method;
 			local.component = ListChangeDelims(arguments.path, ".", "/") & "." & ListChangeDelims(arguments.fileName, ".", "/");
 			local.argumentCollection = arguments;
-			include "/app/root.cfm";
+			include "/root.cfm";
 			return local.rv;
 		}
 

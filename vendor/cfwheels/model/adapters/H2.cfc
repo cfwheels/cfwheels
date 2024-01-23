@@ -30,6 +30,7 @@ component extends="Base" output=false {
 			case "char":
 			case "character":
 			case "nchar":
+			case "UUID":
 				local.rv = "cf_sql_char";
 				break;
 			case "date":
@@ -55,6 +56,7 @@ component extends="Base" output=false {
 			case "integer":
 			case "mediumint":
 			case "signed":
+			case "identity":
 				local.rv = "cf_sql_integer";
 				break;
 			case "int2":
@@ -90,7 +92,14 @@ component extends="Base" output=false {
 			case "mediumtext":
 			case "longtext":
 			case "ntext":
+			case "enum":
 				local.rv = "cf_sql_varchar";
+				break;
+			case "nvarchar_casesensitive":
+				local.rv = "cf_sql_nvarchar";
+				break;
+			case "json":
+				local.rv = "cf_sql_longvarchar";
 				break;
 		}
 		return local.rv;

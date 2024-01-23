@@ -252,6 +252,33 @@ public struct function $buildQueryParamValues(required string property) {
 	local.rv.dataType = variables.wheels.class.properties[arguments.property].dataType;
 	local.rv.scale = variables.wheels.class.properties[arguments.property].scale;
 	local.rv.null = (!Len(this[arguments.property]) && variables.wheels.class.properties[arguments.property].nullable);
+	if(local.rv.datatype eq 'geography'){
+		local.sqlQuery = "select type from geography_columns where f_table_name = '#tableName()#' and f_geography_column = '#arguments.property#'";
+		local.result = queryExecute(local.sqlQuery,[],{datasource: "#variables.wheels.class.datasource#"});
+		if(local.result.type eq 'point'){
+			local.rv.value = 'POINT(#this[arguments.property]#)';
+		}
+		else if(local.result.type eq 'linestring'){
+			local.rv.value = 'LINESTRING(#this[arguments.property]#)';
+		}
+		else if(local.result.type eq 'polygon'){
+			local.rv.value = 'POLYGON(#this[arguments.property]#)';
+		}
+		else if(local.result.type eq 'multipoint'){
+			local.rv.value = 'MULTIPOINT(#this[arguments.property]#)';
+		}
+		else if(local.result.type eq 'multilinestring'){
+			local.rv.value = 'MULTILINESTRING(#this[arguments.property]#)';
+		}
+		else if(local.result.type eq 'multipolygon'){
+			local.rv.value = 'MULTIPOLYGON(#this[arguments.property]#)';
+		}
+		else if(local.result.type eq 'geometrycollection'){
+			local.rv.value = 'GEOMETRYCOLLECTION(#this[arguments.property]#)';
+		}
+		local.rv.column = arguments.property;
+		local.rv.table = tableName();
+	}
 	return local.rv;
 }
 

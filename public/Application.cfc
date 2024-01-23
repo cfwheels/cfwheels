@@ -86,9 +86,18 @@ component output="false" {
 		application.wo = wirebox.getInstance("global");
 
 		application.webrootDir = getDirectoryFromPath( getCurrentTemplatePath() );
-		application.appDir     = application.webrootDir;
-		application.mappings["/app"] = application.appDir;
-		application.mappings["/wheels"] = application.appDir & "wheels";
+		application.appDir     = expandPath(application.webrootDir & "../app/");
+		application.vendorDir  = expandPath(application.webrootDir & "../vendor/");
+		application.wheelsDir  = expandpath(application.vendorDir & "cfwheels/");
+		application.wireboxDir = expandpath(application.vendorDir & "wirebox/");
+		application.testboxDir = expandpath(application.vendorDir & "testbox/");
+
+		// Set up the mappings for the application.
+		application.mappings["/app"]     = application.appDir;
+		application.mappings["/vendor"]  = application.vendorDir;
+		application.mappings["/wheels"]  = application.wheelsDir;
+		application.mappings["/wirebox"] = application.wireboxDir;
+		application.mappings["/testbox"] = application.testboxDir;
 		// Abort if called from incorrect file.
 		application.wo.$abortInvalidRequest();
 

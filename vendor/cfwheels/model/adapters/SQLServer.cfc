@@ -70,7 +70,11 @@ component extends="Base" output=false {
 				break;
 			case "varchar":
 			case "nvarchar":
+			case "hierarchyid":
 				local.rv = "cf_sql_varchar";
+				break;
+			case "cursor":
+				local.rv = "cf_sql_refcursor";
 				break;
 		}
 		return local.rv;
