@@ -199,8 +199,14 @@ public string function $imageTag() {
 		arguments.src = arguments.source;
 	} else {
 		arguments.src = $get("webPath") & $get("imagePath") & "/" & arguments.source;
-		local.file = GetDirectoryFromPath(GetBaseTemplatePath());
-		local.file &= $get("imagePath") & "/" & SpanExcluding(arguments.source, "?");
+		//added this section for the "/wheels" mapping to work correctly
+		if(arguments.source CONTAINS "/wheels"){
+			local.file = expandPath(SpanExcluding(arguments.source, "?"));
+		}
+		else{
+			local.file = GetDirectoryFromPath(GetBaseTemplatePath());
+			local.file &= $get("imagePath") & "/" & SpanExcluding(arguments.source, "?");
+		}
 		if ($get("showErrorInformation") && arguments.required) {
 			if (local.localFile && !FileExists(local.file)) {
 				Throw(

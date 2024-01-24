@@ -189,10 +189,18 @@ public any function sendFile(
 		local.fullPath = ListAppend(local.fullPath, arguments.file, "/");
 		// https://github.com/cfwheels/cfwheels/issues/873 Don't expand path if already contains root
 		if (local.fullPath DOES NOT CONTAIN Replace(local.root, "\", "/", "all")) {
-			local.fullPath = ExpandPath(local.fullPath);
-			local.fullPath = Replace(local.fullPath, "\", "/", "all");
-			local.file = ListLast(local.fullPath, "/");
-			local.directory = Reverse(ListRest(Reverse(local.fullPath), "/"));
+			//added this section for the "/wheels" mapping to work correctly
+			if(local.fullPath CONTAINS "/wheels"){
+				local.fullPath = ExpandPath(mid(local.fullPath,findNoCase("/wheels", local.fullPath)));
+				local.file = ListLast(local.fullPath, "\");
+				local.directory = Reverse(ListRest(Reverse(local.fullPath), "\"));
+			}
+			else{
+				local.fullPath = ExpandPath(local.fullPath);
+				local.fullPath = Replace(local.fullPath, "\", "/", "all");
+				local.file = ListLast(local.fullPath, "/");
+				local.directory = Reverse(ListRest(Reverse(local.fullPath), "/"));
+			}
 		}
 
 		// If the file is not found, try searching for it.
