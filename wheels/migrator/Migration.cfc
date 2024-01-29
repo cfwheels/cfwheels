@@ -411,7 +411,6 @@ component extends="Base" {
 			&& !StructKeyExists(arguments, application[local.appKey].timeStampOnUpdateProperty)
 			&& ListFindNoCase($getColumns(arguments.table), application[local.appKey].timeStampOnUpdateProperty)
 		) {
-			announce(application[local.appKey].setUpdatedAtOnCreate);
 			arguments[application[local.appKey].timeStampOnUpdateProperty] = $timestamp();
 		}
 
