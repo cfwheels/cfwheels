@@ -650,7 +650,7 @@ public string function URLFor(
 	}
 
 	// Start building the URL to return by setting the sub folder path and script name portion.
-	// Script name (index.cfm or rewrite.cfm) will be removed later if applicable (e.g. when URL rewriting is on).
+	// Script name (index.cfm or /wheels/index.cfm) will be removed later if applicable (e.g. when URL rewriting is on).
 	local.rv = application.wheels.webPath & ListLast(request.cgi.script_name, "/");
 
 	// Look up route pattern to use and add it to the URL to return.
@@ -738,7 +738,7 @@ public string function URLFor(
 		local.rv = Replace(local.rv, "&key=", "/");
 	}
 
-	// When URL rewriting is on we remove the rewrite file name (e.g. rewrite.cfm) from the URL so it doesn't show.
+	// When URL rewriting is on we remove the rewrite file name (e.g. /wheels/index.cfm) from the URL so it doesn't show.
 	// Also get rid of the double "/" that this removal typically causes.
 	if (arguments.$URLRewriting == "On") {
 		local.rv = Replace(local.rv, application.wheels.rewriteFile, "");

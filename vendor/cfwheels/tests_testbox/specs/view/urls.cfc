@@ -11,7 +11,7 @@ component extends="testbox.system.BaseSpec" {
 				oldURLRewriting = application.wheels.URLRewriting
 				application.wheels.URLRewriting = "On"
 				oldScriptName = request.cgi.script_name
-				request.cgi.script_name = "/rewrite.cfm"
+				request.cgi.script_name = "/wheels/index.cfm"
 				g.set(functionName = "buttonTo", encode = false)
 				if (StructKeyExists(request, "$wheelsProtectedFromForgery")) {
 					$oldrequestfromforgery = request.$wheelsProtectedFromForgery
@@ -98,7 +98,7 @@ component extends="testbox.system.BaseSpec" {
 				oldURLRewriting = application.wheels.URLRewriting
 				application.wheels.URLRewriting = "On"
 				oldScriptName = request.cgi.script_name
-				request.cgi.script_name = "/rewrite.cfm"
+				request.cgi.script_name = "/wheels/index.cfm"
 				g.set(functionName = "linkTo", encode = false)
 			})
 
@@ -201,7 +201,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 
 			it("works with ampersand in params with URL rewriting", () => {
-				request.cgi.script_name = "/rewrite.cfm"
+				request.cgi.script_name = "/wheels/index.cfm"
 				e = '#application.wheels.webpath#x/x?a=c+ats%26dogs&b=a+c'
 				r = _controller.URLFor(controller = "x", action = "x", params = "a=c ats%26dogs&b=a c", encode = true)
 
@@ -209,7 +209,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 
 			it("works with all arguments with URL rewriting", () => {
-				request.cgi.script_name = "/rewrite.cfm"
+				request.cgi.script_name = "/wheels/index.cfm"
 				e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar"
 				r = _controller.urlFor(argumentcollection = args)
 				
@@ -217,7 +217,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 
 			it("works with missing controller with URL rewriting", () => {
-				request.cgi.script_name = "/rewrite.cfm"
+				request.cgi.script_name = "/wheels/index.cfm"
 				StructDelete(args, "controller")
 				e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar"
 				r = _controller.urlFor(argumentcollection = args)
@@ -226,7 +226,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 
 			it("works with missing action with URL rewriting", () => {
-				request.cgi.script_name = "/rewrite.cfm"
+				request.cgi.script_name = "/wheels/index.cfm"
 				StructDelete(args, "action")
 				e = "#application.wheels.webpath#blog/index/1?param1=foo&param2=bar"
 				r = _controller.urlFor(argumentcollection = args)
@@ -235,7 +235,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 
 			it("works with missing controller and action with URL rewriting", () => {
-				request.cgi.script_name = "/rewrite.cfm"
+				request.cgi.script_name = "/wheels/index.cfm"
 				StructDelete(args, "controller")
 				StructDelete(args, "action")
 				e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar"
@@ -245,7 +245,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 
 			it("works with missing controller, action and key with URL rewriting", () => {
-				request.cgi.script_name = "/rewrite.cfm"
+				request.cgi.script_name = "/wheels/index.cfm"
 				StructDelete(args, "controller")
 				StructDelete(args, "action")
 				StructDelete(args, "key")
@@ -256,7 +256,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 
 			it("works with missing controller, action, key and params with URL rewriting", () => {
-				request.cgi.script_name = "/rewrite.cfm"
+				request.cgi.script_name = "/wheels/index.cfm"
 				StructDelete(args, "controller")
 				StructDelete(args, "action")
 				StructDelete(args, "key")

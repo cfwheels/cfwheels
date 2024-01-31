@@ -14,7 +14,7 @@ component extends="wheels.tests.Test" {
 		cgi_scope.http_host = "";
 		cgi_scope.http_accept = "";
 		cgi_scope.content_type = "";
-		cgi_scope.script_name = "/rewrite.cfm";
+		cgi_scope.script_name = "/wheels/index.cfm";
 		cgi_scope.path_info = "/users/list/index.cfm";
 		cgi_scope.http_x_rewrite_url = "/users/list/http_x_rewrite_url/index.cfm?controller=wheels&action=wheels&view=test";
 		cgi_scope.http_x_original_url = "/users/list/http_x_original_url/index.cfm?controller=wheels&action=wheels&view=test";
