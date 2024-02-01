@@ -14,7 +14,7 @@ component output="false" {
 	this.webrootDir = getDirectoryFromPath( getCurrentTemplatePath() );
 	this.appDir     = expandPath(this.webrootDir & "../app/");
 	this.vendorDir  = expandPath(this.webrootDir & "../vendor/");
-	this.wheelsDir  = expandpath(this.vendorDir & "cfwheels/");
+	this.wheelsDir  = expandpath(this.vendorDir & "wheels/");
 	this.wireboxDir = expandpath(this.vendorDir & "wirebox/");
 	this.testboxDir = expandpath(this.vendorDir & "testbox/");
 
