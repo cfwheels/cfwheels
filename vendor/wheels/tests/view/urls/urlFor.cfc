@@ -19,7 +19,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_ampersand_in_params_with_url_rewriting() {
-		request.cgi.script_name = "/wheels/index.cfm";
+		request.cgi.script_name = "/index.cfm";
 		e = '#application.wheels.webpath#x/x?a=c+ats%26dogs&b=a+c';
 		r = _controller.URLFor(
 			controller = "x",
@@ -31,14 +31,14 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_all_arguments_with_url_rewriting() {
-		request.cgi.script_name = "/wheels/index.cfm";
+		request.cgi.script_name = "/index.cfm";
 		e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";
 		r = _controller.urlFor(argumentcollection = args);
 		assert("e eq r");
 	}
 
 	function test_missing_controller_with_url_rewriting() {
-		request.cgi.script_name = "/wheels/index.cfm";
+		request.cgi.script_name = "/index.cfm";
 		StructDelete(args, "controller");
 		e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";
 		r = _controller.urlFor(argumentcollection = args);
@@ -46,7 +46,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_missing_action_with_url_rewriting() {
-		request.cgi.script_name = "/wheels/index.cfm";
+		request.cgi.script_name = "/index.cfm";
 		StructDelete(args, "action");
 		e = "#application.wheels.webpath#blog/index/1?param1=foo&param2=bar";
 		r = _controller.urlFor(argumentcollection = args);
@@ -54,7 +54,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_missing_controller_and_action_with_url_rewriting() {
-		request.cgi.script_name = "/wheels/index.cfm";
+		request.cgi.script_name = "/index.cfm";
 		StructDelete(args, "controller");
 		StructDelete(args, "action");
 		e = "#application.wheels.webpath#blog/edit/1?param1=foo&param2=bar";
@@ -63,7 +63,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_missing_controller_action_and_key_with_url_rewriting() {
-		request.cgi.script_name = "/wheels/index.cfm";
+		request.cgi.script_name = "/index.cfm";
 		StructDelete(args, "controller");
 		StructDelete(args, "action");
 		StructDelete(args, "key");
@@ -73,7 +73,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_missing_controller_action_key_and_params_with_url_rewriting() {
-		request.cgi.script_name = "/wheels/index.cfm";
+		request.cgi.script_name = "/index.cfm";
 		StructDelete(args, "controller");
 		StructDelete(args, "action");
 		StructDelete(args, "key");

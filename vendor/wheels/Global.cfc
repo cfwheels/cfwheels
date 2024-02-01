@@ -633,7 +633,7 @@
 			}
 
 			// fixes IIS issue that returns a blank cgi.path_info
-			if (!Len(local.rv.path_info) && Right(local.rv.script_name, 17) == "/wheels/index.cfm") {
+			if (!Len(local.rv.path_info) && Right(local.rv.script_name, 10) == "/index.cfm") {
 				if (Len(local.rv.http_x_rewrite_url)) {
 					// IIS6 1/ IIRF (Ionics Isapi Rewrite Filter)
 					local.rv.path_info = ListFirst(local.rv.http_x_rewrite_url, "?");
@@ -660,9 +660,9 @@
 				}
 			}
 
-			// some web servers incorrectly place /wheels/index.cfm in the path_info but since that should never be there we can safely remove it
-			if (Find("/wheels/index.cfm/", local.rv.path_info)) {
-				Replace(local.rv.path_info, "/wheels/index.cfm/", "");
+			// some web servers incorrectly place index.cfm in the path_info but since that should never be there we can safely remove it
+			if (Find("index.cfm/", local.rv.path_info)) {
+				Replace(local.rv.path_info, "index.cfm/", "");
 			}
 			return local.rv;
 		}
@@ -704,10 +704,7 @@
 			if (
 				!(GetFileFromPath(local.callingPath) == "runner.cfm")
 				&&
-				(
-					ListLen(local.callingPath, "/") > ListLen(local.applicationPath, "/")
-					|| GetFileFromPath(local.callingPath) == "root.cfm"
-				)
+				ListLen(local.callingPath, "/") > ListLen(local.applicationPath, "/")
 			) {
 				if (StructKeyExists(application, "wheels")) {
 					if (StructKeyExists(application.wheels, "showErrorInformation") && !application.wheels.showErrorInformation) {
@@ -887,7 +884,12 @@
 			local.method = arguments.method;
 			local.component = ListChangeDelims(arguments.path, ".", "/") & "." & ListChangeDelims(arguments.fileName, ".", "/");
 			local.argumentCollection = arguments;
-			include "/root.cfm";
+			if(local.method EQ 'init'){
+				evaluate('#local.returnVariable# = application.wirebox.getInstance(name = "#local.component#", initArguments = local.argumentCollection)')
+			}
+			else{
+				evaluate('#local.returnVariable# = application.wirebox.getInstance(name = "#local.component#").#local.method#(argumentCollection = local.argumentCollection)')
+			}
 			return local.rv;
 		}
 
@@ -1471,8 +1473,7 @@
 				"wheels",
 				"Application.cfc",
 				"box.json",
-				"/wheels/index.cfm",
-				"root.cfm"
+				"index.cfm"
 			];
 
 			// directories & files to be removed
@@ -2370,7 +2371,7 @@
 			}
 
 			// Start building the URL to return by setting the sub folder path and script name portion.
-			// Script name (index.cfm or /wheels/index.cfm) will be removed later if applicable (e.g. when URL rewriting is on).
+			// Script name index.cfm will be removed later if applicable (e.g. when URL rewriting is on).
 			local.rv = application.wheels.webPath & ListLast(request.cgi.script_name, "/");
 
 			// Look up route pattern to use and add it to the URL to return.
@@ -2458,7 +2459,7 @@
 				local.rv = Replace(local.rv, "&key=", "/");
 			}
 
-			// When URL rewriting is on we remove the rewrite file name (e.g. /wheels/index.cfm) from the URL so it doesn't show.
+			// When URL rewriting is on we remove the rewrite file name (e.g. index.cfm) from the URL so it doesn't show.
 			// Also get rid of the double "/" that this removal typically causes.
 			if (arguments.$URLRewriting == "On") {
 				local.rv = Replace(local.rv, application.wheels.rewriteFile, "");

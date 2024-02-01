@@ -24,7 +24,6 @@
 			<cfset local.errorPos = local.errorPos + 1>
 			<cfif
 				local.i.template Does Not Contain local.path & "wheels"
-				AND local.i.template IS NOT local.path & "root.cfm"
 				AND local.i.template IS NOT local.path & "index.cfm"
 				AND IsDefined("application.wheels.rewriteFile")
 				AND local.i.template IS NOT local.path & application.wheels.rewriteFile

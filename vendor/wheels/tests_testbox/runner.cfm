@@ -22,7 +22,7 @@
 
         local.AssetPath = "/wheels/tests_testbox/_assets/"
         
-        application.wo.set(rewriteFile = "/wheels/index.cfm")
+        application.wo.set(rewriteFile = "index.cfm")
         application.wo.set(controllerPath = local.AssetPath & "controllers")
         application.wo.set(viewPath = local.AssetPath & "views")
         application.wo.set(modelPath = local.AssetPath & "models")

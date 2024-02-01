@@ -195,8 +195,6 @@
 				<include name="views/**"/>
 				<include name="Application.cfc"/>
 				<include name="index.cfm"/>
-				<include name="rewrite.cfm"/>
-				<include name="root.cfm"/>
 			</fileset>
 		</copy>
 

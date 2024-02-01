@@ -719,6 +719,6 @@ public void function $seedDatabase(required struct paths) {
  */
 public any function $isCoreFile(required string path) {
 	local.path = Replace(arguments.path, ExpandPath("/"), "", "one");
-	return (Left(local.path, 7) == "wheels/" || ListFindNoCase("index.cfm,/wheels/index.cfm,root.cfm", local.path));
+	return (Left(local.path, 7) == "wheels/" || ListFindNoCase("index.cfm", local.path));
 }
 </cfscript>

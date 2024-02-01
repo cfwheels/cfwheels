@@ -164,7 +164,7 @@ settings = [
 			<td class='eight wide'>#get("serverName")##get("serverVersion")#</td>
 		</tr>
 		<tr>
-			<td>CFWheels Version</td>
+			<td>Wheels Version</td>
 			<td>#get("version")#</td>
 		</tr>
 		<tr>

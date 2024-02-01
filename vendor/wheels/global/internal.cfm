@@ -350,7 +350,7 @@ public struct function $cgiScope(
 	}
 
 	// fixes IIS issue that returns a blank cgi.path_info
-	if (!Len(local.rv.path_info) && Right(local.rv.script_name, 17) == "/wheels/index.cfm") {
+	if (!Len(local.rv.path_info) && Right(local.rv.script_name, 10) == "/index.cfm") {
 		if (Len(local.rv.http_x_rewrite_url)) {
 			// IIS6 1/ IIRF (Ionics Isapi Rewrite Filter)
 			local.rv.path_info = ListFirst(local.rv.http_x_rewrite_url, "?");
@@ -377,9 +377,9 @@ public struct function $cgiScope(
 		}
 	}
 
-	// some web servers incorrectly place /wheels/index.cfm in the path_info but since that should never be there we can safely remove it
-	if (Find("/wheels/index.cfm/", local.rv.path_info)) {
-		Replace(local.rv.path_info, "/wheels/index.cfm/", "");
+	// some web servers incorrectly place index.cfm in the path_info but since that should never be there we can safely remove it
+	if (Find("index.cfm/", local.rv.path_info)) {
+		Replace(local.rv.path_info, "index.cfm/", "");
 	}
 	return local.rv;
 }
@@ -420,7 +420,6 @@ public void function $abortInvalidRequest() {
 	local.callingPath = Replace(GetBaseTemplatePath(), "\", "/", "all");
 	if (
 		ListLen(local.callingPath, "/") > ListLen(local.applicationPath, "/")
-		|| GetFileFromPath(local.callingPath) == "root.cfm"
 	) {
 		if (StructKeyExists(application, "wheels")) {
 			if (StructKeyExists(application.wheels, "showErrorInformation") && !application.wheels.showErrorInformation) {
@@ -1198,8 +1197,7 @@ public string function $buildReleaseZip(string version = application.wheels.vers
 		"views",
 		"Application.cfc",
 		"box.json",
-		"/wheels/index.cfm",
-		"root.cfm"
+		"index.cfm"
 	];
 
 	// directories & files to be removed

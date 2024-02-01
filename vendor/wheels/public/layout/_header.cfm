@@ -70,7 +70,7 @@ if (application.wheels.enablePluginsComponent) {
 request.currentRoute = getActiveRoute(request.wheels.params.route, request.navigation);
 
 // Page Title
-request.internalPageTitle = StructKeyExists(request.currentRoute, 'title') ? request.currentRoute.title & ' | ' & "CFWheels" : "CFWheels";
+request.internalPageTitle = StructKeyExists(request.currentRoute, 'title') ? request.currentRoute.title & ' | ' & "Wheels" : "Wheels";
 
 request.wheels.internalHeaderLoaded = true;
 

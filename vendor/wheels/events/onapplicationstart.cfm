@@ -127,7 +127,7 @@
 	}
 
 	// Rewrite settings based on web server rewrite capabilities.
-	application.$wheels.rewriteFile = "/wheels/index.cfm";
+	application.$wheels.rewriteFile = "index.cfm";
 	if (Right(request.cgi.script_name, 12) == "/" & application.$wheels.rewriteFile) {
 		application.$wheels.URLRewriting = "On";
 	} else if (Len(request.cgi.path_info)) {

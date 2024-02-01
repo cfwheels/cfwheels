@@ -27,20 +27,20 @@
         "box.json",
         "readme.md"
     ],
-		"installPathConvention":{
-			"modules":"vendor/",
-			"cfwheels-plugins":"vendor/"
-		},
+    "installPathConvention":{
+        "modules":"vendor/",
+        "cfwheels-plugins":"vendor/"
+    },
     "installPaths":{
-        "cfwheels":"vendor/cfwheels/",
-				"wirebox":"vendor/wirebox/",
-				"testbox":"vendor/testbox/"
+        "cfwheels":"vendor/wheels/",
+        "wirebox":"vendor/wirebox/",
+        "testbox":"vendor/testbox/"
     },
     "dependencies":{
-				"wirebox":"^7",
-				"testbox":"^5"
+        "wirebox":"^7",
+        "testbox":"^5"
     },
-		"type":"mvc",
+    "type":"mvc",
     "private":false,
     "license":[
         {
@@ -49,9 +49,9 @@
         }
     ],
     "scripts":{
-			"onServerInstall":"cfpm install image,mail,zip,debugger,caching,mysql,postgresql,sqlserver",
-       "format":"cfformat run --overwrite",
-       "format:watch":"cfformat watch ./.cfformat.json",
-       "format:check":"cfformat check"
+        "onServerInstall":"cfpm install image,mail,zip,debugger,caching,mysql,postgresql,sqlserver",
+        "format":"cfformat run --overwrite",
+        "format:watch":"cfformat watch ./.cfformat.json",
+        "format:check":"cfformat check"
     }
 }

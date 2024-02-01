@@ -110,7 +110,7 @@ component extends="wheels.tests.Test" {
 				.resources(name = "cats")
 				.end();
 
-			d.$setCORSHeaders(allowMethodsByRoute = true, pathInfo = "/cats", scriptName = "/wheels/index.cfm");
+			d.$setCORSHeaders(allowMethodsByRoute = true, pathInfo = "/cats", scriptName = "/index.cfm");
 
 			returnedMethods = $getHeader('Access-Control-Allow-Methods');
 			assert("returnedMethods EQ 'GET, POST'");
@@ -123,7 +123,7 @@ component extends="wheels.tests.Test" {
 				.resources(name = "cats")
 				.end();
 
-			d.$setCORSHeaders(allowMethodsByRoute = true, pathInfo = "/cats/123", scriptName = "/wheels/index.cfm");
+			d.$setCORSHeaders(allowMethodsByRoute = true, pathInfo = "/cats/123", scriptName = "/index.cfm");
 
 			returnedMethods = $getHeader('Access-Control-Allow-Methods');
 			assert("returnedMethods EQ 'GET, PATCH, PUT, DELETE'");

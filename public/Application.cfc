@@ -88,7 +88,7 @@ component output="false" {
 		application.webrootDir = getDirectoryFromPath( getCurrentTemplatePath() );
 		application.appDir     = expandPath(application.webrootDir & "../app/");
 		application.vendorDir  = expandPath(application.webrootDir & "../vendor/");
-		application.wheelsDir  = expandpath(application.vendorDir & "cfwheels/");
+		application.wheelsDir  = expandpath(application.vendorDir & "wheels/");
 		application.wireboxDir = expandpath(application.vendorDir & "wirebox/");
 		application.testboxDir = expandpath(application.vendorDir & "testbox/");
 
@@ -226,7 +226,7 @@ component output="false" {
 		}
 
 		// Rewrite settings based on web server rewrite capabilites.
-		application.$wheels.rewriteFile = "/wheels/index.cfm";
+		application.$wheels.rewriteFile = "index.cfm";
 		if (Right(request.cgi.script_name, 12) == "/" & application.$wheels.rewriteFile) {
 			application.$wheels.URLRewriting = "On";
 		} else if (Len(request.cgi.path_info)) {

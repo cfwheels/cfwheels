@@ -5,7 +5,7 @@ component extends="wheels.tests.Test" {
 		oldURLRewriting = application.wheels.URLRewriting;
 		application.wheels.URLRewriting = "On";
 		oldScriptName = request.cgi.script_name;
-		request.cgi.script_name = "/wheels/index.cfm";
+		request.cgi.script_name = "/index.cfm";
 		set(functionName = "buttonTo", encode = false);
 		if(structKeyExists(request, "$wheelsProtectedFromForgery")){
 		$oldrequestfromforgery = request.$wheelsProtectedFromForgery;
