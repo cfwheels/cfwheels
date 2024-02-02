@@ -22,7 +22,7 @@
 	*/
 	set(URLRewriting="On");
 
-	// Reload your application with ?reload=true&password=|reloadPassword|
+	// Reload your application with ?reload=true&password=wheels.fw
 	set(reloadPassword="wheels.fw");
 
 	// CLI-Appends-Here
