@@ -34,9 +34,6 @@ services:
       - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
       - type: bind
-        source: ./docker/lucee6/box.json
-        target: /cfwheels-test-suite/box.json
-      - type: bind
         source: ./docker/lucee6/server.json
         target: /cfwheels-test-suite/server.json
       - type: bind
@@ -53,9 +50,6 @@ services:
     volumes:
       - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
-      - type: bind
-        source: ./docker/adobe2016/box.json
-        target: /cfwheels-test-suite/box.json
       - type: bind
         source: ./docker/adobe2016/server.json
         target: /cfwheels-test-suite/server.json
@@ -74,9 +68,6 @@ services:
       - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
       - type: bind
-        source: ./docker/adobe2018/box.json
-        target: /cfwheels-test-suite/box.json
-      - type: bind
         source: ./docker/adobe2018/server.json
         target: /cfwheels-test-suite/server.json
       - type: bind
@@ -94,9 +85,6 @@ services:
       - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
       - type: bind
-        source: ./docker/adobe2021/box.json
-        target: /cfwheels-test-suite/box.json
-      - type: bind
         source: ./docker/adobe2021/server.json
         target: /cfwheels-test-suite/server.json
       - type: bind
@@ -113,9 +101,6 @@ services:
     volumes:
       - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
-      - type: bind
-        source: ./docker/adobe2023/box.json
-        target: /cfwheels-test-suite/box.json
       - type: bind
         source: ./docker/adobe2023/server.json
         target: /cfwheels-test-suite/server.json
