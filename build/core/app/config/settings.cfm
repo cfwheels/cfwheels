@@ -9,8 +9,8 @@
 	/*
 		If you leave these settings commented out, CFWheels will set the data source name to the same name as the folder the application resides in.
 	*/
-	set(coreTestDataSourceName="wheels.fw");
-	set(dataSourceName="wheels.fw");
+	set(coreTestDataSourceName="|datasourceName|");
+	set(dataSourceName="|datasourceName|");
 	// set(dataSourceUserName="");
 	// set(dataSourcePassword="");
 
@@ -23,7 +23,7 @@
 	set(URLRewriting="On");
 
 	// Reload your application with ?reload=true&password=|reloadPassword|
-	set(reloadPassword="wheels.fw");
+	set(reloadPassword="|reloadPassword|");
 
 	// CLI-Appends-Here
 </cfscript>

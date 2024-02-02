@@ -34,7 +34,12 @@
     "installPaths":{
         "cfwheels":"vendor/wheels/",
         "wirebox":"vendor/wirebox/",
-        "testbox":"vendor/testbox/"
+        "testbox":"vendor/testbox/",
+    },
+    "devDependencies":{
+        "commandbox-dotenv":"*",
+        "commandbox-cfconfig":"*",
+        "commandbox-cfformat":"*",
     },
     "dependencies":{
         "wirebox":"^7",

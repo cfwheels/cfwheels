@@ -7,13 +7,6 @@
 		this.sessionTimeout = CreateTimeSpan(0,0,5,0);
 	*/
 
-	this.name = "wheels.fw";
-
-	this.datasources['wheels.fw'] = {
-		class: 'org.h2.Driver'
-	, connectionString: 'jdbc:h2:file:./db/h2/wheels.fw;MODE=MySQL'
-	, username = 'sa'
-	};
-
+	this.name = "|appName|";
 	// CLI-Appends-Here
 </cfscript>

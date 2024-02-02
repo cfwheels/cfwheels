@@ -19,3 +19,5 @@ settings.xml
 *.db
 /vendor/testbox/
 /vendor/wirebox/
+orgh213172lex/box.json
+orgh213172lex/orgh213172lex.lex
