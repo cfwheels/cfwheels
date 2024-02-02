@@ -17,14 +17,11 @@ services:
       - ./:/cfwheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
       - type: bind
-        source: ./docker/lucee5/box.json
-        target: /cfwheels-test-suite/box.json
-      - type: bind
         source: ./docker/lucee5/server.json
         target: /cfwheels-test-suite/server.json
       - type: bind
         source: ./docker/lucee5/settings.cfm
-        target: /cfwheels-test-suite/config/settings.cfm
+        target: /cfwheels-test-suite/app/config/settings.cfm
     ports:
       - "60005:8080"
 
