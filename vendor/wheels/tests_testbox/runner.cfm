@@ -1,4 +1,5 @@
-﻿<cfscript>
+﻿<cfsetting requestTimeOut="1800">
+<cfscript>
     testBox = new testbox.system.TestBox(directory="wheels.tests_testbox.specs")
 
     setTestboxEnvironment()

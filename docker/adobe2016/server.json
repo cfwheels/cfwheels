@@ -10,7 +10,7 @@
 			},
 			"rewrites":{
 					"enable":true,
-					"config":"urlrewrite.xml"
+					"config":"public/urlrewrite.xml"
 			}
 	},
 	"app":{
