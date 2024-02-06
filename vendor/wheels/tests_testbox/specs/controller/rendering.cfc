@@ -294,7 +294,7 @@ component extends="testbox.system.BaseSpec" {
 
 			beforeEach(() => {
 				params = {controller = "test", action = "test"}
-				cfheader(statustext = "OK", statuscode = 200)
+				cfheader(statustext = "OK", statuscode = 200);
 			})
 
 			afterEach(() => {
