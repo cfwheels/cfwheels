@@ -118,6 +118,10 @@ public string function $dateOrTimeSelect(
 	}
 
 	local.value = $formValue(argumentCollection = arguments);
+	// Added this section for Adobe Coldfusion as it returns a "java.time.LocalDateTime" object for datetime data
+	if(application.wheels.servername eq "Adobe Coldfusion" and isInstanceOf(local.value,"java.time.LocalDateTime")){
+		local.value = createDateTime(local.value.getYear(),local.value.getMonthValue(),local.value.getDayOfMonth(),local.value.getHour(),local.value.getMinute(),local.value.getSecond());
+	}
 	local.rv = "";
 	local.firstDone = false;
 	local.iEnd = ListLen(arguments.order);

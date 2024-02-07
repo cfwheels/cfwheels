@@ -99,7 +99,9 @@ component extends="testbox.system.BaseSpec" {
 					)
 					transaction action="rollback";
 				}
-
+				if(application.wheels.servername eq "Adobe Coldfusion" and isInstanceOf(user.birthTime,"java.time.LocalDateTime")){
+					user.birthTime = createDateTime(user.birthTime.getYear(),user.birthTime.getMonthValue(),user.birthTime.getDayOfMonth(),user.birthTime.getHour(),user.birthTime.getMinute(),user.birthTime.getSecond());
+				}
 				expect(user).toHaveKey("birthTime")
 				expect(TimeFormat(user.birthTime, "HH:mm:ss")).toBe("18:26:08")
 			})
@@ -110,7 +112,9 @@ component extends="testbox.system.BaseSpec" {
 					user.save(reload = true)
 					transaction action="rollback";
 				}
-
+				if(application.wheels.servername eq "Adobe Coldfusion" and isInstanceOf(user.birthTime,"java.time.LocalDateTime")){
+					user.birthTime = createDateTime(user.birthTime.getYear(),user.birthTime.getMonthValue(),user.birthTime.getDayOfMonth(),user.birthTime.getHour(),user.birthTime.getMinute(),user.birthTime.getSecond());
+				}
 				expect(user).toHaveKey("birthTime")
 				expect(TimeFormat(user.birthTime, "HH:mm:ss")).toBe("18:26:08")
 			})

@@ -1,12 +1,11 @@
 component {
     public void function $init() {
 
-        application.webrootDir = getDirectoryFromPath( getCurrentTemplatePath() );
-        application.appDir     = expandPath(application.webrootDir & "../app/");
-        application.vendorDir  = expandPath(application.webrootDir & "../vendor/");
-        application.wheelsDir  = expandpath(application.vendorDir & "wheels/");
-        application.wireboxDir = expandpath(application.vendorDir & "wirebox/");
-        application.testboxDir = expandpath(application.vendorDir & "testbox/");
+        application.appDir     = expandPath("../app/");
+        application.vendorDir  = expandPath("../vendor/");
+        application.wheelsDir  = application.vendorDir & "wheels/";
+        application.wireboxDir = application.vendorDir & "wirebox/";
+        application.testboxDir = application.vendorDir & "testbox/";
 
         // Set up the mappings for the application.
         application.mappings["/app"]     = application.appDir;

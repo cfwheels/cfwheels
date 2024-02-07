@@ -191,7 +191,7 @@ public any function sendFile(
 		if (local.fullPath DOES NOT CONTAIN Replace(local.root, "\", "/", "all")) {
 			//added this section for the "/wheels" mapping to work correctly
 			if(local.fullPath CONTAINS "/wheels"){
-				local.fullPath = ExpandPath(mid(local.fullPath,findNoCase("/wheels", local.fullPath)));
+				local.fullPath = ExpandPath(mid(local.fullPath,findNoCase("/wheels", local.fullPath),len(local.fullPath)-findNoCase("/wheels", local.fullPath)+1));
 				local.file = ListLast(local.fullPath, "\");
 				local.directory = Reverse(ListRest(Reverse(local.fullPath), "\"));
 			}
