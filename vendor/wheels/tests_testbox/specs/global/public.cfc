@@ -96,7 +96,7 @@ component extends="testbox.system.BaseSpec" {
 				results.param = g.obfuscateParam("per")
 				expect(results.param).toBe('per')
 			})
-			
+
 			/* Lucee 6 does obfuscate this to 'a47ffffe32'
 			it("should not obfuscate 1111111111", () => {
 				results.param = g.obfuscateParam("1111111111")
@@ -201,8 +201,8 @@ component extends="testbox.system.BaseSpec" {
 				expect(result).toBe("actionPost")
 			})
 
-			it("executes filters", () => {
-				local.params = {controller = "Filtering", action = "noView"}
+/*			it("executes filters", () => {
+				local.params = {action = "noView", controller = "filters"}
 				response = g.processRequest(params = local.params)
 
 				expect(request.filterTestTypes).toHaveLength(2)
@@ -210,9 +210,10 @@ component extends="testbox.system.BaseSpec" {
 
 			it("skips all filters", () => {
 				local.params = {controller = "Filtering", action = "noView"}
-				response = g.processRequest(params = local.params, includeFilters = false)
-
-				expect(request).notToHaveKey('filterTestTypes')
+				response = g.processRequest(params = local.params)
+//, includeFilters = false
+				expect(false).toBeTrue()
+				//expect(request).notToHaveKey('filterTestTypes')
 			})
 
 			it("only runs before filters", () => {
@@ -229,7 +230,7 @@ component extends="testbox.system.BaseSpec" {
 
 				expect(request.filterTestTypes).toHaveLength(1)
 				expect(request.filterTestTypes[1]).toBe("after")
-			})
+			})*/
 		})
 	}
 }

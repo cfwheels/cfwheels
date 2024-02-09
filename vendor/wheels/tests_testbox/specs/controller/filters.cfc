@@ -5,8 +5,8 @@ component extends="testbox.system.BaseSpec" {
         describe("Tests that $runfilters", () => {
 
         	beforeEach(() => {
-                params = {controller = "filtering", action = "index"}
-                _controller = application.wo.controller("filtering", params)
+                params = {controller = "filters", action = "index"}
+                _controller = application.wo.controller("filters", params)
         		request.filterTests = StructNew()
         	})
 
@@ -82,19 +82,19 @@ component extends="testbox.system.BaseSpec" {
         })
 
         describe("Tests that filters", () => {
-            
+
             it("is adding filter", () => {
                 local.controller = application.wo.controller(name = "dummy")
                 local.controller.setFilterChain([])
                 local.args = {}
                 local.args.through = "restrictAccess"
                 local.controller.filters(argumentcollection = local.args)
-                
+
                 result = ArrayLen(local.controller.filterChain())
                 expected = 1
-                
+
                 expect(result).toBe(expected)
-                
+
                 local.controller.setFilterChain([])
             })
         })
@@ -125,7 +125,7 @@ component extends="testbox.system.BaseSpec" {
 
                 // Compare filter chains
                 expect(ArrayLen(filterChainSet)).toBe(ArrayLen(filterChainNormal))
-                expect(filterChainSet).toBe(filterChainNormal)                
+                expect(filterChainSet).toBe(filterChainNormal)
             })
         })
     }

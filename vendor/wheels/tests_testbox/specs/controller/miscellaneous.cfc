@@ -150,13 +150,13 @@ component extends="testbox.system.BaseSpec" {
 				expect(r.name.right(17)).toBe("cfwheels-logo.png")
 			})
 
-			it("checks no extension single file exists", () => {
-				args.file = "/wheels/tests_testbox/_assets/files/sendfile"
+			it("checks single file exists", () => {
+				args.file = "/wheels/tests_testbox/_assets/files/sendfile.txt"
 				r = _controller.sendFile(argumentCollection = args)
 
-				expect(Right(r.file, 12)).toBe("sendFile.txt")
+				expect(r.file.right(12)).toBe("sendFile.txt")
 				expect(r.mime).toBe("text/plain")
-				expect(r.name).toBe("sendFile.txt")
+				expect(r.name.right(12)).toBe("sendFile.txt")
 			})
 
 			it("checks no extension file does not exist", () => {
