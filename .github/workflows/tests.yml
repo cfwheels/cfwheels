@@ -51,6 +51,12 @@ jobs:
           - cf: adobe2021
             db: h2
           - cf: adobe2023
+            db: mysql
+          - cf: adobe2023
+            db: postgres
+          - cf: adobe2023
+            db: sqlserver
+          - cf: adobe2023
             db: h2
 
     steps:
