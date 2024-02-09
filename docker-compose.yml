@@ -15,7 +15,6 @@ services:
     image: cfwheels-test-lucee5:v3.0.0
     volumes:
       - ./:/cfwheels-test-suite
-      - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
       - type: bind
         source: ./docker/lucee5/server.json
         target: /cfwheels-test-suite/server.json
