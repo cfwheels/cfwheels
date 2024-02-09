@@ -33,7 +33,7 @@ component extends="testbox.system.BaseSpec" {
 
 				actual = _controller.$performedRender()
 				expect(actual).toBeFalse()
-				
+
 				actual = _controller.$performedRenderOrRedirect()
 				expect(actual).toBeFalse()
 			})
@@ -102,9 +102,9 @@ component extends="testbox.system.BaseSpec" {
 				args.file = "/wheels/tests_testbox/_assets/files/cfwheels-logo.png"
 				r = _controller.sendFile(argumentCollection = args)
 
-				expect(Right(r.file, 17)).toBe("cfwheels-logo.png")
+				expect(r.file.right(17)).toBe("cfwheels-logo.png")
 				expect(r.mime).toBe("image/png")
-				expect(r.name).toBe("cfwheels-logo.png")
+				expect(r.name.right(17)).toBe("cfwheels-logo.png")
 			})
 
 			it("gets test info", () => {
@@ -113,7 +113,7 @@ component extends="testbox.system.BaseSpec" {
 				_controller.sendFile(argumentCollection = args)
 				r = _controller.getFiles()
 
-				expect(Right(r[1].file, 17)).toBe("cfwheels-logo.png")
+				expect(r[1].file.right(17)).toBe("cfwheels-logo.png")
 				expect(r[1].mime).toBe("image/png")
 				expect(r[1].name).toBe("A Weird FileName.png")
 			})
@@ -123,7 +123,7 @@ component extends="testbox.system.BaseSpec" {
 				args.name = "A Weird FileName.png"
 				r = _controller.sendFile(argumentCollection = args)
 
-				expect(Right(r.file, 17)).toBe("cfwheels-logo.png")
+				expect(r.file.right(17)).toBe("cfwheels-logo.png")
 				expect(r.mime).toBe("image/png")
 				expect(r.name).toBe("A Weird FileName.png")
 			})
@@ -133,10 +133,10 @@ component extends="testbox.system.BaseSpec" {
 				args.disposition = "attachment"
 				r = _controller.sendFile(argumentCollection = args)
 
-				expect(Right(r.file, 17)).toBe("cfwheels-logo.png")
+				expect(r.file.right(17)).toBe("cfwheels-logo.png")
 				expect(r.disposition).toBe("attachment")
 				expect(r.mime).toBe("image/png")
-				expect(r.name).toBe("cfwheels-logo.png")
+				expect(r.name.right(17)).toBe("cfwheels-logo.png")
 			})
 
 			it("overloads mimetype", () => {
@@ -144,10 +144,10 @@ component extends="testbox.system.BaseSpec" {
 				args.type = "wheels/custom"
 				r = _controller.sendFile(argumentCollection = args)
 
-				expect(Right(r.file, 17)).toBe("cfwheels-logo.png")
+				expect(r.file.right(17)).toBe("cfwheels-logo.png")
 				expect(r.disposition).toBe("attachment")
 				expect(r.mime).toBe("wheels/custom")
-				expect(r.name).toBe("cfwheels-logo.png")
+				expect(r.name.right(17)).toBe("cfwheels-logo.png")
 			})
 
 			it("checks no extension single file exists", () => {
@@ -161,7 +161,7 @@ component extends="testbox.system.BaseSpec" {
 
 			it("checks no extension file does not exist", () => {
 				args.file = "/wheels/tests_testbox/_assets/files/cfwheels-logo"
-				
+
 				expect(function() {
 					_controller.sendFile(argumentCollection = args)
 				}).toThrow("Wheels.FileNotFound")
@@ -172,9 +172,9 @@ component extends="testbox.system.BaseSpec" {
 				args.file = "files/cfwheels-logo.png"
 				r = _controller.sendFile(argumentCollection = args)
 
-				expect(Right(r.file, 17)).toBe("cfwheels-logo.png")
+				expect(r.file.right(17)).toBe("cfwheels-logo.png")
 				expect(r.mime).toBe("image/png")
-				expect(r.name).toBe("cfwheels-logo.png")
+				expect(r.name.right(17)).toBe("cfwheels-logo.png")
 			})
 		})
 
@@ -205,7 +205,7 @@ component extends="testbox.system.BaseSpec" {
 				application.wheels.functions.sendEmail.from = "sender@example.com"
 				application.wheels.functions.sendEmail.to = "recipient@example.com"
 				application.wheels.functions.sendEmail.subject = "test email"
-				
+
 				r = default_args(template = "")
 				expect(r.from).toBe("sender@example.com")
 				expect(r.to).toBe("recipient@example.com")
