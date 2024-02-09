@@ -99,7 +99,7 @@ component extends="testbox.system.BaseSpec" {
 					)
 					transaction action="rollback";
 				}
-				if(application.wheels.servername eq "Adobe Coldfusion" and isInstanceOf(user.birthTime,"java.time.LocalDateTime")){
+				if(isInstanceOf(user.birthTime,"java.time.LocalDateTime")){
 					user.birthTime = createDateTime(user.birthTime.getYear(),user.birthTime.getMonthValue(),user.birthTime.getDayOfMonth(),user.birthTime.getHour(),user.birthTime.getMinute(),user.birthTime.getSecond());
 				}
 				expect(user).toHaveKey("birthTime")
@@ -112,7 +112,7 @@ component extends="testbox.system.BaseSpec" {
 					user.save(reload = true)
 					transaction action="rollback";
 				}
-				if(application.wheels.servername eq "Adobe Coldfusion" and isInstanceOf(user.birthTime,"java.time.LocalDateTime")){
+				if(isInstanceOf(user.birthTime,"java.time.LocalDateTime")){
 					user.birthTime = createDateTime(user.birthTime.getYear(),user.birthTime.getMonthValue(),user.birthTime.getDayOfMonth(),user.birthTime.getHour(),user.birthTime.getMinute(),user.birthTime.getSecond());
 				}
 				expect(user).toHaveKey("birthTime")
@@ -527,7 +527,10 @@ component extends="testbox.system.BaseSpec" {
 					post.update()
 					post.reload()
 					newUpdatedAt = post.properties().updatedAt
-
+					if(isInstanceOf(orgUpdatedAt,"java.time.LocalDateTime") and isInstanceOf(newUpdatedAt,"java.time.LocalDateTime")){
+						orgUpdatedAt = createDateTime(orgUpdatedAt.getYear(),orgUpdatedAt.getMonthValue(),orgUpdatedAt.getDayOfMonth(),orgUpdatedAt.getHour(),orgUpdatedAt.getMinute(),orgUpdatedAt.getSecond());
+						newUpdatedAt = createDateTime(newUpdatedAt.getYear(),newUpdatedAt.getMonthValue(),newUpdatedAt.getDayOfMonth(),newUpdatedAt.getHour(),newUpdatedAt.getMinute(),newUpdatedAt.getSecond());
+					}
 					expect(orgUpdatedAt).toBe(newUpdatedAt)
 
 					transaction action="rollback";
@@ -541,7 +544,10 @@ component extends="testbox.system.BaseSpec" {
 					post.update(body = "here is some updated text")
 					post.reload()
 					newCreatedAt = post.properties().createdAt
-
+					if(isInstanceOf(orgUpdatedAt,"java.time.LocalDateTime") and isInstanceOf(newUpdatedAt,"java.time.LocalDateTime")){
+						orgUpdatedAt = createDateTime(orgUpdatedAt.getYear(),orgUpdatedAt.getMonthValue(),orgUpdatedAt.getDayOfMonth(),orgUpdatedAt.getHour(),orgUpdatedAt.getMinute(),orgUpdatedAt.getSecond());
+						newUpdatedAt = createDateTime(newUpdatedAt.getYear(),newUpdatedAt.getMonthValue(),newUpdatedAt.getDayOfMonth(),newUpdatedAt.getHour(),newUpdatedAt.getMinute(),newUpdatedAt.getSecond());
+					}
 					expect(orgUpdatedAt).toBe(newUpdatedAt)
 					
 					transaction action="rollback";

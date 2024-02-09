@@ -13,7 +13,11 @@ component extends="testbox.system.BaseSpec" {
 
 				actual = application.wo.$includeAndReturnOutput($template = "/wheels/events/onerror/cfmlerror.cfm", exception = exception)
 				// line 9 is the throw() line in this test case.
-				expected = "/wheels/tests_testbox/specs/events/onerror.cfc:9" 
+				if(application.wheels.servername eq "Adobe Coldfusion" and left(application.wheels.serverversion,4) eq "2018"){
+					expected = "wheels\tests_testbox\specs\events\onerror.cfc:9" 
+				}else{
+					expected = "/wheels/tests_testbox/specs/events/onerror.cfc:9" 
+				}
 
 				expect(actual).toInclude(expected)
 			})
