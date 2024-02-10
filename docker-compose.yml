@@ -14,7 +14,9 @@ services:
       dockerfile: ./docker/lucee5/Dockerfile
     image: wheels-test-lucee5:v3.0.1
     volumes:
-      - ./:/wheels-deploy
+      - type: bind
+        source: ./
+        target: /wheels-deploy
       - type: bind
         source: ./docker/lucee5/server.json
         target: /wheels-deploy/server.json
