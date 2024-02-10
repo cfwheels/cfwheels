@@ -13,6 +13,7 @@ ENV HEALTHCHECK_URI         "http://127.0.0.1:8080/"
 ENV ENV_MODE                "remote"
 ENV BOX_SERVER_CFCONFIGFILE "/app/docker/lucee5/CFConfig.json"
 ENV BOX_SERVER_PROFILE      "none"
+ENV BOX_INSTALL				      "true"
 
 # WARM UP THE SERVER
 RUN ${BUILD_DIR}/util/warmup-server.sh
