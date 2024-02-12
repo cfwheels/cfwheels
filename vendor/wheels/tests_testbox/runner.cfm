@@ -4,10 +4,20 @@
 
     setTestboxEnvironment()
 
-    result = testBox.run(
-        reporter = "testbox.system.reports.SimpleReporter"
-    )
-    writeOutput(result)
+    if(structKeyExists(url, "format")){
+        result = testBox.run(
+            reporter = "testbox.system.reports.JSONReporter"
+        );
+        cfcontent(type="application/json");
+        cfheader(name="Access-Control-Allow-Origin", value="*");
+        writeOutput(result)
+    }
+    else{
+        result = testBox.run(
+            reporter = "testbox.system.reports.SimpleReporter"
+        )
+        writeOutput(result)
+    }
 
     // reset the original environment
     application.wheels = application.$$$wheels
