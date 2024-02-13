@@ -1,8 +1,6 @@
 FROM ortussolutions/commandbox:latest
 RUN echo "------------------------------- Starting Dockerfile -------------------------------"
 
-run ls /wheels-test-suite
-
 LABEL maintainer "Wheels Core Team"
 
 #Add the H2 extension
