@@ -2,7 +2,8 @@
 
 echo "------------------------------- Starting Core-tests.sh -------------------------------"
 
-docker exec cfwheels-lucee5-1 /bin/bash -c 'whoami'
+docker exec cfwheels-lucee5-1 /bin/bash -c 'pwd'
+docker exec cfwheels-lucee5-1 /bin/bash -c 'box server status'
 
 cfengine=${1}
 dbengine=${2}
