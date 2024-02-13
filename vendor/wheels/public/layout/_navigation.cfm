@@ -18,7 +18,17 @@
 			if(structKeyExists(item, "type"))
 				navArgs['type'] = item['type'];
 			</cfscript>
-			<a href="#urlFor(argumentCollection = navArgs)#" <cfif item.title eq 'Testbox Packages'>target="_blank"</cfif> class="#navArgs['class']#">#navArgs.Text#</a>
+			<cfif item.title eq 'Testbox Packages'>
+			<div class="ui dropdown item">
+				#navArgs.Text#
+				<div class="menu">
+				  <a href="#urlFor(argumentCollection = navArgs)#" class="#navArgs['class']#" target="_blank">HTML</a>
+				  <a href="#urlFor(argumentCollection = navArgs)#?format=json" class="#navArgs['class']#" target="_blank">JSON</a>
+				</div>
+			  </div>
+			<cfelse>
+				<a href="#urlFor(argumentCollection = navArgs)#" class="#navArgs['class']#">#navArgs.Text#</a>
+			</cfif>
 		</cfloop>
 	</nav>
 </div>

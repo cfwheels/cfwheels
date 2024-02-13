@@ -190,7 +190,9 @@ component output="false" {
 		if (
 			application.wheels.showDebugInformation && StructKeyExists(request.wheels, "showDebugInformation") && request.wheels.showDebugInformation
 		) {
-			application.wo.$includeAndOutput(template = "/wheels/events/onrequestend/debug.cfm");
+			if(!structKeyExists(url, "format")){
+				application.wo.$includeAndOutput(template = "/wheels/events/onrequestend/debug.cfm");
+			}
 		}
 	}
 
