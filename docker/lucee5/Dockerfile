@@ -2,6 +2,7 @@ FROM ortussolutions/commandbox:latest
 
 LABEL maintainer "CFWheels Core Team"
 
+RUN echo ${ github.workspace }
 RUN echo "PWD" && pwd
 RUN ls
 
