@@ -14,7 +14,7 @@ services:
       dockerfile: ./docker/lucee5/Dockerfile
     image: wheels-test-lucee5:v3.0.0
     volumes:
-      - ./:/wheels-test-suite
+      - .:/wheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
       - type: bind
         source: ./docker/lucee5/server.json

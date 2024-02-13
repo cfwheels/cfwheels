@@ -1,4 +1,5 @@
 {
+	"name":"wheels",
 	"profile": "development",
 	"force":true,
 	"web":{
