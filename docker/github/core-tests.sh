@@ -3,6 +3,7 @@
 echo "------------------------------- Starting Core-tests.sh -------------------------------"
 
 docker exec cfwheels-lucee5-1 /bin/bash -c 'pwd'
+docker exec cfwheels-lucee5-1 /bin/bash -c 'ls -la'
 docker exec cfwheels-lucee5-1 /bin/bash -c 'box server status'
 
 cfengine=${1}
