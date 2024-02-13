@@ -2,6 +2,8 @@
 
 echo "------------------------------- Starting Core-tests.sh -------------------------------"
 
+docker exec cfwheels-lucee5-1 /bin/bash -c 'whoami'
+
 cfengine=${1}
 dbengine=${2}
 
