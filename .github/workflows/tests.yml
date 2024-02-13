@@ -60,6 +60,9 @@ jobs:
             db: h2
 
     steps:
+      - name: Start tests.yml
+        run: echo "------------------------------- Starting tests.yml -------------------------------"
+
       - name: Checkout Repository
         uses: actions/checkout@v3
 
@@ -92,3 +95,6 @@ jobs:
           SLACK_TITLE: 'CFWheels Tests For (${{ matrix.cf }}, ${{ matrix.db }}) failed'
           SLACK_USERNAME: Peter Amiri
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: End tests.yml
+        run: echo "------------------------------- Ending tests.yml -------------------------------"

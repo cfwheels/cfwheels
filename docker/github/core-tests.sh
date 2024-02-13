@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "------------------------------- Starting Core-tests.sh -------------------------------"
+
 cfengine=${1}
 dbengine=${2}
 
@@ -44,3 +46,5 @@ else
     echo "\nFAIL: Status Code: $http_code"
     exit 1
 fi
+
+echo "------------------------------- Ending Core-tests.sh -------------------------------"

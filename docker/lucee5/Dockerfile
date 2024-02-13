@@ -1,3 +1,5 @@
+RUN echo "------------------------------- Starting Dockerfile -------------------------------"
+
 FROM ortussolutions/commandbox:latest
 
 LABEL maintainer "CFWheels Core Team"
@@ -13,3 +15,5 @@ ENV BOX_SERVER_PROFILE      "none"
 
 # WARM UP THE SERVER
 RUN ${BUILD_DIR}/util/warmup-server.sh
+
+RUN echo "------------------------------- Ending Dockerfile -------------------------------"
