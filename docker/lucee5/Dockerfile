@@ -15,5 +15,8 @@ ENV BOX_SERVER_CFCONFIGFILE "/app/docker/lucee5/CFConfig.json"
 ENV BOX_SERVER_PROFILE      "none"
 ENV BOX_INSTALL				      "true"
 
+RUN echo "PWD" && pwd
+RUN ls
+
 # WARM UP THE SERVER
 RUN ${BUILD_DIR}/util/warmup-server.sh
