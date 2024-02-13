@@ -17,9 +17,6 @@ services:
       - ./:/wheels-test-suite
       - ~/.CommandBox/artifacts:/root/.CommandBox/artifacts
       - type: bind
-        source: ./docker/lucee5/box.json
-        target: /wheels-test-suite/box.json
-      - type: bind
         source: ./docker/lucee5/server.json
         target: /wheels-test-suite/server.json
       - type: bind
