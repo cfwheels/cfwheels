@@ -14,7 +14,7 @@ services:
       dockerfile: ./docker/lucee5/Dockerfile
     image: wheels-test-lucee5:v3.0.1
     volumes:
-      - .:/app
+      - ${{ github.workspace }}:/app
       - type: bind
         source: ./docker/lucee5/server.json
         target: /app/server.json
