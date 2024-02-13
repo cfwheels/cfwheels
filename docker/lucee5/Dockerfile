@@ -1,6 +1,7 @@
 FROM ortussolutions/commandbox:latest
 RUN echo "------------------------------- Starting Dockerfile -------------------------------"
 
+run ls /cfwheels-test-suite
 
 LABEL maintainer "CFWheels Core Team"
 
