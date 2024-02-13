@@ -69,6 +69,9 @@ jobs:
       - name: Print Directory Listing
         run: ls -la
 
+      - name: echo github.workspace
+        run: echo ${{ github.workspace }}
+
       - name: Either start ${{ matrix.cf }} Application Server with external DB (${{ matrix.db }}) ...
         if: ${{ matrix.db != 'h2' }}
         run: docker compose up ${{ matrix.cf }} ${{ matrix.db }} --detach --wait
