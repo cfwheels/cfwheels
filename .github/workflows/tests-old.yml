@@ -1,0 +1,100 @@
+# This is a reusable workflow for executing the full CFWheels Test Suites
+name: CFWheels Test Suites
+
+# We are a reusable Workflow only
+on:
+  workflow_call:
+    secrets:
+      SLACK_WEBHOOK_URL:
+        required: true
+
+jobs:
+  tests:
+    name: Test Suites
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cf: [lucee5, lucee6, adobe2018, adobe2021, adobe2023]
+        db: [mysql, postgres, sqlserver, h2]
+        exclude:
+          - cf: lucee5
+            db: mysql
+          - cf: lucee5
+            db: postgres
+          - cf: lucee5
+            db: sqlserver
+#          - cf: lucee5
+#            db: h2
+          - cf: lucee6
+            db: mysql
+          - cf: lucee6
+            db: postgres
+          - cf: lucee6
+            db: sqlserver
+          - cf: lucee6
+            db: h2
+          - cf: adobe2018
+            db: mysql
+          - cf: adobe2018
+            db: postgres
+          - cf: adobe2018
+            db: sqlserver
+          - cf: adobe2018
+            db: h2
+          - cf: adobe2021
+            db: mysql
+          - cf: adobe2021
+            db: postgres
+          - cf: adobe2021
+            db: sqlserver
+          - cf: adobe2021
+            db: h2
+          - cf: adobe2023
+            db: mysql
+          - cf: adobe2023
+            db: postgres
+          - cf: adobe2023
+            db: sqlserver
+          - cf: adobe2023
+            db: h2
+
+    steps:
+      - name: Start tests.yml
+        run: echo "------------------------------- Starting tests.yml -------------------------------"
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Print Working Directory
+        run: pwd
+
+      - name: Print Directory Listing
+        run: ls -la
+
+      - name: Either start ${{ matrix.cf }} Application Server with external DB (${{ matrix.db }}) ...
+        if: ${{ matrix.db != 'h2' }}
+        run: docker compose up ${{ matrix.cf }} ${{ matrix.db }} --detach --wait
+
+      - name: ... or start ${{ matrix.cf }} Application Server for internal H2 testing
+        if: ${{ matrix.db == 'h2' }}
+        run: docker compose up ${{ matrix.cf }} --detach --wait
+
+      - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
+        run: docker/github/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}
+
+      - name: Slack Notification
+        # Only on failures and NOT in pull requests
+        if: ${{ failure() && !startsWith( 'pull_request', github.event_name ) }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_CHANNEL: builds
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
+          SLACK_ICON_EMOJI: ":bell:"
+          SLACK_MESSAGE: 'CFWheels tests failed :cry:, check them out here: https://github.com/cfwheels/cfwheels/actions'
+          SLACK_TITLE: 'CFWheels Tests For (${{ matrix.cf }}, ${{ matrix.db }}) failed'
+          SLACK_USERNAME: Peter Amiri
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: End tests.yml
+        run: echo "------------------------------- Ending tests.yml -------------------------------"
