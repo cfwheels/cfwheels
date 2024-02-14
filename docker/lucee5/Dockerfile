@@ -1,4 +1,4 @@
-FROM ortussolutions/commandbox:latest
+FROM ortussolutions/commandbox:3.8.4
 RUN echo "------------------------------- Starting Dockerfile -------------------------------"
 
 LABEL maintainer "Wheels Core Team"
