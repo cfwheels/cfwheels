@@ -74,11 +74,11 @@ jobs:
 
       - name: Either start ${{ matrix.cf }} Application Server with external DB (${{ matrix.db }}) ...
         if: ${{ matrix.db != 'h2' }}
-        run: docker compose up ${{ matrix.cf }} ${{ matrix.db }} --detach --wait
+        run: docker-compose up -d ${{ matrix.cf }} ${{ matrix.db }}
 
       - name: ... or start ${{ matrix.cf }} Application Server for internal H2 testing
         if: ${{ matrix.db == 'h2' }}
-        run: docker-compose up ${{ matrix.cf }}
+        run: docker-compose up -d ${{ matrix.cf }}
 
       - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
         run: docker/github/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}
