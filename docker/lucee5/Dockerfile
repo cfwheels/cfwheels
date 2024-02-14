@@ -13,6 +13,8 @@ ENV BOX_SERVER_CFCONFIGFILE "/wheels-test-suite/docker/lucee5/CFConfig.json"
 ENV BOX_SERVER_PROFILE      "none"
 
 RUN cd ..
+RUN PWD
+RUN ls -la
 
 # WARM UP THE SERVER
 RUN ${BUILD_DIR}/util/warmup-server.sh
