@@ -25,45 +25,45 @@ jobs:
         cfengine: [ "lucee@5", "lucee@6", "adobe@2018", "adobe@2021", "adobe@2023" ]
         dbengine: ["mysql", "postgres", "sqlserver", "h2"]
         exclude:
-          - cfengine: lucee5
+          - cfengine: lucee@5
             dbengine: mysql
-          - cfengine: lucee5
+          - cfengine: lucee@5
             dbengine: postgres
-          - cfengine: lucee5
+          - cfengine: lucee@5
             dbengine: sqlserver
-#          - cfengine: lucee5
+#          - cfengine: lucee@5
 #            dbengine: h2
-          - cfengine: lucee6
+          - cfengine: lucee@6
             dbengine: mysql
-          - cfengine: lucee6
+          - cfengine: lucee@6
             dbengine: postgres
-          - cfengine: lucee6
+          - cfengine: lucee@6
             dbengine: sqlserver
-          - cfengine: lucee6
+          - cfengine: lucee@6
             dbengine: h2
-          - cfengine: adobe2018
+          - cfengine: adobe@2018
             dbengine: mysql
-          - cfengine: adobe2018
+          - cfengine: adobe@2018
             dbengine: postgres
-          - cfengine: adobe2018
+          - cfengine: adobe@2018
             dbengine: sqlserver
-          - cfengine: adobe2018
+          - cfengine: adobe@2018
             dbengine: h2
-          - cfengine: adobe2021
+          - cfengine: adobe@2021
             dbengine: mysql
-          - cfengine: adobe2021
+          - cfengine: adobe@2021
             dbengine: postgres
-          - cfengine: adobe2021
+          - cfengine: adobe@2021
             dbengine: sqlserver
-          - cfengine: adobe2021
+          - cfengine: adobe@2021
             dbengine: h2
-          - cfengine: adobe2023
+          - cfengine: adobe@2023
             dbengine: mysql
-          - cfengine: adobe2023
+          - cfengine: adobe@2023
             dbengine: postgres
-          - cfengine: adobe2023
+          - cfengine: adobe@2023
             dbengine: sqlserver
-          - cfengine: adobe2023
+          - cfengine: adobe@2023
             dbengine: h2
 
     steps:
