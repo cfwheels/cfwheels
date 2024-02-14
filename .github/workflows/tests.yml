@@ -1,4 +1,5 @@
-# This is a reusable workflow for executing the full Wheels Framework Test Suites
+# This is a reusable workflow that is called from the pr, snapshot, and release workflows
+# This workflow runs the complete Wheels Framework Test Suites
 name: Wheels Test Suites
 
 # We are a reusable Workflow only
@@ -112,7 +113,7 @@ jobs:
         run: |
           box server start serverConfigFile="server-${{ matrix.cfengine }}.json" --noSaveSettings --debug
           # Test the harness
-          curl http://127.0.0.1:8599/test-harness
+          curl http://127.0.0.1:8080/test-harness
 
       - name: Run Tests
         run: |
