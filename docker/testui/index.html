@@ -187,7 +187,7 @@
                 let currentServer = servers.find((server) => server.servername === requestList[i].trim().split(':')[0]);
                 let currentDatabase = databases.find((database) => database.databasename === requestList[i].trim().split(':')[1].trim());
                 
-                requestUrl = `${currentServer.server}/wheels/tests/core?reload=true&format=json&sort=${execOrder}&db=${currentDatabase.database}`;
+                requestUrl = `${currentServer.server}/wheels/testbox?format=json&sort=${execOrder}&db=${currentDatabase.database}`;
                 clearSection(document.getElementById('console-section'));
                 document.getElementById('console-section').insertAdjacentHTML('beforeend', `<div class="row p-1"><div class="col-md-1"><span class="badge badge-info">${gettime()}</span></div><div class="col-md-11 text-left">Test Started -${requestList[i]}</div></div>`);
                 await API_call(requestUrl, requestList[i], requestStatus[i],requestStatus[i].parentNode.nextSibling,i);
@@ -225,10 +225,18 @@
             const response = await fetch(requestUrl);
 
             const data = await response.json();
+            //Filter Results
+            const filteredResults = data.bundleStats.filter(bundle => {
+                const suiteStats = bundle.suiteStats;
+                const filteredSuiteStats = suiteStats.filter(suite => suite.status === 'Error' || suite.status === 'Failed');
+                const filteredSpecStats = suiteStats.flatMap(suite => suite.specStats.filter(spec => spec.status === 'Error' || spec.status === 'Failed'));
+                return filteredSuiteStats.length > 0 || filteredSpecStats.length > 0;
+            });
 
-            const filteredResults = data.RESULTS.filter(result => result.STATUS === 'Failure' || result.STATUS === 'Error');
             clearSection(document.getElementById('results-section'));
-            if(data.NUMERRORS > 0 || data.NUMFAILURES > 0){
+            const timeStart = new Date(data.startTime).toLocaleString('en-US');
+            const timeEnd = new Date(data.endTime).toLocaleString('en-US');
+            if(data.totalError > 0 || data.totalFail > 0){
                 requestStatus.textContent = 'error';
                 requestStatus.classList.remove('bg-warning','text-dark');
                 requestStatus.classList.add('bg-danger');
@@ -241,11 +249,17 @@
                 else{
                     document.getElementById('console-section').insertAdjacentHTML('beforeend', `<div class="row p-1"><div class="col-md-1"><span class="badge badge-danger">${gettime()}</span></div><div class="col-md-11 text-left">Tests Failed:${request_server}</div></div>`);
                 }
-                document.getElementById('results-section').insertAdjacentHTML('beforeend',`<div class="card m-3 border-danger" id="errorBody${index}"><div class="card-header bg-danger text-white"><div class="d-flex flex-row"><h6>${request_server}</h6><button type="button" class="btn ml-auto btn-light btn-sm" onclick = "copyToClipboard('errorBody${index}')"><svg viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="file earmark code" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi-file-earmark-code b-icon bi"><g><path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"></path><path d="M8.646 6.646a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L10.293 9 8.646 7.354a.5.5 0 0 1 0-.708zm-1.292 0a.5.5 0 0 0-.708 0l-2 2a.5.5 0 0 0 0 .708l2 2a.5.5 0 0 0 .708-.708L5.707 9l1.647-1.646a.5.5 0 0 0 0-.708z"></path></g></svg> Copy to Clipboard</button> </div></div><p class="card-text"><div class="row text-left ml-1"><div class="col-lg-4"> Path: ${data.PATH}<br> Cases: ${data.NUMCASES}<br> Tests: ${data.NUMTESTS} </div><div class="col-lg-3"> Passes: <strong class="text-danger">${data.NUMSUCCESSES}</strong><br> Failures: <span>${data.NUMFAILURES}</span><br> Errors: <span>${data.NUMERRORS}</span></div><div class="col-lg-5"> Started: ${data.BEGIN}<br> Ended: ${data.END}<br></div></div></p></div>`);
+                document.getElementById('results-section').insertAdjacentHTML('beforeend',`<div class="card m-3 border-danger" id="errorBody${index}"><div class="card-header bg-danger text-white"><div class="d-flex flex-row"><h6>${request_server}</h6><button type="button" class="btn ml-auto btn-light btn-sm" onclick = "copyToClipboard('errorBody${index}')"><svg viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="file earmark code" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi-file-earmark-code b-icon bi"><g><path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"></path><path d="M8.646 6.646a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L10.293 9 8.646 7.354a.5.5 0 0 1 0-.708zm-1.292 0a.5.5 0 0 0-.708 0l-2 2a.5.5 0 0 0 0 .708l2 2a.5.5 0 0 0 .708-.708L5.707 9l1.647-1.646a.5.5 0 0 0 0-.708z"></path></g></svg> Copy to Clipboard</button> </div></div><p class="card-text"><div class="row text-left ml-1"><div class="col-lg-4"> Path: Wheels.Testbox<br> Cases: ${data.totalBundles}<br> Tests: ${data.totalSpecs} </div><div class="col-lg-3"> Passes: <strong class="text-danger">${data.totalPass}</strong><br> Failures: <span>${data.totalFail}</span><br> Errors: <span>${data.totalError}</span></div><div class="col-lg-5"> Started: ${timeStart}<br> Ended: ${timeEnd}<br></div></div></p></div>`);
 
                 if(filteredResults.length > 0){
                     for(let i = 0 ; i < filteredResults.length; i++){
-                        document.getElementById(`errorBody${index}`).insertAdjacentHTML('beforeend',`<div role="alert" class="alert m-3 text-left alert-danger"><span class="badge badge-danger">${filteredResults[i].STATUS}</span> <strong>${filteredResults[i].CLEANTESTNAME} <svg viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" aria-label="arrow right" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi-arrow-right b-icon bi"><g><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path></g></svg> ${filteredResults[i].CLEANTESTCASE}</strong><br><pre></pre><hr><pre>${filteredResults[i].MESSAGE}</pre></div>`)
+                        for(let j = 0 ; j < filteredResults[i].suiteStats.length; j++){
+                            for(let k=0 ; k < filteredResults[i].suiteStats[j].specStats.length ; k++){
+                                if(filteredResults[i].suiteStats[j].specStats[k].status === "Error" || filteredResults[i].suiteStats[j].specStats[k].status === "Failed"){
+                                    document.getElementById(`errorBody${index}`).insertAdjacentHTML('beforeend',`<div role="alert" class="alert m-3 text-left alert-danger"><span class="badge badge-danger">${filteredResults[i].suiteStats[j].specStats[k].status}</span> <strong>${filteredResults[i].suiteStats[j].specStats[k].name}</strong><br><pre></pre><hr><pre><strong>${filteredResults[i].suiteStats[j].specStats[k].failMessage}<strong></br>${filteredResults[i].suiteStats[j].specStats[k].failDetail}</br></br>${filteredResults[i].suiteStats[j].specStats[k].failStacktrace}</pre></div>`)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -255,7 +269,7 @@
                 requestStatus.classList.add('bg-success');
                 spinner.innerHTML = '';
                 document.getElementById('console-section').insertAdjacentHTML('beforeend', `<div class="row p-1"><div class="col-md-1"><span class="badge badge-success">${gettime()}</span></div><div class="col-md-11 text-left">Tests Passed:${request_server}</div></div>`);
-                document.getElementById('results-section').insertAdjacentHTML('afterbegin',`<div class="card m-3 border-success"><div class="card-header bg-success text-white"><div class="d-flex flex-row"><h6>${request_server}</h6> </div></div><p class="card-text"><div class="row text-left ml-1"><div class="col-lg-4"> Path: ${data.PATH}<br> Cases: ${data.NUMCASES}<br> Tests: ${data.NUMTESTS} </div><div class="col-lg-3"> Passes: <strong class="text-success">${data.NUMSUCCESSES}</strong><br> Failures: <span>${data.NUMFAILURES}</span><br> Errors: <span>${data.NUMERRORS}</span></div><div class="col-lg-5"> Started: ${data.BEGIN}<br> Ended: ${data.END}<br></div></div></p></div>`);
+                document.getElementById('results-section').insertAdjacentHTML('afterbegin',`<div class="card m-3 border-success"><div class="card-header bg-success text-white"><div class="d-flex flex-row"><h6>${request_server}</h6> </div></div><p class="card-text"><div class="row text-left ml-1"><div class="col-lg-4"> Path: Wheels.Testbox<br> Cases: ${data.totalBundles}<br> Tests: ${data.totalSpecs} </div><div class="col-lg-3"> Passes: <strong class="text-success">${data.totalPass}</strong><br> Failures: <span>${data.totalFail}</span><br> Errors: <span>${data.totalError}</span></div><div class="col-lg-5"> Started: ${timeStart}<br> Ended: ${timeEnd}<br></div></div></p></div>`);
             }
         }
         catch(error){
