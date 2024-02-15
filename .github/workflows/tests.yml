@@ -111,7 +111,7 @@ jobs:
 
       - name: Start ${{ matrix.cfengine }} Server
         run: |
-          box server start serverConfigFile="server-${{ matrix.cfengine }}.json" --noSaveSettings --debug
+          box server start serverConfigFile="server.json" --noSaveSettings --debug
           # Test the harness
           curl http://127.0.0.1:8080/test-harness
 
