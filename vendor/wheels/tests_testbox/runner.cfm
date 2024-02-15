@@ -5,12 +5,21 @@
     setTestboxEnvironment()
 
     if(structKeyExists(url, "format")){
-        result = testBox.run(
-            reporter = "testbox.system.reports.JSONReporter"
-        );
-        cfcontent(type="application/json");
-        cfheader(name="Access-Control-Allow-Origin", value="*");
-        writeOutput(result)
+        if(url.format eq "json"){
+            result = testBox.run(
+                reporter = "testbox.system.reports.JSONReporter"
+            );
+            cfcontent(type="application/json");
+            cfheader(name="Access-Control-Allow-Origin", value="*");
+            writeOutput(result)
+        }
+        else if (url.format eq "txt") {
+            result = testBox.run(
+                reporter = "testbox.system.reports.TextReporter"
+            )        
+
+            writeOutput(result)
+        }
     }
     else{
         result = testBox.run(
