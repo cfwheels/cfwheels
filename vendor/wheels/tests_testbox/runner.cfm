@@ -17,7 +17,14 @@
             result = testBox.run(
                 reporter = "testbox.system.reports.TextReporter"
             )        
-
+            cfcontent(type="text/plain")
+            writeOutput(result)
+        }
+        else if(url.format eq "junit"){
+            result = testBox.run(
+                reporter = "testbox.system.reports.ANTJUnitReporter"
+            )
+            cfcontent(type="text/xml")
             writeOutput(result)
         }
     }

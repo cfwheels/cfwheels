@@ -25,6 +25,7 @@
 				  <a href="#urlFor(argumentCollection = navArgs)#" class="#navArgs['class']#" target="_blank">HTML</a>
 				  <a href="#urlFor(argumentCollection = navArgs)#?format=json" class="#navArgs['class']#" target="_blank">JSON</a>
 				  <a href="#urlFor(argumentCollection = navArgs)#?format=txt" class="#navArgs['class']#" target="_blank">TXT</a>
+				  <a href="#urlFor(argumentCollection = navArgs)#?format=junit" class="#navArgs['class']#" target="_blank">JUnit</a>
 				</div>
 			  </div>
 			<cfelse>
