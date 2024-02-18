@@ -23,3 +23,5 @@
 #linkTo(text="Delete Post", action="delete", key=99, class="delete", id="delete-99")#
 <!--- Outputs: <a class="delete" href="/blog/delete/99" id="delete-99">Delete Post</a> --->
 
+<!--- Using icons like Font Awesome in the text attribute, notice the use of encode="attributes" --->
+#linkTo(text="<i class='fa fa-trash' aria-hidden='true'></i> " & "Delete Post", encode="attributes", action="delete", key=99, class="delete", id="delete-99")#
