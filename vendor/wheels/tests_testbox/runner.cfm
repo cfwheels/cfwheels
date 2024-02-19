@@ -11,30 +11,32 @@
             );
             cfcontent(type="application/json");
             cfheader(name="Access-Control-Allow-Origin", value="*");
-            writeOutput(result)
+            DeJsonResult = DeserializeJSON(result);
+            if (DeJsonResult.totalFail > 0 || DeJsonResult.totalError > 0) {
+                cfheader(statustext="Expectation Failed", statuscode=417);
+            } else {
+                cfheader(statustext="OK", statuscode=200);
+            }
         }
         else if (url.format eq "txt") {
             result = testBox.run(
                 reporter = "testbox.system.reports.TextReporter"
             )        
-            cfcontent(type="text/plain")
-            writeOutput(result)
+            cfcontent(type="text/plain");
         }
         else if(url.format eq "junit"){
             result = testBox.run(
                 reporter = "testbox.system.reports.ANTJUnitReporter"
             )
-            cfcontent(type="text/xml")
-            writeOutput(result)
+            cfcontent(type="text/xml");
         }
     }
     else{
         result = testBox.run(
             reporter = "testbox.system.reports.SimpleReporter"
         )
-        writeOutput(result)
     }
-
+    writeOutput(result)
     // reset the original environment
     application.wheels = application.$$$wheels
     structDelete(application, "$$$wheels")
@@ -86,7 +88,13 @@
             application.wheels.csrfCookieEncryptionAlgorithm,
             application.wheels.csrfCookieEncryptionEncoding
         )
-
+        if(structKeyExists(url, "db") && listFind("mysql,sqlserver,postgres,h2", url.db)){
+            application.wheels.dataSourceName = "wheelstestdb_" & url.db;
+        } else if (application.wheels.coreTestDataSourceName eq "|datasourceName|") {
+            application.wheels.dataSourceName = "wheelstestdb"; 
+        } else {
+            application.wheels.dataSourceName = application.wheels.coreTestDataSourceName;
+        }
         application.testenv.db = application.wo.$dbinfo(datasource = application.wheels.dataSourceName, type = "version")
 
         // Setting up test database for test environment
