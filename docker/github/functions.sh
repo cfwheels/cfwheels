@@ -8,7 +8,7 @@ get_port () {
       echo -n "60005"
       ;;
     lucee@5)
-      echo -n "60005"
+      echo -n "8080"
       ;;
     lucee6)
       echo -n "60006"
