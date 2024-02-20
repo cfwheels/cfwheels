@@ -1,0 +1,20 @@
+{
+	"profile": "development",
+	"force":true,
+	"web":{
+			"host":"localhost",
+			"webroot":"public",
+			"http":{
+					"port":"8080",
+					"enable":true
+			},
+			"rewrites":{
+					"enable":true,
+					"config":"public/urlrewrite.xml"
+			}
+	},
+	"app":{
+			"cfengine":"adobe@2018.0.10+320417",
+			"libDirs":"docker/adobe2018/lib"
+	}
+}
