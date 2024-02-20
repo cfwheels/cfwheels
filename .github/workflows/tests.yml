@@ -154,14 +154,14 @@ jobs:
         if: ${{ failure() }}
         run: |
           box version
-          box server info serverConfigFile="server-${{ matrix.cfengine }}.json" --json
-          box server log serverConfigFile="server-${{ matrix.cfengine }}.json"
+          box server info serverConfigFile="server.json" --json
+          box server log serverConfigFile="server.json"
 
-      - name: Upload Debugging Info To Artifacts
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: Failure Debugging Info - ${{ matrix.cfengine }}
-          path: |
-            .engine/**/logs/*
-            .engine/**/WEB-INF/cfusion/logs/*
+      # - name: Upload Debugging Info To Artifacts
+      #   if: ${{ failure() }}
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: Failure Debugging Info - ${{ matrix.cfengine }}
+      #     path: |
+      #       .engine/**/logs/*
+      #       .engine/**/WEB-INF/cfusion/logs/*
