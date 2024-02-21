@@ -1,8 +1,8 @@
 {
 	"profile": "development",
 	"robustExceptionEnabled": true,
-	"adminPassword": "commandbox",
-	"adminPasswordDefault": "commandbox",
+	"adminPassword": "wheels.fm",
+	"adminPasswordDefault": "wheels.fm",
 	"adminLoginRequired": false,
 	"adminAllowedIPList": "*",
 	"secureProfileEnabled": false,
