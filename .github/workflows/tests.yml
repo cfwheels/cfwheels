@@ -76,8 +76,6 @@ jobs:
           cp ./docker/${{ matrix.cfengine }}/server.json ./
           cp ./docker/${{ matrix.cfengine }}/CFConfig.json ./
           cp ./docker/${{ matrix.cfengine }}/settings.cfm ./app/config/settings.cfm
-        env:
-          BOX_SERVER_CFCONFIGFILE: /docker/${{ matrix.cfengine }}/CFConfig.json
           
       - name: Start external DB if needed (${{ matrix.dbengine }}) ...
         if: ${{ matrix.dbengine != 'h2' }}
