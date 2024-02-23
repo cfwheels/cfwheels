@@ -17,6 +17,32 @@
             } else {
                 cfheader(statustext="OK", statuscode=200);
             }
+            // Check if 'only' parameter is provided in the URL
+            if (structKeyExists(url, "only") && url.only eq "failure,error") {
+                // Filter test results
+                filteredBundles = [];
+                
+                for (bundle in DeJsonResult.bundleStats) {
+                    if (bundle.totalError > 0 || bundle.totalFail > 0) {
+                        filteredSuites = [];
+                        
+                        for (suite in bundle.suiteStats) {
+                            if (suite.totalError > 0 || suite.totalFail > 0) {
+                                arrayAppend(filteredSuites, suite);
+                            }
+                        }
+                        
+                        if (len(filteredSuites) > 0) {
+                            bundle.suiteStats = filteredSuites;
+                            arrayAppend(filteredBundles, bundle);
+                        }
+                    }
+                }
+            
+                // Update the result with filtered data
+                DeJsonResult.bundleStats = filteredBundles;
+                result = serializeJSON(DeJsonResult);
+            }
         }
         else if (url.format eq "txt") {
             result = testBox.run(
