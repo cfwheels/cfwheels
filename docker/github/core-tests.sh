@@ -4,7 +4,7 @@ echo "------------------------------- Starting Core-tests.sh -------------------
 
 pwd
 ls ../
-ls ../vendor/wheels
+ls ../cfwheels/vendor/wheels
 box server status
 
 cfengine=${1}
