@@ -16,7 +16,8 @@
 	},
 	"app":{
 			"cfengine":"Lucee@5",
-			"libDirs":"docker/lucee5/lib"
+			"libDirs":"docker/lucee5/lib",
+			"serverHomeDirectory":".engine/lucee5"
 	},
 	"cfconfigFile":"CFConfig.json"
 }
