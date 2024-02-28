@@ -203,6 +203,7 @@ component output="false" {
 	}
 
 	public void function onError( any Exception, string EventName ) {
+		writeDump(Exception);
 		wirebox = new wirebox.system.ioc.Injector("wheels.wirebox");
 		application.wo = wirebox.getInstance("global");
 
