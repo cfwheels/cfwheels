@@ -203,7 +203,12 @@ component output="false" {
 	}
 
 	public void function onError( any Exception, string EventName ) {
-		writeDump(Exception);
+		if(structKeyExists(this, "mappings")){
+			writeDump(this.mappings);
+		}
+		if(structKeyExists(application, "mappings")){
+			writeDump(application.mappings);
+		}
 		wirebox = new wirebox.system.ioc.Injector("wheels.wirebox");
 		application.wo = wirebox.getInstance("global");
 
