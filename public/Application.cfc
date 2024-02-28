@@ -78,11 +78,6 @@ component output="false" {
 	function onApplicationStart() {
 		include "/app/config/app.cfm";
 		// include "/wheels/controller/appfunctions.cfm";
-		application.mappings["/app"]     = this.appDir;
-		application.mappings["/vendor"]  = this.vendorDir;
-		application.mappings["/wheels"]  = this.wheelsDir;
-		application.mappings["/wirebox"] = this.wireboxDir;
-		application.mappings["/testbox"] = this.testboxDir;
 		wirebox = new wirebox.system.ioc.Injector("wheels.wirebox");
 
 		/* wheels/global object */
@@ -207,14 +202,6 @@ component output="false" {
 	}
 
 	public void function onError( any Exception, string EventName ) {
-		if(structKeyExists(this, "mappings")){
-			writeDump("This");
-			writeDump(this.mappings);
-		}
-		if(structKeyExists(application, "mappings")){
-			writeDump("Application");
-			writeDump(application.mappings);
-		}
 		wirebox = new wirebox.system.ioc.Injector("wheels.wirebox");
 		application.wo = wirebox.getInstance("global");
 
