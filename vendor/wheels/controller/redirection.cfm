@@ -42,9 +42,8 @@ public void function redirectTo(
 	boolean delay,
 	boolean encode
 ) {
-	writeDump(arguments);
 	$args(name = "redirectTo", args = arguments);
-	writeDump(arguments);
+
 	// Set flash if passed in.
 	// If more than the arguments listed in the function declaration was passed in it's possible that one of them is intended for the flash.
 	local.functionInfo = GetMetadata(variables.redirectTo);
