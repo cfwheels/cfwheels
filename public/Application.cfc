@@ -78,7 +78,7 @@ component output="false" {
 	function onApplicationStart() {
 		include "/app/config/app.cfm";
 		// include "/wheels/controller/appfunctions.cfm";
-		wirebox = new wirebox.system.ioc.Injector("wheels.Global");
+		wirebox = new wirebox.system.ioc.Injector("wheels.wirebox");
 
 		/* wheels/global object */
 		application.wo = wirebox.getInstance("global");
@@ -202,7 +202,7 @@ component output="false" {
 	}
 
 	public void function onError( any Exception, string EventName ) {
-		wirebox = new wirebox.system.ioc.Injector("wheels.Global");
+		wirebox = new wirebox.system.ioc.Injector("wheels.wirebox");
 		application.wo = wirebox.getInstance("global");
 
 		// In case the error was caused by a timeout we have to add extra time for error handling.
