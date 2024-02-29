@@ -657,6 +657,7 @@ public string function URLFor(
 	// Either from a passed in route or the Wheels default one.
 	// For the Wheels default we set the controller and action arguments to what's in the params struct.
 	if (Len(arguments.route)) {
+		writeDump(arguments);
 		local.route = $findRoute(argumentCollection = arguments);
 		local.foundVariables  = local.route.foundVariables ;
 		local.rv &= local.route.pattern;

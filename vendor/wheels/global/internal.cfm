@@ -446,6 +446,9 @@ public string function $routeVariables() {
  */
 public struct function $findRoute() {
 	// Throw error if no route was found.
+	writeDump(application.wheels.namedRoutePositions);
+	writeDump(arguments.route);
+	abort;
 	if (!StructKeyExists(application.wheels.namedRoutePositions, arguments.route)) {
 		$throwErrorOrShow404Page(
 			type = "Wheels.RouteNotFound",
