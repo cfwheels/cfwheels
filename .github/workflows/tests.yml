@@ -13,9 +13,6 @@ jobs:
   tests:
     name: Test Suites
     runs-on: ubuntu-20.04
-    env:
-      DB_USER: root
-      DB_PASSWORD: root
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
