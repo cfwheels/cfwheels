@@ -12,6 +12,7 @@ EXPOSE 1433
 
 # Copy the initialization script into the container
 COPY ./docker/sqlserver/init-db.sh /usr/src/app/init-db.sh
+RUN chmod +x /usr/src/app/init-db.sh
 
 # Use the script as the entrypoint to initialize the database
 ENTRYPOINT ["/usr/src/app/init-db.sh"]
