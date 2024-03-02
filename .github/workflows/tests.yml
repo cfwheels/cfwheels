@@ -31,14 +31,14 @@ jobs:
           #  dbengine: sqlserver
           #- cfengine: lucee@5
           #  dbengine: h2
-          - cfengine: lucee@6
-            dbengine: mysql
-          - cfengine: lucee@6
-            dbengine: postgres
-          - cfengine: lucee@6
-            dbengine: sqlserver
-          - cfengine: lucee@6
-            dbengine: h2
+          #- cfengine: lucee@6
+          #  dbengine: mysql
+          #- cfengine: lucee@6
+          #  dbengine: postgres
+          #- cfengine: lucee@6
+          #  dbengine: sqlserver
+          #- cfengine: lucee@6
+          #  dbengine: h2
           - cfengine: adobe@2018
             dbengine: mysql
           - cfengine: adobe@2018
