@@ -20,6 +20,10 @@ component extends="testbox.system.BaseSpec" {
 			})
 			
 			it("findall respects model config datasource", () => {
+				writeDump(this);
+				writeDump(application.wheels.dataSourceName);
+				writeDump(isTestable);
+				abort;
 				if (!isTestable) return;
 				transaction {
 					this.db_setup()
