@@ -26,28 +26,28 @@ component extends="testbox.system.BaseSpec" {
 				g.set(functionName = "paginationLinks", encode = true)
 			})
 
-			it("current page works", () => {
-				authors = g.model("author").findAll(page = 2, perPage = 3, order = "lastName")
-				link = _controller.linkTo(text = "2", params = "page=2")
-				result = _controller.paginationLinks(linkToCurrentPage = true)
-
-				expect(result).toInclude(link)
-
-				result = _controller.paginationLinks(linkToCurrentPage = false)
-
-				expect(result).notToInclude(link)
-				expect(result).toInclude("2")
-			})
-
-			// it("works with class and classForCurrent", () => {
+			// it("current page works", () => {
 			// 	authors = g.model("author").findAll(page = 2, perPage = 3, order = "lastName")
-			// 	defaultLink = _controller.linkTo(text = "1", params = "page=1", class = "default")
-			// 	currentLink = _controller.linkTo(text = "2", params = "page=2", class = "current")
-			// 	result = _controller.paginationLinks(linkToCurrentPage = true, class = "default", classForCurrent = "current")
+			// 	link = _controller.linkTo(text = "2", params = "page=2")
+			// 	result = _controller.paginationLinks(linkToCurrentPage = true)
 
-			// 	expect(result).toInclude(defaultLink)
-			// 	expect(result).toInclude(currentLink)
+			// 	expect(result).toInclude(link)
+
+			// 	result = _controller.paginationLinks(linkToCurrentPage = false)
+
+			// 	expect(result).notToInclude(link)
+			// 	expect(result).toInclude("2")
 			// })
+
+			it("works with class and classForCurrent", () => {
+				authors = g.model("author").findAll(page = 2, perPage = 3, order = "lastName")
+				defaultLink = _controller.linkTo(text = "1", params = "page=1", class = "default")
+				currentLink = _controller.linkTo(text = "2", params = "page=2", class = "current")
+				result = _controller.paginationLinks(linkToCurrentPage = true, class = "default", classForCurrent = "current")
+
+				expect(result).toInclude(defaultLink)
+				expect(result).toInclude(currentLink)
+			})
 
 			// it("works with route", () => {
 			// 	authors = g.model("author").findAll(page = 2, perPage = 3, order = "lastName")
