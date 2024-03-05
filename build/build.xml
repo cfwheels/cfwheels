@@ -185,9 +185,11 @@
 		</copy>
 
 		<!-- Copy files to exports -->
-		<copy file="build/box.json" 	toFile="${dir.build.base}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
-		<copy file="build/README.md" toFile="${dir.build.base}/cfwheels/README.md" 	encoding="UTF-8" overwrite="true"/>
-		<copy file="build/server.json" toFile="${dir.build.base}/cfwheels/server.json" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="build/base/box.json" 	toFile="${dir.build.base}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="build/base/README.md" toFile="${dir.build.base}/cfwheels/README.md" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="build/base/server.json" toFile="${dir.build.base}/cfwheels/server.json" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="build/base/app/config/app.cfm" toFile="${dir.build.base}/cfwheels/app/config/app.cfm" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="build/base/app/config/settings.cfm" toFile="${dir.build.base}/cfwheels/app/config/settings.cfm" 	encoding="UTF-8" overwrite="true"/>
 
 		<!-- Replace Version + Build Numbers -->
 		<replaceregexp match='@build.version@' replace="${cfwheels.version}" flags="ig" byline="true" encoding="UTF-8">
