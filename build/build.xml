@@ -178,9 +178,9 @@
 
 		<copy todir="${dir.build.base}/cfwheels" encoding="UTF-8" overwrite="true">
 			<fileset dir="${basedir}">
-				<include name="app"/>
-				<include name="puclic"/>
-				<include name="tests"/>
+				<include name="app/*"/>
+				<include name="puclic/*"/>
+				<include name="tests/*"/>
 			</fileset>
 		</copy>
 
