@@ -9,10 +9,6 @@ const servers =
 		server: 'http://localhost:60006'
 	},
 	{
-		servername: 'Adobe 2016',
-		server: 'http://localhost:62016'
-	},
-	{
 		servername: 'Adobe 2018',
 		server: 'http://localhost:62018'
 	},

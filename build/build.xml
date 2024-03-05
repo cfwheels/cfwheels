@@ -99,14 +99,14 @@
 		<concat destfile="${dir.build.core}/cfwheels/${build.core.label}">Built on ${start.TODAY}</concat>
 
 		<copy todir="${dir.build.core}/cfwheels" encoding="UTF-8" overwrite="true">
-			<fileset dir="wheels">
+			<fileset dir="vendor/wheels">
 			<!--	<exclude name="tests/**"/> -->
 			</fileset>
 		</copy>
 
 		<!-- Copy box.json to exports -->
-		<copy file="box-core.json" 	toFile="${dir.build.core}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
-		<copy file="readme-core.md" toFile="${dir.build.core}/cfwheels/readme.md" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="build/core/box.json" 	toFile="${dir.build.core}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="build/core/README.md" toFile="${dir.build.core}/cfwheels/README.md" 	encoding="UTF-8" overwrite="true"/>
 
 		<!-- Replace Version + Build Numbers -->
 		<replaceregexp match='@build.version@' replace="${cfwheels.version}" flags="ig" byline="true" encoding="UTF-8">
@@ -178,31 +178,18 @@
 
 		<copy todir="${dir.build.base}/cfwheels" encoding="UTF-8" overwrite="true">
 			<fileset dir="${basedir}">
-				<include name="config/**"/>
-				<include name="controllers/**"/>
-				<include name="events/**"/>
-				<include name="files/**"/>
-				<include name="global/**"/>
-				<include name="images/**"/>
-				<include name="javascripts/**"/>
-				<include name="miscellaneous/**"/>
-				<include name="migrator/**"/>
-				<include name="models/**"/>
-				<include name="plugins/**"/>
-				<include name="stylesheets/**"/>
-				<include name="templates/**"/>
+				<include name="app/**"/>
+				<include name="puclic/**"/>
 				<include name="tests/**"/>
-				<include name="views/**"/>
-				<include name="Application.cfc"/>
-				<include name="index.cfm"/>
-				<include name="rewrite.cfm"/>
-				<include name="root.cfm"/>
 			</fileset>
 		</copy>
 
-		<!-- Copy box.json to exports -->
-		<copy file="box-base.json" 	toFile="${dir.build.base}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
-		<copy file="readme-base.md" toFile="${dir.build.base}/cfwheels/readme.md" 	encoding="UTF-8" overwrite="true"/>
+		<!-- Copy files to exports -->
+		<copy file="build/base/box.json" 	toFile="${dir.build.base}/cfwheels/box.json" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="build/base/README.md" toFile="${dir.build.base}/cfwheels/README.md" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="build/base/server.json" toFile="${dir.build.base}/cfwheels/server.json" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="build/base/app/config/app.cfm" toFile="${dir.build.base}/cfwheels/app/config/app.cfm" 	encoding="UTF-8" overwrite="true"/>
+		<copy file="build/base/app/config/settings.cfm" toFile="${dir.build.base}/cfwheels/app/config/settings.cfm" 	encoding="UTF-8" overwrite="true"/>
 
 		<!-- Replace Version + Build Numbers -->
 		<replaceregexp match='@build.version@' replace="${cfwheels.version}" flags="ig" byline="true" encoding="UTF-8">
