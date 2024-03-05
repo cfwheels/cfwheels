@@ -8,13 +8,13 @@
 	</description>
 
 	<!-- UPDATE ON EACH VERSION CYCLE -->
-	<property name="groupID"				value="cfwheels" />
-	<property name="cfwheels.slug"	 		value="cfwheels"/>
+	<property name="groupID"				        value="cfwheels" />
+	<property name="cfwheels.slug"	 		    value="cfwheels"/>
 	<property name="cfwheels.core.slug"	 		value="cfwheels"/>
 	<property name="cfwheels.base.slug"	 		value="cfwheels-base-template"/>
 
   <!-- Default environment check, if not passed via -Denvironment -->
-	<condition property="environment" value="local">
+	<condition property="environment"       value="local">
 		<not><isset property="environment" /></not>
 	</condition>
 
@@ -178,9 +178,9 @@
 
 		<copy todir="${dir.build.base}/cfwheels" encoding="UTF-8" overwrite="true">
 			<fileset dir="${basedir}">
-				<include name="app/**"/>
-				<include name="puclic/**"/>
-				<include name="tests/**"/>
+				<include name="app"/>
+				<include name="puclic"/>
+				<include name="tests"/>
 			</fileset>
 		</copy>
 
