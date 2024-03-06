@@ -32,7 +32,7 @@
                             }
                         }
                         
-                        if (len(filteredSuites) > 0) {
+                        if (arrayLen(filteredSuites) > 0) {
                             bundle.suiteStats = filteredSuites;
                             arrayAppend(filteredBundles, bundle);
                         }
