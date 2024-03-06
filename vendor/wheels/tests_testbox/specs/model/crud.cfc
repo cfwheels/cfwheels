@@ -1069,7 +1069,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that fromClause", () => {
+		describe("Tests that $fromClause", () => {
 
 			it("is working", () => {
 				result = g.model("author").$fromClause(include = "")

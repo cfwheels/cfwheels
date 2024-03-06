@@ -2,7 +2,7 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
 
-        describe("Tests that runfilters", () => {
+        describe("Tests that $runfilters", () => {
 
         	beforeEach(() => {
                 params = {controller = "filters", action = "index"}

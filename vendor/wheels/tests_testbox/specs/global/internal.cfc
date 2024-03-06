@@ -4,7 +4,7 @@ component extends="testbox.system.BaseSpec" {
 
 		g = application.wo
 
-		describe("Tests that args", () => {
+		describe("Tests that $args", () => {
 
 			it("throws error when declaring missing required arguments", () => {
 				args = {}
@@ -62,7 +62,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that cgiscope", () => {
+		describe("Tests that $cgiscope", () => {
 
 			beforeEach(() => {
 				cgi_scope = {}
@@ -136,7 +136,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that checkMinimumVersion", () => {
+		describe("Tests that $checkMinimumVersion", () => {
 
 			it("checks railo invalid", () => {
 				expect(len(g.$checkMinimumVersion(version="4.3.0.003", engine="Railo"))).toBeGT(0)
@@ -183,7 +183,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that fullDomainString", () => {
+		describe("Tests that $fullDomainString", () => {
 
 			it("is returing protocol and port", () => {
 				r = g.$fullDomainString("http://www.cfwheels.com")
@@ -206,7 +206,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that fullCgiDomainString", () => {
+		describe("Tests that $fullCgiDomainString", () => {
 
 			it("gets full domain string from cgi https", () => {
 				r = g.$fullCgiDomainString({server_name = "www.cfwheels.com", server_port = 443, server_port_secure = 1})
@@ -233,7 +233,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that getrequesttimeout", () => {
+		describe("Tests that $getrequesttimeout", () => {
 
 			it("is getting timeout", () => {
 				setting requestTimeout=666;
@@ -242,7 +242,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that hashedkey", () => {
+		describe("Tests that $hashedkey", () => {
 
 			it("accepts undefined value", () => {
 				$assert.notThrows(function(string value1 = "foo", string value2) {
@@ -291,7 +291,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that listToStruct", () => {
+		describe("Tests that $listToStruct", () => {
 			
 			it("is creating struct from list", () => {
 				actual = g.$listToStruct("a,b,c")
@@ -303,7 +303,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that wildcardDomainMatchCGI", () => {
+		describe("Tests that $wildcardDomainMatchCGI", () => {
 			
 			it("matches simple exact http", () => {
 				r = g.$wildcardDomainMatchCGI(

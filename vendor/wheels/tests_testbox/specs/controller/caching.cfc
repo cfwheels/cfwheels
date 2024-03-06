@@ -2,7 +2,7 @@ component extends="testbox.system.BaseSpec" {
 	
 	function run() {
 
-		describe("Tests that addCachableAction", () => {
+		describe("Tests that $addCachableAction", () => {
 
 			it("is adding cachable action", () => {
 				_controller = application.wo.controller(name = "dummy")
@@ -20,7 +20,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that cachableActions", () => {
+		describe("Tests that $cachableActions", () => {
 
 			it("is getting cachable actions", () => {
 				_controller = application.wo.controller(name = "dummy")
@@ -33,7 +33,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that cacheSettingsForAction", () => {
+		describe("Tests that $cacheSettingsForAction", () => {
 
 			it("is getting cache settings for action", () => {
 				_controller = application.wo.controller(name = "dummy")
@@ -44,7 +44,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that clearCachableActions", () => {
+		describe("Tests that $clearCachableActions", () => {
 
 			it("is clearing cachable actions", () => {
 				_controller = application.wo.controller(name = "dummy")
@@ -56,7 +56,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that hasCachableActions", () => {
+		describe("Tests that $hasCachableActions", () => {
 
 			it("is checking cachable action", () => {
 				_controller = application.wo.controller(name = "dummy")
@@ -72,7 +72,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that setCachableActions", () => {
+		describe("Tests that $setCachableActions", () => {
 
 			it("is setting cachable actions", () => {
 				_controller = application.wo.controller(name = "dummy")

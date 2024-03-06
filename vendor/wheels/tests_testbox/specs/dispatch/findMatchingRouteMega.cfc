@@ -85,7 +85,7 @@ component extends="testbox.system.BaseSpec" {
 	
 	function run() {
 		
-		describe("Tests that findMatchingRouteMega", () => {
+		describe("Tests that $findMatchingRouteMega", () => {
 
 			beforeEach(() => {
 				_originalForm = Duplicate(form)

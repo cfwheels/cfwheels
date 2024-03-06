@@ -4,7 +4,7 @@ component extends="testbox.system.BaseSpec" {
 
 		g = application.wo
 
-		describe("Tests that findMatchingRoute", () => {
+		describe("Tests that $findMatchingRoute", () => {
 
 			beforeEach(() => {
 				dispatch = CreateObject("component", "wheels.Dispatch")
