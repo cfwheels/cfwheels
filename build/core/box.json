@@ -19,9 +19,6 @@
         "type":"git",
         "URL":"https://github.com/cfwheels/cfwheels"
     },
-    "installPaths":{
-        "cfwheels":"wheels/"
-    },
     "keywords":[
         "mvc",
         "rails",

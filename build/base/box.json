@@ -35,7 +35,7 @@
 			"cfwheels-plugins":"vendor/"
 		},
     "installPaths":{
-        "cfwheels":"vendor/cfwheels/",
+        "cfwheels":"vendor/wheels/",
 				"wirebox":"vendor/wirebox/",
 				"testbox":"vendor/testbox/"
     },
