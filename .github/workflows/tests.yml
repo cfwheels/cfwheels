@@ -118,23 +118,23 @@ jobs:
         run: |
           docker/github/core-tests.sh ${{ matrix.cfengine }} ${{ matrix.dbengine }}
 
-      # - name: Set cfengine version env
-      #   run: echo "CFENGINE_VERSION=$(box echo ${serverInfo.engineName@wheels-${{ matrix.cfengine }}}@${serverInfo.engineVersion@wheels-${{ matrix.cfengine }}})" >> $GITHUB_ENV
+      - name: Set cfengine version env
+        run: echo "CFENGINE_VERSION=$(box echo ${serverInfo.engineName@wheels-${{ matrix.cfengine }}}@${serverInfo.engineVersion@wheels-${{ matrix.cfengine }}})" >> $GITHUB_ENV
 
-      # - name: Publish Test Results
-      #   uses: EnricoMi/publish-unit-test-result-action@v2
-      #   if: always()
-      #   with:
-      #     files: tests/results/**/*.xml
-      #     check_name: "${{ env.CFENGINE_VERSION }} Test Results"
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: tests/results/**/*.xml
+          check_name: "${{ env.CFENGINE_VERSION }} Test Results"
 
-      # - name: Upload Test Results Artifacts
-      #   if: always()
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: coldbox-test-results-${{ matrix.cfengine }}
-      #     path: |
-      #       tests/results/**/*
+      - name: Upload Test Results Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coldbox-test-results-${{ matrix.cfengine }}
+          path: |
+            tests/results/**/*
 
       - name: Slack Notification
         # Only on failures and NOT in pull requests
