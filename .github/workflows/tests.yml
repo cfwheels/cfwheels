@@ -24,7 +24,7 @@ jobs:
         dbengine: ["mysql", "postgres", "sqlserver", "h2"]
         exclude:
           - cfengine: lucee@5
-           dbengine: mysql
+            dbengine: mysql
           - cfengine: lucee@5
             dbengine: postgres
           - cfengine: lucee@5
