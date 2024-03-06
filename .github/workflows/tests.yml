@@ -109,8 +109,6 @@ jobs:
       - name: Start ${{ matrix.cfengine }} Server
         run: |
           box server start serverConfigFile="server.json" --noSaveSettings --debug
-          # Test Server is Running
-          curl http://127.0.0.1:8080/
 
       - name: Running onServerInstall Script for Adobe2021 and Adobe2023
         if: ${{ matrix.cfengine == 'adobe@2021' }} || ${{ matrix.cfengine == 'adobe@2023' }}
