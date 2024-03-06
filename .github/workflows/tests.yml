@@ -106,15 +106,15 @@ jobs:
           # Core dependencies
           box install
 
-      - name: Running onServerInstall Script for Adobe2021 and Adobe2023
-        if: ${{ matrix.cfengine == 'adobe@2021' }} || ${{ matrix.cfengine == 'adobe@2023' }}
-        run: box run-script onServerInstall
-
       - name: Start ${{ matrix.cfengine }} Server
         run: |
           box server start serverConfigFile="server.json" --noSaveSettings --debug
           # Test the harness
           # curl http://127.0.0.1:8080/test-harness
+          
+      - name: Running onServerInstall Script for Adobe2021 and Adobe2023
+        if: ${{ matrix.cfengine == 'adobe@2021' }} || ${{ matrix.cfengine == 'adobe@2023' }}
+        run: box run-script onServerInstall
 
       - name: Run Tests ${{ matrix.cfengine }} ${{ matrix.dbengine }}
         run: |
