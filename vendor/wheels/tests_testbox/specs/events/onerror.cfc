@@ -18,7 +18,8 @@ component extends="testbox.system.BaseSpec" {
 				}else{
 					expected = "/wheels/tests_testbox/specs/events/onerror.cfc:9" 
 				}
-
+writeDump(actual);
+abort;
 				expect(actual).toInclude(expected)
 			})
 		})
