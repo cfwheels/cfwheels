@@ -78,8 +78,6 @@ component output="false" {
 	function onApplicationStart() {
 		include "/app/config/app.cfm";
 		// include "/wheels/controller/appfunctions.cfm";
-		writeDump(this.mappings);
-		abort;
 		wirebox = new wirebox.system.ioc.Injector("wheels.wirebox");
 
 		/* wheels/global object */
