@@ -2,7 +2,7 @@ component extends="testbox.system.BaseSpec" {
 
 	function run() {
 
-		describe("Tests that $callaction", () => {
+		describe("Tests that callaction", () => {
 
 			beforeEach(() => {
 				params = {controller = "test", action = "test"}
@@ -20,7 +20,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that $performedRenderOrRedirect", () => {
+		describe("Tests that performedRenderOrRedirect", () => {
 
 			beforeEach(() => {
 				params = {controller = "dummy", action = "dummy"}

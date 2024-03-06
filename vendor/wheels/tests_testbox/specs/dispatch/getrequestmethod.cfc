@@ -2,7 +2,7 @@ component extends="testbox.system.BaseSpec" {
 	
 	function run() {
 
-		describe("Tests that $getrequestmethod", () => {
+		describe("Tests that getrequestmethod", () => {
 
 			beforeEach(() => {
 				_originalForm = Duplicate(form)

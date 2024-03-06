@@ -4,7 +4,7 @@ component extends="testbox.system.BaseSpec" {
 
 		g = application.wo
 
-		describe("Tests that $objectName", () => {
+		describe("Tests that objectName", () => {
 
 			beforeEach(() => {
 				_controller = g.controller(name = "ControllerWithNestedModel")

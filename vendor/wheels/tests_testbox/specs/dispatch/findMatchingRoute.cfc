@@ -23,7 +23,7 @@ component extends="testbox.system.BaseSpec" {
 
 	function run() {
 		
-		describe("Tests that $findMatchingRoute", () => {
+		describe("Tests that findMatchingRoute", () => {
 
 			beforeEach(() => {
 				_originalForm = Duplicate(form)

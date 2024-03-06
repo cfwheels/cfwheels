@@ -4,7 +4,7 @@ component extends="testbox.system.BaseSpec" {
 
 		g = application.wo
 
-		describe("Tests that $element", () => {
+		describe("Tests that element", () => {
 
 			it("works with all options", () => {
 				_controller = g.controller(name = "dummy")
@@ -23,7 +23,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that $getObject", () => {
+		describe("Tests that getObject", () => {
 
 			include "/wheels/view/miscellaneous.cfm"
 
@@ -49,7 +49,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 		})
 
-		describe("Tests that $tagID and $tagName", () => {
+		describe("Tests that tagID and tagName", () => {
 
 			beforeEach(() => {
 				_controller = g.controller(name = "dummy")

@@ -2,7 +2,7 @@ component extends="testbox.system.BaseSpec" {
 
 	function run() {
 
-		describe("Tests that $listclean", () => {
+		describe("Tests that listclean", () => {
 
 			it("cleans default delimeter", () => {
 				mylist = "tony,    per   ,  james    ,,, chris   , raul ,,,,  peter"

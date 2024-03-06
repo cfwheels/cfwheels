@@ -2,7 +2,7 @@ component extends="testbox.system.BaseSpec" {
 
 	function run() {
 
-		describe("Tests that $yearMonthHourMinuteSecondSelectTagContent", () => {
+		describe("Tests that yearMonthHourMinuteSecondSelectTagContent", () => {
 
 			beforeEach(() => {
 				pkg.controller = application.wo.controller("dummy")

@@ -2,7 +2,7 @@ component extends="testbox.system.BaseSpec" {
 
 	function run() {
 
-		describe("Tests that $requestcontenttype", () => {
+		describe("Tests that requestcontenttype", () => {
 
 			beforeEach(() => {
 				params = {controller = "dummy", action = "dummy"}

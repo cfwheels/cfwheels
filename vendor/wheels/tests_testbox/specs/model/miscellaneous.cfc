@@ -4,7 +4,7 @@ component extends="testbox.system.BaseSpec" {
 
 		g = application.wo
 
-		describe("Tests that $objectFileName", () => {
+		describe("Tests that objectFileName", () => {
 
 			it("returns model class name in same case as file wo expandpath", () => {
 				actual = g.$objectFileName(name = "PhotoGallery", objectPath = "/wheels/tests_testbox/_assets/models/", type = "model")

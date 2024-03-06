@@ -2,7 +2,7 @@ component extends="testbox.system.BaseSpec" {
 
 	function run() {
 
-		describe("Tests that $argumentsForPartial", () => {
+		describe("Tests that argumentsForPartial", () => {
 
 			it("name is not a function", () => {
 				params = {controller = "dummy", action = "dummy"}
