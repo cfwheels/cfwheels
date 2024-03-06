@@ -23,6 +23,8 @@ echo ${result_file}
 
 http_code=$(curl -s -o "${result_file}" --write-out "%{http_code}" "${test_url}";)
 
+echo ${http_code}
+
 echo "\nls /tmp/:"
 ls /tmp -la
 
