@@ -104,14 +104,14 @@ component output="false" {
 			application.wo.$simpleLock(name = local.lockName, execute = "onApplicationStart", type = "exclusive", timeout = 180, executeArgs = local.executeArgs);
 		}
 
-		local.executeArgs = {"componentReference" = "wheels.events.eventmethods"};
+		local.executeArgs = {"componentReference" = "wheels.events.EventMethods"};
 		application.wo.$simpleLock(name = local.lockName, execute = "$runOnSessionStart", type = "readOnly", timeout = 180, executeArgs = local.executeArgs);
 	}
 
 	public void function onSessionEnd( struct SessionScope, struct ApplicationScope ) {
 		local.lockName = "reloadLock" & arguments.applicationScope.applicationName;
 
-		arguments.componentReference = "wheels.events.eventmethods";
+		arguments.componentReference = "wheels.events.EventMethods";
 		application.wo.$simpleLock(
 			name = local.lockName,
 			execute = "$runOnSessionEnd",
@@ -154,7 +154,7 @@ component output="false" {
 		}
 
 		// Run the rest of the request start code.
-		arguments.componentReference = "wheels.events.eventmethods";
+		arguments.componentReference = "wheels.events.EventMethods";
 		application.wo.$simpleLock(
 			name = local.lockName,
 			execute = "$runOnRequestStart",
@@ -177,7 +177,7 @@ component output="false" {
 	public void function onRequestEnd( string targetPage ) {
 		local.lockName = "reloadLock" & application.applicationName;
 
-		arguments.componentReference = "wheels.events.eventmethods";
+		arguments.componentReference = "wheels.events.EventMethods";
 
 		application.wo.$simpleLock(
 			name = local.lockName,
@@ -214,7 +214,7 @@ component output="false" {
 		setting requestTimeout=local.requestTimeout;
 
 		application.wo.$initializeRequestScope();
-		arguments.componentReference = "wheels.events.eventmethods";
+		arguments.componentReference = "wheels.events.EventMethods";
 
 		local.lockName = "reloadLock" & application.applicationName;
 		local.rv = application.wo.$simpleLock(
@@ -230,7 +230,7 @@ component output="false" {
 	public boolean function onMissingTemplate( string targetPage ) {
 		local.lockName = "reloadLock" & application.applicationName;
 
-		arguments.componentReference = "wheels.events.eventmethods";
+		arguments.componentReference = "wheels.events.EventMethods";
 
 		application.wo.$simpleLock(
 			name = local.lockName,
