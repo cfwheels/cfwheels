@@ -13,7 +13,14 @@ component extends="testbox.system.BaseSpec" {
 
 				actual = application.wo.$includeAndReturnOutput($template = "/wheels/events/onerror/cfmlerror.cfm", exception = exception)
 
-				expected = "\wheels\tests_testbox\specs\events\onerror.cfc:9"
+				system = CreateObject("java", "java.lang.System").getProperties()
+
+				if(findNoCase('Windows', system['os.name'])){
+					expected = "\wheels\tests_testbox\specs\events\onerror.cfc:9"
+				}else {
+					expected = "/wheels/tests_testbox/specs/events/onerror.cfc:9"
+				}
+
 				expect(actual).toInclude(expected)
 			})
 		})
