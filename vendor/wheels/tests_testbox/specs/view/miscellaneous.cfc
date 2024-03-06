@@ -1,5 +1,7 @@
 component extends="testbox.system.BaseSpec" {
 
+	include "/wheels/view/miscellaneous.cfm"
+	
 	function run() {
 
 		g = application.wo
@@ -25,7 +27,7 @@ component extends="testbox.system.BaseSpec" {
 
 		describe("Tests that $getObject", () => {
 
-			include "/wheels/view/miscellaneous.cfm"
+			
 
 			it("is getting object from request scope", () => {
 				request.obj = g.model("post").findOne()

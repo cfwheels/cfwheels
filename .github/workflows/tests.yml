@@ -23,8 +23,8 @@ jobs:
         cfengine: [ "lucee@5", "lucee@6", "adobe@2018", "adobe@2021", "adobe@2023" ]
         dbengine: ["mysql", "postgres", "sqlserver", "h2"]
         exclude:
-          #- cfengine: lucee@5
-          #  dbengine: mysql
+          # - cfengine: lucee@5
+          #   dbengine: mysql
           # - cfengine: lucee@5
           #   dbengine: postgres
           # - cfengine: lucee@5
@@ -39,28 +39,28 @@ jobs:
           #   dbengine: sqlserver
           # - cfengine: lucee@6
           #   dbengine: h2
-          - cfengine: adobe@2018
-            dbengine: mysql
-          - cfengine: adobe@2018
-            dbengine: postgres
-          - cfengine: adobe@2018
-            dbengine: sqlserver
+          # - cfengine: adobe@2018
+          #   dbengine: mysql
+          # - cfengine: adobe@2018
+          #   dbengine: postgres
+          # - cfengine: adobe@2018
+          #   dbengine: sqlserver
           - cfengine: adobe@2018
             dbengine: h2
-          - cfengine: adobe@2021
-            dbengine: mysql
-          - cfengine: adobe@2021
-            dbengine: postgres
-          - cfengine: adobe@2021
-            dbengine: sqlserver
+          # - cfengine: adobe@2021
+          #   dbengine: mysql
+          # - cfengine: adobe@2021
+          #   dbengine: postgres
+          # - cfengine: adobe@2021
+          #   dbengine: sqlserver
           - cfengine: adobe@2021
             dbengine: h2
-          - cfengine: adobe@2023
-            dbengine: mysql
-          - cfengine: adobe@2023
-            dbengine: postgres
-          - cfengine: adobe@2023
-            dbengine: sqlserver
+          # - cfengine: adobe@2023
+          #   dbengine: mysql
+          # - cfengine: adobe@2023
+          #   dbengine: postgres
+          # - cfengine: adobe@2023
+          #   dbengine: sqlserver
           - cfengine: adobe@2023
             dbengine: h2
 
@@ -111,6 +111,10 @@ jobs:
           box server start serverConfigFile="server.json" --noSaveSettings --debug
           # Test the harness
           # curl http://127.0.0.1:8080/test-harness
+          
+      - name: Running onServerInstall Script for Adobe2021 and Adobe2023
+        if: ${{ matrix.cfengine == 'adobe@2021' }} || ${{ matrix.cfengine == 'adobe@2023' }}
+        run: box run-script onServerInstall
 
       - name: Run Tests ${{ matrix.cfengine }} ${{ matrix.dbengine }}
         run: |

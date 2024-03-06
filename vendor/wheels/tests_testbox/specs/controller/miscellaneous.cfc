@@ -151,7 +151,7 @@ component extends="testbox.system.BaseSpec" {
 			})
 
 			it("checks single file exists", () => {
-				args.file = "/wheels/tests_testbox/_assets/files/sendfile.txt"
+				args.file = "/wheels/tests_testbox/_assets/files/sendFile.txt"
 				r = _controller.sendFile(argumentCollection = args)
 
 				expect(r.file.right(12)).toBe("sendFile.txt")
