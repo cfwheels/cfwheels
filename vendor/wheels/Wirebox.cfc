@@ -3,7 +3,7 @@ component extends="wirebox.system.ioc.config.Binder" {
         // wireBox = {
         //     scanLocations = ["wheels"]
         // };
-        map('global').to('wheels.global');
+        map('global').to('wheels.Global');
 
         map('eventmethods').to('wheels.events.EventMethods');
         
