@@ -19,29 +19,43 @@
             }
             // Check if 'only' parameter is provided in the URL
             if (structKeyExists(url, "only") && url.only eq "failure,error") {
-                // Filter test results
-                filteredBundles = [];
-                
-                for (bundle in DeJsonResult.bundleStats) {
-                    if (bundle.totalError > 0 || bundle.totalFail > 0) {
-                        filteredSuites = [];
-                        
-                        for (suite in bundle.suiteStats) {
-                            if (suite.totalError > 0 || suite.totalFail > 0) {
-                                arrayAppend(filteredSuites, suite);
+                if(DeJsonResult.totalFail > 0 || DeJsonResult.totalError > 0){  
+
+                    // Filter test results
+                    filteredBundles = [];
+                    
+                    for (bundle in DeJsonResult.bundleStats) {
+                        if (bundle.totalError > 0 || bundle.totalFail > 0) {
+                            filteredSuites = [];
+
+                            for (suite in bundle.suiteStats) {
+                                if (suite.totalError > 0 || suite.totalFail > 0) {
+                                    arrayAppend(filteredSuites, suite);
+                                }
+                            }
+
+                            if (arrayLen(filteredSuites) > 0) {
+                                bundle.suiteStats = filteredSuites;
+                                arrayAppend(filteredBundles, bundle);
                             }
                         }
-                        
-                        if (arrayLen(filteredSuites) > 0) {
-                            bundle.suiteStats = filteredSuites;
-                            arrayAppend(filteredBundles, bundle);
-                        }
+                    }
+                
+                    // Update the result with filtered data
+                    DeJsonResult.bundleStats = filteredBundles;
+                    result = serializeJSON(DeJsonResult);
+                    writeOutput(result)
+                }else{
+                    for(bundle in DeJsonResult.bundleStats){
+                        writeOutput("Bundle: #bundle.name##Chr(13)##Chr(10)#")
+                        writeOutput("CFML Engine: #DeJsonResult.CFMLEngine# #DeJsonResult.CFMLEngineVersion##Chr(13)##Chr(10)#")
+                        writeOutput("Duration: #bundle.totalDuration#ms#Chr(13)##Chr(10)#")
+                        writeOutput("Labels: #ArrayToList(DeJsonResult.labels, ', ')##Chr(13)##Chr(10)#")
+                        writeOutput("╔═══════════════════════════════════════════════════════════╗#Chr(13)##Chr(10)#║ Suites  ║ Specs   ║ Passed  ║ Failed  ║ Errored ║ Skipped ║#Chr(13)##Chr(10)#╠═══════════════════════════════════════════════════════════╣#Chr(13)##Chr(10)#║ #NumberFormat(bundle.totalSuites,'999')#     ║ #NumberFormat(bundle.totalSpecs,'999')#     ║ #NumberFormat(bundle.totalPass,'999')#     ║ #NumberFormat(bundle.totalFail,'999')#     ║ #NumberFormat(bundle.totalError,'999')#     ║ #NumberFormat(bundle.totalSkipped,'999')#     ║#Chr(13)##Chr(10)#╚═══════════════════════════════════════════════════════════╝#Chr(13)##Chr(10)##Chr(13)##Chr(10)##Chr(13)##Chr(10)#")
                     }
                 }
-            
-                // Update the result with filtered data
-                DeJsonResult.bundleStats = filteredBundles;
-                result = serializeJSON(DeJsonResult);
+            }else{
+                writeOutput(result)
             }
         }
         else if (url.format eq "txt") {
@@ -49,20 +63,22 @@
                 reporter = "testbox.system.reports.TextReporter"
             )        
             cfcontent(type="text/plain");
+            writeOutput(result)
         }
         else if(url.format eq "junit"){
             result = testBox.run(
                 reporter = "testbox.system.reports.ANTJUnitReporter"
             )
             cfcontent(type="text/xml");
+            writeOutput(result)
         }
     }
     else{
         result = testBox.run(
             reporter = "testbox.system.reports.SimpleReporter"
         )
+        writeOutput(result)
     }
-    writeOutput(result)
     // reset the original environment
     application.wheels = application.$$$wheels
     structDelete(application, "$$$wheels")
