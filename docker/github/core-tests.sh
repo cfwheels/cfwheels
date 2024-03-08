@@ -14,7 +14,7 @@ dbengine=${2}
 port="$(get_port ${cfengine})"
 db="$(get_db ${dbengine})"
 
-test_url="http://127.0.0.1:${port}/wheels/testbox?db=${db}&format=json&only=failure,error"
+test_url="http://127.0.0.1:${port}/wheels/testbox?db=${db}&format=json&only=failure,error&method=runRemote&directory=&testSpecs=is%20setting%20properties%20on%20multiple%20objects&testBundles=wheels%2Etests_testbox%2Especs%2Emodel%2Ecallbacks&opt_run=true&coverageEnabled=false"
 result_file="/tmp/${cfengine}-${db}-result.txt"
 
 echo "\nRUNNING SUITE (${cfengine}/${dbengine}):\n"
