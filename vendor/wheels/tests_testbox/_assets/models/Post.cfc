@@ -11,8 +11,6 @@ component extends="Model" {
 	}
 
 	function afterFindCallback() {
-		writeDump(arguments);
-		abort;
 		if (StructIsEmpty(arguments)) {
 			this.title = "setTitle";
 			this.views = this.views + 100;
