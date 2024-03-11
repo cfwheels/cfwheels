@@ -13,6 +13,9 @@ jobs:
   tests:
     name: Test Suites
     runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ matrix.cfengine }}-${{ matrix.dbengine }}
+      cancel-in-progress: true
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
@@ -25,8 +28,8 @@ jobs:
         exclude:
           # - cfengine: lucee@5
           #   dbengine: mysql
-          - cfengine: lucee@5
-            dbengine: postgres
+          # - cfengine: lucee@5
+          #   dbengine: postgres
           - cfengine: lucee@5
             dbengine: sqlserver
           - cfengine: lucee@5
