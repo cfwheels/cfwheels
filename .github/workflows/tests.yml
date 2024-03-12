@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-20.04
     continue-on-error: ${{ matrix.experimental }}
     strategy:
+      max-parallel: 1
       fail-fast: false
       matrix:
         commandbox_version: [ "6.0.0" ]
@@ -25,8 +26,8 @@ jobs:
         exclude:
           # - cfengine: lucee@5
           #   dbengine: mysql
-          - cfengine: lucee@5
-            dbengine: postgres
+          # - cfengine: lucee@5
+          #   dbengine: postgres
           - cfengine: lucee@5
             dbengine: sqlserver
           - cfengine: lucee@5
