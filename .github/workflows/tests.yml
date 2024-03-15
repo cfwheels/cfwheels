@@ -15,48 +15,48 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        cf: [lucee@5, lucee@6, adobe@2018, adobe@2021, adobe@2023]
+        cf: [lucee5, lucee6, adobe2018, adobe2021, adobe2023]
         db: [mysql, postgres, sqlserver, h2]
         exclude:
-#          - cf: lucee@5
+#          - cf: lucee5
 #            db: mysql
-#          - cf: lucee@5
+#          - cf: lucee5
 #            db: postgres
-#          - cf: lucee@5
+#          - cf: lucee5
 #            db: sqlserver
-#          - cf: lucee@5
+#          - cf: lucee5
 #            db: h2
-#          - cf: lucee@6
+#          - cf: lucee6
 #            db: mysql
-#          - cf: lucee@6
+#          - cf: lucee6
 #            db: postgres
-#          - cf: lucee@6
+#          - cf: lucee6
 #            db: sqlserver
-#          - cf: lucee@6
+#          - cf: lucee6
 #            db: h2
-#          - cf: adobe@2018
+#          - cf: adobe2018
 #            db: mysql
-#          - cf: adobe@2018
+#          - cf: adobe2018
 #            db: postgres
-#          - cf: adobe@2018
+#          - cf: adobe2018
 #            db: sqlserver
-          - cf: adobe@2018
+          - cf: adobe2018
             db: h2
-#          - cf: adobe@2021
+#          - cf: adobe2021
 #            db: mysql
-#          - cf: adobe@2021
+#          - cf: adobe2021
 #            db: postgres
-#          - cf: adobe@2021
+#          - cf: adobe2021
 #            db: sqlserver
-          - cf: adobe@2021
+          - cf: adobe2021
             db: h2
-#          - cf: adobe@2023
+#          - cf: adobe2023
 #            db: mysql
-#          - cf: adobe@2023
+#          - cf: adobe2023
 #            db: postgres
-#          - cf: adobe@2023
+#          - cf: adobe2023
 #            db: sqlserver
-          - cf: adobe@2023
+          - cf: adobe2023
             db: h2
 
     steps:

@@ -8,7 +8,7 @@ services:
     ports:
       - "3000:8080"
 
-  lucee@5:
+  lucee5:
     build:
       context: ./
       dockerfile: ./docker/lucee@5/Dockerfile
@@ -25,7 +25,7 @@ services:
     ports:
       - "60005:8080"
 
-  lucee@6:
+  lucee6:
     build:
       context: ./
       dockerfile: ./docker/lucee@6/Dockerfile
@@ -42,7 +42,7 @@ services:
     ports:
       - "60006:8080"
 
-  adobe@2018:
+  adobe2018:
     build:
       context: ./
       dockerfile: ./docker/adobe@2018/Dockerfile
@@ -59,7 +59,7 @@ services:
     ports:
       - "62018:8080"
 
-  adobe@2021:
+  adobe2021:
     build:
       context: ./
       dockerfile: ./docker/adobe@2021/Dockerfile
@@ -76,7 +76,7 @@ services:
     ports:
       - "62021:8080"
 
-  adobe@2023:
+  adobe2023:
     build:
       context: ./
       dockerfile: ./docker/adobe@2023/Dockerfile
