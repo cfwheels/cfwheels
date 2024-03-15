@@ -6,7 +6,7 @@
 			"host":"localhost",
 			"webroot":"public",
 			"http":{
-					"port":"60005",
+					"port":"8080",
 					"enable":true
 			},
 			"rewrites":{
@@ -16,8 +16,8 @@
 	},
 	"app":{
 			"cfengine":"Lucee@5",
-			"libDirs":"docker/lucee5/lib",
-			"serverHomeDirectory":".engine/lucee5"
+			"libDirs":"docker/lucee@5/lib",
+			"serverHomeDirectory":".engine/lucee@5"
 	},
 	"cfconfigFile":"CFConfig.json"
 }
