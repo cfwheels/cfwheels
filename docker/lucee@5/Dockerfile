@@ -12,13 +12,13 @@ ENV ENV_MODE                "remote"
 ENV BOX_SERVER_CFCONFIGFILE "/wheels-test-suite/docker/lucee@5/CFConfig.json"
 ENV BOX_SERVER_PROFILE      "none"
 
-# Change working directory to the application directory
-WORKDIR ${APP_DIR}
+RUN cd ..
+RUN ls -la
 
 # WARM UP THE SERVER
 RUN ${BUILD_DIR}/util/warmup-server.sh
 
 # Install our box.json dependencies
-RUN cd ${APP_DIR} && box install
+#RUN cd ${APP_DIR} && box install
 
 RUN echo "------------------------------- Ending Dockerfile -------------------------------"
