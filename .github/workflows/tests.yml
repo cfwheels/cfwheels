@@ -73,6 +73,15 @@ jobs:
       - name: Or Start just the Application Server for H2 testing ${{ matrix.cf }}
         if: ${{ matrix.db == 'h2' }}
         run: docker compose up ${{ matrix.cf }} --detach --wait
+      
+      - name: Install Dependencies
+        run: |
+          # Core dependencies
+          box install
+
+      - name: Running onServerInstall Script for Adobe2021 and Adobe2023
+        if: ${{ matrix.cf == 'adobe2021' }} || ${{ matrix.cf == 'adobe2023' }}
+        run: box run-script onServerInstall
 
       - name: Run core tests ${{ matrix.cf }} ${{ matrix.db }}
         run: docker/github/core-tests.sh ${{ matrix.cf }} ${{ matrix.db }}
