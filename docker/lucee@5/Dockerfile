@@ -13,6 +13,7 @@ ENV BOX_SERVER_CFCONFIGFILE "/wheels-test-suite/docker/lucee@5/CFConfig.json"
 ENV BOX_SERVER_PROFILE      "none"
 
 COPY CFConfig.json /wheels-test-suite/docker/lucee@5/
+COPY box.json /wheels-test-suite/
 
 WORKDIR ${APP_DIR}
 
