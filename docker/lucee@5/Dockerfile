@@ -12,11 +12,13 @@ ENV ENV_MODE                "remote"
 ENV BOX_SERVER_CFCONFIGFILE "/wheels-test-suite/docker/lucee@5/CFConfig.json"
 ENV BOX_SERVER_PROFILE      "none"
 
+WORKDIR ${APP_DIR}
+
 COPY CFConfig.json /wheels-test-suite/docker/lucee@5/
 COPY box.json /wheels-test-suite/
 COPY server.json /wheels-test-suite/docker/lucee@5/
 
-WORKDIR ${APP_DIR}
+RUN pwd
 
 RUN ls -la
 
