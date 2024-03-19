@@ -19,5 +19,5 @@
 			"libDirs":"docker/lucee@5/lib",
 			"serverHomeDirectory":".engine/lucee@5"
 	},
-	"cfconfigFile":"CFConfig.json"
+	"cfconfigFile":"docker/lucee@5/CFConfig.json"
 }
