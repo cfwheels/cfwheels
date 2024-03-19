@@ -4,7 +4,7 @@ echo "------------------------------- Starting Core-tests.sh -------------------
 
 pwd
 ls ../
-box server status
+# box server status
 
 cfengine=${1}
 dbengine=${2}
