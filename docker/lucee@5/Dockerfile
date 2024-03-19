@@ -12,6 +12,8 @@ ENV ENV_MODE                "remote"
 ENV BOX_SERVER_CFCONFIGFILE "/wheels-test-suite/docker/lucee@5/CFConfig.json"
 ENV BOX_SERVER_PROFILE      "none"
 
+COPY CFConfig.json /wheels-test-suite/docker/lucee@5/
+
 WORKDIR ${APP_DIR}
 
 # WARM UP THE SERVER
