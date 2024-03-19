@@ -4,14 +4,12 @@ RUN echo "------------------------------- Starting Dockerfile ------------------
 LABEL maintainer "Wheels Core Team"
 WORKDIR /wheels-test-suite
 
-COPY CFConfig.json /wheels-test-suite/docker/lucee@5/
-COPY box.json /wheels-test-suite/
-COPY server.json /wheels-test-suite/docker/lucee@5/
+COPY ../../ /wheels-test-suite
 
 #Add the H2 extension
 ADD https://ext.lucee.org/org.h2-1.3.172.lex /usr/local/lib/serverHome/WEB-INF/lucee-server/deploy/org.h2-1.3.172.lex
 
-# ENV APP_DIR                 "/wheels-test-suite"
+ENV APP_DIR                 "/wheels-test-suite"
 ENV HEALTHCHECK_URI         "http://127.0.0.1:8080/"
 ENV ENV_MODE                "remote"
 ENV BOX_SERVER_CFCONFIGFILE "/wheels-test-suite/docker/lucee@5/CFConfig.json"
