@@ -66,6 +66,9 @@ jobs:
       - name: Print Working Directory
         run: pwd
 
+      - name: Check files
+        run: ls -la
+
       - name: Building Application Server image ${{ matrix.cf }}
         if: ${{ matrix.db != 'h2' }}
         run: docker compose build ${{ matrix.cf }} --no-cache
