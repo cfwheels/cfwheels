@@ -14,8 +14,11 @@ ENV BOX_SERVER_PROFILE      "none"
 
 COPY CFConfig.json /wheels-test-suite/docker/lucee@5/
 COPY box.json /wheels-test-suite/
+COPY server.json /wheels-test-suite/docker/lucee@5/
 
 WORKDIR ${APP_DIR}
+
+RUN ls -la
 
 # WARM UP THE SERVER
 RUN ${BUILD_DIR}/util/warmup-server.sh
