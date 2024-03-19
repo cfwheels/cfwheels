@@ -4,22 +4,22 @@ echo "------------------------------- Starting functions.sh --------------------
 
 get_port () {
   case $1 in
-    lucee@5)
+    lucee5)
       echo -n "60005"
       ;;
-    lucee@6)
+    lucee6)
       echo -n "60006"
       ;;
     adobe2016)
       echo -n "62016"
       ;;
-    adobe@2018)
+    adobe2018)
       echo -n "62018"
       ;;
-    adobe@2021)
+    adobe2021)
       echo -n "62021"
       ;;
-    adobe@2023)
+    adobe2023)
       echo -n "62023"
       ;;
     mysql56)
