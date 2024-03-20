@@ -75,7 +75,7 @@ jobs:
 
       - name: Start Application Server and DB ${{ matrix.cf }} ${{ matrix.db }}
         if: ${{ matrix.db != 'h2' }}
-        run: docker compose up ${{ matrix.cf }} ${{ matrix.db }} --detach --wait
+        run: docker compose up ${{ matrix.cf }} ${{ matrix.db }} --wait
 
       - name: Or Start just the Application Server for H2 testing ${{ matrix.cf }}
         if: ${{ matrix.db == 'h2' }}
