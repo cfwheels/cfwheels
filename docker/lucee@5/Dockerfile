@@ -21,11 +21,11 @@ RUN pwd
 RUN ls -la
 
 # WARM UP THE SERVER
-RUN ${BUILD_DIR}/util/warmup-server.sh
+# RUN ${BUILD_DIR}/util/warmup-server.sh
 
 # Install our box.json dependencies
-RUN box server start
-
 RUN box install
+
+RUN box server start
 
 RUN echo "------------------------------- Ending Dockerfile -------------------------------"
