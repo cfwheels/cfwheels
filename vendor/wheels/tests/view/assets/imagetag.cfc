@@ -3,7 +3,7 @@ component extends="wheels.tests.Test" {
 	function setup() {
 		_controller = controller(name = "dummy");
 		args = {};
-		args.source = "../wheels/tests/_assets/files/cfwheels-logo.png";
+		args.source = "/wheels/tests/_assets/files/cfwheels-logo.png";
 		args.alt = "wheelstestlogo";
 		args.class = "wheelstestlogoclass";
 		args.id = "wheelstestlogoid";
@@ -119,7 +119,7 @@ component extends="wheels.tests.Test" {
 	}
 
 	function test_raises_exception_on_unsupported_image() {
-		path = "../wheels/tests/_assets/files/cfwheels-logo.txt";
+		path = "/wheels/tests/_assets/files/cfwheels-logo.txt";
 		actual = raised("_controller.imageTag(source=path)");
 		expected = "Wheels.ImageFormatNotSupported";
 		assert("actual eq expected");
