@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-22.04
     continue-on-error: ${{ matrix.experimental }}
     strategy:
-      max-parallel: 1
       fail-fast: false
       matrix:
         commandbox_version: [ "6.0.0" ]
@@ -103,7 +102,7 @@ jobs:
       - name: Run Tests ${{ matrix.cfengine }} ${{ matrix.dbengine }}
         run: |
           docker/github/core-tests.sh ${{ matrix.cfengine }} ${{ matrix.dbengine }}
-          
+
       - name: Failure Debugging Info
         if: ${{ failure() }}
         run: |
