@@ -6,7 +6,7 @@
 			"host":"localhost",
 			"webroot":"public",
 			"http":{
-					"port":"8080",
+					"port":"60005",
 					"enable":true
 			},
 			"rewrites":{
