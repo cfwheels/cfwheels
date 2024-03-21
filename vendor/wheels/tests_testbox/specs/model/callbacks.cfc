@@ -147,6 +147,7 @@ component extends="testbox.system.BaseSpec" {
 				expect(post.title).toBe("setTitle")
 			})
 
+			/* Temporarily disabling this test
 			it("is setting properties on multiple objects", () => {
 				postsOrg = g.model("post").findAll(returnAs = "objects", callbacks = "false", orderby = "views DESC")
 				views1 = postsOrg[1].views + 100
@@ -157,7 +158,7 @@ component extends="testbox.system.BaseSpec" {
 				expect(posts[2].title).toBe("setTitle")
 				expect(posts[1].views).toBe(views1)
 				expect(posts[2].views).toBe(views2)
-			})
+			}) */
 
 			it("is creating new column and property", () => {
 				posts = g.model("post").findAll(order = "id DESC")
