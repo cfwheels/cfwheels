@@ -26,7 +26,7 @@ if (StructKeyExists(application.wheels, "docs")) {
 		To add the test framework functions in the documentation. Added the Test componenet in the documentscope.
 
 		As app/test/functions/Example.cfc can be deleted, so check if that component exists then create that component's object.
-		As Example.cfc extends app.tests.Test so we are checking the Example.cfc first as that will include both component's functions.
+		As Example.cfc extends tests.Test so we are checking the Example.cfc first as that will include both component's functions.
 	*/
 	try{
 		ArrayAppend(documentScope, {"name" = "test", "scope" = CreateObject("component", "tests.functions.Example")});

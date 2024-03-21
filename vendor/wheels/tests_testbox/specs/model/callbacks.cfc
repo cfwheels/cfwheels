@@ -147,7 +147,7 @@ component extends="testbox.system.BaseSpec" {
 				expect(post.title).toBe("setTitle")
 			})
 
-			/* Temporarily disabling this test
+			/* Commenting this test temporarily to make the github actions work as it is not working in tetsbox
 			it("is setting properties on multiple objects", () => {
 				postsOrg = g.model("post").findAll(returnAs = "objects", callbacks = "false", orderby = "views DESC")
 				views1 = postsOrg[1].views + 100

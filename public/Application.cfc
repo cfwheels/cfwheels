@@ -23,6 +23,7 @@ component output="false" {
 	this.mappings["/wheels"]  = this.wheelsDir;
 	this.mappings["/wirebox"] = this.wireboxDir;
 	this.mappings["/testbox"] = this.testboxDir;
+	this.mappings["/tests"] = expandPath("../tests");
 
 	// We turn on "sessionManagement" by default since the Flash uses it.
 	this.sessionManagement = true;

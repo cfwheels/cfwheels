@@ -3,7 +3,7 @@
  * We recommend using the "functions" folder for testing controller, model and global functions.
  * The test suite is flexible though so you can safely rename folders and files to structure things how you want it.
  */
-component extends="app.tests.Test" {
+component extends="tests.Test" {
 
 	/**
 	 * Executes once before this package's first test case.
