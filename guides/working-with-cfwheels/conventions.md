@@ -108,4 +108,4 @@ For information on overriding column and property names, refer to documentation 
 
 There are many default values and settings that you can tweak in CFWheels when you need to. Some of them are conventions and others are just configurations available for you to change. You can even change argument defaults for built-in CFWheels functions to keep your code DRYer.
 
-For more details on what you can configure, read the [Configuration and Defaults](https://guides.cfwheels.org/cfwheels-guides/working-with-cfwheels/configuration-and-defaults) chapter.
+For more details on what you can configure, read the [Configuration and Defaults](https://guides.cfwheels.org/2.5.0/working-with-cfwheels/configuration-and-defaults) chapter.
