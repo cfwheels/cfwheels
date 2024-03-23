@@ -6,9 +6,24 @@ description: URL rewriting instructions for Apache
 
 ### Instructions for Apache
 
-On most Apache setups, you don't have to do anything at all to get URL rewriting to work. Just use the following `.htaccess` file and Apache will pick up and use them automatically on server start-up.
+First in your web.xml add the following servlet mapping above the default servlet mapping:
 
-There are some exceptions though...
+{% code title="web.xml" %}
+```
+ <!-- The mapping for rewriting -->
+    <servlet-mapping>
+        <servlet-name>CFMLServlet</servlet-name>
+        <url-pattern>/rewrite.cfm/*</url-pattern>
+    </servlet-mapping>
+```
+{% endcode %}
+
+For this you can use the global web.xml that for instance can be found at: /opt/lucee/tomcat/conf/web.xml.
+Or, if you are on shared hosting, use a local web.xml that for instance can be found at: yourwebroot/WEB-INF/web.xml.
+
+After that use the following `.htaccess` file and Apache will pick up and use them automatically on server start-up.
+
+Most of the time this will work. There are some exceptions though...
 
 If you have installed Apache yourself you may need to turn on the rewrite module and/or change the security settings before URL rewriting will work:
 
