@@ -1,13 +1,13 @@
 {
-    "name":"CFWheels Core",
+    "name":"Wheels Core",
     "version":"@build.version@",
-    "author":"CFWheels Core Team and Community",
-    "shortDescription":"CFWheels MVC Framework Core Directory",
+    "author":"Wheels Core Team and Community",
+    "shortDescription":"Wheels Framework Core Directory",
     "location":"ForgeboxStorage",
-    "slug":"cfwheels",
-    "directory":"/wheels",
+    "slug":"wheels-core",
+    "directory":"vendor/wheels",
     "createPackageDirectory":true,
-    "packageDirectory":"/wheels",
+    "packageDirectory":"vendor/wheels",
 		"homepage":"https://cfwheels.org/",
     "documentation":"https://docs.cfwheels.org/",
     "changelog":"https://github.com/cfwheels/cfwheels/blob/master/CHANGELOG.md",
@@ -23,7 +23,7 @@
         "mvc",
         "rails",
         "wheels",
-        "cfwheels",
+        "wheels",
         "core"
     ],
     "ignore":[

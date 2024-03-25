@@ -1,17 +1,17 @@
 {
-    "name":"CFWheels Base Template",
+    "name":"Wheels Base Template",
     "version":"@build.version@",
-    "author":"CFWheels Core Team and Community",
-    "shortDescription":"CFWheels MVC Framework Base Template",
+    "author":"Wheels Core Team and Community",
+    "shortDescription":"Wheels Framework Base Template",
     "location":"forgeboxStorage",
-    "slug":"cfwheels-base-template",
+    "slug":"wheels-base-template",
     "createPackageDirectory":false,
     "type":"cfwheels-templates",
     "keywords":[
 			"mvc",
 			"rails",
 			"wheels",
-			"cfwheels",
+			"wheels",
 			"core"
 		],
     "homepage":"https://cfwheels.org/",
@@ -35,7 +35,7 @@
 			"cfwheels-plugins":"vendor/"
 		},
     "installPaths":{
-        "cfwheels":"vendor/wheels/",
+        "wheels-core":"vendor/wheels/",
 				"wirebox":"vendor/wirebox/",
 				"testbox":"vendor/testbox/"
     },
