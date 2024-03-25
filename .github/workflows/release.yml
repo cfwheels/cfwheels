@@ -58,7 +58,7 @@ jobs:
       # publish core package
       - uses: pixl8/github-action-box-publish@v4
         with:
-          forgebox_user: cfwheels
+          forgebox_user: wheels-fw
           forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
           force: "true"
         env:
@@ -67,7 +67,7 @@ jobs:
       # publish base package
       - uses: pixl8/github-action-box-publish@v4
         with:
-          forgebox_user: cfwheels
+          forgebox_user: wheels-fw
           forgebox_pass: ${{ secrets.FORGEBOX_PASS }}
           force: "true"
         env:
@@ -80,7 +80,7 @@ jobs:
           SLACK_CHANNEL: coding
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
           SLACK_ICON_EMOJI: ":bell:"
-          SLACK_MESSAGE: 'CFWheels ${{ env.CFWHEELS_VERSION }} Built with ${{ job.status }}!'
+          SLACK_MESSAGE: 'Wheels ${{ env.CFWHEELS_VERSION }} Built with ${{ job.status }}!'
           SLACK_TITLE: "CFWheels Build"
           SLACK_USERNAME: CI
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
