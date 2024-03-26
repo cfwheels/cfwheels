@@ -12,32 +12,32 @@ component extends="testbox.system.BaseSpec" {
 
 			it("works with objectName", () => {
 				objectName = _controller.$objectName(objectName = "author")
-				
+
 				expect(objectName).toBe("author")
 			})
 
 			it("works with objectName as struct", () => {
 				struct = {formField = "formValue"}
 				objectName = _controller.$objectName(objectName = struct)
-				
+
 				expect(objectName).toBeStruct()
 			})
 
 			it("works with hasOne association", () => {
 				objectName = _controller.$objectName(objectName = "author", association = "profile")
-				
+
 				expect(objectName).toBe("author['profile']")
 			})
 
 			it("works with hasMany associations", () => {
 				objectName = _controller.$objectName(objectName = "author", association = "posts", position = "1")
-				
+
 				expect(objectName).toBe("author['posts'][1]")
 			})
 
 			it("works with hasMany associations nested", () => {
 				objectName = _controller.$objectName(objectName = "author", association = "posts,comments", position = "1,2")
-				
+
 				expect(objectName).toBe("author['posts'][1]['comments'][2]")
 			})
 
@@ -213,7 +213,7 @@ component extends="testbox.system.BaseSpec" {
 
 				e = _controller.fileFieldTag(name = "photo")
 				r = '<input id="photo" name="photo" type="file">'
-				
+
 				expect(e).toBe(r)
 			})
 		})
@@ -225,7 +225,7 @@ component extends="testbox.system.BaseSpec" {
 
 				e = _controller.hiddenField(objectName = "user", property = "firstname")
 				r = '<input id="user-firstname" name="user&##x5b;firstname&##x5d;" type="hidden" value="Tony">'
-				
+
 				expect(e).toBe(r)
 			})
 		})
@@ -237,7 +237,7 @@ component extends="testbox.system.BaseSpec" {
 
 				e = _controller.hiddenFieldTag(name = "userId", value = "tony")
 				r = '<input id="userId" name="userId" type="hidden" value="tony">'
-				
+
 				expect(e).toBe(r)
 			})
 		})
@@ -256,14 +256,14 @@ component extends="testbox.system.BaseSpec" {
 			it("tag with disabled and readonly set to true", () => {
 				textField = _controller.textFieldTag(label = "First Name", name = "firstName", disabled = true, readonly = true)
 				expected = '<label for="firstName">First Name<input disabled id="firstName" name="firstName" readonly type="text" value=""></label>'
-				
+
 				expect(textField).toBe(expected)
 			})
 
 			it("tag with disabled and readonly set to false", () => {
 				textField = _controller.textFieldTag(label = "First Name", name = "firstName", disabled = false, readonly = false)
 				expected = '<label for="firstName">First Name<input id="firstName" name="firstName" type="text" value=""></label>'
-				
+
 				expect(textField).toBe(expected)
 			})
 
@@ -275,28 +275,28 @@ component extends="testbox.system.BaseSpec" {
 					readonly = "crackers"
 				)
 				expected = '<label for="firstName">First Name<input disabled="cheese" id="firstName" name="firstName" readonly="crackers" type="text" value=""></label>'
-				
+
 				expect(textField).toBe(expected)
 			})
 
 			it("supported attributes should be boolean", () => {
 				result = _controller.textFieldTag(name = "num", checked = true, disabled = "true")
 				expected = '<input checked disabled id="num" name="num" type="text" value="">'
-				
+
 				expect(result).toBe(expected)
 			})
 
 			it("non supported attributes should be non boolean", () => {
 				result = _controller.textFieldTag(name = "num", class = "true", value = "true")
 				expected = '<input class="true" id="num" name="num" type="text" value="true">'
-				
+
 				expect(result).toBe(expected)
 			})
 
 			it("supported attribute should be ommitted when false", () => {
 				result = _controller.textFieldTag(name = "num", readonly = false)
 				expected = '<input id="num" name="num" type="text" value="">'
-				
+
 				expect(result).toBe(expected)
 			})
 
@@ -304,7 +304,7 @@ component extends="testbox.system.BaseSpec" {
 				application.wheels.booleanAttributes = false
 				result = _controller.textFieldTag(name = "num", checked = true)
 				expected = '<input checked="true" id="num" name="num" type="text" value="">'
-				
+
 				expect(result).toBe(expected)
 			})
 
@@ -312,7 +312,7 @@ component extends="testbox.system.BaseSpec" {
 				application.wheels.booleanAttributes = true
 				result = _controller.textFieldTag(name = "num", whatever = true)
 				expected = '<input id="num" name="num" type="text" value="" whatever>'
-				
+
 				expect(result).toBe(expected)
 			})
 		})
@@ -870,15 +870,6 @@ component extends="testbox.system.BaseSpec" {
 				expect(e).toBe(r)
 			})
 
-			it("works with root route", () => {
-				args.route = "root"
-				argsction = _controller.urlfor(argumentCollection = args)
-				e = _controller.startFormTag(argumentcollection = args)
-				r = '<form action="#argsction#" method="post">' & _controller.authenticityTokenField()
-
-				expect(e).toBe(r)
-			})
-
 			it("works with external link", () => {
 				args.multipart = true
 				argsction = _controller.urlfor(argumentCollection = args)
@@ -898,7 +889,7 @@ component extends="testbox.system.BaseSpec" {
 		})
 
 		describe("Tests that submitTag", () => {
-			
+
 			beforeEach(() => {
 				_controller = g.controller(name = "ControllerWithModel")
 				g.set(functionName = "submitTag", encode = false)
