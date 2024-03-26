@@ -13,5 +13,6 @@
 
 		// The root route below is the one that will be called on your application's home page (e.g. http://127.0.0.1/).
 		//.root(to = "home##index", method = "get")
+		.root(method = "get")
 	.end();
 </cfscript>

@@ -870,6 +870,15 @@ component extends="testbox.system.BaseSpec" {
 				expect(e).toBe(r)
 			})
 
+			it("works with root route", () => {
+				args.route = "root"
+				argsction = _controller.urlfor(argumentCollection = args)
+				e = _controller.startFormTag(argumentcollection = args)
+				r = '<form action="#argsction#" method="post">' & _controller.authenticityTokenField()
+
+				expect(e).toBe(r)
+			})
+
 			it("works with external link", () => {
 				args.multipart = true
 				argsction = _controller.urlfor(argumentCollection = args)
