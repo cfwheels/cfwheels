@@ -80,7 +80,7 @@ jobs:
           SLACK_CHANNEL: coding
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
           SLACK_ICON_EMOJI: ":bell:"
+          SLACK_TITLE: "Wheels Build"
           SLACK_MESSAGE: 'Wheels ${{ env.CFWHEELS_VERSION }} Built with ${{ job.status }}!'
-          SLACK_TITLE: "CFWheels Build"
           SLACK_USERNAME: CI
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
