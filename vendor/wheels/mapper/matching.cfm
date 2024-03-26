@@ -165,7 +165,21 @@ public struct function root(string to, boolean mapFormat) {
 	} else {
 		local.pattern = "/";
 	}
+
+  // If arguments.to is not passed in, we check for the existance of views/home/index.cfm if found we set that as the root
+  // else we set wheels##wheels as the root.
+  if (!structKeyExists(arguments, "to")) {
+    if (fileExists(application.AppDir & "views/home/index.cfm")) {
+      arguments.to = "home##index";
+      arguments.method = "get";
+    } else {
+      arguments.to = "wheels##wheels";
+      arguments.method = "get";
+    }
+  }
+
 	return $match(name = "root", pattern = local.pattern, argumentCollection = arguments);
+
 }
 
 /**
