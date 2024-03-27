@@ -123,6 +123,15 @@ component output="false" {
 	}
 
 	public boolean function onRequestStart( string targetPage ) {
+
+		// Added this section so that whenever the format parameter is passed in the URL and it is junit, json or txt then the content will be served without the head and body tags
+		if(structKeyExists(url, "format") && listFindNoCase("junit,json,txt", url.format))
+		{
+			application.contentOnly = true;
+		}else{
+			application.contentOnly = false;
+		}
+
 		local.lockName = "reloadLock" & application.applicationName;
 
 		// Abort if called from incorrect file.
