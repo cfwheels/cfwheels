@@ -11,6 +11,13 @@
 	}
 
 	/**
+	 * Actions set view-facing variables UNscoped (e.g. `|ObjectNamePlural|=…`),
+	 * which lands them in the controller's `variables` scope so the rendered
+	 * view can read them. Do NOT switch these to `local.` — the view can't see
+	 * `local.`, and its query loop would throw "Can't cast String to query".
+	 * Reserve `local.` for temporaries the view doesn't need.
+	 */
+	/**
 	* View all |ObjectNamePluralC|
 	**/
 	function index() {
