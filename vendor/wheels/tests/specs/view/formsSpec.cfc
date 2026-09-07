@@ -965,6 +965,34 @@ component extends="wheels.WheelsTest" {
 				expect(e).toBe(r)
 			})
 
+			it("resolves put/patch/delete resource member routes instead of throwing RouteNotFound (##3517)", () => {
+				// Resource member routes carry get/patch/put/delete — never post —
+				// so the route must be resolved with the ORIGINAL verb, then the
+				// HTML verb restored before rendering.
+				$clearRoutes()
+				g.mapper().resources(name = "customers").end()
+				g.$setNamedRoutePositions()
+
+				StructDelete(args, "controller")
+				args.route = "customer"
+				args.key = "1"
+
+				args.method = "delete"
+				r = _controller.startFormTag(argumentcollection = args)
+				expect(r).toInclude('method="post"')
+				expect(r).toInclude('name="_method" type="hidden" value="delete"')
+
+				args.method = "put"
+				r = _controller.startFormTag(argumentcollection = args)
+				expect(r).toInclude('method="post"')
+				expect(r).toInclude('name="_method" type="hidden" value="put"')
+
+				args.method = "patch"
+				r = _controller.startFormTag(argumentcollection = args)
+				expect(r).toInclude('method="post"')
+				expect(r).toInclude('name="_method" type="hidden" value="patch"')
+			})
+
 			it("works with multipart", () => {
 				args.multipart = "true"
 				argsction = _controller.urlfor(argumentCollection = args)
