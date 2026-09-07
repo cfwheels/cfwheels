@@ -14,6 +14,12 @@ component extends="wheels.WheelsTest" {
 				expect(_controller.response()).toInclude("variableForViewContent")
 			})
 
+			it("does not shadow a view variable named resolved (##3518)", () => {
+				c = application.wo.controller("test", {controller = "test", action = "testResolved"})
+				c.$callAction(action = "testResolved")
+				expect(c.response()).toInclude("RESOLVED-IS-STRUCT")
+			})
+
 			it("is implicitly calling render page", () => {
 				_controller.$callAction(action = "test")
 				expect(_controller.response()).toInclude("view template content")
