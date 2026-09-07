@@ -607,6 +607,12 @@ component output="false" displayName="Model" extends="wheels.Global"{
 		boolean base = true,
 		boolean useFilterLists = true
 	) {
+		// Register super<name> override aliases here too: the #3213 instance
+		// fast path (CreateObject + $initModelObject) never calls init(), so
+		// this is the one hook every instance path runs. Idempotent — names
+		// already registered on `this` by the legacy init() path are skipped.
+		$registerModelSuperAliases();
+
 		variables.wheels = {};
 		variables.wheels.instance = {};
 		variables.wheels.errors = [];

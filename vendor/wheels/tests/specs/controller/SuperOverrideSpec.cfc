@@ -42,6 +42,16 @@ component extends="wheels.WheelsTest" {
 				expect(m.columnNames()).toStartWith("wrapped:")
 			})
 
+			it("registers super<name> on model instances built via the fast path", () => {
+				// #3515: new()/create()/finder rows are built by
+				// $createObjectFromRoot's CreateObject + $initModelObject fast path,
+				// which never calls init() — the aliases must register here too.
+				m = g.model("superOverride").new()
+
+				expect(StructKeyExists(m, "superColumnNames")).toBeTrue()
+				expect(m.columnNames()).toStartWith("wrapped:")
+			})
+
 			it("adds no super<name> keys to a controller that overrides nothing", () => {
 				// the else branch fires only on a genuine override, so the common case pays
 				// nothing — this runs on every request
