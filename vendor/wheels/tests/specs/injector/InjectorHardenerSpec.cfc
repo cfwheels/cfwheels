@@ -1,7 +1,9 @@
 /**
  * Hardener proofs for Injector desk IDs S1–S10. Desk IDs stay locked.
  *
- * Flipped: S2 rebind reset, S3 fail-loud / flag the new key, S7 Duplicate copy.
+ * Flipped: S2 rebind reset (reversed by #3516 — a path re-map now preserves the
+ * singleton/request-scoped lifecycle; only request.$wheelsDICache is dropped),
+ * S3 fail-loud / flag the new key, S7 Duplicate copy.
  * Unchanged on develop: S1, S4, S5, S6, S8, S9, S10. S4 stays dotted-path fallback.
  *
  * Directory-scoped so `wheels test --core --ci --filter=injector` discovers
@@ -38,20 +40,20 @@ component extends="wheels.WheelsTest" {
 
 			});
 
-			describe("S2 rebind resets flags and drops request cache", () => {
+			describe("S2 rebind preserves lifecycle and drops request cache", () => {
 
-				it("S2: rebind overwrites the path and resets the singleton flag", () => {
+				it("S2: rebind overwrites the path and preserves the singleton flag", () => {
 					di.map("rebind").to("wheels.tests._assets.di.SimpleService").asSingleton();
 					expect(di.isSingleton("rebind")).toBeTrue();
 					di.map("rebind").to("wheels.tests._assets.di.OptionalDependentService");
 					expect(di.getMappings()["rebind"]).toBe("wheels.tests._assets.di.OptionalDependentService");
-					expect(di.isSingleton("rebind")).toBeFalse();
+					expect(di.isSingleton("rebind")).toBeTrue();
 					expect(di.isRequestScoped("rebind")).toBeFalse();
 					var after = di.getInstance("rebind");
 					expect(after.hasDependency()).toBeFalse();
 				});
 
-				it("S2: rebind resets the request-scoped flag and drops request.$wheelsDICache", () => {
+				it("S2: rebind preserves the request-scoped flag and drops request.$wheelsDICache", () => {
 					di.map("rebindReq").to("wheels.tests._assets.di.SimpleService").asRequestScoped();
 					structDelete(request, "$wheelsDICache");
 					var first = di.getInstance("rebindReq");
@@ -59,7 +61,7 @@ component extends="wheels.WheelsTest" {
 					expect(structKeyExists(request, "$wheelsDICache")).toBeTrue();
 					expect(structKeyExists(request["$wheelsDICache"], "rebindReq")).toBeTrue();
 					di.map("rebindReq").to("wheels.tests._assets.di.OptionalDependentService");
-					expect(di.isRequestScoped("rebindReq")).toBeFalse();
+					expect(di.isRequestScoped("rebindReq")).toBeTrue();
 					expect(di.isSingleton("rebindReq")).toBeFalse();
 					expect(di.getMappings()["rebindReq"]).toBe("wheels.tests._assets.di.OptionalDependentService");
 					expect(structKeyExists(request, "$wheelsDICache")).toBeFalse();
@@ -73,7 +75,7 @@ component extends="wheels.WheelsTest" {
 					di.getInstance("rebindSolo");
 					di.map("rebindSolo").to("wheels.tests._assets.di.OptionalDependentService");
 					expect(structKeyExists(request, "$wheelsDICache")).toBeFalse();
-					expect(di.isSingleton("rebindSolo")).toBeFalse();
+					expect(di.isSingleton("rebindSolo")).toBeTrue();
 				});
 
 				it("S2: first bind of a new name does not drop request.$wheelsDICache", () => {
@@ -91,20 +93,20 @@ component extends="wheels.WheelsTest" {
 					expect(di.isSingleton("keepSolo")).toBeTrue();
 					expect(di.isRequestScoped("keepReq")).toBeTrue();
 					di.map("rebindOther").to("wheels.tests._assets.di.OptionalDependentService");
-					expect(di.isSingleton("rebindOther")).toBeFalse();
+					expect(di.isSingleton("rebindOther")).toBeTrue();
 					expect(di.isSingleton("keepSolo")).toBeTrue();
 					expect(di.isRequestScoped("keepReq")).toBeTrue();
 					expect(di.isSingleton("keepReq")).toBeFalse();
 				});
 
-				it("S2: same-path rebind still resets flags until asSingleton is called again", () => {
+				it("S2: same-path rebind preserves the flag and the cached instance", () => {
 					di.map("samePath").to("wheels.tests._assets.di.SimpleService").asSingleton();
 					var before = di.getInstance("samePath");
 					before.setMarker("stable");
 					di.map("samePath").to("wheels.tests._assets.di.SimpleService");
-					expect(di.isSingleton("samePath")).toBeFalse();
+					expect(di.isSingleton("samePath")).toBeTrue();
 					var mid = di.getInstance("samePath");
-					expect(mid.getMarker()).toBe("");
+					expect(mid.getMarker()).toBe("stable");
 					di.map("samePath").to("wheels.tests._assets.di.SimpleService").asSingleton();
 					expect(di.isSingleton("samePath")).toBeTrue();
 				});
