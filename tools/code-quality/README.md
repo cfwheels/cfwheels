@@ -67,14 +67,17 @@ python3 tools/code-quality/cfml-coverage.py revert vendor/wheels
 ```
 
 Latest combined measurement (Lucee 7 + SQLite): **81.0% function coverage**
-(2,143/2,646 functions). Known caveats:
+(2,144/2,646 functions). Known caveats:
 
 - Coverage is per-leg: `databaseAdapters/*` paths for MySQL/Oracle/SQLServer/
   CockroachDB only execute on those matrix legs — a SQLite-only measurement
   structurally under-reports them.
 - `public/` dev-console views and the stdio `wheels mcp wheels` surface are
   exercised by the e2e flow (real CLI invocations), not the in-server suites —
-  a spec-suite-only measurement under-reports them.
+  a spec-suite-only measurement under-reports them. The dev-console command
+  handlers (`public/CliBridge.cfc`) ARE covered in-server by
+  `tests/specs/cli/CliBridgeSpec.cfc`; only its DB-/worker-backed branches
+  (`diff`, `dbSchema`, `dbReset`, `dbDump`, `dbSeed`, `jobs*`) remain DB-covered.
 - `Public.cfc` is intentionally **not** instrumented (its gated handlers must
   call `$blockInProduction()` as their first statement, a structural guard
   enforced by `PublicComponentProductionSpec`), so an instrumented run is green
