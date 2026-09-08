@@ -166,6 +166,28 @@ else
     exit 1
 fi
 
+# Fresh-VM first boot: LuCLI downloads + extracts Lucee Express and boots the
+# server before the module's post-start staging can drop the SQLite JDBC into
+# the server's OSGi bundles dir (the pre-start staging has no express/ dir to
+# target). The running server's bundle scan has already happened, so the first
+# `migrate latest` would fail with ClassException org.sqlite.JDBC. Restart once:
+# the pre-start staging now finds the bundles dir and stages the JAR before
+# Lucee boots. (This is the "seed for the next start" gap the CLI's staging
+# documents; the restart is what makes the FIRST start also work.)
+run_cli stop > /dev/null 2>&1 || true
+if run_cli start --force > "$TMPDIR/restart.log" 2>&1; then
+    pass "restart after driver staging exited 0"
+else
+    fail "restart after driver staging failed"
+    cat "$TMPDIR/restart.log"
+fi
+if wait_for_server; then
+    pass "server up after restart on :$PORT"
+else
+    fail "server did not become ready after restart"
+    exit 1
+fi
+
 reload_app() {
     run_cli reload > /dev/null 2>&1 || true
     sleep 2
