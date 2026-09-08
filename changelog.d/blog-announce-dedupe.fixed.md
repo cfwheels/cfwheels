@@ -1,0 +1,1 @@
+- Blog announcement publisher no longer creates a second GitHub Discussion when one already exists for the same title or post URL

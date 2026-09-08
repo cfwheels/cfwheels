@@ -9,6 +9,11 @@
  * the moved file paths. A post without an `announcement` block, or one whose
  * `announcement.discussionUrl` is already set, is skipped.
  *
+ * Before creating a discussion the script GraphQL-searches the repo's
+ * Announcements (or `announcement.category`) for an exact title match and/or
+ * a body that already contains the post's blog URL. A hit is treated as a
+ * prior announce: the existing URL is written back and create is skipped.
+ *
  * Usage:
  *   node web/scripts/blog-announce-discussion.mjs <post.md> [<post.md> ...]
  *   node web/scripts/blog-announce-discussion.mjs --dry-run <post.md> ...
@@ -17,11 +22,12 @@
  *      Runs with Node's built-ins only (node:fs, node:child_process, fetch).
  */
 import { readFileSync, writeFileSync } from 'node:fs';
+import { basename, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
-const args = process.argv.slice(2);
-const dryRun = args.includes('--dry-run');
-const files = args.filter((a) => a !== '--dry-run');
+const BLOG_ORIGIN = 'https://blog.wheels.dev';
+const BLOG_URL_RE = /https:\/\/blog\.wheels\.dev\/(?:blog|posts)\/[A-Za-z0-9._-]+/g;
 
 // ---------------------------------------------------------------------------
 // Frontmatter parsing — just the `announcement:` block. The rest of the
@@ -29,7 +35,7 @@ const files = args.filter((a) => a !== '--dry-run');
 // nested object, so it never needs a full YAML parser.
 // ---------------------------------------------------------------------------
 
-function splitFrontmatter(content) {
+export function splitFrontmatter(content) {
 	const m = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
 	if (!m) throw new Error('no frontmatter found');
 	return { fm: m[1], rest: content.slice(m[0].length) };
@@ -49,7 +55,7 @@ function splitFrontmatter(content) {
  *       line two
  *     discussionUrl: 'https://...'
  */
-function extractAnnouncement(fm) {
+export function extractAnnouncement(fm) {
 	const lines = fm.split('\n');
 	const start = lines.findIndex((l) => /^announcement:\s*$/.test(l));
 	if (start === -1) return null;
@@ -90,7 +96,27 @@ function extractAnnouncement(fm) {
 	return out;
 }
 
-function writeDiscussionUrl(content, url) {
+export function extractSlug(fm) {
+	const m = fm.match(/^slug:\s*(?:'([^']*)'|"([^"]*)"|(\S+))\s*$/m);
+	if (!m) return '';
+	return m[1] || m[2] || m[3] || '';
+}
+
+/**
+ * Blog URLs used for Discussion-body dedupe. Prefer URLs already written in
+ * the announcement body; always include the canonical /blog/<slug> URL when
+ * a slug is known (frontmatter or filename).
+ */
+export function extractBlogUrls({ body = '', slug = '', file = '' } = {}) {
+	const urls = new Set();
+	const matches = String(body).match(BLOG_URL_RE) || [];
+	for (const url of matches) urls.add(url);
+	const resolvedSlug = slug || (file ? basename(file).replace(/\.mdx?$/i, '') : '');
+	if (resolvedSlug) urls.add(`${BLOG_ORIGIN}/blog/${resolvedSlug}`);
+	return [...urls];
+}
+
+export function writeDiscussionUrl(content, url) {
 	const { fm, rest } = splitFrontmatter(content);
 	const next = fm.replace(/^announcement:\s*$/m, `announcement:\n  discussionUrl: '${url}'`);
 	return `---\n${next}\n---\n${rest}`;
@@ -100,7 +126,49 @@ function writeDiscussionUrl(content, url) {
 // GitHub Discussions GraphQL
 // ---------------------------------------------------------------------------
 
-function repoOwnerName() {
+export function quoteSearchTerm(value) {
+	return `"${String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
+}
+
+/**
+ * GitHub search syntax for Discussions in one category. Title and URL clauses
+ * are OR'd so a single GraphQL `search` covers both signals; callers still
+ * exact-match client-side because `in:title` is substring, not equality.
+ */
+export function buildDiscussionSearchQuery({ owner, name, category, title, urls = [] } = {}) {
+	if (!owner || !name || !category) {
+		throw new Error('owner, name, and category are required to search discussions');
+	}
+	const clauses = [];
+	if (title) clauses.push(`in:title ${quoteSearchTerm(title)}`);
+	for (const url of urls) {
+		if (url) clauses.push(`in:body ${quoteSearchTerm(url)}`);
+	}
+	if (!clauses.length) return '';
+	const inner = clauses.length === 1 ? clauses[0] : `(${clauses.join(' OR ')})`;
+	return `repo:${owner}/${name} category:${quoteSearchTerm(category)} ${inner}`;
+}
+
+/**
+ * Pick a prior announcement from GraphQL search nodes. Requires an exact
+ * title match and/or a body that contains one of the post's blog URLs, and
+ * ignores hits from a different category when the node reports one.
+ */
+export function pickExistingDiscussion(nodes, { title, urls = [], category } = {}) {
+	const wantedUrls = new Set((urls || []).filter(Boolean));
+	for (const node of nodes || []) {
+		if (!node || !node.url) continue;
+		if (category && node.category?.name && node.category.name !== category) continue;
+		if (title && node.title === title) return node;
+		const body = node.body || '';
+		for (const url of wantedUrls) {
+			if (body.includes(url)) return node;
+		}
+	}
+	return null;
+}
+
+export function repoOwnerName() {
 	let url = '';
 	try {
 		url = execFileSync('git', ['config', '--get', 'remote.origin.url'], {
@@ -115,7 +183,7 @@ function repoOwnerName() {
 	return { owner: m[1], name: m[2] };
 }
 
-async function gql(token, query, variables = {}) {
+export async function gql(token, query, variables = {}) {
 	const res = await fetch('https://api.github.com/graphql', {
 		method: 'POST',
 		headers: {
@@ -132,9 +200,9 @@ async function gql(token, query, variables = {}) {
 	return payload.data;
 }
 
-async function resolveRepoAndCategories(token) {
+export async function resolveRepoAndCategories(token, gqlFn = gql) {
 	const { owner, name } = repoOwnerName();
-	const data = await gql(
+	const data = await gqlFn(
 		token,
 		`query($owner: String!, $name: String!) {
 			repository(owner: $owner, name: $name) {
@@ -149,11 +217,42 @@ async function resolveRepoAndCategories(token) {
 	const categories = new Map(
 		data.repository.discussionCategories.nodes.map((c) => [c.name, c.id]),
 	);
-	return { repositoryId: data.repository.id, categories };
+	return { repositoryId: data.repository.id, categories, owner, name };
 }
 
-async function createDiscussion(token, repositoryId, categoryId, title, body) {
-	const data = await gql(
+export async function searchDiscussions(token, query, gqlFn = gql) {
+	if (!query) return [];
+	const data = await gqlFn(
+		token,
+		`query($query: String!) {
+			search(query: $query, type: DISCUSSION, first: 20) {
+				nodes {
+					... on Discussion {
+						title
+						url
+						body
+						category { name }
+					}
+				}
+			}
+		}`,
+		{ query },
+	);
+	return (data.search?.nodes || []).filter(Boolean);
+}
+
+export async function findExistingDiscussion(
+	token,
+	{ owner, name, category, title, urls },
+	gqlFn = gql,
+) {
+	const query = buildDiscussionSearchQuery({ owner, name, category, title, urls });
+	const nodes = await searchDiscussions(token, query, gqlFn);
+	return pickExistingDiscussion(nodes, { title, urls, category });
+}
+
+export async function createDiscussion(token, repositoryId, categoryId, title, body, gqlFn = gql) {
+	const data = await gqlFn(
 		token,
 		`mutation($repositoryId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
 			createDiscussion(input: {
@@ -174,63 +273,109 @@ async function createDiscussion(token, repositoryId, categoryId, title, body) {
 // Main
 // ---------------------------------------------------------------------------
 
-const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
-if (!token && !dryRun) {
-	console.error('GH_TOKEN (or GITHUB_TOKEN) is not set.');
-	process.exit(1);
-}
-
-let ctx = null;
-if (!dryRun) {
-	ctx = await resolveRepoAndCategories(token);
-}
-
-let posted = 0;
-for (const file of files) {
-	const content = readFileSync(file, 'utf8');
-	let fm;
-	try {
-		fm = splitFrontmatter(content).fm;
-	} catch {
-		console.log(`skip (no frontmatter): ${file}`);
-		continue;
-	}
-	const announcement = extractAnnouncement(fm);
-
-	if (!announcement) {
-		console.log(`skip (no announcement): ${file}`);
-		continue;
-	}
-	if (announcement.discussionUrl) {
-		console.log(`skip (already posted): ${file} -> ${announcement.discussionUrl}`);
-		continue;
+export async function announceFiles(files, { dryRun = false, token, gqlFn = gql } = {}) {
+	let ctx = null;
+	if (!dryRun) {
+		ctx = await resolveRepoAndCategories(token, gqlFn);
 	}
 
-	const category = announcement.category || 'Announcements';
-	if (!ctx && !dryRun) throw new Error('discussion context missing');
+	let posted = 0;
+	for (const file of files) {
+		const content = readFileSync(file, 'utf8');
+		let fm;
+		try {
+			fm = splitFrontmatter(content).fm;
+		} catch {
+			console.log(`skip (no frontmatter): ${file}`);
+			continue;
+		}
+		const announcement = extractAnnouncement(fm);
 
-	if (dryRun) {
-		console.log(`[dry-run] would post to ${category}:\n  title: ${announcement.title}\n  body: ${announcement.body.split('\n').join('\n        ')}`);
-		continue;
-	}
+		if (!announcement) {
+			console.log(`skip (no announcement): ${file}`);
+			continue;
+		}
+		if (announcement.discussionUrl) {
+			console.log(`skip (already posted): ${file} -> ${announcement.discussionUrl}`);
+			continue;
+		}
 
-	const categoryId = ctx.categories.get(category);
-	if (!categoryId) {
-		throw new Error(
-			`discussion category "${category}" not found. Available: ${[...ctx.categories.keys()].join(', ')}`,
+		const category = announcement.category || 'Announcements';
+		const slug = extractSlug(fm);
+		const urls = extractBlogUrls({ body: announcement.body, slug, file });
+
+		if (dryRun) {
+			const searchQuery = buildDiscussionSearchQuery({
+				owner: 'OWNER',
+				name: 'REPO',
+				category,
+				title: announcement.title,
+				urls,
+			}).replace('repo:OWNER/REPO ', '');
+			console.log(
+				`[dry-run] would search ${category} then post if no match:\n  search: ${searchQuery}\n  title: ${announcement.title}\n  body: ${announcement.body.split('\n').join('\n        ')}`,
+			);
+			continue;
+		}
+
+		if (!ctx) throw new Error('discussion context missing');
+
+		const existing = await findExistingDiscussion(
+			token,
+			{
+				owner: ctx.owner,
+				name: ctx.name,
+				category,
+				title: announcement.title,
+				urls,
+			},
+			gqlFn,
 		);
+		if (existing) {
+			writeFileSync(file, writeDiscussionUrl(content, existing.url), 'utf8');
+			console.log(`skip (existing discussion): ${file} -> ${existing.url}`);
+			continue;
+		}
+
+		const categoryId = ctx.categories.get(category);
+		if (!categoryId) {
+			throw new Error(
+				`discussion category "${category}" not found. Available: ${[...ctx.categories.keys()].join(', ')}`,
+			);
+		}
+
+		const url = await createDiscussion(
+			token,
+			ctx.repositoryId,
+			categoryId,
+			announcement.title,
+			announcement.body,
+			gqlFn,
+		);
+		writeFileSync(file, writeDiscussionUrl(content, url), 'utf8');
+		console.log(`posted: ${file} -> ${url}`);
+		posted++;
 	}
 
-	const url = await createDiscussion(
-		token,
-		ctx.repositoryId,
-		categoryId,
-		announcement.title,
-		announcement.body,
-	);
-	writeFileSync(file, writeDiscussionUrl(content, url), 'utf8');
-	console.log(`posted: ${file} -> ${url}`);
-	posted++;
+	console.log(`Done. Posted ${posted} announcement(s).`);
+	return posted;
 }
 
-console.log(`Done. Posted ${posted} announcement(s).`);
+export async function main(argv = process.argv.slice(2), env = process.env) {
+	const dryRun = argv.includes('--dry-run');
+	const files = argv.filter((a) => a !== '--dry-run');
+	const token = env.GH_TOKEN || env.GITHUB_TOKEN;
+	if (!token && !dryRun) {
+		console.error('GH_TOKEN (or GITHUB_TOKEN) is not set.');
+		process.exitCode = 1;
+		return;
+	}
+	await announceFiles(files, { dryRun, token });
+}
+
+const isDirectRun =
+	Boolean(process.argv[1]) && import.meta.url === pathToFileURL(resolve(process.argv[1])).href;
+
+if (isDirectRun) {
+	await main();
+}
