@@ -102,39 +102,43 @@ component output="false" {
 	public void function $includeConfig(required string template) {
 		try {
 			// cfformat-ignore-start
-			local.resolved = $resolveGlobalIncludeTemplate(arguments.template);
-			var configIncludeState = {done = false, output = ""};
-			var configCaptured = "";
+			// Every local is $-prefixed so it cannot shadow a same-named variable in
+			// the included config template (#3526): the include runs inside this
+			// function's scope, so a bare `resolved`/`configCaptured` here would
+			// otherwise win over the app's own variable.
+			local.$resolved = $resolveGlobalIncludeTemplate(arguments.template);
+			var $configIncludeState = {done = false, output = ""};
+			var $configCaptured = "";
 			try {
-				savecontent variable="configCaptured" {
-					include "#local.resolved#"
+				savecontent variable="$configCaptured" {
+					include "#local.$resolved#"
 				};
-				configIncludeState.output = configCaptured;
-				configIncludeState.done = true;
+				$configIncludeState.output = $configCaptured;
+				$configIncludeState.done = true;
 			} catch (any e) {
 				if (!$isMissingMappedInclude(e)) {
 					rethrow;
 				}
 			}
-			if (!configIncludeState.done) {
-				var configFallbacks = $mappedIncludeFallbacks(local.resolved);
-				var configFbCount = ArrayLen(configFallbacks);
-				for (var configFbIndex = 1; configFbIndex <= configFbCount; configFbIndex++) {
+			if (!$configIncludeState.done) {
+				var $configFallbacks = $mappedIncludeFallbacks(local.$resolved);
+				var $configFbCount = ArrayLen($configFallbacks);
+				for (var $configFbIndex = 1; $configFbIndex <= $configFbCount; $configFbIndex++) {
 					try {
-						savecontent variable="configCaptured" {
-							include "#configFallbacks[configFbIndex]#"
+						savecontent variable="$configCaptured" {
+							include "#$configFallbacks[$configFbIndex]#"
 						};
-						configIncludeState.output = configCaptured;
-						configIncludeState.done = true;
+						$configIncludeState.output = $configCaptured;
+						$configIncludeState.done = true;
 						break;
 					} catch (any e) {
-						if (configFbIndex == configFbCount || !$isMissingMappedInclude(e)) {
+						if ($configFbIndex == $configFbCount || !$isMissingMappedInclude(e)) {
 							rethrow;
 						}
 					}
 				}
 			}
-			local.$wheelsConfigOutput = configIncludeState.output;
+			local.$wheelsConfigOutput = $configIncludeState.output;
 			// cfformat-ignore-end
 		} catch (any e) {
 			// Fail closed: a compile-time or runtime failure in a config template is a

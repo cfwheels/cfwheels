@@ -123,6 +123,21 @@ component extends="wheels.WheelsTest" {
 					expect(structKeyExists(after, "hasDependency")).toBeTrue();
 				});
 
+				it("preserves the singleton lifecycle when re-bound to a different path WITHOUT re-flagging (##3516)", () => {
+					di.map("repointedSingleton").to("wheels.tests._assets.di.SimpleService").asSingleton();
+					di.getInstance("repointedSingleton");
+					// Re-point to a DIFFERENT component without re-applying .asSingleton().
+					// The lifecycle must survive the re-map (the test-double DI-swap
+					// pattern) — dropping the flag here degrades it to transient.
+					di.map("repointedSingleton").to("wheels.tests._assets.di.OptionalDependentService");
+
+					expect(di.isSingleton("repointedSingleton")).toBeTrue();
+					var first = di.getInstance("repointedSingleton");
+					var second = di.getInstance("repointedSingleton");
+					expect(first).toBe(second);
+					expect(structKeyExists(first, "hasDependency")).toBeTrue();
+				});
+
 				it("keeps the cached singleton when the alias is re-registered with the same path (dev-reload pattern)", () => {
 					di.map("stableSingleton").to("wheels.tests._assets.di.SimpleService").asSingleton();
 					var before = di.getInstance("stableSingleton");
