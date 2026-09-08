@@ -29,6 +29,11 @@ CLOSURE_FN = re.compile(r'\bvariables\s*\.\s*\$?([A-Za-z_$][\w$]*)\s*=\s*functio
 # embedding it produced ids full of quotes, i.e. invalid CFML in the counter.
 TAG_FN = re.compile(r'<cffunction\b[^>]*?\bname\s*=\s*["\']?([A-Za-z_$][\w$]*)', re.I)
 EXCLUDE_DIRS = {'tests', 'rocketunit_tests'}
+# Public.cfc's gated handlers must call $blockInProduction() as their FIRST
+# statement (enforced by PublicComponentProductionSpec). Injecting a coverage
+# counter as the first statement would break that structural security assert,
+# so skip it — its ~30 thin dispatcher handlers are negligible coverage loss.
+EXCLUDE_FILES = {'Public.cfc'}
 
 
 def _mask(text):
@@ -194,6 +199,8 @@ def _files(root):
             dirnames[:] = []
             continue
         for fn in filenames:
+            if fn in EXCLUDE_FILES:
+                continue
             if fn.lower().endswith(('.cfc', '.cfm')):
                 yield os.path.join(dirpath, fn)
 
@@ -303,21 +310,46 @@ def combine(root, coverage_path, complexity_path):
     print('wrote crap-report.json')
 
 
+def merge(coverage_paths, out):
+    """Union multiple server.__wheels_cov dumps (core + CLI) into one map."""
+    merged = {}
+    for p in coverage_paths:
+        d = json.load(open(p))
+        if isinstance(d, dict):
+            merged.update(d)
+    json.dump(merged, open(out, 'w'))
+    print(f'merged {len(coverage_paths)} coverage dumps -> {len(merged)} covered functions -> {out}')
+    return merged
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('cmd', choices=['instrument', 'revert', 'combine'])
-    ap.add_argument('root')
-    ap.add_argument('coverage_json', nargs='?', default=None)
-    ap.add_argument('complexity_json', nargs='?', default=None)
+    sub = ap.add_subparsers(dest='cmd', required=True)
+
+    p_instr = sub.add_parser('instrument')
+    p_instr.add_argument('root')
+
+    p_revert = sub.add_parser('revert')
+    p_revert.add_argument('root')
+
+    p_merge = sub.add_parser('merge')
+    p_merge.add_argument('coverage_jsons', nargs='+')
+    p_merge.add_argument('-o', '--out', default='/tmp/wheels-coverage.json')
+
+    p_combine = sub.add_parser('combine')
+    p_combine.add_argument('root')
+    p_combine.add_argument('coverage_json')
+    p_combine.add_argument('complexity_json')
+
     args = ap.parse_args()
 
     if args.cmd == 'instrument':
         instrument(args.root)
     elif args.cmd == 'revert':
         revert(args.root)
+    elif args.cmd == 'merge':
+        merge(args.coverage_jsons, args.out)
     elif args.cmd == 'combine':
-        if not args.coverage_json or not args.complexity_json:
-            ap.error('combine needs <coverage.json> <complexity.json>')
         combine(args.root, args.coverage_json, args.complexity_json)
 
 
