@@ -90,10 +90,12 @@ component implements="wheels.interfaces.di.InjectorInterface" {
 			structDelete(variables.requestScopedFlags, arguments.name);
 			structDelete(request, "$wheelsDICache");
 		} else if (structKeyExists(variables.mappings, arguments.name)) {
-			// Path re-map: keep the cached singleton for the dev-reload
-			// same-path pattern (to() invalidates it on a path CHANGE).
-			structDelete(variables.singletonFlags, arguments.name);
-			structDelete(variables.requestScopedFlags, arguments.name);
+			// Path re-map: keep the cached singleton AND its lifecycle flag
+			// (#3516). to() already invalidates the cached instance only on a
+			// path CHANGE (preserving it for the dev-reload same-path case), so
+			// dropping the flag here wrongly degrades a re-bound singleton to
+			// transient. Only clear the request-scoped instance cache; the
+			// singleton cache is invalidated by to() on a real path change.
 			structDelete(request, "$wheelsDICache");
 		}
 		variables.currentMapping = arguments.name;

@@ -28,45 +28,48 @@ component output="false" {
 			local = arguments;
 		}
 		// Include the template and return the result.
-		// Variable is set to $wheels to limit chances of it being overwritten in the included template.
+		// Every local is $-prefixed so it cannot shadow a same-named variable in
+		// the included view (#3518): the include runs inside this function's
+		// scope, so a bare `resolved`/`captured`/`fallbacks` here would otherwise
+		// win over the controller variable passed to the view.
 		// Include stays in this function: `local = arguments` above must be
 		// visible to partials, and savecontent must wrap the include itself
 		// (a helper on this output=false CFC would capture nothing).
 		// cfformat-ignore-start
-		local.resolved = $resolveGlobalIncludeTemplate(arguments.$template);
-		var includeState = {done = false, output = ""};
-		var captured = "";
+		local.$resolved = $resolveGlobalIncludeTemplate(arguments.$template);
+		var $includeState = {done = false, output = ""};
+		var $captured = "";
 		try {
-			savecontent variable="captured" {
-				include "#local.resolved#"
+			savecontent variable="$captured" {
+				include "#local.$resolved#"
 			};
-			includeState.output = captured;
-			includeState.done = true;
+			$includeState.output = $captured;
+			$includeState.done = true;
 		} catch (any e) {
 			if (!$isMissingMappedInclude(e)) {
 				rethrow;
 			}
 		}
-		if (!includeState.done) {
-			var fallbacks = $mappedIncludeFallbacks(local.resolved);
-			var fbCount = ArrayLen(fallbacks);
-			for (var fbIndex = 1; fbIndex <= fbCount; fbIndex++) {
+		if (!$includeState.done) {
+			var $fallbacks = $mappedIncludeFallbacks(local.$resolved);
+			var $fbCount = ArrayLen($fallbacks);
+			for (var $fbIndex = 1; $fbIndex <= $fbCount; $fbIndex++) {
 				try {
-					savecontent variable="captured" {
-						include "#fallbacks[fbIndex]#"
+					savecontent variable="$captured" {
+						include "#$fallbacks[$fbIndex]#"
 					};
-					includeState.output = captured;
-					includeState.done = true;
+					$includeState.output = $captured;
+					$includeState.done = true;
 					break;
 				} catch (any e) {
-					if (fbIndex == fbCount || !$isMissingMappedInclude(e)) {
+					if ($fbIndex == $fbCount || !$isMissingMappedInclude(e)) {
 						rethrow;
 					}
 				}
 			}
 		}
 		// cfformat-ignore-end
-		return includeState.output;
+		return $includeState.output;
 	}
 
 	/**

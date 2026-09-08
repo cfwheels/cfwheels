@@ -75,6 +75,15 @@ component {
 		// the original verb for the `_method` hidden field (empty string when none applies).
 		local.method = $startFormTagMethod(args = arguments);
 
+		// HTML forms only support get/post, but the named-route lookup must use
+		// the ORIGINAL verb (put/patch/delete) — resource member routes never
+		// declare `post` (#3517). Remember the HTML verb and restore it after
+		// the route is resolved.
+		local.formMethod = arguments.method;
+		if (Len(local.method)) {
+			arguments.method = local.method;
+		}
+
 		// set the form's action attribute to the URL that we want to send to
 		local.encodeExcept = "";
 		local.skipCsrf = false;
@@ -110,6 +119,9 @@ component {
 		if (ListFind(local.skip, "action")) {
 			local.skip = ListDeleteAt(local.skip, ListFind(local.skip, "action"));
 		}
+
+		// Restore the HTML verb before rendering <form method="...">.
+		arguments.method = local.formMethod;
 
 		local.rv = arguments.prepend & $tag(
 			name = "form",
