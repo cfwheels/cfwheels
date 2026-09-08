@@ -476,6 +476,26 @@ component extends="wheels.WheelsTest" {
 				expect(result.html).toBe("<p>another dummy html email body</p>")
 			})
 
+			it("writeToFile dumps a single html body without mime headers", () => {
+				// Reporter case for #3529: one HTML template + writeToFile + .eml path.
+				// sendEmail writes the rendered body only — no RFC 822 / MIME envelope —
+				// which is why Outlook shows raw HTML tags on the saved file while
+				// live cfmail delivery still renders. Pin that contract so a later
+				// MIME writer is an intentional change, not a silent one.
+				args.template = "HTMLEmailTemplate"
+				args.writeToFile = filePath
+				if (FileExists(filePath)) {
+					FileDelete(filePath)
+				}
+				_controller.sendEmail(argumentCollection = args)
+				fileContent = FileRead(filePath)
+				FileDelete(filePath)
+
+				expect(fileContent).toInclude(HTMLBody)
+				expect(FindNoCase("Content-Type:", fileContent)).toBe(0)
+				expect(FindNoCase("MIME-Version:", fileContent)).toBe(0)
+			})
+
 			it("sends mail with writetofile", () => {
 				args.templates = "HTMLEmailTemplate,plainEmailTemplate"
 				args.writeToFile = filePath
