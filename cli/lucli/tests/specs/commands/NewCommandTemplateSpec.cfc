@@ -90,6 +90,21 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 				expect(content).toInclude("PopulateCfm.MigrationFailed");
 			});
 
+			it("ships stacked form defaults and red validation error styles", () => {
+				expect(fileExists(templateRoot & "public/stylesheets/wheels.css")).toBeTrue();
+				var css = fileRead(templateRoot & "public/stylesheets/wheels.css");
+				expect(css).toInclude(".error-message");
+				expect(css).toInclude("width: 100%");
+				expect(css).toInclude("⚠");
+
+				var layout = fileRead(templateRoot & "app/views/layout.cfm");
+				expect(layout).toInclude('styleSheetLinkTag(sources="simple,wheels")');
+
+				var settings = fileRead(templateRoot & "config/settings.cfm");
+				expect(settings).toInclude("includeFormErrorMessages=true");
+				expect(settings).toInclude('labelPlacement="before"');
+			});
+
 			it("ships .gitkeep files in tests/specs subfolders so empty dirs survive git", () => {
 				// Templates check — confirms the .gitkeep files exist on disk
 				// in the template tree. Their copying into the scaffolded app

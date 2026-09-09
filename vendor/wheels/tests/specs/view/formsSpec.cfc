@@ -1319,6 +1319,48 @@ component extends="wheels.WheelsTest" {
 				expect(e).toBe(r)
 			})
 		})
+
+		describe("Tests that includeErrorMessage nests the message in the field block", () => {
+
+			beforeEach(() => {
+				_controller = g.controller(name = "ControllerWithModelErrors")
+			})
+
+			it("does not emit a per-field error message by default", () => {
+				result = _controller.textField(objectName = "user", property = "firstname", label = false)
+
+				expect(result).toInclude("field-with-errors")
+				expect(result).notToInclude("error-message")
+			})
+
+			it("nests errorMessageOn inside the error wrapper when includeErrorMessage is true", () => {
+				result = _controller.textField(
+					objectName = "user",
+					property = "firstname",
+					labelPlacement = "before",
+					includeErrorMessage = true
+				)
+
+				expect(result).toInclude("field-with-errors")
+				expect(result).toInclude('class="error-message"')
+				expect(result).toInclude('role="alert"')
+				// encode=true turns the colon into a hex entity (S18 / encodeHtmlTags).
+				expect(result).toInclude("Error&##x3a;")
+				expect(result).toInclude("firstname error1")
+				expect(FindNoCase('type="text"', result)).toBeLT(FindNoCase("error-message", result))
+				expect(result).notToInclude("includeErrorMessage")
+			})
+
+			it("honours includeFormErrorMessages when the per-call flag is omitted", () => {
+				g.set(includeFormErrorMessages = true)
+				try {
+					result = _controller.textField(objectName = "user", property = "firstname", label = false)
+					expect(result).toInclude("error-message")
+				} finally {
+					g.set(includeFormErrorMessages = false)
+				}
+			})
+		})
 	}
 
 	function changeBirthday(required any value) {

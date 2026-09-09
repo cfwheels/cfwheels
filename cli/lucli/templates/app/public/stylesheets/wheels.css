@@ -1,0 +1,119 @@
+/*
+ * Wheels form defaults — stacked labels, full-width inputs, red errors.
+ * Loaded after simple.css. Safe to delete if you bring your own stylesheet.
+ * #3549 #3550
+ */
+:root {
+	--wheels-error: #9f1239;
+	--wheels-error-bg: #fff1f2;
+	--wheels-error-border: #be123c;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--wheels-error: #fda4af;
+		--wheels-error-bg: #4c0519;
+		--wheels-error-border: #fb7185;
+	}
+}
+
+.field {
+	display: block;
+	margin-bottom: 1.25rem;
+}
+
+.field > label,
+form label {
+	display: block;
+	margin-bottom: 0.25rem;
+}
+
+/* Full-width text-like controls. Checkboxes/radios stay shrink-wrapped. */
+.field input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="range"]):not([type="color"]):not([type="file"]):not([type="image"]),
+.field textarea,
+.field select,
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="url"],
+form input[type="tel"],
+form input[type="search"],
+form input[type="number"],
+form input[type="date"],
+form input[type="datetime-local"],
+form input[type="month"],
+form input[type="week"],
+form input[type="time"],
+form textarea,
+form select {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+/* around-placement: the input lives inside the label — put it on the next line */
+form label > input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="range"]):not([type="color"]):not([type="file"]):not([type="image"]),
+form label > textarea,
+form label > select {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+.field-with-errors {
+	display: block;
+}
+
+.field-with-errors input,
+.field-with-errors textarea,
+.field-with-errors select {
+	border-color: var(--wheels-error-border);
+}
+
+.error-message,
+.error-messages {
+	color: var(--wheels-error);
+	font-weight: 600;
+}
+
+.error-message {
+	display: block;
+	margin-top: 0.35rem;
+}
+
+/* Icon prefix so errors are not color-only (paired with the "Error:" text
+   the helper prepends, role="alert", and the stronger type weight). */
+.error-message::before,
+.error-messages li::before {
+	content: "⚠ ";
+}
+
+.error-messages {
+	background-color: var(--wheels-error-bg);
+	border: 1px solid var(--wheels-error-border);
+	border-radius: 5px;
+	padding: 0.75rem 1rem 0.75rem 1.5rem;
+	margin: 0 0 1.25rem;
+	list-style: none;
+}
+
+.error-messages li {
+	margin: 0.25rem 0;
+}
+
+form input[type="checkbox"] + label,
+form input[type="radio"] + label,
+form label:has(> input[type="checkbox"]),
+form label:has(> input[type="radio"]) {
+	display: inline-block;
+	width: auto;
+}
+
+form label > input[type="checkbox"],
+form label > input[type="radio"] {
+	display: inline-block;
+	width: auto;
+	margin-right: 0.4rem;
+}

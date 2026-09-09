@@ -513,23 +513,50 @@ component {
 			if (arrayFindNoCase(foreignKeys, fieldName)) {
 				var associationName = left(fieldName, len(fieldName) - 2);
 				var associationModel = variables.helpers.capitalize(associationName);
-				fieldCode = '##select(objectName="|ObjectNameSingular|", property="#fieldName#", options=model("#associationModel#").findAll(), textField="name", valueField="id", includeBlank="Select #associationModel#", label="#fieldLabel#")##';
+				fieldCode = $scaffoldFieldCall(
+					helperName = "select",
+					fieldName = fieldName,
+					fieldLabel = fieldLabel,
+					extraArgs = 'options=model("#associationModel#").findAll(), textField="name", valueField="id", includeBlank="Select #associationModel#"'
+				);
 			} else {
 				switch (lCase(fieldType)) {
 					case "boolean":
-						fieldCode = '##checkBox(objectName="|ObjectNameSingular|", property="#fieldName#", label="#fieldLabel#")##';
+						// Checkboxes stay beside their label (around placement).
+						fieldCode = $scaffoldFieldCall(
+							helperName = "checkBox",
+							fieldName = fieldName,
+							fieldLabel = fieldLabel,
+							stacked = false
+						);
 						break;
 					case "text": case "longtext":
-						fieldCode = '##textArea(objectName="|ObjectNameSingular|", property="#fieldName#", label="#fieldLabel#")##';
+						fieldCode = $scaffoldFieldCall(
+							helperName = "textArea",
+							fieldName = fieldName,
+							fieldLabel = fieldLabel
+						);
 						break;
 					case "date":
-						fieldCode = '##dateSelect(objectName="|ObjectNameSingular|", property="#fieldName#", label="#fieldLabel#")##';
+						fieldCode = $scaffoldFieldCall(
+							helperName = "dateSelect",
+							fieldName = fieldName,
+							fieldLabel = fieldLabel
+						);
 						break;
 					case "datetime": case "timestamp":
-						fieldCode = '##dateTimeSelect(objectName="|ObjectNameSingular|", property="#fieldName#", label="#fieldLabel#")##';
+						fieldCode = $scaffoldFieldCall(
+							helperName = "dateTimeSelect",
+							fieldName = fieldName,
+							fieldLabel = fieldLabel
+						);
 						break;
 					case "time":
-						fieldCode = '##timeSelect(objectName="|ObjectNameSingular|", property="#fieldName#", label="#fieldLabel#")##';
+						fieldCode = $scaffoldFieldCall(
+							helperName = "timeSelect",
+							fieldName = fieldName,
+							fieldLabel = fieldLabel
+						);
 						break;
 					case "enum":
 						// Render a <select> with the enum's values. The
@@ -542,20 +569,57 @@ component {
 							enumValues = $resolveEnumValuesFromModel(arguments.modelName, fieldName);
 						}
 						if (len(enumValues)) {
-							fieldCode = '##select(objectName="|ObjectNameSingular|", property="#fieldName#", options="#enumValues#", label="#fieldLabel#")##';
+							fieldCode = $scaffoldFieldCall(
+								helperName = "select",
+								fieldName = fieldName,
+								fieldLabel = fieldLabel,
+								extraArgs = 'options="#enumValues#"'
+							);
 						} else {
 							// Fall back to a textField if we couldn't find
 							// the values — better than crashing the scaffold.
-							fieldCode = '##textField(objectName="|ObjectNameSingular|", property="#fieldName#", label="#fieldLabel#")##';
+							fieldCode = $scaffoldFieldCall(
+								helperName = "textField",
+								fieldName = fieldName,
+								fieldLabel = fieldLabel
+							);
 						}
 						break;
 					default:
-						fieldCode = '##textField(objectName="|ObjectNameSingular|", property="#fieldName#", label="#fieldLabel#")##';
+						fieldCode = $scaffoldFieldCall(
+							helperName = "textField",
+							fieldName = fieldName,
+							fieldLabel = fieldLabel
+						);
 				}
 			}
 			arrayAppend(fields, fieldCode);
 		}
 		return arrayToList(fields, chr(10));
+	}
+
+	/**
+	 * One scaffolded field: `.field` wrapper, label above the control
+	 * (except checkboxes), and includeErrorMessage so validation text
+	 * lives in the field block (#3549, #3550).
+	 */
+	private string function $scaffoldFieldCall(
+		required string helperName,
+		required string fieldName,
+		required string fieldLabel,
+		boolean stacked = true,
+		string extraArgs = ""
+	) {
+		var call = '##' & arguments.helperName & '(objectName="|ObjectNameSingular|", property="#arguments.fieldName#", label="#arguments.fieldLabel#"';
+		if (arguments.stacked) {
+			call &= ', labelPlacement="before"';
+		}
+		call &= ', includeErrorMessage=true';
+		if (len(arguments.extraArgs)) {
+			call &= ', ' & arguments.extraArgs;
+		}
+		call &= ')##';
+		return '<div class="field">' & chr(10) & call & chr(10) & '</div>';
 	}
 
 	/**

@@ -397,6 +397,16 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(content).notToInclude('textField(objectName="post", property="status"');
 				});
 
+				it("_form.cfm stacks labels above fields and nests errors in the field block", () => {
+					$scaffoldPost();
+					var content = fileRead(tempRoot & "/app/views/posts/_form.cfm");
+					expect(content).toInclude('class="field"');
+					expect(content).toInclude('labelPlacement="before"');
+					expect(content).toInclude("includeErrorMessage=true");
+					expect(content).toInclude('textField(objectName="post", property="title"');
+					expect(content).toInclude('textArea(objectName="post", property="body"');
+				});
+
 				it("index.cfm uses article markup, not Bootstrap table classes", () => {
 					$scaffoldPost();
 					var content = fileRead(tempRoot & "/app/views/posts/index.cfm");

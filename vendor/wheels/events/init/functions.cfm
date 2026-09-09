@@ -156,13 +156,15 @@
 			appendText = "",
 			wrapperElement = "span",
 			class = "error-message",
+			role = "alert",
 			encode = true
 		};
 		application.$wheels.functions.errorMessagesFor = {
 			class = "error-messages",
 			showDuplicates = true,
 			encode = true,
-			includeAssociations = true
+			includeAssociations = true,
+			role = "alert"
 		};
 		application.$wheels.functions.excerpt = {radius = 100, excerptString = "..."};
 		application.$wheels.functions.exists = {reload = false, parameterize = true};
