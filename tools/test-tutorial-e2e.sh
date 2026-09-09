@@ -189,8 +189,65 @@ else
 fi
 
 reload_app() {
+    # `wheels reload` applicationStop()s; the next request re-runs
+    # onApplicationStart. A fixed sleep raced the first-compile of a
+    # freshly scaffolded Post model on cold CI runners. Wait for `/`
+    # to answer again instead.
     run_cli reload > /dev/null 2>&1 || true
-    sleep 2
+    wait_for_server || true
+}
+
+# POST /wheels/console/eval __ping__ until the eval surface is actually
+# ready (password + JSON + success=true). `/` coming up is not enough:
+# after reload the first eval can still 500 while models compile.
+wait_for_console() {
+    local password=""
+    if [ -f "$APP_DIR/.env" ]; then
+        password="$(grep -E '^(WHEELS_)?RELOAD_PASSWORD=' "$APP_DIR/.env" | head -1 | cut -d= -f2- | tr -d '[:space:]' | tr -d '"' | tr -d "'")"
+    fi
+    local i body
+    for i in $(seq 1 60); do
+        body="$(curl -s --connect-timeout 2 --max-time 10 \
+            -X POST -H "Content-Type: application/json" \
+            -d "{\"expression\":\"__ping__\",\"password\":\"${password}\"}" \
+            "http://localhost:$PORT/wheels/console/eval" 2>/dev/null || true)"
+        if printf '%s' "$body" | grep -q '"success"[[:space:]]*:[[:space:]]*true'; then
+            return 0
+        fi
+        sleep 2
+    done
+    return 1
+}
+
+# Run one console expression. Fails the check (and dumps the log) when the
+# CLI exits non-zero, prints `Error:`, or reports a validation failure —
+# so a silent no-op create cannot look like success.
+run_console_expr() {
+    local expr="$1" label="$2" expect_re="${3:-}"
+    printf '%s\n' "$expr" | run_cli console > "$TMPDIR/console.log" 2>&1
+    local code=$?
+    if [ "$code" -ne 0 ]; then
+        fail "$label — console exited $code"
+        cat "$TMPDIR/console.log"
+        return 0
+    fi
+    if grep -q '^Error:' "$TMPDIR/console.log"; then
+        fail "$label — console printed Error:"
+        cat "$TMPDIR/console.log"
+        return 0
+    fi
+    if grep -q 'Validation failed' "$TMPDIR/console.log"; then
+        fail "$label — model validation failed"
+        cat "$TMPDIR/console.log"
+        return 0
+    fi
+    if [ -n "$expect_re" ] && ! grep -qiE "$expect_re" "$TMPDIR/console.log"; then
+        fail "$label — console output missing /$expect_re/"
+        cat "$TMPDIR/console.log"
+        return 0
+    fi
+    pass "$label"
+    return 0
 }
 
 # ── Beat 2: scaffold Post + migrate + routes ──────────────────────────────
@@ -210,11 +267,24 @@ run_cli migrate latest > "$TMPDIR/migrate.log" 2>&1 \
     && pass "migrate latest exited 0" || { fail "migrate latest failed"; cat "$TMPDIR/migrate.log"; }
 
 reload_app
+if wait_for_console; then
+    pass "console eval endpoint ready after reload"
+else
+    fail "console eval endpoint not ready after reload"
+fi
 echo "==> console: create a Post"
 # The scaffold adds validatesPresenceOf("title,body,publishedAt"), so pass all three.
-printf '%s\n' 'model("Post").create(title="Console Post", body="Created from the console", publishedAt=Now())' \
-    | run_cli console > "$TMPDIR/console.log" 2>&1 \
-    && pass "console create exited 0" || { fail "console create failed"; cat "$TMPDIR/console.log"; }
+# create() returns the model even when validation fails — the CLI now treats
+# `_hasErrors` as a failed expression (non-zero on EOF). Also assert the
+# row is actually queryable before we look at /posts.
+run_console_expr \
+    'model("Post").create(title="Console Post", body="Created from the console", publishedAt=Now())' \
+    "console create persisted" \
+    '_isNew: (false|no)'
+run_console_expr \
+    'model("Post").count(where="title=''Console Post''")' \
+    "console count of Console Post is 1" \
+    '=> 1'
 
 echo "==> routes"
 run_cli routes > "$TMPDIR/routes.log" 2>&1 \
@@ -236,10 +306,15 @@ echo ""
 echo "==> HTTP surface"
 assert_http "/posts" 200 "GET /posts"
 assert_http "/posts.json" 200 "GET /posts.json (format suffix)"
-if curl -s "http://localhost:$PORT/posts" | grep -q "Console Post"; then
+POSTS_BODY="$(curl -s --connect-timeout 2 --max-time 15 "http://localhost:$PORT/posts" 2>/dev/null || true)"
+if printf '%s' "$POSTS_BODY" | grep -q "Console Post"; then
     pass "console-created Post appears in /posts"
 else
     fail "console-created Post missing from /posts"
+    echo "  --- /posts body (first 2k) ---"
+    printf '%s' "$POSTS_BODY" | head -c 2048
+    echo ""
+    echo "  --- end /posts body ---"
 fi
 
 # ── Beat 7: api-resource + .json ──────────────────────────────────────────

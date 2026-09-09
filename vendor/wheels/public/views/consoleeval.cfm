@@ -243,6 +243,29 @@ if (!StructKeyExists(variables, "$consoleEvalFormatResult")) {
 					if (structKeyExists(local.evalResult, "isNew") && isCustomFunction(local.evalResult.isNew)) {
 						local.props["_isNew"] = local.evalResult.isNew();
 					}
+					// Validation state so the CLI can fail a piped session
+					// when `.create()` returned an unsaved invalid model.
+					local.errorMeta = {hasErrors = false, errors = []};
+					if (structKeyExists(local.evalResult, "hasErrors") && isCustomFunction(local.evalResult.hasErrors)) {
+						local.errorMeta.hasErrors = local.evalResult.hasErrors();
+					}
+					if (
+						local.errorMeta.hasErrors
+						&& structKeyExists(local.evalResult, "allErrors")
+						&& isCustomFunction(local.evalResult.allErrors)
+					) {
+						local.rawErrors = local.evalResult.allErrors();
+						for (local.err in local.rawErrors) {
+							local.propName = structKeyExists(local.err, "property") ? local.err.property : "";
+							local.msg = structKeyExists(local.err, "message") ? local.err.message : "";
+							arrayAppend(
+								local.errorMeta.errors,
+								len(local.propName) ? (local.propName & ": " & local.msg) : local.msg
+							);
+						}
+					}
+					local.props["_hasErrors"] = local.errorMeta.hasErrors;
+					local.props["_errors"] = local.errorMeta.errors;
 					local.response.result = serializeJSON(local.props);
 				} catch (any e) {
 					local.response.result = getMetadata(local.evalResult).name ?: "Model";
