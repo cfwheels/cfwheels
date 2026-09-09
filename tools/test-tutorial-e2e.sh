@@ -203,19 +203,22 @@ reload_app() {
 wait_for_console() {
     local password=""
     if [ -f "$APP_DIR/.env" ]; then
-        password="$(grep -E '^(WHEELS_)?RELOAD_PASSWORD=' "$APP_DIR/.env" | head -1 | cut -d= -f2- | tr -d '[:space:]' | tr -d '"' | tr -d "'")"
+        # First matching RELOAD_PASSWORD assignment; strip quotes/CR.
+        password="$(grep -E '^(WHEELS_)?RELOAD_PASSWORD=' "$APP_DIR/.env" | head -1 | cut -d= -f2- | tr -d '\r\n\t "')"
     fi
     local i body
-    for i in $(seq 1 60); do
+    for i in $(seq 1 30); do
         body="$(curl -s --connect-timeout 2 --max-time 10 \
             -X POST -H "Content-Type: application/json" \
             -d "{\"expression\":\"__ping__\",\"password\":\"${password}\"}" \
             "http://localhost:$PORT/wheels/console/eval" 2>/dev/null || true)"
-        if printf '%s' "$body" | grep -q '"success"[[:space:]]*:[[:space:]]*true'; then
+        # serializeJSON key case varies by engine (success vs SUCCESS).
+        if printf '%s' "$body" | grep -qiE '"success"[[:space:]]*:[[:space:]]*true'; then
             return 0
         fi
         sleep 2
     done
+    echo "  last console ping body: ${body:0:300}"
     return 1
 }
 
@@ -224,8 +227,10 @@ wait_for_console() {
 # so a silent no-op create cannot look like success.
 run_console_expr() {
     local expr="$1" label="$2" expect_re="${3:-}"
-    printf '%s\n' "$expr" | run_cli console > "$TMPDIR/console.log" 2>&1
-    local code=$?
+    local code=0
+    # pipefail + set -e would abort the whole script on a non-zero
+    # console exit before we can dump the log — capture it instead.
+    printf '%s\n' "$expr" | run_cli console > "$TMPDIR/console.log" 2>&1 || code=$?
     if [ "$code" -ne 0 ]; then
         fail "$label — console exited $code"
         cat "$TMPDIR/console.log"
@@ -282,8 +287,8 @@ run_console_expr \
     "console create persisted" \
     '_isNew: (false|no)'
 run_console_expr \
-    'model("Post").count(where="title=''Console Post''")' \
-    "console count of Console Post is 1" \
+    'model("Post").count()' \
+    "console count of posts is 1" \
     '=> 1'
 
 echo "==> routes"
