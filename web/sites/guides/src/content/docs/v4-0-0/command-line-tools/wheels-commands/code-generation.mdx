@@ -63,11 +63,14 @@ The other generators (`controller`, `view`, `migration`, `route`, `test`, `helpe
 | You write | Column type | Notes |
 |---|---|---|
 | `name` | `string` | Type defaults to `string` when `:type` is omitted. |
-| `title:string` | `string` | Also: `varchar`. |
+| `title:string` | `string` | Also: `varchar`. Default `limit=255`. |
+| `title:string{50}` | `string` | Rails-style brace sets `limit=50`. Same `{N}` form works on `integer`, `text`, `binary`, and `varchar`. |
 | `body:text` | `text` | Also: `longtext`. |
-| `count:integer` | `integer` | Also: `int`. |
+| `count:integer` | `integer` | Also: `int`. Default `limit=11`. |
 | `views:biginteger` | `bigInteger` | Also: `bigint`. |
-| `price:decimal` | `decimal` | Also: `float`, `numeric`. |
+| `price:decimal` | `decimal` | Also: `float`, `numeric`. Default `precision=10`, `scale=2`. |
+| `price:decimal{10,2}` | `decimal` | Brace sets `precision=10`, `scale=2`. |
+| `status:enum:draft,published` | `enum` | Colon-separated values are unchanged — braces must not be used for the value list. |
 | `active:boolean` | `boolean` | Also: `bool`. |
 | `publishedAt:datetime` | `datetime` | Also: `timestamp`. |
 | `publishedOn:date` | `date` | |
@@ -79,6 +82,15 @@ The other generators (`controller`, `view`, `migration`, `route`, `test`, `helpe
 
 <Aside type="note" title="Type aliases land on the same column type">
 The mapper folds aliases together — `varchar` and `string` both emit `t.string(...)`, `int` and `integer` both emit `t.integer(...)`, and so on. Pick whichever reads best; the generated migration is identical.
+</Aside>
+
+<Aside type="tip" title="Quote braced sizes in the shell">
+Brace modifiers are Rails-compatible (`title:string{50}`, `price:decimal{10,2}`). Some shells treat `{…}` as a glob or brace expansion, so quote those arguments when needed:
+
+```bash
+wheels generate scaffold Post 'title:string{50}' 'price:decimal{10,2}' body:text
+wheels generate model Product 'name:string{80}' 'amount:decimal{12,4}'
+```
 </Aside>
 
 ### `wheels generate model`

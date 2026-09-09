@@ -75,4 +75,8 @@ component extends="cli.lucli.Module" {
 		return parseTestArgs(arguments.coll);
 	}
 
+	public struct function $parseGeneratorArgs(required array args) {
+		return parseGeneratorArgs(arguments.args);
+	}
+
 }

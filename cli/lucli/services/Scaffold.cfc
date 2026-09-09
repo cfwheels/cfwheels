@@ -1163,12 +1163,7 @@ component {
 			// types `default=''` just rendered DEFAULT NULL anyway. Omitting the
 			// default yields NULL for nullable columns, which is the same thing.
 			params &= ", allowNull=" & (structKeyExists(prop, "required") && prop.required ? "false" : "true");
-
-			switch (cfType) {
-				case "string": params &= ", limit='255'"; break;
-				case "decimal": params &= ", precision='10', scale='2'"; break;
-				case "integer": params &= ", limit='11'"; break;
-			}
+			params &= $columnSizeParams(prop, cfType);
 
 			c &= t & t & t & t & "t.#cfType#(#params#);" & nl;
 		}
@@ -1209,6 +1204,40 @@ component {
 	}
 
 	/**
+	 * Emit limit / precision / scale for a generated column.
+	 * Brace modifiers from the CLI (`string{50}`, `decimal{10,2}`) override
+	 * the defaults; types that do not take a default size only emit a limit
+	 * when the caller supplied one.
+	 */
+	private string function $columnSizeParams(required struct prop, required string cfType) {
+		switch (arguments.cfType) {
+			case "string":
+				return ", limit='" & $propOrDefault(arguments.prop, "limit", "255") & "'";
+			case "decimal":
+				return ", precision='" & $propOrDefault(arguments.prop, "precision", "10")
+					& "', scale='" & $propOrDefault(arguments.prop, "scale", "2") & "'";
+			case "integer":
+				return ", limit='" & $propOrDefault(arguments.prop, "limit", "11") & "'";
+			case "text":
+			case "binary":
+				if (structKeyExists(arguments.prop, "limit")) {
+					return ", limit='" & arguments.prop.limit & "'";
+				}
+				return "";
+			default:
+				return "";
+		}
+	}
+
+	/**
+	 * Read a numeric column-size override from a parsed property, or the
+	 * generator default when the caller omitted a brace modifier.
+	 */
+	private string function $propOrDefault(required struct prop, required string key, required string fallback) {
+		return structKeyExists(arguments.prop, arguments.key) ? arguments.prop[arguments.key] : arguments.fallback;
+	}
+
+	/**
 	 * Map property type to Wheels migration column type
 	 */
 	private string function mapToWheelsType(required string type) {
@@ -1241,8 +1270,8 @@ component {
 	 */
 	private string function $mapWheelsTextualType(required string type) {
 		switch (arguments.type) {
-			case "string": return "string";
-			case "text": return "text";
+			case "string": case "varchar": return "string";
+			case "text": case "longtext": return "text";
 			default: return "";
 		}
 	}
