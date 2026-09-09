@@ -64,7 +64,7 @@ The other generators (`controller`, `view`, `migration`, `route`, `test`, `helpe
 |---|---|---|
 | `name` | `string` | Type defaults to `string` when `:type` is omitted. |
 | `title:string` | `string` | Also: `varchar`. Default `limit=255`. |
-| `title:string{50}` | `string` | Rails-style brace sets `limit=50`. Same `{N}` form works on `integer`, `text`, `binary`, and `varchar`. |
+| `title:string{50}` | `string` | Rails-style brace sets migration `limit=50` and `validatesLengthOf(property="title", maximum=50)` on the generated model. Same `{N}` form works on `integer`, `text`, `binary`, and `varchar` (length validation is string-like types only). |
 | `body:text` | `text` | Also: `longtext`. |
 | `count:integer` | `integer` | Also: `int`. Default `limit=11`. |
 | `views:biginteger` | `bigInteger` | Also: `bigint`. |
@@ -91,6 +91,8 @@ Brace modifiers are Rails-compatible (`title:string{50}`, `price:decimal{10,2}`)
 wheels generate scaffold Post 'title:string{50}' 'price:decimal{10,2}' body:text
 wheels generate model Product 'name:string{80}' 'amount:decimal{12,4}'
 ```
+
+A `{n}` limit on `string`, `varchar`, `text`, or `binary` also emits `validatesLengthOf(property="…", maximum=n)` in the generated model's `config()`. Bare types without braces do not invent a length validation (no implicit `maximum=255`). Integer `{n}` is a column display width only; decimal `{p,s}` stays precision/scale.
 </Aside>
 
 ### `wheels generate model`

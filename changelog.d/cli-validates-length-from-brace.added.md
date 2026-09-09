@@ -1,0 +1,1 @@
+- CLI generators emit `validatesLengthOf(property=..., maximum=N)` on the generated model when a string-like property (`string`, `varchar`, `text`, `binary`) uses a `{N}` size modifier

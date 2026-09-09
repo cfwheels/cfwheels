@@ -66,30 +66,50 @@ component {
 	/**
 	 * Build validation code lines for a model's config() from typed properties.
 	 * Emits a single combined validatesPresenceOf("a,b,c") for all properties,
-	 * plus per-property validatesFormatOf for email and URL types.
+	 * plus per-property validatesFormatOf for email and URL types, and
+	 * validatesLengthOf when a string-like property carries a brace `{N}` limit.
 	 */
 	private string function buildModelValidations(required array properties) {
 		if (!arrayLen(arguments.properties)) return "";
 
 		var presenceProps = [];
-		var formatLines = [];
+		var extraLines = [];
 
 		for (var prop in arguments.properties) {
 			arrayAppend(presenceProps, prop.name);
 			var propType = structKeyExists(prop, "type") ? lCase(prop.type) : "string";
 			if (propType == "email") {
-				arrayAppend(formatLines, "validatesFormatOf(property=""#prop.name#"", type=""email"");");
+				arrayAppend(extraLines, "validatesFormatOf(property=""#prop.name#"", type=""email"");");
 			} else if (propType == "url") {
-				arrayAppend(formatLines, "validatesFormatOf(property=""#prop.name#"", type=""URL"");");
+				arrayAppend(extraLines, "validatesFormatOf(property=""#prop.name#"", type=""URL"");");
+			}
+			if (isStringLikeLengthLimit(prop, propType)) {
+				arrayAppend(extraLines, "validatesLengthOf(property=""#prop.name#"", maximum=#prop.limit#);");
 			}
 		}
 
 		var lines = ["validatesPresenceOf(""#arrayToList(presenceProps)#"");"];
-		lines.append(formatLines, true);
+		lines.append(extraLines, true);
 		// Join with newline + 2 tabs so subsequent lines align with the template's
 		// `\t\t{{validations}}` placeholder indent. The first line gets its indent
 		// from the placeholder's leading whitespace at fill time.
 		return arrayToList(lines, chr(10) & chr(9) & chr(9));
+	}
+
+	/**
+	 * True when the property is string-like and carries a numeric `{N}` limit
+	 * from the generator parser. Integer `{N}` is a column display width, not
+	 * a string length, so it is excluded. Decimal `{p,s}` uses precision/scale
+	 * and never sets limit.
+	 */
+	private boolean function isStringLikeLengthLimit(required struct prop, required string propType) {
+		if (listFindNoCase("string,varchar,text,binary", arguments.propType) == 0) {
+			return false;
+		}
+		if (!structKeyExists(arguments.prop, "limit")) {
+			return false;
+		}
+		return isNumeric(arguments.prop.limit) && val(arguments.prop.limit) > 0;
 	}
 
 	/**

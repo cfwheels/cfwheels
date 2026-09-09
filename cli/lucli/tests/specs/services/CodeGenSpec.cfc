@@ -135,6 +135,77 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					var content = fileRead(tempRoot & "/app/models/Empty.cfc");
 					expect(content).notToInclude("validatesPresenceOf");
 					expect(content).notToInclude("validatesFormatOf");
+					expect(content).notToInclude("validatesLengthOf");
+				});
+
+				it("emits validatesLengthOf for a string property with a brace limit", () => {
+					codegen.generateModel(
+						name = "SizedTitle",
+						properties = [{name: "title", type: "string", limit: "50"}],
+						force = true
+					);
+					var content = fileRead(tempRoot & "/app/models/SizedTitle.cfc");
+					expect(content).toInclude('validatesPresenceOf("title")');
+					expect(content).toInclude('validatesLengthOf(property="title", maximum=50)');
+				});
+
+				it("does not invent a length validation for a bare string", () => {
+					codegen.generateModel(
+						name = "BareTitle",
+						properties = [{name: "title", type: "string"}],
+						force = true
+					);
+					var content = fileRead(tempRoot & "/app/models/BareTitle.cfc");
+					expect(content).toInclude('validatesPresenceOf("title")');
+					expect(content).notToInclude("validatesLengthOf");
+				});
+
+				it("emits length validation for varchar / text / binary limits", () => {
+					codegen.generateModel(
+						name = "SizedMisc",
+						properties = [
+							{name: "sku", type: "varchar", limit: "80"},
+							{name: "body", type: "text", limit: "1000"},
+							{name: "blob", type: "binary", limit: "4096"}
+						],
+						force = true
+					);
+					var content = fileRead(tempRoot & "/app/models/SizedMisc.cfc");
+					expect(content).toInclude('validatesPresenceOf("sku,body,blob")');
+					expect(content).toInclude('validatesLengthOf(property="sku", maximum=80)');
+					expect(content).toInclude('validatesLengthOf(property="body", maximum=1000)');
+					expect(content).toInclude('validatesLengthOf(property="blob", maximum=4096)');
+				});
+
+				it("skips length validation for integer limits and decimal precision", () => {
+					codegen.generateModel(
+						name = "NumericSized",
+						properties = [
+							{name: "count", type: "integer", limit: "8"},
+							{name: "price", type: "decimal", precision: "10", scale: "2"}
+						],
+						force = true
+					);
+					var content = fileRead(tempRoot & "/app/models/NumericSized.cfc");
+					expect(content).toInclude('validatesPresenceOf("count,price")');
+					expect(content).notToInclude("validatesLengthOf");
+				});
+
+				it("keeps email format validation alongside a sibling string limit", () => {
+					codegen.generateModel(
+						name = "MixedValidations",
+						properties = [
+							{name: "title", type: "string", limit: "50"},
+							{name: "email", type: "email"}
+						],
+						force = true
+					);
+					var content = fileRead(tempRoot & "/app/models/MixedValidations.cfc");
+					expect(content).toInclude('validatesPresenceOf("title,email")');
+					expect(content).toInclude('validatesFormatOf(property="email", type="email")');
+					expect(content).toInclude('validatesLengthOf(property="title", maximum=50)');
+					expect(content).toInclude(chr(9) & chr(9) & "validatesLengthOf");
+					expect(content).notToInclude(chr(10) & "validatesLengthOf");
 				});
 
 				it("emits enum() for enum-typed properties (##M2)", () => {
