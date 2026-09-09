@@ -644,7 +644,7 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					);
 					expect(result.success).toBeTrue();
 					var content = fileRead(result.path);
-					expect(content).toInclude('model("Gadget").create(properties = {"label" = "MyString"})');
+					expect(content).toInclude('model("Gadget").create(properties = {"label": "MyString"})');
 					expect(content).toInclude("expect(result.status).toBe(201)");
 					expect(content).toInclude("expect(result.status).toBe(204)");
 					expect(content).toInclude("beforeCount + 1");
