@@ -6716,7 +6716,7 @@ component extends="modules.BaseModule" {
 		string basePath = "",
 		numeric timeoutSeconds = 900
 	) {
-		var serverPort = $requireRunningServer([
+		var serverPort = $requireOwnRunningServer([
 			"Start one with: wheels start",
 			"Or use: bash tools/test-local.sh (auto-manages server)"
 		]);
@@ -8571,6 +8571,38 @@ component extends="modules.BaseModule" {
 			message=arguments.requireProjectConfig
 				? "No running Wheels server detected for this project (set 'port' in lucee.json or PORT in .env, then start with: wheels start)"
 				: "No running Wheels server detected on any expected port (checked lucee.json, .env, 8080/60000/3000/8500)"
+		);
+	}
+
+	/**
+	 * Guard for commands that must target THIS project's server, not a
+	 * sibling app squatting a common port. `wheels test` is the canonical
+	 * caller: attaching to the wrong server yields misleading spec-load
+	 * failures (a foreign app reports a spec file that "failed to load" with
+	 * its own models on the stack). Unlike `$requireRunningServer()`, this
+	 * never falls back to a bare port probe — it only accepts a server whose
+	 * ownership is provable: the RustCFML backend (project-bound by
+	 * construction) or a Lucee registration in the server registry whose
+	 * `.project-path` matches this project (see ServerRegistry.ownServerPort).
+	 */
+	private numeric function $requireOwnRunningServer(required array hints) {
+		// RustCFML backend is project-bound by construction.
+		var rustSvc = new services.rustcfml.RustCFMLEngine();
+		var rustStatus = rustSvc.status(variables.projectRoot);
+		if (rustStatus.running && structKeyExists(rustStatus, "port") && rustStatus.port > 0) {
+			return rustStatus.port;
+		}
+
+		// Lucee: only the project's OWN registered, alive server qualifies.
+		var ownPort = getService("serverRegistry").ownServerPort(variables.projectRoot);
+		if (ownPort > 0) return ownPort;
+
+		for (var hint in arguments.hints) {
+			out(hint, "yellow");
+		}
+		throw(
+			type="Wheels.ServerNotRunning",
+			message="No running Wheels server detected for this project (start one with: wheels start)"
 		);
 	}
 
