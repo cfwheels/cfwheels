@@ -168,8 +168,12 @@ component {
 		var t = chr(9);
 		for (var col in arguments.columns) {
 			var helper = mapColumnToFormHelper(col);
-			fields &= t & "<div>" & nl;
-			fields &= t & t & '##' & helper & '(objectName="#arguments.singular#", property="#col.name#")##' & nl;
+			var extra = ', includeErrorMessage=true';
+			if (helper != "checkBox") {
+				extra = ', labelPlacement="before"' & extra;
+			}
+			fields &= t & '<div class="field">' & nl;
+			fields &= t & t & '##' & helper & '(objectName="#arguments.singular#", property="#col.name#"#extra#)##' & nl;
 			fields &= t & "</div>" & nl;
 		}
 		return fields;

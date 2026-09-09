@@ -538,12 +538,38 @@ component {
 			}
 			local.rv &= arguments.appendToLabel;
 		}
+		if ($includeFormErrorMessage(argumentCollection = arguments) && $formHasError(argumentCollection = arguments)) {
+			// Nest the per-field message inside the error wrapper, after the
+			// control (and after around-placement's closing label). Prefix is
+			// a non-color cue; CSS adds an icon + red (#3549, #3550).
+			local.errorArgs = {
+				objectName = arguments.objectName,
+				property = arguments.property,
+				prependText = "Error:"
+			};
+			if (StructKeyExists(arguments, "encode")) {
+				local.errorArgs.encode = arguments.encode;
+			}
+			local.rv &= errorMessageOn(argumentCollection = local.errorArgs);
+		}
 		if ($formHasError(argumentCollection = arguments) && Len(arguments.errorElement)) {
 			arguments.errorElement = $sanitizeHtmlTagName(arguments.errorElement);
 			// the input has an error and is wrapped in a tag so we need to close that wrapper tag
 			local.rv &= "</" & arguments.errorElement & ">";
 		}
 		return local.rv;
+	}
+
+	/**
+	 * Whether this field helper should emit errorMessageOn() inside its error wrapper.
+	 * Per-call `includeErrorMessage` wins; otherwise the app-level setting
+	 * `includeFormErrorMessages` (default false) is used.
+	 */
+	public boolean function $includeFormErrorMessage() {
+		if (StructKeyExists(arguments, "includeErrorMessage") && IsBoolean(arguments.includeErrorMessage)) {
+			return arguments.includeErrorMessage;
+		}
+		return $get("includeFormErrorMessages");
 	}
 
 	/**

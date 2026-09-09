@@ -18,6 +18,7 @@ component {
 	 * @appendToLabel String to append to the form control's label. Useful to wrap the form control with HTML tags.
 	 * @errorElement HTML tag to wrap the form control with when the object contains errors.
 	 * @errorClass The class name of the HTML tag that wraps the form control when there are errors.
+	 * @includeErrorMessage When true, nest errorMessageOn() inside the field's error wrapper after the control. When omitted, the app-level includeFormErrorMessages setting is used (false unless the app opts in).
 	 * @type Input type attribute. Common examples in HTML5 and later are text (default), email, tel, and url.
 	 * @labelClass String added to the label's class.
 	 * @encode [see:styleSheetLinkTag].

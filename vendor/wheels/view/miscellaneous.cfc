@@ -496,6 +496,7 @@ component {
 					|| Left(local.key, Len(arguments.skipStartingWith)) != arguments.skipStartingWith
 				)
 				&& Left(local.key, 1) != "$"
+				&& !ListFindNoCase("includeErrorMessage,includeFormErrorMessages", local.key)
 			) {
 				if (IsSimpleValue(arguments.attributes[local.key])) {
 					local.rv &= $tagAttribute(
