@@ -5524,25 +5524,25 @@ component extends="modules.BaseModule" {
 			out("--- #heading# ---", "bold");
 
 			for (var col in (diff.addColumns ?: [])) {
-				out("  + add    #col#", "green");
+				out("  + add    #col.name# (#col.type#)", "green");
 				anyOutput = true;
 			}
 			for (var col in (diff.removeColumns ?: [])) {
-				out("  - remove #col#", "red");
-				out("      (if this is a rename, use --rename #col#:newName)", "yellow");
+				out("  - remove #col.name#", "red");
+				out("      (if this is a rename, use --rename #col.name#:newName)", "yellow");
 				anyOutput = true;
 			}
 			for (var col in (diff.changeColumns ?: [])) {
-				out("  ~ change #col#", "yellow");
+				out("  ~ change #col.name# (#col.from.type# -> #col.to.type#)", "yellow");
 				anyOutput = true;
 			}
 			for (var col in (diff.renameColumns ?: [])) {
-				out("  ~ rename #col#", "yellow");
+				out("  ~ rename #col.from# -> #col.to#", "yellow");
 				anyOutput = true;
 			}
 			for (var suggestion in (diff.suggestedRenames ?: [])) {
-				var sugOld = suggestion.oldName ?: "?";
-				var sugNew = suggestion.newName ?: "?";
+				var sugOld = suggestion.from ?: "?";
+				var sugNew = suggestion.to ?: "?";
 				var sugConf = suggestion.confidence ?: "";
 				out("  ? suggest #sugOld# -> #sugNew# (#sugConf#)", "cyan");
 				anyOutput = true;
