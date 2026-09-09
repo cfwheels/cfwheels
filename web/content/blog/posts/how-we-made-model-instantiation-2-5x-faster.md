@@ -18,6 +18,7 @@ excerpt: >-
   trusting micro-benchmarks.
 coverImage: '/blog-images/4-1/how-we-made-model-instantiation-2-5x-faster.png'
 announcement:
+  discussionUrl: 'https://github.com/wheels-dev/wheels/discussions/3540'
   title: '2.5x faster model instantiation'
   body: |
     New post: **[2.5x faster, the long way](https://blog.wheels.dev/blog/how-we-made-model-instantiation-2-5x-faster)** — how model materialization got 2.5x faster, the long way.

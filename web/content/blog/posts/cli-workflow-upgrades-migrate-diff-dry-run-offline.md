@@ -17,6 +17,7 @@ excerpt: >-
   and the honesty fixes that make a green build mean something.
 coverImage: '/blog-images/4-1/cli-workflow-upgrades-migrate-diff-dry-run-offline.png'
 announcement:
+  discussionUrl: 'https://github.com/wheels-dev/wheels/discussions/3538'
   title: 'CLI upgrades: diff, dry-run, offline'
   body: |
     New post: **[CLI workflows that never guess](https://blog.wheels.dev/blog/cli-workflow-upgrades-migrate-diff-dry-run-offline)** — `wheels migrate diff`, `wheels generate --dry-run`, and offline mode.

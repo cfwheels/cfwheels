@@ -17,6 +17,7 @@ excerpt: >-
   have to check on the way up.
 coverImage: '/blog-images/4-1/the-wheels-4-1-security-hardening-pass.png'
 announcement:
+  discussionUrl: 'https://github.com/wheels-dev/wheels/discussions/3542'
   title: 'The 4.1 security hardening pass'
   body: |
     New post: **[Fail closed, everywhere](https://blog.wheels.dev/blog/the-wheels-4-1-security-hardening-pass)** — the hardening pass that makes Wheels fail closed by default.
