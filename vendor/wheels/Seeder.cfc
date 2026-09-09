@@ -314,7 +314,15 @@ component output="false" extends="wheels.Global" {
 							var record = {};
 							for (var propName in properties) {
 								if (propName != "id" && !ListFindNoCase("createdAt,updatedAt,deletedAt", propName)) {
-									var propType = StructKeyExists(properties[propName], "type") ? properties[propName].type : "string";
+									// Prefer the simple validationType ("string"/"integer"/"text"/
+									// "datetime"/"boolean") over the CF_SQL type ("cf_sql_varchar"/
+									// "cf_sql_integer"). The type-based branches in $generateTestData
+									// match the simple names, so using the CF_SQL type made every
+									// non-name-matched property fall through to the default string —
+									// an integer FK (postId) was generated as "postId Test 1".
+									var propType = StructKeyExists(properties[propName], "validationType")
+										? properties[propName].validationType
+										: (StructKeyExists(properties[propName], "type") ? properties[propName].type : "string");
 									record[propName] = $generateTestData(propName, propType, i);
 								}
 							}
@@ -324,14 +332,25 @@ component output="false" extends="wheels.Global" {
 							}
 						}
 
+						// A model that saves ZERO rows (every generated record rejected by
+						// its validations) is skipped, not failed: auto-generated data cannot
+						// satisfy auth models (transient password/confirmation, protected
+						// digest) or unique/association constraints, and failing the whole
+						// run over one such model makes `wheels seed` useless for a normal
+						// blog-with-auth app. Partial success (some rows saved, some not) is
+						// still a real failure — validations are rejecting some generated data.
+						var entrySkipped = (arguments.count > 0 && seededCount == 0);
 						var entrySuccess = (seededCount == arguments.count);
 						ArrayAppend(result.seeded, {
 							model = modelName,
 							count = seededCount,
-							success = entrySuccess
+							success = entrySuccess,
+							skipped = entrySkipped
 						});
 						result.totalCreated += seededCount;
-						if (!entrySuccess) {
+						if (entrySkipped) {
+							result.totalSkipped++;
+						} else if (!entrySuccess) {
 							result.totalFailed++;
 						}
 					} catch (any modelError) {
@@ -339,6 +358,7 @@ component output="false" extends="wheels.Global" {
 							model = modelName,
 							count = 0,
 							success = false,
+							skipped = false,
 							error = modelError.message
 						});
 						result.totalFailed++;
@@ -366,6 +386,9 @@ component output="false" extends="wheels.Global" {
 		result.success = (result.totalFailed == 0 && result.totalCreated > 0);
 		if (result.success) {
 			result.message = "Database seeding completed. Created #result.totalCreated# records across #ArrayLen(result.seeded)# #ArrayLen(result.seeded) == 1 ? 'model' : 'models'#.";
+			if (result.totalSkipped > 0) {
+				result.message &= " Skipped #result.totalSkipped# model(s) that could not be auto-generated (#$skippedGenerateSummary(result.seeded)#) — use `wheels seed models=...` or a hand-written seeds.cfm for those.";
+			}
 		} else {
 			result.message = "Database seeding failed. Created #result.totalCreated# records; #result.totalFailed# of #ArrayLen(result.seeded)# #result.totalFailed == 1 ? 'model' : 'models'# failed (#$failedGenerateSummary(result.seeded)#).";
 		}
@@ -412,12 +435,26 @@ component output="false" extends="wheels.Global" {
 	public string function $failedGenerateSummary(required array seeded) {
 		var parts = [];
 		for (var entry in arguments.seeded) {
-			if (!entry.success) {
+			if (!entry.success && !(StructKeyExists(entry, "skipped") && entry.skipped)) {
 				var reason = StructKeyExists(entry, "error") ? entry.error : "only #entry.count# of the requested rows saved";
 				ArrayAppend(parts, "#entry.model#: #reason#");
 			}
 		}
 		return ArrayToList(parts, "; ");
+	}
+
+	/**
+	 * Internal function. Comma-joined list of model names that were skipped
+	 * (saved zero rows) during generateSeeds().
+	 */
+	public string function $skippedGenerateSummary(required array seeded) {
+		var parts = [];
+		for (var entry in arguments.seeded) {
+			if (StructKeyExists(entry, "skipped") && entry.skipped) {
+				ArrayAppend(parts, entry.model);
+			}
+		}
+		return ArrayToList(parts, ", ");
 	}
 
 	/**
@@ -499,9 +536,10 @@ component output="false" extends="wheels.Global" {
 			return {handled = true, value = "https://example#arguments.index#.com"};
 		}
 
-		// Password fields
+		// Password fields — long enough for the auth scaffold's
+		// validatesLengthOf(password, minimum=12).
 		if (FindNoCase("password", arguments.name)) {
-			return {handled = true, value = "TestPass#arguments.index#!"};
+			return {handled = true, value = "TestPassword#arguments.index#!"};
 		}
 
 		return {handled = false, value = ""};
