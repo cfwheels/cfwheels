@@ -1,0 +1,1 @@
+- Fixed the debug bar's Code Complexity panel leaking raw CFML identifiers (e.g. `#local.codeComplexity.summary.files#`) instead of evaluated values on engines that do not inherit the `cfoutput` context across a `cfinclude` boundary. The panel now wraps its own `<cfoutput>` so summary metrics and per-file rows always render real numbers and paths (#3548)
