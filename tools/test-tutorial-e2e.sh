@@ -318,13 +318,16 @@ echo "==> HTTP surface"
 assert_http "/posts" 200 "GET /posts"
 assert_http "/posts.json" 200 "GET /posts.json (format suffix)"
 POSTS_BODY="$(curl -s --connect-timeout 2 --max-time 15 "http://localhost:$PORT/posts" 2>/dev/null || true)"
-if printf '%s' "$POSTS_BODY" | grep -q "Console Post"; then
+# Avoid `printf | grep -q` under `set -o pipefail`: grep -q closes the pipe
+# as soon as it matches, printf then SIGPIPEs, and the pipeline is treated
+# as a failure even when "Console Post" is in the HTML (debug-bar pages are
+# large enough to hit this every time).
+if [[ "$POSTS_BODY" == *"Console Post"* ]]; then
     pass "console-created Post appears in /posts"
 else
     fail "console-created Post missing from /posts"
     echo "  --- /posts body (first 2k) ---"
-    printf '%s' "$POSTS_BODY" | head -c 2048
-    echo ""
+    printf '%s\n' "${POSTS_BODY:0:2048}"
     echo "  --- end /posts body ---"
 fi
 

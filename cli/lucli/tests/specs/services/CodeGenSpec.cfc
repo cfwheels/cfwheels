@@ -93,7 +93,8 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 						force = true
 					);
 					var content = fileRead(tempRoot & "/tests/specs/controllers/PostsControllerSpec.cfc");
-					expect(content).toInclude('model("Post").create(properties = {title = "MyString", body = "MyText", publishedAt = Now()})');
+					expect(content).toInclude('model("Post").create(properties = {"title" = "MyString", "body" = "MyText", "publishedAt" = Now()})');
+					expect(content).notToInclude("{title = ");
 					expect(content).toInclude("beforeCount + 1");
 					expect(content).toInclude("beforeCount - 1");
 					expect(content).toInclude("expect(result.status).toBe(302)");
@@ -115,7 +116,7 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					var rich = fileRead(tempRoot & "/tests/specs/models/PostSpec.cfc");
 					expect(rich).toInclude("is invalid without required attributes");
 					expect(rich).toInclude("is valid with required attributes");
-					expect(rich).toInclude('new(properties = {title = "MyString", body = "MyText"})');
+					expect(rich).toInclude('new(properties = {"title" = "MyString", "body" = "MyText"})');
 				});
 
 				it("sample attributes cover enum, email, integer, and boolean types", () => {
@@ -132,10 +133,11 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 						force = true
 					);
 					var content = fileRead(tempRoot & "/tests/specs/controllers/TicketsControllerSpec.cfc");
-					expect(content).toInclude('status = "open"');
-					expect(content).toInclude('email = "user@example.com"');
-					expect(content).toInclude("count = 1");
-					expect(content).toInclude("active = true");
+					expect(content).toInclude('"status" = "open"');
+					expect(content).toInclude('"email" = "user@example.com"');
+					expect(content).toInclude('"count" = 1');
+					expect(content).toInclude('"active" = true');
+					expect(content).notToInclude("{status = ");
 				});
 
 				it("api spec asserts 201/204 and count deltas with created record keys", () => {
@@ -154,7 +156,7 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(content).toInclude("expect(result.status).toBe(201)");
 					expect(content).toInclude("expect(result.status).toBe(204)");
 					expect(content).toInclude("variables.widget.id");
-					expect(content).toInclude('value = "MyString"');
+					expect(content).toInclude('"value" = "MyString"');
 					expect(content).notToInclude("processRequest(route=");
 				});
 

@@ -95,14 +95,14 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(content).toInclude('action = "edit"');
 					expect(content).toInclude('action = "update"');
 					expect(content).toInclude('action = "delete"');
-					expect(content).toInclude('model("Chronicle").create(properties = {title = "MyString", body = "MyText", publishedAt = Now()})');
+					expect(content).toInclude('model("Chronicle").create(properties = {"title" = "MyString", "body" = "MyText", "publishedAt" = Now()})');
 					expect(content).toInclude("beforeCount + 1");
 					expect(content).toInclude("beforeCount - 1");
 					expect(content).toInclude("expect(result.status).toBe(302)");
 
 					var modelSpec = fileRead(tempRoot & "/tests/specs/models/ChronicleSpec.cfc");
 					expect(modelSpec).toInclude("is invalid without required attributes");
-					expect(modelSpec).toInclude('new(properties = {title = "MyString", body = "MyText", publishedAt = Now()})');
+					expect(modelSpec).toInclude('new(properties = {"title" = "MyString", "body" = "MyText", "publishedAt" = Now()})');
 				});
 
 				it("generates migration file in migrations directory", () => {
@@ -644,7 +644,7 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					);
 					expect(result.success).toBeTrue();
 					var content = fileRead(result.path);
-					expect(content).toInclude('model("Gadget").create(properties = {label = "MyString"})');
+					expect(content).toInclude('model("Gadget").create(properties = {"label" = "MyString"})');
 					expect(content).toInclude("expect(result.status).toBe(201)");
 					expect(content).toInclude("expect(result.status).toBe(204)");
 					expect(content).toInclude("beforeCount + 1");
