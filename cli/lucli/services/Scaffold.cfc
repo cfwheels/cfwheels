@@ -1227,7 +1227,16 @@ component {
 		var textual = $mapWheelsTextualType(t);
 		if (len(textual)) return textual;
 
-		return $mapWheelsOtherType(t);
+		var other = $mapWheelsOtherType(t);
+		if (len(other)) return other;
+
+		// Never silently map an unknown type to a VARCHAR — `references` and
+		// other unrecognised tokens must fail loudly instead of producing a
+		// plain string column with no foreign key.
+		throw(
+			type = "ScaffoldError",
+			message = "Unknown property type '#arguments.type#'. Valid types: string, text, integer, biginteger, float, decimal, boolean, date, datetime, time, binary, uuid, enum, email, url."
+		);
 	}
 
 	/**
@@ -1255,8 +1264,10 @@ component {
 	}
 
 	/**
-	 * Map boolean/temporal/binary/uuid property types (and the default) to
-	 * their Wheels migration column type.
+	 * Map boolean/temporal/binary/uuid property types to their Wheels
+	 * migration column type. `email`/`url`/`enum` are stored as VARCHAR
+	 * columns (the model layer adds format/enum behaviour); anything else
+	 * returns "" so mapToWheelsType() rejects it instead of guessing "string".
 	 */
 	private string function $mapWheelsOtherType(required string type) {
 		switch (arguments.type) {
@@ -1266,7 +1277,8 @@ component {
 			case "time": return "time";
 			case "binary": case "blob": return "binary";
 			case "uuid": return "uniqueidentifier";
-			default: return "string";
+			case "email": case "url": case "enum": return "string";
+			default: return "";
 		}
 	}
 

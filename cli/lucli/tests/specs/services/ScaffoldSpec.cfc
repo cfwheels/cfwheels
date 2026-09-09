@@ -673,6 +673,24 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 
 			});
 
+			describe("unknown property type rejection", () => {
+
+				it("rejects 'references' instead of silently emitting a VARCHAR", () => {
+					// `user:references` was previously mapped to `string`, producing
+					// a plain VARCHAR column with no FK and no warning. Unknown types
+					// must fail loudly rather than generate silently-wrong output.
+					var result = scaffold.generateScaffold(
+						name = "Assignment",
+						properties = [{name: "content", type: "text"}, {name: "user", type: "references"}],
+						force = true
+					);
+					expect(result.success).toBeFalse();
+					expect(arrayLen(result.errors)).toBeGTE(1);
+					expect(result.errors[1]).toInclude("references");
+				});
+
+			});
+
 		});
 
 	}
