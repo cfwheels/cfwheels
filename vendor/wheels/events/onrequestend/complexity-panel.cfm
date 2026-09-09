@@ -3,8 +3,12 @@
 	inherit the cfoutput context across a <cfinclude> boundary, so the
 	expressions in this partial leaked as literal CFML references instead of
 	evaluated values. A self-contained <cfoutput> evaluates them on Lucee,
-	Adobe CF, and BoxLang (issue 3548). Reads local.codeComplexity, populated
-	defensively in debug.cfm. --->
+	Adobe CF, BoxLang, and RustCFML (issue 3548).
+
+	File paths use HtmlEditFormat (not EncodeForHTML): RustCFML's EncodeForHTML
+	encodes "/" as "&#x2f;", which breaks readable path display and the panel
+	regression. HtmlEditFormat still escapes <>&"' while preserving slashes.
+	Reads local.codeComplexity, populated defensively in debug.cfm. --->
 <cfoutput>
 <div class="wdb-panel" id="wdb-panel-complexity">
 	<div class="wdb-panel-header">
@@ -41,7 +45,7 @@
 						<cfset local.rowColor = "##a6e3a1">
 					</cfif>
 					<tr style="border-bottom:1px solid ##313244;color:##cdd6f4;">
-						<td style="padding:4px 8px;font-family:monospace;">#EncodeForHTML(local.cf.file)#</td>
+						<td style="padding:4px 8px;font-family:monospace;">#HtmlEditFormat(local.cf.file)#</td>
 						<td style="padding:4px 8px;text-align:right;">#local.cf.functions#</td>
 						<td style="padding:4px 8px;text-align:right;color:#local.rowColor#;font-weight:600;">#local.cf.complexity#</td>
 						<td style="padding:4px 8px;text-align:right;">#NumberFormat(local.cf.avg, "0.0")#</td>
