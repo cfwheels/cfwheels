@@ -107,7 +107,7 @@
 <cfset local.codeComplexity = local.codeComplexityAnalyzer.load(ExpandPath("/app"))>
 <!--- cfformat-ignore-start --->
 <cfsavecontent variable="local.wdbHtml"><cfoutput>
-<div id="wheels-debugbar" style="all:initial;position:fixed;bottom:0;left:0;width:100%;overflow:hidden;z-index:99999;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;">
+<div id="wheels-debugbar" style="all:initial;display:block;position:fixed;bottom:0;left:0;overflow:hidden;z-index:99999;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;">
 <style><cfinclude template="/wheels/public/assets/css/debugbar.css"></style>
 
 <!--- ============ RELOAD-REFUSED NOTICE (issue 3311) ============

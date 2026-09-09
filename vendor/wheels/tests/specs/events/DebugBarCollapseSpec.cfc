@@ -6,7 +6,8 @@ component extends="wheels.WheelsTest" {
 			// sibling button labeled "Debug" (the ##3345 restore control). Collapse
 			// now keeps the container visible and shrinks it to the stylized W logo
 			// via a CSS width transition. These specs lock the chrome contract:
-			// logo first, X last, no floating Debug button, CSS/JS animation hooks.
+			// logo first, X last, no floating Debug button, no inline width fight,
+			// collapsed-chrome CSS hides non-logo bar children.
 
 			it("renders the stylized W logo first and the X close last, with no floating Debug button", () => {
 				var output = $renderDebugBar();
@@ -19,6 +20,18 @@ component extends="wheels.WheelsTest" {
 				);
 				expect(output contains "</svg>Debug</button>").toBeFalse(
 					"the collapsed chrome must not be a floating button labeled Debug"
+				);
+				expect(
+					FindNoCase('id="wheels-debugbar" style="all:initial;display:block;', output)
+				).toBeGT(
+					0,
+					"all:initial isolation must restore display:block so width can layout and transition"
+				);
+				expect(
+					FindNoCase('id="wheels-debugbar" style="all:initial;display:block;position:fixed;bottom:0;left:0;width:', output)
+				).toBe(
+					0,
+					"the root inline style must not pin width — stylesheet width has to animate"
 				);
 
 				var barStart = FindNoCase('id="wdb-bar"', output);
@@ -80,6 +93,14 @@ component extends="wheels.WheelsTest" {
 				expect(FindNoCase("width:40px", css)).toBeGT(
 					0,
 					"collapsed chrome must shrink to a logo-sized width"
+				);
+				expect(FindNoCase("width:100% !important", css)).toBeGT(
+					0,
+					"expanded width must be stylesheet-driven with !important so it beats all:initial and interpolates with the collapsed 40px rule"
+				);
+				expect(FindNoCase(".wdb-bar>:not(.wdb-logo)", css)).toBeGT(
+					0,
+					"collapsed chrome must hide non-logo children of .wdb-bar, not only clip them"
 				);
 				expect(FindNoCase("wdb-collapsed", js)).toBeGT(
 					0,
