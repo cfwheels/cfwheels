@@ -107,7 +107,7 @@
 <cfset local.codeComplexity = local.codeComplexityAnalyzer.load(ExpandPath("/app"))>
 <!--- cfformat-ignore-start --->
 <cfsavecontent variable="local.wdbHtml"><cfoutput>
-<div id="wheels-debugbar" style="all:initial;position:fixed;bottom:0;left:0;right:0;z-index:99999;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;">
+<div id="wheels-debugbar" style="all:initial;position:fixed;bottom:0;left:0;width:100%;overflow:hidden;z-index:99999;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;">
 <style><cfinclude template="/wheels/public/assets/css/debugbar.css"></style>
 
 <!--- ============ RELOAD-REFUSED NOTICE (issue 3311) ============
@@ -132,10 +132,11 @@
 	</div>
 </cfif>
 
-<!--- ============ COLLAPSED BAR ============ --->
+<!--- ============ CHROME BAR ============ --->
 <div class="wdb-bar" id="wdb-bar">
-	<!--- Wheels logo / toggle --->
-	<button class="wdb-tab" onclick="wdbToggle('request')" title="Request Details">
+	<!--- Wheels logo: first chrome element. Opens Request when expanded;
+		restores the bar when collapsed (issue 3547). --->
+	<button class="wdb-tab wdb-logo" onclick="wdbLogoClick()" title="Request Details">
 		<svg viewBox="0 0 31 18" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:16px;"><path d="M15.71 12c1.65 0 2.99 1.34 2.99 3s-1.34 3-2.99 3-2.99-1.34-2.99-3v-1.27c0-.42-.15-.79-.45-1.09L6.1 6.45c-.3-.3-.66-.45-1.09-.45H3.75c-1.65 0-2.99-1.34-2.99-3S2.09 0 3.74 0s2.99 1.34 2.99 3v1.27c0 .42.15.79.45 1.09l6.17 6.19c.3.3.66.45 1.09.45h1.27zM27.68 0c1.65 0 2.99 1.34 2.99 3s-1.34 3-2.99 3-2.99-1.34-2.99-3 1.34-3 2.99-3zm0 12h-1.27c-.42 0-.79-.15-1.09-.45l-6.17-6.19c-.3-.3-.45-.66-.45-1.09V3c0-1.65-1.34-3-2.99-3S12.73 1.35 12.73 3s1.34 3 2.99 3h1.27c.42 0 .79.16 1.09.45l6.17 6.19c.3.3.45.66.45 1.09V15c0 1.65 1.34 3 2.99 3s2.99-1.34 2.99-3-1.34-3-2.99-3z" fill="##f38ba8"/></svg>
 	</button>
 	<span class="wdb-sep"></span>
@@ -200,8 +201,8 @@
 		</a>
 	</cfif>
 
-	<!--- Close/minimize --->
-	<button class="wdb-tab" onclick="wdbMinimize()" title="Hide Debug Bar" style="color:##a6adc8;">
+	<!--- Close: last chrome element. Slides the bar left to the logo (issue 3547). --->
+	<button class="wdb-tab wdb-close" onclick="wdbMinimize()" title="Hide Debug Bar" style="color:##a6adc8;">
 		<svg viewBox="0 0 320 512" style="width:10px;height:10px;fill:currentColor;"><path d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z"/></svg>
 	</button>
 </div>
@@ -521,17 +522,7 @@
 <!--- ============ COMPLEXITY PANEL ============ --->
 <cfinclude template="/wheels/events/onrequestend/complexity-panel.cfm">
 
-</div>
-
-<!--- ============ MINIMIZED BUTTON ============ --->
-<!--- Sibling of ##wheels-debugbar on purpose: wdbMinimize() sets the container to display:none, and a descendant of a display:none element can never render, so nesting this inside the container makes the restore button unreachable (issue ##3345). It is independently position:fixed. The script include stays below so both elements exist when debugbar.js's load-time wdbMinimize() re-invocation runs. --->
-<div id="wdb-minimized" style="all:initial;display:none;position:fixed;bottom:8px;right:8px;z-index:99999;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;">
-	<button onclick="wdbRestore()" style="background:##1e1e2e;border:1px solid ##45475a;border-radius:8px;padding:6px 10px;cursor:pointer;color:##89b4fa;font-size:12px;font-family:inherit;display:flex;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.3);">
-		<svg viewBox="0 0 153 18" xmlns="http://www.w3.org/2000/svg" style="width:20px;height:5px;"><path d="M15.71 12c1.65 0 2.99 1.34 2.99 3s-1.34 3-2.99 3-2.99-1.34-2.99-3v-1.27c0-.42-.15-.79-.45-1.09L6.1 6.45c-.3-.3-.66-.45-1.09-.45H3.75c-1.65 0-2.99-1.34-2.99-3S2.09 0 3.74 0s2.99 1.34 2.99 3v1.27c0 .42.15.79.45 1.09l6.17 6.19c.3.3.66.45 1.09.45z" fill="##f38ba8"/></svg>
-		Debug
-	</button>
-</div>
-
 <script><cfinclude template="/wheels/public/assets/js/debugbar.js"></script>
+</div>
 </cfoutput></cfsavecontent><cfoutput>#ReReplace(local.wdbHtml, "(?m)>\s+<", "><", "all")#</cfoutput>
 <!--- cfformat-ignore-end --->

@@ -1,6 +1,43 @@
 (function () {
 	var activePanel = null;
+
+	function debugRoot() {
+		return document.getElementById('wheels-debugbar');
+	}
+
+	function setCollapsed(collapsed, animate) {
+		var root = debugRoot();
+		if (!root) return;
+		if (!animate) {
+			root.classList.add('wdb-no-transition');
+		}
+		if (collapsed) {
+			root.classList.add('wdb-collapsed');
+		} else {
+			root.classList.remove('wdb-collapsed');
+		}
+		var logo = root.querySelector('.wdb-logo');
+		if (logo) {
+			logo.title = collapsed ? 'Show Debug Bar' : 'Request Details';
+		}
+		if (!animate) {
+			root.offsetWidth;
+			root.classList.remove('wdb-no-transition');
+		}
+		try {
+			if (collapsed) {
+				sessionStorage.setItem('wdb-hidden', '1');
+			} else {
+				sessionStorage.removeItem('wdb-hidden');
+			}
+		} catch (e) {}
+	}
+
 	window.wdbToggle = function (name) {
+		var root = debugRoot();
+		if (root && root.classList.contains('wdb-collapsed')) {
+			return;
+		}
 		var panels = document.querySelectorAll('#wheels-debugbar .wdb-panel');
 		var tabs = document.querySelectorAll('#wheels-debugbar .wdb-tab');
 		if (activePanel === name) {
@@ -22,16 +59,20 @@
 		for (var j = 0; j < tabs.length; j++) tabs[j].classList.remove('active');
 		activePanel = null;
 	};
+	window.wdbLogoClick = function () {
+		var root = debugRoot();
+		if (root && root.classList.contains('wdb-collapsed')) {
+			wdbRestore();
+			return;
+		}
+		wdbToggle('request');
+	};
 	window.wdbMinimize = function () {
 		wdbClosePanel();
-		document.getElementById('wheels-debugbar').style.display = 'none';
-		document.getElementById('wdb-minimized').style.display = 'block';
-		try { sessionStorage.setItem('wdb-hidden', '1'); } catch (e) {}
+		setCollapsed(true, true);
 	};
 	window.wdbRestore = function () {
-		document.getElementById('wheels-debugbar').style.display = '';
-		document.getElementById('wdb-minimized').style.display = 'none';
-		try { sessionStorage.removeItem('wdb-hidden'); } catch (e) {}
+		setCollapsed(false, true);
 	};
 	window.wdbEnvSwitch = function (el) {
 		var target = el.getAttribute('data-wdb-reload');
@@ -41,5 +82,10 @@
 		window.location.href = target + '&password=' + encodeURIComponent(pw);
 		return false;
 	};
-	try { if (sessionStorage.getItem('wdb-hidden') === '1') wdbMinimize(); } catch (e) {}
+	try {
+		if (sessionStorage.getItem('wdb-hidden') === '1') {
+			wdbClosePanel();
+			setCollapsed(true, false);
+		}
+	} catch (e) {}
 })();
