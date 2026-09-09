@@ -2,8 +2,8 @@ component extends="wheels.WheelsTest" {
 
 	function run() {
 		describe("debug.cfm Complexity panel rendering", () => {
-			// The Complexity panel is <cfinclude>d from inside debug.cfm's
-			// <cfsavecontent><cfoutput> block. At least one supported engine does
+			// The Complexity panel is cfinclude'd from inside debug.cfm's
+			// cfsavecontent/cfoutput block. At least one supported engine does
 			// not inherit the cfoutput context across the include boundary, so the
 			// panel's expressions leaked literally into the HTML instead of
 			// evaluating (issue #3548). This spec renders debug.cfm with a
