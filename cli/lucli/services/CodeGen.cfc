@@ -448,9 +448,10 @@ component {
 
 	/**
 	 * CFML struct literal used as model().create(properties=...) / params.<model>.
-	 * Keys are quoted so they keep their camelCase names — unquoted
-	 * `{title = "MyString"}` becomes TITLE on Adobe (and some Lucee settings),
-	 * and Wheels then looks up a property that does not exist.
+	 * Use quoted keys + colon (`{"title": "MyString"}`). Unquoted `{title = ...}`
+	 * uppercases the key to TITLE. Quoted keys with equals (`{"title" = ...}`)
+	 * are a boolean equality expression, not a keyed entry — create() then
+	 * receives a boolean and Wheels looks up TITLE on it.
 	 */
 	private string function $buildValidAttributesLiteral(required array properties) {
 		if (!arrayLen(arguments.properties)) {
@@ -458,7 +459,7 @@ component {
 		}
 		var parts = [];
 		for (var prop in arguments.properties) {
-			arrayAppend(parts, '"' & prop.name & '" = ' & $samplePropertyLiteral(prop));
+			arrayAppend(parts, '"' & prop.name & '": ' & $samplePropertyLiteral(prop));
 		}
 		return "{" & arrayToList(parts, ", ") & "}";
 	}
