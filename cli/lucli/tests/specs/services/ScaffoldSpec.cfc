@@ -74,6 +74,37 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(content).toInclude("function delete()");
 				});
 
+				it("emits a full CRUD controller spec with model().create() test data", () => {
+					var result = scaffold.generateScaffold(
+						name = "Chronicle",
+						properties = [
+							{name: "title", type: "string"},
+							{name: "body", type: "text"},
+							{name: "publishedAt", type: "datetime"}
+						],
+						force = true
+					);
+					expect(result.success).toBeTrue();
+					var specPath = tempRoot & "/tests/specs/controllers/ChroniclesControllerSpec.cfc";
+					expect(fileExists(specPath)).toBeTrue();
+					var content = fileRead(specPath);
+					expect(content).toInclude('action = "index"');
+					expect(content).toInclude('action = "new"');
+					expect(content).toInclude('action = "create"');
+					expect(content).toInclude('action = "show"');
+					expect(content).toInclude('action = "edit"');
+					expect(content).toInclude('action = "update"');
+					expect(content).toInclude('action = "delete"');
+					expect(content).toInclude('model("Chronicle").create(properties = {"title": "MyString", "body": "MyText", "publishedAt": Now()})');
+					expect(content).toInclude("beforeCount + 1");
+					expect(content).toInclude("beforeCount - 1");
+					expect(content).toInclude("expect(result.status).toBe(303)");
+
+					var modelSpec = fileRead(tempRoot & "/tests/specs/models/ChronicleSpec.cfc");
+					expect(modelSpec).toInclude("is invalid without required attributes");
+					expect(modelSpec).toInclude('new(properties = {"title": "MyString", "body": "MyText", "publishedAt": Now()})');
+				});
+
 				it("generates migration file in migrations directory", () => {
 					var migrationsDir = tempRoot & "/app/migrator/migrations";
 					var files = directoryList(migrationsDir, false, "name", "*articles*");
@@ -602,6 +633,23 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(content).toInclude('route: "apiWidget"');
 					expect(content).toInclude('returnAs="struct"');
 					expect(content).notToInclude('processRequest(route=');
+				});
+
+				it("creates a record in beforeEach and asserts create/delete count deltas", () => {
+					var result = scaffold.generateApiTest(
+						controllerName = "Gadgets",
+						modelName = "Gadget",
+						properties = [{name: "label", type: "string"}],
+						force = true
+					);
+					expect(result.success).toBeTrue();
+					var content = fileRead(result.path);
+					expect(content).toInclude('model("Gadget").create(properties = {"label": "MyString"})');
+					expect(content).toInclude("expect(result.status).toBe(201)");
+					expect(content).toInclude("expect(result.status).toBe(204)");
+					expect(content).toInclude("beforeCount + 1");
+					expect(content).toInclude("beforeCount - 1");
+					expect(content).toInclude("variables.gadget.id");
 				});
 
 			});
