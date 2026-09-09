@@ -150,7 +150,11 @@ component {
 				local.method = "get";
 			}
 		}
-		arguments.method = local.method;
+		// Route resolution below must use the caller's real verb (delete/put/patch),
+		// not the spoofed HTML form method. Singular member routes have no POST
+		// candidate, so passing "post" to URLFor / $findRoute threw
+		// Wheels.RouteNotFound (issue #3551). The spoofed form method is applied just
+		// before the form element is rendered.
 		// Shallow copy for the same reason as in linkTo() above.
 		local.args = StructCopy(arguments);
 		local.args.$encodeForHtmlAttribute = true;
@@ -168,6 +172,10 @@ component {
 			// variables passed in as route arguments should not be added to the html element
 			local.skip = ListAppend(local.skip, $routeVariables(argumentCollection = arguments));
 		}
+		// The form element itself submits with the spoofed HTML method (post, or get for
+		// get requests); the real verb for put/patch/delete is carried in the hidden
+		// `_method` field added above.
+		arguments.method = local.method;
 		local.encode = $coerceEncode(arguments.encode, "attributes");
 		if ($isRequestProtectedFromForgery() && ListFindNoCase("post,put,patch,delete", arguments.method)) {
 			local.content &= authenticityTokenField();
