@@ -117,6 +117,12 @@
                 }
             }
 
+            // Expand the TestBox mapping up front so constructor / run failures
+            // can report the filesystem path (a missing `/tests` mapping after
+            // applicationStop() looks exactly like "specs failed to compile").
+            local.testFsPath = ExpandPath("/" & Replace(local.testDirectory, ".", "/", "all"));
+            local.testDirectoryExists = DirectoryExists(local.testFsPath);
+
             try {
                 testBox = new wheels.wheelstest.system.TestBox(
                     directory = local.testDirectory,
@@ -128,7 +134,11 @@
                 writeOutput(SerializeJSON({
                     success: false,
                     error: "Failed to create TestBox instance",
-                    message: e.message
+                    message: e.message,
+                    detail: e.detail ?: "",
+                    directoryResolved: local.testDirectory,
+                    testDirectoryPath: local.testFsPath,
+                    testDirectoryExists: local.testDirectoryExists
                 }));
                 abort;
             }
@@ -145,6 +155,13 @@
                 scope = local.testScope,
                 bundlesDiscovered = local.bundlesDiscovered
             );
+            if (!local.testDirectoryExists) {
+                ArrayAppend(
+                    local.scopeWarnings,
+                    "Test directory mapping '" & local.testDirectory & "' expanded to '"
+                    & local.testFsPath & "' which does not exist."
+                );
+            }
 
             // Resolve the output format (reporter + content type + whether to
             // render an HTML report) through TestFormatResolver so the rule is
@@ -155,7 +172,24 @@
             local.output = local.fmtResolver.resolveFormat(url);
 
             if (local.output.recognized) {
-                result = testBox.run(reporter = local.output.reporter);
+                try {
+                    result = testBox.run(reporter = local.output.reporter);
+                } catch (any runErr) {
+                    cfheader(statuscode = 500);
+                    cfcontent(type = "application/json");
+                    writeOutput(SerializeJSON({
+                        success: false,
+                        error: "TestBox run failed",
+                        message: runErr.message,
+                        detail: runErr.detail ?: "",
+                        bundlesDiscovered: local.bundlesDiscovered,
+                        directoryResolved: local.testDirectory,
+                        testDirectoryPath: local.testFsPath,
+                        testDirectoryExists: local.testDirectoryExists,
+                        warnings: local.scopeWarnings
+                    }));
+                    abort;
+                }
 
                 if (local.output.rendersHtml) {
                     // Render the TestBox-style HTML report for the html / no-format

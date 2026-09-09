@@ -151,6 +151,23 @@ Any of these end the session:
 
 There is no `.exit` command. Typing `exit` or `quit` without the leading slash will be evaluated as a CFML expression and produce an error.
 
+### Scripting and exit codes
+
+Piped sessions (EOF after one or more expressions) exit non-zero when:
+
+- the console cannot connect or the `__ping__` handshake fails
+- an expression evaluates with `success: false` (the CLI prints `Error: …`)
+- the result is a model that has validation errors (`.create()` that did not persist)
+
+Interactive `/exit` still returns 0 so a typo does not fail the whole session. Connection and ping failures always exit non-zero, interactive or not.
+
+```bash title="illustrative — fail a script when create does not persist"
+printf '%s\n' 'model("Post").create(title="Console Post", body="Created from the console", publishedAt=Now())' \
+  | wheels console
+```
+
+`model().create()` returns the object even when validation fails. The console treats `_hasErrors` on that result as a failed expression, so the pipeline above is a safe gate — do not assert success from the CLI exit code alone without this contract.
+
 <Aside type="note" title="Expressions, not statements">
 Each line is evaluated as a CFML expression. Variable assignments work (`var x = 1`), but multi-line blocks, `if`/`else` control flow, and `cfscript` component declarations are not supported — wrap them in a `.cfm` script and execute that instead.
 </Aside>
