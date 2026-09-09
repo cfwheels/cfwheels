@@ -618,6 +618,33 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(content).notToInclude('findByKey(params.key, include=');
 				});
 
+				it("emits <name>_id FK column when useUnderscoreReferenceColumns=true", () => {
+					// `wheels new` apps opt into underscore reference columns; the
+					// scaffold's belongsTo FK column must match what t.references()
+					// would produce rather than hard-coding camelCase `userId`.
+					var settingsPath = tempRoot & "/config/settings.cfm";
+					var originalSettings = fileRead(settingsPath);
+					fileWrite(
+						settingsPath,
+						replace(originalSettings, "// CLI-Appends-Here", "set(useUnderscoreReferenceColumns=true);" & chr(10) & "// CLI-Appends-Here")
+					);
+
+					scaffold.generateScaffold(
+						name = "Membership",
+						properties = [{name: "level", type: "string"}],
+						belongsTo = "User",
+						force = true
+					);
+
+					var files = directoryList(tempRoot & "/app/migrator/migrations", false, "name", "*memberships*");
+					expect(arrayLen(files)).toBeGTE(1);
+					var migration = fileRead(tempRoot & "/app/migrator/migrations/" & files[1]);
+					expect(migration).toInclude("t.integer(columnNames='user_id'");
+					expect(migration).notToInclude("columnNames='userId'");
+
+					fileWrite(settingsPath, originalSettings);
+				});
+
 			});
 
 			describe("generateApiTest() (CLI-D3)", () => {
