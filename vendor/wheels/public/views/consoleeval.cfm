@@ -199,80 +199,95 @@ if (!StructKeyExists(variables, "$consoleEvalHandleBuiltInCommands")) {
 	};
 }
 
+if (!StructKeyExists(variables, "$consoleEvalFormatQuery")) {
+	variables.$consoleEvalFormatQuery = function(required evalResult, required response) {
+		local.response = arguments.response;
+		local.response.type = "query";
+		local.cols = listToArray(arguments.evalResult.columnList);
+		local.rows = [];
+		local.rowCount = 0;
+		for (local.row in arguments.evalResult) {
+			local.rowCount++;
+			// Limit to 100 rows to avoid huge responses
+			if (local.rowCount > 100) break;
+			local.r = {};
+			for (local.col in local.cols) {
+				local.r[local.col] = isNull(local.row[local.col]) ? "" : local.row[local.col];
+			}
+			arrayAppend(local.rows, local.r);
+		}
+		local.response.result = serializeJSON({
+			columns: local.cols,
+			recordCount: arguments.evalResult.recordCount,
+			data: local.rows
+		});
+	};
+}
+
+if (!StructKeyExists(variables, "$consoleEvalFormatModel")) {
+	variables.$consoleEvalFormatModel = function(required evalResult, required response) {
+		local.evalResult = arguments.evalResult;
+		local.response = arguments.response;
+		local.response.type = "model";
+		try {
+			local.props = local.evalResult.properties();
+			if (structKeyExists(local.evalResult, "key") && isCustomFunction(local.evalResult.key)) {
+				local.props["_key"] = local.evalResult.key();
+			}
+			if (structKeyExists(local.evalResult, "isNew") && isCustomFunction(local.evalResult.isNew)) {
+				local.props["_isNew"] = local.evalResult.isNew();
+			}
+			$consoleEvalAttachModelErrors(local.evalResult, local.props);
+			local.response.result = serializeJSON(local.props);
+		} catch (any e) {
+			local.response.result = getMetadata(local.evalResult).name ?: "Model";
+			local.response.type = "object";
+		}
+	};
+}
+
+if (!StructKeyExists(variables, "$consoleEvalAttachModelErrors")) {
+	variables.$consoleEvalAttachModelErrors = function(required evalResult, required props) {
+		// Validation state so the CLI can fail a piped session when
+		// `.create()` returned an unsaved invalid model.
+		local.errorMeta = {hasErrors = false, errors = []};
+		if (structKeyExists(arguments.evalResult, "hasErrors") && isCustomFunction(arguments.evalResult.hasErrors)) {
+			local.errorMeta.hasErrors = arguments.evalResult.hasErrors();
+		}
+		if (
+			local.errorMeta.hasErrors
+			&& structKeyExists(arguments.evalResult, "allErrors")
+			&& isCustomFunction(arguments.evalResult.allErrors)
+		) {
+			local.rawErrors = arguments.evalResult.allErrors();
+			for (local.err in local.rawErrors) {
+				local.propName = structKeyExists(local.err, "property") ? local.err.property : "";
+				local.msg = structKeyExists(local.err, "message") ? local.err.message : "";
+				arrayAppend(
+					local.errorMeta.errors,
+					len(local.propName) ? (local.propName & ": " & local.msg) : local.msg
+				);
+			}
+		}
+		arguments.props["_hasErrors"] = local.errorMeta.hasErrors;
+		arguments.props["_errors"] = local.errorMeta.errors;
+	};
+}
+
 if (!StructKeyExists(variables, "$consoleEvalFormatResult")) {
 	variables.$consoleEvalFormatResult = function(required evalResult, required response) {
 		local.evalResult = arguments.evalResult;
 		local.response = arguments.response;
 
 		if (!isNull(local.evalResult)) {
-			// Query objects (from findAll, etc.)
 			if (isQuery(local.evalResult)) {
-				local.response.type = "query";
-				local.cols = listToArray(local.evalResult.columnList);
-				local.rows = [];
-				local.rowCount = 0;
-				for (local.row in local.evalResult) {
-					local.rowCount++;
-					// Limit to 100 rows to avoid huge responses
-					if (local.rowCount > 100) break;
-					local.r = {};
-					for (local.col in local.cols) {
-						local.r[local.col] = isNull(local.row[local.col]) ? "" : local.row[local.col];
-					}
-					arrayAppend(local.rows, local.r);
-				}
-				local.response.result = serializeJSON({
-					columns: local.cols,
-					recordCount: local.evalResult.recordCount,
-					data: local.rows
-				});
-
-			// Wheels model objects (from findByKey, findOne, new)
+				$consoleEvalFormatQuery(local.evalResult, local.response);
 			} else if (
 				isObject(local.evalResult)
 				&& structKeyExists(local.evalResult, "properties")
 				&& isCustomFunction(local.evalResult.properties)
 			) {
-				local.response.type = "model";
-				try {
-					local.props = local.evalResult.properties();
-					// Add key if available
-					if (structKeyExists(local.evalResult, "key") && isCustomFunction(local.evalResult.key)) {
-						local.props["_key"] = local.evalResult.key();
-					}
-					if (structKeyExists(local.evalResult, "isNew") && isCustomFunction(local.evalResult.isNew)) {
-						local.props["_isNew"] = local.evalResult.isNew();
-					}
-					// Validation state so the CLI can fail a piped session
-					// when `.create()` returned an unsaved invalid model.
-					local.errorMeta = {hasErrors = false, errors = []};
-					if (structKeyExists(local.evalResult, "hasErrors") && isCustomFunction(local.evalResult.hasErrors)) {
-						local.errorMeta.hasErrors = local.evalResult.hasErrors();
-					}
-					if (
-						local.errorMeta.hasErrors
-						&& structKeyExists(local.evalResult, "allErrors")
-						&& isCustomFunction(local.evalResult.allErrors)
-					) {
-						local.rawErrors = local.evalResult.allErrors();
-						for (local.err in local.rawErrors) {
-							local.propName = structKeyExists(local.err, "property") ? local.err.property : "";
-							local.msg = structKeyExists(local.err, "message") ? local.err.message : "";
-							arrayAppend(
-								local.errorMeta.errors,
-								len(local.propName) ? (local.propName & ": " & local.msg) : local.msg
-							);
-						}
-					}
-					local.props["_hasErrors"] = local.errorMeta.hasErrors;
-					local.props["_errors"] = local.errorMeta.errors;
-					local.response.result = serializeJSON(local.props);
-				} catch (any e) {
-					local.response.result = getMetadata(local.evalResult).name ?: "Model";
-					local.response.type = "object";
-				}
-
-			// Simple values (strings, numbers, booleans)
+				$consoleEvalFormatModel(local.evalResult, local.response);
 			} else if (isSimpleValue(local.evalResult)) {
 				if (isNumeric(local.evalResult)) {
 					local.response.type = "number";
@@ -282,24 +297,16 @@ if (!StructKeyExists(variables, "$consoleEvalFormatResult")) {
 					local.response.type = "string";
 				}
 				local.response.result = toString(local.evalResult);
-
-			// Structs
 			} else if (isStruct(local.evalResult)) {
 				local.response.type = "struct";
 				local.response.result = serializeJSON(local.evalResult);
-
-			// Arrays
 			} else if (isArray(local.evalResult)) {
 				local.response.type = "array";
 				local.response.result = serializeJSON(local.evalResult);
-
-			// Other objects (services, components, etc.)
 			} else if (isObject(local.evalResult)) {
 				local.response.type = "object";
 				local.meta = getMetadata(local.evalResult);
 				local.response.result = local.meta.name ?: "Object";
-
-			// Fallback
 			} else {
 				local.response.type = "unknown";
 				try {
