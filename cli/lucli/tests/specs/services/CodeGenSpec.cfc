@@ -76,6 +76,8 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(content).toInclude("processRequest(");
 					expect(content).toInclude("returnAs = ""struct""");
 					expect(content).notToInclude("// it(""creates a record""");
+					expect(content).notToInclude("{{targetName}}");
+					expect(content).notToInclude("{{modelName}}");
 				});
 
 				it("controller spec creates per-example data via model().create()", () => {

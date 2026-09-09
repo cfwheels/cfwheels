@@ -425,21 +425,25 @@ component {
 		resolvedModel = variables.helpers.capitalize(resolvedModel);
 		var modelNameLower = lCase(resolvedModel);
 		var pluralLower = lCase(controllerName);
-		return {
-			testName: arguments.testName,
-			targetName: arguments.targetName,
-			type: arguments.type,
-			name: resolvedModel,
-			modelName: resolvedModel,
-			modelNameLower: modelNameLower,
-			controllerName: controllerName,
-			pluralLower: pluralLower,
-			collectionRoute: "api" & variables.helpers.capitalize(pluralLower),
-			memberRoute: "api" & variables.helpers.capitalize(lCase(resolvedModel)),
-			validAttributes: $buildValidAttributesLiteral(arguments.properties),
-			validationExamples: $buildValidationExamples(resolvedModel, arguments.properties),
-			timestamp: dateTimeFormat(now(), "yyyy-mm-dd HH:nn:ss")
-		};
+		// Bracket-assign keys so they stay camelCase. CFML struct literals
+		// uppercase keys, and processTemplate matches {{key}} case-sensitively
+		// (TemplatesSpec: "CodeGen builds context with lowercase keys via
+		// explicit struct assignment").
+		var context = {};
+		context["testName"] = arguments.testName;
+		context["targetName"] = arguments.targetName;
+		context["type"] = arguments.type;
+		context["name"] = resolvedModel;
+		context["modelName"] = resolvedModel;
+		context["modelNameLower"] = modelNameLower;
+		context["controllerName"] = controllerName;
+		context["pluralLower"] = pluralLower;
+		context["collectionRoute"] = "api" & variables.helpers.capitalize(pluralLower);
+		context["memberRoute"] = "api" & variables.helpers.capitalize(modelNameLower);
+		context["validAttributes"] = $buildValidAttributesLiteral(arguments.properties);
+		context["validationExamples"] = $buildValidationExamples(resolvedModel, arguments.properties);
+		context["timestamp"] = dateTimeFormat(now(), "yyyy-mm-dd HH:nn:ss");
+		return context;
 	}
 
 	/**
