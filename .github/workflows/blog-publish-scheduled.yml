@@ -2,10 +2,14 @@ name: Blog — Publish Scheduled Posts
 
 # Every morning (06:00 UTC), moves blog posts whose publishedAt date is
 # today or earlier from web/content/blog/scheduled/ into
-# web/content/blog/posts/, commits as wheels-bot[bot], and pushes. The push
-# triggers the blog deploy (web-deploy.yml detects web/content/blog/posts/
-# changes), so the posts go live without further intervention. Catch-up
-# semantics: a missed day publishes on the next successful run.
+# web/content/blog/posts/, commits as wheels-bot[bot] on a
+# docs/bot-blog-publish-<YYYYMMDD> branch, and opens a PR against develop.
+# develop's branch protection rejects direct pushes (GH013), so the publish
+# lands through a PR rather than a push to develop. Merging that PR triggers
+# the blog deploy (web-deploy.yml detects web/content/blog/posts/ changes) and
+# the announcement workflow (blog-announce-on-publish.yml), so the posts go
+# live and are announced once they are durable on develop.
+# Catch-up semantics: a missed day publishes on the next successful run.
 
 on:
   schedule:
@@ -14,6 +18,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: blog-publish-scheduled
@@ -33,18 +38,13 @@ jobs:
           private-key: ${{ secrets.WHEELS_BOT_PRIVATE_KEY }}
 
       # App-token pushes trigger downstream workflows (GITHUB_TOKEN pushes
-      # do not), which is what makes the blog deploy fire.
+      # do not), which is what makes the blog deploy and the announce
+      # workflow fire after the publish PR merges.
       - name: Checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
           token: ${{ steps.app-token.outputs.token }}
-
-      # Node for the discussion-announcement helper (web/scripts/...mjs).
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
 
       - name: Publish due posts
         env:

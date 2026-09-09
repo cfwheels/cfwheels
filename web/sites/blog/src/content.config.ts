@@ -19,7 +19,8 @@ const posts = defineCollection({
 		legacyId: z.string().optional(),
 		// Discussion announcement posted to the repo's Discussions board when
 		// the post is published. `discussionUrl` is written back by the
-		// scheduler after the discussion is created (idempotency marker).
+		// announce-on-publish workflow after the discussion is created
+		// (idempotency marker).
 		announcement: z
 			.object({
 				title: z.string(),
