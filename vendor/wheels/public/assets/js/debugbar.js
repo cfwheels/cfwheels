@@ -5,6 +5,23 @@
 		return document.getElementById('wheels-debugbar');
 	}
 
+	function syncPageInset() {
+		var root = debugRoot();
+		var html = document.documentElement;
+		if (!html) return;
+		var insetPx = '0px';
+		if (root && !root.classList.contains('wdb-collapsed')) {
+			var measured = root.offsetHeight;
+			insetPx = (measured > 0 ? measured : 36) + 'px';
+			html.classList.add('wdb-has-debugbar');
+			html.classList.remove('wdb-debugbar-collapsed');
+		} else if (root) {
+			html.classList.add('wdb-has-debugbar');
+			html.classList.add('wdb-debugbar-collapsed');
+		}
+		html.style.setProperty('--wdb-inset', insetPx);
+	}
+
 	function setCollapsed(collapsed, animate) {
 		var root = debugRoot();
 		if (!root) return;
@@ -24,6 +41,7 @@
 			root.offsetWidth;
 			root.classList.remove('wdb-no-transition');
 		}
+		syncPageInset();
 		try {
 			if (collapsed) {
 				sessionStorage.setItem('wdb-hidden', '1');
@@ -86,6 +104,10 @@
 		if (sessionStorage.getItem('wdb-hidden') === '1') {
 			wdbClosePanel();
 			setCollapsed(true, false);
+		} else {
+			syncPageInset();
 		}
-	} catch (e) {}
+	} catch (e) {
+		syncPageInset();
+	}
 })();
