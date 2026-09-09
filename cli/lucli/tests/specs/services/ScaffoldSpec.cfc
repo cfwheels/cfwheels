@@ -266,6 +266,77 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(content).toInclude("active");
 				});
 
+				it("emits default string limit 255 when no brace modifier is present", () => {
+					var path = scaffold.createMigrationWithProperties(
+						name = "Barestring",
+						properties = [{name: "title", type: "string"}]
+					);
+					var content = fileRead(path);
+					expect(content).toInclude("t.string(columnNames='title', allowNull=true, limit='255')");
+				});
+
+				it("emits custom string limit from title:string{50}", () => {
+					var path = scaffold.createMigrationWithProperties(
+						name = "Sizedstring",
+						properties = [{name: "title", type: "string", limit: "50"}]
+					);
+					var content = fileRead(path);
+					expect(content).toInclude("t.string(columnNames='title', allowNull=true, limit='50')");
+					expect(content).notToInclude("limit='255'");
+				});
+
+				it("emits default decimal precision 10 scale 2 without braces", () => {
+					var path = scaffold.createMigrationWithProperties(
+						name = "Baredecimal",
+						properties = [{name: "price", type: "decimal"}]
+					);
+					var content = fileRead(path);
+					expect(content).toInclude("t.decimal(columnNames='price', allowNull=true, precision='10', scale='2')");
+				});
+
+				it("emits custom decimal precision and scale from price:decimal{10,2}", () => {
+					var path = scaffold.createMigrationWithProperties(
+						name = "Sizeddecimal",
+						properties = [{name: "price", type: "decimal", precision: "10", scale: "2"}]
+					);
+					var content = fileRead(path);
+					expect(content).toInclude("t.decimal(columnNames='price', allowNull=true, precision='10', scale='2')");
+				});
+
+				it("emits custom decimal precision and scale from amount:decimal{12,4}", () => {
+					var path = scaffold.createMigrationWithProperties(
+						name = "Widedecimal",
+						properties = [{name: "amount", type: "decimal", precision: "12", scale: "4"}]
+					);
+					var content = fileRead(path);
+					expect(content).toInclude("t.decimal(columnNames='amount', allowNull=true, precision='12', scale='4')");
+					expect(content).notToInclude("precision='10'");
+				});
+
+				it("emits custom integer limit and optional text/binary limit", () => {
+					var path = scaffold.createMigrationWithProperties(
+						name = "Sizedmisc",
+						properties = [
+							{name: "count", type: "integer", limit: "8"},
+							{name: "body", type: "text", limit: "1000"},
+							{name: "payload", type: "binary", limit: "4096"}
+						]
+					);
+					var content = fileRead(path);
+					expect(content).toInclude("t.integer(columnNames='count', allowNull=true, limit='8')");
+					expect(content).toInclude("t.text(columnNames='body', allowNull=true, limit='1000')");
+					expect(content).toInclude("t.binary(columnNames='payload', allowNull=true, limit='4096')");
+				});
+
+				it("emits default integer limit 11 when no brace modifier is present", () => {
+					var path = scaffold.createMigrationWithProperties(
+						name = "Bareinteger",
+						properties = [{name: "count", type: "integer"}]
+					);
+					var content = fileRead(path);
+					expect(content).toInclude("t.integer(columnNames='count', allowNull=true, limit='11')");
+				});
+
 			});
 
 			describe("updateRoutes()", () => {
