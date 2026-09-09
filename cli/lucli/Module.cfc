@@ -7021,7 +7021,9 @@ component extends="modules.BaseModule" {
 		var unloadedSpecPaths = $collectUnloadedSpecs(result, arguments.testDirectory, specsFailedToLoad);
 
 		if (specsFailedToLoad > 0) {
-			$printFailedToLoadWarning(specsFailedToLoad, unloadedSpecPaths);
+			$printFailedToLoadWarning(specsFailedToLoad, unloadedSpecPaths, result);
+		} else {
+			$printTestResultDiagnostics(result);
 		}
 
 		// Display bundle/suite/spec tree if verbose and bundles exist
@@ -7082,16 +7084,87 @@ component extends="modules.BaseModule" {
 	}
 
 	/**
-	 * Print the "specs failed to load" warning block (and the parse-error hint).
+	 * Print the "specs failed to load" warning block plus any runner-payload
+	 * diagnostics (populate / TestBox constructor / 0-bundle / parse error).
+	 * Disk-vs-bundleStats is only a proxy — the same WARN used to fire for a
+	 * non-TestBox JSON body (e.g. tests/populate.cfm failed) with no compile
+	 * error at all.
 	 */
-	private void function $printFailedToLoadWarning(required numeric specsFailedToLoad, required array unloadedSpecPaths) {
+	private void function $printFailedToLoadWarning(
+		required numeric specsFailedToLoad,
+		required array unloadedSpecPaths,
+		required any result
+	) {
 		out("");
-		out("WARN  #arguments.specsFailedToLoad# spec file(s) failed to compile and were silently skipped:", "yellow");
+		out("WARN  #arguments.specsFailedToLoad# spec file(s) were on disk but not loaded (compile error, empty discovery, or runner error):", "yellow");
 		for (var unloaded in arguments.unloadedSpecPaths) {
 			out("        #unloaded#", "yellow");
 		}
-		out("        Visit /wheels/app/tests in a browser for the parse-error details.", "yellow");
+		out("        Visit /wheels/app/tests?format=json for runner diagnostics.", "yellow");
+		$printTestResultDiagnostics(arguments.result);
 		out("");
+	}
+
+	/**
+	 * Human-readable lines from a runner JSON body that is missing bundleStats
+	 * or carries an explicit error (populate.cfm, TestBox constructor, 0-bundle
+	 * discovery). Public so CLI specs can lock the fields without a live server.
+	 */
+	public array function $testResultDiagnosticLines(required any result) {
+		var lines = [];
+		if (!isStruct(arguments.result)) {
+			return lines;
+		}
+		var interesting = false;
+		if (structKeyExists(arguments.result, "error") && isSimpleValue(arguments.result.error) && len(arguments.result.error)) {
+			arrayAppend(lines, "Runner error: #arguments.result.error#");
+			interesting = true;
+		}
+		if (structKeyExists(arguments.result, "message") && isSimpleValue(arguments.result.message) && len(arguments.result.message)) {
+			arrayAppend(lines, "Message: #arguments.result.message#");
+			interesting = true;
+		}
+		if (structKeyExists(arguments.result, "detail") && isSimpleValue(arguments.result.detail) && len(arguments.result.detail)) {
+			arrayAppend(lines, "Detail: #arguments.result.detail#");
+			interesting = true;
+		}
+		if (structKeyExists(arguments.result, "directoryRejected") && arguments.result.directoryRejected) {
+			arrayAppend(lines, "directoryRejected: true");
+			interesting = true;
+		}
+		if (structKeyExists(arguments.result, "bundlesDiscovered") && arguments.result.bundlesDiscovered == 0) {
+			arrayAppend(lines, "bundlesDiscovered: 0");
+			interesting = true;
+		}
+		if (structKeyExists(arguments.result, "testDirectoryExists") && !arguments.result.testDirectoryExists) {
+			arrayAppend(lines, "testDirectoryExists: false");
+			interesting = true;
+		}
+		if (structKeyExists(arguments.result, "warnings") && isArray(arguments.result.warnings) && arrayLen(arguments.result.warnings)) {
+			interesting = true;
+			for (var warning in arguments.result.warnings) {
+				if (isSimpleValue(warning) && len(warning)) {
+					arrayAppend(lines, "Warning: #warning#");
+				}
+			}
+		}
+		// Path / resolved-directory only when something above was wrong —
+		// a clean pass always carries bundlesDiscovered > 0 and must stay quiet.
+		if (interesting) {
+			if (structKeyExists(arguments.result, "directoryResolved") && isSimpleValue(arguments.result.directoryResolved) && len(arguments.result.directoryResolved)) {
+				arrayAppend(lines, "directoryResolved: #arguments.result.directoryResolved#");
+			}
+			if (structKeyExists(arguments.result, "testDirectoryPath") && isSimpleValue(arguments.result.testDirectoryPath) && len(arguments.result.testDirectoryPath)) {
+				arrayAppend(lines, "testDirectoryPath: #arguments.result.testDirectoryPath#");
+			}
+		}
+		return lines;
+	}
+
+	private void function $printTestResultDiagnostics(required any result) {
+		for (var line in $testResultDiagnosticLines(arguments.result)) {
+			out("        #line#", "yellow");
+		}
 	}
 
 	/**

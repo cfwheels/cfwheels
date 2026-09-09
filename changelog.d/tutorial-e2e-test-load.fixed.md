@@ -1,0 +1,1 @@
+- `wheels test` now prints runner `error` / `message` / `bundlesDiscovered` / mapping-path diagnostics when on-disk specs are not loaded, instead of only warning that they "failed to compile" (a populate failure or empty TestBox discovery produced the same WARN)

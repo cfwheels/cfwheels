@@ -151,12 +151,18 @@ else
 fi
 
 wait_for_server() {
+    # Any HTTP response (including 500 during applicationStop() / first
+    # compile after `wheels reload` purges cfclasses) used to count as
+    # "up". Require 200 so later beats do not race a half-started app.
+    local code=""
     for i in $(seq 1 120); do
-        if curl -s -o /dev/null --connect-timeout 2 --max-time 3 "http://localhost:$PORT/" 2>/dev/null; then
+        code="$(curl -s -o /dev/null --connect-timeout 2 --max-time 10 -w '%{http_code}' "http://localhost:$PORT/" 2>/dev/null || echo 000)"
+        if [ "$code" = "200" ]; then
             return 0
         fi
         sleep 2
     done
+    echo "  last HTTP status from /: ${code:-000}"
     return 1
 }
 if wait_for_server; then
@@ -342,11 +348,109 @@ run_cli migrate latest > "$TMPDIR/migrate3.log" 2>&1 \
     && pass "migrate (auth) exited 0" || { fail "migrate (auth) failed"; cat "$TMPDIR/migrate3.log"; }
 
 # ── Beat 6: test ──────────────────────────────────────────────────────────
-reload_app
+# `wheels test` hits the isolated `#3374` application (`<name>_wheelsTest`).
+# Reloading the *live* app immediately beforehand is unnecessary (the
+# isolated app cold-starts from current source) and harmful: `wheels reload`
+# wipes Lucee's cfclass cache, then the first TestBox directory scan can
+# return 0 bundles. The CLI then reports every on-disk *Spec.cfc as
+# "failed to compile" even when the runner JSON is a populate/constructor
+# error or an empty discovery — which is what CI showed after the console
+# flake was fixed (6 specs, 0 passed, ~2s).
 echo ""
 echo "==> test"
-run_cli test > "$TMPDIR/test.log" 2>&1 \
-    && pass "test exited 0" || { fail "test failed"; tail -40 "$TMPDIR/test.log"; }
+if wait_for_server; then
+    pass "server HTTP 200 before test"
+else
+    fail "server not HTTP 200 before test"
+fi
+
+wait_for_test_app() {
+    # Start the isolated test application on a cheap request so `wheels test`
+    # is not the first hit after a cfclass purge / live-app restart.
+    local i code=""
+    for i in $(seq 1 30); do
+        code="$(curl -s -o /dev/null --connect-timeout 2 --max-time 30 -w '%{http_code}' \
+            -H "X-Wheels-Test-Context: 1" \
+            "http://localhost:$PORT/" 2>/dev/null || echo 000)"
+        if [ "$code" = "200" ]; then
+            return 0
+        fi
+        sleep 2
+    done
+    echo "  isolated test app last HTTP status: ${code:-000}"
+    return 1
+}
+
+dump_test_runner_json() {
+    echo "  --- /wheels/app/tests?format=json ---"
+    local body
+    body="$(curl -s --connect-timeout 2 --max-time 90 \
+        "http://localhost:$PORT/wheels/app/tests?format=json&useTestDB=true" 2>/dev/null || true)"
+    if command -v python3 >/dev/null 2>&1 && [ -n "$body" ]; then
+        printf '%s' "$body" | python3 -c '
+import json, sys
+raw = sys.stdin.read()
+try:
+    d = json.loads(raw)
+except Exception:
+    print(raw[:4096])
+    sys.exit(0)
+keys = (
+    "success", "error", "message", "detail",
+    "bundlesDiscovered", "directoryRejected", "directoryResolved",
+    "testDirectoryPath", "testDirectoryExists", "warnings",
+    "totalPass", "totalFail", "totalError",
+)
+for k in keys:
+    if k in d:
+        print("  %s: %r" % (k, d[k]))
+snippet = d.get("RootCause") or d.get("rootCause")
+if snippet:
+    print("  RootCause: %r" % (snippet,))
+' || printf '%s\n' "${body:0:4096}"
+    else
+        printf '%s\n' "${body:0:4096}"
+    fi
+    echo "  --- end runner JSON ---"
+}
+
+run_wheels_test() {
+    local code=0
+    run_cli test > "$TMPDIR/test.log" 2>&1 || code=$?
+    if [ "$code" -ne 0 ]; then
+        return 1
+    fi
+    if grep -q 'failed to load' "$TMPDIR/test.log"; then
+        return 1
+    fi
+    if ! grep -qE '[1-9][0-9]* passed' "$TMPDIR/test.log"; then
+        return 1
+    fi
+    return 0
+}
+
+if wait_for_test_app; then
+    pass "isolated test app ready"
+else
+    echo "  WARN isolated test app not HTTP 200 yet; continuing to wheels test"
+fi
+
+if run_wheels_test; then
+    pass "test exited 0"
+else
+    echo "  first wheels test attempt failed; dumping runner JSON and retrying"
+    dump_test_runner_json
+    tail -40 "$TMPDIR/test.log" || true
+    wait_for_server || true
+    wait_for_test_app || true
+    if run_wheels_test; then
+        pass "test exited 0 (after retry)"
+    else
+        fail "test failed"
+        dump_test_runner_json
+        tail -40 "$TMPDIR/test.log" || true
+    fi
+fi
 grep -qE 'passed' "$TMPDIR/test.log" && pass "test reported results" || fail "test output missing pass count"
 
 # ── Report ────────────────────────────────────────────────────────────────
