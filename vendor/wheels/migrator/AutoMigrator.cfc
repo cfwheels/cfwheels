@@ -74,6 +74,9 @@ component extends="wheels.migrator.Base" {
 		local.removeColumns = [];
 		local.changeColumns = [];
 		local.unmappedColumns = [];
+		// Memoized adapter name (SQLite/H2/MySQL/…), used to normalize type
+		// affinity below without a per-column $dbinfo round-trip.
+		local.dbType = $getDBType();
 		// S9: destructive unmapped→remove stays the default. Opt out with
 		// options.allowColumnRemoval=false (fail-closed listing only).
 		local.allowColumnRemoval = true;
@@ -124,6 +127,19 @@ component extends="wheels.migrator.Base" {
 				local.actualMigType = $dbTypeToMigrationType(local.actual.typeName);
 
 				local.typeChanged = (local.expectedMigType != local.actualMigType && local.actualMigType != "unknown");
+				// SQLite type affinity stores string/text/datetime all as TEXT, so the
+				// model introspection reports cf_sql_varchar ("string") while the raw
+				// column type maps to "text". A string↔text difference there is not a
+				// real schema change — normalize it away so a fresh scaffold diff is
+				// clean instead of reporting a spurious change on every column.
+				if (local.typeChanged && local.dbType == "SQLite") {
+					if (
+						ListFindNoCase("string,text", local.expectedMigType) > 0
+						&& ListFindNoCase("string,text", local.actualMigType) > 0
+					) {
+						local.typeChanged = false;
+					}
+				}
 				local.sizeChanged = (
 					Len(ToString(local.expected.size))
 					&& IsNumeric(local.expected.size)
