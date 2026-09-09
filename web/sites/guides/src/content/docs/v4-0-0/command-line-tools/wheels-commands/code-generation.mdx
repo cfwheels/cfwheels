@@ -195,7 +195,7 @@ wheels generate scaffold <Name> [property:type ...] [--belongsTo=<list>] [--hasM
 
 #### Description
 
-The most opinionated generator. It runs, in order: model, create-table migration, controller (pluralised from `<Name>`), views (`index`, `show`, `new`, `edit`, `_form`), a model spec and controller spec under `tests/specs/`, and a `.resources()` route in `config/routes.cfm`. If any step fails the whole batch is rolled back so you're not left with a half-generated resource.
+The most opinionated generator. It runs, in order: model, create-table migration, controller (pluralised from `<Name>`), views (`index`, `show`, `new`, `edit`, `_form`), a model spec and a full CRUD controller spec under `tests/specs/`, and a `.resources()` route in `config/routes.cfm`. If any step fails the whole batch is rolled back so you're not left with a half-generated resource.
 
 `belongsTo` associations automatically add a foreign-key column — `--belongsTo=author` adds an `authorId` integer column to the migration even if you didn't list it in the properties.
 
@@ -213,7 +213,7 @@ Writes:
 - `app/migrator/migrations/<timestamp>_create_posts_table.cfc` with `title`, `body`, `publishedAt`, `authorId`, and the `timestamps()` trio
 - `app/controllers/Posts.cfc` with the seven CRUD actions
 - `app/views/posts/index.cfm`, `show.cfm`, `new.cfm`, `edit.cfm`, `_form.cfm`
-- `tests/specs/models/PostSpec.cfc`, `tests/specs/controllers/PostsControllerSpec.cfc`
+- `tests/specs/models/PostSpec.cfc`, `tests/specs/controllers/PostsControllerSpec.cfc` — the controller spec covers all seven CRUD actions (`index`, `new`, `create`, `show`, `edit`, `update`, `delete`) with `processRequest` assertions for status codes, redirects, and record-count deltas. Test data is created in `beforeEach` via `model().create()` (the Wheels-native stand-in for Rails YAML fixtures), so the specs pass on a fresh app after `wheels migrate latest`. Existing apps keep their hand-edited specs unless you re-generate with `--force`.
 - `.resources("posts")` appended to `config/routes.cfm`
 
 See the [Database guide](../database/) for what to do with the generated migration.
@@ -278,7 +278,7 @@ wheels generate test <type> <Name>
 
 #### Description
 
-Writes `tests/specs/models/<Name>Spec.cfc` or `tests/specs/controllers/<Name>ControllerSpec.cfc`, extending `wheels.WheelsTest` with a `run()` method and one placeholder `it()` block. Use this when you want a spec file for a model or controller that wasn't scaffolded.
+Writes `tests/specs/models/<Name>Spec.cfc` or `tests/specs/controllers/<Name>ControllerSpec.cfc`, extending `wheels.WheelsTest`. A controller spec covers the seven CRUD actions with `processRequest` (same shape `wheels generate scaffold` emits; attribute structs stay empty unless you scaffolded with properties). A model spec starts as a thin `model().new()` smoke test. Use this when you want a spec file for a model or controller that wasn't scaffolded.
 
 #### Example
 

@@ -289,35 +289,22 @@ component {
 	}
 
 	/**
-	 * Generate a test file
+	 * Generate a test file.
+	 *
+	 * `properties` (scaffold / api-resource) drive sample attribute literals so
+	 * create/update/destroy assertions have valid data. `modelName` overrides
+	 * the singular derived from `name` (api-resource already knows both).
 	 */
 	public struct function generateTest(
 		required string type,
 		required string name,
+		array properties = [],
+		string modelName = "",
 		boolean force = false
 	) {
-		var testName = arguments.name;
-		var testDir = "tests/specs/";
-		var suffix = "";
-
-		switch (arguments.type) {
-			case "model":
-				testDir &= "models/";
-				suffix = "Spec";
-				break;
-			case "controller":
-				testDir &= "controllers/";
-				suffix = "ControllerSpec";
-				break;
-			default:
-				testDir &= "unit/";
-				suffix = "Spec";
-		}
-
-		// Remove existing suffixes before adding the correct one
-		testName = reReplaceNoCase(testName, "(Test|Spec|ControllerSpec|ViewSpec|IntegrationSpec)$", "");
-		testName &= suffix;
-
+		var meta = $testFileMeta(arguments.type, arguments.name);
+		var testName = meta.testName;
+		var testDir = meta.testDir;
 		var fileName = testName & ".cfc";
 		// Refuse to clobber an existing spec unless --force (mirrors generateHelper).
 		// Previously generateTest silently overwrote and still printed "create".
@@ -331,12 +318,13 @@ component {
 		}
 
 		var template = "tests/#arguments.type#.txt";
-		var context = {
-			testName: testName,
-			targetName: reReplaceNoCase(testName, "(Spec|Test|ControllerSpec)$", ""),
-			type: arguments.type,
-			timestamp: dateTimeFormat(now(), "yyyy-mm-dd HH:nn:ss")
-		};
+		var context = $buildTestContext(
+			type = arguments.type,
+			testName = testName,
+			targetName = meta.targetName,
+			modelName = arguments.modelName,
+			properties = arguments.properties
+		);
 
 		var result = variables.templateService.generateFromTemplate(
 			template = template,
@@ -372,6 +360,157 @@ component {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Resolve dest directory, file stem, and the unsuffixed target name for a
+	 * generated spec. `api` writes Api<Name>ControllerSpec under controllers/.
+	 */
+	private struct function $testFileMeta(required string type, required string name) {
+		var testName = arguments.name;
+		var testDir = "tests/specs/";
+		var suffix = "Spec";
+
+		switch (arguments.type) {
+			case "model":
+				testDir &= "models/";
+				break;
+			case "controller":
+				testDir &= "controllers/";
+				suffix = "ControllerSpec";
+				break;
+			case "api":
+				testDir &= "controllers/";
+				suffix = "ControllerSpec";
+				if (!reFindNoCase("^Api", testName)) {
+					testName = "Api" & testName;
+				}
+				break;
+			default:
+				testDir &= "unit/";
+		}
+
+		testName = reReplaceNoCase(testName, "(Test|Spec|ControllerSpec|ViewSpec|IntegrationSpec)$", "");
+		testName &= suffix;
+		return {
+			testDir: testDir,
+			testName: testName,
+			targetName: reReplaceNoCase(testName, "(Spec|Test|ControllerSpec)$", "")
+		};
+	}
+
+	/**
+	 * Template context for model / controller / API specs, including Rails-style
+	 * sample attributes derived from scaffold properties.
+	 */
+	private struct function $buildTestContext(
+		required string type,
+		required string testName,
+		required string targetName,
+		string modelName = "",
+		array properties = []
+	) {
+		var resolvedModel = len(arguments.modelName) ? arguments.modelName : arguments.targetName;
+		var controllerName = arguments.targetName;
+		if (arguments.type == "api") {
+			controllerName = reReplaceNoCase(arguments.targetName, "^Api", "");
+			if (!len(arguments.modelName)) {
+				resolvedModel = variables.helpers.singularize(controllerName);
+			}
+		} else if (arguments.type == "controller" && !len(arguments.modelName)) {
+			resolvedModel = variables.helpers.singularize(arguments.targetName);
+		} else if (arguments.type == "model") {
+			controllerName = variables.helpers.pluralize(resolvedModel);
+		}
+		resolvedModel = variables.helpers.capitalize(resolvedModel);
+		var modelNameLower = lCase(resolvedModel);
+		var pluralLower = lCase(controllerName);
+		return {
+			testName: arguments.testName,
+			targetName: arguments.targetName,
+			type: arguments.type,
+			name: resolvedModel,
+			modelName: resolvedModel,
+			modelNameLower: modelNameLower,
+			controllerName: controllerName,
+			pluralLower: pluralLower,
+			collectionRoute: "api" & variables.helpers.capitalize(pluralLower),
+			memberRoute: "api" & variables.helpers.capitalize(lCase(resolvedModel)),
+			validAttributes: $buildValidAttributesLiteral(arguments.properties),
+			validationExamples: $buildValidationExamples(resolvedModel, arguments.properties),
+			timestamp: dateTimeFormat(now(), "yyyy-mm-dd HH:nn:ss")
+		};
+	}
+
+	/**
+	 * CFML struct literal used as model().create(properties=...) / params.<model>.
+	 */
+	private string function $buildValidAttributesLiteral(required array properties) {
+		if (!arrayLen(arguments.properties)) {
+			return "{}";
+		}
+		var parts = [];
+		for (var prop in arguments.properties) {
+			arrayAppend(parts, prop.name & " = " & $samplePropertyLiteral(prop));
+		}
+		return "{" & arrayToList(parts, ", ") & "}";
+	}
+
+	/**
+	 * One CFML literal matching the property type (Rails fixture spirit).
+	 */
+	private string function $samplePropertyLiteral(required struct prop) {
+		var propType = structKeyExists(prop, "type") ? lCase(prop.type) : "string";
+		var propName = structKeyExists(prop, "name") ? lCase(prop.name) : "";
+
+		if (propType == "enum" && structKeyExists(prop, "values") && len(prop.values)) {
+			return '"' & listFirst(prop.values) & '"';
+		}
+		if (propType == "email" || propName == "email") {
+			return '"user@example.com"';
+		}
+		if (propType == "url" || listFindNoCase("url,website", propName)) {
+			return '"https://example.com"';
+		}
+		if (listFindNoCase("integer,int,biginteger,bigint", propType)) {
+			return "1";
+		}
+		if (listFindNoCase("decimal,float,numeric", propType)) {
+			return "9.99";
+		}
+		if (listFindNoCase("boolean,bool", propType)) {
+			return "true";
+		}
+		if (listFindNoCase("datetime,timestamp,date,time", propType)) {
+			return "Now()";
+		}
+		if (listFindNoCase("text,longtext", propType)) {
+			return '"MyText"';
+		}
+		return '"MyString"';
+	}
+
+	/**
+	 * Optional presence/valid-attributes examples when the scaffold emitted
+	 * validatesPresenceOf from properties. Empty string when there are none.
+	 */
+	private string function $buildValidationExamples(required string modelName, required array properties) {
+		if (!arrayLen(arguments.properties)) {
+			return "";
+		}
+		var nl = chr(10);
+		var t3 = chr(9) & chr(9) & chr(9);
+		var t4 = t3 & chr(9);
+		var block = "";
+		block &= nl & t3 & 'it("is invalid without required attributes", () => {' & nl;
+		block &= t4 & 'var record = model("#arguments.modelName#").new();' & nl;
+		block &= t4 & "expect(record.valid()).toBeFalse();" & nl;
+		block &= t3 & "});" & nl & nl;
+		block &= t3 & 'it("is valid with required attributes", () => {' & nl;
+		block &= t4 & 'var record = model("#arguments.modelName#").new(properties = ' & $buildValidAttributesLiteral(arguments.properties) & ');' & nl;
+		block &= t4 & "expect(record.valid()).toBeTrue();" & nl;
+		block &= t3 & "});";
+		return block;
 	}
 
 	/**

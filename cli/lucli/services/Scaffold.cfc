@@ -153,13 +153,24 @@ component {
 
 			// 5. Generate Tests
 			if (arguments.tests) {
-				var modelTestResult = variables.codeGenService.generateTest(type = "model", name = arguments.name);
+				var modelTestResult = variables.codeGenService.generateTest(
+					type = "model",
+					name = arguments.name,
+					properties = props,
+					force = arguments.force
+				);
 				if (modelTestResult.success) {
 					arrayAppend(results.generated, {type: "test", path: modelTestResult.path});
 					arrayAppend(results.rollback, modelTestResult.path);
 				}
 
-				var ctrlTestResult = variables.codeGenService.generateTest(type = "controller", name = pluralName);
+				var ctrlTestResult = variables.codeGenService.generateTest(
+					type = "controller",
+					name = pluralName,
+					properties = props,
+					modelName = arguments.name,
+					force = arguments.force
+				);
 				if (ctrlTestResult.success) {
 					arrayAppend(results.generated, {type: "test", path: ctrlTestResult.path});
 					arrayAppend(results.rollback, ctrlTestResult.path);
@@ -467,13 +478,23 @@ component {
 
 			// 4. Generate API-specific tests
 			if (arguments.tests) {
-				var modelTestResult = variables.codeGenService.generateTest(type="model", name=arguments.name);
+				var modelTestResult = variables.codeGenService.generateTest(
+					type = "model",
+					name = arguments.name,
+					properties = props,
+					force = arguments.force
+				);
 				if (modelTestResult.success) {
 					arrayAppend(results.generated, {type: "test", path: modelTestResult.path});
 					arrayAppend(results.rollback, modelTestResult.path);
 				}
 
-				var apiTestResult = generateApiTest(pluralName, arguments.name);
+				var apiTestResult = generateApiTest(
+					controllerName = pluralName,
+					modelName = arguments.name,
+					properties = props,
+					force = arguments.force
+				);
 				if (apiTestResult.success) {
 					arrayAppend(results.generated, {type: "test", path: apiTestResult.path});
 					arrayAppend(results.rollback, apiTestResult.path);
@@ -586,66 +607,23 @@ component {
 	}
 
 	/**
-	 * Generate an API-specific controller test that verifies JSON responses
+	 * Generate an API-specific controller test that verifies JSON responses.
+	 * Delegates to CodeGen.generateTest(type="api") so the template stays
+	 * locked by CodeGenSpec / ScaffoldSpec the same way HTML CRUD specs are.
 	 */
-	public struct function generateApiTest(required string controllerName, required string modelName) {
-		var testName = "Api" & arguments.controllerName & "ControllerSpec";
-		var testDir = variables.projectRoot & "/tests/specs/controllers/";
-		var filePath = testDir & testName & ".cfc";
-
-		if (fileExists(filePath)) {
-			return {success: false, error: "Test already exists: #filePath#", path: filePath};
-		}
-
-		if (!directoryExists(testDir)) {
-			directoryCreate(testDir, true);
-		}
-
-		var singular = lCase(arguments.modelName);
-		var plural = lCase(arguments.controllerName);
-		var nl = chr(10);
-		var t = chr(9);
-
-		// processRequest() takes a params STRUCT (with the route NAME inside it,
-		// not a URL path) and needs returnAs="struct" for the result to expose
-		// `status`. Routes added by updateApiRoutes() live in .namespace("api"),
-		// which prefixes child route names: apiProducts / apiProduct.
-		var collectionRoute = "api" & variables.helpers.capitalize(plural);
-		var memberRoute = "api" & variables.helpers.capitalize(singular);
-
-		var c = 'component extends="wheels.WheelsTest" {' & nl & nl;
-		c &= t & 'function run() {' & nl;
-		c &= t & t & 'describe("API #arguments.controllerName# Controller", () => {' & nl & nl;
-		c &= t & t & t & 'beforeEach(() => {' & nl;
-		c &= t & t & t & t & '// Setup test data' & nl;
-		c &= t & t & t & '})' & nl & nl;
-		c &= t & t & t & 'it("GET /api/#plural# returns JSON list", () => {' & nl;
-		c &= t & t & t & t & 'result = processRequest(params={route: "#collectionRoute#", format: "json"}, method="get", returnAs="struct");' & nl;
-		c &= t & t & t & t & 'expect(result).toHaveKey("status");' & nl;
-		c &= t & t & t & t & 'expect(result.status).toBe(200);' & nl;
-		c &= t & t & t & '})' & nl & nl;
-		c &= t & t & t & 'it("GET /api/#plural#/:key returns JSON record", () => {' & nl;
-		c &= t & t & t & t & 'result = processRequest(params={route: "#memberRoute#", key: 1, format: "json"}, method="get", returnAs="struct");' & nl;
-		c &= t & t & t & t & 'expect(result).toHaveKey("status");' & nl;
-		c &= t & t & t & '})' & nl & nl;
-		c &= t & t & t & 'it("POST /api/#plural# creates record", () => {' & nl;
-		c &= t & t & t & t & 'result = processRequest(params={route: "#collectionRoute#", format: "json", #singular#: {}}, method="post", returnAs="struct");' & nl;
-		c &= t & t & t & t & 'expect(result).toHaveKey("status");' & nl;
-		c &= t & t & t & '})' & nl & nl;
-		c &= t & t & t & 'it("PUT /api/#plural#/:key updates record", () => {' & nl;
-		c &= t & t & t & t & 'result = processRequest(params={route: "#memberRoute#", key: 1, format: "json", #singular#: {}}, method="put", returnAs="struct");' & nl;
-		c &= t & t & t & t & 'expect(result).toHaveKey("status");' & nl;
-		c &= t & t & t & '})' & nl & nl;
-		c &= t & t & t & 'it("DELETE /api/#plural#/:key deletes record", () => {' & nl;
-		c &= t & t & t & t & 'result = processRequest(params={route: "#memberRoute#", key: 1, format: "json"}, method="delete", returnAs="struct");' & nl;
-		c &= t & t & t & t & 'expect(result).toHaveKey("status");' & nl;
-		c &= t & t & t & '})' & nl & nl;
-		c &= t & t & '})' & nl;
-		c &= t & '}' & nl;
-		c &= '}' & nl;
-
-		$write(filePath, c);
-		return {success: true, path: filePath, message: "Generated API controller test"};
+	public struct function generateApiTest(
+		required string controllerName,
+		required string modelName,
+		array properties = [],
+		boolean force = false
+	) {
+		return variables.codeGenService.generateTest(
+			type = "api",
+			name = arguments.controllerName,
+			modelName = arguments.modelName,
+			properties = arguments.properties,
+			force = arguments.force
+		);
 	}
 
 	/**

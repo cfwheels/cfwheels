@@ -1,0 +1,1 @@
+- `wheels generate scaffold` now emits full CRUD controller specs (`index`, `new`, `create`, `show`, `edit`, `update`, `delete`) with `processRequest` assertions and `model().create()` test data, matching the spirit of Rails scaffold controller tests. Re-generate existing apps with `--force` to pick up the richer specs.

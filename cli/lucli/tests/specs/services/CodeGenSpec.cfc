@@ -63,6 +63,99 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(content).toInclude("expect(true).toBeTrue();");
 				});
 
+				it("controller spec covers the seven CRUD actions with processRequest", () => {
+					codegen.generateTest(type = "controller", name = "Posts", force = true);
+					var content = fileRead(tempRoot & "/tests/specs/controllers/PostsControllerSpec.cfc");
+					expect(content).toInclude('action = "index"');
+					expect(content).toInclude('action = "new"');
+					expect(content).toInclude('action = "create"');
+					expect(content).toInclude('action = "show"');
+					expect(content).toInclude('action = "edit"');
+					expect(content).toInclude('action = "update"');
+					expect(content).toInclude('action = "delete"');
+					expect(content).toInclude("processRequest(");
+					expect(content).toInclude("returnAs = ""struct""");
+					expect(content).notToInclude("// it(""creates a record""");
+				});
+
+				it("controller spec creates per-example data via model().create()", () => {
+					codegen.generateTest(
+						type = "controller",
+						name = "Posts",
+						modelName = "Post",
+						properties = [
+							{name: "title", type: "string"},
+							{name: "body", type: "text"},
+							{name: "publishedAt", type: "datetime"}
+						],
+						force = true
+					);
+					var content = fileRead(tempRoot & "/tests/specs/controllers/PostsControllerSpec.cfc");
+					expect(content).toInclude('model("Post").create(properties = {title = "MyString", body = "MyText", publishedAt = Now()})');
+					expect(content).toInclude("beforeCount + 1");
+					expect(content).toInclude("beforeCount - 1");
+					expect(content).toInclude("expect(result.status).toBe(302)");
+					expect(content).toInclude("variables.post.id");
+				});
+
+				it("model spec stays thin without properties and adds presence examples when given them", () => {
+					codegen.generateTest(type = "model", name = "Bare", force = true);
+					var bare = fileRead(tempRoot & "/tests/specs/models/BareSpec.cfc");
+					expect(bare).toInclude('model("Bare").new()');
+					expect(bare).notToInclude("is invalid without required attributes");
+
+					codegen.generateTest(
+						type = "model",
+						name = "Post",
+						properties = [{name: "title", type: "string"}, {name: "body", type: "text"}],
+						force = true
+					);
+					var rich = fileRead(tempRoot & "/tests/specs/models/PostSpec.cfc");
+					expect(rich).toInclude("is invalid without required attributes");
+					expect(rich).toInclude("is valid with required attributes");
+					expect(rich).toInclude('new(properties = {title = "MyString", body = "MyText"})');
+				});
+
+				it("sample attributes cover enum, email, integer, and boolean types", () => {
+					codegen.generateTest(
+						type = "controller",
+						name = "Tickets",
+						modelName = "Ticket",
+						properties = [
+							{name: "status", type: "enum", values: "open,pending,closed"},
+							{name: "email", type: "email"},
+							{name: "count", type: "integer"},
+							{name: "active", type: "boolean"}
+						],
+						force = true
+					);
+					var content = fileRead(tempRoot & "/tests/specs/controllers/TicketsControllerSpec.cfc");
+					expect(content).toInclude('status = "open"');
+					expect(content).toInclude('email = "user@example.com"');
+					expect(content).toInclude("count = 1");
+					expect(content).toInclude("active = true");
+				});
+
+				it("api spec asserts 201/204 and count deltas with created record keys", () => {
+					var result = codegen.generateTest(
+						type = "api",
+						name = "Widgets",
+						modelName = "Widget",
+						properties = [{name: "value", type: "string"}],
+						force = true
+					);
+					expect(result.success).toBeTrue();
+					var content = fileRead(tempRoot & "/tests/specs/controllers/ApiWidgetsControllerSpec.cfc");
+					expect(content).toInclude('params={route: "apiWidgets", format: "json"}');
+					expect(content).toInclude('route: "apiWidget"');
+					expect(content).toInclude("returnAs=""struct""");
+					expect(content).toInclude("expect(result.status).toBe(201)");
+					expect(content).toInclude("expect(result.status).toBe(204)");
+					expect(content).toInclude("variables.widget.id");
+					expect(content).toInclude('value = "MyString"');
+					expect(content).notToInclude("processRequest(route=");
+				});
+
 			});
 
 			describe("generateModel()", () => {
