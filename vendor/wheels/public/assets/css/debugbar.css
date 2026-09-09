@@ -3,8 +3,7 @@
 #wheels-debugbar.wdb-collapsed{width:40px !important;}
 #wheels-debugbar.wdb-no-transition{transition:none !important;}
 @media (prefers-reduced-motion:reduce){#wheels-debugbar{transition:none !important;}}
-#wheels-debugbar.wdb-collapsed [data-wdb-reload-refused]{display:none;}
-#wheels-debugbar.wdb-collapsed .wdb-panel{display:none !important;}
+#wheels-debugbar.wdb-collapsed>:not(.wdb-bar):not(style):not(script){display:none !important;}
 #wheels-debugbar .wdb-logo{flex-shrink:0;}
 #wheels-debugbar.wdb-collapsed .wdb-bar{padding:0;}
 #wheels-debugbar.wdb-collapsed .wdb-logo{width:40px;padding:0;justify-content:center;}
