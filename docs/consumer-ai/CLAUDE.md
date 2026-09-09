@@ -501,6 +501,14 @@ The CLI boots the app on an isolated port and runs the suite over HTTP,
 mirroring CI. Browser-driven specs need Playwright installed once:
 `wheels browser setup`.
 
+## Development Error Page
+
+When `showErrorInformation` is on (the development default), the framework
+error page includes a **Copy** button. One click copies a JSON payload
+(exception type and message, suggested action, file + line, source snippet,
+and stack frames tagged app vs framework) to the clipboard for pasting into
+a coding agent.
+
 ## Where to go deeper
 
 - Human guides: https://guides.wheels.dev (start-here, core-concepts, testing, deployment)
