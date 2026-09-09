@@ -151,12 +151,18 @@ else
 fi
 
 wait_for_server() {
+    # Any HTTP response (including 500 during applicationStop() / first
+    # compile after `wheels reload` purges cfclasses) used to count as
+    # "up". Require 200 so later beats do not race a half-started app.
+    local code=""
     for i in $(seq 1 120); do
-        if curl -s -o /dev/null --connect-timeout 2 --max-time 3 "http://localhost:$PORT/" 2>/dev/null; then
+        code="$(curl -s -o /dev/null --connect-timeout 2 --max-time 10 -w '%{http_code}' "http://localhost:$PORT/" 2>/dev/null || echo 000)"
+        if [ "$code" = "200" ]; then
             return 0
         fi
         sleep 2
     done
+    echo "  last HTTP status from /: ${code:-000}"
     return 1
 }
 if wait_for_server; then
@@ -189,8 +195,70 @@ else
 fi
 
 reload_app() {
+    # `wheels reload` applicationStop()s; the next request re-runs
+    # onApplicationStart. A fixed sleep raced the first-compile of a
+    # freshly scaffolded Post model on cold CI runners. Wait for `/`
+    # to answer again instead.
     run_cli reload > /dev/null 2>&1 || true
-    sleep 2
+    wait_for_server || true
+}
+
+# POST /wheels/console/eval __ping__ until the eval surface is actually
+# ready (password + JSON + success=true). `/` coming up is not enough:
+# after reload the first eval can still 500 while models compile.
+wait_for_console() {
+    local password=""
+    if [ -f "$APP_DIR/.env" ]; then
+        # First matching RELOAD_PASSWORD assignment; strip quotes/CR.
+        password="$(grep -E '^(WHEELS_)?RELOAD_PASSWORD=' "$APP_DIR/.env" | head -1 | cut -d= -f2- | tr -d '\r\n\t "')"
+    fi
+    local i body
+    for i in $(seq 1 30); do
+        body="$(curl -s --connect-timeout 2 --max-time 10 \
+            -X POST -H "Content-Type: application/json" \
+            -d "{\"expression\":\"__ping__\",\"password\":\"${password}\"}" \
+            "http://localhost:$PORT/wheels/console/eval" 2>/dev/null || true)"
+        # serializeJSON key case varies by engine (success vs SUCCESS).
+        if printf '%s' "$body" | grep -qiE '"success"[[:space:]]*:[[:space:]]*true'; then
+            return 0
+        fi
+        sleep 2
+    done
+    echo "  last console ping body: ${body:0:300}"
+    return 1
+}
+
+# Run one console expression. Fails the check (and dumps the log) when the
+# CLI exits non-zero, prints `Error:`, or reports a validation failure —
+# so a silent no-op create cannot look like success.
+run_console_expr() {
+    local expr="$1" label="$2" expect_re="${3:-}"
+    local code=0
+    # pipefail + set -e would abort the whole script on a non-zero
+    # console exit before we can dump the log — capture it instead.
+    printf '%s\n' "$expr" | run_cli console > "$TMPDIR/console.log" 2>&1 || code=$?
+    if [ "$code" -ne 0 ]; then
+        fail "$label — console exited $code"
+        cat "$TMPDIR/console.log"
+        return 0
+    fi
+    if grep -q '^Error:' "$TMPDIR/console.log"; then
+        fail "$label — console printed Error:"
+        cat "$TMPDIR/console.log"
+        return 0
+    fi
+    if grep -q 'Validation failed' "$TMPDIR/console.log"; then
+        fail "$label — model validation failed"
+        cat "$TMPDIR/console.log"
+        return 0
+    fi
+    if [ -n "$expect_re" ] && ! grep -qiE "$expect_re" "$TMPDIR/console.log"; then
+        fail "$label — console output missing /$expect_re/"
+        cat "$TMPDIR/console.log"
+        return 0
+    fi
+    pass "$label"
+    return 0
 }
 
 # ── Beat 2: scaffold Post + migrate + routes ──────────────────────────────
@@ -210,11 +278,24 @@ run_cli migrate latest > "$TMPDIR/migrate.log" 2>&1 \
     && pass "migrate latest exited 0" || { fail "migrate latest failed"; cat "$TMPDIR/migrate.log"; }
 
 reload_app
+if wait_for_console; then
+    pass "console eval endpoint ready after reload"
+else
+    fail "console eval endpoint not ready after reload"
+fi
 echo "==> console: create a Post"
 # The scaffold adds validatesPresenceOf("title,body,publishedAt"), so pass all three.
-printf '%s\n' 'model("Post").create(title="Console Post", body="Created from the console", publishedAt=Now())' \
-    | run_cli console > "$TMPDIR/console.log" 2>&1 \
-    && pass "console create exited 0" || { fail "console create failed"; cat "$TMPDIR/console.log"; }
+# create() returns the model even when validation fails — the CLI now treats
+# `_hasErrors` as a failed expression (non-zero on EOF). Also assert the
+# row is actually queryable before we look at /posts.
+run_console_expr \
+    'model("Post").create(title="Console Post", body="Created from the console", publishedAt=Now())' \
+    "console create persisted" \
+    '_isNew: (false|no)'
+run_console_expr \
+    'model("Post").count()' \
+    "console count of posts is 1" \
+    '=> 1'
 
 echo "==> routes"
 run_cli routes > "$TMPDIR/routes.log" 2>&1 \
@@ -236,10 +317,15 @@ echo ""
 echo "==> HTTP surface"
 assert_http "/posts" 200 "GET /posts"
 assert_http "/posts.json" 200 "GET /posts.json (format suffix)"
-if curl -s "http://localhost:$PORT/posts" | grep -q "Console Post"; then
+POSTS_BODY="$(curl -s --connect-timeout 2 --max-time 15 "http://localhost:$PORT/posts" 2>/dev/null || true)"
+if printf '%s' "$POSTS_BODY" | grep -q "Console Post"; then
     pass "console-created Post appears in /posts"
 else
     fail "console-created Post missing from /posts"
+    echo "  --- /posts body (first 2k) ---"
+    printf '%s' "$POSTS_BODY" | head -c 2048
+    echo ""
+    echo "  --- end /posts body ---"
 fi
 
 # ── Beat 7: api-resource + .json ──────────────────────────────────────────
@@ -262,11 +348,109 @@ run_cli migrate latest > "$TMPDIR/migrate3.log" 2>&1 \
     && pass "migrate (auth) exited 0" || { fail "migrate (auth) failed"; cat "$TMPDIR/migrate3.log"; }
 
 # ── Beat 6: test ──────────────────────────────────────────────────────────
-reload_app
+# `wheels test` hits the isolated `#3374` application (`<name>_wheelsTest`).
+# Reloading the *live* app immediately beforehand is unnecessary (the
+# isolated app cold-starts from current source) and harmful: `wheels reload`
+# wipes Lucee's cfclass cache, then the first TestBox directory scan can
+# return 0 bundles. The CLI then reports every on-disk *Spec.cfc as
+# "failed to compile" even when the runner JSON is a populate/constructor
+# error or an empty discovery — which is what CI showed after the console
+# flake was fixed (6 specs, 0 passed, ~2s).
 echo ""
 echo "==> test"
-run_cli test > "$TMPDIR/test.log" 2>&1 \
-    && pass "test exited 0" || { fail "test failed"; tail -40 "$TMPDIR/test.log"; }
+if wait_for_server; then
+    pass "server HTTP 200 before test"
+else
+    fail "server not HTTP 200 before test"
+fi
+
+wait_for_test_app() {
+    # Start the isolated test application on a cheap request so `wheels test`
+    # is not the first hit after a cfclass purge / live-app restart.
+    local i code=""
+    for i in $(seq 1 30); do
+        code="$(curl -s -o /dev/null --connect-timeout 2 --max-time 30 -w '%{http_code}' \
+            -H "X-Wheels-Test-Context: 1" \
+            "http://localhost:$PORT/" 2>/dev/null || echo 000)"
+        if [ "$code" = "200" ]; then
+            return 0
+        fi
+        sleep 2
+    done
+    echo "  isolated test app last HTTP status: ${code:-000}"
+    return 1
+}
+
+dump_test_runner_json() {
+    echo "  --- /wheels/app/tests?format=json ---"
+    local body
+    body="$(curl -s --connect-timeout 2 --max-time 90 \
+        "http://localhost:$PORT/wheels/app/tests?format=json&useTestDB=true" 2>/dev/null || true)"
+    if command -v python3 >/dev/null 2>&1 && [ -n "$body" ]; then
+        printf '%s' "$body" | python3 -c '
+import json, sys
+raw = sys.stdin.read()
+try:
+    d = json.loads(raw)
+except Exception:
+    print(raw[:4096])
+    sys.exit(0)
+keys = (
+    "success", "error", "message", "detail",
+    "bundlesDiscovered", "directoryRejected", "directoryResolved",
+    "testDirectoryPath", "testDirectoryExists", "warnings",
+    "totalPass", "totalFail", "totalError",
+)
+for k in keys:
+    if k in d:
+        print("  %s: %r" % (k, d[k]))
+snippet = d.get("RootCause") or d.get("rootCause")
+if snippet:
+    print("  RootCause: %r" % (snippet,))
+' || printf '%s\n' "${body:0:4096}"
+    else
+        printf '%s\n' "${body:0:4096}"
+    fi
+    echo "  --- end runner JSON ---"
+}
+
+run_wheels_test() {
+    local code=0
+    run_cli test > "$TMPDIR/test.log" 2>&1 || code=$?
+    if [ "$code" -ne 0 ]; then
+        return 1
+    fi
+    if grep -q 'failed to load' "$TMPDIR/test.log"; then
+        return 1
+    fi
+    if ! grep -qE '[1-9][0-9]* passed' "$TMPDIR/test.log"; then
+        return 1
+    fi
+    return 0
+}
+
+if wait_for_test_app; then
+    pass "isolated test app ready"
+else
+    echo "  WARN isolated test app not HTTP 200 yet; continuing to wheels test"
+fi
+
+if run_wheels_test; then
+    pass "test exited 0"
+else
+    echo "  first wheels test attempt failed; dumping runner JSON and retrying"
+    dump_test_runner_json
+    tail -40 "$TMPDIR/test.log" || true
+    wait_for_server || true
+    wait_for_test_app || true
+    if run_wheels_test; then
+        pass "test exited 0 (after retry)"
+    else
+        fail "test failed"
+        dump_test_runner_json
+        tail -40 "$TMPDIR/test.log" || true
+    fi
+fi
 grep -qE 'passed' "$TMPDIR/test.log" && pass "test reported results" || fail "test output missing pass count"
 
 # ── Report ────────────────────────────────────────────────────────────────

@@ -1840,27 +1840,33 @@ component extends="modules.BaseModule" {
 			password = detectReloadPassword();
 		}
 
-		// Verify connectivity with a ping
+		// Verify connectivity with a ping. Fail closed (##2229 / ##2941): a
+		// silent `return ""` here made `printf '...' | wheels console && ...`
+		// look successful when the eval endpoint was down or still restarting.
 		var evalUrl = "#$serverUrlBase(serverPort)#/wheels/console/eval";
 		try {
 			var pingResult = makeHttpPost(evalUrl, serializeJSON({expression: "__ping__", password: password}));
 			if (isJSON(pingResult)) {
 				var pingData = deserializeJSON(pingResult);
 				if (!pingData.success) {
-					out("Console connection failed: #pingData.error#", "red");
-					return "";
+					$consoleFail("Console connection failed: #pingData.error#");
 				}
 				var wheelsVersion = pingData.version ?: "unknown";
 				var wheelsEnv = pingData.environment ?: "unknown";
 			} else {
-				out("Server returned unexpected response. Is this a Wheels 3.x application?", "red");
-				return "";
+				$consoleFail("Server returned unexpected response. Is this a Wheels 3.x application?");
 			}
 		} catch (any e) {
+			if (e.type == "Wheels.ConsoleFailed") {
+				rethrow;
+			}
 			out("Cannot connect to console endpoint at #evalUrl#", "red");
 			out("Ensure your Wheels app is v3.1+ with console support.", "yellow");
 			out("Error: #e.message#", "yellow");
-			return "";
+			throw(
+				type = "Wheels.ConsoleFailed",
+				message = "Cannot connect to console endpoint at #evalUrl#: #e.message#"
+			);
 		}
 
 		// Banner
@@ -1870,13 +1876,18 @@ component extends="modules.BaseModule" {
 		out("Type expressions to evaluate in your app context. /help for commands.", "");
 		out("", "");
 
-		// Interactive REPL loop
+		// Interactive REPL loop. Piped sessions (EOF after one or more
+		// expressions) throw at EOF if any eval failed so shell `&&` gates
+		// and the tutorial e2e do not treat a printed `Error:` as success.
+		// Interactive `/exit` still returns 0 so a typo does not fail the
+		// whole session.
 		var System = createObject("java", "java.lang.System");
 		var reader = createObject("java", "java.io.BufferedReader").init(
 			createObject("java", "java.io.InputStreamReader").init(System.in)
 		);
 
 		var running = true;
+		var hadError = false;
 		while (running) {
 			// Print prompt
 			System.out.print("wheels> ");
@@ -1885,10 +1896,16 @@ component extends="modules.BaseModule" {
 			// Read input
 			var line = reader.readLine();
 
-			// Handle EOF (Ctrl+D)
+			// Handle EOF (Ctrl+D or end of a pipe)
 			if (isNull(line)) {
 				out("");
 				out("Bye!", "cyan");
+				if (hadError) {
+					throw(
+						type = "Wheels.ConsoleFailed",
+						message = "One or more console expressions failed"
+					);
+				}
 				break;
 			}
 
@@ -1903,12 +1920,18 @@ component extends="modules.BaseModule" {
 				running = false;
 				continue;
 			}
+			if (verdict == "error") {
+				hadError = true;
+				continue;
+			}
 			if (verdict == "handled") {
 				continue;
 			}
 
 			// Evaluate expression
-			consoleExec(evalUrl, line, password);
+			if (!consoleExec(evalUrl, line, password)) {
+				hadError = true;
+			}
 		}
 
 		return "";
@@ -1916,8 +1939,8 @@ component extends="modules.BaseModule" {
 
 	/**
 	 * Handle one REPL command line. Returns "exit" to end the loop, "handled"
-	 * when the line was a slash command, or "" when it should be evaluated as
-	 * an expression by the caller.
+	 * when the line was a slash command, "error" when a slash command's eval
+	 * failed, or "" when it should be evaluated as an expression by the caller.
 	 */
 	private string function $consoleHandleCommand(required string line, required string evalUrl, required string password, required string serverPort, required any javaSystem) {
 		switch (lCase(arguments.line)) {
@@ -1933,7 +1956,9 @@ component extends="modules.BaseModule" {
 				return "handled";
 
 			case "/env":
-				consoleExec(arguments.evalUrl, "__env__", arguments.password);
+				if (!consoleExec(arguments.evalUrl, "__env__", arguments.password)) {
+					return "error";
+				}
 				return "handled";
 
 			case "/reload":
@@ -1963,29 +1988,40 @@ component extends="modules.BaseModule" {
 				return "handled";
 
 			case "/models":
-				consoleExec(arguments.evalUrl, "structKeyArray(application.wheels.models).sort('textnocase')", arguments.password);
+				if (!consoleExec(arguments.evalUrl, "structKeyArray(application.wheels.models).sort('textnocase')", arguments.password)) {
+					return "error";
+				}
 				return "handled";
 
 			case "/routes":
-				consoleExec(arguments.evalUrl, "application.wheels.routes.map(function(r){ return r.pattern & ' -> ' & r.controller & '##' & r.action; })", arguments.password);
+				if (!consoleExec(arguments.evalUrl, "application.wheels.routes.map(function(r){ return r.pattern & ' -> ' & r.controller & '##' & r.action; })", arguments.password)) {
+					return "error";
+				}
 				return "handled";
 
 			case "/version":
-				consoleExec(arguments.evalUrl, "application.wheels.version", arguments.password);
+				if (!consoleExec(arguments.evalUrl, "application.wheels.version", arguments.password)) {
+					return "error";
+				}
 				return "handled";
 
 			case "/ds":
 			case "/datasource":
-				consoleExec(arguments.evalUrl, "application.wheels.dataSourceName", arguments.password);
+				if (!consoleExec(arguments.evalUrl, "application.wheels.dataSourceName", arguments.password)) {
+					return "error";
+				}
 				return "handled";
 		}
 		return "";
 	}
 
 	/**
-	 * Execute a single expression and display the result
+	 * Execute a single expression and display the result. Returns false when
+	 * the HTTP call failed, the server reported success=false, or a model
+	 * result carries validation errors — the REPL records that and exits
+	 * non-zero on EOF so piped scripts cannot hide a failed create.
 	 */
-	private void function consoleExec(required string requestUrl, required string expression, string password = "") {
+	private boolean function consoleExec(required string requestUrl, required string expression, string password = "") {
 		try {
 			var body = serializeJSON({expression: expression, password: password});
 			var httpResult = makeHttpPost(requestUrl, body);
@@ -1993,7 +2029,7 @@ component extends="modules.BaseModule" {
 			if (!isJSON(httpResult)) {
 				out("Server returned non-JSON response.", "red");
 				verbose(httpResult);
-				return;
+				return false;
 			}
 
 			var result = deserializeJSON(httpResult);
@@ -2005,7 +2041,7 @@ component extends="modules.BaseModule" {
 
 			if (!result.success) {
 				out("Error: #result.error#", "red");
-				return;
+				return false;
 			}
 
 			// Display result based on type
@@ -2014,7 +2050,7 @@ component extends="modules.BaseModule" {
 
 			if (resultType == "void" && !len(resultValue)) {
 				// No return value and no output — nothing to display
-				return;
+				return true;
 			}
 
 			switch (resultType) {
@@ -2024,6 +2060,9 @@ component extends="modules.BaseModule" {
 
 				case "model":
 					displayModelResult(resultValue);
+					if ($consoleModelHasErrors(resultValue)) {
+						return false;
+					}
 					break;
 
 				case "struct":
@@ -2047,9 +2086,38 @@ component extends="modules.BaseModule" {
 					}
 			}
 
+			return true;
+
 		} catch (any e) {
 			out("Request failed: #e.message#", "red");
+			return false;
 		}
+	}
+
+	/**
+	 * Print-then-throw for console startup failures so LuCLI surfaces a
+	 * non-zero exit (same contract as reload / routes, GH ##2229 / ##2941).
+	 */
+	private void function $consoleFail(required string message) {
+		out(arguments.message, "red");
+		throw(type = "Wheels.ConsoleFailed", message = arguments.message);
+	}
+
+	/**
+	 * True when a serialized model result includes validation errors.
+	 * `.create()` that fails validation still evaluates successfully and
+	 * returns the unsaved object — without this, piped console sessions
+	 * exited 0 after a no-op persist.
+	 */
+	public boolean function $consoleModelHasErrors(required string jsonResult) {
+		if (!isJSON(arguments.jsonResult)) {
+			return false;
+		}
+		var props = deserializeJSON(arguments.jsonResult);
+		if (!isStruct(props) || !structKeyExists(props, "_hasErrors")) {
+			return false;
+		}
+		return isBoolean(props._hasErrors) && props._hasErrors;
 	}
 
 	/**
@@ -2137,6 +2205,14 @@ component extends="modules.BaseModule" {
 			}
 			if (structKeyExists(props, "_isNew")) {
 				out("    _isNew: #props._isNew#", "cyan");
+			}
+			if (structKeyExists(props, "_hasErrors") && isBoolean(props._hasErrors) && props._hasErrors) {
+				out("    Validation failed:", "red");
+				if (structKeyExists(props, "_errors") && isArray(props._errors)) {
+					for (var errMsg in props._errors) {
+						out("    #errMsg#", "red");
+					}
+				}
 			}
 			out("  }", "green");
 		} catch (any e) {
@@ -6945,7 +7021,9 @@ component extends="modules.BaseModule" {
 		var unloadedSpecPaths = $collectUnloadedSpecs(result, arguments.testDirectory, specsFailedToLoad);
 
 		if (specsFailedToLoad > 0) {
-			$printFailedToLoadWarning(specsFailedToLoad, unloadedSpecPaths);
+			$printFailedToLoadWarning(specsFailedToLoad, unloadedSpecPaths, result);
+		} else {
+			$printTestResultDiagnostics(result);
 		}
 
 		// Display bundle/suite/spec tree if verbose and bundles exist
@@ -7006,16 +7084,87 @@ component extends="modules.BaseModule" {
 	}
 
 	/**
-	 * Print the "specs failed to load" warning block (and the parse-error hint).
+	 * Print the "specs failed to load" warning block plus any runner-payload
+	 * diagnostics (populate / TestBox constructor / 0-bundle / parse error).
+	 * Disk-vs-bundleStats is only a proxy — the same WARN used to fire for a
+	 * non-TestBox JSON body (e.g. tests/populate.cfm failed) with no compile
+	 * error at all.
 	 */
-	private void function $printFailedToLoadWarning(required numeric specsFailedToLoad, required array unloadedSpecPaths) {
+	private void function $printFailedToLoadWarning(
+		required numeric specsFailedToLoad,
+		required array unloadedSpecPaths,
+		required any result
+	) {
 		out("");
-		out("WARN  #arguments.specsFailedToLoad# spec file(s) failed to compile and were silently skipped:", "yellow");
+		out("WARN  #arguments.specsFailedToLoad# spec file(s) were on disk but not loaded (compile error, empty discovery, or runner error):", "yellow");
 		for (var unloaded in arguments.unloadedSpecPaths) {
 			out("        #unloaded#", "yellow");
 		}
-		out("        Visit /wheels/app/tests in a browser for the parse-error details.", "yellow");
+		out("        Visit /wheels/app/tests?format=json for runner diagnostics.", "yellow");
+		$printTestResultDiagnostics(arguments.result);
 		out("");
+	}
+
+	/**
+	 * Human-readable lines from a runner JSON body that is missing bundleStats
+	 * or carries an explicit error (populate.cfm, TestBox constructor, 0-bundle
+	 * discovery). Public so CLI specs can lock the fields without a live server.
+	 */
+	public array function $testResultDiagnosticLines(required any result) {
+		var lines = [];
+		if (!isStruct(arguments.result)) {
+			return lines;
+		}
+		var interesting = false;
+		if (structKeyExists(arguments.result, "error") && isSimpleValue(arguments.result.error) && len(arguments.result.error)) {
+			arrayAppend(lines, "Runner error: #arguments.result.error#");
+			interesting = true;
+		}
+		if (structKeyExists(arguments.result, "message") && isSimpleValue(arguments.result.message) && len(arguments.result.message)) {
+			arrayAppend(lines, "Message: #arguments.result.message#");
+			interesting = true;
+		}
+		if (structKeyExists(arguments.result, "detail") && isSimpleValue(arguments.result.detail) && len(arguments.result.detail)) {
+			arrayAppend(lines, "Detail: #arguments.result.detail#");
+			interesting = true;
+		}
+		if (structKeyExists(arguments.result, "directoryRejected") && arguments.result.directoryRejected) {
+			arrayAppend(lines, "directoryRejected: true");
+			interesting = true;
+		}
+		if (structKeyExists(arguments.result, "bundlesDiscovered") && arguments.result.bundlesDiscovered == 0) {
+			arrayAppend(lines, "bundlesDiscovered: 0");
+			interesting = true;
+		}
+		if (structKeyExists(arguments.result, "testDirectoryExists") && !arguments.result.testDirectoryExists) {
+			arrayAppend(lines, "testDirectoryExists: false");
+			interesting = true;
+		}
+		if (structKeyExists(arguments.result, "warnings") && isArray(arguments.result.warnings) && arrayLen(arguments.result.warnings)) {
+			interesting = true;
+			for (var warning in arguments.result.warnings) {
+				if (isSimpleValue(warning) && len(warning)) {
+					arrayAppend(lines, "Warning: #warning#");
+				}
+			}
+		}
+		// Path / resolved-directory only when something above was wrong —
+		// a clean pass always carries bundlesDiscovered > 0 and must stay quiet.
+		if (interesting) {
+			if (structKeyExists(arguments.result, "directoryResolved") && isSimpleValue(arguments.result.directoryResolved) && len(arguments.result.directoryResolved)) {
+				arrayAppend(lines, "directoryResolved: #arguments.result.directoryResolved#");
+			}
+			if (structKeyExists(arguments.result, "testDirectoryPath") && isSimpleValue(arguments.result.testDirectoryPath) && len(arguments.result.testDirectoryPath)) {
+				arrayAppend(lines, "testDirectoryPath: #arguments.result.testDirectoryPath#");
+			}
+		}
+		return lines;
+	}
+
+	private void function $printTestResultDiagnostics(required any result) {
+		for (var line in $testResultDiagnosticLines(arguments.result)) {
+			out("        #line#", "yellow");
+		}
 	}
 
 	/**
