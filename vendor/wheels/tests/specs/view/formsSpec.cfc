@@ -1344,7 +1344,8 @@ component extends="wheels.WheelsTest" {
 				expect(result).toInclude("field-with-errors")
 				expect(result).toInclude('class="error-message"')
 				expect(result).toInclude('role="alert"')
-				expect(result).toInclude("Error:")
+				// encode=true turns the colon into a hex entity (S18 / encodeHtmlTags).
+				expect(result).toInclude("Error&##x3a;")
 				expect(result).toInclude("firstname error1")
 				expect(FindNoCase('type="text"', result)).toBeLT(FindNoCase("error-message", result))
 				expect(result).notToInclude("includeErrorMessage")
