@@ -8316,31 +8316,85 @@ component extends="modules.BaseModule" {
 				var rels = listToArray(valueAfterEquals(arg));
 				result.hasOne.append(rels, true);
 			} else if (!arg.startsWith("--")) {
-				// Property: name, name:type, or name:enum:value1,value2,...
-				// Split on the FIRST two colons only — any additional colons
-				// (e.g. inside the comma-separated value list) belong in the
-				// values segment.
-				var parts = listToArray(arg, ":");
-				var prop = {
-					name: parts[1],
-					type: arrayLen(parts) > 1 ? parts[2] : "string"
-				};
-				if (lCase(prop.type) == "enum" && arrayLen(parts) > 2) {
-					// Re-join everything after the second colon so values
-					// like "draft,published,archived" land in a single
-					// segment. Most cases are arrayLen==3 (no embedded
-					// colons), so this is just parts[3] — defensive against
-					// pathological inputs.
-					var valueSegments = [];
-					for (var i = 3; i <= arrayLen(parts); i++) {
-						arrayAppend(valueSegments, parts[i]);
-					}
-					prop.values = arrayToList(valueSegments, ":");
-				}
-				arrayAppend(result.properties, prop);
+				// Property: name, name:type, name:type{N}, name:type{P,S},
+				// or name:enum:value1,value2,...
+				arrayAppend(result.properties, $parsePropertyArg(arg));
 			}
 		}
 
+		return result;
+	}
+
+	/**
+	 * Parse one generator property token into a name/type struct, plus
+	 * optional Rails-style brace modifiers (`string{50}`, `decimal{10,2}`)
+	 * and colon-delimited enum values (`status:enum:draft,published`).
+	 *
+	 * Brace modifiers attach to the type token only, so they never steal
+	 * the value list from `name:enum:a,b`.
+	 */
+	private struct function $parsePropertyArg(required string arg) {
+		// Split on the FIRST two colons only — any additional colons
+		// (e.g. inside the comma-separated value list) belong in the
+		// values segment.
+		var parts = listToArray(arguments.arg, ":");
+		var typeToken = arrayLen(parts) > 1 ? parts[2] : "string";
+		var modifiers = $parseTypeModifiers(typeToken);
+		var prop = {
+			name: parts[1],
+			type: modifiers.type
+		};
+		if (structKeyExists(modifiers, "limit")) {
+			prop.limit = modifiers.limit;
+		}
+		if (structKeyExists(modifiers, "precision")) {
+			prop.precision = modifiers.precision;
+		}
+		if (structKeyExists(modifiers, "scale")) {
+			prop.scale = modifiers.scale;
+		}
+		if (lCase(prop.type) == "enum" && arrayLen(parts) > 2) {
+			// Re-join everything after the second colon so values
+			// like "draft,published,archived" land in a single
+			// segment. Most cases are arrayLen==3 (no embedded
+			// colons), so this is just parts[3] — defensive against
+			// pathological inputs.
+			var valueSegments = [];
+			for (var i = 3; i <= arrayLen(parts); i++) {
+				arrayAppend(valueSegments, parts[i]);
+			}
+			prop.values = arrayToList(valueSegments, ":");
+		}
+		return prop;
+	}
+
+	/**
+	 * Strip a trailing `{N}` or `{P,S}` modifier from a type token.
+	 * Single number → limit. Two comma-separated numbers → precision, scale.
+	 * Malformed or empty braces leave the type unchanged and add no fields.
+	 */
+	private struct function $parseTypeModifiers(required string typeToken) {
+		var result = {type: arguments.typeToken};
+		var openBrace = find("{", arguments.typeToken);
+		if (openBrace < 2) {
+			return result;
+		}
+		if (right(arguments.typeToken, 1) != "}") {
+			return result;
+		}
+		var inner = mid(arguments.typeToken, openBrace + 1, len(arguments.typeToken) - openBrace - 1);
+		if (!len(trim(inner))) {
+			return result;
+		}
+		// openBrace is at least 2, so this Left() length is at least 1
+		result.type = left(arguments.typeToken, openBrace - 1);
+		var bits = listToArray(inner);
+		if (arrayLen(bits) >= 2 && isNumeric(trim(bits[1])) && isNumeric(trim(bits[2]))) {
+			result.precision = trim(bits[1]);
+			result.scale = trim(bits[2]);
+		} else if (arrayLen(bits) == 1 && isNumeric(trim(bits[1]))) {
+			result.limit = trim(bits[1]);
+		}
 		return result;
 	}
 
