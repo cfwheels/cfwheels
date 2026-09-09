@@ -98,7 +98,7 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(content).notToInclude('"title" = ');
 					expect(content).toInclude("beforeCount + 1");
 					expect(content).toInclude("beforeCount - 1");
-					expect(content).toInclude("expect(result.status).toBe(302)");
+					expect(content).toInclude("expect(result.status).toBe(303)");
 					expect(content).toInclude("variables.post.id");
 				});
 

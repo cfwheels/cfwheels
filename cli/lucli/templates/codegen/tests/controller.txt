@@ -36,7 +36,7 @@ component extends="wheels.WheelsTest" {
 					method = "post",
 					returnAs = "struct"
 				);
-				expect(result.status).toBe(302);
+				expect(result.status).toBe(303);
 				expect(len(result.redirect)).toBeGT(0);
 				expect(model("{{modelName}}").count()).toBe(beforeCount + 1);
 			});
@@ -57,7 +57,7 @@ component extends="wheels.WheelsTest" {
 					method = "post",
 					returnAs = "struct"
 				);
-				expect(result.status).toBe(302);
+				expect(result.status).toBe(303);
 				expect(len(result.redirect)).toBeGT(0);
 			});
 
@@ -68,7 +68,7 @@ component extends="wheels.WheelsTest" {
 					method = "delete",
 					returnAs = "struct"
 				);
-				expect(result.status).toBe(302);
+				expect(result.status).toBe(303);
 				expect(len(result.redirect)).toBeGT(0);
 				expect(model("{{modelName}}").count()).toBe(beforeCount - 1);
 			});

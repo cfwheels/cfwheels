@@ -171,6 +171,27 @@
             local.fmtResolver = new wheels.tests._assets.dispatch.TestFormatResolver();
             local.output = local.fmtResolver.resolveFormat(url);
 
+            // Same as the core runner (vendor/wheels/tests/runner.cfm): delay
+            // redirectTo() so processRequest() can read getRedirect() instead
+            // of the action cflocation-aborting this HTTP request. Without
+            // this, a scaffold create/update/delete spec 303s the runner to
+            // /posts/:key; show.cfm then does post.title on findByKey()=false
+            // ("there is no property with name [TITLE] found in [boolean]").
+            local.originalRedirectDelay = false;
+            if (
+                StructKeyExists(application.wheels, "functions")
+                && StructKeyExists(application.wheels.functions, "redirectTo")
+                && StructKeyExists(application.wheels.functions.redirectTo, "delay")
+            ) {
+                local.originalRedirectDelay = application.wheels.functions.redirectTo.delay;
+            }
+            if (
+                StructKeyExists(application.wheels, "functions")
+                && StructKeyExists(application.wheels.functions, "redirectTo")
+            ) {
+                application.wheels.functions.redirectTo.delay = true;
+            }
+
             if (local.output.recognized) {
                 try {
                     result = testBox.run(reporter = local.output.reporter);
@@ -234,6 +255,14 @@
             // cached model classes are invalidated). Only the request that
             // performed the swap restores it — re-entrant sub-requests never
             // touch the live config.
+            if (
+                StructKeyExists(application, "wheels")
+                && StructKeyExists(application.wheels, "functions")
+                && StructKeyExists(application.wheels.functions, "redirectTo")
+                && StructKeyExists(local, "originalRedirectDelay")
+            ) {
+                application.wheels.functions.redirectTo.delay = local.originalRedirectDelay;
+            }
             if (local.runnerOwnsSwap) {
                 if (local.swappedDataSource) {
                     local.dbResolver.applyDataSource(
