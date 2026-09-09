@@ -18,6 +18,7 @@ excerpt: >-
   that obvious before the September bug goes out.
 coverImage: '/blog-images/4-1/wheels-coverage-and-the-complexity-panel.png'
 announcement:
+  discussionUrl: 'https://github.com/wheels-dev/wheels/discussions/3543'
   title: 'Find your riskiest code'
   body: |
     New post: **[Find your riskiest code](https://blog.wheels.dev/blog/wheels-coverage-and-the-complexity-panel)** — `wheels coverage` and the new code-complexity panel rank your change-riskiest files.

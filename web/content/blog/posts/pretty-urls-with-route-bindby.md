@@ -16,6 +16,7 @@ excerpt: >-
   that quietly breaks your site.
 coverImage: '/blog-images/4-1/pretty-urls-with-route-bindby.png'
 announcement:
+  discussionUrl: 'https://github.com/wheels-dev/wheels/discussions/3541'
   title: 'Pretty URLs with bindBy'
   body: |
     New post: **[Pretty URLs with bindBy](https://blog.wheels.dev/blog/pretty-urls-with-route-bindby)** — bind a resource route's `:key` segment to any column, so URLs carry slugs instead of primary keys.

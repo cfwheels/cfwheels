@@ -16,6 +16,7 @@ excerpt: >-
   between one closed arrow and ten open switch statements.
 coverImage: '/blog-images/4-1/dependency-injection-factories-with-tofactory.png'
 announcement:
+  discussionUrl: 'https://github.com/wheels-dev/wheels/discussions/3539'
   title: 'DI factories with toFactory()'
   body: |
     New post: **[Factories for your container](https://blog.wheels.dev/blog/dependency-injection-factories-with-tofactory)** — `Injector.toFactory()` binds a name to a closure that builds the instance.
