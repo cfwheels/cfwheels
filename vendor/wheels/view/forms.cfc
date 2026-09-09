@@ -540,6 +540,12 @@ component {
 		}
 		if ($formHasError(argumentCollection = arguments) && Len(arguments.errorElement)) {
 			arguments.errorElement = $sanitizeHtmlTagName(arguments.errorElement);
+			// Nest the property's validation error inside the field block, with
+			// the control (#3549 / #3550). errorMessageOn resolves the same
+			// object + property via $getObject, so this renders only when the
+			// field actually has errors and honors the app's errorMessageOn
+			// defaults (prependText, wrapperElement, class, encode).
+			local.rv &= errorMessageOn(objectName = arguments.objectName, property = arguments.property);
 			// the input has an error and is wrapped in a tag so we need to close that wrapper tag
 			local.rv &= "</" & arguments.errorElement & ">";
 		}

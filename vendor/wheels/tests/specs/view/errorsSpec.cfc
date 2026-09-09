@@ -48,6 +48,27 @@ component extends="wheels.WheelsTest" {
 
 		})
 
+		describe("field helpers nest the per-property error in the field block", () => {
+
+			it("appends errorMessageOn inside the errorElement wrapper (##3549/##3550)", () => {
+				_controller = application.wo.controller(name = "ControllerWithModelErrors")
+				result = _controller.textField(objectName = "user", property = "firstname")
+				// The errorElement wrapper still marks the field...
+				expect(result).toInclude('class="field-with-errors"')
+				// ...and the inline message is now rendered with the control, after
+				// the field's input element.
+				expect(result).toInclude('<span class="error-message">firstname error1</span>')
+				expect(find('<span class="error-message">', result)).toBeGT(find("<input", result))
+			})
+
+			it("renders no inline message when the property has no errors", () => {
+				_controller = application.wo.controller(name = "ControllerWithModelErrors")
+				result = _controller.textField(objectName = "user", property = "username")
+				expect(result).notToInclude("error-message")
+			})
+
+		})
+
 		describe("Tests that errorMessagesFor", () => {
 
 			beforeEach(() => {
