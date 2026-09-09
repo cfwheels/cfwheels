@@ -34,5 +34,40 @@
 	*/
 	set(useUnderscoreReferenceColumns=true);
 
+	/*
+		Form helper defaults for scaffolded forms (issues #3549 / #3550):
+		stack the label above the field, let string/text inputs span the full
+		row width (via public/stylesheets/wheels-forms.css), and nest each
+		property's validation error inside the field block. These are defaults
+		for NEW scaffolds only — the framework's global `labelPlacement` stays
+		`around` so existing apps and exact-HTML expectations are unaffected.
+	*/
+	set(
+		functionName="textField,textFieldTag,emailField,emailFieldTag,urlField,urlFieldTag,numberField,numberFieldTag,telField,telFieldTag,searchField,searchFieldTag,passwordField,passwordFieldTag,textArea,textAreaTag,select,selectTag,fileField,fileFieldTag",
+		labelPlacement="before",
+		prependToLabel="<div class=""field"">",
+		append="</div>",
+		errorElement="div",
+		errorClass="field-with-errors",
+		encode="attributes"
+	);
+	// Boolean controls stay inline (label beside the checkbox/radio).
+	set(
+		functionName="checkBox,checkBoxTag,radioButton,radioButtonTag",
+		labelPlacement="aroundRight"
+	);
+	// Accessible validation errors: a "Error:" text prefix is a non-color cue
+	// (red styling lives in wheels-forms.css).
+	set(
+		functionName="errorMessageOn",
+		prependText="Error:",
+		wrapperElement="span",
+		class="error-message"
+	);
+	set(
+		functionName="errorMessagesFor",
+		class="error-messages"
+	);
+
 	// CLI-Appends-Here
 </cfscript>

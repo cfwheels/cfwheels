@@ -1,0 +1,82 @@
+/*
+ * wheels-forms.css — scaffolded form layout (issues #3549 / #3550)
+ *
+ * Loaded after simple.css in app/views/layout.cfm. Complements the classless
+ * simple.css with stacked, full-width form fields and red, accessible
+ * validation errors. Remove it (and the <link> in layout.cfm) to bring your
+ * own form styling.
+ */
+
+/* Field block: label on its own line, control below. */
+.field {
+    margin-bottom: 1rem;
+}
+.field label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+/*
+ * Errored field block. The framework wraps the label + control in
+ * `.field-with-errors` when the property has validation errors and nests the
+ * per-property message inside it, so keep the message visually attached.
+ */
+.field-with-errors {
+    margin-bottom: 1rem;
+}
+.field-with-errors .field {
+    margin-bottom: 0.25rem;
+}
+
+/* String/text controls span the full row (checkbox/radio stay inline). */
+.field input[type="text"],
+.field input[type="password"],
+.field input[type="email"],
+.field input[type="url"],
+.field input[type="search"],
+.field input[type="number"],
+.field input[type="tel"],
+.field textarea,
+.field select {
+    width: 100%;
+    display: block;
+}
+
+/*
+ * Validation errors: red with strong contrast, plus a non-color cue (the
+ * "Error:" text prefix configured in config/settings.cfm) so they are not
+ * conveyed by color alone.
+ */
+.error-message,
+.error-messages {
+    color: #b91c1c; /* red-700: ~4.6:1 contrast on white */
+    font-weight: 600;
+}
+.error-message {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+}
+.error-messages {
+    list-style: none;
+    padding: 0.5rem 0.75rem;
+    margin: 0 0 1rem;
+    border-left: 3px solid #b91c1c;
+    background: #fef2f2;
+}
+.error-messages::before {
+    content: "Errors: ";
+    font-weight: 700;
+}
+
+@media (prefers-color-scheme: dark) {
+    .error-message,
+    .error-messages {
+        color: #f87171; /* red-400: readable on dark backgrounds */
+    }
+    .error-messages {
+        background: rgba(185, 28, 28, 0.15);
+        border-left-color: #f87171;
+    }
+}

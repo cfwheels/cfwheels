@@ -20,6 +20,10 @@
 			      to bring your own CSS, or swap for a richer kit — e.g.
 			      `wheels packages add wheels-basecoat`. --->
 			<cfoutput>#styleSheetLinkTag(sources="simple")#</cfoutput>
+			<!--- Scaffold form layout: stacked label-above-field, full-width
+			      text inputs, and red accessible validation errors (#3549/#3550).
+			      Loaded after simple.css so it layers on top. --->
+			<cfoutput>#styleSheetLinkTag(sources="wheels-forms")#</cfoutput>
 		</head>
 
 		<body>

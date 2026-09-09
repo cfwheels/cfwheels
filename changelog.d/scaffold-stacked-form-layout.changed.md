@@ -1,0 +1,1 @@
+- New `wheels new` scaffolds render forms with the label on its own line above the field and string/text inputs spanning the full row width (a new `wheels-forms.css` + `labelPlacement="before"` field wrapper defaults), while each property's validation error is now nested inside its field block instead of only appearing in the summary list (#3549)

@@ -1,0 +1,1 @@
+- Validation errors in scaffolded forms are now styled red with sufficient contrast and a non-color "Error:" text prefix (via `errorMessageOn` defaults and `wheels-forms.css`), so they read as errors at a glance without relying on color alone (#3550)

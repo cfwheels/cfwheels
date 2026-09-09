@@ -102,6 +102,33 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 				expect(fileExists(templateRoot & "tests/specs/models/.gitkeep")).toBeTrue();
 			});
 
+			it("ships scaffolded form layout defaults (label above field, full-width, nested errors)", () => {
+				// Issues #3549/#3550: new scaffolds stack the label above the
+				// field and nest the validation error in the field block via
+				// `set()` defaults in config/settings.cfm. The framework's
+				// global `labelPlacement` default is intentionally left as
+				// `around` so existing apps are unaffected.
+				var content = fileRead(templateRoot & "config/settings.cfm");
+				expect(content).toInclude('labelPlacement="before"');
+				expect(content).toInclude('functionName="textField,textFieldTag');
+				expect(content).toInclude('prependToLabel="<div class=""field"">"');
+				expect(content).toInclude('errorElement="div"');
+				expect(content).toInclude('prependText="Error:"');
+				expect(content).toInclude('functionName="errorMessageOn"');
+				// Boolean controls stay inline.
+				expect(content).toInclude('labelPlacement="aroundRight"');
+			});
+
+			it("ships wheels-forms.css and links it after simple.css in layout.cfm", () => {
+				// The companion stylesheet layers full-width inputs and red
+				// accessible error styling on top of the bundled simple.css.
+				expect(fileExists(templateRoot & "public/stylesheets/wheels-forms.css")).toBeTrue();
+				var layout = fileRead(templateRoot & "app/views/layout.cfm");
+				expect(layout).toInclude('sources="simple"');
+				expect(layout).toInclude('sources="wheels-forms"');
+				expect(find('sources="wheels-forms"', layout)).toBeGT(find('sources="simple"', layout));
+			});
+
 		});
 
 	}
