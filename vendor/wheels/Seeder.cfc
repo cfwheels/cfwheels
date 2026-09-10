@@ -551,8 +551,11 @@ component output="false" extends="wheels.Global" {
 	 * the if-chain. Returns {handled: true/false, value: ...}.
 	 */
 	public struct function $generateTestDataByType(required string propertyType, required string name, required numeric index) {
-		// Boolean fields
-		if (arguments.propertyType == "boolean" || FindNoCase("active", arguments.name) || FindNoCase("enabled", arguments.name) || FindNoCase("published", arguments.name)) {
+		// Type-first: an explicit column type wins over name heuristics, so a
+		// `publishedAt:datetime` field gets a date instead of matching the
+		// "published" boolean name heuristic (the old order substring-matched
+		// "published" inside "publishedAt" and returned true/false).
+		if (arguments.propertyType == "boolean") {
 			return {handled = true, value = (arguments.index mod 2) == 1};
 		}
 
@@ -571,12 +574,28 @@ component output="false" extends="wheels.Global" {
 		}
 
 		// Date fields
-		if (arguments.propertyType == "date" || arguments.propertyType == "datetime" || FindNoCase("date", arguments.name) || FindNoCase("birthday", arguments.name) || FindNoCase("dob", arguments.name)) {
+		if (arguments.propertyType == "date" || arguments.propertyType == "datetime") {
+			return {handled = true, value = DateAdd("d", -arguments.index, Now())};
+		}
+
+		// Text fields
+		if (arguments.propertyType == "text") {
+			return {handled = true, value = "This is test content #arguments.index#. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."};
+		}
+
+		// Name heuristics — only for string/unknown types, so they never
+		// override an explicit column type. "published" is an exact match so it
+		// doesn't swallow a datetime-typed "publishedAt".
+		if (FindNoCase("active", arguments.name) || FindNoCase("enabled", arguments.name) || arguments.name == "published") {
+			return {handled = true, value = (arguments.index mod 2) == 1};
+		}
+
+		if (FindNoCase("date", arguments.name) || FindNoCase("birthday", arguments.name) || FindNoCase("dob", arguments.name) || FindNoCase("publishedat", arguments.name) || FindNoCase("publishedon", arguments.name)) {
 			return {handled = true, value = DateAdd("d", -arguments.index, Now())};
 		}
 
 		// Text/description fields
-		if (arguments.propertyType == "text" || FindNoCase("description", arguments.name) || FindNoCase("content", arguments.name) || FindNoCase("body", arguments.name)) {
+		if (FindNoCase("description", arguments.name) || FindNoCase("content", arguments.name) || FindNoCase("body", arguments.name)) {
 			return {handled = true, value = "This is test content #arguments.index#. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."};
 		}
 

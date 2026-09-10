@@ -87,21 +87,19 @@
                 }
             }
 
-            // If the test database has no migrator-versions table, include
-            // the user's tests/populate.cfm to bootstrap schema. Skip
-            // silently when the file doesn't exist (advanced users with
+            // Always include the user's tests/populate.cfm before specs run so
+            // pending migrations reach the test DB on every run
+            // (migrateToLatest() is a no-op when already current) — gating on
+            // "no migrator-versions table" meant migrations added after the
+            // first run never reached db/test.sqlite and their specs failed
+            // with "table could not be found". Seed data added to
+            // populate.cfm must be idempotent: it runs before every test run.
+            // Skip silently when the file doesn't exist (advanced users with
             // their own setup).
             local.populatePath = ExpandPath("/tests/populate.cfm");
             if (local.swappedDataSource && FileExists(local.populatePath)) {
                 try {
-                    local.dbinfo = application.wo.$dbinfo(
-                        datasource = local.targetDataSource,
-                        type = "tables"
-                    );
-                    local.tableList = ValueList(local.dbinfo.table_name);
-                    if (!FindNoCase(application.wheels.migratorTableName, local.tableList)) {
-                        include "/tests/populate.cfm";
-                    }
+                    include "/tests/populate.cfm";
                 } catch (any populateErr) {
                     // Surface populate.cfm errors as JSON; don't silently
                     // run specs against an empty test DB.

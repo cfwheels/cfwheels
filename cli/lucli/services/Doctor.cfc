@@ -434,7 +434,11 @@ component {
 	 */
 	private void function checkRawParamsMassAssignment(required struct results) {
 		var scanDirs = ["app/controllers", "app/models"];
-		var massAssignmentPattern = "\b(create|update|updateAll|new|save|findByKey)\s*\(\s*params\.";
+		// `findByKey` is deliberately excluded: it reads a single scalar primary
+		// key from params to look up a record and writes nothing to the model,
+		// so it is not a mass-assignment vector (the generated CRUD scaffolds
+		// call findByKey(params.key) in show/edit/update/delete).
+		var massAssignmentPattern = "\b(create|update|updateAll|new|save)\s*\(\s*params\.";
 		for (var scanDir in scanDirs) {
 			var absDir = variables.projectRoot & "/" & scanDir;
 			if (!directoryExists(absDir)) continue;

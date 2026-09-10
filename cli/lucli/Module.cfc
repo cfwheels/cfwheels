@@ -254,8 +254,10 @@ component extends="modules.BaseModule" {
 	public struct function mcpToolSpecs() {
 		return {
 			"analyze" = analyzeArgSpec().toInputSchema(),
+			"create"  = createArgSpec().toInputSchema(),
 			"destroy" = destroyArgSpec().toInputSchema(),
 			"doctor"  = verboseFlagSpec().toInputSchema(),
+			"generate" = generateArgSpec().toInputSchema(),
 			"migrate" = migrateArgSpec().toInputSchema(),
 			"notes"   = notesArgSpec().toInputSchema(),
 			"seed"    = seedArgSpec().toInputSchema(),
@@ -324,6 +326,20 @@ component extends="modules.BaseModule" {
 			.positional(name = "type", default = "", description = "What to remove: resource, model, controller, or view")
 			.positional(name = "name", default = "", description = "Name of the artifact to remove")
 			.flag(name = "force", default = false, description = "Skip the confirmation prompt");
+	}
+
+	private any function generateArgSpec() {
+		return new services.ArgSpec()
+			.positional(name = "type", required = true, description = "What to generate: model, controller, view, scaffold, migration, api-resource, route, test, property, helper, policy, snippets, admin, auth, or app")
+			.positional(name = "name", description = "Artifact name (model/controller/resource name, or the app name for `generate app`)")
+			.positional(name = "attributes", description = "Column definitions for model/scaffold (space- or comma-delimited name:type pairs, e.g. 'title:string body:text')")
+			.flag(name = "dry-run", default = false, description = "Print the would-be paths and write nothing");
+	}
+
+	private any function createArgSpec() {
+		return new services.ArgSpec()
+			.positional(name = "type", required = true, description = "What to create: app")
+			.positional(name = "name", required = true, description = "Application name");
 	}
 
 	private any function verboseFlagSpec() {
@@ -588,6 +604,31 @@ component extends="modules.BaseModule" {
 
 		var type = cleaned[1];
 		var remaining = arrayLen(cleaned) > 1 ? cleaned.slice(2) : [];
+
+		// MCP and structured callers pass {"type": "...", "name": "...",
+		// "attributes": "..."} which toArgv() re-emits as --type=... --name=...
+		// --attributes=... — normalize those named prefixes back to positional
+		// form so `wheels generate scaffold Post title:string` behaves the same
+		// from a shell or an MCP tool call.
+		if (left(type, 7) == "--type=") {
+			type = mid(type, 8, len(type));
+		}
+		var normalized = [];
+		for (var i = 1; i <= arrayLen(remaining); i++) {
+			var r = remaining[i];
+			if (left(r, 7) == "--name=") {
+				arrayAppend(normalized, mid(r, 8, len(r)));
+			} else if (left(r, 12) == "--attributes=") {
+				// Attributes arrive as one space/comma-delimited string — split
+				// into the individual name:type tokens the generators expect.
+				for (var token in reMatch("[^\s,]+", mid(r, 13, len(r)))) {
+					arrayAppend(normalized, token);
+				}
+			} else {
+				arrayAppend(normalized, r);
+			}
+		}
+		remaining = normalized;
 
 		var result = $generateDispatch(type, remaining);
 
@@ -1563,6 +1604,23 @@ component extends="modules.BaseModule" {
 
 		var type = lCase(args[1]);
 		var remaining = args.len() > 1 ? args.slice(2) : [];
+
+		// Normalize the named --type=/--name= prefixes that MCP callers
+		// produce (toArgv re-emits {"type":"app","name":"myapp"} as
+		// --type=app --name=myapp) back to positional form.
+		if (left(type, 7) == "--type=") {
+			type = lCase(mid(type, 8, len(type)));
+		}
+		var normalizedRemaining = [];
+		for (var i = 1; i <= arrayLen(remaining); i++) {
+			var r = remaining[i];
+			if (left(r, 7) == "--name=") {
+				arrayAppend(normalizedRemaining, mid(r, 8, len(r)));
+			} else {
+				arrayAppend(normalizedRemaining, r);
+			}
+		}
+		remaining = normalizedRemaining;
 
 		switch (type) {
 			case "app":

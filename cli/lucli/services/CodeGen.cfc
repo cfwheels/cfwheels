@@ -84,7 +84,10 @@ component {
 				arrayAppend(extraLines, "validatesFormatOf(property=""#prop.name#"", type=""URL"");");
 			}
 			if (isStringLikeLengthLimit(prop, propType)) {
-				arrayAppend(extraLines, "validatesLengthOf(property=""#prop.name#"", maximum=#prop.limit#);");
+				// allowBlank=true so an empty value only surfaces the
+				// validatesPresenceOf "can't be empty" error instead of also
+				// triggering a confusing "is the wrong length" duplicate.
+				arrayAppend(extraLines, "validatesLengthOf(property=""#prop.name#"", maximum=#prop.limit#, allowBlank=true);");
 			}
 		}
 
