@@ -41,7 +41,7 @@ That report is the spine of this whole release. It's why 4.1 has a story, and wh
 
 Over the next two weeks, the blog will walk through each thread, one post at a time:
 
-- **bcrypt for your passwords** — pure-CFML bcrypt helpers, and the migration dance you'll actually have to do to use them.
+- **bcrypt for your passwords** — bcrypt helpers (bundled jBCrypt with a pure-CFML fallback), and the migration dance you'll actually have to do to use them.
 - **Session auth in one line** — the `enableSession()` facade, and the three subtle bugs it saves you from.
 - **Pretty URLs with `bindBy`** — human URLs for resource routes, and the mistake it invites if you're not careful.
 - **Factories for your container** — DI `toFactory()`, for when `to()` can't express *how* something is built.
