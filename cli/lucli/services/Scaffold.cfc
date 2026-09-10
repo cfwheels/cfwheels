@@ -204,7 +204,7 @@ component {
 		var props = duplicate(arguments.properties);
 		if (len(arguments.belongsTo)) {
 			for (var parent in listToArray(arguments.belongsTo)) {
-				var fkName = lCase(parent) & "Id";
+				var fkName = $foreignKeyName(parent);
 				var hasFK = false;
 				for (var p in props) {
 					if (p.name == fkName) { hasFK = true; break; }
@@ -215,6 +215,45 @@ component {
 			}
 		}
 		return props;
+	}
+
+	/**
+	 * Foreign-key column name for a belongsTo parent, honoring the
+	 * `useUnderscoreReferenceColumns` setting (framework default false, but
+	 * `wheels new` apps opt in): `user_id` when true, `userId` when false.
+	 * Mirrors the suffix `t.references()` emits (TableDefinition.cfc) so the
+	 * scaffold's FK column matches a hand-written migration's column.
+	 */
+	private string function $foreignKeyName(required string parent) {
+		return lCase(arguments.parent) & ($usesUnderscoreReferenceColumns() ? "_id" : "Id");
+	}
+
+	/**
+	 * Whether config/settings.cfm opts into `<name>_id` reference columns.
+	 * The framework reads the flag via `$get()` at migration time; the CLI
+	 * service reads the source file directly, comment-stripped first
+	 * (Anti-Pattern #14) so a commented-out
+	 * `// set(useUnderscoreReferenceColumns=true);` doesn't satisfy the check.
+	 */
+	private boolean function $usesUnderscoreReferenceColumns() {
+		var settingsPath = variables.projectRoot & "/config/settings.cfm";
+		if (!fileExists(settingsPath)) return false;
+		return reFindNoCase(
+			"useUnderscoreReferenceColumns\s*=\s*true",
+			$stripCfmlComments(fileRead(settingsPath))
+		) > 0;
+	}
+
+	/**
+	 * Strip tag / block / line comments so source-grep checks can't be fooled
+	 * by commented-out code (Anti-Pattern #14). Mirrors Analysis.cfc.
+	 */
+	private string function $stripCfmlComments(required string source) {
+		var result = arguments.source;
+		result = reReplace(result, "<!---[\s\S]*?--->", "", "all");
+		result = reReplace(result, "/\*[\s\S]*?\*/", "", "all");
+		result = reReplace(result, "//[^\r\n]*", "", "all");
+		return result;
 	}
 
 	/**
@@ -428,7 +467,7 @@ component {
 			var props = duplicate(arguments.properties);
 			if (len(arguments.belongsTo)) {
 				for (var parent in listToArray(arguments.belongsTo)) {
-					var fkName = lCase(parent) & "Id";
+					var fkName = $foreignKeyName(parent);
 					var hasFK = false;
 					for (var p in props) {
 						if (p.name == fkName) { hasFK = true; break; }
