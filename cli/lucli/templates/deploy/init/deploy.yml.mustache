@@ -11,7 +11,9 @@ servers:
 proxy:
   ssl: true
   host: app.example.com
-  app_port: 8080
+  # The lucee/lucee container listens on 8888 (the Dockerfile makes it follow
+  # $PORT too, and adds a RewriteValve so clean URLs like /up work).
+  app_port: 8888
   healthcheck:
     path: /up
     interval: 1
