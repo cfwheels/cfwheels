@@ -123,6 +123,16 @@ component extends="wheels.migrator.Base" {
 				local.expectedMigType = $cfSqlTypeToMigrationType(local.expected.type);
 				local.actualMigType = $dbTypeToMigrationType(local.actual.typeName);
 
+				// SQLite's type affinity collapses VARCHAR/DATETIME/DATE/BOOLEAN
+				// to a single TEXT storage class, so the schema probe reports
+				// "text" where the model declared "string" (and similarly for
+				// the INTEGER/REAL affinities). Normalize the affinity-equivalent
+				// pairs so `migrate diff` doesn't emit spurious `text -> string`
+				// changes on a schema that is already in sync.
+				if ($getDBType() == "sqlite" && local.actualMigType == "text" && ListFindNoCase("string,text,datetime,date,time,boolean", local.expectedMigType)) {
+					local.actualMigType = local.expectedMigType;
+				}
+
 				local.typeChanged = (local.expectedMigType != local.actualMigType && local.actualMigType != "unknown");
 				local.sizeChanged = (
 					Len(ToString(local.expected.size))
