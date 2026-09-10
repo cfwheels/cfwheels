@@ -31,7 +31,7 @@ Full notes: [GitHub Release v4.1.0](https://github.com/wheels-dev/wheels/release
 
 ## The features, and what they're really about
 
-**bcrypt password hashing.** `bcryptHash()`, `bcryptVerify()`, `bcryptNeedsRehash()` — pure CFML, no Java objects, OpenBSD/htpasswd/jBCrypt-compatible, correct on every engine. The [deep dive](https://blog.wheels.dev/posts/bcrypt-password-hashing-in-wheels-4-1/) starts with a pentest report, but it's really about the migration dance you'll do to use them.
+**bcrypt password hashing.** `bcryptHash()`, `bcryptVerify()`, `bcryptNeedsRehash()` — bundled jBCrypt for speed with a pure-CFML fallback when the jar isn't available, OpenBSD/htpasswd/jBCrypt-compatible, correct on every engine. The [deep dive](https://blog.wheels.dev/posts/bcrypt-password-hashing-in-wheels-4-1/) starts with a pentest report, but it's really about the migration dance you'll do to use them.
 
 **One-line session auth.** `injector().enableSession()` in `config/services.cfm`. The [story](https://blog.wheels.dev/posts/one-line-session-auth-with-enablesession/) is the three subtle bugs it exists to prevent — the strategy that isn't there, the duplicate, the logged-in-user-who-isn't.
 

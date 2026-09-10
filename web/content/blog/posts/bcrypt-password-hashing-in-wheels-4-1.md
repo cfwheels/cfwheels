@@ -19,14 +19,14 @@ coverImage: '/blog-images/4-1/bcrypt-password-hashing-in-wheels-4-1.png'
 announcement:
   title: 'bcrypt is in Wheels 4.1'
   body: |
-    New post: **[bcrypt for your passwords](https://blog.wheels.dev/blog/bcrypt-password-hashing-in-wheels-4-1)** — the story behind `bcryptHash()`, `bcryptVerify()`, and `bcryptNeedsRehash()`: pure CFML, no JARs, verified against OpenBSD and jBCrypt vectors.
+    New post: **[bcrypt for your passwords](https://blog.wheels.dev/blog/bcrypt-password-hashing-in-wheels-4-1)** — the story behind `bcryptHash()`, `bcryptVerify()`, and `bcryptNeedsRehash()`: bundled jBCrypt for speed with a pure-CFML fallback, verified against OpenBSD and jBCrypt vectors.
 ---
 
 The email was four lines long, and it was fine. *Your passwords are hashed with plain SHA-256, no salt, and the database backup from March is on a shared drive.* That's not a vulnerability, that's a sentence.
 
 The developer who filed it wasn't angry. They were tired. What they'd have to do to fix it — install a library, swap the hasher, write a second code path for the old hashes, and get a migration through review — was more than they had budget for. So they asked, reasonably: *why doesn't Wheels just have this?*
 
-It was a good question, and two weeks later we had an answer in the framework: `bcryptHash()`, `bcryptVerify()`, and `bcryptNeedsRehash()` — global helpers, pure CFML, no Java objects, no CFX tags, no bundled JAR. The whole thing is Blowfish plus an "expensive key schedule," implemented in CFML so it runs identically on Lucee, Adobe ColdFusion, BoxLang, and RustCFML.
+It was a good question, and two weeks later we had an answer in the framework: `bcryptHash()`, `bcryptVerify()`, and `bcryptNeedsRehash()` — global helpers with the same Blowfish "expensive key schedule" underneath. On JVM engines they run through a bundled jBCrypt (MIT) jar for speed, and fall back to a pure-CFML implementation — no CFX tags, no external libraries — when the jar isn't on the classpath. RustCFML ships the helpers as native builtins, so on that engine Wheels steps aside and lets the engine serve them.
 
 ```cfm
 hashed = bcryptHash("correct horse battery staple");       // $2b$10$...
@@ -56,13 +56,18 @@ That's the whole "migrate" strategy. The framework can't do it for you, and it s
 
 ## What the cost factor actually costs you
 
-bcrypt's cost is exponential: every +1 doubles the work. The pure-CFML implementation is honest that this has teeth. A **cost-10** hash takes roughly **14 seconds of CFML on Lucee 7**. That's a real number, and it changes your sizing math:
+bcrypt's cost is exponential: every +1 doubles the work, and that has teeth — which is why the helpers don't run the same way on every engine.
 
-- **Cost 4–6** for test suites and local dev.
-- **Cost 10–12** for production — but measure it on *your* hardware, because the constant differs by engine. Adobe runs the same cost several times faster than Lucee.
-- If you need cost 12 *and* snappy registration on Lucee, plan for the CPU. That's not a bug in bcrypt; it's the entire point of bcrypt.
+- **On a JVM (Lucee, Adobe CF, BoxLang),** a cost-10 hash runs through the bundled jBCrypt jar and costs roughly **100 ms** — the number you'd expect from any native bcrypt library.
+- **When the jar isn't available,** the pure-CFML fallback takes over, and it's honest about the cost: roughly **14 seconds** for cost 10 on Lucee 7. That's the price of doing Blowfish arithmetic in interpreted CFML, and it's exactly why we ship the jar rather than making you install one.
 
-The helpers validate cost up front and throw `Wheels.InvalidArgument` outside 4–31, so `bcryptHash(password, 1)` fails loud instead of quietly hashing with a cost any GPU would shrug off.
+For speed reasons Wheels bundles jBCrypt and loads it automatically from `vendor/wheels/resources/java`; when it can't be resolved (no JVM, or the class isn't on the classpath) the helpers fall back to the CFML path, and on RustCFML they defer to the engine's native builtins. The API never changes — only the constant does.
+
+Practical sizing:
+
+- **Cost 10** is the default and the right call for production on a JVM.
+- If you're exercising the CFML fallback (a non-JVM engine), measure it — cost 4–6 for test suites and local dev.
+- The helpers validate cost up front and throw `Wheels.InvalidArgument` outside 4–31, so `bcryptHash(password, 1)` fails loud instead of quietly hashing with a cost any GPU would shrug off.
 
 ## The part where we questioned our sanity
 
@@ -79,6 +84,6 @@ The suite now verifies the helpers against external vectors: an OpenBSD `$2b$` c
 
 The framework shipped bcrypt because a tired developer asked a good question and we couldn't point at a good answer. If you've got a `hash()` plus SHA in your model, this is your clean exit. New hashes today, upgrade-on-login for the old ones, two helpers you'll rarely think about again.
 
-And if it takes fourteen seconds on your test suite, that's not the framework slowing you down — that's bcrypt doing its job. Bump the cost down for tests, and stop there.
+And if it ever takes fourteen seconds, you've fallen off the JVM fast path onto the CFML fallback — the helpers keep working either way, but check that the bundled jar is on the classpath. On a JVM it should cost a tenth of a second, not a coffee break.
 
 Next up in the series: read the next post — session auth in one line, and the three bugs you won't have to find the hard way. (See the [series index](https://blog.wheels.dev/posts/wheels-4-1-coming/).)
