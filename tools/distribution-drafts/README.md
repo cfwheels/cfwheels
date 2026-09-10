@@ -14,7 +14,7 @@ When merged, the contents of this directory should be copied into:
 | `winget/manifests/*.yaml` | `microsoft/winget-pkgs` (PR) | `manifests/w/WheelsFramework/Wheels/<version>/` |
 | `snapshots-repo/README.md` | `wheels-dev/wheels-snapshots` (✅ pushed) | `README.md` |
 | `snapshots-repo/cleanup-old-snapshots.yml` | `wheels-dev/wheels-snapshots` (✅ pushed) | `.github/workflows/cleanup-old-snapshots.yml` |
-| `linux-packages/*` | reference + Phase 2 plan for `apt.wheels.dev` / `yum.wheels.dev` | (CF Pages) |
+| `linux-packages/*` | nfpm configs + `build-linux-packages.sh` — used live by `release.yml` to build the `.deb`/`.rpm` | (source repo) |
 
 ## Scoop bucket is authoritative, not drafted here
 
@@ -24,3 +24,13 @@ workflow and is the unambiguous source of truth — keeping a drafted copy here
 just produced silent drift (the in-repo drafts grew out of sync with the
 bucket's inline-JDK rework and no one noticed for two releases). Edit the
 bucket repo directly; this repo no longer mirrors it.
+
+## apt / yum buckets are authoritative, not drafted here
+
+`apt.wheels.dev` and `yum.wheels.dev` are live (served from Cloudflare R2).
+The `wheels-dev/apt-wheels` and `wheels-dev/yum-wheels` repos are the source of
+truth for their receiver workflow (`wheels-released.yml`), regen/signing
+scripts, and landing pages. The `apt-repo/` and `yum-repo/` drafts that used to
+live here were removed for the same reason as the Scoop drafts: they drifted
+from the deployed workflows and misled reviewers. Edit the bucket repos
+directly; this repo no longer mirrors them.

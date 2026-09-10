@@ -648,13 +648,13 @@ jobs:
       # yum.wheels.dev within minutes. See issue #2605.
       #
       # Requires LINUX_REPO_DISPATCH_TOKEN — a fine-grained PAT with
-      # `contents: write` on the two bucket repos. If the secret is unset
-      # (which it will be until the bucket repos are created), this step
-      # skips silently — releases continue to land on the GitHub Release
-      # artifact stream regardless.
+      # `contents: write` on the two bucket repos. If the secret is unset,
+      # this step skips silently — releases continue to land on the GitHub
+      # Release artifact stream regardless.
       #
-      # Templates for the bucket repos live in
-      # tools/distribution-drafts/apt-repo/ and tools/distribution-drafts/yum-repo/.
+      # The bucket repos (wheels-dev/apt-wheels and wheels-dev/yum-wheels)
+      # are live and authoritative; their receiver workflows regenerate and
+      # republish the apt/yum metadata from the R2 pools.
       #############################################
       - name: Dispatch Linux repo buckets
         if: steps.gh-release-final.outcome == 'success' || steps.gh-release-snapshot.outcome == 'success'
