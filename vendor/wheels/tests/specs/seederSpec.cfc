@@ -614,7 +614,9 @@ component extends="wheels.WheelsTest" {
 				it("S10: url / website and password names", () => {
 					expect(seeder.$generateTestData(propertyName = "url", propertyType = "string", index = 5)).toBe("https://example5.com");
 					expect(seeder.$generateTestData(propertyName = "website", propertyType = "string", index = 5)).toBe("https://example5.com");
-					expect(seeder.$generateTestData(propertyName = "password", propertyType = "string", index = 5)).toBe("TestPass5!");
+					// Password values are >= 12 chars so they pass the auth scaffold's
+					// validatesLengthOf(password, minimum=12).
+					expect(seeder.$generateTestData(propertyName = "password", propertyType = "string", index = 5)).toBe("TestPassword5!");
 				});
 
 				it("S10: boolean type and active / enabled / published names", () => {
