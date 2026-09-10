@@ -34,8 +34,11 @@ RUN if [ -f package.json ] && node -e "process.exit(require('./package.json').sc
     fi
 
 # --- Stage 2: runtime ---------------------------------------------------------
-# Lucee 7 on Java 21. The lucee/lucee image ships a ready webroot at /var/www.
-FROM lucee/lucee:7-tomcat10-jre21
+# Lucee 7.1 (stable). The lucee/lucee image serves /var/www as its webroot and
+# listens on 8888; both are corrected below. The stock image has no URL-rewrite
+# filter (Tuckey), so clean URLs like /up 404 in the container — the health
+# check below probes / for that reason.
+FROM lucee/lucee:7.1.0.204
 
 LABEL org.opencontainers.image.title="{{service_name}}"
 
@@ -52,6 +55,13 @@ ENV WHEELS_ENV=production \
 
 WORKDIR /var/www
 
+# Point Tomcat's ROOT context at Wheels' public/ webroot, and make the HTTP
+# connector follow $PORT (default 8888) so PaaS platforms and kamal-proxy can
+# both route to it.
+RUN sed -i 's#docBase="/var/www/"#docBase="/var/www/public"#' /usr/local/tomcat/conf/server.xml \
+    && sed -i 's#port="8888"#port="${http.port}"#' /usr/local/tomcat/conf/server.xml \
+    && printf 'export CATALINA_OPTS="$CATALINA_OPTS -Dhttp.port=${PORT:-8888}"\n' > /usr/local/tomcat/bin/setenv.sh
+
 # Install curl for the HEALTHCHECK probe.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
@@ -65,9 +75,7 @@ COPY --from=builder /build/config         ./config
 COPY --from=builder /build/public         ./public
 COPY --from=builder /build/vendor         ./vendor
 
-# Tomcat listens on 8080 in the lucee/lucee image — matches the default
-# proxy.app_port in config/deploy.yml.
-EXPOSE 8080
+EXPOSE 8888
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
-    CMD curl -fsS http://127.0.0.1:8080/up || exit 1
+    CMD curl -fsS "http://127.0.0.1:${PORT:-8888}/" || exit 1
