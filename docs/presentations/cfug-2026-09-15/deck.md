@@ -6,6 +6,10 @@ A ~60-minute talk in five parts. Speaker notes are the `> Notes:`
 blockquotes. The live build (Part 2) follows [`demo.md`](demo.md) beat-for-beat;
 everything else is slides with a few terminal snippets.
 
+This deck matches a rehearsal on **Wheels 4.1.0-snapshot / upcoming 4.1**.
+4.1 is what we're shipping — the cut is being held to absorb polish, and the
+release blog is postponed to ~September 17. Treat this build as 4.1.
+
 **Timing:** Part 1 ≈ 10 · Part 2 ≈ 25 · Part 3 ≈ 15 · Part 4 ≈ 8 · Part 5 ≈ 3,
 leaving ~30 min for announcements and Q&A in a 1.5-hour meeting.
 
@@ -21,28 +25,32 @@ leaving ~30 min for announcements and Q&A in a 1.5-hour meeting.
 Peter Amiri · Mid-Michigan CFUG · September 15, 2026
 
 > Notes: Thank Rick. One sentence of framing: "half of this is typing, half is
-> the story of why CFML needed this."
+> the story of why CFML needed this." This is a 4.1 talk on a 4.1.0-snapshot
+> build — the release is shipping imminently.
 
 ## Slide 2 — The one-liner
 
 **Wheels is the convention-over-configuration MVC framework for CFML.**
 
 - The project you knew as **CFWheels** — rebranded at v3.0.
-- **4.1.0 shipped September 10** — five days ago.
+- **4.1 is what we're shipping** — this build *is* 4.1; the cut is held
+  deliberately so polish lands with it.
 - Models, migrations, routes, controllers, views — wired by *naming*, not XML.
 
-> Notes: The thesis. Say it slowly. This is the "oh" moment for anyone who
-> fought CFML config in the 2000s.
+> Notes: The thesis. Say it slowly. Do not claim "4.1.0 shipped September 10"
+> — Peter held the release to absorb polish bugs; the blog post is postponed
+> to ~September 17. "This is 4.1" is the true sentence.
 
 ## Slide 3 — The Rails DNA
 
 - Convention over configuration, the DHH way.
-- `Post` → `posts` → `PostsController` → `/posts`.
+- `Post` → `posts` → `Posts.cfc` → `/posts`.
 - Associations, validations, migrations read like Rails.
 - If you've written Rails, **you already know the shape of Wheels**.
 
 > Notes: Aim this at Rick and the RoR folks. It's the bridge that makes the
-> rest of the talk land.
+> rest of the talk land. Controllers are `Posts.cfc` / `Comments.cfc` — not
+> `PostsController.cfc`.
 
 ## Slide 4 — A short history
 
@@ -71,10 +79,10 @@ configuration** — and it generates real files you own.
 ## Slide 6 — What we're building
 
 1. `wheels new` — a running app, in seconds.
-2. **Scaffold + migrate** — full CRUD.
+2. **Scaffold + migrate + seed** — full CRUD, content on screen.
 3. **Associations + validation** — comments on posts.
-4. **Route model binding** — no `findByKey`, 404s for free.
-5. **One-command auth** — bcrypt, generated.
+4. **Route model binding** — `params.post`, 404s for free.
+5. **One-command auth** — PBKDF2, generated.
 6. The CLI + debug bar.
 
 > Notes: "No more slideware after this." Everything here is reproducible from
@@ -87,21 +95,29 @@ $ wheels new blog
 $ cd blog && wheels start
 ```
 
-A running app with a status line: **version · engine · database · environment**.
+A running app. The welcome page is a **prose sentence**:
 
-> Notes: Beat 1. Zero config to a running app. Gesture at the status line.
+> Your Wheels … application is running on Lucee with blog (development).
 
-## Slide 8 — Scaffold + migrate
+> Notes: Beat 1. Zero config to a running app. Gesture at that sentence —
+> version, engine, datasource, environment, in English. If `wheels start`
+> complains about a leftover server name, `--force`.
+
+## Slide 8 — Scaffold + migrate + seed
 
 ```
 $ wheels generate scaffold Post title:string body:text
 $ wheels migrate latest
+$ wheels seed
 ```
 
-Model, migration, controller, views, tests, route — one command. Then CRUD live.
+Model, migration, controller, views, tests, route — one command. Then two
+posts on `/posts` without typing through the form.
 
-> Notes: Beat 2, the "blog in 15 minutes" moment. Open a generated file and
-> point at it: this is code you own.
+> Notes: Beat 2, the "blog in 15 minutes" moment. Drop
+> `demo-app/seeds.cfm` into `app/db/seeds.cfm` (LuCLI has no
+> `wheels generate seed`). Open `app/controllers/Posts.cfc` — real code
+> you own.
 
 ## Slide 9 — Associations + validation
 
@@ -121,13 +137,19 @@ validatesPresenceOf("author,body");
 ## Slide 10 — Route model binding
 
 ```cfm
-.resources(name="posts", binding=true)   // delete the findByKey in show()
+.resources(name="posts", binding=true)
+
+function show() {
+    post = params.post;   // was findByKey(params.key)
+}
 ```
 
-The dispatcher loads `params.post` before the action; missing `:key` → 404.
-`bindBy="slug"` swaps the segment to any column for pretty URLs.
+The dispatcher loads `params.post` before the action; a missing `:key` is a
+404. Scaffolded `show()` is only `findByKey` — replace it. `bindBy="slug"`
+swaps the segment to any column for pretty URLs.
 
-> Notes: Beat 4. The "wow" — the boilerplate literally disappears.
+> Notes: Beat 4. The "wow" — the boilerplate literally disappears. There is
+> no IsObject / not-found guard to delete.
 
 ## Slide 11 — One-command auth
 
@@ -136,22 +158,22 @@ $ wheels generate auth
 $ wheels migrate latest
 ```
 
-Registration + login + logout, generated. **bcrypt** hashing, per-user salt in
-the hash, constant-time verify.
+Registration + login + logout, generated. Column is **`passwordDigest`**.
+Hashing is **PBKDF2-HMAC-SHA256** via the `passwordHasher` service.
 
-> Notes: Beat 5. Point at the `passwordHash` column. "No JARs, no CFX — pure
-> CFML bcrypt, byte-identical to OpenBSD."
+> Notes: Beat 5. Point at `passwordDigest`. Do not say bcrypt here —
+> `bcryptHash()` / `bcryptVerify()` are a separate 4.1 helper set (Part 4).
 
 ## Slide 12 — The CLI + debug bar
 
 ```
-$ wheels migrate diff       # what would migrations say?
 $ wheels coverage --top=5   # change-risk ranking
 ```
 
 Plus the dev debug bar: request timing, params, queries, the complexity panel.
 
-> Notes: Beat 6. Pick two. This is the "tooling is first-class now" point.
+> Notes: Beat 6. This is the reliable wow. `migrate diff` is 4.1 polish —
+> do not promise a live crash-free demo of it.
 
 ---
 
@@ -234,13 +256,14 @@ Playwright, and `wheels coverage` for change-risk.
 
 ## Slide 18 — The CLI
 
-`wheels new · generate · migrate · test · console · deploy · doctor · coverage`
+`wheels new · generate · migrate · seed · test · console · deploy · doctor · coverage`
 
 A first-party CLI built on the LuCLI runtime — Homebrew/Scoop/apt. CommandBox
 still works; the CLI is an accelerator, not a gate.
 
-> Notes: Name the verbs. The deploy verb (Kamal-style) is worth one sentence if
-> time allows.
+> Notes: Name the verbs. They already saw `new`, `generate`, `migrate`,
+> `seed`, and `coverage`. The deploy verb (Kamal-style) is worth one
+> sentence if time allows.
 
 ---
 
@@ -248,14 +271,19 @@ still works; the CLI is an accelerator, not a gate.
 
 ## Slide 19 — What's in 4.1
 
-- **bcrypt** password hashing — pure CFML, OpenBSD/jBCrypt-compatible.
+- **`generate auth`** — session/token/JWT scaffolds; **PBKDF2-HMAC-SHA256**
+  into `passwordDigest`.
+- **`bcryptHash()` / `bcryptVerify()`** — a *separate* 4.1 helper set
+  (OpenBSD/jBCrypt-compatible). Not what `generate auth` uses.
 - **`enableSession()`** — one-line auth wiring.
 - **`bindBy=`** and **`toFactory()`** — routing and DI ergonomics.
-- **CLI:** `migrate diff`, `generate --dry-run`, `--offline`, `coverage`.
+- **CLI:** `coverage`, `generate --dry-run`, `--offline` — plus `migrate
+  diff` as shipping polish.
 - **The security-hardening pass** and a **2.5x** model-instantiation speedup.
 
-> Notes: This is the release post from the blog, condensed. Tie each bullet to
-> something they saw in the live build.
+> Notes: Keep bcrypt and `generate auth` in different sentences. Tie each
+> other bullet to something they saw in the live build. The release is
+> shipping imminently — this snapshot *is* the 4.1 surface.
 
 ## Slide 20 — The hardening pass
 
@@ -290,7 +318,7 @@ it's conventions plus real files.
 ## Slide 23 — Where to go, and Q&A
 
 - **guides.wheels.dev** — the docs
-- **blog.wheels.dev** — the 4.1 release series
+- **blog.wheels.dev** — the 4.1 series (release post ~September 17)
 - **github.com/wheels-dev/wheels** — issues, PRs, stars
 
 > Notes: "Come build something with it — and file the bug when it breaks."
