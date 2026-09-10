@@ -94,3 +94,8 @@ web/tests/visual-diffs/
 public/testbox/system/stubs/
 /rewrite.config
 /box.json
+
+# Office lock files
+~\$*.pptx
+~\$*.docx
+~\$*.xlsx
