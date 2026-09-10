@@ -1,7 +1,7 @@
 ---
 title: 'Wheels 4.1.0 is out — the release a bug report built'
 slug: wheels-4-1-0-released
-publishedAt: '2026-09-10T14:00:00.000Z'
+publishedAt: '2026-09-17T14:00:00.000Z'
 updatedAt: null
 author: Peter Amiri
 tags:
