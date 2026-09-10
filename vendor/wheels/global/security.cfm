@@ -20,8 +20,70 @@
  * (int-range validation) and Lucee (BitSHRN treats negatives as 64-bit).
  */
 
+/**
+ * Returns the bundled jBCrypt Java class (org.mindrot.jbcrypt.BCrypt) when a
+ * JVM is present and the class is resolvable via this.javaSettings.LoadPaths
+ * (vendor/wheels/resources/java). Returns "" otherwise so callers fall back to
+ * the pure-CFML Blowfish implementation (or the engine's native builtins on
+ * RustCFML). Cached per-request; the class proxy is immutable.
+ */
+public any function $getJBCrypt() {
+	if (!StructKeyExists(request, "wheelsJBCrypt")) {
+		request.wheelsJBCrypt = "";
+		try {
+			request.wheelsJBCrypt = CreateObject("java", "org.mindrot.jbcrypt.BCrypt");
+		} catch (any e) {
+			// No JVM (RustCFML) or the jar is not on the classpath — the pure-CFML
+			// path below (or the native builtin) handles it.
+		}
+	}
+	return request.wheelsJBCrypt;
+}
+
+/**
+ * True when every character of the value is a single ASCII byte (< 0x80).
+ * Used to decide whether a $2b$/$2y$/$2x$ hash can be verified through jBCrypt
+ * 0.4 (which only implements $2a$): for ASCII passwords the $2a$/$2b$ checksums
+ * are byte-identical, but for 8-bit passwords $2b$ differs from $2a$.
+ */
+public boolean function $bcryptIsAscii(required string value) {
+	var i = 1;
+	var end = Len(arguments.value);
+	for (i = 1; i <= end; i++) {
+		if (Asc(Mid(arguments.value, i, 1)) > 127) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/**
+ * Returns the hash revision to hand to jBCrypt 0.4's checkpw(), or "" when the
+ * hash should be verified by the pure-CFML path instead. jBCrypt 0.4 accepts
+ * $2a$ and legacy $2$ only; $2b$/$2y$/$2x$ share $2a$'s checksum for ASCII
+ * input, so they are translated (and only then) to $2a$.
+ */
+public string function $bcryptJbcryptHash(required string password, required string hash) {
+	if (Left(arguments.hash, 4) == "$2a$" || Left(arguments.hash, 3) == "$2$") {
+		return arguments.hash;
+	}
+	if (Left(arguments.hash, 2) == "$2" && Len(arguments.hash) >= 4 && Mid(arguments.hash, 4, 1) == "$") {
+		if ($bcryptIsAscii(arguments.password)) {
+			return "$2a$" & Mid(arguments.hash, 5, Len(arguments.hash) - 4);
+		}
+	}
+	return "";
+}
+
 public string function bcryptHash(required string password, numeric cost = 10) {
 	$bcryptValidateCost(arguments.cost);
+	local.jbcrypt = $getJBCrypt();
+	if (IsObject(local.jbcrypt)) {
+		// Native Java jBCrypt: same bcrypt algorithm, ~100ms instead of minutes
+		// at the default cost. jBCrypt 0.4 emits $2a$ hashes, which
+		// bcryptVerify()/checkpw() both accept.
+		return local.jbcrypt.hashpw(arguments.password, local.jbcrypt.gensalt(arguments.cost));
+	}
 	local.salt = $bcryptRandomBytes(16);
 	local.key = $bcryptStringToBytes(arguments.password, true);
 	local.checksum = $bcryptHashCore(arguments.cost, local.salt, local.key);
@@ -30,6 +92,22 @@ public string function bcryptHash(required string password, numeric cost = 10) {
 }
 
 public boolean function bcryptVerify(required string password, required string hash) {
+	local.jbcrypt = $getJBCrypt();
+	if (IsObject(local.jbcrypt)) {
+		// jBCrypt 0.4 only accepts the $2a$/$2$ revisions; translate $2b$/$2y$/
+		// $2x$ to $2a$ for ASCII passwords (identical checksum) so existing
+		// pure-CFML hashes verify fast. Non-ASCII $2b$ hashes fall through to
+		// the pure-CFML path below, which handles the $2b$ 8-bit semantics.
+		local.jhash = $bcryptJbcryptHash(arguments.password, arguments.hash);
+		if (Len(local.jhash)) {
+			try {
+				return local.jbcrypt.checkpw(arguments.password, local.jhash);
+			} catch (any e) {
+				// jBCrypt throws on a malformed hash — treat as "does not match".
+				return false;
+			}
+		}
+	}
 	try {
 		local.parsed = $bcryptParseHash(arguments.hash);
 		if (!local.parsed.valid) {
