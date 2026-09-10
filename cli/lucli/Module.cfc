@@ -5509,42 +5509,115 @@ component extends="modules.BaseModule" {
 	}
 
 	/**
+	 * Coerce a diff-payload field to a printable string.
+	 *
+	 * AutoMigrator entries are structs (`{name, type, from, to, …}`).
+	 * Interpolating one (`"#col#"` / `"#suggestion.from#"` when `from` is
+	 * itself a struct) throws `Can't cast Complex Object Type [Struct] to
+	 * String` — the generate-auth User table hits this via nested
+	 * `changeColumns.from` / `.to`. Prefer scalar `name` / `from` / `to` /
+	 * `type` when present. Public for specs.
+	 */
+	public string function $stringifyDiffValue(required any value, fallback = "") {
+		if (isSimpleValue(arguments.value)) {
+			return toString(arguments.value);
+		}
+		if (isStruct(arguments.value)) {
+			var preferred = ["name", "from", "to", "type"];
+			for (var key in preferred) {
+				if (structKeyExists(arguments.value, key) && isSimpleValue(arguments.value[key])) {
+					return toString(arguments.value[key]);
+				}
+			}
+		}
+		return arguments.fallback;
+	}
+
+	/**
+	 * Read a changeColumn `from` / `to` node. AutoMigrator emits
+	 * `{type, size, scale, nullable}`; rename/suggest emit a bare name
+	 * string. Never interpolates the struct itself.
+	 */
+	public string function $diffTypeLabel(required any node, fallback = "?") {
+		if (isStruct(arguments.node) && structKeyExists(arguments.node, "type") && isSimpleValue(arguments.node.type)) {
+			return toString(arguments.node.type);
+		}
+		if (isSimpleValue(arguments.node) && len(toString(arguments.node))) {
+			return toString(arguments.node);
+		}
+		return arguments.fallback;
+	}
+
+	/**
 	 * Render a diff bridge response. Human-readable column listing per
 	 * model, with a trailer when previewing.
+	 *
+	 * Public for specs. Every printed field is forced through
+	 * `$stringifyDiffValue` / `$diffTypeLabel` so a struct in any array
+	 * (add/remove/change/rename/suggest/unmapped, or nested from/to)
+	 * cannot hit the Struct-to-String cast.
 	 */
-	private void function $renderDiffResult(required struct parsed, required boolean write) {
+	public void function $renderDiffResult(required struct parsed, required boolean write) {
 		var isSingle = structKeyExists(arguments.parsed, "model");
 		var diffs = isSingle ? { "": arguments.parsed.model } : (arguments.parsed.models ?: {});
+		if (!isStruct(diffs)) {
+			diffs = {};
+		}
 
 		var anyOutput = false;
 		for (var modelKey in diffs) {
 			var diff = diffs[modelKey];
-			var heading = structKeyExists(diff, "modelName") ? diff.modelName : modelKey;
+			if (!isStruct(diff)) {
+				continue;
+			}
+			var heading = $stringifyDiffValue(
+				structKeyExists(diff, "modelName") ? diff.modelName : modelKey,
+				isSimpleValue(modelKey) ? toString(modelKey) : "model"
+			);
 			out("");
-			out("--- #heading# ---", "bold");
+			out("--- " & heading & " ---", "bold");
 
-			for (var col in (diff.addColumns ?: [])) {
-				out("  + add    #col.name# (#col.type#)", "green");
+			for (var col in $diffColumnArray(diff, "addColumns")) {
+				if (isStruct(col)) {
+					out(
+						"  + add    " & $stringifyDiffValue(col.name ?: "")
+							& " (" & $stringifyDiffValue(col.type ?: "") & ")",
+						"green"
+					);
+				} else {
+					out("  + add    " & $stringifyDiffValue(col), "green");
+				}
 				anyOutput = true;
 			}
-			for (var col in (diff.removeColumns ?: [])) {
-				out("  - remove #col.name#", "red");
-				out("      (if this is a rename, use --rename #col.name#:newName)", "yellow");
+			for (var col in $diffColumnArray(diff, "removeColumns")) {
+				var removed = isStruct(col)
+					? $stringifyDiffValue(col.name ?: "")
+					: $stringifyDiffValue(col);
+				out("  - remove " & removed, "red");
+				out("      (if this is a rename, use --rename " & removed & ":newName)", "yellow");
 				anyOutput = true;
 			}
-			for (var col in (diff.changeColumns ?: [])) {
-				out("  ~ change #col.name# (#col.from.type# -> #col.to.type#)", "yellow");
+			for (var col in $diffColumnArray(diff, "changeColumns")) {
+				// Nested from/to are structs — extract .type; never "#col.from#".
+				var changeName = isStruct(col) ? $stringifyDiffValue(col.name ?: "") : $stringifyDiffValue(col);
+				var fromType = isStruct(col) ? $diffTypeLabel(col.from ?: {}) : "?";
+				var toType = isStruct(col) ? $diffTypeLabel(col.to ?: {}) : "?";
+				out("  ~ change " & changeName & " (" & fromType & " -> " & toType & ")", "yellow");
 				anyOutput = true;
 			}
-			for (var col in (diff.renameColumns ?: [])) {
-				out("  ~ rename #col.from# -> #col.to#", "yellow");
+			for (var col in $diffColumnArray(diff, "renameColumns")) {
+				var renameFrom = isStruct(col) ? $stringifyDiffValue(col.from ?: "?") : $stringifyDiffValue(col);
+				var renameTo = isStruct(col) ? $stringifyDiffValue(col.to ?: "?") : "?";
+				out("  ~ rename " & renameFrom & " -> " & renameTo, "yellow");
 				anyOutput = true;
 			}
-			for (var suggestion in (diff.suggestedRenames ?: [])) {
-				var sugOld = suggestion.from ?: "?";
-				var sugNew = suggestion.to ?: "?";
-				var sugConf = suggestion.confidence ?: "";
-				out("  ? suggest #sugOld# -> #sugNew# (#sugConf#)", "cyan");
+			for (var suggestion in $diffColumnArray(diff, "suggestedRenames")) {
+				// Elvis (`from ?: "?"`) returns a struct when `from` is nested
+				// (changeColumn-shaped). Force both sides through stringify.
+				var sugOld = isStruct(suggestion) ? $stringifyDiffValue(suggestion.from ?: "?", "?") : $stringifyDiffValue(suggestion, "?");
+				var sugNew = isStruct(suggestion) ? $stringifyDiffValue(suggestion.to ?: "?", "?") : "?";
+				var sugConf = isStruct(suggestion) ? $stringifyDiffValue(suggestion.confidence ?: "", "") : "";
+				out("  ? suggest " & sugOld & " -> " & sugNew & " (" & sugConf & ")", "cyan");
 				anyOutput = true;
 			}
 		}
@@ -5560,6 +5633,16 @@ component extends="modules.BaseModule" {
 			out("");
 			out("Migration file(s) written.", "green");
 		}
+	}
+
+	/**
+	 * Safe array read for a diff key. Missing / non-array keys become [].
+	 */
+	private array function $diffColumnArray(required struct diff, required string key) {
+		if (!structKeyExists(arguments.diff, arguments.key) || !isArray(arguments.diff[arguments.key])) {
+			return [];
+		}
+		return arguments.diff[arguments.key];
 	}
 
 	// ── Seed Execution ──────────────────────────────
