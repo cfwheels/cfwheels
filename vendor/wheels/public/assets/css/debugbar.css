@@ -47,3 +47,5 @@
 #wheels-debugbar .wdb-env-dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
 #wheels-debugbar .wdb-section{margin-bottom:16px;}
 #wheels-debugbar .wdb-section-title{font-size:11px;font-weight:700;color:#89b4fa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #313244;}
+html:has(#wheels-debugbar),html.wdb-has-debugbar{--wdb-inset:36px;padding-bottom:var(--wdb-inset);scroll-padding-bottom:var(--wdb-inset);}
+html:has(#wheels-debugbar.wdb-collapsed),html.wdb-debugbar-collapsed{--wdb-inset:0px;}

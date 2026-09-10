@@ -1,0 +1,1 @@
+- Debug bar: the expanded bar now reserves its height at the bottom of the page (`--wdb-inset` / `padding-bottom` on `html`) so content and controls are not covered and remain reachable by scrolling. Collapsing to the logo strip releases that space
