@@ -624,10 +624,7 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					// would produce rather than hard-coding camelCase `userId`.
 					var settingsPath = tempRoot & "/config/settings.cfm";
 					var originalSettings = fileRead(settingsPath);
-					fileWrite(
-						settingsPath,
-						replace(originalSettings, "// CLI-Appends-Here", "set(useUnderscoreReferenceColumns=true);" & chr(10) & "// CLI-Appends-Here")
-					);
+					fileWrite(settingsPath, originalSettings & chr(10) & "set(useUnderscoreReferenceColumns=true);");
 
 					scaffold.generateScaffold(
 						name = "Membership",
