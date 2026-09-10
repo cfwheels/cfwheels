@@ -55,6 +55,23 @@ component output="false" {
 		}
 	}
 
+	// Framework Java resources — the bundled jBCrypt jar used by the global
+	// bcryptHash()/bcryptVerify() helpers. LoadPaths are read at app init, so
+	// the jar must be present under vendor/wheels/resources/java before the
+	// first request; on JVM engines this makes bcrypt run in native Java
+	// instead of the slow pure-CFML Blowfish fallback.
+	if (DirectoryExists(this.wheelsDir & "resources/java")) {
+		if (!StructKeyExists(this, "javaSettings")) {
+			this.javaSettings = {};
+		}
+		if (!StructKeyExists(this.javaSettings, "LoadPaths")) {
+			this.javaSettings.LoadPaths = [];
+		}
+		if (!ArrayFind(this.javaSettings.LoadPaths, this.wheelsDir & "resources/java")) {
+			ArrayAppend(this.javaSettings.LoadPaths, this.wheelsDir & "resources/java");
+		}
+	}
+
 	// Put environment vars into env struct
 	if ( !structKeyExists(this,"env") ) {
 		this.env = {};

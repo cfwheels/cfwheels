@@ -2,21 +2,23 @@
  * Tests the bcrypt password helpers — bcryptHash, bcryptVerify,
  * and bcryptNeedsRehash — for OpenBSD / htpasswd / jBCrypt compatibility.
  *
- * On Lucee/Adobe/BoxLang these come from the pure-CFML implementation in
- * global/security.cfm. RustCFML ships bcryptHash/bcryptVerify as NATIVE
- * builtins (Global.cfc skips security.cfm there to avoid the name
- * collision), so specs that pin pure-CFML specifics — the $2b$ prefix and
- * the Wheels.InvalidArgument cost validation — are skipped on that engine.
- * bcryptNeedsRehash has no engine builtin and ships everywhere via
- * security-extra.cfm.
+ * On JVM engines (Lucee/Adobe/BoxLang) bcryptHash/bcryptVerify prefer the
+ * bundled jBCrypt jar (org.mindrot.jbcrypt.BCrypt, MIT) via
+ * $getJBCrypt() — native Java, ~100ms at cost 10. When the jar is not on the
+ * classpath they fall back to the pure-CFML Blowfish implementation in
+ * global/security.cfm (slow at cost 10, which is exactly what the fast path
+ * avoids). RustCFML ships bcryptHash/bcryptVerify as NATIVE builtins
+ * (Global.cfc skips security.cfm there to avoid the name collision), so specs
+ * that pin CFML specifics — the $2b$ prefix and the Wheels.InvalidArgument
+ * cost validation — are skipped on that engine. bcryptNeedsRehash has no
+ * engine builtin and ships everywhere via security-extra.cfm.
  *
- * The reference vectors are cost 4. The algorithm is byte-identical at every
- * cost — cost only sets the EksBlowfish iteration count (2^cost) — so a cost-4
- * vector from Apache htpasswd proves OpenBSD/jBCrypt compatibility as strongly
- * as a cost-10 one, while running ~64x faster. On BoxLang/Adobe the pure-CFML
- * Blowfish is slow (each function/arithmetic op in the hot loop is far cheaper
- * on Lucee), so cost 10 would make one verify take minutes; cost 4 keeps the
- * suite fast on every engine (#3478).
+ * jBCrypt 0.4 emits the $2a$ prefix while the pure-CFML fallback emits $2b$;
+ * both are valid bcrypt and verify identically for ASCII input, so prefix
+ * assertions accept either. The reference vectors are cost 4: cost only sets
+ * the EksBlowfish iteration count (2^cost), so a cost-4 Apache htpasswd vector
+ * proves OpenBSD/jBCrypt compatibility as strongly as a cost-10 one while
+ * running ~64x faster (#3478).
  */
 component extends="wheels.WheelsTest" {
 
@@ -61,9 +63,10 @@ component extends="wheels.WheelsTest" {
 				var hash = bcryptHash("abc", 4);
 				expect(Len(hash)).toBe(60);
 				if (!_nativeBuiltin) {
-					// RustCFML's native bcrypt crate emits the $2a$ prefix;
-					// the pure-CFML implementation always emits $2b$.
-					expect(Left(hash, 7)).toBe("$2b$04$");
+					// RustCFML's native bcrypt crate and the bundled jBCrypt both
+					// emit the $2a$ prefix; the pure-CFML fallback emits $2b$.
+					expect(ListFindNoCase("$2a$,$2b$", Left(hash, 4)) > 0).toBeTrue();
+					expect(Mid(hash, 5, 2)).toBe("04");
 				}
 				expect(bcryptVerify("abc", hash)).toBeTrue();
 				expect(bcryptVerify("not-abc", hash)).toBeFalse();
@@ -73,12 +76,31 @@ component extends="wheels.WheelsTest" {
 				var hash = bcryptHash("abc", 4);
 				expect(Len(hash)).toBe(60);
 				if (!_nativeBuiltin) {
-					expect(Left(hash, 4)).toBe("$2b$");
+					expect(ListFindNoCase("$2a$,$2b$", Left(hash, 4)) > 0).toBeTrue();
 				}
 				expect(Mid(hash, 5, 2)).toBe("04");
 				expect(Mid(hash, 7, 1)).toBe("$");
 				expect(Len(Mid(hash, 8, 22))).toBe(22);
 				expect(Len(Mid(hash, 30, 31))).toBe(31);
+			});
+
+			it("completes a default-cost (10) hash quickly on the native/jBCrypt path", function() {
+				// The pure-CFML Blowfish at cost 10 takes minutes — that is the
+				// hang this fast path exists to eliminate. Only assert timing when
+				// a native implementation (RustCFML builtin, or the bundled jBCrypt
+				// on a JVM engine) is actually in use; otherwise skip so the suite
+				// never grinds through pure-CFML cost 10.
+				var fastPath = _nativeBuiltin || IsObject(g.$getJBCrypt());
+				if (!fastPath) {
+					return;
+				}
+				var started = GetTickCount();
+				var hash = bcryptHash("performance-probe", 10);
+				var elapsed = GetTickCount() - started;
+				expect(bcryptVerify("performance-probe", hash)).toBeTrue();
+				// Native bcrypt at cost 10 is on the order of 100ms; anything over
+				// 5s means the slow pure-CFML path was (wrongly) taken.
+				expect(elapsed).toBeLTE(5000);
 			});
 
 			it("throws for an out-of-range cost", function() {
