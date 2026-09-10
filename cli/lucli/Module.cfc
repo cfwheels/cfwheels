@@ -1344,7 +1344,19 @@ component extends="modules.BaseModule" {
 		var cmdArgs = ["start"];
 		cmdArgs.append(passThrough, true);
 
-		executeCommand("server", cmdArgs, variables.projectRoot);
+		try {
+			executeCommand("server", cmdArgs, variables.projectRoot);
+		} catch (any startErr) {
+			// A failed LuCLI server start can leave a half-written
+			// registration in ~/.wheels/servers/<name>; the next start then
+			// refuses with "registered to a different project" and needs a
+			// manual --force. Wipe the dead registration so a retry starts
+			// clean.
+			try {
+				registry.clean(serverName);
+			} catch (any cleanupErr) {}
+			rethrow;
+		}
 
 		// Post-stage. If the express dir didn't exist at pre-stage time
 		// (very first LuCLI run on a fresh VM), the start command above just
