@@ -12,11 +12,10 @@ proxy:
   ssl: true
   host: app.example.com
   # The lucee/lucee container listens on 8888 (the Dockerfile makes it follow
-  # $PORT too). /up needs a URL-rewrite filter the stock image doesn't bundle,
-  # so the health check probes / instead.
+  # $PORT too, and adds a RewriteValve so clean URLs like /up work).
   app_port: 8888
   healthcheck:
-    path: /
+    path: /up
     interval: 1
     timeout: 30
 
