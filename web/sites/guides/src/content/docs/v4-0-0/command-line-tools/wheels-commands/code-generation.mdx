@@ -402,7 +402,7 @@ After reload, the admin interface is available at `/admin/users`.
 
 ### `wheels generate auth`
 
-Generate a complete authentication scaffold on the built-in `wheels.auth` primitives (`PasswordHasher`, `Authenticator`, and the session/token/JWT strategies).
+Generate a complete authentication scaffold on the built-in `wheels.auth` primitives (`Authenticator` and the session/token/JWT strategies). Passwords are hashed with bcrypt via the framework's `bcryptHash()` / `bcryptVerify()` helpers.
 
 #### Synopsis
 
@@ -421,9 +421,9 @@ wheels generate auth [ModelName] [--model=User] [--strategy=session|token|jwt] [
 
 The generated code is **code you own** — every file carries a stamped header, nothing is patched by framework upgrades. To pick up generator improvements later, re-run with `--force` on a clean branch and review the changes with `git diff`. The route, service, and strategy registrations are injected between `// wheels:generate-auth:*` marker comments and replaced in place on re-runs, never duplicated. The migration is never overwritten, even with `--force`.
 
-All strategies share the same `User` model: PBKDF2-HMAC-SHA256 hashing through the `passwordHasher` service (a transient `password` property is validated — presence on create, 12-character minimum, confirmation — then hashed into `passwordDigest` and scrubbed in a `beforeSave` callback), an `authenticate()` method with transparent rehash-on-login, and single-use SHA-256-digested password reset tokens that expire after 2 hours.
+All strategies share the same `User` model: bcrypt hashing through the framework's `bcryptHash()` / `bcryptVerify()` / `bcryptNeedsRehash()` helpers — bundled jBCrypt on JVM engines, native builtins on RustCFML (a transient `password` property is validated — presence on create, 12-character minimum, confirmation — then hashed into `passwordHash` and scrubbed in a `beforeSave` callback), an `authenticate()` method with transparent rehash-on-login, and single-use SHA-256-digested password reset tokens that expire after 2 hours.
 
-**Session** (default) writes `Sessions`/`Passwords`/`Registrations` controllers (every `config()` starts with `super.config()`, so the base controller's CSRF protection stays active), `startFormTag`-based views, login/logout/register/password routes, and DI registrations for `passwordHasher`, `authenticator`, and `sessionStrategy` in `config/services.cfm`, with the strategy wired into the authenticator in `app/events/onapplicationstart.cfm`.
+**Session** (default) writes `Sessions`/`Passwords`/`Registrations` controllers (every `config()` starts with `super.config()`, so the base controller's CSRF protection stays active), `startFormTag`-based views, login/logout/register/password routes, and DI registrations for `authenticator` and `sessionStrategy` in `config/services.cfm`, with the strategy wired into the authenticator in `app/events/onapplicationstart.cfm`.
 
 **Token** writes `app/controllers/api/Sessions.cfc` instead (no views; the registration flag doesn't apply): `POST /api/session` exchanges credentials for an opaque bearer token returned exactly once — only its SHA-256 digest is stored — and `DELETE /api/session` revokes it. The `TokenStrategy` validator is registered at startup and resolves accounts by token digest.
 

@@ -37,7 +37,7 @@ wheels migrate latest
 | `--registration` / `--no-registration` | on | Include the public sign-up flow (session strategy only). |
 | `--force` | off | Overwrite generated files and regenerate the injected config blocks in place. |
 
-The session strategy emits a `User` model with PBKDF2 hashing via the `passwordHasher` service, `Sessions`/`Passwords`/`Registrations` controllers and views, a create-users migration, the route/service/strategy wiring described below, and app specs. The generated files are **code you own** — edit them freely, and re-run with `--force` plus a `git diff` review when you want to pick up generator improvements. See the [`wheels generate auth` reference](/v4-0-0/command-line-tools/wheels-commands/code-generation/#wheels-generate-auth) for the full file list.
+The session strategy emits a `User` model with bcrypt hashing via the framework's `bcryptHash()` / `bcryptVerify()` helpers, `Sessions`/`Passwords`/`Registrations` controllers and views, a create-users migration, the route/service/strategy wiring described below, and app specs. The generated files are **code you own** — edit them freely, and re-run with `--force` plus a `git diff` review when you want to pick up generator improvements. See the [`wheels generate auth` reference](/v4-0-0/command-line-tools/wheels-commands/code-generation/#wheels-generate-auth) for the full file list.
 
 The rest of this page explains the primitives the scaffold sits on — read on to understand what was generated, customize it, or wire things up by hand.
 
@@ -175,7 +175,7 @@ The filter must be `private`. A `public` filter becomes a routable action — Wh
 Model-level hashing stays the same regardless of which strategy you use — the strategy doesn't touch passwords, it just round-trips a principal struct after you've already verified credentials.
 
 <Aside type="tip">
-  **Bcrypt ships with Wheels 4.1.** `bcryptHash()`, `bcryptVerify()`, and `bcryptNeedsRehash()` are global helpers — pure-CFML bcrypt with no Java objects, CFX tags, or external libraries, byte-compatible with OpenBSD `$2b$` / jBCrypt hashes and verified against `$2$`, `$2a$`, `$2x$`, and `$2y$` inputs. Use them directly; there's no reason to hand-roll a salted hash anymore.
+  **Bcrypt ships with Wheels 4.1.** `bcryptHash()`, `bcryptVerify()`, and `bcryptNeedsRehash()` are global helpers — bundled jBCrypt on JVM engines with a pure-CFML fallback, no CFX tags or external libraries, byte-compatible with OpenBSD `$2b$` / jBCrypt hashes and verified against `$2$`, `$2a$`, `$2x$`, and `$2y$` inputs. Use them directly; there's no reason to hand-roll a salted hash anymore.
 </Aside>
 
 The pattern is a `beforeValidation` callback that hashes plaintext and clears it, plus an `authenticate(password)` instance method that verifies against the stored hash:

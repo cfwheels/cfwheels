@@ -1,10 +1,12 @@
 <cfscript>
 /**
- * Pure-CFML bcrypt password hashing — OpenBSD / htpasswd / jBCrypt compatible.
+ * bcrypt password hashing — OpenBSD / htpasswd / jBCrypt compatible.
  *
- * Implements the Blowfish block cipher and the EksBlowfish ("expensive key
- * schedule") setup entirely in CFML: no Java objects, CFX tags, or external
- * libraries. Runs on Lucee 5/6/7, Adobe CF 2018-2025, BoxLang, and RustCFML.
+ * Prefers the bundled jBCrypt Java class (org.mindrot.jbcrypt.BCrypt, loaded
+ * from vendor/wheels/resources/java) on JVM engines, and falls back to a
+ * pure-CFML Blowfish/EksBlowfish implementation — no CFX tags or external
+ * libraries — elsewhere. Runs on Lucee 5/6/7, Adobe CF 2018-2025, BoxLang,
+ * and RustCFML (which ships bcryptHash/bcryptVerify as native builtins).
  *
  * Hash format (60 chars): $2b$<2-digit cost>$<22-char salt><31-char checksum>.
  * Passwords are UTF-8 encoded and NUL-terminated before keying, matching
