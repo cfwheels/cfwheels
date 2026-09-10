@@ -165,6 +165,10 @@ component output="false" {
 		}
 		local.pct = local.total ? Round(100 * local.covered / local.total) : 0;
 		arrayAppend(local.lines, "Function coverage: " & local.covered & "/" & local.total & " files (" & local.pct & "%) - " & arguments.instrumented & " counters instrumented" & (Len(arguments.suiteStatus) ? "; suite HTTP " & arguments.suiteStatus : ""));
+		if (Len(arguments.suiteStatus) && arguments.suiteStatus != "200") {
+			arrayAppend(local.lines, "");
+			arrayAppend(local.lines, "WARNING: the test suite did not pass (suite HTTP " & arguments.suiteStatus & "). Coverage numbers are incomplete and the CRAP ranking below understates change risk — fix the failing specs, then re-run `wheels coverage`.");
+		}
 		arrayAppend(local.lines, "");
 		arrayAppend(local.lines, "Top CRAP (change risk = complexity^2 x (1 - coverage)^3 + complexity):");
 		arrayAppend(local.lines, "  CRAP   comp  cov  file");

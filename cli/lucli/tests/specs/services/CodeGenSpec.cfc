@@ -245,7 +245,7 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					);
 					var content = fileRead(tempRoot & "/app/models/SizedTitle.cfc");
 					expect(content).toInclude('validatesPresenceOf("title")');
-					expect(content).toInclude('validatesLengthOf(property="title", maximum=50)');
+					expect(content).toInclude('validatesLengthOf(property="title", maximum=50, allowBlank=true)');
 				});
 
 				it("does not invent a length validation for a bare string", () => {
@@ -271,9 +271,9 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					);
 					var content = fileRead(tempRoot & "/app/models/SizedMisc.cfc");
 					expect(content).toInclude('validatesPresenceOf("sku,body,blob")');
-					expect(content).toInclude('validatesLengthOf(property="sku", maximum=80)');
-					expect(content).toInclude('validatesLengthOf(property="body", maximum=1000)');
-					expect(content).toInclude('validatesLengthOf(property="blob", maximum=4096)');
+					expect(content).toInclude('validatesLengthOf(property="sku", maximum=80, allowBlank=true)');
+					expect(content).toInclude('validatesLengthOf(property="body", maximum=1000, allowBlank=true)');
+					expect(content).toInclude('validatesLengthOf(property="blob", maximum=4096, allowBlank=true)');
 				});
 
 				it("skips length validation for integer limits and decimal precision", () => {
@@ -302,7 +302,7 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					var content = fileRead(tempRoot & "/app/models/MixedValidations.cfc");
 					expect(content).toInclude('validatesPresenceOf("title,email")');
 					expect(content).toInclude('validatesFormatOf(property="email", type="email")');
-					expect(content).toInclude('validatesLengthOf(property="title", maximum=50)');
+					expect(content).toInclude('validatesLengthOf(property="title", maximum=50, allowBlank=true)');
 					expect(content).toInclude(chr(9) & chr(9) & "validatesLengthOf");
 					expect(content).notToInclude(chr(10) & "validatesLengthOf");
 				});

@@ -538,21 +538,21 @@ component {
 						);
 						break;
 					case "date":
-						fieldCode = $scaffoldFieldCall(
+						fieldCode = $scaffoldDateFieldCall(
 							helperName = "dateSelect",
 							fieldName = fieldName,
 							fieldLabel = fieldLabel
 						);
 						break;
 					case "datetime": case "timestamp":
-						fieldCode = $scaffoldFieldCall(
+						fieldCode = $scaffoldDateFieldCall(
 							helperName = "dateTimeSelect",
 							fieldName = fieldName,
 							fieldLabel = fieldLabel
 						);
 						break;
 					case "time":
-						fieldCode = $scaffoldFieldCall(
+						fieldCode = $scaffoldDateFieldCall(
 							helperName = "timeSelect",
 							fieldName = fieldName,
 							fieldLabel = fieldLabel
@@ -620,6 +620,26 @@ component {
 		}
 		call &= ')##';
 		return '<div class="field">' & chr(10) & call & chr(10) & '</div>';
+	}
+
+	/**
+	 * One scaffolded date/time field: a single <label> above the composite
+	 * control, WITHOUT labelPlacement/includeErrorMessage on the helper. The
+	 * dateSelect/dateTimeSelect/timeSelect helpers render a sub-select per
+	 * component (3 for date, 6 for datetime), so passing label/error through
+	 * them repeated the label and validation message once per sub-select
+	 * (#3553). The top-level errorMessagesFor() still shows the error once.
+	 */
+	private string function $scaffoldDateFieldCall(
+		required string helperName,
+		required string fieldName,
+		required string fieldLabel
+	) {
+		var call = '##' & arguments.helperName & '(objectName="|ObjectNameSingular|", property="' & arguments.fieldName & '")##';
+		return '<div class="field">' & chr(10)
+			& '<label>' & arguments.fieldLabel & '</label>' & chr(10)
+			& call & chr(10)
+			& '</div>';
 	}
 
 	/**

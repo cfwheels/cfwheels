@@ -624,8 +624,11 @@ component extends="wheels.WheelsTest" {
 					expect(seeder.$generateTestData(propertyName = "flag", propertyType = "boolean", index = 2)).toBeFalse();
 					expect(seeder.$generateTestData(propertyName = "isActive", propertyType = "string", index = 1)).toBeTrue();
 					expect(seeder.$generateTestData(propertyName = "enabled", propertyType = "string", index = 2)).toBeFalse();
-					// publishedAt matches "published" before the later date-name branch.
-					expect(seeder.$generateTestData(propertyName = "publishedAt", propertyType = "string", index = 1)).toBeTrue();
+					// bare "published" is boolean; "publishedAt" is date-like. The
+					// type-first reorder stops the "published" substring from
+					// swallowing "publishedAt" into a boolean (#3552).
+					expect(seeder.$generateTestData(propertyName = "published", propertyType = "string", index = 1)).toBeTrue();
+					expect(IsDate(seeder.$generateTestData(propertyName = "publishedAt", propertyType = "string", index = 1))).toBeTrue();
 				});
 
 				it("S10: integer / numeric type — age, price, quantity, and default", () => {
