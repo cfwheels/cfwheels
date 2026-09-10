@@ -169,6 +169,7 @@ component {
 					name = pluralName,
 					properties = props,
 					modelName = arguments.name,
+					belongsTo = arguments.belongsTo,
 					force = arguments.force
 				);
 				if (ctrlTestResult.success) {
