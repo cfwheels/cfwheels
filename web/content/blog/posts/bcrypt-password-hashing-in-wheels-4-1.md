@@ -17,6 +17,7 @@ excerpt: >-
   Adobe CF made us question our sanity.
 coverImage: '/blog-images/4-1/bcrypt-password-hashing-in-wheels-4-1.png'
 announcement:
+  discussionUrl: 'https://github.com/wheels-dev/wheels/discussions/3582'
   title: 'bcrypt is in Wheels 4.1'
   body: |
     New post: **[bcrypt for your passwords](https://blog.wheels.dev/blog/bcrypt-password-hashing-in-wheels-4-1)** — the story behind `bcryptHash()`, `bcryptVerify()`, and `bcryptNeedsRehash()`: bundled jBCrypt for speed with a pure-CFML fallback, verified against OpenBSD and jBCrypt vectors.
