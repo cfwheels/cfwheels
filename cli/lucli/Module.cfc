@@ -1194,8 +1194,65 @@ component extends="modules.BaseModule" {
 
 		out("Installed documentation for #version#.", "green");
 		out("  #target#");
-		out("  Read it at /wheels/guides/ and /wheels/api/ while the dev server runs.");
+		$docsMountIntoWebroot(target);
 		return "";
+	}
+
+	/**
+	 * Mirrors the unpacked bundle into the project's webroot as wheels-docs/.
+	 *
+	 * Required, not a convenience: the dev server's Lucee urlRewrite only
+	 * routes EXTENSION-LESS paths to the front controller, so the bundle's
+	 * /wheels-docs/.../_astro/*.css and pagefind assets have to be real files
+	 * under the webroot for the container to serve them. Pages still go through
+	 * the framework route.
+	 *
+	 * Hardlinks where possible so the shared cache is not duplicated per app;
+	 * falls back to a copy across filesystems.
+	 */
+	private void function $docsMountIntoWebroot(required string source) {
+		var webroot = variables.projectRoot & "/public";
+		if (!directoryExists(webroot)) {
+			out("  (no public/ webroot found — skipping the webroot mount)", "yellow");
+			return;
+		}
+		var mount = webroot & "/wheels-docs";
+		if (directoryExists(mount)) {
+			// directoryDelete rather than rm -rf so a partially-written mount
+			// from an interrupted run is cleared cleanly.
+			try {
+				directoryDelete(mount, true);
+			} catch (any e) {
+				out("  Could not clear the existing mount at #mount#.", "red");
+				return;
+			}
+		}
+		// -R -l hardlinks; -R alone copies. Try links first: same filesystem is
+		// the common case and costs no extra disk.
+		var linked = false;
+		try {
+			cfexecute(name = "cp", arguments = "-R -l #arguments.source# #mount#", timeout = 300, variable = "local.o1", errorVariable = "local.e1");
+			linked = directoryExists(mount);
+		} catch (any e) {
+			linked = false;
+		}
+		if (!linked) {
+			try {
+				cfexecute(name = "cp", arguments = "-R #arguments.source# #mount#", timeout = 600, variable = "local.o2", errorVariable = "local.e2");
+			} catch (any e) {
+				out("  Could not mount the docs into the webroot: #e.message#", "red");
+				return;
+			}
+		}
+		if (directoryExists(mount)) {
+			out("  Mounted at #mount#", "green");
+			out("  Read them at /wheels-docs/guides/ and /wheels-docs/api/ while the dev server runs.");
+			if (!linked) {
+				out("  (copied — the cache and webroot are on different filesystems)");
+			}
+		} else {
+			out("  Could not mount the docs into the webroot.", "red");
+		}
 	}
 
 	/**

@@ -8,6 +8,13 @@ set -e
 # and /wheels/api/ so the framework can serve them out of the user's cache with
 # no internet connection.
 #
+# Mounted at <app webroot>/wheels-docs/ and served as /wheels-docs/guides/ and
+# /wheels-docs/api/. NOT /wheels/...: the dev server's Lucee urlRewrite only
+# routes extension-LESS paths to the front controller, so extension-bearing
+# asset URLs under /wheels/ never reach Wheels and 404 from Tomcat. Under the
+# app webroot Tomcat serves the assets directly and only the extension-less
+# page paths go through the framework.
+#
 # The bundle deliberately carries ONE docs version (the newest slug), not every
 # version the sites publish: the full API site is ~1.3 GB across nine versions
 # because Starlight server-renders its whole sidebar into each of 2,739 pages.
@@ -59,13 +66,13 @@ if [ ! -d "${WEB_DIR}/node_modules" ]; then
 	(cd "${WEB_DIR}" && pnpm install --frozen-lockfile)
 fi
 
-echo "  building guides -> /wheels/guides/"
+echo "  building guides -> /wheels-docs/guides/"
 rm -rf "${WEB_DIR}/sites/guides/dist" "${WEB_DIR}/sites/guides/.astro"
-(cd "${WEB_DIR}" && WHEELS_DOCS_BASE=/wheels/guides/ pnpm --filter @wheels-dev/site-guides build)
+(cd "${WEB_DIR}" && WHEELS_DOCS_BASE=/wheels-docs/guides/ pnpm --filter @wheels-dev/site-guides build)
 
-echo "  building api -> /wheels/api/"
+echo "  building api -> /wheels-docs/api/"
 rm -rf "${WEB_DIR}/sites/api/dist" "${WEB_DIR}/sites/api/.astro"
-(cd "${WEB_DIR}" && WHEELS_DOCS_BASE=/wheels/api/ pnpm --filter @wheels-dev/site-api build)
+(cd "${WEB_DIR}" && WHEELS_DOCS_BASE=/wheels-docs/api/ pnpm --filter @wheels-dev/site-api build)
 
 # ── Stage ──────────────────────────────────────────────────────────────────
 rm -rf "${STAGE_DIR}"

@@ -41,5 +41,13 @@ mapper()
 		.root(method = "get", to = "public##index", mapFormat = false)
 	.end()
 	.get(name = "testbox", pattern = "/wheels/app/tests", to = "wheels##public##testbox")
+	// The docs bundle is mounted at the app webroot and served as
+	// /wheels-docs/guides/... — deliberately OUTSIDE the /wheels namespace.
+	// Extension-bearing URLs under /wheels/ never reach the front controller
+	// (Lucee's urlRewrite only routes extension-less paths), so assets must be
+	// served by the container straight off disk from the webroot. Only the
+	// extension-less page paths land here.
+	.get(name = "docsBundle", pattern = "/wheels-docs", to = "wheels##public##docsBundle")
+	.get(name = "docsBundleWildCard", pattern = "/wheels-docs/*[path]", to = "wheels##public##docsBundle")
 .end();
 </cfscript>

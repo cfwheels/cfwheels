@@ -165,6 +165,19 @@ class WheelsBe < Formula
         unzip -q -o "#{libexec}/wheels-docs.zip" -d "${DOCS_DIR}"
       fi
 
+      # wheels-docs mount — the bundle must be real files under the app webroot
+      # for its extension-bearing asset URLs to be served: the dev server's
+      # Lucee urlRewrite only routes extension-less paths to the front
+      # controller, so /wheels-docs/.../_astro/*.css would otherwise 404 from
+      # Tomcat. Hardlinked so the shared cache is not duplicated per app.
+      if [ -f "./vendor/wheels/wheels.json" ] && [ -d "./public" ]; then
+        if [ -f "${DOCS_DIR}/manifest.json" ]; then
+          rm -rf "./public/wheels-docs"
+          cp -R -l "${DOCS_DIR}" "./public/wheels-docs" 2>/dev/null \
+            || cp -R "${DOCS_DIR}" "./public/wheels-docs"
+        fi
+      fi
+
       # Stage SQLite JDBC into Lucee Express on first run. The path varies by
       # Lucee version so we do a glob + first-match rather than hardcoding.
       LUCEE_EXT_DIR="$(find "${LUCLI_HOME}/express" -path "*/lib/ext" -type d 2>/dev/null | head -1 || true)"

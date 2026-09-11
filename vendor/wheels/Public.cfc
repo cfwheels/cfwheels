@@ -639,6 +639,36 @@ component output="false" displayName="Internal GUI" extends="wheels.Global" {
 	}
 
 	/**
+	 * Serves the prebuilt docs bundle mounted under the app webroot.
+	 *
+	 * The bundle is served as /wheels-docs/guides/... and /wheels-docs/api/....
+	 * Assets under those prefixes are served by the container straight off
+	 * disk; only the extension-less page paths reach this handler, which maps
+	 * them onto the matching index.html.
+	 */
+	function docsBundle() {
+		$blockInProduction();
+		var path = StructKeyExists(request.wheels.params, "path") ? request.wheels.params.path : "";
+		var site = "guides";
+		if (Find("/", path)) {
+			site = LCase(ListFirst(path, "/"));
+			path = ListRest(path, "/");
+		} elseif (Len(path)) {
+			site = LCase(path);
+			path = "";
+		}
+		if (site != "guides" && site != "api") {
+			$docsUnavailable("guides");
+			return "";
+		}
+		if ($serveDocsFile(site, path)) {
+			return "";
+		}
+		$docsUnavailable(site);
+		return "";
+	}
+
+	/**
 	 * Guides. Served from the local docs bundle so they work offline.
 	 *
 	 * When no bundle is installed this falls back to views/guides.cfm, which
@@ -856,6 +886,18 @@ component output="false" displayName="Internal GUI" extends="wheels.Global" {
 			var trimmed = REReplace(Trim(override), "[/\\]+$", "");
 			return DirectoryExists(trimmed) ? trimmed : "";
 		}
+		// Prefer a bundle mounted under the app's own webroot. It has to live
+		// there for ASSETS to work at all: the dev server's Lucee urlRewrite
+		// only routes extension-less paths to the front controller, so
+		// extension-bearing URLs under /wheels/ never reach Wheels. Files under
+		// the webroot are served by the container directly, and only the
+		// extension-less page paths come through here.
+		var webrootMount = ExpandPath("/wheels-docs");
+		if (DirectoryExists(webrootMount) && FileExists(webrootMount & "/manifest.json")) {
+			return webrootMount;
+		}
+		// Fall back to the shared cache that `wheels docs fetch` populates.
+		// Pages serve from here; assets cannot (see above).
 		var cliHome = env("LUCLI_HOME", "");
 		if (!IsSimpleValue(cliHome) || !Len(Trim(cliHome))) {
 			var userHome = env("HOME", "");
