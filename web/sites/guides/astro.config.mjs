@@ -5,10 +5,13 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { GUIDES_VERSIONS } from '@wheels-dev/ui/data/versions';
+import { rehypeBasePrefix } from '@wheels-dev/ui/markdown/rehype-base-prefix.mjs';
+import { remarkBasePrefix } from '@wheels-dev/ui/markdown/remark-base-prefix.mjs';
 import cfmlGrammar from './languages/cfml.tmLanguage.json';
 import cfscriptGrammar from './languages/cfscript.tmLanguage.json';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
 
 function loadSidebar(version) {
 	const path = resolve(__dirname, 'src/sidebars', `${version}.json`);
@@ -67,13 +70,29 @@ function buildSidebarForVersion(version) {
 	};
 }
 
-export default defineConfig({
+const config = defineConfig({
 	site: 'https://guides.wheels.dev',
+	// The local docs bundle that ships with the framework is served from
+	// /wheels/guides/ rather than a domain root, and every asset URL Astro
+	// emits is absolute — so without a base the pages would request
+	// /_astro/*.css from the app root and 404. Set WHEELS_DOCS_BASE to build
+	// that variant; unset (the website build) leaves `base` at its default.
+	...(process.env.WHEELS_DOCS_BASE ? { base: process.env.WHEELS_DOCS_BASE } : {}),
 	// Astro 7 stopped applying GFM to MDX content pages by default, so tables
 	// in .mdx guides rendered as raw pipe text. Re-enable remark-gfm so it
 	// applies to both .md and .mdx (Starlight merges this with its defaults).
 	markdown: {
-		remarkPlugins: [remarkGfm],
+		remarkPlugins: [
+			[remarkBasePrefix, { base: process.env.WHEELS_DOCS_BASE || '' }],
+			remarkGfm,
+		],
+		// Astro's `base` covers the URLs Astro generates, but NOT a link
+		// authored as `/v4-0-0/...` inside content. There are ~1000 of those in
+		// the guides, so the local docs bundle (served from /wheels/guides/)
+		// rewrites them at build time. No-op when base is unset.
+		rehypePlugins: [
+			[rehypeBasePrefix, { base: process.env.WHEELS_DOCS_BASE || '' }],
+		],
 	},
 	redirects: {
 		// v4.0.0 GA (2026-05-12) renamed the URL slug `v4-0-0-snapshot` to `v4-0-0`.
@@ -209,3 +228,19 @@ export default defineConfig({
 		}),
 	],
 });
+
+// Astro writes redirect DESTINATIONS verbatim, so in a sub-path build every
+// stub would bounce the reader to the app root. Prefix them here. The source
+// keys are left alone: Astro already emits the stub pages under the base.
+// No-op when WHEELS_DOCS_BASE is unset (the website build).
+const docsRedirectBase = (process.env.WHEELS_DOCS_BASE || '').replace(/\/+$/, '');
+if (docsRedirectBase && config.redirects) {
+	for (const [from, to] of Object.entries(config.redirects)) {
+		if (typeof to !== 'string') continue;
+		if (!to.startsWith('/') || to.startsWith('//')) continue;
+		if (to === docsRedirectBase || to.startsWith(docsRedirectBase + '/')) continue;
+		config.redirects[from] = docsRedirectBase + to;
+	}
+}
+
+export default config;
