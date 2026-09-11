@@ -128,10 +128,8 @@ component extends="wheels.migrator.Base" {
 				// "text" where the model declared "string" (and similarly for
 				// the INTEGER/REAL affinities). Normalize the affinity-equivalent
 				// pairs so `migrate diff` doesn't emit spurious `text -> string`
-				// changes on a schema that is already in sync.
-				if ($getDBType() == "sqlite" && local.actualMigType == "text" && ListFindNoCase("string,text,datetime,date,time,boolean", local.expectedMigType)) {
-					local.actualMigType = local.expectedMigType;
-				}
+				// changes on a schema that is already in sync (#3565).
+				local.actualMigType = $normalizeMigTypeForDiff(local.actualMigType, local.expectedMigType);
 
 				local.typeChanged = (local.expectedMigType != local.actualMigType && local.actualMigType != "unknown");
 				local.sizeChanged = (
@@ -607,6 +605,31 @@ component extends="wheels.migrator.Base" {
 			return variables.dbTypeMap[local.key];
 		}
 		return "unknown";
+	}
+
+	/**
+	 * Normalize an actual (DB-probed) migration type against the expected
+	 * (model-introspected) type before the diff comparison, so SQLite's
+	 * type-affinity collapse doesn't read as a spurious type change (#3565).
+	 *
+	 * SQLite stores VARCHAR/TEXT/DATETIME/DATE/TIME under a single TEXT
+	 * storage class. The model layer maps that TEXT back to "string"
+	 * (cf_sql_varchar), while the DB probe maps it to "text", so every stable
+	 * string-like column looked like a `text -> string` change. Return the
+	 * expected type in that case; otherwise return the actual type unchanged.
+	 *
+	 * Public ONLY so autoMigratorSpec can unit-test the affinity families
+	 * (same carve-out as $cfSqlTypeToMigrationType / $dbTypeToMigrationType).
+	 */
+	public string function $normalizeMigTypeForDiff(required string actualMigType, required string expectedMigType) {
+		if (
+			$getDBType() == "sqlite"
+			&& arguments.actualMigType == "text"
+			&& ListFindNoCase("string,text,datetime,date,time,boolean", arguments.expectedMigType)
+		) {
+			return arguments.expectedMigType;
+		}
+		return arguments.actualMigType;
 	}
 
 }
