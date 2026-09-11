@@ -110,8 +110,22 @@ component extends="wheels.WheelsTest" {
 					0,
 					"debugbar.js must expand the bar when the collapsed logo is clicked"
 				);
-				expect(js contains "display = 'none'").toBeFalse(
-					"wdbMinimize() must not hide ##wheels-debugbar with display:none"
+				// Was a file-wide `display = 'none'` search, which is a blunt
+				// proxy: it also trips on the panels' legitimate display
+				// toggles for their own result blocks, and those have nothing
+				// to do with the collapse. Assert the documented intent
+				// directly instead — the collapse must animate through the
+				// width transition, so wdbMinimize() must not hide anything,
+				// and the bar element itself must never be display-hidden.
+				var minimizeAt = FindNoCase("window.wdbMinimize", js);
+				expect(minimizeAt).toBeGT(0, "debugbar.js must define wdbMinimize()");
+				expect(FindNoCase("display", Mid(js, minimizeAt, 85))).toBe(
+					0,
+					"wdbMinimize() must collapse via the width transition, not hide the container with display:none"
+				);
+				expect(FindNoCase("debugRoot()).style.display", js)).toBe(
+					0,
+					"nothing may hide ##wheels-debugbar itself with display:none"
 				);
 				expect(js contains "wdb-minimized").toBeFalse(
 					"debugbar.js must not drive a floating ##wdb-minimized restore button"
