@@ -8,13 +8,25 @@ When merged, the contents of this directory should be copied into:
 
 | File | Destination repo | Path in destination |
 |------|-----------------|---------------------|
-| `homebrew/wheels-be.rb` | `wheels-dev/homebrew-wheels` | `Formula/wheels-be.rb` (new file) |
-| `homebrew/bleeding-edge-update.yml` | `wheels-dev/homebrew-wheels` | `.github/workflows/bleeding-edge-update.yml` (new file) |
-| `homebrew/auto-update-channel-patch.md` | (informational) | applied as a small patch to the existing `auto-update.yml` |
 | `winget/manifests/*.yaml` | `microsoft/winget-pkgs` (PR) | `manifests/w/WheelsFramework/Wheels/<version>/` |
 | `snapshots-repo/README.md` | `wheels-dev/wheels-snapshots` (✅ pushed) | `README.md` |
 | `snapshots-repo/cleanup-old-snapshots.yml` | `wheels-dev/wheels-snapshots` (✅ pushed) | `.github/workflows/cleanup-old-snapshots.yml` |
 | `linux-packages/*` | nfpm configs + `build-linux-packages.sh` — used live by `release.yml` to build the `.deb`/`.rpm` | (source repo) |
+
+## Homebrew tap is authoritative, not drafted here
+
+The live tap is `wheels-dev/homebrew-wheels` (`Formula/wheels.rb` stable,
+`Formula/wheels-be.rb` bleeding-edge). Its `wheels-be.rb` and
+`bleeding-edge-update.yml` were previously mirrored here; both drifted badly
+enough that a docs change written against the in-repo copy never reached the
+tap at all, and the feature silently did not ship. The drafts were removed for
+the same reason as the Scoop and apt/yum ones.
+
+Edit the tap directly. `bleeding-edge-update.yml` recomputes each resource's
+`sha256` by anchored regex, so **adding a resource to the formula means adding
+the matching compute step, `env:` entry, and rewrite pattern there too** —
+otherwise the next auto-bump leaves a stale hash and `brew install` fails its
+checksum check.
 
 ## Scoop bucket is authoritative, not drafted here
 
