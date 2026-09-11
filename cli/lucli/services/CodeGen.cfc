@@ -303,6 +303,7 @@ component {
 		required string name,
 		array properties = [],
 		string modelName = "",
+		string belongsTo = "",
 		boolean force = false
 	) {
 		var meta = $testFileMeta(arguments.type, arguments.name);
@@ -326,7 +327,8 @@ component {
 			testName = testName,
 			targetName = meta.targetName,
 			modelName = arguments.modelName,
-			properties = arguments.properties
+			properties = arguments.properties,
+			belongsTo = arguments.belongsTo
 		);
 
 		var result = variables.templateService.generateFromTemplate(
@@ -411,7 +413,8 @@ component {
 		required string testName,
 		required string targetName,
 		string modelName = "",
-		array properties = []
+		array properties = [],
+		string belongsTo = ""
 	) {
 		var resolvedModel = len(arguments.modelName) ? arguments.modelName : arguments.targetName;
 		var controllerName = arguments.targetName;
@@ -443,7 +446,17 @@ component {
 		context["pluralLower"] = pluralLower;
 		context["collectionRoute"] = "api" & variables.helpers.capitalize(pluralLower);
 		context["memberRoute"] = "api" & variables.helpers.capitalize(modelNameLower);
-		context["validAttributes"] = $buildValidAttributesLiteral(arguments.properties);
+
+		// belongsTo-aware: the child's FK must reference a real parent, but the
+		// generated spec hard-coded `<name>_id: 1`. The controller eager-loads the
+		// parent via findByKey(include="<name>"), which inner-joins — so a child
+		// with no parent yet came back false and the first `wheels test` run
+		// failed the show/edit/update/delete specs. Create each parent in
+		// beforeEach (validation skipped: the generator can't know the parent's
+		// required fields) and reference its id for the FK.
+		var belongsToInfo = $belongsToInfo(arguments.belongsTo, arguments.properties);
+		context["belongsToSetup"] = $belongsToSetupLines(belongsToInfo);
+		context["validAttributes"] = $buildValidAttributesLiteral(arguments.properties, belongsToInfo);
 		context["validationExamples"] = $buildValidationExamples(resolvedModel, arguments.properties);
 		context["timestamp"] = dateTimeFormat(now(), "yyyy-mm-dd HH:nn:ss");
 		return context;
@@ -456,15 +469,69 @@ component {
 	 * are a boolean equality expression, not a keyed entry — create() then
 	 * receives a boolean and Wheels looks up TITLE on it.
 	 */
-	private string function $buildValidAttributesLiteral(required array properties) {
+	private string function $buildValidAttributesLiteral(required array properties, array belongsToInfo = []) {
 		if (!arrayLen(arguments.properties)) {
 			return "{}";
 		}
 		var parts = [];
 		for (var prop in arguments.properties) {
-			arrayAppend(parts, '"' & prop.name & '": ' & $samplePropertyLiteral(prop));
+			var literal = $samplePropertyLiteral(prop);
+			// Replace a belongsTo FK sample value with the created parent's id.
+			for (var info in arguments.belongsToInfo) {
+				if (prop.name == info.fkColumn) {
+					literal = "variables." & info.parentVar & ".id";
+					break;
+				}
+			}
+			arrayAppend(parts, '"' & prop.name & '": ' & literal);
 		}
 		return "{" & arrayToList(parts, ", ") & "}";
+	}
+
+	/**
+	 * Map each belongsTo parent to its parent model, variable name, and the
+	 * foreign-key column in the child's properties (matching either `_id` or
+	 * `Id` convention). Empty when there are no belongsTo associations.
+	 */
+	private array function $belongsToInfo(required string belongsTo, required array properties) {
+		var result = [];
+		if (!len(arguments.belongsTo)) {
+			return result;
+		}
+		for (var parent in listToArray(arguments.belongsTo)) {
+			var parentVar = lCase(trim(parent));
+			var parentModel = variables.helpers.capitalize(parentVar);
+			var fkColumn = "";
+			for (var prop in arguments.properties) {
+				var propName = lCase(prop.name);
+				if (propName == parentVar & "_id" || propName == parentVar & "id") {
+					fkColumn = prop.name;
+					break;
+				}
+			}
+			if (len(fkColumn)) {
+				arrayAppend(result, {parentVar = parentVar, parentModel = parentModel, fkColumn = fkColumn});
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * beforeEach lines that persist each belongsTo parent with validation
+	 * skipped (the generator can't know the parent's required fields). Joined
+	 * with a newline + 4 tabs so the template's `{{belongsToSetup}}` placeholder
+	 * (already indented under beforeEach) lines up with the sibling statements.
+	 */
+	private string function $belongsToSetupLines(required array belongsToInfo) {
+		if (!arrayLen(arguments.belongsToInfo)) {
+			return "";
+		}
+		var lines = [];
+		for (var info in arguments.belongsToInfo) {
+			arrayAppend(lines, 'variables.' & info.parentVar & ' = model("' & info.parentModel & '").new();');
+			arrayAppend(lines, 'variables.' & info.parentVar & '.save(validate = false);');
+		}
+		return arrayToList(lines, chr(10) & chr(9) & chr(9) & chr(9) & chr(9));
 	}
 
 	/**

@@ -618,6 +618,25 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(content).notToInclude('findByKey(params.key, include=');
 				});
 
+				it("creates the belongsTo parent in the controller spec beforeEach so the FK is valid", () => {
+					// The controller eager-loads the parent via include= (an inner
+					// join); the generated spec used to hard-code <name>_id: 1, so on
+					// a fresh test DB (child specs run before the parent specs) the
+					// first `wheels test` returned false from findByKey(include=...) and
+					// broke show/edit/update/delete. The spec now persists the parent
+					// (validation skipped) and references its id for the FK.
+					scaffold.generateScaffold(
+						name = "Review",
+						properties = [{name: "body", type: "text"}],
+						belongsTo = "Author",
+						force = true
+					);
+					var spec = fileRead(tempRoot & "/tests/specs/controllers/ReviewsControllerSpec.cfc");
+					expect(spec).toInclude('variables.author = model("Author").new();');
+					expect(spec).toInclude('variables.author.save(validate = false);');
+					expect(spec).toInclude('variables.author.id');
+				});
+
 				it("emits <name>_id FK column when useUnderscoreReferenceColumns=true", () => {
 					// `wheels new` apps opt into underscore reference columns; the
 					// scaffold's belongsTo FK column must match what t.references()
