@@ -445,9 +445,15 @@
 			local.settingName = "timeStampOnUpdateProperty";
 		}
 		// Allow explicit assignment of the timestamp property if allowExplicitTimestamps is true.
+		// The flag is stored in the private `variables` scope (set by
+		// new()/create()/update() via $setAllowExplicitTimestamps) so it is NOT
+		// serialized into JSON; the `this` check remains for direct
+		// setProperties(allowExplicitTimestamps=...) calls.
 		if (
-			StructKeyExists(this, "allowExplicitTimestamps")
-			&& this.allowExplicitTimestamps
+			(
+				(StructKeyExists(variables, "$allowExplicitTimestamps") && variables.$allowExplicitTimestamps)
+				|| (StructKeyExists(this, "allowExplicitTimestamps") && this.allowExplicitTimestamps)
+			)
 			&& StructKeyExists(this, $get(local.settingName))
 			&& Len(this[$get(local.settingName)])
 		) {
@@ -455,5 +461,16 @@
 			return;
 		}
 		$timestampProperty(property = variables.wheels.class[local.settingName]);
+	}
+
+	/**
+	 * Internal function. Record the `allowExplicitTimestamps` control flag in
+	 * the private `variables` scope instead of `this`, so the flag is honored by
+	 * `$stampTimestampProperty` but never leaks into `properties()` /
+	 * SerializeJSON output (it is a write-path control flag, not a model
+	 * attribute).
+	 */
+	public void function $setAllowExplicitTimestamps(required boolean value) {
+		variables.$allowExplicitTimestamps = arguments.value;
 	}
 </cfscript>

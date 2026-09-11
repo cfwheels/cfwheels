@@ -27,7 +27,7 @@
 		$args(name = "create", args = arguments);
 		$setProperties(
 			argumentCollection = arguments,
-			filterList = "properties,parameterize,reload,validate,transaction,callbacks",
+			filterList = "properties,parameterize,reload,validate,transaction,callbacks,allowExplicitTimestamps",
 			setOnModel = false
 		);
 		local.rv = new (argumentCollection = arguments);
@@ -60,10 +60,11 @@
 	) {
 		arguments.properties = $setProperties(
 			argumentCollection = arguments,
-			filterList = "properties,reload,transaction,callbacks",
+			filterList = "properties,reload,transaction,callbacks,allowExplicitTimestamps",
 			setOnModel = false
 		);
 		local.rv = $createInstance(callbacks = arguments.callbacks, persisted = false, properties = arguments.properties);
+		local.rv.$setAllowExplicitTimestamps(arguments.allowExplicitTimestamps);
 		local.rv.$setDefaultValues();
 		return local.rv;
 	}

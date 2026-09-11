@@ -244,8 +244,9 @@
 		$args(name = "update", args = arguments);
 		$setProperties(
 			argumentCollection = arguments,
-			filterList = "properties,parameterize,reload,validate,transaction,callbacks"
+			filterList = "properties,parameterize,reload,validate,transaction,callbacks,allowExplicitTimestamps"
 		);
+		$setAllowExplicitTimestamps(arguments.allowExplicitTimestamps);
 		return save(
 			callbacks = arguments.callbacks,
 			parameterize = arguments.parameterize,
