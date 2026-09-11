@@ -1,5 +1,6 @@
 /*
- * Wheels form defaults — stacked labels, full-width inputs, red errors.
+ * Wheels form defaults — stacked labels, full-width inputs, red errors,
+ * and boxed flash messages (green success, blue notice, amber warning).
  * Loaded after simple.css. Safe to delete if you bring your own stylesheet.
  * #3549 #3550
  */
@@ -7,6 +8,15 @@
 	--wheels-error: #9f1239;
 	--wheels-error-bg: #fff1f2;
 	--wheels-error-border: #be123c;
+	--wheels-success: #166534;
+	--wheels-success-bg: #f0fdf4;
+	--wheels-success-border: #16a34a;
+	--wheels-notice: #1e40af;
+	--wheels-notice-bg: #eff6ff;
+	--wheels-notice-border: #2563eb;
+	--wheels-warning: #92400e;
+	--wheels-warning-bg: #fffbeb;
+	--wheels-warning-border: #d97706;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -14,6 +24,15 @@
 		--wheels-error: #fda4af;
 		--wheels-error-bg: #4c0519;
 		--wheels-error-border: #fb7185;
+		--wheels-success: #86efac;
+		--wheels-success-bg: #14532d;
+		--wheels-success-border: #4ade80;
+		--wheels-notice: #93c5fd;
+		--wheels-notice-bg: #1e3a8a;
+		--wheels-notice-border: #60a5fa;
+		--wheels-warning: #fcd34d;
+		--wheels-warning-bg: #78350f;
+		--wheels-warning-border: #fbbf24;
 	}
 }
 
@@ -101,6 +120,53 @@ form label > select {
 
 .error-messages li {
 	margin: 0.25rem 0;
+}
+
+/* Boxed flash messages. flashMessages() emits a <p class="<key>-message"> for
+   each flash entry; the scaffold flashes `success` (created/updated/deleted)
+   and `notice`, and `warning` rounds out the palette. Field-level errors keep
+   using .error-message above, which stays inline rather than a box. */
+.success-message,
+.notice-message,
+.warning-message {
+	display: block;
+	border: 1px solid;
+	border-radius: 5px;
+	padding: 0.75rem 1rem 0.75rem 1.5rem;
+	margin: 0 0 1.25rem;
+	font-weight: 600;
+}
+
+.success-message {
+	color: var(--wheels-success);
+	background-color: var(--wheels-success-bg);
+	border-color: var(--wheels-success-border);
+}
+
+.notice-message {
+	color: var(--wheels-notice);
+	background-color: var(--wheels-notice-bg);
+	border-color: var(--wheels-notice-border);
+}
+
+.warning-message {
+	color: var(--wheels-warning);
+	background-color: var(--wheels-warning-bg);
+	border-color: var(--wheels-warning-border);
+}
+
+/* Icon prefixes so each tone is not color-only (paired with the box, role,
+   and the stronger type weight). */
+.success-message::before {
+	content: "✓ ";
+}
+
+.notice-message::before {
+	content: "ℹ ";
+}
+
+.warning-message::before {
+	content: "⚠ ";
 }
 
 form input[type="checkbox"] + label,
