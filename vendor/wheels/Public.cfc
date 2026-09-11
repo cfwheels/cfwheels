@@ -428,9 +428,21 @@ component output="false" displayName="Internal GUI" extends="wheels.Global" {
 		include "views/routetesterprocess.cfm";
 		return "";
 	}
+	/**
+	 * API reference. Served from the local docs bundle so it works offline.
+	 *
+	 * This replaces the CFML renderer that walked the installed framework's
+	 * source comments (public/docs/core.cfm + reference/) — the prebuilt
+	 * Starlight site is now the single source, so what you read locally is
+	 * identical to api.wheels.dev rather than a second rendering of it.
+	 */
 	function api() {
 		$blockInProduction();
-		include "/wheels/public/views/api.cfm";
+		var path = StructKeyExists(request.wheels.params, "path") ? request.wheels.params.path : "";
+		if ($serveDocsFile("api", path)) {
+			return "";
+		}
+		$docsUnavailable("api");
 		return "";
 	}
 	function runner() {
@@ -626,8 +638,50 @@ component output="false" displayName="Internal GUI" extends="wheels.Global" {
 		return wheels();
 	}
 
+	/**
+	 * Serves the prebuilt docs bundle mounted under the app webroot.
+	 *
+	 * The bundle is served as /wheels-docs/guides/... and /wheels-docs/api/....
+	 * Assets under those prefixes are served by the container straight off
+	 * disk; only the extension-less page paths reach this handler, which maps
+	 * them onto the matching index.html.
+	 */
+	function docsBundle() {
+		$blockInProduction();
+		var path = StructKeyExists(request.wheels.params, "path") ? request.wheels.params.path : "";
+		var site = "guides";
+		if (Find("/", path)) {
+			site = LCase(ListFirst(path, "/"));
+			path = ListRest(path, "/");
+		} elseif (Len(path)) {
+			site = LCase(path);
+			path = "";
+		}
+		if (site != "guides" && site != "api") {
+			$docsUnavailable("guides");
+			return "";
+		}
+		if ($serveDocsFile(site, path)) {
+			return "";
+		}
+		$docsUnavailable(site);
+		return "";
+	}
+
+	/**
+	 * Guides. Served from the local docs bundle so they work offline.
+	 *
+	 * When no bundle is installed this falls back to views/guides.cfm, which
+	 * redirects HTML callers to guides.wheels.dev and returns a sidebar-derived
+	 * summary for AI/MCP callers hitting ?format=json — so an install without
+	 * the bundle keeps working exactly as it did before.
+	 */
 	function guides() {
 		$blockInProduction();
+		var path = StructKeyExists(request.wheels.params, "path") ? request.wheels.params.path : "";
+		if ($serveDocsFile("guides", path)) {
+			return "";
+		}
 		include "/wheels/public/views/guides.cfm";
 		return "";
 	}
@@ -775,7 +829,25 @@ component output="false" displayName="Internal GUI" extends="wheels.Global" {
 			case "js":
 				return "application/javascript";
 			case "map":
+			case "json":
 				return "application/json";
+			// Added for the local docs bundle, which serves whole pages and the
+			// Pagefind search index rather than just dev-UI assets.
+			case "html":
+			case "htm":
+				return "text/html";
+			case "xml":
+				return "application/xml";
+			case "txt":
+				return "text/plain";
+			case "wasm":
+				return "application/wasm";
+			case "webp":
+				return "image/webp";
+			case "avif":
+				return "image/avif";
+			case "ico":
+				return "image/x-icon";
 			case "woff2":
 				return "font/woff2";
 			case "woff":
@@ -797,6 +869,162 @@ component output="false" displayName="Internal GUI" extends="wheels.Global" {
 				return "application/octet-stream";
 		}
 	}
+
+	/**
+	 * Absolute path to the unpacked local docs bundle, or "" when there isn't
+	 * one.
+	 *
+	 * The bundle is built by tools/build/scripts/build-docs.sh and unpacked
+	 * under the CLI home as docs/<frameworkVersion>/. `wheels docs fetch`
+	 * populates it, and the Homebrew formula stages it during install/upgrade.
+	 * `docsBundlePath` overrides the location (used by the spec suite, and by
+	 * anyone serving the bundle from somewhere else).
+	 */
+	public string function $docsBundleRoot() {
+		var override = $get("docsBundlePath");
+		if (IsSimpleValue(override) && Len(Trim(override))) {
+			var trimmed = REReplace(Trim(override), "[/\\]+$", "");
+			return DirectoryExists(trimmed) ? trimmed : "";
+		}
+		// Prefer a bundle mounted under the app's own webroot. It has to live
+		// there for ASSETS to work at all: the dev server's Lucee urlRewrite
+		// only routes extension-less paths to the front controller, so
+		// extension-bearing URLs under /wheels/ never reach Wheels. Files under
+		// the webroot are served by the container directly, and only the
+		// extension-less page paths come through here.
+		var webrootMount = ExpandPath("/wheels-docs");
+		if (DirectoryExists(webrootMount) && FileExists(webrootMount & "/manifest.json")) {
+			return webrootMount;
+		}
+		// Fall back to the shared cache that `wheels docs fetch` populates.
+		// Pages serve from here; assets cannot (see above).
+		var cliHome = env("LUCLI_HOME", "");
+		if (!IsSimpleValue(cliHome) || !Len(Trim(cliHome))) {
+			var userHome = env("HOME", "");
+			if (!IsSimpleValue(userHome) || !Len(Trim(userHome))) {
+				return "";
+			}
+			cliHome = userHome & "/.wheels";
+		}
+		var candidate = REReplace(Trim(cliHome), "[/\\]+$", "") & "/docs/" & application.wheels.version;
+		return DirectoryExists(candidate) ? candidate : "";
+	}
+
+	/**
+	 * Resolves a requested docs path to an absolute file inside the bundle.
+	 *
+	 * Mirrors $resolveDevAssetPath: reject traversal, backslashes, absolute
+	 * paths and anything outside a conservative charset before touching the
+	 * filesystem, then confirm with a canonical-prefix compare. Returns "" for
+	 * anything that escapes the bundle or does not exist.
+	 *
+	 * The extension allowlist is intentionally wider than the dev-asset one
+	 * because the bundle contains whole pages, the search index and fonts. It
+	 * still excludes anything that could be executed — no .cfc, .cfm, .cfml.
+	 */
+	public string function $resolveDocsPath(required string site, required string requested) {
+		if (arguments.site != "guides" && arguments.site != "api") {
+			return "";
+		}
+		if (!Len(Trim(arguments.requested))) {
+			return "";
+		}
+		if (
+			Find("..", arguments.requested)
+			|| Left(arguments.requested, 1) == "/"
+			|| ReFind("[^A-Za-z0-9_\-./]", arguments.requested)
+		) {
+			return "";
+		}
+		if (
+			!ListFindNoCase(
+				"html,htm,css,js,json,map,xml,txt,wasm,woff,woff2,ttf,eot,svg,png,jpg,jpeg,gif,webp,avif,ico",
+				ListLast(arguments.requested, ".")
+			)
+		) {
+			return "";
+		}
+		var root = $docsBundleRoot();
+		if (!Len(root)) {
+			return "";
+		}
+		var siteDir = root & "/" & arguments.site;
+		var target = siteDir & "/" & arguments.requested;
+		try {
+			var canonicalSite = CreateObject("java", "java.io.File").init(siteDir).getCanonicalPath();
+			var canonicalTarget = CreateObject("java", "java.io.File").init(target).getCanonicalPath();
+		} catch (any e) {
+			return "";
+		}
+		var separator = CreateObject("java", "java.io.File").separator;
+		if (Right(canonicalSite, 1) != separator) {
+			canonicalSite &= separator;
+		}
+		if (CompareNoCase(Left(canonicalTarget, Len(canonicalSite)), canonicalSite) != 0) {
+			return "";
+		}
+		return FileExists(canonicalTarget) ? canonicalTarget : "";
+	}
+
+	/**
+	 * Serves a file from the local docs bundle, or returns false when there is
+	 * no bundle / the path is not in it so the caller can fall back.
+	 *
+	 * Directory-style requests resolve to index.html, matching the static site
+	 * Astro builds.
+	 */
+	private boolean function $serveDocsFile(required string site, string path = "") {
+		var requested = Len(Trim(arguments.path)) ? Trim(arguments.path) : "index.html";
+		if (Right(requested, 1) == "/") {
+			requested &= "index.html";
+		}
+		// The app's urlrewrite.xml has a "Convert dot to format parameter" rule
+		// that maps /foo/bar.css to /foo/bar?format=css, so for any asset with an
+		// extension the filename arrives WITHOUT it and the extension shows up as
+		// the format param. Re-attach it, but only for extensions we serve — a
+		// genuine `?format=json` API call must not become a bogus filename.
+		if (!Find(".", ListLast(requested, "/"))) {
+			var fmt = StructKeyExists(request.wheels.params, "format") ? request.wheels.params.format : "";
+			if (
+				Len(fmt)
+				&& ListFindNoCase("css,js,json,map,xml,txt,wasm,woff,woff2,ttf,eot,svg,png,jpg,jpeg,gif,webp,avif,ico", fmt)
+			) {
+				requested &= "." & fmt;
+			}
+		}
+		var resolved = $resolveDocsPath(arguments.site, requested);
+		if (!Len(resolved)) {
+			return false;
+		}
+		var mime = $devAssetMimeType(resolved);
+		// The bundle is content-addressed by framework version, so a file only
+		// changes on upgrade — safe to cache hard, but not immutably, since the
+		// directory is replaced in place rather than renamed.
+		cfheader(name = "Cache-Control", value = "public, max-age=3600");
+		cfheader(name = "Content-Type", value = mime);
+		cffile(action = "readBinary", file = resolved, variable = "docsData");
+		cfcontent(type = mime, variable = docsData);
+		return true;
+	}
+
+	/**
+	 * Rendered when a docs route is hit but no local bundle is installed, so
+	 * the reader gets an actionable message instead of a bare 404. The bundle
+	 * arrives with the CLI (Homebrew stages it on install/upgrade); a source
+	 * checkout or a non-brew install needs `wheels docs fetch` once.
+	 */
+	private void function $docsUnavailable(required string site) {
+		cfheader(statusCode = 404);
+		var label = arguments.site == "api" ? "API reference" : "guides";
+		WriteOutput(
+			"<h1>Wheels " & label & " are not available offline yet</h1>"
+			& "<p>These pages are served from a local copy of the documentation so they work "
+			& "with no internet connection, and that copy is not installed.</p>"
+			& "<p>Run <code>wheels docs fetch</code> once to download it. Homebrew installs "
+			& "stage it automatically on <code>brew install</code> / <code>brew upgrade</code>.</p>"
+		);
+	}
+
 
 	/**
 	 * Builds a versioned URL for a bundled dev-UI asset, served by the

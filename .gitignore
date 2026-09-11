@@ -99,3 +99,6 @@ public/testbox/system/stubs/
 ~\$*.pptx
 ~\$*.docx
 ~\$*.xlsx
+
+# Build outputs (docs bundle etc.)
+artifacts/
