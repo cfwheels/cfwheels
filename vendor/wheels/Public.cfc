@@ -429,15 +429,27 @@ component output="false" displayName="Internal GUI" extends="wheels.Global" {
 		return "";
 	}
 	/**
-	 * API reference. Served from the local docs bundle so it works offline.
+	 * API reference.
 	 *
-	 * This replaces the CFML renderer that walked the installed framework's
-	 * source comments (public/docs/core.cfm + reference/) — the prebuilt
-	 * Starlight site is now the single source, so what you read locally is
-	 * identical to api.wheels.dev rather than a second rendering of it.
+	 * The BROWSABLE page is served from the local docs bundle so it works
+	 * offline, replacing the CFML renderer that walked the installed framework's
+	 * source comments. The prebuilt Starlight site is the single source, so what
+	 * you read locally is identical to api.wheels.dev rather than a second
+	 * rendering of it.
+	 *
+	 * The non-HTML formats are NOT retired. `?format=json` is a published
+	 * interface, not a page: the Wheels Snapshots workflow fetches
+	 * /wheels/api?format=json&type=core to build the API snapshot the docs site
+	 * consumes, and /wheels/ai derives its condensed summary from the same data.
+	 * Those keep the CFML renderer.
 	 */
 	function api() {
 		$blockInProduction();
+		var format = StructKeyExists(request.wheels.params, "format") ? request.wheels.params.format : "html";
+		if (LCase(format) != "html") {
+			include "/wheels/public/views/api.cfm";
+			return "";
+		}
 		var path = StructKeyExists(request.wheels.params, "path") ? request.wheels.params.path : "";
 		if ($serveDocsFile("api", path)) {
 			return "";
