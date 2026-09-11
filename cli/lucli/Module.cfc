@@ -7009,6 +7009,19 @@ component extends="modules.BaseModule" {
 			out("Scope: #filter#", "cyan");
 		}
 
+		// Reload the isolated `_wheelsTest` application scope before an app
+		// test run (RETEST-2461 B): specs execute in a separate CFML
+		// application scope (suffix `_wheelsTest`, #3374) whose routes and
+		// model config are cached from its first boot. Anything scaffolded
+		// after that first run — e.g. `api-resource`'s `/api` routes and
+		// model config — stays invisible to the runner because `wheels reload`
+		// only restarts the live scope. Restart the test scope here so the
+		// suite reflects the code on disk. Core tests keep their own runner
+		// and reload semantics, so this is app-mode only.
+		if (!coreTests) {
+			$reloadTestApplication(serverPort, testPath);
+		}
+
 		// Struct (not a bare local) so the catch-block write persists on
 		// BoxLang — local assignments inside catch are discarded there
 		// (CLAUDE.md cross-engine invariant 11). result/specsFailedToLoad
@@ -9011,6 +9024,43 @@ component extends="modules.BaseModule" {
 	public string function $buildTestRunnerPath(boolean coreTests = false, string basePath = "") {
 		var prefix = $normalizeBasePath(arguments.basePath);
 		return prefix & (arguments.coreTests ? "/wheels/core/tests" : "/wheels/app/tests");
+	}
+
+	/**
+	 * Restart the isolated `_wheelsTest` application scope before an app test
+	 * run. See runTests() for the why (RETEST-2461 B).
+	 *
+	 * Hitting the test-runner path with `?reload=true&password=...` routes the
+	 * request to the `_wheelsTest` scope (the path matches testcontext.cfm's
+	 * `/wheels/app/tests` haystack) and the framework's reload gate calls
+	 * applicationStop() there, then `location()`-redirects — so a successful
+	 * restart answers HTTP 302 and the next suite request boots the scope fresh.
+	 *
+	 * Best-effort: when no reload password is configured the gate fails closed
+	 * and the warm (possibly stale) scope is reused. We surface a note but never
+	 * block the run on a reload.
+	 *
+	 * Public ONLY so TestCommandSpec can unit-test the 302-vs-fallthrough
+	 * contract against a stub server (same carve-out as $evaluateReloadResponse).
+	 */
+	public boolean function $reloadTestApplication(required numeric serverPort, required string testPath) {
+		var password = detectReloadPassword();
+		if (!len(password)) {
+			return false;
+		}
+		var reloadUrl = "#$serverUrlBase(serverPort)##testPath#?reload=true&password=#urlEncodedFormat(password)#";
+		var reloadState = { statusCode = 0 };
+		try {
+			reloadState = makeHttpRequestWithStatus(reloadUrl, false);
+		} catch (any e) {
+			out("Note: could not reload the isolated test application (#e.message#).", "yellow");
+			return false;
+		}
+		if (reloadState.statusCode == 302) {
+			return true;
+		}
+		out("Note: the isolated test application was not reloaded (HTTP #reloadState.statusCode#); the run may use cached routes.", "yellow");
+		return false;
 	}
 
 	/**
