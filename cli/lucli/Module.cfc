@@ -1105,9 +1105,19 @@ component extends="modules.BaseModule" {
 	public string function docs() {
 		var args = new services.ArgSpec().toArgv(structuredArgs(arguments));
 		var action = arrayLen(args) ? lCase(args[1]) : "fetch";
+		// Resolve --force HERE, in the command that actually receives the parsed
+		// argv. docsFetch() takes no arguments, so a helper reading its
+		// `arguments` scope always saw an empty struct and the flag was
+		// silently ignored.
+		var force = false;
+		for (var a in args) {
+			if (lCase(a) == "--force") {
+				force = true;
+			}
+		}
 		switch (action) {
 			case "fetch":
-				return docsFetch();
+				return docsFetch(force = force);
 			case "status":
 				return docsStatus();
 			default:
@@ -1123,7 +1133,7 @@ component extends="modules.BaseModule" {
 	 * (the Homebrew formula's wrapper does essentially the same thing on
 	 * install/upgrade).
 	 */
-	private string function docsFetch() {
+	private string function docsFetch(boolean force = false) {
 		var version = $docsFrameworkVersion();
 		if (!len(version)) {
 			out("Could not determine the framework version — is this a Wheels project?", "red");
@@ -1135,22 +1145,24 @@ component extends="modules.BaseModule" {
 			return "";
 		}
 		var target = home & "/docs/" & version;
-		var force = $docsHasForceFlag();
 
-		if (directoryExists(target) && !force) {
+		if (directoryExists(target) && !arguments.force) {
 			out("Documentation for #version# is already installed.", "green");
 			out("  #target#");
 			out("  Re-run with --force to replace it.");
 			return "";
 		}
 
-		var url = $docsBundleUrl(version);
+		// Not `url` — a variable named after a reserved CFML scope shadows it,
+		// and the download then receives the URL scope struct instead of the
+		// string ("Can't cast Complex Object Type [URL scope] to String").
+		var bundleUrl = $docsBundleUrl(version);
 		var tmp = getTempDirectory() & "wheels-docs-#version#.zip";
 		out("Fetching docs for #version#...");
-		out("  #url#");
+		out("  #bundleUrl#");
 
 		try {
-			new services.packages.HttpClient(timeoutSeconds = 300).download(url, tmp);
+			new services.packages.HttpClient(timeoutSeconds = 300).download(bundleUrl, tmp);
 		} catch (any e) {
 			out("Download failed: #e.message#", "red");
 			out("  A release without a docs asset will 404 here — the bundle is built by");
@@ -1323,15 +1335,6 @@ component extends="modules.BaseModule" {
 		return "https://github.com/wheels-dev/#repo#/releases/download/v#arguments.version#/wheels-docs-#arguments.version#.zip";
 	}
 
-	private boolean function $docsHasForceFlag() {
-		var args = new services.ArgSpec().toArgv(structuredArgs(arguments));
-		for (var a in args) {
-			if (lCase(a) == "--force") {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	// ─────────────────────────────────────────────────
 	//  reload — Reload application
