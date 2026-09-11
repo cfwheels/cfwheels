@@ -28,12 +28,12 @@
 		<div class="wdb-section">
 			<div class="wdb-section-title">Most Complex Files</div>
 			<div style="font-size:11px;color:##a6adc8;margin-bottom:6px;">Cyclomatic complexity = 1 + decision points (if / for / case / catch / &amp;&amp; / || / ternary). Static only &mdash; test coverage is a separate <code>wheels coverage</code> run.</div>
-			<table style="width:100%;border-collapse:collapse;font-size:12px;">
-				<tr style="text-align:left;color:##a6adc8;border-bottom:1px solid ##45475a;">
-					<th style="padding:4px 8px;">File</th>
-					<th style="padding:4px 8px;text-align:right;">Funcs</th>
-					<th style="padding:4px 8px;text-align:right;">Complexity</th>
-					<th style="padding:4px 8px;text-align:right;">Avg/Fn</th>
+			<table class="wdb-table">
+				<tr>
+					<th>File</th>
+					<th style="text-align:right;">Funcs</th>
+					<th style="text-align:right;">Complexity</th>
+					<th style="text-align:right;">Avg/Fn</th>
 				</tr>
 				<cfloop from="1" to="#Min(15, ArrayLen(local.codeComplexity.files))#" index="local.ci">
 					<cfset local.cf = local.codeComplexity.files[local.ci]>
