@@ -102,3 +102,6 @@ public/testbox/system/stubs/
 
 # Build outputs (docs bundle etc.)
 artifacts/
+
+# Linux package build staging (tools/distribution-drafts/linux-packages)
+.linux-pkg-build/
