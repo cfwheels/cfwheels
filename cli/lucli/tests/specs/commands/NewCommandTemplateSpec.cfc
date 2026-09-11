@@ -90,12 +90,19 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 				expect(content).toInclude("PopulateCfm.MigrationFailed");
 			});
 
-			it("ships stacked form defaults and red validation error styles", () => {
+			it("ships stacked form defaults, red validation errors, and boxed flash styles", () => {
 				expect(fileExists(templateRoot & "public/stylesheets/wheels.css")).toBeTrue();
 				var css = fileRead(templateRoot & "public/stylesheets/wheels.css");
 				expect(css).toInclude(".error-message");
 				expect(css).toInclude("width: 100%");
 				expect(css).toInclude("⚠");
+				// Boxed flash messages: success (green) and notice (blue) are
+				// styled like the error box so created/updated/deleted confirmations
+				// aren't bare text.
+				expect(css).toInclude(".success-message");
+				expect(css).toInclude(".notice-message");
+				expect(css).toInclude("--wheels-success");
+				expect(css).toInclude("--wheels-notice");
 
 				var layout = fileRead(templateRoot & "app/views/layout.cfm");
 				expect(layout).toInclude('styleSheetLinkTag(sources="simple,wheels")');
