@@ -1165,8 +1165,24 @@ component extends="modules.BaseModule" {
 			directoryCreate(target, true);
 			// The bundle is zipped with its contents at the root (manifest.json,
 			// guides/, api/), so unpack straight into the version directory.
-			// Lucee's extract() requires an explicit format.
-			extract(format = "zip", source = tmp, destination = target, overwrite = true);
+			// Shell out to `unzip` rather than Lucee's extract(): `extract` is
+			// shadowed in this module's scope and resolves to a helper with a
+			// different arity. Same approach Installer::$extract() takes with
+			// `tar`, for the same reason.
+			var unzipResult = {};
+			cfexecute(
+				name = "unzip",
+				arguments = "-o -q #tmp# -d #target#",
+				timeout = 300,
+				variable = "local.unzipOut",
+				errorVariable = "local.unzipErr",
+				result = "unzipResult"
+			);
+			if (unzipResult.exitCode != 0) {
+				out("Could not unpack the bundle (unzip exit #unzipResult.exitCode#).", "red");
+				out("  #local.unzipErr#");
+				return "";
+			}
 		} catch (any e) {
 			out("Could not unpack the bundle: #e.message#", "red");
 			return "";
