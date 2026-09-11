@@ -197,6 +197,9 @@ component extends="modules.BaseModule" {
 			"browser",  // multi-step browser testing flow
 			"jobs",     // `jobs work` is a long-lived poll loop — no single-call MCP semantics (like start/stop)
 			"coverage", // instruments app/ on disk then runs the suite — stateful, not single-call MCP semantics
+			// downloads a ~30 MB bundle from GitHub and unpacks it into the CLI
+			// home — a side-effecting install step, not a query
+			"docs",
 			"mcpToolSpecs", // per-tool inputSchema registry read by LuCLI — not itself a tool
 			// $-prefixed internal helpers. Public ONLY so TestCommandSpec can
 			// unit-test them directly (the cli/CLAUDE.md "public for specs"
@@ -1088,6 +1091,173 @@ component extends="modules.BaseModule" {
 			return f;
 		}
 		return "tests.specs." & f;
+	}
+
+
+	// ─────────────────────────────────────────────────
+	//  docs — Local offline documentation bundle
+	// ─────────────────────────────────────────────────
+
+	/**
+	 * hint: Fetch the local offline documentation bundle (so the guides and
+	 * API reference work with no internet connection)
+	 */
+	public string function docs() {
+		var args = new services.ArgSpec().toArgv(structuredArgs(arguments));
+		var action = arrayLen(args) ? lCase(args[1]) : "fetch";
+		switch (action) {
+			case "fetch":
+				return docsFetch();
+			case "status":
+				return docsStatus();
+			default:
+				out("Unknown docs action: #action#. Try: fetch, status", "red");
+				return "";
+		}
+	}
+
+	/**
+	 * Downloads wheels-docs-<version>.zip into <CLI home>/docs/<version>/,
+	 * which is where Public::$docsBundleRoot() looks for it. Skips the download
+	 * when that version is already unpacked, so this is safe to run repeatedly
+	 * (the Homebrew formula's wrapper does essentially the same thing on
+	 * install/upgrade).
+	 */
+	private string function docsFetch() {
+		var version = $docsFrameworkVersion();
+		if (!len(version)) {
+			out("Could not determine the framework version — is this a Wheels project?", "red");
+			return "";
+		}
+		var home = $resolveLucliHome();
+		if (!len(home)) {
+			out("Could not resolve the Wheels CLI home directory.", "red");
+			return "";
+		}
+		var target = home & "/docs/" & version;
+		var force = $docsHasForceFlag();
+
+		if (directoryExists(target) && !force) {
+			out("Documentation for #version# is already installed.", "green");
+			out("  #target#");
+			out("  Re-run with --force to replace it.");
+			return "";
+		}
+
+		var url = $docsBundleUrl(version);
+		var tmp = getTempDirectory() & "wheels-docs-#version#.zip";
+		out("Fetching docs for #version#...");
+		out("  #url#");
+
+		try {
+			new services.packages.HttpClient(timeoutSeconds = 300).download(url, tmp);
+		} catch (any e) {
+			out("Download failed: #e.message#", "red");
+			out("  A release without a docs asset will 404 here — the bundle is built by");
+			out("  tools/build/scripts/build-docs.sh and attached to the release.");
+			return "";
+		}
+
+		try {
+			if (directoryExists(target)) {
+				directoryDelete(target, true);
+			}
+			directoryCreate(target, true);
+			// The bundle is zipped with its contents at the root (manifest.json,
+			// guides/, api/), so unpack straight into the version directory.
+			// Lucee's extract() requires an explicit format.
+			extract(format = "zip", source = tmp, destination = target, overwrite = true);
+		} catch (any e) {
+			out("Could not unpack the bundle: #e.message#", "red");
+			return "";
+		} finally {
+			if (fileExists(tmp)) {
+				fileDelete(tmp);
+			}
+		}
+
+		out("Installed documentation for #version#.", "green");
+		out("  #target#");
+		out("  Read it at /wheels/guides/ and /wheels/api/ while the dev server runs.");
+		return "";
+	}
+
+	/**
+	 * Reports whether a docs bundle is installed for the current project.
+	 */
+	private string function docsStatus() {
+		var version = $docsFrameworkVersion();
+		var home = $resolveLucliHome();
+		if (!len(version) || !len(home)) {
+			out("Could not determine the framework version or the CLI home.", "red");
+			return "";
+		}
+		var target = home & "/docs/" & version;
+		if (!directoryExists(target)) {
+			out("No documentation installed for #version#.", "yellow");
+			out("  Run `wheels docs fetch` to download it.");
+			return "";
+		}
+		var manifestPath = target & "/manifest.json";
+		out("Documentation for #version# is installed.", "green");
+		out("  #target#");
+		if (fileExists(manifestPath)) {
+			try {
+				var manifest = deserializeJSON(fileRead(manifestPath));
+				if (structKeyExists(manifest, "docsVersion")) {
+					out("  docs version:  #manifest.docsVersion#");
+				}
+				if (structKeyExists(manifest, "builtAt")) {
+					out("  built:         #manifest.builtAt#");
+				}
+			} catch (any e) {
+				// A malformed manifest is not worth failing status over.
+			}
+		}
+		return "";
+	}
+
+	/**
+	 * The framework version the docs cache is keyed by — the same value
+	 * Public::$docsBundleRoot() appends to the docs path, read from the
+	 * project's vendor/wheels/wheels.json.
+	 */
+	private string function $docsFrameworkVersion() {
+		var manifestPath = variables.projectRoot & "/vendor/wheels/wheels.json";
+		if (!fileExists(manifestPath)) {
+			return "";
+		}
+		try {
+			var manifest = deserializeJSON(fileRead(manifestPath));
+			var version = manifest.version ?: "";
+			// An unstamped dev checkout reports a build token rather than a
+			// version; treat that as unknown rather than creating a bogus cache.
+			if (!len(version) || find("@", version)) {
+				return "";
+			}
+			return version;
+		} catch (any e) {
+			return "";
+		}
+	}
+
+	/**
+	 * Snapshots publish to the snapshots repo and releases to the main repo,
+	 * mirroring how the Homebrew formulae resolve their artifacts.
+	 */
+	private string function $docsBundleUrl(required string version) {
+		var repo = find("-snapshot", arguments.version) ? "wheels-snapshots" : "wheels";
+		return "https://github.com/wheels-dev/#repo#/releases/download/v#arguments.version#/wheels-docs-#arguments.version#.zip";
+	}
+
+	private boolean function $docsHasForceFlag() {
+		var args = new services.ArgSpec().toArgv(structuredArgs(arguments));
+		for (var a in args) {
+			if (lCase(a) == "--force") {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	// ─────────────────────────────────────────────────

@@ -38,6 +38,17 @@ class WheelsBe < Formula
     sha256 "0000000000000000000000000000000000000000000000000000000000000000"
   end
 
+  # Local documentation bundle — the prebuilt Astro/Starlight guides and API
+  # reference, built to be served from /wheels/guides/ and /wheels/api/. Staged
+  # alongside the framework and unpacked by the wrapper under
+  # ~/.wheels/docs/<version>/, which is where the framework looks for it, so a
+  # developer can read the docs with no internet connection. Deliberately
+  # carries ONE docs version (~30 MB); the full multi-version site is ~1.3 GB.
+  resource "wheels-docs" do
+    url "https://github.com/wheels-dev/wheels-snapshots/releases/download/v4.0.1-snapshot.1700/wheels-docs-4.0.1-snapshot.1700.zip"
+    sha256 "0000000000000000000000000000000000000000000000000000000000000000"
+  end
+
   # LuCLI binary — pinned independently because it's an upstream artifact
   # (cybersonic/LuCLI). The brew formula stages it as libexec/wheels.
   # LuCLI ships single binaries per OS (no arch split) — the macOS asset is a
@@ -78,6 +89,9 @@ class WheelsBe < Formula
     libexec.install Dir["#{buildpath}/wheels-cli-*.zip"].first => "wheels-module.zip"
     resource("wheels-core").stage do
       cp Dir["wheels-core-*.zip"].first, libexec/"wheels-core.zip"
+    end
+    resource("wheels-docs").stage do
+      cp Dir["wheels-docs-*.zip"].first, libexec/"wheels-docs.zip"
     end
     resource("sqlite-jdbc").stage do
       libexec.install "sqlite-jdbc-3.49.1.0.jar" => "sqlite-jdbc.jar"
@@ -137,6 +151,18 @@ class WheelsBe < Formula
         unzip -q -o "#{libexec}/wheels-module.zip" -d "${MODULE_DIR}"
         unzip -q -o "#{libexec}/wheels-core.zip" -d "${MODULE_DIR}/vendor/wheels"
         echo "${EXPECTED_VERSION}" > "${MODULE_VERSION_FILE}"
+      fi
+
+      # Local docs bundle — same version gate as the module/framework, so
+      # `brew upgrade` refreshes the offline docs. Shared per machine rather
+      # than per app: ~/.wheels/docs/<version>/ is keyed by framework version,
+      # which is what Public::$docsBundleRoot() resolves.
+      DOCS_DIR="${LUCLI_HOME}/docs/#{version}"
+      if [ ! -f "${DOCS_DIR}/manifest.json" ]; then
+        echo "Installing offline docs for #{version}..." >&2
+        rm -rf "${DOCS_DIR}"
+        mkdir -p "${DOCS_DIR}"
+        unzip -q -o "#{libexec}/wheels-docs.zip" -d "${DOCS_DIR}"
       fi
 
       # Stage SQLite JDBC into Lucee Express on first run. The path varies by
