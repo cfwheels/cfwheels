@@ -74,6 +74,26 @@ echo "  building api -> /wheels-docs/api/"
 rm -rf "${WEB_DIR}/sites/api/dist" "${WEB_DIR}/sites/api/.astro"
 (cd "${WEB_DIR}" && WHEELS_DOCS_BASE=/wheels-docs/api/ pnpm --filter @wheels-dev/site-api build)
 
+# ── Repair absolute URLs in metadata ───────────────────────────────────────
+# Astro builds canonical / og:url / the sitemap from `site`, but the local
+# bundle also sets `base`, so they come out as
+# https://guides.wheels.dev/wheels-docs/guides/v4-0-0/ — a URL that does not
+# exist on the live site. Nothing fetches these, but they should still describe
+# the real page, so strip the local mount prefix back off.
+echo "  repairing canonical/sitemap URLs"
+for pair in "guides:guides.wheels.dev" "api:api.wheels.dev"; do
+	site="${pair%%:*}"
+	domain="${pair##*:}"
+	# HTML: canonical, og:url, and any other absolute link into the mount
+	find "${WEB_DIR}/sites/${site}/dist" -name "*.html" -print0 \
+		| xargs -0 sed -i.bak -e "s|https://${domain}/wheels-docs/${site}/|https://${domain}/|g"
+	# Sitemaps
+	find "${WEB_DIR}/sites/${site}/dist" -name "*.xml" -print0 \
+		| xargs -0 sed -i.bak -e "s|https://${domain}/wheels-docs/${site}/|https://${domain}/|g"
+	# sed -i.bak leaves backups behind; drop them
+	find "${WEB_DIR}/sites/${site}/dist" -name "*.bak" -delete
+done
+
 # ── Stage ──────────────────────────────────────────────────────────────────
 rm -rf "${STAGE_DIR}"
 mkdir -p "${STAGE_DIR}/guides" "${STAGE_DIR}/api"
