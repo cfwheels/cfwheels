@@ -1,0 +1,1 @@
+- The guides and API reference can now be served from a local copy of the documentation instead of guides.wheels.dev / api.wheels.dev, so they are readable with no internet connection. `wheels docs fetch` downloads the bundle into the CLI home and the Homebrew formula stages it on install/upgrade
