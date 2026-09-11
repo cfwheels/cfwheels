@@ -314,6 +314,28 @@ jobs:
           ./tools/build/scripts/build-core.sh "${{ env.WHEELS_VERSION }}" "${{ env.BRANCH }}" "${{ github.run_number }}" "${{ env.WHEELS_PRERELEASE }}"
           ./tools/build/scripts/build-starterApp.sh "${{ env.WHEELS_VERSION }}"
 
+      # The offline docs bundle: the prebuilt Astro/Starlight guides and API
+      # reference that `wheels docs fetch` downloads and the Homebrew formula
+      # stages. Built here so it lands on the SAME release tag as the core and
+      # module zips — that is what both consumers resolve against.
+      - name: Setup Node for Docs Bundle
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Build Docs Bundle
+        run: |
+          cd web && pnpm install --frozen-lockfile && cd ..
+          ./tools/build/scripts/build-docs.sh "${{ env.WHEELS_VERSION }}"
+          cd "artifacts/wheels/${{ env.WHEELS_VERSION }}"
+          md5sum wheels-docs-${{ env.WHEELS_VERSION }}.zip > wheels-docs-${{ env.WHEELS_VERSION }}.zip.md5 || md5 -r wheels-docs-${{ env.WHEELS_VERSION }}.zip > wheels-docs-${{ env.WHEELS_VERSION }}.zip.md5
+          sha512sum wheels-docs-${{ env.WHEELS_VERSION }}.zip > wheels-docs-${{ env.WHEELS_VERSION }}.zip.sha512 || shasum -a 512 wheels-docs-${{ env.WHEELS_VERSION }}.zip > wheels-docs-${{ env.WHEELS_VERSION }}.zip.sha512
+
       - name: Build Wheels Module Tarball
         env:
           MODULE_VERSION: ${{ env.WHEELS_VERSION }}
@@ -498,6 +520,9 @@ jobs:
               artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-core-*.zip
               artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-core-*.zip.md5
               artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-core-*.zip.sha512
+              artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-docs-*.zip
+              artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-docs-*.zip.md5
+              artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-docs-*.zip.sha512
               artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-starter-app-*.zip
               artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-starter-app-*.zip.md5
               artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-starter-app-*.zip.sha512
@@ -554,6 +579,9 @@ jobs:
               artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-core-*.zip
               artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-core-*.zip.md5
               artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-core-*.zip.sha512
+              artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-docs-*.zip
+              artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-docs-*.zip.md5
+              artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-docs-*.zip.sha512
               artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-starter-app-*.zip
               artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-starter-app-*.zip.md5
               artifacts/wheels/${{ env.WHEELS_VERSION }}/wheels-starter-app-*.zip.sha512
