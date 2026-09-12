@@ -1504,17 +1504,19 @@ component extends="modules.BaseModule" {
 			}
 		}
 
-		// `--port` used to be parsed and then dropped for Lucee projects — only
-		// the RustCFML branch below consumed it, so `wheels start --port=8090`
-		// on a Lucee app silently booted on the port from lucee.json. Persist
-		// the requested port, and place the shutdown port next to it rather than
-		// leaving the app's original value: two projects whose defaults collide
-		// then fail with LuCLI's "port conflicts detected:" and an empty list,
-		// because the shutdown port is what actually clashes.
-		if (enginePort > 0 && engine != "rustcfml") {
-			var resolvedShutdownPort = $nextFreePort(enginePort + 1);
-			$writePinnedPorts(variables.projectRoot, enginePort, resolvedShutdownPort);
-			out("Using port " & enginePort & " (shutdown " & resolvedShutdownPort & ").", "cyan");
+		// Port resolution. Two projects whose defaults overlap clash on the
+		// SHUTDOWN port, and LuCLI reports that as "port conflicts detected:"
+		// followed by an empty list — an error that names nothing. So the
+		// shutdown port is always moved to a free one rather than left to
+		// collide, whether it came from --port or from lucee.json.
+		//
+		// The HTTP port is deliberately NOT moved on its own: users expect the
+		// port they configured, and silently relocating it would be worse than
+		// the warning emitted further down. `--port` used to be parsed and then
+		// dropped for Lucee projects — only the RustCFML branch consumed it — so
+		// `wheels start --port=8090` silently booted on the lucee.json port.
+		if (engine != "rustcfml") {
+			$resolveStartPorts(enginePort);
 		}
 
 		// RustCFML backend — separate lifecycle from LuCLI (no JDK/Lucee
@@ -8390,17 +8392,31 @@ component extends="modules.BaseModule" {
 	 * deterministic port to pre-check for a collision before delegating.
 	 */
 	private numeric function $readPinnedPort(required string projectRoot) {
+		return $readPinnedPorts(arguments.projectRoot).port;
+	}
+
+	/**
+	 * Both ports pinned in the project's lucee.json. Each is 0 when absent, so
+	 * callers can tell "not configured" from a real value.
+	 */
+	private struct function $readPinnedPorts(required string projectRoot) {
+		var ports = {port: 0, shutdownPort: 0};
 		var configFile = arguments.projectRoot & "/lucee.json";
-		if (!fileExists(configFile)) return 0;
+		if (!fileExists(configFile)) return ports;
 		try {
 			var config = deserializeJSON(fileRead(configFile));
-			if (isStruct(config) && structKeyExists(config, "port") && isNumeric(config.port)) {
-				return config.port;
+			if (isStruct(config)) {
+				if (structKeyExists(config, "port") && isNumeric(config.port)) {
+					ports.port = config.port;
+				}
+				if (structKeyExists(config, "shutdownPort") && isNumeric(config.shutdownPort)) {
+					ports.shutdownPort = config.shutdownPort;
+				}
 			}
 		} catch (any e) {
 			// Malformed lucee.json — let LuCLI surface its own parse error.
 		}
-		return 0;
+		return ports;
 	}
 
 	/**
@@ -8417,6 +8433,51 @@ component extends="modules.BaseModule" {
 			}
 		}
 		return arguments.from;
+	}
+
+	/**
+	 * Decide the HTTP and shutdown ports for a Lucee start, and persist the
+	 * shutdown port when it has to move.
+	 *
+	 * Two projects whose defaults overlap clash on the SHUTDOWN port, and LuCLI
+	 * reports that as "port conflicts detected:" followed by an empty list — an
+	 * error that names nothing. So the shutdown port is always moved to a free
+	 * one rather than left to collide, whether it came from --port or from
+	 * lucee.json.
+	 *
+	 * The HTTP port is deliberately NOT moved on its own: users expect the port
+	 * they configured, and silently relocating it would be worse than the
+	 * warning `start()` emits when it is taken. `--port` used to be parsed and
+	 * then dropped for Lucee projects — only the RustCFML branch consumed it —
+	 * so `wheels start --port=8090` silently booted on the lucee.json port.
+	 *
+	 * Extracted from start() rather than inlined: the branching here pushed that
+	 * function past the repository's complexity gate of 30.
+	 */
+	private void function $resolveStartPorts(required numeric enginePort) {
+		var pinned = $readPinnedPorts(variables.projectRoot);
+		var startupPort = arguments.enginePort > 0 ? arguments.enginePort : pinned.port;
+		var shutdownPort = 0;
+		var movedShutdown = false;
+
+		if (arguments.enginePort > 0) {
+			shutdownPort = $nextFreePort(arguments.enginePort + 1);
+		} else if (pinned.shutdownPort > 0 && getService("portProbe").portInUse(pinned.shutdownPort)) {
+			// Default path: keep the configured shutdown port only while it is
+			// actually free.
+			shutdownPort = $nextFreePort(pinned.shutdownPort + 1);
+			movedShutdown = true;
+		}
+
+		if (shutdownPort > 0 && (arguments.enginePort > 0 || movedShutdown)) {
+			if (movedShutdown) {
+				out("Shutdown port " & pinned.shutdownPort & " is in use; using " & shutdownPort & ".", "yellow");
+			}
+			$writePinnedPorts(variables.projectRoot, startupPort, shutdownPort);
+		}
+		if (arguments.enginePort > 0) {
+			out("Using port " & arguments.enginePort & " (shutdown " & shutdownPort & ").", "cyan");
+		}
 	}
 
 	/**
