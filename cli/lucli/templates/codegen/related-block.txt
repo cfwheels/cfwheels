@@ -1,0 +1,18 @@
+<!--- CLI: related |Association| (generated) --->
+<h2>|ListCap|</h2>
+<cfif StructKeyExists(|ParentVar|, "|Association|") and ArrayLen(|ParentVar|.|Association|)>
+	<!--- Multiple eager-loaded collections can repeat a child across joined rows. --->
+	<cfset wheelsRelated|ListCap|Seen = {}>
+	<cfloop array="#|ParentVar|.|Association|#" index="|Singular|">
+		<cfif not StructKeyExists(wheelsRelated|ListCap|Seen, |Singular|.id)>
+			<cfset wheelsRelated|ListCap|Seen[|Singular|.id] = true>
+			<article>
+				<p>#linkTo(route="|Singular|", key=|Singular|.id, text=|Singular|.|DisplayProperty|)#</p>
+			</article>
+		</cfif>
+	</cfloop>
+<cfelse>
+	<p>No |Association| yet.</p>
+</cfif>
+<p>#linkTo(route="new|SingularCap|", text="Add a |Singular|")#</p>
+<!--- /CLI: related |Association| --->

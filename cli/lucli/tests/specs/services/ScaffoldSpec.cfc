@@ -18,7 +18,10 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 		variables.scaffold = new cli.lucli.services.Scaffold(
 			codeGenService = variables.codegen,
 			helpers = variables.helpers,
-			projectRoot = variables.tempRoot
+			projectRoot = variables.tempRoot,
+			// Production passes the module root explicitly. The parent-wiring
+			// regressions below also exercise direct callers that omit it.
+			moduleRoot = variables.moduleRoot
 		);
 	}
 
@@ -699,6 +702,671 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					fileWrite(settingsPath, originalSettings);
 				});
 
+				it("wires the parent side of belongsTo: hasMany, include=, and a show block", () => {
+					// Scaffolding the child used to leave the parent unaware of it:
+					// no hasMany, nothing eager-loaded, nothing rendered. The parent
+					// files already exist, so the scaffold edits them in place.
+					scaffold.generateScaffold(
+						name = "Widget",
+						properties = [{name: "title", type: "string"}],
+						force = true
+					);
+					var result = scaffold.generateScaffold(
+						name = "Note",
+						properties = [{name: "body", type: "text"}],
+						belongsTo = "widget",
+						force = true
+					);
+					expect(result.success).toBeTrue();
+
+					// 1. inverse association on the parent model, inside config()
+					var parentModel = fileRead(tempRoot & "/app/models/Widget.cfc");
+					expect(parentModel).toInclude('hasMany(name="notes")');
+					expect(parentModel).toInclude("function config()");
+
+					// 2. the parent controller eager-loads them on show
+					var parentController = fileRead(tempRoot & "/app/controllers/Widgets.cfc");
+					expect(parentController).toInclude('findByKey(key=params.key, include="notes")');
+					// ...and never the mixed positional+named form
+					expect(parentController).notToInclude("findByKey(params.key, include=");
+
+					// 3. the parent show view renders them, inside a marked block
+					var parentShow = fileRead(tempRoot & "/app/views/widgets/show.cfm");
+					expect(parentShow).toInclude("CLI: related notes (generated)");
+					expect(parentShow).toInclude("newNote");
+					expect(parentShow).toInclude("<h2>Notes</h2>");
+
+					// and it is all idempotent — re-running must not stack blocks
+					scaffold.generateScaffold(
+						name = "Note",
+						properties = [{name: "body", type: "text"}],
+						belongsTo = "widget",
+						force = true
+					);
+					var again = fileRead(tempRoot & "/app/views/widgets/show.cfm");
+					var marker = "CLI: related notes (generated)";
+					// exactly one occurrence: strip it once and it is gone
+					var stripped = Replace(again, marker, "", "one");
+					expect(Find(marker, again)).toBeGT(0);
+					expect(Find(marker, stripped)).toBe(0);
+				});
+
+			});
+
+			describe("safe parent-side belongsTo wiring regressions", () => {
+
+				// Each example seeds its own parent files, not a scaffold generated
+				// by an earlier example. Resource names are unique in shared tempRoot.
+				it("reports parent edits as modified, never generated, and inserts a single output-safe child link", () => {
+					var fixture = $seedWiringParent("Wirebasic");
+					var result = scaffold.generateScaffold(
+						name = fixture.childName,
+						properties = [{name: "title", type: "string"}, {name: "body", type: "text"}],
+						belongsTo = fixture.parentName
+					);
+					expect(result.success).toBeTrue();
+					expect(arrayLen(result.modified)).toBe(3);
+					$expectWiringModification(result, fixture.modelPath, "model");
+					$expectWiringModification(result, fixture.controllerPath, "controller");
+					$expectWiringModification(result, fixture.viewPath, "view");
+					$expectNoGeneratedParent(result, fixture);
+					var modelContent = fileRead(fixture.modelPath);
+					expect(modelContent).toInclude('hasMany(name="' & fixture.association & '")');
+					expect(arrayLen(reMatchNoCase('hasMany\s*\(', modelContent))).toBe(1);
+					var expectedController = replace(fixture.controllerContent,
+						fixture.showFinder, replace(fixture.showFinder, "findByKey(params.key)",
+							'findByKey(key=params.key, include="' & fixture.association & '")'), "one");
+					$expectWiringFileBytes(fixture.controllerPath, expectedController);
+					var viewContent = fileRead(fixture.viewPath);
+					expect(viewContent).toInclude("CLI: related " & fixture.association & " (generated)");
+					expect(arrayLen(reMatchNoCase(chr(60) & "cfoutput\b", viewContent))).toBe(1);
+					expect(arrayLen(reMatchNoCase(chr(60) & "/cfoutput\s*>", viewContent))).toBe(1);
+					$expectRelatedChildLink(viewContent, fixture, "title");
+					expect(viewContent).notToInclude(fixture.childVar & ".body");
+				});
+
+				it("renders each child once across multiple eager-loaded collections and still appends later blocks", () => {
+					var fixture = $seedWiringParent("Wirejoined");
+					var first = scaffold.generateScaffold(name=fixture.childName, properties=[{name: "title", type: "string"}], belongsTo=fixture.parentName);
+					expect(first.success).toBeTrue();
+					var firstView = fileRead(fixture.viewPath);
+					var firstSeen = "wheelsRelated" & helpers.capitalize(fixture.association) & "Seen";
+					expect(firstView).toInclude(chr(60) & "cfset " & firstSeen & " = {}>");
+					expect(firstView).toInclude("not StructKeyExists(" & firstSeen & ", " & fixture.childVar & ".id)");
+					expect(firstView).toInclude(chr(60) & "cfset " & firstSeen & "[" & fixture.childVar & ".id] = true>");
+
+					var secondName = "Wirejoinedbookmark";
+					var secondVar = lCase(secondName);
+					var secondAssociation = lCase(helpers.pluralize(secondName));
+					var second = scaffold.generateScaffold(name=secondName, properties=[{name: "label", type: "string"}], belongsTo=fixture.parentName);
+					expect(second.success).toBeTrue();
+					$expectWiringModification(second, fixture.viewPath, "view");
+					var content = fileRead(fixture.viewPath);
+					expect(fileRead(fixture.controllerPath)).toInclude('include="' & fixture.association & ',' & secondAssociation & '"');
+					var closing = chr(60) & "/cfoutput>";
+					var prefix = left(firstView, len(firstView) - len(closing));
+					expect(compare(left(content, len(prefix)), prefix)).toBe(0);
+					expect(content).toInclude("wheelsRelated" & helpers.capitalize(secondAssociation) & "Seen = {}");
+
+					// The SQL join cross-product can materialize the same child ID
+					// more than once. Equal IDs in different associations remain distinct.
+					var parentRecord = {};
+					parentRecord[fixture.association] = [
+						{id: 1, title: "First note"}, {id: 1, title: "Duplicate note"}, {id: 2, title: "Second note"}
+					];
+					parentRecord[secondAssociation] = [
+						{id: 1, label: "First bookmark"}, {id: 1, label: "Duplicate bookmark"}, {id: 3, label: "Third bookmark"}
+					];
+					var renderer = new cli.lucli.tests._helpers.RelatedBlockRenderer();
+					var rendered = renderer.render(fixture.viewPath, fixture.parentVar, parentRecord);
+					expect(arrayLen(reMatch("\[" & fixture.childVar & ":1:", rendered))).toBe(1);
+					expect(arrayLen(reMatch("\[" & secondVar & ":1:", rendered))).toBe(1);
+					expect(rendered).toInclude("[" & fixture.childVar & ":2:Second note]");
+					expect(rendered).toInclude("[" & secondVar & ":3:Third bookmark]");
+					expect(rendered).notToInclude("Duplicate note");
+					expect(rendered).notToInclude("Duplicate bookmark");
+					expect(compare(renderer.render(fixture.viewPath, fixture.parentVar, parentRecord), rendered)).toBe(0);
+
+					scaffold.generateScaffold(name=secondName, properties=[{name: "label", type: "string"}], belongsTo=fixture.parentName, force=true);
+					$expectWiringFileBytes(fixture.viewPath, content);
+					parentRecord[fixture.association] = [];
+					parentRecord[secondAssociation] = [];
+					var empty = renderer.render(fixture.viewPath, fixture.parentVar, parentRecord);
+					expect(empty).toInclude("No " & fixture.association & " yet.");
+					expect(empty).toInclude("No " & secondAssociation & " yet.");
+					expect(empty).toInclude("Add a " & fixture.childVar);
+					expect(empty).toInclude("Add a " & secondVar);
+				});
+
+				it("does not broaden the view scanner to arbitrary set statements", () => {
+					var fixture = $seedWiringParent("Wirecustomset");
+					var sourceReader = new cli.lucli.services.ScaffoldSource();
+					for (var statement in [
+						"counter = 1", "wheelsRelatedNotesSeen = loadIds()",
+						"wheelsRelatedNotesSeen[note.other] = true", "wheelsRelatedNotesSeen[note.id] = false"
+					]) {
+						var custom = replace(fixture.viewContent, "<h1>", chr(60) & "cfset " & statement & "><h1>", "one");
+						expect(sourceReader.viewAnchor(custom, fixture.parentVar)).toBe(0);
+					}
+				});
+
+				it("preserves an existing hasMany with name first and skips unsafe downstream wiring", () => {
+					var fixture = $seedWiringParent("Wirecustomfirst");
+					fixture.modelContent = 'component extends="Model" { function config() {' & chr(10)
+						& 'hasMany(name="' & fixture.association & '", dependent="delete", foreignKey="ownerId");'
+						& chr(10) & '} }';
+					fileWrite(fixture.modelPath, charsetDecode(fixture.modelContent, "utf-8"));
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName, force=true);
+					expect(result.success).toBeTrue();
+					expect(arrayLen(result.modified)).toBe(0);
+					$expectWiringParentsUnchanged(fixture);
+					$expectWiringWarning(result, fixture.modelPath);
+					$expectNoGeneratedParent(result, fixture);
+				});
+
+				it("recognizes custom hasMany options before name without duplicating or replacing them", () => {
+					var fixture = $seedWiringParent("Wirecustomlast");
+					fixture.modelContent = 'component extends="Model" { function config() {' & chr(10)
+						& "hasMany(foreignKey='ownerId', dependent='delete', name='" & fixture.association & "');"
+						& chr(10) & '} }';
+					fileWrite(fixture.modelPath, charsetDecode(fixture.modelContent, "utf-8"));
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName, force=true);
+					expect(result.success).toBeTrue();
+					expect(arrayLen(result.modified)).toBe(0);
+					$expectWiringParentsUnchanged(fixture);
+					$expectWiringWarning(result, fixture.modelPath);
+				});
+
+				it("preserves a conflicting hasOne or a hasMany alias targeting the child and skips downstream edits", () => {
+					for (var scenario in ["hasone", "alias"]) {
+						var fixture = $seedWiringParent("Wireinverse" & scenario);
+						var declaration = scenario == "hasone"
+							? 'hasOne(name="' & fixture.association & '");'
+							: 'hasMany(name="customChildren", modelName="' & fixture.childName & '");';
+						fixture.modelContent = 'component extends="Model" { function config() { ' & declaration & ' } }';
+						fileWrite(fixture.modelPath, charsetDecode(fixture.modelContent, "utf-8"));
+						var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName, force=true);
+						expect(result.success).toBeTrue();
+						expect(arrayLen(result.modified)).toBe(0);
+						$expectWiringParentsUnchanged(fixture);
+						$expectWiringWarning(result, fixture.modelPath);
+					}
+				});
+
+				it("preserves dynamic or indirect inverse declarations instead of injecting a possible duplicate", () => {
+					for (var scenario in ["dynamicname", "literalprefix", "dynamictarget", "indirect"]) {
+						var fixture = $seedWiringParent("Wiredynamicinverse" & scenario);
+						var associationPrefix = left(fixture.association, len(fixture.association) - len("notes"));
+						var declaration = "";
+						switch (scenario) {
+							case "dynamicname": declaration = 'var prefix="' & associationPrefix & '"; hasMany(name=prefix & "notes");'; break;
+							case "literalprefix": declaration = 'hasMany(name="' & associationPrefix & '" & "notes");'; break;
+							case "dynamictarget": declaration = 'hasMany(name="aliases", modelName=getChildModel());'; break;
+							case "indirect": declaration = 'this["hasMany"]("' & fixture.association & '");'; break;
+						}
+						fixture.modelContent = 'component extends="Model" { function config() { ' & declaration & ' } }';
+						fileWrite(fixture.modelPath, charsetDecode(fixture.modelContent, "utf-8"));
+						var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName, force=true);
+						expect(result.success).toBeTrue();
+						expect(arrayLen(result.modified)).toBe(0);
+						$expectWiringParentsUnchanged(fixture);
+						$expectWiringWarning(result, fixture.modelPath);
+						$expectNoGeneratedParent(result, fixture);
+					}
+				});
+
+				it("reuses conventional positional or named hasMany declarations without duplicating them", () => {
+					for (var style in ["positional", "named"]) {
+						var fixture = $seedWiringParent("Wirereuse" & style);
+						var declaration = style == "named"
+							? 'hasMany(name="' & fixture.association & '");'
+							: "hasMany('" & fixture.association & "');";
+						fixture.modelContent = 'component extends="Model" { function config() { ' & declaration & ' } }';
+						fileWrite(fixture.modelPath, charsetDecode(fixture.modelContent, "utf-8"));
+						var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+						expect(result.success).toBeTrue();
+						$expectWiringFileBytes(fixture.modelPath, fixture.modelContent);
+						expect(arrayLen(result.modified)).toBe(2);
+						$expectWiringModification(result, fixture.controllerPath, "controller");
+						$expectWiringModification(result, fixture.viewPath, "view");
+					}
+				});
+
+				it("warns when the parent model is missing and does not edit its controller or view", () => {
+					var fixture = $seedWiringParent("Wiremissingmodel");
+					fileDelete(fixture.modelPath);
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					expect(fileExists(fixture.modelPath)).toBeFalse();
+					expect(arrayLen(result.modified)).toBe(0);
+					$expectWiringFileBytes(fixture.controllerPath, fixture.controllerContent);
+					$expectWiringFileBytes(fixture.viewPath, fixture.viewContent);
+					$expectWiringWarning(result, fixture.modelPath);
+				});
+
+				it("warns when no real config exists even if comments and strings contain one", () => {
+					var fixture = $seedWiringParent("Wiremissingconfig");
+					fixture.modelContent = 'component extends="Model" {' & chr(10)
+						& '// function config() {}' & chr(10)
+						& '/* function config() {} */' & chr(10)
+						& chr(60) & '!--- function config() {} --->' & chr(10)
+						& 'variables.example = "function config() {}";' & chr(10) & '}';
+					fileWrite(fixture.modelPath, charsetDecode(fixture.modelContent, "utf-8"));
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					expect(arrayLen(result.modified)).toBe(0);
+					$expectWiringParentsUnchanged(fixture);
+					$expectWiringWarning(result, fixture.modelPath);
+					expect(arrayToList(result.skipped, chr(10))).toInclude("config");
+				});
+
+				it("ignores line, block, tag and string decoys while inserting at original model offsets", () => {
+					var fixture = $seedWiringParent("Wiremodelscanner");
+					var nl = chr(13) & chr(10);
+					var decoy = 'function config() { hasMany(name="' & fixture.association & '"); }';
+					var prefix = 'component extends="Model" {' & nl
+						& '// ' & decoy & nl & '/* ' & decoy & ' */' & nl
+						& chr(60) & '!--- ' & decoy & ' --->' & nl
+						& "variables.example = '" & decoy & "';" & nl
+						& 'function config() {';
+					var suffix = nl & 'validatesPresenceOf(properties="title");' & nl & '}' & nl & '}';
+					fixture.modelContent = prefix & suffix;
+					fileWrite(fixture.modelPath, charsetDecode(fixture.modelContent, "utf-8"));
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					$expectWiringModification(result, fixture.modelPath, "model");
+					var content = fileRead(fixture.modelPath);
+					expect(compare(left(content, len(prefix)), prefix)).toBe(0);
+					expect(compare(right(content, len(suffix)), suffix)).toBe(0);
+					var insertion = mid(content, len(prefix) + 1, len(content) - len(prefix) - len(suffix));
+					expect(insertion).toInclude('hasMany(name="' & fixture.association & '")');
+				});
+
+				it("rewrites only the real show finder and preserves comment/string decoys and edit byte for byte", () => {
+					var fixture = $seedWiringParent("Wirecontrollerscanner");
+					var nl = chr(13) & chr(10);
+					var decoy = 'function show() { ' & fixture.showFinder & ' }';
+					fixture.controllerContent = 'component extends="Controller" {' & nl
+						& '// ' & decoy & nl & '/* ' & decoy & ' */' & nl
+						& chr(60) & '!--- ' & decoy & ' --->' & nl
+						& "variables.example = '" & decoy & "';" & nl
+						& 'function show() {' & nl & '/* Preserve this } and fake findByKey(params.key). */' & nl
+						& fixture.showFinder & nl & '// Preserve this trailing }.' & nl & '}' & nl
+						& 'function edit() { ' & fixture.showFinder & ' }' & nl & '}';
+					fileWrite(fixture.controllerPath, charsetDecode(fixture.controllerContent, "utf-8"));
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					var newFinder = replace(fixture.showFinder, 'findByKey(params.key)',
+						'findByKey(key=params.key, include="' & fixture.association & '")');
+					var expected = replace(fixture.controllerContent, nl & fixture.showFinder & nl, nl & newFinder & nl, "one");
+					$expectWiringFileBytes(fixture.controllerPath, expected);
+					$expectWiringModification(result, fixture.controllerPath, "controller");
+				});
+
+				it("merges flat static include lists in either quote style without duplicate include arguments", () => {
+					for (var quoteStyle in ["double", "single"]) {
+						var fixture = $seedWiringParent("Wireinclude" & quoteStyle);
+						var quoteChar = quoteStyle == "double" ? chr(34) : chr(39);
+						fixture.controllerContent = replace(fixture.controllerContent, fixture.showFinder,
+							fixture.parentVar & '=model(' & quoteChar & fixture.parentName & quoteChar
+							& ').findByKey(key=params.key, include=' & quoteChar & 'author,tags' & quoteChar & ');', "one");
+						fileWrite(fixture.controllerPath, charsetDecode(fixture.controllerContent, "utf-8"));
+						var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+						expect(result.success).toBeTrue();
+						$expectWiringModification(result, fixture.controllerPath, "controller");
+						var content = fileRead(fixture.controllerPath);
+						expect(content).toInclude('author,tags,' & fixture.association);
+						expect(arrayLen(reMatchNoCase('\binclude\s*=', content))).toBe(1);
+						expect(content).notToInclude('findByKey(params.key,');
+						var snapshot = content;
+						scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName, force=true);
+						$expectWiringFileBytes(fixture.controllerPath, snapshot);
+					}
+				});
+
+				it("merges a static include appearing before the named key without changing other controller bytes", () => {
+					var fixture = $seedWiringParent("Wireincludefirst");
+					fixture.controllerContent = replace(fixture.controllerContent, 'findByKey(params.key)',
+						'findByKey(include="author,tags", key=params.key)', "one");
+					fileWrite(fixture.controllerPath, charsetDecode(fixture.controllerContent, "utf-8"));
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					$expectWiringModification(result, fixture.controllerPath, "controller");
+					var expected = replace(fixture.controllerContent, 'include="author,tags"',
+						'include="author,tags,' & fixture.association & '"', "one");
+					$expectWiringFileBytes(fixture.controllerPath, expected);
+				});
+
+				it("recognizes existing include tokens despite whitespace and case without adding a duplicate", () => {
+					var fixture = $seedWiringParent("Wireincludepresent");
+					fixture.controllerContent = replace(fixture.controllerContent, 'findByKey(params.key)',
+						'findByKey(include=" author , ' & uCase(fixture.association) & ' , tags ", key=params.key)', "one");
+					fileWrite(fixture.controllerPath, charsetDecode(fixture.controllerContent, "utf-8"));
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					expect(arrayLen(result.modified)).toBe(2);
+					$expectWiringModification(result, fixture.modelPath, "model");
+					$expectWiringModification(result, fixture.viewPath, "view");
+					$expectWiringFileBytes(fixture.controllerPath, fixture.controllerContent);
+				});
+
+				it("fills an empty static include without a leading comma in either named argument order", () => {
+					for (var argumentOrder in ["keyfirst", "includefirst"]) {
+						var fixture = $seedWiringParent("Wireemptyinclude" & argumentOrder);
+						var finder = argumentOrder == "keyfirst"
+							? 'findByKey(key=params.key, include="")'
+							: 'findByKey(include="", key=params.key)';
+						fixture.controllerContent = replace(fixture.controllerContent, 'findByKey(params.key)', finder, "one");
+						fileWrite(fixture.controllerPath, charsetDecode(fixture.controllerContent, "utf-8"));
+						var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+						expect(result.success).toBeTrue();
+						$expectWiringModification(result, fixture.controllerPath, "controller");
+						var expected = replace(fixture.controllerContent, 'include=""', 'include="' & fixture.association & '"', "one");
+						$expectWiringFileBytes(fixture.controllerPath, expected);
+					}
+				});
+
+				it("accepts a conventional named-key finder with no include yet", () => {
+					var fixture = $seedWiringParent("Wirenamedkey");
+					fixture.controllerContent = replace(fixture.controllerContent, 'findByKey(params.key)', 'findByKey(key=params.key)', "one");
+					fileWrite(fixture.controllerPath, charsetDecode(fixture.controllerContent, "utf-8"));
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					$expectWiringModification(result, fixture.controllerPath, "controller");
+					expect(fileRead(fixture.controllerPath)).toInclude('findByKey(key=params.key, include="' & fixture.association & '")');
+				});
+
+				it("warns and preserves the entire controller for dynamic includes or custom show statements", () => {
+					var cases = ["dynamic", "interpolated", "nestedinclude", "statement", "scoped", "othermodel", "otherkey", "multiple", "branch"];
+					for (var scenario in cases) {
+						var fixture = $seedWiringParent("Wireunsafe" & scenario);
+						var statement = fixture.showFinder;
+						switch (scenario) {
+							case "dynamic": statement = replace(statement, 'findByKey(params.key)', 'findByKey(key=params.key, include=params.include)'); break;
+							case "interpolated": statement = replace(statement, 'findByKey(params.key)', 'findByKey(key=params.key, include="##params.include##")'); break;
+							case "nestedinclude": statement = replace(statement, 'findByKey(params.key)', 'findByKey(key=params.key, include="author(tags)")'); break;
+							case "statement": statement &= ' auditAccess();'; break;
+							case "scoped": statement = 'local.' & statement; break;
+							case "othermodel": statement = replace(statement, 'model("' & fixture.parentName & '")', 'model("SomeoneElse")'); break;
+							case "otherkey": statement = replace(statement, 'params.key', 'params.slug'); break;
+							case "multiple": statement &= chr(10) & fixture.showFinder; break;
+							case "branch": statement = 'if (params.allowed) { ' & statement & ' }'; break;
+						}
+						fixture.controllerContent = replace(fixture.controllerContent, fixture.showFinder, statement, "one");
+						fileWrite(fixture.controllerPath, charsetDecode(fixture.controllerContent, "utf-8"));
+						var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName, force=true);
+						expect(result.success).toBeTrue();
+						$expectWiringFileBytes(fixture.controllerPath, fixture.controllerContent);
+						$expectWiringFileBytes(fixture.viewPath, fixture.viewContent);
+						$expectWiringWarning(result, fixture.controllerPath);
+						expect(arrayLen(result.modified)).toBe(1);
+						$expectWiringModification(result, fixture.modelPath, "model");
+					}
+				});
+
+				it("skips missing or ambiguous show actions without rewriting any controller bytes", () => {
+					for (var scenario in ["missing", "ambiguous"]) {
+						var fixture = $seedWiringParent("Wireshow" & scenario);
+						if (scenario == "missing") {
+							fixture.controllerContent = replace(fixture.controllerContent, "function show()", "function preview()", "one");
+						} else {
+							fixture.controllerContent = replace(fixture.controllerContent, "function edit()", "function show()", "one");
+						}
+						fileWrite(fixture.controllerPath, charsetDecode(fixture.controllerContent, "utf-8"));
+						var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+						expect(result.success).toBeTrue();
+						$expectWiringFileBytes(fixture.controllerPath, fixture.controllerContent);
+						$expectWiringFileBytes(fixture.viewPath, fixture.viewContent);
+						$expectWiringWarning(result, fixture.controllerPath);
+					}
+				});
+
+				it("warns for missing parent HTML files instead of creating them", () => {
+					for (var missingFile in ["controller", "view"]) {
+						var fixture = $seedWiringParent("Wiremissing" & missingFile);
+						var missingPath = missingFile == "controller" ? fixture.controllerPath : fixture.viewPath;
+						fileDelete(missingPath);
+						var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+						expect(result.success).toBeTrue();
+						expect(fileExists(missingPath)).toBeFalse();
+						$expectWiringWarning(result, missingPath);
+						if (missingFile == "controller") $expectWiringFileBytes(fixture.viewPath, fixture.viewContent);
+					}
+				});
+
+				it("requires an unambiguous conventional parent param and one non-nested output wrapper", () => {
+					for (var scenario in ["noparam", "wrongparam", "nooutput", "multiple", "nested", "duplicateparam"]) {
+						var fixture = $seedWiringParent("Wirewrapper" & scenario);
+						var outputOpen = chr(60) & 'cfoutput>';
+						var outputClose = chr(60) & '/cfoutput>';
+						var paramTag = chr(60) & 'cfparam name="' & fixture.parentVar & '" default="">';
+						switch (scenario) {
+							case "noparam": fixture.viewContent = replace(fixture.viewContent, paramTag, "", "one"); break;
+							case "wrongparam": fixture.viewContent = replace(fixture.viewContent, paramTag, chr(60) & 'cfparam name="someoneElse" default="">', "one"); break;
+							case "nooutput": fixture.viewContent = paramTag & chr(10) & '<h1>Custom rendering</h1>'; break;
+							case "multiple": fixture.viewContent &= chr(10) & outputOpen & '<p>Second output</p>' & outputClose; break;
+							case "nested": fixture.viewContent = replace(fixture.viewContent, '<h1>Parent</h1>', outputOpen & '<h1>Nested</h1>' & outputClose, "one"); break;
+							case "duplicateparam": fixture.viewContent = paramTag & chr(10) & fixture.viewContent; break;
+						}
+						fileWrite(fixture.viewPath, charsetDecode(fixture.viewContent, "utf-8"));
+						var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName, force=true);
+						expect(result.success).toBeTrue();
+						$expectWiringFileBytes(fixture.viewPath, fixture.viewContent);
+						$expectWiringWarning(result, fixture.viewPath);
+						expect(arrayLen(result.modified)).toBe(2);
+					}
+				});
+
+				it("ignores commented output wrappers and preserves original view insertion offsets", () => {
+					var fixture = $seedWiringParent("Wireviewscanner");
+					var prefix = chr(60) & '!--- Example ' & chr(60) & 'cfoutput>not live'
+						& chr(60) & '/cfoutput> --->' & chr(13) & chr(10);
+					fixture.viewContent = prefix & fixture.viewContent;
+					fileWrite(fixture.viewPath, charsetDecode(fixture.viewContent, "utf-8"));
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					$expectWiringModification(result, fixture.viewPath, "view");
+					var content = fileRead(fixture.viewPath);
+					var closeTag = chr(60) & '/cfoutput>';
+					var originalPrefix = left(fixture.viewContent, len(fixture.viewContent) - len(closeTag));
+					expect(compare(left(content, len(originalPrefix)), originalPrefix)).toBe(0);
+					expect(compare(right(content, len(closeTag)), closeTag)).toBe(0);
+					expect(find('CLI: related ' & fixture.association, content)).toBeGT(len(originalPrefix));
+				});
+
+				it("ignores nested tag-comment decoys in all three parent files", () => {
+					var fixture = $seedWiringParent("Wirenestedcomments");
+					var commentOpen = chr(60) & '!---';
+					var nestedPrefix = commentOpen & ' Outer ' & commentOpen & ' Inner ---> ';
+					var modelComment = nestedPrefix & 'function config() { hasMany(name="' & fixture.association & '"); } --->';
+					var controllerComment = nestedPrefix & 'function show() { ' & fixture.showFinder & ' } --->';
+					var viewComment = nestedPrefix & chr(60) & 'cfoutput>Ignored' & chr(60) & '/cfoutput> --->';
+					fixture.modelContent = replace(fixture.modelContent, 'component extends="Model" {',
+						'component extends="Model" {' & chr(10) & modelComment, "one");
+					fixture.controllerContent = replace(fixture.controllerContent, 'component extends="Controller" {',
+						'component extends="Controller" {' & chr(10) & controllerComment, "one");
+					fixture.viewContent = viewComment & chr(10) & fixture.viewContent;
+					fileWrite(fixture.modelPath, charsetDecode(fixture.modelContent, "utf-8"));
+					fileWrite(fixture.controllerPath, charsetDecode(fixture.controllerContent, "utf-8"));
+					fileWrite(fixture.viewPath, charsetDecode(fixture.viewContent, "utf-8"));
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					expect(arrayLen(result.modified)).toBe(3);
+					$expectWiringModification(result, fixture.modelPath, "model");
+					$expectWiringModification(result, fixture.controllerPath, "controller");
+					$expectWiringModification(result, fixture.viewPath, "view");
+					expect(fileRead(fixture.modelPath)).toInclude(modelComment);
+					expect(arrayLen(reMatchNoCase('hasMany\s*\(', fileRead(fixture.modelPath)))).toBe(2);
+					var expectedController = replace(fixture.controllerContent, chr(9) & chr(9) & fixture.showFinder,
+						chr(9) & chr(9) & replace(fixture.showFinder, 'findByKey(params.key)',
+							'findByKey(key=params.key, include="' & fixture.association & '")'), "one");
+					$expectWiringFileBytes(fixture.controllerPath, expectedController);
+					expect(fileRead(fixture.viewPath)).toInclude(viewComment);
+					$expectRelatedChildLink(fileRead(fixture.viewPath), fixture, "id");
+				});
+
+				it("ignores quoted closing-tag decoys in view attributes and output expressions", () => {
+					var fixture = $seedWiringParent("Wirequotedview");
+					var closeTag = chr(60) & '/cfoutput>';
+					var decoys = '<p data-example="' & closeTag & '">##encodeForHTML("' & closeTag & '")##</p>';
+					fixture.viewContent = replace(fixture.viewContent, '<h1>Parent</h1>', '<h1>Parent</h1>' & chr(10) & decoys, "one");
+					fileWrite(fixture.viewPath, charsetDecode(fixture.viewContent, "utf-8"));
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					$expectWiringModification(result, fixture.viewPath, "view");
+					var content = fileRead(fixture.viewPath);
+					var originalPrefix = left(fixture.viewContent, len(fixture.viewContent) - len(closeTag));
+					expect(compare(left(content, len(originalPrefix)), originalPrefix)).toBe(0);
+					expect(compare(right(content, len(closeTag)), closeTag)).toBe(0);
+					expect(find('CLI: related ' & fixture.association, content)).toBeGT(len(originalPrefix));
+				});
+
+				it("preserves malformed begin-only or end-only related markers even with force", () => {
+					for (var markerType in ["beginonly", "endonly"]) {
+						var fixture = $seedWiringParent("Wiremarker" & markerType);
+						var marker = markerType == "beginonly"
+							? chr(60) & '!--- CLI: related ' & fixture.association & ' (generated) --->'
+							: chr(60) & '!--- /CLI: related ' & fixture.association & ' --->';
+						fixture.viewContent = replace(fixture.viewContent, chr(60) & '/cfoutput>',
+							marker & chr(10) & '<aside>Preserve incomplete custom block.</aside>' & chr(10) & chr(60) & '/cfoutput>', "one");
+						fileWrite(fixture.viewPath, charsetDecode(fixture.viewContent, "utf-8"));
+						var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName, force=true);
+						expect(result.success).toBeTrue();
+						expect(arrayLen(result.modified)).toBe(2);
+						$expectWiringFileBytes(fixture.viewPath, fixture.viewContent);
+						$expectWiringWarning(result, fixture.viewPath);
+					}
+				});
+
+				it("never overwrites a user-edited marked related block even with force", () => {
+					var fixture = $seedWiringParent("Wiremarked");
+					var customBlock = chr(60) & '!--- CLI: related ' & fixture.association & ' (generated) --->' & chr(10)
+						& '<aside>My hand-written related UI must survive.</aside>' & chr(10)
+						& chr(60) & '!--- /CLI: related ' & fixture.association & ' --->';
+					fixture.viewContent = replace(fixture.viewContent, chr(60) & '/cfoutput>', customBlock & chr(10) & chr(60) & '/cfoutput>', "one");
+					fileWrite(fixture.viewPath, charsetDecode(fixture.viewContent, "utf-8"));
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[{name: "label", type: "string"}], belongsTo=fixture.parentName, force=true);
+					expect(result.success).toBeTrue();
+					$expectWiringFileBytes(fixture.viewPath, fixture.viewContent);
+					expect(arrayLen(result.modified)).toBe(2);
+					scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName, force=true);
+					$expectWiringFileBytes(fixture.viewPath, fixture.viewContent);
+				});
+
+				it("leaves all parent files byte-identical on a forced rerun and reports no modifications", () => {
+					var fixture = $seedWiringParent("Wirererun");
+					var first = scaffold.generateScaffold(name=fixture.childName, properties=[{name: "label", type: "string"}], belongsTo=fixture.parentName);
+					expect(first.success).toBeTrue();
+					expect(arrayLen(first.modified)).toBe(3);
+					fixture.modelContent = fileRead(fixture.modelPath);
+					fixture.controllerContent = fileRead(fixture.controllerPath);
+					fixture.viewContent = fileRead(fixture.viewPath);
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[{name: "label", type: "string"}], belongsTo=fixture.parentName, force=true);
+					expect(result.success).toBeTrue();
+					expect(arrayLen(result.modified)).toBe(0);
+					$expectWiringParentsUnchanged(fixture);
+					$expectNoGeneratedParent(result, fixture);
+				});
+
+				it("finds the bundled related template when a direct service caller omits moduleRoot", () => {
+					var fixture = $seedWiringParent("Wiredirect");
+					var directScaffold = new cli.lucli.services.Scaffold(codeGenService=variables.codegen, helpers=variables.helpers, projectRoot=variables.tempRoot);
+					var result = directScaffold.generateScaffold(name=fixture.childName, properties=[{name: "caption", type: "string"}], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					$expectWiringModification(result, fixture.viewPath, "view");
+					$expectRelatedChildLink(fileRead(fixture.viewPath), fixture, "caption");
+				});
+
+				it("prefers the first string property over an earlier text property for the related child link", () => {
+					var fixture = $seedWiringParent("Wiretextdisplay");
+					var result = scaffold.generateScaffold(name=fixture.childName,
+						properties=[{name: "rank", type: "integer"}, {name: "summary", type: "text"}, {name: "title", type: "string"}], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					var content = fileRead(fixture.viewPath);
+					$expectRelatedChildLink(content, fixture, "title");
+					expect(content).notToInclude(fixture.childVar & ".body");
+					expect(content).notToInclude('text=' & fixture.childVar & '.summary');
+				});
+
+				it("uses the first text property when no string or body property exists", () => {
+					var fixture = $seedWiringParent("Wiretextonly");
+					var result = scaffold.generateScaffold(name=fixture.childName,
+						properties=[{name: "rank", type: "integer"}, {name: "summary", type: "text"}, {name: "description", type: "text"}], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					var content = fileRead(fixture.viewPath);
+					$expectRelatedChildLink(content, fixture, "summary");
+					expect(content).notToInclude(fixture.childVar & ".body");
+					expect(content).notToInclude('text=' & fixture.childVar & '.description');
+				});
+
+				it("falls back to the child id when merged view properties have no string or text", () => {
+					var fixture = $seedWiringParent("Wireiddisplay");
+					var result = scaffold.generateScaffold(name=fixture.childName,
+						properties=[{name: "rank", type: "integer"}, {name: "active", type: "boolean"}], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					var content = fileRead(fixture.viewPath);
+					$expectRelatedChildLink(content, fixture, "id");
+					expect(content).notToInclude(fixture.childVar & ".body");
+				});
+
+				it("chooses related link display from migration columns merged into viewProps", () => {
+					var fixture = $seedWiringParent("Wiremergeddisplay");
+					var migrationPath = tempRoot & '/app/migrator/migrations/20260419120001_create_' & fixture.association & '_table.cfc';
+					fileWrite(migrationPath, 'component extends="wheels.migrator.Migration" { function up() {'
+						& 't = createTable(name="' & fixture.association & '");'
+						& 't.integer(columnNames="rank"); t.text(columnNames="caption"); t.string(columnNames="title"); t.create(); } }');
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[{name: "rank", type: "integer"}], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					$expectRelatedChildLink(fileRead(fixture.viewPath), fixture, "title");
+				});
+
+				it("wires only the parent model for api=true and leaves all parent HTML bytes untouched", () => {
+					var fixture = $seedWiringParent("Wireapiscaffold");
+					var result = scaffold.generateScaffold(name=fixture.childName, properties=[], belongsTo=fixture.parentName, api=true);
+					expect(result.success).toBeTrue();
+					expect(arrayLen(result.modified)).toBe(1);
+					$expectWiringModification(result, fixture.modelPath, "model");
+					$expectWiringFileBytes(fixture.controllerPath, fixture.controllerContent);
+					$expectWiringFileBytes(fixture.viewPath, fixture.viewContent);
+					expect(directoryExists(tempRoot & '/app/views/' & fixture.association)).toBeFalse();
+					$expectNoGeneratedParent(result, fixture);
+				});
+
+				it("does not touch parent HTML when generating an API resource", () => {
+					var fixture = $seedWiringParent("Wireapiresource");
+					var result = scaffold.generateApiResource(name=fixture.childName, properties=[], belongsTo=fixture.parentName);
+					expect(result.success).toBeTrue();
+					$expectWiringFileBytes(fixture.controllerPath, fixture.controllerContent);
+					$expectWiringFileBytes(fixture.viewPath, fixture.viewContent);
+					expect(directoryExists(tempRoot & '/app/views/' & fixture.association)).toBeFalse();
+				});
+
+				it("records dry-run parent paths without changing bytes and always restores request state", () => {
+					var fixture = $seedWiringParent("Wiredryrun");
+					var prior = {
+						hadFlag: structKeyExists(request, "$wheelsGenerateDryRun"),
+						hadPaths: structKeyExists(request, "$wheelsDryRunPaths")
+					};
+					if (prior.hadFlag) prior.flag = request.$wheelsGenerateDryRun;
+					if (prior.hadPaths) prior.paths = request.$wheelsDryRunPaths;
+					try {
+						request.$wheelsGenerateDryRun = true;
+						request.$wheelsDryRunPaths = [];
+						var result = scaffold.generateScaffold(name=fixture.childName, properties=[{name: "title", type: "string"}], belongsTo=fixture.parentName);
+						expect(result.success).toBeTrue();
+						$expectWiringParentsUnchanged(fixture);
+						expect(arrayFind(request.$wheelsDryRunPaths, fixture.modelPath)).toBeGT(0);
+						expect(arrayFind(request.$wheelsDryRunPaths, fixture.controllerPath)).toBeGT(0);
+						expect(arrayFind(request.$wheelsDryRunPaths, fixture.viewPath)).toBeGT(0);
+						$expectNoGeneratedParent(result, fixture);
+					} finally {
+						if (prior.hadFlag) request.$wheelsGenerateDryRun = prior.flag;
+						else structDelete(request, "$wheelsGenerateDryRun");
+						if (prior.hadPaths) request.$wheelsDryRunPaths = prior.paths;
+						else structDelete(request, "$wheelsDryRunPaths");
+					}
+				});
+
 			});
 
 			describe("generateApiTest() (CLI-D3)", () => {
@@ -774,6 +1442,94 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 
 		});
 
+	}
+
+	/** Hand-seed user-owned files; no example depends on another scaffold run. */
+	private struct function $seedWiringParent(required string prefix) {
+		var fixture = {};
+		fixture.parentName = arguments.prefix & "parent";
+		fixture.parentVar = lCase(fixture.parentName);
+		fixture.childName = arguments.prefix & "note";
+		fixture.childVar = lCase(fixture.childName);
+		fixture.association = lCase(variables.helpers.pluralize(fixture.childName));
+		fixture.modelPath = variables.tempRoot & "/app/models/" & fixture.parentName & ".cfc";
+		fixture.controllerPath = variables.tempRoot & "/app/controllers/" & variables.helpers.pluralize(fixture.parentName) & ".cfc";
+		fixture.viewPath = variables.tempRoot & "/app/views/" & lCase(variables.helpers.pluralize(fixture.parentName)) & "/show.cfm";
+		var nl = chr(10);
+		fixture.modelContent = 'component extends="Model" {' & nl
+			& chr(9) & 'function config() {' & nl
+			& chr(9) & chr(9) & 'validatesPresenceOf(properties="title");' & nl
+			& chr(9) & '}' & nl & '}';
+		fixture.showFinder = fixture.parentVar & '=model("' & fixture.parentName & '").findByKey(params.key);';
+		fixture.controllerContent = 'component extends="Controller" {' & nl
+			& chr(9) & 'function config() {}' & nl
+			& chr(9) & 'function show() {' & nl & chr(9) & chr(9) & fixture.showFinder & nl & chr(9) & '}' & nl
+			& chr(9) & 'function edit() {' & nl & chr(9) & chr(9) & fixture.showFinder & nl & chr(9) & '}' & nl
+			& '}';
+		// Construct CFML tags to avoid Lucee's file-level tag-balance scan
+		// treating string fixtures as executable markup in this spec.
+		fixture.viewContent = chr(60) & 'cfparam name="' & fixture.parentVar & '" default="">' & nl
+			& chr(60) & 'cfoutput>' & nl & '<h1>Parent</h1>' & nl
+			& '<p>Keep this custom footer.</p>' & nl & chr(60) & '/cfoutput>';
+		if (!directoryExists(getDirectoryFromPath(fixture.viewPath))) directoryCreate(getDirectoryFromPath(fixture.viewPath), true);
+		fileWrite(fixture.modelPath, charsetDecode(fixture.modelContent, "utf-8"));
+		fileWrite(fixture.controllerPath, charsetDecode(fixture.controllerContent, "utf-8"));
+		fileWrite(fixture.viewPath, charsetDecode(fixture.viewContent, "utf-8"));
+		return fixture;
+	}
+
+	private void function $expectWiringFileBytes(required string path, required string content) {
+		expect(compare(toBase64(fileReadBinary(arguments.path)), toBase64(charsetDecode(arguments.content, "utf-8")))).toBe(0);
+	}
+
+	private void function $expectWiringParentsUnchanged(required struct fixture) {
+		$expectWiringFileBytes(arguments.fixture.modelPath, arguments.fixture.modelContent);
+		$expectWiringFileBytes(arguments.fixture.controllerPath, arguments.fixture.controllerContent);
+		$expectWiringFileBytes(arguments.fixture.viewPath, arguments.fixture.viewContent);
+	}
+
+	private void function $expectWiringModification(required struct result, required string path, required string kind) {
+		var matches = 0;
+		for (var entry in arguments.result.modified) {
+			expect(isStruct(entry)).toBeTrue();
+			expect(structKeyExists(entry, "type")).toBeTrue();
+			expect(structKeyExists(entry, "path")).toBeTrue();
+			if (compare(entry.path, arguments.path) == 0) {
+				expect(entry.type).toBe(arguments.kind);
+				matches++;
+			}
+		}
+		expect(matches).toBe(1);
+	}
+
+	private void function $expectNoGeneratedParent(required struct result, required struct fixture) {
+		for (var entry in arguments.result.generated) {
+			expect(compare(entry.path, arguments.fixture.modelPath)).notToBe(0);
+			expect(compare(entry.path, arguments.fixture.controllerPath)).notToBe(0);
+			expect(compare(entry.path, arguments.fixture.viewPath)).notToBe(0);
+		}
+	}
+
+	private void function $expectWiringWarning(required struct result, required string path) {
+		var found = false;
+		for (var warning in arguments.result.skipped) {
+			expect(isSimpleValue(warning)).toBeTrue();
+			// Allow full or project-relative paths, but require an actionable file.
+			if (findNoCase(listLast(arguments.path, "/"), warning)) found = true;
+		}
+		expect(found).toBeTrue();
+	}
+
+	private void function $expectRelatedChildLink(required string content, required struct fixture, required string propertyName) {
+		var links = reMatchNoCase('linkTo\([^)]*\)', arguments.content);
+		var found = false;
+		for (var link in links) {
+			if (reFindNoCase('route\s*=\s*["'']' & arguments.fixture.childVar & '["'']', link)) {
+				expect(reFindNoCase('\btext\s*=\s*' & arguments.fixture.childVar & '\.' & arguments.propertyName & '\b', link)).toBeGT(0);
+				found = true;
+			}
+		}
+		expect(found).toBeTrue();
 	}
 
 }

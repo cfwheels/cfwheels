@@ -17,10 +17,11 @@ component {
 		variables.codeGenService = arguments.codeGenService;
 		variables.helpers = arguments.helpers;
 		variables.projectRoot = arguments.projectRoot;
-		// Optional: only needed by generators that read bundled template
-		// directories directly (generateAuth). Ends with a trailing slash
-		// when provided (same convention as the Admin service).
-		variables.moduleRoot = arguments.moduleRoot;
+		// Direct service callers need the same bundled templates as Module.cfc.
+		variables.moduleRoot = Len(arguments.moduleRoot)
+			? arguments.moduleRoot & "/"
+			: GetDirectoryFromPath(GetCurrentTemplatePath()) & "../";
+		variables.parentSource = new ScaffoldSource();
 		return this;
 	}
 
@@ -57,7 +58,7 @@ component {
 		boolean tests = true,
 		boolean force = false
 	) {
-		var results = {success: true, generated: [], skipped: [], errors: [], rollback: []};
+		var results = {success: true, generated: [], modified: [], skipped: [], errors: [], rollback: []};
 		var pluralName = variables.helpers.pluralize(arguments.name);
 
 		try {
@@ -186,6 +187,10 @@ component {
 			// and broke the controller convention.
 			updateRoutes(pluralName);
 
+			// Parent files belong to the user, even under --force. Only make
+			// narrowly recognized edits; report everything else for manual wiring.
+			$wireParentSide(arguments.name, arguments.belongsTo, viewProps, arguments.api, results);
+
 		} catch (any e) {
 			results.success = false;
 			arrayAppend(results.errors, e.message);
@@ -195,6 +200,101 @@ component {
 		}
 
 		return results;
+	}
+
+	/** Wire only conventional parent files; --force never owns parent code. */
+	private void function $wireParentSide(required string childName, required string belongsTo, required array viewProps, required boolean api, required struct results) {
+		var association = LCase(variables.helpers.pluralize(arguments.childName));
+		for (var parent in ListToArray(arguments.belongsTo)) {
+			parent = Trim(parent);
+			if (!ReFind("^[A-Za-z][A-Za-z0-9_]*$", parent) || !ReFind("^[A-Za-z][A-Za-z0-9_]*$", association)) {
+				ArrayAppend(arguments.results.skipped, "parent wiring: custom association name; wire manually");
+				continue;
+			}
+			var parentModel = variables.helpers.capitalize(parent);
+			var parentPlural = variables.helpers.pluralize(parentModel);
+			var modelPath = variables.projectRoot & "/app/models/" & parentModel & ".cfc";
+			if (!FileExists(modelPath)) {
+				ArrayAppend(arguments.results.skipped, "parent model: " & modelPath & " not found; add hasMany(name=""" & association & """) manually");
+				continue;
+			}
+			var original = FileRead(modelPath);
+			var modelEdit = variables.parentSource.inverse(original, association, arguments.childName);
+			if (!modelEdit.ready) {
+				ArrayAppend(arguments.results.skipped, "parent model: " & modelPath & " — " & modelEdit.reason & "; wire " & association & " manually");
+				continue;
+			}
+			$writeParentChange(modelPath, original, modelEdit.content, "model", arguments.results);
+			// API scaffolds must not change existing browser controllers/views.
+			if (arguments.api) continue;
+			var controllerPath = variables.projectRoot & "/app/controllers/" & parentPlural & ".cfc";
+			if (!FileExists(controllerPath)) {
+				ArrayAppend(arguments.results.skipped, "parent controller: " & controllerPath & " not found; add show include=""" & association & """ and related UI manually");
+				continue;
+			}
+			original = FileRead(controllerPath);
+			var controllerEdit = variables.parentSource.showInclude(original, LCase(parent), parentModel, association);
+			if (!controllerEdit.ready) {
+				ArrayAppend(arguments.results.skipped, "parent controller: " & controllerPath & " — " & controllerEdit.reason & "; add include=""" & association & """ and related UI manually");
+				continue;
+			}
+			$writeParentChange(controllerPath, original, controllerEdit.content, "controller", arguments.results);
+			$appendRelatedBlock(variables.projectRoot & "/app/views/" & LCase(parentPlural) & "/show.cfm", parent, association, arguments.viewProps, arguments.results);
+		}
+	}
+
+	private void function $writeParentChange(required string path, required string original, required string content, required string type, required struct results) {
+		if (Compare(arguments.original, arguments.content) == 0) return;
+		$write(arguments.path, arguments.content);
+		// Never put pre-existing parent files in the rollback deletion list.
+		for (var item in arguments.results.modified) {
+			if (item.path == arguments.path) return;
+		}
+		ArrayAppend(arguments.results.modified, {type: arguments.type, path: arguments.path});
+	}
+
+	/** Append once. A marked block is user-owned, including on --force reruns. */
+	private void function $appendRelatedBlock(required string viewPath, required string parent, required string association, required array viewProps, required struct results) {
+		if (!FileExists(arguments.viewPath)) {
+			ArrayAppend(arguments.results.skipped, "parent view: " & arguments.viewPath & " not found; add related UI manually");
+			return;
+		}
+		var content = FileRead(arguments.viewPath);
+		var marker = "CLI: related " & arguments.association;
+		if (FindNoCase(marker, content)) {
+			ArrayAppend(arguments.results.skipped, "parent view: " & arguments.viewPath & " — related " & arguments.association & " block already present; preserved (edit manually)");
+			return;
+		}
+		var anchor = variables.parentSource.viewAnchor(content, LCase(arguments.parent));
+		if (!anchor) {
+			ArrayAppend(arguments.results.skipped, "parent view: " & arguments.viewPath & " — custom or ambiguous show wrapper; add related UI manually");
+			return;
+		}
+		var templatePath = variables.moduleRoot & "templates/codegen/related-block.txt";
+		if (!FileExists(templatePath)) {
+			ArrayAppend(arguments.results.skipped, "parent view: related template not found: " & templatePath);
+			return;
+		}
+		// Same string/text/id priority as the child views, including columns
+		// merged from its existing migration. Never assume a body column.
+		var display = "id";
+		for (var kind in ["string", "text"]) {
+			for (var prop in arguments.viewProps) {
+				if ((prop.type ?: "string") == kind && !ReFindNoCase("(Id|_id)$", prop.name)) {
+					display = prop.name;
+					break;
+				}
+			}
+			if (display != "id") break;
+		}
+		var singular = LCase(variables.helpers.singularize(arguments.association));
+		var block = FileRead(templatePath);
+		var substitutions = {SingularCap: variables.helpers.capitalize(singular), Singular: singular, Association: arguments.association, ListCap: variables.helpers.capitalize(arguments.association), ParentVar: LCase(arguments.parent), DisplayProperty: display};
+		for (var key in substitutions) block = ReplaceNoCase(block, "|" & key & "|", substitutions[key], "all");
+		var nl = Find(Chr(13) & Chr(10), content) ? Chr(13) & Chr(10) : Chr(10);
+		block = Replace(RTrim(block), Chr(10), nl, "all") & nl;
+		// Insert takes a CHARACTER COUNT, not a one-based index.
+		$writeParentChange(arguments.viewPath, content, Insert(block, content, anchor - 1), "view", arguments.results);
 	}
 
 	/**

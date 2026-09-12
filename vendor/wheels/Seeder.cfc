@@ -323,7 +323,7 @@ component output="false" extends="wheels.Global" {
 									var propType = StructKeyExists(properties[propName], "validationType")
 										? properties[propName].validationType
 										: (StructKeyExists(properties[propName], "type") ? properties[propName].type : "string");
-									record[propName] = $generateTestData(propName, propType, i);
+									record[propName] = $generateTestData(propName, propType, i, modelName);
 								}
 							}
 							var newRecord = modelInstance.new(record);
@@ -461,8 +461,8 @@ component output="false" extends="wheels.Global" {
 	 * Internal function. Produces a plausible fake value for a property based on
 	 * its name and type — used by generateSeeds().
 	 */
-	public any function $generateTestData(required string propertyName, string propertyType = "string", numeric index = 1) {
-		local.name = LCase(arguments.propertyName);
+	public any function $generateTestData(required string propertyName, string propertyType = "string", numeric index = 1, string modelName = "") {
+		local.name = LCase(Trim(arguments.propertyName));
 
 		// Name-pattern branches (checked before any type-based branch, matching
 		// the original ordering of the if-chain).
@@ -471,14 +471,55 @@ component output="false" extends="wheels.Global" {
 			return local.byName.value;
 		}
 
-		// Type-based branches, in the original order.
-		local.byType = $generateTestDataByType(arguments.propertyType, local.name, arguments.index);
+		// Keep the property's casing for readable camelCase labels; the type
+		// helper's name heuristics are case-insensitive.
+		local.byType = $generateTestDataByType(arguments.propertyType, Trim(arguments.propertyName), arguments.index, arguments.modelName);
 		if (local.byType.handled) {
 			return local.byType.value;
 		}
 
-		// Default string value
+		// Default string value: preserve the legacy no-model form.
+		if (Len(Trim(arguments.modelName))) {
+			return "#$sampleTextLabel(arguments.propertyName, arguments.modelName)# Test #arguments.index#";
+		}
 		return "#arguments.propertyName# Test #arguments.index#";
+	}
+
+	/**
+	 * Internal function. Readable context shared by free-text and title values.
+	 * Keep both the owning model (when known) and the property, not either/or.
+	 */
+	public string function $sampleTextLabel(required string propertyName, string modelName = "") {
+		local.label = humanize(Trim(arguments.propertyName));
+		if (Len(Trim(arguments.modelName))) {
+			local.label = humanize(Trim(arguments.modelName)) & " " & local.label;
+		}
+		return local.label;
+	}
+
+	/**
+	 * Internal function. Free-text filler for a column.
+	 *
+	 * Include model, property and row index so posts.body, comments.body and
+	 * posts.description have different context, even when a sentence repeats.
+	 * The fixed pool and arithmetic rotation make this text reproducible with
+	 * no network, clock or random state. This is not a global uniqueness promise
+	 * for seed data: bounded values such as booleans and statuses still repeat.
+	 *
+	 * @modelName Optional owning model; the property is always included.
+	 */
+	public string function $sampleTextValue(required string propertyName, string modelName = "", numeric index = 1) {
+		local.sentences = [
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+			"Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+			"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+			"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum."
+		];
+		local.subject = LCase($sampleTextLabel(arguments.propertyName, arguments.modelName));
+		// The label offsets a small sentence pool; equal-length labels may pick
+		// the same sentence, but the model/property context and row index remain.
+		local.pick = ((arguments.index - 1 + Len(local.subject)) mod ArrayLen(local.sentences)) + 1;
+		return "This is #local.subject# #arguments.index#. #local.sentences[local.pick]#";
 	}
 
 	/**
@@ -550,7 +591,7 @@ component output="false" extends="wheels.Global" {
 	 * late name-only title/status checks), preserving the original order of
 	 * the if-chain. Returns {handled: true/false, value: ...}.
 	 */
-	public struct function $generateTestDataByType(required string propertyType, required string name, required numeric index) {
+	public struct function $generateTestDataByType(required string propertyType, required string name, required numeric index, string modelName = "") {
 		// Type-first: an explicit column type wins over name heuristics, so a
 		// `publishedAt:datetime` field gets a date instead of matching the
 		// "published" boolean name heuristic (the old order substring-matched
@@ -580,7 +621,7 @@ component output="false" extends="wheels.Global" {
 
 		// Text fields
 		if (arguments.propertyType == "text") {
-			return {handled = true, value = "This is test content #arguments.index#. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."};
+			return {handled = true, value = $sampleTextValue(arguments.name, arguments.modelName, arguments.index)};
 		}
 
 		// Name heuristics — only for string/unknown types, so they never
@@ -596,12 +637,18 @@ component output="false" extends="wheels.Global" {
 
 		// Text/description fields
 		if (FindNoCase("description", arguments.name) || FindNoCase("content", arguments.name) || FindNoCase("body", arguments.name)) {
-			return {handled = true, value = "This is test content #arguments.index#. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."};
+			return {handled = true, value = $sampleTextValue(arguments.name, arguments.modelName, arguments.index)};
 		}
 
 		// Title fields
 		if (FindNoCase("title", arguments.name) || FindNoCase("subject", arguments.name)) {
-			return {handled = true, value = "Test Title #arguments.index#"};
+			// Without an owning model keep the original "Test Title N"; with one,
+			// include the property too, so title and subject do not collide.
+			local.titleLabel = "Test Title";
+			if (Len(Trim(arguments.modelName))) {
+				local.titleLabel = $sampleTextLabel(arguments.name, arguments.modelName);
+			}
+			return {handled = true, value = "#local.titleLabel# #arguments.index#"};
 		}
 
 		// Status fields

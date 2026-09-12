@@ -657,12 +657,11 @@ component extends="wheels.WheelsTest" {
 					expect(DateDiff("d", local.dob, Now())).toBe(4);
 				});
 
-				it("S10: text type and description / content / body / title / status", () => {
-					local.lorem = "This is test content 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-					expect(seeder.$generateTestData(propertyName = "foo", propertyType = "text", index = 1)).toBe(local.lorem);
-					expect(seeder.$generateTestData(propertyName = "description", propertyType = "string", index = 1)).toBe(local.lorem);
-					expect(seeder.$generateTestData(propertyName = "content", propertyType = "string", index = 1)).toBe(local.lorem);
-					expect(seeder.$generateTestData(propertyName = "body", propertyType = "string", index = 1)).toBe(local.lorem);
+				it("S10: text type and description / content / body / title / status without a model", () => {
+					expect(seeder.$generateTestData(propertyName = "foo", propertyType = "text", index = 1)).toStartWith("This is foo 1.");
+					expect(seeder.$generateTestData(propertyName = "description", propertyType = "string", index = 1)).toStartWith("This is description 1.");
+					expect(seeder.$generateTestData(propertyName = "content", propertyType = "string", index = 1)).toStartWith("This is content 1.");
+					expect(seeder.$generateTestData(propertyName = "body", propertyType = "string", index = 1)).toStartWith("This is body 1.");
 					expect(seeder.$generateTestData(propertyName = "title", propertyType = "string", index = 8)).toBe("Test Title 8");
 					expect(seeder.$generateTestData(propertyName = "subject", propertyType = "string", index = 8)).toBe("Test Title 8");
 					expect(seeder.$generateTestData(propertyName = "status", propertyType = "string", index = 1)).toBe("pending");
@@ -670,9 +669,106 @@ component extends="wheels.WheelsTest" {
 					expect(seeder.$generateTestData(propertyName = "status", propertyType = "string", index = 5)).toBe("pending");
 				});
 
+				it("varies the same free-text column across models", () => {
+					// Both explicit text types and name-inferred string bodies must
+					// distinguish comments from the post they appear beneath.
+					for (local.propertyType in ["text", "string"]) {
+						local.postBody = seeder.$generateTestData(propertyName = "body", propertyType = local.propertyType, index = 1, modelName = "Post");
+						local.commentBody = seeder.$generateTestData(propertyName = "body", propertyType = local.propertyType, index = 1, modelName = "Comment");
+						local.pageBody = seeder.$generateTestData(propertyName = "body", propertyType = local.propertyType, index = 1, modelName = "Page");
+						expect(local.postBody).notToBe(local.commentBody);
+						// Equal-length model labels can share a sentence, not a value.
+						expect(local.postBody).notToBe(local.pageBody);
+						expect(local.postBody).toStartWith("This is post body 1.");
+						expect(local.commentBody).toStartWith("This is comment body 1.");
+					}
+				});
+
+				it("varies free-text columns within the same model", () => {
+					for (local.propertyType in ["text", "string"]) {
+						local.body = seeder.$generateTestData(propertyName = "body", propertyType = local.propertyType, index = 1, modelName = "Post");
+						local.description = seeder.$generateTestData(propertyName = "description", propertyType = local.propertyType, index = 1, modelName = "Post");
+						local.content = seeder.$generateTestData(propertyName = "content", propertyType = local.propertyType, index = 1, modelName = "Post");
+						expect(local.body).notToBe(local.description);
+						expect(local.body).notToBe(local.content);
+						expect(local.description).notToBe(local.content);
+						expect(local.description).toStartWith("This is post description 1.");
+					}
+				});
+
+				it("varies titles by model and property while preserving legacy no-model titles", () => {
+					expect(seeder.$generateTestData(propertyName = "title", index = 8, modelName = "Post")).toBe("Post Title 8");
+					expect(seeder.$generateTestData(propertyName = "subject", index = 8, modelName = "Post")).toBe("Post Subject 8");
+					expect(seeder.$generateTestData(propertyName = "subtitle", index = 8, modelName = "Post")).toBe("Post Subtitle 8");
+					expect(seeder.$generateTestData(propertyName = "title", index = 8, modelName = "Comment")).toBe("Comment Title 8");
+					expect(seeder.$generateTestData(propertyName = "title", index = 8, modelName = "   ")).toBe("Test Title 8");
+				});
+
+				it("keeps generated text deterministic and rows distinct beyond the sentence pool", () => {
+					local.otherSeeder = CreateObject("component", "wheels.Seeder").init();
+					for (local.propertyType in ["text", "string"]) {
+						for (local.propertyName in ["body", "description", "title", "notes"]) {
+							local.seen = {};
+							for (local.i = 1; local.i <= 6; local.i++) {
+								local.value = seeder.$generateTestData(propertyName = local.propertyName, propertyType = local.propertyType, index = local.i, modelName = "Post");
+								expect(StructKeyExists(local.seen, local.value)).toBeFalse();
+								local.seen[local.value] = true;
+								expect(local.otherSeeder.$generateTestData(propertyName = local.propertyName, propertyType = local.propertyType, index = local.i, modelName = "Post")).toBe(local.value);
+							}
+						}
+					}
+				});
+
+				it("uses property and row context without a model and treats blank models as absent", () => {
+					local.body = seeder.$generateTestData(propertyName = "body", propertyType = "text", index = 1);
+					local.description = seeder.$generateTestData(propertyName = "description", propertyType = "text", index = 1);
+					expect(local.body).notToBe(local.description);
+					expect(seeder.$generateTestData(propertyName = "body", propertyType = "text", index = 5)).notToBe(local.body);
+					expect(seeder.$generateTestData(propertyName = "body", propertyType = "text", index = 1)).toBe(local.body);
+					expect(seeder.$generateTestData(propertyName = "body", propertyType = "text", index = 1, modelName = "   ")).toBe(local.body);
+				});
+
+				it("trims context and retains readable camelCase model and property labels", () => {
+					expect(seeder.$generateTestData(propertyName = " mainBody ", propertyType = "text", index = 2, modelName = " BlogPost ")).toStartWith("This is blog post main body 2.");
+					expect(seeder.$generateTestData(propertyName = " metaTitle ", index = 2, modelName = " BlogPost ")).toBe("Blog Post Meta Title 2");
+					expect(seeder.$generateTestData(propertyName = " mainBody ", propertyType = "text", index = 2, modelName = " BlogPost ")).toBe(seeder.$generateTestData(propertyName = "mainBody", propertyType = "text", index = 2, modelName = "BlogPost"));
+				});
+
+				it("supports single-character model names on Adobe as well as other engines", () => {
+					// The old title path used two-argument Mid(), which Adobe cannot
+					// compile. A one-character model must also need no remainder.
+					expect(seeder.$generateTestData(propertyName = "title", index = 1, modelName = "x")).toBe("X Title 1");
+					expect(seeder.$generateTestData(propertyName = "subject", index = 1, modelName = " X ")).toBe("X Subject 1");
+					expect(seeder.$generateTestData(propertyName = "body", propertyType = "text", index = 1, modelName = "x")).toStartWith("This is x body 1.");
+				});
+
+				it("preserves numeric, foreign-key, boolean and date values with model context", () => {
+					expect(seeder.$generateTestData(propertyName = "body", propertyType = "integer", index = 3, modelName = "Post")).toBe(3);
+					expect(seeder.$generateTestData(propertyName = "title", propertyType = "numeric", index = 3, modelName = "Post")).toBe(3);
+					expect(seeder.$generateTestData(propertyName = "postId", propertyType = "integer", index = 3, modelName = "Comment")).toBe(3);
+					expect(seeder.$generateTestData(propertyName = "post_id", propertyType = "integer", index = 3, modelName = "Comment")).toBe(3);
+					expect(seeder.$generateTestData(propertyName = "price", propertyType = "numeric", index = 3, modelName = "Product")).toBe(30.99);
+					expect(seeder.$generateTestData(propertyName = "body", propertyType = "boolean", index = 2, modelName = "Post")).toBeFalse();
+					expect(seeder.$generateTestData(propertyName = "published", propertyType = "boolean", index = 3, modelName = "Post")).toBeTrue();
+					local.typedDate = seeder.$generateTestData(propertyName = "body", propertyType = "date", index = 3, modelName = "Post");
+					local.publishedAt = seeder.$generateTestData(propertyName = "publishedAt", propertyType = "datetime", index = 3, modelName = "Post");
+					expect(IsDate(local.typedDate)).toBeTrue();
+					expect(IsDate(local.publishedAt)).toBeTrue();
+					expect(DateDiff("d", local.publishedAt, Now())).toBe(3);
+					// Model context does not alter bounded/special-purpose pools.
+					expect(seeder.$generateTestData(propertyName = "status", index = 5, modelName = "Post")).toBe("pending");
+					expect(seeder.$generateTestData(propertyName = "email", index = 3, modelName = "User")).toBe("test3@example.com");
+				});
+
 				it("S10: unmatched names fall through to the default string", () => {
 					expect(seeder.$generateTestData(propertyName = "zzz", propertyType = "string", index = 9)).toBe("zzz Test 9");
 					expect(seeder.$generateTestData(propertyName = "notes", index = 1)).toBe("notes Test 1");
+				});
+
+				it("includes model and property context in otherwise unmatched string fields", () => {
+					expect(seeder.$generateTestData(propertyName = "notes", index = 1, modelName = "Post")).toBe("Post Notes Test 1");
+					expect(seeder.$generateTestData(propertyName = "notes", index = 1, modelName = "Comment")).toBe("Comment Notes Test 1");
+					expect(seeder.$generateTestData(propertyName = "displayName", index = 1, modelName = "Post")).toBe("Post Display Name Test 1");
 				});
 
 			});

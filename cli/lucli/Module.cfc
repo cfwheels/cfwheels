@@ -4513,6 +4513,10 @@ component extends="modules.BaseModule" {
 				var relPath = listLast(item.path, "/\");
 				printCreated("#item.type#: #relPath#");
 			}
+			for (var item in results.modified ?: []) {
+				var relPath = replace(item.path, variables.projectRoot & "/", "");
+				out("  modify  #item.type#: #relPath#", "green");
+			}
 			// Issue #2327: scaffold can succeed with skipped artifacts. Surface
 			// what was skipped so users know why their existing model wasn't
 			// touched and how to force a rewrite if they wanted one.
