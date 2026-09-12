@@ -1504,6 +1504,19 @@ component extends="modules.BaseModule" {
 			}
 		}
 
+		// `--port` used to be parsed and then dropped for Lucee projects — only
+		// the RustCFML branch below consumed it, so `wheels start --port=8090`
+		// on a Lucee app silently booted on the port from lucee.json. Persist
+		// the requested port, and place the shutdown port next to it rather than
+		// leaving the app's original value: two projects whose defaults collide
+		// then fail with LuCLI's "port conflicts detected:" and an empty list,
+		// because the shutdown port is what actually clashes.
+		if (enginePort > 0 && engine != "rustcfml") {
+			var resolvedShutdownPort = $nextFreePort(enginePort + 1);
+			$writePinnedPorts(variables.projectRoot, enginePort, resolvedShutdownPort);
+			out("Using port " & enginePort & " (shutdown " & resolvedShutdownPort & ").", "cyan");
+		}
+
 		// RustCFML backend — separate lifecycle from LuCLI (no JDK/Lucee
 		// Express), so it never touches the server registry below.
 		if (engine == "rustcfml") {
@@ -8388,6 +8401,47 @@ component extends="modules.BaseModule" {
 			// Malformed lucee.json — let LuCLI surface its own parse error.
 		}
 		return 0;
+	}
+
+	/**
+	 * First free TCP port at or above `from`. Used to place a project's shutdown
+	 * port next to its requested HTTP port without colliding with another
+	 * project's server. Bounded so a pathological environment cannot spin
+	 * forever; falls back to `from` and lets LuCLI report the conflict itself.
+	 */
+	private numeric function $nextFreePort(required numeric from) {
+		var probe = getService("portProbe");
+		for (var candidate = arguments.from; candidate < arguments.from + 100; candidate++) {
+			if (!probe.portInUse(candidate)) {
+				return candidate;
+			}
+		}
+		return arguments.from;
+	}
+
+	/**
+	 * Persist the HTTP and shutdown ports into the project's lucee.json, which
+	 * is where LuCLI reads them from.
+	 *
+	 * Targeted substitution rather than a serializeJSON round-trip: rewriting
+	 * the whole file would collapse `wheels new`'s 2-space formatting onto a
+	 * single line and bury a two-number change in a wall of diff noise. The
+	 * file is parsed first so a malformed config is left untouched for LuCLI to
+	 * report. `"port"` cannot match inside `"shutdownPort"` because the pattern
+	 * requires a quote before the `p`.
+	 */
+	private void function $writePinnedPorts(required string projectRoot, required numeric port, required numeric shutdownPort) {
+		var configFile = arguments.projectRoot & "/lucee.json";
+		if (!fileExists(configFile)) return;
+		try {
+			if (!isStruct(deserializeJSON(fileRead(configFile)))) return;
+		} catch (any e) {
+			return;
+		}
+		var raw = fileRead(configFile);
+		raw = reReplace(raw, '"port"\s*:\s*\d+', '"port": ' & arguments.port, "one");
+		raw = reReplace(raw, '"shutdownPort"\s*:\s*\d+', '"shutdownPort": ' & arguments.shutdownPort, "one");
+		fileWrite(configFile, raw);
 	}
 
 	/**
