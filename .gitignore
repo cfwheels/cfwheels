@@ -108,3 +108,6 @@ artifacts/
 
 # Offline docs bundle the CLI mirrors into the webroot of any app it runs in
 public/wheels-docs/
+
+# Test-server JVM pid recorded by tools/test-cli-local.sh
+.wheels-test-server.pid
