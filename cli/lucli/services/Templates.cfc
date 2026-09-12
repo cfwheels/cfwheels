@@ -483,7 +483,8 @@ component {
 		for (var prop in arguments.properties) {
 			var t = lCase(prop.type ?: "string");
 			var n = prop.name ?: "";
-			if (t == "string" && right(n, 2) != "Id" && n != "id") {
+			// Skip foreign keys in BOTH conventions — post_id as well as postId.
+			if (t == "string" && right(n, 2) != "Id" && right(n, 3) != "_id" && n != "id") {
 				return n;
 			}
 		}
@@ -511,13 +512,16 @@ component {
 			var fieldCode = "";
 
 			if (arrayFindNoCase(foreignKeys, fieldName)) {
-				var associationName = left(fieldName, len(fieldName) - 2);
-				var associationModel = variables.helpers.capitalize(associationName);
+				var fk = $foreignKeyParts(fieldName);
+				// Label the parent picker with the parent's own display column
+				// rather than a hardcoded "name" — a scaffolded Post has a
+				// title, so a "name" textField rendered a dropdown of blanks.
+				var labelField = $resolveParentDisplayField(fk.model);
 				fieldCode = $scaffoldFieldCall(
 					helperName = "select",
 					fieldName = fieldName,
-					fieldLabel = fieldLabel,
-					extraArgs = 'options=model("#associationModel#").findAll(), textField="name", valueField="id", includeBlank="Select #associationModel#"'
+					fieldLabel = variables.helpers.capitalize(fk.association),
+					extraArgs = 'options=model("#fk.model#").findAll(), textField="#labelField#", valueField="id", includeBlank="Select #fk.model#"'
 				);
 			} else {
 				switch (lCase(fieldType)) {
@@ -694,7 +698,7 @@ component {
 				// findAll() returns a flat query — association objects are not
 				// reachable inside a query-driven cfloop, so posts.author.name throws.
 				// Keep the friendly label but render the raw FK column value.
-				label = variables.helpers.capitalize(left(prop.name, len(prop.name) - 2));
+				label = variables.helpers.capitalize($foreignKeyParts(prop.name).association);
 			}
 			arrayAppend(blocks, '<p>' & label & ': ##|ObjectNamePlural|.' & prop.name & '##</p>');
 		}
@@ -711,7 +715,7 @@ component {
 		for (var prop in arguments.properties) {
 			var headerName = variables.helpers.capitalize(prop.name);
 			if (arrayFindNoCase(foreignKeys, prop.name)) {
-				headerName = variables.helpers.capitalize(left(prop.name, len(prop.name) - 2));
+				headerName = variables.helpers.capitalize($foreignKeyParts(prop.name).association);
 			}
 			arrayAppend(headers, '<th>#headerName#</th>');
 		}
@@ -753,8 +757,11 @@ component {
 			}
 			var propDisplay = '<p>' & chr(10);
 			if (arrayFindNoCase(foreignKeys, prop.name)) {
-				var assocName = left(prop.name, len(prop.name) - 2);
-				propDisplay &= chr(9) & '<strong>#variables.helpers.capitalize(assocName)#:</strong> ##encodeForHTML(|ObjectNameSingular|.' & assocName & '.name)##' & chr(10);
+				var fk = $foreignKeyParts(prop.name);
+				// Link to the parent record and show its label, so the detail
+				// page shows the relationship instead of a raw foreign key.
+				var labelField2 = $resolveParentDisplayField(fk.model);
+				propDisplay &= chr(9) & '<strong>#variables.helpers.capitalize(fk.association)#:</strong> ##linkTo(route="' & fk.association & '", key=|ObjectNameSingular|.' & fk.association & '.id, text=|ObjectNameSingular|.' & fk.association & '.' & labelField2 & ')##' & chr(10);
 			} else {
 				propDisplay &= chr(9) & '<strong>#variables.helpers.capitalize(prop.name)#:</strong> ##encodeForHTML(|ObjectNameSingular|.#prop.name#)##' & chr(10);
 			}
@@ -804,10 +811,74 @@ component {
 		var foreignKeys = [];
 		if (len(arguments.belongsTo)) {
 			for (var parent in listToArray(arguments.belongsTo)) {
-				arrayAppend(foreignKeys, lCase(trim(parent)) & "Id");
+				var name = lCase(trim(parent));
+				// BOTH conventions. The camelCase form (postId) is the framework
+				// default, but `wheels new` scaffolds apps with
+				// useUnderscoreReferenceColumns=true, so the column the migrator
+				// actually creates is post_id. Recognising only camelCase meant
+				// every belongsTo field in a freshly scaffolded app silently
+				// degraded to a raw id text input instead of a parent picker.
+				arrayAppend(foreignKeys, name & "Id");
+				arrayAppend(foreignKeys, name & "_id");
 			}
 		}
 		return foreignKeys;
+	}
+
+	/**
+	 * Split a foreign-key column name into its association name and parent
+	 * model, for either convention: postId / post_id -> post / Post.
+	 */
+	private struct function $foreignKeyParts(required string fieldName) {
+		var n = arguments.fieldName;
+		if (right(n, 3) == "_id") {
+			n = left(n, len(n) - 3);
+		} else if (right(n, 2) == "Id") {
+			n = left(n, len(n) - 2);
+		}
+		return { association = n, model = variables.helpers.capitalize(n) };
+	}
+
+	/**
+	 * Best human-readable column to label a parent record with, resolved from
+	 * the parent's own create-table migration. Falls back to "name" so the
+	 * generated code is still valid when the parent was not scaffolded here.
+	 */
+	private string function $resolveParentDisplayField(required string parentModel) {
+		var fallback = "name";
+		var migrationsDir = variables.projectRoot & "/app/migrator/migrations";
+		if (!directoryExists(migrationsDir)) {
+			return fallback;
+		}
+		var tableName = lCase(variables.helpers.pluralize(arguments.parentModel));
+		for (var f in directoryList(migrationsDir, false, "name", "*create_*_table.cfc")) {
+			var src = fileRead(migrationsDir & "/" & f);
+			// Generated migrations use single quotes and the `createTable`
+			// helper (createTable(name='posts', ...)); hand-written ones may use
+			// double quotes, the `table` alias, or the singular columnName.
+			if (!reFindNoCase("(?:createTable|table)\(\s*name\s*=\s*['""]#tableName#['""]", src)) {
+				continue;
+			}
+			var cols = [];
+			for (var decl in reMatchNoCase("(?:columnNames|columnName)\s*=\s*['""][^'""]+['""]", src)) {
+				for (var one in listToArray(reReplaceNoCase(decl, ".*['""]([^'""]+)['""].*", "\1"))) {
+					arrayAppend(cols, trim(one));
+				}
+			}
+			for (var candidate in ["title", "name", "label", "subject", "heading", "username", "email"]) {
+				if (arrayFindNoCase(cols, candidate)) {
+					return candidate;
+				}
+			}
+			for (var c in cols) {
+				var lc = lCase(c);
+				if (lc == "id" || right(lc, 3) == "_id" || listFindNoCase("createdat,updatedat,deletedat", lc)) {
+					continue;
+				}
+				return c;
+			}
+		}
+		return fallback;
 	}
 
 	/**
