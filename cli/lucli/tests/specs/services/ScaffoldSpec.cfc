@@ -661,6 +661,44 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					fileWrite(settingsPath, originalSettings);
 				});
 
+				it("renders a parent picker, not a raw id text field, when the FK is an underscore column", () => {
+					// buildForeignKeyList() used to recognise only camelCase, so in
+					// a `wheels new` app (useUnderscoreReferenceColumns=true, and
+					// therefore a post_id column) the belongsTo branch never fired
+					// and the form shipped a bare `post_id` text input.
+					var settingsPath = tempRoot & "/config/settings.cfm";
+					var originalSettings = fileRead(settingsPath);
+					fileWrite(settingsPath, originalSettings & chr(10) & "set(useUnderscoreReferenceColumns=true);");
+
+					scaffold.generateScaffold(
+						name = "Post",
+						properties = [{name: "title", type: "string"}, {name: "body", type: "text"}],
+						force = true
+					);
+					scaffold.generateScaffold(
+						name = "Comment",
+						properties = [{name: "body", type: "text"}],
+						belongsTo = "post",
+						force = true
+					);
+
+					// `formContent`, not `form` — a local named after the FORM
+					// scope shadows it and the assertion reads the empty scope.
+					var formContent = fileRead(tempRoot & "/app/views/comments/_form.cfm");
+					expect(formContent).toInclude('select(objectName="comment", property="post_id"');
+					expect(formContent).notToInclude('textField(objectName="comment", property="post_id"');
+					// Labelled by the parent's real display column, not a
+					// hardcoded "name" — a scaffolded Post has a title.
+					expect(formContent).toInclude('textField="title"');
+
+					// show.cfm shows the relationship as a link to the parent.
+					var showContent = fileRead(tempRoot & "/app/views/comments/show.cfm");
+					expect(showContent).toInclude('linkTo(route="post"');
+					expect(showContent).notToInclude("comment.post_");
+
+					fileWrite(settingsPath, originalSettings);
+				});
+
 			});
 
 			describe("generateApiTest() (CLI-D3)", () => {

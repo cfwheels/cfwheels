@@ -105,3 +105,6 @@ artifacts/
 
 # Linux package build staging (tools/distribution-drafts/linux-packages)
 .linux-pkg-build/
+
+# Offline docs bundle the CLI mirrors into the webroot of any app it runs in
+public/wheels-docs/
