@@ -1027,9 +1027,12 @@ component output="false" displayName="Internal GUI" extends="wheels.Global" {
 	 */
 	private void function $docsUnavailable(required string site) {
 		cfheader(statusCode = 404);
+		// "API reference" is singular, "guides" is plural. The starter page links
+		// straight here, so this is now a page users actually land on.
 		var label = arguments.site == "api" ? "API reference" : "guides";
+		var verb = arguments.site == "api" ? "is" : "are";
 		WriteOutput(
-			"<h1>Wheels " & label & " are not available offline yet</h1>"
+			"<h1>Wheels " & label & " " & verb & " not available offline yet</h1>"
 			& "<p>These pages are served from a local copy of the documentation so they work "
 			& "with no internet connection, and that copy is not installed.</p>"
 			& "<p>Run <code>wheels docs fetch</code> once to download it. Homebrew installs "

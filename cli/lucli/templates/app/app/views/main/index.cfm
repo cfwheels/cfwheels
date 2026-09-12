@@ -57,9 +57,14 @@
 	.wheels-starter-details dd { margin: 0; }
 	.wheels-starter-cards {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+		/* Exactly two cards, so a fixed pair of columns reads better than
+		   auto-fit, which would leave a ragged gap at wide widths. */
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: .85rem;
 		margin: 0 0 2.5rem;
+	}
+	@media (max-width: 34rem) {
+		.wheels-starter-cards { grid-template-columns: 1fr; }
 	}
 	/* :visited/:hover are listed explicitly — simple.css styles a:visited, and
 	   a pseudo-class selector outranks a bare class, which otherwise leaves one
@@ -130,27 +135,15 @@
 
 	<h2>Next steps</h2>
 	<div class="wheels-starter-cards">
-		<a class="wheels-starter-card" href="/wheels/guides">
+		<!--- Both open in a new tab: they are documentation, and a reader who
+		     follows one should not lose the app they are working in.
+		     rel="noopener" stops the opened page reaching back through
+		     window.opener. --->
+		<a class="wheels-starter-card" href="/wheels/guides" target="_blank" rel="noopener">
 			<strong>Guides</strong>
 			<span>Learn Wheels end to end</span>
 		</a>
-		<a class="wheels-starter-card" href="/wheels/routes">
-			<strong>Routes</strong>
-			<span>Every route in this app</span>
-		</a>
-		<a class="wheels-starter-card" href="/wheels/migrator">
-			<strong>Migrator</strong>
-			<span>Schema and migrations</span>
-		</a>
-		<a class="wheels-starter-card" href="/wheels/app/tests">
-			<strong>Tests</strong>
-			<span>Run your app's suite</span>
-		</a>
-		<a class="wheels-starter-card" href="/wheels/info">
-			<strong>System info</strong>
-			<span>Versions and configuration</span>
-		</a>
-		<a class="wheels-starter-card" href="/wheels/ai">
+		<a class="wheels-starter-card" href="/wheels/api" target="_blank" rel="noopener">
 			<strong>API docs</strong>
 			<span>Every helper, searchable</span>
 		</a>

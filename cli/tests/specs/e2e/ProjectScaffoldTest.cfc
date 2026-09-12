@@ -223,9 +223,17 @@ component extends="testbox.system.BaseSpec" {
 					expect(content).toInclude("The details");
 					expect(content).toInclude("Next steps");
 					expect(content).toInclude("wheels g scaffold");
-					// Dev-tool cards point at routes that exist on any running app.
-					expect(content).toInclude("/wheels/guides");
-					expect(content).toInclude("/wheels/routes");
+					// Exactly two calls to action: the guides and the API
+					// reference. Both are documentation, so they open in a new
+					// tab (with rel=noopener) rather than navigating away from
+					// the app. The API card points at /wheels/api — the HTML
+					// reference — not /wheels/ai, which serves JSON.
+					expect(content).toInclude('href="/wheels/guides" target="_blank" rel="noopener"');
+					expect(content).toInclude('href="/wheels/api" target="_blank" rel="noopener"');
+					expect(content).notToInclude("/wheels/ai");
+					expect(
+						Len(content) - Len(Replace(content, 'class="wheels-starter-card"', "", "all"))
+					).toBe(Len('class="wheels-starter-card"') * 2);
 					// Brand mark comes from the copied image assets, not an inline
 					// SVG, and swaps to the inverse artwork on dark backgrounds.
 					expect(content).toInclude("/images/wheels-logo.png");
