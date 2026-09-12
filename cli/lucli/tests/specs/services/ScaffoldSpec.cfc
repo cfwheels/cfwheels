@@ -18,7 +18,11 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 		variables.scaffold = new cli.lucli.services.Scaffold(
 			codeGenService = variables.codegen,
 			helpers = variables.helpers,
-			projectRoot = variables.tempRoot
+			projectRoot = variables.tempRoot,
+			// Required by $upsertRelatedBlock, which renders the parent-view
+			// block from templates/codegen/related-block.txt. Module.cfc passes
+			// this in production; the spec must too or the block is skipped.
+			moduleRoot = variables.moduleRoot
 		);
 	}
 
@@ -697,6 +701,55 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(showContent).notToInclude("comment.post_");
 
 					fileWrite(settingsPath, originalSettings);
+				});
+
+				it("wires the parent side of belongsTo: hasMany, include=, and a show block", () => {
+					// Scaffolding the child used to leave the parent unaware of it:
+					// no hasMany, nothing eager-loaded, nothing rendered. The parent
+					// files already exist, so the scaffold edits them in place.
+					scaffold.generateScaffold(
+						name = "Widget",
+						properties = [{name: "title", type: "string"}],
+						force = true
+					);
+					var result = scaffold.generateScaffold(
+						name = "Note",
+						properties = [{name: "body", type: "text"}],
+						belongsTo = "widget",
+						force = true
+					);
+					expect(result.success).toBeTrue();
+
+					// 1. inverse association on the parent model, inside config()
+					var parentModel = fileRead(tempRoot & "/app/models/Widget.cfc");
+					expect(parentModel).toInclude('hasMany(name="notes")');
+					expect(parentModel).toInclude("function config()");
+
+					// 2. the parent controller eager-loads them on show
+					var parentController = fileRead(tempRoot & "/app/controllers/Widgets.cfc");
+					expect(parentController).toInclude('findByKey(key=params.key, include="notes")');
+					// ...and never the mixed positional+named form
+					expect(parentController).notToInclude("findByKey(params.key, include=");
+
+					// 3. the parent show view renders them, inside a replaceable block
+					var parentShow = fileRead(tempRoot & "/app/views/widgets/show.cfm");
+					expect(parentShow).toInclude("CLI: related notes (generated)");
+					expect(parentShow).toInclude("newNote");
+					expect(parentShow).toInclude("<h2>Notes</h2>");
+
+					// and it is all idempotent — re-running must not stack blocks
+					scaffold.generateScaffold(
+						name = "Note",
+						properties = [{name: "body", type: "text"}],
+						belongsTo = "widget",
+						force = true
+					);
+					var again = fileRead(tempRoot & "/app/views/widgets/show.cfm");
+					var marker = "CLI: related notes (generated)";
+					// exactly one occurrence: strip it once and it is gone
+					var stripped = Replace(again, marker, "", "one");
+					expect(Find(marker, again)).toBeGT(0);
+					expect(Find(marker, stripped)).toBe(0);
 				});
 
 			});

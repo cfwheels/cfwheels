@@ -658,11 +658,25 @@ component extends="wheels.WheelsTest" {
 				});
 
 				it("S10: text type and description / content / body / title / status", () => {
-					local.lorem = "This is test content 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-					expect(seeder.$generateTestData(propertyName = "foo", propertyType = "text", index = 1)).toBe(local.lorem);
-					expect(seeder.$generateTestData(propertyName = "description", propertyType = "string", index = 1)).toBe(local.lorem);
-					expect(seeder.$generateTestData(propertyName = "content", propertyType = "string", index = 1)).toBe(local.lorem);
-					expect(seeder.$generateTestData(propertyName = "body", propertyType = "string", index = 1)).toBe(local.lorem);
+					// Text filler names the record it belongs to, so no two columns
+					// produce the same string.
+					expect(seeder.$generateTestData(propertyName = "foo", propertyType = "text", index = 1)).toStartWith("This is foo 1.");
+					expect(seeder.$generateTestData(propertyName = "description", propertyType = "string", index = 1)).toStartWith("This is description 1.");
+					expect(seeder.$generateTestData(propertyName = "content", propertyType = "string", index = 1)).toStartWith("This is content 1.");
+					expect(seeder.$generateTestData(propertyName = "body", propertyType = "string", index = 1)).toStartWith("This is body 1.");
+
+					// The bug this guards: posts.body and comments.body are both
+					// text columns named `body`, so they received byte-identical
+					// values and a seeded blog rendered its comments as an
+					// apparent duplicate of the post body.
+					local.postBody = seeder.$generateTestData(propertyName = "body", propertyType = "text", index = 1, modelName = "Post");
+					local.commentBody = seeder.$generateTestData(propertyName = "body", propertyType = "text", index = 1, modelName = "Comment");
+					expect(local.postBody).notToBe(local.commentBody);
+					expect(local.postBody).toStartWith("This is post 1.");
+					expect(local.commentBody).toStartWith("This is comment 1.");
+
+					// Titles take the owning model's name too.
+					expect(seeder.$generateTestData(propertyName = "title", propertyType = "string", index = 8, modelName = "Post")).toBe("Post Title 8");
 					expect(seeder.$generateTestData(propertyName = "title", propertyType = "string", index = 8)).toBe("Test Title 8");
 					expect(seeder.$generateTestData(propertyName = "subject", propertyType = "string", index = 8)).toBe("Test Title 8");
 					expect(seeder.$generateTestData(propertyName = "status", propertyType = "string", index = 1)).toBe("pending");

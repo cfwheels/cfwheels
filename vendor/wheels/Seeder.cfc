@@ -323,7 +323,7 @@ component output="false" extends="wheels.Global" {
 									var propType = StructKeyExists(properties[propName], "validationType")
 										? properties[propName].validationType
 										: (StructKeyExists(properties[propName], "type") ? properties[propName].type : "string");
-									record[propName] = $generateTestData(propName, propType, i);
+									record[propName] = $generateTestData(propName, propType, i, modelName);
 								}
 							}
 							var newRecord = modelInstance.new(record);
@@ -461,18 +461,18 @@ component output="false" extends="wheels.Global" {
 	 * Internal function. Produces a plausible fake value for a property based on
 	 * its name and type — used by generateSeeds().
 	 */
-	public any function $generateTestData(required string propertyName, string propertyType = "string", numeric index = 1) {
+	public any function $generateTestData(required string propertyName, string propertyType = "string", numeric index = 1, string modelName = "") {
 		local.name = LCase(arguments.propertyName);
 
 		// Name-pattern branches (checked before any type-based branch, matching
 		// the original ordering of the if-chain).
-		local.byName = $generateTestDataByName(local.name, arguments.index);
+		local.byName = $generateTestDataByName(local.name, arguments.index, arguments.modelName);
 		if (local.byName.handled) {
 			return local.byName.value;
 		}
 
 		// Type-based branches, in the original order.
-		local.byType = $generateTestDataByType(arguments.propertyType, local.name, arguments.index);
+		local.byType = $generateTestDataByType(arguments.propertyType, local.name, arguments.index, arguments.modelName);
 		if (local.byType.handled) {
 			return local.byType.value;
 		}
@@ -482,11 +482,40 @@ component output="false" extends="wheels.Global" {
 	}
 
 	/**
+	 * Internal function. Free-text filler for a column.
+	 *
+	 * Two text columns both named `body` — posts.body and comments.body — used
+	 * to receive byte-identical values, so a seeded blog rendered its comment
+	 * list as an apparent duplicate of the post body. Every value now names the
+	 * record it belongs to (the model when the caller knows it, otherwise the
+	 * column) and rotates a sentence pool off that label, so no two columns
+	 * produce the same string.
+	 *
+	 * @modelName Optional owning model; used as the subject when supplied.
+	 */
+	public string function $sampleTextValue(required string propertyName, string modelName = "", numeric index = 1) {
+		local.sentences = [
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+			"Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+			"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+			"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum."
+		];
+		local.subject = Len(Trim(arguments.modelName)) ? LCase(arguments.modelName) : LCase(arguments.propertyName);
+		// Offset the rotation by the subject's length so sibling columns in
+		// different tables pick different sentences as well as different
+		// subjects — cheap, deterministic, and identical on every engine
+		// (no hash()/Rand(), which vary by engine and would make seeded data
+		// unreproducible between runs).
+		local.pick = ((arguments.index - 1 + Len(local.subject)) mod ArrayLen(local.sentences)) + 1;
+		return "This is #local.subject# #arguments.index#. #local.sentences[local.pick]#";
+	}
+
+	/**
 	 * Internal function. Name-pattern branches of $generateTestData: every
 	 * check that runs before the first type-based branch. Returns
 	 * {handled: true/false, value: ...}.
 	 */
-	public struct function $generateTestDataByName(required string name, required numeric index) {
+	public struct function $generateTestDataByName(required string name, required numeric index, string modelName = "") {
 		// Email fields
 		if (FindNoCase("email", arguments.name)) {
 			return {handled = true, value = "test#arguments.index#@example.com"};
@@ -550,7 +579,7 @@ component output="false" extends="wheels.Global" {
 	 * late name-only title/status checks), preserving the original order of
 	 * the if-chain. Returns {handled: true/false, value: ...}.
 	 */
-	public struct function $generateTestDataByType(required string propertyType, required string name, required numeric index) {
+	public struct function $generateTestDataByType(required string propertyType, required string name, required numeric index, string modelName = "") {
 		// Type-first: an explicit column type wins over name heuristics, so a
 		// `publishedAt:datetime` field gets a date instead of matching the
 		// "published" boolean name heuristic (the old order substring-matched
@@ -580,7 +609,7 @@ component output="false" extends="wheels.Global" {
 
 		// Text fields
 		if (arguments.propertyType == "text") {
-			return {handled = true, value = "This is test content #arguments.index#. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."};
+			return {handled = true, value = $sampleTextValue(arguments.name, arguments.modelName, arguments.index)};
 		}
 
 		// Name heuristics — only for string/unknown types, so they never
@@ -596,12 +625,20 @@ component output="false" extends="wheels.Global" {
 
 		// Text/description fields
 		if (FindNoCase("description", arguments.name) || FindNoCase("content", arguments.name) || FindNoCase("body", arguments.name)) {
-			return {handled = true, value = "This is test content #arguments.index#. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."};
+			return {handled = true, value = $sampleTextValue(arguments.name, arguments.modelName, arguments.index)};
 		}
 
 		// Title fields
 		if (FindNoCase("title", arguments.name) || FindNoCase("subject", arguments.name)) {
-			return {handled = true, value = "Test Title #arguments.index#"};
+			// Without an owning model keep the original "Test Title N"; with one,
+			// name the record so posts.title and comments.title don't collide.
+			// Inlined rather than calling capitalize(): Seeder is instantiated
+			// directly and does not carry the wheels.Global string mixins.
+			local.titlePrefix = "Test";
+			if (Len(Trim(arguments.modelName))) {
+				local.titlePrefix = UCase(Left(arguments.modelName, 1)) & LCase(Mid(arguments.modelName, 2));
+			}
+			return {handled = true, value = "#local.titlePrefix# Title #arguments.index#"};
 		}
 
 		// Status fields

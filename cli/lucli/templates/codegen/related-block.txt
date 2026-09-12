@@ -1,0 +1,13 @@
+<!--- CLI: related |Association| (generated) --->
+<h2>|ListCap|</h2>
+<cfif StructKeyExists(|ParentVar|, "|Association|") and ArrayLen(|ParentVar|.|Association|)>
+	<cfloop array="#|ParentVar|.|Association|#" index="|Singular|">
+		<article>
+			<p>#encodeForHTML(|Singular|.body)#</p>
+		</article>
+	</cfloop>
+<cfelse>
+	<p>No |Association| yet.</p>
+</cfif>
+<p>#linkTo(route="new|SingularCap|", text="Add a |Singular|")#</p>
+<!--- /CLI: related |Association| --->
