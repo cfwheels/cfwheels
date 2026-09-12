@@ -1,0 +1,158 @@
+<!---
+	Starter home page: replace before production.
+
+	This development/first-run landing page surfaces environment details
+	(Wheels version, engine, datasource, environment) and links to the dev
+	tools. It renders because config/routes.cfm still points the root route at
+	the Main controller. Replace it with a real homepage before you deploy so
+	those details are not exposed to anonymous visitors.
+
+	Lives in cli/lucli/templates/app/ so it ships with `wheels new` and is
+	reviewable in the repository — not as an inline string in the CLI.
+--->
+<style>
+	/* Scoped to this page so it cannot leak into the app's own styles. */
+	.wheels-starter {
+		--ws-border: #d4d4d5;
+		--ws-muted: rgba(0, 0, 0, .62);
+		--ws-note-bg: #f4f6f8;
+		max-width: 46rem;
+		margin: 0 auto;
+		padding: 3rem 1.25rem 4rem;
+	}
+	@media (prefers-color-scheme: dark) {
+		.wheels-starter {
+			--ws-border: #3f3f46;
+			--ws-muted: rgba(255, 255, 255, .68);
+			--ws-note-bg: #27272a;
+		}
+	}
+	.wheels-starter-brand {
+		display: flex;
+		align-items: center;
+		gap: .55rem;
+		margin: 0 0 1.75rem;
+		font-size: 1.35rem;
+		font-weight: 700;
+		letter-spacing: -.01em;
+	}
+	.wheels-starter-brand svg { width: 34px; height: 20px; }
+	.wheels-starter h1 { margin: 0 0 .85rem; }
+	.wheels-starter h2 { margin: 2.5rem 0 1rem; }
+	.wheels-starter-note {
+		margin: 1.75rem 0;
+		padding: 1rem 1.15rem;
+		border: 1px solid var(--ws-border);
+		border-radius: .4rem;
+		background: var(--ws-note-bg);
+	}
+	.wheels-starter-note p { margin: 0; }
+	.wheels-starter-details {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: .45rem 1.75rem;
+		margin: 0;
+	}
+	.wheels-starter-details dt { font-weight: 700; }
+	.wheels-starter-details dd { margin: 0; }
+	.wheels-starter-cards {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+		gap: .85rem;
+		margin: 0 0 2.5rem;
+	}
+	/* :visited/:hover are listed explicitly — simple.css styles a:visited, and
+	   a pseudo-class selector outranks a bare class, which otherwise leaves one
+	   already-visited card a different colour from its siblings. */
+	.wheels-starter-card,
+	.wheels-starter-card:visited,
+	.wheels-starter-card:hover,
+	.wheels-starter-card:focus {
+		display: block;
+		padding: .9rem 1.05rem;
+		border: 1px solid var(--ws-border);
+		border-radius: .4rem;
+		color: inherit;
+		text-decoration: none;
+	}
+	.wheels-starter-card:hover { border-color: #4183c4; }
+	.wheels-starter-card strong { display: block; color: inherit; }
+	.wheels-starter-card span {
+		display: block;
+		margin-top: .2rem;
+		font-size: .9rem;
+		color: var(--ws-muted);
+	}
+	.wheels-starter-footer {
+		margin: 0;
+		color: var(--ws-muted);
+		font-size: .9rem;
+	}
+</style>
+
+<div class="wheels-starter">
+	<p class="wheels-starter-brand">
+		<svg viewBox="0 0 31 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15.71 12c1.65 0 2.99 1.34 2.99 3s-1.34 3-2.99 3-2.99-1.34-2.99-3v-1.27c0-.42-.15-.79-.45-1.09L6.1 6.45c-.3-.3-.66-.45-1.09-.45H3.75c-1.65 0-2.99-1.34-2.99-3S2.09 0 3.74 0s2.99 1.34 2.99 3v1.27c0 .42.15.79.45 1.09l6.17 6.19c.3.3.66.45 1.09.45h1.27zM27.68 0c1.65 0 2.99 1.34 2.99 3s-1.34 3-2.99 3-2.99-1.34-2.99-3 1.34-3 2.99-3zm0 12h-1.27c-.42 0-.79-.15-1.09-.45l-6.17-6.19c-.3-.3-.45-.66-.45-1.09V3c0-1.65-1.34-3-2.99-3S12.73 1.35 12.73 3s1.34 3 2.99 3h1.27c.42 0 .79.16 1.09.45l6.17 6.19c.3.3.45.66.45 1.09V15c0 1.65 1.34 3 2.99 3s2.99-1.34 2.99-3-1.34-3-2.99-3z" fill="currentColor"/></svg>
+		<span>Wheels</span>
+	</p>
+
+	<h1>Welcome to {{appName}}</h1>
+
+	<p>Your application booted and is serving requests. Here is what it is connected to, and where to go next.</p>
+
+	<div class="wheels-starter-note">
+		<p>
+			<strong>This is the starter page, not a real homepage.</strong>
+			It is showing because <code>config/routes.cfm</code> still points the root route at the
+			<code>Main</code> controller, and it prints your environment and datasource names.
+			Replace it with a real action before you deploy.
+		</p>
+	</div>
+
+	<h2>The details</h2>
+	<cfoutput>
+		<dl class="wheels-starter-details">
+			<dt>Wheels</dt>
+			<dd>#get("version")#</dd>
+			<dt>Engine</dt>
+			<dd>#application.wheels.serverName# #application.wheels.serverVersion#</dd>
+			<dt>Datasource</dt>
+			<dd>#application.wheels.dataSourceName#</dd>
+			<dt>Environment</dt>
+			<dd>#get("environment")#</dd>
+		</dl>
+	</cfoutput>
+
+	<h2>Next steps</h2>
+	<div class="wheels-starter-cards">
+		<a class="wheels-starter-card" href="/wheels/guides">
+			<strong>Guides</strong>
+			<span>Learn Wheels end to end</span>
+		</a>
+		<a class="wheels-starter-card" href="/wheels/routes">
+			<strong>Routes</strong>
+			<span>Every route in this app</span>
+		</a>
+		<a class="wheels-starter-card" href="/wheels/migrator">
+			<strong>Migrator</strong>
+			<span>Schema and migrations</span>
+		</a>
+		<a class="wheels-starter-card" href="/wheels/app/tests">
+			<strong>Tests</strong>
+			<span>Run your app's suite</span>
+		</a>
+		<a class="wheels-starter-card" href="/wheels/info">
+			<strong>System info</strong>
+			<span>Versions and configuration</span>
+		</a>
+		<a class="wheels-starter-card" href="/wheels/ai">
+			<strong>API docs</strong>
+			<span>Every helper, searchable</span>
+		</a>
+	</div>
+
+	<p class="wheels-starter-footer">
+		This page lives at <code>app/views/main/index.cfm</code>; routing is in <code>config/routes.cfm</code>.
+		Run <code>wheels g scaffold Post title content:text</code> to generate a real resource.
+	</p>
+</div>
