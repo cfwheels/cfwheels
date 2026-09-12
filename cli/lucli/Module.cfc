@@ -1516,29 +1516,7 @@ component extends="modules.BaseModule" {
 		// dropped for Lucee projects — only the RustCFML branch consumed it — so
 		// `wheels start --port=8090` silently booted on the lucee.json port.
 		if (engine != "rustcfml") {
-			var pinned = $readPinnedPorts(variables.projectRoot);
-			var startupPort = enginePort > 0 ? enginePort : pinned.port;
-			var shutdownPort = 0;
-			var movedShutdown = false;
-
-			if (enginePort > 0) {
-				shutdownPort = $nextFreePort(enginePort + 1);
-			} else if (pinned.shutdownPort > 0 && getService("portProbe").portInUse(pinned.shutdownPort)) {
-				// Default path: keep the configured shutdown port only while it
-				// is actually free.
-				shutdownPort = $nextFreePort(pinned.shutdownPort + 1);
-				movedShutdown = true;
-			}
-
-			if (shutdownPort > 0 && (enginePort > 0 || movedShutdown)) {
-				if (movedShutdown) {
-					out("Shutdown port " & pinned.shutdownPort & " is in use; using " & shutdownPort & ".", "yellow");
-				}
-				$writePinnedPorts(variables.projectRoot, startupPort, shutdownPort);
-			}
-			if (enginePort > 0) {
-				out("Using port " & enginePort & " (shutdown " & shutdownPort & ").", "cyan");
-			}
+			$resolveStartPorts(enginePort);
 		}
 
 		// RustCFML backend — separate lifecycle from LuCLI (no JDK/Lucee
@@ -8455,6 +8433,51 @@ component extends="modules.BaseModule" {
 			}
 		}
 		return arguments.from;
+	}
+
+	/**
+	 * Decide the HTTP and shutdown ports for a Lucee start, and persist the
+	 * shutdown port when it has to move.
+	 *
+	 * Two projects whose defaults overlap clash on the SHUTDOWN port, and LuCLI
+	 * reports that as "port conflicts detected:" followed by an empty list — an
+	 * error that names nothing. So the shutdown port is always moved to a free
+	 * one rather than left to collide, whether it came from --port or from
+	 * lucee.json.
+	 *
+	 * The HTTP port is deliberately NOT moved on its own: users expect the port
+	 * they configured, and silently relocating it would be worse than the
+	 * warning `start()` emits when it is taken. `--port` used to be parsed and
+	 * then dropped for Lucee projects — only the RustCFML branch consumed it —
+	 * so `wheels start --port=8090` silently booted on the lucee.json port.
+	 *
+	 * Extracted from start() rather than inlined: the branching here pushed that
+	 * function past the repository's complexity gate of 30.
+	 */
+	private void function $resolveStartPorts(required numeric enginePort) {
+		var pinned = $readPinnedPorts(variables.projectRoot);
+		var startupPort = arguments.enginePort > 0 ? arguments.enginePort : pinned.port;
+		var shutdownPort = 0;
+		var movedShutdown = false;
+
+		if (arguments.enginePort > 0) {
+			shutdownPort = $nextFreePort(arguments.enginePort + 1);
+		} else if (pinned.shutdownPort > 0 && getService("portProbe").portInUse(pinned.shutdownPort)) {
+			// Default path: keep the configured shutdown port only while it is
+			// actually free.
+			shutdownPort = $nextFreePort(pinned.shutdownPort + 1);
+			movedShutdown = true;
+		}
+
+		if (shutdownPort > 0 && (arguments.enginePort > 0 || movedShutdown)) {
+			if (movedShutdown) {
+				out("Shutdown port " & pinned.shutdownPort & " is in use; using " & shutdownPort & ".", "yellow");
+			}
+			$writePinnedPorts(variables.projectRoot, startupPort, shutdownPort);
+		}
+		if (arguments.enginePort > 0) {
+			out("Using port " & arguments.enginePort & " (shutdown " & shutdownPort & ").", "cyan");
+		}
 	}
 
 	/**
