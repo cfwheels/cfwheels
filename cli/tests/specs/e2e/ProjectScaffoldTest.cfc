@@ -226,6 +226,32 @@ component extends="testbox.system.BaseSpec" {
 					// Dev-tool cards point at routes that exist on any running app.
 					expect(content).toInclude("/wheels/guides");
 					expect(content).toInclude("/wheels/routes");
+					// Brand mark comes from the copied image assets, not an inline
+					// SVG, and swaps to the inverse artwork on dark backgrounds.
+					expect(content).toInclude("/images/wheels-logo.png");
+					expect(content).toInclude("/images/wheels-logo-inverse.png");
+				});
+
+				it("copies binary template assets byte-for-byte", function() {
+					// The starter page ships the Wheels wordmark. The generic copy
+					// path is fileRead -> processPlaceholders -> fileWrite, which is
+					// a TEXT round-trip: it mangles binary data (and Adobe's
+					// FileWrite appends a trailing newline to simple values), so
+					// binary extensions must bypass it. A corrupted logo would still
+					// "exist", so assert real bytes, not just presence.
+					var names = ["wheels-logo.png", "wheels-logo-inverse.png"];
+					for (var name in names) {
+						var srcPath = variables.templateDir & "/public/images/" & name;
+						var dstPath = variables.targetDir & "/public/images/" & name;
+						expect(fileExists(srcPath)).toBeTrue("template asset missing: " & name);
+						expect(fileExists(dstPath)).toBeTrue("copied asset missing: " & name);
+
+						var srcBytes = fileReadBinary(srcPath);
+						var dstBytes = fileReadBinary(dstPath);
+						expect(arrayLen(dstBytes)).toBe(arrayLen(srcBytes));
+						// PNG magic number — only intact if the bytes were verbatim.
+						expect(binaryEncode(binaryMid(dstBytes, 1, 8), "hex")).toBe("89504e470d0a1a0a");
+					}
 				});
 
 				it("generates base Controller.cfc in app/controllers/", function() {
@@ -374,6 +400,18 @@ component extends="testbox.system.BaseSpec" {
 			} else {
 				// Skip .gitkeep files
 				if (entry.name == ".gitkeep") continue;
+
+				// Binary assets (the starter page's logo PNGs) must be copied
+				// byte-for-byte — the fileRead/processPlaceholders/fileWrite
+				// path is a text round-trip and mangles them. Mirrors
+				// Module.cfc::$isBinaryTemplateFile.
+				if (ListFindNoCase(
+					"png,jpg,jpeg,gif,webp,avif,ico,bmp,woff,woff2,ttf,otf,eot,pdf,zip,gz,jar,mp4,webm,mp3",
+					LCase(ListLast(entry.name, "."))
+				)) {
+					fileCopy(sourcePath, targetPath);
+					continue;
+				}
 
 				var content = fileRead(sourcePath);
 				content = processPlaceholders(content, arguments.context);
