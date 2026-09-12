@@ -785,6 +785,71 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(viewContent).notToInclude(fixture.childVar & ".body");
 				});
 
+				it("renders each child once across multiple eager-loaded collections and still appends later blocks", () => {
+					var fixture = $seedWiringParent("Wirejoined");
+					var first = scaffold.generateScaffold(name=fixture.childName, properties=[{name: "title", type: "string"}], belongsTo=fixture.parentName);
+					expect(first.success).toBeTrue();
+					var firstView = fileRead(fixture.viewPath);
+					var firstSeen = "wheelsRelated" & helpers.capitalize(fixture.association) & "Seen";
+					expect(firstView).toInclude(chr(60) & "cfset " & firstSeen & " = {}>");
+					expect(firstView).toInclude("not StructKeyExists(" & firstSeen & ", " & fixture.childVar & ".id)");
+					expect(firstView).toInclude(chr(60) & "cfset " & firstSeen & "[" & fixture.childVar & ".id] = true>");
+
+					var secondName = "Wirejoinedbookmark";
+					var secondVar = lCase(secondName);
+					var secondAssociation = lCase(helpers.pluralize(secondName));
+					var second = scaffold.generateScaffold(name=secondName, properties=[{name: "label", type: "string"}], belongsTo=fixture.parentName);
+					expect(second.success).toBeTrue();
+					$expectWiringModification(second, fixture.viewPath, "view");
+					var content = fileRead(fixture.viewPath);
+					expect(fileRead(fixture.controllerPath)).toInclude('include="' & fixture.association & ',' & secondAssociation & '"');
+					var closing = chr(60) & "/cfoutput>";
+					var prefix = left(firstView, len(firstView) - len(closing));
+					expect(compare(left(content, len(prefix)), prefix)).toBe(0);
+					expect(content).toInclude("wheelsRelated" & helpers.capitalize(secondAssociation) & "Seen = {}");
+
+					// The SQL join cross-product can materialize the same child ID
+					// more than once. Equal IDs in different associations remain distinct.
+					var parentRecord = {};
+					parentRecord[fixture.association] = [
+						{id: 1, title: "First note"}, {id: 1, title: "Duplicate note"}, {id: 2, title: "Second note"}
+					];
+					parentRecord[secondAssociation] = [
+						{id: 1, label: "First bookmark"}, {id: 1, label: "Duplicate bookmark"}, {id: 3, label: "Third bookmark"}
+					];
+					var renderer = new cli.lucli.tests._helpers.RelatedBlockRenderer();
+					var rendered = renderer.render(fixture.viewPath, fixture.parentVar, parentRecord);
+					expect(arrayLen(reMatch("\[" & fixture.childVar & ":1:", rendered))).toBe(1);
+					expect(arrayLen(reMatch("\[" & secondVar & ":1:", rendered))).toBe(1);
+					expect(rendered).toInclude("[" & fixture.childVar & ":2:Second note]");
+					expect(rendered).toInclude("[" & secondVar & ":3:Third bookmark]");
+					expect(rendered).notToInclude("Duplicate note");
+					expect(rendered).notToInclude("Duplicate bookmark");
+					expect(compare(renderer.render(fixture.viewPath, fixture.parentVar, parentRecord), rendered)).toBe(0);
+
+					scaffold.generateScaffold(name=secondName, properties=[{name: "label", type: "string"}], belongsTo=fixture.parentName, force=true);
+					$expectWiringFileBytes(fixture.viewPath, content);
+					parentRecord[fixture.association] = [];
+					parentRecord[secondAssociation] = [];
+					var empty = renderer.render(fixture.viewPath, fixture.parentVar, parentRecord);
+					expect(empty).toInclude("No " & fixture.association & " yet.");
+					expect(empty).toInclude("No " & secondAssociation & " yet.");
+					expect(empty).toInclude("Add a " & fixture.childVar);
+					expect(empty).toInclude("Add a " & secondVar);
+				});
+
+				it("does not broaden the view scanner to arbitrary set statements", () => {
+					var fixture = $seedWiringParent("Wirecustomset");
+					var sourceReader = new cli.lucli.services.ScaffoldSource();
+					for (var statement in [
+						"counter = 1", "wheelsRelatedNotesSeen = loadIds()",
+						"wheelsRelatedNotesSeen[note.other] = true", "wheelsRelatedNotesSeen[note.id] = false"
+					]) {
+						var custom = replace(fixture.viewContent, "<h1>", chr(60) & "cfset " & statement & "><h1>", "one");
+						expect(sourceReader.viewAnchor(custom, fixture.parentVar)).toBe(0);
+					}
+				});
+
 				it("preserves an existing hasMany with name first and skips unsafe downstream wiring", () => {
 					var fixture = $seedWiringParent("Wirecustomfirst");
 					fixture.modelContent = 'component extends="Model" { function config() {' & chr(10)

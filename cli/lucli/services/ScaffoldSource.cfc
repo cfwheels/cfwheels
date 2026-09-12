@@ -272,6 +272,12 @@ component {
 				if (!paramSeen || outputSeen || !ReFindNoCase("^" & Chr(60) & "cfoutput\s*>$", tag)) return 0;
 				outputSeen = true;
 			} else if (!outputSeen) return 0;
+			if (name == "cfset") {
+				// Generated related blocks keep per-association seen-ID sets.
+				// Recognize only those assignments, not arbitrary template code.
+				if (closing || !$relatedSeenAssignment(tag)) return 0;
+				continue;
+			}
 			if (ListFind("cfelse,cfelseif", name)) {
 				if (!ArrayLen(stack) || stack[ArrayLen(stack)] != "cfif") return 0;
 				continue;
@@ -284,6 +290,14 @@ component {
 			} else ArrayAppend(stack, name);
 		}
 		return ArrayLen(stack) ? 0 : anchor;
+	}
+
+	/** The only stateful statements emitted by the related-block template. */
+	private boolean function $relatedSeenAssignment(required string tag) {
+		var identifier = "[A-Za-z][A-Za-z0-9_]*";
+		var initializer = "\s*=\s*\{\s*\}";
+		var recordId = "\s*\[\s*" & identifier & "\.id\s*\]\s*=\s*true";
+		return ReFindNoCase("^" & Chr(60) & "cfset\s+wheelsRelated" & identifier & "Seen(?:" & initializer & "|" & recordId & ")\s*>$", arguments.tag) > 0;
 	}
 
 	/** End offsets are exclusive; zero means malformed/unsupported source. */

@@ -76,7 +76,7 @@ The other generators (`controller`, `view`, `migration`, `route`, `test`, `helpe
 | `publishedOn:date` | `date` | |
 | `startsAt:time` | `time` | |
 | `payload:binary` | `binary` | |
-| `--belongsTo=author` | — | Adds `belongsTo("author")` and an `authorId` FK column. |
+| `--belongsTo=author` | — | Adds `belongsTo("author")` and an `author_id` or `authorId` FK column, according to `useUnderscoreReferenceColumns`. |
 | `--hasMany=comments` | — | Adds `hasMany(name="comments")`. Pass multiple names comma-separated. |
 | `--hasOne=profile` | — | Adds `hasOne(name="profile")`. |
 
@@ -195,7 +195,7 @@ wheels generate scaffold <Name> [property:type ...] [--belongsTo=<list>] [--hasM
 
 #### Description
 
-The most opinionated generator. It runs, in order: model, create-table migration, controller (pluralised from `<Name>`), views (`index`, `show`, `new`, `edit`, `_form`), a model spec and a full CRUD controller spec under `tests/specs/`, and a `.resources()` route in `config/routes.cfm`. If any step fails the whole batch is rolled back so you're not left with a half-generated resource.
+The most opinionated generator. It runs, in order: model, create-table migration, controller (pluralised from `<Name>`), views (`index`, `show`, `new`, `edit`, `_form`), a model spec and a full CRUD controller spec under `tests/specs/`, and a `.resources()` route in `config/routes.cfm`. Read the created, modified, skipped, and error messages after generation; use `--dry-run` first when scaffolding into an existing application.
 
 `belongsTo` associations automatically add a foreign-key column even if you didn't list it in the properties. `--belongsTo=author` uses `author_id` when `useUnderscoreReferenceColumns=true` (the `wheels new` default), or `authorId` otherwise. The child form gets a parent picker, and its detail page links back to the parent.
 
