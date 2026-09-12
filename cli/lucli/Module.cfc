@@ -8736,6 +8736,18 @@ component extends="modules.BaseModule" {
 					printCreated(relativePath);
 					continue;
 				}
+				// Binary assets are copied byte-for-byte. fileRead/fileWrite is a
+				// text round-trip — reading a PNG as a string and writing it back
+				// mangles the bytes, and processPlaceholders() would run replace()
+				// over binary data. The Wheels wordmark shipped with the starter
+				// page hits exactly this, so binary extensions skip the
+				// placeholder pass entirely. SVG is deliberately NOT listed: it is
+				// text, and templates may legitimately use placeholders in it.
+				if ($isBinaryTemplateFile(entry.name)) {
+					fileCopy(sourcePath, targetPath);
+					printCreated(relativePath);
+					continue;
+				}
 				// Read template, process placeholders, write to target
 				var content = fileRead(sourcePath);
 				content = processPlaceholders(content, arguments.context);
@@ -8743,6 +8755,18 @@ component extends="modules.BaseModule" {
 				printCreated(relativePath);
 			}
 		}
+	}
+
+	/**
+	 * Whether an app-template file must be copied byte-for-byte instead of being
+	 * read as text, placeholder-substituted, and written back.
+	 */
+	private boolean function $isBinaryTemplateFile(required string fileName) {
+		var ext = LCase(ListLast(arguments.fileName, "."));
+		return ListFindNoCase(
+			"png,jpg,jpeg,gif,webp,avif,ico,bmp,woff,woff2,ttf,otf,eot,pdf,zip,gz,jar,mp4,webm,mp3",
+			ext
+		) > 0;
 	}
 
 	/**

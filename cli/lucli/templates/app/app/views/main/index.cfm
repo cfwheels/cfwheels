@@ -30,13 +30,13 @@
 	.wheels-starter-brand {
 		display: flex;
 		align-items: center;
-		gap: .55rem;
 		margin: 0 0 1.75rem;
-		font-size: 1.35rem;
-		font-weight: 700;
-		letter-spacing: -.01em;
 	}
-	.wheels-starter-brand svg { width: 34px; height: 20px; }
+	.wheels-starter-brand img {
+		display: block;
+		height: 26px;
+		width: auto;
+	}
 	.wheels-starter h1 { margin: 0 0 .85rem; }
 	.wheels-starter h2 { margin: 2.5rem 0 1rem; }
 	.wheels-starter-note {
@@ -92,8 +92,13 @@
 
 <div class="wheels-starter">
 	<p class="wheels-starter-brand">
-		<svg viewBox="0 0 31 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15.71 12c1.65 0 2.99 1.34 2.99 3s-1.34 3-2.99 3-2.99-1.34-2.99-3v-1.27c0-.42-.15-.79-.45-1.09L6.1 6.45c-.3-.3-.66-.45-1.09-.45H3.75c-1.65 0-2.99-1.34-2.99-3S2.09 0 3.74 0s2.99 1.34 2.99 3v1.27c0 .42.15.79.45 1.09l6.17 6.19c.3.3.66.45 1.09.45h1.27zM27.68 0c1.65 0 2.99 1.34 2.99 3s-1.34 3-2.99 3-2.99-1.34-2.99-3 1.34-3 2.99-3zm0 12h-1.27c-.42 0-.79-.15-1.09-.45l-6.17-6.19c-.3-.3-.45-.66-.45-1.09V3c0-1.65-1.34-3-2.99-3S12.73 1.35 12.73 3s1.34 3 2.99 3h1.27c.42 0 .79.16 1.09.45l6.17 6.19c.3.3.45.66.45 1.09V15c0 1.65 1.34 3 2.99 3s2.99-1.34 2.99-3-1.34-3-2.99-3z" fill="currentColor"/></svg>
-		<span>Wheels</span>
+		<!--- Official Wheels wordmark. Two files: the default reads on light
+		     backgrounds, the inverse reads on dark ones — same artwork, so the
+		     <picture> swap cannot shift layout. --->
+		<picture>
+			<source srcset="/images/wheels-logo-inverse.png" media="(prefers-color-scheme: dark)">
+			<img src="/images/wheels-logo.png" alt="Wheels" width="1492" height="178">
+		</picture>
 	</p>
 
 	<h1>Welcome to {{appName}}</h1>
