@@ -462,36 +462,51 @@ component output="false" extends="wheels.Global" {
 	 * its name and type — used by generateSeeds().
 	 */
 	public any function $generateTestData(required string propertyName, string propertyType = "string", numeric index = 1, string modelName = "") {
-		local.name = LCase(arguments.propertyName);
+		local.name = LCase(Trim(arguments.propertyName));
 
 		// Name-pattern branches (checked before any type-based branch, matching
 		// the original ordering of the if-chain).
-		local.byName = $generateTestDataByName(local.name, arguments.index, arguments.modelName);
+		local.byName = $generateTestDataByName(local.name, arguments.index);
 		if (local.byName.handled) {
 			return local.byName.value;
 		}
 
-		// Type-based branches, in the original order.
-		local.byType = $generateTestDataByType(arguments.propertyType, local.name, arguments.index, arguments.modelName);
+		// Keep the property's casing for readable camelCase labels; the type
+		// helper's name heuristics are case-insensitive.
+		local.byType = $generateTestDataByType(arguments.propertyType, Trim(arguments.propertyName), arguments.index, arguments.modelName);
 		if (local.byType.handled) {
 			return local.byType.value;
 		}
 
-		// Default string value
+		// Default string value: preserve the legacy no-model form.
+		if (Len(Trim(arguments.modelName))) {
+			return "#$sampleTextLabel(arguments.propertyName, arguments.modelName)# Test #arguments.index#";
+		}
 		return "#arguments.propertyName# Test #arguments.index#";
+	}
+
+	/**
+	 * Internal function. Readable context shared by free-text and title values.
+	 * Keep both the owning model (when known) and the property, not either/or.
+	 */
+	public string function $sampleTextLabel(required string propertyName, string modelName = "") {
+		local.label = humanize(Trim(arguments.propertyName));
+		if (Len(Trim(arguments.modelName))) {
+			local.label = humanize(Trim(arguments.modelName)) & " " & local.label;
+		}
+		return local.label;
 	}
 
 	/**
 	 * Internal function. Free-text filler for a column.
 	 *
-	 * Two text columns both named `body` — posts.body and comments.body — used
-	 * to receive byte-identical values, so a seeded blog rendered its comment
-	 * list as an apparent duplicate of the post body. Every value now names the
-	 * record it belongs to (the model when the caller knows it, otherwise the
-	 * column) and rotates a sentence pool off that label, so no two columns
-	 * produce the same string.
+	 * Include model, property and row index so posts.body, comments.body and
+	 * posts.description have different context, even when a sentence repeats.
+	 * The fixed pool and arithmetic rotation make this text reproducible with
+	 * no network, clock or random state. This is not a global uniqueness promise
+	 * for seed data: bounded values such as booleans and statuses still repeat.
 	 *
-	 * @modelName Optional owning model; used as the subject when supplied.
+	 * @modelName Optional owning model; the property is always included.
 	 */
 	public string function $sampleTextValue(required string propertyName, string modelName = "", numeric index = 1) {
 		local.sentences = [
@@ -500,12 +515,9 @@ component output="false" extends="wheels.Global" {
 			"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
 			"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum."
 		];
-		local.subject = Len(Trim(arguments.modelName)) ? LCase(arguments.modelName) : LCase(arguments.propertyName);
-		// Offset the rotation by the subject's length so sibling columns in
-		// different tables pick different sentences as well as different
-		// subjects — cheap, deterministic, and identical on every engine
-		// (no hash()/Rand(), which vary by engine and would make seeded data
-		// unreproducible between runs).
+		local.subject = LCase($sampleTextLabel(arguments.propertyName, arguments.modelName));
+		// The label offsets a small sentence pool; equal-length labels may pick
+		// the same sentence, but the model/property context and row index remain.
 		local.pick = ((arguments.index - 1 + Len(local.subject)) mod ArrayLen(local.sentences)) + 1;
 		return "This is #local.subject# #arguments.index#. #local.sentences[local.pick]#";
 	}
@@ -515,7 +527,7 @@ component output="false" extends="wheels.Global" {
 	 * check that runs before the first type-based branch. Returns
 	 * {handled: true/false, value: ...}.
 	 */
-	public struct function $generateTestDataByName(required string name, required numeric index, string modelName = "") {
+	public struct function $generateTestDataByName(required string name, required numeric index) {
 		// Email fields
 		if (FindNoCase("email", arguments.name)) {
 			return {handled = true, value = "test#arguments.index#@example.com"};
@@ -631,14 +643,12 @@ component output="false" extends="wheels.Global" {
 		// Title fields
 		if (FindNoCase("title", arguments.name) || FindNoCase("subject", arguments.name)) {
 			// Without an owning model keep the original "Test Title N"; with one,
-			// name the record so posts.title and comments.title don't collide.
-			// Inlined rather than calling capitalize(): Seeder is instantiated
-			// directly and does not carry the wheels.Global string mixins.
-			local.titlePrefix = "Test";
+			// include the property too, so title and subject do not collide.
+			local.titleLabel = "Test Title";
 			if (Len(Trim(arguments.modelName))) {
-				local.titlePrefix = UCase(Left(arguments.modelName, 1)) & LCase(Mid(arguments.modelName, 2));
+				local.titleLabel = $sampleTextLabel(arguments.name, arguments.modelName);
 			}
-			return {handled = true, value = "#local.titlePrefix# Title #arguments.index#"};
+			return {handled = true, value = "#local.titleLabel# #arguments.index#"};
 		}
 
 		// Status fields

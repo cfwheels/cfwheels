@@ -3,7 +3,7 @@
 <cfif StructKeyExists(|ParentVar|, "|Association|") and ArrayLen(|ParentVar|.|Association|)>
 	<cfloop array="#|ParentVar|.|Association|#" index="|Singular|">
 		<article>
-			<p>#encodeForHTML(|Singular|.body)#</p>
+			<p>#linkTo(route="|Singular|", key=|Singular|.id, text=|Singular|.|DisplayProperty|)#</p>
 		</article>
 	</cfloop>
 <cfelse>

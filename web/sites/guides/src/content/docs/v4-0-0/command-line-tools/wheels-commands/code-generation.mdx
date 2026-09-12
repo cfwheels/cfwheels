@@ -197,9 +197,24 @@ wheels generate scaffold <Name> [property:type ...] [--belongsTo=<list>] [--hasM
 
 The most opinionated generator. It runs, in order: model, create-table migration, controller (pluralised from `<Name>`), views (`index`, `show`, `new`, `edit`, `_form`), a model spec and a full CRUD controller spec under `tests/specs/`, and a `.resources()` route in `config/routes.cfm`. If any step fails the whole batch is rolled back so you're not left with a half-generated resource.
 
-`belongsTo` associations automatically add a foreign-key column — `--belongsTo=author` adds an `authorId` integer column to the migration even if you didn't list it in the properties.
+`belongsTo` associations automatically add a foreign-key column even if you didn't list it in the properties. `--belongsTo=author` uses `author_id` when `useUnderscoreReferenceColumns=true` (the `wheels new` default), or `authorId` otherwise. The child form gets a parent picker, and its detail page links back to the parent.
 
-After running, do `wheels migrate latest` to apply the migration, then `wheels start` to try the new resource.
+When the parent already exists, the scaffold also attempts to wire the inverse side. For example:
+
+```bash
+wheels generate scaffold Post title:string body:text
+wheels generate scaffold Comment body:text --belongsTo=post
+```
+
+For conventional scaffolded files, the second command:
+
+- Adds `hasMany(name="comments")` inside `Post.config()`.
+- Adds `include="comments"` to the parent's `show()` finder, preserving an existing static include list.
+- Adds a related-record section to `posts/show.cfm`, with links to each comment and an **Add a comment** link. It uses the child's display property, not an assumed `body` column.
+
+Existing parent files are reported as **modify**, not **create**. `--dry-run` previews these edits without writing them. A repeat run preserves the existing marked related-record section, including your edits—even with `--force`. Custom association options, dynamic finders, or ambiguous source are left alone with a message explaining what to wire manually. Cascading deletion is **not** enabled automatically. API-only scaffolds can add the inverse model association but do not modify the parent's HTML controller or views.
+
+Start the server with `wheels start`, then run `wheels migrate latest` to apply the migration and try the resource.
 
 #### Example
 

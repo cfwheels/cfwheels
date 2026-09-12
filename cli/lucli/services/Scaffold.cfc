@@ -17,10 +17,11 @@ component {
 		variables.codeGenService = arguments.codeGenService;
 		variables.helpers = arguments.helpers;
 		variables.projectRoot = arguments.projectRoot;
-		// Optional: only needed by generators that read bundled template
-		// directories directly (generateAuth). Ends with a trailing slash
-		// when provided (same convention as the Admin service).
-		variables.moduleRoot = arguments.moduleRoot;
+		// Direct service callers need the same bundled templates as Module.cfc.
+		variables.moduleRoot = Len(arguments.moduleRoot)
+			? arguments.moduleRoot & "/"
+			: GetDirectoryFromPath(GetCurrentTemplatePath()) & "../";
+		variables.parentSource = new ScaffoldSource();
 		return this;
 	}
 
@@ -57,7 +58,7 @@ component {
 		boolean tests = true,
 		boolean force = false
 	) {
-		var results = {success: true, generated: [], skipped: [], errors: [], rollback: []};
+		var results = {success: true, generated: [], modified: [], skipped: [], errors: [], rollback: []};
 		var pluralName = variables.helpers.pluralize(arguments.name);
 
 		try {
@@ -186,13 +187,9 @@ component {
 			// and broke the controller convention.
 			updateRoutes(pluralName);
 
-			// 7. Wire the other side of every belongsTo relationship: the parent
-			// model's hasMany, its controller's include=, and a block on its show
-			// view. Only files that already exist are touched — a belongsTo
-			// pointing at an external or hand-written model is left alone.
-			for (var wired in $wireParentSide(arguments.name, arguments.belongsTo)) {
-				arrayAppend(results.generated, wired);
-			}
+			// Parent files belong to the user, even under --force. Only make
+			// narrowly recognized edits; report everything else for manual wiring.
+			$wireParentSide(arguments.name, arguments.belongsTo, viewProps, arguments.api, results);
 
 		} catch (any e) {
 			results.success = false;
@@ -205,182 +202,99 @@ component {
 		return results;
 	}
 
-	/**
-	 * Wire the OTHER side of a belongsTo relationship.
-	 *
-	 * `generate scaffold Comment --belongsTo=post` used to produce a Comment
-	 * that knew about its Post while the Post knew nothing about comments: no
-	 * hasMany, nothing eager-loaded, and a show page that could not display
-	 * them. The parent files already exist and are owned by the user, so this
-	 * edits them in place rather than regenerating (which would discard their
-	 * work) and reports every file it touched.
-	 *
-	 * Returns an array of {type, path} entries for the caller's `generated`
-	 * list. Nothing is reported when the parent was not scaffolded here — a
-	 * belongsTo pointing at a hand-written or external model is left alone.
-	 */
-	private array function $wireParentSide(required string childName, required string belongsTo) {
-		var wired = [];
-		if (!Len(Trim(arguments.belongsTo))) {
-			return wired;
-		}
-
-		// Lowercase: this is an association name (comments), not a class name.
-		var childPlural = LCase(variables.helpers.pluralize(arguments.childName));
+	/** Wire only conventional parent files; --force never owns parent code. */
+	private void function $wireParentSide(required string childName, required string belongsTo, required array viewProps, required boolean api, required struct results) {
+		var association = LCase(variables.helpers.pluralize(arguments.childName));
 		for (var parent in ListToArray(arguments.belongsTo)) {
 			parent = Trim(parent);
-			if (!Len(parent)) {
+			if (!ReFind("^[A-Za-z][A-Za-z0-9_]*$", parent) || !ReFind("^[A-Za-z][A-Za-z0-9_]*$", association)) {
+				ArrayAppend(arguments.results.skipped, "parent wiring: custom association name; wire manually");
 				continue;
 			}
 			var parentModel = variables.helpers.capitalize(parent);
 			var parentPlural = variables.helpers.pluralize(parentModel);
-
-			// 1. Parent model — declare the inverse association.
 			var modelPath = variables.projectRoot & "/app/models/" & parentModel & ".cfc";
-			if (FileExists(modelPath) && $injectHasMany(modelPath, childPlural)) {
-				ArrayAppend(wired, {type: "model", path: modelPath});
+			if (!FileExists(modelPath)) {
+				ArrayAppend(arguments.results.skipped, "parent model: " & modelPath & " not found; add hasMany(name=""" & association & """) manually");
+				continue;
 			}
-
-			// 2. Parent controller — eager-load the children on show.
+			var original = FileRead(modelPath);
+			var modelEdit = variables.parentSource.inverse(original, association, arguments.childName);
+			if (!modelEdit.ready) {
+				ArrayAppend(arguments.results.skipped, "parent model: " & modelPath & " — " & modelEdit.reason & "; wire " & association & " manually");
+				continue;
+			}
+			$writeParentChange(modelPath, original, modelEdit.content, "model", arguments.results);
+			// API scaffolds must not change existing browser controllers/views.
+			if (arguments.api) continue;
 			var controllerPath = variables.projectRoot & "/app/controllers/" & parentPlural & ".cfc";
-			if (FileExists(controllerPath) && $injectShowInclude(controllerPath, childPlural)) {
-				ArrayAppend(wired, {type: "controller", path: controllerPath});
+			if (!FileExists(controllerPath)) {
+				ArrayAppend(arguments.results.skipped, "parent controller: " & controllerPath & " not found; add show include=""" & association & """ and related UI manually");
+				continue;
 			}
-
-			// 3. Parent show view — render them.
-			var showPath = variables.projectRoot & "/app/views/" & LCase(parentPlural) & "/show.cfm";
-			if (FileExists(showPath) && $upsertRelatedBlock(showPath, parent, childPlural)) {
-				ArrayAppend(wired, {type: "view", path: showPath});
+			original = FileRead(controllerPath);
+			var controllerEdit = variables.parentSource.showInclude(original, LCase(parent), parentModel, association);
+			if (!controllerEdit.ready) {
+				ArrayAppend(arguments.results.skipped, "parent controller: " & controllerPath & " — " & controllerEdit.reason & "; add include=""" & association & """ and related UI manually");
+				continue;
 			}
+			$writeParentChange(controllerPath, original, controllerEdit.content, "controller", arguments.results);
+			$appendRelatedBlock(variables.projectRoot & "/app/views/" & LCase(parentPlural) & "/show.cfm", parent, association, arguments.viewProps, arguments.results);
 		}
-		return wired;
 	}
 
-	/**
-	 * Add `hasMany(name="<children>")` to a parent model's config(), unless it
-	 * already declares that association. Comments are stripped before the
-	 * check so a commented-out hasMany does not read as present (#2595).
-	 */
-	private boolean function $injectHasMany(required string modelPath, required string association) {
-		var content = FileRead(arguments.modelPath);
-		// Comments are stripped for the "already declared" check only. Positions
-		// from the stripped copy must never be used to edit the original — the
-		// stripped text is shorter, so the offset lands in the docblock above
-		// config() and the association gets injected into a comment.
-		var code = $stripCfmlComments(content);
-		if (reFindNoCase('hasMany\s*\(\s*(name\s*=\s*)?["'']' & arguments.association & '["'']', code)) {
-			return false;
+	private void function $writeParentChange(required string path, required string original, required string content, required string type, required struct results) {
+		if (Compare(arguments.original, arguments.content) == 0) return;
+		$write(arguments.path, arguments.content);
+		// Never put pre-existing parent files in the rollback deletion list.
+		for (var item in arguments.results.modified) {
+			if (item.path == arguments.path) return;
 		}
-		// Locate config() in the ORIGINAL text. The needle includes the
-		// `function` keyword because the generated model's docblock mentions a
-		// bare `config()`, and $findCodePosition skips line-commented matches.
-		var declPos = $findCodePosition(content, "function config");
-		if (!declPos) {
-			return false;
-		}
-		var bracePos = Find("{", content, Find(")", content, declPos));
-		if (!bracePos) {
-			return false;
-		}
-		// Indent one level past the `function config()` line itself, so the new
-		// association sits with the other declarations in the body.
-		var indent = $lineIndent(content, declPos) & chr(9);
-		var insertion = chr(10) & indent & "// Inverse of " & variables.helpers.capitalize(variables.helpers.singularize(arguments.association)) & "'s belongsTo — generated by the scaffold." & chr(10)
-			& indent & "// Add dependent=""delete"" if deleting this record should delete its " & arguments.association & "." & chr(10)
-			& indent & "hasMany(name=""" & arguments.association & """);";
-		content = Insert(insertion, content, bracePos + 1);
-		FileWrite(arguments.modelPath, content);
-		return true;
+		ArrayAppend(arguments.results.modified, {type: arguments.type, path: arguments.path});
 	}
 
-	/**
-	 * Add `include="<children>"` to the parent controller's show() finder so
-	 * the view can walk the association. Finds the show action specifically —
-	 * not every findByKey in the file — and merges into an existing include
-	 * list rather than emitting a second include= argument.
-	 */
-	private boolean function $injectShowInclude(required string controllerPath, required string association) {
-		var content = FileRead(arguments.controllerPath);
-		var match = reFindNoCase("function\s+show\s*\(\s*\)\s*\{[^}]*\}", content, 1, true);
-		if (!match.pos[1]) {
-			return false;
+	/** Append once. A marked block is user-owned, including on --force reruns. */
+	private void function $appendRelatedBlock(required string viewPath, required string parent, required string association, required array viewProps, required struct results) {
+		if (!FileExists(arguments.viewPath)) {
+			ArrayAppend(arguments.results.skipped, "parent view: " & arguments.viewPath & " not found; add related UI manually");
+			return;
 		}
-		var body = Mid(content, match.pos[1], match.len[1]);
-		var updated = body;
-		if (reFindNoCase('include\s*=\s*"', body)) {
-			// Append to the existing list: include="author" -> include="author,comments"
-			if (reFindNoCase('include\s*=\s*"[^"]*\b' & arguments.association & '\b', body)) {
-				return false;
-			}
-			updated = reReplaceNoCase(body, '(include\s*=\s*")([^"]*)(")', "\1\2," & arguments.association & "\3", "one");
-		} else if (reFindNoCase('findByKey\s*\(\s*params\.key\s*\)', body)) {
-			// All-named form — the mixed positional+named shape is rejected at
-			// runtime, so never generate findByKey(params.key, include=...).
-			updated = reReplaceNoCase(body, 'findByKey\s*\(\s*params\.key\s*\)', 'findByKey(key=params.key, include="' & arguments.association & '")', "one");
-		} else {
-			return false;
-		}
-		FileWrite(arguments.controllerPath, Replace(content, body, updated, "one"));
-		return true;
-	}
-
-	/**
-	 * Insert (or refresh) the generated block that lists a parent's children
-	 * on its show view. Delimited by markers so a later scaffold of another
-	 * child replaces its own block instead of stacking duplicates, and so a
-	 * re-scaffold never touches hand-written markup elsewhere in the file.
-	 */
-	private boolean function $upsertRelatedBlock(required string viewPath, required string parent, required string association) {
 		var content = FileRead(arguments.viewPath);
-		var singular = variables.helpers.singularize(arguments.association);
-		var openMarker = "<!--- CLI: related " & arguments.association & " (generated) --->";
-		var closeMarker = "<!--- /CLI: related " & arguments.association & " --->";
-
-		// Rendered from a bundled template rather than built inline: the block
-		// is CFML containing #expressions# and nested quotes, and assembling
-		// that inside a CFC keeps tripping Lucee's parser over interpolated
-		// hashes. A .txt template is read verbatim, so nothing is evaluated.
+		var marker = "CLI: related " & arguments.association;
+		if (FindNoCase(marker, content)) {
+			ArrayAppend(arguments.results.skipped, "parent view: " & arguments.viewPath & " — related " & arguments.association & " block already present; preserved (edit manually)");
+			return;
+		}
+		var anchor = variables.parentSource.viewAnchor(content, LCase(arguments.parent));
+		if (!anchor) {
+			ArrayAppend(arguments.results.skipped, "parent view: " & arguments.viewPath & " — custom or ambiguous show wrapper; add related UI manually");
+			return;
+		}
 		var templatePath = variables.moduleRoot & "templates/codegen/related-block.txt";
-		if (!Len(variables.moduleRoot) || !FileExists(templatePath)) {
-			return false;
+		if (!FileExists(templatePath)) {
+			ArrayAppend(arguments.results.skipped, "parent view: related template not found: " & templatePath);
+			return;
 		}
-		var block = FileRead(templatePath);
-		block = Replace(block, "|SingularCap|", variables.helpers.capitalize(singular), "all");
-		block = Replace(block, "|Singular|", singular, "all");
-		block = Replace(block, "|Association|", arguments.association, "all");
-		block = Replace(block, "|ListCap|", variables.helpers.capitalize(arguments.association), "all");
-		block = Replace(block, "|ParentVar|", LCase(arguments.parent), "all");
-		block = RTrim(block);
-
-		// Replace an existing block for this association, if present. Plain
-		// Find/Replace rather than regex: the markers contain parentheses and
-		// dashes, and reEscape() is not a CFML builtin.
-		var openPos = Find(openMarker, content);
-		if (openPos) {
-			var closePos = Find(closeMarker, content, openPos);
-			if (closePos) {
-				var current = Mid(content, openPos, closePos - openPos + Len(closeMarker));
-				if (current == block) {
-					return false;
+		// Same string/text/id priority as the child views, including columns
+		// merged from its existing migration. Never assume a body column.
+		var display = "id";
+		for (var kind in ["string", "text"]) {
+			for (var prop in arguments.viewProps) {
+				if ((prop.type ?: "string") == kind && !ReFindNoCase("(Id|_id)$", prop.name)) {
+					display = prop.name;
+					break;
 				}
-				FileWrite(arguments.viewPath, Replace(content, current, block, "one"));
-				return true;
 			}
+			if (display != "id") break;
 		}
-
-		// Otherwise append ahead of the closing cfoutput tag, which every
-		// generated show view has. Built from chr(60) and replaced wholesale
-		// rather than written literally/inserted by offset: Lucee's compiler
-		// reads a bare end-tag token inside a CFC string (or comment) as a real
-		// tag, and reFind() offsets land either side of the `<` depending on
-		// the pattern, which split the tag into `<` + block + `/cfoutput>`.
-		var closeTag = chr(60) & "/cfoutput>";
-		if (!Find(closeTag, content)) {
-			return false;
-		}
-		content = Replace(content, closeTag, block & chr(10) & closeTag, "one");
-		FileWrite(arguments.viewPath, content);
-		return true;
+		var singular = LCase(variables.helpers.singularize(arguments.association));
+		var block = FileRead(templatePath);
+		var substitutions = {SingularCap: variables.helpers.capitalize(singular), Singular: singular, Association: arguments.association, ListCap: variables.helpers.capitalize(arguments.association), ParentVar: LCase(arguments.parent), DisplayProperty: display};
+		for (var key in substitutions) block = ReplaceNoCase(block, "|" & key & "|", substitutions[key], "all");
+		var nl = Find(Chr(13) & Chr(10), content) ? Chr(13) & Chr(10) : Chr(10);
+		block = Replace(RTrim(block), Chr(10), nl, "all") & nl;
+		// Insert takes a CHARACTER COUNT, not a one-based index.
+		$writeParentChange(arguments.viewPath, content, Insert(block, content, anchor - 1), "view", arguments.results);
 	}
 
 	/**
