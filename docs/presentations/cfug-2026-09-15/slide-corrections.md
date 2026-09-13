@@ -77,12 +77,14 @@ not a silent replacement for the live generated-seed track.
   hiding it. Info, migrate diff and coverage also passed in this rehearsal.
 - [ ] **Slide 20 — current MCP evidence.** Keep `wheels mcp wheels` and
   the app-scoped client config. Verify actual tools/list and the intended
-  project. Build 2482 returned 19 tools and completed the Tag loop; the
-  following suite passed 44/44. Its generated seed reported 30 created,
-  2 skipped (User and Product), not success for every model. Disclose those
-  skips or use explicit valid Tag data. Product's decimal sample limitation
-  is distinct from the successful explicit API payload. The stdio server
-  is not an interactive REPL.
+  project. Build 2482 returned 19 tools, Tag commands returned success,
+  `/tags` returned 200 and the suite passed 44/44. **The final row-count
+  audit nevertheless found no durable generated Tag/Product rows after
+  auth; the Tag page was empty.** Remove any “completed data loop” claim.
+  Reported 30 created / 2 skipped was not proof of committed data. Use the
+  explicit convention Tag seed in demo.md, or wait for a verified fix;
+  inspect rows in a new request. This does not invalidate the separately
+  verified explicit Product API payload. The stdio server is not a REPL.
 - [ ] **Slide 21 — result claims.** Remove “versioned” from the `/api/products`
   description: an `/api` namespace alone does not version an API. Recap
   only the features actually shown, including any disclosed fallback.

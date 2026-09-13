@@ -293,8 +293,11 @@ The client launches the stdio server in the app. Generated AI docs and the
 error page's Copy button provide context.
 
 > Notes: Show actual tools/list, not a frozen count. Optional Tag loop:
-> generate, migrate, reload, valid sample data, browser. Do not blindly
-> reseed every model after auth. The protocol server is not a REPL.
+> generate, migrate, reload, explicit convention seed, browser with rows.
+> The after-auth generated seed returned success in rehearsal but the final
+> audit found no durable Tag/Product rows. Do not call that a completed
+> data loop: use the convention example in demo.md or a separately verified
+> corrected build, and check committed rows. The protocol server is not a REPL.
 
 ---
 
