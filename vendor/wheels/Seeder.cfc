@@ -303,8 +303,15 @@ component output="false" extends="wheels.Global" {
 			return result;
 		}
 
+		var transactionWrapper = {exists = StructKeyExists(request, "$wheelsTransactionWrapper")};
+		if (transactionWrapper.exists) {
+			transactionWrapper.value = request.$wheelsTransactionWrapper;
+		}
 		transaction action="begin" {
 			try {
+				// The seeder, not each model.save(), owns commit/rollback. Without
+				// this signal a validation failure rolls back earlier valid models.
+				request.$wheelsTransactionWrapper = true;
 				modelList = $orderGenerateModels(modelList);
 				for (var modelName in modelList) {
 					try {
@@ -316,6 +323,13 @@ component output="false" extends="wheels.Global" {
 						// Resolve parent rows after selected parents have been generated, and
 						// inside the same transaction. Never fabricate a foreign key from i.
 						var references = arguments.count > 0 ? $generateReferences(modelInstance) : [];
+						var savepointName = "wseed" & Left(Replace(CreateUUID(), "-", "", "all"), 20);
+						if (arguments.count > 0) {
+							// Establish this datasource before setting a savepoint: metadata
+							// can be cached, and all generated records may fail before INSERT.
+							modelInstance.findOne(select = modelInstance.primaryKeys(), callbacks = false, reload = true);
+							transaction action="setsavepoint" savepoint=savepointName;
+						}
 
 						for (var i = 1; i <= arguments.count; i++) {
 							var record = {};
@@ -353,6 +367,11 @@ component output="false" extends="wheels.Global" {
 						// blog-with-auth app. Partial success (some rows saved, some not) is
 						// still a real failure — validations are rejecting some generated data.
 						var entrySkipped = (arguments.count > 0 && seededCount == 0);
+						if (entrySkipped) {
+							// A skipped model must not keep writes made by its callbacks,
+							// but must not erase successful models earlier in the run either.
+							transaction action="rollback" savepoint=savepointName;
+						}
 						var entrySuccess = (seededCount == arguments.count);
 						ArrayAppend(result.seeded, {
 							model = modelName,
@@ -393,6 +412,12 @@ component output="false" extends="wheels.Global" {
 				result.success = false;
 				result.message = "Database seeding failed: " & e.message;
 				return result;
+			} finally {
+				if (transactionWrapper.exists) {
+					request.$wheelsTransactionWrapper = transactionWrapper.value;
+				} else {
+					StructDelete(request, "$wheelsTransactionWrapper");
+				}
 			}
 		}
 

@@ -648,6 +648,57 @@ component extends="wheels.WheelsTest" {
 					expect(model("RefParent").count()).toBe(2);
 				});
 
+				it("durably commits valid models before skipped auth models with normal transaction defaults", () => {
+					// Core tests normally disable model transactions, hiding a failed save's
+					// nested rollback of the seeder's already-created records.
+					local.transactionMode = application.wheels.transactionMode;
+					application.wheels.transactionMode = "commit";
+					try {
+						local.result = seeder.generateSeeds(models = "RefParent,SeederRejectedParent", count = 2);
+						expect(local.result.success).toBeTrue();
+						expect(local.result.totalCreated).toBe(2);
+						expect(local.result.totalSkipped).toBe(1);
+						expect(model("RefParent").count()).toBe(2);
+					} finally {
+						application.wheels.transactionMode = local.transactionMode;
+					}
+				});
+
+				it("discards skipped model callback writes without discarding valid models", () => {
+					local.result = seeder.generateSeeds(models = "RefParent,SeederCallbackParent", count = 2);
+					expect(local.result.success).toBeTrue();
+					expect(local.result.totalCreated).toBe(2);
+					expect(local.result.totalSkipped).toBe(1);
+					expect(model("RefParent").count()).toBe(2);
+					expect(model("RefParent").count(where = "name = 'SeederCallbackSideEffect'")).toBe(0);
+				});
+
+				it("restores the outer transaction signal on success and failure", () => {
+					local.previous = {exists = StructKeyExists(request, "$wheelsTransactionWrapper")};
+					if (local.previous.exists) {
+						local.previous.value = request.$wheelsTransactionWrapper;
+					}
+					try {
+						StructDelete(request, "$wheelsTransactionWrapper");
+						seeder.generateSeeds(models = "RefParent", count = 1);
+						expect(StructKeyExists(request, "$wheelsTransactionWrapper")).toBeFalse();
+						seeder.generateSeeds(models = "NoSuchModel_SeederSignal", count = 1);
+						expect(StructKeyExists(request, "$wheelsTransactionWrapper")).toBeFalse();
+						request.$wheelsTransactionWrapper = false;
+						seeder.generateSeeds(models = "RefParent", count = 1);
+						expect(request.$wheelsTransactionWrapper).toBeFalse();
+						request.$wheelsTransactionWrapper = true;
+						seeder.generateSeeds(models = "NoSuchModel_SeederSignal", count = 1);
+						expect(request.$wheelsTransactionWrapper).toBeTrue();
+					} finally {
+						if (local.previous.exists) {
+							request.$wheelsTransactionWrapper = local.previous.value;
+						} else {
+							StructDelete(request, "$wheelsTransactionWrapper");
+						}
+					}
+				});
+
 				it("rolls back partially saved models rather than treating them as skipped", () => {
 					local.result = seeder.generateSeeds(models = "SeederPartialParent", count = 2);
 					expect(local.result.success).toBeFalse();
