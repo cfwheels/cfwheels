@@ -129,6 +129,25 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 				expect(fileExists(templateRoot & "tests/specs/models/.gitkeep")).toBeTrue();
 			});
 
+			it("ships app/snippets/CRUDContent.txt identical to the bundled codegen template", () => {
+				// `wheels new` copies every codegen template into the app's
+				// app/snippets/, and Templates.cfc resolves THOSE first — they
+				// shadow the bundled copy. So a fix to templates/codegen/
+				// CRUDContent.txt is invisible to every freshly generated app
+				// unless the snippet copy moves with it. That is exactly how the
+				// 404 guard shipped in a release and then failed to appear in a
+				// stock `wheels new` app: the two files had silently diverged.
+				//
+				// Only this pair is pinned. Two other twins differ on purpose
+				// (the app copies read the reload password from .env), so a
+				// blanket "all snippets match codegen" rule would be wrong.
+				var bundled = fileRead(expandPath("/cli/lucli/templates/codegen/CRUDContent.txt"));
+				var shipped = fileRead(templateRoot & "app/snippets/CRUDContent.txt");
+				expect(compare(shipped, bundled)).toBe(0);
+				// And the shipped copy must actually carry the guard.
+				expect(shipped).toInclude('filters(through="requireRecord"');
+			});
+
 		});
 
 	}
