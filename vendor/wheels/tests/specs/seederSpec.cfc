@@ -574,6 +574,122 @@ component extends="wheels.WheelsTest" {
 
 			});
 
+			describe("generated belongsTo references", () => {
+
+				beforeEach(() => {
+					model("RefChild").deleteAll(instantiate = false);
+					model("RefParent").deleteAll(instantiate = false);
+				});
+
+				afterEach(() => {
+					model("RefChild").deleteAll(instantiate = false);
+					model("RefParent").deleteAll(instantiate = false);
+				});
+
+				it("generates selected parents before children even when the child is listed first", () => {
+					local.result = seeder.generateSeeds(models = "RefChild,RefParent", count = 3);
+					expect(local.result.success).toBeTrue();
+					expect(local.result.totalCreated).toBe(6);
+					expect(local.result.seeded[1].model).toBe("RefParent");
+					local.children = model("RefChild").findAll(include = "refParent");
+					expect(local.children.recordCount).toBe(3);
+				});
+
+				it("cycles actual noncontiguous underscore foreign keys rather than row indices", () => {
+					$createSeederParents();
+					local.result = seeder.generateSeeds(models = "RefChild", count = 5);
+					expect(local.result.success).toBeTrue();
+					local.children = model("RefChild").findAll(order = "id");
+					expect(ValueList(local.children.refparent_id)).toBe("41,97,41,97,41");
+					expect(model("RefParent").count()).toBe(2);
+				});
+
+				it("honors modelName, mapped custom foreignKey and a non-primary joinKey", () => {
+					$createSeederParents();
+					local.result = seeder.generateSeeds(models = "SeederJoinChild", count = 3);
+					expect(local.result.success).toBeTrue();
+					local.children = model("SeederJoinChild").findAll(order = "id");
+					expect(ValueList(local.children.ownerCode)).toBe("41,97,41");
+				});
+
+				it("fails missing parents without creating orphans and rolls back other models", () => {
+					local.beforeCount = model("Author").count();
+					local.result = seeder.generateSeeds(models = "Author,RefChild", count = 2);
+					expect(local.result.success).toBeFalse();
+					expect(local.result.totalFailed).toBe(1);
+					expect(local.result.message).toInclude("refParent");
+					expect(local.result.message).toInclude("rolled back");
+					expect(model("RefChild").count()).toBe(0);
+					expect(model("Author").count()).toBe(local.beforeCount);
+				});
+
+				it("keeps zero-save auth-style validation failures skipped", () => {
+					local.result = seeder.generateSeeds(models = "SeederRejectedParent,RefParent", count = 2);
+					expect(local.result.success).toBeTrue();
+					expect(local.result.totalSkipped).toBe(1);
+					expect(local.result.totalFailed).toBe(0);
+					expect(model("RefParent").count()).toBe(2);
+				});
+
+				it("rolls back partially saved models rather than treating them as skipped", () => {
+					local.result = seeder.generateSeeds(models = "SeederPartialParent", count = 2);
+					expect(local.result.success).toBeFalse();
+					expect(local.result.totalCreated).toBe(1);
+					expect(local.result.totalFailed).toBe(1);
+					expect(local.result.totalSkipped).toBe(0);
+					expect(model("RefParent").count()).toBe(0);
+				});
+
+				it("bounds self references and refuses to invent a missing parent", () => {
+					local.result = seeder.generateSeeds(models = "SeederSelfChild", count = 2);
+					expect(local.result.success).toBeFalse();
+					expect(local.result.message).toInclude("No usable");
+					expect(model("RefChild").count()).toBe(0);
+				});
+
+				it("refuses polymorphic references instead of generating an arbitrary type and id", () => {
+					local.result = seeder.generateSeeds(models = "PolyComment", count = 2);
+					expect(local.result.success).toBeFalse();
+					expect(local.result.totalFailed).toBe(1);
+					expect(local.result.message).toInclude("polymorphic");
+				});
+
+				it("resolves a string primary key that is not named id", () => {
+					local.beforeQuery = model("Truck").findAll(select = "id");
+					local.beforeIds = ValueList(local.beforeQuery.id);
+					try {
+						local.result = seeder.generateSeeds(models = "Truck", count = 3);
+						expect(local.result.success).toBeTrue();
+						local.children = model("Truck").findAll(where = "id NOT IN (#local.beforeIds#)", include = "shop");
+						expect(local.children.recordCount).toBe(3);
+					} finally {
+						model("Truck").deleteAll(where = "id NOT IN (#local.beforeIds#)", instantiate = false);
+					}
+				});
+
+				it("uses existing camelCase parent keys and excludes soft-deleted parents", () => {
+					local.beforeQuery = model("Comment").findAll(select = "id");
+					local.beforeIds = ValueList(local.beforeQuery.id);
+					local.deleted = model("Post").findOne(order = "id");
+					local.deleted.delete();
+					try {
+						local.parents = model("Post").findAll(select = "id", order = "id");
+						local.parentIds = ValueList(local.parents.id);
+						local.result = seeder.generateSeeds(models = "Comment", count = 7);
+						expect(local.result.success).toBeTrue();
+						local.children = model("Comment").findAll(where = "id NOT IN (#local.beforeIds#)");
+						expect(local.children.recordCount).toBe(7);
+						for (local.row = 1; local.row <= local.children.recordCount; local.row++) {
+							expect(ListFind(local.parentIds, local.children.postid[local.row]) > 0).toBeTrue();
+						}
+					} finally {
+						model("Comment").deleteAll(where = "id NOT IN (#local.beforeIds#)", instantiate = false);
+						local.deleted.update(deletedAt = "", includeSoftDeletes = true);
+					}
+				});
+
+			});
+
 			describe("$generateTestData()", () => {
 
 				it("S10: email names return an example.com address", () => {
@@ -775,6 +891,11 @@ component extends="wheels.WheelsTest" {
 
 		});
 
+	}
+
+	public void function $createSeederParents() {
+		model("RefParent").create(id = 41, name = "Parent forty one");
+		model("RefParent").create(id = 97, name = "Parent ninety seven");
 	}
 
 	public void function $deleteAuthorByFirstName(required string firstName) {

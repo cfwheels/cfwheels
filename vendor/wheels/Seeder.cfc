@@ -259,7 +259,10 @@ component output="false" extends="wheels.Global" {
 	 * Generate fake records for one or more models — the legacy
 	 * `wheels seed --generate` path. Unlike convention seeding this does not
 	 * use seed files; it introspects each model's persisted properties and
-	 * inserts `count` rows of plausible test data per model.
+	 * inserts `count` rows of plausible test data per model. Selected belongsTo
+	 * parents run first; foreign keys cycle through real, non-soft-deleted parent
+	 * rows using the association's foreignKey/joinKey metadata. Missing parents
+	 * or unsupported associations fail the run rather than inventing references.
 	 *
 	 * Honesty contract (issue #3082): a model that throws, or whose generated
 	 * rows do not all save, is recorded as a failed entry AND forces overall
@@ -302,6 +305,7 @@ component output="false" extends="wheels.Global" {
 
 		transaction action="begin" {
 			try {
+				modelList = $orderGenerateModels(modelList);
 				for (var modelName in modelList) {
 					try {
 						var modelInstance = model(modelName);
@@ -309,6 +313,9 @@ component output="false" extends="wheels.Global" {
 						// each value is the property's metadata struct. Iterate the keys.
 						var properties = modelInstance.$classData().properties;
 						var seededCount = 0;
+						// Resolve parent rows after selected parents have been generated, and
+						// inside the same transaction. Never fabricate a foreign key from i.
+						var references = arguments.count > 0 ? $generateReferences(modelInstance) : [];
 
 						for (var i = 1; i <= arguments.count; i++) {
 							var record = {};
@@ -324,6 +331,12 @@ component output="false" extends="wheels.Global" {
 										? properties[propName].validationType
 										: (StructKeyExists(properties[propName], "type") ? properties[propName].type : "string");
 									record[propName] = $generateTestData(propName, propType, i, modelName);
+								}
+							}
+							for (var reference in references) {
+								var parentRow = ((i - 1) mod reference.rows.recordCount) + 1;
+								for (var foreignKey in reference.keys) {
+									record[foreignKey] = reference.rows[reference.keys[foreignKey]][parentRow];
 								}
 							}
 							var newRecord = modelInstance.new(record);
@@ -393,6 +406,105 @@ component output="false" extends="wheels.Global" {
 			result.message = "Database seeding failed. Created #result.totalCreated# records; #result.totalFailed# of #ArrayLen(result.seeded)# #result.totalFailed == 1 ? 'model' : 'models'# failed (#$failedGenerateSummary(result.seeded)#).";
 		}
 		return result;
+	}
+
+	/**
+	 * Internal function. Visit selected belongsTo parents before their children.
+	 * Unselected models are never generated. The visited set also bounds cycles;
+	 * those can only seed when a usable parent already exists (checked below).
+	 */
+	public array function $orderGenerateModels(required array models) {
+		var state = {visited = {}, ordered = []};
+		for (var i = 1; i <= ArrayLen(arguments.models); i++) {
+			$visitGenerateModel(i, arguments.models, state);
+		}
+		return state.ordered;
+	}
+
+	public void function $visitGenerateModel(required numeric index, required array models, required struct state) {
+		if (StructKeyExists(arguments.state.visited, arguments.index)) {
+			return;
+		}
+		arguments.state.visited[arguments.index] = true;
+		var associations = {};
+		try {
+			associations = model(arguments.models[arguments.index]).$classData().associations;
+		} catch (any modelError) {
+			// Leave invalid models in the list: the normal generation loop records
+			// their errors and rolls back, preserving the per-model result contract.
+		}
+		for (var name in associations) {
+			var association = associations[name];
+			if (association.type == "belongsTo" && Len(association.modelName)) {
+				var parentIndex = ArrayFindNoCase(arguments.models, association.modelName);
+				if (parentIndex) {
+					$visitGenerateModel(parentIndex, arguments.models, arguments.state);
+				}
+			}
+		}
+		ArrayAppend(arguments.state.ordered, arguments.models[arguments.index]);
+	}
+
+	/**
+	 * Internal function. Resolve belongsTo metadata using the ORM's own rules
+	 * (schema-driven camel/underscore defaults, mapped properties, joinKey).
+	 * Read one parent pool per association, not one query per generated row.
+	 */
+	public array function $generateReferences(required any modelInstance) {
+		var references = [];
+		var associations = arguments.modelInstance.$classData().associations;
+		for (var name in associations) {
+			if (associations[name].type != "belongsTo") {
+				continue;
+			}
+			var association = StructCopy(associations[name]);
+			if (StructKeyExists(association, "polymorphic") && association.polymorphic) {
+				Throw(
+					type = "Wheels.Seeder.UnsupportedAssociation",
+					message = "Cannot auto-generate polymorphic association '#name#'. Use a hand-written seeds.cfm."
+				);
+			}
+			var parent = model(association.modelName);
+			arguments.modelInstance.$expandedAssociationsMetadata(
+				associationName = name,
+				association = association,
+				ownerClass = arguments.modelInstance,
+				associatedClass = parent
+			);
+			var keys = {};
+			var conditions = [];
+			if (ListLen(association.foreignKey) != ListLen(association.joinKey)) {
+				Throw(type = "Wheels.Seeder.UnsupportedAssociation", message = "Association '#name#' has mismatched foreignKey and joinKey lists. Use a hand-written seeds.cfm.");
+			}
+			for (var i = 1; i <= ListLen(association.foreignKey); i++) {
+				var foreignKey = Trim(ListGetAt(association.foreignKey, i));
+				// Match the ORM join builder: same-name keys take precedence over position.
+				var keyPosition = ListFindNoCase(association.joinKey, foreignKey);
+				var parentKey = Trim(ListGetAt(association.joinKey, keyPosition ? keyPosition : i));
+				if (!StructKeyExists(arguments.modelInstance.$classData().properties, foreignKey) || !StructKeyExists(parent.$classData().properties, parentKey)) {
+					Throw(type = "Wheels.Seeder.UnsupportedAssociation", message = "Association '#name#' must reference persisted foreignKey and joinKey properties. Use a hand-written seeds.cfm.");
+				}
+				keys[foreignKey] = parentKey;
+				ArrayAppend(conditions, "#parentKey# IS NOT NULL");
+			}
+			var rows = parent.findAll(
+				select = association.joinKey,
+				where = ArrayToList(conditions, " AND "),
+				order = association.joinKey,
+				returnAs = "query",
+				includeSoftDeletes = false,
+				callbacks = false,
+				reload = true
+			);
+			if (!rows.recordCount) {
+				Throw(
+					type = "Wheels.Seeder.MissingParent",
+					message = "No usable '#association.modelName#' records for belongsTo '#name#'. Seed the parent first or include it in models; use seeds.cfm for custom associations."
+				);
+			}
+			ArrayAppend(references, {keys = keys, rows = rows});
+		}
+		return references;
 	}
 
 	/**
