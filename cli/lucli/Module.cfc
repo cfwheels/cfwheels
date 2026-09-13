@@ -605,33 +605,28 @@ component extends="modules.BaseModule" {
 			out("Dry run — nothing will be written.", "cyan");
 		}
 
-		var type = cleaned[1];
-		var remaining = arrayLen(cleaned) > 1 ? cleaned.slice(2) : [];
-
-		// MCP and structured callers pass {"type": "...", "name": "...",
-		// "attributes": "..."} which toArgv() re-emits as --type=... --name=...
-		// --attributes=... — normalize those named prefixes back to positional
-		// form so `wheels generate scaffold Post title:string` behaves the same
-		// from a shell or an MCP tool call.
-		if (left(type, 7) == "--type=") {
-			type = mid(type, 8, len(type));
-		}
+		// MCP named keys can arrive in any order. Normalize all three advertised
+		// parameters before choosing the dispatch type; an attributes option
+		// must never fall through as an ignored generator flag. Matching the
+		// literal prefix also avoids the old off-by-one length check.
+		var named = {};
 		var normalized = [];
-		for (var i = 1; i <= arrayLen(remaining); i++) {
-			var r = remaining[i];
-			if (left(r, 7) == "--name=") {
-				arrayAppend(normalized, mid(r, 8, len(r)));
-			} else if (left(r, 12) == "--attributes=") {
-				// Attributes arrive as one space/comma-delimited string — split
-				// into the individual name:type tokens the generators expect.
-				for (var token in reMatch("[^\s,]+", mid(r, 13, len(r)))) {
+		for (var r in cleaned) {
+			if (reFindNoCase("^--type=", r)) {
+				named.type = valueAfterEquals(r);
+			} else if (reFindNoCase("^--name=", r)) {
+				named.name = valueAfterEquals(r);
+			} else if (reFindNoCase("^--attributes=", r)) {
+				for (var token in $splitGeneratorAttributes(valueAfterEquals(r))) {
 					arrayAppend(normalized, token);
 				}
 			} else {
 				arrayAppend(normalized, r);
 			}
 		}
-		remaining = normalized;
+		var type = structKeyExists(named, "type") ? named.type : normalized[1];
+		var remaining = structKeyExists(named, "type") ? normalized : (arrayLen(normalized) > 1 ? normalized.slice(2) : []);
+		if (structKeyExists(named, "name")) arrayPrepend(remaining, named.name);
 
 		var result = $generateDispatch(type, remaining);
 
@@ -651,6 +646,36 @@ component extends="modules.BaseModule" {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Split MCP's attribute string without splitting decimal{10,2} or enum
+	 * value lists. An enum followed by another bare property needs whitespace;
+	 * a comma followed by name:type starts a new property unambiguously.
+	 */
+	private array function $splitGeneratorAttributes(required string attributes) {
+		var tokens = [];
+		var token = "";
+		var braceDepth = 0;
+		for (var i = 1; i <= len(arguments.attributes); i++) {
+			var ch = mid(arguments.attributes, i, 1);
+			if (ch == "{") braceDepth++;
+			if (ch == "}") braceDepth--;
+			var separator = braceDepth == 0 && reFind("\s", ch) > 0;
+			if (ch == "," && braceDepth == 0) {
+				var enumValues = reFindNoCase("^[^:]+:enum:", token) > 0;
+				var nextProperty = reFind("^[A-Za-z_][A-Za-z0-9_]*:", trim(mid(arguments.attributes, i + 1, len(arguments.attributes)))) > 0;
+				separator = !enumValues || nextProperty;
+			}
+			if (separator) {
+				if (len(token)) arrayAppend(tokens, token);
+				token = "";
+			} else {
+				token &= ch;
+			}
+		}
+		if (len(token)) arrayAppend(tokens, token);
+		return tokens;
 	}
 
 	/**
