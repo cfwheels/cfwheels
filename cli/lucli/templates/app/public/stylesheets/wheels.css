@@ -190,14 +190,22 @@ form label > input[type="radio"] {
  * `.button` class so links and form buttons read alike — before this, Edit and
  * "all posts" were plain links next to a Delete button. `buttonTo` needs its
  * class passed as `inputClass` because it wraps a nested <button>.
+ *
+ * Top-aligned on purpose. `buttonTo` renders a <form>, so the flex item is
+ * the form and the visible button sits one level down. simple.css gives that
+ * nested button `margin-bottom: 8px`, which made the form 8px taller than the
+ * sibling links; `align-items: center` then floated the Delete button 4px
+ * above Edit and "all posts". Zeroing the nested margin fixes the height, and
+ * `flex-start` means a future height difference can't re-centre the row.
  */
 .wheels-actions {
 	display: flex;
 	flex-wrap: wrap;
-	align-items: center;
+	align-items: flex-start;
 	gap: 0.5rem;
 }
 
-.wheels-actions > * {
+.wheels-actions > *,
+.wheels-actions > form > .button {
 	margin-bottom: 0;
 }
