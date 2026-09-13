@@ -292,12 +292,17 @@ wheels mcp wheels
 The client launches the stdio server in the app. Generated AI docs and the
 error page's Copy button provide context.
 
-> Notes: Show actual tools/list, not a frozen count. Optional Tag loop:
-> generate, migrate, reload, explicit convention seed, browser with rows.
-> The after-auth generated seed returned success in rehearsal but the final
-> audit found no durable Tag/Product rows. Do not call that a completed
-> data loop: use the convention example in demo.md or a separately verified
-> corrected build, and check committed rows. The protocol server is not a REPL.
+> Notes: Show actual tools/list, not a frozen count. On installed build
+> 2482, MCP generate ignored attributes and wrote an empty Tag: inspect the
+> model/migration before proceeding, or use positional CLI generation.
+> The after-auth generated seed also returned success without durable rows.
+> Do not call that baseline a completed data loop. Positional generation +
+> convention Tag seeding was verified. The separately patched CLI also
+> passed real reordered-key MCP generation, migration, durable convention
+> seeding, HTTP content and 30 app specs (1359 strict CLI specs). That is
+> local-patch proof, not a globally upgraded Homebrew installation. Details
+> are in demo.md. Check committed rows, not just HTTP 200 or passing specs.
+> The protocol server is not a REPL.
 
 ---
 

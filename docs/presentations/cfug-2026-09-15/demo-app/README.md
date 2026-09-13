@@ -58,10 +58,14 @@ two Comments created and two Posts skipped; repeat should skip all four.
 From empty Post/Comment tables expect four created, then four skipped.
 Verify persisted counts and zero orphans rather than relying only on an
 exit code. Test this fallback separately from the main generated-seed run.
-The build-2482 rehearsal exercised both files on a **prepopulated** database:
-repeat runs added zero records and the Comments used real parent IDs with
-zero orphans. The clean-state numbers above describe the expected recipe;
-they are not measured clean-table results from that rehearsal.
+The independent build-2482 recipe rehearsal measured the staged clean
+flow: Post-only **2 created / 0 skipped**, repeat **0 / 2**; parent IDs then
+changed to **41/97** before any children existed; parent-and-child seed
+**2 / 2**, repeat **0 / 4**. Final database: two Posts, two Comments using
+41/97, zero orphans, **20 passing specs**. Both files were also repeated on
+a prepopulated app without adding duplicate seed records. Running the
+combined file directly on entirely empty Post/Comment tables was not a
+separate measured run.
 
 If the database already contains duplicate Posts with either title,
 resolve the duplicates first: `seedOnce` does not deduplicate existing

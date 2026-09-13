@@ -81,10 +81,18 @@ not a silent replacement for the live generated-seed track.
   `/tags` returned 200 and the suite passed 44/44. **The final row-count
   audit nevertheless found no durable generated Tag/Product rows after
   auth; the Tag page was empty.** Remove any “completed data loop” claim.
-  Reported 30 created / 2 skipped was not proof of committed data. Use the
-  explicit convention Tag seed in demo.md, or wait for a verified fix;
-  inspect rows in a new request. This does not invalidate the separately
-  verified explicit Product API payload. The stdio server is not a REPL.
+  MCP generate had also ignored `attributes`: Tag's config was empty,
+  migration only ID/timestamps. Inspect requested fields before migrating.
+  Reported 30 created / 2 skipped was not proof of committed data. The
+  positional CLI + convention Tag fallback now has durable/browser proof
+  and a correctly shaped 46-spec suite; local Seeder patches have separate
+  row-count evidence. The separately patched CLI passed 1359 strict CLI
+  specs plus real stdio reordered-key generation, SQL schema/migration,
+  durable convention seed, HTTP content and 30 app specs. Its isolated MCP
+  client used aligned registry/cache paths with the normal app server.
+  Keep local-patch proof distinct from the failed installed build; there
+  was no global Homebrew module replacement. The explicit Product API
+  payload was independently verified. The stdio server is not a REPL.
 - [ ] **Slide 21 — result claims.** Remove “versioned” from the `/api/products`
   description: an `/api` namespace alone does not version an API. Recap
   only the features actually shown, including any disclosed fallback.

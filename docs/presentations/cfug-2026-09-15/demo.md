@@ -55,25 +55,55 @@ complete POST 201, list 200, PATCH 200 / invalid PATCH 422, missing record
 **36/36**. Offline Guides and API documentation returned 200 in the browser;
 debug-bar timing, params, routes and complexity panels opened.
 
-MCP initialize/tools-list returned **19 tools**; Tag generate → migrate →
-reload → seed commands returned success, the Tag route returned HTTP 200,
-and the app suite passed **44/44**. **A subsequent durable row-count audit
-found that the generated seed after auth had persisted no new Tag or
-Product rows. The Tag page was empty.** The reported **30 created, 2
-skipped** was not proof of committed rows. Product also had a decimal-sample
-limitation; merely removing that skip did not establish persistence.
+**Installed build 2482: MCP/data failures, not a completed data loop.**
+MCP initialize/tools-list returned **19 tools**; Tag commands returned
+success, `/tags` returned 200, and the suite passed **44/44**. The final
+audit found two independent problems:
 
-Do **not** present the after-auth generated-data loop as verified. Use the
-explicit convention Tag seed below, or wait for a corrected implementation
-and verify its committed row counts in a separate request. Investigation
-of the generated-seed failure is ongoing. The successful explicit Product
-API requests above and the pre-auth Post/Comment seed checks are separate
-results.
+- MCP `generate` **ignored its advertised `attributes`**: Tag's config was
+  empty and its migration had only ID/timestamps, not name/slug. The green
+  specs were testing the wrong generated shape.
+- All-model generated seeding after auth reported **30 created, 2 skipped**
+  but committed no new Tag/Product rows. The Tag page was empty. Product
+  also had a decimal-sample limitation; removing that skip alone did not
+  prove persistence.
 
-Both convention seed assets were exercised on a **prepopulated** database.
-Their repeat runs added **zero** records; seeded Comments referenced real
-parent IDs (not an assumed 1–10), with zero orphans. This is repeat-safety
-evidence, not a claim that the clean-table counts were measured.
+The separately successful explicit Product API requests and pre-auth
+Post/Comment seed checks remain valid. Use positional CLI generation and
+convention seeding for the fallback below, or verify corrected local code;
+**do not imply that these later corrections are in the installed build**.
+
+**Independent convention-seed rehearsal:** in a fresh app, the Post-only
+seed produced **2 created / 0 skipped**, then **0 / 2**. The two parent IDs
+were deliberately changed to **41 and 97** before adding any children.
+After the Comment migration, the parent-and-child seed produced **2 / 2**,
+then **0 / 4**. The actual database held two Posts and two Comments linked
+to 41/97, with **zero orphans**; the suite passed **20/20**. Repeat safety
+was also checked on the earlier prepopulated app.
+
+**Separate local correction/fallback evidence:** rebuilding the empty Tag
+with positional CLI attributes gave the intended name/slug schema. The
+convention Tag seed below committed `CFUG Demo` / `cfug-demo`, repeated
+without adding a Tag, and displayed it in the browser. The correctly
+shaped app then passed **46/46**, rather than the empty-Tag run's 44.
+Applying the three local Seeder corrections separately produced durable
+counts **Posts 29→39, Comments 13→23, Products 2→12, Tags 1→11, Users 1→1**,
+with zero orphans and zero nonnumeric prices. The 46-spec suite left those
+development counts unchanged. That is local-patch evidence, not a
+recharacterization of the failed Homebrew baseline.
+
+**Patched CLI / real stdio MCP proof:** local CLI commit `193563241` passed
+its strict suite with **1359 passed, 0 failed, 0 errors**. A separate
+isolated MCP client loaded that module while a normal Homebrew-started
+server served the recipe app on port 8096; server-registry/cache paths were
+aligned for reload and test discovery. The actual protocol returned 19
+tools and accepted reordered `attributes`, `name`, `type` keys. Generated
+Tag source and real SQLite schema both contained name/slug. MCP migration
+round-trip, convention seed **1 created / 4 skipped**, repeat **0 / 5**,
+and `/tags` **200 with CFUG Demo / cfug-demo** all passed. SQLite durably
+held **2 Posts, 2 Comments, 1 Tag**; MCP `test` passed **30/30** without
+changing those live counts. This verifies the locally patched CLI, **not a
+global Homebrew upgrade or the original installed MCP implementation**.
 
 The optional binding check reproduced the plain-bound Post's missing
 Comments and the query-to-array error from the old workaround. Explicit
@@ -431,20 +461,36 @@ framework repository:
 Verify `initialize` and `tools/list` with the configured client. The
 rehearsal returned **19 tools**; show the actual list rather than assuming
 that count on another build. Optional agent loop: generate a Tag with
-`name:string{30} slug:string`, migrate, reload, create valid sample data,
-and visit `/tags`.
+`name:string{30} slug:string`, **inspect the generated fields**, migrate,
+reload, create valid sample data, and visit `/tags`.
 
-**Do not use the unverified after-auth generated seed on stage.** The MCP
-call reported **30 created, 2 skipped**, but the final audit found no
-durable generated Tag/Product rows and `/tags` was empty. A 200 page, a
-green unit suite and successful seed output are not persistence checks.
-A partial seeder fix also needs a durable row-count check before it can
-replace this warning; do not assume eliminating a skipped model solves it.
+**On installed build 2482, use positional CLI generation for this step:**
 
-For a focused alternative, after the Tag migration, add this block to
-`app/db/seeds.cfm` (create the file if absent; preserve any existing seed
-blocks). This is a proposed convention-seed recipe to rehearse, not a claim
-that the failed generated-data loop passed:
+```bash
+wheels generate scaffold Tag 'name:string{30}' slug:string
+```
+
+The baseline MCP call accepted `attributes` but silently generated an
+empty Tag. Before migrating, inspect `app/models/Tag.cfc` for name/slug
+presence and the name maximum of 30, and inspect its migration for both
+columns. With a corrected MCP implementation, repeat the same inspection
+and include a request with reordered JSON keys. A successful response is
+not evidence that the requested fields were generated. If the empty Tag
+migration was already applied, use the prepared fallback app or reconcile
+that disposable migration deliberately; don't stack a second create-table
+migration or assume `--force` replaces an already-applied schema.
+
+**Do not use the installed build's after-auth generated seed on stage.**
+It reported **30 created, 2 skipped**, but committed no new Tag/Product
+rows. Use the explicit convention alternative below. Local Seeder fixes
+were verified separately with durable counts, but must be present in the
+actual app before demonstrating the repaired all-model generated path.
+
+After migrating the **correct name/slug schema**, add this block to
+`app/db/seeds.cfm` (create the file if absent; preserve existing blocks).
+This fallback was verified after positional CLI generation and through the
+separately patched stdio MCP client. It is not a claim that the original
+installed MCP generated-data loop passed:
 
 ```cfm
 <cfscript>
