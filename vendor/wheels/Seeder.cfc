@@ -713,7 +713,8 @@ component output="false" extends="wheels.Global" {
 		}
 
 		// Numeric fields
-		if (arguments.propertyType == "integer" || arguments.propertyType == "numeric") {
+		// Adapters classify decimal/double columns with validationType="float".
+		if (arguments.propertyType == "integer" || arguments.propertyType == "numeric" || arguments.propertyType == "float") {
 			if (FindNoCase("age", arguments.name)) {
 				return {handled = true, value = 20 + (arguments.index mod 50)};
 			}

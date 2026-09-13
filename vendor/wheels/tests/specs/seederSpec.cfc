@@ -446,6 +446,23 @@ component extends="wheels.WheelsTest" {
 					}
 				});
 
+				it("persists numeric values for float-validated decimal and floating point columns", () => {
+					local.beforeQuery = model("SeederNumericProduct").findAll(select = "id");
+					local.beforeIds = ValueList(local.beforeQuery.id);
+					try {
+						local.result = seeder.generateSeeds(models = "SeederNumericProduct", count = 2);
+						expect(local.result.success).toBeTrue();
+						expect(local.result.totalCreated).toBe(2);
+						expect(local.result.totalSkipped).toBe(0);
+						local.rows = model("SeederNumericProduct").findAll(where = "id NOT IN (#local.beforeIds#)", order = "id");
+						// The shared fixture is FLOAT, whose JDBC round-trip can lose precision.
+						expect(Round(local.rows.price[1] * 100) / 100).toBe(10.99);
+						expect(Round(local.rows.price[2] * 100) / 100).toBe(20.99);
+					} finally {
+						model("SeederNumericProduct").deleteAll(where = "id NOT IN (#local.beforeIds#)", instantiate = false, softDelete = false);
+					}
+				});
+
 				it("reports overall failure when a model cannot be seeded", () => {
 					local.gen = CreateObject("component", "wheels.Seeder").init();
 					local.result = local.gen.generateSeeds(
@@ -750,6 +767,8 @@ component extends="wheels.WheelsTest" {
 				it("S10: integer / numeric type — age, price, quantity, and default", () => {
 					expect(seeder.$generateTestData(propertyName = "age", propertyType = "integer", index = 1)).toBe(21);
 					expect(seeder.$generateTestData(propertyName = "price", propertyType = "numeric", index = 1)).toBe(10.99);
+					expect(seeder.$generateTestData(propertyName = "price", propertyType = "float", index = 1, modelName = "Product")).toBe(10.99);
+					expect(seeder.$generateTestData(propertyName = "rating", propertyType = "float", index = 3)).toBe(3);
 					expect(seeder.$generateTestData(propertyName = "cost", propertyType = "integer", index = 2)).toBe(20.99);
 					expect(seeder.$generateTestData(propertyName = "amount", propertyType = "integer", index = 3)).toBe(30.99);
 					expect(seeder.$generateTestData(propertyName = "quantity", propertyType = "integer", index = 2)).toBe(10);
