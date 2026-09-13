@@ -8,6 +8,17 @@
 	 */
 	function config() {
 		super.config();
+		// 404 rather than a 500 when the key matches nothing. findByKey returns a
+		// non-object for BOTH a missing key and a soft-deleted row, and the
+		// actions below then operate on that empty value — `post.title` in the
+		// view, or `.update()` here, throws.
+		//
+		// A BEFORE filter that deliberately does NOT assign the record: the
+		// actions keep their conventional single-finder body, which the
+		// `--belongsTo` parent wiring depends on — it only rewrites `show()`
+		// when the finder is the whole body, and skips a customized one.
+		// Loading twice is cheap and keeps that contract intact.
+		filters(through="requireRecord", only="show,edit,update,delete");
 	}
 
 	/**
@@ -79,6 +90,23 @@
 		|ObjectNameSingular|.delete();
 		flashInsert(success="|ObjectNameSingularC| was deleted successfully.");
 		redirectTo(route="|ObjectNamePlural|");
+	}
+
+	/**
+	* Guard: abort with a 404 when the key matches no record.
+	*
+	* The message is a plain string on purpose. The scaffold's parent wiring
+	* scans this file with ScaffoldSource, which refuses interpolated strings
+	* (`##...##`) wholesale — a single `##params.key##` here would silently turn
+	* off `include=` wiring for every `--belongsTo` child of this model.
+	**/
+	private function requireRecord() {
+		if (!IsObject(model("|ObjectNameSingularC|").findByKey(key=params.key))) {
+			Throw(
+				type = "Wheels.RecordNotFound",
+				message = "|ObjectNameSingularC| not found for the requested key."
+			);
+		}
 	}
 
 }
