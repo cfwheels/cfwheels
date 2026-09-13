@@ -396,12 +396,16 @@ seedOnce(modelName="User", uniqueProperties="email", properties={
 ```bash
 wheels seed                            # auto-detect env (canonical)
 wheels seed --environment=production
-wheels seed --generate                 # legacy: random test data
+wheels seed --generate                 # generated sample data
 ```
 
 To scaffold seed templates, use: `wheels generate snippets seed-data` (writes `app/snippets/seeds*.cfm` — copy or move to `app/db/` to activate them). There is no `wheels generate seed` generator.
 
 `seedOnce()`: idempotent — checks `uniqueProperties` via `findOne()`, creates only if not found. Execution: `seeds.cfm` → `seeds/<environment>.cfm`, wrapped in a transaction. Programmatic: `application.wheels.seeder.runSeeds()`. (Note: `wheels db:seed` is NOT a valid command — it errors. Use `wheels seed`.)
+
+Generated seeds resolve `belongsTo` references from real, non-soft-deleted parent rows, honoring conventional and custom foreign keys and `joinKey`. When both models are selected, the parent is generated first; a child-only run reuses existing parents without creating any. Programmatic selection: `application.wheels.seeder.generateSeeds(models="Comment,Post", count=10)`.
+
+If an association has no usable parent, generation fails and rolls back the entire run instead of guessing IDs. Seed that parent first (including auth models that require hand-written seeds). Polymorphic associations and cycles without existing parents require `app/db/seeds.cfm`. Models whose generated records all fail validation are still skipped; partial saves or errors still roll back the run.
 
 ## Background Jobs Quick Reference
 
