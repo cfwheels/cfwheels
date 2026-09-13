@@ -108,6 +108,12 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 				// the buttons sit flush against each other with no gap.
 				expect(css).toInclude(".wheels-actions");
 				expect(css).toInclude("display: flex");
+				// Top-aligned, and the button nested inside buttonTo's <form>
+				// loses simple.css's 8px bottom margin. With `center` and that
+				// margin intact, the form was 8px taller than the sibling links
+				// and Delete floated 4px above Edit and "all posts".
+				expect(css).toInclude("align-items: flex-start");
+				expect(css).toInclude(".wheels-actions > form > .button");
 
 				var layout = fileRead(templateRoot & "app/views/layout.cfm");
 				expect(layout).toInclude('styleSheetLinkTag(sources="simple,wheels")');
