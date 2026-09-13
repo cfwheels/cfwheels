@@ -77,6 +77,40 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					expect(content).toInclude("function delete()");
 				});
 
+				it("guards every key-loading action against a missing record", () => {
+					// findByKey returns a non-object for BOTH a missing key and a
+					// soft-deleted row. Without a guard the action renders against
+					// that empty value and the view throws a 500 where a 404
+					// belongs — reproduced on a soft-deleted post before the fix.
+					var result = scaffold.generateScaffold(
+						name = "Notefile",
+						properties = [{name = "title", type = "string"}],
+						force = true
+					);
+					expect(result.success).toBeTrue();
+					var content = fileRead(tempRoot & "/app/controllers/Notefiles.cfc");
+
+					// A BEFORE filter covering all four key-loading actions.
+					expect(content).toInclude('filters(through="requireRecord", only="show,edit,update,delete")');
+					expect(content).toInclude("private function requireRecord()");
+					expect(content).toInclude('if (!IsObject(model("Notefile").findByKey(key=params.key))) {');
+					expect(content).toInclude('type = "Wheels.RecordNotFound"');
+
+					// The guard must NOT live inside show(): ScaffoldSource only
+					// rewrites show() when its finder is the whole body, so an
+					// inline guard there disables `--belongsTo` include= wiring.
+					var showBody = ReMatchNoCase("function show\(\) \{[^}]+\}", content);
+					expect(ArrayLen(showBody)).toBe(1);
+					expect(showBody[1]).notToInclude("IsObject");
+
+					// And the generated file must still SCAN. ScaffoldSource fails
+					// closed on any interpolated string, so a single `##...##` in
+					// the guard's message would silently switch off the parent
+					// wiring for every child of this model. Pin it at the source.
+					var scanned = new cli.lucli.services.ScaffoldSource().scan(content);
+					expect(scanned.valid).toBeTrue(scanned.reason);
+				});
+
 				it("emits a full CRUD controller spec with model().create() test data", () => {
 					var result = scaffold.generateScaffold(
 						name = "Chronicle",
