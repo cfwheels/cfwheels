@@ -1,325 +1,346 @@
-# Wheels 4.1: Modern CFML, the Rails Way — a Live Build
+# Rails-Style CFML — building a blog live with Wheels 4.1
 
-Mid-Michigan CFUG · Tuesday, September 15, 2026 · 7:00 PM ET · Peter Amiri
+Peter Amiri · Mid-Michigan CFUG · September 15, 2026 · 7:00 PM ET
 
-A ~60-minute talk in five parts. Speaker notes are the `> Notes:`
-blockquotes. The live build (Part 2) follows [`demo.md`](demo.md) beat-for-beat;
-everything else is slides with a few terminal snippets.
+This is the speaker outline for the **25-slide PowerPoint**
+[`wheels-rails-style-cfml-mmcfug-2026-09-15.pptx`](wheels-rails-style-cfml-mmcfug-2026-09-15.pptx).
+Slide numbers below match that file. It replaces the earlier 23-slide,
+five-part outline, which described a different demo.
 
-This deck matches a rehearsal on **Wheels 4.1.0-snapshot / upcoming 4.1**.
-4.1 is what we're shipping — the cut is being held to absorb polish, and the
-release blog is postponed to ~September 17. Treat this build as 4.1.
+The executable sequence is [`demo.md`](demo.md): eight live beats on slides
+13–20, approximately 50 minutes, after roughly 25 minutes of context.
+The PowerPoint still needs the edits in
+[`slide-corrections.md`](slide-corrections.md); these Markdown changes do
+not rewrite its slide text or speaker notes.
 
-**Timing:** Part 1 ≈ 10 · Part 2 ≈ 25 · Part 3 ≈ 15 · Part 4 ≈ 8 · Part 5 ≈ 3,
-leaving ~30 min for announcements and Q&A in a 1.5-hour meeting.
-
----
-
-# Part 1 — The pitch (10 min)
-
-## Slide 1 — Title
-
-**Wheels 4.1: Modern CFML, the Rails Way**
-*A live build*
-
-Peter Amiri · Mid-Michigan CFUG · September 15, 2026
-
-> Notes: Thank Rick. One sentence of framing: "half of this is typing, half is
-> the story of why CFML needed this." This is a 4.1 talk on a 4.1.0-snapshot
-> build — the release is shipping imminently.
-
-## Slide 2 — The one-liner
-
-**Wheels is the convention-over-configuration MVC framework for CFML.**
-
-- The project you knew as **CFWheels** — rebranded at v3.0.
-- **4.1 is what we're shipping** — this build *is* 4.1; the cut is held
-  deliberately so polish lands with it.
-- Models, migrations, routes, controllers, views — wired by *naming*, not XML.
-
-> Notes: The thesis. Say it slowly. Do not claim "4.1.0 shipped September 10"
-> — Peter held the release to absorb polish bugs; the blog post is postponed
-> to ~September 17. "This is 4.1" is the true sentence.
-
-## Slide 3 — The Rails DNA
-
-- Convention over configuration, the DHH way.
-- `Post` → `posts` → `Posts.cfc` → `/posts`.
-- Associations, validations, migrations read like Rails.
-- If you've written Rails, **you already know the shape of Wheels**.
-
-> Notes: Aim this at Rick and the RoR folks. It's the bridge that makes the
-> rest of the talk land. Controllers are `Posts.cfc` / `Comments.cfc` — not
-> `PostsController.cfc`.
-
-## Slide 4 — A short history
-
-- **~2006:** CFWheels announced, in the shadow of the Rails 1.x wave.
-- **3.0:** the rebrand to Wheels.
-- **4.0:** the big rewrite — dropped the WireBox dependency, shipped its own
-  DI container, test framework, and `wheels` CLI.
-- **4.1:** the release that makes it feel native, not ported.
-
-> Notes: Give the arc in one breath. The point is continuity: the idea was
-> right in 2006; the rewrite finally caught the execution up to the idea.
-
-## Slide 5 — The pain it solves
-
-CFML apps have historically been config-heavy: hand-wired `Application.cfc`,
-XML, manual dependency glue. Wheels says **the naming convention is the
-configuration** — and it generates real files you own.
-
-> Notes: Name the pain explicitly — it's why the room is here. Then promise the
-> antidote is the next 25 minutes.
+Use the actual CLI/app build shown during rehearsal. Do not infer a release
+date or shipped status from “4.1” in the title or from a snapshot version.
 
 ---
 
-# Part 2 — The live build (25 min)
+## Slide 1 — Rails-Style CFML
 
-## Slide 6 — What we're building
+**Building a blog live with Wheels 4.1 — no CommandBox, no configuration ceremony.**
 
-1. `wheels new` — a running app, in seconds.
-2. **Scaffold + migrate + seed** — full CRUD, content on screen.
-3. **Associations + validation** — comments on posts.
-4. **Route model binding** — `params.post`, 404s for free.
-5. **One-command auth** — PBKDF2, generated.
-6. The CLI + debug bar.
+> Notes: Thank Rick and MMCFUG. Set the evening's shape: context, eight live
+> beats, then Q&A. “No configuration ceremony” is more accurate than “no
+> config files”: the demo has intentional model, layout, policy and spec
+> edits. There is no requirement to use a particular IDE.
 
-> Notes: "No more slideware after this." Everything here is reproducible from
-> the repo; the exact commands are in demo.md.
+## Slide 2 — Who's talking
 
-## Slide 7 — The `wheels new` moment
+- CTO at PAI Industries; Wheels used in a real production business.
+- Wheels maintainer and long-time CFML developer.
+- Tonight's promise: commands the audience can repeat, with fallbacks identified.
 
-```
-$ wheels new blog
-$ cd blog && wheels start
-```
+> Notes: Keep this to 90 seconds. The credibility is production use, not a
+> promise that every feature or engine was tested in tonight's rehearsal.
 
-A running app. The welcome page is a **prose sentence**:
+## Slide 3 — Three quick show-of-hands
 
-> Your Wheels … application is running on Lucee with blog (development).
+1. Still have a CFML app in production?
+2. Tried CFWheels before?
+3. Seen the original Rails blog video?
 
-> Notes: Beat 1. Zero config to a running app. Gesture at that sentence —
-> version, engine, datasource, environment, in English. If `wheels start`
-> complains about a leftover server name, `--force`.
+> Notes: Wait for hands. Rick's Rails story is the bridge: conventions and
+> generators, applied to the language this room already knows.
 
-## Slide 8 — Scaffold + migrate + seed
+## Slide 4 — The 200 lines you've written forty times
 
-```
-$ wheels generate scaffold Post title:string body:text
-$ wheels migrate latest
-$ wheels seed
-```
+CRUD, validation, routing, parameterized queries, login, tests.
+None of those repeated plumbing tasks is the business logic.
 
-Model, migration, controller, views, tests, route — one command. Then two
-posts on `/posts` without typing through the form.
+> Notes: Name the pain, then move. A framework makes the repetitive parts
+> consistent; it does not remove the need for application security review.
 
-> Notes: Beat 2, the "blog in 15 minutes" moment. Drop
-> `demo-app/seeds.cfm` into `app/db/seeds.cfm` (LuCLI has no
-> `wheels generate seed`). Open `app/controllers/Posts.cfc` — real code
-> you own.
+## Slide 5 — Twenty years of Wheels
 
-## Slide 9 — Associations + validation
+Rails inspiration → CFWheels → the Wheels rebrand → modern first-party tooling.
 
-```cfm
-// Post.cfc
-hasMany(name="comments", dependent="delete");
-// Comment.cfc
-belongsTo(name="post");
-validatesPresenceOf("author,body");
-```
+> Notes: Preserve the historical arc in the PowerPoint. Recheck the dated
+> release claim before presenting; do not repeat “shipped September 10”
+> merely because it is printed on the current binary slide.
 
-`Post` ↔ `posts`. `belongsTo("post")` just works. Errors surface for free.
+## Slide 6 — What Wheels is
 
-> Notes: Beat 3. Convention is the star — no FK config, no relationship XML.
-> Show a validation failure live.
+**An MVC web framework for CFML, built on conventions.**
 
-## Slide 10 — Route model binding
+ORM, migrations, query builder, routing, validation, auth, policies, tests,
+CLI and MCP. Multiple CFML engines and databases; the live demo uses Lucee
+and SQLite.
+
+> Notes: Other engines matter to this room, but this local demonstration
+> does not verify the current cross-engine test matrix. Keep support and
+> coverage claims tied to current project documentation.
+
+## Slide 7 — Convention over configuration
+
+`Post` → `posts` → `Posts.cfc` → `app/views/posts/` → named routes.
 
 ```cfm
-.resources(name="posts", binding=true)
-
-function show() {
-    post = params.post;   // was findByKey(params.key)
-}
-```
-
-The dispatcher loads `params.post` before the action; a missing `:key` is a
-404. Scaffolded `show()` is only `findByKey` — replace it. `bindBy="slug"`
-swaps the segment to any column for pretty URLs.
-
-> Notes: Beat 4. The "wow" — the boilerplate literally disappears. There is
-> no IsObject / not-found guard to delete.
-
-## Slide 11 — One-command auth
-
-```
-$ wheels generate auth
-$ wheels migrate latest
-```
-
-Registration + login + logout, generated. Column is **`passwordDigest`**.
-Hashing is **PBKDF2-HMAC-SHA256** via the `passwordHasher` service.
-
-> Notes: Beat 5. Point at `passwordDigest`. Do not say bcrypt here —
-> `bcryptHash()` / `bcryptVerify()` are a separate 4.1 helper set (Part 4).
-
-## Slide 12 — The CLI + debug bar
-
-```
-$ wheels coverage --top=5   # change-risk ranking
-```
-
-Plus the dev debug bar: request timing, params, queries, the complexity panel.
-
-> Notes: Beat 6. This is the reliable wow. `migrate diff` is 4.1 polish —
-> do not promise a live crash-free demo of it.
-
----
-
-# Part 3 — The deeper tour (15 min)
-
-## Slide 13 — The ORM
-
-```cfm
-model("User")
-    .where("status", "active")
-    .where("age", ">", 18)
-    .orderBy("name")
-    .get();
-
-model("User").active().recent().findAll();   // named scopes
-user.isDraft();                              // enum checkers
-```
-
-Chainable query builder, scopes, enums, `include=` associations, batch finders.
-
-> Notes: Don't rebuild it live — show the shape and connect it to what they
-> just saw. 2-/3-arg `where` is injection-safe; 1-arg is raw SQL.
-
-## Slide 14 — DI container + middleware
-
-```cfm
-// config/services.cfm
-local.di.map("emailService").to("app.lib.EmailService").asSingleton();
-local.di.map("storage").toFactory(function() { return new ...; });
-
-// config/settings.cfm
-set(middleware=[new wheels.middleware.SecurityHeaders(), ...]);
-```
-
-Dependency injection *and* a middleware pipeline — the two things that used to
-mean a third-party framework.
-
-> Notes: "WireBox used to be a dependency. Now the container is `vendor/wheels`."
-
-## Slide 15 — Background jobs + realtime
-
-```cfm
-job.enqueue(data={email: user.email});   // app/jobs/*.cfc
-renderSSE(data=json, event="update");    // server-sent events
-```
-
-Queues, retries with backoff, and SSE/channels for live updates.
-
-> Notes: Breadth over depth. Name them, don't demo them.
-
-## Slide 16 — Storage + multi-tenancy
-
-```cfm
-service("storage").disk("s3").put("reports/q3.pdf", bytes);
-service("storage").disk("s3").signedUrl(key=..., expiresIn=900);
-```
-
-`LocalDisk` / `S3Disk` behind one interface (SigV4, no AWS SDK), plus a
-`TenantResolver` middleware for database-per-tenant apps.
-
-> Notes: This is the "enterprise CFML" checklist item — files to S3 and
-> multi-tenant routing out of the box.
-
-## Slide 17 — Testing
-
-```cfm
-component extends="wheels.WheelsTest" {
-    function run() {
-        describe("Post", () => {
-            it("validates", () => { expect(model("Post").new().valid()).toBeFalse(); });
-        });
+component extends="Model" {
+    function config() {
+        hasMany("comments");
+        validatesPresenceOf("title,body,publishedAt");
     }
 }
 ```
 
-BDD test framework built in (TestBox dependency gone), browser tests via
-Playwright, and `wheels coverage` for change-risk.
+> Notes: Singular model, plural controller/table. You can override the
+> conventions, but the live build won't need foreign-key configuration.
 
-> Notes: "Tests are first-class, not an afterthought."
+## Slide 8 — One request, end to end
 
-## Slide 18 — The CLI
+Browser → router → controller → model → view/layout → response.
 
-`wheels new · generate · migrate · seed · test · console · deploy · doctor · coverage`
+```cfm
+post = model("Post").findByKey(params.key);
+```
 
-A first-party CLI built on the LuCLI runtime — Homebrew/Scoop/apt. CommandBox
-still works; the CLI is an accelerator, not a gate.
+> Notes: Walk left to right once. A static route/view need not have custom
+> controller or model logic. The scaffold supplies real files once we do.
 
-> Notes: Name the verbs. They already saw `new`, `generate`, `migrate`,
-> `seed`, and `coverage`. The deploy verb (Kamal-style) is worth one
-> sentence if time allows.
+## Slide 9 — Your code and the framework never mix
+
+- `app/`: your models, controllers, views, policies and migrations.
+- `config/`: routes and settings.
+- `public/`: web root.
+- `tests/specs/`: app tests.
+- `vendor/wheels/`: framework.
+
+> Notes: Updating a CLI installation and updating an existing app's
+> framework are different operations. Record both versions in rehearsal.
+
+## Slide 10 — The model layer in one screen
+
+```cfm
+model("Post").findAll(order="publishedAt DESC", include="comments");
+model("Post").where("title", "LIKE", "%Wheels%")
+    .orderBy("publishedAt", "DESC").get();
+```
+
+Finders, associations, validation/callbacks and migrations.
+
+> Notes: These query-builder overloads bind values. Do not promise “you
+> cannot accidentally write SQL injection”: raw SQL expressions still need
+> care. Use straight quotes in code, not typographic quotes copied from slides.
+
+## Slide 11 — The CLI: one binary, no CommandBox
+
+```bash
+brew tap wheels-dev/wheels
+brew install wheels
+# Or choose the bleeding-edge formula: brew install wheels-be
+```
+
+Java 21. Homebrew/Scoop and native Linux distribution options.
+`new · generate · migrate · seed · test · console · deploy · mcp`
+
+> Notes: Use the chosen installed channel consistently. Show the build
+> that actually ran; do not install a second formula on stage to resolve
+> uncertainty about what the first one contains.
+
+## Slide 12 — The next 50 minutes
+
+- Posts: full CRUD and validation.
+- Comments: belongsTo/hasMany and visible relationships.
+- Users: bcrypt passwords and sessions.
+- Policies: explicit authorization, default-deny.
+- Tests: first-run green, deliberate red, restored green.
+- API and agent tooling.
+
+> Notes: Name the target. The exact steps and safety checks are in demo.md.
+> Switch to the terminal; slides 13–20 are prompts, not a different script.
 
 ---
 
-# Part 4 — The 4.1 release (8 min)
+## Slide 13 — Beat 1: a running app in one command
 
-## Slide 19 — What's in 4.1
+```bash
+wheels new blogdemo
+cd blogdemo
+wheels start
+```
 
-- **`generate auth`** — session/token/JWT scaffolds; **PBKDF2-HMAC-SHA256**
-  into `passwordDigest`.
-- **`bcryptHash()` / `bcryptVerify()`** — a *separate* 4.1 helper set
-  (OpenBSD/jBCrypt-compatible). Not what `generate auth` uses.
-- **`enableSession()`** — one-line auth wiring.
-- **`bindBy=`** and **`toFactory()`** — routing and DI ergonomics.
-- **CLI:** `coverage`, `generate --dry-run`, `--offline` — plus `migrate
-  diff` as shipping polish.
-- **The security-hardening pass** and a **2.5x** model-instantiation speedup.
+Point at **The details** list on the starter page.
 
-> Notes: Keep bcrypt and `generate auth` in different sentences. Tie each
-> other bullet to something they saw in the live build. The release is
-> shipping imminently — this snapshot *is* the 4.1 surface.
+> Notes: First boot downloads are not a reason to start a second server.
+> Use the printed URL; default port 8080 was verified in the rehearsal.
 
-## Slide 20 — The hardening pass
+## Slide 14 — Beat 2: scaffold a Post
 
-"Fail closed, everywhere" — mass-assignment strictness, sanitized `linkTo`
-hrefs, typed storage errors, fail-closed tenant routing.
+```bash
+wheels generate scaffold Post 'title:string{50}' body:text publishedAt:datetime --dry-run
+wheels generate scaffold Post 'title:string{50}' body:text publishedAt:datetime
+wheels migrate latest
+wheels seed --generate
+wheels reload
+wheels routes
+```
 
-> Notes: One sentence on the philosophy: the framework should assume the worst
-> and make you opt into the risky path.
+Ten Posts with dates, then browser create/edit/delete.
 
-## Slide 21 — 2.5x faster + coverage
+> Notes: Dry-run first, full command second. Preserve seeded Post IDs 1–10
+> for the Comment seed. Create and retain **Hello, Wheels** for the later
+> search; demonstrate deletion on a separate throwaway. `seed --generate`
+> adds data; it is not the idempotent two-Post fallback.
 
-Model instantiation rewritten (compile-time includes, no per-instance copy
-loop) — and a `wheels coverage` command that ranks your change-riskiest files
-by cyclomatic complexity × test coverage.
+## Slide 15 — Beat 3: it wrote files; you own them
 
-> Notes: The perf story has a fun punchline (the long way), but keep it to two
-> sentences. Point at the debug bar's complexity panel.
+Keep the generated presence and maximum-length rules. Add:
+
+```cfm
+validatesExclusionOf(property="title", list="Untitled");
+hasMany(name="comments");
+```
+
+Reload; show empty-form errors and a rejected `Untitled` title.
+
+> Notes: These are the new hand edits, not the presence rule. Use all-named
+> arguments when specifying options. No title uniqueness in this demo:
+> generated titles repeat. No cascade deletion is configured by this hasMany.
+
+## Slide 16 — Beat 4: associations and a REPL
+
+```bash
+wheels generate scaffold Comment body:text --belongsTo=post
+wheels migrate latest
+wheels seed --generate
+wheels reload
+wheels console
+```
+
+```cfm
+model("Post").findByKey(1).comments()
+model("Comment").findByKey(3).post().title
+model("Post").where("title", "LIKE", "%Wheels%").orderBy("publishedAt", "DESC").get()
+```
+
+> Notes: Each console expression is one stateless request. Expect **Post
+> Title 3**, not the older **Test Title 3**. The second seed adds Posts too.
+> The flag reuses our inverse and wires the parent finder/view plus the
+> child Post dropdown. Show a blank-body error, then a valid Comment on its
+> parent. Select the intended Post explicitly; the add link is not nested.
+> Type `/exit` to leave the console before the next CLI command.
+
+## Slide 17 — Beat 5: authentication and authorization
+
+```bash
+wheels generate auth --strategy=session
+wheels migrate latest
+wheels reload
+wheels generate policy Post
+```
+
+**bcrypt → `passwordHash`**, using `bcryptHash`, `bcryptVerify`,
+`bcryptNeedsRehash`. Register, logout, wrong login, correct login.
+
+> Notes: Add the layout navigation/logout button described in demo.md;
+> auth generation does not add it for you. Password minimum is 12
+> characters. Show the stored bcrypt shape, not a real user's password.
+> Edit policy show, add `authorize(post)` after the finder, reload: logged
+> out 403, logged in 200. Remove that temporary authorization before the
+> unauthenticated CRUD tests. Keep the comments eager load.
+
+## Slide 18 — Beat 6: red, green
+
+```bash
+wheels test
+```
+
+Add a Post body-presence example; remove only body from the validation to
+show red; restore and show green.
+
+> Notes: A **fresh first run** must pass. Current generated Comment
+> controller specs create their parent; do not retain the old off-screen
+> warm-up instruction that masks missing fixtures. Use actual totals, not
+> fixed 27/28 claims. Reload after model edits and verify test-app state.
+
+## Slide 19 — Beat 7: the two-minute tour
+
+```bash
+wheels info
+wheels migrate diff
+wheels coverage --top=5
+wheels generate api-resource Product name price:decimal sku:string
+wheels migrate latest
+wheels reload
+```
+
+```bash
+curl -i -X POST http://localhost:8080/api/products \
+  -H 'Content-Type: application/json' \
+  -d '{"product":{"name":"Drum","price":149.99,"sku":"DRUM-001"}}'
+curl -i http://localhost:8080/api/products
+```
+
+> Notes: Substitute the actual port. SKU is required: without it the
+> response is 422, not 201. A successful POST returns 201; list returns 200.
+> `/api` is a namespace, not versioning. Verify diff/coverage and the suite
+> after API generation during rehearsal; don't claim success from old notes.
+
+## Slide 20 — Beat 8: Wheels and AI coding agents
+
+```bash
+wheels mcp wheels
+```
+
+```json
+{"mcpServers":{"wheels":{"command":"wheels","args":["mcp","wheels"]}}}
+```
+
+The client launches the stdio server in the app. Generated AI docs and the
+error page's Copy button provide context.
+
+> Notes: Show actual tools/list, not a frozen count. Optional Tag loop:
+> generate, migrate, reload, valid sample data, browser. Do not blindly
+> reseed every model after auth. The protocol server is not a REPL.
 
 ---
 
-# Part 5 — Close (3 min)
+## Slide 21 — What we just built
 
-## Slide 22 — You own every line
+Posts · Comments · Users · Policies · Tests · JSON API.
 
-> **Convention over configuration — but you own every line it generates.**
+**Convention over configuration — but you own every line it generates.**
 
-Generated code is yours to edit; `--force` regenerates it. Wheels isn't magic —
-it's conventions plus real files.
+> Notes: Recap the actual result. Acknowledge any cut or fallback. Do not
+> call the API versioned or insist on a fixed command/function count.
 
-> Notes: Pre-empt the "black box" objection. This is the trust statement.
+## Slide 22 — Also in the box
 
-## Slide 23 — Where to go, and Q&A
+Security middleware, SSE, background jobs, storage, multi-tenancy, deploy,
+dev tooling and packages.
 
-- **guides.wheels.dev** — the docs
-- **blog.wheels.dev** — the 4.1 series (release post ~September 17)
-- **github.com/wheels-dev/wheels** — issues, PRs, stars
+> Notes: Read the headings, not an implementation guide. An optional
+> route-binding follow-up is in demo.md; it keeps the related-comments
+> array explicit with `returnAs="objects"`.
 
-> Notes: "Come build something with it — and file the bug when it breaks."
-> Then open the floor.
+## Slide 23 — How do I move my existing app to it?
+
+Run beside the legacy app; move one route at a time; map existing tables;
+choose the engine deliberately.
+
+> Notes: This is not a rewrite pitch. Keep engine, benchmark and release
+> claims tied to current evidence, not a hard-coded slide-note number.
+
+## Slide 24 — Try it tonight
+
+```bash
+wheels new myapp
+cd myapp
+wheels start
+```
+
+- [wheels.dev](https://wheels.dev)
+- [guides.wheels.dev](https://guides.wheels.dev)
+- [github.com/wheels-dev/wheels](https://github.com/wheels-dev/wheels)
+
+> Notes: Java 21; install the chosen CLI channel first. First boot may
+> download dependencies, so don't guarantee a 60-second result on venue Wi-Fi.
+
+## Slide 25 — Questions
+
+Thank Rick and Mid-Michigan CFUG. Invite people to build something and file
+issues with reproducible examples. Intermediate follow-up: agent-driven
+maintenance, MCP and multi-engine CI.
