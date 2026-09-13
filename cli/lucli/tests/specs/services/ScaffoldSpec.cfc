@@ -533,8 +533,19 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 					// the id. Tutorial readers still get a clean show.cfm
 					// they can swap the heading on.
 					expect(content).toInclude("<h1>");
-					expect(content).toInclude('linkTo(route="editPost", key=post.id, text="Edit")');
-					expect(content).toInclude('buttonTo(route="post", key=post.id, text="Delete", method="delete")');
+					// Every action carries simple.css's `.button` class so links
+					// and the form button read alike — previously Edit and
+					// "all posts" were bare links beside a Delete button.
+					// `linkTo` takes HTML attributes directly; `buttonTo` needs
+					// the `input` prefix because it wraps a nested <button>.
+					expect(content).toInclude('linkTo(route="editPost", key=post.id, text="Edit", class="button")');
+					expect(content).toInclude('buttonTo(route="post", key=post.id, text="Delete", method="delete", inputClass="button")');
+					expect(content).toInclude('linkTo(route="posts", text="← all posts", class="button")');
+					// A <div>, not a <p>: buttonTo emits a <form>, and a form
+					// inside a paragraph is invalid HTML — the browser closes
+					// the <p> early and the action row breaks apart.
+					expect(content).toInclude('<div class="wheels-actions">');
+					expect(content).notToInclude('<p class="wheels-actions">');
 					expect(content).notToInclude("View Post");
 					expect(content).notToInclude('class="btn btn-primary"');
 				});
