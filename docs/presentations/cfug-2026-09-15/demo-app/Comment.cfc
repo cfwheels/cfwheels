@@ -1,11 +1,10 @@
 /**
- * Hand-typed target for Act 3 — belongsTo + presence validation.
- * Diff against the live app with:
- *   diff app/models/Comment.cfc docs/presentations/cfug-2026-09-15/demo-app/Comment.cfc
+ * Reference config after: scaffold Comment body:text --belongsTo=post
+ * Stock new apps use post_id. No author column is part of this demo.
  */
 component extends="Model" {
 	function config() {
 		belongsTo(name="post");
-		validatesPresenceOf("author,body");
+		validatesPresenceOf("body,post_id");
 	}
 }
