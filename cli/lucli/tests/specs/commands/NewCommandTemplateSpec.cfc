@@ -103,6 +103,11 @@ component extends="wheels.wheelstest.system.BaseSpec" {
 				expect(css).toInclude(".notice-message");
 				expect(css).toInclude("--wheels-success");
 				expect(css).toInclude("--wheels-notice");
+				// Action rows: the scaffold gives every action simple.css's
+				// `.button` class, and this rule lays the row out. Without it
+				// the buttons sit flush against each other with no gap.
+				expect(css).toInclude(".wheels-actions");
+				expect(css).toInclude("display: flex");
 
 				var layout = fileRead(templateRoot & "app/views/layout.cfm");
 				expect(layout).toInclude('styleSheetLinkTag(sources="simple,wheels")');

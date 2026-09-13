@@ -14,5 +14,9 @@
 <cfelse>
 	<p>No |Association| yet.</p>
 </cfif>
-<p>#linkTo(route="new|SingularCap|", text="Add a |Singular|")#</p>
+<!--- A <div>, not a <p>: `buttonTo` renders a <form>, and a form inside a
+     paragraph is invalid HTML — the browser closes the <p> early and the row
+     falls apart. --->
+<div class="wheels-actions">#linkTo(route="new|SingularCap|", text="Add a |Singular|", class="button")#
+</div>
 <!--- /CLI: related |Association| --->
